@@ -1,4 +1,4 @@
-import { INCREMENT_COUNTER } from '../constants/ActionTypes';
+import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
 
 export default function CounterStore(state, action) {
   if (!state) {
@@ -8,6 +8,8 @@ export default function CounterStore(state, action) {
   switch (action.type) {
   case INCREMENT_COUNTER:
     return { counter: state.counter + 1 };
+  case DECREMENT_COUNTER:
+    return { counter: state.counter - 1 };
   default:
     return state;
   }

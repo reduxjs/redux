@@ -8,7 +8,7 @@ const dispatcher =
 
 dispatcher.receive(stores, actions);
 
-module.hot.dispose((data) => {
+module.hot.dispose(data => {
   data.dispatcher = dispatcher;
 });
 

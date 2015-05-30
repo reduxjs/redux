@@ -6,7 +6,8 @@ import connect from './redux/connect';
     counterState: stores.CounterStore
   }),
   actions => ({
-    increment: actions.increment
+    increment: actions.increment,
+    decrement: actions.decrement
   })
 )
 export default class Counter {
