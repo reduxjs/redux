@@ -16,6 +16,8 @@ export default function createDispatcher() {
   let stores = {};
   let actionCreators = {};
   let currentState = {};
+  let currentTransaction = null;
+  let committedState = {};
 
   // To compute the next state, combine the next states of every store
   function computeNextState(state, action) {
@@ -44,17 +46,23 @@ export default function createDispatcher() {
     notifyObservers.forEach(o => o());
   }
 
-  // Reassign the current state on each dispatch
-  function dispatch(action) {
+  // Update state and emit change if needed
+  function updateState(nextState) {
     // Swap the state
     const previousState = currentState;
-    currentState = computeNextState(currentState, action);
+    currentState = nextState;
 
     // Notify the observers
     const changedKeys = Object.keys(currentState).filter(key =>
       currentState[key] !== previousState[key]
     );
     emitChange(changedKeys);
+  }
+
+  // Reassign the current state on each dispatch
+  function dispatch(action) {
+    const nextState = computeNextState(currentState, action);
+    updateState(nextState);
   }
 
   // Provide subscription and unsubscription
@@ -87,12 +95,21 @@ export default function createDispatcher() {
     };
   }
 
+  // Bind action creator to the dispatcher
+  function bindAction(actionCreator) {
+    return function dispatchAction(...args) {
+      const action = actionCreator(...args);
+      dispatch(action);
+
+      if (currentTransaction) {
+        currentTransaction.push(action);
+      }
+    };
+  }
+
   // Provide dispatching
   function bindActions(pickActions) {
-    return mapValues(
-      pickActions(actionCreators),
-      (actionCreator) => (...args) => dispatch(actionCreator(...args))
-    );
+    return mapValues(pickActions(actionCreators), bindAction);
   }
 
   // Provide a way to receive new stores and actions
@@ -106,12 +123,44 @@ export default function createDispatcher() {
     );
 
     // Dispatch to initialize stores
-    dispatch(BOOTSTRAP_STORE);
+    if (currentTransaction) {
+      updateState(committedState);
+      currentTransaction.forEach(dispatch);
+    } else {
+      dispatch(BOOTSTRAP_STORE);
+    }
+  }
+
+  // Support state transactions
+  function transact() {
+    if (currentTransaction) {
+      throw new Error('Cannot nest transactions.');
+    }
+
+    currentTransaction = [];
+    committedState = currentState;
+
+    function finish(nextState) {
+      currentTransaction = null;
+      committedState = nextState;
+      updateState(nextState);
+    }
+
+    function commit() {
+      finish(currentState);
+    }
+
+    function rollback() {
+      finish(committedState);
+    }
+
+    return { commit, rollback };
   }
 
   return {
     bindActions,
     observeStores,
-    receive
+    receive,
+    transact
   };
 }
