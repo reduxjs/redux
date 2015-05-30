@@ -6,16 +6,25 @@ function mapValues(obj, fn) {
   return result;
 }
 
-export default function createDispatcher(stores, actionCreators, initialState) {
+// An action dispatched to init store state
+const BOOTSTRAP_STORE = {
+  type: 'BOOTSTRAP_STORE'
+};
+
+export default function createDispatcher() {
+  let observers = {};
+  let stores = {};
+  let actionCreators = {};
+  let currentState = {};
+
   // To compute the next state, combine the next states of every store
-  function computeState(state, action) {
+  function computeNextState(state, action) {
     return mapValues(stores,
       (store, key) => store(state[key], action)
     );
   }
 
-  // Keep all store observers by key
-  const observers = mapValues(stores, () => []);
+  // Notify observers about the changed stores
   function emitChange(changedKeys) {
     if (!changedKeys.length) {
       return;
@@ -36,11 +45,10 @@ export default function createDispatcher(stores, actionCreators, initialState) {
   }
 
   // Reassign the current state on each dispatch
-  let currentState = initialState || computeState({});
   function dispatch(action) {
     // Swap the state
     const previousState = currentState;
-    currentState = computeState(currentState, action);
+    currentState = computeNextState(currentState, action);
 
     // Notify the observers
     const changedKeys = Object.keys(currentState).filter(key =>
@@ -87,13 +95,23 @@ export default function createDispatcher(stores, actionCreators, initialState) {
     );
   }
 
-  function getState() {
-    return currentState;
+  // Provide a way to receive new stores and actions
+  function receive(nextStores, nextActionCreators) {
+    stores = nextStores;
+    actionCreators = nextActionCreators;
+
+    // Merge the observers
+    observers = mapValues(stores,
+      (store, key) => observers[key] || []
+    );
+
+    // Dispatch to initialize stores
+    dispatch(BOOTSTRAP_STORE);
   }
 
   return {
     bindActions,
     observeStores,
-    getState
+    receive
   };
 }
