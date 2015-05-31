@@ -1,6 +1,6 @@
 {
   "name": "redux",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Work in progress",
   "scripts": {
     "start": "node server.js",
