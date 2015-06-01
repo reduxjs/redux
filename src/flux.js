@@ -16,7 +16,7 @@ export default function flux(dispatcher) {
       'Component';
 
     return class {
-      static displayName = `ReduxProvide(${wrappedDisplayName})`;
+      static displayName = `Redux(${wrappedDisplayName})`;
       static childContextTypes = childContextTypes;
 
       getChildContext() {

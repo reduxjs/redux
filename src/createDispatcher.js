@@ -61,6 +61,10 @@ export default function createDispatcher() {
 
   // Reassign the current state on each dispatch
   function dispatch(action) {
+    if (typeof action.type !== 'string') {
+      throw new Error('Action type must be a string.');
+    }
+
     const nextState = computeNextState(currentState, action);
     updateState(nextState);
   }

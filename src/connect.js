@@ -20,8 +20,10 @@ export default function connect(pickStores, pickActions) {
         super(props, context);
         this.handleChange = this.handleChange.bind(this);
 
-        this.actions = this.context.bindActions(pickActions);
         this.unobserve = this.context.observeStores(pickStores, this.handleChange);
+        if (pickActions) {
+          this.actions = this.context.bindActions(pickActions);
+        }
       }
 
       handleChange(state) {
