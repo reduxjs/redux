@@ -6,7 +6,7 @@ module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
-    './src/index'
+    './index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -18,13 +18,19 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    alias: {
+      'redux': path.resolve(__dirname, '../src')
+    }
   },
   module: {
     loaders: [{
       test: /\.jsx?$/,
       loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'src')
+      include: [
+        __dirname,
+        path.resolve(__dirname, '../src')
+      ]
     }]
   }
 };

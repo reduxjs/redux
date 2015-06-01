@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Counter from './Counter';
-import flux from './redux/flux';
+import flux from 'redux/flux';
 import dispatcher from './dispatcher';
 
 @flux(dispatcher)

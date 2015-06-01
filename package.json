@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Work in progress",
   "scripts": {
-    "start": "node server.js",
+    "start": "cd examples && node server.js",
     "lint": "eslint src"
   },
   "repository": {
