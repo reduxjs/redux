@@ -6,6 +6,14 @@ export function increment() {
   };
 }
 
+export function incrementAsync() {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(increment());
+    }, 1000);
+  };
+}
+
 export function decrement() {
   return {
     type: DECREMENT_COUNTER

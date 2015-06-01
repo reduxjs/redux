@@ -95,14 +95,24 @@ export default function createDispatcher() {
     };
   }
 
+  // Dispatch in the context of current transaction
+  function dispatchInTransaction(action) {
+    if (currentTransaction) {
+      currentTransaction.push(action);
+    }
+    dispatch(action);
+  }
+
   // Bind action creator to the dispatcher
   function bindAction(actionCreator) {
     return function dispatchAction(...args) {
       const action = actionCreator(...args);
-      dispatch(action);
-
-      if (currentTransaction) {
-        currentTransaction.push(action);
+      if (typeof action === 'function') {
+        // Async action creator
+        action(dispatchInTransaction);
+      } else {
+        // Sync action creator
+        dispatchInTransaction(action);
       }
     };
   }
@@ -131,7 +141,8 @@ export default function createDispatcher() {
     }
   }
 
-  // Support state transactions
+  // Support state transactions hooks for devtools.
+  // Useful for hot-reloading some actions on top of a "committed" state.
   function transact() {
     if (currentTransaction) {
       throw new Error('Cannot nest transactions.');
