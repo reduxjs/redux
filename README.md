@@ -62,6 +62,17 @@ export function incrementAsync() {
     }, 1000);
   };
 }
+
+// Could also look into state in the callback form
+export function incrementIfOdd() {
+  return (dispatch, state) => {
+    if (state.counterStore.counter % 2 === 0) {
+      return;
+    }
+
+    dispatch(increment());
+  };
+}
 ```
 
 ### Stores
@@ -85,7 +96,7 @@ function decremenent({ counter }) {
 }
 
 // what's important is that Store is a pure function too
-export default function CounterStore(state = initialState, action) {
+export default function counterStore(state = initialState, action) {
   // that returns the new state when an action comes
   switch (action.type) {
   case INCREMENT_COUNTER:
@@ -111,7 +122,7 @@ import React from 'react';
 import { observes } from 'redux';
 
 // Gonna subscribe it
-@observes('CounterStore')
+@observes('counterStore')
 export default class Counter {
   render() {
     const { counter } = this.props; // injected by @observes
@@ -133,9 +144,9 @@ import { observes } from 'redux';
 
 // With multiple stores, you might want to specify a prop mapper as last argument.
 // You can also access `props` inside the prop mapper.
-@observes('CounterStore', 'TodoStore', (state, props) => ({
-  counter: state.CounterStore.counter,
-  todos: state.TodoStore.todos
+@observes('counterStore', 'todoStore', (state, props) => ({
+  counter: state.counterStore.counter,
+  todos: state.todoStore.todos
 }))
 export default class TodosWithCounter {
   /* ... */

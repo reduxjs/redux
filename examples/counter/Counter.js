@@ -2,7 +2,7 @@ import React from 'react';
 import { performs, observes } from 'redux';
 
 @performs('increment', 'decrement')
-@observes('CounterStore')
+@observes('counterStore')
 export default class Counter {
   render() {
     const { increment, decrement } = this.props;

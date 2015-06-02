@@ -110,10 +110,10 @@ export default function createDispatcher() {
     return function dispatchAction(...args) {
       const action = actionCreator(...args);
       if (typeof action === 'function') {
-        // Async action creator
-        action(dispatchInTransaction);
+        // Callback-style action creator
+        action(dispatchInTransaction, currentState);
       } else {
-        // Sync action creator
+        // Simple action creator
         dispatchInTransaction(action);
       }
     };

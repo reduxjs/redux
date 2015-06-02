@@ -9,6 +9,16 @@ export function increment() {
   };
 }
 
+export function incrementIfOdd() {
+  return (dispatch, state) => {
+    if (state.counterStore.counter % 2 === 0) {
+      return;
+    }
+
+    dispatch(increment());
+  };
+}
+
 export function incrementAsync() {
   return dispatch => {
     setTimeout(() => {

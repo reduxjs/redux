@@ -7,7 +7,7 @@ const initialState = {
   }]
 };
 
-export function TodoStore(state = initialState, action) {
+export function todoStore(state = initialState, action) {
   switch (action.type) {
   case ADD_TODO:
     return {
