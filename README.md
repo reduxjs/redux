@@ -18,6 +18,15 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 * Keep Flux lingo. No cursors or observables in core.
 * Have I mentioned hot reloading yet?
 
+## Demo
+
+```
+git clone https://github.com/gaearon/redux.git redux
+cd redux
+npm install
+npm start
+```
+
 ## What's it look like?
 
 ### Actions
