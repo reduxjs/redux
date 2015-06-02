@@ -23,7 +23,7 @@ export function increment() {
 }
 
 export function decrement() {
-  return {s
+  return {
     type: DECREMENT_COUNTER
   };
 }
@@ -165,12 +165,15 @@ import * as stores from './stores/index';
 import * as actions from './actions/index';
 import { createDispatcher } from 'redux';
 
+// Prefer to use existing dispatcher
 const dispatcher =
   module.hot && module.hot.data && module.hot.data.dispatcher ||
   createDispatcher();
 
+// Pass (potentially hot-reloaded) stores and actions
 dispatcher.receive(stores, actions);
 
+// Store the dispatcher for the next hot reload
 module.hot.dispose(data => {
   data.dispatcher = dispatcher;
 });
