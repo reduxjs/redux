@@ -2,5 +2,3 @@
 * should add new stores on reload
 * error handling in components, stores and actions
 * transact on initial value?
-* separate connecting actions and stores
-* no need to care about shape
