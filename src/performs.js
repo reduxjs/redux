@@ -43,7 +43,8 @@ export default function performs(...actionKeys) {
 
       render() {
         return (
-          <DecoratedComponent {...this.actions} />
+          <DecoratedComponent {...this.props}
+                              {...this.actions} />
         );
       }
     };
