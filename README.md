@@ -173,9 +173,11 @@ const dispatcher =
 dispatcher.receive(stores, actions);
 
 // Store the dispatcher for the next hot reload
-module.hot.dispose(data => {
-  data.dispatcher = dispatcher;
-});
+if (module.hot) {
+  module.hot.dispose(data => {
+    data.dispatcher = dispatcher;
+  });
+}
 
 export default dispatcher;
 ```
