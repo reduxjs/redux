@@ -230,3 +230,7 @@ export default class App {
 ### But you're using strings for injecting actions and store state!
 
 I'm not super happy about strings. If you find a better way, let me know and file an issue with your suggestions.
+
+### Can I use this in production?
+
+I wouldn't. Many use cases are not be considered yet. If you find some use cases this lib can't handle yet, please file an issue.
