@@ -1,10 +1,4 @@
-function mapValues(obj, fn) {
-  const result = {};
-  Object.keys(obj).forEach(key =>
-    result[key] = fn(obj[key], key)
-  );
-  return result;
-}
+import mapValues from 'lodash/object/mapValues';
 
 // An action dispatched to init store state
 const BOOTSTRAP_STORE = {
@@ -70,20 +64,10 @@ export default function createDispatcher() {
   }
 
   // Provide subscription and unsubscription
-  function observeStores(stateGetters, onChange) {
-    // Get observed store keys
-    const observedKeys = Object.keys(stateGetters);
-
-    // Emit the state update for the observed keys
+  function observeStores(observedKeys, onChange) {
+    // Emit the state update
     function handleChange() {
-      let observedState = {};
-      observedKeys.forEach(key => {
-        observedState = {
-          ...observedState,
-          ...stateGetters[key](currentState[key])
-        };
-      });
-      onChange(observedState);
+      onChange(currentState);
     }
 
     // Synchronously emit the initial value
