@@ -1,15 +1,13 @@
 import { ADD_TODO } from '../constants/ActionTypes';
 
-export function TodoStore(state, action) {
-  if (!state) {
-    return {
-      todos: [{
-        text: 'do something',
-        id: 0
-      }]
-    };
-  }
+const initialState = {
+  todos: [{
+    text: 'do something',
+    id: 0
+  }]
+};
 
+export function TodoStore(state = initialState, action) {
   switch (action.type) {
   case ADD_TODO:
     return {

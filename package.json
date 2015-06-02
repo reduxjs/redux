@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.4.7",
+    "invariant": "^2.0.0",
     "lodash": "^3.9.3",
     "react": "^0.13.0"
   }

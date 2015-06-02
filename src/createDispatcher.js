@@ -1,4 +1,5 @@
 import mapValues from 'lodash/object/mapValues';
+import invariant from 'invariant';
 
 // An action dispatched to init store state
 const BOOTSTRAP_STORE = {
@@ -16,7 +17,15 @@ export default function createDispatcher() {
   // To compute the next state, combine the next states of every store
   function computeNextState(state, action) {
     return mapValues(stores,
-      (store, key) => store(state[key], action)
+      (store, key) => {
+        const nextStoreState = store(state[key], action);
+        invariant(
+          nextStoreState != null,
+          'State returned by %s is null or undefined.',
+          key
+        );
+        return nextStoreState;
+      }
     );
   }
 
@@ -55,9 +64,10 @@ export default function createDispatcher() {
 
   // Reassign the current state on each dispatch
   function dispatch(action) {
-    if (typeof action.type !== 'string') {
-      throw new Error('Action type must be a string.');
-    }
+    invariant(
+      typeof action.type === 'string',
+      'Action type must be a string.'
+    );
 
     const nextState = computeNextState(currentState, action);
     updateState(nextState);

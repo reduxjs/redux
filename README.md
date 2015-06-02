@@ -64,13 +64,8 @@ function decremenent({ counter }) {
 }
 
 // what's important is that Store is a pure function too
-export default function CounterStore(state, action) {
-  // ... that has an initial state
-  if (!state) {
-    return initialState;
-  }
-
-  // and return the new state when an action comes
+export default function CounterStore(state = initialState, action) {
+  // that returns the new state when an action comes
   switch (action.type) {
   case INCREMENT_COUNTER:
     return incremenent(state, action);

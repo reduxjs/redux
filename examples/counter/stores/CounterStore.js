@@ -13,11 +13,7 @@ function decremenent({ counter }) {
   return { counter: counter - 1 };
 }
 
-export default function CounterStore(state, action) {
-  if (!state) {
-    return initialState;
-  }
-
+export default function CounterStore(state = initialState, action) {
   switch (action.type) {
   case INCREMENT_COUNTER:
     return incremenent(state, action);
