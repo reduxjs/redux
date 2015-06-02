@@ -27,7 +27,18 @@ export default function performs(...actionKeys) {
 
       constructor(props, context) {
         super(props, context);
-        this.actions = mapActions(pick(this.context.getActions(), actionKeys));
+        this.updateActions(props);
+      }
+
+      componentWillReceiveProps(nextProps) {
+        this.updateActions(nextProps);
+      }
+
+      updateActions(props) {
+        this.actions = mapActions(
+          pick(this.context.getActions(), actionKeys),
+          props
+        );
       }
 
       render() {
