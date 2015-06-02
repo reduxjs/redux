@@ -4,7 +4,11 @@ redux
 An experiment in fully hot-reloadable Flux.  
 The API might change any day. Don't use in production.
 
-## What's It Look Like?
+## Why another Flux framework?
+
+Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-evolution-of-flux-frameworks-6c16ad26bb31)** for some context.
+
+## What's it look like?
 
 ### Actions
 
@@ -80,7 +84,7 @@ export default function CounterStore(state, action) {
 
 ### Components
 
-#### Observing a Single Store
+#### Observing a single Store
 
 ```js
 // We're gonna need some decorators
@@ -101,7 +105,7 @@ export default class Counter {
 }
 ```
 
-#### Observing Many Stores
+#### Observing many Stores
 
 ```js
 // We're gonna need some decorators
@@ -119,7 +123,7 @@ export default class TodosWithCounter {
 }
 ```
 
-#### Performing a Single Action
+#### Performing a single Action
 
 ```js
 // We're gonna need some decorators
@@ -138,7 +142,7 @@ export default class IncrementButton {
 }
 ```
 
-#### Performing Many Actions
+#### Performing many Actions
 
 ```js
 // We're gonna need some decorators
