@@ -2,7 +2,9 @@ redux
 =========================
 
 An experiment in fully hot-reloadable Flux.  
-The API might change any day. Don't use in production.
+
+**The API might change any day.**  
+_**Don't use in production.**_
 
 ## Why another Flux framework?
 
