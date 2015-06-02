@@ -1,10 +1,13 @@
 {
   "name": "redux",
-  "version": "0.1.0",
-  "description": "Work in progress",
+  "version": "0.2.0",
+  "description": "An experiment in fully hot-reloadable Flux",
+  "main": "lib/index.js",
   "scripts": {
     "start": "cd examples && node server.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "build": "./scripts/build",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,6 +31,7 @@
   },
   "homepage": "https://github.com/gaearon/redux",
   "devDependencies": {
+    "babel": "^5.4.7",
     "babel-core": "^5.4.7",
     "babel-eslint": "^3.1.9",
     "babel-loader": "^5.1.2",
@@ -37,6 +41,7 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
+    "babel-runtime": "^5.4.7",
     "lodash": "^3.9.3",
     "react": "^0.13.0"
   }
