@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from './Header';
 import Body from './Body';
-import flux from 'redux/flux';
+import { provides } from 'redux';
 import dispatcher from './dispatcher';
 
-@flux(dispatcher)
+@provides(dispatcher)
 export default class App {
   render() {
     return (

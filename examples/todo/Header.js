@@ -1,7 +1,7 @@
 import React from 'react';
-import connect from 'redux/connect';
+import { performs } from 'redux';
 
-@connect()
+@performs('addTodo')
 export default class Header {
   render() {
     return (
@@ -12,6 +12,6 @@ export default class Header {
   }
 
   addTodo() {
-    this.props.actions.addTodo('some text');
+    this.props.addTodo('some text');
   }
 }

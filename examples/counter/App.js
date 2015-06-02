@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Counter from './Counter';
-import flux from 'redux/flux';
+import { provides } from 'redux';
 import dispatcher from './dispatcher';
 
-@flux(dispatcher)
+@provides(dispatcher)
 export default class App extends Component {
   render() {
     return (

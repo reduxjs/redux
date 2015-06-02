@@ -5,7 +5,7 @@ const childContextTypes = {
   getActions: PropTypes.func.isRequired
 };
 
-export default function flux(dispatcher) {
+export default function provides(dispatcher) {
   return function (DecoratedComponent) {
     const wrappedDisplayName =
       DecoratedComponent.displayName ||
@@ -13,7 +13,7 @@ export default function flux(dispatcher) {
       'Component';
 
     return class {
-      static displayName = `Redux(${wrappedDisplayName})`;
+      static displayName = `ReduxProvides(${wrappedDisplayName})`;
       static childContextTypes = childContextTypes;
 
       getChildContext() {

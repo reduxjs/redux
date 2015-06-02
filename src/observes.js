@@ -1,35 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import isPlainObject from 'lodash/lang/isPlainObject';
+import pick from 'lodash/object/pick';
+import identity from 'lodash/utility/identity';
 
 const contextTypes = {
-  observeStores: PropTypes.func.isRequired,
-  getActions: PropTypes.func.isRequired
+  observeStores: PropTypes.func.isRequired
 };
 
-function extractShorthandArguments(storeMap) {
-  const storeKeys = Object.keys(storeMap);
+export default function connect(...storeKeys) {
+  let mapState = identity;
 
-  function mapState(stateFromStores, props) {
-    let state = {};
-    storeKeys.forEach(key => {
-      const stateFromStore = stateFromStores[key];
-      const mapStoreState = storeMap[key];
-      state = { ...state, ...mapStoreState(stateFromStore, props) };
-    });
-    return state;
-  }
-
-  return {
-    storeKeys,
-    mapState
-  };
-}
-
-export default function connect(storeKeys = [], mapState = () => {}) {
-  if (isPlainObject(storeKeys)) {
-    ({ storeKeys, mapState } = extractShorthandArguments(storeKeys));
-  } else if (!Array.isArray(storeKeys)) {
-    throw new Error('Pass either a string array or an object as the first argument.');
+  // Last argument may be a custom mapState function
+  const lastIndex = storeKeys.length - 1;
+  if (typeof storeKeys[lastIndex] === 'function') {
+    [mapState] = storeKeys.splice(lastIndex, 1);
   }
 
   return function (DecoratedComponent) {
@@ -39,19 +22,17 @@ export default function connect(storeKeys = [], mapState = () => {}) {
       'Component';
 
     return class extends Component {
-      static displayName = `ReduxConnect(${wrappedDisplayName})`;
+      static displayName = `ReduxObserves(${wrappedDisplayName})`;
       static contextTypes = contextTypes;
 
       constructor(props, context) {
         super(props, context);
         this.handleChange = this.handleChange.bind(this);
-
         this.unobserve = this.context.observeStores(storeKeys, this.handleChange);
-        this.actions = this.context.getActions();
       }
 
       handleChange(stateFromStores) {
-        this.currentStateFromStores = stateFromStores;
+        this.currentStateFromStores = pick(stateFromStores, storeKeys);
         this.updateState(stateFromStores, this.props);
       }
 
@@ -60,6 +41,11 @@ export default function connect(storeKeys = [], mapState = () => {}) {
       }
 
       updateState(stateFromStores, props) {
+        if (storeKeys.length === 1) {
+          // Just give it the particular store state for convenience
+          stateFromStores = stateFromStores[storeKeys[0]];
+        }
+
         const state = mapState(stateFromStores, props);
         if (this.state) {
           this.setState(state);
@@ -75,8 +61,7 @@ export default function connect(storeKeys = [], mapState = () => {}) {
       render() {
         return (
           <DecoratedComponent {...this.props}
-                              {...this.state}
-                              actions={this.actions} />
+                              {...this.state} />
         );
       }
     };

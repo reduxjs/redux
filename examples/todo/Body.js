@@ -1,9 +1,7 @@
 import React from 'react';
-import connect from 'redux/connect';
+import { observes } from 'redux';
 
-@connect({
-  TodoStore: ({ todos }) => ({ todos })
-})
+@observes('TodoStore')
 export default class Body {
   render() {
     return (

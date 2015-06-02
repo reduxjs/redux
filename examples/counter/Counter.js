@@ -1,17 +1,14 @@
 import React from 'react';
-import connect from 'redux/connect';
+import { performs, observes } from 'redux';
 
-@connect({
-  CounterStore: ({ counter }) => ({
-    value: counter
-  })
-})
+@performs('increment', 'decrement')
+@observes('CounterStore')
 export default class Counter {
   render() {
-    const { increment, decrement } = this.props.actions;
+    const { increment, decrement } = this.props;
     return (
       <p>
-        Clicked: {this.props.value} times
+        Clicked: {this.props.counter} times
         {' '}
         <button onClick={() => increment()}>+</button>
         {' '}
