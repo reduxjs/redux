@@ -8,13 +8,14 @@ import connect from 'redux/connect';
 })
 export default class Counter {
   render() {
+    const { increment, decrement } = this.props.actions;
     return (
       <p>
         Clicked: {this.props.value} times
         {' '}
-        <button onClick={() => this.props.actions.increment()}>+</button>
+        <button onClick={() => increment()}>+</button>
         {' '}
-        <button onClick={() => this.props.actions.decrement()}>-</button>
+        <button onClick={() => decrement()}>-</button>
       </p>
     );
   }

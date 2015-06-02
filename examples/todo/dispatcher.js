@@ -12,6 +12,4 @@ module.hot.dispose(data => {
   data.dispatcher = dispatcher;
 });
 
-window.d = dispatcher;
-
 export default dispatcher;
