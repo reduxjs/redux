@@ -87,11 +87,11 @@ import {
 
 const initialState = { counter: 0 };
 
-function incremenent({ counter }) {
+function increment({ counter }) {
   return { counter: counter + 1 };
 }
 
-function decremenent({ counter }) {
+function decrement({ counter }) {
   return { counter: counter - 1 };
 }
 
@@ -100,9 +100,9 @@ export default function counterStore(state = initialState, action) {
   // that returns the new state when an action comes
   switch (action.type) {
   case INCREMENT_COUNTER:
-    return incremenent(state, action);
+    return increment(state, action);
   case DECREMENT_COUNTER:
-    return decremenent(state, action);
+    return decrement(state, action);
   default:
     return state;
   }
