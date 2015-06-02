@@ -23,7 +23,7 @@ export function increment() {
 }
 
 export function decrement() {
-  return {
+  return {s
     type: DECREMENT_COUNTER
   };
 }
@@ -126,7 +126,7 @@ export default class TodosWithCounter {
 import React from 'react';
 import { performs } from 'redux';
 
-// Gonna subscribe it
+// Gonna inject it
 @performs('increment')
 export default class IncrementButton {
   render() {
