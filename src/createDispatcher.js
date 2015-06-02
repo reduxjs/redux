@@ -70,15 +70,19 @@ export default function createDispatcher() {
   }
 
   // Provide subscription and unsubscription
-  function observeStores(pickStores, onChange) {
-    // Map store keys into the desired shape
-    const observedKeys = pickStores(
-      mapValues(stores, (store, key) => key)
-    );
+  function observeStores(stateGetters, onChange) {
+    // Get observed store keys
+    const observedKeys = Object.keys(stateGetters);
 
-    // Emit the state update in the desired shape
+    // Emit the state update for the observed keys
     function handleChange() {
-      const observedState = mapValues(observedKeys, key => currentState[key]);
+      let observedState = {};
+      observedKeys.forEach(key => {
+        observedState = {
+          ...observedState,
+          ...stateGetters[key](currentState[key])
+        };
+      });
       onChange(observedState);
     }
 
@@ -86,13 +90,13 @@ export default function createDispatcher() {
     handleChange();
 
     // Register the observer for each relevant key
-    mapValues(observedKeys, key => {
-      observers[key].push(handleChange);
-    });
+    observedKeys.forEach(key =>
+      observers[key].push(handleChange)
+    );
 
     // Let it unregister when the time comes
     return () => {
-      mapValues(observedKeys, key => {
+      observedKeys.forEach(key => {
         const index = observers[key].indexOf(handleChange);
         observers[key].splice(index, 1);
       });
@@ -108,7 +112,7 @@ export default function createDispatcher() {
   }
 
   // Bind action creator to the dispatcher
-  function bindAction(actionCreator) {
+  function wrapActionCreator(actionCreator) {
     return function dispatchAction(...args) {
       const action = actionCreator(...args);
       if (typeof action === 'function') {
@@ -122,14 +126,14 @@ export default function createDispatcher() {
   }
 
   // Provide dispatching
-  function bindActions(pickActions) {
-    return mapValues(pickActions(actionCreators), bindAction);
+  function getActions() {
+    return actionCreators;
   }
 
   // Provide a way to receive new stores and actions
   function receive(nextStores, nextActionCreators) {
     stores = nextStores;
-    actionCreators = nextActionCreators;
+    actionCreators = mapValues(nextActionCreators, wrapActionCreator);
 
     // Merge the observers
     observers = mapValues(stores,
@@ -173,7 +177,7 @@ export default function createDispatcher() {
   }
 
   return {
-    bindActions,
+    getActions,
     observeStores,
     receive,
     transact

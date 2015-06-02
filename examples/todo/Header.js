@@ -1,10 +1,7 @@
 import React from 'react';
 import connect from 'redux/connect';
 
-@connect(
-  () => ({}),
-  ({ addTodo }) => ({ addTodo })
-)
+@connect()
 export default class Header {
   render() {
     return (
@@ -15,6 +12,6 @@ export default class Header {
   }
 
   addTodo() {
-    this.props.addTodo('some text');
+    this.props.actions.addTodo('some text');
   }
 }

@@ -1,19 +1,20 @@
 import React from 'react';
 import connect from 'redux/connect';
 
-@connect(
-  ({ CounterStore }) => ({ CounterStore }),
-  ({ increment, decrement }) => ({ increment, decrement })
-)
+@connect({
+  CounterStore: ({ counter }) => ({
+    value: counter
+  })
+})
 export default class Counter {
   render() {
     return (
       <p>
-        Clicked: {this.props.CounterStore.counter} times
+        Clicked: {this.props.value} times
         {' '}
-        <button onClick={this.props.increment}>+</button>
+        <button onClick={() => this.props.actions.increment()}>+</button>
         {' '}
-        <button onClick={this.props.decrement}>-</button>
+        <button onClick={() => this.props.actions.decrement()}>-</button>
       </p>
     );
   }

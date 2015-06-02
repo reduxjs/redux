@@ -2,13 +2,10 @@ import React, { PropTypes } from 'react';
 
 const childContextTypes = {
   observeStores: PropTypes.func.isRequired,
-  bindActions: PropTypes.func.isRequired
+  getActions: PropTypes.func.isRequired
 };
 
 export default function flux(dispatcher) {
-  const { observeStores, bindActions } = dispatcher;
-  const childContext = { observeStores, bindActions };
-
   return function (DecoratedComponent) {
     const wrappedDisplayName =
       DecoratedComponent.displayName ||
@@ -20,7 +17,10 @@ export default function flux(dispatcher) {
       static childContextTypes = childContextTypes;
 
       getChildContext() {
-        return childContext;
+        return {
+          observeStores: dispatcher.observeStores,
+          getActions: dispatcher.getActions
+        };
       }
 
       render() {

@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 
 const contextTypes = {
   observeStores: PropTypes.func.isRequired,
-  bindActions: PropTypes.func.isRequired
+  getActions: PropTypes.func.isRequired
 };
 
-export default function connect(pickStores, pickActions) {
+export default function connect(stateGetters = {}) {
   return function (DecoratedComponent) {
     const wrappedDisplayName =
       DecoratedComponent.displayName ||
@@ -20,10 +20,8 @@ export default function connect(pickStores, pickActions) {
         super(props, context);
         this.handleChange = this.handleChange.bind(this);
 
-        this.unobserve = this.context.observeStores(pickStores, this.handleChange);
-        if (pickActions) {
-          this.actions = this.context.bindActions(pickActions);
-        }
+        this.unobserve = this.context.observeStores(stateGetters, this.handleChange);
+        this.actions = this.context.getActions();
       }
 
       handleChange(state) {
@@ -42,7 +40,7 @@ export default function connect(pickStores, pickActions) {
         return (
           <DecoratedComponent {...this.props}
                               {...this.state}
-                              {...this.actions} />
+                              actions={this.actions} />
         );
       }
     };
