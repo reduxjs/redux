@@ -218,3 +218,15 @@ export default class App {
   /* ... */
 }
 ```
+
+## FAQ
+
+### How does hot reloading work?
+
+* http://webpack.github.io/docs/hot-module-replacement.html
+* http://gaearon.github.io/react-hot-loader/
+* those `module.hot` lines in the dispatcher example above
+
+### But you're using strings for injecting actions and store state!
+
+I'm not super happy about strings. If you find a better way, let me know and file an issue with your suggestions.
