@@ -75,6 +75,9 @@ export default function CounterStore(state = initialState, action) {
     return state;
   }
 }
+
+// bonus: no special support needed for ImmutableJS,
+// just return its objects as the state.
 ```
 
 ### Components
