@@ -8,6 +8,16 @@ The API might change any day. Don't use in production.
 
 Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-evolution-of-flux-frameworks-6c16ad26bb31)** for some context.
 
+### Design Goals
+
+* Hot reloading of everything.
+* A hook for the future devtools to "commit" a state, and replay actions on top of it during hot reload.
+* No `createAction`, `createStores`, `wrapThisStuff`. Your stuff is your stuff.
+* I don't mind action constants. Seriously.
+* Embrace decorators for React components.
+* Keep Flux lingo. No cursors or observables in core.
+* Have I mentioned hot reloading yet?
+
 ## What's it look like?
 
 ### Actions
