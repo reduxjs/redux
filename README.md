@@ -107,7 +107,7 @@ export default function counterStore(state = initialState, action) {
   default:
     return state;
   }
-  
+
   // BUT THAT'S A SWITCH STATEMENT!
   // Right. If you hate 'em, see the FAQ below.
 }
@@ -262,4 +262,4 @@ Redux has no opinion on how you do this in your project.
 
 I wrote a lot of vanilla Flux code, and my only use case for it was avoiding emitting a change before a related Store consumes the action. In Redux this doesn't matter because the change is only emitted after *all* Stores have consumed the action.
 
-If several of your Stores want to read data from each other and depend on each other, it's a sign they should'be been a single Store instead.
+If several of your Stores want to read data from each other and depend on each other, it's a sign they should've been a single Store instead.
