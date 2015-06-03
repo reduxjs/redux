@@ -105,6 +105,9 @@ export default function counterStore(state = initialState, action) {
   default:
     return state;
   }
+  
+  // BUT THAT'S A SWITCH STATEMENT!
+  // Right. If you hate 'em, see the FAQ below.
 }
 
 // bonus: no special support needed for ImmutableJS,
@@ -225,3 +228,29 @@ export default class App {
 ### Can I use this in production?
 
 I wouldn't. Many use cases are not be considered yet. If you find some use cases this lib can't handle yet, please file an issue.
+
+### But there are switch statements!
+
+`(state, action) => state` is as simple as a Store can get. You are free to implement your own `createStore`:
+
+```js
+export default function createStore(initialState, handlers) {
+  return (state = initialState, action) =>
+    handlers[action.type] ?
+      handlers[action.type](state, action) :
+      state;
+}
+```
+
+and use it for your Stores:
+
+```js
+export default createStore(initialState, {
+  [INCREMENT_COUNTER]: increment,
+  [DECREMENT_COUNTER]: decrement
+});
+```
+
+It's all just functions.
+Fancy stuff like generating stores from handler maps, or generating action creator constants, should be in userland.
+Redux has no opinion on how you do this in your project.
