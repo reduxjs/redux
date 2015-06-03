@@ -7,7 +7,7 @@
     "build": "npm run lint && babel src --out-dir lib",
     "clean": "rimraf lib",
     "lint": "eslint src",
-    "prepublish": "npm run clean && npm run build",
+    "prepublish": "in-publish && npm run clean && npm run build || in-install",
     "start": "cd examples && node server.js"
   },
   "repository": {
@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.4.7",
+    "in-publish": "^1.1.1",
     "invariant": "^2.0.0",
     "lodash": "^3.9.3",
     "react": "^0.13.0"
