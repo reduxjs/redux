@@ -5,19 +5,21 @@ import { Root, Container } from 'redux';
 import { todoStore } from './stores/index';
 import { addTodo } from './actions/index';
 
-@Root
-export default class App {
+export default class TodoApp {
   render() {
     return (
-      <Container stores={todoStore}
-                 actions={{ addTodo }}>
-        {props =>
-          <div>
-            <Header addTodo={props.addTodo} />
-            <Body todos={props.todos} />
-          </div>
+      <Root>
+        {() =>
+          <Container stores={todoStore} actions={{ addTodo }}>
+            {props =>
+              <div>
+                <Header addTodo={props.addTodo} />
+                <Body todos={props.todos} />
+              </div>
+            }
+          </Container>
         }
-      </Container>
+      </Root>
     );
   }
 }

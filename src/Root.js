@@ -1,23 +1,32 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import createDispatcher from './createDispatcher';
 
-export default function root(DecoratedComponent) {
-  return class ReduxRoot extends Component {
-    static childContextTypes = {
-      redux: PropTypes.object.isRequired
-    };
-
-    getChildContext() {
-      return { redux: this.dispatcher };
-    }
-
-    constructor(props, context) {
-      super(props, context);
-      this.dispatcher = createDispatcher();
-    }
-
-    render() {
-      return <DecoratedComponent {...this.props} />;
-    }
+export default class ReduxRoot {
+  static propTypes = {
+    children: PropTypes.func.isRequired
   };
+
+  static childContextTypes = {
+    redux: PropTypes.object.isRequired
+  };
+
+  constructor() {
+    this.dispatcher = createDispatcher();
+  }
+
+  getChildContext() {
+    const { observeStores, wrapActionCreator } = this.dispatcher
+    return {
+      redux: {
+        observeStores,
+        wrapActionCreator
+      }
+    };
+  }
+
+  render() {
+    return this.props.children({
+      ...this.props
+    });
+  }
 }
