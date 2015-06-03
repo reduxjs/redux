@@ -4,10 +4,11 @@
   "description": "An experiment in fully hot-reloadable Flux",
   "main": "lib/index.js",
   "scripts": {
-    "start": "cd examples && node server.js",
-    "lint": "eslint src",
     "build": "babel src --out-dir lib",
-    "prepublish": "npm run build"
+    "clean": "rimraf lib",
+    "lint": "eslint src",
+    "prepublish": "npm run clean && npm run build",
+    "start": "cd examples && node server.js"
   },
   "repository": {
     "type": "git",
