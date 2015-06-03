@@ -37,7 +37,8 @@ export default class ReduxContainer extends Component {
   }
 
   update(props) {
-    this.actions = mapValues(props.actions, this.context.redux.wrapActionCreator);
+    const { wrapActionCreator, observeStores } = this.context.redux;
+    this.actions = mapValues(props.actions, wrapActionCreator);
     if (this.unsubscribe) {
       this.unsubscribe();
     }
@@ -51,7 +52,7 @@ export default class ReduxContainer extends Component {
     }
 
     this.mapState = mapState;
-    this.unsubscribe = this.context.redux.observeStores(stores, this.handleChange);
+    this.unsubscribe = observeStores(stores, this.handleChange);
   }
 
   handleChange(stateFromStores) {

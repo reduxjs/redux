@@ -8,13 +8,7 @@ export default function root(DecoratedComponent) {
     };
 
     getChildContext() {
-      const { observeStores, wrapActionCreator } = this.dispatcher
-      return {
-        redux: {
-          observeStores,
-          wrapActionCreator
-        }
-      };
+      return { redux: this.dispatcher };
     }
 
     constructor(props, context) {
