@@ -225,7 +225,7 @@ export default class App {
 
 * http://webpack.github.io/docs/hot-module-replacement.html
 * http://gaearon.github.io/react-hot-loader/
-* those `module.hot` lines in the dispatcher example above
+* Literally that's it. Redux is fully driven by component props, so it works on top of React Hot Loader.
 
 ### Can I use this in production?
 
