@@ -1,5 +1,10 @@
 import React, { PropTypes } from 'react';
+import { container } from 'redux';
+import { addTodo } from './actions/index';
 
+@container({
+  actions: { addTodo }
+})
 export default class Header {
   static propTypes = {
     addTodo: PropTypes.func.isRequired
