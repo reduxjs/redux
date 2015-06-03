@@ -3,6 +3,7 @@ import createDispatcher from './createDispatcher';
 
 export default class ReduxRoot {
   static propTypes = {
+    stores: PropTypes.object.isRequired,
     children: PropTypes.func.isRequired
   };
 
@@ -10,8 +11,13 @@ export default class ReduxRoot {
     redux: PropTypes.object.isRequired
   };
 
-  constructor() {
+  constructor(props) {
     this.dispatcher = createDispatcher();
+    this.dispatcher.receiveStores(props.stores);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.dispatcher.receiveStores(nextProps.stores);
   }
 
   getChildContext() {
@@ -19,8 +25,6 @@ export default class ReduxRoot {
   }
 
   render() {
-    return this.props.children({
-      ...this.props
-    });
+    return this.props.children();
   }
 }

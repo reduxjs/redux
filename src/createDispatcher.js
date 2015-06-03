@@ -7,8 +7,9 @@ const BOOTSTRAP_STORE = {
 };
 
 export default function createDispatcher() {
-  let observers = {};
-  let stores = {};
+  const observers = {};
+  const stores = {};
+  const storeKeys = new Map();
   let currentState = {};
 
   // To compute the next state, combine the next states of every store
@@ -71,19 +72,22 @@ export default function createDispatcher() {
   }
 
   // Merge the newly added stores
-  function mergeStores(newStores) {
-    newStores.forEach(newStore => {
-      const key = newStore.name;
-      stores[key] = newStore;
+  function receiveStores(nextStores) {
+    Object.keys(nextStores).forEach(key => {
+      stores[key] = nextStores[key];
       observers[key] = observers[key] || [];
+      storeKeys[stores[key]] = key;
     });
     dispatch(BOOTSTRAP_STORE);
   }
 
   // Provide subscription and unsubscription
   function observeStores(observedStores, onChange) {
-    mergeStores(observedStores);
-    const observedKeys = observedStores.map(s => s.name);
+    const observedKeys = observedStores.map(store => {
+      const key = storeKeys[store];
+      invariant(key, 'This store is not registered with the Redux root: %s', store);
+      return key;
+    });
 
     // Emit the state update
     function handleChange() {
@@ -123,6 +127,7 @@ export default function createDispatcher() {
 
   return {
     wrapActionCreator,
-    observeStores
+    observeStores,
+    receiveStores
   };
 }
