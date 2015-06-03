@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class Header {
+  static propTypes = {
+    addTodo: PropTypes.func.isRequired
+  };
+
   render() {
     return (
       <div>

@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class Body {
+  static propTypes = {
+    todos: PropTypes.array.isRequired
+  };
+
   render() {
     return (
       <div>
