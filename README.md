@@ -162,6 +162,7 @@ export default class CounterContainer {
     return (
       <Container stores={[counterStore]}
                  actions={{ increment, decrement }}>
+        {/* Yes this is a function as a child. Bear with me. */}
         {props => <Counter {...props} />}
       </Container>
     );
