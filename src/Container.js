@@ -10,9 +10,7 @@ export default class ReduxContainer extends Component {
   static propTypes = {
     children: PropTypes.func.isRequired,
     actions: PropTypes.object.isRequired,
-    stores: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.func.isRequired).isRequired
-    ]).isRequired
+    stores: PropTypes.arrayOf(PropTypes.func.isRequired).isRequired
   }
 
   static defaultProps = {
