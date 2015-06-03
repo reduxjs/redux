@@ -1,6 +1,8 @@
 import { Component, PropTypes } from 'react';
 import mapValues from 'lodash/object/mapValues';
 import identity from 'lodash/utility/identity';
+import invariant from 'invariant';
+import isPlainObject from 'lodash/lang/isPlainObject';
 
 export default class ReduxContainer extends Component {
   static contextTypes = {
@@ -33,18 +35,29 @@ export default class ReduxContainer extends Component {
   }
 
   update(props) {
-    const { wrapActionCreator, observeStores } = this.context.redux;
+    const { stores, actions } = props;
+    invariant(
+      isPlainObject(actions) &&
+      Object.keys(actions).every(key => typeof actions[key] === 'function'),
+      '"actions" must be a plain object with functions as values. Did you misspell an import?'
+    );
+    invariant(
+      Array.isArray(stores) &&
+      stores.every(s => typeof s === 'function'),
+      '"stores" must be an array of functions. Did you misspell an import?'
+    );
+
+    const { wrapActionCreator, observeStores, getStoreKey } = this.context.redux;
     this.actions = mapValues(props.actions, wrapActionCreator);
+
     if (this.unsubscribe) {
       this.unsubscribe();
     }
 
-    const { stores } = props;
-    const mapState = (stores.length === 1) ?
-      state => state[stores[0].name] :
+    this.mapState = (stores.length === 1) ?
+      state => state[getStoreKey(stores[0])] :
       identity;
 
-    this.mapState = mapState;
     this.unsubscribe = observeStores(stores, this.handleChange);
   }
 

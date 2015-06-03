@@ -81,13 +81,16 @@ export default function createDispatcher() {
     dispatch(BOOTSTRAP_STORE);
   }
 
+  // Get the key a store was registered with
+  function getStoreKey(store) {
+    const key = storeKeys[store];
+    invariant(key, 'This store is not registered with the Redux root: %s', store);
+    return key;
+  }
+
   // Provide subscription and unsubscription
   function observeStores(observedStores, onChange) {
-    const observedKeys = observedStores.map(store => {
-      const key = storeKeys[store];
-      invariant(key, 'This store is not registered with the Redux root: %s', store);
-      return key;
-    });
+    const observedKeys = observedStores.map(getStoreKey);
 
     // Emit the state update
     function handleChange() {
@@ -128,6 +131,7 @@ export default function createDispatcher() {
   return {
     wrapActionCreator,
     observeStores,
-    receiveStores
+    receiveStores,
+    getStoreKey
   };
 }
