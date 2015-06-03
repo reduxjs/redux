@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cd examples && node server.js",
     "lint": "eslint src",
-    "build": "./scripts/build",
+    "build": "babel src --out-dir lib",
     "prepublish": "npm run build"
   },
   "repository": {
