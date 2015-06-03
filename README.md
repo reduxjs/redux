@@ -204,9 +204,9 @@ export default class Counter {
 
 ```js
 import React from 'react';
-import { Root } from 'redux';
+import { root } from 'redux';
 
-@Root
+@root
 export default class App {
   /* ... */
 }
