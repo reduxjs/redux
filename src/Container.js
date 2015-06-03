@@ -1,7 +1,9 @@
-import { Component, PropTypes } from 'react';
+import React, { Children, Component, PropTypes } from 'react';
+import invariant from 'invariant';
 import mapValues from 'lodash/object/mapValues';
 import identity from 'lodash/utility/identity';
 import invariant from 'invariant';
+import isFunction from 'lodash/lang/isFunction';
 import isPlainObject from 'lodash/lang/isPlainObject';
 
 export default class ReduxContainer extends Component {
@@ -10,14 +12,23 @@ export default class ReduxContainer extends Component {
   };
 
   static propTypes = {
-    children: PropTypes.func.isRequired,
+    Wrapper: PropTypes.oneOfType([
+      PropTypes.func.isRequired,
+      PropTypes.string.isRequired
+    ]).isRequired,
+    children: PropTypes.oneOfType([
+      PropTypes.func.isRequired,
+      PropTypes.element.isRequired,
+      PropTypes.arrayOf(PropTypes.element.isRequired).isRequired
+    ]).isRequired,
     actions: PropTypes.object.isRequired,
     stores: PropTypes.arrayOf(PropTypes.func.isRequired).isRequired
   }
 
   static defaultProps = {
     stores: [],
-    actions: {}
+    actions: {},
+    Wrapper: 'span'
   };
 
   constructor(props, context) {
@@ -37,13 +48,11 @@ export default class ReduxContainer extends Component {
   update(props) {
     const { stores, actions } = props;
     invariant(
-      isPlainObject(actions) &&
-      Object.keys(actions).every(key => typeof actions[key] === 'function'),
+      isPlainObject(actions) && Object.keys(actions).every(isFunction),
       '"actions" must be a plain object with functions as values. Did you misspell an import?'
     );
     invariant(
-      Array.isArray(stores) &&
-      stores.every(s => typeof s === 'function'),
+      Array.isArray(stores) && stores.every(isFunction),
       '"stores" must be an array of functions. Did you misspell an import?'
     );
 
@@ -71,9 +80,29 @@ export default class ReduxContainer extends Component {
   }
 
   render() {
-    return this.props.children({
+    const { children, Wrapper } = this.props;
+    const props = {
       ...this.actions,
       ...this.state
-    });
+    };
+
+    if (isFunction(children)) {
+      return children(props);
+    }
+
+    if (Array.isArray(children)) {
+      return (
+        <Wrapper>
+          {Children.map(children, (child) => React.cloneElement(child, props))}
+        </Wrapper>
+      );
+    }
+
+    invariant(
+      React.isValidElement(children),
+      'The redux container must render a single component'
+    );
+
+    return React.cloneElement(children, props);
   }
 }
