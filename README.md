@@ -21,6 +21,8 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 
 ## Demo
 
+![gif](https://s3.amazonaws.com/f.cl.ly/items/2Z2D3U260d2A311k2B0z/Screen%20Recording%202015-06-03%20at%2003.22%20pm.gif)
+
 ```
 git clone https://github.com/gaearon/redux.git redux
 cd redux
