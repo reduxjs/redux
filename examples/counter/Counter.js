@@ -1,14 +1,17 @@
-import React from 'react';
-import { performs, observes } from 'redux';
+import React, { PropTypes } from 'react';
 
-@performs('increment', 'decrement')
-@observes('counterStore')
 export default class Counter {
+  static propTypes = {
+    increment: PropTypes.func.isRequired,
+    decrement: PropTypes.func.isRequired,
+    counter: PropTypes.number.isRequired
+  };
+
   render() {
-    const { increment, decrement } = this.props;
+    const { increment, decrement, counter } = this.props;
     return (
       <p>
-        Clicked: {this.props.counter} times
+        Clicked: {counter} times
         {' '}
         <button onClick={() => increment()}>+</button>
         {' '}

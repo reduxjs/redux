@@ -1,7 +1,5 @@
 import React from 'react';
-import { observes } from 'redux';
 
-@observes('todoStore')
 export default class Body {
   render() {
     return (

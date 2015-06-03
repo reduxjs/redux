@@ -1,7 +1,5 @@
 import React from 'react';
-import { performs } from 'redux';
 
-@performs('addTodo')
 export default class Header {
   render() {
     return (

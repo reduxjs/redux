@@ -9,10 +9,7 @@ const BOOTSTRAP_STORE = {
 export default function createDispatcher() {
   let observers = {};
   let stores = {};
-  let actionCreators = {};
   let currentState = {};
-  let currentTransaction = null;
-  let committedState = {};
 
   // To compute the next state, combine the next states of every store
   function computeNextState(state, action) {
@@ -73,8 +70,21 @@ export default function createDispatcher() {
     updateState(nextState);
   }
 
+  // Merge the newly added stores
+  function mergeStores(newStores) {
+    newStores.forEach(newStore => {
+      const key = newStore.name;
+      stores[key] = newStore;
+      observers[key] = observers[key] || [];
+    });
+    dispatch(BOOTSTRAP_STORE);
+  }
+
   // Provide subscription and unsubscription
-  function observeStores(observedKeys, onChange) {
+  function observeStores(observedStores, onChange) {
+    mergeStores(observedStores);
+    const observedKeys = observedStores.map(s => s.name);
+
     // Emit the state update
     function handleChange() {
       onChange(currentState);
@@ -97,83 +107,22 @@ export default function createDispatcher() {
     };
   }
 
-  // Dispatch in the context of current transaction
-  function dispatchInTransaction(action) {
-    if (currentTransaction) {
-      currentTransaction.push(action);
-    }
-    dispatch(action);
-  }
-
-  // Bind action creator to the dispatcher
+  // Bind an action creator to the dispatcher
   function wrapActionCreator(actionCreator) {
     return function dispatchAction(...args) {
       const action = actionCreator(...args);
       if (typeof action === 'function') {
         // Callback-style action creator
-        action(dispatchInTransaction, currentState);
+        action(dispatch, currentState);
       } else {
         // Simple action creator
-        dispatchInTransaction(action);
+        dispatch(action);
       }
     };
   }
 
-  // Provide dispatching
-  function getActions() {
-    return actionCreators;
-  }
-
-  // Provide a way to receive new stores and actions
-  function receive(nextStores, nextActionCreators) {
-    stores = nextStores;
-    actionCreators = mapValues(nextActionCreators, wrapActionCreator);
-
-    // Merge the observers
-    observers = mapValues(stores,
-      (store, key) => observers[key] || []
-    );
-
-    // Dispatch to initialize stores
-    if (currentTransaction) {
-      updateState(committedState);
-      currentTransaction.forEach(dispatch);
-    } else {
-      dispatch(BOOTSTRAP_STORE);
-    }
-  }
-
-  // Support state transactions hooks for devtools.
-  // Useful for hot-reloading some actions on top of a "committed" state.
-  function transact() {
-    if (currentTransaction) {
-      throw new Error('Cannot nest transactions.');
-    }
-
-    currentTransaction = [];
-    committedState = currentState;
-
-    function finish(nextState) {
-      currentTransaction = null;
-      committedState = nextState;
-      updateState(nextState);
-    }
-
-    function commit() {
-      finish(currentState);
-    }
-
-    function rollback() {
-      finish(committedState);
-    }
-
-    return { commit, rollback };
-  }
-
   return {
-    getActions,
-    observeStores,
-    receive,
-    transact
+    wrapActionCreator,
+    observeStores
   };
 }

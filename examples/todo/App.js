@@ -1,17 +1,23 @@
 import React from 'react';
 import Header from './Header';
 import Body from './Body';
-import { provides } from 'redux';
-import dispatcher from './dispatcher';
+import { Root, Container } from 'redux';
+import { todoStore } from './stores/index';
+import { addTodo } from './actions/index';
 
-@provides(dispatcher)
+@Root
 export default class App {
   render() {
     return (
-      <div>
-        <Header />
-        <Body />
-      </div>
+      <Container stores={todoStore}
+                 actions={{ addTodo }}>
+        {props =>
+          <div>
+            <Header addTodo={props.addTodo} />
+            <Body todos={props.todos} />
+          </div>
+        }
+      </Container>
     );
   }
 }

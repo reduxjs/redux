@@ -16,7 +16,6 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 * A hook for the future devtools to "commit" a state, and replay actions on top of it during hot reload.
 * No `createAction`, `createStores`, `wrapThisStuff`. Your stuff is your stuff.
 * I don't mind action constants. Seriously.
-* Embrace decorators for React components.
 * Keep Flux lingo. No cursors or observables in core.
 * Have I mentioned hot reloading yet?
 
@@ -114,18 +113,21 @@ export default function counterStore(state = initialState, action) {
 
 ### Components
 
-#### Observing a single Store
+#### Dumb Components
 
 ```js
-// We're gonna need some decorators
-import React from 'react';
-import { observes } from 'redux';
+// The dumb component receives everything using props:
+import React, { PropTypes } from 'react';
 
-// Gonna subscribe it
-@observes('counterStore')
 export default class Counter {
+  static propTypes = {
+    counter: PropTypes.number.isRequired,
+    increment: PropTypes.func.isRequired,
+    decrement: PropTypes.func.isRequired
+  };
+
   render() {
-    const { counter } = this.props; // injected by @observes
+    const { counter } = this.props;
     return (
       <p>
         Clicked: {counter} times
@@ -135,96 +137,40 @@ export default class Counter {
 }
 ```
 
-#### Observing many Stores
+#### Smart Components
 
 ```js
-// We're gonna need some decorators
-import React from 'react';
-import { observes } from 'redux';
+// The smart component may inject actions
+// and observe stores using <Container />:
 
-// With multiple stores, you might want to specify a prop mapper as last argument.
-// You can also access `props` inside the prop mapper.
-@observes('counterStore', 'todoStore', (state, props) => ({
-  counter: state.counterStore.counter,
-  todos: state.todoStore.todos
-}))
-export default class TodosWithCounter {
-  /* ... */
-}
-```
+import React, { Component } from 'react';
+import { Root, Container } from 'redux';
+import { increment, decrement } from './actions/CounterActions';
+import counterStore from './stores/counterStore';
+import Counter from './Counter';
 
-#### Performing a single Action
-
-```js
-// We're gonna need some decorators
-import React from 'react';
-import { performs } from 'redux';
-
-// Gonna inject it
-@performs('increment')
-export default class IncrementButton {
+export default class CounterContainer {
   render() {
-    const { increment } = this.props; // injected by @performs
+    // stores can be a single store or an array.
+    // actions can only be a string -> function map.
+    // props passed to children will combine these actions and state.
     return (
-      <button onClick={increment}>+</button>
+      <Container stores={counterStore}
+                 actions={{ increment, decrement }}>
+        {props => <Counter {...props} />}
+      </Container>
     );
   }
 }
 ```
 
-#### Performing many Actions
-
-```js
-// We're gonna need some decorators
-import React from 'react';
-import { performs } from 'redux';
-
-// With multiple actions, you might want to specify a prop mapper as last argument.
-// You can also access `props` inside the prop mapper.
-@performs('increment', 'decrement', (actions, props) => ({
-  increment: props.invert ? actions.decrement : actions.increment,
-  decrement: props.invert ? actions.increment : actions.decrement
-}))
-export default class IncrementButton {
-  /* .... */
-}
-```
-
-### Dispatcher
-
-#### Creating a hot-reloadable dispatcher
-
-```js
-import * as stores from './stores/index';
-import * as actions from './actions/index';
-import { createDispatcher } from 'redux';
-
-// Prefer to use existing dispatcher
-const dispatcher =
-  module.hot && module.hot.data && module.hot.data.dispatcher ||
-  createDispatcher();
-
-// Pass (potentially hot-reloaded) stores and actions
-dispatcher.receive(stores, actions);
-
-// Store the dispatcher for the next hot reload
-if (module.hot) {
-  module.hot.dispose(data => {
-    data.dispatcher = dispatcher;
-  });
-}
-
-export default dispatcher;
-```
-
-#### Attaching the dispatcher to the root component
+#### The root component
 
 ```js
 import React from 'react';
-import { provides } from 'redux';
-import dispatcher from './dispatcher';
+import { Root } from 'redux';
 
-@provides(dispatcher)
+@Root
 export default class App {
   /* ... */
 }
@@ -237,10 +183,6 @@ export default class App {
 * http://webpack.github.io/docs/hot-module-replacement.html
 * http://gaearon.github.io/react-hot-loader/
 * those `module.hot` lines in the dispatcher example above
-
-### But you're using strings for injecting actions and store state!
-
-I'm not super happy about strings. If you find a better way, let me know and file an issue with your suggestions.
 
 ### Can I use this in production?
 
