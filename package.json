@@ -4,7 +4,7 @@
   "description": "An experiment in fully hot-reloadable Flux",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "npm run lint && babel src --out-dir lib",
     "clean": "rimraf lib",
     "lint": "eslint src",
     "prepublish": "npm run clean && npm run build",
