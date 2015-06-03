@@ -1,6 +1,6 @@
 import { Component, PropTypes } from 'react';
+import values from 'lodash/object/values';
 import mapValues from 'lodash/object/mapValues';
-import identity from 'lodash/utility/identity';
 import invariant from 'invariant';
 import isPlainObject from 'lodash/lang/isPlainObject';
 
@@ -12,11 +12,11 @@ export default class ReduxContainer extends Component {
   static propTypes = {
     children: PropTypes.func.isRequired,
     actions: PropTypes.object.isRequired,
-    stores: PropTypes.arrayOf(PropTypes.func.isRequired).isRequired
+    stores: PropTypes.object.isRequired
   }
 
   static defaultProps = {
-    stores: [],
+    stores: {},
     actions: {}
   };
 
@@ -42,23 +42,26 @@ export default class ReduxContainer extends Component {
       '"actions" must be a plain object with functions as values. Did you misspell an import?'
     );
     invariant(
-      Array.isArray(stores) &&
-      stores.every(s => typeof s === 'function'),
-      '"stores" must be an array of functions. Did you misspell an import?'
+      isPlainObject(stores) &&
+      Object.keys(stores).every(key => typeof stores[key] === 'function'),
+      '"stores" must be a plain object with functions as values. Did you misspell an import?'
     );
 
-    const { wrapActionCreator, observeStores, getStoreKey } = this.context.redux;
+    const { wrapActionCreator, observeStores } = this.context.redux;
     this.actions = mapValues(props.actions, wrapActionCreator);
 
     if (this.unsubscribe) {
       this.unsubscribe();
     }
 
-    this.mapState = (stores.length === 1) ?
-      state => state[getStoreKey(stores[0])] :
-      identity;
+    this.unsubscribe = observeStores(values(stores), this.handleChange);
+  }
 
-    this.unsubscribe = observeStores(stores, this.handleChange);
+  mapState(stateFromStores) {
+    const { getStoreKey } = this.context.redux;
+    return mapValues(this.props.stores, store =>
+      stateFromStores[getStoreKey(store)]
+    );
   }
 
   handleChange(stateFromStores) {
@@ -72,8 +75,8 @@ export default class ReduxContainer extends Component {
 
   render() {
     return this.props.children({
-      ...this.actions,
-      ...this.state
+      state: this.state,
+      actions: this.actions
     });
   }
 }

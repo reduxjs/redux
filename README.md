@@ -86,14 +86,14 @@ import {
 
 // but you can write this part anyhow you like:
 
-const initialState = { counter: 0 };
+const initialState = 0;
 
-function increment({ counter }) {
-  return { counter: counter + 1 };
+function increment(counter) {
+  return counter + 1;
 }
 
-function decrement({ counter }) {
-  return { counter: counter - 1 };
+function decrement(counter) {
+  return counter - 1;
 }
 
 // what's important is that Store is a pure function too
@@ -156,14 +156,13 @@ import Counter from './Counter';
 
 export default class CounterContainer {
   render() {
-    // stores must be an array.
-    // actions must be a string -> function map.
+    // stores and actions must both be string -> function maps.
     // props passed to children will combine these actions and state.
     return (
-      <Container stores={[counterStore]}
+      <Container stores={{ counter: stores.counterStore }}
                  actions={{ increment, decrement }}>
         {/* Yes this is a function as a child. Bear with me. */}
-        {props => <Counter {...props} />}
+        {({ state, actions }) => <Counter {...state} {...actions} />}
       </Container>
     );
   }
@@ -183,7 +182,7 @@ import counterStore from './stores/counterStore';
 
 @container({
   actions: { increment, decrement },
-  stores: [counterStore]
+  stores: { counter: counterStore }
 })
 export default class Counter {
   static propTypes = {
