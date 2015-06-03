@@ -151,11 +151,11 @@ import Counter from './Counter';
 
 export default class CounterContainer {
   render() {
-    // stores can be a single store or an array.
-    // actions can only be a string -> function map.
+    // stores must be an array.
+    // actions must be a string -> function map.
     // props passed to children will combine these actions and state.
     return (
-      <Container stores={counterStore}
+      <Container stores={[counterStore]}
                  actions={{ increment, decrement }}>
         {props => <Counter {...props} />}
       </Container>
@@ -177,7 +177,7 @@ import counterStore from './stores/counterStore';
 
 @container({
   actions: { increment, decrement },
-  stores: counterStore
+  stores: [counterStore]
 })
 export default class Counter {
   static propTypes = {

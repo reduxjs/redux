@@ -11,9 +11,7 @@ export default class ReduxContainer extends Component {
     children: PropTypes.func.isRequired,
     actions: PropTypes.object.isRequired,
     stores: PropTypes.oneOfType([
-      PropTypes.func.isRequired,
-      PropTypes.arrayOf(PropTypes.func.isRequired).isRequired,
-      PropTypes.object.isRequired
+      PropTypes.arrayOf(PropTypes.func.isRequired).isRequired
     ]).isRequired
   }
 
@@ -43,13 +41,10 @@ export default class ReduxContainer extends Component {
       this.unsubscribe();
     }
 
-    let stores = props.stores;
-    let mapState = identity;
-    if (typeof props.stores === 'function') {
-      const store = props.stores;
-      stores = [store];
-      mapState = state => state[store.name];
-    }
+    const { stores } = props;
+    const mapState = (stores.length === 1) ?
+      state => state[stores[0].name] :
+      identity;
 
     this.mapState = mapState;
     this.unsubscribe = observeStores(stores, this.handleChange);
