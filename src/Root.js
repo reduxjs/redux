@@ -4,14 +4,16 @@ import createDispatcher from './createDispatcher';
 export default function root(DecoratedComponent) {
   return class ReduxRoot extends Component {
     static childContextTypes = {
-      observeStores: PropTypes.func.isRequired,
-      wrapActionCreator: PropTypes.func.isRequired
+      redux: PropTypes.object.isRequired
     };
 
     getChildContext() {
+      const { observeStores, wrapActionCreator } = this.dispatcher
       return {
-        observeStores: this.dispatcher.observeStores,
-        wrapActionCreator: this.dispatcher.wrapActionCreator
+        redux: {
+          observeStores,
+          wrapActionCreator
+        }
       };
     }
 

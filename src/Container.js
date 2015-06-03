@@ -4,8 +4,7 @@ import identity from 'lodash/utility/identity';
 
 export default class ReduxContainer extends Component {
   static contextTypes = {
-    wrapActionCreator: PropTypes.func.isRequired,
-    observeStores: PropTypes.func.isRequired
+    redux: PropTypes.object.isRequired
   };
 
   static propTypes = {
@@ -38,7 +37,7 @@ export default class ReduxContainer extends Component {
   }
 
   update(props) {
-    this.actions = mapValues(props.actions, this.context.wrapActionCreator);
+    this.actions = mapValues(props.actions, this.context.redux.wrapActionCreator);
     if (this.unsubscribe) {
       this.unsubscribe();
     }
@@ -52,7 +51,7 @@ export default class ReduxContainer extends Component {
     }
 
     this.mapState = mapState;
-    this.unsubscribe = this.context.observeStores(stores, this.handleChange);
+    this.unsubscribe = this.context.redux.observeStores(stores, this.handleChange);
   }
 
   handleChange(stateFromStores) {
