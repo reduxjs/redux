@@ -211,7 +211,7 @@ export default class Counter {
 ```js
 import React from 'react';
 import { root } from 'redux';
-import * from './stores/index';
+import * as stores from './stores/index';
 
 // Let it know about all the stores
 @root(stores)
