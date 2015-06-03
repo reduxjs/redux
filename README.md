@@ -164,6 +164,43 @@ export default class CounterContainer {
 }
 ```
 
+#### Decorators
+
+Don't want to separate dumb and smart components just yet?  
+Use the decorators.  
+They work exactly the same as the container components, but are lowercase:
+
+```js
+import React, { PropTypes } from 'react';
+import { increment, decrement } from './actions/CounterActions';
+import { container } from 'redux';
+import counterStore from './stores/counterStore';
+
+@container({
+  actions: { increment, decrement },
+  stores: counterStore
+})
+export default class Counter {
+  static propTypes = {
+    increment: PropTypes.func.isRequired,
+    decrement: PropTypes.func.isRequired,
+    counter: PropTypes.number.isRequired
+  };
+
+  render() {
+    return (
+      <p>
+        Clicked: {this.props.counter} times
+        {' '}
+        <button onClick={() => this.props.increment()}>+</button>
+        {' '}
+        <button onClick={() => this.props.decrement()}>-</button>
+      </p>
+    );
+  }
+}
+```
+
 #### The root component
 
 ```js
