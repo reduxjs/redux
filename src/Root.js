@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import { PropTypes } from 'react';
 import createDispatcher from './createDispatcher';
 
 export default class ReduxRoot {
@@ -15,13 +15,7 @@ export default class ReduxRoot {
   }
 
   getChildContext() {
-    const { observeStores, wrapActionCreator } = this.dispatcher
-    return {
-      redux: {
-        observeStores,
-        wrapActionCreator
-      }
-    };
+    return { redux: this.dispatcher };
   }
 
   render() {
