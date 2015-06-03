@@ -63,8 +63,8 @@ export default function createDispatcher() {
   // Reassign the current state on each dispatch
   function dispatch(action) {
     invariant(
-      typeof action.type === 'string',
-      'Action type must be a string.'
+      typeof action.type === 'string' || typeof action.type === 'symbol',
+      'Action type must be a string or a Symbol.'
     );
 
     const nextState = computeNextState(currentState, action);
