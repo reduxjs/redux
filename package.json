@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run lint && babel src --out-dir lib",
-    "clean": "rimraf lib",
+    "clean": "rimraf ./lib",
     "lint": "eslint src",
     "prepublish": "npm run clean && npm run build",
     "start": "cd examples && node server.js"
