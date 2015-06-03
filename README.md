@@ -257,3 +257,7 @@ export default createStore(initialState, {
 It's all just functions.
 Fancy stuff like generating stores from handler maps, or generating action creator constants, should be in userland.
 Redux has no opinion on how you do this in your project.
+
+### What about `waitFor`?
+
+I wrote a lot of vanilla Flux code, and my only use case for it was avoiding emitting a change before a related Store consumes the action. In Redux this doesn't matter because the change is only emitted after *all* Stores have consumed the action.
