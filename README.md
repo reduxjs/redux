@@ -166,8 +166,7 @@ export default class CounterContainer {
 
 #### Decorators
 
-Don't want to separate dumb and smart components just yet?  
-Use the decorators.  
+Don't want to separate dumb and smart components just yet? Use the decorators!  
 They work exactly the same as the container components, but are lowercase:
 
 ```js
