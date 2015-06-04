@@ -3,6 +3,7 @@ import createDispatcher from './createDispatcher';
 
 export default class ReduxRoot {
   static propTypes = {
+    dispatcher: PropTypes.object,
     stores: PropTypes.object.isRequired,
     children: PropTypes.func.isRequired
   };
@@ -12,7 +13,7 @@ export default class ReduxRoot {
   };
 
   constructor(props) {
-    this.dispatcher = createDispatcher();
+    this.dispatcher = props.dispatcher || createDispatcher();
     this.dispatcher.receiveStores(props.stores);
   }
 
