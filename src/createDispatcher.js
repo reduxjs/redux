@@ -18,8 +18,8 @@ export default function createDispatcher() {
       (store, key) => {
         const nextStoreState = store(state[key], action);
         invariant(
-          nextStoreState != null,
-          'State returned by %s is null or undefined.',
+          typeof nextStoreState !== 'undefined',
+          'State returned by %s may not be undefined.',
           key
         );
         return nextStoreState;
