@@ -74,16 +74,17 @@ export default function createDispatcher() {
   // Merge the newly added stores
   function receiveStores(nextStores) {
     Object.keys(nextStores).forEach(key => {
+      storeKeys.delete(stores[key]);
       stores[key] = nextStores[key];
       observers[key] = observers[key] || [];
-      storeKeys[stores[key]] = key;
+      storeKeys.set(stores[key], key);
     });
     dispatch(BOOTSTRAP_STORE);
   }
 
   // Get the key a store was registered with
   function getStoreKey(store) {
-    const key = storeKeys[store];
+    const key = storeKeys.get(store);
     invariant(key, 'This store is not registered with the Redux root: %s', store);
     return key;
   }
