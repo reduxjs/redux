@@ -128,11 +128,21 @@ export default function createDispatcher() {
       }
     };
   }
+  
+  function hydrate() {
+    return currentState;
+  }
+  
+  function dehydrate(nextState) {
+    updateState(nextState);
+  }
 
   return {
     wrapActionCreator,
     observeStores,
     receiveStores,
-    getStoreKey
+    getStoreKey,
+    hydrate,
+    dehydrate
   };
 }
