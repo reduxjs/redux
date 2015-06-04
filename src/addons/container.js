@@ -2,8 +2,8 @@ import React from 'react';
 import Container from '../Container';
 import getDisplayName from './getDisplayName';
 
-function defaultTransformProps({ state, actions }) {
-  return { ...state, ...actions };
+function defaultTransformProps({ props, state, actions }) {
+  return { ...props, ...state, ...actions };
 }
 
 export default function container(
@@ -14,10 +14,11 @@ export default function container(
     static displayName = `ReduxContainer(${getDisplayName(DecoratedComponent)})`;
 
     render() {
+      const {props} = this
+      
       return (
         <Container actions={actions} stores={stores}>
-          {props => <DecoratedComponent {...this.props}
-                                        {...transformProps(props)} />}
+          {({state, actions}) => <DecoratedComponent {...transformProps({props, state, actions})} />}
         </Container>
       );
     }
