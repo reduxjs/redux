@@ -67,7 +67,7 @@ export function incrementAsync() {
 // Could also look into state in the callback form
 export function incrementIfOdd() {
   return (dispatch, state) => {
-    if (state.counterStore.counter % 2 === 0) {
+    if (state.counterStore % 2 === 0) {
       return;
     }
 
