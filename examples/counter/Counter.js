@@ -13,9 +13,9 @@ export default class Counter {
       <p>
         Clicked: {counter} times
         {' '}
-        <button onClick={() => increment()}>+</button>
+        <button onClick={increment}>+</button>
         {' '}
-        <button onClick={() => decrement()}>-</button>
+        <button onClick={decrement}>-</button>
       </p>
     );
   }
