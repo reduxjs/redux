@@ -2,25 +2,35 @@ import React from 'react';
 import Container from '../Container';
 import getDisplayName from './getDisplayName';
 
-function defaultTransformProps({ props, state, actions }) {
+function mergePropsStateAndActions({ props, state, actions }) {
   return { ...props, ...state, ...actions };
 }
 
 export default function container(
-  { actions, stores },
-  transformProps = defaultTransformProps
+  { actions: actionsToInject, stores: storesToConnect },
+  getChildProps = mergePropsStateAndActions
 ) {
   return DecoratedComponent => class ReduxContainerDecorator {
     static displayName = `ReduxContainer(${getDisplayName(DecoratedComponent)})`;
 
+    constructor() {
+      this.renderChild = this.renderChild.bind(this);
+    }
+
     render() {
-      const {props} = this
-      
       return (
-        <Container actions={actions} stores={stores}>
-          {({state, actions}) => <DecoratedComponent {...transformProps({props, state, actions})} />}
+        <Container actions={actionsToInject}
+                   stores={storesToConnect}>
+          {this.renderChild}
         </Container>
       );
+    }
+
+    renderChild({ state, actions }) {
+      const { props } = this;
+      const childProps = getChildProps({ props, state, actions });
+
+      return <DecoratedComponent {...childProps} />;
     }
   };
 }

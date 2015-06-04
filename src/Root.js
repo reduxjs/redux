@@ -25,6 +25,7 @@ export default class ReduxRoot {
   }
 
   render() {
-    return this.props.children();
+    const { children } = this.props;
+    return children();
   }
 }
