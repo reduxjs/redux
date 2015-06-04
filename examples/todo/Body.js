@@ -3,7 +3,7 @@ import { container } from 'redux';
 import { todoStore } from './stores/index';
 
 @container({
-  stores: [todoStore]
+  stores: { todos: todoStore }
 })
 export default class Body {
   static propTypes = {

@@ -8,9 +8,9 @@ import Counter from './Counter';
 export default class CounterApp extends Component {
   render() {
     return (
-      <Container stores={[stores.counterStore]}
+      <Container stores={{ counter: stores.counterStore }}
                  actions={{ increment, decrement }}>
-        {props => <Counter {...props} />}
+        {({ state, actions }) => <Counter {...state} {...actions} />}
       </Container>
     );
   }

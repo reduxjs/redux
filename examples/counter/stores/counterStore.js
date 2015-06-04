@@ -3,14 +3,14 @@ import {
   DECREMENT_COUNTER
 } from '../constants/ActionTypes';
 
-const initialState = { counter: 0 };
+const initialState = 0;
 
-function increment({ counter }) {
-  return { counter: counter + 1 };
+function increment(counter) {
+  return counter + 1;
 }
 
-function decrement({ counter }) {
-  return { counter: counter - 1 };
+function decrement(counter) {
+  return counter - 1;
 }
 
 export default function counterStore(state = initialState, action) {
