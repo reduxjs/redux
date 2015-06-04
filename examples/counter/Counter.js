@@ -12,9 +12,9 @@ export default class Counter {
     return (
       <p>
         Clicked: {counter} times
-        {' '}
+        &nbsp;
         <button onClick={increment}>+</button>
-        {' '}
+        &nbsp;
         <button onClick={decrement}>-</button>
       </p>
     );
