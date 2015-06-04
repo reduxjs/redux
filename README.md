@@ -36,10 +36,7 @@ npm start
 
 ```js
 // Still using constants...
-import {
-  INCREMENT_COUNTER,
-  DECREMENT_COUNTER
-} from '../constants/ActionTypes';
+import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
 
 // But action creators are pure functions returning actions
 export function increment() {
