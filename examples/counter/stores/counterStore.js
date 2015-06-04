@@ -3,23 +3,13 @@ import {
   DECREMENT_COUNTER
 } from '../constants/ActionTypes';
 
-const initialState = 0;
-
-function increment(counter) {
-  return counter + 1;
-}
-
-function decrement(counter) {
-  return counter - 1;
-}
-
-export default function counterStore(state = initialState, action) {
+export default function counterStore(counter = 0, action) {
   switch (action.type) {
   case INCREMENT_COUNTER:
-    return increment(state, action);
+    return counter + 1;
   case DECREMENT_COUNTER:
-    return decrement(state, action);
+    return counter - 1;
   default:
-    return state;
+    return counter;
   }
 }
