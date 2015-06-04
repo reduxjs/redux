@@ -21,7 +21,7 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 
 ## Demo
 
-![gif](https://s3.amazonaws.com/f.cl.ly/items/2Z2D3U260d2A311k2B0z/Screen%20Recording%202015-06-03%20at%2003.22%20pm.gif)
+<img src='https://s3.amazonaws.com/f.cl.ly/items/2Z2D3U260d2A311k2B0z/Screen%20Recording%202015-06-03%20at%2003.22%20pm.gif' width='500'>
 
 ```
 git clone https://github.com/gaearon/redux.git redux
@@ -84,36 +84,27 @@ import {
   DECREMENT_COUNTER
 } from '../constants/ActionTypes';
 
-// but you can write this part anyhow you like:
+// what's important is that Store is a pure function,
+// and you can write it anyhow you like.
 
-const initialState = 0;
+// the Store signature is (state, action) => state,
+// and the state shape is up to you: you can use primitives,
+// objects, arrays, or even ImmutableJS objects.
 
-function increment(counter) {
-  return counter + 1;
-}
-
-function decrement(counter) {
-  return counter - 1;
-}
-
-// what's important is that Store is a pure function too
-export default function counterStore(state = initialState, action) {
-  // that returns the new state when an action comes
+export default function counterStore(counter = 0, action) {
+  // this function returns the new state when an action comes
   switch (action.type) {
   case INCREMENT_COUNTER:
-    return increment(state, action);
+    return counter + 1;
   case DECREMENT_COUNTER:
-    return decrement(state, action);
+    return counter - 1;
   default:
-    return state;
+    return counter;
   }
 
   // BUT THAT'S A SWITCH STATEMENT!
   // Right. If you hate 'em, see the FAQ below.
 }
-
-// bonus: no special support needed for ImmutableJS,
-// just return its objects as the state.
 ```
 
 ### Components
@@ -247,9 +238,9 @@ export default function createStore(initialState, handlers) {
 and use it for your Stores:
 
 ```js
-export default createStore(initialState, {
-  [INCREMENT_COUNTER]: increment,
-  [DECREMENT_COUNTER]: decrement
+export default createStore(0, {
+  [INCREMENT_COUNTER]: x => x + 1,
+  [DECREMENT_COUNTER]: x => x - 1
 });
 ```
 
