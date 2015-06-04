@@ -3,7 +3,7 @@ import Root from '../Root';
 import getDisplayName from './getDisplayName';
 
 export default function root(stores) {
-  return DecoratedComponent => class ReduxRootDecorator {
+  return (DecoratedComponent) => class ReduxRootDecorator {
     static displayName = `ReduxRoot(${getDisplayName(DecoratedComponent)})`;
 
     render() {
