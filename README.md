@@ -79,10 +79,7 @@ export function incrementIfOdd() {
 ### Stores
 ```js
 // ... too, use constants
-import {
-  INCREMENT_COUNTER,
-  DECREMENT_COUNTER
-} from '../constants/ActionTypes';
+import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
 
 // what's important is that Store is a pure function,
 // and you can write it anyhow you like.
@@ -145,7 +142,7 @@ export default class Counter {
 
 import React, { Component } from 'react';
 import { Root, Container } from 'redux';
-import { increment, decrement } from './actions/CounterActions';
+import * as CounterActions from './actions/CounterActions';
 import counterStore from './stores/counterStore';
 import Counter from './Counter';
 
@@ -155,7 +152,7 @@ export default class CounterContainer {
     // props passed to children will combine these actions and state.
     return (
       <Container stores={{ counter: stores.counterStore }}
-                 actions={{ increment, decrement }}>
+                 actions={CounterActions}>
         {/* Yes this is a function as a child. Bear with me. */}
         {({ state, actions }) => <Counter {...state} {...actions} />}
       </Container>
@@ -171,12 +168,12 @@ They work exactly the same as the container components, but are lowercase:
 
 ```js
 import React, { PropTypes } from 'react';
-import { increment, decrement } from './actions/CounterActions';
+import * as CounterActions from './actions/CounterActions';
 import { container } from 'redux';
 import counterStore from './stores/counterStore';
 
 @container({
-  actions: { increment, decrement },
+  actions: CounterActions,
   stores: { counter: counterStore }
 })
 export default class Counter {
@@ -187,13 +184,14 @@ export default class Counter {
   };
 
   render() {
+    const { increment, decrement, counter } = this.props;
     return (
       <p>
-        Clicked: {this.props.counter} times
+        Clicked: {counter} times
         {' '}
-        <button onClick={() => this.props.increment()}>+</button>
+        <button onClick={increment}>+</button>
         {' '}
-        <button onClick={() => this.props.decrement()}>-</button>
+        <button onClick={decrement}>-</button>
       </p>
     );
   }
