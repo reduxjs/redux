@@ -122,7 +122,7 @@ export default function createDispatcher() {
       if (typeof action === 'function') {
         // Callback-style action creator
         action(dispatch, currentState);
-      } else {
+      } else if (action) {
         // Simple action creator
         dispatch(action);
       }
