@@ -1,8 +1,9 @@
 import { Component, PropTypes } from 'react';
-import values from 'lodash/object/values';
-import mapValues from 'lodash/object/mapValues';
 import invariant from 'invariant';
+import isFunction from 'lodash/lang/isFunction';
 import isPlainObject from 'lodash/lang/isPlainObject';
+import mapValues from 'lodash/object/mapValues';
+import values from 'lodash/object/values';
 
 export default class ReduxContainer extends Component {
   static contextTypes = {
@@ -36,14 +37,14 @@ export default class ReduxContainer extends Component {
 
   update(props) {
     const { stores, actions } = props;
+
     invariant(
-      isPlainObject(actions) &&
-      Object.keys(actions).every(key => typeof actions[key] === 'function'),
+      isPlainObject(actions) && values(actions).every(isFunction),
       '"actions" must be a plain object with functions as values. Did you misspell an import?'
     );
+
     invariant(
-      isPlainObject(stores) &&
-      Object.keys(stores).every(key => typeof stores[key] === 'function'),
+      isPlainObject(stores) && values(stores).every(isFunction),
       '"stores" must be a plain object with functions as values. Did you misspell an import?'
     );
 
