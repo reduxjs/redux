@@ -4,7 +4,7 @@ import createDispatcher from './createDispatcher';
 export default class ReduxRoot {
   static propTypes = {
     dispatcher: PropTypes.object,
-    stores: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     children: PropTypes.func.isRequired
   };
 
@@ -14,11 +14,18 @@ export default class ReduxRoot {
 
   constructor(props) {
     this.dispatcher = props.dispatcher || createDispatcher();
-    this.dispatcher.receiveStores(props.stores);
+    if (props.stores) {
+      this.dispatcher.receiveStores(props.stores);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.dispatcher.receiveStores(nextProps.stores);
+    if (nextProps.dispatcher) {
+      this.dispatcher = nextProps.dispatcher;
+    }
+    if (nextProps.stores) {
+      this.dispatcher.receiveStores(nextProps.stores);
+    }
   }
 
   getChildContext() {
