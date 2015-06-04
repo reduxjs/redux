@@ -10,7 +10,7 @@ export default function container(
   { actions, stores },
   transformProps = defaultTransformProps
 ) {
-  return (DecoratedComponent) => class ReduxContainerDecorator {
+  return DecoratedComponent => class ReduxContainerDecorator {
     static displayName = `ReduxContainer(${getDisplayName(DecoratedComponent)})`;
 
     render() {
