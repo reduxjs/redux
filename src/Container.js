@@ -3,6 +3,7 @@ import values from 'lodash/object/values';
 import mapValues from 'lodash/object/mapValues';
 import invariant from 'invariant';
 import isPlainObject from 'lodash/lang/isPlainObject';
+import isFunction from 'lodash/lang/isFunction';
 
 export default class ReduxContainer extends Component {
   static contextTypes = {
@@ -11,8 +12,12 @@ export default class ReduxContainer extends Component {
 
   static propTypes = {
     children: PropTypes.func.isRequired,
-    actions: PropTypes.object.isRequired,
-    stores: PropTypes.object.isRequired
+    actions: PropTypes.objectOf(
+      PropTypes.func.isRequired
+    ).isRequired,
+    stores: PropTypes.objectOf(
+      PropTypes.func.isRequired
+    ).isRequired
   }
 
   static defaultProps = {
@@ -36,16 +41,35 @@ export default class ReduxContainer extends Component {
 
   update(props) {
     const { stores, actions } = props;
-    invariant(
-      isPlainObject(actions) &&
-      Object.keys(actions).every(key => typeof actions[key] === 'function'),
-      '"actions" must be a plain object with functions as values. Did you misspell an import?'
-    );
-    invariant(
-      isPlainObject(stores) &&
-      Object.keys(stores).every(key => typeof stores[key] === 'function'),
-      '"stores" must be a plain object with functions as values. Did you misspell an import?'
-    );
+
+    if (process.env.NODE_ENV !== 'production') {
+      invariant(
+        isPlainObject(actions),
+        '"actions" must be a plain object with functions as values. Instead received: %s.',
+        actions
+      );
+      invariant(
+        isPlainObject(stores),
+        '"stores" must be a plain object with functions as values. Instead received: %s.',
+        stores
+      );
+      Object.keys(actions).forEach(key =>
+        invariant(
+          isFunction(actions[key]),
+          'Expected "%s" in "actions" to be a function. Instead received: %s.',
+          key,
+          actions[key]
+        )
+      );
+      Object.keys(stores).forEach(key =>
+        invariant(
+          isFunction(stores[key]),
+          'Expected "%s" in "stores" to be a function. Instead received: %s.',
+          key,
+          stores[key]
+        )
+      );
+    }
 
     const { wrapActionCreator, observeStores } = this.context.redux;
     this.actions = mapValues(props.actions, wrapActionCreator);
