@@ -121,10 +121,10 @@ export default function createDispatcher() {
       const action = actionCreator(...args);
       if (typeof action === 'function') {
         // Callback-style action creator
-        action(dispatch, currentState);
+        return action(dispatch, currentState);
       } else {
         // Simple action creator
-        dispatch(action);
+        return dispatch(action);
       }
     };
   }
