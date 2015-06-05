@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from './Header';
 import Body from './Body';
-import { root } from 'redux';
+import { dispatch } from 'redux';
 import * as stores from './stores/index';
 
-@root(stores)
+@dispatch(stores)
 export default class TodoApp {
   render() {
     return (

@@ -5,7 +5,7 @@ import invariant from 'invariant';
 import isPlainObject from 'lodash/lang/isPlainObject';
 import isFunction from 'lodash/lang/isFunction';
 
-export default class ReduxContainer extends Component {
+export default class ReduxInjector extends Component {
   static contextTypes = {
     redux: PropTypes.object.isRequired
   };

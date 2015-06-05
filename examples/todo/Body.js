@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import { container } from 'redux';
+import { inject } from 'redux';
 import { todoStore } from './stores/index';
 
-@container({
+@inject({
   stores: { todos: todoStore }
 })
 export default class Body {

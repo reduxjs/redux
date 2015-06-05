@@ -1,7 +1,7 @@
 import { PropTypes } from 'react';
 import createDispatcher from './createDispatcher';
 
-export default class ReduxRoot {
+export default class ReduxDispatcher {
   static propTypes = {
     stores: PropTypes.object.isRequired,
     children: PropTypes.func.isRequired

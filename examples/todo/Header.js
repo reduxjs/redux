@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import { container } from 'redux';
+import { inject } from 'redux';
 import { addTodo } from './actions/index';
 
-@container({
+@inject({
   actions: { addTodo }
 })
 export default class Header {

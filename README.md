@@ -136,10 +136,10 @@ export default class Counter {
 
 ```js
 // The smart component may inject actions
-// and observe stores using <Container />:
+// and observe stores using <Injector />:
 
 import React, { Component } from 'react';
-import { Root, Container } from 'redux';
+import { Injector } from 'redux';
 import * as CounterActions from './actions/CounterActions';
 import counterStore from './stores/counterStore';
 import Counter from './Counter';
@@ -149,11 +149,11 @@ export default class CounterContainer {
     // stores and actions must both be string -> function maps.
     // props passed to children will combine these actions and state.
     return (
-      <Container stores={{ counter: stores.counterStore }}
+      <Injector stores={{ counter: stores.counterStore }}
                  actions={CounterActions}>
         {/* Yes this is a function as a child. Bear with me. */}
         {({ state, actions }) => <Counter {...state} {...actions} />}
-      </Container>
+      </Injector>
     );
   }
 }
@@ -167,10 +167,10 @@ They work exactly the same as the container components, but are lowercase:
 ```js
 import React, { PropTypes } from 'react';
 import * as CounterActions from './actions/CounterActions';
-import { container } from 'redux';
+import { inject } from 'redux';
 import counterStore from './stores/counterStore';
 
-@container({
+@inject({
   actions: CounterActions,
   stores: { counter: counterStore }
 })
@@ -198,13 +198,15 @@ export default class Counter {
 
 #### The root component
 
+Decorate your top-level component with `@dispatch(stores)` (or `<Dispatcher stores={stores}>` inside) to bind it to a Redux dispatcher instance.
+
 ```js
 import React from 'react';
-import { root } from 'redux';
+import { dispatch } from 'redux';
 import * as stores from './stores/index';
 
 // Let it know about all the stores
-@root(stores)
+@dispatch(stores)
 export default class App {
   /* ... */
 }
