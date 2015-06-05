@@ -128,6 +128,14 @@ export default function createDispatcher() {
       }
     };
   }
+  
+  function hydrate() {
+    return currentState;
+  }
+  
+  function dehydrate(nextState) {
+    updateState(nextState);
+  }
 
   // Allow to read the state of a store
   function read(store) {
@@ -138,6 +146,8 @@ export default function createDispatcher() {
     wrapActionCreator,
     observeStores,
     receiveStores,
-    getStoreKey
+    getStoreKey,
+    hydrate,
+    dehydrate
   };
 }
