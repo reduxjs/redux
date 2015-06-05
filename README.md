@@ -198,18 +198,37 @@ export default class Counter {
 
 #### The root component
 
-Decorate your top-level component with `@dispatch(stores)` (or `<Dispatcher stores={stores}>` inside) to bind it to a Redux dispatcher instance.
+Decorate your top-level component with `@dispatch(stores)` (or put `<Dispatcher stores={stores}>` inside it) to bind it to a Redux dispatcher instance.
 
 ```js
 import React from 'react';
 import { dispatch } from 'redux';
 import * as stores from './stores/index';
 
-// Let it know about all the stores
+// Register stores with the dispatcher (and initialize their state)
 @dispatch(stores)
 export default class App {
   /* ... */
 }
+```
+
+```js
+// Without decorators:
+import React from 'react';
+import { Dispatcher } from 'redux';
+import * as stores from './stores/index';
+
+export default class App {
+  render() {
+    return (
+      <Dispatcher stores={stores}>
+        {/* Yes this is a function as a child. We won't need this when React 0.14 comes out! */}
+        {() => <SomeRootComponent />}
+      </Dispatcher>
+    );
+  }
+}
+
 ```
 
 ## FAQ
