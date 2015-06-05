@@ -15,6 +15,7 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 * Hot reloading of everything.
 * A hook for the future devtools to "commit" a state, and replay actions on top of it during hot reload.
 * No `createAction`, `createStores`, `wrapThisStuff`. Your stuff is your stuff.
+* Super easy to test things in isolation without mocks.
 * I don't mind action constants. Seriously.
 * Keep Flux lingo. No cursors or observables in core.
 * Have I mentioned hot reloading yet?
