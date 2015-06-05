@@ -150,7 +150,7 @@ export default class CounterContainer {
     // props passed to children will combine these actions and state.
     return (
       <Injector stores={{ counter: stores.counterStore }}
-                 actions={CounterActions}>
+                actions={CounterActions}>
         {/* Yes this is a function as a child. Bear with me. */}
         {({ state, actions }) => <Counter {...state} {...actions} />}
       </Injector>
