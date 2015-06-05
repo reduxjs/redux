@@ -121,12 +121,17 @@ export default function createDispatcher() {
       const action = actionCreator(...args);
       if (typeof action === 'function') {
         // Callback-style action creator
-        action(dispatch, currentState);
+        action(dispatch, read);
       } else {
         // Simple action creator
         dispatch(action);
       }
     };
+  }
+
+  // Allow to read the state of a store
+  function read(store) {
+    return currentState[getStoreKey(store)];
   }
 
   return {

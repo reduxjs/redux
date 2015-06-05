@@ -2,6 +2,7 @@ import {
   INCREMENT_COUNTER,
   DECREMENT_COUNTER
 } from '../constants/ActionTypes';
+import { counterStore } from '../stores';
 
 export function increment() {
   return {
@@ -10,8 +11,8 @@ export function increment() {
 }
 
 export function incrementIfOdd() {
-  return (dispatch, state) => {
-    if (state.counterStore.counter % 2 === 0) {
+  return (dispatch, read) => {
+    if (read(counterStore) % 2 === 0) {
       return;
     }
 

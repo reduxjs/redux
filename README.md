@@ -62,10 +62,10 @@ export function incrementAsync() {
   };
 }
 
-// Could also look into state in the callback form
+// Could also read state of a store in the callback form
 export function incrementIfOdd() {
-  return (dispatch, state) => {
-    if (state.counterStore % 2 === 0) {
+  return (dispatch, read) => {
+    if (read(counterStore) % 2 === 0) {
       return;
     }
 
