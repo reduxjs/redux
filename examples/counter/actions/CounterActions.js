@@ -1,7 +1,4 @@
-import {
-  INCREMENT_COUNTER,
-  DECREMENT_COUNTER
-} from '../constants/ActionTypes';
+import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
 import { counterStore } from '../stores';
 
 export function increment() {
