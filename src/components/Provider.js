@@ -1,14 +1,18 @@
 import { PropTypes } from 'react';
-import Dispatcher from '../Dispatcher';
+
+const dispatcherShape = PropTypes.shape({
+  subscribe: PropTypes.func.isRequired,
+  perform: PropTypes.func.isRequired
+});
 
 export default class Provider {
   static propTypes = {
-    dispatcher: PropTypes.instanceOf(Dispatcher).isRequired,
+    dispatcher: dispatcherShape.isRequired,
     children: PropTypes.func.isRequired
   };
 
   static childContextTypes = {
-    redux: PropTypes.instanceOf(Provider).isRequired
+    redux: dispatcherShape.isRequired
   };
 
   getChildContext() {

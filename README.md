@@ -14,7 +14,7 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 
 * Hot reloading of everything.
 * A hook for the future devtools to "commit" a state, and replay actions on top of it during hot reload.
-* No `createAction`, `createStores`, `wrapThisStuff`. Your stuff is your stuff.
+* No wrapper calls in your stores and actions. Your stuff is your stuff.
 * Super easy to test things in isolation without mocks.
 * I don't mind action constants. Seriously.
 * Keep Flux lingo. No cursors or observables in core.
@@ -53,23 +53,24 @@ export function decrement() {
 }
 
 // Can also be async if you return a function
-// (wow, much functions, so injectable :doge:)
 export function incrementAsync() {
-  return dispatch => {
+  return perform => {
     setTimeout(() => {
-      dispatch(increment());
+      // Yay! Can invoke sync or async actions with `perform`
+      perform(increment());
     }, 1000);
   };
 }
 
+
 // Could also read state of a store in the callback form
 export function incrementIfOdd() {
-  return (dispatch, read) => {
-    if (read(counterStore) % 2 === 0) {
+  return (perform, { counter }) => {
+    if (counter % 2 === 0) {
       return;
     }
 
-    dispatch(increment());
+    perform(increment());
   };
 }
 ```
@@ -86,15 +87,15 @@ import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
 // and the state shape is up to you: you can use primitives,
 // objects, arrays, or even ImmutableJS objects.
 
-export default function counterStore(counter = 0, action) {
+export default function counter(state = 0, action) {
   // this function returns the new state when an action comes
   switch (action.type) {
   case INCREMENT_COUNTER:
-    return counter + 1;
+    return state + 1;
   case DECREMENT_COUNTER:
-    return counter - 1;
+    return state - 1;
   default:
-    return counter;
+    return state;
   }
 
   // BUT THAT'S A SWITCH STATEMENT!
@@ -135,25 +136,28 @@ export default class Counter {
 #### Smart Components
 
 ```js
-// The smart component may inject actions
-// and observe stores using <Injector />:
+// The smart component may observe stores using `<Connector />`,
+// and bind actions to the dispatcher with `bindActions`.
 
-import React, { Component } from 'react';
-import { Injector } from 'redux';
-import * as CounterActions from './actions/CounterActions';
-import counterStore from './stores/counterStore';
-import Counter from './Counter';
+import React from 'react';
+import { Connector, bindActions } from 'redux';
+import Counter from '../components/Counter';
+import * as CounterActions from '../actions/CounterActions';
 
-export default class CounterContainer {
+function select(state) {
+  return { counter: state.counter };
+}
+
+export default class CounterApp {
   render() {
-    // stores and actions must both be string -> function maps.
-    // props passed to children will combine these actions and state.
     return (
-      <Injector stores={{ counter: stores.counterStore }}
-                 actions={CounterActions}>
-        {/* Yes this is a function as a child. Bear with me. */}
-        {({ state, actions }) => <Counter {...state} {...actions} />}
-      </Injector>
+      <Connector select={select}>
+        {({ counter, dispatcher }) =>
+          /* Yes this is child as a function. */
+          <Counter counter={counter}
+                   {...bindActions(CounterActions, dispatcher)} />
+        }
+      </Connector>
     );
   }
 }
@@ -161,36 +165,23 @@ export default class CounterContainer {
 
 #### Decorators
 
-Don't want to separate dumb and smart components just yet? Use the decorators!  
-They work exactly the same as the container components, but are lowercase:
+The `@connect` decorator lets you create smart components less verbosely:
 
 ```js
-import React, { PropTypes } from 'react';
-import * as CounterActions from './actions/CounterActions';
-import { inject } from 'redux';
-import counterStore from './stores/counterStore';
+import React from 'react';
+import { connect, bindActions } from 'redux';
+import Counter from '../components/Counter';
+import * as CounterActions from '../actions/CounterActions';
 
-@inject({
-  actions: CounterActions,
-  stores: { counter: counterStore }
-})
-export default class Counter {
-  static propTypes = {
-    increment: PropTypes.func.isRequired,
-    decrement: PropTypes.func.isRequired,
-    counter: PropTypes.number.isRequired
-  };
-
+@connect(state => ({
+  counter: state.counter
+}))
+export default class CounterApp {
   render() {
-    const { increment, decrement, counter } = this.props;
+    const { counter, dispatcher } = this.props;
     return (
-      <p>
-        Clicked: {counter} times
-        {' '}
-        <button onClick={increment}>+</button>
-        {' '}
-        <button onClick={decrement}>-</button>
-      </p>
+      <Counter counter={counter}
+               {...bindActions(CounterActions, dispatcher)} />
     );
   }
 }
@@ -198,17 +189,35 @@ export default class Counter {
 
 #### The root component
 
-Decorate your top-level component with `@dispatch(stores)` (or `<Dispatcher stores={stores}>` inside) to bind it to a Redux dispatcher instance.
+Decorate your top-level component with `@provider(dispatcher)` (or `<Provider dispatcher={dispatcher}>` inside) to bind it to a Redux dispatcher instance.
+
+Redux dispatcher accepts a single Store as an argument. Usually Flux apps have many Stores, so Redux provides a `composeStore` method that turns an object with Store functions as values (such as what you'd get from `import * as stores`) into a Store that [composes](https://gist.github.com/gaearon/d77ca812015c0356654f) them.
+
+Think `composeStores` is a “higher-order” Store because it creates a Store from several Stores. (You don't have to use it! You can just pass your own top-level Store function if that's what you prefer.)
 
 ```js
 import React from 'react';
-import { dispatch } from 'redux';
-import * as stores from './stores/index';
+import { createDispatcher, Provider, composeStores } from 'redux';
+import CounterApp from './CounterApp';
+import TodoApp from './TodoApp';
+import * as stores from '../stores/index';
 
-// Let it know about all the stores
-@dispatch(stores)
+const dispatcher = createDispatcher(composeStores(stores));
+
 export default class App {
-  /* ... */
+  render() {
+    return (
+      <Provider dispatcher={dispatcher}>
+        {() =>
+          /* Yep, function as a child. */
+          <div>
+            <CounterApp />
+            <TodoApp />
+          </div>
+        }
+      </Provider>
+    );
+  }
 }
 ```
 
