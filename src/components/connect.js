@@ -17,7 +17,7 @@ export default function connect(select) {
 
     render() {
       return (
-        <Connector select={select}>
+        <Connector select={state => select(state, this.props)}>
           {this.renderChild}
         </Connector>
       );
