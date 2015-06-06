@@ -1,6 +1,6 @@
 import React from 'react';
 import Injector from '../Injector';
-import getDisplayName from './getDisplayName';
+import getDisplayName from '../utils/getDisplayName';
 
 function mergeAll({ props, atom, actions }) {
   return { ...props, ...atom, ...actions };

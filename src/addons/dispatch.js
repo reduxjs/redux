@@ -1,6 +1,6 @@
 import React from 'react';
 import Dispatcher from '../Dispatcher';
-import getDisplayName from './getDisplayName';
+import getDisplayName from '../utils/getDisplayName';
 
 export default function dispatch(store) {
   return DecoratedComponent => class DispatcherDecorator {
