@@ -2,8 +2,8 @@ import React from 'react';
 import Injector from '../Injector';
 import getDisplayName from '../utils/getDisplayName';
 
-function mergeAll({ props, atom, actions }) {
-  return { ...props, ...atom, ...actions };
+function mergeAll({ props, state, actions }) {
+  return { ...props, ...state, ...actions };
 }
 
 export default function inject(
@@ -25,9 +25,9 @@ export default function inject(
       );
     }
 
-    renderChild({ atom, actions }) {
+    renderChild({ state, actions }) {
       const { props } = this;
-      const childProps = getChildProps({ props, atom, actions });
+      const childProps = getChildProps({ props, state, actions });
 
       return <DecoratedComponent {...childProps} />;
     }

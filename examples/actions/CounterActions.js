@@ -7,8 +7,8 @@ export function increment() {
 }
 
 export function incrementIfOdd() {
-  return (dispatch, atom) => {
-    if (atom.counter % 2 === 0) {
+  return (dispatch, { counter }) => {
+    if (counter % 2 === 0) {
       return;
     }
 

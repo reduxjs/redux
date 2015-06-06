@@ -8,7 +8,7 @@ export default class TodoApp {
   render() {
     return (
       <Injector actions={TodoActions}>
-        {({ atom: { todos }, actions}) =>
+        {({ state: { todos }, actions}) =>
           <div>
             <AddTodo {...actions} />
             <TodoList todos={todos} {...actions} />

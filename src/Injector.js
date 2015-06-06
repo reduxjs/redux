@@ -53,6 +53,6 @@ export default class Injector extends Component {
       this.performAction.bind(this, actionCreator)
     );
 
-    return children({ atom, actions });
+    return children({ state: atom, actions });
   }
 }
