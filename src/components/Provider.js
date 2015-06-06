@@ -25,8 +25,8 @@ export default class Provider {
   }
 
   componentWillReceiveProps(nextProps) {
-    nextProps.dispatcher.hydrate(
-      this.props.dispatcher.dehydrate()
+    nextProps.dispatcher.initialize(
+      this.props.dispatcher.dispose()
     );
   }
 

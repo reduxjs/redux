@@ -6,8 +6,9 @@ export default function createDispatcher(...args) {
   return {
     subscribe: ::dispatcher.subscribe,
     perform: ::dispatcher.perform,
-    hydrate: ::dispatcher.hydrate,
-    dehydrate: ::dispatcher.dehydrate,
-    getAtom: ::dispatcher.getAtom
+    getAtom: ::dispatcher.getAtom,
+    setAtom: ::dispatcher.setAtom,
+    initialize: ::dispatcher.initialize,
+    dispose: ::dispatcher.dispose
   };
 }
