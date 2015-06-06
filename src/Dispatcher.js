@@ -6,16 +6,16 @@ export default class Dispatcher {
   constructor(store) {
     this.perform = this.perform.bind(this);
     this.store = store;
-    this.hydrate();
+    this.initialize();
   }
 
-  hydrate({ atom, subscriptions = [] } = {}) {
+  initialize({ atom, subscriptions = [] } = {}) {
     this.atom = atom;
     this.subscriptions = subscriptions;
     this.dispatch({});
   }
 
-  dehydrate() {
+  dispose() {
     const { atom, subscriptions } = this;
     delete this.atom;
     this.subscriptions = [];
