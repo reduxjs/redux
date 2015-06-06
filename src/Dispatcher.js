@@ -1,6 +1,6 @@
 import { Component, PropTypes } from 'react';
 
-export default function dispatch(store, atom, action) {
+function dispatch(store, atom, action) {
   return store(atom, action);
 }
 
