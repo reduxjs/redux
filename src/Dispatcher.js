@@ -26,9 +26,7 @@ export default class Dispatcher {
     this.setAtom(nextAtom);
   }
 
-  perform(actionCreator, ...args) {
-    const action = actionCreator(...args);
-
+  perform(action) {
     return typeof action === 'function'
       ? action(this.dispatch, this.atom)
       : this.dispatch(action);
