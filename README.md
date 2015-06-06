@@ -144,6 +144,9 @@ import { Connector, bindActions } from 'redux';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
+// You can optionally specify `select` for finer-grained subscriptions
+// and retrieval. Only when the return value is shallowly different,
+// will the child component be updated.
 function select(state) {
   return { counter: state.counter };
 }
