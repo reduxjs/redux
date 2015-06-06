@@ -1,10 +1,10 @@
-import { Component, PropTypes } from 'react';
+import { PropTypes } from 'react';
 
 function dispatch(store, atom, action) {
   return store(atom, action);
 }
 
-export default class Dispatcher extends Component {
+export default class Dispatcher {
   static propTypes = {
     store: PropTypes.func.isRequired,
     children: PropTypes.func.isRequired
@@ -18,9 +18,7 @@ export default class Dispatcher extends Component {
     return { redux: this };
   }
 
-  constructor(props, context) {
-    super(props, context);
-
+  constructor(props) {
     this.subscriptions = [];
     this.emitChange = this.emitChange.bind(this);
     this.dispatch = this.dispatch.bind(this);
@@ -36,11 +34,6 @@ export default class Dispatcher extends Component {
 
   setAtom(atom) {
     this.atom = atom;
-    if (this.state) {
-      this.setState({ atom });
-    } else {
-      this.state = { atom };
-    }
     this.emitChange();
   }
 
