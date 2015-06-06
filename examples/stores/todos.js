@@ -5,14 +5,14 @@ const initialState = [{
   id: 0
 }];
 
-export function todoStore(todos = initialState, action) {
+export default function todos(state = initialState, action) {
   switch (action.type) {
   case ADD_TODO:
     return [{
-      id: todos[0].id + 1,
+      id: state[0].id + 1,
       text: action.text
-    }, ...todos];
+    }, ...state];
   }
 
-  return todos;
+  return state;
 }

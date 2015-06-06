@@ -1,11 +1,6 @@
 import React, { PropTypes } from 'react';
-import { inject } from 'redux';
-import { addTodo } from './actions/index';
 
-@inject({
-  actions: { addTodo }
-})
-export default class Header {
+export default class AddTodo {
   static propTypes = {
     addTodo: PropTypes.func.isRequired
   };

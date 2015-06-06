@@ -1,11 +1,7 @@
 import React from 'react';
-import CounterApp from './counter/App';
-import TodoApp from './todo/App';
+import App from './containers/App';
 
 React.render(
-  <div>
-    <CounterApp />
-    <TodoApp />
-  </div>,
+  <App />,
   document.getElementById('root')
 );

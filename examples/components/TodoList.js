@@ -1,11 +1,6 @@
 import React, { PropTypes } from 'react';
-import { inject } from 'redux';
-import { todoStore } from './stores/index';
 
-@inject({
-  stores: { todos: todoStore }
-})
-export default class Body {
+export default class TodoList {
   static propTypes = {
     todos: PropTypes.array.isRequired
   };

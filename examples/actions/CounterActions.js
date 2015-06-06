@@ -1,5 +1,4 @@
 import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
-import { counterStore } from '../stores';
 
 export function increment() {
   return {
@@ -8,8 +7,8 @@ export function increment() {
 }
 
 export function incrementIfOdd() {
-  return (dispatch, read) => {
-    if (read(counterStore) % 2 === 0) {
+  return (dispatch, atom) => {
+    if (atom.counter % 2 === 0) {
       return;
     }
 

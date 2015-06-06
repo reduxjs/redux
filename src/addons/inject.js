@@ -2,16 +2,16 @@ import React from 'react';
 import Injector from '../Injector';
 import getDisplayName from './getDisplayName';
 
-function mergePropsStateAndActions({ props, state, actions }) {
-  return { ...props, ...state, ...actions };
+function mergeAll({ props, atom, actions }) {
+  return { ...props, ...atom, ...actions };
 }
 
 export default function inject(
-  { actions: actionsToInject, stores: storesToConnect },
-  getChildProps = mergePropsStateAndActions
+  { actions: actionsToInject },
+  getChildProps = mergeAll
 ) {
-  return DecoratedComponent => class ReduxInjectorDecorator {
-    static displayName = `ReduxInjector(${getDisplayName(DecoratedComponent)})`;
+  return DecoratedComponent => class InjectorDecorator {
+    static displayName = `Injector(${getDisplayName(DecoratedComponent)})`;
 
     constructor() {
       this.renderChild = this.renderChild.bind(this);
@@ -19,16 +19,15 @@ export default function inject(
 
     render() {
       return (
-        <Injector actions={actionsToInject}
-                  stores={storesToConnect}>
+        <Injector actions={actionsToInject}>
           {this.renderChild}
         </Injector>
       );
     }
 
-    renderChild({ state, actions }) {
+    renderChild({ atom, actions }) {
       const { props } = this;
-      const childProps = getChildProps({ props, state, actions });
+      const childProps = getChildProps({ props, atom, actions });
 
       return <DecoratedComponent {...childProps} />;
     }
