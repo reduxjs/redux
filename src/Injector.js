@@ -1,5 +1,6 @@
 import { Component, PropTypes } from 'react';
 import mapValues from 'lodash/object/mapValues';
+import shallowEqual from './utils/shallowEqual';
 
 export default class Injector extends Component {
   static contextTypes = {
@@ -16,6 +17,15 @@ export default class Injector extends Component {
   static defaultProps = {
     actions: {}
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.hasChanged(this.state.atom, nextState.atom) ||
+           !shallowEqual(this.props.actions, nextProps.actions);
+  }
+
+  hasChanged(atom, prevAtom) {
+    return atom !== prevAtom;
+  }
 
   constructor(props, context) {
     super(props, context);
