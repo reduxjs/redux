@@ -1,4 +1,5 @@
 import { Component, PropTypes } from 'react';
+import mapValues from 'lodash/object/mapValues';
 
 export default class Injector extends Component {
   static contextTypes = {
@@ -48,10 +49,9 @@ export default class Injector extends Component {
     const { children, actions: _actions } = this.props;
     const { atom } = this.state;
 
-    const actions = Object.keys(_actions).reduce((result, key) => {
-      result[key] = this.performAction.bind(this, _actions[key]);
-      return result;
-    }, {});
+    const actions = mapValues(_actions, actionCreator =>
+      this.performAction.bind(this, actionCreator)
+    );
 
     return children({ atom, actions });
   }
