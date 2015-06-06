@@ -1,34 +1,23 @@
-import { PropTypes } from 'react';
-
 function dispatch(store, atom, action) {
   return store(atom, action);
 }
 
 export default class Dispatcher {
-  static propTypes = {
-    store: PropTypes.func.isRequired,
-    children: PropTypes.func.isRequired
-  };
-
-  static childContextTypes = {
-    redux: PropTypes.object.isRequired
-  };
-
-  getChildContext() {
-    return { redux: this };
+  constructor(store, atom) {
+    this.store = store;
+    this.atom = atom;
+    this.subscriptions = [];
+    this.dispatch({});
   }
 
-  constructor(props) {
-    this.subscriptions = [];
-    this.emitChange = this.emitChange.bind(this);
-    this.dispatch = this.dispatch.bind(this);
-
-    const initialAtom = dispatch(props.store, undefined, {});
-    this.setAtom(initialAtom);
+  receive(dispatcher) {
+    this.atom = dispatcher.atom;
+    this.subscriptions = dispatcher.subscriptions;
+    this.dispatch({});
   }
 
   dispatch(action) {
-    const nextAtom = dispatch(this.props.store, this.atom, action);
+    const nextAtom = dispatch(this.store, this.atom, action);
     this.setAtom(nextAtom);
   }
 
@@ -52,8 +41,8 @@ export default class Dispatcher {
     subscriptions.forEach(listener => listener(atom));
   }
 
-  render() {
-    const { children } = this.props;
-    return children();
+  dispose() {
+    this.atom = undefined;
+    this.subscriptions = [];
   }
 }

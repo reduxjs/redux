@@ -1,5 +1,5 @@
 import React from 'react';
-import Injector from '../Injector';
+import Connector from './Connector';
 import getDisplayName from '../utils/getDisplayName';
 import shallowEqualScalar from '../utils/shallowEqualScalar';
 
@@ -7,12 +7,12 @@ function mergeAll({ props, state, actions }) {
   return { ...props, ...state, ...actions };
 }
 
-export default function inject(
+export default function connect(
   { actions: actionsToInject, select },
   getChildProps = mergeAll
 ) {
-  return DecoratedComponent => class InjectorDecorator {
-    static displayName = `Injector(${getDisplayName(DecoratedComponent)})`;
+  return DecoratedComponent => class ConnectorDecorator {
+    static displayName = `Connector(${getDisplayName(DecoratedComponent)})`;
 
     shouldComponentUpdate(nextProps) {
       return !shallowEqualScalar(this.props, nextProps);
@@ -24,10 +24,10 @@ export default function inject(
 
     render() {
       return (
-        <Injector actions={actionsToInject}
+        <Connector actions={actionsToInject}
                   select={select}>
           {this.renderChild}
-        </Injector>
+        </Connector>
       );
     }
 

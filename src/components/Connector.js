@@ -1,9 +1,9 @@
 import { Component, PropTypes } from 'react';
 import identity from 'lodash/utility/identity';
 import mapValues from 'lodash/object/mapValues';
-import shallowEqual from './utils/shallowEqual';
+import shallowEqual from '../utils/shallowEqual';
 
-export default class Injector extends Component {
+export default class Connector extends Component {
   static contextTypes = {
     redux: PropTypes.object.isRequired
   };

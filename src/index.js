@@ -1,10 +1,13 @@
-// Wrapper components
+// Core
 export Dispatcher from './Dispatcher';
-export Injector from './Injector';
+
+// Wrapper components
+export Provider from './components/Provider';
+export Connector from './components/Connector';
 
 // Higher-order components (decorators)
-export dispatch from './addons/dispatch';
-export inject from './addons/inject';
+export provide from './components/provide';
+export connect from './components/connect';
 
 // Utilities
-export composeStores from './addons/composeStores';
+export composeStores from './utils/composeStores';
