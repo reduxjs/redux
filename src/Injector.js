@@ -1,4 +1,5 @@
 import { Component, PropTypes } from 'react';
+import identity from 'lodash/utility/identity';
 import mapValues from 'lodash/object/mapValues';
 import shallowEqual from './utils/shallowEqual';
 
@@ -12,19 +13,24 @@ export default class Injector extends Component {
     actions: PropTypes.objectOf(
       PropTypes.func.isRequired
     ).isRequired
-  }
+  };
 
   static defaultProps = {
-    actions: {}
+    actions: {},
+    select: identity
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.hasChanged(this.state.atom, nextState.atom) ||
-           !shallowEqual(this.props.actions, nextProps.actions);
+    return !this.isSliceEqual(this.state.slice, nextState.slice) ||
+           !shallowEqual(this.props, nextProps);
   }
 
-  hasChanged(atom, prevAtom) {
-    return atom !== prevAtom;
+  isSliceEqual(slice, nextSlice) {
+    if (typeof slice !== 'object' && typeof nextSlice !== 'object') {
+      return slice === nextSlice;
+    } else {
+      return shallowEqual(slice, nextSlice);
+    }
   }
 
   constructor(props, context) {
@@ -48,21 +54,22 @@ export default class Injector extends Component {
   }
 
   handleChange(atom) {
+    const slice = this.props.select(atom);
     if (this.state) {
-      this.setState({ atom });
+      this.setState({ slice });
     } else {
-      this.state = { atom };
+      this.state = { slice };
     }
   }
 
   render() {
     const { children, actions: _actions } = this.props;
-    const { atom } = this.state;
+    const { slice: state } = this.state;
 
     const actions = mapValues(_actions, actionCreator =>
       this.performAction.bind(this, actionCreator)
     );
 
-    return children({ state: atom, actions });
+    return children({ state, actions });
   }
 }
