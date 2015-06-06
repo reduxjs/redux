@@ -26,7 +26,7 @@ export default class Injector extends Component {
   }
 
   isSliceEqual(slice, nextSlice) {
-    if (typeof slice !== 'object' && typeof nextSlice !== 'object') {
+    if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
       return slice === nextSlice;
     } else {
       return shallowEqual(slice, nextSlice);
