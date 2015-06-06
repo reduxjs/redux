@@ -10,6 +10,7 @@ export default class Injector extends Component {
 
   static propTypes = {
     children: PropTypes.func.isRequired,
+    select: PropTypes.func.isRequired,
     actions: PropTypes.objectOf(
       PropTypes.func.isRequired
     ).isRequired
