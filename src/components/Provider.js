@@ -20,12 +20,9 @@ export default class Provider {
   }
 
   componentWillReceiveProps(nextProps) {
-    nextProps.dispatcher.receive(this.props.dispatcher);
-    this.props.dispatcher.dispose();
-  }
-
-  componentWillUnmount() {
-    this.props.dispatcher.dispose();
+    nextProps.dispatcher.hydrate(
+      this.props.dispatcher.dehydrate()
+    );
   }
 
   subscribe(listener) {

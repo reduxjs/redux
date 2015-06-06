@@ -3,17 +3,22 @@ function dispatch(store, atom, action) {
 }
 
 export default class Dispatcher {
-  constructor(store, atom) {
+  constructor(store) {
     this.store = store;
+    this.hydrate();
+  }
+
+  hydrate({ atom, subscriptions = [] } = {}) {
     this.atom = atom;
-    this.subscriptions = [];
+    this.subscriptions = subscriptions;
     this.dispatch({});
   }
 
-  receive(dispatcher) {
-    this.atom = dispatcher.atom;
-    this.subscriptions = dispatcher.subscriptions;
-    this.dispatch({});
+  dehydrate() {
+    const { atom, subscriptions } = this;
+    delete this.atom;
+    this.subscriptions = [];
+    return { atom, subscriptions };
   }
 
   dispatch(action) {
@@ -39,10 +44,5 @@ export default class Dispatcher {
   emitChange() {
     const { atom, subscriptions } = this;
     subscriptions.forEach(listener => listener(atom));
-  }
-
-  dispose() {
-    this.atom = undefined;
-    this.subscriptions = [];
   }
 }
