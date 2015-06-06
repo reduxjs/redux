@@ -13,13 +13,17 @@ export default class TodoApp {
     return (
       <Injector actions={TodoActions}
                 select={select}>
-        {({ state, actions}) =>
-          <div>
-            <AddTodo {...actions} />
-            <TodoList todos={state} {...actions} />
-          </div>
-        }
+        {this.renderChild}
       </Injector>
+    );
+  }
+
+  renderChild({ state, actions}) {
+    return (
+      <div>
+        <AddTodo {...actions} />
+        <TodoList todos={state} {...actions} />
+      </div>
     );
   }
 }

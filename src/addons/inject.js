@@ -8,7 +8,7 @@ function mergeAll({ props, state, actions }) {
 }
 
 export default function inject(
-  { actions: actionsToInject },
+  { actions: actionsToInject, select },
   getChildProps = mergeAll
 ) {
   return DecoratedComponent => class InjectorDecorator {
@@ -24,7 +24,8 @@ export default function inject(
 
     render() {
       return (
-        <Injector actions={actionsToInject}>
+        <Injector actions={actionsToInject}
+                  select={select}>
           {this.renderChild}
         </Injector>
       );
