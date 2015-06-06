@@ -1,5 +1,5 @@
 // Core
-export Dispatcher from './Dispatcher';
+export createDispatcher from './createDispatcher';
 
 // Wrapper components
 export Provider from './components/Provider';

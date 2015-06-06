@@ -1,10 +1,10 @@
 import React from 'react';
-import { Dispatcher, Provider, composeStores } from 'redux';
+import { createDispatcher, Provider, composeStores } from 'redux';
 import CounterApp from './CounterApp';
 import TodoApp from './TodoApp';
 import * as stores from '../stores/index';
 
-const dispatcher = new Dispatcher(composeStores(stores));
+const dispatcher = createDispatcher(composeStores(stores));
 
 export default class App {
   render() {
