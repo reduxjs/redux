@@ -3,14 +3,7 @@ import Connector from './Connector';
 import getDisplayName from '../utils/getDisplayName';
 import shallowEqualScalar from '../utils/shallowEqualScalar';
 
-function mergeAll({ props, state, actions }) {
-  return { ...props, ...state, ...actions };
-}
-
-export default function connect(
-  { actions: actionsToInject, select },
-  getChildProps = mergeAll
-) {
+export default function connect(select) {
   return DecoratedComponent => class ConnectorDecorator {
     static displayName = `Connector(${getDisplayName(DecoratedComponent)})`;
 
@@ -24,18 +17,15 @@ export default function connect(
 
     render() {
       return (
-        <Connector actions={actionsToInject}
-                  select={select}>
+        <Connector select={select}>
           {this.renderChild}
         </Connector>
       );
     }
 
-    renderChild({ state, actions }) {
+    renderChild(state) {
       const { props } = this;
-      const childProps = getChildProps({ props, state, actions });
-
-      return <DecoratedComponent {...childProps} />;
+      return <DecoratedComponent {...props} {...state} />;
     }
   };
 }

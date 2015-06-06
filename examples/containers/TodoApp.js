@@ -1,5 +1,5 @@
 import React from 'react';
-import { Connector } from 'redux';
+import { bindActions, Connector } from 'redux';
 import AddTodo from '../components/AddTodo';
 import TodoList from '../components/TodoList';
 import * as TodoActions from '../actions/TodoActions';
@@ -7,18 +7,18 @@ import * as TodoActions from '../actions/TodoActions';
 export default class TodoApp {
   render() {
     return (
-      <Connector actions={TodoActions}
-                 select={state => state.todos}>
+      <Connector select={state => ({ todos: state.todos })}>
         {this.renderChild}
       </Connector>
     );
   }
 
-  renderChild({ state, actions }) {
+  renderChild({ todos, dispatcher }) {
+    const actions = bindActions(TodoActions, dispatcher);
     return (
       <div>
         <AddTodo {...actions} />
-        <TodoList todos={state} {...actions} />
+        <TodoList todos={todos} {...actions} />
       </div>
     );
   }

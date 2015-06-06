@@ -26,6 +26,14 @@ export default class Dispatcher {
     this.setAtom(nextAtom);
   }
 
+  perform(actionCreator, ...args) {
+    const action = actionCreator(...args);
+
+    return typeof action === 'function'
+      ? action(this.dispatch, this.atom)
+      : this.dispatch(action);
+  }
+
   setAtom(atom) {
     this.atom = atom;
     this.emitChange();

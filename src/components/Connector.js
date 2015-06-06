@@ -1,6 +1,5 @@
 import { Component, PropTypes } from 'react';
 import identity from 'lodash/utility/identity';
-import mapValues from 'lodash/object/mapValues';
 import shallowEqual from '../utils/shallowEqual';
 
 export default class Connector extends Component {
@@ -10,14 +9,10 @@ export default class Connector extends Component {
 
   static propTypes = {
     children: PropTypes.func.isRequired,
-    select: PropTypes.func.isRequired,
-    actions: PropTypes.objectOf(
-      PropTypes.func.isRequired
-    ).isRequired
+    select: PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    actions: {},
     select: identity
   };
 
@@ -48,15 +43,6 @@ export default class Connector extends Component {
     this.unsubscribe();
   }
 
-  performAction(actionCreator, ...args) {
-    const { dispatch, atom } = this.context.redux;
-    const payload = actionCreator(...args);
-
-    return typeof payload === 'function'
-      ? payload(dispatch, atom)
-      : dispatch(payload);
-  }
-
   handleChange(atom) {
     const slice = this.props.select(atom);
     if (this.state) {
@@ -67,13 +53,13 @@ export default class Connector extends Component {
   }
 
   render() {
-    const { children, actions: _actions } = this.props;
-    const { slice: state } = this.state;
+    const { children } = this.props;
+    const { slice } = this.state;
+    const { redux } = this.context;
 
-    const actions = mapValues(_actions, actionCreator =>
-      this.performAction.bind(this, actionCreator)
-    );
-
-    return children({ state, actions });
+    return children({
+      dispatcher: redux,
+      ...slice
+    });
   }
 }

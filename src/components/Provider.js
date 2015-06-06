@@ -33,6 +33,10 @@ export default class Provider {
     return this.props.dispatcher.dispatch(action);
   }
 
+  perform(actionCreator, ...args) {
+    return this.props.dispatcher.perform(actionCreator, ...args);
+  }
+
   render() {
     const { children } = this.props;
     return children();
