@@ -11,10 +11,6 @@ export default function connect(select) {
       return !shallowEqualScalar(this.props, nextProps);
     }
 
-    constructor() {
-      this.renderChild = this.renderChild.bind(this);
-    }
-
     render() {
       return (
         <Connector select={state => select(state, this.props)}>
@@ -24,8 +20,7 @@ export default function connect(select) {
     }
 
     renderChild(state) {
-      const { props } = this;
-      return <DecoratedComponent {...props} {...state} />;
+      return <DecoratedComponent {...state} />;
     }
   };
 }
