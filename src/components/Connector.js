@@ -39,6 +39,14 @@ export default class Connector extends Component {
     this.unsubscribe = context.redux.subscribe(this.handleChange);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.select !== this.props.select) {
+      // Force the state slice recalculation
+      const atom = this.context.redux.getAtom();
+      this.handleChange(atom);
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribe();
   }
