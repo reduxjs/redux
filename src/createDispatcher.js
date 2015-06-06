@@ -8,5 +8,6 @@ export default function createDispatcher(...args) {
     perform: ::dispatcher.perform,
     hydrate: ::dispatcher.hydrate,
     dehydrate: ::dispatcher.dehydrate,
+    getAtom: ::dispatcher.getAtom
   };
 }

@@ -33,6 +33,10 @@ export default class Dispatcher {
       : this.dispatch(action);
   }
 
+  getAtom() {
+    return this.atom;
+  }
+
   setAtom(atom) {
     this.atom = atom;
     this.emitChange();
