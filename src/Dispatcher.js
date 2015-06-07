@@ -4,7 +4,6 @@ function dispatch(store, atom, action) {
 
 export default class Dispatcher {
   constructor(store) {
-    this.perform = this.perform.bind(this);
     this.store = store;
     this.initialize();
   }
@@ -25,12 +24,6 @@ export default class Dispatcher {
   dispatch(action) {
     const nextAtom = dispatch(this.store, this.atom, action);
     this.setAtom(nextAtom);
-  }
-
-  perform(action) {
-    return typeof action === 'function'
-      ? action(this.perform, this.atom)
-      : this.dispatch(action);
   }
 
   getAtom() {

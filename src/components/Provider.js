@@ -2,7 +2,7 @@ import { PropTypes } from 'react';
 
 const dispatcherShape = PropTypes.shape({
   subscribe: PropTypes.func.isRequired,
-  perform: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   getAtom: PropTypes.func.isRequired
 });
 
@@ -36,10 +36,6 @@ export default class Provider {
 
   dispatch(action) {
     return this.props.dispatcher.dispatch(action);
-  }
-
-  perform(actionCreator, ...args) {
-    return this.props.dispatcher.perform(actionCreator, ...args);
   }
 
   getAtom() {

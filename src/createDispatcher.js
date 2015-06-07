@@ -5,7 +5,7 @@ export default function createDispatcher(...args) {
 
   return {
     subscribe: ::dispatcher.subscribe,
-    perform: ::dispatcher.perform,
+    dispatch: ::dispatcher.dispatch,
     getAtom: ::dispatcher.getAtom,
     setAtom: ::dispatcher.setAtom,
     initialize: ::dispatcher.initialize,

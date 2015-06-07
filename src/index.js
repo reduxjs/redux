@@ -11,4 +11,4 @@ export connect from './components/connect';
 
 // Utilities
 export composeStores from './utils/composeStores';
-export bindActions from './utils/bindActions';
+export bindActionCreators from './utils/bindActionCreators';
