@@ -31,7 +31,7 @@ npm install
 npm start
 ```
 
-## What's it look like?
+## What does it look like?
 
 ### Actions
 
@@ -196,7 +196,7 @@ Decorate your top-level component with `@provider(dispatcher)` (or `<Provider di
 
 Redux dispatcher accepts a single Store as an argument. Usually Flux apps have many Stores, so Redux provides a `composeStore` method that turns an object with Store functions as values (such as what you'd get from `import * as stores`) into a Store that [composes](https://gist.github.com/gaearon/d77ca812015c0356654f) them.
 
-Think `composeStores` is a “higher-order” Store because it creates a Store from several Stores. (You don't have to use it! You can just pass your own top-level Store function if that's what you prefer.)
+Think of `composeStores` as a “higher-order” Store because it creates a Store from several Stores. (You don't have to use it! You can just pass your own top-level Store function if that's what you prefer.)
 
 ```js
 import React from 'react';
@@ -234,7 +234,7 @@ export default class App {
 
 ### Can I use this in production?
 
-I wouldn't. Many use cases are not be considered yet. If you find some use cases this lib can't handle yet, please file an issue.
+I wouldn't. Many use cases haven't been considered yet. If you find some use cases this lib can't handle yet, please file an issue.
 
 ### But there are switch statements!
 
@@ -264,9 +264,9 @@ Redux has no opinion on how you do this in your project.
 
 ### What about `waitFor`?
 
-I wrote a lot of vanilla Flux code, and my only use case for it was avoiding emitting a change before a related Store consumes the action. In Redux this doesn't matter because the change is only emitted after *all* Stores have consumed the action.
+I wrote a lot of vanilla Flux code and my only use case for it was to avoid emitting a change before a related Store consumes the action. This doesn't matter in Redux because the change is only emitted after *all* Stores have consumed the action.
 
-If several of your Stores want to read data from each other and depend on each other, it's a sign they should've been a single Store instead. [See this discussion on how `waitFor` can be replaced by the composition of stateless Stores.](https://gist.github.com/gaearon/d77ca812015c0356654f)
+If several of your Stores want to read data from each other and depend on each other, it's a sign that they should've been a single Store instead. [See this discussion on how `waitFor` can be replaced by the composition of stateless Stores.](https://gist.github.com/gaearon/d77ca812015c0356654f)
 
 ### My views aren't updating!
 
