@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run lint && babel src --out-dir lib",
     "clean": "rimraf ./lib",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "prepublish": "npm run clean && npm run build",
     "start": "cd examples && node server.js",
     "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
