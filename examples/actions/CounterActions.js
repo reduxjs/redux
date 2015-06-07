@@ -17,11 +17,12 @@ export function incrementIfOdd(counter) {
 }
 
 export function incrementAsync() {
-  return perform => {
-    setTimeout(() => {
-      perform(increment());
-    }, 1000);
-  };
+  return new Promise(resolve =>
+    setTimeout(
+      () => resolve(increment()),
+      1000
+    )
+  );
 }
 
 export function decrement() {
