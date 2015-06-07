@@ -6,8 +6,8 @@ export function increment() {
   };
 }
 
-export function incrementIfOdd() {
-  return (perform, { counter }) => {
+export function incrementIfOdd(counter) {
+  return perform => {
     if (counter % 2 === 0) {
       return;
     }
