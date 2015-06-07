@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, bindActionCreators, composeMiddleware } from 'redux';
+import { connect, bindActionCreators, compose } from 'redux';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 import callbackMiddleware from 'redux/middleware/callback';
@@ -13,7 +13,7 @@ function promiseMiddleware(next) {
       : next(action);
 }
 
-const middleware = composeMiddleware(callbackMiddleware, promiseMiddleware);
+const middleware = compose(callbackMiddleware, promiseMiddleware);
 
 @connect(state => ({
   counter: state.counter
