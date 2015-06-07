@@ -5,7 +5,7 @@
   },
   "env": {
     "browser": true,
-    "jasmine": true,
+    "mocha": true,
     "node": true
   },
   "parser": "babel-eslint",
