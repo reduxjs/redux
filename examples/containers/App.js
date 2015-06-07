@@ -1,5 +1,5 @@
 import React from 'react';
-import { createDispatcher, Provider, composeStores, reduceStore, compose } from 'redux';
+import { createDispatcher, Provider, composeStores, compose } from 'redux';
 import CounterApp from './CounterApp';
 import TodoApp from './TodoApp';
 import * as stores from '../stores/index';

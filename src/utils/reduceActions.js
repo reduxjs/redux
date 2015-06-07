@@ -1,4 +1,4 @@
-export default function reduceStore(getAtom, store) {
+export default function reduceActions(getAtom, store) {
   return next => action =>
     next(store(getAtom(), action));
 }
