@@ -12,4 +12,5 @@ export connect from './components/connect';
 // Utilities
 export composeStores from './utils/composeStores';
 export compose from './utils/compose';
+export reduceStore from './utils/reduceStore';
 export bindActionCreators from './utils/bindActionCreators';

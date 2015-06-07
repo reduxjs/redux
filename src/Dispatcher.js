@@ -1,10 +1,6 @@
-function dispatch(store, atom, action) {
-  return store(atom, action);
-}
-
 export default class Dispatcher {
-  constructor(store) {
-    this.store = store;
+  constructor(middleware) {
+    this.middleware = middleware(::this.getAtom);
     this.initialize();
   }
 
@@ -22,8 +18,7 @@ export default class Dispatcher {
   }
 
   dispatch(action) {
-    const nextAtom = dispatch(this.store, this.atom, action);
-    this.setAtom(nextAtom);
+    this.middleware(nextAtom => this.setAtom(nextAtom))(action);
   }
 
   getAtom() {
