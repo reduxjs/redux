@@ -18,18 +18,13 @@ function promiseMiddleware(next) {
 
 const store = composeStores(stores);
 const transactor = createTransactor();
-// const dispatcher = createDispatcher(compose(
-//   promiseMiddleware,
-//   callbackMiddleware,
-//   transactor(store)
-// ));
+
 const dispatcher = createDispatcher({
-  middleware: compose(promiseMiddleware, callbackMiddleware),
-  reducer: transactor(store)
+  store,
+  reducer: transactor,
+  middleware: [ promiseMiddleware, callbackMiddleware ]
 });
 
-
-global.transactor = transactor;
 
 export default class App {
   render() {

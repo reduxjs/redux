@@ -11,15 +11,13 @@ export default class Transactions {
 
   render() {
     const { status, commit, begin, rollback } = this.props;
+
     return (
       <p>
-        <DOMify value={status} />
-        {' '}
         <button onClick={begin}>Begin</button>
-        {' '}
         <button onClick={commit}>Commit</button>
-        {' '}
         <button onClick={rollback}>Rollback</button>
+        <DOMify value={status} />
       </p>
     );
   }

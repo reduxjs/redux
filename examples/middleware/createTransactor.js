@@ -13,7 +13,7 @@ class Transactor {
 
       if (this.isCapturingState) {
         this.isCapturingState = false;
-        return () => () => this.next(state);
+        return () => () => this.sendToNext(state);
       }
 
       return next => {
@@ -23,10 +23,10 @@ class Transactor {
           if (this.inProgress) {
             this.actions.push(action);
             const nextState = this.reduceActions(this.headState, this.actions);
-            return this.next(nextState);
+            return this.sendToNext(nextState);
           } else {
-            const nextState = this.store(this.currentState, action);
-            return this.next(nextState);
+            const nextState = this.reduceActions(this.currentState, [ action ]);
+            return this.sendToNext(nextState);
           }
         };
       };
@@ -47,11 +47,20 @@ class Transactor {
     );
   }
 
+  sendToNext(nextState) {
+    // Something about this feels wrong, but it will work for now
+    this.next({
+      ...nextState,
+      transactorStatus: this.getStatus()
+    });
+  }
+
   begin() {
     if (!this.inProgress) {
       this.inProgress = true;
       this.actions = [];
       this.headState = this.getCurrentState();
+      this.sendToNext(this.headState);
     }
   }
 
@@ -60,7 +69,7 @@ class Transactor {
       this.inProgress = false;
       this.actions = [];
       delete this.headState;
-      this.next(this.getCurrentState());
+      this.sendToNext(this.getCurrentState());
     }
   }
 
@@ -70,7 +79,7 @@ class Transactor {
       this.actions = [];
       this.currentState = this.headState;
       delete this.headState;
-      return this.next(this.currentState);
+      return this.sendToNext(this.currentState);
     }
   }
 

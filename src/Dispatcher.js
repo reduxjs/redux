@@ -1,28 +1,29 @@
 import compose from './utils/compose';
+import storeReducer from './storeReducer';
 
 export default class Dispatcher {
-  constructor({ reducer, middleware }) {
-    this.reducer = reducer;
-    this.middleware = middleware;
-    this.initialize();
+  constructor({ store, reducer = storeReducer, middleware } = {}) {
+    this.store = store;
+    this.middleware = compose(...middleware);
+    this.initialize({ reducer });
   }
 
-  initialize({ atom, subscriptions = [] } = {}) {
+  initialize({ atom, subscriptions = [], reducer } = {}) {
     this.atom = atom;
     this.subscriptions = subscriptions;
+    this.reducer = reducer;
     this.dispatch({});
   }
 
   dispose() {
-    const { atom, subscriptions } = this;
-    delete this.atom;
+    const { atom, subscriptions, reducer } = this;
     this.subscriptions = [];
-    return { atom, subscriptions };
+    return { atom, subscriptions, reducer };
   }
 
-  dispatch = (action) => {
+  dispatch(action) {
     this.middleware(
-      _action => this.reducer(this.getAtom(), this.dispatch)(
+      _action => this.reducer(this.store)(this.getAtom(), ::this.dispatch)(
         nextAtom => this.setAtom(nextAtom)
       )(_action)
     )(action);

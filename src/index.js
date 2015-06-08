@@ -1,6 +1,6 @@
 // Core
 export createDispatcher from './createDispatcher';
-export createReducer from './createReducer';
+export storeReducer from './storeReducer';
 
 // Wrapper components
 export Provider from './components/Provider';
@@ -13,5 +13,4 @@ export connect from './components/connect';
 // Utilities
 export composeStores from './utils/composeStores';
 export compose from './utils/compose';
-export reduceActions from './utils/reduceActions';
 export bindActionCreators from './utils/bindActionCreators';

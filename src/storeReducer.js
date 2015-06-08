@@ -1,4 +1,4 @@
-export default function createReducer(store) {
+export default function storeReducer(store) {
   return state => next => action =>
     next(store(state, action));
 }

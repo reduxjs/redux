@@ -16,18 +16,19 @@ export default class TransactionsApp {
 
   render() {
     return (
-      // TODO: Need a way to subscribe to all dispatches, without memoization
-      <Connector select={() => ({ lol: {} })}>
+      <Connector select={state => {
+        return { status: state.transactorStatus };
+      }}>
         {::this.renderChild}
       </Connector>
     );
   }
 
-  renderChild() {
-    const { transactor: { getStatus, begin, commit, rollback } } = this.props;
+  renderChild({ status }) {
+    const { transactor: { begin, commit, rollback } } = this.props;
 
     return (
-      <Transactions status={getStatus()}
+      <Transactions status={status}
                     commit={commit}
                     begin={begin}
                     rollback={rollback} />
