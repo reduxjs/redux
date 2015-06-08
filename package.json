@@ -38,6 +38,7 @@
     "babel-loader": "^5.1.2",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.3.0",
+    "react-domify": "~0.2.1",
     "react-hot-loader": "^1.2.7",
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6",

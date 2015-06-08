@@ -6,8 +6,8 @@ export function increment() {
   };
 }
 
-export function incrementIfOdd() {
-  return (perform, { counter }) => {
+export function incrementIfOdd(counter) {
+  return perform => {
     if (counter % 2 === 0) {
       return;
     }
@@ -17,11 +17,12 @@ export function incrementIfOdd() {
 }
 
 export function incrementAsync() {
-  return perform => {
-    setTimeout(() => {
-      perform(increment());
-    }, 1000);
-  };
+  return new Promise(resolve =>
+    setTimeout(
+      () => resolve(increment()),
+      1000
+    )
+  );
 }
 
 export function decrement() {
