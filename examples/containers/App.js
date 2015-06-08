@@ -2,6 +2,7 @@ import React from 'react';
 import { createDispatcher, Provider, composeStores, compose } from 'redux';
 import CounterApp from './CounterApp';
 import TodoApp from './TodoApp';
+import TransactionsApp from './TransactionsApp';
 import * as stores from '../stores/index';
 import createTransactor from '../middleware/createTransactor';
 import callbackMiddleware from 'redux/middleware/callback';
@@ -17,11 +18,16 @@ function promiseMiddleware(next) {
 
 const store = composeStores(stores);
 const transactor = createTransactor();
-const dispatcher = createDispatcher(getAtom => compose(
-  promiseMiddleware,
-  callbackMiddleware,
-  transactor(getAtom, store)
-));
+// const dispatcher = createDispatcher(compose(
+//   promiseMiddleware,
+//   callbackMiddleware,
+//   transactor(store)
+// ));
+const dispatcher = createDispatcher({
+  middleware: compose(promiseMiddleware, callbackMiddleware),
+  reducer: transactor(store)
+});
+
 
 global.transactor = transactor;
 
@@ -33,6 +39,7 @@ export default class App {
           <div>
             <CounterApp />
             <TodoApp />
+            <TransactionsApp transactor={transactor} />
           </div>
         }
       </Provider>

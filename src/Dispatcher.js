@@ -1,6 +1,9 @@
+import compose from './utils/compose';
+
 export default class Dispatcher {
-  constructor(middleware) {
-    this.middleware = middleware(::this.getAtom);
+  constructor({ reducer, middleware }) {
+    this.reducer = reducer;
+    this.middleware = middleware;
     this.initialize();
   }
 
@@ -17,8 +20,12 @@ export default class Dispatcher {
     return { atom, subscriptions };
   }
 
-  dispatch(action) {
-    this.middleware(nextAtom => this.setAtom(nextAtom))(action);
+  dispatch = (action) => {
+    this.middleware(
+      _action => this.reducer(this.getAtom(), this.dispatch)(
+        nextAtom => this.setAtom(nextAtom)
+      )(_action)
+    )(action);
   }
 
   getAtom() {

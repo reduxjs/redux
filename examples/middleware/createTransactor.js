@@ -1,26 +1,43 @@
+function noop() {}
+
 class Transactor {
   inProgress = false;
   actions = [];
 
-  middleware(getAtom, store) {
+  middleware(store) {
     this.store = store;
-    this.getAtom = getAtom;
-    this.headState = getAtom();
 
-    return next => {
-      this.next = next;
+    return (state, dispatch) => {
+      this.dispatch = dispatch;
+      this.currentState = state;
 
-      return action => {
-        if (this.inProgress) {
-          this.actions.push(action);
-          return next(this.reduceActions(this.headState, this.actions));
-        } else {
-          const state = this.store(this.getAtom(), action);
-          this.headState = state;
-          return next(state);
-        }
+      if (this.isCapturingState) {
+        this.isCapturingState = false;
+        return () => () => this.next(state);
+      }
+
+      return next => {
+        this.next = next;
+
+        return action => {
+          if (this.inProgress) {
+            this.actions.push(action);
+            const nextState = this.reduceActions(this.headState, this.actions);
+            return this.next(nextState);
+          } else {
+            const nextState = this.store(this.currentState, action);
+            return this.next(nextState);
+          }
+        };
       };
     };
+  }
+
+  // Get the current state atom by running a dummy dispatch.
+  getCurrentState() {
+    this.isCapturingState = true;
+    this.dispatch();
+    return this.currentState;
   }
 
   reduceActions(initialState, actions) {
@@ -31,24 +48,30 @@ class Transactor {
   }
 
   begin() {
-    this.inProgress = true;
-    this.dirty = false;
-    this.actions = [];
+    if (!this.inProgress) {
+      this.inProgress = true;
+      this.actions = [];
+      this.headState = this.getCurrentState();
+    }
   }
 
   commit() {
-    this.inProgress = false;
-    this.dirty = false;
-    this.actions = [];
-    this.headState = this.getAtom();
+    if (this.inProgress) {
+      this.inProgress = false;
+      this.actions = [];
+      delete this.headState;
+      this.next(this.getCurrentState());
+    }
   }
 
   rollback() {
-    const { headState } = this;
-    this.inProgress = false;
-    this.dirty = false;
-    this.actions = [];
-    return this.next(headState);
+    if (this.inProgress) {
+      this.inProgress = false;
+      this.actions = [];
+      this.currentState = this.headState;
+      delete this.headState;
+      return this.next(this.currentState);
+    }
   }
 
   getStatus() {
