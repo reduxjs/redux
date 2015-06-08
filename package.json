@@ -38,7 +38,9 @@
     "babel-loader": "^5.1.2",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.3.0",
+    "isomorphic-fetch": "^2.1.0",
     "react-hot-loader": "^1.2.7",
+    "react-router": "^0.13.3",
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
