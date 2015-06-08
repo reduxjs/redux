@@ -2,16 +2,9 @@ import React, { PropTypes } from 'react';
 import { Connector } from 'redux';
 import Transactions from '../components/Transactions';
 
-const transactorShape = PropTypes.shape({
-  getStatus: PropTypes.func.isRequired,
-  begin: PropTypes.func.isRequired,
-  commit: PropTypes.func.isRequired,
-  rollback: PropTypes.func.isRequired
-});
-
 export default class TransactionsApp {
   static propTypes = {
-    transactor: transactorShape.isRequired
+    transactor: PropTypes.func
   };
 
   render() {

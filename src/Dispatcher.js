@@ -23,7 +23,7 @@ export default class Dispatcher {
 
   dispatch(action) {
     this.middleware(
-      _action => this.reducer(this.store)(this.getAtom(), ::this.dispatch)(
+      _action => this.reducer(this.store, this.getAtom(), ::this.dispatch)(
         nextAtom => this.setAtom(nextAtom)
       )(_action)
     )(action);

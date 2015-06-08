@@ -4,31 +4,28 @@ class Transactor {
   inProgress = false;
   actions = [];
 
-  middleware(store) {
+  middleware(store, state, dispatch) {
     this.store = store;
+    this.dispatch = dispatch;
+    this.currentState = state;
 
-    return (state, dispatch) => {
-      this.dispatch = dispatch;
-      this.currentState = state;
+    if (this.isCapturingState) {
+      this.isCapturingState = false;
+      return () => () => this.sendToNext(state);
+    }
 
-      if (this.isCapturingState) {
-        this.isCapturingState = false;
-        return () => () => this.sendToNext(state);
-      }
+    return next => {
+      this.next = next;
 
-      return next => {
-        this.next = next;
-
-        return action => {
-          if (this.inProgress) {
-            this.actions.push(action);
-            const nextState = this.reduceActions(this.headState, this.actions);
-            return this.sendToNext(nextState);
-          } else {
-            const nextState = this.reduceActions(this.currentState, [ action ]);
-            return this.sendToNext(nextState);
-          }
-        };
+      return action => {
+        if (this.inProgress) {
+          this.actions.push(action);
+          const nextState = this.reduceActions(this.headState, this.actions);
+          return this.sendToNext(nextState);
+        } else {
+          const nextState = this.reduceActions(this.currentState, [ action ]);
+          return this.sendToNext(nextState);
+        }
       };
     };
   }
