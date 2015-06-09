@@ -44,7 +44,6 @@
     "mocha": "^2.2.5",
     "react-hot-loader": "^1.2.7",
     "rimraf": "^2.3.4",
-    "sinon": "^1.14.1",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
   },
