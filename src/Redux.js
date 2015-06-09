@@ -2,10 +2,10 @@ import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
 
 export default class Redux {
-  constructor(dispatcher, initialState) {
+  constructor(dispatcher, initialState, middleware) {
     if (typeof dispatcher === 'object') {
       // A shortcut notation to use the default dispatcher
-      dispatcher = createDispatcher(composeStores(dispatcher), initialState);
+      dispatcher = createDispatcher(composeStores(dispatcher), middleware);
     }
 
     this.state = initialState;
