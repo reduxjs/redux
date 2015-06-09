@@ -1,15 +1,15 @@
 import React from 'react';
-import { createDispatcher, Provider, composeStores } from 'redux';
 import CounterApp from './CounterApp';
 import TodoApp from './TodoApp';
+import { createRedux, Provider } from 'redux';
 import * as stores from '../stores/index';
 
-const dispatcher = createDispatcher(composeStores(stores));
+const redux = createRedux(stores);
 
 export default class App {
   render() {
     return (
-      <Provider dispatcher={dispatcher}>
+      <Provider redux={redux}>
         {() =>
           <div>
             <CounterApp />

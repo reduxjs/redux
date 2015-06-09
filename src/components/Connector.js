@@ -37,13 +37,13 @@ export default class Connector extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.unsubscribe = context.redux.subscribe(this.handleChange);
+    this.handleChange();
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.select !== this.props.select) {
       // Force the state slice recalculation
-      const atom = this.context.redux.getAtom();
-      this.handleChange(atom);
+      this.handleChange();
     }
   }
 
@@ -51,8 +51,10 @@ export default class Connector extends Component {
     this.unsubscribe();
   }
 
-  handleChange(atom) {
-    const slice = this.props.select(atom);
+  handleChange() {
+    const state = this.context.redux.getState();
+    const slice = this.props.select(state);
+
     if (this.state) {
       this.setState({ slice });
     } else {
@@ -66,7 +68,7 @@ export default class Connector extends Component {
     const { redux } = this.context;
 
     return children({
-      dispatcher: redux,
+      dispatch: ::redux.dispatch,
       ...slice
     });
   }

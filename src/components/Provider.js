@@ -1,49 +1,33 @@
-import { PropTypes } from 'react';
+import { Component, PropTypes } from 'react';
 
-const dispatcherShape = PropTypes.shape({
+const reduxShape = PropTypes.shape({
   subscribe: PropTypes.func.isRequired,
-  perform: PropTypes.func.isRequired,
-  getAtom: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  getState: PropTypes.func.isRequired
 });
 
-export default class Provider {
+export default class Provider extends Component {
   static propTypes = {
-    dispatcher: dispatcherShape.isRequired,
+    redux: reduxShape.isRequired,
     children: PropTypes.func.isRequired
   };
 
   static childContextTypes = {
-    redux: dispatcherShape.isRequired
+    redux: reduxShape.isRequired
   };
 
   getChildContext() {
-    return { redux: this };
+    return { redux: this.state.redux };
   }
 
-  constructor() {
-    this.dispatch = this.dispatch.bind(this);
+  constructor(props, context) {
+    super(props, context);
+    this.state = { redux: props.redux };
   }
 
   componentWillReceiveProps(nextProps) {
-    nextProps.dispatcher.initialize(
-      this.props.dispatcher.dispose()
-    );
-  }
-
-  subscribe(listener) {
-    return this.props.dispatcher.subscribe(listener);
-  }
-
-  dispatch(action) {
-    return this.props.dispatcher.dispatch(action);
-  }
-
-  perform(actionCreator, ...args) {
-    return this.props.dispatcher.perform(actionCreator, ...args);
-  }
-
-  getAtom() {
-    return this.props.dispatcher.getAtom();
+    const nextDispatcher = nextProps.redux.getDispatcher();
+    this.state.redux.replaceDispatcher(nextDispatcher);
   }
 
   render() {
