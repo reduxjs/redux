@@ -38,7 +38,7 @@ export default class Redux {
   subscribe(listener) {
     this.listeners.push(listener);
 
-    return () => {
+    return function unsubscribe () {
       const index = this.listeners.indexOf(listener);
       this.listeners.splice(index, 1);
     };
