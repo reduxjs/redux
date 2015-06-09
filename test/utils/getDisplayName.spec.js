@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import expect from 'expect';
 import getDisplayName from '../../src/utils/getDisplayName';
 
 describe('Utils', () => {
@@ -11,7 +11,7 @@ describe('Utils', () => {
         {}
       ].map(getDisplayName);
 
-      expect(names).to.deep.equal(['Foo', 'Bar', 'Component']);
+      expect(names).toEqual(['Foo', 'Bar', 'Component']);
     });
   });
 });

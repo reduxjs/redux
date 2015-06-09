@@ -1,4 +1,4 @@
-// import { expect } from 'chai';
+// import expect from 'expect';
 // import shallowEqualScalar from '../../src/utils/shallowEqualScalar';
 
 describe('Utils', () => {

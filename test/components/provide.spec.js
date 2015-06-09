@@ -1,4 +1,4 @@
-// import { expect } from 'chai';
+// import expect from 'expect';
 // import { provide } from '../../src';
 
 describe('Decorators', () => {

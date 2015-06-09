@@ -1,21 +1,23 @@
-import { expect } from 'chai';
+import expect from 'expect';
 import * as redux from '../src';
 
 describe('Redux', () => {
 
   it('should export necessary components', () => {
-    expect(Object.keys(redux)).to.have.length(7);
+    const imports = Object.keys(redux);
+    expect(imports.length).toBe(8);
 
-    expect(redux).to.have.a.property('createDispatcher');
+    expect(imports).toContain('createRedux');
+    expect(imports).toContain('createDispatcher');
 
-    expect(redux).to.have.a.property('Provider');
-    expect(redux).to.have.a.property('Connector');
+    expect(imports).toContain('Provider');
+    expect(imports).toContain('Connector');
 
-    expect(redux).to.have.a.property('provide');
-    expect(redux).to.have.a.property('connect');
+    expect(imports).toContain('provide');
+    expect(imports).toContain('connect');
 
-    expect(redux).to.have.a.property('composeStores');
-    expect(redux).to.have.a.property('bindActions');
+    expect(imports).toContain('composeStores');
+    expect(imports).toContain('bindActionCreators');
   });
 
 });
