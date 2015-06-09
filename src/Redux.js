@@ -5,7 +5,7 @@ export default class Redux {
   constructor(dispatcher, initialState) {
     if (typeof dispatcher === 'object') {
       // A shortcut notation to use the default dispatcher
-      dispatcher = createDispatcher(composeStores(dispatcher));
+      dispatcher = createDispatcher(composeStores(dispatcher), initialState);
     }
 
     this.state = initialState;
