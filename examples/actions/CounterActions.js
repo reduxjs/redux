@@ -7,19 +7,19 @@ export function increment() {
 }
 
 export function incrementIfOdd() {
-  return (perform, { counter }) => {
+  return (dispatch, { counter }) => {
     if (counter % 2 === 0) {
       return;
     }
 
-    perform(increment());
+    dispatch(increment());
   };
 }
 
 export function incrementAsync() {
-  return perform => {
+  return dispatch => {
     setTimeout(() => {
-      perform(increment());
+      dispatch(increment());
     }, 1000);
   };
 }

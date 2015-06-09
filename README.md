@@ -54,10 +54,10 @@ export function decrement() {
 
 // Can also be async if you return a function
 export function incrementAsync() {
-  return perform => {
+  return dispatch => {
     setTimeout(() => {
-      // Yay! Can invoke sync or async actions with `perform`
-      perform(increment());
+      // Yay! Can invoke sync or async actions with `dispatch`
+      dispatch(increment());
     }, 1000);
   };
 }
@@ -65,12 +65,12 @@ export function incrementAsync() {
 
 // Could also read state of a store in the callback form
 export function incrementIfOdd() {
-  return (perform, { counter }) => {
+  return (dispatch, { counter }) => {
     if (counter % 2 === 0) {
       return;
     }
 
-    perform(increment());
+    dispatch(increment());
   };
 }
 ```
@@ -137,10 +137,10 @@ export default class Counter {
 
 ```js
 // The smart component may observe stores using `<Connector />`,
-// and bind actions to the dispatcher with `bindActions`.
+// and bind actions to the dispatcher with `bindActionCreators`.
 
 import React from 'react';
-import { Connector, bindActions } from 'redux';
+import { Connector, bindActionCreators } from 'redux';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -155,10 +155,10 @@ export default class CounterApp {
   render() {
     return (
       <Connector select={select}>
-        {({ counter, dispatcher }) =>
+        {({ counter, dispatch }) =>
           /* Yes this is child as a function. */
           <Counter counter={counter}
-                   {...bindActions(CounterActions, dispatcher)} />
+                   {...bindActionCreators(CounterActions, dispatch)} />
         }
       </Connector>
     );
@@ -172,7 +172,7 @@ The `@connect` decorator lets you create smart components less verbosely:
 
 ```js
 import React from 'react';
-import { connect, bindActions } from 'redux';
+import { connect, bindActionCreators } from 'redux';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -181,48 +181,91 @@ import * as CounterActions from '../actions/CounterActions';
 }))
 export default class CounterApp {
   render() {
-    const { counter, dispatcher } = this.props;
+    const { counter, dispatch } = this.props;
     return (
       <Counter counter={counter}
-               {...bindActions(CounterActions, dispatcher)} />
+               {...bindActionCreators(CounterActions, dispatch)} />
     );
   }
 }
 ```
 
-#### The root component
+#### Initializing Redux
 
-Decorate your top-level component with `@provider(dispatcher)` (or `<Provider dispatcher={dispatcher}>` inside) to bind it to a Redux dispatcher instance.
-
-Redux dispatcher accepts a single Store as an argument. Usually Flux apps have many Stores, so Redux provides a `composeStore` method that turns an object with Store functions as values (such as what you'd get from `import * as stores`) into a Store that [composes](https://gist.github.com/gaearon/d77ca812015c0356654f) them.
-
-Think of `composeStores` as a “higher-order” Store because it creates a Store from several Stores. (You don't have to use it! You can just pass your own top-level Store function if that's what you prefer.)
+The simplest way to initialize a Redux instance is to give it an object whose values are your Store functions, and whose keys are their names. You may `import *` from the file with all your Store definitions to obtain such an object:
 
 ```js
-import React from 'react';
-import { createDispatcher, Provider, composeStores } from 'redux';
-import CounterApp from './CounterApp';
-import TodoApp from './TodoApp';
+import { createRedux, Provider } from 'redux';
 import * as stores from '../stores/index';
 
-const dispatcher = createDispatcher(composeStores(stores));
+const redux = createRedux(stores);
+```
 
+Then pass `redux` as a prop to `<Provider>` component in the root component of your app, and you're all set:
+
+```js
 export default class App {
   render() {
     return (
-      <Provider dispatcher={dispatcher}>
+      <Provider redux={redux}>
         {() =>
-          /* Yep, function as a child. */
-          <div>
-            <CounterApp />
-            <TodoApp />
-          </div>
+          <CounterApp />
         }
       </Provider>
     );
   }
 }
 ```
+
+#### Running the same code on client and server
+
+The `redux` instance returned by `createRedux` also has the `dispatch(action)`, `subscribe()` and `getState()` methods that you may call outside the React components.
+
+You may optionally specify the initial state as the second argument to `createRedux`. This is useful for hydrating the state you received from running Redux on the server:
+
+```js
+// server
+const redux = createRedux(stores);
+redux.dispatch(MyActionCreators.doSomething()); // fire action creators to fill the state
+const state = redux.getState(); // somehow pass this state to the client
+
+// client
+const initialState = window.STATE_FROM_SERVER;
+const redux = createRedux(stores, initialState);
+```
+
+#### Additional customization
+
+There is also a longer way to do the same thing, if you need additional customization.
+
+This:
+
+```js
+import { createRedux } from 'redux';
+import * as stores from '../stores/index';
+
+const redux = createRedux(stores);
+```
+
+is in fact a shortcut for this:
+
+```js
+import { createRedux, createDispatcher, composeStores } from 'redux';
+import * as stores from '../stores/index';
+
+// Compose all your Stores into a single Store function with `composeStores`:
+const store = composeStores(stores);
+
+// Create a Dispatcher function for your composite Store:
+const dispatcher = createDispatcher(store);
+
+// Create a Redux instance using the dispatcher function:
+const redux = createRedux(dispatcher);
+```
+
+Why would you want to write it longer? Maybe you're an advanced user and want to provide a custom Dispatcher function, or maybe you have a different idea of how to compose your Stores (or you're satisfied with a single Store). Redux lets you do all of this.
+
+When in doubt, use the shorter option!
 
 ## FAQ
 
