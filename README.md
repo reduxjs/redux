@@ -182,6 +182,8 @@ import * as CounterActions from '../actions/CounterActions';
 export default class CounterApp {
   render() {
     const { counter, dispatch } = this.props;
+    // Instead of `bindActionCreators`, you may also pass `dispatch` as a prop
+    // to your component and call `dispatch(CounterActions.increment())`
     return (
       <Counter counter={counter}
                {...bindActionCreators(CounterActions, dispatch)} />
