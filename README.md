@@ -338,3 +338,14 @@ function (state, action) {
 ```
 
 [Read more](https://github.com/sebmarkbage/ecmascript-rest-spread) about the spread properties ES7 proposal.
+
+## Inspiration and Thanks
+
+* [Webpack Hot Module Replacement](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack)
+* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial)
+* [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/)
+* [Developing ClojureScript with Figwheel](http://www.youtube.com/watch?v=j-kj2qwJa_E)
+* [Flummox](https://github.com/acdlite/flummox)
+* [disto](https://github.com/threepointone/disto)
+
+Special thanks to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
