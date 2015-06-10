@@ -1,5 +1,6 @@
 import React from 'react';
-import { bindActionCreators, Connector } from 'redux';
+import { bindActionCreators } from 'redux';
+import { Connector } from 'redux/react';
 import AddTodo from '../components/AddTodo';
 import TodoList from '../components/TodoList';
 import * as TodoActions from '../actions/TodoActions';
