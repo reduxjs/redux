@@ -1,4 +1,6 @@
-export default function createDispatcher(store, middleware) {
+import compose from './utils/composeMiddleware';
+
+export default function createDispatcher(store, middlewares = []) {
   return function dispatcher(initialState, setState) {
     let state = store(initialState, {});
     setState(state);
@@ -9,20 +11,14 @@ export default function createDispatcher(store, middleware) {
       return action;
     }
 
-    // Default middleware. It's special because it reads in the current state.
-    // This is kept here to maintain existing API behavior.
-    function perform(next) {
-      return function recurse(action) {
-        return typeof action === 'function' ?
-          action(recurse, state) :
-          next(action);
-      };
+    function getState() {
+      return state;
     }
 
-    if (typeof middleware === 'undefined') {
-      middleware = perform;
+    if (typeof middlewares === 'function') {
+      middlewares = middlewares(getState);
     }
 
-    return middleware(dispatch);
+    return compose(...middlewares, dispatch);
   };
 }

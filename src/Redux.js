@@ -2,10 +2,13 @@ import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
 
 export default class Redux {
-  constructor(dispatcher, initialState, middleware) {
+  constructor(dispatcher, initialState) {
     if (typeof dispatcher === 'object') {
       // A shortcut notation to use the default dispatcher
-      dispatcher = createDispatcher(composeStores(dispatcher), middleware);
+      dispatcher = createDispatcher(
+        composeStores(dispatcher),
+        [ ::this.middleware ]
+      );
     }
 
     this.state = initialState;
@@ -24,6 +27,15 @@ export default class Redux {
 
   dispatch(action) {
     return this.dispatchFn(action);
+  }
+
+  middleware(next) {
+    const recurse = (action) =>
+      typeof action === 'function' ?
+        action(recurse, ::this.getState) :
+        next(action);
+
+    return recurse;
   }
 
   getState() {
