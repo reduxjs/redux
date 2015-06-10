@@ -1,10 +1,22 @@
 import expect from 'expect';
 import Redux from '../src/Redux';
 
+const initialState = {};
 const fakeState = { foo: 'bar' };
 
-function fakeStore() {
-  return fakeState;
+function fakeStore(state = initialState, action) {
+  const { type } = action;
+  if (type === 'FOO') {
+    return action.body;
+  }
+  return state;
+}
+
+function foo() {
+  return {
+    type: 'FOO',
+    body: fakeState
+  };
 }
 
 describe('Redux', () => {
@@ -16,19 +28,21 @@ describe('Redux', () => {
   });
 
   it('should correctly initialize', () => {
-    expect(redux.state).toEqual({ fakeStore: fakeState });
+    expect(redux.state).toEqual({ fakeStore: {} });
     expect(redux.listeners).toEqual([]);
     expect(redux.dispatcher).toBeA('function');
     expect(redux.dispatchFn).toBeA('function');
   });
 
-  it('should subscribe to changes', done => {
+  it.only('should subscribe to changes', done => {
+    let state = redux.getState();
+    expect(state.fakeStore).toEqual({});
     redux.subscribe(() => {
-      const state = redux.getState();
-      expect(state).toEqual(fakeState);
+      state = redux.getState();
+      expect(state.fakeStore).toEqual(fakeState);
       done();
     });
-    redux.setState(fakeState);
+    redux.dispatch(foo());
   });
 
   it('should unsubscribe a listener', () => {
@@ -38,10 +52,10 @@ describe('Redux', () => {
     expect(changeListenerSpy.calls.length).toBe(0);
 
     redux.setState(fakeState);
-
     expect(changeListenerSpy.calls.length).toBe(1);
 
     unsubscribe();
+    redux.setState(fakeState);
     expect(changeListenerSpy.calls.length).toBe(1);
   });
 });
