@@ -1,5 +1,5 @@
 import expect from 'expect';
-import getDisplayName from '../../src/utils/getDisplayName';
+import getDisplayName from '../src/utils/getDisplayName';
 
 describe('Utils', () => {
   describe('getDisplayName', () => {
