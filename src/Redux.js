@@ -1,5 +1,6 @@
 import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
+import thunkMiddleware from './middleware/thunk';
 
 export default class Redux {
   constructor(dispatcher, initialState) {
@@ -7,7 +8,7 @@ export default class Redux {
       // A shortcut notation to use the default dispatcher
       dispatcher = createDispatcher(
         composeStores(dispatcher),
-        [ ::this.middleware ]
+        getState => [ thunkMiddleware(getState) ]
       );
     }
 
@@ -27,15 +28,6 @@ export default class Redux {
 
   dispatch(action) {
     return this.dispatchFn(action);
-  }
-
-  middleware(next) {
-    const recurse = (action) =>
-      typeof action === 'function' ?
-        action(recurse, ::this.getState) :
-        next(action);
-
-    return recurse;
   }
 
   getState() {
