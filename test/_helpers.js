@@ -23,10 +23,10 @@ export const todoActions = {
 
   addTodoAsync(text, cb/* for testing only */) {
     return dispatch => {
-      setTimeout(() => {
+      setImmediate(() => {
         dispatch({ type: ADD_TODO_ASYNC, text });
         cb();
-      }, 500);
+      });
     };
   }
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect, bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'redux/react';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
