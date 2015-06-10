@@ -35,8 +35,7 @@ export default class Connector extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.unsubscribe = context.redux.subscribe(this.handleChange);
+    this.unsubscribe = context.redux.subscribe(::this.handleChange);
     this.handleChange();
   }
 
