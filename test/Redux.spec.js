@@ -34,7 +34,7 @@ describe('Redux', () => {
     expect(redux.dispatchFn).toBeA('function');
   });
 
-  it.only('should subscribe to changes', done => {
+  it('should subscribe to changes', done => {
     let state = redux.getState();
     expect(state.fakeStore).toEqual({});
     redux.subscribe(() => {
