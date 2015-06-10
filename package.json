@@ -6,9 +6,11 @@
   "scripts": {
     "build": "npm run lint && babel src --out-dir lib",
     "clean": "rimraf ./lib",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "prepublish": "npm run clean && npm run build",
-    "start": "cd examples && node server.js"
+    "start": "cd examples && node server.js",
+    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -38,6 +40,8 @@
     "babel-loader": "^5.1.2",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.3.0",
+    "expect": "^1.6.0",
+    "mocha": "^2.2.5",
     "react-hot-loader": "^1.2.7",
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6",

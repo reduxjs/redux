@@ -2,7 +2,7 @@ import React from 'react';
 import CounterApp from './CounterApp';
 import TodoApp from './TodoApp';
 import { createRedux, Provider } from 'redux';
-import * as stores from '../stores/index';
+import * as stores from '../stores';
 
 const redux = createRedux(stores);
 
