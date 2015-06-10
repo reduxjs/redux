@@ -341,11 +341,15 @@ function (state, action) {
 
 ## Inspiration and Thanks
 
-* [Webpack Hot Module Replacement](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack)
-* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial)
-* [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/)
-* [Developing ClojureScript with Figwheel](http://www.youtube.com/watch?v=j-kj2qwJa_E)
-* [Flummox](https://github.com/acdlite/flummox)
-* [disto](https://github.com/threepointone/disto)
+* [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) for Hot Module Replacement
+* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to “stateless Stores”
+* [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/) for blowing my mind
+* [Developing ClojureScript with Figwheel](http://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”
+* [Flummox](https://github.com/acdlite/flummox) for teaching me to approach Flux without boilerplate or singletons
+* [disto](https://github.com/threepointone/disto) for a proof of concept of hot reloadable Stores
+* [NuclearJS](https://github.com/optimizely/nuclear-js) for proving this architecture can be performant
+* [Om](https://github.com/omcljs/om) for popularizing the idea of a single state atom
+* [Cycle](https://github.com/staltz/cycle) for showing how often a function is the best tool
+* [React](https://github.com/facebook/react) for the pragmatic innovation
 
-Special thanks to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
+Special thanks go to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
