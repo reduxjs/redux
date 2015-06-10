@@ -23,10 +23,10 @@ function foo() {
 
 function fooAsync(cb/* for testing only */) {
   return dispatch => {
-    setTimeout(() => {
+    setImmediate(() => {
       dispatch(fakeActionAsync);
       cb();
-    }, 500);
+    });
   };
 }
 

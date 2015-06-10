@@ -16,9 +16,9 @@ const fakeActionCreators = {
   },
   fooAsync() {
     return dispatch => {
-      setTimeout(() => {
+      setImmediate(() => {
         dispatch({ type: 'FOO_ASYNC' });
-      }, 1000);
+      });
     };
   }
 };
