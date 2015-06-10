@@ -1,11 +1,15 @@
 import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
+import thunkMiddleware from './middleware/thunk';
 
 export default class Redux {
   constructor(dispatcher, initialState) {
     if (typeof dispatcher === 'object') {
       // A shortcut notation to use the default dispatcher
-      dispatcher = createDispatcher(composeStores(dispatcher));
+      dispatcher = createDispatcher(
+        composeStores(dispatcher),
+        getState => [ thunkMiddleware(getState) ]
+      );
     }
 
     this.state = initialState;

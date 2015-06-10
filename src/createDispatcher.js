@@ -1,20 +1,24 @@
-export default function createDispatcher(store) {
+import compose from './utils/composeMiddleware';
+
+export default function createDispatcher(store, middlewares = []) {
   return function dispatcher(initialState, setState) {
     let state = store(initialState, {});
     setState(state);
 
-    function dispatchSync(action) {
+    function dispatch(action) {
       state = store(state, action);
       setState(state);
       return action;
     }
 
-    function dispatch(action) {
-      return typeof action === 'function' ?
-        action(dispatch, state) :
-        dispatchSync(action);
+    function getState() {
+      return state;
     }
 
-    return dispatch;
+    if (typeof middlewares === 'function') {
+      middlewares = middlewares(getState);
+    }
+
+    return compose(...middlewares, dispatch);
   };
 }

@@ -8,7 +8,7 @@ export default class Counter {
   };
 
   render() {
-    const { increment, decrement, counter } = this.props;
+    const { increment, incrementIfOdd, decrement, counter } = this.props;
     return (
       <p>
         Clicked: {counter} times
@@ -16,6 +16,8 @@ export default class Counter {
         <button onClick={increment}>+</button>
         {' '}
         <button onClick={decrement}>-</button>
+        {' '}
+        <button onClick={incrementIfOdd}>Increment if odd</button>
       </p>
     );
   }
