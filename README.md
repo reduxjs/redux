@@ -1,10 +1,13 @@
 redux
 =========================
 
+[![build status](https://img.shields.io/travis/gaearon/redux.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
+[![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
+
 An experiment in fully hot-reloadable Flux.  
 
 **The API might change any day.**  
-_**Don't use in production.**_
+_**Don't use in production just yet.**_
 
 ## Why another Flux framework?
 
