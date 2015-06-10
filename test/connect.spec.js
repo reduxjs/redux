@@ -1,8 +1,8 @@
 // import expect from 'expect';
-// import { provide } from '../../src';
+// import { connect } from '../src';
 
 describe('Decorators', () => {
-  describe('provide', () => {
+  describe('connect', () => {
 
     it('should return decorated component');
   });

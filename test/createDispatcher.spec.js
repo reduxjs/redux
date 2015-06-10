@@ -1,55 +1,40 @@
 import expect from 'expect';
 import { createDispatcher, composeStores } from '../src';
 import thunkMiddleware from '../src/middleware/thunk';
+import * as helpers from './_helpers';
 
-const fakeState = { foo: 'bar' };
-const fakeAction = { type: 'FOO', foo: 'bar' };
-const fakeActionAsync = { type: 'FOO_ASYNC', fooAsync: 'barAsync' };
-
-function fakeStore(state = fakeState, action) {
-  const { type } = action;
-  if (type === 'FOO') {
-    return action.foo;
-  }
-  if (type === 'FOO_ASYNC') {
-    return action.fooAsync;
-  }
-  return state;
-}
-
-function foo() {
-  return fakeAction;
-}
-
-function fooAsync(cb/* for testing only */) {
-  return dispatch => {
-    setTimeout(() => {
-      dispatch(fakeActionAsync);
-      cb();
-    }, 500);
-  };
-}
+const { constants, defaultText, todoActions, todoStore } = helpers;
+const { addTodo, addTodoAsync } = todoActions;
+const { ADD_TODO } = constants;
 
 describe('createDispatcher', () => {
 
   it('should handle sync and async dispatches', done => {
     const spy = expect.createSpy(() => {});
     const dispatcher = createDispatcher(
-      composeStores({ fakeStore }),
+      composeStores({ todoStore }),
+      // we need this middleware to handle async actions
       getState => [thunkMiddleware(getState)]);
+
     expect(dispatcher).toBeA('function');
 
-    const dispatchFn = dispatcher(fakeState, spy);
-    expect(spy).toHaveBeenCalledWith({ fakeStore: fakeState });
+    const dispatchFn = dispatcher(undefined, spy);
+    expect(spy.calls.length).toBe(1);
+    expect(spy).toHaveBeenCalledWith({ todoStore: [] });
 
-    const fooAction = dispatchFn(foo());
-    expect(fooAction).toEqual(fakeAction);
+    const addTodoAction = dispatchFn(addTodo(defaultText));
+    expect(addTodoAction).toEqual({ type: ADD_TODO, text: defaultText });
     expect(spy.calls.length).toBe(2);
-    expect(spy).toHaveBeenCalledWith({ fakeStore: 'bar' });
+    expect(spy).toHaveBeenCalledWith({ todoStore: [
+      { id: 1, text: defaultText }
+    ] });
 
-    dispatchFn(fooAsync(() => {
+    dispatchFn(addTodoAsync(('Say hi!'), () => {
       expect(spy.calls.length).toBe(3);
-      expect(spy).toHaveBeenCalledWith({ fakeStore: 'barAsync' });
+      expect(spy).toHaveBeenCalledWith({ todoStore: [
+        { id: 2, text: 'Say hi!' },
+        { id: 1, text: defaultText }
+      ] });
       done();
     }));
   });

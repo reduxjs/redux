@@ -1,5 +1,5 @@
 // import expect from 'expect';
-// import { composeStores } from '../../src';
+// import { composeStores } from '../src';
 
 describe('Utils', () => {
   describe('composeStores', () => {

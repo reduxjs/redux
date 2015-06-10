@@ -1,5 +1,5 @@
 // import expect from 'expect';
-// import { Connector } from '../../src';
+// import { Connector } from '../src';
 
 describe('Components', () => {
   describe('Connector', () => {
