@@ -5,7 +5,7 @@ describe('Redux', () => {
 
   it('should export necessary components', () => {
     const imports = Object.keys(redux);
-    expect(imports.length).toBe(8);
+    expect(imports.length).toBe(9);
 
     expect(imports).toContain('createRedux');
     expect(imports).toContain('createDispatcher');
@@ -16,6 +16,7 @@ describe('Redux', () => {
     expect(imports).toContain('provide');
     expect(imports).toContain('connect');
 
+    expect(imports).toContain('compose');
     expect(imports).toContain('composeStores');
     expect(imports).toContain('bindActionCreators');
   });
