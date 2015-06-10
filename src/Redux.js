@@ -40,11 +40,12 @@ export default class Redux {
   }
 
   subscribe(listener) {
-    this.listeners.push(listener);
+    const { listeners } = this;
+    listeners.push(listener);
 
     return function unsubscribe () {
-      const index = this.listeners.indexOf(listener);
-      this.listeners.splice(index, 1);
+      const index = listeners.indexOf(listener);
+      listeners.splice(index, 1);
     };
   }
 }

@@ -1,5 +1,6 @@
 import expect from 'expect';
 import { createDispatcher, composeStores } from '../src';
+import thunkMiddleware from '../src/middleware/thunk';
 
 const fakeState = { foo: 'bar' };
 const fakeAction = { type: 'FOO', foo: 'bar' };
@@ -33,7 +34,9 @@ describe('createDispatcher', () => {
 
   it('should handle sync and async dispatches', done => {
     const spy = expect.createSpy(() => {});
-    const dispatcher = createDispatcher(composeStores({ fakeStore }));
+    const dispatcher = createDispatcher(
+      composeStores({ fakeStore }),
+      getState => [thunkMiddleware(getState)]);
     expect(dispatcher).toBeA('function');
 
     const dispatchFn = dispatcher(fakeState, spy);
