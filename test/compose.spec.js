@@ -4,6 +4,6 @@
 describe('Utils', () => {
   describe('compose', () => {
 
-    it('should call map stores');
+    it('should return combined middleware that executes from left to right');
   });
 });
