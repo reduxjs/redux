@@ -4,6 +4,7 @@ import { Link, RouteHandler } from 'react-router';
 export default class PostList {
 
   componentWillMount() {
+    // FIXME: not sure this is the right place
     this.props.fetchAllPosts();
   }
 
@@ -19,6 +20,7 @@ export default class PostList {
             </li>
           )}
         </ul>
+        {/* this will render the selected post detail */}
         <RouteHandler {...this.props} />
       </div>
     );

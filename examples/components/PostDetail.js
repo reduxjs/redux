@@ -17,7 +17,7 @@ export default class PostDetail {
     return (
       <div>
         <h1>{this.props.post.title}</h1>
-        <textarea>{this.props.post.body}</textarea>
+        <code>{this.props.post.body}></code>
       </div>
     );
   }

@@ -1,9 +1,10 @@
 import React from 'react';
-import { bindActions, Connector } from 'redux';
-import PostDetail from '../components/PostList';
+import { bindActionCreators } from 'redux';
+import { Connector } from 'redux/react';
+import PostDetail from '../components/PostDetail';
 import * as BlogActions from '../actions/BlogActions';
 
-export default class PostDetailApp {
+export default class BlogDetailApp {
 
   render() {
     return (
@@ -13,8 +14,8 @@ export default class PostDetailApp {
     );
   }
 
-  renderChild({ blog, dispatcher }) {
-    const actions = bindActions(BlogActions, dispatcher);
+  renderChild({ blog, dispatch }) {
+    const actions = bindActionCreators(BlogActions, dispatch);
     return (
       <PostDetail post={blog.post} {...this.props} {...actions} />
     );

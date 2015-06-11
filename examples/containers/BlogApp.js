@@ -1,6 +1,6 @@
 import React from 'react';
-import { RouteHandler } from 'react-router';
-import { bindActions, Connector } from 'redux';
+import { bindActionCreators } from 'redux';
+import { Connector } from 'redux/react';
 import PostList from '../components/PostList';
 import * as BlogActions from '../actions/BlogActions';
 
@@ -14,8 +14,8 @@ export default class BlogApp {
     );
   }
 
-  renderChild({ blog, dispatcher }) {
-    const actions = bindActions(BlogActions, dispatcher);
+  renderChild({ blog, dispatch }) {
+    const actions = bindActionCreators(BlogActions, dispatch);
     return (
       <div>
         <PostList
@@ -26,7 +26,6 @@ export default class BlogApp {
                           we have to pass them down and let the dumb
                           component fetch the data */
         />
-        <RouteHandler {...this.props} />
       </div>
     );
   }
