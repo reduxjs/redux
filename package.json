@@ -1,14 +1,17 @@
 {
   "name": "redux",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "An experiment in fully hot-reloadable Flux",
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run lint && babel src --out-dir lib",
     "clean": "rimraf ./lib",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "prepublish": "npm run clean && npm run build",
-    "start": "cd examples && node server.js"
+    "start": "cd examples && node server.js",
+    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm run test -- --watch",
+    "test:cov": "istanbul cover node_modules/.bin/_mocha -- --compilers js:babel/register --recursive"
   },
   "repository": {
     "type": "git",
@@ -38,7 +41,11 @@
     "babel-loader": "^5.1.2",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.3.0",
+    "expect": "^1.6.0",
     "isomorphic-fetch": "^2.1.0",
+    "istanbul": "^0.3.15",
+    "mocha": "^2.2.5",
+    "react": "^0.13.0",
     "react-hot-loader": "^1.2.7",
     "react-router": "^0.13.3",
     "rimraf": "^2.3.4",
@@ -49,8 +56,7 @@
     "babel-runtime": "^5.4.7",
     "envify": "^3.4.0",
     "invariant": "^2.0.0",
-    "lodash": "^3.9.3",
-    "react": "^0.13.0"
+    "lodash": "^3.9.3"
   },
   "browserify": {
     "transform": [

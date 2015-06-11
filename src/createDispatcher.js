@@ -1,14 +1,24 @@
-import Dispatcher from './Dispatcher';
+import compose from './utils/composeMiddleware';
 
-export default function createDispatcher(...args) {
-  const dispatcher = new Dispatcher(...args);
+export default function createDispatcher(store, middlewares = []) {
+  return function dispatcher(initialState, setState) {
+    let state = store(initialState, {});
+    setState(state);
 
-  return {
-    subscribe: ::dispatcher.subscribe,
-    perform: ::dispatcher.perform,
-    getAtom: ::dispatcher.getAtom,
-    setAtom: ::dispatcher.setAtom,
-    initialize: ::dispatcher.initialize,
-    dispose: ::dispatcher.dispose
+    function dispatch(action) {
+      state = store(state, action);
+      setState(state);
+      return action;
+    }
+
+    function getState() {
+      return state;
+    }
+
+    if (typeof middlewares === 'function') {
+      middlewares = middlewares(getState);
+    }
+
+    return compose(...middlewares, dispatch);
   };
 }

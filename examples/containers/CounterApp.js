@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect, bindActions } from 'redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'redux/react';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -8,10 +9,10 @@ import * as CounterActions from '../actions/CounterActions';
 }))
 export default class CounterApp {
   render() {
-    const { counter, dispatcher } = this.props;
+    const { counter, dispatch } = this.props;
     return (
       <Counter counter={counter}
-               {...bindActions(CounterActions, dispatcher)} />
+               {...bindActionCreators(CounterActions, dispatch)} />
     );
   }
 }

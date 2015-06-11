@@ -7,19 +7,21 @@ export function increment() {
 }
 
 export function incrementIfOdd() {
-  return (perform, { counter }) => {
+  return (dispatch, getState) => {
+    const { counter } = getState();
+
     if (counter % 2 === 0) {
       return;
     }
 
-    perform(increment());
+    dispatch(increment());
   };
 }
 
 export function incrementAsync() {
-  return perform => {
+  return dispatch => {
     setTimeout(() => {
-      perform(increment());
+      dispatch(increment());
     }, 1000);
   };
 }
