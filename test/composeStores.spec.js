@@ -1,9 +1,20 @@
-// import expect from 'expect';
-// import { composeStores } from '../src';
+import expect from 'expect';
+import { composeStores } from '../src';
 
 describe('Utils', () => {
   describe('composeStores', () => {
+    it('should return a store that maps state keys to reducer functions', () =>{
+      const store = composeStores({
+        counter: (state = 0, action) =>
+          action.type === 'increment' ? state + 1 : state,
+        stack: (state = [], action) =>
+          action.type === 'push' ? [...state, action.value] : state
+      });
 
-    it('should call map stores');
+      const s1 = store({}, { type: 'increment' });
+      expect(s1).toEqual({ counter: 1, stack: [] });
+      const s2 = store(s1, { type: 'push', value: 'a' });
+      expect(s2).toEqual({ counter: 1, stack: ['a'] });
+    });
   });
 });
