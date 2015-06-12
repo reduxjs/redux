@@ -3,7 +3,6 @@ import jsdom from 'mocha-jsdom';
 import React, { PropTypes, Component } from 'react/addons';
 import { createRedux } from '../../src';
 import { Connector } from '../../src/react';
-import { todoStore, todoActions } from '../_helpers';
 
 const { TestUtils } = React.addons;
 
