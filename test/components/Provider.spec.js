@@ -1,17 +1,19 @@
 import expect from 'expect';
-import React, { PropTypes } from 'react/addons';
+import jsdom from 'mocha-jsdom';
+import React, { PropTypes, Component } from 'react/addons';
 import { createRedux } from '../../src';
 import { Provider } from '../../src/react';
 
 const { TestUtils } = React.addons;
-const renderer = TestUtils.createRenderer();
 
 describe('React', () => {
   describe('Provider', () => {
-    it.skip('adds Redux to child context', () => {
+    jsdom();
+
+    it('adds Redux to child context', () => {
       const redux = createRedux({ test: () => 'test' });
 
-      class Child {
+      class Child extends Component {
         static contextTypes = {
           redux: PropTypes.object.isRequired
         }
@@ -21,15 +23,14 @@ describe('React', () => {
         }
       }
 
-      renderer.render(
+      const tree = TestUtils.renderIntoDocument(
         <Provider redux={redux}>
           {() => <Child />}
         </Provider>
       );
 
-      const result = renderer.getRenderOutput();
-
-      expect(result.type).toBe(Child);
+      const child = TestUtils.findRenderedComponentWithType(tree, Child);
+      expect(child.context.redux).toBe(redux);
     });
   });
 });
