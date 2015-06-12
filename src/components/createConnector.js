@@ -71,7 +71,7 @@ export default function createConnector(React) {
       const { redux } = this.context;
 
       return children({
-        dispatch: ::redux.dispatch,
+        dispatch: redux.dispatch,
         ...slice
       });
     }

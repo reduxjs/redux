@@ -2,8 +2,10 @@ import getDisplayName from '../utils/getDisplayName';
 import shallowEqualScalar from '../utils/shallowEqualScalar';
 
 export default function createConnectDecorator(React, Connector) {
+  const { Component } = React;
+
   return function connect(select) {
-    return DecoratedComponent => class ConnectorDecorator {
+    return DecoratedComponent => class ConnectorDecorator extends Component {
       static displayName = `Connector(${getDisplayName(DecoratedComponent)})`;
 
       shouldComponentUpdate(nextProps) {
@@ -13,13 +15,9 @@ export default function createConnectDecorator(React, Connector) {
       render() {
         return (
           <Connector select={state => select(state, this.props)}>
-            {this.renderChild}
+            {stuff => <DecoratedComponent {...stuff} {...this.props} />}
           </Connector>
         );
-      }
-
-      renderChild(state) {
-        return <DecoratedComponent {...state} />;
       }
     };
   };
