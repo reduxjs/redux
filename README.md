@@ -144,7 +144,7 @@ export default class Counter {
 
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { Connector } from 'redux/react'; // Or redux/react-native
+import { Connector } from 'redux/react';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -177,7 +177,7 @@ The `@connect` decorator lets you create smart components less verbosely:
 ```js
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { connect } from 'redux/react'; // Or redux/react-native
+import { connect } from 'redux/react';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -195,6 +195,15 @@ export default class CounterApp {
     );
   }
 }
+```
+
+#### React Native
+
+To use Redux with React Native, just replace imports from `redux/react` with `redux/react-native`:
+
+```js
+import { bindActionCreators } from 'redux';
+import { Provider, Connector } from 'redux/react-native';
 ```
 
 #### Initializing Redux
