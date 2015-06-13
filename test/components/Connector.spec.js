@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdom from 'mocha-jsdom';
 import React, { PropTypes, Component } from 'react/addons';
-import { createRedux, bindActionCreators } from '../../src';
+import { createRedux } from '../../src';
 import { Connector } from '../../src/react';
 
 const { TestUtils } = React.addons;
@@ -150,7 +150,7 @@ describe('React', () => {
 
       const testActions = {
         anAction: () => {
-          return { type: 'TEST_ACTION' }
+          return { type: 'TEST_ACTION' };
         }
       };
 
@@ -165,7 +165,7 @@ describe('React', () => {
       );
 
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-      expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions))
+      expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions));
       expect(div.props.actions.anAction).toBeA('function');
     });
 
@@ -174,7 +174,7 @@ describe('React', () => {
 
       const testActions = {
         anAction: () => {
-          return { type: 'TEST_ACTION' }
+          return { type: 'TEST_ACTION' };
         }
       };
 
@@ -191,7 +191,7 @@ describe('React', () => {
       );
 
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-      expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions))
+      expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions));
       expect(div.props.actions.anAction).toBeA('function');
     });
   });
