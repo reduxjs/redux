@@ -9,10 +9,11 @@ export default class PostList {
   }
 
   render() {
+    const subset = this.props.posts.slice(0, 20);
     return (
       <div>
         <ul>
-          {this.props.posts.map(post =>
+          {subset.map(post =>
             <li key={post.id}>
               <Link to="post" params={{ postId: post.id }}>
                 {post.title}
