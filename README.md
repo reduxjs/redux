@@ -143,7 +143,8 @@ export default class Counter {
 // and bind actions to the dispatcher with `bindActionCreators`.
 
 import React from 'react';
-import { Connector, bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
+import { Connector } from 'redux/react'; // Or redux/react-native
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -175,7 +176,8 @@ The `@connect` decorator lets you create smart components less verbosely:
 
 ```js
 import React from 'react';
-import { connect, bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'redux/react'; // Or redux/react-native
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -200,7 +202,8 @@ export default class CounterApp {
 The simplest way to initialize a Redux instance is to give it an object whose values are your Store functions, and whose keys are their names. You may `import *` from the file with all your Store definitions to obtain such an object:
 
 ```js
-import { createRedux, Provider } from 'redux';
+import { createRedux } from 'redux';
+import { Provider } from 'redux/react';
 import * as stores from '../stores/index';
 
 const redux = createRedux(stores);
