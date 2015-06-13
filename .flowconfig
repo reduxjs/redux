@@ -1,0 +1,10 @@
+[ignore]
+.*/lib
+.*/test
+
+[include]
+
+[libs]
+./type-definitions
+
+[options]
