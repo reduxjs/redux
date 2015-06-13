@@ -1,3 +1,3 @@
-export default function compose(...middlewares) {
+export default function composeMiddleware(...middlewares) {
   return middlewares.reduceRight((composed, m) => m(composed));
 }
