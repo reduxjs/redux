@@ -144,5 +144,21 @@ describe('React', () => {
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
       expect(div.props.dispatch).toBe(redux.dispatch);
     });
+
+    it('should throw an error if `state` returns anything but a plain object', () => {
+      const redux = createRedux(() => {});
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider redux={redux}>
+            {() => (
+              <Connector state={() => 1}>
+                {() => <div />}
+              </Connector>
+            )}
+          </Provider>
+        );
+      }).toThrow(/select/);
+    });
   });
 });
