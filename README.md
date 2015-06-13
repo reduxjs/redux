@@ -256,19 +256,25 @@ is in fact a shortcut for this:
 
 ```js
 import { createRedux, createDispatcher, composeStores } from 'redux';
+import thunkMiddleware from 'redux/lib/middleware/thunk';
 import * as stores from '../stores/index';
 
 // Compose all your Stores into a single Store function with `composeStores`:
 const store = composeStores(stores);
 
 // Create a Dispatcher function for your composite Store:
-const dispatcher = createDispatcher(store);
+const dispatcher = createDispatcher(
+  store,
+  getState => [thunkMiddleware(getState)] // Pass the default middleware
+);
 
 // Create a Redux instance using the dispatcher function:
 const redux = createRedux(dispatcher);
 ```
 
 Why would you want to write it longer? Maybe you're an advanced user and want to provide a custom Dispatcher function, or maybe you have a different idea of how to compose your Stores (or you're satisfied with a single Store). Redux lets you do all of this.
+
+`createDispatcher()` also gives you the ability to specify middleware -- for example, to add support for promises. [Learn more](https://github.com/gaearon/redux/blob/master/docs/middleware.md) about how to create and use middleware in Redux.
 
 When in doubt, use the shorter option!
 
