@@ -1,1 +1,1 @@
-export * from './lib/react-native';
+module.exports = require('./lib/react-native');

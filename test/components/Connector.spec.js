@@ -99,7 +99,7 @@ describe('React', () => {
       expect(spy.calls.length).toBe(1);
     });
 
-    it('shallow compares selected state to prevent unnecessary updates', () =>{
+    it('shallow compares selected state to prevent unnecessary updates', () => {
       const redux = createRedux({ string: stringBuilder });
       const spy = expect.createSpy(() => {});
       function render({ string }) {
@@ -143,6 +143,22 @@ describe('React', () => {
 
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
       expect(div.props.dispatch).toBe(redux.dispatch);
+    });
+
+    it('should throw an error if `state` returns anything but a plain object', () => {
+      const redux = createRedux(() => {});
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider redux={redux}>
+            {() => (
+              <Connector state={() => 1}>
+                {() => <div />}
+              </Connector>
+            )}
+          </Provider>
+        );
+      }).toThrow(/select/);
     });
   });
 });
