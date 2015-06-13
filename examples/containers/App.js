@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link, RouteHandler } from 'react-router';
-import CounterApp from './CounterApp';
-import TodoApp from './TodoApp';
 
 export default class App {
   render() {

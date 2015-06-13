@@ -10,6 +10,6 @@ const redux = createRedux(stores);
 Router.run(routes, HistoryLocation, (Handler, state) =>
   React.render(
     <Provider redux={redux}>
-      {() => <Handler {...state} />}
+      {() => <Handler router={state} />}
     </Provider>
   , document.getElementById('root')));

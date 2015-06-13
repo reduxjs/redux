@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link, RouteHandler } from 'react-router';
+import { fetch } from './decorators';
 
+@fetch(actions => actions.fetchAllPosts())
 export default class PostList {
 
-  componentWillMount() {
-    // FIXME: not sure this is the right place
-    this.props.fetchAllPosts();
-  }
-
   render() {
-    const subset = this.props.posts.slice(0, 20);
+    const { blog } = this.props;
+    const subset = blog.posts.slice(0, 20);
     return (
       <div>
         <ul>

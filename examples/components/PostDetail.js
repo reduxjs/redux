@@ -1,23 +1,15 @@
 import React from 'react';
+import { fetchOnUpdate } from './decorators';
 
+@fetchOnUpdate('postId', (param, actions) => actions.fetchPost(param))
 export default class PostDetail {
 
-  componentWillMount() {
-    this.props.fetchPost(this.props.params.postId);
-  }
-
-  componentDidUpdate (prevProps) {
-    const postId = this.props.params.postId;
-    if (prevProps.params.postId !== postId) {
-      this.props.fetchPost(postId);
-    }
-  }
-
   render() {
+    const { post } = this.props.blog;
     return (
       <div>
-        <h1>{this.props.post.title}</h1>
-        <code>{this.props.post.body}></code>
+        <h1>{post.title}</h1>
+        <code>{post.body}></code>
       </div>
     );
   }

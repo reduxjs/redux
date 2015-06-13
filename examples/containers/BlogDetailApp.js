@@ -1,23 +1,17 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { Connector } from 'redux/react';
+import { connect } from 'redux/react';
 import PostDetail from '../components/PostDetail';
 import * as BlogActions from '../actions/BlogActions';
 
+@connect(state => ({
+  blog: state.blog
+}))
 export default class BlogDetailApp {
 
   render() {
-    return (
-      <Connector select={state => ({ blog: state.blog })}>
-        {this.renderChild.bind(this)}
-      </Connector>
-    );
-  }
-
-  renderChild({ blog, dispatch }) {
+    const { dispatch } = this.props;
     const actions = bindActionCreators(BlogActions, dispatch);
-    return (
-      <PostDetail post={blog.post} {...this.props} {...actions} />
-    );
+    return <PostDetail actions={actions} {...this.props} />;
   }
 }
