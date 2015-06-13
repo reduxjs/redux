@@ -2,12 +2,10 @@ import compose from './utils/composeMiddleware';
 
 export default function createDispatcher(store, middlewares = []) {
   return function dispatcher(initialState, setState) {
-    let state = store(initialState, {});
-    setState(state);
+    let state = setState(store(initialState, {}));
 
     function dispatch(action) {
-      state = store(state, action);
-      setState(state);
+      state = setState(store(state, action));
       return action;
     }
 

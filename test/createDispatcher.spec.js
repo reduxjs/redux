@@ -10,11 +10,15 @@ const { ADD_TODO } = constants;
 describe('createDispatcher', () => {
 
   it('should handle sync and async dispatches', done => {
-    const spy = expect.createSpy(() => {});
+    const spy = expect.createSpy(
+      nextState => nextState
+    ).andCallThrough();
+
     const dispatcher = createDispatcher(
       composeStores({ todoStore }),
       // we need this middleware to handle async actions
-      getState => [thunkMiddleware(getState)]);
+      getState => [thunkMiddleware(getState)]
+    );
 
     expect(dispatcher).toBeA('function');
 
