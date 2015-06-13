@@ -40,7 +40,9 @@ describe('Utils', () => {
         const state = redux.getState();
 
         expect(state.fakeStore).toEqual(fakeState);
-        if (expectedCallCount === 0) { done(); }
+        if (expectedCallCount === 0) {
+          done();
+        }
       });
       const actions = bindActionCreators(fakeActionCreators, redux.dispatch);
       expect(Object.keys(actions))

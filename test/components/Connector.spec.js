@@ -99,7 +99,7 @@ describe('React', () => {
       expect(spy.calls.length).toBe(1);
     });
 
-    it('shallow compares selected state to prevent unnecessary updates', () =>{
+    it('shallow compares selected state to prevent unnecessary updates', () => {
       const redux = createRedux({ string: stringBuilder });
       const spy = expect.createSpy(() => {});
       function render({ string }) {
