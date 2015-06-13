@@ -1,14 +1,16 @@
 import getDisplayName from '../utils/getDisplayName';
 
 export default function createProvideDecorator(React, Provider) {
+  const { Component } = React;
+
   return function provide(redux) {
-    return DecoratedComponent => class ProviderDecorator {
+    return DecoratedComponent => class ProviderDecorator extends Component {
       static displayName = `Provider(${getDisplayName(DecoratedComponent)})`;
 
       render() {
         return (
           <Provider redux={redux}>
-            {props => <DecoratedComponent {...this.props} {...props} />}
+            {() => <DecoratedComponent {...this.props} />}
           </Provider>
         );
       }
