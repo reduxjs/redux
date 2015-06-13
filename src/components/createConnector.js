@@ -73,6 +73,9 @@ export default function createConnector(React) {
         return {};
       }
 
+      // Handle `function` version of prop that allows user
+      // to do fancy things, like change how actions are bound or
+      // change the shape of the `actions` object.
       if (typeof this.props.actionCreators === 'function') {
         return { actions: this.props.actionCreators(dispatch) };
       } else {
