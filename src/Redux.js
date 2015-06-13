@@ -37,6 +37,7 @@ export default class Redux {
   setState(nextState) {
     this.state = nextState;
     this.listeners.forEach(listener => listener());
+    return nextState;
   }
 
   subscribe(listener) {
