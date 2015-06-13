@@ -3,7 +3,7 @@ import { composeStores } from '../src';
 
 describe('Utils', () => {
   describe('composeStores', () => {
-    it('should return a store that maps state keys to reducer functions', () =>{
+    it('should return a store that maps state keys to reducer functions', () => {
       const store = composeStores({
         counter: (state = 0, action) =>
           action.type === 'increment' ? state + 1 : state,
