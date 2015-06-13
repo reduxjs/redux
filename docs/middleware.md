@@ -64,7 +64,7 @@ For now, we are treating middleware as an advanced feature. You'll have to forgo
 
 ```js
 const dispatcher = createDispatcher(
-  composeStores({ fakeStore }),
+  composeStores(stores),
   [promiseMiddleware, filterUndefined]
 );
 ```
