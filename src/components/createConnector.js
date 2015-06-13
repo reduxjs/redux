@@ -1,5 +1,7 @@
 import identity from 'lodash/utility/identity';
 import shallowEqual from '../utils/shallowEqual';
+import bindActionCreators from '../utils/bindActionCreators';
+
 
 export default function createConnector(React) {
   const { Component, PropTypes } = React;
@@ -11,7 +13,11 @@ export default function createConnector(React) {
 
     static propTypes = {
       children: PropTypes.func.isRequired,
-      select: PropTypes.func.isRequired
+      select: PropTypes.func.isRequired,
+      actionCreators: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.object
+      ])
     };
 
     static defaultProps = {
@@ -62,12 +68,24 @@ export default function createConnector(React) {
       return { slice };
     }
 
+    bindActionCreators(dispatch) {
+      if (!this.props.actionCreators) {
+        return {};
+      }
+
+      if (typeof this.props.actionCreators === 'function') {
+        return { actions: this.props.actionCreators(dispatch) };
+      } else {
+        return { actions: bindActionCreators(this.props.actionCreators, dispatch) };
+      }
+    }
+
     render() {
       const { children } = this.props;
       const { slice } = this.state;
       const { redux: { dispatch } } = this.context;
 
-      return children({ dispatch, ...slice });
+      return children({ dispatch, ...slice, ...this.bindActionCreators(dispatch) });
     }
   };
 }
