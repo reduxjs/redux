@@ -40,7 +40,7 @@ export default function createConnector(React) {
 
       this.handleChange = this.handleChange.bind(this);
       this.unsubscribe = context.redux.subscribe(this.handleChange);
-      this.handleChange();
+      this.state = this.selectState({ context, props });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -55,14 +55,13 @@ export default function createConnector(React) {
     }
 
     handleChange() {
-      const state = this.context.redux.getState();
-      const slice = this.props.select(state);
+      this.setState(this.selectState());
+    }
 
-      if (this.state) {
-        this.setState({ slice });
-      } else {
-        this.state = { slice };
-      }
+    selectState({ context, props } = this) {
+      const state = context.redux.getState();
+      const slice = props.select(state);
+      return { slice };
     }
 
     render() {
