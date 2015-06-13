@@ -1,4 +1,4 @@
-import compose from './utils/composeMiddleware';
+import composeMiddleware from './utils/composeMiddleware';
 
 export default function createDispatcher(store, middlewares = []) {
   return function dispatcher(initialState, setState) {
@@ -17,6 +17,6 @@ export default function createDispatcher(store, middlewares = []) {
       middlewares = middlewares(getState);
     }
 
-    return compose(...middlewares, dispatch);
+    return composeMiddleware(...middlewares, dispatch);
   };
 }
