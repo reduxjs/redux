@@ -65,7 +65,7 @@ describe('createRedux', () => {
       state = getState().todoStore;
     };
 
-    nextRedux.dispatch(action);
+    redux.dispatch(action);
 
     expect(state).toEqual(redux.getState().todoStore);
   });
