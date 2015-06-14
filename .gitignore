@@ -3,3 +3,5 @@ npm-debug.log
 .DS_Store
 lib
 coverage
+./react.js
+./react-native.js
