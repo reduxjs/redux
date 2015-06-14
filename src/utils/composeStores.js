@@ -2,7 +2,7 @@
 
 import mapValues from 'lodash/object/mapValues';
 
-import { Store, Action, State } from '../types';
+import type { Store, Action, State } from '../types';
 
 export default function composeStores(stores: Store[]): Store {
   return function Composition(state: State = {}, action: Action) {

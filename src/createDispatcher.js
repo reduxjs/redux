@@ -2,7 +2,7 @@
 
 import compose from './utils/composeMiddleware';
 
-import { Middleware, Store, Action, State, Dispatcher } from './types';
+import type { Middleware, Store, Action, State, Dispatcher } from './types';
 
 export default function createDispatcher(
   store: Store,
