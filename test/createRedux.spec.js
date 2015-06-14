@@ -60,10 +60,13 @@ describe('createRedux', () => {
     let nextRedux = createRedux({ todoStore });
     redux.replaceDispatcher(nextRedux.getDispatcher());
 
+    let state;
     let action = (_, getState) => {
-      expect(getState().todoStore).toEqual(redux.getState().todoStore);
+      state = getState().todoStore;
     };
 
     nextRedux.dispatch(action);
+
+    expect(state).toEqual(redux.getState().todoStore);
   });
 });
