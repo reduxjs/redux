@@ -53,4 +53,17 @@ describe('createRedux', () => {
     ]);
     expect(changeListenerSpy.calls.length).toBe(1);
   });
+
+  it('should use existing state when replacing the dispatcher', () => {
+    redux.dispatch(addTodo('Hello'));
+
+    let nextRedux = createRedux({ todoStore });
+    redux.replaceDispatcher(nextRedux.getDispatcher());
+
+    let action = (_, getState) => {
+      expect(getState().todoStore).toEqual(redux.getState().todoStore);
+    };
+
+    nextRedux.dispatch(action);
+  });
 });
