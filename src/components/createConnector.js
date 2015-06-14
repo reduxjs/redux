@@ -2,6 +2,9 @@ import identity from 'lodash/utility/identity';
 import shallowEqual from '../utils/shallowEqual';
 import bindActionCreators from '../utils/bindActionCreators';
 
+import isPlainObject from 'lodash/lang/isPlainObject';
+import invariant from 'invariant';
+
 
 export default function createConnector(React) {
   const { Component, PropTypes } = React;
@@ -68,6 +71,13 @@ export default function createConnector(React) {
     selectState({ context, props } = this) {
       const state = context.redux.getState();
       const slice = props.select(state);
+
+      invariant(
+        isPlainObject(slice),
+        'The return value of `select` prop must be an object. Instead received %s.',
+        slice
+      );
+
       return { slice };
     }
 

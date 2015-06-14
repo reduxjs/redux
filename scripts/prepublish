@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+sh scripts/lint
+sh scripts/clean
+sh scripts/build

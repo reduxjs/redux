@@ -168,5 +168,21 @@ describe('React', () => {
       expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions));
       expect(div.props.actions.anAction).toBeA('function');
     });
+
+    it('should throw an error if `state` returns anything but a plain object', () => {
+      const redux = createRedux(() => {});
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider redux={redux}>
+            {() => (
+              <Connector state={() => 1}>
+                {() => <div />}
+              </Connector>
+            )}
+          </Provider>
+        );
+      }).toThrow(/select/);
+    });
   });
 });

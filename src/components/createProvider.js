@@ -27,8 +27,13 @@ export default function createProvider(React) {
     }
 
     componentWillReceiveProps(nextProps) {
-      const nextDispatcher = nextProps.redux.getDispatcher();
-      this.state.redux.replaceDispatcher(nextDispatcher);
+      const { redux } = this.state;
+      const { redux: nextRedux } = nextProps;
+
+      if (redux !== nextRedux) {
+        const nextDispatcher = nextRedux.getDispatcher();
+        redux.replaceDispatcher(nextDispatcher);
+      }
     }
 
     render() {

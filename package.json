@@ -1,17 +1,17 @@
 {
   "name": "redux",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "An experiment in fully hot-reloadable Flux",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run lint && babel src --out-dir lib",
-    "clean": "rimraf ./lib",
-    "lint": "eslint src test",
-    "prepublish": "npm run clean && npm run build",
-    "start": "cd examples && node server.js",
-    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
-    "test:watch": "npm run test -- --watch",
-    "test:cov": "istanbul cover node_modules/.bin/_mocha -- --compilers js:babel/register --recursive"
+    "build": "scripts/build",
+    "clean": "scripts/clean",
+    "lint": "scripts/lint",
+    "prepublish": "scripts/prepublish",
+    "start": "scripts/start",
+    "test": "scripts/test",
+    "test:watch": "scripts/test-watch",
+    "test:cov": "scripts/test-cov"
   },
   "repository": {
     "type": "git",
@@ -35,10 +35,10 @@
   },
   "homepage": "https://github.com/gaearon/redux",
   "devDependencies": {
-    "babel": "^5.4.7",
-    "babel-core": "^5.4.7",
-    "babel-eslint": "^3.1.11",
-    "babel-loader": "^5.1.2",
+    "babel": "^5.5.8",
+    "babel-core": "^5.5.8",
+    "babel-eslint": "^3.1.15",
+    "babel-loader": "^5.1.4",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.3.0",
     "expect": "^1.6.0",
@@ -53,7 +53,7 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
-    "babel-runtime": "^5.4.7",
+    "babel-runtime": "^5.5.8",
     "envify": "^3.4.0",
     "invariant": "^2.0.0",
     "lodash": "^3.9.3"
