@@ -168,31 +168,5 @@ describe('React', () => {
       expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions));
       expect(div.props.actions.anAction).toBeA('function');
     });
-
-    it('properly binds and passes action creators when passed as a function', () => {
-      const redux = createRedux({ test: () => 'test'});
-
-      const testActions = {
-        anAction: () => {
-          return { type: 'TEST_ACTION' };
-        }
-      };
-
-      const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
-          {() => (
-            <Connector actionCreators={(dispatch) => ({
-              anAction: (...args) => dispatch(testActions.anAction(...args))
-            })}>
-              {({ dispatch, actions }) => <div dispatch={dispatch} actions={actions} />}
-            </Connector>
-          )}
-        </Provider>
-      );
-
-      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-      expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions));
-      expect(div.props.actions.anAction).toBeA('function');
-    });
   });
 });

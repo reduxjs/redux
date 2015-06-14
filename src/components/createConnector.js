@@ -14,14 +14,12 @@ export default function createConnector(React) {
     static propTypes = {
       children: PropTypes.func.isRequired,
       select: PropTypes.func.isRequired,
-      actionCreators: PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.object
-      ])
+      actionCreators: PropTypes.object
     };
 
     static defaultProps = {
-      select: identity
+      select: identity,
+      actionCreators: {}
     };
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -45,12 +43,17 @@ export default function createConnector(React) {
 
       this.unsubscribe = context.redux.subscribe(::this.handleChange);
       this.state = this.selectState({ context, props });
+      this.boundActions = this.bindActionCreators(props.actionCreators, context.redux.dispatch);
     }
 
     componentWillReceiveProps(nextProps) {
       if (nextProps.select !== this.props.select) {
         // Force the state slice recalculation
         this.handleChange();
+      }
+
+      if (nextProps.actionCreators !== this.props.actionCreators) {
+        this.boundActions = this.bindActionCreators(nextProps.actionCreators, this.context.redux.dispatch);
       }
     }
 
@@ -68,19 +71,10 @@ export default function createConnector(React) {
       return { slice };
     }
 
-    bindActionCreators(dispatch) {
-      if (!this.props.actionCreators) {
-        return {};
-      }
-
-      // Handle `function` version of prop that allows user
-      // to do fancy things, like change how actions are bound or
-      // change the shape of the `actions` object.
-      if (typeof this.props.actionCreators === 'function') {
-        return { actions: this.props.actionCreators(dispatch) };
-      } else {
-        return { actions: bindActionCreators(this.props.actionCreators, dispatch) };
-      }
+    bindActionCreators = (actionCreators, dispatch) => {
+      return {
+        actions: bindActionCreators(actionCreators, dispatch)
+      };
     }
 
     render() {
@@ -88,7 +82,7 @@ export default function createConnector(React) {
       const { slice } = this.state;
       const { redux: { dispatch } } = this.context;
 
-      return children({ dispatch, ...slice, ...this.bindActionCreators(dispatch) });
+      return children({ dispatch, ...slice, ...this.boundActions });
     }
   };
 }
