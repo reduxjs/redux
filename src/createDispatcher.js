@@ -13,10 +13,10 @@ export default function createDispatcher(store, middlewares = []) {
       return state;
     }
 
-    if (typeof middlewares === 'function') {
-      middlewares = middlewares(getState);
-    }
+    const finalMiddlewares = typeof middlewares === 'function' ?
+      middlewares(getState) :
+      middlewares;
 
-    return composeMiddleware(...middlewares, dispatch);
+    return composeMiddleware(...finalMiddlewares, dispatch);
   };
 }
