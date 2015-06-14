@@ -8,10 +8,10 @@
     "clean": "scripts/clean",
     "lint": "scripts/lint",
     "prepublish": "scripts/prepublish",
-    "start": "cd examples && node server.js",
-    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
-    "test:watch": "npm run test -- --watch",
-    "test:cov": "istanbul cover node_modules/.bin/_mocha -- --compilers js:babel/register --recursive"
+    "start": "scripts/start",
+    "test": "scripts/test",
+    "test:watch": "scripts/test-watch",
+    "test:cov": "scripts/test-cov"
   },
   "repository": {
     "type": "git",
