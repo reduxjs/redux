@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/sh -e
 
 rm -rf lib
-./node_modules/.bin/babel src --out-dir lib
+`npm bin`/babel src --out-dir lib
 
 mv lib/react-entry.js ./react.js
 mv lib/react-native-entry.js ./react-native.js
