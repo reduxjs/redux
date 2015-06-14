@@ -1,15 +1,25 @@
+/* @flow */
+
 import compose from './utils/composeMiddleware';
 
-export default function createDispatcher(store, middlewares = []) {
-  return function dispatcher(initialState, setState) {
-    let state = setState(store(initialState, {}));
+import { Middleware, Store, Action, State, Dispatcher } from './types';
 
-    function dispatch(action) {
+export default function createDispatcher(
+  store: Store,
+  middlewares: (Middleware[] | (getState: () => State) => Middleware[]) = []
+): Dispatcher {
+  return function dispatcher(
+    initialState: State,
+    setState: (state: State) => State
+  ) {
+    var state: State = setState(store(initialState, {}));
+
+    function dispatch(action: Action): Action {
       state = setState(store(state, action));
       return action;
     }
 
-    function getState() {
+    function getState(): State {
       return state;
     }
 

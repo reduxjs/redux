@@ -1,9 +1,13 @@
+/* @flow */
+
 import mapValues from 'lodash/object/mapValues';
 
-export default function composeStores(stores) {
-  return function Composition(atom = {}, action) {
+import { Store, Action, State } from '../types';
+
+export default function composeStores(stores: Store[]): Store {
+  return function Composition(state: State = {}, action: Action) {
     return mapValues(stores, (store, key) =>
-      store(atom[key], action)
+      store(state[key], action)
     );
   };
 }
