@@ -4,22 +4,21 @@ import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
 import thunkMiddleware from './middleware/thunk';
 
-type Dispatch = (action: mixed) => mixed;
-type Dispatcher = (state: mixed, setState: (nextState: mixed) => mixed) => Dispatch;
+import { State, Action, Dispatch, Dispatcher } from './types';
 
 export default class Redux {
-  state: mixed;
-  listeners: Array<() => mixed>;
+  state: State;
+  listeners: Function[];
   dispatcher: Dispatcher;
   dispatchFn: Dispatch;
 
-  constructor(dispatcher: Dispatcher | Object, initialState: mixed): void {
+  constructor(dispatcher: Dispatcher, initialState: State): void {
     if (typeof dispatcher === 'object') {
       // A shortcut notation to use the default dispatcher
-      dispatcher = createDispatcher(
+      dispatcher = (createDispatcher(
         composeStores(dispatcher),
         getState => [thunkMiddleware(getState)]
-      );
+      ));
     }
 
     this.state = initialState;
@@ -36,25 +35,25 @@ export default class Redux {
     this.dispatchFn = nextDispatcher(this.state, this.setState.bind(this));
   }
 
-  dispatch(action: mixed): mixed {
+  dispatch(action: Action): any {
     return this.dispatchFn(action);
   }
 
-  getState(): mixed {
+  getState(): State {
     return this.state;
   }
 
-  setState(nextState: mixed): mixed {
+  setState(nextState: State): State {
     this.state = nextState;
     this.listeners.forEach(listener => listener());
     return nextState;
   }
 
-  subscribe(listener: () => mixed): () => mixed {
+  subscribe(listener: Function): () => void {
     var { listeners } = this;
     listeners.push(listener);
 
-    return function unsubscribe () {
+    return function unsubscribe() {
       var index = listeners.indexOf(listener);
       listeners.splice(index, 1);
     };

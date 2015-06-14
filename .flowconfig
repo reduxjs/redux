@@ -5,6 +5,5 @@
 [include]
 
 [libs]
-./type-definitions
 
 [options]
