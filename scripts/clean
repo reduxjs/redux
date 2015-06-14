@@ -1,0 +1,3 @@
+#!/bin/sh
+
+`npm bin`/rimraf ./lib
