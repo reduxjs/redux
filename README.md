@@ -57,7 +57,7 @@ export function decrement() {
 
 // Can also be async if you return a function
 export function incrementAsync() {
-  return dispatch => {
+  return (dispatch) => {
     setTimeout(() => {
       // Yay! Can invoke sync or async actions with `dispatch`
       dispatch(increment());
