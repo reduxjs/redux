@@ -4,14 +4,14 @@
   "description": "An experiment in fully hot-reloadable Flux",
   "main": "lib/index.js",
   "scripts": {
-    "build": "scripts/build",
-    "clean": "scripts/clean",
-    "lint": "scripts/lint",
-    "prepublish": "scripts/prepublish",
-    "start": "scripts/start",
-    "test": "scripts/test",
-    "test:watch": "scripts/test-watch",
-    "test:cov": "scripts/test-cov"
+    "build": "shjs scripts/build",
+    "clean": "shjs scripts/clean",
+    "lint": "shjs scripts/lint",
+    "prepublish": "shjs scripts/prepublish",
+    "start": "shjs scripts/start",
+    "test": "shjs scripts/test",
+    "test:watch": "shjs scripts/test-watch",
+    "test:cov": "shjs scripts/test-cov"
   },
   "repository": {
     "type": "git",
@@ -48,7 +48,7 @@
     "mocha-jsdom": "~0.4.0",
     "react": "^0.13.0",
     "react-hot-loader": "^1.2.7",
-    "rimraf": "^2.3.4",
+    "shelljs": "^0.5.1",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
   },
