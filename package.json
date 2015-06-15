@@ -48,7 +48,6 @@
     "mocha-jsdom": "~0.4.0",
     "react": "^0.13.0",
     "react-hot-loader": "^1.2.7",
-    "rimraf": "^2.3.4",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
   },
