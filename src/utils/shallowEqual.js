@@ -18,13 +18,6 @@ export default function shallowEqual(objA, objB) {
 
       return false;
     }
-
-    var valA = objA[keysA[i]];
-    var valB = objB[keysA[i]];
-
-    if (valA !== valB) {
-      return false;
-    }
   }
 
   return true;
