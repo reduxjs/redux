@@ -1,8 +1,12 @@
 import composeMiddleware from './utils/composeMiddleware';
 
+const INIT_ACTION = {
+  type: '@@INIT'
+};
+
 export default function createDispatcher(store, middlewares = []) {
   return function dispatcher(initialState, setState) {
-    let state = setState(store(initialState, {}));
+    let state = setState(store(initialState, INIT_ACTION));
 
     function dispatch(action) {
       state = setState(store(state, action));
