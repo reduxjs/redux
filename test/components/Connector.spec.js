@@ -145,6 +145,30 @@ describe('React', () => {
       expect(div.props.dispatch).toBe(redux.dispatch);
     });
 
+    it('properly binds and passes action creators when passed as an object', () => {
+      const redux = createRedux({ test: () => 'test'});
+
+      const testActions = {
+        anAction: () => {
+          return { type: 'TEST_ACTION' };
+        }
+      };
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider redux={redux}>
+          {() => (
+            <Connector actionCreators={testActions}>
+              {({ dispatch, actions }) => <div dispatch={dispatch} actions={actions} />}
+            </Connector>
+          )}
+        </Provider>
+      );
+
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(Object.keys(div.props.actions)).toEqual(Object.keys(testActions));
+      expect(div.props.actions.anAction).toBeA('function');
+    });
+
     it('should throw an error if `state` returns anything but a plain object', () => {
       const redux = createRedux(() => {});
 

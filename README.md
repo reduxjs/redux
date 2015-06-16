@@ -4,9 +4,9 @@ redux
 [![build status](https://img.shields.io/travis/gaearon/redux.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 
-An experiment in fully hot-reloadable Flux.  
+An experiment in fully hot-reloadable Flux.
 
-**The API might change any day.**  
+**The API might change any day.**
 _**Don't use in production just yet.**_
 
 ## Why another Flux framework?
@@ -140,10 +140,8 @@ export default class Counter {
 
 ```js
 // The smart component may observe stores using `<Connector />`,
-// and bind actions to the dispatcher with `bindActionCreators`.
 
 import React from 'react';
-import { bindActionCreators } from 'redux';
 import { Connector } from 'redux/react';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
@@ -158,11 +156,13 @@ function select(state) {
 export default class CounterApp {
   render() {
     return (
-      <Connector select={select}>
-        {({ counter, dispatch }) =>
+      // Passing an object of action creators here automatically binds them 
+      // with Redux's dispatcher and passes them to the child function
+      // (so they can be passed as props to child components)
+      <Connector select={select} actionCreators={CounterActions}>
+        {({ counter, actions }) =>
           /* Yes this is child as a function. */
-          <Counter counter={counter}
-                   {...bindActionCreators(CounterActions, dispatch)} />
+          <Counter counter={counter} {...actions} />
         }
       </Connector>
     );
@@ -176,22 +176,23 @@ The `@connect` decorator lets you create smart components less verbosely:
 
 ```js
 import React from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
+// Pass an object of action creators you want to pass 
+// as the `actions` prop to your component as the (optional) 
+// second parameter of @connect
 @connect(state => ({
   counter: state.counter
-}))
+}), CounterActions)
 export default class CounterApp {
   render() {
-    const { counter, dispatch } = this.props;
-    // Instead of `bindActionCreators`, you may also pass `dispatch` as a prop
-    // to your component and call `dispatch(CounterActions.increment())`
+    const { counter, actions, dispatch } = this.props;
+    // Instead of passing action creators as a parameter to @connect to autobind them, you may also
+    // pass `dispatch` as a prop to your component and call `dispatch(CounterActions.increment())`
     return (
-      <Counter counter={counter}
-               {...bindActionCreators(CounterActions, dispatch)} />
+      <Counter counter={counter} {...actions} />
     );
   }
 }

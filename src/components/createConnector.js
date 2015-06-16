@@ -1,7 +1,10 @@
 import identity from 'lodash/utility/identity';
 import shallowEqual from '../utils/shallowEqual';
+import bindActionCreators from '../utils/bindActionCreators';
+
 import isPlainObject from 'lodash/lang/isPlainObject';
 import invariant from 'invariant';
+
 
 export default function createConnector(React) {
   const { Component, PropTypes } = React;
@@ -13,11 +16,13 @@ export default function createConnector(React) {
 
     static propTypes = {
       children: PropTypes.func.isRequired,
-      select: PropTypes.func.isRequired
+      select: PropTypes.func.isRequired,
+      actionCreators: PropTypes.object
     };
 
     static defaultProps = {
-      select: identity
+      select: identity,
+      actionCreators: {}
     };
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -41,12 +46,17 @@ export default function createConnector(React) {
 
       this.unsubscribe = context.redux.subscribe(::this.handleChange);
       this.state = this.selectState({ context, props });
+      this.boundActions = this.bindActionCreators(props.actionCreators, context.redux.dispatch);
     }
 
     componentWillReceiveProps(nextProps) {
       if (nextProps.select !== this.props.select) {
         // Force the state slice recalculation
         this.handleChange();
+      }
+
+      if (nextProps.actionCreators !== this.props.actionCreators) {
+        this.boundActions = this.bindActionCreators(nextProps.actionCreators, this.context.redux.dispatch);
       }
     }
 
@@ -71,12 +81,18 @@ export default function createConnector(React) {
       return { slice };
     }
 
+    bindActionCreators = (actionCreators, dispatch) => {
+      return {
+        actions: bindActionCreators(actionCreators, dispatch)
+      };
+    }
+
     render() {
       const { children } = this.props;
       const { slice } = this.state;
       const { redux: { dispatch } } = this.context;
 
-      return children({ dispatch, ...slice });
+      return children({ dispatch, ...slice, ...this.boundActions });
     }
   };
 }
