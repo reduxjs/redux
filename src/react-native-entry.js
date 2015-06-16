@@ -1,1 +1,1 @@
-export * from 'lib/react-native';
+export * from './lib/react-native';
