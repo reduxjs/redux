@@ -48,5 +48,18 @@ describe('React', () => {
 
       expect(Container.displayName).toBe('Provider(Container)');
     });
+
+    it('sets DecoratedComponent to wrapped component', () => {
+      class Container extends Component {
+        render() {
+          return <div />;
+        }
+      }
+
+      let decorator = provide(state => state);
+      let ProviderDecorator = decorator(Container);
+
+      expect(ProviderDecorator.DecoratedComponent).toBe(Container);
+    });
   });
 });
