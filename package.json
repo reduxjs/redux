@@ -1,7 +1,7 @@
 {
   "name": "redux",
   "version": "0.11.1",
-  "description": "An experiment in fully hot-reloadable Flux",
+  "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
   "scripts": {
     "build": "scripts/build",
