@@ -1,5 +1,5 @@
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
+import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
 import { createRedux } from '../../src';
 import { provide, Provider } from '../../src/react';
@@ -8,7 +8,7 @@ const { TestUtils } = React.addons;
 
 describe('React', () => {
   describe('provide', () => {
-    jsdom();
+    jsdomReact();
 
     class Child extends Component {
       static contextTypes = {

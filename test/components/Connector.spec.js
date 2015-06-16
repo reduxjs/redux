@@ -1,5 +1,5 @@
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
+import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
 import { createRedux } from '../../src';
 import { Connector } from '../../src/react';
@@ -8,7 +8,7 @@ const { TestUtils } = React.addons;
 
 describe('React', () => {
   describe('Connector', () => {
-    jsdom();
+    jsdomReact();
 
     // Mock minimal Provider interface
     class Provider extends Component {
@@ -126,6 +126,48 @@ describe('React', () => {
       expect(spy.calls.length).toBe(3);
       redux.dispatch({ type: 'APPEND', body: ''});
       expect(spy.calls.length).toBe(3);
+    });
+
+    it('recomputes the state slice when `select` prop changes', () => {
+      const redux = createRedux({ a: () => 42, b: () => 72 });
+
+      function selectA(state) {
+        return { result: state.a };
+      }
+
+      function selectB(state) {
+        return { result: state.b };
+      }
+
+      function render({ result }) {
+        return <div>{result}</div>;
+      }
+
+      class Container extends Component {
+        constructor() {
+          super();
+          this.state = { select: selectA };
+        }
+
+        render() {
+          return (
+            <Provider redux={redux}>
+              {() =>
+                <Connector select={this.state.select}>
+                  {render}
+                </Connector>
+              }
+            </Provider>
+          );
+        }
+      }
+
+      let tree = TestUtils.renderIntoDocument(<Container />);
+      let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(div.props.children).toBe(42);
+
+      tree.setState({ select: selectB });
+      expect(div.props.children).toBe(72);
     });
 
     it('passes `dispatch()` to child function', () => {
