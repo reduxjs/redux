@@ -308,7 +308,25 @@ When in doubt, use the shorter option!
 
 ### Can I use this in production?
 
-I wouldn't. Many use cases haven't been considered yet. If you find some use cases this lib can't handle yet, please file an issue.
+Yep. People already do that although I warned them! The API surface is minimal so migrating to 1.0 API when it comes out won't be difficult. Let us know about any issues.
+
+### How do I do async?
+
+There's already a built-in way of doing async action creators:
+
+```js
+// Can also be async if you return a function
+export function incrementAsync() {
+  return dispatch => {
+    setTimeout(() => {
+      // Yay! Can invoke sync or async actions with `dispatch`
+      dispatch(increment());
+    }, 1000);
+  };
+}
+```
+
+It's also easy to implement support for returning Promises or Observables with a custom middleware. [See an example of a custom Promise middleware.](https://github.com/gaearon/redux/issues/99#issuecomment-112212639)
 
 ### But there are switch statements!
 
@@ -335,6 +353,8 @@ export default createStore(0, {
 It's all just functions.
 Fancy stuff like generating stores from handler maps, or generating action creator constants, should be in userland.
 Redux has no opinion on how you do this in your project.
+
+See also [this gist](https://gist.github.com/skevy/8a4ffc3cfdaf5fd68739) for an example implementation of action constant generation.
 
 ### What about `waitFor`?
 
