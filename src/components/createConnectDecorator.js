@@ -7,6 +7,7 @@ export default function createConnectDecorator(React, Connector) {
   return function connect(select) {
     return DecoratedComponent => class ConnectorDecorator extends Component {
       static displayName = `Connector(${getDisplayName(DecoratedComponent)})`;
+      static DecoratedComponent = DecoratedComponent;
 
       shouldComponentUpdate(nextProps) {
         return !shallowEqualScalar(this.props, nextProps);
