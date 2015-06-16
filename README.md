@@ -360,6 +360,10 @@ function (state, action) {
 
 [Read more](https://github.com/sebmarkbage/ecmascript-rest-spread) about the spread properties ES7 proposal.
 
+## Discussion
+
+Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack community
+
 ## Inspiration and Thanks
 
 * [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) for Hot Module Replacement
