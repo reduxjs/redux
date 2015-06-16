@@ -4,6 +4,7 @@
   "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
   "scripts": {
+    "browser": "scripts/browser",
     "build": "scripts/build",
     "clean": "scripts/clean",
     "lint": "scripts/lint",
@@ -53,7 +54,6 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
-    "babel-runtime": "^5.5.8",
     "invariant": "^2.0.0",
     "lodash": "^3.9.3"
   }

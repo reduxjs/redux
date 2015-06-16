@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+WEBPACK_CMD=node_modules/.bin/webpack
+
+mkdir -p dist
+$WEBPACK_CMD src/index.js dist/redux.js
+NODE_ENV=production $WEBPACK_CMD src/index.js dist/redux.min.js
