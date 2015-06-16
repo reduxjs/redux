@@ -4,23 +4,31 @@ redux
 [![build status](https://img.shields.io/travis/gaearon/redux.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 
-An experiment in fully hot-reloadable Flux.  
+Atomic Flux with hot reloading.  
 
-**The API might change any day.**  
-_**Don't use in production just yet.**_
+**The API is likely to change a few times before we reach 1.0.**  
+**Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
 ## Why another Flux framework?
 
 Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-evolution-of-flux-frameworks-6c16ad26bb31)** for some context.
 
-### Design Goals
+### Philosophy & Design Goals
 
-* Hot reloading of everything.
-* A hook for the future devtools to "commit" a state, and replay actions on top of it during hot reload.
+* You shouldn't need a book on functional programming to use Redux.
+* Everything (Stores, Action Creators, configuration) is hot reloadable.
+* Preserves the benefits of Flux, but adds other nice properties thanks to its functional nature.
+* Prevents some of the anti-patterns common in Flux code.
+* Works great in isomoprhic apps because it doesn't use singletons and the data can be rehydrated.
+* Doesn't care how you store your data: you may use JS objects, arrays, ImmutableJS, etc.
+* Under the hood, it keeps all yout data in a tree, but you don't need to think about it.
+* Lets you efficiently subscribe to finer-grained updates than individual Stores.
+* Provides hooks for powerful devtools (e.g. time travel, record/replay) to be implementable without user buy-in.
+* Provides extension points so it's easy to [support promises](https://github.com/gaearon/redux/issues/99#issuecomment-112212639) or [generate constants](https://gist.github.com/skevy/8a4ffc3cfdaf5fd68739) outside the core.
 * No wrapper calls in your stores and actions. Your stuff is your stuff.
-* Super easy to test things in isolation without mocks.
-* I don't mind action constants. Seriously.
-* Keep Flux lingo. No cursors or observables in core.
+* It's super easy to test things in isolation without mocks.
+* You can use “flat” Stores, or [compose and reuse Stores](https://gist.github.com/gaearon/d77ca812015c0356654f) just like you compose Components.
+* The API surface area is minimal.
 * Have I mentioned hot reloading yet?
 
 ## Demo
