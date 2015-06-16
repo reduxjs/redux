@@ -1,3 +1,0 @@
-#!/bin/sh
-
-`npm bin`/istanbul cover `npm bin`/_mocha -- --compilers js:babel/register --recursive
