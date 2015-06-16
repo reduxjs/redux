@@ -54,13 +54,7 @@
   },
   "dependencies": {
     "babel-runtime": "^5.5.8",
-    "envify": "^3.4.0",
     "invariant": "^2.0.0",
     "lodash": "^3.9.3"
-  },
-  "browserify": {
-    "transform": [
-      "envify"
-    ]
   }
 }
