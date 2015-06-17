@@ -9,6 +9,32 @@ Atomic Flux with hot reloading.
 **The API is likely to change a few times before we reach 1.0.**  
 **Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
+# Table of Contents
+
+- [Why another Flux framework?](#why-another-flux-framework)
+  - [Philosophy & Design Goals](#philosophy--design-goals)
+- [Demo](#demo)
+- [What does it look like?](#what-does-it-look-like)
+  - [Actions](#actions)
+  - [Stores](#stores)
+  - [Components](#components)
+    - [Dumb Components](#dumb-components)
+    - [Smart Components](#smart-components)
+    - [Decorators](#decorators)
+  - [React Native](#react-native)
+  - [Initializing Redux](#initializing-redux)
+  - [Running the same code on client and server](#running-the-same-code-on-client-and-server)
+  - [Additional customization](#additional-customization)
+- [FAQ](#faq)
+  - [How does hot reloading work?](#how-does-hot-reloading-work)
+  - [Can I use this in production?](#can-i-use-this-in-production)
+  - [How do I do async?](#how-do-i-do-async)
+  - [But there are switch statements!](#but-there-are-switch-statements)
+  - [What about `waitFor`?](#what-about-waitfor)
+  - [My views aren't updating!](#my-views-arent-updating)
+- [Discussion](#discussion)
+- [Inspiration and Thanks](#inspiration-and-thanks)
+
 ## Why another Flux framework?
 
 Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-evolution-of-flux-frameworks-6c16ad26bb31)** for some context.
@@ -205,7 +231,7 @@ export default class CounterApp {
 }
 ```
 
-#### React Native
+### React Native
 
 To use Redux with React Native, just replace imports from `redux/react` with `redux/react-native`:
 
@@ -214,7 +240,7 @@ import { bindActionCreators } from 'redux';
 import { Provider, Connector } from 'redux/react-native';
 ```
 
-#### Initializing Redux
+### Initializing Redux
 
 The simplest way to initialize a Redux instance is to give it an object whose values are your Store functions, and whose keys are their names. You may `import *` from the file with all your Store definitions to obtain such an object:
 
@@ -242,7 +268,7 @@ export default class App {
 }
 ```
 
-#### Running the same code on client and server
+### Running the same code on client and server
 
 The `redux` instance returned by `createRedux` also has the `dispatch(action)`, `subscribe()` and `getState()` methods that you may call outside the React components.
 
@@ -259,7 +285,7 @@ const initialState = window.STATE_FROM_SERVER;
 const redux = createRedux(stores, initialState);
 ```
 
-#### Additional customization
+### Additional customization
 
 There is also a longer way to do the same thing, if you need additional customization.
 
