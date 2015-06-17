@@ -16,5 +16,16 @@ describe('Utils', () => {
       const s2 = store(s1, { type: 'push', value: 'a' });
       expect(s2).toEqual({ counter: 1, stack: ['a'] });
     });
+
+    it('should ignore all props which are not a function', () => {
+      const store = composeStores({
+        fake: true,
+        broken: 'string',
+        another: {nested: 'object'},
+        stack: (state = []) => state
+      });
+
+      expect(Object.keys(store({}, {type: 'push'}))).toEqual(['stack']);
+    });
   });
 });
