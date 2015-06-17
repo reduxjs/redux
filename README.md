@@ -329,7 +329,7 @@ When in doubt, use the shorter option!
 
 ### Any examples with data fetching and `react-router`?
 
-Besised the examples in this repo, there is an [officially supported example](https://github.com/emmenko/redux-react-router-async-example) (_still WIP_) tackling those implementations.
+Besides the examples in this repo, there is an [officially supported example](https://github.com/emmenko/redux-react-router-async-example) (_still WIP_) tackling those implementations.
 
 ### How does hot reloading work?
 
