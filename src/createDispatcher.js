@@ -1,20 +1,14 @@
 import composeMiddleware from './utils/composeMiddleware';
 
 export default function createDispatcher(store, middlewares = []) {
-  return function dispatcher(initialState, setState) {
-    let state = setState(store(initialState, {}));
-
+  return function dispatcher({ getState, setState }) {
     function dispatch(action) {
-      state = setState(store(state, action));
+      setState(store(getState(), action));
       return action;
     }
 
-    function getState() {
-      return state;
-    }
-
     const finalMiddlewares = typeof middlewares === 'function' ?
-      middlewares(getState) :
+      middlewares(getState, setState, dispatch) :
       middlewares;
 
     return composeMiddleware(...finalMiddlewares, dispatch);

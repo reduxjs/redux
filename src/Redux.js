@@ -1,9 +1,10 @@
 import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
 import thunkMiddleware from './middleware/thunk';
+import identity from 'lodash/utility/identity';
 
 export default class Redux {
-  constructor(dispatcher, initialState) {
+  constructor(dispatcher, initialState, prepareState = identity) {
     if (typeof dispatcher === 'object') {
       // A shortcut notation to use the default dispatcher
       dispatcher = createDispatcher(
@@ -13,6 +14,7 @@ export default class Redux {
     }
 
     this.state = initialState;
+    this.prepareState = prepareState;
     this.listeners = [];
     this.replaceDispatcher(dispatcher);
   }
@@ -23,15 +25,23 @@ export default class Redux {
 
   replaceDispatcher(nextDispatcher) {
     this.dispatcher = nextDispatcher;
-    this.dispatchFn = nextDispatcher(this.state, ::this.setState);
+    this.dispatchFn = nextDispatcher({
+      getState: ::this.getRawState,
+      setState: ::this.setState
+    });
+    this.dispatch({});
   }
 
   dispatch(action) {
     return this.dispatchFn(action);
   }
 
-  getState() {
+  getRawState() {
     return this.state;
+  }
+
+  getState() {
+    return this.prepareState(this.state);
   }
 
   setState(nextState) {
