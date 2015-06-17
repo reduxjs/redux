@@ -26,6 +26,7 @@ Atomic Flux with hot reloading.
   - [Running the same code on client and server](#running-the-same-code-on-client-and-server)
   - [Additional customization](#additional-customization)
 - [FAQ](#faq)
+  - [Any examples with data fetching and `react-router`?](#any-examples-with-data-fetching-and-react-router)
   - [How does hot reloading work?](#how-does-hot-reloading-work)
   - [Can I use this in production?](#can-i-use-this-in-production)
   - [How do I do async?](#how-do-i-do-async)
@@ -325,6 +326,10 @@ Why would you want to write it longer? Maybe you're an advanced user and want to
 When in doubt, use the shorter option!
 
 ## FAQ
+
+### Any examples with data fetching and `react-router`?
+
+Besised the examples in this repo, there is an [officially supported example](https://github.com/emmenko/redux-react-router-async-example) (_still WIP_) tackling those implementations.
 
 ### How does hot reloading work?
 
