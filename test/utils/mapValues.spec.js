@@ -4,8 +4,8 @@ import mapValues from '../../src/utils/mapValues';
 describe('Utils', () => {
   describe('mapValues', () => {
     it('should return object with mapped values', () => {
-      const test = { 'a': 1, 'b': 2 };
-      expect(mapValues(test, val => val * 3)).toEqual({ 'a': 3, 'b': 6 });
+      const test = { 'a': 'c', 'b': 'd' };
+      expect(mapValues(test, (val, key) => val + key)).toEqual({ 'a': 'ca', 'b': 'db' });
     });
   });
 });
