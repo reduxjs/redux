@@ -21,11 +21,11 @@ describe('Utils', () => {
       const store = composeStores({
         fake: true,
         broken: 'string',
-        another: {nested:'object'},
-        stack: (state = [], action) => state
+        another: {nested: 'object'},
+        stack: (state = []) => state
       });
 
-      expect(Object.keys(store({}, {type:'push'}))).toEqual(['stack']);
+      expect(Object.keys(store({}, {type: 'push'}))).toEqual(['stack']);
     });
   });
 });
