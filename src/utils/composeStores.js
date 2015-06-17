@@ -1,4 +1,4 @@
-import mapValues from 'lodash/object/mapValues';
+import mapValues from '../utils/mapValues';
 import pick from 'lodash/object/pick';
 
 export default function composeStores(stores) {
