@@ -8,7 +8,7 @@ export default class Redux {
       // A shortcut notation to use the default dispatcher
       dispatcher = createDispatcher(
         composeStores(dispatcher),
-        getState => [thunkMiddleware(getState)]
+        ({ getState }) => [thunkMiddleware(getState)]
       );
     }
 
@@ -23,7 +23,11 @@ export default class Redux {
 
   replaceDispatcher(nextDispatcher) {
     this.dispatcher = nextDispatcher;
-    this.dispatchFn = nextDispatcher(this.state, ::this.setState);
+    this.dispatchFn = nextDispatcher({
+      getState: ::this.getState,
+      setState: ::this.setState
+    });
+    this.dispatch({});
   }
 
   dispatch(action) {

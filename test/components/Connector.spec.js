@@ -188,13 +188,13 @@ describe('React', () => {
     });
 
     it('should throw an error if `state` returns anything but a plain object', () => {
-      const redux = createRedux(() => {});
+      const redux = createRedux({ test: () => 'test' });
 
       expect(() => {
         TestUtils.renderIntoDocument(
           <Provider redux={redux}>
             {() => (
-              <Connector state={() => 1}>
+              <Connector select={() => 1}>
                 {() => <div />}
               </Connector>
             )}
