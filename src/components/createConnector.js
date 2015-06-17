@@ -31,9 +31,8 @@ export default function createConnector(React) {
         return true;
       } else if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
         return isRefEqual;
-      } else {
-        return shallowEqual(slice, nextSlice);
       }
+      return shallowEqual(slice, nextSlice);
     }
 
     constructor(props, context) {
