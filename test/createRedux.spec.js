@@ -69,4 +69,29 @@ describe('createRedux', () => {
 
     expect(state).toEqual(redux.getState().todoStore);
   });
+
+  it('should handle nested dispatches gracefully', () => {
+    function foo(state = 0, action) {
+      return action.type === 'foo' ? 1 : state;
+    }
+
+    function bar(state = 0, action) {
+      return action.type === 'bar' ? 2 : state;
+    }
+
+    redux = createRedux({ foo, bar });
+
+    redux.subscribe(() => {
+      // What the Connector ends up doing.
+      const state = redux.getState();
+      if (state.bar === 0) {
+        redux.dispatch({type: 'bar'});
+      }
+    });
+
+    redux.dispatch({type: 'foo'});
+
+    // Either this or throw an error when nesting dispatchers
+    expect(redux.getState()).toEqual({foo: 1, bar: 2});
+  });
 });
