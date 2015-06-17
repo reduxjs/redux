@@ -8,7 +8,7 @@ export default function createDispatcher(store, middlewares = []) {
     }
 
     const finalMiddlewares = typeof middlewares === 'function' ?
-      middlewares({ getState, setState, dispatch }) :
+      middlewares(getState, setState, dispatch) :
       middlewares;
 
     return composeMiddleware(...finalMiddlewares, dispatch);
