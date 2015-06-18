@@ -33,6 +33,7 @@ Atomic Flux with hot reloading.
   - [But there are switch statements!](#but-there-are-switch-statements)
   - [What about `waitFor`?](#what-about-waitfor)
   - [My views aren't updating!](#my-views-arent-updating)
+  - [How do Stores, Actions and Components interact?](#how-do-stores-actions-and-components-interact)
 - [Discussion](#discussion)
 - [Inspiration and Thanks](#inspiration-and-thanks)
 
@@ -418,6 +419,18 @@ function (state, action) {
 ```
 
 [Read more](https://github.com/sebmarkbage/ecmascript-rest-spread) about the spread properties ES7 proposal.
+
+### How do Stores, Actions and Components interact?
+
+Action creators are just pure functions so they don't interact with anything. Components need to call `dispatch(action)` (or use `bindActionCreators` that wraps it) to dispatch an action *returned* by the action creator.
+
+Stores are just pure functions too so they don't need to be “registered” in the traditional sense, and you can't subscribe to them directly. They're just descriptions of how data transforms. So in that sense they don't “interact” with anything either, they just exist, and are used by the dispatcher for computation of the next state.
+
+Now, the dispatcher is more interesting. You pass all the Stores to it, and it composes them into a single Store function that it uses for computation. The dispatcher is also a pure function, and it is passed as configuration to `createRedux`, the only stateful thing in Redux. By default, the default dispatcher is used, so if you call `createRedux(stores)`, it is created implicitly.
+
+To sum it up: there is a Redux instance at the root of your app. It binds everything together. It accepts a dispatcher (which itself accepts Stores), it holds the state, and it knows how to turn actions into state updates. Everything else (components, for example) subscribes to the Redux instance. If something wants to dispatch an action, they need to do it on the Redux instance. `Connector` is a handy shortcut for subscribing to a slice of the Redux instance's state and injecting `dispatch` into your components, but you don't have to use it.
+
+There is no other “interaction” in Redux.
 
 ## Discussion
 
