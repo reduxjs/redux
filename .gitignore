@@ -1,6 +1,7 @@
 node_modules
 npm-debug.log
 .DS_Store
+dist
 lib
 coverage
 react.js
