@@ -6,7 +6,6 @@ const { todoActions, todoStore } = helpers;
 
 describe('Utils', () => {
   describe('bindActionCreators', () => {
-
     let redux;
 
     beforeEach(() => {

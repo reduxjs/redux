@@ -8,7 +8,6 @@ const { addTodo, addTodoAsync } = todoActions;
 const { ADD_TODO } = constants;
 
 describe('createDispatcher', () => {
-
   it('should handle sync and async dispatches', done => {
     const spy = expect.createSpy(
       nextState => nextState

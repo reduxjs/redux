@@ -29,11 +29,13 @@ export default function createConnector(React) {
       const isRefEqual = slice === nextSlice;
       if (isRefEqual) {
         return true;
-      } else if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
-        return isRefEqual;
-      } else {
-        return shallowEqual(slice, nextSlice);
       }
+
+      if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
+        return isRefEqual;
+      }
+
+      return shallowEqual(slice, nextSlice);
     }
 
     constructor(props, context) {

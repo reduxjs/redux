@@ -38,7 +38,7 @@ describe('React', () => {
       expect(child.context.redux).toBe(redux);
     });
 
-    it('sets displayName correctly', () => {
+    it('sets displayName correctly', () => { // eslint-disable-line padded-blocks
       @provide(createRedux({ test: () => 'test' }))
       class Container extends Component {
         render() {
