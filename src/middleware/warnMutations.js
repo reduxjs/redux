@@ -33,7 +33,7 @@ export default function warnMutationsMiddleware(getState) {
         ' This may cause incorrect behavior.',
         '(https://github.com/gaearon/redux#my-views-arent-updating)'
       ].join(''));
-    };
+    }
 
     action = next(action);
 
