@@ -14,6 +14,7 @@ Atomic Flux with hot reloading.
 - [Why another Flux framework?](#why-another-flux-framework)
   - [Philosophy & Design Goals](#philosophy--design-goals)
 - [Demo](#demo)
+- [Running TodoMVC](#running-todomvc)
 - [What does it look like?](#what-does-it-look-like)
   - [Actions](#actions)
   - [Stores](#stores)
@@ -63,9 +64,15 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 
 <img src='https://s3.amazonaws.com/f.cl.ly/items/2Z2D3U260d2A311k2B0z/Screen%20Recording%202015-06-03%20at%2003.22%20pm.gif' width='500'>
 
+## Running TodoMVC
+
 ```
 git clone https://github.com/gaearon/redux.git redux
+
 cd redux
+npm install
+
+cd examples/todomvc
 npm install
 npm start
 ```
