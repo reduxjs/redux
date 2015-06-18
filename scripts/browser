@@ -9,6 +9,3 @@ NODE_ENV=production $WEBPACK_CMD src/index.js dist/redux.min.js
 
 $WEBPACK_CMD src/react.js dist/redux-react.js
 NODE_ENV=production $WEBPACK_CMD src/react.js dist/redux-react.min.js
-
-$WEBPACK_CMD src/react-native.js dist/redux-react-native.js
-NODE_ENV=production $WEBPACK_CMD src/react-native.js dist/redux-react-native.min.js
