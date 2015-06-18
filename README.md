@@ -104,7 +104,9 @@ export function incrementAsync() {
 
 // Could also read state of a store in the callback form
 export function incrementIfOdd() {
-  return (dispatch, { counter }) => {
+  return (dispatch, getState) => {
+    const { counter } = getState();
+
     if (counter % 2 === 0) {
       return;
     }
