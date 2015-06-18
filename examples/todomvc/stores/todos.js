@@ -1,7 +1,7 @@
 import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL } from '../constants/ActionTypes';
 
 const initialState = [{
-  text: 'do something',
+  text: 'Use Redux',
   marked: false,
   id: 0
 }];
@@ -16,7 +16,9 @@ export default function todos(state = initialState, action) {
     }, ...state];
 
   case DELETE_TODO:
-    return state.filter(todo => todo.id !== action.id);
+    return state.filter(todo =>
+      todo.id !== action.id
+    );
 
   case EDIT_TODO:
     return state.map(todo =>
@@ -33,13 +35,11 @@ export default function todos(state = initialState, action) {
     );
 
   case MARK_ALL:
-    let nextState;
-    if (state.filter(todo => todo.marked).length < state.length) {
-      nextState = state.map(todo => ({ ...todo, marked: true }));
-    } else {
-      nextState = state.map(todo => ({ ...todo, marked: false }));
-    }
-    return nextState;
+    const areAllMarked = state.every(todo => todo.marked);
+    return state.map(todo => ({
+      ...todo,
+      marked: !areAllMarked
+    }));
 
   default:
     return state;
