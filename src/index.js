@@ -1,8 +1,16 @@
 // Core
-export createRedux from './createRedux';
-export createDispatcher from './createDispatcher';
+import createRedux from './createRedux';
+import createDispatcher from './createDispatcher';
 
 // Utilities
-export composeMiddleware from './utils/composeMiddleware';
-export composeStores from './utils/composeStores';
-export bindActionCreators from './utils/bindActionCreators';
+import composeMiddleware from './utils/composeMiddleware';
+import composeStores from './utils/composeStores';
+import bindActionCreators from './utils/bindActionCreators';
+
+export {
+  createRedux,
+  createDispatcher,
+  composeMiddleware,
+  composeStores,
+  bindActionCreators
+};
