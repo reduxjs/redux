@@ -17,7 +17,7 @@ describe('createDispatcher', () => {
     const dispatcher = createDispatcher(
       composeStores({ todoStore }),
       // we need this middleware to handle async actions
-      getState => [thunkMiddleware(getState)]
+      ({ getState, dispatch }) => [thunkMiddleware(getState, dispatch)]
     );
 
     expect(dispatcher).toBeA('function');
