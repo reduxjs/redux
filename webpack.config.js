@@ -20,10 +20,17 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
+var reactExternal = {
+  root: 'React',
+  commonjs2: 'react',
+  commonjs: 'react',
+  amd: 'react'
+};
+
 module.exports = {
   externals: {
-    'react': 'React',
-    'react-native': 'React'
+    'react': reactExternal,
+    'react-native': reactExternal
   },
   module: {
     loaders: [
@@ -32,7 +39,7 @@ module.exports = {
   },
   output: {
     library: 'Redux',
-    libraryTarget: 'var'
+    libraryTarget: 'umd'
   },
   plugins: plugins,
   resolve: {
