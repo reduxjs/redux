@@ -130,5 +130,4 @@ describe('Utils', () => {
       ).toBe(false);
     });
   });
-
 });

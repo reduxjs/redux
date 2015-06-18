@@ -47,7 +47,7 @@ describe('React', () => {
         .toNotThrow();
     });
 
-    it('sets displayName correctly', () => {
+    it('sets displayName correctly', () => { // eslint-disable-line padded-blocks
       @connect(state => state)
       class Container extends Component {
         render() {

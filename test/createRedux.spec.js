@@ -6,7 +6,6 @@ const { defaultText, todoActions, todoStore } = helpers;
 const { addTodo } = todoActions;
 
 describe('createRedux', () => {
-
   let redux;
 
   beforeEach(() => {
