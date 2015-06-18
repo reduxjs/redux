@@ -8,7 +8,6 @@
     "clean": "scripts/clean",
     "lint": "scripts/lint",
     "prepublish": "scripts/prepublish",
-    "start": "scripts/start",
     "test": "scripts/test",
     "test:watch": "scripts/test-watch",
     "test:cov": "scripts/test-cov"
