@@ -1,6 +1,6 @@
-import identity from 'lodash/utility/identity';
+import identity from '../utils/identity';
 import shallowEqual from '../utils/shallowEqual';
-import isPlainObject from 'lodash/lang/isPlainObject';
+import isPlainObject from '../utils/isPlainObject';
 import invariant from 'invariant';
 
 export default function createConnector(React) {
