@@ -1,24 +1,65 @@
 import invariant from 'invariant';
+import isPlainObject from '../utils/isPlainObject';
 
-import isEqual from 'lodash/lang/isEqual';
-import any from 'lodash/collection/any';
-import cloneDeep from 'lodash/lang/cloneDeep';
-
-function copyState(state) {
-  return cloneDeep(state);
+function any(collection, predicate) {
+  for (let key in collection) {
+    if (collection.hasOwnProperty(key)) {
+      if (predicate(collection[key], key)) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
-function wasMutated(prevStateRef, prevState, stateRef, state) {
-  if (prevStateRef === stateRef && !isEqual(prevState, state)) {
-    return true;
+// Based on https://github.com/facebook/immutable-js/issues/421#issuecomment-87089399
+function isImmutableDefault(value) {
+  return typeof value !== 'object' ||
+    (typeof value.equals === 'function' && typeof value.hashCode === 'function');
+}
+
+function copyState(state, isImmutable) {
+  if (!state) { return state; }
+
+  if (isImmutable(state)) {
+    return state;
   }
 
-  if (typeof prevStateRef !== 'object') {
+  if (!Array.isArray(state) && !isPlainObject(state)) {
+    return state;
+  }
+
+  const keysAndValues = [];
+
+  for (let key in state) {
+    if (state.hasOwnProperty(key)) {
+      keysAndValues.push([key, copyState(state[key], isImmutable)]);
+    }
+  }
+
+  const initialObj = Array.isArray(state) ? [] : {};
+
+  return keysAndValues.reduce((obj, [key, value]) => {
+    obj[key] = value;
+    return obj;
+  }, initialObj);
+}
+
+function wasMutated(prevStateRef, prevState, stateRef, state, isImmutable, sameParentRef = true) {
+  if (isImmutable(prevState)) {
+    if (sameParentRef) {
+      return prevState !== state;
+    }
+
     return false;
   }
 
   return any(prevStateRef, (val, key) =>
-    wasMutated(val, prevState[key], stateRef[key], state[key]));
+    wasMutated(
+      val, prevState[key], stateRef[key], state[key],
+      isImmutable, prevStateRef === stateRef
+    )
+  );
 }
 
 const BETWEEN_DISPATCHES_MESSAGE = [
@@ -33,26 +74,26 @@ const INSIDE_DISPATCH_MESSAGE = [
   '(https://github.com/gaearon/redux#my-views-arent-updating)'
 ].join('');
 
-export default function warnMutationsMiddleware(getState) {
+export default function warnMutationsMiddleware(getState, isImmutable = isImmutableDefault) {
   let lastStateRef = getState();
-  let lastState = copyState(lastStateRef);
+  let lastState = copyState(lastStateRef, isImmutable);
 
   return (next) => (action) => {
     const stateRef = getState();
-    const state = copyState(stateRef);
+    const state = copyState(stateRef, isImmutable);
 
     invariant(
-      !wasMutated(lastStateRef, lastState, stateRef, state),
+      !wasMutated(lastStateRef, lastState, stateRef, state, isImmutable),
       BETWEEN_DISPATCHES_MESSAGE
     );
 
     const dispatchedAction = next(action);
 
     lastStateRef = getState();
-    lastState = copyState(lastStateRef);
+    lastState = copyState(lastStateRef, isImmutable);
 
     invariant(
-      !wasMutated(stateRef, state, lastStateRef, lastState),
+      !wasMutated(stateRef, state, lastStateRef, lastState, isImmutable),
       INSIDE_DISPATCH_MESSAGE,
       action.type
     );
