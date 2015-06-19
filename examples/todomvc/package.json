@@ -30,7 +30,7 @@
   "dependencies": {
     "classnames": "^2.1.2",
     "react": "^0.13.3",
-    "redux": "^0.11.1"
+    "redux": "^0.12.0"
   },
   "devDependencies": {
     "babel-core": "^5.5.8",
