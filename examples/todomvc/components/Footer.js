@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
+import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/Show';
 
 export default class Footer {
   static propTypes = {
@@ -30,22 +31,22 @@ export default class Footer {
         </span>
         <ul className='filters'>
           <li>
-            <a className={classnames({ selected: this.props.showing === 'all'})}
-               onClick={(e) => this.props.onShow(e, 'all')}>
+            <a className={classnames({ selected: this.props.showing === SHOW_ALL})}
+               onClick={(e) => this.props.onShow(e, SHOW_ALL)}>
               All
             </a>
           </li>
           {' '}
           <li>
-            <a className={classnames({ selected: this.props.showing === 'unmarked'})}
-               onClick={(e) => this.props.onShow(e, 'unmarked')} >
+            <a className={classnames({ selected: this.props.showing === SHOW_UNMARKED})}
+               onClick={(e) => this.props.onShow(e, SHOW_UNMARKED)} >
               Active
             </a>
           </li>
           {' '}
           <li>
-            <a className={classnames({ selected: this.props.showing === 'marked'})}
-               onClick={(e) => this.props.onShow(e, 'marked')} >
+            <a className={classnames({ selected: this.props.showing === SHOW_MARKED})}
+               onClick={(e) => this.props.onShow(e, SHOW_MARKED)} >
               Completed
             </a>
           </li>

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
+import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/Show';
 
 export default class MainSection extends Component {
 
@@ -11,12 +12,12 @@ export default class MainSection extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { showing: 'all' };
+    this.state = { showing: SHOW_ALL };
   }
 
   handleClearMarked() {
-    const atleastOneMarked = this.props.todos.some(todo => todo.marked);
-    if (atleastOneMarked) {
+    const atLeastOneMarked = this.props.todos.some(todo => todo.marked);
+    if (atLeastOneMarked) {
       this.props.actions.clearMarked();
     }
   }
@@ -40,11 +41,11 @@ export default class MainSection extends Component {
     }
 
     let todoList = null;
-    if (this.state.showing === 'all') {
+    if (this.state.showing === SHOW_ALL) {
       todoList = this.props.todos;
-    } else if (this.state.showing === 'unmarked') {
+    } else if (this.state.showing === SHOW_UNMARKED) {
       todoList = this.props.todos.filter(todo => !todo.marked);
-    } else if (this.state.showing === 'marked') {
+    } else if (this.state.showing === SHOW_MARKED) {
       todoList = this.props.todos.filter(todo => todo.marked);
     }
 
@@ -55,7 +56,7 @@ export default class MainSection extends Component {
                 unmarkedCount={unmarkedCount}
                 showing={this.state.showing}
                 onClearMarked={::this.handleClearMarked}
-                onShow={(e, show) => this.handleShow(e, show)} />
+                onShow={::this.handleShow} />
       );
     }
 
