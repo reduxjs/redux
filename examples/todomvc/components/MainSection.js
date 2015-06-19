@@ -10,11 +10,8 @@ export default class MainSection {
 
   render() {
 
-    let toggleAll;
-    // Toggle All shouldn't be present if no todos are present.
-    if (this.props.todos.length === 0) {
-      toggleAll = null;
-    } else {
+    let toggleAll = null;
+    if (this.props.todos.length > 0) {
       toggleAll = (
         <input className='toggle-all'
                type='checkbox'
