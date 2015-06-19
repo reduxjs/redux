@@ -1,9 +1,11 @@
 import invariant from 'invariant';
 import isPlainObject from '../utils/isPlainObject';
 
+const hasOwn = Object.prototype.hasOwnProperty;
+
 function any(collection, predicate) {
   for (let key in collection) {
-    if (collection.hasOwnProperty(key)) {
+    if (hasOwn.call(collection, key)) {
       if (predicate(collection[key], key)) {
         return true;
       }
@@ -32,7 +34,7 @@ function copyState(state, isImmutable) {
   const keysAndValues = [];
 
   for (let key in state) {
-    if (state.hasOwnProperty(key)) {
+    if (hasOwn.call(state, key)) {
       keysAndValues.push([key, copyState(state[key], isImmutable)]);
     }
   }
