@@ -15,21 +15,21 @@ Multiple middleware can be composed manually
 middleware1(middleware2(dispatch))(action)
 ```
 
-Or using the provided `compose()` utility:
+Or using the provided `composeMiddleware()` utility:
 
 ```js
-import { compose } from 'redux';
+import { composeMiddleware } from 'redux';
 
 // All are equivalent:
 middleware1(middleware2(dispatch))(action)
-compose(middleware1, middleware2)(dispatch)(action)
-compose(middleware1, middleware2, dispatch)(action)
+composeMiddleware(middleware1, middleware2)(dispatch)(action)
+composeMiddleware(middleware1, middleware2, dispatch)(action)
 ```
 
-`compose` enables you to easily compose an array of middleware using spread notation:
+`composeMiddleware` enables you to easily compose an array of middleware using spread notation:
 
 ```
-compose(...middlewares);
+composeMiddleware(...middlewares);
 ```
 
 ## Example of how to write middleware
