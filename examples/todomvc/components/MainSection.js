@@ -2,14 +2,12 @@ import React, { PropTypes } from 'react';
 import TodoItem from './TodoItem';
 
 export default class MainSection {
-
   static propTypes = {
     todos: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
   };
 
   render() {
-
     let toggleAll = null;
     if (this.props.todos.length > 0) {
       toggleAll = (
