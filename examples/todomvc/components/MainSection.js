@@ -9,11 +9,22 @@ export default class MainSection {
   };
 
   render() {
-    return (
-      <section className='main'>
+
+    let toggleAll;
+    // Toggle All shouldn't be present if no todos are present.
+    if (this.props.todos.length === 0) {
+      toggleAll = null;
+    } else {
+      toggleAll = (
         <input className='toggle-all'
                type='checkbox'
                onChange={::this.props.actions.markAll} />
+      );
+    }
+
+    return (
+      <section className='main'>
+        {toggleAll}
         <ul className='todo-list'>
           {this.props.todos.map(todo =>
             <TodoItem key={todo.id} todo={todo} {...this.props.actions} />
