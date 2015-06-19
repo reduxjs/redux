@@ -1,4 +1,5 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL } from '../constants/ActionTypes';
+import { ADD_TODO, DELETE_TODO, EDIT_TODO } from '../constants/ActionTypes';
+import { MARK_TODO, MARK_ALL, CLEAR_MARKED } from '../constants/ActionTypes';
 
 const initialState = [{
   text: 'Use Redux',
@@ -40,6 +41,9 @@ export default function todos(state = initialState, action) {
       ...todo,
       marked: !areAllMarked
     }));
+
+  case CLEAR_MARKED:
+    return state.filter(todo => todo.marked === false);
 
   default:
     return state;

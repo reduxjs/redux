@@ -1,4 +1,5 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL } from '../constants/ActionTypes';
+import { ADD_TODO, DELETE_TODO, EDIT_TODO } from '../constants/ActionTypes';
+import { MARK_TODO, MARK_ALL, CLEAR_MARKED } from '../constants/ActionTypes';
 
 export function addTodo(text) {
   return {
@@ -32,5 +33,11 @@ export function markTodo(id) {
 export function markAll() {
   return {
     type: MARK_ALL
+  };
+}
+
+export function clearMarked() {
+  return {
+    type: CLEAR_MARKED
   };
 }
