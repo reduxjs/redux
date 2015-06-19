@@ -26,7 +26,6 @@ export default class MainSection extends Component {
   }
 
   render() {
-
     let unmarkedCount = this.props.todos.reduce((acc, todo) => todo.marked ? acc : acc + 1, 0);
     let markedCount = this.props.todos.length - unmarkedCount;
 
