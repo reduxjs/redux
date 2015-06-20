@@ -52,10 +52,11 @@
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2",
-    "immutable": "~3.7.4"
+    "immutable": "^3.7.4"
   },
   "dependencies": {
-    "invariant": "^2.0.0"
+    "invariant": "^2.0.0",
+    "lodash.clonedeep": "^3.0.1"
   },
   "npmName": "redux",
   "npmFileMap": [

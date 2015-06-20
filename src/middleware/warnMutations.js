@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import isPlainObject from '../utils/isPlainObject';
+import cloneDeep from 'lodash.clonedeep';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
@@ -21,33 +21,14 @@ function isImmutableDefault(value) {
 }
 
 function copyState(state, isImmutable) {
-  if (!state) { return state; }
-
-  if (isImmutable(state)) {
-    return state;
-  }
-
-  if (!Array.isArray(state) && !isPlainObject(state)) {
-    return state;
-  }
-
-  const keysAndValues = [];
-
-  for (let key in state) {
-    if (hasOwn.call(state, key)) {
-      keysAndValues.push([key, copyState(state[key], isImmutable)]);
+  return cloneDeep(state, value => {
+    if (isImmutable(value)) {
+      return value;
     }
-  }
-
-  const initialObj = Array.isArray(state) ? [] : {};
-
-  return keysAndValues.reduce((obj, [key, value]) => {
-    obj[key] = value;
-    return obj;
-  }, initialObj);
+  });
 }
 
-function wasMutated(prevStateRef, prevState, stateRef, state, isImmutable, sameParentRef = true) {
+function wasMutated(prevStateRef, prevState, state, isImmutable, sameParentRef = true) {
   if (isImmutable(prevState)) {
     if (sameParentRef) {
       return prevState !== state;
@@ -56,11 +37,10 @@ function wasMutated(prevStateRef, prevState, stateRef, state, isImmutable, sameP
     return false;
   }
 
+  const sameRef = prevStateRef === state;
+
   return any(prevStateRef, (val, key) =>
-    wasMutated(
-      val, prevState[key], stateRef[key], state[key],
-      isImmutable, prevStateRef === stateRef
-    )
+    wasMutated(val, prevState[key], state[key], isImmutable, sameRef)
   );
 }
 
@@ -78,28 +58,27 @@ const INSIDE_DISPATCH_MESSAGE = [
 
 export default function warnMutationsMiddleware(getState, isImmutable = isImmutableDefault) {
   let lastStateRef = getState();
-  let lastState = copyState(lastStateRef, isImmutable);
+  let lastStateCopy = copyState(lastStateRef, isImmutable);
 
   return (next) => (action) => {
     const stateRef = getState();
-    const state = copyState(stateRef, isImmutable);
 
     invariant(
-      !wasMutated(lastStateRef, lastState, stateRef, state, isImmutable),
+      !wasMutated(lastStateRef, lastStateCopy, stateRef, isImmutable),
       BETWEEN_DISPATCHES_MESSAGE
     );
 
+    const stateCopy = copyState(stateRef, isImmutable);
     const dispatchedAction = next(action);
-
     lastStateRef = getState();
-    lastState = copyState(lastStateRef, isImmutable);
 
     invariant(
-      !wasMutated(stateRef, state, lastStateRef, lastState, isImmutable),
+      !wasMutated(stateRef, stateCopy, lastStateRef, isImmutable),
       INSIDE_DISPATCH_MESSAGE,
       action.type
     );
 
+    lastStateCopy = copyState(lastStateRef, isImmutable);
     return dispatchedAction;
   };
 }
