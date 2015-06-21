@@ -1,0 +1,41 @@
+{
+  "name": "counter-redux",
+  "version": "0.0.0",
+  "description": "Counter example for redux",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaearon/redux.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "hot",
+    "reload",
+    "hmr",
+    "live",
+    "edit",
+    "webpack",
+    "flux"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaearon/redux/issues"
+  },
+  "homepage": "https://github.com/gaearon/redux#readme",
+  "dependencies": {
+    "react": "^0.13.3",
+    "redux": "^0.12.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.5.8",
+    "babel-loader": "^5.1.4",
+    "node-libs-browser": "^0.5.2",
+    "react-hot-loader": "^1.2.7",
+    "webpack": "^1.9.11",
+    "webpack-dev-server": "^1.9.0"
+  }
+}

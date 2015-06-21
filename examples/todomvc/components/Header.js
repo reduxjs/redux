@@ -17,7 +17,7 @@ export default class Header {
       <header className='header'>
           <h1>todos</h1>
           <TodoTextInput newTodo={true}
-                         handleSave={::this.handleSave}
+                         onSave={::this.handleSave}
                          placeholder='What needs to be done?' />
       </header>
     );

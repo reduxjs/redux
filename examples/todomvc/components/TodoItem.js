@@ -39,7 +39,7 @@ export default class TodoItem extends Component {
       element = (
         <TodoTextInput text={todo.text}
                        editing={this.state.editing}
-                       handleSave={(text) => this.handleSave(todo.id, text)} />
+                       onSave={(text) => this.handleSave(todo.id, text)} />
       );
     } else {
       element = (
