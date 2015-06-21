@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import TodoTextInput from './TodoTextInput';
 
-
 export default class TodoItem extends Component {
   static propTypes = {
     todo: PropTypes.object.isRequired,
@@ -48,7 +47,9 @@ export default class TodoItem extends Component {
                  type='checkbox'
                  checked={todo.marked}
                  onChange={() => markTodo(todo.id)} />
-          <label onDoubleClick={::this.handleDoubleClick}>{todo.text}</label>
+          <label onDoubleClick={::this.handleDoubleClick}>
+            {todo.text}
+          </label>
           <button className='destroy'
                   onClick={() => deleteTodo(todo.id)} />
         </div>

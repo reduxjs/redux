@@ -1,10 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
-import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/Show';
+import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
+
+const TODO_FILTERS = {
+  [SHOW_ALL]: () => true,
+  [SHOW_UNMARKED]: todo => !todo.marked,
+  [SHOW_MARKED]: todo => todo.marked
+};
 
 export default class MainSection extends Component {
-
   static propTypes = {
     todos: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
@@ -12,7 +17,7 @@ export default class MainSection extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { showing: SHOW_ALL };
+    this.state = { filter: SHOW_ALL };
   }
 
   handleClearMarked() {
@@ -22,54 +27,58 @@ export default class MainSection extends Component {
     }
   }
 
-  handleShow(e, show) {
-    this.setState({ showing: show });
+  handleShow(filter) {
+    this.setState({ filter });
   }
 
   render() {
-    let unmarkedCount = this.props.todos.reduce((acc, todo) => todo.marked ? acc : acc + 1, 0);
-    let markedCount = this.props.todos.length - unmarkedCount;
+    const { todos, actions } = this.props;
+    const { filter } = this.state;
 
-    let toggleAll = null;
-    if (this.props.todos.length > 0) {
-      toggleAll = (
+    const filteredTodos = todos.filter(TODO_FILTERS[filter]);
+    const markedCount = todos.reduce((count, todo) =>
+      todo.marked ? count + 1 : count,
+      0
+    );
+
+    return (
+      <section className='main'>
+        {this.renderToggleAll(markedCount)}
+        <ul className='todo-list'>
+          {filteredTodos.map(todo =>
+            <TodoItem key={todo.id} todo={todo} {...actions} />
+          )}
+        </ul>
+        {this.renderFooter(markedCount)}
+      </section>
+    );
+  }
+
+  renderToggleAll(markedCount) {
+    const { todos, actions } = this.props;
+    if (todos.length > 0) {
+      return (
         <input className='toggle-all'
                type='checkbox'
-               checked={unmarkedCount === 0}
-               onChange={::this.props.actions.markAll} />
+               checked={markedCount === todos.length}
+               onChange={actions.markAll} />
       );
     }
+  }
 
-    let todoList = null;
-    if (this.state.showing === SHOW_ALL) {
-      todoList = this.props.todos;
-    } else if (this.state.showing === SHOW_UNMARKED) {
-      todoList = this.props.todos.filter(todo => !todo.marked);
-    } else if (this.state.showing === SHOW_MARKED) {
-      todoList = this.props.todos.filter(todo => todo.marked);
-    }
+  renderFooter(markedCount) {
+    const { todos } = this.props;
+    const { filter } = this.state;
+    const unmarkedCount = todos.length - markedCount;
 
-    let footer = null;
-    if (markedCount || unmarkedCount) {
-      footer = (
+    if (todos.length) {
+      return (
         <Footer markedCount={markedCount}
                 unmarkedCount={unmarkedCount}
-                showing={this.state.showing}
+                filter={filter}
                 onClearMarked={::this.handleClearMarked}
                 onShow={::this.handleShow} />
       );
     }
-
-    return (
-      <section className='main'>
-        {toggleAll}
-        <ul className='todo-list'>
-          {todoList.map(todo =>
-            <TodoItem key={todo.id} todo={todo} {...this.props.actions} />
-          )}
-        </ul>
-        {footer}
-      </section>
-    );
   }
 }

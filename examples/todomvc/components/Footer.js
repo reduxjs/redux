@@ -1,58 +1,71 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/Show';
+import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
+
+const FILTER_TITLES = {
+  [SHOW_ALL]: 'All',
+  [SHOW_UNMARKED]: 'Active',
+  [SHOW_MARKED]: 'Completed'
+};
 
 export default class Footer {
   static propTypes = {
     markedCount: PropTypes.number.isRequired,
     unmarkedCount: PropTypes.number.isRequired,
-    showing: PropTypes.string.isRequired,
+    filter: PropTypes.string.isRequired,
     onClearMarked: PropTypes.func.isRequired,
     onShow: PropTypes.func.isRequired
   }
 
   render() {
-    let clearButton = null;
-    let itemWord = this.props.unmarkedCount > 1 ? 'items' : 'item';
+    return (
+      <footer className='footer'>
+        {this.renderTodoCount()}
+        <ul className='filters'>
+          {[SHOW_ALL, SHOW_UNMARKED, SHOW_MARKED].map(filter =>
+            <li key={filter}>
+              {this.renderFilterLink(filter)}
+            </li>
+          )}
+        </ul>
+        {this.renderClearButton()}
+      </footer>
+    );
+  }
 
-    if (this.props.markedCount > 0) {
-      clearButton = (
+  renderTodoCount() {
+    const { unmarkedCount } = this.props;
+    const itemWord = unmarkedCount === 1 ? 'item' : 'items';
+
+    return (
+      <span className='todo-count'>
+        <strong>{unmarkedCount || 'No'}</strong> {itemWord} left
+      </span>
+    );
+  }
+
+  renderFilterLink(filter) {
+    const title = FILTER_TITLES[filter];
+    const { filter: selectedFilter, onShow } = this.props;
+
+    return (
+      <a className={classnames({ selected: filter === selectedFilter })}
+         style={{ cursor: 'hand' }}
+         onClick={() => onShow(filter)}>
+        {title}
+      </a>
+    );
+  }
+
+  renderClearButton() {
+    const { markedCount, onClearMarked } = this.props;
+    if (markedCount > 0) {
+      return (
         <button className='clear-completed'
-                onClick={::this.props.onClearMarked} >
+                onClick={onClearMarked} >
           Clear completed
         </button>
       );
     }
-
-    return (
-      <footer className='footer'>
-        <span className='todo-count'>
-          <strong>{this.props.unmarkedCount}</strong> {itemWord} left
-        </span>
-        <ul className='filters'>
-          <li>
-            <a className={classnames({ selected: this.props.showing === SHOW_ALL})}
-               onClick={(e) => this.props.onShow(e, SHOW_ALL)}>
-              All
-            </a>
-          </li>
-          {' '}
-          <li>
-            <a className={classnames({ selected: this.props.showing === SHOW_UNMARKED})}
-               onClick={(e) => this.props.onShow(e, SHOW_UNMARKED)} >
-              Active
-            </a>
-          </li>
-          {' '}
-          <li>
-            <a className={classnames({ selected: this.props.showing === SHOW_MARKED})}
-               onClick={(e) => this.props.onShow(e, SHOW_MARKED)} >
-              Completed
-            </a>
-          </li>
-        </ul>
-        {clearButton}
-      </footer>
-    );
   }
 }
