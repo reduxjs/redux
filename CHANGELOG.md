@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [unreleased]
 
 ## [0.12.0] - 2015/06/19
 No breaking changes this time.
@@ -319,7 +319,7 @@ Minor caveat: Store function names are now significant.
   [examples](https://github.com/gaearon/redux/tree/master/examples) folder.
   Alpha quality :-)
 
-[0.12.0]: https://github.com/gaearon/redux/compare/v0.12.0...HEAD
+[unreleased]: https://github.com/gaearon/redux/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/gaearon/redux/compare/v0.11.1...v0.12.0
 [0.11.1]: https://github.com/gaearon/redux/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/gaearon/redux/compare/v0.10.1...v0.11.0
