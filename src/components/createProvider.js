@@ -31,8 +31,8 @@ export default function createProvider(React) {
       const { redux: nextRedux } = nextProps;
 
       if (redux !== nextRedux) {
-        const nextDispatcher = nextRedux.getDispatcher();
-        redux.replaceDispatcher(nextDispatcher);
+        const nextReducer = nextRedux.getReducer();
+        redux.replaceReducer(nextReducer);
       }
     }
 
