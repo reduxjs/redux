@@ -1,7 +1,7 @@
 redux
 =========================
 
-[![build status](https://img.shields.io/travis/gaearon/redux.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
+[![build status](https://img.shields.io/travis/gaearon/redux/master.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 
 Atomic Flux with hot reloading.  
