@@ -353,6 +353,8 @@ When in doubt, use the shorter option!
 
 Besides the examples in this repo, there is an [officially supported example](https://github.com/emmenko/redux-react-router-async-example) (_still WIP_) tackling those implementations.
 
+There is also a complete universal (isomorphic), hot-reloading example with `react-router` and asynchronous data fetching from both the client and server [here](https://github.com/erikras/react-redux-universal-hot-example/).
+
 ### How does hot reloading work?
 
 * http://webpack.github.io/docs/hot-module-replacement.html
