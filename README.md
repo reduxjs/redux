@@ -22,6 +22,7 @@ Atomic Flux with hot reloading.
     - [Dumb Components](#dumb-components)
     - [Smart Components](#smart-components)
     - [Decorators](#decorators)
+    - [Selectors](#selectors)
   - [React Native](#react-native)
   - [Initializing Redux](#initializing-redux)
   - [Running the same code on client and server](#running-the-same-code-on-client-and-server)
