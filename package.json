@@ -50,6 +50,7 @@
     "react": "^0.13.0",
     "react-hot-loader": "^1.2.7",
     "rimraf": "^2.3.4",
+    "sinon": "^1.15.3",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
   },
@@ -57,10 +58,12 @@
     "invariant": "^2.0.0"
   },
   "npmName": "redux",
-  "npmFileMap": [{
-    "basePath": "/dist/",
-    "files": [
-      "*.js"
-    ]
-  }]
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
 }
