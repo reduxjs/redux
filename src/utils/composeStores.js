@@ -1,6 +1,5 @@
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
-import invariant from 'invariant';
 
 export default function composeStores(stores) {
   const finalStores = pick(stores, (val) => typeof val === 'function');
