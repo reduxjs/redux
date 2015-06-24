@@ -38,8 +38,11 @@ export default function createConnector(React) {
     constructor(props, context) {
       super(props, context);
 
-      this.unsubscribe = context.redux.subscribe(::this.handleChange);
       this.state = this.selectState(props, context);
+    }
+
+    componentDidMount() {
+      this.unsubscribe = this.context.redux.subscribe(::this.handleChange);
     }
 
     componentWillReceiveProps(nextProps) {
