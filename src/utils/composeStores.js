@@ -7,16 +7,13 @@ export default function composeStores(stores) {
   const dummyAction = {};
   const dummyStore = {};
 
-  Object.keys(finalStores).forEach(key => {
-    if (finalStores[key](dummyStore, dummyAction) !== dummyStore) {
-      const message = `Your ${key} Store must return the state given to it for any unknown actions.`;
-      if (process.env.NODE_ENV === 'production') {
-        console.warn(message);
-      } else {
-        throw new Error(message);
+  if (process.env.NODE_ENV !== 'production') {
+    Object.keys(finalStores).forEach(key => {
+      if (finalStores[key](dummyStore, dummyAction) !== dummyStore) {
+        console.warn(`Your ${key} Store must return the state given to it for any unknown actions.`);
       }
-    }
-  });
+    });
+  }
 
   return function Composition(atom = {}, action) {
     return mapValues(finalStores, (store, key) =>
