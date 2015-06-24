@@ -5,13 +5,20 @@ import invariant from 'invariant';
 export default function composeStores(stores) {
   const finalStores = pick(stores, (val) => typeof val === 'function');
 
+  const dummyAction = {};
+  const dummyStore = {};
+
   Object.keys(finalStores).forEach(key => {
-    invariant(
-        typeof finalStores[key]({}, {}) !== 'undefined',
-        'The return value of `%s` reducer function must not be undefined.',
-        key
-    );
+    if (finalStores[key](dummyStore, dummyAction) !== dummyStore) {
+      const message = `Your ${key} Store must return the state given to it for any unknown actions.`;
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(message);
+      } else {
+        throw new Error(message);
+      }
+    }
   });
+
   return function Composition(atom = {}, action) {
     return mapValues(finalStores, (store, key) =>
       store(atom[key], action)

@@ -28,16 +28,24 @@ describe('Utils', () => {
       expect(Object.keys(store({}, {type: 'push'}))).toEqual(['stack']);
     });
 
-    it('should check, that return value of every reducer function inside is not undefined', () => {
+    it('should check that return value of every reducer is the state given to it for any unknown actions', () => {
+
       expect(function () {
         const store = composeStores({
           counter: (state = 0, action) =>
-              action.type === 'increment' ? state + 1 : state,
+            action.type === 'increment' ? state + 1 : state,
           stack: (state = [], action) =>
-              action.type === 'push' ? [...state, action.value] : state,
+            action.type === 'push' ? [...state, action.value] : state,
           some: (state = initialState, action) => {}
         });
-      }).toThrow(/must not be undefined/);
+      }).toThrow(/Store must return the state given to it for any unknown actions/);
+
+      expect(function () {
+        const store = composeStores({
+          someOther: (state = initialState, action) => false
+        });
+      }).toThrow(/Store must return the state given to it for any unknown actions/);
+
     });
 
   });
