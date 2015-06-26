@@ -202,5 +202,30 @@ describe('React', () => {
         );
       }).toThrow(/select/);
     });
+
+    it('does not throw error when `renderToString` is called on server', () => {
+      const { renderToString } = React;
+      const redux = createRedux({ string: stringBuilder });
+      class TestComp extends Component {
+        componentWillMount() {
+          // simulate response action on data returning
+          redux.dispatch({ type: 'APPEND', body: 'a'});
+        }
+        render() {
+          return (<div>{this.props.string}</div>);
+        }
+      }
+      const el = (
+        <Provider redux={redux}>
+          {() => (
+            <Connector select={state => ({ string: state.string })}>
+              {({ string }) => <TestComp string={string} />}
+            </Connector>
+          )}
+        </Provider>
+      );
+      expect(() => renderToString(el)).toNotThrow();
+
+    });
   });
 });
