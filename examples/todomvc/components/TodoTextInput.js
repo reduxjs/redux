@@ -31,6 +31,12 @@ export default class TodoTextInput extends Component {
     this.setState({ text: e.target.value });
   }
 
+  handleBlur(e) {
+    if (!this.props.newTodo) {
+      this.props.onSave(e.target.value);
+    }
+  }
+
   render() {
     return (
       <input className={classnames({
@@ -41,7 +47,7 @@ export default class TodoTextInput extends Component {
              placeholder={this.props.placeholder}
              autoFocus='true'
              value={this.state.text}
-             onBlur={(e) => this.props.onSave(e.target.value)}
+             onBlur={::this.handleBlur}
              onChange={::this.handleChange}
              onKeyDown={::this.handleSubmit} />
     );
