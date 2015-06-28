@@ -5,9 +5,9 @@ redux
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
 
-Atomic Flux with hot reloading.  
+Atomic Flux with hot reloading.
 
-**The API is likely to change a few times before we reach 1.0.**  
+**The API is likely to change a few times before we reach 1.0.**
 **Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
 # Table of Contents
@@ -355,6 +355,8 @@ When in doubt, use the shorter option!
 Besides the examples in this repo, there is an [officially supported example](https://github.com/emmenko/redux-react-router-async-example) (_still WIP_) tackling those implementations.
 
 There is also a complete universal (isomorphic), hot-reloading example with `react-router` and asynchronous data fetching from both the client and server [here](https://github.com/erikras/react-redux-universal-hot-example/).
+
+Another complete universal (isomorphic) example use `react-router` and `Immutable` [here](https://github.com/quangbuule/redux-example).
 
 ### How does hot reloading work?
 
