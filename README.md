@@ -7,7 +7,7 @@ redux
 
 Atomic Flux with hot reloading.
 
-**The API is likely to change a few times before we reach 1.0.**
+**The API is likely to change a few times before we reach 1.0.**  
 **Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
 # Table of Contents
@@ -15,7 +15,9 @@ Atomic Flux with hot reloading.
 - [Why another Flux framework?](#why-another-flux-framework)
   - [Philosophy & Design Goals](#philosophy--design-goals)
 - [Demo](#demo)
-- [Running Examples](#running-examples)
+- [Examples](#examples)
+  - [Simple Examples](#simple-examples)
+  - [Async and Universal Examples with Routing](#async-and-universal-examples-with-routing)
 - [What does it look like?](#what-does-it-look-like)
   - [Actions](#actions)
   - [Stores](#stores)
@@ -28,7 +30,6 @@ Atomic Flux with hot reloading.
   - [Running the same code on client and server](#running-the-same-code-on-client-and-server)
   - [Additional customization](#additional-customization)
 - [FAQ](#faq)
-  - [Any examples with data fetching and `react-router`?](#any-examples-with-data-fetching-and-react-router)
   - [How does hot reloading work?](#how-does-hot-reloading-work)
   - [Can I use this in production?](#can-i-use-this-in-production)
   - [How do I do async?](#how-do-i-do-async)
@@ -65,7 +66,11 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 
 <img src='https://s3.amazonaws.com/f.cl.ly/items/2Z2D3U260d2A311k2B0z/Screen%20Recording%202015-06-03%20at%2003.22%20pm.gif' width='500'>
 
-## Running Examples
+## Examples
+
+### Simple Examples
+
+Redux is distributed with a Counter and a TodoMVC example in its source code.
 
 First, clone the repo:
 
@@ -89,6 +94,16 @@ cd ../todomvc
 npm install
 npm start
 ```
+
+### Async and Universal Examples with Routing
+
+These async and [universal (aka “isomorphic”)](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) examples using React Router should help you get started:
+
+* [redux-react-router-async-example](https://github.com/emmenko/redux-react-router-async-example): Work in progress. Semi-official. Only the client side. Uses React Router.
+* [react-redux-universal-hot-example](https://github.com/erikras/react-redux-universal-hot-example): Universal. Uses React Router.
+* [redux-example](https://github.com/quangbuule/redux-example): Universal. Uses Immutable, React Router.
+
+Don’t be shy, add your own!
 
 ## What does it look like?
 
@@ -349,14 +364,6 @@ Why would you want to write it longer? Maybe you're an advanced user and want to
 When in doubt, use the shorter option!
 
 ## FAQ
-
-### Any examples with data fetching and `react-router`?
-
-Besides the examples in this repo, there is an [officially supported example](https://github.com/emmenko/redux-react-router-async-example) (_still WIP_) tackling those implementations.
-
-There is also a complete universal (isomorphic), hot-reloading example with `react-router` and asynchronous data fetching from both the client and server [here](https://github.com/erikras/react-redux-universal-hot-example/).
-
-Another complete universal (isomorphic) example use `react-router` and `Immutable` [here](https://github.com/quangbuule/redux-example).
 
 ### How does hot reloading work?
 
