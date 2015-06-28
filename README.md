@@ -7,7 +7,7 @@ redux
 
 Atomic Flux with hot reloading.
 
-**The API is likely to change a few times before we reach 1.0.**  
+**The API is likely to change a few times before we reach 1.0.**<br>
 **Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
 # Table of Contents
