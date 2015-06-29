@@ -1,6 +1,7 @@
-import identity from 'lodash/utility/identity';
+import createReduxShape from '../utils/createReduxShape';
+import identity from '../utils/identity';
 import shallowEqual from '../utils/shallowEqual';
-import isPlainObject from 'lodash/lang/isPlainObject';
+import isPlainObject from '../utils/isPlainObject';
 import invariant from 'invariant';
 
 export default function createConnector(React) {
@@ -8,7 +9,7 @@ export default function createConnector(React) {
 
   return class Connector extends Component {
     static contextTypes = {
-      redux: PropTypes.object.isRequired
+      redux: createReduxShape(PropTypes).isRequired
     };
 
     static propTypes = {
@@ -31,16 +32,18 @@ export default function createConnector(React) {
         return true;
       } else if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
         return isRefEqual;
-      } else {
-        return shallowEqual(slice, nextSlice);
       }
+      return shallowEqual(slice, nextSlice);
     }
 
     constructor(props, context) {
       super(props, context);
 
-      this.unsubscribe = context.redux.subscribe(::this.handleChange);
       this.state = this.selectState(props, context);
+    }
+
+    componentDidMount() {
+      this.unsubscribe = this.context.redux.subscribe(::this.handleChange);
     }
 
     componentWillReceiveProps(nextProps) {

@@ -6,6 +6,12 @@ export function increment() {
   };
 }
 
+export function decrement() {
+  return {
+    type: DECREMENT_COUNTER
+  };
+}
+
 export function incrementIfOdd() {
   return (dispatch, getState) => {
     const { counter } = getState();
@@ -23,11 +29,5 @@ export function incrementAsync() {
     setTimeout(() => {
       dispatch(increment());
     }, 1000);
-  };
-}
-
-export function decrement() {
-  return {
-    type: DECREMENT_COUNTER
   };
 }

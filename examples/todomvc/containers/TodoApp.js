@@ -1,8 +1,8 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { Connector } from 'redux/react';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
+import Header from '../components/Header';
+import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/TodoActions';
 
 export default class TodoApp {
@@ -18,8 +18,8 @@ export default class TodoApp {
     const actions = bindActionCreators(TodoActions, dispatch);
     return (
       <div>
-        <AddTodo {...actions} />
-        <TodoList todos={todos} {...actions} />
+        <Header addTodo={actions.addTodo} />
+        <MainSection todos={todos} actions={actions} />
       </div>
     );
   }

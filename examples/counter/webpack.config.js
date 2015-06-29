@@ -18,19 +18,13 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    alias: {
-      'redux': path.resolve(__dirname, '../src')
-    }
+    extensions: ['', '.js']
   },
   module: {
     loaders: [{
-      test: /\.jsx?$/,
+      test: /\.js$/,
       loaders: ['react-hot', 'babel'],
-      include: [
-        __dirname,
-        path.resolve(__dirname, '../src')
-      ]
+      exclude: /node_modules/
     }]
   }
 };

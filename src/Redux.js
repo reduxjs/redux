@@ -3,18 +3,19 @@ import composeStores from './utils/composeStores';
 import thunkMiddleware from './middleware/thunk';
 
 export default class Redux {
-  constructor(dispatcher, initialState) {
-    if (typeof dispatcher === 'object') {
+  constructor(dispatcherOrStores, initialState) {
+    let finalDispatcher = dispatcherOrStores;
+    if (typeof dispatcherOrStores === 'object') {
       // A shortcut notation to use the default dispatcher
-      dispatcher = createDispatcher(
-        composeStores(dispatcher),
-        getState => [thunkMiddleware(getState)]
+      finalDispatcher = createDispatcher(
+        composeStores(dispatcherOrStores),
+        (getState) => [thunkMiddleware(getState)]
       );
     }
 
     this.state = initialState;
     this.listeners = [];
-    this.replaceDispatcher(dispatcher);
+    this.replaceDispatcher(finalDispatcher);
   }
 
   getDispatcher() {
@@ -44,7 +45,7 @@ export default class Redux {
     const { listeners } = this;
     listeners.push(listener);
 
-    return function unsubscribe () {
+    return function unsubscribe() {
       const index = listeners.indexOf(listener);
       listeners.splice(index, 1);
     };

@@ -1,5 +1,0 @@
-* should add new actions on reload
-* should add new stores on reload
-* error handling in components, stores and actions
-* transact on initial value?
-* figure out how to avoid resetting component state with decorator versions
