@@ -1,3 +1,4 @@
+import createReduxShape from './createReduxShape';
 import identity from '../utils/identity';
 import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
@@ -8,7 +9,7 @@ export default function createConnector(React) {
 
   return class Connector extends Component {
     static contextTypes = {
-      redux: PropTypes.object.isRequired
+      redux: createReduxShape(PropTypes).isRequired
     };
 
     static propTypes = {
