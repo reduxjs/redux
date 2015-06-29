@@ -1,4 +1,4 @@
-import createReduxShape from './createReduxShape';
+import createReduxShape from '../utils/createReduxShape';
 import identity from '../utils/identity';
 import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';

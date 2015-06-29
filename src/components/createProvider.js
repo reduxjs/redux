@@ -1,4 +1,4 @@
-import createReduxShape from './createReduxShape';
+import createReduxShape from '../utils/createReduxShape';
 
 export default function createProvider(React) {
   const { Component, PropTypes } = React;
