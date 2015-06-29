@@ -1,3 +1,16 @@
+/**
+ * Given two objects, performs equality by iterating through keys
+ * on an object and returning `false` when any key has values which
+ * are not strictly equal between `objA` and `objB`.
+ * Returns `true` when the values of all keys are strictly equal.
+ *
+ * NOTE: if value is an `Object`, returns `false`. This allows the check
+ * to be more performant.
+ *
+ * @param  {Object} objA
+ * @param  {Object} objB
+ * @return {Boolean}
+ */
 export default function shallowEqualScalar(objA, objB) {
   if (objA === objB) {
     return true;
