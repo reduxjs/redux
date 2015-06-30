@@ -1,11 +1,10 @@
 import React from 'react';
 import TodoApp from './TodoApp';
-import { createStore, composeReducers } from 'redux/index';
+import { createStore } from 'redux';
 import { Provider } from 'redux/react';
 import * as reducers from '../reducers';
 
-const reducer = composeReducers(reducers);
-const store = createStore(reducer);
+const store = createStore(reducers);
 
 export default class App {
   render() {
