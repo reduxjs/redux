@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
-import { createRedux } from '../../src';
+import { createStore } from '../../src';
 import { Connector } from '../../src/react';
 
 const { TestUtils } = React.addons;
@@ -13,11 +13,11 @@ describe('React', () => {
     // Mock minimal Provider interface
     class Provider extends Component {
       static childContextTypes = {
-        redux: PropTypes.object.isRequired
+        store: PropTypes.object.isRequired
       }
 
       getChildContext() {
-        return { redux: this.props.redux };
+        return { store: this.props.store };
       }
 
       render() {
@@ -25,17 +25,17 @@ describe('React', () => {
       }
     }
 
-    const stringBuilder = (prev = '', action) => {
+    function stringBuilder(prev = '', action) {
       return action.type === 'APPEND'
         ? prev + action.body
         : prev;
-    };
+    }
 
-    it('gets Redux from context', () => {
-      const redux = createRedux({ test: () => 'test' });
+    it('should receive the store in the context', () => {
+      const store = createStore({});
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => (
             <Connector>
               {() => <div />}
@@ -45,16 +45,16 @@ describe('React', () => {
       );
 
       const connector = TestUtils.findRenderedComponentWithType(tree, Connector);
-      expect(connector.context.redux).toBe(redux);
+      expect(connector.context.store).toBe(store);
     });
 
-    it('subscribes to Redux changes', () => {
-      const redux = createRedux({ string: stringBuilder });
+    it('should subscribe to the store changes', () => {
+      const store = createStore(stringBuilder);
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => (
-            <Connector select={state => ({ string: state.string })}>
+            <Connector select={string => ({ string })}>
               {({ string }) => <div string={string} />}
             </Connector>
           )}
@@ -63,19 +63,19 @@ describe('React', () => {
 
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
       expect(div.props.string).toBe('');
-      redux.dispatch({ type: 'APPEND', body: 'a'});
+      store.dispatch({ type: 'APPEND', body: 'a'});
       expect(div.props.string).toBe('a');
-      redux.dispatch({ type: 'APPEND', body: 'b'});
+      store.dispatch({ type: 'APPEND', body: 'b'});
       expect(div.props.string).toBe('ab');
     });
 
-    it('unsubscribes before unmounting', () => {
-      const redux = createRedux({ test: () => 'test' });
-      const subscribe = redux.subscribe;
+    it('should unsubscribe before unmounting', () => {
+      const store = createStore(stringBuilder);
+      const subscribe = store.subscribe;
 
-      // Keep track of unsubscribe by wrapping `subscribe()`
+      // Keep track of unsubscribe by wrapping subscribe()
       const spy = expect.createSpy(() => {});
-      redux.subscribe = (listener) => {
+      store.subscribe = (listener) => {
         const unsubscribe = subscribe(listener);
         return () => {
           spy();
@@ -84,9 +84,9 @@ describe('React', () => {
       };
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => (
-            <Connector select={state => ({ string: state.string })}>
+            <Connector select={string => ({ string })}>
               {({ string }) => <div string={string} />}
             </Connector>
           )}
@@ -99,8 +99,8 @@ describe('React', () => {
       expect(spy.calls.length).toBe(1);
     });
 
-    it('shallow compares selected state to prevent unnecessary updates', () => {
-      const redux = createRedux({ string: stringBuilder });
+    it('should shallowly compare the selected state to prevent unnecessary updates', () => {
+      const store = createStore(stringBuilder);
       const spy = expect.createSpy(() => {});
       function render({ string }) {
         spy();
@@ -108,9 +108,9 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => (
-            <Connector select={state => ({ string: state.string })}>
+            <Connector select={string => ({ string })}>
               {render}
             </Connector>
           )}
@@ -120,16 +120,19 @@ describe('React', () => {
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
       expect(spy.calls.length).toBe(1);
       expect(div.props.string).toBe('');
-      redux.dispatch({ type: 'APPEND', body: 'a'});
+      store.dispatch({ type: 'APPEND', body: 'a'});
       expect(spy.calls.length).toBe(2);
-      redux.dispatch({ type: 'APPEND', body: 'b'});
+      store.dispatch({ type: 'APPEND', body: 'b'});
       expect(spy.calls.length).toBe(3);
-      redux.dispatch({ type: 'APPEND', body: ''});
+      store.dispatch({ type: 'APPEND', body: ''});
       expect(spy.calls.length).toBe(3);
     });
 
-    it('recomputes the state slice when `select` prop changes', () => {
-      const redux = createRedux({ a: () => 42, b: () => 72 });
+    it('should recompute the state slice when the select prop changes', () => {
+      const store = createStore({
+        a: () => 42,
+        b: () => 72
+      });
 
       function selectA(state) {
         return { result: state.a };
@@ -151,7 +154,7 @@ describe('React', () => {
 
         render() {
           return (
-            <Provider redux={redux}>
+            <Provider store={store}>
               {() =>
                 <Connector select={this.state.select}>
                   {render}
@@ -170,11 +173,11 @@ describe('React', () => {
       expect(div.props.children).toBe(72);
     });
 
-    it('passes `dispatch()` to child function', () => {
-      const redux = createRedux({ test: () => 'test' });
+    it('should pass dispatch() to the child function', () => {
+      const store = createStore({});
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => (
             <Connector>
               {({ dispatch }) => <div dispatch={dispatch} />}
@@ -184,17 +187,43 @@ describe('React', () => {
       );
 
       const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-      expect(div.props.dispatch).toBe(redux.dispatch);
+      expect(div.props.dispatch).toBe(store.dispatch);
     });
 
-    it('should throw an error if `state` returns anything but a plain object', () => {
-      const redux = createRedux(() => {});
+    it('should throw an error if select returns anything but a plain object', () => {
+      const store = createStore({});
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider redux={redux}>
+          <Provider store={store}>
             {() => (
-              <Connector state={() => 1}>
+              <Connector select={() => 1}>
+                {() => <div />}
+              </Connector>
+            )}
+          </Provider>
+        );
+      }).toThrow(/select/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            {() => (
+              <Connector select={() => 'hey'}>
+                {() => <div />}
+              </Connector>
+            )}
+          </Provider>
+        );
+      }).toThrow(/select/);
+
+      function AwesomeMap() { }
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            {() => (
+              <Connector select={() => new AwesomeMap()}>
                 {() => <div />}
               </Connector>
             )}
@@ -203,29 +232,34 @@ describe('React', () => {
       }).toThrow(/select/);
     });
 
-    it('does not throw error when `renderToString` is called on server', () => {
+    it('should not setState when renderToString is called on the server', () => {
       const { renderToString } = React;
-      const redux = createRedux({ string: stringBuilder });
+      const store = createStore(stringBuilder);
+
       class TestComp extends Component {
         componentWillMount() {
-          // simulate response action on data returning
-          redux.dispatch({ type: 'APPEND', body: 'a'});
+          store.dispatch({
+            type: 'APPEND',
+            body: 'a'
+          });
         }
+
         render() {
           return (<div>{this.props.string}</div>);
         }
       }
+
       const el = (
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => (
-            <Connector select={state => ({ string: state.string })}>
+            <Connector select={string => ({ string })}>
               {({ string }) => <TestComp string={string} />}
             </Connector>
           )}
         </Provider>
       );
-      expect(() => renderToString(el)).toNotThrow();
 
+      expect(() => renderToString(el)).toNotThrow();
     });
   });
 });

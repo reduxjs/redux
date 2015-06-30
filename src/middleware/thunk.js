@@ -1,10 +1,6 @@
-export default function thunkMiddleware(getState) {
-  return (next) => {
-    const recurse = (action) =>
-      typeof action === 'function' ?
-        action(recurse, getState) :
-        next(action);
-
-    return recurse;
-  };
+export default function thunkMiddleware({ dispatch, getState }) {
+  return (next) => (action) =>
+    typeof action === 'function' ?
+      action(dispatch, getState) :
+      next(action);
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux/index';
 import { Connector } from 'redux/react';
 import Header from '../components/Header';
 import MainSection from '../components/MainSection';

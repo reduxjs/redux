@@ -3,7 +3,7 @@ import { composeMiddleware } from '../src';
 
 describe('Utils', () => {
   describe('composeMiddleware', () => {
-    it('should return combined middleware that executes from left to right', () => {
+    it('should return the combined middleware that executes from left to right', () => {
       const a = next => action => next(action + 'a');
       const b = next => action => next(action + 'b');
       const c = next => action => next(action + 'c');

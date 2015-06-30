@@ -1,37 +1,31 @@
 import expect from 'expect';
-import { bindActionCreators, createRedux } from '../../src';
-import * as helpers from '../_helpers';
-
-const { todoActions, todoStore } = helpers;
+import { bindActionCreators, createStore } from '../../src';
+import { todos } from '../helpers/reducers';
+import * as actionCreators from '../helpers/actionCreators';
 
 describe('Utils', () => {
   describe('bindActionCreators', () => {
-
-    let redux;
+    let store;
 
     beforeEach(() => {
-      redux = createRedux({ todoStore });
+      store = createStore(todos);
     });
 
-    it('should bind given actions to the dispatcher', done => {
-      let expectedCallCount = 2;
-      // just for monitoring the dispatched actions
-      redux.subscribe(() => {
-        expectedCallCount--;
-        if (expectedCallCount === 0) {
-          const state = redux.getState();
-          expect(state.todoStore).toEqual([
-            { id: 2, text: 'World' },
-            { id: 1, text: 'Hello' }
-          ]);
-          done();
-        }
-      });
-      const actions = bindActionCreators(todoActions, redux.dispatch);
-      expect(Object.keys(actions)).toEqual(Object.keys(todoActions));
+    it('should wrap the action creators with the dispatch function', () => {
+      const boundActionCreators = bindActionCreators(actionCreators, store.dispatch);
+      expect(
+        Object.keys(boundActionCreators)
+      ).toEqual(
+        Object.keys(actionCreators)
+      );
 
-      actions.addTodo('Hello');
-      actions.addTodoAsync('World');
+      const action = boundActionCreators.addTodo('Hello');
+      expect(action).toEqual(
+        actionCreators.addTodo('Hello')
+      );
+      expect(store.getState()).toEqual([
+        { id: 1, text: 'Hello' }
+      ]);
     });
   });
 });
