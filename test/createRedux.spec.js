@@ -20,8 +20,8 @@ describe('createRedux', () => {
     expect(methods).toContain('subscribe');
     expect(methods).toContain('dispatch');
     expect(methods).toContain('getState');
-    expect(methods).toContain('getDispatcher');
-    expect(methods).toContain('replaceDispatcher');
+    expect(methods).toContain('getReducer');
+    expect(methods).toContain('replaceReducer');
   });
 
   it('should subscribe to changes', done => {
@@ -54,11 +54,11 @@ describe('createRedux', () => {
     expect(changeListenerSpy.calls.length).toBe(1);
   });
 
-  it('should use existing state when replacing the dispatcher', () => {
+  it('should use existing state when replacing the reducer', () => {
     redux.dispatch(addTodo('Hello'));
 
     let nextRedux = createRedux({ todoStore });
-    redux.replaceDispatcher(nextRedux.getDispatcher());
+    redux.replaceReducer(nextRedux.getReducer());
 
     let state;
     let action = (_, getState) => {

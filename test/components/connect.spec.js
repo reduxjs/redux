@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
-import { createRedux } from '../../src';
+import { createRedux, composeReducers } from '../../src';
 import { connect, Connector } from '../../src/react';
 
 const { TestUtils } = React.addons;
