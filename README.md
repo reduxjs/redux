@@ -50,7 +50,7 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 * Everything (Stores, Action Creators, configuration) is hot reloadable.
 * Preserves the benefits of Flux, but adds other nice properties thanks to its functional nature.
 * Prevents some of the anti-patterns common in Flux code.
-* Works great in isomoprhic apps because it doesn't use singletons and the data can be rehydrated.
+* Works great in [universal (aka “isomorphic”)](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) apps because it doesn't use singletons and the data can be rehydrated.
 * Doesn't care how you store your data: you may use JS objects, arrays, ImmutableJS, etc.
 * Under the hood, it keeps all your data in a tree, but you don't need to think about it.
 * Lets you efficiently subscribe to finer-grained updates than individual Stores.
