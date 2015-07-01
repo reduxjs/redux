@@ -29,5 +29,30 @@ describe('Utils', () => {
         Object.keys(reducer({}, { type: 'push' }))
       ).toEqual(['stack']);
     });
+
+    it('should throw an error if undefined return from reducer', () => {
+      const reducer = composeReducers({
+        stack: (state = []) => state,
+        bad: (state = [], action) => {
+          if (action.type === 'something') {
+            return state;
+          }
+        }
+      });
+      expect(() => reducer({}, {type: '@@testType'})).toThrow();
+    });
+    
+    it('should throw an error if undefined return not by default', () => {
+      const reducer = composeReducers({
+        stack: (state = []) => state,
+        bad: (state = 1, action) => {
+          if (action.type !== 'something') {
+            return state;
+          }
+        }
+      });
+      expect(reducer({}, {type: '@@testType'})).toEqual({stack: [], bad: 1});
+      expect(() => reducer({}, {type: 'something'})).toThrow();
+    });
   });
 });
