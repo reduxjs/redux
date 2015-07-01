@@ -95,7 +95,7 @@ describe('Store', () => {
 
     store.dispatch(addTodo('Perhaps'));
     expect(store.getState()).toEqual([{
-      id: 2,
+      id: 3,
       text: 'Perhaps'
     }, {
       id: 1,
@@ -108,7 +108,7 @@ describe('Store', () => {
     nextStore = new Store(todos);
     store.replaceReducer(nextStore.getReducer());
     expect(store.getState()).toEqual([{
-      id: 2,
+      id: 3,
       text: 'Perhaps'
     }, {
       id: 1,
@@ -120,7 +120,7 @@ describe('Store', () => {
 
     store.dispatch(addTodo('Surely'));
     expect(store.getState()).toEqual([{
-      id: 2,
+      id: 3,
       text: 'Perhaps'
     }, {
       id: 1,
@@ -129,7 +129,7 @@ describe('Store', () => {
       id: 2,
       text: 'World'
     }, {
-      id: 3,
+      id: 4,
       text: 'Surely'
     }]);
   });
