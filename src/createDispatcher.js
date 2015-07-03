@@ -5,16 +5,12 @@ const INIT_ACTION = {
 };
 
 export default function createDispatcher(store, middlewares = []) {
-  return function dispatcher(initialState, setState) {
-    let state = setState(store(initialState, INIT_ACTION));
-
+  return function dispatcher(initialState, setState, getState) {
+    setState(store(initialState, INIT_ACTION));
+    
     function dispatch(action) {
-      state = setState(store(state, action));
+      setState(store(getState(), action));
       return action;
-    }
-
-    function getState() {
-      return state;
     }
 
     const finalMiddlewares = typeof middlewares === 'function' ?
