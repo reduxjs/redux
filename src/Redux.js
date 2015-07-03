@@ -24,7 +24,7 @@ export default class Redux {
 
   replaceDispatcher(nextDispatcher) {
     this.dispatcher = nextDispatcher;
-    this.dispatchFn = nextDispatcher(this.state, ::this.setState);
+    this.dispatchFn = nextDispatcher(this.state, ::this.setState, ::this.getState);
   }
 
   dispatch(action) {
