@@ -35,7 +35,7 @@ describe('createStore', () => {
     }]);
   });
 
-  it('should provide the thunk middleware by default', done => {
+  it.skip('should provide the thunk middleware by default', done => {
     const store = createStore(reducers.todos);
     store.dispatch(addTodoIfEmpty('Hello'));
     expect(store.getState()).toEqual([{
@@ -111,7 +111,7 @@ describe('createStore', () => {
     });
   });
 
-  it('should support custom dumb middleware', done => {
+  it.skip('should support custom dumb middleware', done => {
     const doneMiddleware = next => action => {
       next(action);
       done();
@@ -125,7 +125,7 @@ describe('createStore', () => {
     store.dispatch(addTodo('Hello'));
   });
 
-  it('should support custom smart middleware', done => {
+  it.skip('should support custom smart middleware', done => {
     function doneMiddleware({ getState, dispatch }) {
       return next => action => {
         next(action);
