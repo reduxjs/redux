@@ -1,7 +1,7 @@
 import expect from 'expect';
 import { createStore } from '../src/index';
 import * as reducers from './helpers/reducers';
-import { addTodo, addTodoIfEmpty, addTodoAsync } from './helpers/actionCreators';
+import { addTodo, addTodoAsync } from './helpers/actionCreators';
 
 describe('createStore', () => {
   it('should expose the public API', () => {
