@@ -20,9 +20,8 @@ Or using the provided `composeMiddleware()` utility:
 ```js
 import { composeMiddleware } from 'redux';
 
-// All are equivalent:
+// Equivalent:
 middleware1(middleware2(dispatch))(action)
-composeMiddleware(middleware1, middleware2)(dispatch)(action)
 composeMiddleware(middleware1, middleware2, dispatch)(action)
 ```
 
