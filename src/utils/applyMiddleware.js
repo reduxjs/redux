@@ -1,9 +1,6 @@
 import compose from './compose';
+import composeMiddleware from './composeMiddleware';
 import thunk from '../middleware/thunk';
-
-function composeMiddleware(...middlewares) {
-  return methods => compose(...middlewares.map(m => m(methods)));
-}
 
 /**
  * Creates a higher-order store that applies middleware to a store's dispatch.
