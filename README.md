@@ -17,6 +17,7 @@ Atomic Flux with hot reloading.
 
 - [Why another Flux framework?](#why-another-flux-framework)
   - [Philosophy & Design Goals](#philosophy--design-goals)
+- [The Talk](#the-talk)
 - [Demo](#demo)
 - [Examples](#examples)
   - [Simple Examples](#simple-examples)
@@ -64,6 +65,11 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 * You can use “flat” Stores, or [compose and reuse Stores](https://gist.github.com/gaearon/d77ca812015c0356654f) just like you compose Components.
 * The API surface area is minimal.
 * Have I mentioned hot reloading yet?
+
+## The Talk
+
+Redux was demoed together with **[React Hot Loader](https://github.com/gaearon/react-hot-loader)** at React Europe.  
+Watch **[Dan Abramov's talk on Hot Reloading with Time Travel](https://www.youtube.com/watch?v=xsSnOQynTHs).**
 
 ## Demo
 
