@@ -29,6 +29,7 @@ Atomic Flux with hot reloading.
     - [Dumb Components](#dumb-components)
     - [Smart Components](#smart-components)
     - [Decorators](#decorators)
+    - [Selectors](#selectors)
   - [React Native](#react-native)
   - [Initializing Redux](#initializing-redux)
   - [Running the same code on client and server](#running-the-same-code-on-client-and-server)
@@ -276,6 +277,46 @@ export default class CounterApp {
     return (
       <Counter counter={counter}
                {...bindActionCreators(CounterActions, dispatch)} />
+    );
+  }
+}
+```
+
+#### Selectors
+
+Selectors let you define views on your state. They enable you to define derived data on your store's state. 
+In combination with memoized functions the calculation overhead can be minmized. Hence, the child components of a Connector 
+ using memoized selectors will only be rerendered if the source data of the selector changes. This can help to
+ prevent store dependencies.
+ 
+It is further recommended to define complex selectors in separate modules.
+
+e.g. defining selectors for a Todo Store
+```js
+import { createSelector, createBuffered } from 'redux';
+
+export let todoSelector = createSelector('todos');
+export let numberOfTodos = createSelector(todoSelector, createBuffered(todos => todos.length)); 
+```
+
+using the selector in your Component
+```js
+import React from 'react';
+import { Connector } from 'redux/react';
+//import your selectors
+import { numberOfTodos } from 'selectors/TodoSelectors';
+
+export default class TodoCount {
+  render() {
+    return (
+      //use your predefined selectors
+      <Connector select={state => ({
+        todoCount: numberOfTodos(state)
+      })}>
+        {({ todoCount, dispatch }) =>
+          <div>{todoCount}</div>
+        }
+      </Connector>
     );
   }
 }
