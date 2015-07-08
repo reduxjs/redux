@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import CounterApp from './CounterApp';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { Provider } from 'redux/react';
 import * as reducers from '../reducers';
+
+import DebugPanel from '../redux-devtools/DebugPanel';
+import devtools from '../redux-devtools/devtools';
+import ReduxMonitor from '../redux-devtools/ReduxMonitor';
 
 // TODO: move into a separate project
 function thunk({ dispatch, getState }) {
@@ -12,16 +16,27 @@ function thunk({ dispatch, getState }) {
       next(action);
 }
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const finalCreateStore = compose(
+  applyMiddleware(),
+  devtools(),
+  createStore
+);
+
 const reducer = combineReducers(reducers);
-const store = createStoreWithMiddleware(reducer);
+const store = finalCreateStore(combineReducers(reducers));
+const devToolsStore = store.getDevToolsStore();
 
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        {() => <CounterApp />}
-      </Provider>
+      <div>
+        <Provider store={store}>
+          {() => <CounterApp />}
+        </Provider>
+        <DebugPanel>
+          {() => <ReduxMonitor store={devToolsStore} />}
+        </DebugPanel>
+      </div>
     );
   }
 }
