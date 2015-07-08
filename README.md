@@ -21,6 +21,7 @@ Atomic Flux with hot reloading.
 - [Demo](#demo)
 - [Examples](#examples)
   - [Simple Examples](#simple-examples)
+  - [ES5 Examples](#es5-examples)
   - [Async and Universal Examples with Routing](#async-and-universal-examples-with-routing)
 - [What does it look like?](#what-does-it-look-like)
   - [Actions](#actions)
@@ -103,6 +104,12 @@ cd ../todomvc
 npm install
 npm start
 ```
+
+### ES5 Examples
+
+If you have not used ES6 before, check out one of these ES5 examples:
+
+* [redux-todomvc-es5](https://github.com/insin/redux-todomvc-es5)
 
 ### Async and Universal Examples with Routing
 
