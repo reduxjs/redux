@@ -10,10 +10,14 @@ Atomic Flux with hot reloading.
 **The API is likely to change a few times before we reach 1.0.**<br>
 **Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
+**You can track the [new docs](https://github.com/gaearon/redux/pull/140) and the [1.0 API and terminology changes](https://github.com/gaearon/redux/pull/195).**
+
+
 # Table of Contents
 
 - [Why another Flux framework?](#why-another-flux-framework)
   - [Philosophy & Design Goals](#philosophy--design-goals)
+- [The Talk](#the-talk)
 - [Demo](#demo)
 - [Examples](#examples)
   - [Simple Examples](#simple-examples)
@@ -62,6 +66,11 @@ Read **[The Evolution of Flux Frameworks](https://medium.com/@dan_abramov/the-ev
 * The API surface area is minimal.
 * Have I mentioned hot reloading yet?
 
+## The Talk
+
+Redux was demoed together with **[React Hot Loader](https://github.com/gaearon/react-hot-loader)** at React Europe.  
+Watch **[Dan Abramov's talk on Hot Reloading with Time Travel](https://www.youtube.com/watch?v=xsSnOQynTHs).**
+
 ## Demo
 
 <img src='https://s3.amazonaws.com/f.cl.ly/items/2Z2D3U260d2A311k2B0z/Screen%20Recording%202015-06-03%20at%2003.22%20pm.gif' width='500'>
@@ -103,6 +112,7 @@ These async and [universal (aka “isomorphic”)](https://medium.com/@mjackson/
 * [react-redux-universal-hot-example](https://github.com/erikras/react-redux-universal-hot-example): Universal. Uses React Router.
 * [redux-example](https://github.com/quangbuule/redux-example): Universal. Uses Immutable, React Router.
 * [isomorphic-counter-example](https://github.com/khtdr/redux-react-koa-isomorphic-counter-example): Universal. A bare-bone implentation of the [counter example app](https://github.com/gaearon/redux/tree/master/examples/counter). Uses promises-middleware to interact with API via Koa on the server.
+* [Awesome list](https://github.com/xgrommx/awesome-redux)
 
 Don’t be shy, add your own!
 
