@@ -2,13 +2,17 @@
 import createStore from './createStore';
 
 // Utilities
-import composeMiddleware from './utils/composeMiddleware';
+import compose from './utils/compose';
 import composeReducers from './utils/composeReducers';
 import bindActionCreators from './utils/bindActionCreators';
+import applyMiddleware from './utils/applyMiddleware';
+import composeMiddleware from './utils/composeMiddleware';
 
 export {
   createStore,
-  composeMiddleware,
+  compose,
   composeReducers,
-  bindActionCreators
+  bindActionCreators,
+  applyMiddleware,
+  composeMiddleware
 };
