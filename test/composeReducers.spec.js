@@ -30,29 +30,59 @@ describe('Utils', () => {
       ).toEqual(['stack']);
     });
 
-    it('should throw an error if undefined return from reducer', () => {
+    it('should throw an error if a reducer returns undefined', () => {
       const reducer = composeReducers({
-        stack: (state = []) => state,
-        bad: (state = [], action) => {
-          if (action.type === 'something') {
+        undefinedByDefault(state = 0, action) {
+          switch (action && action.type) {
+          case 'increment':
+            return state + 1;
+          case 'decrement':
+            return state - 1;
+          case '@@INIT':
             return state;
+          default:
+            return undefined;
           }
         }
       });
-      expect(() => reducer({}, {type: '@@testType'})).toThrow();
+
+      const initialState = reducer(undefined, { type: '@@INIT' });
+      expect(
+        () => reducer(initialState, { type: 'whatever' })
+      ).toThrow(
+        /"undefinedByDefault".*"whatever"/
+      );
+      expect(
+        () => reducer(initialState, null)
+      ).toThrow(
+        /"undefinedByDefault".*an action/
+      );
+      expect(
+        () => reducer(initialState, {})
+      ).toThrow(
+        /"undefinedByDefault".*an action/
+      );
     });
-    
-    it('should throw an error if undefined return not by default', () => {
+
+    it('should throw an error if a reducer returns undefined initializing', () => {
       const reducer = composeReducers({
-        stack: (state = []) => state,
-        bad: (state = 1, action) => {
-          if (action.type !== 'something') {
+        undefinedInitially(state, action) {
+          switch (action.type) {
+          case 'increment':
+            return state + 1;
+          case 'decrement':
+            return state - 1;
+          default:
             return state;
           }
         }
       });
-      expect(reducer({}, {type: '@@testType'})).toEqual({stack: [], bad: 1});
-      expect(() => reducer({}, {type: 'something'})).toThrow();
+
+      expect(
+        () => reducer(undefined, { type: '@@INIT' })
+      ).toThrow(
+        /"undefinedInitially".*initialization/
+      );
     });
   });
 });
