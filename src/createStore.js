@@ -1,5 +1,5 @@
 import Store from './Store';
-import composeReducers from './utils/composeReducers';
+import combineReducers from './utils/combineReducers';
 
 export default function createStore(
   reducer,
@@ -7,7 +7,7 @@ export default function createStore(
 ) {
   const finalReducer = typeof reducer === 'function' ?
     reducer :
-    composeReducers(reducer);
+    combineReducers(reducer);
 
   const store = new Store(finalReducer, initialState);
 

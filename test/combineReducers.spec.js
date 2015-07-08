@@ -1,10 +1,10 @@
 import expect from 'expect';
-import { composeReducers } from '../src';
+import { combineReducers } from '../src';
 
 describe('Utils', () => {
-  describe('composeReducers', () => {
+  describe('combineReducers', () => {
     it('should return a composite reducer that maps the state keys to given reducers', () => {
-      const reducer = composeReducers({
+      const reducer = combineReducers({
         counter: (state = 0, action) =>
           action.type === 'increment' ? state + 1 : state,
         stack: (state = [], action) =>
@@ -18,7 +18,7 @@ describe('Utils', () => {
     });
 
     it('ignores all props which are not a function', () => {
-      const reducer = composeReducers({
+      const reducer = combineReducers({
         fake: true,
         broken: 'string',
         another: { nested: 'object' },
@@ -31,7 +31,7 @@ describe('Utils', () => {
     });
 
     it('should throw an error if a reducer returns undefined', () => {
-      const reducer = composeReducers({
+      const reducer = combineReducers({
         undefinedByDefault(state = 0, action) {
           switch (action && action.type) {
           case 'increment':
@@ -65,7 +65,7 @@ describe('Utils', () => {
     });
 
     it('should throw an error if a reducer returns undefined initializing', () => {
-      const reducer = composeReducers({
+      const reducer = combineReducers({
         undefinedInitially(state, action) {
           switch (action.type) {
           case 'increment':

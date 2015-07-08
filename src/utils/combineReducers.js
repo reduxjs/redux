@@ -21,7 +21,7 @@ function getErrorMessage(key, action) {
   );
 }
 
-export default function composeReducers(reducers) {
+export default function combineReducers(reducers) {
   const finalReducers = pick(reducers, (val) => typeof val === 'function');
 
   return function composition(state = {}, action) {
