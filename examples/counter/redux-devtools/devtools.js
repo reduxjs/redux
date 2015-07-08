@@ -1,5 +1,6 @@
 export const ActionTypes = {
-  PERFORM_ACTION: 'PERFORM_ACTION'
+  PERFORM_ACTION: 'PERFORM_ACTION',
+  RESET: 'RESET'
 };
 
 const INIT_ACTION = { type: '@@INIT' };
@@ -10,12 +11,19 @@ function wrap(reducer, initialState = reducer(undefined, INIT_ACTION)) {
     log: [{ state: initialState, action: INIT_ACTION }]
   };
 
+  function performAction({ log, state }, { action }) {
+    state = reducer(state, action);
+    log = [...log, { state, action }];
+    return { state, log };
+  }
+
+  function reset() {
+    return initialDevState;
+  }
+
   const handlers = {
-    [ActionTypes.PERFORM_ACTION]({ log, state }, { action }) {
-      state = reducer(state, action);
-      log = [...log, { state, action }];
-      return { state, log };
-    }
+    [ActionTypes.RESET]: reset,
+    [ActionTypes.PERFORM_ACTION]: performAction
   };
 
   return function handleDevAction(devState = initialDevState, devAction) {
