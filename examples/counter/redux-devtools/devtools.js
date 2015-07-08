@@ -1,54 +1,60 @@
 export const ActionTypes = {
-  PERFORM: 'PERFORM'
+  PERFORM_ACTION: 'PERFORM_ACTION'
 };
 
-function lift(reducer) {
-  const initialState = {
-    appState: reducer(undefined, { type: '@@INIT' })
+const INIT_ACTION = { type: '@@INIT' };
+
+function wrap(reducer, initialState = reducer(undefined, INIT_ACTION)) {
+  const initialDevState = {
+    state: initialState,
+    log: [{ state: initialState, action: INIT_ACTION }]
   };
 
-  return function handleDevToolsAction(state = initialState, action) {
-    switch (action.type) {
-    case ActionTypes.PERFORM:
-      return {
-        ...state,
-        appState: reducer(state.appState, action.action)
-      };
-    default:
-      return state;
+  const handlers = {
+    [ActionTypes.PERFORM_ACTION]({ log, state }, { action }) {
+      state = reducer(state, action);
+      log = [...log, { state, action }];
+      return { state, log };
     }
+  };
+
+  return function handleDevAction(devState = initialDevState, devAction) {
+    if (!handlers.hasOwnProperty(devAction.type)) {
+      return devState;
+    }
+
+    const nextDevState = handlers[devAction.type](devState, devAction);
+    return { ...devState, ...nextDevState };
   };
 }
 
-function unlift(store) {
+function unwrap(devStore) {
   function getState() {
-    return store.getState().appState;
+    return devStore.getState().state;
   }
 
   function dispatch(action) {
-    store.dispatch({
-      type: ActionTypes.PERFORM,
+    devStore.dispatch({
+      type: ActionTypes.PERFORM_ACTION,
       action
     });
   }
 
   return {
-    ...store,
+    ...devStore,
     dispatch,
     getState,
     getDevToolsStore() {
-      return store;
+      return devStore;
     }
   };
 }
 
 export default function devtools() {
-  // TODO: initial state
-  return next => reducer => {
-    const devToolsReducer = lift(reducer);
-    const devToolsStore = next(devToolsReducer);
-    const store = unlift(devToolsStore);
-
+  return next => (reducer, initialState) => {
+    const devReducer = wrap(reducer, initialState);
+    const devStore = next(devReducer);
+    const store = unwrap(devStore);
     return store;
   };
 }

@@ -33,8 +33,11 @@ export default class App extends Component {
         <Provider store={store}>
           {() => <CounterApp />}
         </Provider>
-        <DebugPanel>
-          {() => <ReduxMonitor store={devToolsStore} />}
+
+        <DebugPanel top right bottom>
+          <Provider store={devToolsStore}>
+            {() => <ReduxMonitor />}
+          </Provider>
         </DebugPanel>
       </div>
     );

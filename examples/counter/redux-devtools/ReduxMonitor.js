@@ -6,15 +6,13 @@ import identity from 'lodash/utility/identity';
 import values from 'lodash/object/values';
 
 @connect(state => ({
-  actions: state.actions || [], // TODO
-  states: state.states || [], // TODO
+  log: state.log || [], // TODO
   disabledActions: state.disabledActions || {}, // TODO
   error: state.error || null // TODO
 }))
 export default class ReduxMonitor {
   static propTypes = {
-    actions: PropTypes.array.isRequired,
-    states: PropTypes.array.isRequired,
+    log: PropTypes.array.isRequired,
     select: PropTypes.func.isRequired
   };
 
@@ -23,7 +21,7 @@ export default class ReduxMonitor {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.actions.length < nextProps.actions.length) {
+    if (this.props.log.length < nextProps.log.length) {
       const scrollableNode = findDOMNode(this).parentElement;
       const { scrollTop, offsetHeight, scrollHeight } = scrollableNode;
 
@@ -37,7 +35,7 @@ export default class ReduxMonitor {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.actions.length < this.props.actions.length &&
+      prevProps.log.length < this.props.log.length &&
       this.scrollDown
     ) {
       const scrollableNode = findDOMNode(this).parentElement;
@@ -82,11 +80,10 @@ export default class ReduxMonitor {
 
   render() {
     const elements = [];
-    const { actions, disabledActions, states, error, select } = this.props;
+    const { disabledActions, log, error, select } = this.props;
 
-    for (let i = 0; i < actions.length; i++) {
-      const action = actions[i];
-      const state = states[i];
+    for (let i = 0; i < log.length; i++) {
+      const { action, state } = log[i];
 
       let errorText;
       if (error) {
@@ -122,7 +119,7 @@ export default class ReduxMonitor {
         </div>
         {elements}
         <div>
-          {actions.length > 1 &&
+          {log.length > 1 &&
             <a onClick={::this.handleRollback}
                style={{ textDecoration: 'underline', cursor: 'hand' }}>
               Rollback
@@ -137,7 +134,7 @@ export default class ReduxMonitor {
               </a>
             </span>
           }
-          {actions.length > 1 &&
+          {log.length > 1 &&
             <span>
               <span>
               {' • '}

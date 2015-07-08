@@ -2,13 +2,13 @@ import invariant from 'invariant';
 import isPlainObject from './utils/isPlainObject';
 
 export default class Store {
-  constructor(reducer) {
+  constructor(reducer, initialState) {
     invariant(
       typeof reducer === 'function',
       'Expected the reducer to be a function.'
     );
 
-    this.state = undefined;
+    this.state = initialState;
     this.listeners = [];
     this.replaceReducer(reducer);
   }
