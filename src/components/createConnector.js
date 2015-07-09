@@ -44,6 +44,7 @@ export default function createConnector(React) {
 
     componentDidMount() {
       this.unsubscribe = this.context.store.subscribe(::this.handleChange);
+      this.handleChange();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,7 +60,9 @@ export default function createConnector(React) {
 
     handleChange(props = this.props) {
       const nextState = this.selectState(props, this.context);
-      this.setState(nextState);
+      if (!this.isSliceEqual(this.state.slice, nextState.slice)) {
+        this.setState(nextState);
+      }
     }
 
     selectState(props, context) {

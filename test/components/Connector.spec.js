@@ -245,7 +245,7 @@ describe('React', () => {
         }
 
         render() {
-          return (<div>{this.props.string}</div>);
+          return <div>{this.props.string}</div>;
         }
       }
 
@@ -260,6 +260,36 @@ describe('React', () => {
       );
 
       expect(() => renderToString(el)).toNotThrow();
+    });
+
+    it('should handle dispatch inside componentDidMount', () => {
+      const store = createStore(stringBuilder);
+
+      class TestComp extends Component {
+        componentDidMount() {
+          store.dispatch({
+            type: 'APPEND',
+            body: 'a'
+          });
+        }
+
+        render() {
+          return <div>{this.props.string}</div>;
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Connector select={string => ({ string })}>
+              {({ string }) => <TestComp string={string} />}
+            </Connector>
+          )}
+        </Provider>
+      );
+
+      const testComp = TestUtils.findRenderedComponentWithType(tree, TestComp);
+      expect(testComp.props.string).toBe('a');
     });
   });
 });
