@@ -18,6 +18,10 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   resolve: {
+    alias: {
+      'redux': path.join(__dirname, '..', '..', 'src'),
+      'react': path.join(__dirname, '..', '..', 'node_modules', 'react')
+    },
     extensions: ['', '.js']
   },
   module: {

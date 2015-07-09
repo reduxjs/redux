@@ -1,36 +1,34 @@
-import createReduxShape from '../utils/createReduxShape';
+import createStoreShape from '../utils/createStoreShape';
 
 export default function createProvider(React) {
   const { Component, PropTypes } = React;
-
-  const reduxShapeIsRequired = createReduxShape(PropTypes).isRequired;
+  const storeShape = createStoreShape(PropTypes);
 
   return class Provider extends Component {
+    static childContextTypes = {
+      store: storeShape.isRequired
+    };
+
     static propTypes = {
-      redux: reduxShapeIsRequired,
       children: PropTypes.func.isRequired
     };
 
-    static childContextTypes = {
-      redux: reduxShapeIsRequired
-    };
-
     getChildContext() {
-      return { redux: this.state.redux };
+      return { store: this.state.store };
     }
 
     constructor(props, context) {
       super(props, context);
-      this.state = { redux: props.redux };
+      this.state = { store: props.store };
     }
 
     componentWillReceiveProps(nextProps) {
-      const { redux } = this.state;
-      const { redux: nextRedux } = nextProps;
+      const { store } = this.state;
+      const { store: nextStore } = nextProps;
 
-      if (redux !== nextRedux) {
-        const nextDispatcher = nextRedux.getDispatcher();
-        redux.replaceDispatcher(nextDispatcher);
+      if (store !== nextStore) {
+        const nextReducer = nextStore.getReducer();
+        store.replaceReducer(nextReducer);
       }
     }
 
