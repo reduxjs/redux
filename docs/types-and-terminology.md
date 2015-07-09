@@ -97,7 +97,7 @@ A store-creating function is a function that creates a Redux store. Like with di
 ### Higher-order store
 
 ```js
-type HigherOrderStore = CreateStore
+type HigherOrderStore = (next: CreateStore) => CreateStore
 ```
 
 A higher-order store is a higher-order function that composes a store-creating function to return a new store-creating function. This is similar to middleware in that it allows you to alter the store interface in a composable way.
