@@ -1,4 +1,56 @@
-# Middleware
+Middleware
+==========
+
+A middleware in Redux is a function that turns a dispatching function into a new dispatching function:
+
+```
+dispatch => dispatch'
+```
+
+The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of the what comes before or after it in the chain.
+
+Usage
+=====
+
+To enable middleware in your Redux app, use `applyMiddleware()`.
+
+### `applyMiddleware(...middlewares)`
+
+This function returns a [higher-order store](higher-order store). You don't need to worry about that if you're not interested — here's how you use it:
+
+```js
+const store = applyMiddleware(thunk, promise, observable)(createStore)(reducer);
+```
+
+Yes, you read that correctly. If this looks strange to you, it may help to break the process down into multiple steps:
+
+```js
+const newCreateStore = applyMiddleware(thunk, promise, observable)(createStore);
+const store = newCreateStore(reducer);
+```
+
+If you 
+
+How it works
+============
+
+```js
+const newDispatch = thunk(promise(observable(dispatch)));
+// Or
+const newDispatch = compose(thunk, promise, observable, dispatch);
+```
+
+`compose` performs function composition. It is the same as `compose()` in underscore or lodash.
+
+You can also use `composeMiddleware()`, which is similar to `compose()` except instead of creating a dispatching function, it creates a middleware function:
+
+```js
+const middleware = composeMiddleware(thunk, promise, observable);
+const newDispatch = compose(middleware, dispatch);
+// Or simply
+const newDispatch = compose(dispatch);
+```
+
 
 A middleware is a function that wraps the `dispatch()` method, or another middleware. For example:
 

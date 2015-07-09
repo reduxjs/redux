@@ -7,9 +7,9 @@ A higher-order store is a function that turns a store creating function into a n
 createStore => createStore'
 ```
 
-Look familiar? It's just like the signature for [middleware](middleware.md), only we're wrapping `createStore()` instead of `dispatch()`.
+Look familiar? It's just like the signature for [middleware](middleware.md), only we're wrapping `createStore()` instead of `dispatch()`. Like middleware, the key feature of higher-order stores is that they are composable.
 
-Higher-order stores are a pattern for creating composable Redux extensions. They're much the same as higher-order components in React. They can be as simple as `applyMiddleware()`, or as powerful as the Redux Devtools](https://github.com/gaearon/redux-devtools). There's no limit to the kinds of things you can create.
+Higher-order stores are much the same as higher-order components in React. They can be as simple as `applyMiddleware()`, or as powerful as the Redux Devtools](https://github.com/gaearon/redux-devtools). There's no limit to the kinds of extensions you can create.
 
 ## How it works
 
