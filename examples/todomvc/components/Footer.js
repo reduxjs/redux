@@ -1,4 +1,4 @@
-import { PropTypes, Components } from 'react';
+import React, { PropTypes, Component } from 'react';
 import classnames from 'classnames';
 import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
 

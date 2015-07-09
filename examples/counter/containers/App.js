@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import CounterApp from './CounterApp';
 import { createRedux } from 'redux';
 import { Provider } from 'redux/react';
