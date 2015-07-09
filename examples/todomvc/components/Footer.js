@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import { PropTypes, Components } from 'react';
 import classnames from 'classnames';
 import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
 
@@ -8,7 +8,7 @@ const FILTER_TITLES = {
   [SHOW_MARKED]: 'Completed'
 };
 
-export default class Footer {
+export default class Footer extends Component {
   static propTypes = {
     markedCount: PropTypes.number.isRequired,
     unmarkedCount: PropTypes.number.isRequired,

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
 export default class TodoTextInput extends Component {
