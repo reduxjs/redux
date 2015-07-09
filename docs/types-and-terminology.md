@@ -1,7 +1,7 @@
 Types and terminology
 =====================
 
-This is a glossary of the core terms in Redux, along with their type signatures. Types documented using [Flow notation](http://flowtype.org/docs/quick-reference.html#_).
+This is a glossary of the core terms in Redux, along with their type signatures. Types are documented using [Flow notation](http://flowtype.org/docs/quick-reference.html#_).
 
 ### State
 
@@ -57,12 +57,12 @@ An action creator is, quite simply, a function that creates an action. Do not co
 type IntermediateAction = any
 ```
 
-An *intermediate action* is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer; it will be transformed by middleware before being sent to the base `dispatch()` function. Intermediate actions are often asynchronous primitives, like a promise or a thunk, which are not dispatched themselves, but trigger dispatches once an operation has completed.
+An **intermediate action** is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer; it will be transformed by middleware before being sent to the base `dispatch()` function. Intermediate actions are often asynchronous primitives, like a promise or a thunk, which are not dispatched themselves, but trigger dispatches once an operation has completed.
 
 ### Middleware
 
 ```js
-type Middleware = ({ dispatch: Dispatch, getState: () => State }) => next: Dispatch => Dispatch
+type Middleware = ({ dispatch: Dispatch, getState: () => State }) => (next: Dispatch) => Dispatch
 ```
 
 A middleware is a higher-order function that composes a dispatch function to return a new dispatch function.
@@ -79,7 +79,7 @@ Middleware is composable using function composition.
 type Store = { dispatch: Dispatch, getState: State, subscribe: Function, getReducer: Reducer, replaceReducer: void }
 ```
 
-Store is an object of bound methods to an underlying class instance.
+A store is an object of bound methods to an underlying class instance.
 
 - `dispatch()` is the base dispatch function described above.
 - `getState()` returns the current state of the store.
@@ -101,3 +101,7 @@ type HigherOrderStore = CreateStore
 ```
 
 A higher-order store is a higher-order function that composes a store-creating function to return a new store-creating function. This is similar to middleware in that it allows you to alter the store interface in a composable way.
+
+Higher-order stores are much the same concept as higher-order components in React.
+
+Because a store is not an instance, but rather an plain-object collection of bound methods, copies can be easily created and modified without mutating the original store.
