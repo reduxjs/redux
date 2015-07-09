@@ -7,7 +7,7 @@ import { connect, Connector } from '../../src/react';
 const { TestUtils } = React.addons;
 
 describe('React', () => {
-  describe('provide', () => {
+  describe('connect', () => {
     jsdomReact();
 
     // Mock minimal Provider interface
@@ -48,6 +48,52 @@ describe('React', () => {
       expect(() =>
         TestUtils.findRenderedComponentWithType(container, Connector)
       ).toNotThrow();
+    });
+
+    it('should handle additional prop changes in addition to slice', () => {
+      const store = createStore(() => ({
+        foo: 'bar'
+      }));
+
+      @connect(state => state)
+      class ConnectContainer extends Component {
+        render() {
+          return (
+              <div {...this.props} pass={this.props.bar.baz} />
+          );
+        }
+      }
+
+      class Container extends Component {
+        constructor() {
+          super();
+          this.state = {
+            bar: {
+              baz: ''
+            }
+          };
+        }
+        componentDidMount() {
+
+          // Simulate deep object mutation
+          this.state.bar.baz = 'through';
+          this.setState({
+            bar: this.state.bar
+          });
+        }
+        render() {
+          return (
+            <Provider store={store}>
+              {() => <ConnectContainer bar={this.state.bar} />}
+             </Provider>
+          );
+        }
+      }
+
+      const container = TestUtils.renderIntoDocument(<Container />);
+      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
+      expect(div.props.foo).toEqual('bar');
+      expect(div.props.pass).toEqual('through');
     });
 
     it('should pass the only argument as the select prop down', () => {
