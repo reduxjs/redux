@@ -2,7 +2,9 @@ import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 import invariant from 'invariant';
 
-function getErrorMessage(key, action) {
+import type { Action, State, Reducer } from '../types';
+
+function getErrorMessage(key: String, action: Action): String {
   const actionType = action && action.type;
   const actionName = actionType && `"${actionType}"` || 'an action';
   const reducerName = `Reducer "${key}"`;
@@ -21,10 +23,10 @@ function getErrorMessage(key, action) {
   );
 }
 
-export default function combineReducers(reducers) {
+export default function combineReducers(reducers: Object): Reducer {
   const finalReducers = pick(reducers, (val) => typeof val === 'function');
 
-  return function composition(state = {}, action) {
+  return function composition(state: State = {}, action: Action): State {
     return mapValues(finalReducers, (reducer, key) => {
       const newState = reducer(state[key], action);
       invariant(

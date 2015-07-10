@@ -1,18 +1,20 @@
-export default function shallowEqual(objA, objB) {
+/* @flow */
+
+export default function shallowEqual(objA: Object, objB: Object): boolean {
   if (objA === objB) {
     return true;
   }
 
-  const keysA = Object.keys(objA);
-  const keysB = Object.keys(objB);
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
 
   if (keysA.length !== keysB.length) {
     return false;
   }
 
   // Test for A's keys different from B.
-  const hasOwn = Object.prototype.hasOwnProperty;
-  for (let i = 0; i < keysA.length; i++) {
+  var hasOwn = Object.prototype.hasOwnProperty;
+  for (var i = 0; i < keysA.length; i++) {
     if (!hasOwn.call(objB, keysA[i]) ||
         objA[keysA[i]] !== objB[keysA[i]]) {
       return false;

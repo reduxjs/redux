@@ -1,21 +1,25 @@
-import Store from './Store';
+/* @flow */
+
+import StoreClass from './Store';
 import combineReducers from './utils/combineReducers';
 
+import type { State, Action, Reducer, Dispatch, Store } from './types';
+
 export default function createStore(
-  reducer,
-  initialState
-) {
-  const finalReducer = typeof reducer === 'function' ?
+  reducer: Reducer,
+  initialState: State
+): Store {
+  var finalReducer = typeof reducer === 'function' ?
     reducer :
     combineReducers(reducer);
 
-  const store = new Store(finalReducer, initialState);
+  var store = new StoreClass(finalReducer, initialState);
 
   return {
-    dispatch: ::store.dispatch,
-    subscribe: ::store.subscribe,
-    getState: ::store.getState,
-    getReducer: ::store.getReducer,
-    replaceReducer: ::store.replaceReducer
+    dispatch: store.dispatch.bind(store),
+    subscribe: store.subscribe.bind(store),
+    getState: store.getState.bind(store),
+    getReducer: store.getReducer.bind(store),
+    replaceReducer: store.replaceReducer.bind(store)
   };
 }

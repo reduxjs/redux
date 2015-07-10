@@ -1,8 +1,16 @@
+/* @flow */
+
 import invariant from 'invariant';
 import isPlainObject from './utils/isPlainObject';
 
+import type { State, Action, Reducer } from './types';
+
 export default class Store {
-  constructor(reducer, initialState) {
+  state: State;
+  reducer: Reducer;
+  listeners: Array<Function>;
+
+  constructor(reducer: Reducer, initialState: State): void {
     invariant(
       typeof reducer === 'function',
       'Expected the reducer to be a function.'
@@ -13,37 +21,37 @@ export default class Store {
     this.replaceReducer(reducer);
   }
 
-  getReducer() {
+  getReducer(): Reducer {
     return this.reducer;
   }
 
-  replaceReducer(nextReducer) {
+  replaceReducer(nextReducer: Reducer): void {
     this.reducer = nextReducer;
     this.dispatch({ type: '@@INIT' });
   }
 
-  dispatch(action) {
+  dispatch(action: Action): Action {
     invariant(
       isPlainObject(action),
       'Actions must be plain objects. Use custom middleware for async actions.'
     );
 
-    const { reducer } = this;
+    var { reducer } = this;
     this.state = reducer(this.state, action);
     this.listeners.forEach(listener => listener());
     return action;
   }
 
-  getState() {
+  getState(): State {
     return this.state;
   }
 
-  subscribe(listener) {
-    const { listeners } = this;
+  subscribe(listener: Function): Function {
+    var { listeners } = this;
     listeners.push(listener);
 
     return function unsubscribe() {
-      const index = listeners.indexOf(listener);
+      var index = listeners.indexOf(listener);
       listeners.splice(index, 1);
     };
   }
