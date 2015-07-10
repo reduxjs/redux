@@ -1,11 +1,17 @@
 export const ActionTypes = {
   PERFORM_ACTION: 'PERFORM_ACTION',
-  RESET: 'RESET'
+  RESET: 'RESET',
+  ROLLBACK: 'ROLLBACK',
+  COMMIT: 'COMMIT'
 };
 
 const INIT_ACTION = {
   type: '@@INIT'
 };
+
+function last(arr) {
+  return arr[arr.length - 1];
+}
 
 /**
  * Computes the next entry in the log by applying an action.
@@ -40,7 +46,7 @@ function recompute(reducer, liftedState) {
     const action = actions[i];
 
     const previousEntry = computations[i - 1];
-    const previousState = previousEntry ? previousEntry.state : undefined;
+    const previousState = previousEntry ? previousEntry.state : initialState;
     const previousError = previousEntry ? previousEntry.error : undefined;
 
     const entry = computeNextEntry(reducer, action, previousState, previousError);
@@ -66,7 +72,25 @@ function liftReducer(reducer, initialState) {
   return function liftedReducer(liftedState = initialLiftedState, liftedAction) {
     switch (liftedAction.type) {
     case ActionTypes.RESET:
-      liftedState = initialLiftedState;
+      liftedState = {
+        ...liftedState,
+        actions: [INIT_ACTION],
+        initialState
+      };
+      break;
+    case ActionTypes.COMMIT:
+      const { computations } = liftedState;
+      liftedState = {
+        ...liftedState,
+        actions: [INIT_ACTION],
+        initialState: last(computations).state
+      };
+      break;
+    case ActionTypes.ROLLBACK:
+      liftedState = {
+        ...liftedState,
+        actions: [INIT_ACTION]
+      };
       break;
     case ActionTypes.PERFORM_ACTION:
       const { actions } = liftedState;
@@ -98,8 +122,7 @@ function liftAction(action) {
  */
 function unliftState(liftedState) {
   const { computations } = liftedState;
-  const lastComputation = computations[computations.length - 1];
-  const { state } = lastComputation;
+  const { state } = last(computations);
   return state;
 }
 
