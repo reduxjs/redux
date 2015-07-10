@@ -159,17 +159,18 @@ function unliftState(liftedState) {
  * Unlifts the DevTools store to act like the app's store.
  */
 function unliftStore(liftedStore) {
-  const store = {
-    ...liftedStore,
+  return Object.assign(Object.create(liftedStore), {
+    devToolsStore: liftedStore,
+
     dispatch(action) {
       liftedStore.dispatch(liftAction(action));
+      return action;
     },
+
     getState() {
       return unliftState(liftedStore.getState());
-    },
-    devToolsStore: liftedStore
-  };
-  return store;
+    }
+  });
 }
 
 /**
