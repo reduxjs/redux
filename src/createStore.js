@@ -3,7 +3,7 @@
 import StoreClass from './Store';
 import combineReducers from './utils/combineReducers';
 
-import type { State, Action, Reducer, Dispatch, Store } from './types';
+import type { State, Reducer, Store } from './types';
 
 export default function createStore(
   reducer: Reducer,

@@ -4,7 +4,7 @@ import compose from './compose';
 import composeMiddleware from './composeMiddleware';
 import thunk from '../middleware/thunk';
 
-import type { Middleware, Dispatch, CreateStore } from '../types';
+import type { Dispatch, CreateStore } from '../types';
 
 /**
  * Creates a higher-order store that applies middleware to a store's dispatch.
