@@ -34,7 +34,7 @@ We must distinguish between dispatching functions in general and the base dispat
 ### Reducer
 
 ```js
-type Reducer<S,A> = (state: S, action: A) => S
+type Reducer<S, A> = (state: S, action: A) => S
 ```
 
 A **reducer** or **reducing function** is a function that accepts an accumulation and a value and returns a new accumulation. They are used to reduce a collection of values down to a single value. Reducers are not unique to Redux — they are a fundamental concept in functional programming.  Even most non-functional languages, like JavaScript, have a built-in API for reducing. (In JavaScript, it's `Array.prototype.reduce()`.)
@@ -46,7 +46,7 @@ Reducers are the most important concept in Redux.
 ### Action creator
 
 ```js
-type ActionCreator = (...args) => Action | IntermediateAction
+type ActionCreator = (...args: any) => Action | IntermediateAction
 ```
 
 An action creator is, quite simply, a function that creates an action. Do not confuse the two terms — again, an action is a payload of information, and an action creator is a factory that creates them.
@@ -62,7 +62,7 @@ An **intermediate action** is a value that is sent to a dispatching function, bu
 ### Middleware
 
 ```js
-type Middleware = ({ dispatch: Dispatch, getState: () => State }) => (next: Dispatch) => Dispatch
+type Middleware = (methods: { dispatch: Dispatch, getState: () => State }) => (next: Dispatch) => Dispatch;
 ```
 
 A middleware is a higher-order function that composes a dispatch function to return a new dispatch function.
