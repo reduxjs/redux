@@ -1,10 +1,10 @@
-export const ActionTypes = {
+const ActionTypes = {
   PERFORM_ACTION: 'PERFORM_ACTION',
   RESET: 'RESET',
   ROLLBACK: 'ROLLBACK',
   COMMIT: 'COMMIT',
-  TOGGLE_ACTION: 'TOGGLE_ACTION',
-  SWEEP: 'SWEEP'
+  SWEEP: 'SWEEP',
+  TOGGLE_ACTION: 'TOGGLE_ACTION'
 };
 
 const INIT_ACTION = {
@@ -173,6 +173,27 @@ function unliftStore(liftedStore) {
   };
   return store;
 }
+
+/**
+ * Action creators to manage DevTools state.
+ */
+export const ActionCreators = {
+  reset() {
+    return { type: ActionTypes.RESET };
+  },
+  rollback() {
+    return { type: ActionTypes.ROLLBACK };
+  },
+  commit() {
+    return { type: ActionTypes.COMMIT };
+  },
+  sweep() {
+    return { type: ActionTypes.SWEEP };
+  },
+  toggleAction(index) {
+    return { type: ActionTypes.TOGGLE_ACTION, index };
+  }
+};
 
 /**
  * Redux DevTools middleware.

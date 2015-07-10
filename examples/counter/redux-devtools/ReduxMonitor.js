@@ -1,27 +1,26 @@
 import React, { PropTypes, findDOMNode } from 'react';
 import { ActionTypes } from './devtools';
-import { connect } from '../../../src/react';
 import ReduxMonitorEntry from './ReduxMonitorEntry';
-import identity from 'lodash/utility/identity';
-import values from 'lodash/object/values';
 
-@connect(state => ({
-  stagedActions: state.stagedActions,
-  computedStates: state.computedStates,
-  skippedActions: state.skippedActions
-}))
 export default class ReduxMonitor {
   static propTypes = {
     computedStates: PropTypes.array.isRequired,
+    stagedActions: PropTypes.array.isRequired,
+    skippedActions: PropTypes.object.isRequired,
+    reset: PropTypes.func.isRequired,
+    commit: PropTypes.func.isRequired,
+    rollback: PropTypes.func.isRequired,
+    sweep: PropTypes.func.isRequired,
+    toggleAction: PropTypes.func.isRequired,
     select: PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    select: identity
+    select: (state) => state
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.computedStates.length < nextProps.computedStates.length) {
+    if (this.props.stagedActions.length < nextProps.stagedActions.length) {
       const scrollableNode = findDOMNode(this).parentElement;
       const { scrollTop, offsetHeight, scrollHeight } = scrollableNode;
 
@@ -35,7 +34,7 @@ export default class ReduxMonitor {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.computedStates.length < this.props.computedStates.length &&
+      prevProps.stagedActions.length < this.props.stagedActions.length &&
       this.scrollDown
     ) {
       const scrollableNode = findDOMNode(this).parentElement;
@@ -47,34 +46,23 @@ export default class ReduxMonitor {
   }
 
   handleRollback() {
-    this.props.dispatch({
-      type: ActionTypes.ROLLBACK
-    });
+    this.props.rollback();
   }
 
   handleSweep() {
-    this.props.dispatch({
-      type: ActionTypes.SWEEP
-    });
+    this.props.sweep();
   }
 
   handleCommit() {
-    this.props.dispatch({
-      type: ActionTypes.COMMIT
-    });
+    this.props.commit();
   }
 
   handleToggleAction(index) {
-    this.props.dispatch({
-      type: ActionTypes.TOGGLE_ACTION,
-      index
-    });
+    this.props.toggleAction(index);
   }
 
   handleReset() {
-    this.props.dispatch({
-      type: ActionTypes.RESET
-    });
+    this.props.reset();
   }
 
   render() {
@@ -116,7 +104,7 @@ export default class ReduxMonitor {
               Rollback
             </a>
           }
-          {values(skippedActions).some(identity) &&
+          {Object.keys(skippedActions).some(key => skippedActions[key]) &&
             <span>
               {' • '}
               <a onClick={::this.handleSweep}
