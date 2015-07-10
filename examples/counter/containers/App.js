@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CounterApp from './CounterApp';
-import { createStore, applyMiddleware, compose, combineReducers, bindActionCreators } from 'redux';
-import { Provider, Connector } from 'redux/react';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { Provider } from 'redux/react';
 import * as reducers from '../reducers';
 
 import devTools from '../redux-devtools/index';
