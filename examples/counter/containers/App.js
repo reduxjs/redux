@@ -5,6 +5,7 @@ import { Provider } from 'redux/react';
 import * as reducers from '../reducers';
 
 import devTools from '../redux-devtools/index';
+import persistState from '../redux-devtools/persistState';
 import DebugPanel from '../redux-devtools/DebugPanel';
 import ReduxMonitor from '../redux-devtools/ReduxMonitor';
 
@@ -19,6 +20,7 @@ function thunk({ dispatch, getState }) {
 const finalCreateStore = compose(
   applyMiddleware(),
   devTools(),
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
   createStore
 );
 
