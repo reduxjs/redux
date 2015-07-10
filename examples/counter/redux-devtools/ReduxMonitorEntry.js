@@ -39,17 +39,17 @@ export default class ReduxMonitorEntry {
     state: PropTypes.object.isRequired,
     action: PropTypes.object.isRequired,
     select: PropTypes.func.isRequired,
-    errorText: PropTypes.string,
+    error: PropTypes.string,
     onActionClick: PropTypes.func.isRequired,
     collapsed: PropTypes.bool
   };
 
-  printState(state, errorText) {
-    if (!errorText) {
+  printState(state, error) {
+    if (!error) {
       try {
         return JSON.stringify(this.props.select(state));
       } catch (err) {
-        errorText = 'Error selecting state.';
+        error = 'Error selecting state.';
       }
     }
 
@@ -57,18 +57,20 @@ export default class ReduxMonitorEntry {
       <span style={{
         fontStyle: 'italic'
       }}>
-        ({errorText})
+        ({error})
       </span>
     );
   }
 
   handleActionClick(e) {
     const { index, onActionClick } = this.props;
-    onActionClick(index, e.ctrlKey || e.metaKey);
+    if (index > 0) {
+      onActionClick(index);
+    }
   }
 
   render() {
-    const { index, errorText, action, state, collapsed, onActionClick } = this.props;
+    const { index, error, action, state, collapsed, onActionClick } = this.props;
     const { type = '' } = action;
     const { r, g, b } = colorFromString(action.type);
 
@@ -84,7 +86,7 @@ export default class ReduxMonitorEntry {
              paddingBottom: '1em',
              paddingTop: '1em',
              color: `rgb(${r}, ${g}, ${b})`,
-             cursor: 'hand',
+             cursor: (index > 0) ? 'hand' : 'default',
              WebkitUserSelect: 'none'
            }}>
           {JSON.stringify(action)}
@@ -105,7 +107,7 @@ export default class ReduxMonitorEntry {
             paddingTop: '1em',
             color: 'lightyellow'
           }}>
-            {this.printState(state, errorText)}
+            {this.printState(state, error)}
           </div>
         }
 

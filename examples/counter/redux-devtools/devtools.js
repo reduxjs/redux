@@ -2,7 +2,9 @@ export const ActionTypes = {
   PERFORM_ACTION: 'PERFORM_ACTION',
   RESET: 'RESET',
   ROLLBACK: 'ROLLBACK',
-  COMMIT: 'COMMIT'
+  COMMIT: 'COMMIT',
+  TOGGLE_ACTION: 'TOGGLE_ACTION',
+  SWEEP: 'SWEEP'
 };
 
 const INIT_ACTION = {
@@ -11,6 +13,16 @@ const INIT_ACTION = {
 
 function last(arr) {
   return arr[arr.length - 1];
+}
+
+function toggle(obj, key) {
+  obj = { ...obj };
+  if (obj[key]) {
+    delete obj[key];
+  } else {
+    obj[key] = true;
+  }
+  return obj;
 }
 
 /**
@@ -38,21 +50,25 @@ function computeNextEntry(reducer, action, state, error) {
  * It's probably a good idea to do this only if the code has changed,
  * but until we have some tests we'll just do it every time an action fires.
  */
-function recompute(reducer, committedState, stagedActions) {
-  const computations = [];
+function recomputeStates(reducer, committedState, stagedActions, skippedActions) {
+  const computedStates = [];
 
   for (let i = 0; i < stagedActions.length; i++) {
     const action = stagedActions[i];
 
-    const previousEntry = computations[i - 1];
+    const previousEntry = computedStates[i - 1];
     const previousState = previousEntry ? previousEntry.state : committedState;
     const previousError = previousEntry ? previousEntry.error : undefined;
 
-    const entry = computeNextEntry(reducer, action, previousState, previousError);
-    computations.push(entry);
+    const shouldSkip = Boolean(skippedActions[i]);
+    const entry = shouldSkip ?
+      previousEntry :
+      computeNextEntry(reducer, action, previousState, previousError);
+
+    computedStates.push(entry);
   }
 
-  return computations;
+  return computedStates;
 }
 
 
@@ -62,34 +78,63 @@ function recompute(reducer, committedState, stagedActions) {
 function liftReducer(reducer, initialState) {
   const initialLiftedState = {
     committedState: initialState,
-    stagedActions: [INIT_ACTION]
+    stagedActions: [INIT_ACTION],
+    skippedActions: {}
   };
 
   /**
    * Manages how the DevTools actions modify the DevTools state.
    */
   return function liftedReducer(liftedState = initialLiftedState, liftedAction) {
-    let { committedState, stagedActions, computations } = liftedState;
+    let {
+      committedState,
+      stagedActions,
+      skippedActions,
+      computedStates
+    } = liftedState;
 
     switch (liftedAction.type) {
     case ActionTypes.RESET:
-      stagedActions = [INIT_ACTION];
       committedState = initialState;
+      stagedActions = [INIT_ACTION];
+      skippedActions = {};
       break;
     case ActionTypes.COMMIT:
+      committedState = last(computedStates).state;
       stagedActions = [INIT_ACTION];
-      committedState = last(computations).state;
+      skippedActions = {};
       break;
     case ActionTypes.ROLLBACK:
       stagedActions = [INIT_ACTION];
+      skippedActions = {};
+      break;
+    case ActionTypes.TOGGLE_ACTION:
+      const { index } = liftedAction;
+      skippedActions = toggle(skippedActions, index);
+      break;
+    case ActionTypes.SWEEP:
+      stagedActions = stagedActions.filter((_, i) => !skippedActions[i]);
+      skippedActions = {};
       break;
     case ActionTypes.PERFORM_ACTION:
-      stagedActions = [...stagedActions, liftedAction.action];
+      const { action } = liftedAction;
+      stagedActions = [...stagedActions, action];
       break;
     }
 
-    computations = recompute(reducer, committedState, stagedActions);
-    return { committedState, stagedActions, computations };
+    computedStates = recomputeStates(
+      reducer,
+      committedState,
+      stagedActions,
+      skippedActions
+    );
+
+    return {
+      committedState,
+      stagedActions,
+      skippedActions,
+      computedStates
+    };
   };
 }
 
@@ -105,8 +150,8 @@ function liftAction(action) {
  * Unlifts the DevTools state to the app state.
  */
 function unliftState(liftedState) {
-  const { computations } = liftedState;
-  const { state } = last(computations);
+  const { computedStates } = liftedState;
+  const { state } = last(computedStates);
   return state;
 }
 

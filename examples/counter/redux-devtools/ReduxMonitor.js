@@ -7,12 +7,12 @@ import values from 'lodash/object/values';
 
 @connect(state => ({
   stagedActions: state.stagedActions,
-  computations: state.computations,
-  disabledActions: state.disabledActions || {} // TODO
+  computedStates: state.computedStates,
+  skippedActions: state.skippedActions
 }))
 export default class ReduxMonitor {
   static propTypes = {
-    computations: PropTypes.array.isRequired,
+    computedStates: PropTypes.array.isRequired,
     select: PropTypes.func.isRequired
   };
 
@@ -21,7 +21,7 @@ export default class ReduxMonitor {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.computations.length < nextProps.computations.length) {
+    if (this.props.computedStates.length < nextProps.computedStates.length) {
       const scrollableNode = findDOMNode(this).parentElement;
       const { scrollTop, offsetHeight, scrollHeight } = scrollableNode;
 
@@ -35,7 +35,7 @@ export default class ReduxMonitor {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.computations.length < this.props.computations.length &&
+      prevProps.computedStates.length < this.props.computedStates.length &&
       this.scrollDown
     ) {
       const scrollableNode = findDOMNode(this).parentElement;
@@ -64,11 +64,10 @@ export default class ReduxMonitor {
     });
   }
 
-  handleToggleAction(index, toggleMany) {
+  handleToggleAction(index) {
     this.props.dispatch({
       type: ActionTypes.TOGGLE_ACTION,
-      index,
-      toggleMany
+      index
     });
   }
 
@@ -80,11 +79,11 @@ export default class ReduxMonitor {
 
   render() {
     const elements = [];
-    const { disabledActions, stagedActions, computations, select } = this.props;
+    const { skippedActions, stagedActions, computedStates, select } = this.props;
 
     for (let i = 0; i < stagedActions.length; i++) {
       const action = stagedActions[i];
-      const { state, error } = computations[i];
+      const { state, error } = computedStates[i];
 
       elements.push(
         <ReduxMonitorEntry key={i}
@@ -92,8 +91,8 @@ export default class ReduxMonitor {
                            select={select}
                            action={action}
                            state={state}
-                           collapsed={disabledActions[i]}
-                           errorText={error}
+                           collapsed={skippedActions[i]}
+                           error={error}
                            onActionClick={::this.handleToggleAction} />
       );
     }
@@ -111,13 +110,13 @@ export default class ReduxMonitor {
         </div>
         {elements}
         <div>
-          {computations.length > 1 &&
+          {computedStates.length > 1 &&
             <a onClick={::this.handleRollback}
                style={{ textDecoration: 'underline', cursor: 'hand' }}>
               Rollback
             </a>
           }
-          {values(disabledActions).some(identity) &&
+          {values(skippedActions).some(identity) &&
             <span>
               {' • '}
               <a onClick={::this.handleSweep}
@@ -126,7 +125,7 @@ export default class ReduxMonitor {
               </a>
             </span>
           }
-          {computations.length > 1 &&
+          {computedStates.length > 1 &&
             <span>
               <span>
               {' • '}
