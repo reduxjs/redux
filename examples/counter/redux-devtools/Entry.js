@@ -32,8 +32,7 @@ function colorFromString(token) {
   return hsvToRgb(h, s, v);
 }
 
-
-export default class ReduxMonitorEntry {
+export default class Entry {
   static propTypes = {
     index: PropTypes.number.isRequired,
     state: PropTypes.object.isRequired,

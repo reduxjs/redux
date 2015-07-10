@@ -4,8 +4,8 @@ import { createStore, applyMiddleware, compose, combineReducers, bindActionCreat
 import { Provider, Connector } from 'redux/react';
 import * as reducers from '../reducers';
 
+import devTools from '../redux-devtools/index';
 import DebugPanel from '../redux-devtools/DebugPanel';
-import devtools, { ActionCreators } from '../redux-devtools/devtools';
 import ReduxMonitor from '../redux-devtools/ReduxMonitor';
 
 // TODO: move into a separate project
@@ -18,13 +18,12 @@ function thunk({ dispatch, getState }) {
 
 const finalCreateStore = compose(
   applyMiddleware(),
-  devtools(),
+  devTools(),
   createStore
 );
 
 const reducer = combineReducers(reducers);
 const store = finalCreateStore(combineReducers(reducers));
-const devToolsStore = store.getDevToolsStore();
 
 export default class App extends Component {
   render() {
@@ -35,17 +34,7 @@ export default class App extends Component {
         </Provider>
 
         <DebugPanel top right bottom>
-          <Provider store={devToolsStore}>
-            {() =>
-              <Connector>
-                {({ dispatch, ...props }) =>
-                  <ReduxMonitor
-                    {...props}
-                    {...bindActionCreators(ActionCreators, dispatch)} />
-                }
-              </Connector>
-            }
-          </Provider>
+          <ReduxMonitor store={store} />
         </DebugPanel>
       </div>
     );

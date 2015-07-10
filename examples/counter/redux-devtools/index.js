@@ -167,15 +167,13 @@ function unliftStore(liftedStore) {
     getState() {
       return unliftState(liftedStore.getState());
     },
-    getDevToolsStore() {
-      return liftedStore;
-    }
+    devToolsStore: liftedStore
   };
   return store;
 }
 
 /**
- * Action creators to manage DevTools state.
+ * Action creators to change the DevTools state.
  */
 export const ActionCreators = {
   reset() {
