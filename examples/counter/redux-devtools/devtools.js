@@ -38,15 +38,14 @@ function computeNextEntry(reducer, action, state, error) {
  * It's probably a good idea to do this only if the code has changed,
  * but until we have some tests we'll just do it every time an action fires.
  */
-function recompute(reducer, liftedState) {
-  const { initialState, actions } = liftedState;
+function recompute(reducer, committedState, stagedActions) {
   const computations = [];
 
-  for (let i = 0; i < actions.length; i++) {
-    const action = actions[i];
+  for (let i = 0; i < stagedActions.length; i++) {
+    const action = stagedActions[i];
 
     const previousEntry = computations[i - 1];
-    const previousState = previousEntry ? previousEntry.state : initialState;
+    const previousState = previousEntry ? previousEntry.state : committedState;
     const previousError = previousEntry ? previousEntry.error : undefined;
 
     const entry = computeNextEntry(reducer, action, previousState, previousError);
@@ -62,50 +61,35 @@ function recompute(reducer, liftedState) {
  */
 function liftReducer(reducer, initialState) {
   const initialLiftedState = {
-    initialState,
-    actions: [INIT_ACTION]
+    committedState: initialState,
+    stagedActions: [INIT_ACTION]
   };
 
   /**
    * Manages how the DevTools actions modify the DevTools state.
    */
   return function liftedReducer(liftedState = initialLiftedState, liftedAction) {
+    let { committedState, stagedActions, computations } = liftedState;
+
     switch (liftedAction.type) {
     case ActionTypes.RESET:
-      liftedState = {
-        ...liftedState,
-        actions: [INIT_ACTION],
-        initialState
-      };
+      stagedActions = [INIT_ACTION];
+      committedState = initialState;
       break;
     case ActionTypes.COMMIT:
-      const { computations } = liftedState;
-      liftedState = {
-        ...liftedState,
-        actions: [INIT_ACTION],
-        initialState: last(computations).state
-      };
+      stagedActions = [INIT_ACTION];
+      committedState = last(computations).state;
       break;
     case ActionTypes.ROLLBACK:
-      liftedState = {
-        ...liftedState,
-        actions: [INIT_ACTION]
-      };
+      stagedActions = [INIT_ACTION];
       break;
     case ActionTypes.PERFORM_ACTION:
-      const { actions } = liftedState;
-      const { action } = liftedAction;
-      liftedState = {
-        ...liftedState,
-        actions: [...actions, action]
-      };
+      stagedActions = [...stagedActions, liftedAction.action];
       break;
     }
 
-    return {
-      ...liftedState,
-      computations: recompute(reducer, liftedState)
-    };
+    computations = recompute(reducer, committedState, stagedActions);
+    return { committedState, stagedActions, computations };
   };
 }
 

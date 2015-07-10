@@ -6,7 +6,7 @@ import identity from 'lodash/utility/identity';
 import values from 'lodash/object/values';
 
 @connect(state => ({
-  actions: state.actions,
+  stagedActions: state.stagedActions,
   computations: state.computations,
   disabledActions: state.disabledActions || {} // TODO
 }))
@@ -80,10 +80,10 @@ export default class ReduxMonitor {
 
   render() {
     const elements = [];
-    const { disabledActions, actions, computations, select } = this.props;
+    const { disabledActions, stagedActions, computations, select } = this.props;
 
-    for (let i = 0; i < actions.length; i++) {
-      const action = actions[i];
+    for (let i = 0; i < stagedActions.length; i++) {
+      const action = stagedActions[i];
       const { state, error } = computations[i];
 
       elements.push(
