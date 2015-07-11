@@ -1,4 +1,4 @@
-redux-react
+react-redux
 =========================
 
 Work in progress

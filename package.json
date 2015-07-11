@@ -1,5 +1,5 @@
 {
-  "name": "redux-react",
+  "name": "react-redux",
   "version": "0.1.0",
   "description": "Redux bindings for React",
   "main": "./lib/index.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/redux-react.git"
+    "url": "https://github.com/gaearon/react-redux.git"
   },
   "keywords": [
     "react",
@@ -31,9 +31,9 @@
   "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/redux-react/issues"
+    "url": "https://github.com/gaearon/react-redux/issues"
   },
-  "homepage": "https://github.com/gaearon/redux-react",
+  "homepage": "https://github.com/gaearon/react-redux",
   "devDependencies": {
     "babel": "^5.5.8",
     "babel-core": "5.6.15",
