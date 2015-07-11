@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+sh scripts/lint
+sh scripts/clean
+sh scripts/browser
+sh scripts/build

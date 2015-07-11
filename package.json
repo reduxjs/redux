@@ -1,0 +1,63 @@
+{
+  "name": "redux-react",
+  "version": "0.1.0",
+  "description": "Redux bindings for React",
+  "main": "./lib/index.js",
+  "scripts": {
+    "browser": "scripts/browser",
+    "build": "scripts/build",
+    "clean": "scripts/clean",
+    "lint": "scripts/lint",
+    "prepublish": "scripts/prepublish",
+    "test": "scripts/test",
+    "test:watch": "scripts/test-watch",
+    "test:cov": "scripts/test-cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaearon/redux-react.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "hot",
+    "reload",
+    "hmr",
+    "live",
+    "edit",
+    "flux",
+    "redux"
+  ],
+  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaearon/redux-react/issues"
+  },
+  "homepage": "https://github.com/gaearon/redux-react",
+  "devDependencies": {
+    "babel": "^5.5.8",
+    "babel-core": "5.6.15",
+    "babel-eslint": "^3.1.15",
+    "babel-loader": "^5.1.4",
+    "eslint": "^0.23",
+    "eslint-config-airbnb": "0.0.6",
+    "eslint-plugin-react": "^2.3.0",
+    "expect": "^1.6.0",
+    "istanbul": "^0.3.15",
+    "jsdom": "~5.4.3",
+    "mocha": "^2.2.5",
+    "mocha-jsdom": "~0.4.0",
+    "react": "^0.13.0",
+    "redux": ">=1.0.0-alpha",
+    "rimraf": "^2.3.4",
+    "webpack": "^1.9.6",
+    "webpack-dev-server": "^1.8.2"
+  },
+  "dependencies": {
+    "invariant": "^2.0.0"
+  },
+  "peerDependencies": {
+    "redux": ">=1.0.0-alpha",
+    "react": "^0.13.0"
+  }
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+NODE_ENV=test `npm bin`/mocha --compilers js:babel/register --recursive
