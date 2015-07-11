@@ -1,7 +1,7 @@
 import React from 'react';
 import CounterApp from './CounterApp';
 import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'redux/react';
+import { Provider } from 'redux-react';
 import * as reducers from '../reducers';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
