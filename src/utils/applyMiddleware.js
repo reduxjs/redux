@@ -16,16 +16,18 @@ export default function applyMiddleware(...middlewares) {
 
   return next => (...args) => {
     const store = next(...args);
-    const methods = {
-      dispatch: store.dispatch,
-      getState: store.getState
-    };
+    const middleware = composeMiddleware(...finalMiddlewares);
+
     return {
       ...store,
-      dispatch: compose(
-        composeMiddleware(...finalMiddlewares)(methods),
-        store.dispatch
-      )
+      dispatch: function dispatch(action) {
+        const methods = { dispatch, getState: store.getState };
+
+        return compose(
+          middleware(methods),
+          store.dispatch
+        )(action);
+      }
     };
   };
 }
