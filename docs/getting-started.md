@@ -1,4 +1,4 @@
-## Getting Started
+# Getting Started
 
 Don't be fooled by all the fancy talk about reducers, middleware, higher-order stores — Redux is incredibly simple. If you've ever built a Flux application, you will feel right at home. (If you're new to Flux, it's easy, too!)
 
