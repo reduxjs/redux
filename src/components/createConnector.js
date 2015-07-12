@@ -23,18 +23,8 @@ export default function createConnector(React) {
     };
 
     shouldComponentUpdate(nextProps, nextState) {
-      return !this.isSliceEqual(this.state.slice, nextState.slice) ||
+      return !shallowEqual(this.state.slice, nextState.slice) ||
              !shallowEqual(this.props, nextProps);
-    }
-
-    isSliceEqual(slice, nextSlice) {
-      const isRefEqual = slice === nextSlice;
-      if (isRefEqual) {
-        return true;
-      } else if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
-        return isRefEqual;
-      }
-      return shallowEqual(slice, nextSlice);
     }
 
     constructor(props, context) {
@@ -60,7 +50,7 @@ export default function createConnector(React) {
 
     handleChange(props = this.props) {
       const nextState = this.selectState(props, this.context);
-      if (!this.isSliceEqual(this.state.slice, nextState.slice)) {
+      if (!shallowEqual(this.state.slice, nextState.slice)) {
         this.setState(nextState);
       }
     }
