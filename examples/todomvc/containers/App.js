@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoApp from './TodoApp';
 import { createStore } from 'redux';
-import { Provider } from 'redux/react';
+import { Provider } from 'react-redux';
 import * as reducers from '../reducers';
 
 const store = createStore(reducers);

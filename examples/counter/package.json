@@ -28,7 +28,8 @@
   "homepage": "https://github.com/gaearon/redux#readme",
   "dependencies": {
     "react": "^0.13.3",
-    "redux": "^0.12.0"
+    "redux": "^1.0.0-alpha",
+    "react-redux": "^1.0.0-alpha"
   },
   "devDependencies": {
     "babel-core": "^5.5.8",
