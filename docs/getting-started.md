@@ -103,7 +103,7 @@ A reducer looks like this:
 
 It's the type of function you would pass to `Array.prototype.reduce(reducer, ?initialValue)`.
 
-This may seem radical, but it turns out that this function signature is sufficient to express the entirety of the store model from traditional Flux — in a purely functional way. **This is a essence of Redux**. It's what enables all the cool features like hot reloading, time travel, and universal rendering. Aside from all that, though, it's simply a better model for expressing state changes.
+This may seem radical, but it turns out that this function signature is sufficient to express the entirety of the store model from traditional Flux — in a purely functional way. **This is the essence of Redux**. It's what enables all the cool features like hot reloading, time travel, and universal rendering. Aside from all that, though, it's simply a better model for expressing state changes.
 
 [**See Dan's talk at React Europe for more on this topic**](https://www.youtube.com/watch?v=xsSnOQynTHs).
 
