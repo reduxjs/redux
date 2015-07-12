@@ -76,7 +76,7 @@ Middleware is composable using function composition.
 ### Store
 
 ```js
-type Store = { dispatch: Dispatch, getState: State, subscribe: Function, getReducer: Reducer, replaceReducer: void }
+type Store = { dispatch: Dispatch, getState: () => State, subscribe: () => Function, getReducer: () => Reducer, replaceReducer: (reducer: Reducer) => void }
 ```
 
 A store is an object of bound methods to an underlying class instance.
