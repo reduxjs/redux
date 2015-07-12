@@ -4,7 +4,9 @@ import compose from './compose';
 import composeMiddleware from './composeMiddleware';
 import thunk from '../middleware/thunk';
 
-import type { Dispatch, CreateStore } from '../types';
+/*eslint-disable*/
+import type { Dispatch, CreateStore, Middleware } from '../types';
+/*@eslint-enable*/
 
 /**
  * Creates a higher-order store that applies middleware to a store's dispatch.
