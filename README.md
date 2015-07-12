@@ -32,6 +32,7 @@ Atomic Flux with hot reloading.
     - [Decorators](#decorators)
   - [React Native](#react-native)
   - [Initializing Redux](#initializing-redux)
+    - [Decorators](#decorators-1)
   - [Running the same code on client and server](#running-the-same-code-on-client-and-server)
   - [Additional customization](#additional-customization)
 - [FAQ](#faq)
@@ -263,7 +264,7 @@ export default class CounterApp {
 
 #### Decorators
 
-The `@connect` decorator lets you create smart components less verbosely:
+The `@connect` decorator lets you create smart components more concisely:
 
 ```js
 import React from 'react';
@@ -321,6 +322,21 @@ export default class App {
         }
       </Provider>
     );
+  }
+}
+```
+
+#### Decorators
+
+The `@provide` decorator lets you inject a Redux instance more concisely:
+
+```js
+import { provide } from 'redux/react';
+
+@provide(redux)
+export default class App {
+  render() {
+    return <CounterApp />;
   }
 }
 ```
