@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
-import { createRedux } from '../../src';
+import { createStore } from '../../src';
 import { Provider } from '../../src/react';
 
 const { TestUtils } = React.addons;
@@ -12,7 +12,7 @@ describe('React', () => {
 
     class Child extends Component {
       static contextTypes = {
-        redux: PropTypes.object.isRequired
+        store: PropTypes.object.isRequired
       }
 
       render() {
@@ -20,30 +20,30 @@ describe('React', () => {
       }
     }
 
-    it('adds Redux to child context', () => {
-      const redux = createRedux({ test: () => 'test' });
+    it('should add the store to the child context', () => {
+      const store = createStore({});
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider redux={redux}>
+        <Provider store={store}>
           {() => <Child />}
         </Provider>
       );
 
       const child = TestUtils.findRenderedComponentWithType(tree, Child);
-      expect(child.context.redux).toBe(redux);
+      expect(child.context.store).toBe(store);
     });
 
-    it('does not lose subscribers when receiving new props', () => {
-      const redux1 = createRedux({ test: () => 'test' });
-      const redux2 = createRedux({ test: () => 'test' });
+    it('should replace just the reducer when receiving a new store in props', () => {
+      const store1 = createStore((state = 10) => state + 1);
+      const store2 = createStore((state = 10) => state * 2);
       const spy = expect.createSpy(() => {});
 
       class ProviderContainer extends Component {
-        state = { redux: redux1 };
+        state = { store: store1 };
 
         render() {
           return (
-            <Provider redux={this.state.redux}>
+            <Provider store={this.state.store}>
               {() => <Child />}
             </Provider>
           );
@@ -52,15 +52,20 @@ describe('React', () => {
 
       const container = TestUtils.renderIntoDocument(<ProviderContainer />);
       const child = TestUtils.findRenderedComponentWithType(container, Child);
+      expect(child.context.store.getState()).toEqual(11);
 
-      child.context.redux.subscribe(spy);
-      child.context.redux.dispatch({});
+      child.context.store.subscribe(spy);
+      child.context.store.dispatch({});
       expect(spy.calls.length).toEqual(1);
+      expect(child.context.store.getState()).toEqual(12);
 
-      container.setState({ redux: redux2 });
+      container.setState({ store: store2 });
       expect(spy.calls.length).toEqual(2);
-      child.context.redux.dispatch({});
+      expect(child.context.store.getState()).toEqual(24);
+
+      child.context.store.dispatch({});
       expect(spy.calls.length).toEqual(3);
+      expect(child.context.store.getState()).toEqual(48);
     });
   });
 });

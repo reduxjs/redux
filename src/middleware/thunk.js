@@ -1,10 +1,13 @@
-export default function thunkMiddleware(getState) {
-  return (next) => {
-    const recurse = (action) =>
-      typeof action === 'function' ?
-        action(recurse, getState) :
-        next(action);
+/* @flow */
 
-    return recurse;
-  };
+import type { Dispatch, State, Action } from '../types';
+
+type StoreMethods = { dispatch: Dispatch, getState: () => State };
+
+export default function thunkMiddleware(storeMethods: StoreMethods): Dispatch {
+  var { dispatch, getState } = storeMethods;
+  return (next: Dispatch) => (action: Action) =>
+    typeof action === 'function' ?
+      action(dispatch, getState) :
+      next(action);
 }

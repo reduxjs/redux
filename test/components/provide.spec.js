@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
-import { createRedux } from '../../src';
+import { createStore } from '../../src';
 import { provide, Provider } from '../../src/react';
 
 const { TestUtils } = React.addons;
@@ -12,7 +12,7 @@ describe('React', () => {
 
     class Child extends Component {
       static contextTypes = {
-        redux: PropTypes.object.isRequired
+        store: PropTypes.object.isRequired
       }
 
       render() {
@@ -20,26 +20,29 @@ describe('React', () => {
       }
     }
 
-    it('wraps component with Provider', () => {
-      const redux = createRedux({ test: () => 'test' });
+    it('should wrap the component into Provider', () => {
+      const store = createStore({});
 
-      @provide(redux)
+      @provide(store)
       class Container extends Component {
         render() {
           return <Child {...this.props} />;
         }
       }
 
-      const container = TestUtils.renderIntoDocument(<Container pass="through" />);
+      const container = TestUtils.renderIntoDocument(
+        <Container pass='through' />
+      );
       const child = TestUtils.findRenderedComponentWithType(container, Child);
       expect(child.props.pass).toEqual('through');
-      expect(() => TestUtils.findRenderedComponentWithType(container, Provider))
-        .toNotThrow();
-      expect(child.context.redux).toBe(redux);
+      expect(() =>
+        TestUtils.findRenderedComponentWithType(container, Provider)
+      ).toNotThrow();
+      expect(child.context.store).toBe(store);
     });
 
-    it('sets displayName correctly', () => {
-      @provide(createRedux({ test: () => 'test' }))
+    it('sets the displayName correctly', () => {
+      @provide(createStore({}))
       class Container extends Component {
         render() {
           return <div />;
@@ -49,17 +52,17 @@ describe('React', () => {
       expect(Container.displayName).toBe('Provider(Container)');
     });
 
-    it('sets DecoratedComponent to wrapped component', () => {
+    it('should expose the wrapped component as DecoratedComponent', () => {
       class Container extends Component {
         render() {
           return <div />;
         }
       }
 
-      let decorator = provide(state => state);
-      let ProviderDecorator = decorator(Container);
+      const decorator = provide(state => state);
+      const decorated = decorator(Container);
 
-      expect(ProviderDecorator.DecoratedComponent).toBe(Container);
+      expect(decorated.DecoratedComponent).toBe(Container);
     });
   });
 });
