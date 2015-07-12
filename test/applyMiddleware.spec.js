@@ -2,7 +2,7 @@ import expect from 'expect';
 import { createStore, applyMiddleware } from '../src/index';
 import * as reducers from './helpers/reducers';
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators';
-import thunk from '../src/middleware/thunk';
+import { thunk } from './helpers/middleware';
 
 describe('applyMiddleware', () => {
   it('wraps dispatch method with middleware', () => {
@@ -34,17 +34,15 @@ describe('applyMiddleware', () => {
     }
 
     const spy = expect.createSpy(() => {});
-
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos);
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {
       expect(spy.calls.length).toEqual(2);
     });
-
   });
 
-  it('uses thunk middleware by default', done => {
-    const store = applyMiddleware()(createStore)(reducers.todos);
+  it('works with thunk middleware', done => {
+    const store = applyMiddleware(thunk)(createStore)(reducers.todos);
 
     store.dispatch(addTodoIfEmpty('Hello'));
     expect(store.getState()).toEqual([{

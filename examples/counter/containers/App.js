@@ -4,7 +4,15 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import * as reducers from '../reducers';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+// TODO: move into a separate project
+function thunk({ dispatch, getState }) {
+  return next => action =>
+    typeof action === 'function' ?
+      action(dispatch, getState) :
+      next(action);
+}
+
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
 export default class App {
