@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { Connector } from 'react-redux';
 import Header from '../components/Header';
 import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/TodoActions';
 
-export default class TodoApp {
+export default class TodoApp extends Component {
   render() {
     return (
       <Connector select={state => ({ todos: state.todos })}>

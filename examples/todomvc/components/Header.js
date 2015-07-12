@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import TodoTextInput from './TodoTextInput';
 
-export default class Header {
+export default class Header extends Component {
   static propTypes = {
     addTodo: PropTypes.func.isRequired
   };
