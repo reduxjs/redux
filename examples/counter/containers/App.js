@@ -1,6 +1,6 @@
 import React from 'react';
 import CounterApp from './CounterApp';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import * as reducers from '../reducers';
 
@@ -13,7 +13,8 @@ function thunk({ dispatch, getState }) {
 }
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
+const reducer = combineReducers(reducers);
+const store = createStoreWithMiddleware(reducer);
 
 export default class App {
   render() {
