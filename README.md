@@ -21,6 +21,7 @@ Atomic Flux with hot reloading.
 - [Demo](#demo)
 - [Examples](#examples)
   - [Simple Examples](#simple-examples)
+  - [ES5 Examples](#es5-examples)
   - [Async and Universal Examples with Routing](#async-and-universal-examples-with-routing)
 - [What does it look like?](#what-does-it-look-like)
   - [Actions](#actions)
@@ -104,6 +105,12 @@ npm install
 npm start
 ```
 
+### ES5 Examples
+
+If you have not used ES6 before, check out one of these ES5 examples:
+
+* [redux-todomvc-es5](https://github.com/insin/redux-todomvc-es5)
+
 ### Async and Universal Examples with Routing
 
 These async and [universal (aka “isomorphic”)](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) examples using React Router should help you get started:
@@ -111,7 +118,7 @@ These async and [universal (aka “isomorphic”)](https://medium.com/@mjackson/
 * [redux-react-router-async-example](https://github.com/emmenko/redux-react-router-async-example): Work in progress. Semi-official. Only the client side. Uses React Router.
 * [react-redux-universal-hot-example](https://github.com/erikras/react-redux-universal-hot-example): Universal. Uses React Router.
 * [redux-example](https://github.com/quangbuule/redux-example): Universal. Uses Immutable, React Router.
-* [isomorphic-counter-example](https://github.com/khtdr/redux-react-koa-isomorphic-counter-example): Universal. A bare-bone implentation of the [counter example app](https://github.com/gaearon/redux/tree/master/examples/counter). Uses promises-middleware to interact with API via Koa on the server.
+* [isomorphic-counter-example](https://github.com/khtdr/redux-react-koa-isomorphic-counter-example): Universal. A bare-bone implementation of the [counter example app](https://github.com/gaearon/redux/tree/master/examples/counter). Uses promises-middleware to interact with API via Koa on the server.
 * [Awesome list](https://github.com/xgrommx/awesome-redux)
 
 Don’t be shy, add your own!

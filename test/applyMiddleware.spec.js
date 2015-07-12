@@ -15,6 +15,7 @@ describe('applyMiddleware', () => {
 
     const spy = expect.createSpy(() => {});
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos);
+
     store.dispatch(addTodo('Use Redux'));
 
     expect(Object.keys(spy.calls[0].arguments[0])).toEqual([
@@ -22,6 +23,24 @@ describe('applyMiddleware', () => {
       'getState'
     ]);
     expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' } ]);
+  });
+
+  it('should pass recursive dispatches through the middleware chain', () => {
+    function test(spyOnMethods) {
+      return () => next => action => {
+        spyOnMethods(action);
+        return next(action);
+      };
+    }
+
+    const spy = expect.createSpy(() => {});
+
+    const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos);
+
+    return store.dispatch(addTodoAsync('Use Redux')).then(() => {
+      expect(spy.calls.length).toEqual(2);
+    });
+
   });
 
   it('uses thunk middleware by default', done => {

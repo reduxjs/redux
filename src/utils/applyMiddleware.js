@@ -4,7 +4,9 @@ import compose from './compose';
 import composeMiddleware from './composeMiddleware';
 import thunk from '../middleware/thunk';
 
-import type { Dispatch, CreateStore } from '../types';
+/*eslint-disable */
+import type { Dispatch, CreateStore, Middleware } from '../types';
+/*eslint-enable */
 
 /**
  * Creates a higher-order store that applies middleware to a store's dispatch.
@@ -22,16 +24,17 @@ export default function applyMiddleware(
 
   return (next: CreateStore) => (...args) => {
     var store = next(...args);
-    var methods = {
-      dispatch: store.dispatch,
-      getState: store.getState
-    };
+    var middleware = composeMiddleware(...finalMiddlewares);
     return {
       ...store,
-      dispatch: compose(
-        composeMiddleware(...finalMiddlewares)(methods),
-        store.dispatch
-      )
+      dispatch: function dispatch(action) {
+        var methods = { dispatch, getState: store.getState };
+
+        return compose(
+          middleware(methods),
+          store.dispatch
+        )(action);
+      }
     };
   };
 }
