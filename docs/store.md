@@ -9,7 +9,7 @@ The store has the following responsibilities:
 
 ####Initialization
 
-To intialize a store you simply call `createStore` with a reducer.
+To intialize a store you simply call `createStore` with a reducer:
 
 ```js
 import { createStore } from 'redux';
@@ -18,7 +18,7 @@ import counter from './reducers/counter';
 const store = createStore(counter);
 ```
 
-A redux store works with a single reducer, but in the following example we would like to use the functionality of both the `counter` and `todos` reducers. To do this we need to somehow combine `counter` and `todos` into a single reducer. Here is one approach: 
+`createStore` intializes the store with a single reducer, but in the following example we would like to use functionality from both the `counter` and `todos` reducers. To do this we need to somehow combine `counter` and `todos` into a single reducer. Here is one approach: 
 
 ```js
 import { createStore } from 'redux';
@@ -43,7 +43,7 @@ function combinedReducer(state = initialState, action) {
 const store = createStore(combinedReducer);
 ```
 
-As combining reducers is so common there is a helper function named `combineReducers` to assist. `combineReducers` takes an object of reducers and returns them combined into a single reducer.
+As combining reducers is so common there is a helper function named `combineReducers` to assist. `combineReducers` takes an object of reducers and returns them combined into a single reducer. Here is the previous example using `combineReducers`:
 
 ```js
 import { createStore, combineReducers } from 'redux';
@@ -54,7 +54,7 @@ const reducer = combineReducers({ counter, todos });
 const store = createStore(reducer);
 ```
 
-A recommended pattern is to import the object passed to `combineReducers` from a definition file.
+A recommended pattern is to import the object passed to `combineReducers` from a definition file:
 
 ```js
 // reducers/index.js
