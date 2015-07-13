@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { combineReducers } from '../src';
+import { combineReducers } from '../../src';
 
 describe('Utils', () => {
   describe('combineReducers', () => {

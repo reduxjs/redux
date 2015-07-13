@@ -1,8 +1,8 @@
 import expect from 'expect';
-import { createStore, applyMiddleware } from '../src/index';
-import * as reducers from './helpers/reducers';
-import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators';
-import { thunk } from './helpers/middleware';
+import { createStore, applyMiddleware } from '../../src/index';
+import * as reducers from '../helpers/reducers';
+import { addTodo, addTodoAsync, addTodoIfEmpty } from '../helpers/actionCreators';
+import { thunk } from '../helpers/middleware';
 
 describe('applyMiddleware', () => {
   it('wraps dispatch method with middleware', () => {
