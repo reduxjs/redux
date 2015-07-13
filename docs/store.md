@@ -33,8 +33,8 @@ export { default as todos } from './todos'
 import { createStore, combineReducers } from 'redux';
 import * as reducers from './reducers/index';
 
-const reducer = combineReducer(reducers);
-const store = createStore(reducers);
+const reducer = combineReducers(reducers);
+const store = createStore(reducer);
 ```
 
 You may optionally specify the initial state as the second argument to `createStore`. This is useful for hydrating the state of the client to match the state of a Redux application running on the server.
