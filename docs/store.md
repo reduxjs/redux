@@ -9,18 +9,19 @@ The store has the following responsibilities:
 
 ####Initialization
 
-The simplest way to initialize the store is to call `createStore` with an object of reducer functions. The following example sets up the store for an application that has both a `counter` reducer and a `todos` reducer.
+The simplest way to initialize the store is to call `createStore` with a reducer function. The following example has both a `counter` reducer and a `todos` reducer, so they need to be combined into a single reducer using the `combineReducers` function.
 
 ```js
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import counter from 'reducers/counter';
 import todos from 'reducers/todos';
 
-const store = createStore({counter, todos});
+const reducer = combineReducers({counter, todos});
+const store = createStore(reducer);
 ```
 
-A recommended pattern is to create the object of reducer functions from a definition file.
+A recommended pattern is to create the object passed to `combineReducers` from a definition file.
 
 ```js
 // reducers/index.js
@@ -29,10 +30,10 @@ export { default as todos } from './todos'
 ```
 
 ```js
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import { createStore, combineReducers } from 'redux';
 import * as reducers from './reducers/index';
 
+const reducer = combineReducer(reducers);
 const store = createStore(reducers);
 ```
 
@@ -40,18 +41,18 @@ You may optionally specify the initial state as the second argument to `createSt
 
 ```js
 // server
-const store = createStore(reducers);
+const store = createStore(reducer);
 store.dispatch(MyActionCreators.doSomething()); // fire action creators to fill the state
 const state = store.getState(); // somehow pass this state to the client
 
 // client
 const initialState = window.STATE_FROM_SERVER;
-const store = createStore(reducers, initialState);
+const store = createStore(reducer, initialState);
 ```
 
 ####Usage
 
-Store state is accessed using the `getState` method. Note that when you initialize the store by passing `createStore` an object of reducer functions, the name of each reducer becomes a top-level key on the state object.
+Store state is accessed using the `getState` method. Note that the name of each reducer in the object passed to `combineReducers` becomes a top-level key on the state object.
 
 ```js
 store.getState();
@@ -65,7 +66,7 @@ store.getState();
 // }
 ```
 
-Store state is updated by calling the `dispatch` method with an action understood by one or more reducers.
+Store state is updated by calling the `dispatch` method with an action understood by the reducer.
 
 ```js
 store.dispatch({
@@ -95,23 +96,15 @@ let unsubscribe = store.subscribe(() => console.log('state change!'));
 ```
 
 ####Advanced Intitialization
-`createStore` can be called with a single reducing function instead of an object of reducing functions. The `combineReducers` function can be used to compose multiple reducers. TODO: Real world use case?
-
-```js
-import { createStore, combineReducers } from 'redux';
-import * as reducers from './reducers/index';
-
-const combinedReducerFn = combineReducers(counter, todos);
-const store = createStore(combinedReducerFn);
-```
 
 [Middleware](middleware.md) can be set up using `applyMiddleware`.
 
 ```js
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { logger, promise } from './middleware'
 import * as reducers from './reducers/index';
 
-const createWithMiddleware = applyMiddleware(logger, promise)(createStore);
-const store = createWithMiddleware(reducers);
+const reducer = combineReducers(reducers);
+const createStoreWithMiddleware = applyMiddleware(logger, promise)(createStore);
+const store = createStoreWithMiddleware(reducer);
 ```
