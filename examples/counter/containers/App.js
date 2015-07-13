@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import CounterApp from './CounterApp';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import * as reducers from '../reducers';
+
+import devTools from '../redux-devtools/index';
+import persistState from '../redux-devtools/persistState';
+import DebugPanel from '../redux-devtools/DebugPanel';
+import ReduxMonitor from '../redux-devtools/ReduxMonitor';
 
 // TODO: move into a separate project
 function thunk({ dispatch, getState }) {
@@ -12,16 +17,28 @@ function thunk({ dispatch, getState }) {
       next(action);
 }
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const finalCreateStore = compose(
+  applyMiddleware(),
+  devTools(),
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
+  createStore
+);
+
 const reducer = combineReducers(reducers);
-const store = createStoreWithMiddleware(reducer);
+const store = finalCreateStore(combineReducers(reducers));
 
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        {() => <CounterApp />}
-      </Provider>
+      <div>
+        <Provider store={store}>
+          {() => <CounterApp />}
+        </Provider>
+
+        <DebugPanel top right bottom>
+          <ReduxMonitor store={store} />
+        </DebugPanel>
+      </div>
     );
   }
 }
