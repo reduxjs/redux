@@ -1,6 +1,13 @@
 import invariant from 'invariant';
 import isPlainObject from './utils/isPlainObject';
 
+// Don't ever try to handle these action types in your code. They are private.
+// For any unknown actions, you must return the current state.
+// If the current state is undefined, you must return the initial state.
+export const ActionTypes = {
+  INIT: '@@redux/INIT'
+};
+
 export default class Store {
   constructor(reducer, initialState) {
     invariant(
@@ -19,7 +26,7 @@ export default class Store {
 
   replaceReducer(nextReducer) {
     this.reducer = nextReducer;
-    this.dispatch({ type: '@@INIT' });
+    this.dispatch({ type: ActionTypes.INIT });
   }
 
   dispatch(action) {
