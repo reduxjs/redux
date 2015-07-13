@@ -1,3 +1,5 @@
+React bindings reside in the [react-redux](https://github.com/gaearon/react-redux) repository.
+
 ### Components
 
 #### Dumb Components
@@ -36,7 +38,7 @@ export default class Counter {
 
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { Connector } from 'redux/react';
+import { Connector } from 'react-redux';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -69,7 +71,7 @@ The `@connect` decorator lets you create smart components less verbosely:
 ```js
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { connect } from 'redux/react';
+import { connect } from 'react-redux';
 import Counter from '../components/Counter';
 import * as CounterActions from '../actions/CounterActions';
 
@@ -91,9 +93,9 @@ export default class CounterApp {
 
 ### React Native
 
-To use Redux with React Native, just replace imports from `redux/react` with `redux/react-native`:
+To use Redux with React Native, just replace imports from `react-redux` with `react-redux/native`:
 
 ```js
 import { bindActionCreators } from 'redux';
-import { Provider, Connector } from 'redux/react-native';
+import { Provider, Connector } from 'react-redux/native';
 ```
