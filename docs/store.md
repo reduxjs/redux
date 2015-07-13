@@ -3,25 +3,58 @@
 The store has the following responsibilities:
 
 * Holds application state
-* Allows access to state via the `getState` method
-* Allows state to be updated via the `dispatch` method
-* Registers listeners via the `subscribe` method
+* Allows access to state via `getState`
+* Allows state to be updated via `dispatch`
+* Registers listeners via `subscribe`
 
 ####Initialization
 
-The simplest way to initialize the store is to call `createStore` with a reducer function. The following example has both a `counter` reducer and a `todos` reducer, so they need to be combined into a single reducer using the `combineReducers` function.
+To intialize a store you simply call `createStore` with a reducer.
+
+```js
+import { createStore } from 'redux';
+import counter from './reducers/counter';
+
+const store = createStore(counter);
+```
+
+A redux store works with a single reducer, but in the following example we would like to use the functionality of both the `counter` and `todos` reducers. To do this we need to somehow combine `counter` and `todos` into a single reducer. Here is one approach: 
+
+```js
+import { createStore } from 'redux';
+import counter from './reducers/counter';
+import todos from './reducers/todos';
+
+// set up the initial combined state
+const initialState = {
+  counterState: undefined,
+  todoState: undefined
+};
+ 
+function combinedReducer(state = initialState, action) {
+  // call each reducer separately
+  const counterState = counter(state.counterState, action);
+  const todoState = todos(state.todoState, action);
+  
+  // combine updated state created by each reducer into the new combined state
+  return { counterState, todoState };
+}
+
+const store = createStore(combinedReducer);
+```
+
+As combining reducers is so common there is a helper function named `combineReducers` to assist. `combineReducers` takes an object of reducers and returns them combined into a single reducer.
 
 ```js
 import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import counter from 'reducers/counter';
-import todos from 'reducers/todos';
+import counter from './reducers/counter';
+import todos from './reducers/todos';
 
-const reducer = combineReducers({counter, todos});
+const reducer = combineReducers({ counter, todos });
 const store = createStore(reducer);
 ```
 
-A recommended pattern is to create the object passed to `combineReducers` from a definition file.
+A recommended pattern is to import the object passed to `combineReducers` from a definition file.
 
 ```js
 // reducers/index.js
