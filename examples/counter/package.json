@@ -29,7 +29,7 @@
   "dependencies": {
     "react": "^0.13.3",
     "react-redux": "^1.0.0-alpha",
-    "redux": "^1.0.0-alpha",
+    "redux": "^1.0.0-rc",
     "redux-thunk": "^0.1.0"
   },
   "devDependencies": {

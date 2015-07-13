@@ -1,6 +1,6 @@
 {
   "name": "redux",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-rc",
   "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
   "scripts": {
@@ -18,6 +18,9 @@
     "url": "https://github.com/gaearon/redux.git"
   },
   "keywords": [
+    "flux",
+    "redux",
+    "reducer",
     "react",
     "reactjs",
     "hot",
@@ -25,8 +28,7 @@
     "hmr",
     "live",
     "edit",
-    "webpack",
-    "flux"
+    "webpack"
   ],
   "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
   "license": "MIT",
