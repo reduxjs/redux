@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
-import { Provider, Connector } from 'redux/react';
+import { Provider, Connector } from 'react-redux';
 import { ActionCreators } from './index';
 import Monitor from './Monitor';
 
