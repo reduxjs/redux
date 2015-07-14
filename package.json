@@ -4,14 +4,18 @@
   "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
   "scripts": {
-    "browser": "scripts/browser",
-    "build": "scripts/build",
-    "clean": "scripts/clean",
-    "lint": "scripts/lint",
-    "prepublish": "scripts/prepublish",
-    "test": "scripts/test",
-    "test:watch": "scripts/test-watch",
-    "test:cov": "scripts/test-cov"
+    "build": "npm run clean && babel src --out-dir lib && npm run build:umd",
+    "build:umd": "webpack src/index.js dist/redux.js && NODE_ENV=production webpack src/index.js dist/redux.min.js",
+    "clean": "rimraf lib dist coverage",
+    "lint": "eslint src test examples",
+    "prepublish": "npm run build",
+    "release": "mversion patch -m",
+    "release:patch": "mversion patch -m",
+    "release:minor": "mversion minor -m",
+    "release:major": "mversion major -m",
+    "test": "npm run lint && NODE_ENV=test mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "npm run lint && babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive"
   },
   "repository": {
     "type": "git",
@@ -47,6 +51,7 @@
     "expect": "^1.6.0",
     "isparta": "^3.0.3",
     "mocha": "^2.2.5",
+    "mversion": "^1.10.0",
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"

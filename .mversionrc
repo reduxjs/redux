@@ -1,0 +1,9 @@
+{
+  "commitMessage": "%s",
+  "tagName": "v%s",
+  "scripts": {
+    "preupdate": "npm run build && npm test",
+    "postcommit": "git push && git push --tags && npm publish",
+    "postupdate": "echo 'New version %s tagged and released'"
+  }
+}
