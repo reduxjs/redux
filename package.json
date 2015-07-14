@@ -57,7 +57,6 @@
     "invariant": "^2.0.0"
   },
   "peerDependencies": {
-    "redux": "^1.0.0 || 1.0.0-alpha || 1.0.0-rc",
-    "react": "^0.13.0 || 0.14.0-beta1"
+    "redux": "^1.0.0 || 1.0.0-alpha || 1.0.0-rc"
   }
 }
