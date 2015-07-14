@@ -42,7 +42,7 @@ We need one more action type, for removing todos:
 
 ## Action creators
 
-**Action creators** exactly that — functions that create actions. It's easy to conflate the terms "action" and "action creator," so do your best to use the proper term.
+**Action creators** exactly that — functions that create actions. It's easy to conflate the terms "action" and "action creator", so do your best to use the proper term.
 
 In *other* Flux implementations, action creators often trigger a dispatch when invoked, like so:
 
