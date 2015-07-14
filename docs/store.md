@@ -13,17 +13,17 @@ To intialize a store you simply call `createStore` with a reducer:
 
 ```js
 import { createStore } from 'redux';
-import counter from './reducers/counter';
+import counterReducer from './reducers/counter';
 
-const store = createStore(counter);
+const store = createStore(counterReducer);
 ```
 
-`createStore` intializes the store with a single reducer, but in the following example we would like to use functionality from both the `counter` and `todos` reducers. To do this we need to somehow combine `counter` and `todos` into a single reducer. Here is one approach: 
+`createStore` intializes the store with a single reducer, but in the following example we would like to use functionality from both the `counter` and `todos` reducers. To do this we need to somehow combine `counter` and `todos` into a single reducer. Here is one approach:
 
 ```js
 import { createStore } from 'redux';
-import counter from './reducers/counter';
-import todos from './reducers/todos';
+import counterReducer from './reducers/counter';
+import todosReducer from './reducers/todos';
 
 // set up the initial combined state
 const initialState = {
@@ -31,30 +31,44 @@ const initialState = {
   todoState: undefined
 };
  
-function combinedReducer(state = initialState, action) {
+function masterReducer(state = initialState, action) {
   // call each reducer separately
-  const counterState = counter(state.counterState, action);
-  const todoState = todos(state.todoState, action);
+  const counterState = counterReducer(state.counterState, action);
+  const todoState = todosReducer(state.todoState, action);
   
   // combine updated state created by each reducer into the new combined state
   return { counterState, todoState };
 }
 
-const store = createStore(combinedReducer);
+const store = createStore(masterReducer);
 ```
 
-As combining reducers is so common there is a helper function named `combineReducers` to assist. `combineReducers` takes an object of reducers and returns them combined into a single reducer. Here is the previous example using `combineReducers`:
+Combining reducers is very common so there is a helper function named `combineReducers` to assist. `combineReducers` takes an object of reducers and combines them into a single reducer. Here is the previous example using `combineReducers`:
 
 ```js
 import { createStore, combineReducers } from 'redux';
-import counter from './reducers/counter';
-import todos from './reducers/todos';
+import counterReducer from './reducers/counter';
+import todosReducer from './reducers/todos';
 
-const reducer = combineReducers({ counter, todos });
-const store = createStore(reducer);
+const reducers = {
+  counter: counterReducer,
+  todos: todosReducer
+}
+
+const masterReducer = combineReducers(reducers);
+const store = createStore(masterReducer);
 ```
 
-A recommended pattern is to import the object passed to `combineReducers` from a definition file:
+Note that the key of each reducer in the reducer object passed to `combineReducers` becomes a top-level key on the state object returned by the combined reducer. In the previous example, the state object returned by `masterReducer` looks like this:
+
+```js
+const state = {
+  counter: counterState,
+  todos: todosState
+};
+```
+
+A recommended pattern is to use `import *` to import an object of reducers from a definition file:
 
 ```js
 // reducers/index.js
@@ -85,7 +99,7 @@ const store = createStore(reducer, initialState);
 
 ####Usage
 
-Store state is accessed using the `getState` method. Note that the name of each reducer in the object passed to `combineReducers` becomes a top-level key on the state object.
+Store state is accessed using the `getState` method.
 
 ```js
 store.getState();
