@@ -1,10 +1,7 @@
 react-redux
 =========================
 
-Work in progress
+React bindings for Redux.  
+Docs are work in progress.
 
-TODO:
-
-- dedupe modules
-- figure out UMD
-- probably some other stuff.
+Requires React >= 0.13
