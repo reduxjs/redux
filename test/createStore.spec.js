@@ -64,6 +64,12 @@ describe('createStore', () => {
     const reducer = combineReducers(_reducers);
     const store = createStoreWithMiddleware(reducer, bootstrapData);
 
+    // FIXME: this fails because the initial state from
+    // the reducer is returned.
+    // This is because the initial data passed to the store
+    // has a wrong shape.
+    // We might want to warn or throw an error if no key
+    // is matched.
     expect(store.getState()).toEqual({
       dataReducer: bootstrapData
     });
