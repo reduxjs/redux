@@ -21,7 +21,7 @@ Here's an example action which represents adding a new todo item:
 }
 ```
 
-Actions are plain JavaScript objects. By convention, actions should a have a `type` field that indicates the type of action being performed. Types should typically be defined as constants and imported from another module.
+Actions are plain JavaScript objects. By convention, actions should have a `type` field that indicates the type of action being performed. Types should typically be defined as constants and imported from another module.
 
 ```js
 import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
