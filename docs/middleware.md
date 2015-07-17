@@ -16,7 +16,7 @@ To enable middleware in your Redux app, use `applyMiddleware()`.
 
 ### `applyMiddleware(...middlewares)`
 
-This function returns a [higher-order store](higher-order store). You don't need to worry about that if you're not interested — here's how you use it:
+This function returns a [higher-order store](higher-order-stores.md). You don't need to worry about that if you're not interested — here's how you use it:
 
 ```js
 const store = applyMiddleware(thunk, promise, observable)(createStore)(reducer);
