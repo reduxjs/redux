@@ -4,15 +4,16 @@ import createCounterStore from '../../store/createCounterStore';
 import * as CounterActions from '../../actions/CounterActions';
 
 describe('actions', () => {
-  let store, actions;
-  
+  let store;
+  let actions;
+
   beforeEach(() => {
     store = createCounterStore();
     actions = bindActionCreators(CounterActions, store.dispatch);
   });
 
   it('increment', () => {
-    var test = actions.increment();
+    actions.increment();
     expect(store.getState().counter).toBe(1);
   });
 

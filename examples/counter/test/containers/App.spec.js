@@ -1,6 +1,6 @@
 import expect from 'expect';
 import jsdomReact from '../jsdomReact';
-import React, { PropTypes, Component } from 'react/addons';
+import React from 'react/addons';
 import App from '../../containers/App';
 
 const { TestUtils } = React.addons;
@@ -12,7 +12,7 @@ function setup(initialState) {
     buttons: TestUtils.scryRenderedDOMComponentsWithTag(app, 'button').map(button => {
       return button.getDOMNode();
     }),
-    p: TestUtils.findRenderedDOMComponentWithTag(app, 'p').getDOMNode(),
+    p: TestUtils.findRenderedDOMComponentWithTag(app, 'p').getDOMNode()
   };
 }
 
