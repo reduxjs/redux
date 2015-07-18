@@ -10,6 +10,7 @@ Atomic Flux with hot reloading.
 **The API is likely to change a few times before we reach 1.0.**<br>
 **Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
 
+**The current docs are *bad*, and we know it.**  
 **You can track the [new docs](https://github.com/gaearon/redux/pull/140) and the [1.0 API and terminology changes](https://github.com/gaearon/redux/pull/195).**
 
 
