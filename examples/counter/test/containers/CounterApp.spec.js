@@ -1,12 +1,19 @@
 import expect from 'expect';
 import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
-import App from '../../containers/App';
+import { Provider } from 'react-redux';
+import CounterApp from '../../containers/CounterApp';
+import createCounterStore from '../../store/createCounterStore';
 
 const { TestUtils } = React.addons;
 
 function setup(initialState) {
-  const app = TestUtils.renderIntoDocument(<App initialState={initialState} />);
+  const store = createCounterStore(initialState);
+  const app = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      {() => <CounterApp />}
+    </Provider>
+  );
   return {
     app: app,
     buttons: TestUtils.scryRenderedDOMComponentsWithTag(app, 'button').map(button => {
