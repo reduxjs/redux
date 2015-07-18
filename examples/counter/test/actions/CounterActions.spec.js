@@ -17,12 +17,25 @@ describe('actions', () => {
     expect(store.getState().counter).toBe(1);
   });
 
+  it('decrement', () => {
+    actions.decrement();
+    expect(store.getState().counter).toBe(-1);
+  });
+
+  it('incrementIfOdd', () => {
+    actions.incrementIfOdd();
+    expect(store.getState().counter).toBe(0);
+    actions.increment();
+    actions.incrementIfOdd();
+    expect(store.getState().counter).toBe(2);
+  });
+
   it('incrementAsync', (done) => {
     store.subscribe(() => {
       expect(store.getState().counter).toBe(1);
       done();
     });
-    actions.incrementAsync();
+    actions.incrementAsync(1);
   });
 });
 
