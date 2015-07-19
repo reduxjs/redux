@@ -22,8 +22,8 @@ describe('applyMiddleware', () => {
     expect(spy.calls.length).toEqual(1);
 
     expect(Object.keys(spy.calls[0].arguments[0])).toEqual([
-      'dispatch',
-      'getState'
+      'getState',
+      'dispatch'
     ]);
 
     expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' }, { id: 2, text: 'Flux FTW!' } ]);

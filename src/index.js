@@ -1,7 +1,7 @@
-// Core
+/* @flow */
+
 import createStore from './createStore';
 
-// Utilities
 import compose from './utils/compose';
 import combineReducers from './utils/combineReducers';
 import bindActionCreators from './utils/bindActionCreators';
