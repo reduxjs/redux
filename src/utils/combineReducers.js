@@ -1,7 +1,7 @@
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 import invariant from 'invariant';
-import { ActionTypes } from '../Store';
+import { ActionTypes } from '../createStore';
 
 function getErrorMessage(key, action) {
   const actionType = action && action.type;
