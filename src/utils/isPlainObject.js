@@ -1,3 +1,10 @@
-export default function isPlainObject(obj) {
-  return obj ? typeof obj === 'object' && Object.getPrototypeOf(obj) === Object.prototype : false;
+/* @flow */
+
+export default function isPlainObject(obj: Object): boolean {
+  if (!obj) {
+    return false;
+  }
+
+  return typeof obj === 'object' &&
+         Object.getPrototypeOf(obj) === Object.prototype;
 }
