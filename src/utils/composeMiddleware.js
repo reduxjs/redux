@@ -1,3 +1,9 @@
+/* @flow */
+/*eslint-disable */
+import type { Dispatch, Middleware } from '../types';
+type StoreMethods = { dispatch: Dispatch, getState: () => State };
+/*eslint-enable */
+
 import compose from './compose';
 
 /**
@@ -5,6 +11,9 @@ import compose from './compose';
  * @param  {...Function} middlewares
  * @return {Function}
  */
-export default function composeMiddleware(...middlewares) {
-  return methods => next => compose(...middlewares.map(m => m(methods)), next);
+export default function composeMiddleware(
+  ...middlewares: Array<Middleware>
+): Middleware {
+  return (methods: StoreMethods) => (next: Dispatch) =>
+    compose(...middlewares.map(m => m(methods)), next);
 }

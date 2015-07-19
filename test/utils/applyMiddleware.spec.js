@@ -1,15 +1,15 @@
 import expect from 'expect';
-import { createStore, applyMiddleware } from '../src/index';
-import * as reducers from './helpers/reducers';
-import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators';
-import thunk from '../src/middleware/thunk';
+import { createStore, applyMiddleware } from '../../src/index';
+import * as reducers from '../helpers/reducers';
+import { addTodo, addTodoAsync, addTodoIfEmpty } from '../helpers/actionCreators';
+import { thunk } from '../helpers/middleware';
 
 describe('applyMiddleware', () => {
-  it('wraps dispatch method with middleware', () => {
+  it('wraps dispatch method with middleware once', () => {
     function test(spyOnMethods) {
-      return methods => next => action => {
+      return methods => {
         spyOnMethods(methods);
-        return next(action);
+        return next => action => next(action);
       };
     }
 
@@ -17,12 +17,16 @@ describe('applyMiddleware', () => {
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos);
 
     store.dispatch(addTodo('Use Redux'));
+    store.dispatch(addTodo('Flux FTW!'));
+
+    expect(spy.calls.length).toEqual(1);
 
     expect(Object.keys(spy.calls[0].arguments[0])).toEqual([
       'dispatch',
       'getState'
     ]);
-    expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' } ]);
+
+    expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' }, { id: 2, text: 'Flux FTW!' } ]);
   });
 
   it('should pass recursive dispatches through the middleware chain', () => {
@@ -34,17 +38,15 @@ describe('applyMiddleware', () => {
     }
 
     const spy = expect.createSpy(() => {});
-
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos);
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {
       expect(spy.calls.length).toEqual(2);
     });
-
   });
 
-  it('uses thunk middleware by default', done => {
-    const store = applyMiddleware()(createStore)(reducers.todos);
+  it('works with thunk middleware', done => {
+    const store = applyMiddleware(thunk)(createStore)(reducers.todos);
 
     store.dispatch(addTodoIfEmpty('Hello'));
     expect(store.getState()).toEqual([{

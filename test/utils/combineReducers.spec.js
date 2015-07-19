@@ -1,5 +1,6 @@
 import expect from 'expect';
-import { combineReducers } from '../src';
+import { combineReducers } from '../../src';
+import { ActionTypes } from '../../src/createStore';
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -30,43 +31,44 @@ describe('Utils', () => {
       ).toEqual(['stack']);
     });
 
-    it('should throw an error if a reducer returns undefined', () => {
+    it('should throw an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
-        undefinedByDefault(state = 0, action) {
+        counter(state = 0, action) {
           switch (action && action.type) {
           case 'increment':
             return state + 1;
           case 'decrement':
             return state - 1;
-          case '@@INIT':
-            return state;
-          default:
+          case 'whatever':
+          case null:
+          case undefined:
             return undefined;
+          default:
+            return state;
           }
         }
       });
 
-      const initialState = reducer(undefined, { type: '@@INIT' });
       expect(
-        () => reducer(initialState, { type: 'whatever' })
+        () => reducer({ counter: 0 }, { type: 'whatever' })
       ).toThrow(
-        /"undefinedByDefault".*"whatever"/
+        /"counter".*"whatever"/
       );
       expect(
-        () => reducer(initialState, null)
+        () => reducer({ counter: 0 }, null)
       ).toThrow(
-        /"undefinedByDefault".*an action/
+        /"counter".*an action/
       );
       expect(
-        () => reducer(initialState, {})
+        () => reducer({ counter: 0 }, {})
       ).toThrow(
-        /"undefinedByDefault".*an action/
+        /"counter".*an action/
       );
     });
 
     it('should throw an error if a reducer returns undefined initializing', () => {
-      const reducer = combineReducers({
-        undefinedInitially(state, action) {
+      expect(() => combineReducers({
+        counter(state, action) {
           switch (action.type) {
           case 'increment':
             return state + 1;
@@ -76,12 +78,28 @@ describe('Utils', () => {
             return state;
           }
         }
-      });
+      })).toThrow(
+        /"counter".*initialization/
+      );
+    });
 
-      expect(
-        () => reducer(undefined, { type: '@@INIT' })
-      ).toThrow(
-        /"undefinedInitially".*initialization/
+    it('should throw an error if a reducer attempts to handle a private action', () => {
+      expect(() => combineReducers({
+        counter(state, action) {
+          switch (action.type) {
+          case 'increment':
+            return state + 1;
+          case 'decrement':
+            return state - 1;
+          // Never do this in your code:
+          case ActionTypes.INIT:
+            return 0;
+          default:
+            return undefined;
+          }
+        }
+      })).toThrow(
+        /"counter".*private/
       );
     });
   });

@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { composeMiddleware } from '../src';
+import { composeMiddleware } from '../../src';
 
 describe('Utils', () => {
   describe('composeMiddleware', () => {
