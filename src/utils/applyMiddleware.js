@@ -3,7 +3,7 @@
 import type {
   Dispatch, Middleware, Reducer, State,
   Store, CreateStore, HigherOrderStore
-} from '../types';
+} from '../index';
 /*eslint-enable */
 
 import compose from './compose';

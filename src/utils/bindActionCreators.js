@@ -1,6 +1,6 @@
 /* @flow */
 /*eslint-disable */
-import type { Dispatch } from '../types';
+import type { Dispatch } from '../index';
 /*eslint-enable */
 
 import mapValues from '../utils/mapValues';

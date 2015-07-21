@@ -1,6 +1,6 @@
 /* @flow */
 /*eslint-disable */
-import type { State, Reducer, Action, IntermediateAction, Store } from './types';
+import type { State, Reducer, Action, IntermediateAction, Store } from './index';
 /*eslint-enable */
 
 import invariant from 'invariant';

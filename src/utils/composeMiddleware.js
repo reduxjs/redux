@@ -1,6 +1,6 @@
 /* @flow */
 /*eslint-disable */
-import type { Dispatch, Middleware, MiddlewareArgs } from '../types';
+import type { Dispatch, Middleware, MiddlewareArgs } from '../index';
 /*eslint-enable */
 
 import compose from './compose';

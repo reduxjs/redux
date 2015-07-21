@@ -1,6 +1,6 @@
 /* @flow */
 /*eslint-disable */
-import type { Action, State, Reducer } from '../types';
+import type { Action, State, Reducer } from '../index';
 /*eslint-enable */
 
 import mapValues from '../utils/mapValues';
