@@ -97,7 +97,7 @@ describe('Utils', () => {
         }
       });
 
-      expect(reducer(0, {type: increment}).counter).toEqual(1);
+      expect(reducer(0, { type: increment }).counter).toEqual(1);
     });
 
     it('should throw an error if a reducer attempts to handle a private action', () => {
