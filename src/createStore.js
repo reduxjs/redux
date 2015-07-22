@@ -1,8 +1,3 @@
-/* @flow */
-/*eslint-disable */
-import type { State, Reducer, Action, IntermediateAction, Store } from './index';
-/*eslint-enable */
-
 import invariant from 'invariant';
 import isPlainObject from './utils/isPlainObject';
 
@@ -13,10 +8,7 @@ export var ActionTypes = {
   INIT: '@@redux/INIT'
 };
 
-export default function createStore(
-  reducer: Reducer,
-  initialState: State
-): Store {
+export default function createStore(reducer, initialState) {
   invariant(
     typeof reducer === 'function',
     'Expected the reducer to be a function.'
@@ -30,7 +22,7 @@ export default function createStore(
     return currentState;
   }
 
-  function subscribe(listener: Function) {
+  function subscribe(listener) {
     listeners.push(listener);
 
     return function unsubscribe() {
@@ -39,7 +31,7 @@ export default function createStore(
     };
   }
 
-  function dispatch(action: Action) {
+  function dispatch(action) {
     invariant(
       isPlainObject(action),
       'Actions must be plain objects. Use custom middleware for async actions.'
@@ -54,7 +46,7 @@ export default function createStore(
     return currentReducer;
   }
 
-  function replaceReducer(nextReducer: Reducer) {
+  function replaceReducer(nextReducer) {
     currentReducer = nextReducer;
     dispatch({ type: ActionTypes.INIT });
   }

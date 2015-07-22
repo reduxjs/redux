@@ -1,11 +1,3 @@
-/* @flow */
-/*eslint-disable */
-import type {
-  Dispatch, Middleware, Reducer, State,
-  Store, CreateStore, HigherOrderStore
-} from '../index';
-/*eslint-enable */
-
 import compose from './compose';
 import composeMiddleware from './composeMiddleware';
 
@@ -16,10 +8,8 @@ import composeMiddleware from './composeMiddleware';
  * @param {...Function} ...middlewares
  * @return {Function} A higher-order store
  */
-export default function applyMiddleware(
-  ...middlewares: Array<Middleware>
-): HigherOrderStore {
-  return (next: CreateStore) => (reducer: Reducer, initialState: State) => {
+export default function applyMiddleware(...middlewares) {
+  return (next) => (reducer, initialState) => {
     var store = next(reducer, initialState);
     var middleware = composeMiddleware(...middlewares);
     var composedDispatch = () => {};

@@ -1,6 +1,4 @@
-/* @flow */
-
-export default function isPlainObject(obj: Object): boolean {
+export default function isPlainObject(obj) {
   if (!obj) {
     return false;
   }

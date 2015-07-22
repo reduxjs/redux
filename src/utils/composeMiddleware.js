@@ -1,8 +1,3 @@
-/* @flow */
-/*eslint-disable */
-import type { Dispatch, Middleware, MiddlewareArgs } from '../index';
-/*eslint-enable */
-
 import compose from './compose';
 
 /**
@@ -10,12 +5,9 @@ import compose from './compose';
  * @param  {...Function} middlewares
  * @return {Function}
  */
-export default function composeMiddleware(
-  ...middlewares: Array<Middleware>
-): Middleware {
-  return (args: MiddlewareArgs) => (next: Dispatch) => {
+export default function composeMiddleware(...middlewares) {
+  return args => rawDispatch => {
     var dispatchChain = middlewares.map(middleware => middleware(args));
-    dispatchChain.push(next);
-    return compose.apply(null, dispatchChain);
+    return compose(...dispatchChain, rawDispatch);
   };
 }

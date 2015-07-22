@@ -1,14 +1,9 @@
-/* @flow */
-/*eslint-disable */
-import type { Action, State, Reducer } from '../index';
-/*eslint-enable */
-
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 import invariant from 'invariant';
 import { ActionTypes } from '../createStore';
 
-function getErrorMessage(key: String, action: Action): string {
+function getErrorMessage(key, action) {
   var actionType = action && action.type;
   var actionName = actionType && `"${actionType}"` || 'an action';
 
@@ -18,7 +13,7 @@ function getErrorMessage(key: String, action: Action): string {
   );
 }
 
-export default function combineReducers(reducers: Object): Reducer {
+export default function combineReducers(reducers) {
   var finalReducers = pick(reducers, (val) => typeof val === 'function');
 
   Object.keys(finalReducers).forEach(key => {
@@ -43,7 +38,7 @@ export default function combineReducers(reducers: Object): Reducer {
     );
   });
 
-  return function composition(state: State = {}, action: Action): State {
+  return function composition(state = {}, action) {
     return mapValues(finalReducers, (reducer, key) => {
       var newState = reducer(state[key], action);
       invariant(
