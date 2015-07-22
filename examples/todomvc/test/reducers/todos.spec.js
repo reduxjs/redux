@@ -1,13 +1,6 @@
 import expect from 'expect';
 import reducer from '../../reducers/todos';
-import {
-  ADD_TODO,
-  DELETE_TODO,
-  EDIT_TODO,
-  MARK_TODO,
-  MARK_ALL,
-  CLEAR_MARKED
-} from '../../constants/ActionTypes';
+import * as types from '../../constants/ActionTypes';
 
 describe('todos reducer', () => {
 
@@ -24,7 +17,7 @@ describe('todos reducer', () => {
   it('should handle ADD_TODO', () => {
     expect(
       reducer([], {
-        type: ADD_TODO,
+        type: types.ADD_TODO,
         text: 'Run the tests'
       })
     ).toEqual([
@@ -40,7 +33,7 @@ describe('todos reducer', () => {
         marked: false,
         id: 0
       }], {
-        type: ADD_TODO,
+        type: types.ADD_TODO,
         text: 'Run the tests'
       })
     ).toEqual([{
@@ -65,7 +58,7 @@ describe('todos reducer', () => {
         marked: false,
         id: 0
       }], {
-        type: DELETE_TODO,
+        type: types.DELETE_TODO,
         id: 1
       })
     ).toEqual([{
@@ -86,7 +79,7 @@ describe('todos reducer', () => {
         marked: false,
         id: 0
       }], {
-        type: EDIT_TODO,
+        type: types.EDIT_TODO,
         text: 'Fix the tests',
         id: 1
       })
@@ -112,7 +105,7 @@ describe('todos reducer', () => {
         marked: false,
         id: 0
       }], {
-        type: MARK_TODO,
+        type: types.MARK_TODO,
         id: 1
       })
     ).toEqual([{
@@ -137,7 +130,7 @@ describe('todos reducer', () => {
         marked: false,
         id: 0
       }], {
-        type: MARK_ALL
+        type: types.MARK_ALL
       })
     ).toEqual([{
       text: 'Run the tests',
@@ -160,7 +153,7 @@ describe('todos reducer', () => {
         marked: true,
         id: 0
       }], {
-        type: MARK_ALL
+        type: types.MARK_ALL
       })
     ).toEqual([{
       text: 'Run the tests',
@@ -184,7 +177,7 @@ describe('todos reducer', () => {
         marked: false,
         id: 0
       }], {
-        type: CLEAR_MARKED
+        type: types.CLEAR_MARKED
       })
     ).toEqual([{
       text: 'Use Redux',
