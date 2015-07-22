@@ -1,6 +1,6 @@
 import expect from 'expect';
 import { combineReducers } from '../../src';
-import { ActionTypes } from '../../src/Store';
+import { ActionTypes } from '../../src/createStore';
 
 describe('Utils', () => {
   describe('combineReducers', () => {

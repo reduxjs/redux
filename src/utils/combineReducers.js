@@ -1,11 +1,16 @@
+/* @flow */
+/*eslint-disable */
+import type { Action, State, Reducer } from '../index';
+/*eslint-enable */
+
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 import invariant from 'invariant';
-import { ActionTypes } from '../Store';
+import { ActionTypes } from '../createStore';
 
-function getErrorMessage(key, action) {
-  const actionType = action && action.type;
-  const actionName = actionType && `"${actionType}"` || 'an action';
+function getErrorMessage(key: String, action: Action): string {
+  var actionType = action && action.type;
+  var actionName = actionType && `"${actionType}"` || 'an action';
 
   return (
     `Reducer "${key}" returned undefined handling ${actionName}. ` +
@@ -13,11 +18,11 @@ function getErrorMessage(key, action) {
   );
 }
 
-export default function combineReducers(reducers) {
-  const finalReducers = pick(reducers, (val) => typeof val === 'function');
+export default function combineReducers(reducers: Object): Reducer {
+  var finalReducers = pick(reducers, (val) => typeof val === 'function');
 
   Object.keys(finalReducers).forEach(key => {
-    const reducer = finalReducers[key];
+    var reducer = finalReducers[key];
     invariant(
       typeof reducer(undefined, { type: ActionTypes.INIT }) !== 'undefined',
       `Reducer "${key}" returned undefined during initialization. ` +
@@ -26,7 +31,7 @@ export default function combineReducers(reducers) {
       `not be undefined.`
     );
 
-    const type = Math.random().toString(36).substring(7).split('').join('.');
+    var type = Math.random().toString(36).substring(7).split('').join('.');
     invariant(
       typeof reducer(undefined, { type }) !== 'undefined',
       `Reducer "${key}" returned undefined when probed with a random type. ` +
@@ -38,9 +43,9 @@ export default function combineReducers(reducers) {
     );
   });
 
-  return function composition(state = {}, action) {
+  return function composition(state: State = {}, action: Action): State {
     return mapValues(finalReducers, (reducer, key) => {
-      const newState = reducer(state[key], action);
+      var newState = reducer(state[key], action);
       invariant(
         typeof newState !== 'undefined',
         getErrorMessage(key, action)
