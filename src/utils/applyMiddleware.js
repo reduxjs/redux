@@ -1,11 +1,17 @@
 import compose from './compose';
 
 /**
- * Creates a higher-order store that applies middleware to a store's dispatch.
+ * Creates a higher-order store that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
  * Because middleware is potentially asynchronous, this should be the first
  * higher-order store in the composition chain.
- * @param {...Function} ...middlewares
- * @return {Function} A higher-order store
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A higher-order store.
  */
 export default function applyMiddleware(...middlewares) {
   return (next) => (reducer, initialState) => {
