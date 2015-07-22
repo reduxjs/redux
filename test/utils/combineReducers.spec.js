@@ -83,6 +83,23 @@ describe('Utils', () => {
       );
     });
 
+    it('should allow a symbol to be used as an action type', () => {
+      const increment = Symbol('INCREMENT');
+
+      const reducer = combineReducers({
+        counter(state = 0, action) {
+          switch (action.type) {
+          case increment:
+            return state + 1;
+          default:
+            return state;
+          }
+        }
+      });
+
+      expect(reducer(0, {type: increment}).counter).toEqual(1);
+    });
+
     it('should throw an error if a reducer attempts to handle a private action', () => {
       expect(() => combineReducers({
         counter(state, action) {
