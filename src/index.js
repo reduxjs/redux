@@ -19,7 +19,7 @@ export type Middleware = (args: MiddlewareArgs) =>
 export type Store = {
   dispatch: Dispatch;
   getState: () => State;
-  getReducer: Reducer;
+  getReducer: () => Reducer;
   replaceReducer: (nextReducer: Reducer) => void;
   subscribe: (listener: () => void) => () => void;
 };
