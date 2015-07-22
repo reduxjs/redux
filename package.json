@@ -4,14 +4,19 @@
   "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
   "scripts": {
-    "browser": "scripts/browser",
-    "build": "scripts/build",
-    "clean": "scripts/clean",
-    "lint": "scripts/lint",
-    "prepublish": "scripts/prepublish",
-    "test": "scripts/test",
-    "test:watch": "scripts/test-watch",
-    "test:cov": "scripts/test-cov"
+    "clean": "rimraf lib dist coverage",
+    "lint": "eslint src test examples",
+    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
+    "check": "npm run lint && npm run test",
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js dist/redux.js && NODE_ENV=production webpack src/index.js dist/redux.min.js",
+    "build": "npm run build:lib && npm run build:umd",
+    "preversion": "npm run clean && npm run check",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && npm run clean",
+    "prepublish": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
