@@ -1,5 +1,4 @@
 import compose from './compose';
-import composeMiddleware from './composeMiddleware';
 
 /**
  * Creates a higher-order store that applies middleware to a store's dispatch.
@@ -11,22 +10,15 @@ import composeMiddleware from './composeMiddleware';
 export default function applyMiddleware(...middlewares) {
   return (next) => (reducer, initialState) => {
     var store = next(reducer, initialState);
-    var middleware = composeMiddleware(...middlewares);
-    var composedDispatch = () => {};
-
-    function dispatch(action) {
-      return composedDispatch(action);
-    }
+    var dispatch = store.dispatch;
+    var chain = [];
 
     var middlewareAPI = {
       getState: store.getState,
-      dispatch
+      dispatch: (action) => dispatch(action)
     };
-
-    composedDispatch = compose(
-      middleware(middlewareAPI),
-      store.dispatch
-    );
+    chain = middlewares.map(middleware => middleware(middlewareAPI));
+    dispatch = compose(...chain, store.dispatch);
 
     return {
       ...store,
