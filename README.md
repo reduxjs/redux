@@ -105,9 +105,9 @@ let store = createStore(twoCounters);
 console.log(store.getState());
 // { first: 0, second: 0 }
 
-// You can subscribe to the updates manually, or using the bindings for your view library.
+// You can subscribe to the updates manually, or use bindings to your view layer.
 // It is possible to subscribe to updates of any granularity by comparing references.
-// You can use an efficient selector library to memoize derived data for even better performance.
+// You can use a special library to compute and memoize derived data.
 store.subscribe(() => console.log(store.getState()));
 
 // The only way to mutate the internal state is to dispatch an action.
