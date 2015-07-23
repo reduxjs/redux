@@ -1,7 +1,8 @@
 import expect from 'expect';
-import { createStore, combineReducers } from '../src/index';
+import { applyMiddleware, createStore, combineReducers } from '../src/index';
 import { addTodo } from './helpers/actionCreators';
 import * as reducers from './helpers/reducers';
+import { thunk } from './helpers/middleware';
 
 describe('createStore', () => {
   it('should expose the public API', () => {
@@ -43,6 +44,35 @@ describe('createStore', () => {
       id: 1,
       text: 'Hello'
     }]);
+  });
+
+  it('should warn if passed initial state has an unknown shape', () => {
+    const bootstrapData = {
+      pool: 1000,
+      items: [
+        { item: 'Item 1', cost: 200 }
+      ]
+    };
+    const initialState = {
+      pool: 0,
+      items: []
+    };
+    const _reducers = {
+      dataReducer: (state = initialState) => state
+    };
+    const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+    const reducer = combineReducers(_reducers);
+    const store = createStoreWithMiddleware(reducer, bootstrapData);
+
+    // FIXME: this fails because the initial state from
+    // the reducer is returned.
+    // This is because the initial data passed to the store
+    // has a wrong shape.
+    // We might want to warn or throw an error if no key
+    // is matched.
+    expect(store.getState()).toEqual({
+      dataReducer: bootstrapData
+    });
   });
 
   it('should apply the reducer to the previous state', () => {
