@@ -48,22 +48,21 @@ I wrote Redux while working on my React Europe talk called [“Hot Reloading wit
 
 ## The Gist
 
-* The whole state of your app is stored in an object tree inside a single *store*.
-* The only way to mutate the state is to emit an *action*, an object describing what happened.
-* To specify how the state tree is transformed by the actions, you write pure *reducers*.
-* [Learn more!](docs/Basics/Core Ideas.md)
+The whole state of your app is stored in an object tree inside a single *store*.  
+The only way to mutate the state is to emit an *action*, an object describing what happened.  
+To specify how the state tree is transformed by the actions, you write pure *reducers*.
+
+[Learn more!](docs/Basics/Core Ideas.md)
 
 ```js
 import { createStore } from 'redux';
 
 /**
- * This is a reducer.
+ * This is a reducer, a pure function with (state, action) => state signature.
  * It describes how an action transforms the state into the next state.
  *
  * In this example, we use a `switch` statement and strings, but you can use a helper that
  * follows a different convention (such as function maps) that makes sense for your project.
- *
- * The only important part is (state, action) => state signature.
  */
 function counter(state = 0, action) {
   switch (action.type) {
