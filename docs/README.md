@@ -9,7 +9,7 @@ Maybe...
 - Key Ideas
 - Getting Started
 - Comparison to Flux, Rx, etc
-- Separation of concerns
+- Separating concerns
 
 #### Recipes
 - Stores
