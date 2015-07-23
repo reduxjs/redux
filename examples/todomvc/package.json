@@ -30,10 +30,11 @@
   "dependencies": {
     "classnames": "^2.1.2",
     "react": "^0.13.3",
-    "redux": "^0.12.0"
+    "react-redux": "^0.2.1",
+    "redux": "^1.0.0-rc"
   },
   "devDependencies": {
-    "babel-core": "^5.5.8",
+    "babel-core": "^5.6.18",
     "babel-loader": "^5.1.4",
     "node-libs-browser": "^0.5.2",
     "raw-loader": "^0.5.1",

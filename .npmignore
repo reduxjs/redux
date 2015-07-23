@@ -1,2 +1,5 @@
-src
+.DS_Store
+*.log
 examples
+test
+coverage
