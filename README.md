@@ -123,23 +123,13 @@ Instead, we will create another function called `twoCounters` that *calls* your 
  * This function doesn't know *how* to update the counter—just that there are two counters!
  */
 function twoCounters(state = {}, action) {
-  switch (action.counterName) {
-  case 'first':
-    return {
-      first: counter(state.first, action),
-      second: state.second
-    };
-  case 'second':
-    return {
-      first: state.first,
-      second: counter(state.second, action)
-    };
-  default:
-    return {
-      first: counter(state.first, action),
-      second: counter(state.second, action)
-    };
-  }
+  var updateFirst = !action.counterName || action.counterName === 'first';
+  var updateSecond = !action.counterName || action.counterName === 'second';
+
+  return {
+    first: updateFirst ? counter(state.first, action) : state.first,
+    second: updateSecond ? counter(state.second, action) : state.second
+  };
 }
 
 // Don’t forget there is only a single store in a Redux app.
