@@ -9,7 +9,7 @@ Maybe...
 - Key Ideas
 - Getting Started
 - Comparison to Flux
-- Understanding reducers
+- Separation of concerns
 
 #### Recipes
 - Stores
@@ -25,6 +25,7 @@ Maybe...
   * How to await calls
   * How to write reducers
   * Middleware?
+  * Authentication
 
 - React
   * React bindings
@@ -43,7 +44,7 @@ Maybe...
 #### Advanced topics
 - Middleware
 - Higher order stores
-- Performance
+- Optimizing performance
 
 #### Developer tools
 - Hot reloading
