@@ -6,28 +6,12 @@ What do we need here?
 Maybe...
 
 #### Basics
-- Three Principles
+- Key Ideas
 - Getting Started
-- Comparison to Flux, Rx, etc
-- Immutability
-- API reference
-- Glossary
+- Comparison to Flux
+- Understanding reducers
 
-#### Anti patterns
-- Many stores
-- Impure reducers
-- Unserializable actions
-
-#### Extension points
-- Middleware
-- Higher order stores
-- Utilities
-
-#### Developer tools
-- Hot reloading
-- Redux DevTools with time travel
-
-#### How Do I...
+#### Recipes
 - Stores
   * waitFor
   * read data from “another store”
@@ -50,3 +34,21 @@ Maybe...
 
 - Universal apps
   * (Re)hydrating state
+
+#### Anti-patterns
+- Many stores
+- Impure reducers
+- Unserializable actions
+
+#### Advanced topics
+- Middleware
+- Higher order stores
+- Performance
+
+#### Developer tools
+- Hot reloading
+- Redux DevTools with time travel
+
+#### Reference
+- Full API reference
+- Glossary
