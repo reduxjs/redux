@@ -27,7 +27,7 @@ npm install --save react-redux
 ## Documentation
 
 * [Basics](docs/Basics) cover the core ideas of Redux and its differences from other libraries.
-* [Recipes](docs/Recipes) is a place to look for practical solutions to the problems you’ll encounter building an app.
+* [Recipes](docs/Recipes) are full of practical solutions to the problems you’ll encounter building an app.
 * [Reference](docs/Reference) provides the glossary and the complete API documentation.
 * [Resources](docs/Resources) is a curated list of the utilities, tools, and examples created by the community.
 
