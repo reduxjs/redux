@@ -182,7 +182,7 @@ expect(twoCounters({
 
 #### Next Steps
 
-You’ll probably want to connect Redux to the view layer of your choice. Check out [Getting Started](docs/Basics/Getting Started.md) for a more realistic app walkthrough with a suggest file structure, or head straight to [Connecting UI](docs/Recipes/Connecting UI.md) where you can find instructions on connecting the UI library of your choice to Redux.
+You’ll probably want to connect Redux to the view layer of your choice. Check out [Getting Started](docs/Basics/Getting Started.md) for a more realistic app walkthrough with suggestions on how to structure your app, or head straight to [Connecting UI](docs/Recipes/Connecting UI.md) where you can read how to connect the UI library of your choice to Redux.
 
 ### License
 
