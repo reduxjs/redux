@@ -102,7 +102,7 @@ store.dispatch({ type: 'INCREMENT' });
 store.dispatch({ type: 'INCREMENT' });
 // 2
 store.dispatch({ type: 'DECREMENT' });
-// 0
+// 1
 ```
 
 Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. A special function called a *reducer* specifies how each action transforms the internal state.
