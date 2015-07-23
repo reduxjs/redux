@@ -10,7 +10,7 @@ It evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its 
 
 Redux works both for client-side, universal, and native apps.  
 You can use Redux together with [React](https://facebook.github.io/react/) or any other view library.  
-Redux is tiny (2kB) and has no dependencies, but its ecosystem takes the developer experience to the next level.  
+It is tiny (2kB) and has no dependencies.
 
 ## Installation
 
