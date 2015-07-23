@@ -59,7 +59,7 @@ Calling an action creator only produces an action, but does not dispatch it. You
 ### Intermediate action
 
 ```js
-type IntermediateAction = any
+type IntermediateAction = any;
 ```
 
 An **intermediate action** is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer; it will be transformed by middleware before being sent to the base `dispatch()` function. Intermediate actions are often asynchronous primitives, like a promise or a thunk, which are not dispatched themselves, but trigger dispatches once an operation has completed.
@@ -87,7 +87,7 @@ type Store = {
   getState: () => State;
   subscribe: (listener: () => void) => () => void;
   getReducer: () => Reducer;
-  replaceReducer: (reducer: Reducer) => void
+  replaceReducer: (reducer: Reducer) => void;
 };
 ```
 
@@ -102,7 +102,7 @@ There should only be a single store in a Redux app, as the composition happens o
 ### Store creator
 
 ```js
-type StoreCreator = (reducer: Reducer, initialState: any) => Store
+type StoreCreator = (reducer: Reducer, initialState: any) => Store;
 ```
 
 A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, `createStore()` exported from the Redux package, from store creators that are returned from the store enhancers.
@@ -110,7 +110,7 @@ A store creator is a function that creates a Redux store. Like with dispatching 
 ### Store enhancer
 
 ```js
-type StoreEnhancer = (next: StoreCreator) => StoreCreator
+type StoreEnhancer = (next: StoreCreator) => StoreCreator;
 ```
 
 A store enhancer is a higher-order function that composes a store creator to return a new, enhanced store creator. This is similar to middleware in that it allows you to alter the store interface in a composable way.
