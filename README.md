@@ -75,7 +75,7 @@ function counter(state = 0, action) {
   case 'DECREMENT':
     return state - 1;
   default:
-    return 0;
+    return state;
   }
 }
 
