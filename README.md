@@ -434,10 +434,8 @@ export default createStore(0, {
 ```
 
 It's all just functions.
-Fancy stuff like generating stores from handler maps, or generating action creator constants, should be in userland.
-Redux has no opinion on how you do this in your project.
 
-See also [this gist](https://gist.github.com/skevy/8a4ffc3cfdaf5fd68739) for an example implementation of action constant generation.
+Instead of generating action constants from functions, I suggest you to generate action creators *from* constants. See [here](https://twitter.com/dan_abramov/status/621739119325126656) for an example of such approach.
 
 ### What about `waitFor`?
 
