@@ -1,3 +1,5 @@
+Core Ideas
+--------------------------
 
 Redux can be described in three fundamental principles:
 
