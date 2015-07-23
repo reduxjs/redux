@@ -120,6 +120,7 @@ These async and [universal (aka “isomorphic”)](https://medium.com/@mjackson/
 * [react-redux-universal-hot-example](https://github.com/erikras/react-redux-universal-hot-example): Universal. Uses React Router.
 * [redux-example](https://github.com/quangbuule/redux-example): Universal. Uses Immutable, React Router.
 * [isomorphic-counter-example](https://github.com/khtdr/redux-react-koa-isomorphic-counter-example): Universal. A bare-bone implementation of the [counter example app](https://github.com/gaearon/redux/tree/master/examples/counter). Uses promises-middleware to interact with API via Koa on the server.
+* [generator-flux-on-rails](https://github.com/alexfedoseev/generator-flux-on-rails): Scaffold universal `redux` app with Rails API on board. Just one line in console. Multiple bundles ready, hot reloading & auth example included. [Live demo](http://isomorphic-comments.alexfedoseev.com).
 * [Awesome list](https://github.com/xgrommx/awesome-redux)
 
 Don’t be shy, add your own!
