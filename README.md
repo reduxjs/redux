@@ -119,8 +119,7 @@ Instead, we will create another function called `twoCounters` that *calls* your 
 /**
  * It turns out that reducers, being pure functions, are easy to compose.
  * In fact, all state of your app can be described as a single reducer calling other reducers.
- * We will delegate managing the counters to the `counter` function defined in the previous example.
- * This function doesn't know *how* to update the counter—just that there are two counters!
+ * We will delegate managing the counters to the `counter` function from the previous example.
  */
 function twoCounters(state = {}, action) {
   var updateFirst = !action.counterName || action.counterName === 'first';
