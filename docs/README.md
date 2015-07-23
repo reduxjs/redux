@@ -8,7 +8,7 @@ Maybe...
 #### Basics
 - Key Ideas
 - Getting Started
-- Comparison to Flux
+- Comparison to Flux, Rx, etc
 - Separation of concerns
 
 #### Recipes
@@ -35,6 +35,8 @@ Maybe...
 
 - Universal apps
   * (Re)hydrating state
+
+- Testing
 
 #### Anti-patterns
 - Many stores
