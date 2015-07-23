@@ -102,25 +102,20 @@ function twoCounters(state = {}, action) {
 // There is only a single store in a Redux app.
 // It holds the complete state tree of your app.
 let store = createStore(twoCounters);
-
 console.log(store.getState());
 // { first: 0, second: 0 }
 
 // You can subscribe to the updates manually, or using the bindings for your view library.
 // It is possible to subscribe to updates of any granularity by comparing references.
-// You can also use an efficient selector library that memoizes derived data for even better performance.
-
+// You can use an efficient selector library to memoize derived data for even better performance.
 store.subscribe(() => console.log(store.getState()));
 
 // The only way to mutate the internal state is to dispatch an action.
 // The actions can be serialized, logged or stored and later replayed.
-
 store.dispatch({ type: 'INCREMENT' });
 // { first: 1, second: 1}
-
 store.dispatch({ type: 'INCREMENT', counterName: 'first' });
 // { first: 2, second: 1 }
-
 store.dispatch({ type: 'DECREMENT', counterName: 'second' });
 // { first: 2, second: 0 }
 
