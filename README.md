@@ -8,7 +8,7 @@ redux
 Redux implements predictable state management for JavaScript apps.  
 It evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](elm-lang.org/guide/architecture).
 
-Redux works both for client-side, universal, and native apps.  
+Redux works for client-side, universal, and native apps.  
 You can use Redux together with [React](https://facebook.github.io/react/) or any other view library.  
 It is tiny (2kB) and has no dependencies.
 
