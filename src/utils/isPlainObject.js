@@ -1,4 +1,4 @@
-const fnToString = (fn) => Function.prototype.toString.call(fn);
+var fnToString = (fn) => Function.prototype.toString.call(fn);
 
 /**
  * @param {any} obj The object to inspect.
@@ -9,7 +9,7 @@ export default function isPlainObject(obj) {
     return false;
   }
 
-  const proto = typeof obj.constructor === 'function' ? Object.getPrototypeOf(obj) : Object.prototype;
+  var proto = typeof obj.constructor === 'function' ? Object.getPrototypeOf(obj) : Object.prototype;
 
   if (proto === null) {
     return true;
