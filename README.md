@@ -107,7 +107,7 @@ store.dispatch({ type: 'DECREMENT' });
 
 Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. A special function called a *reducer* specifies how each action transforms the internal state.
 
-This might seem like an overkill for a counter app, but the beauty of this pattern is in how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can also record user sessions and reproduce them just by replaying every action.
+This might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can also record user sessions and reproduce them just by replaying every action.
 
 #### Two Counters
 
