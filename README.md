@@ -140,7 +140,7 @@ function twoCounters(state = {}, action) {
 
 // Don’t forget there is only a single store in a Redux app.
 // It holds the complete state tree of your app.
-// We have changed `createStore` call from the previous example to use `twoCounters` as the reducer.
+// We changed `createStore` call to use `twoCounters` as the reducer instead of `counter`.
 let store = createStore(twoCounters);
 
 // This time, the store’s state will contain the values of both counters!
