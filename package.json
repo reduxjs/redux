@@ -1,7 +1,7 @@
 {
   "name": "redux",
   "version": "1.0.0-rc",
-  "description": "Atomic Flux with hot reloading",
+  "description": "Predictable state management for JavaScript apps",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib dist coverage",
