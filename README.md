@@ -111,7 +111,7 @@ This might seem like an overkill for a counter app, but the beauty of this patte
 
 #### Two Counters
 
-Let’s say we now need to manage two counters separately. You don't need to throw away your `counter` function or create a second store! Remember, in Redux there is just a single store managing your whole application.
+Let’s say we now need to manage two counters separately, and we want to support updating either one or both counters with a single method call. You don't need to throw away your `counter` function or create a second store! Remember, in Redux there is just a single store managing your whole application.
 
 Instead, we will create another function called `twoCounters` that *calls* your `counter` function and delegates its subtree to it. This is similar to how, in a React application, you would have a single root component that is described in terms of child components. Functional composition is a powerful tool!
 
