@@ -230,7 +230,7 @@ console.log(store.getState());
 
 =====================
 
-### `applyMiddleware`
+### `applyMiddleware(...middlewares: Array<Middleware>): StoreEnhancer`
 
 Creates a [store enhancer](./Glossary.md#store-enhancer) that applies middleware to the dispatch method
 of the Redux store. This is handy for a variety of tasks, such as expressing
@@ -311,7 +311,7 @@ boundActionCreators.addTodo('Use Redux');
 
 =====================
 
-### `compose(...funcs)`
+### `compose(...funcs: Array<Function>): Function`
 
 Composes functions from left to right.
 
