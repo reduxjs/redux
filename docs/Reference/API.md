@@ -1,6 +1,8 @@
 API
 =====================
 
+>**All type signatures and terms in this document are mentioned in the [Glossary](./Glossary.md).**
+
 Redux API surface is tiny. Instead of being a monolithic framework, Redux defines a set of contracts for you to implement (such as [reducers](./Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
 
 This file documents the complete Redux API. Keep in mind that Redux is only concerned with managing the state. In a real app, you’ll want to use [UI bindings](../Recipes/Connecting UI.md) to the view library of your choice, such as [React](../Recipes/React.md).
