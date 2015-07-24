@@ -29,7 +29,7 @@ There should only be a single store in your app.
 
 ##### Parameters
 
-* `reducer`: Required. A [reducer](./Glossary.md#reducer) function that returns the next state tree, given
+* `reducer: Reducer`: Required. A [reducer](./Glossary.md#reducer) function that returns the next state tree, given
 the current state tree and the action to handle.
 
 * `initialState: any`: The initial [state](./Glossary.md#state). You may optionally specify it
@@ -89,6 +89,9 @@ The base implementation only supports plain object actions. However, if you wrap
 `createStore` with `applyMiddleware`, the [middleware](./Glossary.md#middleware) can interpret actions differently,
 and provide support asynchronous primitives like promises, observables, thunks or something else
 that makes sense for your project.
+
+By default, it returns the action you just dispatched, but the middleware can override the return result.
+For example, an async middleware may return a promise so you can wait for the dispatch completion.
 
 ##### Example (no middleware)
 
@@ -182,3 +185,45 @@ implement a hot reloading mechanism for Redux.
 
 =====================
 
+### `combineReducers(reducers: Object): Reducer`
+
+Turns an object whose values are different reducer functions, into a single
+reducer function. It will call every child reducer, and gather their results
+into a single state object, whose keys correspond to the keys of the passed
+reducer functions.
+
+Returns a reducer function that invokes every reducer inside the
+passed object, and builds a state object with the same shape.
+
+##### Parameters
+
+* `reducers: Object`: An object whose values correspond to different
+reducer functions that need to be combined into one. One handy way to obtain
+it is to use ES6 `import * as reducers` syntax. The reducers may never return
+`undefined` for any action. Instead, they should return their initial state
+if the state passed to them was undefined, and the current state for any
+unrecognized action.
+
+##### Example
+
+```js
+// reducers.js
+export function todos(state = [], action) {
+  // ...
+}
+export function counter(state = 0, action) {
+  // ...
+}
+
+// App.js
+import { createStore, combineReducers } from 'redux';
+
+import * as reducers from './reducers';
+console.log(reducers);
+// { todos: Function, counter: Function }
+
+let reducer = combineReducers(reducers);
+let store = createStore(reducer);
+console.log(store.getState());
+// { counter: 0, todos: [] }
+```
