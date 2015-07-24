@@ -227,3 +227,101 @@ let store = createStore(reducer);
 console.log(store.getState());
 // { counter: 0, todos: [] }
 ```
+
+=====================
+
+### `applyMiddleware`
+
+Creates a [store enhancer](./Glossary.md#store-enhancer) that applies middleware to the dispatch method
+of the Redux store. This is handy for a variety of tasks, such as expressing
+asynchronous actions in a concise manner, or logging every action payload.
+
+Because middleware is potentially asynchronous, this should be the first store enhancer in the composition chain.
+
+Returns a store enhancer function that needs to be applied to `createStore` to add any middleware to it.
+
+##### Parameters
+
+* `...middlewares: Array<Middleware>`: The middleware chain to be applied.
+
+##### Example
+
+```js
+function logger({ getState }) {
+  return (next) => (action) => {
+    console.log('will dispatch', action);
+    let result = next(action);
+    console.log('state after dispatch', getState());
+    return result;
+  };
+}
+
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+
+let createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
+let store = createStoreWithMiddleware(todos, ['Use Redux']);
+```
+
+=====================
+
+### `bindActionCreators(actionCreators: Object, dispatch: Function): Object`
+
+Turns an object whose values are [action creators](./Glossary.md#action-creators),
+into an object with the same keys, but with every function wrapped into a `dispatch` call
+so they may be invoked directly. This is just a convenience method, as you can call
+`store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+
+Returns an object mimicking the original object, but with every
+action creator wrapped into the `dispatch` call.
+
+##### Parameters
+
+* `actionCreators: Object`: An object whose values are action creator
+functions. One handy way to obtain it is to use ES6 `import * as` syntax.
+
+* `dispatch: Function`: The `dispatch` function available on your Redux
+store. 
+
+##### Example
+
+```js
+// actionCreators.js
+function addTodo(text) {
+  // ...
+}
+function removeTodo(id) {
+  // ...
+}
+
+
+// SomeComponent.js
+import * as actionCreators from './actionCreators';
+console.log(actionCreators);
+// { addTodo: Function, removeTodo: function }
+
+// You can always dispatch yourself:
+store.dispatch(actionCreators.addTodo('Use Redux'));
+
+// But it can be handy to bind action creators to a store instance:
+let boundActionCreators = bindActionCreators(action, store.dispatch);
+boundActionCreators.addTodo('Use Redux');
+// You can pass them down and decouple components below from the Redux store.
+```
+
+=====================
+
+### `compose(...funcs)`
+
+Composes functions from left to right.
+
+This is a common function programming utility, and is included in Redux as convenience.  
+You might want to use it to apply several store enhancers in a row.
+
+Returns a function that passes its only argument to the first of
+the `funcs`, then pipes its return value to the second one, and so on, until
+the last of the `funcs` is called, and its result is returned.
+
+#### Parameters
+
+* `...funcs: Array<Func>`: The functions to compose.
