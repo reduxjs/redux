@@ -87,7 +87,7 @@ notified.
 
 The base implementation only supports plain object actions. However, if you wrapped
 `createStore` with `applyMiddleware`, the [middleware](./Glossary.md#middleware) can interpret actions differently,
-and provide support asynchronous primitives like promises, observables, thunks or something else
+and provide support for asynchronous primitives like promises, observables, thunks or something else
 that makes sense for your project.
 
 By default, it returns the action you just dispatched, but the middleware can override the return result.
