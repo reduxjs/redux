@@ -5,7 +5,7 @@ import * as types from '../constants/ActionTypes';
 
 describe('actions', () => {
   it('returns add todo action type and text', () => {
-    const todoText = 'My first TODO'
+    const todoText = 'My first TODO';
     const { type, text } = addTodo(todoText);
 
     expect(type).toEqual(types.ADD_TODO);
@@ -22,7 +22,7 @@ describe('actions', () => {
 
   it('returns edit todo action type, its id and new text', () => {
     const todoId = 1;
-    const editedTodo = 'My edited TODO'
+    const editedTodo = 'My edited TODO';
     const { type, id, text } = editTodo(todoId, editedTodo);
 
     expect(type).toEqual(types.EDIT_TODO);

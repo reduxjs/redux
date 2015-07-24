@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { increment, decrement, incrementIfOdd, incrementAsync } from '../actions/CounterActions';
+import { increment, decrement } from '../actions/CounterActions';
 import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/ActionTypes';
 
 
