@@ -20,6 +20,20 @@ var createStore = require('redux').createStore;
 var createStore = Redux.createStore;
 ```
 
+#### Table of Contents
+
+* [createStore(reducer: Reducer, initialState: any): Store](#createstorereducer-reducer-initialstate-any-store)
+* [Store API](#store-api)
+  * [getState(): any](#getstate-any)
+  * [dispatch(action: Action | IntermediateAction): any](#dispatchaction-action--intermediateaction-any)
+  * [subscribe(listener: Function): Function](#subscribelistener-function-function)
+  * [getReducer(): Reducer](#getreducer-reducer)
+  * [replaceReducer(nextReducer: Reducer): void](#replacereducernextreducer-reducer-void)
+* [combineReducers(reducers: Object): Reducer](#combinereducersreducers-object-reducer)
+* [applyMiddleware(...middlewares: Array<Middleware>): StoreEnhancer](#applymiddlewaremiddlewares-arraymiddleware-storeenhancer)
+* [bindActionCreators(actionCreators: Object, dispatch: Function): Object](#bindactioncreatorsactioncreators-object-dispatch-function-object)
+* [compose(...funcs: Array<Function>): Function](#composefuncs-arrayfunction-function)
+
 =====================
 
 ### `createStore(reducer: Reducer, initialState: any): Store`
