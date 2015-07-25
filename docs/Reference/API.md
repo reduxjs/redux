@@ -97,7 +97,7 @@ Returns the current state tree of your application.
 Dispatches an action. It is the only way to trigger a state change.
 
 The `reducer` function the store was created with will be called with the
-current state tree and the and the given `action`. Its return value will
+current state tree and the given `action`. Its return value will
 be considered the next state of the tree, and the change listeners will be
 notified.
 
