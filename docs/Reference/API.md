@@ -303,10 +303,10 @@ store.
 
 ```js
 // actionCreators.js
-function addTodo(text) {
+export function addTodo(text) {
   // ...
 }
-function removeTodo(id) {
+export function removeTodo(id) {
   // ...
 }
 
@@ -320,7 +320,7 @@ console.log(actionCreators);
 store.dispatch(actionCreators.addTodo('Use Redux'));
 
 // But it can be handy to bind action creators to a store instance:
-let boundActionCreators = bindActionCreators(action, store.dispatch);
+let boundActionCreators = bindActionCreators(actionCreators, store.dispatch);
 boundActionCreators.addTodo('Use Redux');
 // You can pass them down and decouple components below from the Redux store.
 ```
