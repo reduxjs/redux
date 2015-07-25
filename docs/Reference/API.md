@@ -50,7 +50,7 @@ the current state tree and the action to handle.
 
 * `initialState: any`: The initial [state](./Glossary.md#state). You may optionally specify it
 to hydrate the state from the server in universal apps, or to restore a
-previously serialized user session.
+previously serialized user session. If you use `combineReducers` to produce the root reducer function, this must be an object with the same shape as `combineReducers` keys.
 
 ##### Example
 
@@ -255,6 +255,8 @@ asynchronous actions in a concise manner, or logging every action payload.
 Because middleware is potentially asynchronous, this should be the first store enhancer in the composition chain.
 
 Returns a store enhancer function that needs to be applied to `createStore` to add any middleware to it.
+
+Note that each middleware will be given the `dispatch` and `getState` functions as named arguments.
 
 ##### Parameters
 
