@@ -283,7 +283,7 @@ let store = createStoreWithMiddleware(todos, ['Use Redux']);
 
 ### `bindActionCreators(actionCreators: Object, dispatch: Function): Object`
 
-Turns an object whose values are [action creators](./Glossary.md#action-creators),
+Turns an object whose values are [action creators](./Glossary.md#action-creator),
 into an object with the same keys, but with every function wrapped into a `dispatch` call
 so they may be invoked directly. This is just a convenience method, as you can call
 `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
