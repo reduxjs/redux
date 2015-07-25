@@ -340,4 +340,4 @@ the last of the `funcs` is called, and its result is returned.
 
 #### Parameters
 
-* `...funcs: Array<Func>`: The functions to compose.
+* `...funcs: Array<Function>`: The functions to compose.
