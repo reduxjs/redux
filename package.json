@@ -8,7 +8,7 @@
     "lint": "eslint src test examples",
     "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
     "test:watch": "npm test -- --watch",
-    "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
+    "test:cov": "babel-node $(npm bin)/isparta cover $(npm bin)/_mocha -- --recursive",
     "check": "npm run lint && npm run test",
     "build:lib": "babel src --out-dir lib",
     "build:umd": "webpack src/index.js dist/redux.js && NODE_ENV=production webpack src/index.js dist/redux.min.js",
@@ -16,7 +16,8 @@
     "preversion": "npm run clean && npm run check",
     "version": "npm run build",
     "postversion": "git push && git push --tags && npm run clean",
-    "prepublish": "npm run clean && npm run build"
+    "prepublish": "npm run clean && npm run build",
+    "docs:build": "$(npm bin)/gitbook build"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     "eslint-config-airbnb": "0.0.6",
     "eslint-plugin-react": "^2.3.0",
     "expect": "^1.6.0",
+    "gitbook-cli": "^0.3.4",
     "isparta": "^3.0.3",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
