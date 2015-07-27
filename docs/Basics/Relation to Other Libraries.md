@@ -40,5 +40,29 @@ Most of the functionality Baobab provides is related to updating the data with c
 
 Unlike Immutable, Baobab doesn’t yet implement any special efficient data structures under the hood, so you don’t really win anything from using it together with Redux. It’s easier to just use plain objects in this case.
 
+### Rx
+
+[Reactive Extensions](https://github.com/Reactive-Extensions/RxJS) (and their undergoing [modern rewrite](https://github.com/ReactiveX/RxJS)) are a superb way to manage the complexity of asynchronous apps. In fact [there is an effort to create a library that models human-computer interaction as interdependent observables](http://cycle.js.org).
+
+Does it make sense to use Redux together with Rx? Sure! They work great together. For example, it is easy to expose a Redux store as an observable:
+
+```js
+function toObservable(store) {
+  return {
+    subscribe({ onNext }) {
+      let dispose = store.subscribe(() => onNext(store.getState()));
+      onNext(store.getState());
+      return { dispose };
+    }
+  }
+}
+```
+
+Similarly, you can compose different asynchronous streams to turn them into actions before feeding them to `store.dispatch()`.
+
+The question is: do you really need Redux if you already use Rx? Maybe not. It's not hard to [re-implement Redux in Rx](https://github.com/jas-chen/rx-redux). Some say it's a two-liner using Rx `.scan()` method. It may very well be!
+
+If you’re in doubt, check out the Redux source code (there isn’t much going on there), as well as its ecosystem (for example, [the developer tools](github.com/gaearon/redux-devtools)). If you don’t care too much about it and want to go with the reactive data flow all the way, you might want to explore something like [Cycle](http://cycle.js.org) instead, or even combine it with Redux. Let us know how it goes!
+
 --------------------------
 Next: [The Redux Flow](The Redux Flow.md)   
