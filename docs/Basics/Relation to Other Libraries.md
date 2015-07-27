@@ -30,7 +30,7 @@ Immutable and most similar libraries are orthogonal to Redux. Feel free to use t
 
 **Redux doesn’t care *how* you store the state—it can be a plain object, an Immutable object, or anything else.** You’ll probably want a (de)serialization mechanism for writing universal apps and hydrating their state from the server, but other than that, you can use any data storage library *as long as it supports immutability*. For example, it doesn’t make sense to use Backbone for Redux state, because Backbone models are mutable.
 
-Note that if your immutable library supports cursors, you should not use them in a Redux app. The whole tree should be considered read-only, and you should use Redux for updating the state, and subscribing to the updates. **If you’re happy with cursors, you don’t need Redux.**
+Note that, even if your immutable library supports cursors, you shouldn’t use them in a Redux app. The whole state tree should be considered read-only, and you should use Redux for updating the state, and subscribing to the updates. Therefore writing via cursor doesn’t make sense for Redux. **If your only use case for cursors is decoupling the state tree from the UI tree and gradually refining the cursors, you should look at selectors instead.** Selectors are composable getter functions. See [reselect](http://github.com/faassen/reselect) for a really great and concise implementation of composable selectors.
 
 ### Baobab
 
