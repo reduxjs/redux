@@ -202,7 +202,7 @@ const reducer = combineReducers(reducers);
 const store = createStore(reducer);
 ```
 
-It will create a reducer which produces a state object, whose keys are match those of your reducers:
+It will create a reducer which produces a state object, whose keys match those of your reducers:
 
 ```js
 const state = {
