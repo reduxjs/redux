@@ -29,11 +29,10 @@ Here is how any change in a Redux app happens:
 
   Now, how you structure your root reducer function is completely up to you. However, Redux ships with `combineReducers` helper which is useful for **“splitting” the root reducer into several separate reducer functions that each manage a slice of the state tree.**
  
-  Let’s imagine your passed `combineReducers({ todos: todos })` as your root reducer, where `todos` is a reducer function you wrote, and that just manages the `todos` array.
+  This lets you write a `todos` reducer that gets `['Read docs']` as the current state, and returns `['Read docs', 'Understand the flow']` as the next state, which finally gets combined into `{ todos:  ['Read docs', 'Understand the flow'] }`.
 
-  The way `combineReducers` works is that, given `{ a: someFunction, b: someOtherFunction }` as its arguments, it will call `someFunction` with `state.a`, `someOtherFunction` with `state.b`, and combine their results into the new root `state`.
+  While `combineReducers` is a handy helper, you don’t have to use it, and you can write your own root reducer just fine.
 
-  In our example, it will pass `state.todos` as `state` to your `todos` reducer, and assemble the next root state with the same `{ todos: Array }` shape. The `todos` reducer might get `['Read docs']` as the current state, and return `['Read docs', 'Understand the flow']` as the next state. The reducer returned by `combineReducers` will then return `{ todos: ['Read docs', 'Understand the flow'] }` as the next root state. While `combineReducers` is a handy helper, you don’t have to use it, and you can write your own root reducer just fine.
 
 1. **The Redux store saves the next state tree returned by the reducer.**
 
