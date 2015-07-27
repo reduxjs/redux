@@ -17,7 +17,8 @@
     "version": "npm run build",
     "postversion": "git push && git push --tags && npm run clean",
     "prepublish": "npm run clean && npm run build",
-    "docs:build": "$(npm bin)/gitbook build"
+    "docs:build": "gitbook build",
+    "docs:watch": "gitbook serve"
   },
   "repository": {
     "type": "git",
