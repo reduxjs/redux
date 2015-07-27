@@ -5,7 +5,7 @@ Redux implements an architecture with unidirectional data flow. What does this m
 
 Here is how any change in a Redux app happens:
 
-1. You call `store.dispatch(action)`. An `action` is just a plain object describing “what happened”. For example,`{ type: 'ADD_TODO', text: 'Use Redux' }`. **Actions are like newspapers, reporting anything that may result in changing the state of your app.** You can call `store.dispatch(action)` from your components, XHR callbacks, scheduled intervals, or anywhere else.
+1. You call `store.dispatch(action)`. An `action` is just a plain object describing “what happened”. For example,`{ type: 'ADD_TODO', text: 'Use Redux' }`. **Actions are like newspapers, reporting anything that might be important.** These may result in changing the state of your app. You can call `store.dispatch(action)` from your components, XHR callbacks, scheduled intervals, or anywhere else.
 
 2. The Redux store will call the [reducer function](../Reference/Glossary.md#reducer) you gave it. It will **pass the current state tree as the first argument, and the action as the second one.** For example, your root reducer may receive `{ todos: ['Read docs'] }` as `state` and `{ type: 'ADD_TODO', text: 'Understand the flow' }` as `action`. With our example, we would expect it to return `{ todos: ['Read docs', 'Understand the flow'] }`.
 
