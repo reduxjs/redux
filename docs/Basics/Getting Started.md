@@ -86,7 +86,7 @@ let boundAddTodo = text => dispatch(addTodo(text));
 let boundRemoveTodo = id => dispatch(addTodo(id));
 ```
 
-The `dispatch()` function can be accessed directly from the store as `store.dispatch()`, but more likely you’ll access it using a helper like `connect` from [react-redux](http://github.com/gaearon/react-redux).
+The `dispatch()` function can be accessed directly from the store as `store.dispatch()`, but more likely you’ll access it using a helper like `connect` from [react-redux](https://github.com/gaearon/react-redux).
 
 ### Reducers
 
@@ -236,7 +236,7 @@ Yes, you read that correctly. [Read more about how middleware works here.](../Re
 
 You’ll rarely interact with the store object directly. Most often, you’ll use some sort of binding to your preferred view library.
 
-Flux is most popular within the React community, but Redux works with any kind of view layer. The React bindings for Redux are available as [react-redux](github.com/gaearon/react-redux) — see that project for details on how to integrate with React.
+Flux is most popular within the React community, but Redux works with any kind of view layer. The React bindings for Redux are available as [react-redux](https://github.com/gaearon/react-redux) — see that project for details on how to integrate with React.
 
 However, if you do find yourself needing to access the store directly, the API for doing so is very simple:
 
