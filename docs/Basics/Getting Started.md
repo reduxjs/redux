@@ -184,14 +184,13 @@ const store = createStore(todos);
 Usually you’ll have multiple reducers for different domains of data in your app. Consider the following reducers:
 
 ```js
-// reducers/index.js
-import todos as todoReducer from '../reducers/todos';
-import counter as counterReducer from '../reducers/counters';
+export function todos(state, action) {
+  /* ... */
+}
 
-export default const reducers = {
-  todos: todoReducer,
-  counter: counterReducer
-};
+export function counter(state, action) {
+  /* ... */
+}
 ```
 
 You can use the `combineReducers()` helper to combine multiple reducers into one:
