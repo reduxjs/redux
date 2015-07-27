@@ -10,6 +10,9 @@ import compose from './compose';
  * Because middleware is potentially asynchronous, this should be the first
  * store enhancer in the composition chain.
  *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
  * @param {...Function} middlewares The middleware chain to be applied.
  * @returns {Function} A store enhancer applying the middleware.
  */

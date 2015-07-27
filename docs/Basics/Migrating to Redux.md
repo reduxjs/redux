@@ -3,7 +3,9 @@ Migrating to Redux
 
 #### From Flux Libraries
 
-[Reducer functions](../Reference/Glossary.md#reducers) capture “the essence” of Flux Stores, so it’s possible to gradually migrate an existing Flux project towards Redux, whether you are using [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [vanilla Flux](https://github.com/facebook/flux), or any other Flux library.
+[Reducer functions](../Reference/Glossary.md#reducer) capture “the essence” of Flux Stores, so it’s possible to gradually migrate an existing Flux project towards Redux, whether you are using [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [vanilla Flux](https://github.com/facebook/flux), or any other Flux library.
+
+It is also possible to do the reverse and migrate from Redux to any of these libraries following the same steps.
 
 Your process will look like this:
 
