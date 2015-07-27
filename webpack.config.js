@@ -46,7 +46,7 @@ module.exports = {
     ]
   },
   output: {
-    library: 'ReduxReact',
+    library: 'ReactRedux',
     libraryTarget: 'umd'
   },
   plugins: plugins,
