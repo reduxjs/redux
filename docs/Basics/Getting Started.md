@@ -181,7 +181,19 @@ import todos from '../reducers/todos';
 const store = createStore(todos);
 ```
 
-Usually you’ll have multiple reducers for different domains of data in your app. You can use the `combineReducers()` helper to combine multiple reducers into one:
+Usually you’ll have multiple reducers for different domains of data in your app. Consider the following reducers:
+
+```js
+export function todos(state, action) {
+  /* ... */
+}
+
+export function counter(state, action) {
+  /* ... */
+}
+```
+
+You can use the `combineReducers()` helper to combine multiple reducers into one:
 
 ```js
 import { createStore, combineReducers } from 'redux';
@@ -190,16 +202,7 @@ const reducer = combineReducers(reducers);
 const store = createStore(reducer);
 ```
 
-For example, if the object passed to `combineReducers()` looks like this:
-
-```js
-const reducers = {
-  todos: todoReducer,
-  counter: counterReducer
-};
-```
-
-It will create a reducer which produces a state object like this:
+It will create a reducer which produces a state object, whose keys are match those of your reducers:
 
 ```js
 const state = {
