@@ -99,6 +99,31 @@ If you’re coming from Flux, there is a single important difference you need to
 
 This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
+### Discussion
+
+Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack community.
+
+### Thanks
+
+* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
+* [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
+* [Developing ClojureScript with Figwheel](http://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
+* [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) for Hot Module Replacement;
+* [Flummox](https://github.com/acdlite/flummox) for teaching me to approach Flux without boilerplate or singletons;
+* [disto](https://github.com/threepointone/disto) for a proof of concept of hot reloadable Stores;
+* [NuclearJS](https://github.com/optimizely/nuclear-js) for proving this architecture can be performant;
+* [Om](https://github.com/omcljs/om) for popularizing the idea of a single state atom;
+* [Cycle](https://github.com/staltz/cycle) for showing how often a function is the best tool;
+* [React](https://github.com/facebook/react) for the pragmatic innovation.
+
+Special thanks to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
+
 ### License
 
 MIT
+
+<hr>
+
+[![build status](https://img.shields.io/travis/gaearon/redux/master.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
+[![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
+[![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
