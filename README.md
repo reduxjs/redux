@@ -8,6 +8,26 @@ It helps you write applications that behave consistently, run in different envir
 You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.  
 It is tiny (2kB) and has no dependencies.
 
+### Testimonials
+
+>[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)  
+>Jing Chen, creator of Flux
+
+>[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
+>Bill Fisher, creator of Flux
+
+>[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
+>André Staltz, creator of Cycle
+
+### Developer Experience
+
+I wrote Redux while working on my React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). My goal was to create a state management library with minimal API but completely predictable behavior, so it is possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
+
+### Influences
+
+Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](http://elm-lang.org/guide/architecture).  
+Whether you used them or not, Redux takes a few minutes to get started with.
+
 ### Installation
 
 ```
@@ -20,26 +40,6 @@ Most likely, you’ll also need [the React bindings](http://github.com/gaearon/r
 npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
-
-### Influences
-
-Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](http://elm-lang.org/guide/architecture).  
-Whether you used them or not, Redux takes a few minutes to get started with.
-
-### Developer Experience
-
-I wrote Redux while working on my React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). My goal was to create a state management library with minimal API but completely predictable behavior, so it is possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
-
-### Testimonials
-
->[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)  
->Jing Chen, creator of Flux
-
->[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
->Bill Fisher, creator of Flux
-
->[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
->André Staltz, creator of Cycle
 
 ### The Gist
 
