@@ -12,11 +12,11 @@ To create it, pass your root reducer function to [`createStore`](createStore.md)
 
 ### Store Methods
 
-- [`getState`](#getState)
-- [`dispatch`](#dispatch)
-- [`subscribe`](#subscribe)
-- [`getReducer`](#getReducer)
-- [`replaceReducer`](#replaceReducer)
+- [`getState()`](#getState)
+- [`dispatch(action)`](#dispatch)
+- [`subscribe(listener)`](#subscribe)
+- [`getReducer()`](#getReducer)
+- [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store Methods
 
@@ -27,7 +27,7 @@ It corresponds to the last value returned by the store’s reducer.
 
 #### Returns
 
-*(any)* The current state tree of your application. Its shape depends on what your reducer returns.
+*(any)*: The current state tree of your application. Its shape depends on what your reducer returns.
 
 <hr>
 
@@ -43,7 +43,7 @@ The store’s reducer function will be called with the current [`getState()`](#g
 
 #### Returns
 
-(Object<sup>†</sup>) The dispatched action.
+(Object<sup>†</sup>): The dispatched action.
 
 #### Notes
 
@@ -142,7 +142,7 @@ To unsubscribe the change listener, invoke the function returned by `subscribe`.
 
 ##### Returns
 
-(*Function*) A function that unsubscribes the change listener.
+(*Function*): A function that unsubscribes the change listener.
 
 ##### Example
 
@@ -175,7 +175,7 @@ It is an advanced API. You might only need this if you implement a hot reloading
 
 #### Returns
 
-(*Function*) The store’s current reducer.
+(*Function*): The store’s current reducer.
 
 <hr>
 

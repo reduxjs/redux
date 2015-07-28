@@ -11,7 +11,7 @@ There should only be a single store in your app.
 
 #### Returns
 
-([*`Store`*](Store.md)) An object that holds the complete state of your app, lets you change it by dispatching actions, and subscribe to the changes.
+([*`Store`*](Store.md)): An object that holds the complete state of your app, lets you change it by dispatching actions, and subscribe to the changes.
 
 #### Example
 
