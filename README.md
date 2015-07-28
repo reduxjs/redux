@@ -93,11 +93,11 @@ store.dispatch({ type: 'DECREMENT' });
 // 1
 ```
 
-Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. A special function called a *reducer* specifies how each action transforms the internal state.
+Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. Then you write a special function called a *reducer* to decide how every action transforms the entire application’s state.
 
-An important difference from Flux is that Redux doesn’t have a Dispatcher or many stores. Instead, there is just a single store and a single root reducer function. As your app grows, you can split it into many functions operating on different parts of the state tree. Just like there is a single root component in a React app, there is a single root reducer in a Redux app, but you can compose it out of smaller reducers.
+If you’re coming from Flux, there is a single important difference you need to understand. Redux doesn’t have a Dispatcher or support many stores. Instead, there is just a single store with a single root reducer function. As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. This is exactly like there is just one root component in a React app, but it is composed out of many small components.
 
-This might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
+This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
 ### License
 
