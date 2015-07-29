@@ -1,9 +1,9 @@
 # `combineReducers(reducers)`
 
-As your app grows more complex, you’ll want to split your reducer function into separate different functions managing independent parts of the state.
+As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate different functions managing independent parts of the [state](../Glossary.md#state).
 
-This helper turns an object whose values are different reducer functions into a single
-reducer function you can pass to [`createStore`](createStore.md).
+This helper turns an object whose values are different reducing functions into a single
+reducing function you can pass to [`createStore`](createStore.md).
 
 The resulting reducer calls every child reducer, and gather their results into a single state object. The shape of the state object matches the keys of the passed `reducers`.
 
@@ -13,7 +13,7 @@ The resulting reducer calls every child reducer, and gather their results into a
 
 #### Arguments
 
-1. `reducer` (*Object*): An object whose values correspond to different reducer functions that need to be combined into one. One handy way to obtain it is to use ES6 `import * as reducers` syntax, but you can also construct this object manually. See the notes below for some rules every passed reducer must follow.
+1. `reducer` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. One handy way to obtain it is to use ES6 `import * as reducers` syntax, but you can also construct this object manually. See the notes below for some rules every passed reducer must follow.
 
 #### Returns
 
@@ -92,6 +92,6 @@ console.log(store.getState());
 
 #### Tips
 
-* This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducer function explicitly, like you would write any other function.
+* This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
 
 * You may call `combineReducers` at any level of the reducer hierarchy. It doesn’t have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.

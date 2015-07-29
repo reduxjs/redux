@@ -1,14 +1,14 @@
 # Store
 
-A store holds the whole state tree of your application.  
-The only way to change the state inside it is to dispatch an action on it.  
+A store holds the whole [state tree](../Glossary.md#state) of your application.  
+The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.  
 
 A store is not a class. It’s just an object with a few methods on it.  
-To create it, pass your root reducer function to [`createStore`](createStore.md).
+To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
 
 >##### A Note for Flux Users
 
->If you’re coming from Flux, there is a single important difference you need to understand. Redux doesn’t have a Dispatcher or support many stores. **Instead, there is just a single store with a single root reducer function.** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
+>If you’re coming from Flux, there is a single important difference you need to understand. Redux doesn’t have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
 
 ### Store Methods
 
@@ -35,7 +35,7 @@ It is equal to the last value returned by the store’s reducer.
 
 Dispatches an action. This is the only way to trigger a state change.
 
-The store’s reducer function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
+The store’s reducing function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
 
 #### Arguments
 
@@ -47,11 +47,13 @@ The store’s reducer function will be called with the current [`getState()`](#g
 
 #### Notes
 
-<sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer. However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for asynchronous primitives like Promises, Observables, thunks, or anything else.
+<sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
+
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispathing [intents](../Glossary.md#intent). Intents are usually asynchronous primitives like Promises, Observables, or thunks.
 
 Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
 
-To learn how to describe asynchronous API calls, read the current state inside action creators, or chain them to execute in a sequence, see the examples for [`applyMiddleware`](applyMiddleware.md).
+To learn how to describe asynchronous API calls, read the current state inside action creators, perform side effects, or chain them to execute in a sequence, see the examples for [`applyMiddleware`](applyMiddleware.md).
 
 #### Example
 

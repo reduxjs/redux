@@ -3,7 +3,7 @@
 Composes functions from left to right.
 
 This is a functional programming utility, and is included in Redux as convenience.  
-You might want to use it to apply several store enhancers in a row.
+You might want to use it to apply several [store enhancers](../Glossary.md#store-enhancer) in a row.
 
 #### Arguments
 

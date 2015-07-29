@@ -2,7 +2,9 @@
 
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store’s [`dispatch`](Store.md#dispatch) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of the what comes before or after it in the chain.
 
-The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). For example, [redux-thunk](https://github.com/gaearon/redux-thunk) lets the action creators invert control by dispatching functions that receive [`dispatch`](Store.md#dispatch) as an argument and may call it asynchronously. Another example of middleware is [redux-promise](https://github.com/acdlite/redux-promise) that lets you dispatch a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise), and dispatches a raw action itself when the Promise resolves.
+The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [intents](../Glossary.md#intent) in addition to actions.
+
+For example, [redux-thunk](https://github.com/gaearon/redux-thunk) lets the action creators invert control by dispatching functions that receive [`dispatch`](Store.md#dispatch) as an argument and may call it asynchronously. These functions are called *thunks*. Another example of middleware is [redux-promise](https://github.com/acdlite/redux-promise) that lets you dispatch a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) intent, which translated into a raw action when the Promise resolves.
 
 Middleware is not baked into [`createStore`](createStore.md) and is not a fundamental part of the Redux architecture, but we consider it useful enough to be supported right in the core. This way, there is a single standard way to extend [`dispatch`](Store.md#dispatch) in the ecosystem, and different middleware may compete in expressiveness and utility.
 
@@ -19,7 +21,13 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 ```js
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import sandwichShop from './reducers';
+import sandwhiches from './reducers';
+
+// applyMiddleware supercharges createStore with middleware:
+let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+
+// We can use it exactly like “vanilla” createStore.
+let store = createStoreWithMiddleware(sandwhiches);
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce');
@@ -53,42 +61,66 @@ function withdrawMoney(amount) {
   };
 }
 
-// A “thunk” is just a function that returns a function.
+// Even without a middleware, you can dispatch an action:
+store.dispatch(withdrawMoney(100));
 
-// Thunk middleware lets us dispatch functions in addition to plain objects.
-// It inverts the control by giving `dispatch` as an argument to our actions.
-// This gives action creators full control over when and what to dispatch.
+// But what do you do when you need to start an asynchronous action,
+// such as an API call, or a router transition?
 
-// In the end, plain object actions will be dispatched anyway,
-// but thunk middleware helps us express the control flow before this happens.
+// Meet thunks.
+// A thunk is a function that returns a function.
+// This is a thunk.
 
 function makeASandwichWithSecretSauce(forPerson) {
+
+  // Invert control!
+  // Return a function that accepts `dispatch` so we can dispatch later.
+  // Thunk middleware knows how to turn thunk intents into actions.
+
   return function (dispatch) {
     return fetchSecretSauce().then(
-      secretSauce => dispatch(makeASandwich(forPerson, secretSauce)),
+      sauce => dispatch(makeASandwich(forPerson, sauce)),
       error => dispatch(apologize('The Sandwhich Shop', forPerson, error))
     );
   };
 }
 
-// Note that makeASandwichWithSecretSauce returns a Promise.
-// Thunk middleware doesn’t have any special Promise support.
+// Thunk middleware let me dispatch thunk intents
+// as if they were actions!
 
-// However `dispatch` inside it returns the value from the thunk,
-// and we can use this fact to compose our asynchronous actions with Promises.
+store.dispatch(
+  makeASandwichWithSecretSauce('Me')
+);
+
+// It even takes care to return the thunk’s return value
+// from the dispatch, so I can chain Promises as long as I return them.
+
+store.dispatch(
+  makeASandwichWithSecretSauce('My wife')
+).then(() => {
+  console.log('Done!');
+});
+
+// In fact I can write action creators that dispatch
+// actions and intents from other action creators,
+// and I can build my control flow with Promises.
 
 function makeSandwhichesForEverybody() {
   return function (dispatch, getState) {
-    if (!getState().sandwichShop.isOpen) {
+    if (!getState().sandwhiches.isShopOpen) {
+
       // You don’t have to return Promises, but it’s a handy convention
       // so the caller can always call .then() on async dispatch result.
+
       return Promise.resolve();
     }
 
     // We can dispatch both plain object actions and other thunks,
     // which lets us compose the asynchronous actions in a single flow.
 
-    return dispatch(makeASandwichWithSecretSauce('My Grandma')).then(() =>
+    return dispatch(
+      makeASandwichWithSecretSauce('My Grandma')
+    ).then(() =>
       Promise.all([
         dispatch(makeASandwichWithSecretSauce('Me')),
         dispatch(makeASandwichWithSecretSauce('My wife'))
@@ -104,15 +136,47 @@ function makeSandwhichesForEverybody() {
   };
 }
 
-// applyMiddleware supercharges createStore with middleware:
-let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+// This is very useful for server rendering,
+// because I can wait to prefill the data before
+// sending synchronously rendering the app.
 
-// We can use it exactly like “vanilla” createStore.
-let store = createStoreWithMiddleware(sandwichShop);
-
-// Very useful for server rendering!
-store.dispatch(makeSandwhichesForEverybody()).then(() =>
+store.dispatch(
+  makeSandwhichesForEverybody()
+).then(() =>
   response.send(React.renderToString(<MyApp store={store} />))
+);
+
+// I can also dispatch a thunk intent from a component
+// any times its props change to load the missing data.
+
+import { connect } from 'react-redux';
+import { Component } from 'react';
+
+class SandwhichShop extends Component {
+  componentDidMount() {
+    this.props.dispatch(
+      makeASandwichWithSecretSauce(this.props.forPerson)
+    );
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.forPerson !== this.props.forPerson) {
+      this.props.dispatch(
+        makeASandwichWithSecretSauce(nextProps.forPerson)
+      );      
+    }
+  }
+
+  render() {
+    return <p>{this.props.sandwhiches.join('mustard')}</p>
+  }
+}
+
+export default connect(
+  SandwhichShop,
+  state => ({
+    sandwiches: state.sandwhiches
+  })
 );
 ```
 
@@ -156,6 +220,6 @@ store.dispatch({
 
 * If you use other store enhancers in addition to `applyMiddleware`, make sure to put `applyMiddleware` before them in the composition chain because the middleware is potentially asynchronous. For example, it should go before [redux-devtools](https://github.com/gaearon/redux-devtools) because otherwise the DevTools won’t see the raw actions emitted by the Promise middleware and such.
 
-* Ever wondered what `applyMiddleware` itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, `applyMiddleware` is an example of the most poweful Redux extension mechanism called *store enhancers*. It is highly unlikely you’ll ever want to write a store enhancer yourself. Another example of a store enhancer is [redux-devtools](https://github.com/gaearon/redux-devtools). Middleware is less powerful than a store enhancer, but it is easier to write.
+* Ever wondered what `applyMiddleware` itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, `applyMiddleware` is an example of the most poweful Redux extension mechanism called [store enhancers](../Glossary.md#store-enhancer). It is highly unlikely you’ll ever want to write a store enhancer yourself. Another example of a store enhancer is [redux-devtools](https://github.com/gaearon/redux-devtools). Middleware is less powerful than a store enhancer, but it is easier to write.
 
 * Middleware sounds much more complicated than it really is. The only way to really understand the middleware is to see how the existing middleware works, and try to write your own. The function nesting can be intimidating, but most of the middleware you’ll find are in fact 10-liners, and the nesting and composability is what makes the middleware system powerful.
