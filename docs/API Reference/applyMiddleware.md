@@ -21,19 +21,27 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import sandwichShop from './reducers';
 
-function makeASandwich(secretSauce, forPerson) {
+function makeASandwich(forPerson, secretSauce) {
   return {
     type: 'MAKE_SANDWHICH',
-    secretSauce,
-    forPerson
+    forPerson,
+    secretSauce
   };
 }
 
-function apologize(error, toPerson) {
+function apologize(fromPerson, toPerson, error) {
   return {
     type: 'APOLOGIZE',
+    fromPerson,
     toPerson,
     error
+  };
+}
+
+function withdrawMoney(amount) {
+  return {
+    type: 'WITHDRAW',
+    amount
   };
 }
 
@@ -42,33 +50,51 @@ function fetchSecretSauce() {
 }
 
 // Thunk middleware lets us dispatch functions in addition to plain objects.
-// Curiously, they will take `dispatch` as an argument.
+// It inverts the control by giving `dispatch` as an argument to our actions.
 // This gives action creators full control over when and what to dispatch.
+
+// In the end, plain object actions will be dispatched anyway,
+// but thunk middleware helps us express the control flow before this happens.
 
 function makeASandwichWithSecretSauce(forPerson) {
   return function (dispatch) {
     return fetchSecretSauce().then(
-      secretSauce => dispatch(makeASandwich(secretSauce, forPerson)),
-      error => dispatch(apologize(error, forPerson))
+      secretSauce => dispatch(makeASandwich(forPerson, secretSauce)),
+      error => dispatch(apologize('The Sandwhich Shop', forPerson, error))
     );
   };
 }
 
 // Note that makeASandwichWithSecretSauce returns a Promise.
 // Thunk middleware doesn’t have any special Promise support.
-// However `dispatch` inside it returns the value from the thunk.
-// This can be used to compose thunks into a larger flow.
+
+// However `dispatch` inside it returns the value from the thunk,
+// and we can use this fact to compose our asynchronous actions with Promises.
 
 function makeSandwhichesForEverybody() {
-  return function (dispatch) {
+  return function (dispatch, getState) {
+    if (!getState().sandwichShop.isOpen) {
+      // You don’t have to return Promises, but it’s a handy convention
+      // so the caller can always call .then() on async dispatch result.
+      return Promise.resolve();
+    }
+
+    // We we can dispatch both plain object actions and other thunks,
+    // which lets us compose the asynchronous actions in a single flow.
+
     return dispatch(makeASandwichWithSecretSauce('My Grandma')).then(() =>
       Promise.all([
         dispatch(makeASandwichWithSecretSauce('Me')),
         dispatch(makeASandwichWithSecretSauce('My wife'))
-      ]).then(() =>
-        dispatch(makeASandwich('Our kids'))
+      ])
+    ).then(() =>
+      dispatch(makeASandwichWithSecretSauce('Our kids'))
+    ).then(() =>
+      dispatch(getState().myMoney > 42 ?
+        withdrawMoney(42) :
+        apologize('Me', 'The Sandwich Shop')
       )
-    )
+    );
   };
 }
 
