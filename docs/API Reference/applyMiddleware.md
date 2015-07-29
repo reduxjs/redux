@@ -21,6 +21,14 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import sandwichShop from './reducers';
 
+function fetchSecretSauce() {
+  return fetch('https://www.google.com/search?q=secret+sauce');
+}
+
+// These are the normal action creators you have seen so far.
+// The actions they return can be dispatched without any middleware.
+// However, they only express “facts” and not the “async flow”.
+
 function makeASandwich(forPerson, secretSauce) {
   return {
     type: 'MAKE_SANDWHICH',
@@ -43,10 +51,6 @@ function withdrawMoney(amount) {
     type: 'WITHDRAW',
     amount
   };
-}
-
-function fetchSecretSauce() {
-  return fetch('https://www.google.com/search?q=secret+sauce');
 }
 
 // Thunk middleware lets us dispatch functions in addition to plain objects.
