@@ -53,6 +53,8 @@ function withdrawMoney(amount) {
   };
 }
 
+// A “thunk” is just a function that returns a function.
+
 // Thunk middleware lets us dispatch functions in addition to plain objects.
 // It inverts the control by giving `dispatch` as an argument to our actions.
 // This gives action creators full control over when and what to dispatch.
