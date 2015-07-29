@@ -1,3 +1,5 @@
+/* @flow */
+
 import createStore from './createStore';
 import combineReducers from './utils/combineReducers';
 import bindActionCreators from './utils/bindActionCreators';

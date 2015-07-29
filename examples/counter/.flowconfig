@@ -1,0 +1,13 @@
+[ignore]
+.*/node_modules/webpack/.*
+.*/node_modules/webpack-dev-server/.*
+.*/node_modules/redux/examples/.*
+.*/node_modules/redux/lib/.*
+
+[include]
+
+[libs]
+
+[options]
+module.system=node
+module.name_mapper='\(redux\)' -> '\1/src/index'
