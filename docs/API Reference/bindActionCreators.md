@@ -44,7 +44,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import * as TodoActionCreators from './TodoActionCreators';
-console.log(actionCreators);
+console.log(TodoActionCreators);
 // {
 //   addTodo: Function,
 //   removeTodo: function
@@ -73,7 +73,7 @@ class TodoListContainer extends Component {
     // Here’s a good use case for bindActionCreators:
     // You want a child component to be completely unaware of Redux.
 
-    let boundActionCreators = bindActionCreators(actionCreators, dispatch);
+    let boundActionCreators = bindActionCreators(TodoActionCreators, dispatch);
     console.log(boundActionCreators);
     // {
     //   addTodo: Function,
