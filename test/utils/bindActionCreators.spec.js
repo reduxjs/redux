@@ -26,4 +26,15 @@ describe('bindActionCreators', () => {
       { id: 1, text: 'Hello' }
     ]);
   });
+
+  it('should support wrapping a single function only', () => {
+    const actionCreator = actionCreators.addTodo;
+    const boundActionCreator = bindActionCreators(actionCreator, store.dispatch);
+
+    const action = boundActionCreator('Hello');
+    expect(action).toEqual(actionCreator('Hello'));
+    expect(store.getState()).toEqual([
+      { id: 1, text: 'Hello' }
+    ]);
+  });
 });

@@ -6,6 +6,7 @@ _**WIP**_
   * Website
   * Flow annotations
   * Tutorial
+  * API
   * Glossary
 * “Official” middleware and utilities
   * Async
