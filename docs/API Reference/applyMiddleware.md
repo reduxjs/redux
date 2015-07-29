@@ -85,7 +85,7 @@ function makeSandwhichesForEverybody() {
       return Promise.resolve();
     }
 
-    // We we can dispatch both plain object actions and other thunks,
+    // We can dispatch both plain object actions and other thunks,
     // which lets us compose the asynchronous actions in a single flow.
 
     return dispatch(makeASandwichWithSecretSauce('My Grandma')).then(() =>
