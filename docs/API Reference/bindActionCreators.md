@@ -30,8 +30,8 @@ export function addTodo(text) {
 
 export function removeTodo(id) {
   return {
-  	type: 'REMOVE_TODO',
-  	id
+    type: 'REMOVE_TODO',
+    id
   };
 }
 ```
@@ -66,7 +66,7 @@ class TodoListContainer extends Component {
     dispatch(action);
   }
 
-	render() {
+  render() {
     // Injected by react-redux:
     let { todos, dispatch } = this.props;
 
