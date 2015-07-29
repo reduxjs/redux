@@ -15,10 +15,11 @@
     "build": "npm run build:lib && npm run build:umd",
     "preversion": "npm run clean && npm run check",
     "version": "npm run build",
-    "postversion": "git push && git push --tags && npm run clean",
+    "postversion": "git push && git push --tags && npm run clean && npm run docs:publish",
     "prepublish": "npm run clean && npm run build",
     "docs:build": "gitbook build",
-    "docs:watch": "gitbook serve"
+    "docs:watch": "gitbook serve",
+    "docs:publish": "gitbook build -g gaearon/redux && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:gaearon/redux gh-pages --force"
   },
   "repository": {
     "type": "git",
