@@ -6,4 +6,5 @@
   * [combineReducers](docs/API Reference/combineReducers.md)
   * [applyMiddleware](docs/API Reference/applyMiddleware.md)
   * [bindActionCreators](docs/API Reference/bindActionCreators.md)
+  * [compose](docs/API Reference/compose.md)
 * [Glossary](docs/Glossary.md)

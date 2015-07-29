@@ -10,6 +10,7 @@ This file documents the complete Redux API. Keep in mind that Redux is only conc
 * [combineReducers(reducers)](combineReducers.md)
 * [applyMiddleware(...middlewares)](applyMiddleware.md)
 * [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
+* [compose(...functions)](compose.md)
 
 ### Store API
 
