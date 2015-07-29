@@ -8,6 +8,7 @@ This file documents the complete Redux API. Keep in mind that Redux is only conc
 
 * [createStore(reducer, [initialState])](createStore.md)
 * [combineReducers(reducers)](combineReducers.md)
+* [applyMiddleware(middlewares)](applyMiddleware.md)
 
 ### Store API
 
