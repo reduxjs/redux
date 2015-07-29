@@ -22,7 +22,10 @@ What is `applyMiddleware`, then? It ought to be an extension mechanism more powe
 import { createStore, applyMiddleware } from 'redux';
 import todos from './reducers';
 
-// Our custom logger middleware.
+// We can import some existing middleware.
+import thunk from 'redux-thunk';
+
+// Or we can write our custom logger middleware.
 function logger({ getState }) {
   return (next) => (action) => {
     console.log('will dispatch', action);
@@ -32,7 +35,10 @@ function logger({ getState }) {
   };
 }
 
-let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
+// applyMiddleware returns a function with the same signature as createStore.
+let createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
+
+// We use it just like we’d use vanilla createStore.
 let store = createStoreWithMiddleware(todos, ['Use Redux']);
 
 store.dispatch({
