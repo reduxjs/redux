@@ -1,41 +1,44 @@
 import expect from 'expect';
-import { bindActionCreators } from 'redux';
-import createCounterStore from '../../store/createCounterStore';
-import * as CounterActions from '../../actions/CounterActions';
+import * as actions from '../../actions/CounterActions';
+import * as types from '../../constants/ActionTypes';
 
 describe('actions', () => {
-  let store;
-  let actions;
 
-  beforeEach(() => {
-    store = createCounterStore();
-    actions = bindActionCreators(CounterActions, store.dispatch);
+  it('increment should create increment action', () => {
+    expect(actions.increment()).toEqual({ type: types.INCREMENT_COUNTER });
   });
 
-  it('increment', () => {
-    actions.increment();
-    expect(store.getState().counter).toBe(1);
+  it('decrement should create descrement action', () => {
+    expect(actions.decrement()).toEqual({ type: types.DECREMENT_COUNTER });
   });
 
-  it('decrement', () => {
-    actions.decrement();
-    expect(store.getState().counter).toBe(-1);
+  it('incrementIfOdd should create increment action', () => {
+    let fn = actions.incrementIfOdd();
+    expect(fn).toBeA('function');
+    let dispatch = expect.createSpy();
+    let getState = () => ({ counter: 1 });
+    fn(dispatch, getState);
+    expect(dispatch).toHaveBeenCalledWith({ type: types.INCREMENT_COUNTER });
   });
 
-  it('incrementIfOdd', () => {
-    actions.incrementIfOdd();
-    expect(store.getState().counter).toBe(0);
-    actions.increment();
-    actions.incrementIfOdd();
-    expect(store.getState().counter).toBe(2);
+  it('incrementIfOdd shouldnt create increment action if counter is even', () => {
+    let fn = actions.incrementIfOdd();
+    let dispatch = expect.createSpy();
+    let getState = () => ({ counter: 2 });
+    fn(dispatch, getState);
+    expect(dispatch.calls.length).toBe(0);
   });
 
+  // There's no nice way to test this at the moment...
   it('incrementAsync', (done) => {
-    store.subscribe(() => {
-      expect(store.getState().counter).toBe(1);
+    let fn = actions.incrementAsync(1);
+    expect(fn).toBeA('function');
+    let dispatch = expect.createSpy();
+    fn(dispatch);
+    setTimeout(() => {
+      expect(dispatch).toHaveBeenCalledWith({ type: types.INCREMENT_COUNTER });
       done();
-    });
-    actions.incrementAsync(1);
+    }, 5);
   });
 });
 
