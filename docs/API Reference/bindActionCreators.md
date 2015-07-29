@@ -94,7 +94,7 @@ class TodoListContainer extends Component {
 }
 
 export default connect(
-  SomeComponentAwareOfRedux,
+  TodoListContainer,
   state => ({ todos: state.todos })
 )
 ```
