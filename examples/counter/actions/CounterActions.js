@@ -24,10 +24,10 @@ export function incrementIfOdd() {
   };
 }
 
-export function incrementAsync() {
+export function incrementAsync(delay=1000) {
   return dispatch => {
     setTimeout(() => {
       dispatch(increment());
-    }, 1000);
+    }, delay);
   };
 }
