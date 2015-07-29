@@ -23,11 +23,11 @@ To create it, pass your root reducer function to [`createStore`](createStore.md)
 ### <a id='getState'></a>[`getState()`](#getState)
 
 Returns the current state tree of your application.  
-It corresponds to the last value returned by the store’s reducer.
+It is equal to the last value returned by the store’s reducer.
 
 #### Returns
 
-*(any)*: The current state tree of your application. Its shape depends on what your reducer returns.
+*(any)*: The current state tree of your application.
 
 <hr>
 
@@ -35,7 +35,7 @@ It corresponds to the last value returned by the store’s reducer.
 
 Dispatches an action. This is the only way to trigger a state change.
 
-The store’s reducer function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
+The store’s reducer function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
 
 #### Arguments
 
@@ -47,7 +47,11 @@ The store’s reducer function will be called with the current [`getState()`](#g
 
 #### Notes
 
-<sup>†</sup> [Applying the middleware](applyMiddleware.md) may allow you to dispatch something other than plain objects. For example, there is a middleware that lets you dispatch a [Promise](https://github.com/acdlite/redux-promise), or a [thunk](https://github.com/gaearon/redux-thunk). The return value of the `dispatch` method can also be altered by the middleware. For example, it might return a Promise so the caller can wait for completion. This is especially useful for universal apps that run on the server, because this lets you wait for the `dispatch` calls to finish before rendering the app.
+<sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer. However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for asynchronous primitives like Promises, Observables, thunks, or anything else.
+
+Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
+
+To learn how to describe asynchronous API calls, read the current state inside action creators, or chain them to execute in a sequence, see the examples for [`applyMiddleware`](applyMiddleware.md).
 
 #### Example
 
@@ -65,66 +69,6 @@ function addTodo(text) {
 store.dispatch(addTodo('Read the docs'));
 store.dispatch(addTodo('Read about the middleware'));
 ```
-
-#### Dispatch Asynchronous Actions with Middleware
-
-The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer. However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for asynchronous primitives like promises, observables, thunks, or anything else.
-
-The middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware. Below is an example of using `redux-thunk` for dispatching actions asynchronously and waiting for them to complete.
-
-```js
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-
-let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-let store = createStoreWithMiddleware(todos);
-
-function addTodoAsync(text) {
-
-  // When redux-thunk middleware sees an attempt to dispatch a function,
-  // it inverts the control by giving `dispatch` to it.
-
-  return function (dispatch) {
-
-    // Dispatch an initial action so we can show a spinner
-    // or perform an optimistic update.
-
-    dispatch({
-      type: 'ADD_TODO',
-      readyState: 'request',
-      text
-    });
-
-    // We can return a promise, and
-    // redux-thunk will return it to the caller.
-
-    return postJSON('/api/todos', { text }).then(
-      response => dispatch({
-        type: 'ADD_TODO',
-        readyState: 'success',
-        response
-      }),
-      error => dispatch({
-        type: 'ADD_TODO',
-        readyState: 'failure',
-        error
-      })
-    );
-  };
-}
-
-// Delay server rendering until
-// the initial actions complete.
-
-Promise.all([
-  store.dispatch(addTodoAsync('Learn to use middleware')),
-  store.dispatch(addTodoAsync('Write your own middleware'))
-]).then(() => {
-  response.send(React.renderToString(<MyApp store={store} />));
-});
-```
-
-If many action creators in your app begin to look like this and you want to reduce the amount of boilerplate, consider using [redux-promise](https://github.com/acdlite/redux-promise) together with [redux-actions](https://github.com/acdlite/redux-actions), or even [writing your own async middleware](https://github.com/gaearon/redux/issues/99).
 
 <hr>
 
@@ -169,6 +113,11 @@ handleChange();
 
 ### <a id='getReducer'></a>[`getReducer()`](#getReducer)
 
+>##### Deprecated
+
+>This API has been [deprecated](https://github.com/gaearon/redux/issues/350).  
+>It will be removed when we find a better solution for this problem.
+
 Returns the reducer currently used by the store to calculate the state.
 
 It is an advanced API. You might only need this if you implement a hot reloading mechanism for Redux.
@@ -180,6 +129,11 @@ It is an advanced API. You might only need this if you implement a hot reloading
 <hr>
 
 ### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
+
+>##### Deprecated
+
+>This API has been [deprecated](https://github.com/gaearon/redux/issues/350).  
+>It will be removed when we find a better solution for this problem.
 
 Replaces the reducer currently used by the store to calculate the state.
 

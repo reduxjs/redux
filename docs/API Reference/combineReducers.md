@@ -17,7 +17,7 @@ The resulting reducer calls every child reducer, and gather their results into a
 
 #### Returns
 
-(*Function*): A reducer that that invokes every reducer inside the passed object, and constructs a state object with the same shape.
+(*Function*): A reducer that that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
 
 #### Notes
 
@@ -29,9 +29,9 @@ Any reducer passed to `combineReducers` must satisfy these rules:
 
 * It may never return `undefined`. It is too easy to do this by mistake via an early `return` statement, so `combineReducers` throws if you do that instead of letting the error manifest itself somewhere else.
 
-* If the `state` given to it is `undefined`, it must return an initial state. According to the previous rule, the initial state must not be `undefined` either. It is handy to to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
+* If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
 
-While `combineReducers` attempts to check that your reducers conform to these rules, you should remember them, and do your best to follow them.
+While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them.
 
 #### Example
 
@@ -92,6 +92,6 @@ console.log(store.getState());
 
 #### Tips
 
-* This helper is just a convenience! You can write your own `combineReducers` that works differently, or even assemble the state object from the child reducers manually and write your root reducer explicitly, like any other function.
+* This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducer function explicitly, like you would write any other function.
 
-* Don’t forget that you can call `combineReducers` at any level of the reducer hierarchy. It doesn’t have to happen at the top. In fact you can use it inside any reducer when it gets too complicated and you want to split it into independent parts.
+* You may call `combineReducers` at any level of the reducer hierarchy. It doesn’t have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.
