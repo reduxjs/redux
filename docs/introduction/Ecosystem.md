@@ -16,6 +16,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-thunk](http://github.com/gaearon/redux-thunk) — The easiest way to write async action creators
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
+* [redux-batched-updates](https://github.com/acdlite/redux-batched-updates) — Batch React updates that occur as a result of Redux dispatches
 
 ## Libraries
 
