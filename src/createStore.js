@@ -95,18 +95,19 @@ export default function createStore(reducer, initialState) {
     );
     invariant(
       !isDispatching,
-      'Cannot dispatch in the middle of a dispatch.'
+      'Cannot dispatch in the middle of reducer call.'
     );
 
     isDispatching = true;
 
     try {
       currentState = currentReducer(currentState, action);
-      listeners.forEach(listener => listener());
     } finally {
       isDispatching = false;
-      return action;
     }
+
+    listeners.forEach(listener => listener());
+    return action;
   }
 
   /**

@@ -10,6 +10,7 @@ export default class Counter extends Component {
 
   render() {
     const { increment, incrementIfOdd, decrement, counter } = this.props;
+    console.log(counter)
     return (
       <p>
         Clicked: {counter} times
