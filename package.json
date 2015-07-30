@@ -12,6 +12,7 @@
     "check": "npm run lint && npm run test",
     "build:lib": "babel src --out-dir lib",
     "build:umd": "webpack src/index.js dist/redux.js && NODE_ENV=production webpack src/index.js dist/redux.min.js",
+    "build:examples": "babel-node examples/buildAll.js",
     "build": "npm run build:lib && npm run build:umd",
     "preversion": "npm run clean && npm run check",
     "version": "npm run build",
