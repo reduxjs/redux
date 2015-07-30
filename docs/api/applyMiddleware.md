@@ -27,7 +27,7 @@ import sandwiches from './reducers';
 let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 // We can use it exactly like “vanilla” createStore.
-let store = createStoreWithMiddleware(sandhiches);
+let store = createStoreWithMiddleware(sandwiches);
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce');
