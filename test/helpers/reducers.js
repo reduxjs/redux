@@ -1,4 +1,4 @@
-import { ADD_TODO } from './actionTypes';
+import { ADD_TODO, BAD_TODO, BAD_TODO_ERROR } from './actionTypes';
 
 
 function id(state = []) {
@@ -26,6 +26,25 @@ export function todosReverse(state = [], action) {
       id: id(state),
       text: action.text
     }, ...state];
+  default:
+    return state;
+  }
+}
+
+export function antipatternTodo(state = [], action) {
+  switch (action.type) {
+  case BAD_TODO:
+    action.boundDispatchFn();
+    return state;
+  default:
+    return state;
+  }
+}
+
+export function antipatternTodoWithError(state = [], action) {
+  switch (action.type) {
+  case BAD_TODO_ERROR:
+    throw new Error();
   default:
     return state;
   }
