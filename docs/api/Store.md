@@ -1,9 +1,9 @@
 # Store
 
-A store holds the whole [state tree](../Glossary.md#state) of your application.  
-The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.  
+A store holds the whole [state tree](../Glossary.md#state) of your application.
+The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.
 
-A store is not a class. It’s just an object with a few methods on it.  
+A store is not a class. It’s just an object with a few methods on it.
 To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
 
 >##### A Note for Flux Users
@@ -22,7 +22,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 
 ### <a id='getState'></a>[`getState()`](#getState)
 
-Returns the current state tree of your application.  
+Returns the current state tree of your application.
 It is equal to the last value returned by the store’s reducer.
 
 #### Returns
@@ -49,7 +49,7 @@ The store’s reducing function will be called with the current [`getState()`](#
 
 <sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
 
-However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispathing [intents](../Glossary.md#intent). Intents are usually asynchronous primitives like Promises, Observables, or thunks.
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [intents](../Glossary.md#intent). Intents are usually asynchronous primitives like Promises, Observables, or thunks.
 
 Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
 
@@ -101,7 +101,7 @@ let currentValue;
 function handleChange() {
   let previousValue = currentValue;
   currentValue = select(store.getState());
-  
+
   if (previousValue !== currentValue) {
     console.log('Some deep nested property changed from', previousValue, 'to', currentValue);
   }
@@ -117,7 +117,7 @@ handleChange();
 
 >##### Deprecated
 
->This API has been [deprecated](https://github.com/gaearon/redux/issues/350).  
+>This API has been [deprecated](https://github.com/gaearon/redux/issues/350).
 >It will be removed when we find a better solution for this problem.
 
 Returns the reducer currently used by the store to calculate the state.
@@ -134,7 +134,7 @@ It is an advanced API. You might only need this if you implement a hot reloading
 
 >##### Deprecated
 
->This API has been [deprecated](https://github.com/gaearon/redux/issues/350).  
+>This API has been [deprecated](https://github.com/gaearon/redux/issues/350).
 >It will be removed when we find a better solution for this problem.
 
 Replaces the reducer currently used by the store to calculate the state.

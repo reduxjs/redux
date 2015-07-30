@@ -17,7 +17,7 @@ The resulting reducer calls every child reducer, and gather their results into a
 
 #### Returns
 
-(*Function*): A reducer that that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
+(*Function*): A reducer that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
 
 #### Notes
 

@@ -47,7 +47,7 @@ import * as TodoActionCreators from './TodoActionCreators';
 console.log(TodoActionCreators);
 // {
 //   addTodo: Function,
-//   removeTodo: function
+//   removeTodo: Function
 // }
 
 class TodoListContainer extends Component {

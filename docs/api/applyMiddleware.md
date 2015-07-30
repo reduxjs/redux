@@ -1,10 +1,10 @@
 # `applyMiddleware(...middlewares)`
 
-Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store’s [`dispatch`](Store.md#dispatch) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of the what comes before or after it in the chain.
+Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store’s [`dispatch`](Store.md#dispatch) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
 
-The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [intents](../Glossary.md#intent) in addition to actions.
+The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency or a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [intents](../Glossary.md#intent) in addition to actions.
 
-For example, [redux-thunk](https://github.com/gaearon/redux-thunk) lets the action creators invert control by dispatching functions that receive [`dispatch`](Store.md#dispatch) as an argument and may call it asynchronously. These functions are called *thunks*. Another example of middleware is [redux-promise](https://github.com/acdlite/redux-promise) that lets you dispatch a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) intent, which translated into a raw action when the Promise resolves.
+For example, [redux-thunk](https://github.com/gaearon/redux-thunk) lets the action creators invert control by dispatching functions that receive [`dispatch`](Store.md#dispatch) as an argument and may call it asynchronously. These functions are called *thunks*. Another example of middleware is [redux-promise](https://github.com/acdlite/redux-promise) that lets you dispatch a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) intent, which is translated into a raw action when the Promise resolves.
 
 Middleware is not baked into [`createStore`](createStore.md) and is not a fundamental part of the Redux architecture, but we consider it useful enough to be supported right in the core. This way, there is a single standard way to extend [`dispatch`](Store.md#dispatch) in the ecosystem, and different middleware may compete in expressiveness and utility.
 
@@ -21,13 +21,13 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 ```js
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import sandwhiches from './reducers';
+import sandwiches from './reducers';
 
 // applyMiddleware supercharges createStore with middleware:
 let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 // We can use it exactly like “vanilla” createStore.
-let store = createStoreWithMiddleware(sandwhiches);
+let store = createStoreWithMiddleware(sandhiches);
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce');
@@ -39,7 +39,7 @@ function fetchSecretSauce() {
 
 function makeASandwich(forPerson, secretSauce) {
   return {
-    type: 'MAKE_SANDWHICH',
+    type: 'MAKE_SANDWICH',
     forPerson,
     secretSauce
   };
@@ -80,7 +80,7 @@ function makeASandwichWithSecretSauce(forPerson) {
   return function (dispatch) {
     return fetchSecretSauce().then(
       sauce => dispatch(makeASandwich(forPerson, sauce)),
-      error => dispatch(apologize('The Sandwhich Shop', forPerson, error))
+      error => dispatch(apologize('The Sandwich Shop', forPerson, error))
     );
   };
 }
@@ -105,9 +105,9 @@ store.dispatch(
 // actions and intents from other action creators,
 // and I can build my control flow with Promises.
 
-function makeSandwhichesForEverybody() {
+function makeSandwichesForEverybody() {
   return function (dispatch, getState) {
-    if (!getState().sandwhiches.isShopOpen) {
+    if (!getState().sandwiches.isShopOpen) {
 
       // You don’t have to return Promises, but it’s a handy convention
       // so the caller can always call .then() on async dispatch result.
@@ -141,7 +141,7 @@ function makeSandwhichesForEverybody() {
 // sending synchronously rendering the app.
 
 store.dispatch(
-  makeSandwhichesForEverybody()
+  makeSandwichesForEverybody()
 ).then(() =>
   response.send(React.renderToString(<MyApp store={store} />))
 );
@@ -152,7 +152,7 @@ store.dispatch(
 import { connect } from 'react-redux';
 import { Component } from 'react';
 
-class SandwhichShop extends Component {
+class SandwichShop extends Component {
   componentDidMount() {
     this.props.dispatch(
       makeASandwichWithSecretSauce(this.props.forPerson)
@@ -163,19 +163,19 @@ class SandwhichShop extends Component {
     if (nextProps.forPerson !== this.props.forPerson) {
       this.props.dispatch(
         makeASandwichWithSecretSauce(nextProps.forPerson)
-      );      
+      );
     }
   }
 
   render() {
-    return <p>{this.props.sandwhiches.join('mustard')}</p>
+    return <p>{this.props.sandwiches.join('mustard')}</p>
   }
 }
 
 export default connect(
-  SandwhichShop,
+  SandwichShop,
   state => ({
-    sandwiches: state.sandwhiches
+    sandwiches: state.sandwiches
   })
 );
 ```
