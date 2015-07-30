@@ -60,7 +60,17 @@ function visibleTodoFilter(state = 'SHOW_ALL', action) {
 function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
-    return state.concat([action.text]);
+    return state.concat([{
+      text: action.text,
+      completed: false
+    }]);
+  case 'COMPLETE_TODO':
+    return state
+      .slice(0, action.index)
+      .concat([Object.assign({}, state[action.index], {
+        completed: true
+      })])
+      .concat(state.slice(action.index + 1))
   default:
     return state;
   }
