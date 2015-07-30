@@ -1,6 +1,6 @@
 import expect from 'expect';
 import { createStore, combineReducers } from '../src/index';
-import { addTodo } from './helpers/actionCreators';
+import { addTodo, badTodo, badTodoError } from './helpers/actionCreators';
 import * as reducers from './helpers/reducers';
 
 describe('createStore', () => {
@@ -253,5 +253,24 @@ describe('createStore', () => {
       foo: 1,
       bar: 2
     });
+  });
+
+  it('should not allow dispatch() from within a reducer', () => {
+    const store = createStore(reducers.antipatternTodo);
+
+    expect(() =>
+      store.dispatch(badTodo(::store.dispatch))
+    ).toThrow();
+  });
+
+  it.only('recovers from an error within a reducer', () => {
+    const store = createStore(reducers.antipatternTodoWithError);
+    expect(() =>
+      store.dispatch(badTodoError())
+    ).toThrow();
+
+    expect(() =>
+      store.dispatch({})
+    ).toNotThrow();
   });
 });

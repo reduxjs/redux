@@ -1,4 +1,4 @@
-import { ADD_TODO } from './actionTypes';
+import { ADD_TODO, BAD_TODO, BAD_TODO_ERROR } from './actionTypes';
 
 export function addTodo(text) {
   return { type: ADD_TODO, text };
@@ -16,5 +16,18 @@ export function addTodoIfEmpty(text) {
     if (!getState().length) {
       dispatch(addTodo(text));
     }
+  };
+}
+
+export function badTodo(boundDispatchFn) {
+  return {
+    type: BAD_TODO,
+    boundDispatchFn
+  };
+}
+
+export function badTodoError() {
+  return {
+    type: BAD_TODO_ERROR
   };
 }
