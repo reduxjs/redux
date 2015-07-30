@@ -21,6 +21,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ## Libraries
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
+* [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
 
 ## Developer Tools
 
