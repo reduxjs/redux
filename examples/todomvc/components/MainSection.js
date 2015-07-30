@@ -9,12 +9,7 @@ const TODO_FILTERS = {
   [SHOW_MARKED]: todo => todo.marked
 };
 
-export default class MainSection extends Component {
-  static propTypes = {
-    todos: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired
-  };
-
+class MainSection extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { filter: SHOW_ALL };
@@ -82,3 +77,10 @@ export default class MainSection extends Component {
     }
   }
 }
+
+MainSection.propTypes = {
+  todos: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
+};
+
+export default MainSection;
