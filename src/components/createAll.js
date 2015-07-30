@@ -3,6 +3,7 @@ import createProvideDecorator from './createProvideDecorator';
 
 import createConnector from './createConnector';
 import createConnectDecorator from './createConnectDecorator';
+import createConnectWrapper from './createConnectWrapper';
 
 export default function createAll(React) {
   // Wrapper components
@@ -11,7 +12,10 @@ export default function createAll(React) {
 
   // Higher-order components (decorators)
   const provide = createProvideDecorator(React, Provider);
-  const connect = createConnectDecorator(React, Connector);
+  const connectDecorate = createConnectDecorator(React, Connector);
+  const connect = createConnectWrapper(React);
 
-  return { Provider, Connector, provide, connect };
+  
+
+  return { Provider, Connector, provide, connectDecorate, connect };
 }

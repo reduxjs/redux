@@ -2,12 +2,14 @@ import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
 import { createStore } from 'redux';
-import { connect } from '../../src/index';
+import { connectDecorate, Connector } from '../../src/index';
+
+const connect = connectDecorate;
 
 const { TestUtils } = React.addons;
 
 describe('React', () => {
-  describe('connect', () => {
+  describe('connectDecorate', () => {
     jsdomReact();
 
     // Mock minimal Provider interface
@@ -46,7 +48,7 @@ describe('React', () => {
       expect(div.props.pass).toEqual('through');
       expect(div.props.foo).toEqual('bar');
       expect(() =>
-        TestUtils.findRenderedComponentWithType(container, Container)
+        TestUtils.findRenderedComponentWithType(container, Connector)
       ).toNotThrow();
     });
 
