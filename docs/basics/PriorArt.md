@@ -9,7 +9,7 @@ Can Redux be considered a [Flux](https://facebook.github.io/flux/) implementatio
 
 (Don’t worry, [Flux creators](https://twitter.com/jingc/status/616608251463909376) [approve of it](https://twitter.com/fisherwebdev/status/616286955693682688), if that’s all you wanted to know.)
 
-Redux was inspired by several important qualities of Flux. Like Flux, Redux prescribes you to concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called “action”.
+Redux was inspired by several important qualities of Flux. Like Flux, Redux prescribes that you concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called “action”.
 
 Unlike Flux, **Redux does not have a concept of Dispatcher**. This is because it relies on pure functions instead of event emitters, and pure functions are easy to compose and don’t need an additional entity managing them. Depending on how you view Flux, you may see this as a deviation or an implementation detail. Flux has often been [described as `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot). In this sense, Redux is true to the Flux architecture, but makes it simpler thanks to pure functions.
 
