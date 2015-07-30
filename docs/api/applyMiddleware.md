@@ -163,7 +163,7 @@ class SandwichShop extends Component {
     if (nextProps.forPerson !== this.props.forPerson) {
       this.props.dispatch(
         makeASandwichWithSecretSauce(nextProps.forPerson)
-      );
+      );      
     }
   }
 
