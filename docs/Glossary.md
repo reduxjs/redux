@@ -24,7 +24,7 @@ By convention, actions should have a `type` field that indicates the type of act
 
 Other than `type`, the structure of an action object is really up to you. If you’re interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions should be constructed.
 
-See also [intent](#intent) below.
+See also [async action](#async-action) below.
 
 ## Reducer
 
@@ -46,36 +46,36 @@ Reducers are the most important concept in Redux.
 
 ```js
 type BaseDispatch = (a: Action) => Action;
-type Dispatch = (a: Action | Intent) => any;
+type Dispatch = (a: Action | AsyncAction) => any;
 ```
 
-A *dispatching function* (or simply *dispatch function*) is a function that accepts an action or an [intent](#intent); it then may or may not dispatch one or more actions to the store.
+A *dispatching function* (or simply *dispatch function*) is a function that accepts an action or an [async action](#async-action); it then may or may not dispatch one or more actions to the store.
 
 We must distinguish between dispatching functions in general and the base [`dispatch`](api/Store.md#dispatch) function provided by the store instance without the middleware.
 
 The base dispatch function *always* synchronously sends an action to the store’s reducer, along with the previous state returned by the store, to calculate a new state. It expects actions to be plain objects ready to be consumed by the reducer.
 
-[Middleware](#middleware) wraps the base dispatch function. It allows the dispatch function to handle intents in addition to actions. Middleware may transform, delay, ignore, or otherwise interpret intents and actions before passing them to the next middleware. See below for more information.
+[Middleware](#middleware) wraps the base dispatch function. It allows the dispatch function to handle [async actions](#async-action) in addition to actions. Middleware may transform, delay, ignore, or otherwise interpret actions or async actions before passing them to the next middleware. See below for more information.
 
 ## Action Creator
 
 ```js
-type ActionCreator = (...args: any) => Action | Intent;
+type ActionCreator = (...args: any) => Action | AsyncAction;
 ```
 
 An *action creator* is, quite simply, a function that creates an action. Do not confuse the two terms—again, an action is a payload of information, and an action creator is a factory that creates them.
 
 Calling an action creator only produces an action, but does not dispatch it. You need to call the store’s [`dispatch`](api/Store.md#dispatch) function to actually cause the mutation. Sometimes we say *bound action creators* to mean functions that call an action creator and immediately dispatch its result to a specific store instance.
 
-If an action creator needs to read the current state, perform an API call, or a side effect like a routing transition, it should return an [intent](#intent) instead of an action.
+If an action creator needs to read the current state, perform an API call, or a side effect like a routing transition, it should return an [async action](#async-action) instead of an action.
 
-## Intent
+## Async Action
 
 ```js
-type Intent = any;
+type AsyncAction = any;
 ```
 
-An *intent* is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer. It will be transformed by middleware into an action (or a series of actions) before being sent to the base [`dispatch()`](api/Store.md#dispatch) function. Intents are often asynchronous primitives, like a Promise or a thunk, which are not dispatched themselves, but trigger dispatches once an operation has completed.
+An *async action* is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer. It will be transformed by [middleware](#middleware) into an action (or a series of actions) before being sent to the base [`dispatch()`](api/Store.md#dispatch) function. Async actions may have different types, depending on the middleware you use. They are often asynchronous primitives, like a Promise or a thunk, which are not passed to the reducer immediately, but trigger action dispatches once an operation has completed.
 
 ## Middleware
 
@@ -84,7 +84,7 @@ type MiddlewareAPI = { dispatch: Dispatch, getState: () => State };
 type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch;
 ```
 
-A middleware is a higher-order function that composes a dispatch function to return a new dispatch function. It often turns intents into actions.
+A middleware is a higher-order function that composes a [dispatch function](#dispatching-function) to return a new dispatch function. It often turns [async actions](#async-action) into actions.
 
 Middleware is composable using function composition. It is useful for logging actions, performing side effects like routing, or turning an asynchronous API call into a series of synchronous actions.
 
