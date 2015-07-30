@@ -1,4 +1,6 @@
 {
   "stage": 0,
-  "loose": "all"
+  "loose": "all",
+  "plugins": ["flow-comments"],
+  "blacklist": ["flow"]
 }
