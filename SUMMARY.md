@@ -1,9 +1,10 @@
 ## Summary
 
-* [Basics](/docs/basics/README.md)
-  * [Motivation](/docs/basics/Motivation.md)
-  * [Three Principles](/docs/basics/ThreePrinciples.md)
-  * [Prior Art](/docs/basics/PriorArt.md)
+* [Introduction](/docs/introduction/README.md)
+  * [Motivation](/docs/introduction/Motivation.md)
+  * [Three Principles](/docs/introduction/ThreePrinciples.md)
+  * [Prior Art](/docs/introduction/PriorArt.md)
+  * [Ecosystem](/docs/introduction/Ecosystem.md)
 * [API Reference](docs/api/README.md)
   * [createStore](docs/api/createStore.md)
   * [Store](docs/api/Store.md)
