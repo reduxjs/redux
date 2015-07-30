@@ -2,7 +2,7 @@
 
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store’s [`dispatch`](Store.md#dispatch) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
 
-The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency or a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [intents](../Glossary.md#intent) in addition to actions.
+The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [intents](../Glossary.md#intent) in addition to actions.
 
 For example, [redux-thunk](https://github.com/gaearon/redux-thunk) lets the action creators invert control by dispatching functions that receive [`dispatch`](Store.md#dispatch) as an argument and may call it asynchronously. These functions are called *thunks*. Another example of middleware is [redux-promise](https://github.com/acdlite/redux-promise) that lets you dispatch a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) intent, which is translated into a raw action when the Promise resolves.
 
@@ -163,7 +163,7 @@ class SandwichShop extends Component {
     if (nextProps.forPerson !== this.props.forPerson) {
       this.props.dispatch(
         makeASandwichWithSecretSauce(nextProps.forPerson)
-      );      
+      );
     }
   }
 
