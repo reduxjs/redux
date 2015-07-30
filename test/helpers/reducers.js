@@ -1,4 +1,4 @@
-import { ADD_TODO } from './actionTypes';
+import { ADD_TODO, DISPATCH_IN_MIDDLE, THROW_ERROR } from './actionTypes';
 
 
 function id(state = []) {
@@ -26,6 +26,25 @@ export function todosReverse(state = [], action) {
       id: id(state),
       text: action.text
     }, ...state];
+  default:
+    return state;
+  }
+}
+
+export function dispatchInTheMiddleOfReducer(state = [], action) {
+  switch (action.type) {
+  case DISPATCH_IN_MIDDLE:
+    action.boundDispatchFn();
+    return state;
+  default:
+    return state;
+  }
+}
+
+export function errorThrowingReducer(state = [], action) {
+  switch (action.type) {
+  case THROW_ERROR:
+    throw new Error();
   default:
     return state;
   }
