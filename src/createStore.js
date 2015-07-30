@@ -38,6 +38,7 @@ export default function createStore(reducer, initialState) {
   var currentReducer = reducer;
   var currentState = initialState;
   var listeners = [];
+  var isDispatching = false;
 
   /**
    * Reads the state tree managed by the store.
@@ -92,8 +93,19 @@ export default function createStore(reducer, initialState) {
       isPlainObject(action),
       'Actions must be plain objects. Use custom middleware for async actions.'
     );
+    invariant(
+      !isDispatching,
+      'Cannot dispatch in the middle of reducer call.'
+    );
 
-    currentState = currentReducer(currentState, action);
+    isDispatching = true;
+
+    try {
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
     listeners.forEach(listener => listener());
     return action;
   }
