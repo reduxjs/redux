@@ -114,8 +114,12 @@ export default function createConnectDecorator(React) {
         return merged;
       }
 
+      getUnderlyingRef() {
+        return this.underlyingRef;
+      }
+
       render() {
-        return <DecoratedComponent {...this.props} {...this.merge()} />;
+        return <DecoratedComponent ref={component => (this.underlyingRef = component)} {...this.props} {...this.merge()} />;
       }
     };
   };
