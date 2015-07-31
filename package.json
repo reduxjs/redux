@@ -52,7 +52,7 @@
     "eslint": "^0.23",
     "eslint-config-airbnb": "0.0.6",
     "eslint-plugin-react": "^2.3.0",
-    "expect": "^1.6.0",
+    "expect": "^1.8.0",
     "isparta": "^3.0.3",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
@@ -60,7 +60,8 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
-    "invariant": "^2.0.0"
+    "invariant": "^2.0.0",
+    "warning": "^2.0.0"
   },
   "npmName": "redux",
   "npmFileMap": [
