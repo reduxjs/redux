@@ -21,6 +21,7 @@
   * [Usage with React](/docs/recipes/UsageWithReact.md)
   * [Server Rendering](/docs/recipes/ServerRendering.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)
+* [Troubleshooting](docs/Troubleshooting.md)
 * [Glossary](docs/Glossary.md)
 * [API Reference](docs/api/README.md)
   * [createStore](docs/api/createStore.md)

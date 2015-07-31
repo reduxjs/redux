@@ -23,9 +23,10 @@ We will have some official examples with data fetching, universal rendering and 
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
 * [redux-batched-updates](https://github.com/acdlite/redux-batched-updates) — Batch React updates that occur as a result of Redux dispatches
 
-## Libraries
+## Utilities
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
+* [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
 
 ## Developer Tools
