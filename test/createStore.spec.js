@@ -1,6 +1,6 @@
 import expect from 'expect';
 import { createStore, combineReducers } from '../src/index';
-import { addTodo } from './helpers/actionCreators';
+import { addTodo, dispatchInMiddle, throwError } from './helpers/actionCreators';
 import * as reducers from './helpers/reducers';
 
 describe('createStore', () => {
@@ -253,5 +253,24 @@ describe('createStore', () => {
       foo: 1,
       bar: 2
     });
+  });
+
+  it('should not allow dispatch() from within a reducer', () => {
+    const store = createStore(reducers.dispatchInTheMiddleOfReducer);
+
+    expect(() =>
+      store.dispatch(dispatchInMiddle(store.dispatch.bind(store, {})))
+    ).toThrow(/may not dispatch/);
+  });
+
+  it('recovers from an error within a reducer', () => {
+    const store = createStore(reducers.errorThrowingReducer);
+    expect(() =>
+      store.dispatch(throwError())
+    ).toThrow();
+
+    expect(() =>
+      store.dispatch({})
+    ).toNotThrow();
   });
 });

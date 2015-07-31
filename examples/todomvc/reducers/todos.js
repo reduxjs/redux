@@ -23,21 +23,20 @@ export default function todos(state = initialState, action) {
   case EDIT_TODO:
     return state.map(todo =>
       todo.id === action.id ?
-        { ...todo, text: action.text } :
+        Object.assign({}, todo, { text: action.text }) :
         todo
     );
 
   case MARK_TODO:
     return state.map(todo =>
       todo.id === action.id ?
-        { ...todo, marked: !todo.marked } :
+        Object.assign({}, todo, { marked: !todo.marked }) :
         todo
     );
 
   case MARK_ALL:
     const areAllMarked = state.every(todo => todo.marked);
-    return state.map(todo => ({
-      ...todo,
+    return state.map(todo => Object.assign({}, todo, {
       marked: !areAllMarked
     }));
 
