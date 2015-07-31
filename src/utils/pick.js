@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * Picks key-value pairs from an object where values satisfy a predicate.
  *
@@ -5,7 +6,7 @@
  * @param {Function} fn The predicate the values must satisfy to be copied.
  * @returns {Object} The object with the values that satisfied the predicate.
  */
-export default function pick(obj, fn) {
+export default function pick<T>(obj: { [key: string]: T }, fn: (value: T) => bool) : { [key: string]: T } {
   return Object.keys(obj).reduce((result, key) => {
     if (fn(obj[key])) {
       result[key] = obj[key];
