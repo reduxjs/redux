@@ -81,13 +81,14 @@ using decorators:
 
 ```js
 import { bindActionCreators } from 'redux';
-import { connect, provide } from `react-redux';
+import { connect, provide } from 'react-redux';
 
 // store setup left out... see the Redux documentation for initializing action creators, reducers and the store.
 
 // Note: you do *not* have to `@provide` every component you `@connect`, but this abritrarily simple example only has
-one Smart Component at the top level. A more complete example may have a root level component that is only decorated
-with `@provide` and many smart components decorated with `@connect`.
+// one Smart Component at the top level. A more complete example may have a root level component that is only decorated
+// with `@provide` and many smart components decorated with `@connect`.
+
 @provide(store)
 @connect((state) => ({ counter: state.counter }))
 class CounterApp {
