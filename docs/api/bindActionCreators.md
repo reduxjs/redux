@@ -6,15 +6,17 @@ Normally you should just call [`dispatch`](Store.md#dispatch) directly on your [
 
 The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn’t aware of Redux, and you don’t want to pass [`dispatch`](Store.md#dispatch) or the Redux store to it.
 
+For convenience, you can also pass a single function as the first argument, and get a function in return.
+
 #### Parameters
 
-1. `actionCreators` (*Object*): An object whose values are functions returning actions.
+1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values action creators.
 
 2. `dispatch` (*Function*): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
 
 #### Returns
 
-(*Object*): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator.
+(*Function* or *Object*): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
 
 #### Example
 
