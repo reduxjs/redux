@@ -115,7 +115,7 @@ export default function createConnectDecorator(React) {
       }
 
       render() {
-        return <DecoratedComponent {...this.merge()} />;
+        return <DecoratedComponent {...this.props} {...this.merge()} />;
       }
     };
   };
