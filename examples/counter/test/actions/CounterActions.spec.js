@@ -8,7 +8,7 @@ describe('actions', () => {
     expect(actions.increment()).toEqual({ type: types.INCREMENT_COUNTER });
   });
 
-  it('decrement should create descrement action', () => {
+  it('decrement should create decrement action', () => {
     expect(actions.decrement()).toEqual({ type: types.DECREMENT_COUNTER });
   });
 
