@@ -10,7 +10,7 @@ const emptySelector = () => ({});
 
 const emptyBinder = () => ({});
 
-const identityMerge = (slice, actionsCreators, props) => ({...slice, ...actionsCreators, ...props});
+const identityMerge = (slice, actionsCreators, props) => ({ ...props, ...slice, ...actionsCreators});
 
 
 export default function createConnectDecorator(React) {
@@ -119,7 +119,7 @@ export default function createConnectDecorator(React) {
       }
 
       render() {
-        return <DecoratedComponent ref={component => (this.underlyingRef = component)} {...this.props} {...this.merge()} />;
+        return <DecoratedComponent ref={component => (this.underlyingRef = component)} {...this.merge()} />;
       }
     };
   };
