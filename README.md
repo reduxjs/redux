@@ -75,7 +75,7 @@ for this bug is to pass a function as the child which will then return the Compo
 
 ## Decorators
 
-ECMA Script 6 introduces a new syntactic feature called Decorators. `react-redux` comes with two decorators to simply
+ECMA Script 7 introduces a new syntactic feature called Decorators. `react-redux` comes with two decorators to simply
 creating smart components and providing the store at the top level. Here is the same example at the top of this document
 using decorators:
 
