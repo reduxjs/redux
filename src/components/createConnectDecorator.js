@@ -21,7 +21,7 @@ export default function createConnectDecorator(React) {
 
     const subscribing = select ? true : false;
     const selectState = select || emptySelector;
-    const bindActionCreators = isPlainObject(dispatchBinder) ? wrapActionCreators(dispatchBinder) : dispatchBinder;
+    const bindDispatch = isPlainObject(dispatchBinder) ? wrapActionCreators(dispatchBinder) : dispatchBinder;
     const merge = mergeHandler;
 
     return DecoratedComponent => class ConnectDecorator extends Component {
@@ -51,7 +51,7 @@ export default function createConnectDecorator(React) {
         super(props, context);
         this.state = {
           ...this.selectState(props, context),
-          ...this.bindActionCreators(context)
+          ...this.bindDispatch(context)
         };
       }
 
@@ -88,13 +88,13 @@ export default function createConnectDecorator(React) {
         return { slice };
       }
 
-      bindActionCreators(context = this.context) {
+      bindDispatch(context = this.context) {
         const { dispatch } = context.store;
-        const actionCreators = bindActionCreators(dispatch);
+        const actionCreators = bindDispatch(dispatch);
 
         invariant(
           isPlainObject(actionCreators),
-          'The return value of `bindActionCreators` prop must be an object. Instead received %s.',
+          'The return value of `bindDispatch` prop must be an object. Instead received %s.',
           actionCreators
         );
 
