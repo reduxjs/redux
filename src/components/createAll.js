@@ -2,7 +2,7 @@ import createProvider from './createProvider';
 import createProvideDecorator from './createProvideDecorator';
 
 import createConnector from './createConnector';
-import createConnectDecoratorOld from './createConnectDecoratorOld';
+import createConnectDecoratorDeprecated from './createConnectDecoratorDeprecated';
 import createConnectDecorator from './createConnectDecorator';
 
 export default function createAll(React) {
@@ -12,8 +12,8 @@ export default function createAll(React) {
 
   // Higher-order components (decorators)
   const provide = createProvideDecorator(React, Provider);
-  const connectDecoratorOld = createConnectDecoratorOld(React, Connector);
+  const connectDeprecated = createConnectDecoratorDeprecated(React, Connector);
   const connect = createConnectDecorator(React);
 
-  return { Provider, Connector, provide, connect, connectDecoratorOld };
+  return { Provider, Connector, provide, connect, connectDeprecated };
 }

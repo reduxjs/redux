@@ -2,9 +2,9 @@ import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
 import { createStore } from 'redux';
-import { connectDecoratorOld, Connector } from '../../src/index';
+import { connectDeprecated, Connector } from '../../src/index';
 
-const connect = connectDecoratorOld;
+const connect = connectDeprecated;
 
 const { TestUtils } = React.addons;
 
