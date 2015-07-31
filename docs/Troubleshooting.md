@@ -86,7 +86,29 @@ return update(state, {
 
 Finally, to update objects, you’ll need something like `_.extend` from Underscore, or better, an [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) polyfill.
 
-Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`. You can also write `return { ...state, ...newData }` if you enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/).
+Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`.
+
+You can also enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/):
+
+```js
+// Before:
+return [
+  ...state.slice(0, action.index),
+  Object.assign({}, state[action.index], {
+    completed: true
+  }),
+  ...state.slice(action.index + 1)
+]
+
+// After:
+return [
+  ...state.slice(0, action.index),
+  { ...state[action.index], completed: true },
+  ...state.slice(action.index + 1)
+]
+```
+
+Note that experimental language features are subject to change, and it’s unwise to rely on them in large codebases.
 
 #### Don’t forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
