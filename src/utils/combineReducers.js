@@ -1,7 +1,9 @@
+import { ActionTypes } from '../createStore';
+import isPlainObject from '../utils/isPlainObject';
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 import invariant from 'invariant';
-import { ActionTypes } from '../createStore';
+import warning from 'warning';
 
 function getErrorMessage(key, action) {
   var actionType = action && action.type;
@@ -10,6 +12,41 @@ function getErrorMessage(key, action) {
   return (
     `Reducer "${key}" returned undefined handling ${actionName}. ` +
     `To ignore an action, you must explicitly return the previous state.`
+  );
+}
+
+function verifyStateShape(initialState, currentState) {
+  var reducerKeys = Object.keys(currentState);
+
+  if (reducerKeys.length === 0) {
+    warning(
+      false,
+      'Store does not have a valid reducer. Make sure the argument passed ' +
+      'to combineReducers is an object whose values are reducers.'
+    );
+    return;
+  }
+
+  if (!isPlainObject(initialState)) {
+    warning(
+      false,
+      'initialState has unexpected type of "' +
+      ({}).toString.call(initialState).match(/\s([a-z|A-Z]+)/)[1] +
+      '". Expected initialState to be an object with the following ' +
+      `keys: "${reducerKeys.join('", "')}"`
+    );
+    return;
+  }
+
+  var unexpectedKeys = Object.keys(initialState).filter(
+    key => reducerKeys.indexOf(key) < 0
+  );
+
+  warning(
+    unexpectedKeys.length === 0,
+    `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
+    `"${unexpectedKeys.join('", "')}" in initialState will be ignored. ` +
+    `Expected to find one of the known reducer keys instead: "${reducerKeys.join('", "')}"`
   );
 }
 
@@ -29,6 +66,7 @@ function getErrorMessage(key, action) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
+
 export default function combineReducers(reducers) {
   var finalReducers = pick(reducers, (val) => typeof val === 'function');
 
@@ -54,8 +92,11 @@ export default function combineReducers(reducers) {
     );
   });
 
-  return function combination(state = {}, action) {
-    return mapValues(finalReducers, (reducer, key) => {
+  var defaultState = mapValues(finalReducers, () => undefined);
+  var stateShapeVerified;
+
+  return function combination(state = defaultState, action) {
+    var finalState = mapValues(finalReducers, (reducer, key) => {
       var newState = reducer(state[key], action);
       invariant(
         typeof newState !== 'undefined',
@@ -63,5 +104,12 @@ export default function combineReducers(reducers) {
       );
       return newState;
     });
+
+    if (process.env.NODE_ENV !== 'production' && !stateShapeVerified) {
+      verifyStateShape(state, finalState);
+      stateShapeVerified = true;
+    }
+
+    return finalState;
   };
 }

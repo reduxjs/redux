@@ -97,7 +97,7 @@ describe('Utils', () => {
         }
       });
 
-      expect(reducer(0, { type: increment }).counter).toEqual(1);
+      expect(reducer({counter: 0}, { type: increment }).counter).toEqual(1);
     });
 
     it('should throw an error if a reducer attempts to handle a private action', () => {
@@ -118,6 +118,75 @@ describe('Utils', () => {
       })).toThrow(
         /"counter".*private/
       );
+    });
+
+    it('should warn if no reducers are passed to combineReducers', () => {
+      const spy = expect.spyOn(console, 'error');
+      const reducer = combineReducers({});
+      reducer({});
+      expect(spy.calls[0].arguments[0]).toMatch(
+        /Store does not have a valid reducer/
+      );
+      spy.restore();
+    });
+
+    it('should warn if initial state object does not match state object returned by reducer', () => {
+      const spy = expect.spyOn(console, 'error');
+      const reducerCreator = () => {
+        return combineReducers({
+          foo(state = {bar: 1}) {
+            return state;
+          },
+          baz(state = {qux: 3}) {
+            return state;
+          }
+        });
+      };
+
+      reducerCreator()({foo: {bar: 2}});
+      expect(spy.calls.length).toBe(0);
+
+      reducerCreator()({
+        foo: {bar: 2},
+        baz: {qux: 4}
+      });
+      expect(spy.calls.length).toBe(0);
+
+      reducerCreator()({bar: 2});
+      expect(spy.calls[0].arguments[0]).toMatch(
+        /Unexpected key "bar".*instead: "foo", "baz"/
+      );
+
+      reducerCreator()({bar: 2, qux: 4});
+      expect(spy.calls[1].arguments[0]).toMatch(
+        /Unexpected keys "bar", "qux".*instead: "foo", "baz"/
+      );
+
+      reducerCreator()(1);
+      expect(spy.calls[2].arguments[0]).toMatch(
+        /unexpected type of "Number".*keys: "foo", "baz"/
+      );
+
+      spy.restore();
+    });
+
+    it('should only check state shape on init', () => {
+      const spy = expect.spyOn(console, 'error');
+      const reducer = combineReducers({
+        foo(state = {bar: 1}) {
+          return state;
+        }
+      });
+
+      reducer({bar: 1});
+      expect(spy.calls[0].arguments[0]).toMatch(
+        /Unexpected key "bar".*instead: "foo"/
+      );
+
+      reducer({bar: 1});
+      expect(spy.calls.length).toBe(1);
+
+      spy.restore();
     });
   });
 });
