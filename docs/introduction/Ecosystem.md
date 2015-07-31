@@ -6,6 +6,11 @@ For an extensive list of everything related to Redux, we recommend [Awesome Redu
 
 On this page we will only feature a few of them that the Redux maintainers have vetted personally. Don’t let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don’t hesitate a PR if you’ve built something wonderful with Redux.
 
+## Examples
+
+Redux ships with a counter and a TodoMVC example in the [`examples` folder](https://github.com/gaearon/redux/tree/master/examples) in the source.
+We will have some official examples with data fetching, universal rendering and hot reloading soon, but for now, you can check out some examples from [Awesome Redux](https://github.com/xgrommx/awesome-redux).
+
 ## Bindings
 
 * [react-redux](https://github.com/gaearon/react-redux) — React
