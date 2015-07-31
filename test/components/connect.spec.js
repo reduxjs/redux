@@ -343,65 +343,6 @@ describe('React', () => {
       expect(spy.calls.length).toBe(3);
     });
 
-    it('should recompute the state slice when the select prop changes', () => {
-      const store = createStore(combineReducers({
-        a: () => 42,
-        b: () => 72
-      }));
-
-      function selectA(state) {
-        return { result: state.a };
-      }
-
-      function selectB(state) {
-        return { result: state.b };
-      }
-
-      function render({ result }) {
-        return <div>{result}</div>;
-      }
-
-      function getContainer(select) {
-        return (
-          @connect(select)
-          class Container extends Component {
-            render() {
-              return this.props.children(this.props);
-            }
-          }
-        );
-      }
-
-      class OuterContainer extends Component {
-        constructor() {
-          super();
-          this.state = { select: selectA };
-        }
-
-        render() {
-          return (
-            <Provider store={store}>
-              {() => {
-                const Container = getContainer(this.state.select);
-                return (
-                  <Container>
-                    {render}
-                  </Container>
-                );
-              }}
-            </Provider>
-          );
-        }
-      }
-
-      let tree = TestUtils.renderIntoDocument(<OuterContainer />);
-      let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-      expect(div.props.children).toBe(42);
-
-      tree.setState({ select: selectB });
-      expect(div.props.children).toBe(72);
-    });
-
     it('should throw an error if select, bindActionCreators, or merge returns anything but a plain object', () => {
       const store = createStore(() => ({}));
 
