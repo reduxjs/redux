@@ -514,5 +514,39 @@ describe('React', () => {
 
       expect(decorated.DecoratedComponent).toBe(Container);
     });
+
+    it('should return the instance of the wrapped component for use in calling child methods', () => {
+      const store = createStore(() => ({}));
+
+      const someData = {
+        some: 'data'
+      };
+
+      class Container extends Component {
+        someInstanceMethod() {
+          return someData;
+        }
+
+        render() {
+          return <div />;
+        }
+      }
+
+      const decorator = connect(state => state);
+      const Decorated = decorator(Container);
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Decorated />
+          )}
+        </Provider>
+      );
+
+      const decorated = TestUtils.findRenderedComponentWithType(tree, Decorated);
+
+      expect(() => decorated.someInstanceMethod()).toThrow();
+      expect(decorated.getUnderlyingRef().someInstanceMethod()).toBe(someData);
+    });
   });
 });
