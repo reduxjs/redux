@@ -71,7 +71,8 @@ Here’s how we hook it up to the Redux Store.
 
 We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. With the current API, we’ll need to add an intermediate `CounterContainer` component, but we will soon make `connect` API more powerful so this won’t be required. The `connect()` function lets you specify *which exactly* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
 
-Our `CounterContainer` necessary to hook `Counter` up to a Redux store looks like this:
+Our `CounterContainer` that’s necessary to hook `Counter` up to a Redux store looks like this:  
+(This will be much less verbose in the next versions.)
 
 ```js
 import { Component } from 'react';
