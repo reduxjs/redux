@@ -91,7 +91,7 @@ function select(state) {
   };
 }
 
-class CounterContainer {
+class CounterContainer extends Component {
   render() {
     // connect() call below will inject `dispatch` and
     // every key returned by `select` as props into our container:
@@ -145,7 +145,7 @@ function select(state) {
   };
 }
 
-class CounterContainer {
+class CounterContainer extends Component {
   render() {
     const { dispatch, counter } = this.props;
     
@@ -172,9 +172,10 @@ Finally, how do we actually hook it up to a Redux store? We need to create the s
 The trick is to wrap the whole view hierarchy into `<Provider>{() => ... }</Provider>` where `Provider` is imported from `react-redux`. One gotcha is that **the child of `Provider` must be a function**. This is to work around an issue with how context (undocumented feature we have to rely on to pass Redux data to components below) works in React 0.13. In React 0.14, you will be able to put your view hierarchy in `<Provider>` without wrapping it into a function.
 
 ```js
+import { Component } from 'react';
 import { Provider } from 'react-redux';
 
-class App {
+class App extends Component {
   render() {
     // ...
   }
