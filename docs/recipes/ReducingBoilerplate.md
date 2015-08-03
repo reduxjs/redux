@@ -99,12 +99,118 @@ We just modified how `addTodo` action creator behaves, completely invisible to t
 
 ### Generating Action Creators
 
-...
+Some frameworks like [Flummox](https://github.com/acdlite/flummox) generate action type constants automatically from the action creator function definitions. The idea is that you don’t need to both define `ADD_TODO` constant and `addTodo()` action creator. Under the hood, such solutions still generate action type constants, but they’re created implicitly so it’s a level of indirection.
+
+We don’t recommend this approach. If you’re tired of writing simple action creators like:
+
+```js
+export function addTodo(text) {
+  return {
+    type: 'ADD_TODO',
+    text
+  };
+}
+
+export function removeTodo(id) {
+  return {
+    type: 'REMOVE_TODO',
+    id
+  };
+}
+```
+
+you can always write a function that generates an action creator:
+
+```js
+function makeActionCreator(type, ...argNames) {
+  return function(...args) {
+    let action = { type };
+    argNames.forEach((arg, index) => {
+      action[argNames[index]] = args[i];
+    });
+    return action;
+  }
+}
+
+export const addTodo = makeActionCreator('ADD_TODO', 'todo');
+export const removeTodo = makeActionCreator('REMOVE_TODO', 'id');
+```
+
+See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https:// github.com/acdlite/redux-actions) for examples of such utilites.  
+
+Note that such utilities add magic to your code.  
+Are magic and indirection really worth extra few lines?
 
 ## Reducers
 
-...
+Redux reduces the boilerplate of Flux stores considerably by describing the update logic as a function. A function is simpler than an object, and much simpler than a class.
+
+Consider this Flux store:
+
+```js
+let _todos = [];
+
+export default const TodoStore = assign({}, EventEmitter.prototype, {
+  getAll() {
+    return _todos;
+  }
+});
+
+AppDispatcher.register(function (action) {
+  switch (action.type) {
+  case ActionTypes.ADD_TODO:
+    let text = action.text.trim();
+    _todos.push(text);
+    TodoStore.emitChange();
+  }
+});
+```
+
+With Redux, the same update logic can be described as a reducing function:
+
+```js
+export function todos(state = [], action) {
+  switch (action.type) {
+  case ActionTypes.ADD_TODO:
+    let text = action.text.trim();
+    return [...state, text];
+  default:
+    return state;
+  }
+}
+```
+
+The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
+
+It’s unfortunate that many still choose Flux framework based on whether it uses `switch` statements in the documentation. If you don’t like `switch`, you can solve this with a single function, as we show below.
 
 ### Generating Reducers
 
-...
+Let’s write a function that lets us express reducers as object mapping from action types to handlers. For example, if we want our `todos` reducers to be defined like this:
+
+```js
+export const todos = createReducer([], {
+  [ActionTypes.ADD_TODO](state, action) {
+    let text = action.text.trim();
+    return [...state, text];
+  }
+}
+```
+
+We can write the following helper to accomplish this:
+
+```js
+function createReducer(initialState, handlers) {
+  return function reducer(state = initialState, action) {
+    if (handlers.hasOwnProperty(action.type)) {
+      return handlers[action.type];
+    } else {
+      return state;
+    }
+  }
+}
+```
+
+This wasn’t difficult, was it? Redux doesn’t provide such helper by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to “catch all” handler. All of this depends on the conventions you choose for your team on a specific project.
+
+Redux reducer API is `(state, action) => state`, but how you create those reducers is up to you.
