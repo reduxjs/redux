@@ -28,3 +28,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ## Developer Tools
 
 * [redux-devtools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
+
+## More
+
+[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
