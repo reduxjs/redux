@@ -49,7 +49,7 @@ npm install --save-dev redux-devtools
 ### The Gist
 
 The whole state of your app is retained in a single object that we will call *the store*.  
-The only way to alter the store is to emit an *action*, an object describing what happened.  
+The only way to alter the store is to emit an *action*, an object describing what is happening.  
 To specify how an action transforms the value of the store into another value, you write *reducers*, and these should be stateless (or "pure", or "deterministic", or "no-surprise") functions.
 
 That’s it!
