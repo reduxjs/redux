@@ -51,7 +51,7 @@ dispatch({
 
 you might write an action creator in a separate file, and import it from your component:
 
-#### `ActionCreators.js`
+#### `actionCreators.js`
 
 ```js
 export function addTodo(text) {
@@ -65,7 +65,7 @@ export function addTodo(text) {
 #### `AddTodo.js`
 
 ```js
-import { addTodo } from './ActionCreators';
+import { addTodo } from './actionCreators';
 
 // somewhere in an event handler
 dispatch(addTodo('Use Redux'))
@@ -140,6 +140,282 @@ See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux
 
 Note that such utilities add magic to your code.  
 Are magic and indirection really worth extra few lines?
+
+## Async Action Creators
+
+[Middleware](../Glossary.html#middleware) lets you inject a custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
+
+Without any middleware, [`dispatch`](../api/Store.md#dispatch) only accepts a plain object, so we have to perform AJAX calls inside our components:
+
+#### `actionCreators.js`
+
+```js
+export function loadPostsSuccess(userId, response) {
+  return {
+    type: 'LOAD_POSTS_SUCCESS',
+    userId,
+    response
+  };
+}
+
+export function loadPostsFailure(userId, error) {
+  return {
+    type: 'LOAD_POSTS_FAILURE',
+    userId,
+    error
+  };
+}
+
+export function loadPostsRequest(userId) {
+  return {
+    type: 'LOAD_POSTS_REQUEST',
+    userId
+  };
+}
+```
+
+#### `UserInfo.js`
+
+```js
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import { loadPostsRequest, loadPostsSuccess, loadPostsFailure } from './actionCreators';
+
+class Posts extends Component {
+  loadData(userId) {
+    // Injected into props by React Redux `connect()` call:
+    let { dispatch, posts } = this.props;
+
+    if (posts[userId]) {
+      // There is cached data! Don't do anything.
+      return;
+    }
+
+    // Reducer can react to this action by setting
+    // `isFetching` and thus letting us show a spinner.
+    dispatch(loadPostsRequest(userId));
+
+    // Reducer can react to these actions by filling the `users`.
+    fetch(`http://myapi.com/users/${userId}/posts`).then(
+      response => dispatch(loadPostsSuccess(userId, response)),
+      error => dispatch(loadPostsFailure(userId, error))
+    );
+  }
+
+  componentDidMount() {
+    this.loadData(this.props.userId);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.userId !== this.props.userId) {
+      this.loadData(nextProps.userId);
+    }
+  }
+
+  render() {
+    if (this.props.isLoading) {
+      return <p>Loading...</p>;
+    }
+
+    let posts = this.props.posts.map(post =>
+      <Post post={post} key={post.id} />
+    );
+
+    return <div>{posts}</div>;
+  }
+}
+
+export default connect(state => ({
+  posts: state.posts
+}))(Posts);
+```
+
+However, this quickly gets repetitive because different components request data from the same API endpoints. Moreover, we want to reuse some of this logic (e.g. early exit when there is cached data available) from many components.
+
+**Middleware lets us write more expressive, potentially async action creators.** It lets us dispatch something other than plain objects, and interprets the values. For example, middleware can “catch” dispatched Promises and turn them into a pair of request and success/failure actions.
+
+The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). It lets you write action creators as “thunks”, that is, functions returning functions. This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
+
+Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
+
+#### `actionCreators.js`
+
+```js
+export function loadPosts(userId) {
+  // Interpreted by the thunk middleware:
+  return function (dispatch, getState) {
+    let { posts } = getState();
+    if (posts[userId]) {
+      // There is cached data! Don't do anything.
+      return;
+    }
+
+    dispatch({
+      type: 'LOAD_POSTS_REQUEST',
+      userId
+    });
+
+    // Dispatch vanilla actions asynchronously
+    fetch(`http://myapi.com/users/${userId}/posts`).then(
+      response => dispatch({
+        type: 'LOAD_POSTS_SUCCESS',
+        userId,
+        respone
+      }),
+      error => dispatch({
+        type: 'LOAD_POSTS_FAILURE',
+        userId,
+        error
+      })
+    );
+  }
+}
+```
+
+#### `UserInfo.js`
+
+```js
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import { loadPosts } from './actionCreators';
+
+class Posts extends Component {
+  componentDidMount() {
+    this.props.dispatch(loadPosts(this.props.userId));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.userId !== this.props.userId) {
+      this.props.dispatch(loadPosts(nextProps.userId));
+    }
+  }
+
+  render() {
+    if (this.props.isLoading) {
+      return <p>Loading...</p>;
+    }
+
+    let posts = this.props.posts.map(post =>
+      <Post post={post} key={post.id} />
+    );
+
+    return <div>{posts}</div>;
+  }
+}
+
+export default connect(state => ({
+  posts: state.posts
+}))(Posts);
+```
+
+This is much less typing! If you’d like, you can still have “vanilla” action creators like `loadPostsSuccess` which you’d use from a “smart” `loadPosts` action creator.
+
+**Finally, you can write your own middleware.** Let’s say you want to generalize the pattern above and describe your async action creators like this instead:
+
+```js
+export function loadPosts(userId) {
+  return {
+    // Types of actions to emit before and after
+    types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
+    // Check the cache (optional):
+    shouldCallAPI: (state) => !state.users[userId],
+    // Perform the fetching:
+    callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
+    // Arguments to inject in begin/end actions
+    payload: { userId }
+  };
+}
+```
+
+The middleware that interprets such actions could look like this:
+
+```js
+function callAPIMiddleware({ dispatch, getState }) {
+  return function (next) {
+    return function (action) {
+      const {
+        types,
+        callAPI,
+        shouldCallAPI = () => true,
+        payload = {}
+      } = action;
+
+      if (!types) {
+        // Normal action: pass it on
+        return next(action);
+      }
+
+      if (
+        !Array.isArray(types) ||
+        types.length !== 3 ||
+        !types.every(type => typeof type === 'string')
+      ) {
+        throw new Error('Expected an array of three string types.');
+      }
+
+      if (typeof fetch !== 'function') {
+        throw new Error('Expected fetch to be a function.');
+      }
+
+      if (!shouldCallAPI(getState())) {
+        return;
+      }
+
+      const [requestType, successType, failureType] = types;
+
+      dispatch(Object.assign({}, payload, {
+        type: requestType
+      }));
+
+      return callAPI().then(
+        response => dispatch(Object.assign({}, payload, {
+          type: successType
+        })),
+        error => dispatch(Object.assign({}, payload, {
+          type: failureType
+        }))
+      );
+    };
+  };
+}
+```
+
+After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md), you can write all your API-calling action creators the same way:
+
+```js
+export function loadPosts(userId) {
+  return {
+    types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
+    shouldCallAPI: (state) => !state.users[userId],
+    callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
+    payload: { userId }
+  };
+}
+
+export function loadComments(postId) {
+  return {
+    types: ['LOAD_COMMENTS_REQUEST', 'LOAD_COMMENTS_SUCCESS', 'LOAD_COMMENTS_FAILURE'],
+    shouldCallAPI: (state) => !state.posts[postId],
+    callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
+    payload: { postId }
+  };
+}
+
+export function addComment(postId, message) {
+  return {
+    types: ['ADD_COMMENT_REQUEST', 'ADD_COMMENT_SUCCESS', 'ADD_COMMENT_FAILURE'],
+    callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`, {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message })
+    }),
+    payload: { postId, message }
+  };
+}
+```
 
 ## Reducers
 
