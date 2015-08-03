@@ -353,7 +353,7 @@ function callAPIMiddleware({ dispatch, getState }) {
         throw new Error('Expected an array of three string types.');
       }
 
-      if (typeof fetch !== 'function') {
+      if (typeof callAPI !== 'function') {
         throw new Error('Expected fetch to be a function.');
       }
 
