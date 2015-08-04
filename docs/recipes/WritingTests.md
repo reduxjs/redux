@@ -12,6 +12,7 @@ function addTodo(text) {
   };
 }
 ```
+can be tested like:
 
 ```javascript
 import expect from 'expect';
@@ -33,12 +34,11 @@ describe('actions', () => {
 ```
 
 
-**TODO:** add async example
+### Reducers
+Reducer should return the new state after applying action on the previous state. And that's the behavior tested below.
 
-### [Reducers](https://github.com/gaearon/redux/blob/rewrite-docs-again/docs/api/combineReducers.md#arguments)
-Reducer should return the new state after applying action on the previous state.
+#### Example  
 
-#### Example
 ```javascript
 import { ADD_TODO } from '../constants/ActionTypes';
 
@@ -62,6 +62,7 @@ export default function todos(state = initialState, action) {
   }
 }
 ```
+can be tested like:
 
 ```javascript
 import expect from 'expect';
@@ -116,6 +117,102 @@ describe('todos reducer', () => {
 
 
 ### Components
+Very good thing about React components is that they are usually small and are mostly relying on props. That makes them easy to test.
+To test components we first make a setup in which we include:
+props and shallow renderer. And later on check if they render correctly and if the functionality works as it supposed to.
 
-TODO
+#### Example
 
+```javascript
+import React, { PropTypes, Component } from 'react';
+import TodoTextInput from './TodoTextInput';
+
+export default class Header extends Component {
+  static propTypes = {
+    addTodo: PropTypes.func.isRequired
+  };
+
+  handleSave(text) {
+    if (text.length !== 0) {
+      this.props.addTodo(text);
+    }
+  }
+
+  render() {
+    return (
+      <header className='header'>
+          <h1>todos</h1>
+          <TodoTextInput newTodo={true}
+                         onSave={this.handleSave.bind(this)}
+                         placeholder='What needs to be done?'
+          />
+      </header>
+    );
+  }
+}
+```
+
+can be tested like:
+
+```javascript
+import expect from 'expect';
+import jsdomReact from '../jsdomReact';
+import React from 'react/addons';
+import Header from '../../components/Header';
+import TodoTextInput from '../../components/TodoTextInput';
+
+const { TestUtils } = React.addons;
+
+function setup() {
+  let props = {
+    addTodo: expect.createSpy()
+  };
+
+  let renderer = TestUtils.createRenderer();
+  renderer.render(<Header {...props} />);
+  let output = renderer.getRenderOutput();
+
+  return {
+    props: props,
+    output: output,
+    renderer: renderer
+  };
+}
+
+describe('components', () => {
+  jsdomReact();
+
+  describe('Header', () => {
+
+    it('should render correctly', () => {
+      const { output } = setup();
+
+      expect(output.type).toBe('header');
+      expect(output.props.className).toBe('header');
+
+      let [h1, input] = output.props.children;
+
+      expect(h1.type).toBe('h1');
+      expect(h1.props.children).toBe('todos');
+
+      expect(input.type).toBe(TodoTextInput);
+      expect(input.props.newTodo).toBe(true);
+      expect(input.props.placeholder).toBe('What needs to be done?');
+    });
+
+    it('should call call addTodo if length of text is greater than 0', () => {
+      const { output, props } = setup();
+      let input = output.props.children[1];
+      input.props.onSave('');
+      expect(props.addTodo.calls.length).toBe(0);
+      input.props.onSave('Use Redux');
+      expect(props.addTodo.calls.length).toBe(1);
+    });
+  });
+});
+```
+
+### Glossary
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html) - test utilities.
+- [jsdom](https://github.com/tmpvar/jsdom) - is an in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
+- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering) - the main concept of shallow rendering is to instantiate a component and get the result of its `render` method instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) that means it is possible to access its children, props and test if it works as expected.
