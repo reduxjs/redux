@@ -1,0 +1,312 @@
+# Reducers
+
+[Actions](../Actions.md) describe the fact that *something happened*, but don’t specify how the application’s state changes in response. This is the job of a reducer.
+
+## Designing the State Shape
+
+In Redux, all state of your application is stored as a single object. It’s a good idea to think of its shape before writing any code. What’s the minimal representation of your app’s state as an object?
+
+For our todo app, we want to store two different things:
+
+* The currently selected visibility filter;
+* The actual list of todos.
+
+You’ll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separately from the UI state.
+
+```js
+{
+  visibleTodoFilter: 'SHOW_ALL',
+  todos: [{
+    text: 'Consider using Redux',
+    completed: true,
+  }, {
+    text: 'Keep all state in a single tree',
+    completed: false
+  }]
+}
+```
+
+>##### Note on Relationships
+
+>In a more complex app, you’re going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app’s state as of a database. This approach is described in [normalizr](https://github.com/gaearon/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we’re keeping the example simple.
+
+## Handling Actions
+
+Now that we decided what our state object looks like, we are ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
+
+```js
+(previousState, action) => newState
+```
+
+It’s called a reducer because it’s the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It’s very important that the reducer stays pure. Things you should **never** do inside a reducer:
+
+* Mutate its arguments;
+* Perform side effects like API calls and routing transitions.
+
+We’ll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
+
+With this out of the way, let’s start writing our reducer by gradually teaching it to understand the [actions](Actions.md) we defined earlier.
+
+We’ll start by specifying the initial state. Redux will call our reducer with an `undefined` state for the first time. This is our chance to return the initial state of our app:
+
+```js
+import { VisibilityFilters } from './actions';
+
+const initialState = {
+  visibleTodoFilter: VisibilityFilters.SHOW_ALL,
+  todos: []
+};
+
+function todoApp(state, action) {
+  if (typeof state === 'undefined') {
+    return initialState;
+  }
+
+  // For now, don’t handle any actions
+  // and just return the state given to us.
+  return state;
+}
+```
+
+One neat trick is to use the [ES6 default arguments syntax](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) to write this in a more compact way:
+
+```js
+function todoApp(state = initialState, action) {
+  // For now, don’t handle any actions
+  // and just return the state given to us.
+  return state;
+}
+```
+
+Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibleTodoFilter` on the state. Easy:
+
+```js
+function todoApp(state = initialState, action) {
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return Object.assign({}, state, {
+      visibleTodoFilter: action.filter
+    });
+  default:
+    return state;
+  }
+}
+```
+
+Note that:
+
+1. **We don’t mutate the `state`.** We create a copy with [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). `Object.assign(state, ...)` is also wrong: it will mutate the first argument. You **must** supply an empty object as the first parameter. You can also enable the experimental [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for ES7 to write `{ ...state, ...newState }` instead.
+
+2. **We return the previous `state` in the `default` case.** It’s important to return the previous `state` for any unknown action.
+
+>##### Note on `switch` and Boilerplate
+
+>The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
+
+>It’s unfortunate that many still choose a framework based on whether it uses `switch` statements in the documentation. If you don’t like `switch`, you can use a custom `createReducer` function that accepts a handler map, as shown in [“reducing boilerplate”](../recipes/ReducingBoilerplate.md#reducers).
+
+## Handling More Actions
+
+We have two more actions to handle! Let’s extend our reducer to handle `ADD_TODO`.
+
+```js
+function todoApp(state = initialState, action) {
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return Object.assign({}, state, {
+      visibleTodoFilter: action.filter
+    });
+  case ADD_TODO:
+    return Object.assign({}, state, {
+      todos: [...state.todos, {
+        text: action.text,
+        completed: false
+      }]
+    });    
+  default:
+    return state;
+  }
+}
+```
+
+Just like before, we never write directly to `state` or its fields, and instead we return new objects. The new `todos` is equal to the old `todos` concatenated with a single new item at the end. The fresh todo was constructed using the data from the action.
+
+Finally, the implementation of `COMPLETE_TODO` handler shouldn’t come as a complete surprise:
+
+```js
+case COMPLETE_TODO:
+  return Object.assign({}, state, {
+    todos: [
+      ...state.todos.slice(0, action.index),
+      Object.assign({}, state.todos[action.index], {
+        completed: true
+      }),
+      ...state.todos.slice(action.index + 1)
+    ]
+  });
+```
+
+Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it’s a good idea to use a helper like [React.addons.update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/aaronjensen/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
+
+## Splitting Reducers
+
+Here is our code so far. It is rather verbose:
+
+```js
+function todoApp(state = initialState, action) {
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return Object.assign({}, state, {
+      visibleTodoFilter: action.filter
+    });
+  case ADD_TODO:
+    return Object.assign({}, state, {
+      todos: [...state.todos, {
+        text: action.text,
+        completed: false
+      }]
+    });
+  case COMPLETE_TODO:
+    return Object.assign({}, state, {
+      todos: [
+        ...state.todos.slice(0, action.index),
+        Object.assign({}, state.todos[action.index], {
+          completed: true
+        }),
+        ...state.todos.slice(action.index + 1)
+      ]
+    });
+  default:
+    return state;
+  }
+}
+```
+
+Is there a way to make it easier to comprehend? It seems like `todos` and `visibleTodoFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
+
+```js
+function todos(state = [], action) {
+  switch (action.type) {
+  case ADD_TODO:
+    return [...state, {
+      text: action.text,
+      completed: false
+    }];
+  case COMPLETE_TODO:
+    return [
+      ...state.slice(0, action.index),
+      Object.assign({}, state[action.index], {
+        completed: true
+      }),
+      ...state.slice(action.index + 1)
+    ];
+  default:
+    return state;
+  }
+}
+
+function todoApp(state = initialState, action) {
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return Object.assign({}, state, {
+      visibleTodoFilter: action.filter
+    });
+  case ADD_TODO:
+  case COMPLETE_TODO:
+    return Object.assign({}, state, {
+      todos: todos(state.todos, action)
+    });
+  default:
+    return state;
+  }
+}
+```
+
+Note that `todos` also accepts `state`—but it’s an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called *reducer composition*, and it’s the fundamental pattern of building Redux apps.**
+
+Let’s explore reducer composition more. Can we also extract a reducer managing just `visibleTodoFilter`? We can:
+
+```js
+function visibleTodoFilter(state = SHOW_ALL, action) {
+  return action.filter;
+}
+```
+
+Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn’t need to know the complete initial state anymore. It’s enough that the child reducers return their initial state when given `undefined` at first.
+
+```js
+function todoApp(state = {}, action) {
+  return {
+    visibleTodoFilter: visibleTodoFilter(state.visibleTodoFilter, action),
+    todos: todos(state.todos, action)
+  };
+}
+```
+
+This is already looking good! When the app is larger, we can split the reducers into separate files and keep them completely independent and managing different data domains.
+
+Finally, Redux provides a utility called [`combineReducers`](../api/combineReducers.md) that does the same boilerplate logic that the `todoApp` above currently does. With its help, we can rewrite `todoApp` like this:
+
+```js
+import { combineReducers } from 'redux';
+
+const todoApp = combineReducers({
+  visibleTodoFilter,
+  todos
+});
+```
+
+Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
+
+```js
+import { combineReducers } from 'redux';
+import * as reducers from './reducers';
+
+const todoApp = combineReducers(reducers);
+```
+
+## Source Code
+
+#### `reducers.js`
+
+```js
+import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
+const { SHOW_ALL } = VisibilityFilters;
+
+export function visibleTodoFilter(state = SHOW_ALL, action) {
+  return action.filter;
+}
+
+export function todos(state = [], action) {
+  switch (action.type) {
+  case ADD_TODO:
+    return [...state, {
+      text: action.text,
+      completed: false
+    }];
+  case COMPLETE_TODO:
+    return [
+      ...state.slice(0, action.index),
+      Object.assign({}, state[action.index], {
+        completed: true
+      }),
+      ...state.slice(action.index + 1)
+    ];
+  default:
+    return state;
+  }
+}
+```
+
+#### `index.js`
+
+```js
+import { combineReducers } from 'redux';
+import * as reducers from './reducers';
+
+let todoApp = combineReducers(reducers);
+```
+
+## Next Steps
+
+Next, we’ll expore how to create a Redux store that holds the state and takes care of calling your reducer when you dispatch an action.

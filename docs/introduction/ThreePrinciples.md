@@ -36,7 +36,7 @@ store.dispatch({
 });
 
 store.dispatch({
-  type: 'CHANGE_VISIBLE_FILTER',
+  type: 'SET_VISIBILITY_FILTER',
   filter: 'SHOW_COMPLETED'
 });
 ```
@@ -50,7 +50,7 @@ Reducers are just pure functions that take the previous state and the action, an
 ```js
 function visibleTodoFilter(state = 'SHOW_ALL', action) {
   switch (action.type) {
-  case 'CHANGE_VISIBLE_FILTER':
+  case 'SET_VISIBILITY_FILTER':
     return action.filter;
   default:
     return state;
