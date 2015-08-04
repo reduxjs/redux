@@ -1,4 +1,4 @@
-## Basics
+## Introduction
 
 * [Motivation](Motivation.md)
 * [Three Principles](ThreePrinciples.md)

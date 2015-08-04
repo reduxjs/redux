@@ -22,6 +22,7 @@
   * [Example: Reddit API](/docs/advanced/ExampleRedditAPI.md)
   * [Next Steps](/docs/advanced/NextSteps.md)
 * [Recipes](/docs/recipes/README.md)
+  * [Migrating to Redux](/docs/recipes/MigratingToRedux.md)
   * [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
   * [Server Rendering](/docs/recipes/ServerRendering.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)

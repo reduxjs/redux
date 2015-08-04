@@ -323,4 +323,4 @@ let todoApp = combineReducers(reducers);
 
 ## Next Steps
 
-Next, we’ll expore how to create a Redux store that holds the state and takes care of calling your reducer when you dispatch an action.
+Next, we’ll expore how to [create a Redux store](Store.md) that holds the state and takes care of calling your reducer when you dispatch an action.
