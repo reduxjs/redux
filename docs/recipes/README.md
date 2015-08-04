@@ -1,6 +1,6 @@
 # Recipes
 
-Please somebody help me write these.
+How to cook with Redux:
 
 * [Reducing Boilerplate](ReducingBoilerplate.md)
 * [Usage with React](UsageWithReact.md)
