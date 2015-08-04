@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import CounterApp from './CounterApp';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import * as reducers from '../reducers';
+import CounterApp from './CounterApp';
+import createCounterStore from '../store/createCounterStore';
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const reducer = combineReducers(reducers);
-const store = createStoreWithMiddleware(reducer);
+const store = createCounterStore();
 
 export default class App extends Component {
   render() {

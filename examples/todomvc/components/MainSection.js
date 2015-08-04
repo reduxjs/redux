@@ -71,8 +71,8 @@ class MainSection extends Component {
         <Footer markedCount={markedCount}
                 unmarkedCount={unmarkedCount}
                 filter={filter}
-                onClearMarked={::this.handleClearMarked}
-                onShow={::this.handleShow} />
+                onClearMarked={this.handleClearMarked.bind(this)}
+                onShow={this.handleShow.bind(this)} />
       );
     }
   }
