@@ -58,11 +58,16 @@ store.dispatch(addTodo('Learn about store'));
 store.dispatch(completeTodo(0));
 store.dispatch(completeTodo(1));
 store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
+
+// Stop listening to state updates
+unsubscribe();
 ```
 
 You can see how this causes the state held by the store to change:
 
 <img src='http://i.imgur.com/zMMtoMz.png' width='70%'>
+
+We specified the behavior of our app before we even started writing the UI. We won’t do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won’t need to mock anything because they are just functions. Call them, and make assertions on what they return.
 
 ## Source Code
 
@@ -78,4 +83,4 @@ let store = createStore(todoApp);
 
 ## Next Steps
 
-Before creating a UI, we will take a detour to [how the data flows in a Redux application](DataFlow.md).
+Before creating a UI for our todo app, we will take a detour to [how the data flows in a Redux application](DataFlow.md).

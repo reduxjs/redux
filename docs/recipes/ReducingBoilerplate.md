@@ -136,7 +136,7 @@ export const addTodo = makeActionCreator('ADD_TODO', 'todo');
 export const removeTodo = makeActionCreator('REMOVE_TODO', 'id');
 ```
 
-See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https:// github.com/acdlite/redux-actions) for examples of such utilites.  
+See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions) for examples of such utilites.  
 
 Note that such utilities add magic to your code.  
 Are magic and indirection really worth extra few lines?
