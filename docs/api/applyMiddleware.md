@@ -19,15 +19,16 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 #### Example: Using Thunk Middleware for Async Actions
 
 ```js
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import sandwiches from './reducers';
+import * as reducers from './reducers';
 
 // applyMiddleware supercharges createStore with middleware:
 let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 // We can use it exactly like “vanilla” createStore.
-let store = createStoreWithMiddleware(sandwiches);
+let reducer = combineReducers(reducers);
+let store = createStoreWithMiddleware(reducer);
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce');
