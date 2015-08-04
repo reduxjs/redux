@@ -23,7 +23,6 @@
   * [Next Steps](/docs/advanced/NextSteps.md)
 * [Recipes](/docs/recipes/README.md)
   * [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
-  * [Usage with React](/docs/recipes/UsageWithReact.md)
   * [Server Rendering](/docs/recipes/ServerRendering.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)
 * [Troubleshooting](docs/Troubleshooting.md)
