@@ -15,7 +15,7 @@ You’ll often find that you need to store some data, as well as some UI state, 
 
 ```js
 {
-  visibleTodoFilter: 'SHOW_ALL',
+  visibilityFilter: 'SHOW_ALL',
   todos: [{
     text: 'Consider using Redux',
     completed: true,
@@ -53,7 +53,7 @@ We’ll start by specifying the initial state. Redux will call our reducer with 
 import { VisibilityFilters } from './actions';
 
 const initialState = {
-  visibleTodoFilter: VisibilityFilters.SHOW_ALL,
+  visibilityFilter: VisibilityFilters.SHOW_ALL,
   todos: []
 };
 
@@ -78,14 +78,14 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibleTodoFilter` on the state. Easy:
+Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibilityFilter` on the state. Easy:
 
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return Object.assign({}, state, {
-      visibleTodoFilter: action.filter
+      visibilityFilter: action.filter
     });
   default:
     return state;
@@ -118,7 +118,7 @@ function todoApp(state = initialState, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return Object.assign({}, state, {
-      visibleTodoFilter: action.filter
+      visibilityFilter: action.filter
     });
   case ADD_TODO:
     return Object.assign({}, state, {
@@ -161,7 +161,7 @@ function todoApp(state = initialState, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return Object.assign({}, state, {
-      visibleTodoFilter: action.filter
+      visibilityFilter: action.filter
     });
   case ADD_TODO:
     return Object.assign({}, state, {
@@ -186,7 +186,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Is there a way to make it easier to comprehend? It seems like `todos` and `visibleTodoFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
+Is there a way to make it easier to comprehend? It seems like `todos` and `visibilityFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
 
 ```js
 function todos(state = [], action) {
@@ -213,7 +213,7 @@ function todoApp(state = initialState, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return Object.assign({}, state, {
-      visibleTodoFilter: action.filter
+      visibilityFilter: action.filter
     });
   case ADD_TODO:
   case COMPLETE_TODO:
@@ -228,10 +228,10 @@ function todoApp(state = initialState, action) {
 
 Note that `todos` also accepts `state`—but it’s an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called *reducer composition*, and it’s the fundamental pattern of building Redux apps.**
 
-Let’s explore reducer composition more. Can we also extract a reducer managing just `visibleTodoFilter`? We can:
+Let’s explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can:
 
 ```js
-function visibleTodoFilter(state = SHOW_ALL, action) {
+function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return action.filter;
@@ -246,7 +246,7 @@ Now we can rewrite the main reducer as a function that calls the reducers managi
 ```js
 function todoApp(state = {}, action) {
   return {
-    visibleTodoFilter: visibleTodoFilter(state.visibleTodoFilter, action),
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
   };
 }
@@ -260,7 +260,7 @@ Finally, Redux provides a utility called [`combineReducers`](../api/combineReduc
 import { combineReducers } from 'redux';
 
 const todoApp = combineReducers({
-  visibleTodoFilter,
+  visibilityFilter,
   todos
 });
 ```
@@ -282,7 +282,7 @@ const todoApp = combineReducers(reducers);
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
 const { SHOW_ALL } = VisibilityFilters;
 
-export function visibleTodoFilter(state = SHOW_ALL, action) {
+export function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return action.filter;

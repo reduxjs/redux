@@ -98,3 +98,6 @@ The data lifecycle in any Redux app follows these 4 steps:
 ## Next Steps
 
 Now that you know how Redux works, let’s [connect it to a React app](UsageWithReact.md).
+
+>##### Note for Advanced Users
+>If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async flow](../advanced/AsyncFlow.md) in the [advanced tutorial](../advanced/README.md) to learn how middleware transforms [async actions](../advanced/AsyncActions.md) before they reach the reducer.

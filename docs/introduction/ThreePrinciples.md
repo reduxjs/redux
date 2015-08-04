@@ -12,7 +12,7 @@ This makes it easy to create universal apps. The state from the server can be se
 console.log(store.getState());
 
 {
-  visibleTodoFilter: 'SHOW_ALL',
+  visibilityFilter: 'SHOW_ALL',
   todos: [{
     text: 'Consider using Redux',
     completed: true,
@@ -48,7 +48,7 @@ store.dispatch({
 Reducers are just pure functions that take the previous state and the action, and return the next state. You can start with a single reducer, but as your app grows, you can split it into smaller reducers that manage the specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.
 
 ```js
-function visibleTodoFilter(state = 'SHOW_ALL', action) {
+function visibilityFilter(state = 'SHOW_ALL', action) {
   switch (action.type) {
   case 'SET_VISIBILITY_FILTER':
     return action.filter;
@@ -78,7 +78,7 @@ function todos(state = [], action) {
 }
 
 import { combineReducers, createStore } from 'redux';
-let reducer = combineReducers({ visibleTodoFilter, todos });
+let reducer = combineReducers({ visibilityFilter, todos });
 let store = createStore(reducer);
 ```
 
