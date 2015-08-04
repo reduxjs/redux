@@ -5,14 +5,26 @@ redux
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
 
-Atomic Flux with hot reloading.
+Predictable state container for JavaScript apps
 
-**The API is likely to change a few times before we reach 1.0.**<br>
-**Its [surface area](http://www.youtube.com/watch?v=4anAwXYqLG8) is minimal so you can try it in production and report any issues.**
+# 1.0 is coming soon!
 
-**The current docs are *bad*, and we know it.**  
-**You can track the [new docs](https://github.com/gaearon/redux/pull/140) and the [1.0 API and terminology changes](https://github.com/gaearon/redux/pull/195).**
+It’s time for you to migrate your Redux apps to 1.0 API.  
+1.0 is not yet released, but it will be very soon.
 
+Upgrade guide:
+
+* Apply [changes from 0.12 to 1.0 alpha](https://github.com/gaearon/redux/releases/tag/v1.0.0-alpha)
+* Apply [changes from 1.0 alpha to 1.0 RC](https://github.com/gaearon/redux/releases/tag/v1.0.0-rc)
+* `npm install redux@1.0.0-rc`
+* Read the [new docs](http://gaearon.github.io/redux) as they get more complete every day 
+
+------------------------
+
+**The README below references 0.12 version that is on NPM.**  
+**It will be replaced with [the new README](http://gaearon.github.io/redux/index.html) when 1.0 is released and docs are complete.**
+
+------------------------
 
 # Table of Contents
 
