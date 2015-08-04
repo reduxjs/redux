@@ -36,7 +36,8 @@ In Redux action creators are functions which return plain objects. When testing 
 ```js
 export function addTodo(text) {
   return {
-    type: 'ADD_TODO'
+    type: 'ADD_TODO',
+    text
   };
 }
 ```
@@ -49,12 +50,12 @@ import * as types from '../../constants/ActionTypes';
 
 describe('actions', () => {
   it('should create an action to add a todo', () => {
-    const myTodo = 'Finish docs';
+    const text = 'Finish docs';
     const expectedAction = {
       type: types.ADD_TODO,
-      text: newTodo
+      text
     };
-    expect(actions.addTodo(myTodo)).toEqual(expectedAction);
+    expect(actions.addTodo(text)).toEqual(expectedAction);
   });
 }
 ```
