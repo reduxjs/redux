@@ -1,12 +1,40 @@
 # Writing tests
+
 Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
 
-### Action creators
+### Setting Up
+
+We recommend [Mocha](http://mochajs.org/) as the testing engine.  
+Note that it runs in a Node environment, so you won’t have access to DOM.
+
+```
+npm install --save-dev mocha
+```
+
+To use it together with [Babel](http://babeljs.io), add this to `scripts` in your `package.json`:
+
+```js
+{
+  ...
+  "scripts": {
+    ...
+    "test": "mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm test -- --watch",
+  },
+  ...
+}
+```
+
+and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
+
+### Action Creators
+
 In Redux action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.
 
 #### Example
-```javascript
-function addTodo(text) {
+
+```js
+export function addTodo(text) {
   return {
     type: 'ADD_TODO'
   };
@@ -14,14 +42,13 @@ function addTodo(text) {
 ```
 can be tested like:
 
-```javascript
+```js
 import expect from 'expect';
 import * as actions from '../../actions/TodoActions';
 import * as types from '../../constants/ActionTypes';
 
 describe('actions', () => {
-
-  it('add todo should create add todo action', () => {
+  it('should create an action to add a todo', () => {
     const myTodo = 'Finish docs';
     const expectedAction = {
       type: types.ADD_TODO,
@@ -29,22 +56,21 @@ describe('actions', () => {
     };
     expect(actions.addTodo(myTodo)).toEqual(expectedAction);
   });
-
 }
 ```
 
-
 ### Reducers
-Reducer should return the new state after applying action on the previous state. And that's the behavior tested below.
+
+Reducer should return the new state after applying action on the previous state. And that’s the behavior tested below.
 
 #### Example  
 
-```javascript
+```js
 import { ADD_TODO } from '../constants/ActionTypes';
 
 const initialState = [{
   text: 'Use Redux',
-  marked: false,
+  completed: false,
   id: 0
 }];
 
@@ -53,7 +79,7 @@ export default function todos(state = initialState, action) {
   case ADD_TODO:
     return [{
       id: (state.length === 0) ? 0 : state[0].id + 1,
-      marked: false,
+      completed: false,
       text: action.text
     }, ...state];
 
@@ -64,19 +90,18 @@ export default function todos(state = initialState, action) {
 ```
 can be tested like:
 
-```javascript
+```js
 import expect from 'expect';
 import reducer from '../../reducers/todos';
 import * as types from '../../constants/ActionTypes';
 
 describe('todos reducer', () => {
-
-  it('should handle initial state', () => {
+  it('should return the initial state', () => {
     expect(
       reducer(undefined, {})
     ).toEqual([{
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
@@ -87,17 +112,16 @@ describe('todos reducer', () => {
         type: types.ADD_TODO,
         text: 'Run the tests'
       })
-    ).toEqual([
-      {
+    ).toEqual([{
       text: 'Run the tests',
-      marked: false,
+      completed: false,
       id: 0
     }]);
 
     expect(
       reducer([{
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
         type: types.ADD_TODO,
@@ -105,25 +129,25 @@ describe('todos reducer', () => {
       })
     ).toEqual([{
       text: 'Run the tests',
-      marked: false,
+      completed: false,
       id: 1
     }, {
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
 ```
 
-
 ### Components
-Very good thing about React components is that they are usually small and are mostly relying on props. That makes them easy to test.
-To test components we first make a setup in which we include:
-props and shallow renderer. And later on check if they render correctly and if the functionality works as it supposed to.
+
+A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
+
+To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering). This lets individual tests assert on whether the callbacks were called when expected.
 
 #### Example
 
-```javascript
+```js
 import React, { PropTypes, Component } from 'react';
 import TodoTextInput from './TodoTextInput';
 
@@ -155,7 +179,7 @@ export default Header;
 
 can be tested like:
 
-```javascript
+```js
 import expect from 'expect';
 import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
@@ -184,7 +208,6 @@ describe('components', () => {
   jsdomReact();
 
   describe('Header', () => {
-
     it('should render correctly', () => {
       const { output } = setup();
 
@@ -213,24 +236,32 @@ describe('components', () => {
 });
 ```
 
-**Note:** Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
+#### Fixing Broken `setState()`
 
-1. `npm install --save-dev jsdom`
-2. Add `jsdomReact` helper function that looks like this:  
-   ```javascript
-   import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
-   import jsdom from 'mocha-jsdom';
+Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
 
-   export default function jsdomReact() {
-      jsdom();
-      ExecutionEnvironment.canUseDOM = true;
-   }
+```
+npm install --save-dev jsdom mocha-jsdom
+```
 
-   ```
-3. Call it before every test
+Then add a `jsdomReact()` helper function that looks like this:  
 
+```js
+import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
+import jsdom from 'mocha-jsdom';
+
+export default function jsdomReact() {
+  jsdom();
+  ExecutionEnvironment.canUseDOM = true;
+}
+```
+
+Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
 
 ### Glossary
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html) - test utilities.
-- [jsdom](https://github.com/tmpvar/jsdom) - is an in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
-- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering) - the main concept of shallow rendering is to instantiate a component and get the result of its `render` method instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) that means it is possible to access its children, props and test if it works as expected.
+
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
+
+- [jsdom](https://github.com/tmpvar/jsdom): An in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
+
+- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): The main idea of shallow rendering is to instantiate a component and get the result of its `render` method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) that means it is possible to access its children, props and test if it works as expected.
