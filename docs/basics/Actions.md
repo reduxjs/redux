@@ -136,5 +136,5 @@ export function setVisibilityFilter(filter) {
 
 ## Next Steps
 
-Now let’s [define some reducers](./Reducers.md) to specify how the state updates when you dispatch these actions!
+Now let’s [define some reducers](Reducers.md) to specify how the state updates when you dispatch these actions!
 

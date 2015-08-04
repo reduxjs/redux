@@ -99,6 +99,10 @@ Note that:
 
 2. **We return the previous `state` in the `default` case.** It’s important to return the previous `state` for any unknown action.
 
+>##### Note on `Object.assign`
+
+>[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, but is not implemented by most browsers yet. You’ll need to either use a polyfill, a [Babel plugin](https://github.com/babel-plugins/babel-plugin-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
+
 >##### Note on `switch` and Boilerplate
 
 >The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
@@ -228,7 +232,12 @@ Let’s explore reducer composition more. Can we also extract a reducer managing
 
 ```js
 function visibleTodoFilter(state = SHOW_ALL, action) {
-  return action.filter;
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return action.filter;
+  default:
+    return state;
+  }
 }
 ```
 
@@ -274,7 +283,12 @@ import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } fro
 const { SHOW_ALL } = VisibilityFilters;
 
 export function visibleTodoFilter(state = SHOW_ALL, action) {
-  return action.filter;
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return action.filter;
+  default:
+    return state;
+  }
 }
 
 export function todos(state = [], action) {
