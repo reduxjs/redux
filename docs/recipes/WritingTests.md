@@ -127,11 +127,7 @@ props and shallow renderer. And later on check if they render correctly and if t
 import React, { PropTypes, Component } from 'react';
 import TodoTextInput from './TodoTextInput';
 
-export default class Header extends Component {
-  static propTypes = {
-    addTodo: PropTypes.func.isRequired
-  };
-
+class Header extends Component {
   handleSave(text) {
     if (text.length !== 0) {
       this.props.addTodo(text);
@@ -144,12 +140,17 @@ export default class Header extends Component {
           <h1>todos</h1>
           <TodoTextInput newTodo={true}
                          onSave={this.handleSave.bind(this)}
-                         placeholder='What needs to be done?'
-          />
+                         placeholder='What needs to be done?' />
       </header>
     );
   }
 }
+
+Header.propTypes = {
+  addTodo: PropTypes.func.isRequired
+};
+
+export default Header;
 ```
 
 can be tested like:
@@ -211,6 +212,23 @@ describe('components', () => {
   });
 });
 ```
+
+**Note:** Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
+
+1. npm install --save-dev jsdom
+2. Add `jsdomReact` helper function that looks like this:  
+   ```javascript
+   import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
+   import jsdom from 'mocha-jsdom';
+
+   export default function jsdomReact() {
+     jsdom();
+     ExecutionEnvironment.canUseDOM = true;
+   }
+
+   ```
+3. Call it before every test
+
 
 ### Glossary
 - [React Test Utils](http://facebook.github.io/react/docs/test-utils.html) - test utilities.
