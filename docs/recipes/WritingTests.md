@@ -215,15 +215,15 @@ describe('components', () => {
 
 **Note:** Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
 
-1. npm install --save-dev jsdom
+1. `npm install --save-dev jsdom`
 2. Add `jsdomReact` helper function that looks like this:  
    ```javascript
    import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
    import jsdom from 'mocha-jsdom';
 
    export default function jsdomReact() {
-     jsdom();
-     ExecutionEnvironment.canUseDOM = true;
+      jsdom();
+      ExecutionEnvironment.canUseDOM = true;
    }
 
    ```
