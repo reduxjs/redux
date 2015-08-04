@@ -84,6 +84,8 @@ function addTodoWithoutCheck(text) {
 }
 
 export function addTodo(text) {
+  // This form is allowed by Redux Thunk middleware
+  // described below in “Async Action Creators” section.
   return function (dispatch, getState) {
     if (getState().todos.length === 3) {
       // Exit early
@@ -234,7 +236,11 @@ However, this quickly gets repetitive because different components request data 
 
 **Middleware lets us write more expressive, potentially async action creators.** It lets us dispatch something other than plain objects, and interprets the values. For example, middleware can “catch” dispatched Promises and turn them into a pair of request and success/failure actions.
 
-The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). It lets you write action creators as “thunks”, that is, functions returning functions. This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
+The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
+
+>##### Note
+
+>Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”: it’s about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
 
 Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
 
