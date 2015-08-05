@@ -8,6 +8,8 @@ import * as TodoActions from '../actions/TodoActions';
 export default class TodoApp extends Component {
   render() {
     return (
+      // Connector subscribes children to a selection of app state. Also see: 
+      // http://gaearon.github.io/redux/docs/basics/UsageWithReact.html#connecting-to-redux
       <Connector select={state => ({ todos: state.todos })}>
         {this.renderChild}
       </Connector>
