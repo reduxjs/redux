@@ -7,7 +7,7 @@ reducing function you can pass to [`createStore`](createStore.md).
 
 The resulting reducer calls every child reducer, and gather their results into a single state object. The shape of the state object matches the keys of the passed `reducers`.
 
-Reducer function names are important. Don't be confused by the fact that reducer parameter is named `state`. *Single reducer in the combination does not update compete state of the store.* Its name is the key of the value in the store object it gets and updates. For example, reducer named `todos` receives and changes only `state.todos`.
+Reducer function names are important. Don't be confused by the fact that reducer's parameter is named `state`. *Single reducer in the combination does not update complete state of the store.* When you use modules syntax (``import * as reducers from 'reducers';``), reducers' names become keys of ``combineReducers`` parameter and later they are used as keys of the state object. Each reducer receives and updates only a value that's stored under appropriate key. For example, reducer named `todos` receives and updates only `state.todos`.
 
 >##### A Note for Flux Users
 
