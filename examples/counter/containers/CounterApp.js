@@ -14,6 +14,10 @@ class CounterApp extends Component {
   }
 }
 
-export default connect(state => ({
-  counter: state.counter
-}))(CounterApp);
+function select(state) {
+  return {
+    counter: state.counter
+  };
+}
+
+export default connect(select)(CounterApp);
