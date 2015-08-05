@@ -26,6 +26,7 @@
   * [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
   * [Server Rendering](/docs/recipes/ServerRendering.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)
+  * [Using Reselect](/docs/recipes/Reselect.md)
 * [Troubleshooting](docs/Troubleshooting.md)
 * [Glossary](docs/Glossary.md)
 * [API Reference](docs/api/README.md)
