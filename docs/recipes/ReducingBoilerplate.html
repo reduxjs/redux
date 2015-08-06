@@ -1,0 +1,1124 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Reducing Boilerplate | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.2.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/recipes/ComputingDerivedData.html" />
+    
+    
+    <link rel="prev" href="../../docs/recipes/MigratingToRedux.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="4.2" data-basepath="../.." data-revision="Thu Aug 06 2015 17:57:00 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/AsyncActions.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncActions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Async Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/Middleware.html">
+            
+            <span><b>3.2.</b> Middleware</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/AsyncFlow.html">
+            
+            <span><b>3.3.</b> Async Flow</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="docs/advanced/UsageWithReactRouter.html">
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+            <span><b>3.5.</b> Example: Reddit API</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="docs/advanced/NextSteps.html">
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+            <span><b>4.3.</b> Server Rendering</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="reducing-boilerplate">Reducing Boilerplate</h1>
+<p>Redux is in part <a href="../introduction/PriorArt.html">inspired by Flux</a>, and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider how Redux lets us choose how verbose we&#x2019;d like our code to be, depending on personal style, team preferences, longer term maintainability, and so on.</p>
+<h2 id="actions">Actions</h2>
+<p>Actions are plain objects describing what happened in the app, and serve as the sole way to describe an intention to mutate the data. It&#x2019;s important that <strong>action being objects you have to dispatch is not boilerplate, but one of the <a href="../introduction/ThreePrinciples.html">fundamental design choices</a> of Redux</strong>.</p>
+<p>There are frameworks claiming to be similar to Flux, but without a concept of action objects. In terms of being predictable, this is a step backwards from Flux or Redux. If there are no serializable plain object actions, it is impossible to record and replay user sessions, or to implement <a href="https://www.youtube.com/watch?v=xsSnOQynTHs" target="_blank">hot reloading with time travel</a>. If you&#x2019;d rather modify data directly, you don&#x2019;t need Redux.</p>
+<p>Actions look like this:</p>
+<pre><code class="lang-js">{ type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>, text: <span class="hljs-string">&apos;Use Redux&apos;</span> }
+{ type: <span class="hljs-string">&apos;REMOVE_TODO&apos;</span>, id: <span class="hljs-number">42</span> }
+{ type: <span class="hljs-string">&apos;LOAD_ARTICLE&apos;</span>, response: { ... } }
+</code></pre>
+<p>It is a common convention that actions have a constant type that helps reducers (or Stores in Flux) identify them. We recommend that you use strings and not <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol" target="_blank">Symbols</a> for action types, because strings are serializable, and by using Symbols you make recording and replaying harder than it needs to be.</p>
+<p>In Flux, it is traditionally thought that you would define every action type as a string constant:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">const</span> ADD_TODO = <span class="hljs-string">&apos;ADD_TODO&apos;</span>;
+<span class="hljs-keyword">const</span> REMOVE_TODO = <span class="hljs-string">&apos;REMOVE_TODO&apos;</span>;
+<span class="hljs-keyword">const</span> LOAD_ARTICLE = <span class="hljs-string">&apos;LOAD_ARTICLE&apos;</span>;
+</code></pre>
+<p>Why is this beneficial? <strong>It is often claimed that constants are unnecessary, and for small projects, this might be correct.</strong> For larger projects, there are some benefits to defining action types as constants:</p>
+<ul>
+<li>It helps maintain the naming consistent because all action types are gathered in a single place.</li>
+<li>Sometimes you want to see all existing actions before working on a new feature. It happens that the action you needed was already added by somebody on the team, but you didn&#x2019;t know.</li>
+<li>The list of action types that were added, removed, and changed in a Pull Request, helps everyone on the team keep track of scope and implementation of new features.</li>
+<li>If you make a typo when importing an action constant, you will get <code>undefined</code>. This is much easier to notice than a typo when you wonder why nothing happens when the action is dispatched.</li>
+</ul>
+<p>It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgement.</p>
+<h2 id="action-creators">Action Creators</h2>
+<p>It is another common convention that, instead of creating action objects inline in the places where you dispatch the actions, you would create functions generating them.</p>
+<p>For example, instead of calling <code>dispatch</code> with an object literal:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// somewhere in an event handler</span>
+dispatch({
+  type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>,
+  text: <span class="hljs-string">&apos;Use Redux&apos;</span>
+});
+</code></pre>
+<p>you might write an action creator in a separate file, and import it from your component:</p>
+<h4 id="-actioncreators-js"><code>actionCreators.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodo</span>(<span class="hljs-params">text</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>,
+    text
+  };
+}
+</code></pre>
+<h4 id="-addtodo-js"><code>AddTodo.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { addTodo } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actionCreators&apos;</span>;
+
+<span class="hljs-comment">// somewhere in an event handler</span>
+dispatch(addTodo(<span class="hljs-string">&apos;Use Redux&apos;</span>))
+</code></pre>
+<p>Action creators have often been criticized as boilerplate. Well, you don&#x2019;t have to write them! <strong>You can use object literals if you feel this better suits your project.</strong> There are, however, some benefits for writing action creators you should know about.</p>
+<p>Let&#x2019;s say a designer comes back to us after reviewing our prototype, and tells that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with <a href="https://github.com/gaearon/redux-thunk" target="_blank">redux-thunk</a> middleware an adding an early exit:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodoWithoutCheck</span>(<span class="hljs-params">text</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>,
+    text
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodo</span>(<span class="hljs-params">text</span>) </span>{
+  <span class="hljs-comment">// This form is allowed by Redux Thunk middleware</span>
+  <span class="hljs-comment">// described below in &#x201C;Async Action Creators&#x201D; section.</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">dispatch, getState</span>) </span>{
+    <span class="hljs-keyword">if</span> (getState().todos.length === <span class="hljs-number">3</span>) {
+      <span class="hljs-comment">// Exit early</span>
+      <span class="hljs-keyword">return</span>;
+    }
+
+    dispatch(addTodoWithoutCheck(text));
+  }
+}
+</code></pre>
+<p>We just modified how <code>addTodo</code> action creator behaves, completely invisible to the calling code. <strong>We don&#x2019;t have to worry about looking at each place where todos are being added, to make sure they have this check.</strong> Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions, and it&#x2019;s very handy when the application is under heavy development, and the requirements change often.</p>
+<h3 id="generating-action-creators">Generating Action Creators</h3>
+<p>Some frameworks like <a href="https://github.com/acdlite/flummox" target="_blank">Flummox</a> generate action type constants automatically from the action creator function definitions. The idea is that you don&#x2019;t need to both define <code>ADD_TODO</code> constant and <code>addTodo()</code> action creator. Under the hood, such solutions still generate action type constants, but they&#x2019;re created implicitly so it&#x2019;s a level of indirection.</p>
+<p>We don&#x2019;t recommend this approach. If you&#x2019;re tired of writing simple action creators like:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodo</span>(<span class="hljs-params">text</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>,
+    text
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeTodo</span>(<span class="hljs-params">id</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;REMOVE_TODO&apos;</span>,
+    id
+  };
+}
+</code></pre>
+<p>you can always write a function that generates an action creator:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeActionCreator</span>(<span class="hljs-params">type, ...argNames</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-keyword">let</span> action = { type };
+    argNames.forEach((arg, index) =&gt; {
+      action[argNames[index]] = args[index];
+    });
+    <span class="hljs-keyword">return</span> action;
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> addTodo = makeActionCreator(<span class="hljs-string">&apos;ADD_TODO&apos;</span>, <span class="hljs-string">&apos;todo&apos;</span>);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> removeTodo = makeActionCreator(<span class="hljs-string">&apos;REMOVE_TODO&apos;</span>, <span class="hljs-string">&apos;id&apos;</span>);
+</code></pre>
+<p>See <a href="https://github.com/insin/redux-action-utils" target="_blank">redux-action-utils</a> and <a href="https://github.com/acdlite/redux-actions" target="_blank">redux-actions</a> for examples of such utilites.  </p>
+<p>Note that such utilities add magic to your code.<br>Are magic and indirection really worth extra few lines?</p>
+<h2 id="async-action-creators">Async Action Creators</h2>
+<p><a href="../Glossary.html#middleware">Middleware</a> lets you inject a custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.</p>
+<p>Without any middleware, <a href="../api/Store.html#dispatch"><code>dispatch</code></a> only accepts a plain object, so we have to perform AJAX calls inside our components:</p>
+<h4 id="-actioncreators-js"><code>actionCreators.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPostsSuccess</span>(<span class="hljs-params">userId, response</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;LOAD_POSTS_SUCCESS&apos;</span>,
+    userId,
+    response
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPostsFailure</span>(<span class="hljs-params">userId, error</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;LOAD_POSTS_FAILURE&apos;</span>,
+    userId,
+    error
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPostsRequest</span>(<span class="hljs-params">userId</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;LOAD_POSTS_REQUEST&apos;</span>,
+    userId
+  };
+}
+</code></pre>
+<h4 id="-userinfo-js"><code>UserInfo.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> { connect } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-redux&apos;</span>;
+<span class="hljs-keyword">import</span> { loadPostsRequest, loadPostsSuccess, loadPostsFailure } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actionCreators&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Posts</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  loadData(userId) {
+    <span class="hljs-comment">// Injected into props by React Redux `connect()` call:</span>
+    <span class="hljs-keyword">let</span> { dispatch, posts } = <span class="hljs-keyword">this</span>.props;
+
+    <span class="hljs-keyword">if</span> (posts[userId]) {
+      <span class="hljs-comment">// There is cached data! Don&apos;t do anything.</span>
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// Reducer can react to this action by setting</span>
+    <span class="hljs-comment">// `isFetching` and thus letting us show a spinner.</span>
+    dispatch(loadPostsRequest(userId));
+
+    <span class="hljs-comment">// Reducer can react to these actions by filling the `users`.</span>
+    fetch(<span class="hljs-string">`http://myapi.com/users/<span class="hljs-subst">${userId}</span>/posts`</span>).then(
+      response =&gt; dispatch(loadPostsSuccess(userId, response)),
+      error =&gt; dispatch(loadPostsFailure(userId, error))
+    );
+  }
+
+  componentDidMount() {
+    <span class="hljs-keyword">this</span>.loadData(<span class="hljs-keyword">this</span>.props.userId);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    <span class="hljs-keyword">if</span> (nextProps.userId !== <span class="hljs-keyword">this</span>.props.userId) {
+      <span class="hljs-keyword">this</span>.loadData(nextProps.userId);
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.isLoading) {
+      <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Loading...<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>;</span>
+    }
+
+    <span class="hljs-keyword">let</span> posts = <span class="hljs-keyword">this</span>.props.posts.map(post =&gt;
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Post</span> <span class="hljs-attribute">post</span>=<span class="hljs-value">{post}</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{post.id}</span> /&gt;</span>
+    )</span>;
+
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{posts}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> connect(state =&gt; ({
+  posts: state.posts
+}))(Posts);
+</code></pre>
+<p>However, this quickly gets repetitive because different components request data from the same API endpoints. Moreover, we want to reuse some of this logic (e.g. early exit when there is cached data available) from many components.</p>
+<p><strong>Middleware lets us write more expressive, potentially async action creators.</strong> It lets us dispatch something other than plain objects, and interprets the values. For example, middleware can &#x201C;catch&#x201D; dispatched Promises and turn them into a pair of request and success/failure actions.</p>
+<p>The simplest example of middleware is <a href="https://github.com/gaearon/redux-thunk" target="_blank">redux-thunk</a>. <strong>&#x201C;Thunk&#x201D; middleware lets you write action creators as &#x201C;thunks&#x201D;, that is, functions returning functions.</strong> This inverts the control: you will get <code>dispatch</code> as an argument, so you can write an action creator that dispatches many times.</p>
+<blockquote>
+<h5 id="note">Note</h5>
+<p>Thunk middleware is just one example of middleware. Middleware is not about &#x201C;letting you dispatch functions&#x201D;: it&#x2019;s about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.</p>
+</blockquote>
+<p>Consider the code above rewritten with <a href="https://github.com/gaearon/redux-thunk" target="_blank">redux-thunk</a>:</p>
+<h4 id="-actioncreators-js"><code>actionCreators.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPosts</span>(<span class="hljs-params">userId</span>) </span>{
+  <span class="hljs-comment">// Interpreted by the thunk middleware:</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">dispatch, getState</span>) </span>{
+    <span class="hljs-keyword">let</span> { posts } = getState();
+    <span class="hljs-keyword">if</span> (posts[userId]) {
+      <span class="hljs-comment">// There is cached data! Don&apos;t do anything.</span>
+      <span class="hljs-keyword">return</span>;
+    }
+
+    dispatch({
+      type: <span class="hljs-string">&apos;LOAD_POSTS_REQUEST&apos;</span>,
+      userId
+    });
+
+    <span class="hljs-comment">// Dispatch vanilla actions asynchronously</span>
+    fetch(<span class="hljs-string">`http://myapi.com/users/<span class="hljs-subst">${userId}</span>/posts`</span>).then(
+      response =&gt; dispatch({
+        type: <span class="hljs-string">&apos;LOAD_POSTS_SUCCESS&apos;</span>,
+        userId,
+        respone
+      }),
+      error =&gt; dispatch({
+        type: <span class="hljs-string">&apos;LOAD_POSTS_FAILURE&apos;</span>,
+        userId,
+        error
+      })
+    );
+  }
+}
+</code></pre>
+<h4 id="-userinfo-js"><code>UserInfo.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> { connect } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-redux&apos;</span>;
+<span class="hljs-keyword">import</span> { loadPosts } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actionCreators&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Posts</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  componentDidMount() {
+    <span class="hljs-keyword">this</span>.props.dispatch(loadPosts(<span class="hljs-keyword">this</span>.props.userId));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    <span class="hljs-keyword">if</span> (nextProps.userId !== <span class="hljs-keyword">this</span>.props.userId) {
+      <span class="hljs-keyword">this</span>.props.dispatch(loadPosts(nextProps.userId));
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.isLoading) {
+      <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Loading...<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>;</span>
+    }
+
+    <span class="hljs-keyword">let</span> posts = <span class="hljs-keyword">this</span>.props.posts.map(post =&gt;
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Post</span> <span class="hljs-attribute">post</span>=<span class="hljs-value">{post}</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{post.id}</span> /&gt;</span>
+    )</span>;
+
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{posts}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> connect(state =&gt; ({
+  posts: state.posts
+}))(Posts);
+</code></pre>
+<p>This is much less typing! If you&#x2019;d like, you can still have &#x201C;vanilla&#x201D; action creators like <code>loadPostsSuccess</code> which you&#x2019;d use from a &#x201C;smart&#x201D; <code>loadPosts</code> action creator.</p>
+<p><strong>Finally, you can write your own middleware.</strong> Let&#x2019;s say you want to generalize the pattern above and describe your async action creators like this instead:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPosts</span>(<span class="hljs-params">userId</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-comment">// Types of actions to emit before and after</span>
+    types: [<span class="hljs-string">&apos;LOAD_POSTS_REQUEST&apos;</span>, <span class="hljs-string">&apos;LOAD_POSTS_SUCCESS&apos;</span>, <span class="hljs-string">&apos;LOAD_POSTS_FAILURE&apos;</span>],
+    <span class="hljs-comment">// Check the cache (optional):</span>
+    shouldCallAPI: (state) =&gt; !state.users[userId],
+    <span class="hljs-comment">// Perform the fetching:</span>
+    callAPI: () =&gt; fetch(<span class="hljs-string">`http://myapi.com/users/<span class="hljs-subst">${userId}</span>/posts`</span>),
+    <span class="hljs-comment">// Arguments to inject in begin/end actions</span>
+    payload: { userId }
+  };
+}
+</code></pre>
+<p>The middleware that interprets such actions could look like this:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callAPIMiddleware</span>(<span class="hljs-params">{ dispatch, getState }</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">next</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">action</span>) </span>{
+      <span class="hljs-keyword">const</span> {
+        types,
+        callAPI,
+        shouldCallAPI = () =&gt; <span class="hljs-literal">true</span>,
+        payload = {}
+      } = action;
+
+      <span class="hljs-keyword">if</span> (!types) {
+        <span class="hljs-comment">// Normal action: pass it on</span>
+        <span class="hljs-keyword">return</span> next(action);
+      }
+
+      <span class="hljs-keyword">if</span> (
+        !<span class="hljs-built_in">Array</span>.isArray(types) ||
+        types.length !== <span class="hljs-number">3</span> ||
+        !types.every(type =&gt; <span class="hljs-keyword">typeof</span> type === <span class="hljs-string">&apos;string&apos;</span>)
+      ) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&apos;Expected an array of three string types.&apos;</span>);
+      }
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> callAPI !== <span class="hljs-string">&apos;function&apos;</span>) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&apos;Expected fetch to be a function.&apos;</span>);
+      }
+
+      <span class="hljs-keyword">if</span> (!shouldCallAPI(getState())) {
+        <span class="hljs-keyword">return</span>;
+      }
+
+      <span class="hljs-keyword">const</span> [requestType, successType, failureType] = types;
+
+      dispatch(<span class="hljs-built_in">Object</span>.assign({}, payload, {
+        type: requestType
+      }));
+
+      <span class="hljs-keyword">return</span> callAPI().then(
+        response =&gt; dispatch(<span class="hljs-built_in">Object</span>.assign({}, payload, {
+          response: response,
+          type: successType
+        })),
+        error =&gt; dispatch(<span class="hljs-built_in">Object</span>.assign({}, payload, {
+          error: error,
+          type: failureType
+        }))
+      );
+    };
+  };
+}
+</code></pre>
+<p>After passing it once to <a href="../api/applyMiddleware.html"><code>applyMiddleware(...middlewares)</code></a>, you can write all your API-calling action creators the same way:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadPosts</span>(<span class="hljs-params">userId</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    types: [<span class="hljs-string">&apos;LOAD_POSTS_REQUEST&apos;</span>, <span class="hljs-string">&apos;LOAD_POSTS_SUCCESS&apos;</span>, <span class="hljs-string">&apos;LOAD_POSTS_FAILURE&apos;</span>],
+    shouldCallAPI: (state) =&gt; !state.users[userId],
+    callAPI: () =&gt; fetch(<span class="hljs-string">`http://myapi.com/users/<span class="hljs-subst">${userId}</span>/posts`</span>),
+    payload: { userId }
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadComments</span>(<span class="hljs-params">postId</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    types: [<span class="hljs-string">&apos;LOAD_COMMENTS_REQUEST&apos;</span>, <span class="hljs-string">&apos;LOAD_COMMENTS_SUCCESS&apos;</span>, <span class="hljs-string">&apos;LOAD_COMMENTS_FAILURE&apos;</span>],
+    shouldCallAPI: (state) =&gt; !state.posts[postId],
+    callAPI: () =&gt; fetch(<span class="hljs-string">`http://myapi.com/posts/<span class="hljs-subst">${postId}</span>/comments`</span>),
+    payload: { postId }
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addComment</span>(<span class="hljs-params">postId, message</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    types: [<span class="hljs-string">&apos;ADD_COMMENT_REQUEST&apos;</span>, <span class="hljs-string">&apos;ADD_COMMENT_SUCCESS&apos;</span>, <span class="hljs-string">&apos;ADD_COMMENT_FAILURE&apos;</span>],
+    callAPI: () =&gt; fetch(<span class="hljs-string">`http://myapi.com/posts/<span class="hljs-subst">${postId}</span>/comments`</span>, {
+      method: <span class="hljs-string">&apos;post&apos;</span>,
+      headers: {
+        <span class="hljs-string">&apos;Accept&apos;</span>: <span class="hljs-string">&apos;application/json&apos;</span>,
+        <span class="hljs-string">&apos;Content-Type&apos;</span>: <span class="hljs-string">&apos;application/json&apos;</span>
+      },
+      body: <span class="hljs-built_in">JSON</span>.stringify({ message })
+    }),
+    payload: { postId, message }
+  };
+}
+</code></pre>
+<h2 id="reducers">Reducers</h2>
+<p>Redux reduces the boilerplate of Flux stores considerably by describing the update logic as a function. A function is simpler than an object, and much simpler than a class.</p>
+<p>Consider this Flux store:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">let</span> _todos = [];
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">const</span> TodoStore = assign({}, EventEmitter.prototype, {
+  getAll() {
+    <span class="hljs-keyword">return</span> _todos;
+  }
+});
+
+AppDispatcher.register(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> ActionTypes.ADD_TODO:
+    <span class="hljs-keyword">let</span> text = action.text.trim();
+    _todos.push(text);
+    TodoStore.emitChange();
+  }
+});
+</code></pre>
+<p>With Redux, the same update logic can be described as a reducing function:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> ActionTypes.ADD_TODO:
+    <span class="hljs-keyword">let</span> text = action.text.trim();
+    <span class="hljs-keyword">return</span> [...state, text];
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>The <code>switch</code> statement is <em>not</em> the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).</p>
+<p>It&#x2019;s unfortunate that many still choose Flux framework based on whether it uses <code>switch</code> statements in the documentation. If you don&#x2019;t like <code>switch</code>, you can solve this with a single function, as we show below.</p>
+<h3 id="generating-reducers">Generating Reducers</h3>
+<p>Let&#x2019;s write a function that lets us express reducers as object mapping from action types to handlers. For example, if we want our <code>todos</code> reducers to be defined like this:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> todos = createReducer([], {
+  [ActionTypes.ADD_TODO](state, action) {
+    <span class="hljs-keyword">let</span> text = action.text.trim();
+    <span class="hljs-keyword">return</span> [...state, text];
+  }
+}
+</code></pre>
+<p>We can write the following helper to accomplish this:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createReducer</span>(<span class="hljs-params">initialState, handlers</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reducer</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+    <span class="hljs-keyword">if</span> (handlers.hasOwnProperty(action.type)) {
+      <span class="hljs-keyword">return</span> handlers[action.type](state, action);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> state;
+    }
+  }
+}
+</code></pre>
+<p>This wasn&#x2019;t difficult, was it? Redux doesn&#x2019;t provide such helper by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to &#x201C;catch all&#x201D; handler. All of this depends on the conventions you choose for your team on a specific project.</p>
+<p>Redux reducer API is <code>(state, action) =&gt; state</code>, but how you create those reducers is up to you.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/recipes/MigratingToRedux.html" class="navigation navigation-prev " aria-label="Previous page: Migrating to Redux"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/recipes/ComputingDerivedData.html" class="navigation navigation-next " aria-label="Next page: Computing Derived Data"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

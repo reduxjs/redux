@@ -1,0 +1,938 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Writing Tests | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.2.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/Troubleshooting.html" />
+    
+    
+    <link rel="prev" href="../../docs/recipes/ComputingDerivedData.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="4.5" data-basepath="../.." data-revision="Thu Aug 06 2015 17:57:00 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/AsyncActions.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncActions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Async Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/Middleware.html">
+            
+            <span><b>3.2.</b> Middleware</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/AsyncFlow.html">
+            
+            <span><b>3.3.</b> Async Flow</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="docs/advanced/UsageWithReactRouter.html">
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+            <span><b>3.5.</b> Example: Reddit API</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="docs/advanced/NextSteps.html">
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+            <span><b>4.3.</b> Server Rendering</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="writing-tests">Writing tests</h1>
+<p>Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.</p>
+<h3 id="setting-up">Setting Up</h3>
+<p>We recommend <a href="http://mochajs.org/" target="_blank">Mocha</a> as the testing engine.<br>Note that it runs in a Node environment, so you won&#x2019;t have access to DOM.</p>
+<pre><code>npm install --save-dev mocha
+</code></pre><p>To use it together with <a href="http://babeljs.io" target="_blank">Babel</a>, add this to <code>scripts</code> in your <code>package.json</code>:</p>
+<pre><code class="lang-js">{
+  ...
+  <span class="hljs-string">&quot;scripts&quot;</span>: {
+    ...
+    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;mocha --compilers js:babel/register --recursive&quot;</span>,
+    <span class="hljs-string">&quot;test:watch&quot;</span>: <span class="hljs-string">&quot;npm test -- --watch&quot;</span>,
+  },
+  ...
+}
+</code></pre>
+<p>and run <code>npm test</code> to run it once, or <code>npm run test:watch</code> to test on every file change.</p>
+<h3 id="action-creators">Action Creators</h3>
+<p>In Redux action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.</p>
+<h4 id="example">Example</h4>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodo</span>(<span class="hljs-params">text</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>,
+    text
+  };
+}
+</code></pre>
+<p>can be tested like:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> expect <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;expect&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> actions <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../../actions/TodoActions&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> types <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../../constants/ActionTypes&apos;</span>;
+
+describe(<span class="hljs-string">&apos;actions&apos;</span>, () =&gt; {
+  it(<span class="hljs-string">&apos;should create an action to add a todo&apos;</span>, () =&gt; {
+    <span class="hljs-keyword">const</span> text = <span class="hljs-string">&apos;Finish docs&apos;</span>;
+    <span class="hljs-keyword">const</span> expectedAction = {
+      type: types.ADD_TODO,
+      text
+    };
+    expect(actions.addTodo(text)).toEqual(expectedAction);
+  });
+}
+</code></pre>
+<h3 id="reducers">Reducers</h3>
+<p>Reducer should return the new state after applying action on the previous state. And that&#x2019;s the behavior tested below.</p>
+<h4 id="example">Example</h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { ADD_TODO } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../constants/ActionTypes&apos;</span>;
+
+<span class="hljs-keyword">const</span> initialState = [{
+  text: <span class="hljs-string">&apos;Use Redux&apos;</span>,
+  completed: <span class="hljs-literal">false</span>,
+  id: <span class="hljs-number">0</span>
+}];
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> ADD_TODO:
+    <span class="hljs-keyword">return</span> [{
+      id: (state.length === <span class="hljs-number">0</span>) ? <span class="hljs-number">0</span> : state[<span class="hljs-number">0</span>].id + <span class="hljs-number">1</span>,
+      completed: <span class="hljs-literal">false</span>,
+      text: action.text
+    }, ...state];
+
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>can be tested like:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> expect <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;expect&apos;</span>;
+<span class="hljs-keyword">import</span> reducer <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../../reducers/todos&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> types <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../../constants/ActionTypes&apos;</span>;
+
+describe(<span class="hljs-string">&apos;todos reducer&apos;</span>, () =&gt; {
+  it(<span class="hljs-string">&apos;should return the initial state&apos;</span>, () =&gt; {
+    expect(
+      reducer(<span class="hljs-literal">undefined</span>, {})
+    ).toEqual([{
+      text: <span class="hljs-string">&apos;Use Redux&apos;</span>,
+      completed: <span class="hljs-literal">false</span>,
+      id: <span class="hljs-number">0</span>
+    }]);
+  });
+
+  it(<span class="hljs-string">&apos;should handle ADD_TODO&apos;</span>, () =&gt; {
+    expect(
+      reducer([], {
+        type: types.ADD_TODO,
+        text: <span class="hljs-string">&apos;Run the tests&apos;</span>
+      })
+    ).toEqual([{
+      text: <span class="hljs-string">&apos;Run the tests&apos;</span>,
+      completed: <span class="hljs-literal">false</span>,
+      id: <span class="hljs-number">0</span>
+    }]);
+
+    expect(
+      reducer([{
+        text: <span class="hljs-string">&apos;Use Redux&apos;</span>,
+        completed: <span class="hljs-literal">false</span>,
+        id: <span class="hljs-number">0</span>
+      }], {
+        type: types.ADD_TODO,
+        text: <span class="hljs-string">&apos;Run the tests&apos;</span>
+      })
+    ).toEqual([{
+      text: <span class="hljs-string">&apos;Run the tests&apos;</span>,
+      completed: <span class="hljs-literal">false</span>,
+      id: <span class="hljs-number">1</span>
+    }, {
+      text: <span class="hljs-string">&apos;Use Redux&apos;</span>,
+      completed: <span class="hljs-literal">false</span>,
+      id: <span class="hljs-number">0</span>
+    }]);
+  });
+</code></pre>
+<h3 id="components">Components</h3>
+<p>A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.</p>
+<p>To test the components we make a <code>setup()</code> helper that passes the stubbed callbacks as props and renders the component with <a href="https://facebook.github.io/react/docs/test-utils.html#shallow-rendering" target="_blank">React shallow renderer</a>. This lets individual tests assert on whether the callbacks were called when expected.</p>
+<h4 id="example">Example</h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> React, { PropTypes, Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> TodoTextInput <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./TodoTextInput&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Header</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  handleSave(text) {
+    <span class="hljs-keyword">if</span> (text.length !== <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">this</span>.props.addTodo(text);
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">header</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">&apos;header&apos;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>todos<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">TodoTextInput</span> <span class="hljs-attribute">newTodo</span>=<span class="hljs-value">{true}</span>
+                         <span class="hljs-attribute">onSave</span>=<span class="hljs-value">{this.handleSave.bind(this)}</span>
+                         <span class="hljs-attribute">placeholder</span>=<span class="hljs-value">&apos;What needs to be done?&apos;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">header</span>&gt;</span>
+    )</span>;
+  }
+}
+
+Header.propTypes = {
+  addTodo: PropTypes.func.isRequired
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Header;
+</code></pre>
+<p>can be tested like:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> expect <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;expect&apos;</span>;
+<span class="hljs-keyword">import</span> jsdomReact <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../jsdomReact&apos;</span>;
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react/addons&apos;</span>;
+<span class="hljs-keyword">import</span> Header <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../../components/Header&apos;</span>;
+<span class="hljs-keyword">import</span> TodoTextInput <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;../../components/TodoTextInput&apos;</span>;
+
+<span class="hljs-keyword">const</span> { TestUtils } = React.addons;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setup</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> props = {
+    addTodo: expect.createSpy()
+  };
+
+  <span class="hljs-keyword">let</span> renderer = TestUtils.createRenderer();
+  renderer.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Header</span> {<span class="hljs-attribute">...props</span>} /&gt;</span>)</span>;
+  <span class="hljs-keyword">let</span> output = renderer.getRenderOutput();
+
+  <span class="hljs-keyword">return</span> {
+    props: props,
+    output: output,
+    renderer: renderer
+  };
+}
+
+describe(<span class="hljs-string">&apos;components&apos;</span>, () =&gt; {
+  jsdomReact();
+
+  describe(<span class="hljs-string">&apos;Header&apos;</span>, () =&gt; {
+    it(<span class="hljs-string">&apos;should render correctly&apos;</span>, () =&gt; {
+      <span class="hljs-keyword">const</span> { output } = setup();
+
+      expect(output.type).toBe(<span class="hljs-string">&apos;header&apos;</span>);
+      expect(output.props.className).toBe(<span class="hljs-string">&apos;header&apos;</span>);
+
+      <span class="hljs-keyword">let</span> [h1, input] = output.props.children;
+
+      expect(h1.type).toBe(<span class="hljs-string">&apos;h1&apos;</span>);
+      expect(h1.props.children).toBe(<span class="hljs-string">&apos;todos&apos;</span>);
+
+      expect(input.type).toBe(TodoTextInput);
+      expect(input.props.newTodo).toBe(<span class="hljs-literal">true</span>);
+      expect(input.props.placeholder).toBe(<span class="hljs-string">&apos;What needs to be done?&apos;</span>);
+    });
+
+    it(<span class="hljs-string">&apos;should call call addTodo if length of text is greater than 0&apos;</span>, () =&gt; {
+      <span class="hljs-keyword">const</span> { output, props } = setup();
+      <span class="hljs-keyword">let</span> input = output.props.children[<span class="hljs-number">1</span>];
+      input.props.onSave(<span class="hljs-string">&apos;&apos;</span>);
+      expect(props.addTodo.calls.length).toBe(<span class="hljs-number">0</span>);
+      input.props.onSave(<span class="hljs-string">&apos;Use Redux&apos;</span>);
+      expect(props.addTodo.calls.length).toBe(<span class="hljs-number">1</span>);
+    });
+  });
+});
+</code></pre>
+<h4 id="fixing-broken-setstate">Fixing Broken <code>setState()</code></h4>
+<p>Shallow rendering currently <a href="https://github.com/facebook/react/issues/4019" target="_blank">throws an error if <code>setState</code> is called</a>. React seems to expect that, if you use <code>setState</code>, DOM is available. To work around the issue, we use jsdom so React doesn&#x2019;t throw the exception when DOM isn&#x2019;t available. Here&#x2019;s how to set it up:</p>
+<pre><code>npm install --save-dev jsdom mocha-jsdom
+</code></pre><p>Then add a <code>jsdomReact()</code> helper function that looks like this:  </p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> ExecutionEnvironment <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react/lib/ExecutionEnvironment&apos;</span>;
+<span class="hljs-keyword">import</span> jsdom <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;mocha-jsdom&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">jsdomReact</span>(<span class="hljs-params"></span>) </span>{
+  jsdom();
+  ExecutionEnvironment.canUseDOM = <span class="hljs-literal">true</span>;
+}
+</code></pre>
+<p>Call it before running any component tests. Note this is a dirty workaround, and it can be removed once <a href="https://github.com/facebook/react/issues/4019" target="_blank">facebook/react#4019</a> is fixed.</p>
+<h3 id="glossary">Glossary</h3>
+<ul>
+<li><p><a href="http://facebook.github.io/react/docs/test-utils.html" target="_blank">React Test Utils</a>: Test utilities that ship with React.</p>
+</li>
+<li><p><a href="https://github.com/tmpvar/jsdom" target="_blank">jsdom</a>: An in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.</p>
+</li>
+<li><p><a href="http://facebook.github.io/react/docs/test-utils.html#shallow-rendering" target="_blank">Shallow rendering</a>: The main idea of shallow rendering is to instantiate a component and get the result of its <code>render</code> method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a <a href="https://facebook.github.io/react/docs/glossary.html#react-elements" target="_blank">ReactElement</a> that means it is possible to access its children, props and test if it works as expected.</p>
+</li>
+</ul>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/recipes/ComputingDerivedData.html" class="navigation navigation-prev " aria-label="Previous page: Computing Derived Data"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/Troubleshooting.html" class="navigation navigation-next " aria-label="Next page: Troubleshooting"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

@@ -1,0 +1,774 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Store | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.2.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/basics/DataFlow.html" />
+    
+    
+    <link rel="prev" href="../../docs/basics/Reducers.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="2.3" data-basepath="../.." data-revision="Thu Aug 06 2015 17:57:00 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/AsyncActions.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncActions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Async Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/Middleware.html">
+            
+            <span><b>3.2.</b> Middleware</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/AsyncFlow.html">
+            
+            <span><b>3.3.</b> Async Flow</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="docs/advanced/UsageWithReactRouter.html">
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+            <span><b>3.5.</b> Example: Reddit API</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="docs/advanced/NextSteps.html">
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+            <span><b>4.3.</b> Server Rendering</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="store">Store</h1>
+<p>In the previous steps, we have defined the <a href="Action.md">actions</a> that represent the facts about &#x201C;what happened&#x201D; and the <a href="Reducers.html">reducers</a> that update the state according to those actions.</p>
+<p><strong>Store</strong> is an object that brings them together. The store has the following responsibilities:</p>
+<ul>
+<li>Holds application state;</li>
+<li>Allows access to state via <a href="../api/Store.html#getState"><code>getState()</code></a>;</li>
+<li>Allows state to be updated via <a href="../api/Store.html#dispatch"><code>dispatch(action)</code></a>;</li>
+<li>Registers listeners via <a href="../api/Store.html#subscribe"><code>subscribe(listener)</code></a>.</li>
+</ul>
+<p>It&#x2019;s important to note that you&#x2019;ll only have a single store in a Redux application. When you want to split your data handling logic, you&#x2019;ll use <a href="Reducers.html#splitting-reducers">reducer composition</a> instead of many stores.</p>
+<p>It&#x2019;s easy to create a store if you have a reducer. For example, if we had a single <code>todoApp</code> reducer in our app, we would have written this:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { createStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> todoApp <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-keyword">let</span> store = createStore(todoApp);
+</code></pre>
+<p>For maintainability, we previously split them into separate reducers, so we&#x2019;ll combine them with <a href="../api/combineReducers.html"><code>combineReducers()</code></a>:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { combineReducers, createStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> reducers <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-keyword">let</span> todoApp = combineReducers(reducers);
+<span class="hljs-keyword">let</span> store = createStore(todoApp);
+</code></pre>
+<p>You may optionally specify the initial state as the second argument to <a href="../api/createStore.html"><code>createStore()</code></a>. This is useful for hydrating the state of the client to match the state of a Redux application running on the server.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">let</span> store = createStore(todoApp, <span class="hljs-built_in">window</span>.STATE_FROM_SERVER);
+</code></pre>
+<h2 id="dispatching-actions">Dispatching Actions</h2>
+<p>Now that we have created a store, let&#x2019;s verify our program works! Even without any UI, we can already test the update logic.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actions&apos;</span>;
+
+<span class="hljs-comment">// Log the initial state</span>
+<span class="hljs-built_in">console</span>.log(store.getState());
+
+<span class="hljs-comment">// Every time the state changes, log it</span>
+<span class="hljs-keyword">let</span> unsubscribe = store.subscribe(() =&gt;
+  <span class="hljs-built_in">console</span>.log(store.getState())
+);
+
+<span class="hljs-comment">// Dispatch some actions</span>
+store.dispatch(addTodo(<span class="hljs-string">&apos;Learn about actions&apos;</span>));
+store.dispatch(addTodo(<span class="hljs-string">&apos;Learn about reducers&apos;</span>));
+store.dispatch(addTodo(<span class="hljs-string">&apos;Learn about store&apos;</span>));
+store.dispatch(completeTodo(<span class="hljs-number">0</span>));
+store.dispatch(completeTodo(<span class="hljs-number">1</span>));
+store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
+
+<span class="hljs-comment">// Stop listening to state updates</span>
+unsubscribe();
+</code></pre>
+<p>You can see how this causes the state held by the store to change:</p>
+<p><img src="http://i.imgur.com/zMMtoMz.png" width="70%"></p>
+<p>We specified the behavior of our app before we even started writing the UI. We won&#x2019;t do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won&#x2019;t need to mock anything because they are just functions. Call them, and make assertions on what they return.</p>
+<h2 id="source-code">Source Code</h2>
+<h4 id="-index-js"><code>index.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { combineReducers, createStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> reducers <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-keyword">let</span> todoApp = combineReducers(reducers);
+<span class="hljs-keyword">let</span> store = createStore(todoApp);
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>Before creating a UI for our todo app, we will take a detour to <a href="DataFlow.html">how the data flows in a Redux application</a>.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/basics/Reducers.html" class="navigation navigation-prev " aria-label="Previous page: Reducers"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/basics/DataFlow.html" class="navigation navigation-next " aria-label="Next page: Data Flow"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
