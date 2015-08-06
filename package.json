@@ -3,6 +3,7 @@
   "version": "0.12.0",
   "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "browser": "scripts/browser",
     "build": "scripts/build",
