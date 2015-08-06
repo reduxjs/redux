@@ -120,15 +120,15 @@ In the example above, `visibilityFilterSelector` and `todosSelector` are input-s
 
 ### Composing Selectors
 
-A memoized selector can itself be an input-selector to another memoized selector. Here is `visibleTodosSelector` being used as an input-selector to a selector that further filters the todos:
+A memoized selector can itself be an input-selector to another memoized selector. Here is `visibleTodosSelector` being used as an input-selector to a selector that further filters the todos by keyword:
 
 ```js
-const filterBySelector = (state) => state.filterBy;
+const keywordSelector = (state) => state.keyword;
 
-const mentionsReduxSelector = createSelector(
-  [visibleTodosSelector, filterBySelector],
-  (visibleTodos, filterBy) => visibleTodos.filter(
-    todo => todo.indexOf(filterBy) > -1
+const keywordFilterSelector = createSelector(
+  [visibleTodosSelector, keywordSelector],
+  (visibleTodos, keyword) => visibleTodos.filter(
+    todo => todo.indexOf(keyword) > -1
   )
 );
 ```
