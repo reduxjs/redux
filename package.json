@@ -3,6 +3,7 @@
   "version": "1.0.0-rc",
   "description": "Predictable state container for JavaScript apps",
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "clean": "rimraf lib dist coverage",
     "lint": "eslint src test examples",

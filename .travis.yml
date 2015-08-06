@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "iojs"
+  - "iojs-2"
 script:
   - npm test
   - npm run build:examples
