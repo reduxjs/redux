@@ -33,7 +33,7 @@ composeMiddleware(...middlewares);
 
 ## Example of how to write middleware
 
-Here's a middleware for adding naive promise support to Redux:
+Here's a middleware for adding native promise support to Redux:
 
 ```js
 function promiseMiddleware(next) {
