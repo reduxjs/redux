@@ -719,7 +719,7 @@
 </center>
 
 <p>In this todo app, we will only have a single &#x201C;smart&#x201D; component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest &#x201C;smart&#x201D; components, we suggest you to pass props down whenever possible.</p>
-<h2 id="desigining-component-hierarchy">Desigining Component Hierarchy</h2>
+<h2 id="designing-component-hierarchy">Designing Component Hierarchy</h2>
 <p>Remember how we <a href="Reducers.html">designed the shape of the root state object</a>? It&#x2019;s time we design the UI hierarchy to match it. This is not a Redux-specific task. <a href="https://facebook.github.io/react/docs/thinking-in-react.html" target="_blank">Thinking in React</a> is a great tutorial that explains the process.</p>
 <p>Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incompleted todos.</p>
 <p>I see the following components (and their props) emerge from this brief:</p>
