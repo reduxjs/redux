@@ -3,6 +3,7 @@
   "version": "1.0.0-rc",
   "description": "Atomic Flux with hot reloading",
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "clean": "rimraf lib dist coverage",
     "lint": "eslint src test examples",
