@@ -1,4 +1,4 @@
-# Reselect
+# Computing Derived Data
 
 [Reselect](https://github.com/faassen/reselect.git) is a simple library for creating memoized, composable **selector** functions. Reselect selectors can be used to efficiently compute derived data from the Redux store. 
 
