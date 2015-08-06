@@ -13,10 +13,10 @@ import { Provider } from 'react-redux';
 import App from './containers/App';
 import * as reducers from './reducers';
 
-let todoApp = combineReducers(reducers);
-let store = createStore(todoApp);
+const todoApp = combineReducers(reducers);
+const store = createStore(todoApp);
 
-let rootElement = document.getElementById('root');
+const rootElement = document.getElementById('root');
 React.render(
   // The child must be wrapped in a function
   // to work around an issue in React 0.13.
