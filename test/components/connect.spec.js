@@ -343,7 +343,7 @@ describe('React', () => {
       expect(spy.calls.length).toBe(3);
     });
 
-    it('should throw an error if select, bindActionCreators, or merge returns anything but a plain object', () => {
+    it('should throw an error if select, bindDispatch, or merge returns anything but a plain object', () => {
       const store = createStore(() => ({}));
 
       function makeContainer(select, bindActionCreators, merge) {
@@ -389,7 +389,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => 1, () => ({})) }
           </Provider>
         );
-      }).toThrow(/bindActionCreators/);
+      }).toThrow(/bindDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -397,7 +397,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => 'hey', () => ({})) }
           </Provider>
         );
-      }).toThrow(/bindActionCreators/);
+      }).toThrow(/bindDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -405,7 +405,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => new AwesomeMap(), () => ({})) }
           </Provider>
         );
-      }).toThrow(/bindActionCreators/);
+      }).toThrow(/bindDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
