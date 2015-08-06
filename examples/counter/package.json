@@ -4,7 +4,10 @@
   "description": "Counter example for redux",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
+    "test:watch": "NODE_ENV=test mocha --compilers js:babel/register --recursive --watch",
+    "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive"
   },
   "repository": {
     "type": "git",
@@ -31,11 +34,15 @@
     "redux": "^0.12.0"
   },
   "devDependencies": {
+    "babel": "^5.5.8",
     "babel-core": "^5.5.8",
     "babel-loader": "^5.1.4",
     "node-libs-browser": "^0.5.2",
     "react-hot-loader": "^1.2.7",
     "webpack": "^1.9.11",
-    "webpack-dev-server": "^1.9.0"
+    "webpack-dev-server": "^1.9.0",
+    "expect": "^1.6.0",
+    "isparta": "^3.0.3",
+    "mocha": "^2.2.5"
   }
 }
