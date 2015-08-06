@@ -6,3 +6,4 @@ These are some use cases and code snippets to get you started with Redux in a re
 * [Reducing Boilerplate](ReducingBoilerplate.md)
 * [Server Rendering](ServerRendering.md)
 * [Writing Tests](WritingTests.md)
+* [Using Reselect](Reselect.md)
