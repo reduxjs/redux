@@ -17,7 +17,7 @@ Performant and flexible.
 - [Quick Start](#quick-start)
 - [API](#api)
   - [`<Provider store>`](#provider-store)
-  - [`connect([mapState], [mapDispatch], [mergeProps])(Component)`](#connectmapstate-mapdispatch-mergeprops-component)
+  - [`connect([mapState], [mapDispatch], [mergeProps])(Component)`](#connectmapstate-mapdispatch-mergeprops)
 - [License](#license)
 
 ## React Native
@@ -212,7 +212,7 @@ React.render(
 );
 ```
 
-### `connect([mapState], [mapDispatch], [mergeProps])(Component)`
+### `connect([mapState], [mapDispatch], [mergeProps])`
 
 Connects a React component to a Redux store.
 
@@ -229,6 +229,8 @@ Connects a React component to a Redux store.
 A React component class that injects state and action creators into your component according to the specified options.
 
 #### Remarks
+
+* It needs to be invoked two times. First time with its arguments described above, and second time, with the component: `connect(mapState, mapDispatch, mergeProps)(MyComponent)`.
 
 * The `mapState` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
 
