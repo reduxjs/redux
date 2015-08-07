@@ -277,3 +277,7 @@ export default provide(store)(MyRootComponent);
 ```
 
 This higher-order component provides the same functionality as `<Provider>`. We don’t recommend it anymore because it’s less flexible than `<Provider>` and doesn’t work with [redux-devtools](http://github.com/gaearon/redux-devtools) or server rendering.
+
+## License
+
+MIT
