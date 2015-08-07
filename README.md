@@ -11,9 +11,8 @@ Performant and flexible.
 - [React Native](#react-native)
 - [Quick Start](#quick-start)
 - [API](#api)
-  - [`connect([mapState], [mapDispatch], [mergeProps])`](#connectmapstate-mapdispatch-mergeprops)
   - [`<Provider store>`](#provider-store)
-- [Recipes](#recipes)
+  - [`connect([mapState], [mapDispatch], [mergeProps])(Component)`](#connectmapstate-mapdispatch-mergeprops-component)
 - [License](#license)
 
 ## React Native
@@ -85,6 +84,8 @@ Passing action creator functions as the second parameter will bind them to the s
 
 Why don’t we bind action creators to a store right away? This is because of the so-called “universal” apps that need to render on the server. They would have a different store instance for every request, so we don’t know the store instance during the definition!
 
+##### `containers/CounterContainer.js`
+
 ```js
 import { Component } from 'react';
 import { connect } from 'react-redux';
@@ -106,6 +107,9 @@ function mapState(state) {
 export default connect(mapState, counterActionCreators)(CounterContainer);
 ```
 
+Whether to put `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
+Ask yourself whether you'd want to reuse this component but bind it to different data, or not.
+
 ### Usage Notes
 
 You can have many `connect()`-ed components in your app at any depth, and you can even nest them. It is however preferable that you try to only `connect()` top-level components such as route handlers, so the data flow in your application stays predictable.
@@ -125,7 +129,7 @@ Don’t forget decorators are experimental! And they desugar to function calls a
 
 ### Additional Flexibility
 
-This the most basic usage, but `connect()` supports many other different patterns: just passing the vanilla `dispatch()` function down, binding multiple action creators, putting them as `actions` prop, selecting parts of state and binding action creators depending on `props`, and so on. Check out [Recipes](#recipes) for some ideas about advanced `connect()` usage.
+This the most basic usage, but `connect()` supports many other different patterns: just passing the vanilla `dispatch()` function down, binding multiple action creators, putting them as `actions` prop, selecting parts of state and binding action creators depending on `props`, and so on. Check out `connect()` docs below to learn more.
 
 ### Injecting Redux store
 
@@ -173,36 +177,51 @@ React.render((
 
 ## API
 
-### `connect([mapState], [mapDispatch], [mergeProps])`
-
-Returns a component class that injects the Redux Store’s `dispatch` as a prop into `Component` so it can dispatch Redux actions.
-
-The returned component also subscribes to the updates of Redux store. Any time the state changes, it calls the `mapState` function passed to it. It is called a **selector**. The selector function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and memoize derived data.
-
-Both `dispatch` and every property returned by `mapState` will be provided to your `Component` as `props`.
-
-It is the responsibility of a Smart Component to bind action creators to the given `dispatch` function and pass those
-bound creators to Dumb Components. Redux provides a `bindActionCreators` to streamline the process of binding action
-creators to the dispatch function.
-
-**To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.**
-
-See the usage example in the quick start above.
-
 ### `<Provider store>`
+
+Makes Redux store available to the `connect()` calls in the component hierarchy below.  
+You can’t use `connect()` without wrapping the root component in `<Provider>`.
+
+#### Props
+
+* `store`: (*[Redux Store](http://gaearon.github.io/redux/docs/api/Store.html)*): The single Redux store in your application.
+* `children`: (*Function*): Unlike most React components, `<Provider>` accepts a [function as a child](#child-must-be-a-function) with your root component. This is a temporary workaround for a React 0.13 context issue, which will be fixed when React 0.14 comes out.
+
+#### Example
 
 ```js
 // Make store available to connect() below in hierarchy
-<Provider store={store}>
-  {() => <MyRootComponent>}
-</Provider>
+React.render(
+  <Provider store={store}>
+    {() => <MyRootComponent>}
+  </Provider>,
+  rootEl
+);
 ```
 
-The `Provider` component takes a `store` prop and a [function as a child](#child-must-be-a-function) with your root
-component. The `store` is then passed to the child via React's `context`. This is the entry point for Redux and must be
-present in order to use the `connect` component.
+### `connect([mapState], [mapDispatch], [mergeProps])(Component)`
 
-## Recipes
+Connects a React component to a Redux store.
+
+#### Arguments
+
+* [`mapState`] (*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapState` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store.
+
+* [`mapDispatch`] (*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator, and an object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use `bindActionCreators` helper from Redux.) If you pass omit it, the default implementation just injects `dispatch` into your component’s props.
+
+* [`mergeProps`] (*Function*): If specified, it is passed the result of `mapState()`, `mapDispatch()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `{ ...props, ...mapStateResult, ...mapDispatchResult }` is used by default.
+
+#### Returns
+
+A React component class that injects state and action creators into your component according to the specified options.
+
+#### Remarks
+
+* The `mapState` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
+
+* **To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.**
+
+#### Examples
 
 ##### Inject just `dispatch` and don't listen to store
 
