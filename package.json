@@ -1,7 +1,7 @@
 {
   "name": "react-redux",
-  "version": "0.4.0",
-  "description": "Redux bindings for React",
+  "version": "0.5.0",
+  "description": "React bindings for Redux",
   "main": "./lib/index.js",
   "scripts": {
     "build:lib": "babel src --out-dir lib",
@@ -60,6 +60,6 @@
     "invariant": "^2.0.0"
   },
   "peerDependencies": {
-    "redux": "^1.0.0 || 1.0.0-alpha || 1.0.0-rc"
+    "redux": "^1.0.0 || 1.0.0-rc"
   }
 }
