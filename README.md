@@ -9,12 +9,9 @@ For React Native, import from `react-redux/native` instead.
 >**Note: There is a project called “redux-react” on NPM that is completely unrelated to the official bindings. This documentation (and any other official Redux documentation) is for `react-redux`.**
 
 - [Quick Start](#quick-start)
-- [Recommended API](#recommended-api)
+- [API](#api)
   - [`connect`](#connect)
   - [`Provider`](#provider)
-- [Deprecated API](#deprecated-api)
-  - [`Connector`](#connector)
-  - [`provide`](#provide)
 
 ## Quick Start
 
@@ -214,7 +211,7 @@ React.render((
 // );
 ```
 
-## Recommended API
+## API
 
 ### `connect`
 
@@ -246,42 +243,7 @@ See the usage example in the quick start above.
 
 The `Provider` component takes a `store` prop and a [function as a child](#child-must-be-a-function) with your root
 component. The `store` is then passed to the child via React's `context`. This is the entry point for Redux and must be
-present in order to use the `Connector` component.
-
-## Deprecated API
-
-### `Connector`
-
->**Note**  
->Deprecated. Use `connect()` instead.
-
-```js
-<Connector select={fn}>
-  {props => <MyComponent {...props}  />}
-</Connector>
-```
-
-Similar to `Provider`, the `Connector` expects a single [function as a child](#child-must-be-a-function) and a function
-as the `select` prop. The selector function takes a single argument of the entire root store and returns an object to be
-passed as properties to the child. In addition to the properties returned by the selector, a `dispatch` function is
-passed to the child for dispatching actions.
-
-It is the responsibility of a Smart Component to bind action creators to the given `dispatch` function and pass those
-bound creators to Dumb Components. Redux provides a `bindActionCreators` to streamline the process of binding action
-creators to the dispatch function.
-
-We don’t recommend its use anymore because it’s not as flexible as `connect()` and has some performance implications for more complex scenarios.
-
-### `provide`
-
->**Note**  
->Deprecated. Use `<Provider>` instead.
-
-```js
-export default provide(store)(MyRootComponent);
-```
-
-This higher-order component provides the same functionality as `<Provider>`. We don’t recommend it anymore because it’s less flexible than `<Provider>` and doesn’t work with [redux-devtools](http://github.com/gaearon/redux-devtools) or server rendering.
+present in order to use the `connect` component.
 
 ## License
 

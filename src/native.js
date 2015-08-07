@@ -1,4 +1,5 @@
 import React from 'react-native';
 import createAll from './components/createAll';
 
-export const { Provider, Connector, provide, connect } = createAll(React);
+// provide and Connector are deprecated and removed from public API
+export const { Provider, connect } = createAll(React);
