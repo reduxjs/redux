@@ -14,6 +14,7 @@ For React Native, import from `react-redux/native` instead.
 - [API](#api)
   - [`connect([mapState], [mapDispatch], [mergeProps])`](#connect)
   - [`<Provider store>`](#provider)
+- [Recipes](#recipes)
 - [License](#license)
 
 ## Quick Start
@@ -218,103 +219,6 @@ React.render((
 
 ### `connect([mapState], [mapDispatch], [mergeProps])`
 
-```js
-// Inject just `dispatch` and don't listen to store
-export default connect()(TodoApp);
-
-// Inject `dispatch` and every field in the global state (SLOW!)
-export default connect(state => state)(TodoApp);
-
-// Inject `dispatch` and `todos`
-function mapState(state) {
-  return { todos: state.todos };
-}
-export default connect(mapState)(TodoApp);
-
-// Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...)
-import * as actionCreators from './actionCreators';
-function mapState(state) {
-  return { todos: state.todos };
-}
-export default connect(mapState, actionCreators)(TodoApp);
-
-// Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...) as `actions`
-import * as actionCreators from './actionCreators';
-import { bindActionCreators } from 'redux';
-function mapState(state) {
-  return { todos: state.todos };
-}
-function mapDispatch(dispatch) {
-  return { actions: bindActionCreators(actionCreators, dispatch) };
-}
-export default connect(mapState, actionCreators)(TodoApp);
-
-// Inject `todos` and a specific action creator (`addTodo`)
-import { addTodo } from './actionCreators';
-import { bindActionCreators } from 'redux';
-function mapState(state) {
-  return { todos: state.todos };
-}
-function mapDispatch(dispatch) {
-  return { addTodo: bindActionCreators(addTodo, dispatch) };
-}
-export default connect(mapState, mapDispatch)(TodoApp);
-
-// Inject `todos`, todoActionCreators as `todoActions`, and counterActionCreators as `counterActions`
-import * as todoActionCreators from './todoActionCreators';
-import * as counterActionCreators from './counterActionCreators';
-import { bindActionCreators } from 'redux';
-function mapState(state) {
-  return { todos: state.todos };
-}
-function mapDispatch(dispatch) {
-  return {
-    todoActions: bindActionCreators(todoActionCreators, dispatch),
-    counterActions: bindActionCreators(counterActionCreators, dispatch)
-  };
-}
-export default connect(mapState, mapDispatch)(TodoApp);
-
-// Inject `todos`, and todoActionCreators and counterActionCreators together as `actions`
-import * as todoActionCreators from './todoActionCreators';
-import * as counterActionCreators from './counterActionCreators';
-import { bindActionCreators } from 'redux';
-function mapState(state) {
-  return { todos: state.todos };
-}
-function mapDispatch(dispatch) {
-  return {
-    actions: bindActionCreators({ ...todoActionCreators, ...counterActionCreators }, dispatch)
-  };
-}
-export default connect(mapState, mapDispatch)(TodoApp);
-
-// Inject `todos`, and all todoActionCreators and counterActionCreators directly as props
-import * as todoActionCreators from './todoActionCreators';
-import * as counterActionCreators from './counterActionCreators';
-import { bindActionCreators } from 'redux';
-function mapState(state) {
-  return { todos: state.todos };
-}
-function mapDispatch(dispatch) {
-  return bindActionCreators({ ...todoActionCreators, ...counterActionCreators }, dispatch);
-}
-export default connect(mapState, mapDispatch)(TodoApp);
-
-// Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
-import * as actionCreators from './actionCreators';
-function mapState(state) {
-  return { todos: state.todos };
-}
-function mergeProps(selectedState, boundActions, props) {
-  return Object.assign({}, props, {
-    todos: selectedState.todos[props.userId],
-    addTodo: (text) => boundActions.addTodo(props.userId, text)
-  });
-}
-export default connect(mapState, actionCreators)(TodoApp);
-```
-
 Returns a component class that injects the Redux Store’s `dispatch` as a prop into `Component` so it can dispatch Redux actions.
 
 The returned component also subscribes to the updates of Redux store. Any time the state changes, it calls the `mapState` function passed to it. It is called a **selector**. The selector function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and memoize derived data.
@@ -341,6 +245,135 @@ See the usage example in the quick start above.
 The `Provider` component takes a `store` prop and a [function as a child](#child-must-be-a-function) with your root
 component. The `store` is then passed to the child via React's `context`. This is the entry point for Redux and must be
 present in order to use the `connect` component.
+
+## Recipes
+
+```js
+// Inject just `dispatch` and don't listen to store
+export default connect()(TodoApp);
+
+
+// Inject `dispatch` and every field in the global state (SLOW!)
+export default connect(state => state)(TodoApp);
+
+
+// Inject `dispatch` and `todos`
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+export default connect(mapState)(TodoApp);
+
+
+// Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...)
+import * as actionCreators from './actionCreators';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+export default connect(mapState, actionCreators)(TodoApp);
+
+
+// Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...) as `actions`
+import * as actionCreators from './actionCreators';
+import { bindActionCreators } from 'redux';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+function mapDispatch(dispatch) {
+  return { actions: bindActionCreators(actionCreators, dispatch) };
+}
+
+export default connect(mapState, actionCreators)(TodoApp);
+
+
+// Inject `todos` and a specific action creator (`addTodo`)
+import { addTodo } from './actionCreators';
+import { bindActionCreators } from 'redux';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+function mapDispatch(dispatch) {
+  return { addTodo: bindActionCreators(addTodo, dispatch) };
+}
+
+export default connect(mapState, mapDispatch)(TodoApp);
+
+
+// Inject `todos`, todoActionCreators as `todoActions`, and counterActionCreators as `counterActions`
+import * as todoActionCreators from './todoActionCreators';
+import * as counterActionCreators from './counterActionCreators';
+import { bindActionCreators } from 'redux';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+function mapDispatch(dispatch) {
+  return {
+    todoActions: bindActionCreators(todoActionCreators, dispatch),
+    counterActions: bindActionCreators(counterActionCreators, dispatch)
+  };
+}
+
+export default connect(mapState, mapDispatch)(TodoApp);
+
+
+// Inject `todos`, and todoActionCreators and counterActionCreators together as `actions`
+import * as todoActionCreators from './todoActionCreators';
+import * as counterActionCreators from './counterActionCreators';
+import { bindActionCreators } from 'redux';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+function mapDispatch(dispatch) {
+  return {
+    actions: bindActionCreators({ ...todoActionCreators, ...counterActionCreators }, dispatch)
+  };
+}
+
+export default connect(mapState, mapDispatch)(TodoApp);
+
+
+// Inject `todos`, and all todoActionCreators and counterActionCreators directly as props
+import * as todoActionCreators from './todoActionCreators';
+import * as counterActionCreators from './counterActionCreators';
+import { bindActionCreators } from 'redux';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+function mapDispatch(dispatch) {
+  return bindActionCreators(Object.assign({}, todoActionCreators, counterActionCreators), dispatch);
+}
+
+export default connect(mapState, mapDispatch)(TodoApp);
+
+
+// Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
+import * as actionCreators from './actionCreators';
+
+function mapState(state) {
+  return { todos: state.todos };
+}
+
+function mergeProps(selectedState, boundActions, props) {
+  return Object.assign({}, props, {
+    todos: selectedState.todos[props.userId],
+    addTodo: (text) => boundActions.addTodo(props.userId, text)
+  });
+}
+
+export default connect(mapState, actionCreators)(TodoApp);
+```
 
 ## License
 
