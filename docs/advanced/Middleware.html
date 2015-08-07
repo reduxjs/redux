@@ -713,7 +713,7 @@ store.dispatch(action);
 </code></pre>
 <p>This produces the desired effect, but you wouldn&#x2019;t want to do it every time. </p>
 <h3 id="attempt-2-wrapping-dispatch">Attempt #2: Wrapping Dispatch</h3>
-<p>You can logging into a function:</p>
+<p>You can insert logging into a function:</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dispatchAndLog</span>(<span class="hljs-params">store, action</span>) </span>{
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;dispatching&apos;</span>, action);
   store.dispatch(action);
