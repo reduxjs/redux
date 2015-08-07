@@ -3,6 +3,12 @@ react-redux
 
 Higher-order React components for [Redux](https://github.com/gaearon/redux).
 
+What you get from `react-redux` is for React.  
+For React Native, import from `react-redux/native` instead.
+
+>**Note: There is a project called “redux-react” on NPM that is completely unrelated to the official bindings.**  
+>**This documentation (and any other official Redux documentation) is for `react-redux`.**
+
 - [Quick Start](#quick-start)
 - [Recommended API](#recommended-api)
   - [`connect`](#connect)
