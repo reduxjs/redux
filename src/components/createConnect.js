@@ -6,10 +6,12 @@ import wrapActionCreators from '../utils/wrapActionCreators';
 import invariant from 'invariant';
 
 const emptySelector = () => ({});
-
 const emptyBinder = () => ({});
-
-const identityMerge = (slice, actionsCreators, props) => ({ ...props, ...slice, ...actionsCreators});
+const identityMerge = (slice, actionsCreators, props) => ({
+  ...props,
+  ...slice,
+  ...actionsCreators
+});
 
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
@@ -19,11 +21,17 @@ export default function createConnect(React) {
   const { Component, PropTypes } = React;
   const storeShape = createStoreShape(PropTypes);
 
-  return function connect(select, dispatchBinder = emptyBinder, mergeHandler = identityMerge) {
-
-    const subscribing = select ? true : false;
+  return function connect(
+    select,
+    dispatchBinder = emptyBinder,
+    mergeHandler = identityMerge
+  ) {
+    const shouldSubscribe = select ? true : false;
     const selectState = select || emptySelector;
-    const bindDispatch = isPlainObject(dispatchBinder) ? wrapActionCreators(dispatchBinder) : dispatchBinder;
+    const bindDispatch = isPlainObject(dispatchBinder) ?
+      wrapActionCreators(dispatchBinder) :
+      dispatchBinder;
+
     const merge = mergeHandler;
 
     return DecoratedComponent => class ConnectDecorator extends Component {
@@ -41,16 +49,20 @@ export default function createConnect(React) {
 
       isSliceEqual(slice, nextSlice) {
         const isRefEqual = slice === nextSlice;
-        if (isRefEqual) {
-          return true;
-        } else if (typeof slice !== 'object' || typeof nextSlice !== 'object') {
+        if (
+          isRefEqual ||
+          typeof slice !== 'object' ||
+          typeof nextSlice !== 'object'
+        ) {
           return isRefEqual;
         }
+
         return shallowEqual(slice, nextSlice);
       }
 
       constructor(props, context) {
         super(props, context);
+        this.setUnderlyingRef = ::this.setUnderlyingRef;
         this.state = {
           ...this.selectState(props, context),
           ...this.bindDispatch(context)
@@ -58,14 +70,14 @@ export default function createConnect(React) {
       }
 
       componentDidMount() {
-        if (subscribing) {
+        if (shouldSubscribe) {
           this.subscribed = true;
           this.unsubscribe = this.context.store.subscribe(::this.handleChange);
         }
       }
 
       componentWillUnmount() {
-        if (subscribing) {
+        if (shouldSubscribe) {
           this.unsubscribe();
         }
       }
@@ -120,8 +132,15 @@ export default function createConnect(React) {
         return this.underlyingRef;
       }
 
+      setUnderlyingRef(instance) {
+        this.underlyingRef = instance;
+      }
+
       render() {
-        return <DecoratedComponent ref={component => (this.underlyingRef = component)} {...this.merge()} />;
+        return (
+          <DecoratedComponent ref={this.setUnderlyingRef}
+                              {...this.merge()} />
+        );
       }
     };
   };

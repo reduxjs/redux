@@ -215,7 +215,7 @@ describe('React', () => {
       @connect(
         state => state,
         dispatch => ({ dispatch })
-        )
+      )
       class Container extends Component {
         render() {
           return <div {...this.props} />;
@@ -245,7 +245,7 @@ describe('React', () => {
       @connect(
         null,
         dispatch => ({ dispatch })
-        )
+      )
       class Container extends Component {
         render() {
           return <div {...this.props} />;
@@ -265,7 +265,6 @@ describe('React', () => {
       ).toNotThrow();
       const decorated = TestUtils.findRenderedComponentWithType(container, Container);
       expect(decorated.subscribed).toNotBe(true);
-
     });
 
     it('should unsubscribe before unmounting', () => {
@@ -285,7 +284,7 @@ describe('React', () => {
       @connect(
         state => ({string: state}),
         dispatch => ({ dispatch })
-        )
+      )
       class Container extends Component {
         render() {
           return <div {...this.props} />;
@@ -317,7 +316,7 @@ describe('React', () => {
       @connect(
         state => ({string: state}),
         dispatch => ({ dispatch })
-        )
+      )
       class Container extends Component {
         render() {
           return render(this.props);
