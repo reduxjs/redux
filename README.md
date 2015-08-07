@@ -118,7 +118,10 @@ function mapDispatch(dispatch) {
 export default connect(mapState, mapDispatch)(CounterContainer);
 
 // You can also pass an object instead of defining `mapDispatch`:
-//export default connect(mapState, CounterActionCreators)(CounterContainer); 
+// export default connect(mapState, CounterActionCreators)(CounterContainer);
+
+// Or you can pass `dispatch` down as a prop if you omit `mapDispatch`:
+// export default connect(mapState)(CounterContainer);
 ```
 
 Whether to put `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
