@@ -21,7 +21,7 @@ describe('React', () => {
     }
 
     it('should wrap the component into Provider', () => {
-      const store = createStore({});
+      const store = createStore(() => ({}));
 
       @provide(store)
       class Container extends Component {
@@ -42,7 +42,7 @@ describe('React', () => {
     });
 
     it('sets the displayName correctly', () => {
-      @provide(createStore({}))
+      @provide(createStore(() => ({})))
       class Container extends Component {
         render() {
           return <div />;
