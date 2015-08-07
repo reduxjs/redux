@@ -90,11 +90,10 @@ Why don’t we bind action creators to a store right away? This is because of th
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-// Assuming this is our “dumb” counter
+// Action creators:
+import { increment } from '../actionsCreators';
+// “Dumb” component:
 import Counter from '../components/Counter';
-
-// Assuming action creators as named exports:
-import * as counterActionCreators from '../actionsCreators';
 
 // Which part of the Redux global state does our component want to receive as props?
 function mapState(state) {
@@ -103,14 +102,17 @@ function mapState(state) {
   };
 }
 
-// Don't forget to actually use connect!
-export default connect(mapState, counterActionCreators)(CounterContainer);
+// First argument tells which state fields it’s interested in.
+// Second argument tells which action creators to bind and inject.
+// You may also pass a `dispatch` => Object function as a second argument.
+
+export default connect(mapState, { increment })(CounterContainer);
 ```
 
 Whether to put `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
 Ask yourself whether you'd want to reuse this component but bind it to different data, or not.
 
-### Usage Notes
+### Nesting
 
 You can have many `connect()`-ed components in your app at any depth, and you can even nest them. It is however preferable that you try to only `connect()` top-level components such as route handlers, so the data flow in your application stays predictable.
 
@@ -131,7 +133,7 @@ Don’t forget decorators are experimental! And they desugar to function calls a
 
 This the most basic usage, but `connect()` supports many other different patterns: just passing the vanilla `dispatch()` function down, binding multiple action creators, putting them as `actions` prop, selecting parts of state and binding action creators depending on `props`, and so on. Check out `connect()` docs below to learn more.
 
-### Injecting Redux store
+### Injecting Redux Store
 
 Finally, how do we actually hook it up to a Redux store? We need to create the store somewhere at the root of our component hierarchy. For client apps, the root component is a good place. For server rendering, you can do this in the request handler.
 
