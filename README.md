@@ -307,7 +307,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { addTodo: bindActionCreators(addTodo, dispatch) };
+  return bindActionCreators({ addTodo }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
