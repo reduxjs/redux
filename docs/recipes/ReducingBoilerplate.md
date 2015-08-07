@@ -266,7 +266,7 @@ export function loadPosts(userId) {
       response => dispatch({
         type: 'LOAD_POSTS_SUCCESS',
         userId,
-        respone
+        response
       }),
       error => dispatch({
         type: 'LOAD_POSTS_FAILURE',
