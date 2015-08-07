@@ -53,12 +53,14 @@ describe('React', () => {
       expect(container.context.store).toBe(store);
     });
 
-    it('should wrap the component into Provider', () => {
+    it('should pass the state and the props given component', () => {
       const store = createStore(() => ({
-        foo: 'bar'
+        foo: 'bar',
+        baz: 42,
+        hello: 'world'
       }));
 
-      @connect(state => state)
+      @connect(({ foo, baz }) => ({ foo, baz }))
       class Container extends Component {
         render() {
           return <div {...this.props} />;
@@ -67,12 +69,14 @@ describe('React', () => {
 
       const container = TestUtils.renderIntoDocument(
         <Provider store={store}>
-          {() => <Container pass='through' />}
+          {() => <Container pass='through' baz={50} />}
         </Provider>
       );
       const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
       expect(div.props.pass).toEqual('through');
       expect(div.props.foo).toEqual('bar');
+      expect(div.props.baz).toEqual(42);
+      expect(div.props.hello).toEqual(undefined);
       expect(() =>
         TestUtils.findRenderedComponentWithType(container, Container)
       ).toNotThrow();
@@ -81,7 +85,7 @@ describe('React', () => {
     it('should subscribe to the store changes', () => {
       const store = createStore(stringBuilder);
 
-      @connect(state => ({string: state}) )
+      @connect(state => ({ string: state }) )
       class Container extends Component {
         render() {
           return <div {...this.props}/>;
@@ -128,14 +132,15 @@ describe('React', () => {
             }
           };
         }
-        componentDidMount() {
 
+        componentDidMount() {
           // Simulate deep object mutation
           this.state.bar.baz = 'through';
           this.setState({
             bar: this.state.bar
           });
         }
+
         render() {
           return (
             <Provider store={store}>
@@ -163,11 +168,13 @@ describe('React', () => {
 
       @connect(
         state => ({stateThing: state}),
-        dispatch => ({doSomething: (whatever) => dispatch(doSomething(whatever)) }),
+        dispatch => ({
+          doSomething: (whatever) => dispatch(doSomething(whatever))
+        }),
         (stateProps, actionProps, parentProps) => ({
           ...stateProps,
           ...actionProps,
-          mergedDoSomething: (thing) => {
+          mergedDoSomething(thing) {
             const seed = stateProps.stateThing === '' ? 'HELLO ' : '';
             actionProps.doSomething(seed + thing + parentProps.extra);
           }

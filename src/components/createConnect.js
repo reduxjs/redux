@@ -31,7 +31,6 @@ export default function createConnect(React) {
     const bindDispatch = isPlainObject(dispatchBinder) ?
       wrapActionCreators(dispatchBinder) :
       dispatchBinder;
-
     const merge = mergeHandler;
 
     return DecoratedComponent => class ConnectDecorator extends Component {
