@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as CounterActions from '../actions/CounterActions';
 
-class Counter extends Component {
+export class CounterComponent extends Component {
 
   render() {
     const { actions: { increment, incrementIfOdd, incrementAsync, decrement }, counter } = this.props;
@@ -23,7 +23,7 @@ class Counter extends Component {
   }
 }
 
-Counter.propTypes = {
+CounterComponent.propTypes = {
   actions: PropTypes.shape({
     increment: PropTypes.func.isRequired,
     incrementIfOdd: PropTypes.func.isRequired,
@@ -45,4 +45,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+export default connect(mapStateToProps, mapDispatchToProps)(CounterComponent);

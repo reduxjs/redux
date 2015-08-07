@@ -1,18 +1,18 @@
 import expect from 'expect';
 import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
-import Counter from '../../components/Counter';
+import { CounterComponent as Counter } from '../../components/Counter';
 
 const { TestUtils } = React.addons;
 
-function setup() {
+function setup(initialState) {
   const actions = {
     increment: expect.createSpy(),
     incrementIfOdd: expect.createSpy(),
     incrementAsync: expect.createSpy(),
     decrement: expect.createSpy()
   };
-  const component = TestUtils.renderIntoDocument(<Counter counter={1} {...actions} />);
+  const component = TestUtils.renderIntoDocument(<Counter counter={1} actions={actions} />);
   return {
     component: component,
     actions: actions,
