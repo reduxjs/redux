@@ -244,7 +244,7 @@ describe('React', () => {
       expect(decorated.subscribed).toBe(true);
     });
 
-    it('should not subscribe to stores if select argument is falsy', () => {
+    it('should not subscribe to stores if mapState argument is falsy', () => {
       const store = createStore(() => ({
         foo: 'bar'
       }));
@@ -346,12 +346,12 @@ describe('React', () => {
       expect(spy.calls.length).toBe(3);
     });
 
-    it('should throw an error if select, bindDispatch, or merge returns anything but a plain object', () => {
+    it('should throw an error if mapState, mapDispatch, or mergeProps returns anything but a plain object', () => {
       const store = createStore(() => ({}));
 
-      function makeContainer(select, bindActionCreators, merge) {
+      function makeContainer(mapState, mapDispatch, mergeProps) {
         return React.createElement(
-          @connect(select, bindActionCreators, merge)
+          @connect(mapState, mapDispatch, mergeProps)
           class Container extends Component {
             render() {
               return <div />;
@@ -368,7 +368,7 @@ describe('React', () => {
             { () => makeContainer(() => 1, () => ({}), () => ({})) }
           </Provider>
         );
-      }).toThrow(/select/);
+      }).toThrow(/mapState/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -376,7 +376,7 @@ describe('React', () => {
             { () => makeContainer(() => 'hey', () => ({}), () => ({})) }
           </Provider>
         );
-      }).toThrow(/select/);
+      }).toThrow(/mapState/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -384,7 +384,7 @@ describe('React', () => {
             { () => makeContainer(() => new AwesomeMap(), () => ({}), () => ({})) }
           </Provider>
         );
-      }).toThrow(/select/);
+      }).toThrow(/mapState/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -392,7 +392,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => 1, () => ({})) }
           </Provider>
         );
-      }).toThrow(/bindDispatch/);
+      }).toThrow(/mapDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -400,7 +400,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => 'hey', () => ({})) }
           </Provider>
         );
-      }).toThrow(/bindDispatch/);
+      }).toThrow(/mapDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -408,7 +408,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => new AwesomeMap(), () => ({})) }
           </Provider>
         );
-      }).toThrow(/bindDispatch/);
+      }).toThrow(/mapDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -416,7 +416,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => ({}), () => 1) }
           </Provider>
         );
-      }).toThrow(/merge/);
+      }).toThrow(/mergeProps/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -424,7 +424,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => ({}), () => 'hey') }
           </Provider>
         );
-      }).toThrow(/merge/);
+      }).toThrow(/mergeProps/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
@@ -432,7 +432,7 @@ describe('React', () => {
             { () => makeContainer(() => ({}), () => ({}), () => new AwesomeMap()) }
           </Provider>
         );
-      }).toThrow(/merge/);
+      }).toThrow(/mergeProps/);
     });
 
     it('should set the displayName correctly', () => {

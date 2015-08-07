@@ -5,11 +5,11 @@ import isPlainObject from '../utils/isPlainObject';
 import wrapActionCreators from '../utils/wrapActionCreators';
 import invariant from 'invariant';
 
-const emptySelector = () => ({});
-const defaultBinder = dispatch => ({ dispatch });
-const identityMerge = (slice, actionsCreators, props) => ({
+const defaultMapState = () => ({});
+const defaultMapDispatch = dispatch => ({ dispatch });
+const defaultMergeProps = (stateSlice, actionsCreators, props) => ({
   ...props,
-  ...slice,
+  ...stateSlice,
   ...actionsCreators
 });
 
@@ -22,16 +22,14 @@ export default function createConnect(React) {
   const storeShape = createStoreShape(PropTypes);
 
   return function connect(
-    select,
-    dispatchBinder = defaultBinder,
-    mergeHandler = identityMerge
+    mapState = defaultMapState,
+    mapDispatchOrActionCreators = defaultMapDispatch,
+    mergeProps = defaultMergeProps
   ) {
-    const shouldSubscribe = select ? true : false;
-    const selectState = select || emptySelector;
-    const bindDispatch = isPlainObject(dispatchBinder) ?
-      wrapActionCreators(dispatchBinder) :
-      dispatchBinder;
-    const merge = mergeHandler;
+    const shouldSubscribe = mapState !== defaultMapState;
+    const mapDispatch = isPlainObject(mapDispatchOrActionCreators) ?
+      wrapActionCreators(mapDispatchOrActionCreators) :
+      mapDispatchOrActionCreators;
 
     return DecoratedComponent => class ConnectDecorator extends Component {
       static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
@@ -63,8 +61,8 @@ export default function createConnect(React) {
         super(props, context);
         this.setUnderlyingRef = ::this.setUnderlyingRef;
         this.state = {
-          ...this.selectState(props, context),
-          ...this.bindDispatch(context)
+          ...this.mapState(props, context),
+          ...this.mapDispatch(context)
         };
       }
 
@@ -82,32 +80,32 @@ export default function createConnect(React) {
       }
 
       handleChange(props = this.props) {
-        const nextState = this.selectState(props, this.context);
+        const nextState = this.mapState(props, this.context);
         if (!this.isSliceEqual(this.state.slice, nextState.slice)) {
           this.setState(nextState);
         }
       }
 
-      selectState(props = this.props, context = this.context) {
+      mapState(props = this.props, context = this.context) {
         const state = context.store.getState();
-        const slice = selectState(state);
+        const slice = mapState(state);
 
         invariant(
           isPlainObject(slice),
-          'The return value of `select` prop must be an object. Instead received %s.',
+          '`mapState` must return an object. Instead received %s.',
           slice
         );
 
         return { slice };
       }
 
-      bindDispatch(context = this.context) {
+      mapDispatch(context = this.context) {
         const { dispatch } = context.store;
-        const actionCreators = bindDispatch(dispatch);
+        const actionCreators = mapDispatch(dispatch);
 
         invariant(
           isPlainObject(actionCreators),
-          'The return value of `bindDispatch` prop must be an object. Instead received %s.',
+          '`mapDispatch` must return an object. Instead received %s.',
           actionCreators
         );
 
@@ -116,11 +114,11 @@ export default function createConnect(React) {
 
       merge(props = this.props, state = this.state) {
         const { slice, actionCreators } = state;
-        const merged = merge(slice, actionCreators, props);
+        const merged = mergeProps(slice, actionCreators, props);
 
         invariant(
           isPlainObject(merged),
-          'The return value of `merge` prop must be an object. Instead received %s.',
+          '`mergeProps` must return an object. Instead received %s.',
           merged
         );
 
