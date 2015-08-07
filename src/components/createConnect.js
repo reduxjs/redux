@@ -6,7 +6,7 @@ import wrapActionCreators from '../utils/wrapActionCreators';
 import invariant from 'invariant';
 
 const emptySelector = () => ({});
-const emptyBinder = () => ({});
+const defaultBinder = dispatch => ({ dispatch });
 const identityMerge = (slice, actionsCreators, props) => ({
   ...props,
   ...slice,
@@ -23,7 +23,7 @@ export default function createConnect(React) {
 
   return function connect(
     select,
-    dispatchBinder = emptyBinder,
+    dispatchBinder = defaultBinder,
     mergeHandler = identityMerge
   ) {
     const shouldSubscribe = select ? true : false;

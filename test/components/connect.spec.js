@@ -53,7 +53,7 @@ describe('React', () => {
       expect(container.context.store).toBe(store);
     });
 
-    it('should pass the state and the props given component', () => {
+    it('should pass state and props to the given component', () => {
       const store = createStore(() => ({
         foo: 'bar',
         baz: 42,
@@ -244,15 +244,12 @@ describe('React', () => {
       expect(decorated.subscribed).toBe(true);
     });
 
-    it('should not subscribe to stores if select argument is null', () => {
+    it('should not subscribe to stores if select argument is falsy', () => {
       const store = createStore(() => ({
         foo: 'bar'
       }));
 
-      @connect(
-        null,
-        dispatch => ({ dispatch })
-      )
+      @connect()
       class Container extends Component {
         render() {
           return <div {...this.props} />;
