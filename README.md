@@ -380,7 +380,7 @@ function mergeProps(selectedState, boundActions, props) {
   });
 }
 
-export default connect(mapState, actionCreators)(TodoApp);
+export default connect(mapState, actionCreators, mergeProps)(TodoApp);
 ```
 
 ## License
