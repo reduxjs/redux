@@ -5,7 +5,7 @@ import { CounterComponent as Counter } from '../../components/Counter';
 
 const { TestUtils } = React.addons;
 
-function setup(initialState) {
+function setup() {
   const actions = {
     increment: expect.createSpy(),
     incrementIfOdd: expect.createSpy(),
