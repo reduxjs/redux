@@ -17,7 +17,7 @@ Performant and flexible.
 - [Quick Start](#quick-start)
 - [API](#api)
   - [`<Provider store>`](#provider-store)
-  - [`connect([mapState], [mapDispatch], [mergeProps])(Component)`](#connectmapstate-mapdispatch-mergeprops)
+  - [`connect([mapStateToProps], [mapDispatchToProps], [mergeProps])`](#connectmapstatetoprops-mapdispatchtoprops-mergeprops)
 - [License](#license)
 
 ## React Native
@@ -95,29 +95,29 @@ import Counter from '../components/Counter';
 import { increment } from '../actionsCreators';
 
 // Which part of the Redux global state does our component want to receive as props?
-function mapState(state) {
+function mapStateToProps(state) {
   return {
     value: state.counter
   };
 }
 
 // Which action creators does it want to receive by props?
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     onIncrement: () => dispatch(increment())
   };
 }
 
 export default connect(
-  mapState,
-  mapDispatch
+  mapStateToProps,
+  mapDispatchToProps
 )(CounterContainer);
 
-// You can also pass an object instead of defining `mapDispatch`:
-// export default connect(mapState, CounterActionCreators)(CounterContainer);
+// You can also pass an object instead of defining `mapDispatchToProps`:
+// export default connect(mapStateToProps, CounterActionCreators)(CounterContainer);
 
-// Or you can pass `dispatch` down as a prop if you omit `mapDispatch`:
-// export default connect(mapState)(CounterContainer);
+// Or you can pass `dispatch` down as a prop if you omit `mapDispatchToProps`:
+// export default connect(mapStateToProps)(CounterContainer);
 
 // See more recipes in detailed connect() examples below.
 ```
@@ -136,7 +136,7 @@ use ES7 decorator proposal syntax:
 
 ```js
 // Unstable syntax! It might change or break in production.
-@connect(mapState)
+@connect(mapStateToProps)
 export default class CounterContainer { ... }
 ```
 
@@ -220,17 +220,17 @@ React.render(
 );
 ```
 
-### `connect([mapState], [mapDispatch], [mergeProps])`
+### `connect([mapStateToProps], [mapDispatchToProps], [mergeProps])`
 
 Connects a React component to a Redux store.
 
 #### Arguments
 
-* [`mapState`] \(*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapState` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store.
+* [`mapStateToProps(state): stateProps`] \(*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapStateToProps` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store.
 
-* [`mapDispatch`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props.
+* [`mapDispatchToProps(dispatch): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props.
 
-* [`mergeProps`] \(*Function*): If specified, it is passed the result of `mapState()`, `mapDispatch()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `{ ...props, ...mapStateResult, ...mapDispatchResult }` is used by default.
+* [`mergeProps(stateProps, dispatchProps, parentProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `{ ...parentProps, ...stateProps, ...dispatchProps }` is used by default.
 
 #### Returns
 
@@ -238,9 +238,9 @@ A React component class that injects state and action creators into your compone
 
 #### Remarks
 
-* It needs to be invoked two times. First time with its arguments described above, and second time, with the component: `connect(mapState, mapDispatch, mergeProps)(MyComponent)`.
+* It needs to be invoked two times. First time with its arguments described above, and second time, with the component: `connect(mapStateToProps, mapDispatchToProps, mergeProps)(MyComponent)`.
 
-* The `mapState` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
+* The `mapStateToProps` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
 
 * **To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.**
 
@@ -260,11 +260,11 @@ export default connect(state => state)(TodoApp);
 ##### Inject `dispatch` and `todos`
 
 ```js
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-export default connect(mapState)(TodoApp);
+export default connect(mapStateToProps)(TodoApp);
 ```
 
 ##### Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...)
@@ -272,11 +272,11 @@ export default connect(mapState)(TodoApp);
 ```js
 import * as actionCreators from './actionCreators';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-export default connect(mapState, actionCreators)(TodoApp);
+export default connect(mapStateToProps, actionCreators)(TodoApp);
 ```
 
 ##### Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...) as `actions`
@@ -285,15 +285,15 @@ export default connect(mapState, actionCreators)(TodoApp);
 import * as actionCreators from './actionCreators';
 import { bindActionCreators } from 'redux';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(actionCreators, dispatch) };
 }
 
-export default connect(mapState, mapDispatch)(TodoApp);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
 #####  Inject `todos` and a specific action creator (`addTodo`)
@@ -302,15 +302,15 @@ export default connect(mapState, mapDispatch)(TodoApp);
 import { addTodo } from './actionCreators';
 import { bindActionCreators } from 'redux';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
   return { addTodo: bindActionCreators(addTodo, dispatch) };
 }
 
-export default connect(mapState, mapDispatch)(TodoApp);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
 ##### Inject `todos`, todoActionCreators as `todoActions`, and counterActionCreators as `counterActions`
@@ -320,18 +320,18 @@ import * as todoActionCreators from './todoActionCreators';
 import * as counterActionCreators from './counterActionCreators';
 import { bindActionCreators } from 'redux';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     todoActions: bindActionCreators(todoActionCreators, dispatch),
     counterActions: bindActionCreators(counterActionCreators, dispatch)
   };
 }
 
-export default connect(mapState, mapDispatch)(TodoApp);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
 ##### Inject `todos`, and todoActionCreators and counterActionCreators together as `actions`
@@ -341,17 +341,17 @@ import * as todoActionCreators from './todoActionCreators';
 import * as counterActionCreators from './counterActionCreators';
 import { bindActionCreators } from 'redux';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({ ...todoActionCreators, ...counterActionCreators }, dispatch)
   };
 }
 
-export default connect(mapState, mapDispatch)(TodoApp);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
 ##### Inject `todos`, and all todoActionCreators and counterActionCreators directly as props
@@ -361,15 +361,15 @@ import * as todoActionCreators from './todoActionCreators';
 import * as counterActionCreators from './counterActionCreators';
 import { bindActionCreators } from 'redux';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators(Object.assign({}, todoActionCreators, counterActionCreators), dispatch);
 }
 
-export default connect(mapState, mapDispatch)(TodoApp);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
 ##### Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
@@ -377,18 +377,18 @@ export default connect(mapState, mapDispatch)(TodoApp);
 ```js
 import * as actionCreators from './actionCreators';
 
-function mapState(state) {
+function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mergeProps(selectedState, boundActions, props) {
-  return Object.assign({}, props, {
-    todos: selectedState.todos[props.userId],
-    addTodo: (text) => boundActions.addTodo(props.userId, text)
+function mergeProps(stateProps, dispatchProps, parentProps) {
+  return Object.assign({}, parentProps, {
+    todos: stateProps.todos[parentProps.userId],
+    addTodo: (text) => dispatchProps.addTodo(parentProps.userId, text)
   });
 }
 
-export default connect(mapState, actionCreators, mergeProps)(TodoApp);
+export default connect(mapStateToProps, actionCreators, mergeProps)(TodoApp);
 ```
 
 ## License
