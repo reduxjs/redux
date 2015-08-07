@@ -1,0 +1,926 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>applyMiddleware | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.2.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/api/bindActionCreators.html" />
+    
+    
+    <link rel="prev" href="../../docs/api/combineReducers.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="7.4" data-basepath="../.." data-revision="Fri Aug 07 2015 04:08:16 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/Middleware.html">
+            
+                
+                    <a href="../../docs/advanced/Middleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Middleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/AsyncActions.html">
+            
+            <span><b>3.2.</b> Async Actions</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/AsyncFlow.html">
+            
+            <span><b>3.3.</b> Async Flow</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="docs/advanced/UsageWithReactRouter.html">
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+            <span><b>3.5.</b> Example: Reddit API</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="docs/advanced/NextSteps.html">
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+            <span><b>4.3.</b> Server Rendering</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="-applymiddleware-middlewares"><code>applyMiddleware(...middlewares)</code></h1>
+<p>Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store&#x2019;s <a href="Store.html#dispatch"><code>dispatch</code></a> method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.</p>
+<p>The most common use case for the middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like <a href="https://github.com/Reactive-Extensions/RxJS" target="_blank">Rx</a>. It does so by letting you dispatch <a href="../Glossary.html#async-action">async actions</a> in addition to normal actions.</p>
+<p>For example, <a href="https://github.com/gaearon/redux-thunk" target="_blank">redux-thunk</a> lets the action creators invert control by dispatching functions. They would receive <a href="Store.html#dispatch"><code>dispatch</code></a> as an argument and may call it asynchronously. Such functions are called <em>thunks</em>. Another example of middleware is <a href="https://github.com/acdlite/redux-promise" target="_blank">redux-promise</a>. It lets you dispatch a <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Promise</a> async action, and dispatches a normal action when the Promise resolves.</p>
+<p>Middleware is not baked into <a href="createStore.html"><code>createStore</code></a> and is not a fundamental part of the Redux architecture, but we consider it useful enough to be supported right in the core. This way, there is a single standard way to extend <a href="Store.html#dispatch"><code>dispatch</code></a> in the ecosystem, and different middleware may compete in expressiveness and utility.</p>
+<h4 id="arguments">Arguments</h4>
+<ul>
+<li><code>...middlewares</code> (<em>arguments</em>): Functions that conform to the Redux <em>middleware API</em>. Each middleware receives <a href="Store.html"><code>Store</code></a>&#x2019;s <a href="Store.html#dispatch"><code>dispatch</code></a> and <a href="Store.html#getState"><code>getState</code></a> functions as named arguments, and returns a function. That function will be given the <code>next</code> middleware&#x2019;s dispatch method, and is expected to return a function of <code>action</code> calling <code>next(action)</code> with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in chain will receive the real store&#x2019;s <a href="Store.html#dispatch"><code>dispatch</code></a> method as the <code>next</code> parameter, thus closing the chain. So, the middleware signature is <code>({ getState, dispatch }) =&gt; next =&gt; action</code>.</li>
+</ul>
+<h4 id="returns">Returns</h4>
+<p>(<em>Function</em>) A store enhancer that applies the given middleware. The store enhancer is a function that needs to be applied to <code>createStore</code>. It will return a different <code>createStore</code> which has the middleware enabled.</p>
+<h4 id="example-using-thunk-middleware-for-async-actions">Example: Using Thunk Middleware for Async Actions</h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { createStore, combineReducers, applyMiddleware } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> thunk <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux-thunk&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> reducers <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-comment">// applyMiddleware supercharges createStore with middleware:</span>
+<span class="hljs-keyword">let</span> createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+
+<span class="hljs-comment">// We can use it exactly like &#x201C;vanilla&#x201D; createStore.</span>
+<span class="hljs-keyword">let</span> reducer = combineReducers(reducers);
+<span class="hljs-keyword">let</span> store = createStoreWithMiddleware(reducer);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchSecretSauce</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">&apos;https://www.google.com/search?q=secret+sauce&apos;</span>);
+}
+
+<span class="hljs-comment">// These are the normal action creators you have seen so far.</span>
+<span class="hljs-comment">// The actions they return can be dispatched without any middleware.</span>
+<span class="hljs-comment">// However, they only express &#x201C;facts&#x201D; and not the &#x201C;async flow&#x201D;.</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeASandwich</span>(<span class="hljs-params">forPerson, secretSauce</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;MAKE_SANDWICH&apos;</span>,
+    forPerson,
+    secretSauce
+  };
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">apologize</span>(<span class="hljs-params">fromPerson, toPerson, error</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;APOLOGIZE&apos;</span>,
+    fromPerson,
+    toPerson,
+    error
+  };
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">withdrawMoney</span>(<span class="hljs-params">amount</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: <span class="hljs-string">&apos;WITHDRAW&apos;</span>,
+    amount
+  };
+}
+
+<span class="hljs-comment">// Even without a middleware, you can dispatch an action:</span>
+store.dispatch(withdrawMoney(<span class="hljs-number">100</span>));
+
+<span class="hljs-comment">// But what do you do when you need to start an asynchronous action,</span>
+<span class="hljs-comment">// such as an API call, or a router transition?</span>
+
+<span class="hljs-comment">// Meet thunks.</span>
+<span class="hljs-comment">// A thunk is a function that returns a function.</span>
+<span class="hljs-comment">// This is a thunk.</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeASandwichWithSecretSauce</span>(<span class="hljs-params">forPerson</span>) </span>{
+
+  <span class="hljs-comment">// Invert control!</span>
+  <span class="hljs-comment">// Return a function that accepts `dispatch` so we can dispatch later.</span>
+  <span class="hljs-comment">// Thunk middleware knows how to turn thunk async actions into actions.</span>
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">dispatch</span>) </span>{
+    <span class="hljs-keyword">return</span> fetchSecretSauce().then(
+      sauce =&gt; dispatch(makeASandwich(forPerson, sauce)),
+      error =&gt; dispatch(apologize(<span class="hljs-string">&apos;The Sandwich Shop&apos;</span>, forPerson, error))
+    );
+  };
+}
+
+<span class="hljs-comment">// Thunk middleware let me dispatch thunk async actions</span>
+<span class="hljs-comment">// as if they were actions!</span>
+
+store.dispatch(
+  makeASandwichWithSecretSauce(<span class="hljs-string">&apos;Me&apos;</span>)
+);
+
+<span class="hljs-comment">// It even takes care to return the thunk&#x2019;s return value</span>
+<span class="hljs-comment">// from the dispatch, so I can chain Promises as long as I return them.</span>
+
+store.dispatch(
+  makeASandwichWithSecretSauce(<span class="hljs-string">&apos;My wife&apos;</span>)
+).then(() =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;Done!&apos;</span>);
+});
+
+<span class="hljs-comment">// In fact I can write action creators that dispatch</span>
+<span class="hljs-comment">// actions and async actions from other action creators,</span>
+<span class="hljs-comment">// and I can build my control flow with Promises.</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeSandwichesForEverybody</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">dispatch, getState</span>) </span>{
+    <span class="hljs-keyword">if</span> (!getState().sandwiches.isShopOpen) {
+
+      <span class="hljs-comment">// You don&#x2019;t have to return Promises, but it&#x2019;s a handy convention</span>
+      <span class="hljs-comment">// so the caller can always call .then() on async dispatch result.</span>
+
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve();
+    }
+
+    <span class="hljs-comment">// We can dispatch both plain object actions and other thunks,</span>
+    <span class="hljs-comment">// which lets us compose the asynchronous actions in a single flow.</span>
+
+    <span class="hljs-keyword">return</span> dispatch(
+      makeASandwichWithSecretSauce(<span class="hljs-string">&apos;My Grandma&apos;</span>)
+    ).then(() =&gt;
+      <span class="hljs-built_in">Promise</span>.all([
+        dispatch(makeASandwichWithSecretSauce(<span class="hljs-string">&apos;Me&apos;</span>)),
+        dispatch(makeASandwichWithSecretSauce(<span class="hljs-string">&apos;My wife&apos;</span>))
+      ])
+    ).then(() =&gt;
+      dispatch(makeASandwichWithSecretSauce(<span class="hljs-string">&apos;Our kids&apos;</span>))
+    ).then(() =&gt;
+      dispatch(getState().myMoney &gt; <span class="hljs-number">42</span> ?
+        withdrawMoney(<span class="hljs-number">42</span>) :
+        apologize(<span class="hljs-string">&apos;Me&apos;</span>, <span class="hljs-string">&apos;The Sandwich Shop&apos;</span>)
+      )
+    );
+  };
+}
+
+<span class="hljs-comment">// This is very useful for server rendering,</span>
+<span class="hljs-comment">// because I can wait to prefill the data before</span>
+<span class="hljs-comment">// sending synchronously rendering the app.</span>
+
+store.dispatch(
+  makeSandwichesForEverybody()
+).then(() =&gt;
+  response.send(React.renderToString(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyApp</span> <span class="hljs-attribute">store</span>=<span class="hljs-value">{store}</span> /&gt;</span>)</span>)
+);
+
+<span class="hljs-comment">// I can also dispatch a thunk async action from a component</span>
+<span class="hljs-comment">// any times its props change to load the missing data.</span>
+
+<span class="hljs-keyword">import</span> { connect } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-redux&apos;</span>;
+<span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SandwichShop</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  componentDidMount() {
+    <span class="hljs-keyword">this</span>.props.dispatch(
+      makeASandwichWithSecretSauce(<span class="hljs-keyword">this</span>.props.forPerson)
+    );
+  }
+
+  componentWillReceiveProps(nextProps) {
+    <span class="hljs-keyword">if</span> (nextProps.forPerson !== <span class="hljs-keyword">this</span>.props.forPerson) {
+      <span class="hljs-keyword">this</span>.props.dispatch(
+        makeASandwichWithSecretSauce(nextProps.forPerson)
+      );
+    }
+  }
+
+  render() {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{this.props.sandwiches.join(&apos;mustard&apos;)}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+  }
+}
+
+export default connect(
+  SandwichShop,
+  state =&gt; ({
+    sandwiches: state.sandwiches
+  })
+);
+</span></code></pre>
+<h4 id="example-custom-logger-middleware">Example: Custom Logger Middleware</h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { createStore, applyMiddleware } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> todos <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logger</span>(<span class="hljs-params">{ getState }</span>) </span>{
+  <span class="hljs-keyword">return</span> (next) =&gt; (action) =&gt; {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;will dispatch&apos;</span>, action);
+
+    <span class="hljs-comment">// Call the next dispatch method in the middleware chain.</span>
+    <span class="hljs-keyword">let</span> returnValue = next(action);
+
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;state after dispatch&apos;</span>, getState());
+
+    <span class="hljs-comment">// This will likely be the action itself, unless</span>
+    <span class="hljs-comment">// a middleware further in chain changed it.</span>
+    <span class="hljs-keyword">return</span> returnValue;
+  };
+}
+
+<span class="hljs-keyword">let</span> createStoreWithMiddleware = applyMiddleware(logger)(createStore);
+<span class="hljs-keyword">let</span> store = createStoreWithMiddleware(todos, [<span class="hljs-string">&apos;Use Redux&apos;</span>]);
+
+store.dispatch({
+  type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>,
+  text: <span class="hljs-string">&apos;Understand the middleware&apos;</span>
+});
+<span class="hljs-comment">// (These lines will be logged by the middleware:)</span>
+<span class="hljs-comment">// will dispatch: { type: &apos;ADD_TODO&apos;, text: &apos;Understand the middleware&apos; }</span>
+<span class="hljs-comment">// state after dispatch: [&apos;Use Redux&apos;, &apos;Understand the middleware&apos;]</span>
+</code></pre>
+<h4 id="tips">Tips</h4>
+<ul>
+<li><p>Middleware only wraps the store&#x2019;s <a href="Store.html#dispatch"><code>dispatch</code></a> function. Technically, anything a middleware can do, you can do manually by wrapping every <code>dispatch</code> call, but it&#x2019;s easier to manage this in a single place and define action transformations on the scale of the whole project.</p>
+</li>
+<li><p>If you use other store enhancers in addition to <code>applyMiddleware</code>, make sure to put <code>applyMiddleware</code> before them in the composition chain because the middleware is potentially asynchronous. For example, it should go before <a href="https://github.com/gaearon/redux-devtools" target="_blank">redux-devtools</a> because otherwise the DevTools won&#x2019;t see the raw actions emitted by the Promise middleware and such.</p>
+</li>
+<li><p>Ever wondered what <code>applyMiddleware</code> itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, <code>applyMiddleware</code> is an example of the most poweful Redux extension mechanism called <a href="../Glossary.html#store-enhancer">store enhancers</a>. It is highly unlikely you&#x2019;ll ever want to write a store enhancer yourself. Another example of a store enhancer is <a href="https://github.com/gaearon/redux-devtools" target="_blank">redux-devtools</a>. Middleware is less powerful than a store enhancer, but it is easier to write.</p>
+</li>
+<li><p>Middleware sounds much more complicated than it really is. The only way to really understand the middleware is to see how the existing middleware works, and try to write your own. The function nesting can be intimidating, but most of the middleware you&#x2019;ll find are in fact 10-liners, and the nesting and composability is what makes the middleware system powerful.</p>
+</li>
+</ul>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/api/combineReducers.html" class="navigation navigation-prev " aria-label="Previous page: combineReducers"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/api/bindActionCreators.html" class="navigation navigation-next " aria-label="Next page: bindActionCreators"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

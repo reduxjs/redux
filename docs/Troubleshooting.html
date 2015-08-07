@@ -1,0 +1,860 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Troubleshooting | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.2.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../docs/Glossary.html" />
+    
+    
+    <link rel="prev" href="../docs/recipes/WritingTests.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="5" data-basepath=".." data-revision="Fri Aug 07 2015 04:08:16 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/Middleware.html">
+            
+                
+                    <a href="../docs/advanced/Middleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Middleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/AsyncActions.html">
+            
+            <span><b>3.2.</b> Async Actions</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/AsyncFlow.html">
+            
+            <span><b>3.3.</b> Async Flow</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="docs/advanced/UsageWithReactRouter.html">
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+            <span><b>3.5.</b> Example: Reddit API</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="docs/advanced/NextSteps.html">
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+            <span><b>4.3.</b> Server Rendering</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter active" data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="troubleshooting">Troubleshooting</h1>
+<p>This is a place to share common problems and solutions to them.<br>The examples use React, but you should still find them useful if you use something else.</p>
+<h3 id="nothing-happens-when-i-dispatch-an-action">Nothing happens when I dispatch an action</h3>
+<p>Sometimes, you are trying to dispatch an action, but your view does not update. Why does this happen? There may be several reasons for this.</p>
+<h4 id="never-mutate-reducer-arguments">Never mutate reducer arguments</h4>
+<p>It is tempting to modify <code>state</code> or <code>action</code> passed to you by Redux. Don&#x2019;t do this!</p>
+<p>Redux assumes that you never mutate the objects it gives to you in the reducer. <strong>Every single time, you must return the new state object.</strong> Even if you don&#x2019;t use a library like <a href="https://facebook.github.io/immutable-js/" target="_blank">Immutable</a>, you need to completely avoid mutation.</p>
+<p>Immutability is what lets <a href="https://github.com/gaearon/react-redux" target="_blank">react-redux</a> efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with <a href="http://github.com/gaearon/redux-devtools" target="_blank">redux-devtools</a>.</p>
+<p>For example, a reducer like this is wrong because it mutates the state:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;ADD_TODO&apos;</span>:
+    <span class="hljs-comment">// Wrong! This mutates state.actions.</span>
+    state.actions.push({
+      text: action.text,
+      completed: <span class="hljs-literal">false</span>
+    });
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;COMPLETE_TODO&apos;</span>:
+    <span class="hljs-comment">// Wrong! This mutates state.actions[action.index].</span>
+    state.actions[action.index].completed = <span class="hljs-literal">true</span>;
+  }
+
+  <span class="hljs-keyword">return</span> state
+}
+</code></pre>
+<p>needs to be rewritten like this:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;ADD_TODO&apos;</span>:
+    <span class="hljs-comment">// Return a new array</span>
+    <span class="hljs-keyword">return</span> [...state, {
+      text: action.text,
+      completed: <span class="hljs-literal">false</span>
+    }];
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&apos;COMPLETE_TODO&apos;</span>:
+    <span class="hljs-comment">// Return a new array</span>
+    <span class="hljs-keyword">return</span> [
+      ...state.slice(<span class="hljs-number">0</span>, action.index),
+      <span class="hljs-comment">// Copy the object before mutating</span>
+      <span class="hljs-built_in">Object</span>.assign({}, state[action.index], {
+        completed: <span class="hljs-literal">true</span>
+      }),
+      ...state.slice(action.index + <span class="hljs-number">1</span>)
+    ];
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>It&#x2019;s more code, but it&#x2019;s exactly what makes Redux predictable and efficient. If you want to have less code, you can use a helper like <a href="https://facebook.github.io/react/docs/update.html" target="_blank"><code>React.addons.update</code></a> to write immutable transformations with a terse syntax:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// Before:</span>
+<span class="hljs-keyword">return</span> [
+  ...state.slice(<span class="hljs-number">0</span>, action.index),
+  <span class="hljs-built_in">Object</span>.assign({}, state[action.index], {
+    completed: <span class="hljs-literal">true</span>
+  }),
+  ...state.slice(action.index + <span class="hljs-number">1</span>)
+]
+
+<span class="hljs-comment">// After</span>
+<span class="hljs-keyword">return</span> update(state, {
+  [action.index]: {
+    completed: {
+      $set: <span class="hljs-literal">true</span>
+    }
+  }
+});
+</code></pre>
+<p>Finally, to update objects, you&#x2019;ll need something like <code>_.extend</code> from Underscore, or better, an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank"><code>Object.assign</code></a> polyfill.</p>
+<p>Make sure that you use <code>Object.assign</code> correctly. For example, instead of returning something like <code>Object.assign(state, newData)</code> from your reducers, return <code>Object.assign({}, state, newData)</code>. This way you don&#x2019;t override the previous <code>state</code>.</p>
+<p>You can also enable <a href="https://github.com/sebmarkbage/ecmascript-rest-spread" target="_blank">ES7 object spread proposal</a> with <a href="http://babeljs.io/docs/usage/experimental/" target="_blank">Babel stage 1</a>:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// Before:</span>
+<span class="hljs-keyword">return</span> [
+  ...state.slice(<span class="hljs-number">0</span>, action.index),
+  <span class="hljs-built_in">Object</span>.assign({}, state[action.index], {
+    completed: <span class="hljs-literal">true</span>
+  }),
+  ...state.slice(action.index + <span class="hljs-number">1</span>)
+]
+
+<span class="hljs-comment">// After:</span>
+<span class="hljs-keyword">return</span> [
+  ...state.slice(<span class="hljs-number">0</span>, action.index),
+  { ...state[action.index], completed: <span class="hljs-literal">true</span> },
+  ...state.slice(action.index + <span class="hljs-number">1</span>)
+]
+</code></pre>
+<p>Note that experimental language features are subject to change, and it&#x2019;s unwise to rely on them in large codebases.</p>
+<h4 id="don%E2%80%99t-forget-to-call-dispatch-action-api-store-md-dispatch">Don&#x2019;t forget to call <a href="api/Store.html#dispatch"><code>dispatch(action)</code></a></h4>
+<p>If you define an action creator, calling it will <em>not</em> automatically dispatch the action. For example, this code will do nothing:</p>
+<h4 id="-todoactions-js"><code>TodoActions.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodo</span>(<span class="hljs-params">text</span>) </span>{
+  <span class="hljs-keyword">return</span> { type: <span class="hljs-string">&apos;ADD_TODO&apos;</span>, text };
+}
+</code></pre>
+<h4 id="-addtodo-js"><code>AddTodo.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> { addTodo } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./TodoActions&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AddTodo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  handleClick() {
+    <span class="hljs-comment">// Won&apos;t work!</span>
+    addTodo(<span class="hljs-string">&apos;Fix the issue&apos;</span>);
+  }
+
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> this.handleClick()}&gt;
+        Add
+      <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+    )</span>;
+  }
+}
+</code></pre>
+<p>It doesn&#x2019;t work because your action creator is just a function that <em>returns</em> an action. It is up to you to actually dispatch it. We can&#x2019;t bind your action creators to a particular Store instance during the definition because apps that render on the server need a separate Redux store for every request.</p>
+<p>The fix is to call <a href="api/Store.html#dispatch"><code>dispatch()</code></a> method on the <a href="api/Store.html">store</a> instance:</p>
+<pre><code class="lang-js">handleClick() {
+  <span class="hljs-comment">// Works! (but you need to grab store somehow)</span>
+  store.dispatch(addTodo(<span class="hljs-string">&apos;Fix the issue&apos;</span>));
+}
+</code></pre>
+<p>If you&#x2019;re somewhere deep in the component hierarchy, it is cumbersome to pass the store down manually. This is why <a href="https://github.com/gaearon/react-redux" target="_blank">react-redux</a> lets you use a <code>connect</code> <a href="https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750" target="_blank">higher-order component</a> that will, apart from subscribing you to a Redux store, inject <code>dispatch</code> into your component&#x2019;s props.</p>
+<p>The fixed code will look like this:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;
+<span class="hljs-keyword">import</span> { connect } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react-redux&apos;</span>;
+<span class="hljs-keyword">import</span> { addTodo } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./TodoActions&apos;</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AddTodo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  handleClick() {
+    <span class="hljs-comment">// Works!</span>
+    <span class="hljs-keyword">this</span>.props.dispatch(addTodo(<span class="hljs-string">&apos;Fix the issue&apos;</span>));
+  }
+
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> this.handleClick()}&gt;
+        Add
+      <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+    )</span>;
+  }
+}
+
+<span class="hljs-comment">// In addition to the state, `connect` puts `dispatch` in our props.</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> connect(AddTodo, state =&gt; ({}))
+</code></pre>
+<p>You can then pass <code>dispatch</code> down to other components manually, if you want to.</p>
+<h2 id="something-else-doesn%E2%80%99t-work">Something else doesn&#x2019;t work</h2>
+<p>Ask around on <strong>#redux</strong> <a href="http://reactiflux.com/" target="_blank">Reactiflux</a> Slack channel, or <a href="https://github.com/gaearon/redux/issues" target="_blank">create an issue</a>.<br>If you figure it out, <a href="https://github.com/gaearon/redux/edit/master/docs/Troubleshooting.md" target="_blank">edit this document</a> as a courtesy to the next person having the same problem.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../docs/recipes/WritingTests.html" class="navigation navigation-prev " aria-label="Previous page: Writing Tests"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../docs/Glossary.html" class="navigation navigation-next " aria-label="Next page: Glossary"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

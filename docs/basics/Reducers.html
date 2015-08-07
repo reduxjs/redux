@@ -1,0 +1,976 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Reducers | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.2.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/basics/Store.html" />
+    
+    
+    <link rel="prev" href="../../docs/basics/Actions.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="2.2" data-basepath="../.." data-revision="Fri Aug 07 2015 04:08:16 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/Middleware.html">
+            
+                
+                    <a href="../../docs/advanced/Middleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Middleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/AsyncActions.html">
+            
+            <span><b>3.2.</b> Async Actions</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/AsyncFlow.html">
+            
+            <span><b>3.3.</b> Async Flow</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="docs/advanced/UsageWithReactRouter.html">
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+            <span><b>3.5.</b> Example: Reddit API</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="docs/advanced/NextSteps.html">
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+            <span><b>4.3.</b> Server Rendering</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="reducers">Reducers</h1>
+<p><a href="Actions.html">Actions</a> describe the fact that <em>something happened</em>, but don&#x2019;t specify how the application&#x2019;s state changes in response. This is the job of a reducer.</p>
+<h2 id="designing-the-state-shape">Designing the State Shape</h2>
+<p>In Redux, all state of your application is stored as a single object. It&#x2019;s a good idea to think of its shape before writing any code. What&#x2019;s the minimal representation of your app&#x2019;s state as an object?</p>
+<p>For our todo app, we want to store two different things:</p>
+<ul>
+<li>The currently selected visibility filter;</li>
+<li>The actual list of todos.</li>
+</ul>
+<p>You&#x2019;ll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separately from the UI state.</p>
+<pre><code class="lang-js">{
+  visibilityFilter: <span class="hljs-string">&apos;SHOW_ALL&apos;</span>,
+  todos: [{
+    text: <span class="hljs-string">&apos;Consider using Redux&apos;</span>,
+    completed: <span class="hljs-literal">true</span>,
+  }, {
+    text: <span class="hljs-string">&apos;Keep all state in a single tree&apos;</span>,
+    completed: <span class="hljs-literal">false</span>
+  }]
+}
+</code></pre>
+<blockquote>
+<h5 id="note-on-relationships">Note on Relationships</h5>
+<p>In a more complex app, you&#x2019;re going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app&#x2019;s state as of a database. This approach is described in <a href="https://github.com/gaearon/normalizr" target="_blank">normalizr</a> documentation in detail. For example, keeping <code>todosById: { id -&gt; todo }</code> and <code>todos: array&lt;id&gt;</code> inside the state would be a better idea in a real app, but we&#x2019;re keeping the example simple.</p>
+</blockquote>
+<h2 id="handling-actions">Handling Actions</h2>
+<p>Now that we decided what our state object looks like, we are ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.</p>
+<pre><code class="lang-js">(previousState, action) =&gt; newState
+</code></pre>
+<p>It&#x2019;s called a reducer because it&#x2019;s the type of function you would pass to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce" target="_blank"><code>Array.prototype.reduce(reducer, ?initialValue)</code></a>. It&#x2019;s very important that the reducer stays pure. Things you should <strong>never</strong> do inside a reducer:</p>
+<ul>
+<li>Mutate its arguments;</li>
+<li>Perform side effects like API calls and routing transitions.</li>
+</ul>
+<p>We&#x2019;ll explore how to perform side effects in the <a href="../advanced/index.html">advanced walkthrough</a>. For now, just remember that the reducer must be pure. <strong>Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.</strong></p>
+<p>With this out of the way, let&#x2019;s start writing our reducer by gradually teaching it to understand the <a href="Actions.html">actions</a> we defined earlier.</p>
+<p>We&#x2019;ll start by specifying the initial state. Redux will call our reducer with an <code>undefined</code> state for the first time. This is our chance to return the initial state of our app:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { VisibilityFilters } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actions&apos;</span>;
+
+<span class="hljs-keyword">const</span> initialState = {
+  visibilityFilter: VisibilityFilters.SHOW_ALL,
+  todos: []
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state, action</span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> state === <span class="hljs-string">&apos;undefined&apos;</span>) {
+    <span class="hljs-keyword">return</span> initialState;
+  }
+
+  <span class="hljs-comment">// For now, don&#x2019;t handle any actions</span>
+  <span class="hljs-comment">// and just return the state given to us.</span>
+  <span class="hljs-keyword">return</span> state;
+}
+</code></pre>
+<p>One neat trick is to use the <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters" target="_blank">ES6 default arguments syntax</a> to write this in a more compact way:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+  <span class="hljs-comment">// For now, don&#x2019;t handle any actions</span>
+  <span class="hljs-comment">// and just return the state given to us.</span>
+  <span class="hljs-keyword">return</span> state;
+}
+</code></pre>
+<p>Now let&#x2019;s handle <code>SET_VISIBILITY_FILTER</code>. All it needs to do is to change <code>visibilityFilter</code> on the state. Easy:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> SET_VISIBILITY_FILTER:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      visibilityFilter: action.filter
+    });
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>Note that:</p>
+<ol>
+<li><p><strong>We don&#x2019;t mutate the <code>state</code>.</strong> We create a copy with <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank"><code>Object.assign()</code></a>. <code>Object.assign(state, ...)</code> is also wrong: it will mutate the first argument. You <strong>must</strong> supply an empty object as the first parameter. You can also enable the experimental <a href="https://github.com/sebmarkbage/ecmascript-rest-spread" target="_blank">object spread syntax</a> proposed for ES7 to write <code>{ ...state, ...newState }</code> instead.</p>
+</li>
+<li><p><strong>We return the previous <code>state</code> in the <code>default</code> case.</strong> It&#x2019;s important to return the previous <code>state</code> for any unknown action.</p>
+</li>
+</ol>
+<blockquote>
+<h5 id="note-on-object-assign">Note on <code>Object.assign</code></h5>
+<p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank"><code>Object.assign()</code></a> is a part of ES6, but is not implemented by most browsers yet. You&#x2019;ll need to either use a polyfill, a <a href="https://github.com/babel-plugins/babel-plugin-object-assign" target="_blank">Babel plugin</a>, or a helper from another library like <a href="https://lodash.com/docs#assign" target="_blank"><code>_.assign()</code></a>.</p>
+<h5 id="note-on-switch-and-boilerplate">Note on <code>switch</code> and Boilerplate</h5>
+<p>The <code>switch</code> statement is <em>not</em> the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.</p>
+<p>It&#x2019;s unfortunate that many still choose a framework based on whether it uses <code>switch</code> statements in the documentation. If you don&#x2019;t like <code>switch</code>, you can use a custom <code>createReducer</code> function that accepts a handler map, as shown in <a href="../recipes/ReducingBoilerplate.html#reducers">&#x201C;reducing boilerplate&#x201D;</a>.</p>
+</blockquote>
+<h2 id="handling-more-actions">Handling More Actions</h2>
+<p>We have two more actions to handle! Let&#x2019;s extend our reducer to handle <code>ADD_TODO</code>.</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> SET_VISIBILITY_FILTER:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      visibilityFilter: action.filter
+    });
+  <span class="hljs-keyword">case</span> ADD_TODO:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      todos: [...state.todos, {
+        text: action.text,
+        completed: <span class="hljs-literal">false</span>
+      }]
+    });    
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>Just like before, we never write directly to <code>state</code> or its fields, and instead we return new objects. The new <code>todos</code> is equal to the old <code>todos</code> concatenated with a single new item at the end. The fresh todo was constructed using the data from the action.</p>
+<p>Finally, the implementation of <code>COMPLETE_TODO</code> handler shouldn&#x2019;t come as a complete surprise:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">case</span> COMPLETE_TODO:
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+    todos: [
+      ...state.todos.slice(<span class="hljs-number">0</span>, action.index),
+      <span class="hljs-built_in">Object</span>.assign({}, state.todos[action.index], {
+        completed: <span class="hljs-literal">true</span>
+      }),
+      ...state.todos.slice(action.index + <span class="hljs-number">1</span>)
+    ]
+  });
+</code></pre>
+<p>Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it&#x2019;s a good idea to use a helper like <a href="https://facebook.github.io/react/docs/update.html" target="_blank">React.addons.update</a>, <a href="https://github.com/substantial/updeep" target="_blank">updeep</a>, or even a library like <a href="http://facebook.github.io/immutable-js/" target="_blank">Immutable</a> that has native support for deep updates. Just remember to never assign to anything inside the <code>state</code> unless you clone it first.</p>
+<h2 id="splitting-reducers">Splitting Reducers</h2>
+<p>Here is our code so far. It is rather verbose:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> SET_VISIBILITY_FILTER:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      visibilityFilter: action.filter
+    });
+  <span class="hljs-keyword">case</span> ADD_TODO:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      todos: [...state.todos, {
+        text: action.text,
+        completed: <span class="hljs-literal">false</span>
+      }]
+    });
+  <span class="hljs-keyword">case</span> COMPLETE_TODO:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      todos: [
+        ...state.todos.slice(<span class="hljs-number">0</span>, action.index),
+        <span class="hljs-built_in">Object</span>.assign({}, state.todos[action.index], {
+          completed: <span class="hljs-literal">true</span>
+        }),
+        ...state.todos.slice(action.index + <span class="hljs-number">1</span>)
+      ]
+    });
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>Is there a way to make it easier to comprehend? It seems like <code>todos</code> and <code>visibilityFilter</code> are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating <code>todos</code> into a separate function:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> ADD_TODO:
+    <span class="hljs-keyword">return</span> [...state, {
+      text: action.text,
+      completed: <span class="hljs-literal">false</span>
+    }];
+  <span class="hljs-keyword">case</span> COMPLETE_TODO:
+    <span class="hljs-keyword">return</span> [
+      ...state.slice(<span class="hljs-number">0</span>, action.index),
+      <span class="hljs-built_in">Object</span>.assign({}, state[action.index], {
+        completed: <span class="hljs-literal">true</span>
+      }),
+      ...state.slice(action.index + <span class="hljs-number">1</span>)
+    ];
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state = initialState, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> SET_VISIBILITY_FILTER:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      visibilityFilter: action.filter
+    });
+  <span class="hljs-keyword">case</span> ADD_TODO:
+  <span class="hljs-keyword">case</span> COMPLETE_TODO:
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+      todos: todos(state.todos, action)
+    });
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>Note that <code>todos</code> also accepts <code>state</code>&#x2014;but it&#x2019;s an array! Now <code>todoApp</code> just gives it the slice of the state to manage, and <code>todos</code> knows how to update just that slice. <strong>This is called <em>reducer composition</em>, and it&#x2019;s the fundamental pattern of building Redux apps.</strong></p>
+<p>Let&#x2019;s explore reducer composition more. Can we also extract a reducer managing just <code>visibilityFilter</code>? We can:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">visibilityFilter</span>(<span class="hljs-params">state = SHOW_ALL, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> SET_VISIBILITY_FILTER:
+    <span class="hljs-keyword">return</span> action.filter;
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<p>Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn&#x2019;t need to know the complete initial state anymore. It&#x2019;s enough that the child reducers return their initial state when given <code>undefined</code> at first.</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todoApp</span>(<span class="hljs-params">state = {}, action</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
+  };
+}
+</code></pre>
+<p>This is already looking good! When the app is larger, we can split the reducers into separate files and keep them completely independent and managing different data domains.</p>
+<p>Finally, Redux provides a utility called <a href="../api/combineReducers.html"><code>combineReducers</code></a> that does the same boilerplate logic that the <code>todoApp</code> above currently does. With its help, we can rewrite <code>todoApp</code> like this:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { combineReducers } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+
+<span class="hljs-keyword">const</span> todoApp = combineReducers({
+  visibilityFilter,
+  todos
+});
+</code></pre>
+<p>Because <code>combineReducers</code> expects an object, we can put all top-level reducers into a separate file, <code>export</code> each reducer function, and use <code>import * as reducers</code> to get them as an object with their names as the keys:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { combineReducers } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> reducers <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-keyword">const</span> todoApp = combineReducers(reducers);
+</code></pre>
+<h2 id="source-code">Source Code</h2>
+<h4 id="-reducers-js"><code>reducers.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actions&apos;</span>;
+<span class="hljs-keyword">const</span> { SHOW_ALL } = VisibilityFilters;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">visibilityFilter</span>(<span class="hljs-params">state = SHOW_ALL, action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> SET_VISIBILITY_FILTER:
+    <span class="hljs-keyword">return</span> action.filter;
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> ADD_TODO:
+    <span class="hljs-keyword">return</span> [...state, {
+      text: action.text,
+      completed: <span class="hljs-literal">false</span>
+    }];
+  <span class="hljs-keyword">case</span> COMPLETE_TODO:
+    <span class="hljs-keyword">return</span> [
+      ...state.slice(<span class="hljs-number">0</span>, action.index),
+      <span class="hljs-built_in">Object</span>.assign({}, state[action.index], {
+        completed: <span class="hljs-literal">true</span>
+      }),
+      ...state.slice(action.index + <span class="hljs-number">1</span>)
+    ];
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
+  }
+}
+</code></pre>
+<h4 id="-index-js"><code>index.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> { combineReducers } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> reducers <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-keyword">let</span> todoApp = combineReducers(reducers);
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>Next, we&#x2019;ll expore how to <a href="Store.html">create a Redux store</a> that holds the state and takes care of calling your reducer when you dispatch an action.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/basics/Actions.html" class="navigation navigation-prev " aria-label="Previous page: Actions"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/basics/Store.html" class="navigation navigation-next " aria-label="Next page: Store"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
