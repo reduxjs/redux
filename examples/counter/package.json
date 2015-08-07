@@ -29,7 +29,7 @@
   "homepage": "https://github.com/gaearon/redux#readme",
   "dependencies": {
     "react": "^0.13.3",
-    "react-redux": "^0.3.0",
+    "react-redux": "^0.4.0",
     "redux": "^1.0.0-rc",
     "redux-thunk": "^0.1.0"
   },
