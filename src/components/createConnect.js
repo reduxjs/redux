@@ -5,16 +5,29 @@ import isPlainObject from '../utils/isPlainObject';
 import wrapActionCreators from '../utils/wrapActionCreators';
 import invariant from 'invariant';
 
-const defaultMapState = () => ({});
-const defaultMapDispatch = dispatch => ({ dispatch });
-const defaultMergeProps = (stateSlice, actionsCreators, props) => ({
-  ...props,
-  ...stateSlice,
-  ...actionsCreators
+const defaultMapStateToProps = () => ({});
+const defaultMapDispatchToProps = dispatch => ({ dispatch });
+const defaultMergeProps = (stateProps, dispatchProps, parentProps) => ({
+  ...parentProps,
+  ...stateProps,
+  ...dispatchProps
 });
 
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
+}
+
+function areStatePropsEqual(stateProps, nextStateProps) {
+  const isRefEqual = stateProps === nextStateProps;
+  if (
+    isRefEqual ||
+    typeof stateProps !== 'object' ||
+    typeof nextStateProps !== 'object'
+  ) {
+    return isRefEqual;
+  }
+
+  return shallowEqual(stateProps, nextStateProps);
 }
 
 export default function createConnect(React) {
@@ -22,16 +35,16 @@ export default function createConnect(React) {
   const storeShape = createStoreShape(PropTypes);
 
   return function connect(
-    mapState = defaultMapState,
-    mapDispatchOrActionCreators = defaultMapDispatch,
+    mapStateToProps = defaultMapStateToProps,
+    actionCreatorsOrMapDispatchToProps = defaultMapDispatchToProps,
     mergeProps = defaultMergeProps
   ) {
-    const shouldSubscribe = mapState !== defaultMapState;
-    const mapDispatch = isPlainObject(mapDispatchOrActionCreators) ?
-      wrapActionCreators(mapDispatchOrActionCreators) :
-      mapDispatchOrActionCreators;
+    const shouldSubscribe = mapStateToProps !== defaultMapStateToProps;
+    const mapDispatchToProps = isPlainObject(actionCreatorsOrMapDispatchToProps) ?
+      wrapActionCreators(actionCreatorsOrMapDispatchToProps) :
+      actionCreatorsOrMapDispatchToProps;
 
-    return DecoratedComponent => class ConnectDecorator extends Component {
+    return DecoratedComponent => class Connect extends Component {
       static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
       static DecoratedComponent = DecoratedComponent;
 
@@ -40,21 +53,10 @@ export default function createConnect(React) {
       };
 
       shouldComponentUpdate(nextProps, nextState) {
-        return (this.subscribed && !this.isSliceEqual(this.state.slice, nextState.slice)) ||
-               !shallowEqualScalar(this.props, nextProps);
-      }
-
-      isSliceEqual(slice, nextSlice) {
-        const isRefEqual = slice === nextSlice;
-        if (
-          isRefEqual ||
-          typeof slice !== 'object' ||
-          typeof nextSlice !== 'object'
-        ) {
-          return isRefEqual;
-        }
-
-        return shallowEqual(slice, nextSlice);
+        return (
+          this.subscribed &&
+          !areStatePropsEqual(this.state.stateProps, nextState.stateProps)
+        ) || !shallowEqualScalar(this.props, nextProps);
       }
 
       constructor(props, context) {
@@ -81,40 +83,40 @@ export default function createConnect(React) {
 
       handleChange(props = this.props) {
         const nextState = this.mapState(props, this.context);
-        if (!this.isSliceEqual(this.state.slice, nextState.slice)) {
+        if (!areStatePropsEqual(this.state.stateProps, nextState.stateProps)) {
           this.setState(nextState);
         }
       }
 
       mapState(props = this.props, context = this.context) {
         const state = context.store.getState();
-        const slice = mapState(state);
+        const stateProps = mapStateToProps(state);
 
         invariant(
-          isPlainObject(slice),
-          '`mapState` must return an object. Instead received %s.',
-          slice
+          isPlainObject(stateProps),
+          '`mapStateToProps` must return an object. Instead received %s.',
+          stateProps
         );
 
-        return { slice };
+        return { stateProps };
       }
 
       mapDispatch(context = this.context) {
         const { dispatch } = context.store;
-        const actionCreators = mapDispatch(dispatch);
+        const dispatchProps = mapDispatchToProps(dispatch);
 
         invariant(
-          isPlainObject(actionCreators),
-          '`mapDispatch` must return an object. Instead received %s.',
-          actionCreators
+          isPlainObject(dispatchProps),
+          '`mapDispatchToProps` must return an object. Instead received %s.',
+          dispatchProps
         );
 
-        return { actionCreators };
+        return { dispatchProps };
       }
 
       merge(props = this.props, state = this.state) {
-        const { slice, actionCreators } = state;
-        const merged = mergeProps(slice, actionCreators, props);
+        const { stateProps, dispatchProps } = state;
+        const merged = mergeProps(stateProps, dispatchProps, props);
 
         invariant(
           isPlainObject(merged),
