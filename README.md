@@ -85,20 +85,13 @@ Here’s how we hook it up to the Redux Store.
 
 We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. The `connect()` function lets you specify *which exactly* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
 
-Passing action creator functions as the second parameter will bind them to the specific store instance, and they will be injected as props with the same names they were exported with. 
-
-Why don’t we bind action creators to a store right away? This is because of the so-called “universal” apps that need to render on the server. They would have a different store instance for every request, so we don’t know the store instance during the definition!
-
 ##### `containers/CounterContainer.js`
 
 ```js
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-// “Dumb” component:
 import Counter from '../components/Counter';
-
-// Action creators:
 import { increment } from '../actionsCreators';
 
 // Which part of the Redux global state does our component want to receive as props?
@@ -115,13 +108,18 @@ function mapDispatch(dispatch) {
   };
 }
 
-export default connect(mapState, mapDispatch)(CounterContainer);
+export default connect(
+  mapState,
+  mapDispatch
+)(CounterContainer);
 
 // You can also pass an object instead of defining `mapDispatch`:
 // export default connect(mapState, CounterActionCreators)(CounterContainer);
 
 // Or you can pass `dispatch` down as a prop if you omit `mapDispatch`:
 // export default connect(mapState)(CounterContainer);
+
+// See more recipes in detailed connect() examples below.
 ```
 
 Whether to put `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
