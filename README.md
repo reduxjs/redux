@@ -156,25 +156,6 @@ React.render((
     {() => <App />}
   </Provider>
 ), targetEl);
-
-// or, if you use React Router 0.13,
-
-// Router.run(routes, Router.HistoryLocation, (Handler) => {
-//   React.render(
-//     <Provider store={store}>
-//       {() => <Handler />}
-//     </Provider>,
-//     targetEl
-//   );
-// });
-
-// or, if you use React Router 1.0,
-// React.render(
-//   <Provider store={store}>
-//     {() => <Router history={history}>...</Router>}
-//   </Provider>,
-//   targetEl
-// );
 ```
 
 ## API
@@ -191,13 +172,38 @@ You can’t use `connect()` without wrapping the root component in `<Provider>`.
 
 #### Example
 
+##### Vanilla React
+
 ```js
-// Make store available to connect() below in hierarchy
 React.render(
   <Provider store={store}>
     {() => <MyRootComponent>}
   </Provider>,
   rootEl
+);
+```
+
+##### React Router 0.13
+
+```js
+Router.run(routes, Router.HistoryLocation, (Handler) => {
+  React.render(
+    <Provider store={store}>
+      {() => <Handler />}
+    </Provider>,
+    targetEl
+  );
+});
+```
+
+##### React Router 1.0
+
+```js
+React.render(
+  <Provider store={store}>
+    {() => <Router history={history}>...</Router>}
+  </Provider>,
+  targetEl
 );
 ```
 
