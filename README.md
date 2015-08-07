@@ -12,8 +12,8 @@ For React Native, import from `react-redux/native` instead.
 
 - [Quick Start](#quick-start)
 - [API](#api)
-  - [`connect([mapState], [mapDispatch], [mergeProps])`](#connect)
-  - [`<Provider store>`](#provider)
+  - [`connect([mapState], [mapDispatch], [mergeProps])`](#connectmapstate-mapdispatch-mergeprops)
+  - [`<Provider store>`](#provider-store)
 - [Recipes](#recipes)
 - [License](#license)
 
