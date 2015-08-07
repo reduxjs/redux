@@ -95,10 +95,11 @@ Why don’t we bind action creators to a store right away? This is because of th
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-// Action creators:
-import { increment } from '../actionsCreators';
 // “Dumb” component:
 import Counter from '../components/Counter';
+
+// Action creators:
+import { increment } from '../actionsCreators';
 
 // Which part of the Redux global state does our component want to receive as props?
 function mapState(state) {
@@ -107,11 +108,17 @@ function mapState(state) {
   };
 }
 
-// First argument tells which state fields it’s interested in.
-// Second argument tells which action creators to bind and inject.
-// You may also pass a `dispatch` => Object function as a second argument.
+// Which action creators does it want to receive by props?
+function mapDispatch(dispatch) {
+  return {
+    increment: () => dispatch(increment())
+  };
+}
 
-export default connect(mapState, { increment })(CounterContainer);
+export default connect(mapState, mapDispatch)(CounterContainer);
+
+// You can also pass an object instead of defining `mapDispatch`:
+//export default connect(mapState, CounterActionCreators)(CounterContainer); 
 ```
 
 Whether to put `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
