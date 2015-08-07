@@ -285,7 +285,7 @@ function mapDispatch(dispatch) {
   return { actions: bindActionCreators(actionCreators, dispatch) };
 }
 
-export default connect(mapState, actionCreators)(TodoApp);
+export default connect(mapState, mapDispatch)(TodoApp);
 ```
 
 #####  Inject `todos` and a specific action creator (`addTodo`)
