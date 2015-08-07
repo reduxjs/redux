@@ -96,7 +96,7 @@ What if we want to apply **more then one** such transformation to `dispatch`?
 
 A different useful transformation that comes to my mind is reporting JavaScript errors in production. The global `window.onerror` event is not reliable because it doesn’t provide stack information in some older browsers, which is crucial to understand why an error is happening.
 
-Wouldn’t it be useful if, any time an error is thrown as a result of dispatching an action, we would send it to an crash reporting service like [Sentry](https://getsentry.com/welcome/) with the stack trace, the action that caused the error, and the current state? This way it’s much easier to reproduce the error in development.
+Wouldn’t it be useful if, any time an error is thrown as a result of dispatching an action, we would send it to a crash reporting service like [Sentry](https://getsentry.com/welcome/) with the stack trace, the action that caused the error, and the current state? This way it’s much easier to reproduce the error in development.
 
 However, it is important that we keep logging and crash reporting separate. Ideally we want them to be different modules, potentially in different packages. Otherwise we can’t have an ecosystem of such utilities. (Hint: we’re slowly getting to what middleware is!)
 
