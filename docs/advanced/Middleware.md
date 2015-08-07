@@ -56,7 +56,7 @@ This produces the desired effect, but you wouldn’t want to do it every time.
 
 ### Attempt #2: Wrapping Dispatch
 
-You can logging into a function:
+You can extract logging into a function:
 
 ```js
 function dispatchAndLog(store, action) {
