@@ -8,10 +8,13 @@ For React Native, import from `react-redux/native` instead.
 
 >**Note: There is a project called “redux-react” on NPM that is completely unrelated to the official bindings. This documentation (and any other official Redux documentation) is for `react-redux`.**
 
+## Table of Contents
+
 - [Quick Start](#quick-start)
 - [API](#api)
   - [`connect`](#connect)
   - [`Provider`](#provider)
+- [License](#license)
 
 ## Quick Start
 
