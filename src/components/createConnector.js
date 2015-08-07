@@ -3,7 +3,6 @@ import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
 import invariant from 'invariant';
 
-// Connector is deprecated and removed from public API
 export default function createConnector(React) {
   const { Component, PropTypes } = React;
   const storeShape = createStoreShape(PropTypes);

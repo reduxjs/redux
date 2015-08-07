@@ -2,7 +2,7 @@ import expect from 'expect';
 import jsdomReact from './jsdomReact';
 import React, { PropTypes, Component } from 'react/addons';
 import { createStore } from 'redux';
-import { connect } from '../../src/index';
+import { connect, Connector } from '../../src/index';
 
 const { TestUtils } = React.addons;
 
@@ -45,11 +45,9 @@ describe('React', () => {
       const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
       expect(div.props.pass).toEqual('through');
       expect(div.props.foo).toEqual('bar');
-
-      // Connector is deprecated and removed from public API
-      // expect(() =>
-      //   TestUtils.findRenderedComponentWithType(container, Connector)
-      // ).toNotThrow();
+      expect(() =>
+        TestUtils.findRenderedComponentWithType(container, Connector)
+      ).toNotThrow();
     });
 
     it('should handle additional prop changes in addition to slice', () => {
@@ -120,15 +118,13 @@ describe('React', () => {
           {() => <Container pass='through' />}
         </Provider>
       );
-
-      // Connector is deprecated and removed from public API
-      // const connector = TestUtils.findRenderedComponentWithType(container, Connector);
-      // expect(connector.props.select({
-      //   foo: 5,
-      //   bar: 7
-      // })).toEqual({
-      //   foo: 5
-      // });
+      const connector = TestUtils.findRenderedComponentWithType(container, Connector);
+      expect(connector.props.select({
+        foo: 5,
+        bar: 7
+      })).toEqual({
+        foo: 5
+      });
     });
 
     it('should set the displayName correctly', () => {
