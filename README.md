@@ -1,21 +1,25 @@
 react-redux
 =========================
 
-Higher-order React components for [Redux](https://github.com/gaearon/redux).
+Official React bindings for [Redux](https://github.com/gaearon/redux).  
+Performant and flexible.
 
-What you get from `react-redux` is for React.  
-For React Native, import from `react-redux/native` instead.
-
->**Note: There is a project called “redux-react” on NPM that is completely unrelated to the official bindings. This documentation (and any other official Redux documentation) is for `react-redux`.**
+>**Note: There is a project called `redux-react` on NPM that is [completely unrelated](https://github.com/cgarvis/redux-react/issues/1) to the official bindings. This documentation (and any other official Redux documentation) is for `react-redux`.**
 
 ## Table of Contents
 
+- [React Native](#react-native)
 - [Quick Start](#quick-start)
 - [API](#api)
   - [`connect([mapState], [mapDispatch], [mergeProps])`](#connectmapstate-mapdispatch-mergeprops)
   - [`<Provider store>`](#provider-store)
 - [Recipes](#recipes)
 - [License](#license)
+
+## React Native
+
+What you get from `react-redux` is for React.  
+For React Native, import from `react-redux/native` instead.
 
 ## Quick Start
 
@@ -75,10 +79,11 @@ export default class Counter extends Component {
 
 Here’s how we hook it up to the Redux Store.
 
-We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. With the current API, we’ll need to add an intermediate `CounterContainer` component, but we will soon make `connect` API more powerful so this won’t be required. The `connect()` function lets you specify *which exactly* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
+We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. The `connect()` function lets you specify *which exactly* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
 
-Our `CounterContainer` that’s necessary to hook `Counter` up to a Redux store looks like this:  
-(This will be much less verbose in the next versions.)
+Passing action creator functions as the second parameter will bind them to the specific store instance, and they will be injected as props with the same names they were exported with. 
+
+Why don’t we bind action creators to a store right away? This is because of the so-called “universal” apps that need to render on the server. They would have a different store instance for every request, so we don’t know the store instance during the definition!
 
 ```js
 import { Component } from 'react';
@@ -87,89 +92,40 @@ import { connect } from 'react-redux';
 // Assuming this is our “dumb” counter
 import Counter from '../components/Counter';
 
-// Assuming these are Redux action creators
-import { increment } from './actionCreators';
+// Assuming action creators as named exports:
+import * as counterActionCreators from '../actionsCreators';
 
-function mapState(state) {
-  // Which part of the Redux global state does our component want to receive as props?
-  return {
-    counter: state.counter
-  };
-}
-
-class CounterContainer extends Component {
-  render() {
-    // connect() call below will inject `dispatch` and
-    // every key returned by `mapState` as props into our container:
-    const { dispatch, counter } = this.props;
-    
-    // render our “dumb” component, hooking up state to data props
-    // and using “dispatch action produced by this action creator” as callbacks.
-    // this is a “bridge” between a Redux-aware world above and Redux-unaware world below.
-
-    return (
-      <Counter counter={counter}
-               increment={() => dispatch(increment())} />
-    );
-  }
-}
-
-// Don't forget to actually use connect!
-export default connect(mapState)(CounterContainer);
-
-// You might have noticed that we used parens twice.
-// This is called partial applications, and it lets people
-// use ES7 decorator proposal syntax:
-//
-// @connect(mapState)
-// export default class CounterContainer { ... }
-//
-// Don’t forget decorators are experimental! And they
-// desugar to function calls anyway as example above demonstrates.
-```
-
-As you can see, action creators in Redux just return actions, but we need to manually “bind” them to the `dispatch` function for our Redux store. Why don’t we bind action creators to a store right away? This is because of the so-called “universal” apps that need to render on the server. They would have a different store instance for every request, so we don’t know the store instance during the definition!
-
-### Binding many action creators
-
-Binding can get cumbersome, so Redux provides a `bindActionCreators` helper to turn many action creator methods into an object with methods called the same, but bound to a particular `dispatch` function:
-
-```js
-
-import { Component } from 'react';
-import { connect } from 'react-redux';
-
-// A helper provided by Redux!
-import { bindActionCreators } from 'redux';
-// Import many action creators as a single object (like `require('./actionCreators')` in CommonJS)
-import * as CounterActionCreators from './actionCreators';
-import Counter from '../components/Counter';
-
+// Which part of the Redux global state does our component want to receive as props?
 function mapState(state) {
   return {
     counter: state.counter
   };
 }
 
-class CounterContainer extends Component {
-  render() {
-    const { dispatch, counter } = this.props;
-    
-    // This time, we use `bindActionCreators` to bind many action creators
-    // to a particular dispatch function from our Redux store.
-
-    return (
-      <Counter counter={counter}
-               {...bindActionCreators(CounterActionCreators, dispatch)} />
-    );
-  }
-}
-
 // Don't forget to actually use connect!
-export default connect(mapState)(CounterContainer);
+export default connect(mapState, counterActionCreators)(CounterContainer);
 ```
+
+### Usage Notes
 
 You can have many `connect()`-ed components in your app at any depth, and you can even nest them. It is however preferable that you try to only `connect()` top-level components such as route handlers, so the data flow in your application stays predictable.
+
+### Support for Decorators
+
+You might have noticed that we used parens twice. This is called partial applications, and it lets people
+use ES7 decorator proposal syntax:
+
+```js
+// Unstable syntax! It might change or break in production.
+@connect(mapState)
+export default class CounterContainer { ... }
+```
+
+Don’t forget decorators are experimental! And they desugar to function calls anyway as example above demonstrates.
+
+### Additional Flexibility
+
+This the most basic usage, but `connect()` supports many other different patterns: just passing the vanilla `dispatch()` function down, binding multiple action creators, putting them as `actions` prop, selecting parts of state and binding action creators depending on `props`, and so on. Check out [Recipes](#recipes) for some ideas about advanced `connect()` usage.
 
 ### Injecting Redux store
 
@@ -248,24 +204,30 @@ present in order to use the `connect` component.
 
 ## Recipes
 
+##### Inject just `dispatch` and don't listen to store
+
 ```js
-// Inject just `dispatch` and don't listen to store
 export default connect()(TodoApp);
+```
 
-
-// Inject `dispatch` and every field in the global state (SLOW!)
+##### Inject `dispatch` and every field in the global state (SLOW!)
+```js
 export default connect(state => state)(TodoApp);
+```
 
+##### Inject `dispatch` and `todos`
 
-// Inject `dispatch` and `todos`
+```js
 function mapState(state) {
   return { todos: state.todos };
 }
 
 export default connect(mapState)(TodoApp);
+```
 
+##### Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...)
 
-// Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...)
+```js
 import * as actionCreators from './actionCreators';
 
 function mapState(state) {
@@ -273,9 +235,11 @@ function mapState(state) {
 }
 
 export default connect(mapState, actionCreators)(TodoApp);
+```
 
+##### Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...) as `actions`
 
-// Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...) as `actions`
+```js
 import * as actionCreators from './actionCreators';
 import { bindActionCreators } from 'redux';
 
@@ -288,9 +252,11 @@ function mapDispatch(dispatch) {
 }
 
 export default connect(mapState, actionCreators)(TodoApp);
+```
 
+#####  Inject `todos` and a specific action creator (`addTodo`)
 
-// Inject `todos` and a specific action creator (`addTodo`)
+```js
 import { addTodo } from './actionCreators';
 import { bindActionCreators } from 'redux';
 
@@ -303,9 +269,11 @@ function mapDispatch(dispatch) {
 }
 
 export default connect(mapState, mapDispatch)(TodoApp);
+```
 
+##### Inject `todos`, todoActionCreators as `todoActions`, and counterActionCreators as `counterActions`
 
-// Inject `todos`, todoActionCreators as `todoActions`, and counterActionCreators as `counterActions`
+```js
 import * as todoActionCreators from './todoActionCreators';
 import * as counterActionCreators from './counterActionCreators';
 import { bindActionCreators } from 'redux';
@@ -322,9 +290,11 @@ function mapDispatch(dispatch) {
 }
 
 export default connect(mapState, mapDispatch)(TodoApp);
+```
 
+##### Inject `todos`, and todoActionCreators and counterActionCreators together as `actions`
 
-// Inject `todos`, and todoActionCreators and counterActionCreators together as `actions`
+```js
 import * as todoActionCreators from './todoActionCreators';
 import * as counterActionCreators from './counterActionCreators';
 import { bindActionCreators } from 'redux';
@@ -340,9 +310,11 @@ function mapDispatch(dispatch) {
 }
 
 export default connect(mapState, mapDispatch)(TodoApp);
+```
 
+##### Inject `todos`, and all todoActionCreators and counterActionCreators directly as props
 
-// Inject `todos`, and all todoActionCreators and counterActionCreators directly as props
+```js
 import * as todoActionCreators from './todoActionCreators';
 import * as counterActionCreators from './counterActionCreators';
 import { bindActionCreators } from 'redux';
@@ -356,9 +328,11 @@ function mapDispatch(dispatch) {
 }
 
 export default connect(mapState, mapDispatch)(TodoApp);
+```
 
+##### Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
 
-// Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
+```js
 import * as actionCreators from './actionCreators';
 
 function mapState(state) {
