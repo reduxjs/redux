@@ -241,7 +241,7 @@ describe('React', () => {
         TestUtils.findRenderedComponentWithType(container, Container)
       ).toNotThrow();
       const decorated = TestUtils.findRenderedComponentWithType(container, Container);
-      expect(decorated.subscribed).toBe(true);
+      expect(decorated.isSubscribed()).toBe(true);
     });
 
     it('should not subscribe to stores if mapState argument is falsy', () => {
@@ -268,7 +268,7 @@ describe('React', () => {
         TestUtils.findRenderedComponentWithType(container, Container)
       ).toNotThrow();
       const decorated = TestUtils.findRenderedComponentWithType(container, Container);
-      expect(decorated.subscribed).toNotBe(true);
+      expect(decorated.isSubscribed()).toNotBe(true);
     });
 
     it('should unsubscribe before unmounting', () => {

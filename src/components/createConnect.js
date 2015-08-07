@@ -54,7 +54,7 @@ export default function createConnect(React) {
 
       shouldComponentUpdate(nextProps, nextState) {
         return (
-          this.subscribed &&
+          this.isSubscribed() &&
           !areStatePropsEqual(this.state.stateProps, nextState.stateProps)
         ) || !shallowEqualScalar(this.props, nextProps);
       }
@@ -68,15 +68,18 @@ export default function createConnect(React) {
         };
       }
 
+      isSubscribed() {
+        return typeof this.unsubscribe === 'function';
+      }
+
       componentDidMount() {
         if (shouldSubscribe) {
-          this.subscribed = true;
           this.unsubscribe = this.context.store.subscribe(::this.handleChange);
         }
       }
 
       componentWillUnmount() {
-        if (shouldSubscribe) {
+        if (this.isSubscribed()) {
           this.unsubscribe();
         }
       }
