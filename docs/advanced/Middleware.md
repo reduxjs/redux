@@ -337,7 +337,7 @@ store.dispatch(addTodo('Use Redux'));
 
 If your head boiled from reading the above section, imagine what it was like to write it. This part is meant to be a relaxation for you and me, and will help get your gears turning.
 
-Each function below is (or, in some cases, returns) a valid Redux middleware. They are not equally useful, but at least they are equally fun.
+Each function below is a valid Redux middleware. They are not equally useful, but at least they are equally fun.
 
 ```js
 /**
