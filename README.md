@@ -63,7 +63,7 @@ It is advisable that only top-level components of your app (such as route handle
 
 ### “Dumb” component is unaware of Redux
 
-Let’s say we have a `<Counter />` “dumb” component with a number `counter` prop, and an `increment` function prop that it will call when user presses an “Increment” button:
+Let’s say we have a `<Counter />` “dumb” component with a number `value` prop, and an `onIncrement` function prop that it will call when user presses an “Increment” button:
 
 ```js
 import { Component } from 'react';
@@ -71,8 +71,8 @@ import { Component } from 'react';
 export default class Counter extends Component {
   render() {
     return (
-      <button onClick={this.props.increment}>
-        {this.props.counter}
+      <button onClick={this.props.onIncrement}>
+        {this.props.value}
       </button>
     );
   }
@@ -97,14 +97,14 @@ import { increment } from '../actionsCreators';
 // Which part of the Redux global state does our component want to receive as props?
 function mapState(state) {
   return {
-    counter: state.counter
+    value: state.counter
   };
 }
 
 // Which action creators does it want to receive by props?
 function mapDispatch(dispatch) {
   return {
-    increment: () => dispatch(increment())
+    onIncrement: () => dispatch(increment())
   };
 }
 
