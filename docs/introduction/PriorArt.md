@@ -21,7 +21,7 @@ While it is technically *possible* to [write impure reducers](https://github.com
 
 [Elm](http://elm-lang.org/) is a functional programming language created by [Evan Czaplicki](https://twitter.com/czaplic). It encourages using [an architecture that can be described as `(state, action) => state`](http://elm-lang.org/guide/architecture). Technically, Elm “updaters” are equivalent to the reducers in Redux.
 
-Unlike Redux, Elm is a language, so it is able to benefit from statical typing for actions, and pattern matching. Even if you don’t plan to use Elm, you should read about the Elm architecture, and play with it. There is an interesting [JavaScript library playground implementing similar ideas](https://github.com/paldepind/noname-functional-frontend-framework). We should look there for inspiration on Redux! One way how we can get closer to the static typing of Elm is by [using a gradual typing solution like Flow](https://github.com/gaearon/redux/issues/290).
+Unlike Redux, Elm is a language, so it is able to benefit from static typing for actions, and pattern matching. Even if you don’t plan to use Elm, you should read about the Elm architecture, and play with it. There is an interesting [JavaScript library playground implementing similar ideas](https://github.com/paldepind/noname-functional-frontend-framework). We should look there for inspiration on Redux! One way that we can get closer to the static typing of Elm is by [using a gradual typing solution like Flow](https://github.com/gaearon/redux/issues/290).
 
 ### Immutable
 
@@ -37,7 +37,7 @@ Note that, even if your immutable library supports cursors, you shouldn’t use 
 
 [Baobab](https://github.com/Yomguithereal/baobab) is another popular library implementing immutable API for updating plain JavaScript objects. While you can use it with Redux, there is little benefit to them together.
 
-Most of the functionality Baobab provides is related to updating the data with cursors, but Redux enforces that the only way to update the data is to dispatch the action. Therefore they solve the same problem differently, and don’t complement each other.
+Most of the functionality Baobab provides is related to updating the data with cursors, but Redux enforces that the only way to update the data is to dispatch an action. Therefore they solve the same problem differently, and don’t complement each other.
 
 Unlike Immutable, Baobab doesn’t yet implement any special efficient data structures under the hood, so you don’t really win anything from using it together with Redux. It’s easier to just use plain objects in this case.
 
