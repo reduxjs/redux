@@ -1,12 +1,9 @@
 import createProvider from './createProvider';
-
-import createConnector from './createConnector';
-import createConnectDecorator from './createConnectDecorator';
+import createConnect from './createConnect';
 
 export default function createAll(React) {
   const Provider = createProvider(React);
-  const connect = createConnectDecorator(React, createConnector(React));
+  const connect = createConnect(React);
 
-  // provider and Connector are deprecated and removed from public API
   return { Provider, connect };
 }

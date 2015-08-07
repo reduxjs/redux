@@ -1,6 +1,6 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
-import React, { PropTypes, Component } from 'react/addons';
+import React, { createClass, PropTypes, Component } from 'react/addons';
 import { createStore } from 'redux';
 import { connect } from '../../src/index';
 
@@ -25,12 +25,42 @@ describe('React', () => {
       }
     }
 
-    it('should wrap the component into Provider', () => {
+    function stringBuilder(prev = '', action) {
+      return action.type === 'APPEND'
+        ? prev + action.body
+        : prev;
+    }
+
+    it('should receive the store in the context', () => {
+      const store = createStore(() => ({}));
+
+      @connect()
+      class Container extends Component {
+        render() {
+          return <div {...this.props} />;
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Container pass="through" />
+          )}
+        </Provider>
+      );
+
+      const container = TestUtils.findRenderedComponentWithType(tree, Container);
+      expect(container.context.store).toBe(store);
+    });
+
+    it('should pass state and props to the given component', () => {
       const store = createStore(() => ({
-        foo: 'bar'
+        foo: 'bar',
+        baz: 42,
+        hello: 'world'
       }));
 
-      @connect(state => state)
+      @connect(({ foo, baz }) => ({ foo, baz }))
       class Container extends Component {
         render() {
           return <div {...this.props} />;
@@ -39,17 +69,44 @@ describe('React', () => {
 
       const container = TestUtils.renderIntoDocument(
         <Provider store={store}>
-          {() => <Container pass='through' />}
+          {() => <Container pass='through' baz={50} />}
         </Provider>
       );
       const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
       expect(div.props.pass).toEqual('through');
       expect(div.props.foo).toEqual('bar');
+      expect(div.props.baz).toEqual(42);
+      expect(div.props.hello).toEqual(undefined);
+      expect(() =>
+        TestUtils.findRenderedComponentWithType(container, Container)
+      ).toNotThrow();
+    });
 
-      // Connector is deprecated and removed from public API
-      // expect(() =>
-      //   TestUtils.findRenderedComponentWithType(container, Connector)
-      // ).toNotThrow();
+    it('should subscribe to the store changes', () => {
+      const store = createStore(stringBuilder);
+
+      @connect(state => ({ string: state }) )
+      class Container extends Component {
+        render() {
+          return <div {...this.props}/>;
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Container />
+          )}
+        </Provider>
+      );
+
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+      expect(div.props.string).toBe('');
+      store.dispatch({ type: 'APPEND', body: 'a'});
+      expect(div.props.string).toBe('a');
+      store.dispatch({ type: 'APPEND', body: 'b'});
+      expect(div.props.string).toBe('ab');
     });
 
     it('should handle additional prop changes in addition to slice', () => {
@@ -75,14 +132,15 @@ describe('React', () => {
             }
           };
         }
-        componentDidMount() {
 
+        componentDidMount() {
           // Simulate deep object mutation
           this.state.bar.baz = 'through';
           this.setState({
             bar: this.state.bar
           });
         }
+
         render() {
           return (
             <Provider store={store}>
@@ -98,17 +156,73 @@ describe('React', () => {
       expect(div.props.pass).toEqual('through');
     });
 
-    it('should pass the only argument as the select prop down', () => {
-      const store = createStore(() => ({
-        foo: 'baz',
-        bar: 'baz'
-      }));
+    it('should allow for merge to incorporate state and prop changes', () => {
+      const store = createStore(stringBuilder);
 
-      function select({ foo }) {
-        return { foo };
+      function doSomething(thing) {
+        return {
+          type: 'APPEND',
+          body: thing
+        };
       }
 
-      @connect(select)
+      @connect(
+        state => ({stateThing: state}),
+        dispatch => ({
+          doSomething: (whatever) => dispatch(doSomething(whatever))
+        }),
+        (stateProps, actionProps, parentProps) => ({
+          ...stateProps,
+          ...actionProps,
+          mergedDoSomething(thing) {
+            const seed = stateProps.stateThing === '' ? 'HELLO ' : '';
+            actionProps.doSomething(seed + thing + parentProps.extra);
+          }
+        })
+      )
+      class Container extends Component {
+        render() {
+          return <div {...this.props}/>;
+        };
+      }
+
+      class OuterContainer extends Component {
+        constructor() {
+          super();
+          this.state = { extra: 'z' };
+        }
+
+        render() {
+          return (
+            <Provider store={store}>
+              {() => <Container extra={this.state.extra} />}
+            </Provider>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(<OuterContainer />);
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+      expect(div.props.stateThing).toBe('');
+      div.props.mergedDoSomething('a');
+      expect(div.props.stateThing).toBe('HELLO az');
+      div.props.mergedDoSomething('b');
+      expect(div.props.stateThing).toBe('HELLO azbz');
+      tree.setState({extra: 'Z'});
+      div.props.mergedDoSomething('c');
+      expect(div.props.stateThing).toBe('HELLO azbzcZ');
+    });
+
+    it('should merge actionProps into DecoratedComponent', () => {
+      const store = createStore(() => ({
+        foo: 'bar'
+      }));
+
+      @connect(
+        state => state,
+        dispatch => ({ dispatch })
+      )
       class Container extends Component {
         render() {
           return <div {...this.props} />;
@@ -120,26 +234,232 @@ describe('React', () => {
           {() => <Container pass='through' />}
         </Provider>
       );
-
-      // Connector is deprecated and removed from public API
-      // const connector = TestUtils.findRenderedComponentWithType(container, Connector);
-      // expect(connector.props.select({
-      //   foo: 5,
-      //   bar: 7
-      // })).toEqual({
-      //   foo: 5
-      // });
+      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
+      expect(div.props.dispatch).toEqual(store.dispatch);
+      expect(div.props.foo).toEqual('bar');
+      expect(() =>
+        TestUtils.findRenderedComponentWithType(container, Container)
+      ).toNotThrow();
+      const decorated = TestUtils.findRenderedComponentWithType(container, Container);
+      expect(decorated.subscribed).toBe(true);
     });
 
-    it('should set the displayName correctly', () => {
-      @connect(state => state)
+    it('should not subscribe to stores if mapState argument is falsy', () => {
+      const store = createStore(() => ({
+        foo: 'bar'
+      }));
+
+      @connect()
       class Container extends Component {
         render() {
-          return <div />;
+          return <div {...this.props} />;
         }
       }
 
-      expect(Container.displayName).toBe('Connector(Container)');
+      const container = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => <Container pass='through' />}
+        </Provider>
+      );
+      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
+      expect(div.props.dispatch).toEqual(store.dispatch);
+      expect(div.props.foo).toBe(undefined);
+      expect(() =>
+        TestUtils.findRenderedComponentWithType(container, Container)
+      ).toNotThrow();
+      const decorated = TestUtils.findRenderedComponentWithType(container, Container);
+      expect(decorated.subscribed).toNotBe(true);
+    });
+
+    it('should unsubscribe before unmounting', () => {
+      const store = createStore(stringBuilder);
+      const subscribe = store.subscribe;
+
+      // Keep track of unsubscribe by wrapping subscribe()
+      const spy = expect.createSpy(() => ({}));
+      store.subscribe = (listener) => {
+        const unsubscribe = subscribe(listener);
+        return () => {
+          spy();
+          return unsubscribe();
+        };
+      };
+
+      @connect(
+        state => ({string: state}),
+        dispatch => ({ dispatch })
+      )
+      class Container extends Component {
+        render() {
+          return <div {...this.props} />;
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Container />
+          )}
+        </Provider>
+      );
+
+      const connector = TestUtils.findRenderedComponentWithType(tree, Container);
+      expect(spy.calls.length).toBe(0);
+      connector.componentWillUnmount();
+      expect(spy.calls.length).toBe(1);
+    });
+
+    it('should shallowly compare the selected state to prevent unnecessary updates', () => {
+      const store = createStore(stringBuilder);
+      const spy = expect.createSpy(() => ({}));
+      function render({ string }) {
+        spy();
+        return <div string={string}/>;
+      }
+
+      @connect(
+        state => ({string: state}),
+        dispatch => ({ dispatch })
+      )
+      class Container extends Component {
+        render() {
+          return render(this.props);
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Container />
+          )}
+        </Provider>
+      );
+
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(spy.calls.length).toBe(1);
+      expect(div.props.string).toBe('');
+      store.dispatch({ type: 'APPEND', body: 'a'});
+      expect(spy.calls.length).toBe(2);
+      store.dispatch({ type: 'APPEND', body: 'b'});
+      expect(spy.calls.length).toBe(3);
+      store.dispatch({ type: 'APPEND', body: ''});
+      expect(spy.calls.length).toBe(3);
+    });
+
+    it('should throw an error if mapState, mapDispatch, or mergeProps returns anything but a plain object', () => {
+      const store = createStore(() => ({}));
+
+      function makeContainer(mapState, mapDispatch, mergeProps) {
+        return React.createElement(
+          @connect(mapState, mapDispatch, mergeProps)
+          class Container extends Component {
+            render() {
+              return <div />;
+            }
+          }
+        );
+      }
+
+      function AwesomeMap() { }
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => 1, () => ({}), () => ({})) }
+          </Provider>
+        );
+      }).toThrow(/mapState/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => 'hey', () => ({}), () => ({})) }
+          </Provider>
+        );
+      }).toThrow(/mapState/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => new AwesomeMap(), () => ({}), () => ({})) }
+          </Provider>
+        );
+      }).toThrow(/mapState/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => ({}), () => 1, () => ({})) }
+          </Provider>
+        );
+      }).toThrow(/mapDispatch/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => ({}), () => 'hey', () => ({})) }
+          </Provider>
+        );
+      }).toThrow(/mapDispatch/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => ({}), () => new AwesomeMap(), () => ({})) }
+          </Provider>
+        );
+      }).toThrow(/mapDispatch/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => ({}), () => ({}), () => 1) }
+          </Provider>
+        );
+      }).toThrow(/mergeProps/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => ({}), () => ({}), () => 'hey') }
+          </Provider>
+        );
+      }).toThrow(/mergeProps/);
+
+      expect(() => {
+        TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            { () => makeContainer(() => ({}), () => ({}), () => new AwesomeMap()) }
+          </Provider>
+        );
+      }).toThrow(/mergeProps/);
+    });
+
+    it('should set the displayName correctly', () => {
+      expect(connect(state => state)(
+        class Foo extends Component {
+          render() {
+            return <div />;
+          }
+        }
+      ).displayName).toBe('Connect(Foo)');
+
+      expect(connect(state => state)(
+        createClass({
+          displayName: 'Bar',
+          render() {
+            return <div />;
+          }
+        })
+      ).displayName).toBe('Connect(Bar)');
+
+      expect(connect(state => state)(
+        createClass({
+          render() {
+            return <div />;
+          }
+        })
+      ).displayName).toBe('Connect(Component)');
     });
 
     it('should expose the wrapped component as DecoratedComponent', () => {
@@ -153,6 +473,40 @@ describe('React', () => {
       const decorated = decorator(Container);
 
       expect(decorated.DecoratedComponent).toBe(Container);
+    });
+
+    it('should return the instance of the wrapped component for use in calling child methods', () => {
+      const store = createStore(() => ({}));
+
+      const someData = {
+        some: 'data'
+      };
+
+      class Container extends Component {
+        someInstanceMethod() {
+          return someData;
+        }
+
+        render() {
+          return <div />;
+        }
+      }
+
+      const decorator = connect(state => state);
+      const Decorated = decorator(Container);
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Decorated />
+          )}
+        </Provider>
+      );
+
+      const decorated = TestUtils.findRenderedComponentWithType(tree, Decorated);
+
+      expect(() => decorated.someInstanceMethod()).toThrow();
+      expect(decorated.getUnderlyingRef().someInstanceMethod()).toBe(someData);
     });
   });
 });

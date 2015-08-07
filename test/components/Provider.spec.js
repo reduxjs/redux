@@ -21,7 +21,7 @@ describe('React', () => {
     }
 
     it('should add the store to the child context', () => {
-      const store = createStore({});
+      const store = createStore(() => ({}));
 
       const tree = TestUtils.renderIntoDocument(
         <Provider store={store}>
@@ -36,7 +36,7 @@ describe('React', () => {
     it('should replace just the reducer when receiving a new store in props', () => {
       const store1 = createStore((state = 10) => state + 1);
       const store2 = createStore((state = 10) => state * 2);
-      const spy = expect.createSpy(() => {});
+      const spy = expect.createSpy(() => ({}));
 
       class ProviderContainer extends Component {
         state = { store: store1 };
