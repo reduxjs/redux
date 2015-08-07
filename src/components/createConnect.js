@@ -1,5 +1,4 @@
 import createStoreShape from '../utils/createStoreShape';
-import getDisplayName from '../utils/getDisplayName';
 import shallowEqualScalar from '../utils/shallowEqualScalar';
 import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
@@ -12,8 +11,11 @@ const emptyBinder = () => ({});
 
 const identityMerge = (slice, actionsCreators, props) => ({ ...props, ...slice, ...actionsCreators});
 
+function getDisplayName(Component) {
+  return Component.displayName || Component.name || 'Component';
+}
 
-export default function createConnectDecorator(React) {
+export default function createConnect(React) {
   const { Component, PropTypes } = React;
   const storeShape = createStoreShape(PropTypes);
 
@@ -25,7 +27,7 @@ export default function createConnectDecorator(React) {
     const merge = mergeHandler;
 
     return DecoratedComponent => class ConnectDecorator extends Component {
-      static displayName = `ConnectDecorator(${getDisplayName(DecoratedComponent)})`;
+      static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
       static DecoratedComponent = DecoratedComponent;
 
       static contextTypes = {

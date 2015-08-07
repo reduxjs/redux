@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
-import React, { PropTypes, Component } from 'react/addons';
-import { createStore, combineReducers } from 'redux';
+import React, { createClass, PropTypes, Component } from 'react/addons';
+import { createStore } from 'redux';
 import { connect } from '../../src/index';
 
 const { TestUtils } = React.addons;
@@ -433,14 +433,30 @@ describe('React', () => {
     });
 
     it('should set the displayName correctly', () => {
-      @connect(state => state)
-      class Container extends Component {
-        render() {
-          return <div />;
+      expect(connect(state => state)(
+        class Foo extends Component {
+          render() {
+            return <div />;
+          }
         }
-      }
+      ).displayName).toBe('Connect(Foo)');
 
-      expect(Container.displayName).toBe('ConnectDecorator(Container)');
+      expect(connect(state => state)(
+        createClass({
+          displayName: 'Bar',
+          render() {
+            return <div />;
+          }
+        })
+      ).displayName).toBe('Connect(Bar)');
+
+      expect(connect(state => state)(
+        createClass({
+          render() {
+            return <div />;
+          }
+        })
+      ).displayName).toBe('Connect(Component)');
     });
 
     it('should expose the wrapped component as DecoratedComponent', () => {
