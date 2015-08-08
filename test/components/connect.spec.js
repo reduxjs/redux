@@ -160,6 +160,51 @@ describe('React', () => {
         }
 
         componentDidMount() {
+          this.setState({
+            bar: Object.assign({}, this.state.bar, { baz: 'through' })
+          });
+        }
+
+        render() {
+          return (
+            <Provider store={store}>
+              {() => <ConnectContainer bar={this.state.bar} />}
+             </Provider>
+          );
+        }
+      }
+
+      const container = TestUtils.renderIntoDocument(<Container />);
+      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
+      expect(div.props.foo).toEqual('bar');
+      expect(div.props.pass).toEqual('through');
+    });
+
+    it('should ignore deep mutations in props', () => {
+      const store = createStore(() => ({
+        foo: 'bar'
+      }));
+
+      @connect(state => state)
+      class ConnectContainer extends Component {
+        render() {
+          return (
+              <div {...this.props} pass={this.props.bar.baz} />
+          );
+        }
+      }
+
+      class Container extends Component {
+        constructor() {
+          super();
+          this.state = {
+            bar: {
+              baz: ''
+            }
+          };
+        }
+
+        componentDidMount() {
           // Simulate deep object mutation
           this.state.bar.baz = 'through';
           this.setState({
@@ -179,7 +224,7 @@ describe('React', () => {
       const container = TestUtils.renderIntoDocument(<Container />);
       const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
       expect(div.props.foo).toEqual('bar');
-      expect(div.props.pass).toEqual('through');
+      expect(div.props.pass).toEqual('');
     });
 
     it('should allow for merge to incorporate state and prop changes', () => {
@@ -351,7 +396,7 @@ describe('React', () => {
       }
 
       @connect(
-        state => ({string: state}),
+        state => ({ string: state }),
         dispatch => ({ dispatch })
       )
       class Container extends Component {
@@ -377,6 +422,96 @@ describe('React', () => {
       expect(spy.calls.length).toBe(3);
       store.dispatch({ type: 'APPEND', body: ''});
       expect(spy.calls.length).toBe(3);
+    });
+
+    it('should shallowly compare the merged state to prevent unnecessary updates', () => {
+      const store = createStore(stringBuilder);
+      const spy = expect.createSpy(() => ({}));
+      function render({ string, pass }) {
+        spy();
+        return <div string={string} pass={pass} passVal={pass.val} />;
+      }
+
+      @connect(
+        state => ({ string: state }),
+        dispatch => ({ dispatch }),
+        (stateProps, dispatchProps, parentProps) => ({
+          ...dispatchProps,
+          ...stateProps,
+          ...parentProps
+        })
+      )
+      class Container extends Component {
+        render() {
+          return render(this.props);
+        }
+      }
+
+      class Root extends Component {
+        constructor(props) {
+          super(props);
+          this.state = { pass: '' };
+        }
+
+        render() {
+          return (
+            <Provider store={store}>
+              {() => (
+                <Container pass={this.state.pass} />
+              )}
+            </Provider>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(<Root />);
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(spy.calls.length).toBe(1);
+      expect(div.props.string).toBe('');
+      expect(div.props.pass).toBe('');
+
+      store.dispatch({ type: 'APPEND', body: 'a'});
+      expect(spy.calls.length).toBe(2);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe('');
+
+      tree.setState({ pass: '' });
+      expect(spy.calls.length).toBe(2);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe('');
+
+      tree.setState({ pass: 'through' });
+      expect(spy.calls.length).toBe(3);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe('through');
+
+      tree.setState({ pass: 'through' });
+      expect(spy.calls.length).toBe(3);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe('through');
+
+      const obj = { prop: 'val' };
+      tree.setState({ pass: obj });
+      expect(spy.calls.length).toBe(4);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe(obj);
+
+      tree.setState({ pass: obj });
+      expect(spy.calls.length).toBe(4);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe(obj);
+
+      const obj2 = Object.assign({}, obj, { val: 'otherval' });
+      tree.setState({ pass: obj2 });
+      expect(spy.calls.length).toBe(5);
+      expect(div.props.string).toBe('a');
+      expect(div.props.pass).toBe(obj2);
+
+      obj2.val = 'mutation';
+      tree.setState({ pass: obj2 });
+      expect(spy.calls.length).toBe(5);
+      expect(div.props.string).toBe('a');
+      expect(div.props.passVal).toBe('otherval');
     });
 
     it('should throw an error if mapState, mapDispatch, or mergeProps returns anything but a plain object', () => {

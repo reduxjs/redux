@@ -1,5 +1,4 @@
 import createStoreShape from '../utils/createStoreShape';
-import shallowEqualScalar from '../utils/shallowEqualScalar';
 import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
 import wrapActionCreators from '../utils/wrapActionCreators';
@@ -15,19 +14,6 @@ const defaultMergeProps = (stateProps, dispatchProps, parentProps) => ({
 
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
-}
-
-function areStatePropsEqual(stateProps, nextStateProps) {
-  const isRefEqual = stateProps === nextStateProps;
-  if (
-    isRefEqual ||
-    typeof stateProps !== 'object' ||
-    typeof nextStateProps !== 'object'
-  ) {
-    return isRefEqual;
-  }
-
-  return shallowEqual(stateProps, nextStateProps);
 }
 
 // Helps track hot reloading.
@@ -48,6 +34,38 @@ export default function createConnect(React) {
     // Helps track hot reloading.
     const version = nextVersion++;
 
+    function computeStateProps(context) {
+      const state = context.store.getState();
+      const stateProps = finalMapStateToProps(state);
+      invariant(
+        isPlainObject(stateProps),
+        '`mapStateToProps` must return an object. Instead received %s.',
+        stateProps
+      );
+      return stateProps;
+    }
+
+    function computeDispatchProps(context) {
+      const { dispatch } = context.store;
+      const dispatchProps = finalMapDispatchToProps(dispatch);
+      invariant(
+        isPlainObject(dispatchProps),
+        '`mapDispatchToProps` must return an object. Instead received %s.',
+        dispatchProps
+      );
+      return dispatchProps;
+    }
+
+    function computeNextState(stateProps, dispatchProps, parentProps) {
+      const mergedProps = finalMergeProps(stateProps, dispatchProps, parentProps);
+      invariant(
+        isPlainObject(mergedProps),
+        '`mergeProps` must return an object. Instead received %s.',
+        mergedProps
+      );
+      return mergedProps;
+    }
+
     return DecoratedComponent => class Connect extends Component {
       static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
       static DecoratedComponent = DecoratedComponent;
@@ -57,20 +75,52 @@ export default function createConnect(React) {
       };
 
       shouldComponentUpdate(nextProps, nextState) {
-        return (
-          this.isSubscribed() &&
-          !areStatePropsEqual(this.state.stateProps, nextState.stateProps)
-        ) || !shallowEqualScalar(this.props, nextProps);
+        return !shallowEqual(this.state, nextState);
       }
 
       constructor(props, context) {
         super(props, context);
         this.version = version;
         this.setUnderlyingRef = ::this.setUnderlyingRef;
-        this.state = {
-          ...this.mapState(props, context),
-          ...this.mapDispatch(context)
-        };
+
+        this.stateProps = computeStateProps(context);
+        this.dispatchProps = computeDispatchProps(context);
+        this.state = this.computeNextState();
+      }
+
+      recomputeStateProps() {
+        const nextStateProps = computeStateProps(this.context);
+        if (shallowEqual(nextStateProps, this.stateProps)) {
+          return false;
+        }
+
+        this.stateProps = nextStateProps;
+        return true;
+      }
+
+      recomputeDispatchProps() {
+        const nextDispatchProps = computeDispatchProps(this.context);
+        if (shallowEqual(nextDispatchProps, this.dispatchProps)) {
+          return false;
+        }
+
+        this.dispatchProps = nextDispatchProps;
+        return true;
+      }
+
+      computeNextState(props = this.props) {
+        return computeNextState(
+          this.stateProps,
+          this.dispatchProps,
+          props
+        );
+      }
+
+      recomputeState(props = this.props) {
+        const nextState = this.computeNextState(props);
+        if (!shallowEqual(nextState, this.state)) {
+          this.setState(nextState);
+        }
       }
 
       isSubscribed() {
@@ -85,7 +135,7 @@ export default function createConnect(React) {
       }
 
       tryUnsubscribe() {
-        if (this.isSubscribed()) {
+        if (this.unsubscribe) {
           this.unsubscribe();
           this.unsubscribe = null;
         }
@@ -106,10 +156,15 @@ export default function createConnect(React) {
 
           // Update the state and bindings.
           this.trySubscribe();
-          this.setState({
-            ...this.mapState(),
-            ...this.mapDispatch()
-          });
+          this.recomputeStateProps();
+          this.recomputeDispatchProps();
+          this.recomputeState();
+        }
+      }
+
+      componentWillReceiveProps(nextProps) {
+        if (!shallowEqual(nextProps, this.props)) {
+          this.recomputeState(nextProps);
         }
       }
 
@@ -117,50 +172,10 @@ export default function createConnect(React) {
         this.tryUnsubscribe();
       }
 
-      handleChange(props = this.props) {
-        const nextState = this.mapState(props, this.context);
-        if (!areStatePropsEqual(this.state.stateProps, nextState.stateProps)) {
-          this.setState(nextState);
+      handleChange() {
+        if (this.recomputeStateProps()) {
+          this.recomputeState();
         }
-      }
-
-      mapState(props = this.props, context = this.context) {
-        const state = context.store.getState();
-        const stateProps = finalMapStateToProps(state);
-
-        invariant(
-          isPlainObject(stateProps),
-          '`mapStateToProps` must return an object. Instead received %s.',
-          stateProps
-        );
-
-        return { stateProps };
-      }
-
-      mapDispatch(context = this.context) {
-        const { dispatch } = context.store;
-        const dispatchProps = finalMapDispatchToProps(dispatch);
-
-        invariant(
-          isPlainObject(dispatchProps),
-          '`mapDispatchToProps` must return an object. Instead received %s.',
-          dispatchProps
-        );
-
-        return { dispatchProps };
-      }
-
-      merge(props = this.props, state = this.state) {
-        const { stateProps, dispatchProps } = state;
-        const merged = finalMergeProps(stateProps, dispatchProps, props);
-
-        invariant(
-          isPlainObject(merged),
-          '`mergeProps` must return an object. Instead received %s.',
-          merged
-        );
-
-        return merged;
       }
 
       getUnderlyingRef() {
@@ -174,7 +189,7 @@ export default function createConnect(React) {
       render() {
         return (
           <DecoratedComponent ref={this.setUnderlyingRef}
-                              {...this.merge()} />
+                              {...this.state} />
         );
       }
     };
