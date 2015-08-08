@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import isPlainObject from './utils/isPlainObject';
+import isPlainObject from 'lodash.isplainobject';
 
 /**
  * These are private action types reserved by Redux.
