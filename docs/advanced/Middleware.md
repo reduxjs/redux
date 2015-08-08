@@ -1,6 +1,6 @@
 # Middleware
 
-If you used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you are familiar with a concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple indepent third-party middleware in a single project.
+If you used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you are familiar with a concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple independent third-party middleware in a single project.
 
 Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the store.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
 
@@ -52,7 +52,7 @@ store.dispatch(action);
 console.log('next state', store.getState());
 ```
 
-This produces the desired effect, but you wouldn’t want to do it every time. 
+This produces the desired effect, but you wouldn’t want to do it every time.
 
 ### Attempt #2: Wrapping Dispatch
 
@@ -169,7 +169,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares.reverse();
 
   // Transform dispatch function with each middleware.
-  middlewares.forEach(middleware => 
+  middlewares.forEach(middleware =>
     store.dispatch = middleware(store)
   );
 }
@@ -264,7 +264,7 @@ function applyMiddleware(store, middlewares) {
   middlewares.reverse();
 
   let dispatch = store.dispatch;
-  middlewares.forEach(middleware => 
+  middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
   );
 
@@ -468,7 +468,7 @@ const readyStatePromise = store => next => action => {
 };
 
 /**
- * Lets you dispatch a function instead an action.
+ * Lets you dispatch a function instead of an action.
  * This function will receive `dispatch` and `getState` as arguments.
  *
  * Useful for early exits (conditions over `getState()`), as well
