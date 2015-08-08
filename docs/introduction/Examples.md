@@ -14,7 +14,9 @@ cd redux
 Run the [Counter](https://github.com/gaearon/redux/tree/master/examples/counter) example:
 
 ```
-cd redux/examples/counter
+cd redux/
+npm install
+cd examples/counter
 npm install
 npm start
 ```
