@@ -8,15 +8,7 @@ const FILTER_TITLES = {
   [SHOW_MARKED]: 'Completed'
 };
 
-export default class Footer extends Component {
-  static propTypes = {
-    markedCount: PropTypes.number.isRequired,
-    unmarkedCount: PropTypes.number.isRequired,
-    filter: PropTypes.string.isRequired,
-    onClearMarked: PropTypes.func.isRequired,
-    onShow: PropTypes.func.isRequired
-  }
-
+class Footer extends Component {
   render() {
     return (
       <footer className='footer'>
@@ -69,3 +61,13 @@ export default class Footer extends Component {
     }
   }
 }
+
+Footer.propTypes = {
+  markedCount: PropTypes.number.isRequired,
+  unmarkedCount: PropTypes.number.isRequired,
+  filter: PropTypes.string.isRequired,
+  onClearMarked: PropTypes.func.isRequired,
+  onShow: PropTypes.func.isRequired
+};
+
+export default Footer;

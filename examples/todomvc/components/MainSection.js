@@ -9,12 +9,7 @@ const TODO_FILTERS = {
   [SHOW_MARKED]: todo => todo.marked
 };
 
-export default class MainSection extends Component {
-  static propTypes = {
-    todos: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired
-  };
-
+class MainSection extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { filter: SHOW_ALL };
@@ -76,9 +71,16 @@ export default class MainSection extends Component {
         <Footer markedCount={markedCount}
                 unmarkedCount={unmarkedCount}
                 filter={filter}
-                onClearMarked={::this.handleClearMarked}
-                onShow={::this.handleShow} />
+                onClearMarked={this.handleClearMarked.bind(this)}
+                onShow={this.handleShow.bind(this)} />
       );
     }
   }
 }
+
+MainSection.propTypes = {
+  todos: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
+};
+
+export default MainSection;
