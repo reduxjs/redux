@@ -30,6 +30,9 @@ function areStatePropsEqual(stateProps, nextStateProps) {
   return shallowEqual(stateProps, nextStateProps);
 }
 
+// Helps track hot reloading.
+let nextVersion = 0;
+
 export default function createConnect(React) {
   const { Component, PropTypes } = React;
   const storeShape = createStoreShape(PropTypes);
@@ -43,6 +46,9 @@ export default function createConnect(React) {
     const mapDispatchToProps = isPlainObject(actionCreatorsOrMapDispatchToProps) ?
       wrapActionCreators(actionCreatorsOrMapDispatchToProps) :
       actionCreatorsOrMapDispatchToProps;
+
+    // Helps track hot reloading.
+    const version = nextVersion++;
 
     return DecoratedComponent => class Connect extends Component {
       static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
@@ -61,6 +67,7 @@ export default function createConnect(React) {
 
       constructor(props, context) {
         super(props, context);
+        this.version = version;
         this.setUnderlyingRef = ::this.setUnderlyingRef;
         this.state = {
           ...this.mapState(props, context),
@@ -72,16 +79,43 @@ export default function createConnect(React) {
         return typeof this.unsubscribe === 'function';
       }
 
-      componentDidMount() {
-        if (shouldSubscribe) {
+      trySubscribe() {
+        if (shouldSubscribe && !this.unsubscribe) {
           this.unsubscribe = this.context.store.subscribe(::this.handleChange);
         }
       }
 
-      componentWillUnmount() {
+      tryUnsubscribe() {
         if (this.isSubscribed()) {
           this.unsubscribe();
+          this.unsubscribe = null;
         }
+      }
+
+      componentDidMount() {
+        this.trySubscribe();
+      }
+
+      componentWillUpdate() {
+        if (process.env.NODE_ENV !== 'production') {
+          if (this.version === version) {
+            return;
+          }
+
+          // We are hot reloading!
+          this.version = version;
+
+          // Update the state and bindings.
+          this.trySubscribe();
+          this.setState({
+            ...this.mapState(),
+            ...this.mapDispatch()
+          });
+        }
+      }
+
+      componentWillUnmount() {
+        this.tryUnsubscribe();
       }
 
       handleChange(props = this.props) {

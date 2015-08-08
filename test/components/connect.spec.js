@@ -435,6 +435,57 @@ describe('React', () => {
       }).toThrow(/mergeProps/);
     });
 
+    it('should recalculate the state and rebind the actions on hot update', () => {
+      const store = createStore(() => {});
+
+      @connect(
+        undefined,
+        () => ({ scooby: 'doo' })
+      )
+      class ContainerBefore extends Component {
+        render() {
+          return (
+              <div {...this.props} />
+          );
+        }
+      }
+
+      @connect(
+        () => ({ foo: 'baz' }),
+        () => ({ scooby: 'foo' })
+      )
+      class ContainerAfter extends Component {
+        render() {
+          return (
+              <div {...this.props} />
+          );
+        }
+      }
+
+      let container;
+      TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => <ContainerBefore ref={instance => container = instance} />}
+         </Provider>
+      );
+      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
+      expect(div.props.foo).toEqual(undefined);
+      expect(div.props.scooby).toEqual('doo');
+
+      // Crude imitation of hot reloading that does the job
+      Object.keys(ContainerAfter.prototype).filter(key =>
+        typeof ContainerAfter.prototype[key] === 'function'
+      ).forEach(key => {
+        if (key !== 'render') {
+          ContainerBefore.prototype[key] = ContainerAfter.prototype[key];
+        }
+      });
+
+      container.forceUpdate();
+      expect(div.props.foo).toEqual('baz');
+      expect(div.props.scooby).toEqual('foo');
+    });
+
     it('should set the displayName correctly', () => {
       expect(connect(state => state)(
         class Foo extends Component {
