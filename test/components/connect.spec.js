@@ -109,6 +109,32 @@ describe('React', () => {
       expect(div.props.string).toBe('ab');
     });
 
+    it('should handle dispatches before componentDidMount', () => {
+      const store = createStore(stringBuilder);
+
+      @connect(state => ({ string: state }) )
+      class Container extends Component {
+        componentWillMount() {
+          store.dispatch({ type: 'APPEND', body: 'a'});
+        }
+
+        render() {
+          return <div {...this.props}/>;
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <Container />
+          )}
+        </Provider>
+      );
+
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(div.props.string).toBe('a');
+    });
+
     it('should handle additional prop changes in addition to slice', () => {
       const store = createStore(() => ({
         foo: 'bar'
@@ -469,6 +495,18 @@ describe('React', () => {
         }
       }
 
+      @connect(
+        () => ({ foo: 'bar' }),
+        () => ({ scooby: 'boo' })
+      )
+      class ContainerNext extends Component {
+        render() {
+          return (
+              <div {...this.props} />
+          );
+        }
+      }
+
       let container;
       TestUtils.renderIntoDocument(
         <Provider store={store}>
@@ -479,18 +517,25 @@ describe('React', () => {
       expect(div.props.foo).toEqual(undefined);
       expect(div.props.scooby).toEqual('doo');
 
-      // Crude imitation of hot reloading that does the job
-      Object.keys(ContainerAfter.prototype).filter(key =>
-        typeof ContainerAfter.prototype[key] === 'function'
-      ).forEach(key => {
-        if (key !== 'render') {
-          ContainerBefore.prototype[key] = ContainerAfter.prototype[key];
-        }
-      });
+      function imitateHotReloading(TargetClass, SourceClass) {
+        // Crude imitation of hot reloading that does the job
+        Object.keys(SourceClass.prototype).filter(key =>
+          typeof SourceClass.prototype[key] === 'function'
+        ).forEach(key => {
+          if (key !== 'render') {
+            TargetClass.prototype[key] = SourceClass.prototype[key];
+          }
+        });
+        container.forceUpdate();
+      }
 
-      container.forceUpdate();
+      imitateHotReloading(ContainerBefore, ContainerAfter);
       expect(div.props.foo).toEqual('baz');
       expect(div.props.scooby).toEqual('foo');
+
+      imitateHotReloading(ContainerBefore, ContainerNext);
+      expect(div.props.foo).toEqual('bar');
+      expect(div.props.scooby).toEqual('boo');
     });
 
     it('should set the displayName correctly', () => {

@@ -80,6 +80,7 @@ export default function createConnect(React) {
       trySubscribe() {
         if (shouldSubscribe && !this.unsubscribe) {
           this.unsubscribe = this.context.store.subscribe(::this.handleChange);
+          this.handleChange();
         }
       }
 
