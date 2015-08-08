@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import mapValues from '../utils/mapValues';
+import mapValues from 'lodash.mapvalues';
 
 function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args));

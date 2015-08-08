@@ -1,7 +1,7 @@
 import { ActionTypes } from '../createStore';
-import isPlainObject from '../utils/isPlainObject';
-import mapValues from '../utils/mapValues';
-import pick from '../utils/pick';
+import isPlainObject from 'lodash.isplainobject';
+import mapValues from 'lodash.mapvalues';
+import pick from 'lodash.pick';
 import invariant from 'invariant';
 import warning from 'warning';
 

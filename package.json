@@ -62,7 +62,10 @@
   },
   "dependencies": {
     "invariant": "^2.0.0",
-    "warning": "^2.0.0"
+    "warning": "^2.0.0",
+    "lodash.isplainobject": "^3.2.0",
+    "lodash.mapvalues": "^3.0.1",
+    "lodash.pick": "^3.1.0"
   },
   "npmName": "redux",
   "npmFileMap": [
