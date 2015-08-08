@@ -37,15 +37,13 @@ export default function createConnect(React) {
   const { Component, PropTypes } = React;
   const storeShape = createStoreShape(PropTypes);
 
-  return function connect(
-    mapStateToProps = defaultMapStateToProps,
-    actionCreatorsOrMapDispatchToProps = defaultMapDispatchToProps,
-    mergeProps = defaultMergeProps
-  ) {
-    const shouldSubscribe = mapStateToProps !== defaultMapStateToProps;
-    const mapDispatchToProps = isPlainObject(actionCreatorsOrMapDispatchToProps) ?
-      wrapActionCreators(actionCreatorsOrMapDispatchToProps) :
-      actionCreatorsOrMapDispatchToProps;
+  return function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
+    const shouldSubscribe = Boolean(mapStateToProps);
+    const finalMapStateToProps = mapStateToProps || defaultMapStateToProps;
+    const finalMapDispatchToProps = isPlainObject(mapDispatchToProps) ?
+      wrapActionCreators(mapDispatchToProps) :
+      mapDispatchToProps || defaultMapDispatchToProps;
+    const finalMergeProps = mergeProps || defaultMergeProps;
 
     // Helps track hot reloading.
     const version = nextVersion++;
@@ -127,7 +125,7 @@ export default function createConnect(React) {
 
       mapState(props = this.props, context = this.context) {
         const state = context.store.getState();
-        const stateProps = mapStateToProps(state);
+        const stateProps = finalMapStateToProps(state);
 
         invariant(
           isPlainObject(stateProps),
@@ -140,7 +138,7 @@ export default function createConnect(React) {
 
       mapDispatch(context = this.context) {
         const { dispatch } = context.store;
-        const dispatchProps = mapDispatchToProps(dispatch);
+        const dispatchProps = finalMapDispatchToProps(dispatch);
 
         invariant(
           isPlainObject(dispatchProps),
@@ -153,7 +151,7 @@ export default function createConnect(React) {
 
       merge(props = this.props, state = this.state) {
         const { stateProps, dispatchProps } = state;
-        const merged = mergeProps(stateProps, dispatchProps, props);
+        const merged = finalMergeProps(stateProps, dispatchProps, props);
 
         invariant(
           isPlainObject(merged),

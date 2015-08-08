@@ -244,31 +244,38 @@ describe('React', () => {
       expect(decorated.isSubscribed()).toBe(true);
     });
 
-    it('should not subscribe to stores if mapState argument is falsy', () => {
+    it('should pass dispatch and avoid subscription if arguments are falsy', () => {
       const store = createStore(() => ({
         foo: 'bar'
       }));
 
-      @connect()
-      class Container extends Component {
-        render() {
-          return <div {...this.props} />;
+      function runCheck(...connectArgs) {
+        @connect(...connectArgs)
+        class Container extends Component {
+          render() {
+            return <div {...this.props} />;
+          }
         }
+
+        const container = TestUtils.renderIntoDocument(
+          <Provider store={store}>
+            {() => <Container pass='through' />}
+          </Provider>
+        );
+        const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
+        expect(div.props.dispatch).toEqual(store.dispatch);
+        expect(div.props.foo).toBe(undefined);
+        expect(div.props.pass).toEqual('through');
+        expect(() =>
+          TestUtils.findRenderedComponentWithType(container, Container)
+        ).toNotThrow();
+        const decorated = TestUtils.findRenderedComponentWithType(container, Container);
+        expect(decorated.isSubscribed()).toBe(false);
       }
 
-      const container = TestUtils.renderIntoDocument(
-        <Provider store={store}>
-          {() => <Container pass='through' />}
-        </Provider>
-      );
-      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-      expect(div.props.dispatch).toEqual(store.dispatch);
-      expect(div.props.foo).toBe(undefined);
-      expect(() =>
-        TestUtils.findRenderedComponentWithType(container, Container)
-      ).toNotThrow();
-      const decorated = TestUtils.findRenderedComponentWithType(container, Container);
-      expect(decorated.isSubscribed()).toNotBe(true);
+      runCheck();
+      runCheck(null, null, null);
+      runCheck(false, false, false);
     });
 
     it('should unsubscribe before unmounting', () => {
@@ -439,7 +446,7 @@ describe('React', () => {
       const store = createStore(() => {});
 
       @connect(
-        undefined,
+        null,
         () => ({ scooby: 'doo' })
       )
       class ContainerBefore extends Component {
