@@ -93,7 +93,7 @@ export default function createConnect(React) {
             `props of "${this.constructor.displayName}". ` +
             `Either wrap the root component in a <Provider>, ` +
             `or explicitly pass "store" as a prop to "${this.constructor.displayName}".`
-          )
+          );
 
           this.stateProps = computeStateProps(this.store);
           this.dispatchProps = computeDispatchProps(this.store);
