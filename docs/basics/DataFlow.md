@@ -52,7 +52,7 @@ The data lifecycle in any Redux app follows these 4 steps:
 
   How you structure the root reducer is completely up to you. Redux ships with a [`combineReducers()`](../api/combineReducers.md) helper function, useful for “splitting” the root reducer into separate functions that each manage one branch of the state tree.
 
-  Here’s how [`combineReducers()`](../api/combineReducers.md) works. Let’s say you have a list of todos, and the currently selected filter setting to keep track of with two reducers:
+  Here’s how [`combineReducers()`](../api/combineReducers.md) works. Let’s say you have two reducers, one for a list of todos, and another for the currently selected filter setting:
 
     ```js
     function todos(state = [], action) {
