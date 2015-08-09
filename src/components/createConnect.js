@@ -66,10 +66,10 @@ export default function createConnect(React) {
       return mergedProps;
     }
 
-    return function wrapWithConnect(DecoratedComponent) {
+    return function wrapWithConnect(WrappedComponent) {
       class Connect extends Component {
-        static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
-        static DecoratedComponent = DecoratedComponent;
+        static displayName = `Connect(${getDisplayName(WrappedComponent)})`;
+        static WrappedComponent = WrappedComponent;
 
         static contextTypes = {
           store: storeShape.isRequired
@@ -82,8 +82,6 @@ export default function createConnect(React) {
         constructor(props, context) {
           super(props, context);
           this.version = version;
-          this.setUnderlyingRef = ::this.setUnderlyingRef;
-
           this.stateProps = computeStateProps(context);
           this.dispatchProps = computeDispatchProps(context);
           this.state = this.computeNextState();
@@ -179,18 +177,14 @@ export default function createConnect(React) {
           }
         }
 
-        getUnderlyingRef() {
-          return this.underlyingRef;
-        }
-
-        setUnderlyingRef(instance) {
-          this.underlyingRef = instance;
+        getWrappedInstance() {
+          return this.refs.wrappedInstance;
         }
 
         render() {
           return (
-            <DecoratedComponent ref={this.setUnderlyingRef}
-                                {...this.state} />
+            <WrappedComponent ref='wrappedInstance'
+                              {...this.state} />
           );
         }
       }

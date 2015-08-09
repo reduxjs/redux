@@ -285,7 +285,7 @@ describe('React', () => {
       expect(div.props.stateThing).toBe('HELLO azbzcZ');
     });
 
-    it('should merge actionProps into DecoratedComponent', () => {
+    it('should merge actionProps into WrappedComponent', () => {
       const store = createStore(() => ({
         foo: 'bar'
       }));
@@ -700,7 +700,7 @@ describe('React', () => {
       ).displayName).toBe('Connect(Component)');
     });
 
-    it('should expose the wrapped component as DecoratedComponent', () => {
+    it('should expose the wrapped component as WrappedComponent', () => {
       class Container extends Component {
         render() {
           return <div />;
@@ -710,7 +710,7 @@ describe('React', () => {
       const decorator = connect(state => state);
       const decorated = decorator(Container);
 
-      expect(decorated.DecoratedComponent).toBe(Container);
+      expect(decorated.WrappedComponent).toBe(Container);
     });
 
     it('should return the instance of the wrapped component for use in calling child methods', () => {
@@ -744,7 +744,8 @@ describe('React', () => {
       const decorated = TestUtils.findRenderedComponentWithType(tree, Decorated);
 
       expect(() => decorated.someInstanceMethod()).toThrow();
-      expect(decorated.getUnderlyingRef().someInstanceMethod()).toBe(someData);
+      expect(decorated.getWrappedInstance().someInstanceMethod()).toBe(someData);
+      expect(decorated.refs.wrappedInstance.someInstanceMethod()).toBe(someData);
     });
   });
 });
