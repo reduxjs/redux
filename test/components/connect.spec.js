@@ -713,6 +713,52 @@ describe('React', () => {
       expect(decorated.WrappedComponent).toBe(Container);
     });
 
+    it('should use the store from the props instead of from the context if present', () => {
+      class Container extends Component {
+        render() {
+          return <div />;
+        }
+      }
+
+      let actualState;
+
+      const expectedState = { foos: {} };
+      const decorator = connect(state => {
+        actualState = state;
+        return {};
+      });
+      const Decorated = decorator(Container);
+      const mockStore = {
+        dispatch: () => {},
+        subscribe: () => {},
+        getState: () => expectedState
+      };
+
+      TestUtils.renderIntoDocument(<Decorated store={mockStore} />);
+
+      expect(actualState).toEqual(expectedState);
+    });
+
+    it('should throw an error if the store is not in the props or context', () => {
+      class Container extends Component {
+        render() {
+          return <div />;
+        }
+      }
+
+      const decorator = connect(() => {});
+      const Decorated = decorator(Container);
+      const expectedError =
+        `Invariant Violation: Could not find "store" in either the context ` +
+        `or props of "Connect(Container)". Either wrap the root component in a ` +
+        `<Provider>, or explicitly pass "store" as a prop to "Connect(Container)".`;
+
+      expect(() => TestUtils.renderIntoDocument(<Decorated />)).toThrow(e => {
+        expect(e.message).toEqual(expectedError);
+        return true;
+      });
+    });
+
     it('should return the instance of the wrapped component for use in calling child methods', () => {
       const store = createStore(() => ({}));
 
