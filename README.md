@@ -84,7 +84,7 @@ export default class Counter extends Component {
 
 Here’s how we hook it up to the Redux Store.
 
-We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. The `connect()` function lets you specify *which exactly* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
+We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. The `connect()` function lets you specify *which exact* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
 
 ##### `containers/CounterContainer.js`
 
