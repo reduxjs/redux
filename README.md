@@ -92,6 +92,8 @@ cd redux
 Run the Counter example:
 
 ```
+cd redux/
+npm install
 cd redux/examples/counter
 npm install
 npm start
