@@ -200,12 +200,12 @@ React.render(
 ##### React Router 0.13
 
 ```js
-Router.run(routes, Router.HistoryLocation, (Handler) => {
+Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // note "routerState" here
   React.render(
     <Provider store={store}>
-      {() => <Handler />}
+      {() => <Handler routerState={routerState} />} // note "routerState" here: important to pass it down
     </Provider>,
-    targetEl
+    document.getElementById('root')
   );
 });
 ```
@@ -415,7 +415,9 @@ Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // note "
   React.render(
     <Provider store={store}>
       {() => <Handler routerState={routerState} />} // note "routerState" here
-    </Provider>, document.getElementById('root'));
+    </Provider>,
+    document.getElementById('root')
+  );
 });
 ```
 
