@@ -176,8 +176,7 @@ React.render((
 
 ### `<Provider store>`
 
-Makes Redux store available to the `connect()` calls in the component hierarchy below.  
-You can’t use `connect()` without wrapping the root component in `<Provider>`.
+Makes Redux store available to the `connect()` calls in the component hierarchy below. Normally, you can’t use `connect()` without wrapping the root component in `<Provider>`. (If you *really* need to, you can manually pass `store` as a prop to every `connect()`ed component, but we only recommend to do this for stubbing `store` in unit tests, or in non-fully-React codebases. Normally, you should just use `<Provider>`.)
 
 #### Props
 
@@ -243,7 +242,7 @@ A React component class that injects state and action creators into your compone
 
 * The `mapStateToProps` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
 
-* **To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.**
+* **To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.** You may also pass `store` as a prop to the `connect()`ed component, but it's not recommended because it's just too much trouble. Only do this for in non-fully-React codebases or to stub store in a unit test.
 
 #### Examples
 
