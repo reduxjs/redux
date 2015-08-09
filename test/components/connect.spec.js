@@ -713,6 +713,32 @@ describe('React', () => {
       expect(decorated.WrappedComponent).toBe(Container);
     });
 
+    it('should use the store from the props instead of from the context if present', () => {
+      class Container extends Component {
+        render() {
+          return <div />;
+        }
+      }
+
+      let actualState;
+
+      const expectedState = { foos: {} };
+      const decorator = connect(state => {
+        actualState = state;
+        return {};
+      });
+      const Decorated = decorator(Container);
+      const mockStore = {
+        dispatch: () => {},
+        subscribe: () => {},
+        getState: () => expectedState
+      };
+
+      TestUtils.renderIntoDocument(<Decorated store={mockStore} />);
+
+      expect(actualState).toEqual(expectedState);
+    });
+
     it('should return the instance of the wrapped component for use in calling child methods', () => {
       const store = createStore(() => ({}));
 
