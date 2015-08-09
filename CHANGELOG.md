@@ -1,6 +1,1 @@
-# Change log
-
-All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
-
-TODO
+All notable changes are described on the [Releases](https://github.com/gaearon/react-redux/releases) page.
