@@ -88,7 +88,12 @@ export default function createConnect(React) {
           this.version = version;
           this.store = props.store || context.store;
 
-          invariant(this.store, '`store` must be passed in via the context or props');
+          invariant(this.store,
+            `Could not find "store" in either the context or ` +
+            `props of "${this.constructor.displayName}". ` +
+            `Either wrap the root component in a <Provider>, ` +
+            `or explicitly pass "store" as a prop to "${this.constructor.displayName}".`
+          )
 
           this.stateProps = computeStateProps(this.store);
           this.dispatchProps = computeDispatchProps(this.store);
