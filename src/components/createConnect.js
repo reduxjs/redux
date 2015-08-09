@@ -66,132 +66,136 @@ export default function createConnect(React) {
       return mergedProps;
     }
 
-    return DecoratedComponent => class Connect extends Component {
-      static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
-      static DecoratedComponent = DecoratedComponent;
+    return function wrapWithConnect(DecoratedComponent) {
+      class Connect extends Component {
+        static displayName = `Connect(${getDisplayName(DecoratedComponent)})`;
+        static DecoratedComponent = DecoratedComponent;
 
-      static contextTypes = {
-        store: storeShape.isRequired
-      };
+        static contextTypes = {
+          store: storeShape.isRequired
+        };
 
-      shouldComponentUpdate(nextProps, nextState) {
-        return !shallowEqual(this.state, nextState);
-      }
-
-      constructor(props, context) {
-        super(props, context);
-        this.version = version;
-        this.setUnderlyingRef = ::this.setUnderlyingRef;
-
-        this.stateProps = computeStateProps(context);
-        this.dispatchProps = computeDispatchProps(context);
-        this.state = this.computeNextState();
-      }
-
-      recomputeStateProps() {
-        const nextStateProps = computeStateProps(this.context);
-        if (shallowEqual(nextStateProps, this.stateProps)) {
-          return false;
+        shouldComponentUpdate(nextProps, nextState) {
+          return !shallowEqual(this.state, nextState);
         }
 
-        this.stateProps = nextStateProps;
-        return true;
-      }
+        constructor(props, context) {
+          super(props, context);
+          this.version = version;
+          this.setUnderlyingRef = ::this.setUnderlyingRef;
 
-      recomputeDispatchProps() {
-        const nextDispatchProps = computeDispatchProps(this.context);
-        if (shallowEqual(nextDispatchProps, this.dispatchProps)) {
-          return false;
+          this.stateProps = computeStateProps(context);
+          this.dispatchProps = computeDispatchProps(context);
+          this.state = this.computeNextState();
         }
 
-        this.dispatchProps = nextDispatchProps;
-        return true;
-      }
-
-      computeNextState(props = this.props) {
-        return computeNextState(
-          this.stateProps,
-          this.dispatchProps,
-          props
-        );
-      }
-
-      recomputeState(props = this.props) {
-        const nextState = this.computeNextState(props);
-        if (!shallowEqual(nextState, this.state)) {
-          this.setState(nextState);
-        }
-      }
-
-      isSubscribed() {
-        return typeof this.unsubscribe === 'function';
-      }
-
-      trySubscribe() {
-        if (shouldSubscribe && !this.unsubscribe) {
-          this.unsubscribe = this.context.store.subscribe(::this.handleChange);
-          this.handleChange();
-        }
-      }
-
-      tryUnsubscribe() {
-        if (this.unsubscribe) {
-          this.unsubscribe();
-          this.unsubscribe = null;
-        }
-      }
-
-      componentDidMount() {
-        this.trySubscribe();
-      }
-
-      componentWillUpdate() {
-        if (process.env.NODE_ENV !== 'production') {
-          if (this.version === version) {
-            return;
+        recomputeStateProps() {
+          const nextStateProps = computeStateProps(this.context);
+          if (shallowEqual(nextStateProps, this.stateProps)) {
+            return false;
           }
 
-          // We are hot reloading!
-          this.version = version;
+          this.stateProps = nextStateProps;
+          return true;
+        }
 
-          // Update the state and bindings.
+        recomputeDispatchProps() {
+          const nextDispatchProps = computeDispatchProps(this.context);
+          if (shallowEqual(nextDispatchProps, this.dispatchProps)) {
+            return false;
+          }
+
+          this.dispatchProps = nextDispatchProps;
+          return true;
+        }
+
+        computeNextState(props = this.props) {
+          return computeNextState(
+            this.stateProps,
+            this.dispatchProps,
+            props
+          );
+        }
+
+        recomputeState(props = this.props) {
+          const nextState = this.computeNextState(props);
+          if (!shallowEqual(nextState, this.state)) {
+            this.setState(nextState);
+          }
+        }
+
+        isSubscribed() {
+          return typeof this.unsubscribe === 'function';
+        }
+
+        trySubscribe() {
+          if (shouldSubscribe && !this.unsubscribe) {
+            this.unsubscribe = this.context.store.subscribe(::this.handleChange);
+            this.handleChange();
+          }
+        }
+
+        tryUnsubscribe() {
+          if (this.unsubscribe) {
+            this.unsubscribe();
+            this.unsubscribe = null;
+          }
+        }
+
+        componentDidMount() {
           this.trySubscribe();
-          this.recomputeStateProps();
-          this.recomputeDispatchProps();
-          this.recomputeState();
+        }
+
+        componentWillUpdate() {
+          if (process.env.NODE_ENV !== 'production') {
+            if (this.version === version) {
+              return;
+            }
+
+            // We are hot reloading!
+            this.version = version;
+
+            // Update the state and bindings.
+            this.trySubscribe();
+            this.recomputeStateProps();
+            this.recomputeDispatchProps();
+            this.recomputeState();
+          }
+        }
+
+        componentWillReceiveProps(nextProps) {
+          if (!shallowEqual(nextProps, this.props)) {
+            this.recomputeState(nextProps);
+          }
+        }
+
+        componentWillUnmount() {
+          this.tryUnsubscribe();
+        }
+
+        handleChange() {
+          if (this.recomputeStateProps()) {
+            this.recomputeState();
+          }
+        }
+
+        getUnderlyingRef() {
+          return this.underlyingRef;
+        }
+
+        setUnderlyingRef(instance) {
+          this.underlyingRef = instance;
+        }
+
+        render() {
+          return (
+            <DecoratedComponent ref={this.setUnderlyingRef}
+                                {...this.state} />
+          );
         }
       }
 
-      componentWillReceiveProps(nextProps) {
-        if (!shallowEqual(nextProps, this.props)) {
-          this.recomputeState(nextProps);
-        }
-      }
-
-      componentWillUnmount() {
-        this.tryUnsubscribe();
-      }
-
-      handleChange() {
-        if (this.recomputeStateProps()) {
-          this.recomputeState();
-        }
-      }
-
-      getUnderlyingRef() {
-        return this.underlyingRef;
-      }
-
-      setUnderlyingRef(instance) {
-        this.underlyingRef = instance;
-      }
-
-      render() {
-        return (
-          <DecoratedComponent ref={this.setUnderlyingRef}
-                              {...this.state} />
-        );
-      }
+      return Connect;
     };
   };
 }
