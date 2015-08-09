@@ -190,7 +190,7 @@ You can’t use `connect()` without wrapping the root component in `<Provider>`.
 ```js
 React.render(
   <Provider store={store}>
-    {() => <MyRootComponent>}
+    {() => <MyRootComponent />}
   </Provider>,
   rootEl
 );
