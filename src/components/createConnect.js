@@ -144,23 +144,6 @@ export default function createConnect(React) {
           this.trySubscribe();
         }
 
-        componentWillUpdate() {
-          if (process.env.NODE_ENV !== 'production') {
-            if (this.version === version) {
-              return;
-            }
-
-            // We are hot reloading!
-            this.version = version;
-
-            // Update the state and bindings.
-            this.trySubscribe();
-            this.recomputeStateProps();
-            this.recomputeDispatchProps();
-            this.recomputeState();
-          }
-        }
-
         componentWillReceiveProps(nextProps) {
           if (!shallowEqual(nextProps, this.props)) {
             this.recomputeState(nextProps);
@@ -187,6 +170,32 @@ export default function createConnect(React) {
                               {...this.state} />
           );
         }
+      }
+
+      if ((
+        // Node-like CommonJS environments (Browserify, Webpack)
+        typeof process !== 'undefined' &&
+        typeof process.env !== 'undefined' &&
+        process.env.NODE_ENV !== 'production'
+       ) ||
+        // React Native
+        typeof __DEV__ !== 'undefined' &&
+        __DEV__ //eslint-disable-line no-undef
+      ) {
+        Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+          if (this.version === version) {
+            return;
+          }
+
+          // We are hot reloading!
+          this.version = version;
+
+          // Update the state and bindings.
+          this.trySubscribe();
+          this.recomputeStateProps();
+          this.recomputeDispatchProps();
+          this.recomputeState();
+        };
       }
 
       return Connect;
