@@ -20,7 +20,6 @@ This example demonstrates how to use `compose` to enhance a [store](Store.md) wi
 ```js
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import createMiddleware from './clientMiddleware';
 import * as reducers from '../reducers/index';
 
 let reducer = combineReducers(reducers);
@@ -33,10 +32,10 @@ let finalCreateStore;
 // UglifyJS will eliminate the dead code depending on the build environment.
 
 if (process.env.NODE_ENV === 'production') {
-  finalCreateStore = applyMiddleware(middleware)(createStore);
+  finalCreateStore = applyMiddleware(...middleware)(createStore);
 } else {
   finalCreateStore = compose(
-    applyMiddleware(middleware),
+    applyMiddleware(...middleware),
     require('redux-devtools').devTools(),
     require('redux-devtools').persistState(
       window.location.href.match(/[?&]debug_session=([^&]+)\b/)
