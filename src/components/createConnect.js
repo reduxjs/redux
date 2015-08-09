@@ -75,6 +75,10 @@ export default function createConnect(React) {
           store: storeShape
         };
 
+        static propTypes = {
+          store: storeShape
+        };
+
         shouldComponentUpdate(nextProps, nextState) {
           return !shallowEqual(this.state, nextState);
         }
