@@ -136,6 +136,7 @@ These async and [universal (aka “isomorphic”)](https://medium.com/@mjackson/
 * [generator-flux-on-rails](https://github.com/alexfedoseev/generator-flux-on-rails): Scaffold universal `redux` app with Rails API on board. Just one line in console. Multiple bundles ready, hot reloading & auth example included. [Live demo](http://isomorphic-comments.alexfedoseev.com).
 * [webapp-starter-pack](https://github.com/dferber90/webapp-starter-pack): Setup with code splitting, gradual loading, SSR, multiple entry points, test support, CI support, linting. Uses webpack for client- and server bundles. Can build for production, too.
 * [Awesome list](https://github.com/xgrommx/awesome-redux)
+* [react-redux-starter-kit](https://github.com/davezuko/react-redux-starter-kit) Universal with Koa and React Router. Includes redux-devtools, code splitting, unit testing, linting, sass-loading, and Immutable.
 
 ### React Native Examples
 
