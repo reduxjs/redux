@@ -18,12 +18,14 @@ var cmdArgs = [
 ];
 
 for (let dir of exampleDirs) {
-  let opts = {
-    cwd: path.join(__dirname, dir),
-    stdio: 'inherit'
-  };
 
   for (let cmdArg of cmdArgs) {
+    // delcare opts in this scope to avoid https://github.com/joyent/node/issues/9158
+    let opts = {
+      cwd: path.join(__dirname, dir),
+      stdio: 'inherit'
+    };
+
     let result = spawnSync(cmdArg.cmd, cmdArg.args, opts);
     if (result.status !== 0) {
       throw new Error('Building examples exited with non-zero');
