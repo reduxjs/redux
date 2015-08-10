@@ -1,7 +1,7 @@
 import expect from 'expect';
 import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
-import { CounterComponent as Counter } from '../../components/Counter';
+import Counter from '../../components/Counter';
 
 const { TestUtils } = React.addons;
 

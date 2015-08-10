@@ -1,9 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as CounterActions from '../actions/CounterActions';
 
-export class CounterComponent extends Component {
+export default class Counter extends Component {
 
   render() {
     const { actions: { increment, incrementIfOdd, incrementAsync, decrement }, counter } = this.props;
@@ -23,7 +20,7 @@ export class CounterComponent extends Component {
   }
 }
 
-CounterComponent.propTypes = {
+Counter.propTypes = {
   actions: PropTypes.shape({
     increment: PropTypes.func.isRequired,
     incrementIfOdd: PropTypes.func.isRequired,
@@ -32,17 +29,3 @@ CounterComponent.propTypes = {
   }),
   counter: PropTypes.number.isRequired
 };
-
-function mapStateToProps(state) {
-  return {
-    counter: state.counter
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(CounterActions, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CounterComponent);
