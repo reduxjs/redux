@@ -26,22 +26,22 @@ describe('todo actions', () => {
     });
   });
 
-  it('markTodo should create MARK_TODO action', () => {
-    expect(actions.markTodo(1)).toEqual({
-      type: types.MARK_TODO,
+  it('completeTodo should create COMPLETE_TODO action', () => {
+    expect(actions.completeTodo(1)).toEqual({
+      type: types.COMPLETE_TODO,
       id: 1
     });
   });
 
-  it('markAll should create MARK_ALL action', () => {
-    expect(actions.markAll()).toEqual({
-      type: types.MARK_ALL
+  it('completeAll should create COMPLETE_ALL action', () => {
+    expect(actions.completeAll()).toEqual({
+      type: types.COMPLETE_ALL
     });
   });
 
-  it('clearMarked should create CLEAR_MARKED action', () => {
-    expect(actions.clearMarked('Use Redux')).toEqual({
-      type: types.CLEAR_MARKED
+  it('clearCompleted should create CLEAR_COMPLETED action', () => {
+    expect(actions.clearCompleted('Use Redux')).toEqual({
+      type: types.CLEAR_COMPLETED
     });
   });
 });

@@ -11,11 +11,11 @@ function setup(editing=false) {
     todo: {
       id: 0,
       text: 'Use Redux',
-      marked: false
+      completed: false
     },
     editTodo: expect.createSpy(),
     deleteTodo: expect.createSpy(),
-    markTodo: expect.createSpy()
+    completeTodo: expect.createSpy()
   };
 
   let renderer = TestUtils.createRenderer();
@@ -67,11 +67,11 @@ describe('components', () => {
       expect(button.props.className).toBe('destroy');
     });
 
-    it('input onChange should call markTodo', () => {
+    it('input onChange should call completeTodo', () => {
       const { output, props } = setup();
       let input = output.props.children.props.children[0];
       input.props.onChange({});
-      expect(props.markTodo).toHaveBeenCalledWith(0);
+      expect(props.completeTodo).toHaveBeenCalledWith(0);
     });
 
     it('button onClick should call deleteTodo', () => {

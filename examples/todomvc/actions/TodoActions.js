@@ -12,14 +12,14 @@ export function editTodo(id, text) {
   return { type: types.EDIT_TODO, id, text };
 }
 
-export function markTodo(id) {
-  return { type: types.MARK_TODO, id };
+export function completeTodo(id) {
+  return { type: types.COMPLETE_TODO, id };
 }
 
-export function markAll() {
-  return { type: types.MARK_ALL };
+export function completeAll() {
+  return { type: types.COMPLETE_ALL };
 }
 
-export function clearMarked() {
-  return { type: types.CLEAR_MARKED };
+export function clearCompleted() {
+  return { type: types.CLEAR_COMPLETED };
 }
