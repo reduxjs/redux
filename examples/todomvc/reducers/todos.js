@@ -10,7 +10,7 @@ export default function todos(state = initialState, action) {
   switch (action.type) {
   case ADD_TODO:
     return [{
-      id: (state.length === 0) ? 0 : state[0].id + 1,
+      id: state.length,
       marked: false,
       text: action.text
     }, ...state];
