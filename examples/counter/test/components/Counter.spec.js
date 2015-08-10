@@ -12,7 +12,7 @@ function setup() {
     incrementAsync: expect.createSpy(),
     decrement: expect.createSpy()
   };
-  const component = TestUtils.renderIntoDocument(<Counter counter={1} actions={actions} />);
+  const component = TestUtils.renderIntoDocument(<Counter counter={1} {...actions} />);
   return {
     component: component,
     actions: actions,
