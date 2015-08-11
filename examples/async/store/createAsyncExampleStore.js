@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import thunk from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
+import apiMiddleware from '../middleware/api';
 import * as reducers from '../reducers';
 
 // TODO: remove
@@ -9,7 +10,7 @@ import { Provider } from 'react-redux';
 
 // TODO: remove devtools
 const createStoreWithMiddleware = compose(
-  applyMiddleware(thunk),
+  applyMiddleware(thunkMiddleware, apiMiddleware),
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
   createStore

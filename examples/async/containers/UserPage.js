@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getUser } from '../actions';
+import { fetchUser } from '../actions';
 
 class UserPage extends Component {
   render() {
     return (
-      <h1 onClick={() => this.props.getUser('gaearon')}>
+      <h1 onClick={() => this.props.fetchUser('acdlite')}>
         Oh
       </h1>
     );
@@ -18,7 +18,7 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getUser: (login) => dispatch(getUser(login))
+    fetchUser: (login) => dispatch(fetchUser(login))
   }
 }
 
