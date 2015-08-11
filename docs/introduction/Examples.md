@@ -21,6 +21,8 @@ npm install
 npm start
 ```
 
+Now you can open http://localhost:3000/ in your browser to try the app
+
 Run the [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc) example:
 
 ```
