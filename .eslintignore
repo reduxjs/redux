@@ -6,3 +6,4 @@ examples/todomvc/webpack.config.js
 examples/counter/node_modules
 examples/counter/server.js
 examples/counter/webpack.config.js
+dist/*
