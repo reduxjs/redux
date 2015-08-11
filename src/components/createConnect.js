@@ -131,7 +131,13 @@ export default function createConnect(React) {
         recomputeState(props = this.props) {
           const nextState = this.computeNextState(props);
           if (!shallowEqual(nextState, this.state)) {
-            this.setState(nextState);
+            this.setState({
+              ...Object.keys(this.state)
+                .reduce((r, k) => ({
+                  [k]: undefined
+                }), {}),
+              ...nextState,
+            });
           }
         }
 
