@@ -21,6 +21,8 @@ npm install
 npm start
 ```
 
+See it running at [http://localhost:3000/](http://localhost:3000/).
+
 Run the [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc) example:
 
 ```
@@ -29,8 +31,10 @@ npm install
 npm start
 ```
 
+It will also run at [http://localhost:3000/](http://localhost:3000/).
+
 >##### Important Note
->For examples to work outside the Redux folder, remove these lines from their `webpack.config.js`:
+>If you copy Redux examples outside their folders, remove these lines from their `webpack.config.js`:
 >
 >```js
 >alias: {
