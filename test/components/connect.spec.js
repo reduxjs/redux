@@ -182,10 +182,10 @@ describe('React', () => {
 
     it('should remove undefined props', () => {
       const store = createStore(() => ({}));
-      let props = {x: true};
+      let props = { x: true };
       let container;
 
-      @connect(()=>({}), ()=>({}))
+      @connect(() => ({}), () => ({}))
       class ConnectContainer extends Component {
         render() {
           return (

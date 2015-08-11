@@ -12,6 +12,8 @@ const defaultMergeProps = (stateProps, dispatchProps, parentProps) => ({
   ...dispatchProps
 });
 
+const resetValue = (_, key) => ({ [key]: undefined });
+
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }
@@ -132,11 +134,8 @@ export default function createConnect(React) {
           const nextState = this.computeNextState(props);
           if (!shallowEqual(nextState, this.state)) {
             this.setState({
-              ...Object.keys(this.state)
-                .reduce((r, k) => ({
-                  [k]: undefined
-                }), {}),
-              ...nextState,
+              ...Object.keys(this.state).reduce(resetValue, {}),
+              ...nextState
             });
           }
         }
