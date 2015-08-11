@@ -9,7 +9,7 @@ describe('todos reducer', () => {
       reducer(undefined, {})
     ).toEqual([{
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
@@ -23,14 +23,14 @@ describe('todos reducer', () => {
     ).toEqual([
       {
       text: 'Run the tests',
-      marked: false,
+      completed: false,
       id: 0
     }]);
 
     expect(
       reducer([{
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
         type: types.ADD_TODO,
@@ -38,11 +38,11 @@ describe('todos reducer', () => {
       })
     ).toEqual([{
       text: 'Run the tests',
-      marked: false,
+      completed: false,
       id: 1
     }, {
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
@@ -51,11 +51,11 @@ describe('todos reducer', () => {
     expect(
       reducer([{
         text: 'Run the tests',
-        marked: false,
+        completed: false,
         id: 1
       }, {
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
         type: types.DELETE_TODO,
@@ -63,7 +63,7 @@ describe('todos reducer', () => {
       })
     ).toEqual([{
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
@@ -72,11 +72,11 @@ describe('todos reducer', () => {
     expect(
       reducer([{
         text: 'Run the tests',
-        marked: false,
+        completed: false,
         id: 1
       }, {
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
         type: types.EDIT_TODO,
@@ -85,103 +85,103 @@ describe('todos reducer', () => {
       })
     ).toEqual([{
       text: 'Fix the tests',
-      marked: false,
+      completed: false,
       id: 1
     }, {
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
 
-  it('should handle MARK_TODO', () => {
+  it('should handle COMPLETE_TODO', () => {
     expect(
       reducer([{
         text: 'Run the tests',
-        marked: false,
+        completed: false,
         id: 1
       }, {
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
-        type: types.MARK_TODO,
+        type: types.COMPLETE_TODO,
         id: 1
       })
     ).toEqual([{
       text: 'Run the tests',
-      marked: true,
+      completed: true,
       id: 1
     }, {
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
 
-  it('should handle MARK_ALL', () => {
+  it('should handle COMPLETE_ALL', () => {
     expect(
       reducer([{
         text: 'Run the tests',
-        marked: true,
+        completed: true,
         id: 1
       }, {
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
-        type: types.MARK_ALL
+        type: types.COMPLETE_ALL
       })
     ).toEqual([{
       text: 'Run the tests',
-      marked: true,
+      completed: true,
       id: 1
     }, {
       text: 'Use Redux',
-      marked: true,
+      completed: true,
       id: 0
     }]);
 
-    // Unmark if all todos are currently marked
+    // Unmark if all todos are currently completed
     expect(
       reducer([{
         text: 'Run the tests',
-        marked: true,
+        completed: true,
         id: 1
       }, {
         text: 'Use Redux',
-        marked: true,
+        completed: true,
         id: 0
       }], {
-        type: types.MARK_ALL
+        type: types.COMPLETE_ALL
       })
     ).toEqual([{
       text: 'Run the tests',
-      marked: false,
+      completed: false,
       id: 1
     }, {
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });
 
-  it('should handle CLEAR_MARKED', () => {
+  it('should handle CLEAR_COMPLETED', () => {
     expect(
       reducer([{
         text: 'Run the tests',
-        marked: true,
+        completed: true,
         id: 1
       }, {
         text: 'Use Redux',
-        marked: false,
+        completed: false,
         id: 0
       }], {
-        type: types.CLEAR_MARKED
+        type: types.CLEAR_COMPLETED
       })
     ).toEqual([{
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }]);
   });

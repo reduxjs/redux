@@ -1,11 +1,12 @@
 {
-  "name": "todomvc",
+  "name": "redux-todomvc-example",
   "version": "0.0.0",
-  "description": "TodoMVC example for redux",
+  "description": "Redux TodoMVC example",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha --recursive --compilers js:babel/register"
+    "test": "mocha --recursive --compilers js:babel/register",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,7 @@
   "dependencies": {
     "classnames": "^2.1.2",
     "react": "^0.13.3",
-    "react-redux": "^0.4.0",
+    "react-redux": "^0.8.0",
     "redux": "^1.0.0-rc"
   },
   "devDependencies": {

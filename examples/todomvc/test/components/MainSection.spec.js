@@ -4,7 +4,7 @@ import React from 'react/addons';
 import MainSection from '../../components/MainSection';
 import TodoItem from '../../components/TodoItem';
 import Footer from '../../components/Footer';
-import { SHOW_ALL, SHOW_MARKED } from '../../constants/TodoFilters';
+import { SHOW_ALL, SHOW_COMPLETED } from '../../constants/TodoFilters';
 
 const { TestUtils } = React.addons;
 
@@ -12,19 +12,19 @@ function setup(propOverrides) {
   let props = Object.assign({
     todos: [{
       text: 'Use Redux',
-      marked: false,
+      completed: false,
       id: 0
     }, {
       text: 'Run the tests',
-      marked: true,
+      completed: true,
       id: 1
     }],
     actions: {
       editTodo: expect.createSpy(),
       deleteTodo: expect.createSpy(),
-      markTodo: expect.createSpy(),
-      markAll: expect.createSpy(),
-      clearMarked: expect.createSpy()
+      completeTodo: expect.createSpy(),
+      completeAll: expect.createSpy(),
+      clearCompleted: expect.createSpy()
     }
   }, propOverrides);
 
@@ -60,21 +60,21 @@ describe('components', () => {
         expect(toggle.props.checked).toBe(false);
       });
 
-      it('should be checked if all todos marked', () => {
+      it('should be checked if all todos completed', () => {
         const { output } = setup({ todos: [{
           text: 'Use Redux',
-          marked: true,
+          completed: true,
           id: 0
         }]});
         let [toggle] = output.props.children;
         expect(toggle.props.checked).toBe(true);
       });
 
-      it('should call markAll on change', () => {
+      it('should call completeAll on change', () => {
         const { output, props } = setup();
         let [toggle] = output.props.children;
         toggle.props.onChange({});
-        expect(props.actions.markAll).toHaveBeenCalled();
+        expect(props.actions.completeAll).toHaveBeenCalled();
       });
     });
 
@@ -84,36 +84,36 @@ describe('components', () => {
         const { output } = setup();
         let [,, footer] = output.props.children;
         expect(footer.type).toBe(Footer);
-        expect(footer.props.markedCount).toBe(1);
-        expect(footer.props.unmarkedCount).toBe(1);
+        expect(footer.props.completedCount).toBe(1);
+        expect(footer.props.activeCount).toBe(1);
         expect(footer.props.filter).toBe(SHOW_ALL);
       });
 
       it('onShow should set the filter', () => {
         const { output, renderer } = setup();
         let [,, footer] = output.props.children;
-        footer.props.onShow(SHOW_MARKED);
+        footer.props.onShow(SHOW_COMPLETED);
         let updated = renderer.getRenderOutput();
         let [,, updatedFooter] = updated.props.children;
-        expect(updatedFooter.props.filter).toBe(SHOW_MARKED);
+        expect(updatedFooter.props.filter).toBe(SHOW_COMPLETED);
       });
 
-      it('onClearMarked should call clearMarked', () => {
+      it('onClearCompleted should call clearCompleted', () => {
         const { output, props } = setup();
         let [,, footer] = output.props.children;
-        footer.props.onClearMarked();
-        expect(props.actions.clearMarked).toHaveBeenCalled();
+        footer.props.onClearCompleted();
+        expect(props.actions.clearCompleted).toHaveBeenCalled();
       });
 
-      it('onClearMarked shouldnt call clearMarked if no todos marked', () => {
+      it('onClearCompleted shouldnt call clearCompleted if no todos completed', () => {
         const { output, props } = setup({ todos: [{
           text: 'Use Redux',
-          marked: false,
+          completed: false,
           id: 0
         }]});
         let [,, footer] = output.props.children;
-        footer.props.onClearMarked();
-        expect(props.actions.clearMarked.calls.length).toBe(0);
+        footer.props.onClearCompleted();
+        expect(props.actions.clearCompleted.calls.length).toBe(0);
       });
     });
 
@@ -133,7 +133,7 @@ describe('components', () => {
       it('should filter items', () => {
         const { output, renderer, props } = setup();
         let [,, footer] = output.props.children;
-        footer.props.onShow(SHOW_MARKED);
+        footer.props.onShow(SHOW_COMPLETED);
         let updated = renderer.getRenderOutput();
         let [, updatedList] = updated.props.children;
         expect(updatedList.props.children.length).toBe(1);

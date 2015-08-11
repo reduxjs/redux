@@ -2,16 +2,16 @@ import expect from 'expect';
 import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import Footer from '../../components/Footer';
-import { SHOW_ALL, SHOW_UNMARKED } from '../../constants/TodoFilters';
+import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters';
 
 const { TestUtils } = React.addons;
 
 function setup(propOverrides) {
   let props = Object.assign({
-    markedCount: 0,
-    unmarkedCount: 0,
+    completedCount: 0,
+    activeCount: 0,
     filter: SHOW_ALL,
-    onClearMarked: expect.createSpy(),
+    onClearCompleted: expect.createSpy(),
     onShow: expect.createSpy()
   }, propOverrides);
 
@@ -46,14 +46,14 @@ describe('components', () => {
       expect(output.props.className).toBe('footer');
     });
 
-    it('should display unmarked count when 0', () => {
-      let { output } = setup({ unmarkedCount: 0 });
+    it('should display active count when 0', () => {
+      let { output } = setup({ activeCount: 0 });
       let [count] = output.props.children;
       expect(getTextContent(count)).toBe('No items left');
     });
 
-    it('should display unmarked count when above 0', () => {
-      let { output } = setup({ unmarkedCount: 1 });
+    it('should display active count when above 0', () => {
+      let { output } = setup({ activeCount: 1 });
       let [count] = output.props.children;
       expect(getTextContent(count)).toBe('1 item left');
     });
@@ -81,27 +81,27 @@ describe('components', () => {
       let [, filters] = output.props.children;
       let filterLink = filters.props.children[1].props.children;
       filterLink.props.onClick({});
-      expect(props.onShow).toHaveBeenCalledWith(SHOW_UNMARKED);
+      expect(props.onShow).toHaveBeenCalledWith(SHOW_ACTIVE);
     });
 
-    it('shouldnt show clear button when no marked todos', () => {
-      const { output } = setup({ markedCount: 0 });
+    it('shouldnt show clear button when no completed todos', () => {
+      const { output } = setup({ completedCount: 0 });
       let [,, clear] = output.props.children;
       expect(clear).toBe(undefined);
     });
 
-    it('should render clear button when marked todos', () => {
-      const { output } = setup({ markedCount: 1 });
+    it('should render clear button when completed todos', () => {
+      const { output } = setup({ completedCount: 1 });
       let [,, clear] = output.props.children;
       expect(clear.type).toBe('button');
       expect(clear.props.children).toBe('Clear completed');
     });
 
-    it('should call onClearMarked on clear button click', () => {
-      const { output, props } = setup({ markedCount: 1 });
+    it('should call onClearCompleted on clear button click', () => {
+      const { output, props } = setup({ completedCount: 1 });
       let [,, clear] = output.props.children;
       clear.props.onClick({});
-      expect(props.onClearMarked).toHaveBeenCalled();
+      expect(props.onClearCompleted).toHaveBeenCalled();
     });
   });
 });
