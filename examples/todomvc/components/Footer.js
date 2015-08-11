@@ -1,28 +1,20 @@
 import React, { PropTypes, Component } from 'react';
 import classnames from 'classnames';
-import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
+import { SHOW_ALL, SHOW_COMPLETED, SHOW_ACTIVE } from '../constants/TodoFilters';
 
 const FILTER_TITLES = {
   [SHOW_ALL]: 'All',
-  [SHOW_UNMARKED]: 'Active',
-  [SHOW_MARKED]: 'Completed'
+  [SHOW_ACTIVE]: 'Active',
+  [SHOW_COMPLETED]: 'Completed'
 };
 
-export default class Footer extends Component {
-  static propTypes = {
-    markedCount: PropTypes.number.isRequired,
-    unmarkedCount: PropTypes.number.isRequired,
-    filter: PropTypes.string.isRequired,
-    onClearMarked: PropTypes.func.isRequired,
-    onShow: PropTypes.func.isRequired
-  }
-
+class Footer extends Component {
   render() {
     return (
       <footer className='footer'>
         {this.renderTodoCount()}
         <ul className='filters'>
-          {[SHOW_ALL, SHOW_UNMARKED, SHOW_MARKED].map(filter =>
+          {[SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED].map(filter =>
             <li key={filter}>
               {this.renderFilterLink(filter)}
             </li>
@@ -34,12 +26,12 @@ export default class Footer extends Component {
   }
 
   renderTodoCount() {
-    const { unmarkedCount } = this.props;
-    const itemWord = unmarkedCount === 1 ? 'item' : 'items';
+    const { activeCount } = this.props;
+    const itemWord = activeCount === 1 ? 'item' : 'items';
 
     return (
       <span className='todo-count'>
-        <strong>{unmarkedCount || 'No'}</strong> {itemWord} left
+        <strong>{activeCount || 'No'}</strong> {itemWord} left
       </span>
     );
   }
@@ -58,14 +50,24 @@ export default class Footer extends Component {
   }
 
   renderClearButton() {
-    const { markedCount, onClearMarked } = this.props;
-    if (markedCount > 0) {
+    const { completedCount, onClearCompleted } = this.props;
+    if (completedCount > 0) {
       return (
         <button className='clear-completed'
-                onClick={onClearMarked} >
+                onClick={onClearCompleted} >
           Clear completed
         </button>
       );
     }
   }
 }
+
+Footer.propTypes = {
+  completedCount: PropTypes.number.isRequired,
+  activeCount: PropTypes.number.isRequired,
+  filter: PropTypes.string.isRequired,
+  onClearCompleted: PropTypes.func.isRequired,
+  onShow: PropTypes.func.isRequired
+};
+
+export default Footer;
