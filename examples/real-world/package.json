@@ -1,7 +1,7 @@
 {
-  "name": "async-redux",
+  "name": "redux-real-world-example",
   "version": "0.0.0",
-  "description": "Async example for redux",
+  "description": "Redux real-world example",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

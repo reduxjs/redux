@@ -1,7 +1,7 @@
 {
-  "name": "counter-redux",
+  "name": "redux-counter-example",
   "version": "0.0.0",
-  "description": "Counter example for redux",
+  "description": "Redux counter example",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
