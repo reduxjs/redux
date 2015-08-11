@@ -222,7 +222,52 @@ describe('React', () => {
       };
 
       expect(propsBefore.x).toEqual(true);
-      expect(propsAfter.x).toNotEqual(true);
+      expect('x' in propsAfter).toEqual(false, 'x prop must be removed');
+    });
+
+    it('should remove undefined props without mapDispatchToProps', () => {
+      const store = createStore(() => ({}));
+      let props = { x: true };
+      let container;
+
+      @connect(() => ({}))
+      class ConnectContainer extends Component {
+        render() {
+          return (
+              <div {...this.props} />
+          );
+        }
+      }
+
+      class HolderContainer extends Component {
+        render() {
+          return (
+            <ConnectContainer {...props} />
+          );
+        }
+      }
+
+      TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <HolderContainer ref={instance => container = instance} />
+          )}
+        </Provider>
+      );
+
+      const propsBefore = {
+        ...TestUtils.findRenderedDOMComponentWithTag(container, 'div').props
+      };
+
+      props = {};
+      container.forceUpdate();
+
+      const propsAfter = {
+        ...TestUtils.findRenderedDOMComponentWithTag(container, 'div').props
+      };
+
+      expect(propsBefore.x).toEqual(true);
+      expect('x' in propsAfter).toEqual(false, 'x prop must be removed');
     });
 
     it('should ignore deep mutations in props', () => {

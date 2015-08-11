@@ -12,8 +12,6 @@ const defaultMergeProps = (stateProps, dispatchProps, parentProps) => ({
   ...dispatchProps
 });
 
-const resetValue = (_, key) => ({ [key]: undefined });
-
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }
@@ -82,7 +80,7 @@ export default function createConnect(React) {
         };
 
         shouldComponentUpdate(nextProps, nextState) {
-          return !shallowEqual(this.state, nextState);
+          return !shallowEqual(this.state.props, nextState.props);
         }
 
         constructor(props, context) {
@@ -99,7 +97,9 @@ export default function createConnect(React) {
 
           this.stateProps = computeStateProps(this.store);
           this.dispatchProps = computeDispatchProps(this.store);
-          this.state = this.computeNextState();
+          this.state = {
+            props: this.computeNextState()
+          };
         }
 
         recomputeStateProps() {
@@ -132,10 +132,9 @@ export default function createConnect(React) {
 
         recomputeState(props = this.props) {
           const nextState = this.computeNextState(props);
-          if (!shallowEqual(nextState, this.state)) {
+          if (!shallowEqual(nextState, this.state.props)) {
             this.setState({
-              ...Object.keys(this.state).reduce(resetValue, {}),
-              ...nextState
+              props: nextState
             });
           }
         }
@@ -185,7 +184,7 @@ export default function createConnect(React) {
         render() {
           return (
             <WrappedComponent ref='wrappedInstance'
-                              {...this.state} />
+                              {...this.state.props} />
           );
         }
       }
