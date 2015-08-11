@@ -106,7 +106,7 @@ export default function createStore(reducer, initialState) {
       isDispatching = false;
     }
 
-    listeners.forEach(listener => listener());
+    listeners.slice().forEach(listener => listener());
     return action;
   }
 
