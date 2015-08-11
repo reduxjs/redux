@@ -204,6 +204,28 @@ describe('createStore', () => {
     expect(listenerB.calls.length).toBe(2);
   });
 
+  it('should support removing a subscription within a subscription', () => {
+    const store = createStore(reducers.todos);
+    const listenerA = expect.createSpy(() => {});
+    const listenerB = expect.createSpy(() => {});
+    const listenerC = expect.createSpy(() => {});
+
+    store.subscribe(listenerA);
+    const unSubB = store.subscribe(() => {
+      listenerB();
+      unSubB();
+    });
+    store.subscribe(listenerC);
+
+    store.dispatch({});
+    store.dispatch({});
+
+    expect(listenerA.calls.length).toBe(2);
+    expect(listenerB.calls.length).toBe(1);
+    expect(listenerC.calls.length).toBe(2);
+
+  });
+
   it('should provide an up-to-date state when a subscriber is notified', done => {
     const store = createStore(reducers.todos);
     store.subscribe(() => {
