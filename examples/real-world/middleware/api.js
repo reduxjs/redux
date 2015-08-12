@@ -1,6 +1,7 @@
 import { Schema, arrayOf, normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import 'isomorphic-fetch';
+import merge from 'lodash/object/merge';
 
 /**
  * Extracts the next page URL from Github API response.
@@ -42,7 +43,7 @@ function callApi(endpoint, schema) {
       const nextPageUrl = getNextPageUrl(response) || undefined;
 
       return {
-        ...normalize(camelizedJson, schema),
+        merge({}, normalize(camelizedJson, schema)),
         nextPageUrl
       };
     });
