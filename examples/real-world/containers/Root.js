@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
-import createAsyncExampleStore from '../store/createAsyncExampleStore';
+import configureStore from '../store/configureStore';
 import App from './App';
 import UserPage from './UserPage';
 import RepoPage from './RepoPage';
 
-const store = createAsyncExampleStore();
+const store = configureStore();
 
 export default class Root extends Component {
   render() {
