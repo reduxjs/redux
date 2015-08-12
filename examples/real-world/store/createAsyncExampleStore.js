@@ -1,12 +1,14 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import apiMiddleware from '../middleware/api';
+import loggerMiddleware from 'redux-logger';
 import * as reducers from '../reducers';
 
 const reducer = combineReducers(reducers);
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
-  apiMiddleware
+  apiMiddleware,
+  loggerMiddleware
 )(createStore);
 
 /**

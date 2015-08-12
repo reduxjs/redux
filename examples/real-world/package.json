@@ -35,6 +35,7 @@
     "react-redux": "^0.8.0",
     "react-router": "^1.0.0-beta3",
     "redux": "^1.0.0-rc",
+    "redux-logger": "0.0.1",
     "redux-thunk": "^0.1.0"
   },
   "devDependencies": {
