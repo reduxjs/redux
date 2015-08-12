@@ -105,7 +105,7 @@ export default store => next => action => {
     throw new Error('Specify a string endpoint URL.');
   }
   if (!schema) {
-    throw new Error('Specify on of the exported Schemas.');
+    throw new Error('Specify one of the exported Schemas.');
   }
   if (!Array.isArray(types) || types.length !== 3) {
     throw new Error('Expected an array of three action types.');
