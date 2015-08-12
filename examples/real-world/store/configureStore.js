@@ -14,6 +14,6 @@ const createStoreWithMiddleware = applyMiddleware(
 /**
  * Creates a preconfigured store for this example.
  */
-export default function createAsyncExampleStore(initialState) {
+export default function configureStore(initialState) {
   return createStoreWithMiddleware(reducer, initialState);
 }

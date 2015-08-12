@@ -3,12 +3,12 @@ import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import { Provider } from 'react-redux';
 import CounterApp from '../../containers/CounterApp';
-import createCounterStore from '../../store/createCounterStore';
+import configureStore from '../../store/configureStore';
 
 const { TestUtils } = React.addons;
 
 function setup(initialState) {
-  const store = createCounterStore(initialState);
+  const store = configureStore(initialState);
   const app = TestUtils.renderIntoDocument(
     <Provider store={store}>
       {() => <CounterApp />}

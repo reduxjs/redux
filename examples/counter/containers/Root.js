@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import CounterApp from './CounterApp';
-import createCounterStore from '../store/createCounterStore';
+import configureStore from '../store/configureStore';
 
-const store = createCounterStore();
+const store = configureStore();
 
-export default class App extends Component {
+export default class Root extends Component {
   render() {
     return (
       <Provider store={store}>
