@@ -1,0 +1,10 @@
+{
+  "gitbook": "2.2.0",
+  "plugins": ["edit-link"],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/gaearon/redux/tree/rewrite-docs-again",
+      "label": "Edit This Page"
+    }
+  }
+}
