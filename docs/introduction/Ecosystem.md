@@ -17,6 +17,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
 * [redux-batched-updates](https://github.com/acdlite/redux-batched-updates) — Batch React updates that occur as a result of Redux dispatches
+* [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 
 ## Utilities
 
