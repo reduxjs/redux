@@ -41,10 +41,11 @@ function callApi(endpoint, schema) {
       const camelizedJson = camelizeKeys(json);
       const nextPageUrl = getNextPageUrl(response) || undefined;
 
-      return {
-        ...normalize(camelizedJson, schema),
+      return Object.assign({
+        {},
+        normalize(camelizedJson, schema),
         nextPageUrl
-      };
+      });
     });
 }
 

@@ -1,16 +1,7 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-export default class Repo {
-  static propTypes = {
-    repo: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string
-    }).isRequired,
-    owner: PropTypes.shape({
-      login: PropTypes.string.isRequired
-    }).isRequired
-  }
+export default class Repo extends Component {
 
   render() {
     const { repo, owner } = this.props;
@@ -35,3 +26,13 @@ export default class Repo {
     );
   }
 }
+
+Repo.propTypes = {
+  repo: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string
+  }).isRequired,
+  owner: PropTypes.shape({
+    login: PropTypes.string.isRequired
+  }).isRequired
+};
