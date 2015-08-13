@@ -35,8 +35,14 @@ Whether you used them or not, Redux takes a few minutes to get started with.
 
 ### Installation
 
+To install the stable version:
 ```
 npm install --save redux
+```
+
+To install the release candidate (1.0.0-rc at the time of this writing):
+```
+npm install --save redux@1.0.0-rc
 ```
 
 Most likely, you’ll also need [the React bindings](http://github.com/gaearon/react-redux) and [the developer tools](http://github.com/gaearon/redux-devtools).
