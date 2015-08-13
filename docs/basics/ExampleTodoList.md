@@ -8,12 +8,11 @@ This is the complete source code of the tiny todo app we built during the [basic
 
 ```js
 import React from 'react';
-import { combineReducers, createStore } from 'redux';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './containers/App';
-import * as reducers from './reducers';
+import todoApp from './reducers';
 
-let todoApp = combineReducers(reducers);
 let store = createStore(todoApp);
 
 let rootElement = document.getElementById('root');
@@ -72,10 +71,11 @@ export function setVisibilityFilter(filter) {
 #### `reducers.js`
 
 ```js
+import { combineReducers } from 'redux';
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
 const { SHOW_ALL } = VisibilityFilters;
 
-export function visibilityFilter(state = SHOW_ALL, action) {
+function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
     return action.filter;
@@ -84,7 +84,7 @@ export function visibilityFilter(state = SHOW_ALL, action) {
   }
 }
 
-export function todos(state = [], action) {
+function todos(state = [], action) {
   switch (action.type) {
   case ADD_TODO:
     return [...state, {
@@ -103,6 +103,13 @@ export function todos(state = [], action) {
     return state;
   }
 }
+
+const todoApp = combineReducers({
+  visibilityFilter,
+  todos
+});
+
+export default todoApp;
 ```
 
 ## Smart Components

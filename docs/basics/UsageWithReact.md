@@ -272,12 +272,11 @@ First, we need to import `Provider` from [`react-redux`](http://github.com/gaear
 
 ```js
 import React from 'react'; 
-import { combineReducers, createStore } from 'redux';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './containers/App';
-import * as reducers from './reducers';
+import todoApp from './reducers';
 
-let todoApp = combineReducers(reducers);
 let store = createStore(todoApp);
 
 let rootElement = document.getElementById('root');

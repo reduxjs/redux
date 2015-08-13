@@ -11,22 +11,12 @@ In the previous steps, we have defined the [actions](Action.md) that represent t
 
 It’s important to note that you’ll only have a single store in a Redux application. When you want to split your data handling logic, you’ll use [reducer composition](Reducers.md#splitting-reducers) instead of many stores.
 
-It’s easy to create a store if you have a reducer. For example, if we had a single `todoApp` reducer in our app, we would have written this:
+It’s easy to create a store if you have a reducer. In the [previous section](Reducers.md), we used [`combineReducers()`](../api/combineReducers.md) to combine several reducers into one. We will now import it, and pass it to [`createStore()`](../api/createStore.md).
 
 ```js
 import { createStore } from 'redux';
 import todoApp from './reducers';
 
-let store = createStore(todoApp);
-```
-
-For maintainability, we previously split them into separate reducers, so we’ll combine them with [`combineReducers()`](../api/combineReducers.md):
-
-```js
-import { combineReducers, createStore } from 'redux';
-import * as reducers from './reducers';
-
-let todoApp = combineReducers(reducers);
 let store = createStore(todoApp);
 ```
 
@@ -74,10 +64,9 @@ We specified the behavior of our app before we even started writing the UI. We w
 #### `index.js`
 
 ```js
-import { combineReducers, createStore } from 'redux';
-import * as reducers from './reducers';
+import { createStore } from 'redux';
+import todoApp from './reducers';
 
-let todoApp = combineReducers(reducers);
 let store = createStore(todoApp);
 ```
 
