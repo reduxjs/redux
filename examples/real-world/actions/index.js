@@ -48,7 +48,7 @@ function fetchRepo(fullName) {
   };
 }
 /**
- * Loads a single user from Github API unless it is cached.
+ * Fetches a single repository from Github API unless it is cached.
  * Relies on Redux Thunk middleware.
  */
 export function loadRepo(fullName, requiredFields = []) {
@@ -80,7 +80,7 @@ function fetchStarred(login, nextPageUrl) {
   };
 }
 /**
- * Loads a page of starred repos by a particular user.
+ * Fetches a page of starred repos by a particular user.
  * Bails out if page is cached and user didn’t specifically request next page.
  * Relies on Redux Thunk middleware.
  */
@@ -118,7 +118,7 @@ function fetchStargazers(fullName, nextPageUrl) {
   };
 }
 /**
- * Loads a page of stargazers for a particular repo.
+ * Fetches a page of stargazers for a particular repo.
  * Bails out if page is cached and user didn’t specifically request next page.
  * Relies on Redux Thunk middleware.
  */

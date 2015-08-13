@@ -1,12 +1,12 @@
 import expect from 'expect';
-import reducer from '../../reducers/todos';
+import todos from '../../reducers/todos';
 import * as types from '../../constants/ActionTypes';
 
 describe('todos reducer', () => {
 
   it('should handle initial state', () => {
     expect(
-      reducer(undefined, {})
+      todos(undefined, {})
     ).toEqual([{
       text: 'Use Redux',
       completed: false,
@@ -16,7 +16,7 @@ describe('todos reducer', () => {
 
   it('should handle ADD_TODO', () => {
     expect(
-      reducer([], {
+      todos([], {
         type: types.ADD_TODO,
         text: 'Run the tests'
       })
@@ -28,7 +28,7 @@ describe('todos reducer', () => {
     }]);
 
     expect(
-      reducer([{
+      todos([{
         text: 'Use Redux',
         completed: false,
         id: 0
@@ -49,7 +49,7 @@ describe('todos reducer', () => {
 
   it('should handle DELETE_TODO', () => {
     expect(
-      reducer([{
+      todos([{
         text: 'Run the tests',
         completed: false,
         id: 1
@@ -70,7 +70,7 @@ describe('todos reducer', () => {
 
   it('should handle EDIT_TODO', () => {
     expect(
-      reducer([{
+      todos([{
         text: 'Run the tests',
         completed: false,
         id: 1
@@ -96,7 +96,7 @@ describe('todos reducer', () => {
 
   it('should handle COMPLETE_TODO', () => {
     expect(
-      reducer([{
+      todos([{
         text: 'Run the tests',
         completed: false,
         id: 1
@@ -121,7 +121,7 @@ describe('todos reducer', () => {
 
   it('should handle COMPLETE_ALL', () => {
     expect(
-      reducer([{
+      todos([{
         text: 'Run the tests',
         completed: true,
         id: 1
@@ -144,7 +144,7 @@ describe('todos reducer', () => {
 
     // Unmark if all todos are currently completed
     expect(
-      reducer([{
+      todos([{
         text: 'Run the tests',
         completed: true,
         id: 1
@@ -168,7 +168,7 @@ describe('todos reducer', () => {
 
   it('should handle CLEAR_COMPLETED', () => {
     expect(
-      reducer([{
+      todos([{
         text: 'Run the tests',
         completed: true,
         id: 1
