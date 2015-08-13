@@ -356,11 +356,13 @@ function requestPosts(reddit) {
   };
 }
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
-function requestPosts(reddit) {
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+function receivePosts(reddit, json) {
   return {
-    type: REQUEST_POSTS,
-    reddit
+    type: RECEIVE_POSTS,
+    reddit: reddit,
+    posts: json.data.children.map(child => child.data),
+    receivedAt: Date.now()
   };
 }
 
