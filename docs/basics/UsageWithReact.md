@@ -16,7 +16,7 @@ npm install --save react-redux
 
 ## Smart and Dumb Components
 
-React bindings for Redux embrace the idea of [dividing “smart” and “dumb” components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
+React bindings for Redux embrace the idea of [separating “smart” and “dumb” components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
 
 It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be “dumb” and receive all data via props.
 
@@ -50,13 +50,13 @@ It is advisable that only top-level components of your app (such as route handle
 </table>
 </center>
 
-In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest you to pass props down whenever possible.
+In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest that you pass props down whenever possible.
 
 ## Desigining Component Hierarchy
 
 Remember how we [designed the shape of the root state object](Reducers.md)? It’s time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
 
-Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incompleted todos.
+Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incompleted todos.
 
 I see the following components (and their props) emerge from this brief:
 
@@ -81,7 +81,7 @@ Let’s write them! We don’t need to think about binding to Redux yet. You can
 
 ## Dumb Components
 
-These are all normal React components, so we won’t stop to examine them in details. Here they go:
+These are all normal React components, so we won’t stop to examine them in detail. Here they go:
 
 #### `components/AddTodo.js`
 
@@ -216,7 +216,7 @@ Footer.propTypes = {
 };
 ```
 
-This is it! We can verify that they work correctly by writing a dummy `App` to render them:
+That's it! We can verify that they work correctly by writing a dummy `App` to render them:
 
 #### `containers/App.js`
 
@@ -264,9 +264,9 @@ By itself, it’s not very interesting. Let’s connect it to Redux!
 
 ## Connecting to Redux
 
-We need to do two changes to connect our `App` component to Redux and make it dispatch actions and read state from the Redux store.
+We need to make two changes to connect our `App` component to Redux and make it dispatch actions and read state from the Redux store.
 
-First, we need to import `Provider` from [`react-redux`](http://github.com/gaearon/react-redux) we installed earlier, and **wrap the root component in `<Provider>`** before rendering.
+First, we need to import `Provider` from [`react-redux`](http://github.com/gaearon/react-redux), which we installed earlier, and **wrap the root component in `<Provider>`** before rendering.
 
 #### `index.js`
 
@@ -290,9 +290,9 @@ React.render(
 );
 ```
 
-This makes our store instance available to the components below. (Internally, this is done via React [undocumented “context” feature](http://www.youtube.com/watch?v=H7vlH-wntD4), but it’s not exposed directly in the API so don’t worry about it.)
+This makes our store instance available to the components below. (Internally, this is done via React's [undocumented “context” feature](http://www.youtube.com/watch?v=H7vlH-wntD4), but it’s not exposed directly in the API so don’t worry about it.)
 
-Then, we **wrap the components we want to connect to Redux with `connect()` function from [`react-redux`](http://github.com/gaearon/react-redux)**. Try to only do this for a top-level component, or route handlers. While technically you can `connect()` any component in your app to Redux store, avoid doing this too deeply because it will make the data flow harder to trace.
+Then, we **wrap the components we want to connect to Redux with the `connect()` function from [`react-redux`](http://github.com/gaearon/react-redux)**. Try to only do this for a top-level component, or route handlers. While technically you can `connect()` any component in your app to Redux store, avoid doing this too deeply, because it will make the data flow harder to trace.
 
 **Any component wrapped with `connect()` call will receive a [`dispatch`](../api/Store.md#dispatch) function as a prop, and any state it needs from the global state.** The only argument to `connect()` is a function we call a **selector**. This function takes the global Redux store’s state, and returns the props you need for the component. In the simplest case, you can just return the `state` given to you, but you may also wish to transform it first.
 
@@ -369,8 +369,8 @@ function select(state) {
 export default connect(select)(App);
 ```
 
-This is it! The tiny todo app now functions correctly.
+That's it! The tiny todo app now functions correctly.
 
 ## Next Steps
 
-Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have received. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network and routing!
+Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
