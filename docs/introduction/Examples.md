@@ -2,15 +2,7 @@
 
 Redux is distributed with a few examples in its [source code](https://github.com/gaearon/redux/tree/master/examples).
 
-To run any of them, you need to clone the repo and run `npm install`:
-
-```
-git clone https://github.com/gaearon/redux.git
-cd redux
-npm install
-```
-
-This is **required** before you can run any of the examples.
+**To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
 
 >##### Note on Copying
 >If you copy Redux examples outside their folders, remove these lines from their `webpack.config.js`:
@@ -36,6 +28,10 @@ This is **required** before you can run any of the examples.
 Run the [Counter](https://github.com/gaearon/redux/tree/master/examples/counter) example:
 
 ```
+git clone https://github.com/gaearon/redux.git
+cd redux
+npm install
+
 cd examples/counter
 npm install
 npm start
@@ -52,6 +48,10 @@ It covers:
 Run the [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc) example:
 
 ```
+git clone https://github.com/gaearon/redux.git
+cd redux
+npm install
+
 cd examples/todomvc
 npm install
 npm start
@@ -69,6 +69,10 @@ It covers:
 Run the [Async](https://github.com/gaearon/redux/tree/master/examples/async) example:
 
 ```
+git clone https://github.com/gaearon/redux.git
+cd redux
+npm install
+
 cd examples/async
 npm install
 npm start
