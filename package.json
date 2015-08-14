@@ -10,6 +10,7 @@
     "test": "mocha --compilers js:babel/register --recursive",
     "test:watch": "npm test -- --watch",
     "test:cov": "babel-node $(npm bin)/isparta cover $(npm bin)/_mocha -- --recursive",
+    "test:examples": "babel-node examples/testAll.js",
     "check": "npm run lint && npm run test",
     "build:lib": "babel src --out-dir lib",
     "build:umd": "webpack src/index.js dist/redux.js --config webpack.config.development.js",

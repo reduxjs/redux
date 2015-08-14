@@ -12,8 +12,7 @@ var exampleDirs = fs.readdirSync(__dirname).filter((file) => {
 
 // Ordering is important here. `npm install` must come first.
 var cmdArgs = [
-  { cmd: 'npm', args: ['install'] },
-  { cmd: 'webpack', args: ['index.js'] }
+  { cmd: 'npm', args: ['test'] }
 ];
 
 for (let dir of exampleDirs) {
@@ -24,6 +23,7 @@ for (let dir of exampleDirs) {
       cwd: path.join(__dirname, dir),
       stdio: 'inherit'
     };
+
     let result = {};
     if (process.platform === 'win32') {
       result = spawnSync(cmdArg.cmd + '.cmd', cmdArg.args, opts);
