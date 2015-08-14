@@ -106,6 +106,16 @@ If you’re coming from Flux, there is a single important difference you need to
 
 This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
+### Documentation
+
+* [Introduction](http://gaearon.github.io/redux/docs/introduction/index.html)
+* [Basics](http://gaearon.github.io/redux/docs/basics/index.html)
+* [Advanced](http://gaearon.github.io/redux/docs/advanced/index.html)
+* [Recipes](http://gaearon.github.io/redux/docs/recipes/index.html)
+* [Troubleshooting](http://gaearon.github.io/redux/docs/index.html)
+* [Glossary](http://gaearon.github.io/redux/docs/index.html)
+* [API Reference](http://gaearon.github.io/redux/docs/api/index.html)
+
 ### Discussion
 
 Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack community.
