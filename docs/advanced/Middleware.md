@@ -326,7 +326,7 @@ let todoApp = combineReducers(reducers);
 let store = createStoreWithMiddleware(todoApp);
 ```
 
-That's it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
+That’s it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
 
 ```js
 // Will flow through both logger and crashReporter middleware!
