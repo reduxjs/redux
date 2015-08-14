@@ -4,12 +4,12 @@ Redux is a tiny library, but its contracts and APIs are carefully chosen to spaw
 
 For an extensive list of everything related to Redux, we recommend [Awesome Redux](https://github.com/xgrommx/awesome-redux). It contains examples, boilerplates, middleware, utility libraries, and more.
 
-On this page we will only feature a few of them that the Redux maintainers have vetted personally. Don’t let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don’t hesitate a PR if you’ve built something wonderful with Redux.
+On this page we will only feature a few of them that the Redux maintainers have vetted personally. Don’t let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don’t hesitate to submit a PR if you’ve built something wonderful with Redux.
 
 ## Bindings
 
 * [react-redux](https://github.com/gaearon/react-redux) — React
-* [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
+* [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
 
 ## Middleware
 
