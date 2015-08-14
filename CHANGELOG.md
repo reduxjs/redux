@@ -5,6 +5,57 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 
+## [1.0.0-rc](https://github.com/gaearon/redux/compare/v1.0.0-alpha...v1.0.0-rc) - 2015/07/13
+
+### Big Changes
+
+* React-specific code has been moved to [react-redux](https://github.com/gaearon/react-redux) and will be versioned separately
+* `createStore` no longer implicitly combines reducers
+* All middleware is now “smart” middleware 
+* `createStore` no longer accepts middleware
+* The thunk middleware is no longer included by default
+
+### Correctness Changes
+
+* `combineReducers` now throws if you return `undefined` state
+* `combineReducers` throws if you have no `default` case
+* (React) Components now update correctly in response to the actions fired in `componentDidMount` 
+* Dispatch from the middleware sends the dispatch through the whole middleware chain
+
+**Read the [detailed upgrade notes on the release page.](https://github.com/gaearon/redux/releases/tag/v1.0.0-rc)**
+
+## [1.0.0-alpha](https://github.com/gaearon/redux/compare/v0.12.0...v1.0.0-alpha) - 2015/07/13
+
+### Naming
+
+* “Stateless Stores” are now called reducers. (https://github.com/gaearon/redux/issues/137#issuecomment-114178411)
+* The “Redux instance” is now called “The Store”. (https://github.com/gaearon/redux/issues/137#issuecomment-113252359)
+* The dispatcher is removed completely. (https://github.com/gaearon/redux/pull/166#issue-90113962)
+
+### API changes
+
+* <s>`composeStores`</s> is now `composeReducers`.
+* <s>`createDispatcher`</s> is gone.
+* <s>`createRedux`</s> is now `createStore`.
+* `<Provider>` now accepts `store` prop instead of <s>`redux`</s>.
+* The new `createStore` signature is `createStore(reducer: Function | Object, initialState: any, middlewares: Array | ({ getState, dispatch }) => Array)`.
+* If the first argument to `createStore` is an object, `composeReducers` is automatically applied to it.
+* The “smart” middleware signature changed. It now accepts an object instead of a single `getState` function. The `dispatch` function lets you “recurse” the middleware chain and is useful for async: #113 (comment).
+
+### Correctness changes
+
+* The `dispatch` provided by the default thunk middleware now walks the whole middleware chain.
+* It is enforced now that raw Actions at the end of the middleware chain have to be plain objects.
+* Nested dispatches are now handled gracefully. (#110, #119)
+
+### Internal changes
+
+* The object in React context is renamed from <s>`redux`</s> to `store`.
+* Some tests are rewritten for clarity, focus and edge cases.
+* Redux in examples is now aliased to the source code for easier work on master.
+
+**Read the [detailed upgrade notes on the release page.](https://github.com/gaearon/redux/releases/tag/v1.0.0-alpha)**
+
 ## [0.12.0] - 2015/06/19
 No breaking changes this time.
 
