@@ -29,7 +29,7 @@ and run `npm test` to run it once, or `npm run test:watch` to test on every file
 
 ### Action Creators
 
-In Redux action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.
+In Redux, action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.
 
 #### Example
 
@@ -62,7 +62,7 @@ describe('actions', () => {
 
 ### Reducers
 
-Reducer should return the new state after applying action on the previous state. And that’s the behavior tested below.
+A reducer should return the new state after applying the action to the previous state, and that’s the behavior tested below.
 
 #### Example  
 
@@ -265,4 +265,4 @@ Call it before running any component tests. Note this is a dirty workaround, and
 
 - [jsdom](https://github.com/tmpvar/jsdom): An in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
 
-- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): The main idea of shallow rendering is to instantiate a component and get the result of its `render` method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) that means it is possible to access its children, props and test if it works as expected.
+- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): The main idea of shallow rendering is to instantiate a component and get the result of its `render` method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements). That means it is possible to access its children, props and test if it works as expected.
