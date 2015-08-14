@@ -2,7 +2,7 @@
 
 Composes functions from left to right.
 
-This is a functional programming utility, and is included in Redux as convenience.  
+This is a functional programming utility, and is included in Redux as a convenience.  
 You might want to use it to apply several [store enhancers](../Glossary.md#store-enhancer) in a row.
 
 #### Arguments
@@ -60,4 +60,4 @@ let store = finalCreateStore(reducer);
 
 #### Tips
 
-* All `compose` does is it lets you write deeply nested function transformations without the rightward drift of the code. Don’t give it too much credit!
+* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don’t give it too much credit!
