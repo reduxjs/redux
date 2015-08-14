@@ -83,7 +83,7 @@ store.dispatch(addTodo('Read about the middleware'));
 
 Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
 
-It is a low-level API. Most likely, instead of using it directly, you’ll use React (or other) bindings. If you feel that the callback needs to be invoked with the current state, you might want to [convert the store to an Observable or write a custom `observeStore` utility instead](https://github.com/gaearon/redux/issues/303#issuecomment-125184409).
+It is a low-level API. Most likely, instead of using it directly, you’ll use React (or other) bindings. If you feel that the callback needs to be invoked with the current state, you might want to [convert the store to an Observable or write a custom `observeStore` utility instead](https://github.com/rackt/redux/issues/303#issuecomment-125184409).
 
 To unsubscribe the change listener, invoke the function returned by `subscribe`.
 
@@ -122,7 +122,7 @@ handleChange();
 
 >##### Deprecated
 
->This API has been [deprecated](https://github.com/gaearon/redux/issues/350).  
+>This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
 >It will be removed when we find a better solution for this problem.
 
 Returns the reducer currently used by the store to calculate the state.
@@ -139,7 +139,7 @@ It is an advanced API. You might only need this if you implement a hot reloading
 
 >##### Deprecated
 
->This API has been [deprecated](https://github.com/gaearon/redux/issues/350).  
+>This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
 >It will be removed when we find a better solution for this problem.
 
 Replaces the reducer currently used by the store to calculate the state.

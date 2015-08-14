@@ -1,6 +1,6 @@
 # Examples
 
-Redux is distributed with a few examples in its [source code](https://github.com/gaearon/redux/tree/master/examples).  
+Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).  
 **To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
 
 >##### Note on Copying
@@ -24,7 +24,7 @@ Redux is distributed with a few examples in its [source code](https://github.com
 
 ## Counter
 
-Run the [Counter](https://github.com/gaearon/redux/tree/master/examples/counter) example:
+Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) example:
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -46,7 +46,7 @@ It covers:
 
 ## TodoMVC
 
-Run the [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc) example:
+Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) example:
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -69,7 +69,7 @@ It covers:
 
 ## Async
 
-Run the [Async](https://github.com/gaearon/redux/tree/master/examples/async) example:
+Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) example:
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -92,7 +92,7 @@ It covers:
 
 ## Real World
 
-Run the [Real World](https://github.com/gaearon/redux/tree/master/examples/real-world) example:
+Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-world) example:
 
 ```
 git clone https://github.com/gaearon/redux.git

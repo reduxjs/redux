@@ -1,4 +1,4 @@
-# [Redux](http://gaearon.github.io/redux)
+# [Redux](http://rackt.github.io/redux)
 
 Redux is a predictable state container for JavaScript apps.  
 
@@ -7,7 +7,7 @@ It helps you write applications that behave consistently, run in different envir
 You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.  
 It is tiny (2kB) and has no dependencies.
 
-[![build status](https://img.shields.io/travis/gaearon/redux/master.svg?style=flat-square)](https://travis-ci.org/gaearon/redux) 
+[![build status](https://img.shields.io/travis/rackt/redux/master.svg?style=flat-square)](https://travis-ci.org/rackt/redux) 
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux) 
 [![npm downloads](https://img.shields.io/npm/dm/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
@@ -108,13 +108,13 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 ### Documentation
 
-* [Introduction](http://gaearon.github.io/redux/docs/introduction/index.html)
-* [Basics](http://gaearon.github.io/redux/docs/basics/index.html)
-* [Advanced](http://gaearon.github.io/redux/docs/advanced/index.html)
-* [Recipes](http://gaearon.github.io/redux/docs/recipes/index.html)
-* [Troubleshooting](http://gaearon.github.io/redux/docs/Troubleshooting.html)
-* [Glossary](http://gaearon.github.io/redux/docs/Glossary.html)
-* [API Reference](http://gaearon.github.io/redux/docs/api/index.html)
+* [Introduction](http://rackt.github.io/redux/docs/introduction/index.html)
+* [Basics](http://rackt.github.io/redux/docs/basics/index.html)
+* [Advanced](http://rackt.github.io/redux/docs/advanced/index.html)
+* [Recipes](http://rackt.github.io/redux/docs/recipes/index.html)
+* [Troubleshooting](http://rackt.github.io/redux/docs/Troubleshooting.html)
+* [Glossary](http://rackt.github.io/redux/docs/Glossary.html)
+* [API Reference](http://rackt.github.io/redux/docs/api/index.html)
 
 ### Discussion
 

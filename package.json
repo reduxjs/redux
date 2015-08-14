@@ -21,13 +21,13 @@
     "postversion": "git push && git push --tags && npm run clean && npm run docs:publish",
     "prepublish": "npm run clean && npm run build",
     "docs:clean": "rimraf _book",
-    "docs:build": "gitbook build -g gaearon/redux",
+    "docs:build": "gitbook build -g rackt/redux",
     "docs:watch": "gitbook serve",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:gaearon/redux gh-pages --force"
+    "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:rackt/redux gh-pages --force"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/redux.git"
+    "url": "https://github.com/rackt/redux.git"
   },
   "keywords": [
     "flux",
@@ -45,9 +45,9 @@
   "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/redux/issues"
+    "url": "https://github.com/rackt/redux/issues"
   },
-  "homepage": "https://github.com/gaearon/redux",
+  "homepage": "https://github.com/rackt/redux",
   "devDependencies": {
     "babel": "^5.5.8",
     "babel-core": "^5.6.18",

@@ -188,5 +188,5 @@ You can then pass `dispatch` down to other components manually, if you want to.
 
 ## Something else doesn’t work
 
-Ask around on **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/gaearon/redux/issues).  
-If you figure it out, [edit this document](https://github.com/gaearon/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.
+Ask around on **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/rackt/redux/issues).  
+If you figure it out, [edit this document](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.
