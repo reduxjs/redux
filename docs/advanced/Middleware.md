@@ -490,7 +490,7 @@ let createStoreWithMiddleware = applyMiddleware(
   vanillaPromise,
   readyStatePromise,
   logger,
-  errorHandler
+  crashReporter
 )(createStore);
 let todoApp = combineReducers(reducers);
 let store = createStoreWithMiddleware(todoApp);
