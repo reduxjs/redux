@@ -1,8 +1,8 @@
 # Store
 
-In the previous steps, we have defined the [actions](Action.md) that represent the facts about “what happened” and the [reducers](Reducers.md) that update the state according to those actions.
+In the previous sections, we defined the [actions](Action.md) that represent the facts about “what happened” and the [reducers](Reducers.md) that update the state according to those actions.
 
-**Store** is an object that brings them together. The store has the following responsibilities:
+The **Store** is the object that brings them together. The store has the following responsibilities:
 
 * Holds application state;
 * Allows access to state via [`getState()`](../api/Store.md#getState);
@@ -72,4 +72,4 @@ let store = createStore(todoApp);
 
 ## Next Steps
 
-Before creating a UI for our todo app, we will take a detour to [how the data flows in a Redux application](DataFlow.md).
+Before creating a UI for our todo app, we will take a detour to see [how the data flows in a Redux application](DataFlow.md).

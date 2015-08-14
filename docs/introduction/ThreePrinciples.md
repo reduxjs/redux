@@ -4,9 +4,9 @@ Redux can be described in three fundamental principles:
 
 ### Single source of truth
 
-**The [state](../Glossary.md#state) of your whole application is stored in an object tree inside a single store.**
+**The [state](../Glossary.md#state) of your whole application is stored in an object tree inside a single [store](../Glossary.md#store).**
 
-This makes it easy to create universal apps. The state from the server can be serialized and hydrated into the client with no extra coding effort. It is easier to debug an application when there is a single state tree. You can also persist your app’s state in development for a faster development cycle. And of course, with a single state tree, you get the previously difficult functionality like Undo/Redo for free.
+This makes it easy to create universal apps. The state from the server can be serialized and hydrated into the client with no extra coding effort. It is easier to debug an application when there is a single state tree. You can also persist your app’s state in development for a faster development cycle. And of course, with a single state tree, you get previously difficult functionality like Undo/Redo for free.
 
 ```js
 console.log(store.getState());
@@ -43,9 +43,9 @@ store.dispatch({
 
 ### Mutations are written as pure functions
 
-**To specify how the state tree is transformed by the actions, you write pure [reducers](../Glossary.md#reducer).**
+**To specify how the state tree is transformed by actions, you write pure [reducers](../Glossary.md#reducer).**
 
-Reducers are just pure functions that take the previous state and the action, and return the next state. You can start with a single reducer, but as your app grows, you can split it into smaller reducers that manage the specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.
+Reducers are just pure functions that take the previous state and an action, and return the next state. You can start with a single reducer, but as your app grows, you can split it into smaller reducers that manage specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
@@ -82,4 +82,4 @@ let reducer = combineReducers({ visibilityFilter, todos });
 let store = createStore(reducer);
 ```
 
-This is it! Now you know what Redux is all about.
+That's it! Now you know what Redux is all about.
