@@ -1,6 +1,6 @@
-## Summary
+## Table of Contents
 
-* [Read Me](README.md)
+* [Read Me](/README.md)
 * [Introduction](/docs/introduction/README.md)
   * [Motivation](/docs/introduction/Motivation.md)
   * [Three Principles](/docs/introduction/ThreePrinciples.md)
