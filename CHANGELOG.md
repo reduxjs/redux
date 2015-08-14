@@ -22,7 +22,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 **Read the [detailed upgrade notes on the release page.](https://github.com/gaearon/redux/releases/tag/v1.0.0-rc)**
 
-## [1.0.0-alpha](https://github.com/gaearon/redux/compare/v0.12.0...v1.0.0-alpha) - 2015/07/13
+## [1.0.0-alpha](https://github.com/gaearon/redux/compare/v0.12.0...v1.0.0-alpha) - 2015/06/30
 
 ### Naming
 
