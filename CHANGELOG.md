@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.0](https://github.com/rackt/redux/compare/v1.0.0-rc...v1.0.0) - 2015/08/14
+
+### Breaking Changes
+
+* If `dispatch` is attempted while reducer is executing, an error is thrown. Note that you can dispatch from lifecycle hooks just fine. It's only reducers that are not allowed to dispatch. (https://github.com/rackt/redux/issues/368) 
+
+### New Home
+
+We moved under [rackt](https://github.com/rackt) Github org. This won't affect you, but the new official URL is https://github.com/rackt/redux. We did this because we share values, and we want to collaborate on creating better tools, libraries, documentation, and examples. Redux stays independent of React, but we will work closely with React Router community to figure out a better integration.
+
+### Docs!
+
+[We have real docs now.](http://rackt.github.io/redux/) There are a few missing pieces, but it's a terrific effort, so thanks to everybody who contributed in the past month to get this shipped. Thanks to [Gitbook](https://github.com/GitbookIO/gitbook) for providing great tooling, too.
+
+### Examples!
+
+There's been no shortage of great examples in [Awesome Redux](https://github.com/xgrommx/awesome-redux), but we're shipping two new built-in examples in 1.0. One of them is a [very simple async application](https://github.com/rackt/redux/tree/master/examples/async). Creating it is covered in [async tutorial](http://rackt.github.io/redux/docs/advanced/AsyncActions.html). Another example we ship is a [“real-world” example](https://github.com/rackt/redux/tree/master/examples/real-world). It's a port of somewhat well-known [flux-react-router-example](https://github.com/gaearon/flux-react-router-example) to Redux, and shows advanced techniques such as caching, data normalization, custom API middleware, and pagination. Hopefully this example will help answer some commonly asked questions.
+
+### Other Improvements
+
+* Unsubscribing during a dispatch is now fixed: https://github.com/rackt/redux/pull/462
+* `bindActionCreators` now can also accept a function as the first argument: https://github.com/rackt/redux/pull/352
+* Dispatching from iframe now works: https://github.com/rackt/redux/issues/304
+* Symbols can be used as action types: https://github.com/rackt/redux/pull/295 (Note: we don't recommend you to do this, because they're not serializable, so you can't record/replay user sessions.)
+
 ## [1.0.0-rc](https://github.com/rackt/redux/compare/v1.0.0-alpha...v1.0.0-rc) - 2015/07/13
 
 ### Big Changes
