@@ -1,8 +1,7 @@
 # Examples
 
-Redux is distributed with a few examples in its [source code](https://github.com/gaearon/redux/tree/master/examples).
-
-**To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
+Redux is distributed with a few examples in its [source code](https://github.com/gaearon/redux/tree/master/examples).  
+**To run either of them, clone the repo and run `npm install` both in the root and the example folder.**
 
 >##### Note on Copying
 >If you copy Redux examples outside their folders, remove these lines from their `webpack.config.js`:
@@ -29,11 +28,13 @@ Run the [Counter](https://github.com/gaearon/redux/tree/master/examples/counter)
 
 ```
 git clone https://github.com/gaearon/redux.git
+
 cd redux
 npm install
 
 cd examples/counter
 npm install
+
 npm start
 open http://localhost:3000/
 ```
@@ -49,11 +50,13 @@ Run the [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc)
 
 ```
 git clone https://github.com/gaearon/redux.git
+
 cd redux
 npm install
 
 cd examples/todomvc
 npm install
+
 npm start
 open http://localhost:3000/
 ```
@@ -70,11 +73,13 @@ Run the [Async](https://github.com/gaearon/redux/tree/master/examples/async) exa
 
 ```
 git clone https://github.com/gaearon/redux.git
+
 cd redux
 npm install
 
 cd examples/async
 npm install
+
 npm start
 open http://localhost:3000/
 ```
@@ -90,8 +95,14 @@ It covers:
 Run the [Real World](https://github.com/gaearon/redux/tree/master/examples/real-world) example:
 
 ```
+git clone https://github.com/gaearon/redux.git
+
+cd redux
+npm install
+
 cd examples/real-world
 npm install
+
 npm start
 open http://localhost:3000/
 ```
