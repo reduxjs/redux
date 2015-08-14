@@ -18,13 +18,13 @@
   * [Middleware](/docs/advanced/Middleware.md)
   * [Async Actions](/docs/advanced/AsyncActions.md)
   * [Async Flow](/docs/advanced/AsyncFlow.md)
-  * [Usage with React Router](/docs/advanced/UsageWithReactRouter.md)
+  * Usage with React Router
   * [Example: Reddit API](/docs/advanced/ExampleRedditAPI.md)
-  * [Next Steps](/docs/advanced/NextSteps.md)
+  * Next Steps
 * [Recipes](/docs/recipes/README.md)
   * [Migrating to Redux](/docs/recipes/MigratingToRedux.md)
   * [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
-  * [Server Rendering](/docs/recipes/ServerRendering.md)
+  * Server Rendering
   * [Computing Derived Data](/docs/recipes/ComputingDerivedData.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)
 * [Troubleshooting](docs/Troubleshooting.md)
