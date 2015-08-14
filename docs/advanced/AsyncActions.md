@@ -201,6 +201,10 @@ There are a few important bits here:
 
 Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.
 
+>##### Note
+
+> Here, it is assumed that you understand reducer composition with [`combineReducers()`](../api/combineReducers.md), as described in the [Splitting Reducers](../basics/Reducers.md#splitting-reducers). If you don’t, please read it first.
+
 #### `reducers.js`
 
 ```js
