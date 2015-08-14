@@ -135,6 +135,16 @@ Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack co
 
 Special thanks to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
 
+### Patrons
+
+The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
+Meet some of the outstanding companies that made it possible:
+
+* [Webflow](http://webflow.com/)
+* [Chess iX](http://www.chess-ix.com/)
+
+[See the full list of Redux patrons.](PATRONS.md)
+
 ### License
 
 MIT
