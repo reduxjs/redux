@@ -3,8 +3,6 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
-
 ## [1.0.0-rc](https://github.com/gaearon/redux/compare/v1.0.0-alpha...v1.0.0-rc) - 2015/07/13
 
 ### Big Changes
