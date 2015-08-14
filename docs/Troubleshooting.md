@@ -9,7 +9,7 @@ Sometimes, you are trying to dispatch an action, but your view does not update. 
 
 #### Never mutate reducer arguments
 
-It is tempting to modify `state` or `action` passed to you by Redux. Don’t do this!
+It is tempting to modify the `state` or `action` passed to you by Redux. Don’t do this!
 
 Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don’t use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
 
@@ -35,7 +35,7 @@ function todos(state = [], action) {
 }
 ```
 
-needs to be rewritten like this:
+It needs to be rewritten like this:
 
 ```js
 function todos(state = [], action) {
@@ -158,7 +158,7 @@ handleClick() {
 
 If you’re somewhere deep in the component hierarchy, it is cumbersome to pass the store down manually. This is why [react-redux](https://github.com/gaearon/react-redux) lets you use a `connect` [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that will, apart from subscribing you to a Redux store, inject `dispatch` into your component’s props.
 
-The fixed code will look like this:
+The fixed code looks like this:
 
 ```js
 import { Component } from 'react';
@@ -188,5 +188,5 @@ You can then pass `dispatch` down to other components manually, if you want to.
 
 ## Something else doesn’t work
 
-Ask around on **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/rackt/redux/issues).  
+Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/rackt/redux/issues).  
 If you figure it out, [edit this document](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.
