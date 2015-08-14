@@ -34,7 +34,7 @@ We’ll add one more action type to describe a user ticking off a todo as comple
 }
 ```
 
-It’s a good idea to pass as little data in action as possible. For example, it’s better to pass `index` than the whole todo object.
+It’s a good idea to pass as little data in an action as possible. For example, it’s better to pass `index` rather than the whole todo object.
 
 Finally, we’ll add one more action type for changing the currently visible todos.
 
@@ -47,7 +47,7 @@ Finally, we’ll add one more action type for changing the currently visible tod
 
 ## Action Creators
 
-**Action creators** are exactly that—functions that create actions. It's easy to conflate the terms “action” and “action creator,” so do your best to use the proper term.
+**Action creators** are exactly that — functions that create actions. It's easy to conflate the terms “action” and “action creator,” so do your best to use the proper term.
 
 In [traditional Flux](http://facebook.github.io/flux) implementations, action creators often trigger a dispatch when invoked, like so:
 
