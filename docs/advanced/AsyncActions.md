@@ -405,7 +405,7 @@ store.dispatch(fetchPosts('reactjs')).then(() =>
 );
 ```
 
-The nice thing about thunks it they can dispatch results of each other:
+The nice thing about thunks is that they can dispatch results of each other:
 
 #### `actions.js`
 
