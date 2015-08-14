@@ -18,7 +18,7 @@ The data lifecycle in any Redux app follows these 4 steps:
     { type: 'ADD_TODO', text: 'Read the Redux docs.'};
     ```
 
-  Think of an action as a very brief snippet of news. “Mary liked article 42.” or “Read the Redux docs.” was added to the list of todos.”
+  Think of an action as a very brief snippet of news. “Mary liked article 42.” or “'Read the Redux docs.' was added to the list of todos.”
 
   You can call [`store.dispatch(action)`](../api/Store.md#dispatch) from anywhere in your app, including components and XHR callbacks, or even at scheduled intervals.
 
@@ -46,7 +46,7 @@ The data lifecycle in any Redux app follows these 4 steps:
     let nextState = todoApp(previousState, action);
     ```
 
-    Note that reducer is a pure function. It only *computes* the next state. It should be completely predictable: calling it with the same inputs many times should produce the same outputs. It shouldn’t perform any side effects like API calls or router transitions. These should happen before an action is dispatched.
+    Note that a reducer is a pure function. It only *computes* the next state. It should be completely predictable: calling it with the same inputs many times should produce the same outputs. It shouldn’t perform any side effects like API calls or router transitions. These should happen before an action is dispatched.
 
 3. **The root reducer may combine the output of multiple reducers into a single state tree.**
 
