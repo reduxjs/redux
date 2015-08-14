@@ -386,7 +386,6 @@ export function fetchPosts(reddit) {
 #### `index.js`
 
 ```js
-import fetch from 'isomorphic-fetch';
 import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
