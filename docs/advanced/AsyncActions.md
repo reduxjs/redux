@@ -1,6 +1,6 @@
 # Async Actions
 
-In the [previous section](Middleware.md), we explored how Redux middleware can intercept, delay or transform actions before they reach the reducer. There is a variety of use cases for middleware, logging and crash reporting being great examples. However the most common use case for middleware is expressing asynchronous API calls.
+In the [previous section](Middleware.md), we explored how Redux middleware can intercept, delay or transform actions before they reach the reducer. There are a variety of use cases for middleware; logging and crash reporting being great examples. However, the most common use case for middleware is expressing asynchronous API calls.
 
 In the [basics guide](../basics/README.md), we built a simple todo application. It was fully synchronous. Every time an action was dispatched, the state was updated immediately.
 
@@ -12,11 +12,11 @@ Even if you call an asynchronous API, you need to dispatch actions to change the
 
 * **An action informing the reducers that the request began.**
 
-  The reducers may handle this action by toggling `isFetching` flag in the state. This way the UI knows it’s time to show a spinner.
+  The reducers may handle this action by toggling an `isFetching` flag in the state. This way the UI knows it’s time to show a spinner.
 
 * **An action informing the reducers that the request finished successfully.**
 
-  The reducers may handle this action by merging the new data into the state they manage and resetting `isFetching` flag. The UI would hide the spinner, and display the fetched data.
+  The reducers may handle this action by merging the new data into the state they manage and resetting `isFetching`. The UI would hide the spinner, and display the fetched data.
 
 * **An action informing the reducers that the request failed.**
   
@@ -146,7 +146,7 @@ Here’s what the state shape for our “Reddit headlines” app might look like
 
 There are a few important bits here:
 
-* We store each subreddit information separately so we can cache every subreddit. When the user switches between them the second time, the update will be instant, and we won’t need to refetch unless we want to. Don’t worry about all these items being in memory: unless you’re dealing with tens of thousands of items, and your user rarely closes the tab, you won’t need any sort of cleanup.
+* We store each subreddit's information separately so we can cache every subreddit. When the user switches between them the second time, the update will be instant, and we won’t need to refetch unless we want to. Don’t worry about all these items being in memory: unless you’re dealing with tens of thousands of items, and your user rarely closes the tab, you won’t need any sort of cleanup.
 
 * For every list of items, you’ll want to store `isFetching` to show a spinner, `didInvalidate` so you can later toggle it when the data is stale, `lastUpdated` so you know when it was fetched the last time, and the `items` themselves. In a real app, you’ll also want to store pagination state like `fetchedPageCount` and `nextPageUrl`.
 
@@ -283,7 +283,7 @@ In this code, there are two interesting parts:
     nextState[action.reddit] = posts(state[action.reddit], action);
     return Object.assign({}, state, nextState);
   ```
-* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.html#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
+* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.html#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
 
 Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
 
@@ -312,7 +312,7 @@ fetch(`http://www.reddit.com/r/${reddit}.json`)
   });
 ```
 
-We can do the same from our components. However it quickly gets tedious. Usually you want some kind of common logic before performing a request, such as looking up something in the state, and maybe deciding not to fetch because the data is cached.
+We can do the same from our components. However, it quickly gets tedious. Usually you want some kind of common logic before performing a request, such as looking up something in the state, and maybe deciding not to fetch because the data is cached.
 
 Clearly, actions can’t express control flow. The best tool for control flow is a function. A function can have an `if` statement, or an early `return`. If a function has access to a `dispatch` method, it can call it many times, potentially asynchronously. Does this ring a bell?
 
@@ -457,7 +457,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 >Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.
 
-[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous action in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.html#real-world) does it. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
+[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.html#real-world) does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
 
 ## Connecting to UI
 
