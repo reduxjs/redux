@@ -22,9 +22,11 @@ export var ActionTypes = {
  * @param {Function} reducer A function that returns the next state tree, given
  * the current state tree and the action to handle.
  *
- * @param {any} initialState The initial state. You may optionally specify it
+ * @param {any} [initialState] The initial state. You may optionally specify it
  * to hydrate the state from the server in universal apps, or to restore a
  * previously serialized user session.
+ * If you use `combineReducers` to produce the root reducer function, this must be
+ * an object with the same shape as `combineReducers` keys.
  *
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
@@ -69,22 +71,23 @@ export default function createStore(reducer, initialState) {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
-   * The `reducer` function the store was created with will be called with the
-   * current state tree and the and the given `action`. Its return value will
-   * be considered the next state of the tree, and the change listeners will be
-   * notified.
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
    *
    * The base implementation only supports plain object actions. If you want to
-   * dispatch a promise, an observable, a thunk, or something else, you need to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
    * wrap your store creating function into the corresponding middleware. For
    * example, see the documentation for the `redux-thunk` package. Even the
    * middleware will eventually dispatch plain object actions using this method.
    *
    * @param {Object} action A plain object representing “what changed”. It is
    * a good idea to keep actions serializable so you can record and replay user
-   * sessions, or use the time travelling Redux developer tools.
+   * sessions, or use the time travelling `redux-devtools`.
    *
    * @returns {Object} For convenience, the same action object you dispatched.
+   *
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
@@ -137,6 +140,10 @@ export default function createStore(reducer, initialState) {
     dispatch({ type: ActionTypes.INIT });
   }
 
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
   dispatch({ type: ActionTypes.INIT });
 
   return {
