@@ -2,7 +2,7 @@
 
 Redux is a predictable state container for JavaScript apps.  
 
-It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as live code editing combined with a time traveling debugger.
+It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/gaearon/react-redux).
 
 You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.  
 It is tiny (2kB) and has no dependencies.
@@ -36,13 +36,9 @@ Whether you used them or not, Redux takes a few minutes to get started with.
 ### Installation
 
 To install the stable version:
+
 ```
 npm install --save redux
-```
-
-To install the release candidate (1.0.0-rc at the time of this writing):
-```
-npm install --save redux@1.0.0-rc
 ```
 
 Most likely, you’ll also need [the React bindings](http://github.com/gaearon/react-redux) and [the developer tools](http://github.com/gaearon/redux-devtools).
