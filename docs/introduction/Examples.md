@@ -1,7 +1,7 @@
 # Examples
 
 Redux is distributed with a few examples in its [source code](https://github.com/gaearon/redux/tree/master/examples).  
-**To run either of them, clone the repo and run `npm install` both in the root and the example folder.**
+**To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
 
 >##### Note on Copying
 >If you copy Redux examples outside their folders, remove these lines from their `webpack.config.js`:
@@ -87,7 +87,7 @@ open http://localhost:3000/
 It covers:
 
 * Basic async Redux flow with [redux-thunk](https://github.com/gaearon/redux-thunk);
-* Caching responses and showing spinner while data is fetching;
+* Caching responses and showing a spinner while data is fetching;
 * Invalidating the cached data.
 
 ## Real World
@@ -112,7 +112,7 @@ It covers:
 * Real-world async Redux flow;
 * Keeping entities in a normalized entity cache;
 * A custom middleware for API calls;
-* Caching responses and showing spinner while data is fetching;
+* Caching responses and showing a spinner while data is fetching;
 * Pagination;
 * Routing.
 
