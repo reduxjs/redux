@@ -47,7 +47,7 @@
   "bugs": {
     "url": "https://github.com/rackt/redux/issues"
   },
-  "homepage": "https://github.com/rackt/redux",
+  "homepage": "http://rackt.github.io/redux",
   "devDependencies": {
     "babel": "^5.5.8",
     "babel-core": "^5.6.18",
