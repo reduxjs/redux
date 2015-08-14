@@ -30,6 +30,12 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [redux-devtools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
 
+## Tutorials and Articles
+
+* [redux-tutorial](https://github.com/happypoulp/redux-tutorial) — Learn how to use redux step by step
+* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux)
+* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4)
+
 ## More
 
 [Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
