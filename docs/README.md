@@ -36,3 +36,4 @@
   * [applyMiddleware](/docs/api/applyMiddleware.md)
   * [bindActionCreators](/docs/api/bindActionCreators.md)
   * [compose](/docs/api/compose.md)
+* [Patrons](/PATRONS.md)
