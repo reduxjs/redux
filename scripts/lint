@@ -1,3 +1,0 @@
-#!/bin/sh
-
-`npm bin`/eslint src test examples

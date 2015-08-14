@@ -1,7 +1,0 @@
-#!/bin/sh -e
-
-rm -rf lib
-`npm bin`/babel src --out-dir lib
-
-mv lib/entry-react.js ./react.js
-mv lib/entry-react-native.js ./react-native.js

@@ -1,8 +1,10 @@
+import 'babel/polyfill';
+
 import React from 'react';
-import App from './containers/App';
+import Root from './containers/Root';
 import 'todomvc-app-css/index.css';
 
 React.render(
-  <App />,
+  <Root />,
   document.getElementById('root')
 );
