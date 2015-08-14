@@ -11,15 +11,20 @@ function bindActionCreator(actionCreator, dispatch) {
  * may be invoked directly. This is just a convenience method, as you can call
  * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
  *
- * @param {Object|Function} actionCreators An object whose values are action
+ * For convenience, you can also pass a single function as the first argument,
+ * and get a function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
  * creator functions. One handy way to obtain it is to use ES6 `import * as`
- * syntax. It also supports binding only a single function.
+ * syntax. You may also pass a single function.
  *
  * @param {Function} dispatch The `dispatch` function available on your Redux
  * store.
  *
- * @returns {Object} The object mimicking the original object, but with every
- * action creator wrapped into the `dispatch` call.
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
  */
 export default function bindActionCreators(actionCreators, dispatch) {
   if (typeof actionCreators === 'function') {

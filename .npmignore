@@ -3,3 +3,6 @@
 examples
 test
 coverage
+_book
+book.json
+docs

@@ -4,3 +4,4 @@ node_modules
 dist
 lib
 coverage
+_book
