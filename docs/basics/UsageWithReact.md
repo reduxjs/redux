@@ -216,7 +216,7 @@ Footer.propTypes = {
 };
 ```
 
-That's it! We can verify that they work correctly by writing a dummy `App` to render them:
+That’s it! We can verify that they work correctly by writing a dummy `App` to render them:
 
 #### `containers/App.js`
 
@@ -369,7 +369,7 @@ function select(state) {
 export default connect(select)(App);
 ```
 
-That's it! The tiny todo app now functions correctly.
+That’s it! The tiny todo app now functions correctly.
 
 ## Next Steps
 

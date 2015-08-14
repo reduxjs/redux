@@ -32,7 +32,7 @@ You’ll often find that you need to store some data, as well as some UI state, 
 
 ## Handling Actions
 
-Now that we've decided what our state object looks like, we're ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
+Now that we’ve decided what our state object looks like, we’re ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
 
 ```js
 (previousState, action) => newState

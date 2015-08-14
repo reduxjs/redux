@@ -2,7 +2,7 @@
 
 As the requirements to JavaScript single-page applications get more sophisticated, **more state than ever before needs to be managed by the JavaScript code.** This state may include server responses, cached data, and data created locally, but not yet persisted to the server. It also includes the UI state, such as the active route, the selected tab, whether to show a spinner or pagination controls, and so on.
 
-Managing ever-changing state is hard. If a model can update another model, then a view can update a model that updates another model, and this, in turn, might cause another view to update. At some point you no longer know what happens in your app. **You no longer control when, why, and how the state is updated.** When the system is opaque and non-deterministic, it's hard to reproduce bugs or add new features.
+Managing ever-changing state is hard. If a model can update another model, then a view can update a model that updates another model, and this, in turn, might cause another view to update. At some point you no longer know what happens in your app. **You no longer control when, why, and how the state is updated.** When the system is opaque and non-deterministic, it’s hard to reproduce bugs or add new features.
 
 As if this wasn’t bad enough, consider the **new requirements that are becoming common in front-end product development**, such as handling optimistic updates, rendering on the server, fetching the data before performing route transitions, and so on. We the front-end developers are finding ourselves surrounded by complexity we never had to deal with before. [Is it time we give up?](http://www.quirksmode.org/blog/archives/2015/07/stop_pushing_th.html)
 

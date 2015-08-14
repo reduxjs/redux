@@ -82,4 +82,4 @@ let reducer = combineReducers({ visibilityFilter, todos });
 let store = createStore(reducer);
 ```
 
-That's it! Now you know what Redux is all about.
+That’s it! Now you know what Redux is all about.
