@@ -4,7 +4,7 @@ Redux is in part [inspired by Flux](../introduction/PriorArt.md), and the most c
 
 ## Actions
 
-Actions are plain objects describing what happened in the app, and serve as the sole way to describe an intention to mutate the data. It’s important that **action being objects you have to dispatch is not boilerplate, but one of the [fundamental design choices](../introduction/ThreePrinciples.md) of Redux**.
+Actions are plain objects describing what happened in the app, and serve as the sole way to describe an intention to mutate the data. It’s important that **actions being objects you have to dispatch is not boilerplate, but one of the [fundamental design choices](../introduction/ThreePrinciples.md) of Redux**.
 
 There are frameworks claiming to be similar to Flux, but without a concept of action objects. In terms of being predictable, this is a step backwards from Flux or Redux. If there are no serializable plain object actions, it is impossible to record and replay user sessions, or to implement [hot reloading with time travel](https://www.youtube.com/watch?v=xsSnOQynTHs). If you’d rather modify data directly, you don’t need Redux.
 
@@ -33,7 +33,7 @@ Why is this beneficial? **It is often claimed that constants are unnecessary, an
 * The list of action types that were added, removed, and changed in a Pull Request, helps everyone on the team keep track of scope and implementation of new features.
 * If you make a typo when importing an action constant, you will get `undefined`. This is much easier to notice than a typo when you wonder why nothing happens when the action is dispatched.
 
-It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgement.
+It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgment.
 
 ## Action Creators
 
@@ -138,7 +138,7 @@ export const addTodo = makeActionCreator('ADD_TODO', 'todo');
 export const removeTodo = makeActionCreator('REMOVE_TODO', 'id');
 ```
 
-See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions) for examples of such utilites.  
+See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions) for examples of such utilities.
 
 Note that such utilities add magic to your code.  
 Are magic and indirection really worth extra few lines?

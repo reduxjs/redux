@@ -4,7 +4,7 @@ In the [previous section](Middleware.md), we explored how Redux middleware can i
 
 In the [basics guide](../basics/README.md), we built a simple todo application. It was fully synchronous. Every time an action was dispatched, the state was updated immediately.
 
-In this guide, we will build a different, asynchronous application. It will use Reddit API to show the current headlines for a select subreddit. How does asynchronicity fit into Redux flow?
+In this guide, we will build a different, asynchronous application. It will use the Reddit API to show the current headlines for a select subreddit. How does asynchronicity fit into Redux flow?
 
 ## Actions
 
@@ -71,7 +71,7 @@ export function invalidateReddit(reddit) {
 }
 ```
 
-These were the actions governed by the user interaction. We will also have another kind actions, governed by the network requests. We will see how to dispatch them later, but for now, we just want to define them.
+These were the actions governed by the user interaction. We will also have another kind of action, governed by the network requests. We will see how to dispatch them later, but for now, we just want to define them.
 
 When it’s time to fetch the posts for some reddit, we will dispatch a `REQUEST_POSTS` action:
 
@@ -86,7 +86,7 @@ export function requestPosts(reddit) {
 }
 ```
 
-It is important for it to be separate from `SELECT_REDDIT` or `INVALIDATE_REDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch most popular reddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it’s not wise to couple fetching to some particular UI event early on.
+It is important for it to be separate from `SELECT_REDDIT` or `INVALIDATE_REDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular reddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it’s not wise to couple fetching to some particular UI event early on.
 
 Finally, when the network request comes through, we will dispatch `RECEIVE_POSTS`:
 
@@ -111,9 +111,9 @@ This is all we need to know for now. The particular mechanism to dispatch these 
 
 ## Designing the State Shape
 
-Just like in the basic tutorial, you’ll need to [design the shape of your application’s state](Reducers.md#designing-the-state-shape) before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.
+Just like in the basic tutorial, you’ll need to [design the shape of your application’s state](../basics/Reducers.md#designing-the-state-shape) before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.
 
-This part is often confusing to the beginners, because it is not immediately clear what information describes the state of an asynchronous application, and how to organize it in a single tree.
+This part is often confusing to beginners, because it is not immediately clear what information describes the state of an asynchronous application, and how to organize it in a single tree.
 
 We’ll start with the most common use case: lists. Web applications often show lists of things. For example, a list of posts, or a list of friends. You’ll need to figure out what sorts of lists your app can show. You want to store them separately in the state, because this way you can cache them and only fetch again if necessary.
 
@@ -154,7 +154,7 @@ There are a few important bits here:
 
 >In this example, we store the received items together with the pagination information. However, this approach won’t work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
 
->If you have nested entities, or if you let user edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.html#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
+>If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.html#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
 
 >```js
 > {
@@ -199,7 +199,7 @@ There are a few important bits here:
 
 ## Handling Actions
 
-Before going into details of dispatch actions together with network requests, we will write the reducers for the actions we defined above.
+Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.
 
 #### `reducers.js`
 
