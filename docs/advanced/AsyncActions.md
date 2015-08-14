@@ -146,7 +146,7 @@ Here’s what the state shape for our “Reddit headlines” app might look like
 
 There are a few important bits here:
 
-* We store each subreddit's information separately so we can cache every subreddit. When the user switches between them the second time, the update will be instant, and we won’t need to refetch unless we want to. Don’t worry about all these items being in memory: unless you’re dealing with tens of thousands of items, and your user rarely closes the tab, you won’t need any sort of cleanup.
+* We store each subreddit’s information separately so we can cache every subreddit. When the user switches between them the second time, the update will be instant, and we won’t need to refetch unless we want to. Don’t worry about all these items being in memory: unless you’re dealing with tens of thousands of items, and your user rarely closes the tab, you won’t need any sort of cleanup.
 
 * For every list of items, you’ll want to store `isFetching` to show a spinner, `didInvalidate` so you can later toggle it when the data is stale, `lastUpdated` so you know when it was fetched the last time, and the `items` themselves. In a real app, you’ll also want to store pagination state like `fetchedPageCount` and `nextPageUrl`.
 
