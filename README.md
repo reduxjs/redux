@@ -112,8 +112,8 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 * [Basics](http://gaearon.github.io/redux/docs/basics/index.html)
 * [Advanced](http://gaearon.github.io/redux/docs/advanced/index.html)
 * [Recipes](http://gaearon.github.io/redux/docs/recipes/index.html)
-* [Troubleshooting](http://gaearon.github.io/redux/docs/index.html)
-* [Glossary](http://gaearon.github.io/redux/docs/index.html)
+* [Troubleshooting](http://gaearon.github.io/redux/docs/Troubleshooting.html)
+* [Glossary](http://gaearon.github.io/redux/docs/Glossary.html)
 * [API Reference](http://gaearon.github.io/redux/docs/api/index.html)
 
 ### Discussion
