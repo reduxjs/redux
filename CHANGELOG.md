@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.1](https://github.com/rackt/redux/compare/v1.0.0...v1.0.1) - 2015/08/15
+
+* Fixes “process is not defined” on React Native ([#525](https://github.com/rackt/redux/issues/525), [#526](https://github.com/rackt/redux/pull/526))
+* Removes dependencies on `invariant` and `warning` ([#528](https://github.com/rackt/redux/pull/528))
+* Fixes TodoMVC example ([#524](https://github.com/rackt/redux/issues/524), [#529](https://github.com/rackt/redux/pull/529))
+
 ## [1.0.0](https://github.com/rackt/redux/compare/v1.0.0-rc...v1.0.0) - 2015/08/14
 
 ### Breaking Changes
