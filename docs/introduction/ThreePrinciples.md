@@ -6,7 +6,7 @@ Redux can be described in three fundamental principles:
 
 **The [state](../Glossary.md#state) of your whole application is stored in an object tree inside a single [store](../Glossary.md#store).**
 
-This makes it easy to create universal apps. The state from the server can be serialized and hydrated into the client with no extra coding effort. It is easier to debug an application when there is a single state tree. You can also persist your app’s state in development for a faster development cycle. And of course, with a single state tree, you get previously difficult functionality like Undo/Redo for free.
+This makes it easy to create universal apps. The state from the server can be serialized and hydrated into the client with no extra coding effort. It is easier to debug an application when there is a single state tree. You can also persist your app’s state in development for a faster development cycle. And with a single state tree, you get previously difficult functionality like Undo/Redo for free.
 
 ```js
 console.log(store.getState());
