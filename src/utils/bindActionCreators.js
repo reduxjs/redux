@@ -1,4 +1,3 @@
-import invariant from 'invariant';
 import mapValues from '../utils/mapValues';
 
 function bindActionCreator(actionCreator, dispatch) {
@@ -31,12 +30,12 @@ export default function bindActionCreators(actionCreators, dispatch) {
     return bindActionCreator(actionCreators, dispatch);
   }
 
-  invariant(
-    typeof actionCreators === 'object' && actionCreators != null,
-    'bindActionCreators expected an object or a function, instead received %s. ' +
-    'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?',
-    typeof actionCreators
-  );
+  if (typeof actionCreators !== 'object' || actionCreators == null) {
+    throw new Error(
+      `bindActionCreators expected an object or a function, instead received ${typeof actionCreators}. ` +
+      `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
+    );
+  }
 
   return mapValues(actionCreators, actionCreator =>
     bindActionCreator(actionCreator, dispatch)

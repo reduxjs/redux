@@ -38,7 +38,7 @@ describe('bindActionCreators', () => {
     ]);
   });
 
-  it('should throw an invariant violation for an undefined actionCreator', () => {
+  it('should throw for an undefined actionCreator', () => {
     expect(() => {
       bindActionCreators(undefined, store.dispatch);
     }).toThrow(
@@ -47,7 +47,7 @@ describe('bindActionCreators', () => {
     );
   });
 
-  it('should throw an invariant violation for a null actionCreator', () => {
+  it('should throw for a null actionCreator', () => {
     expect(() => {
       bindActionCreators(null, store.dispatch);
     }).toThrow(
@@ -56,7 +56,7 @@ describe('bindActionCreators', () => {
     );
   });
 
-  it('should throw an invariant violation for a primitive actionCreator', () => {
+  it('should throw for a primitive actionCreator', () => {
     expect(() => {
       bindActionCreators('string', store.dispatch);
     }).toThrow(

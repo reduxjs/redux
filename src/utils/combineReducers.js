@@ -2,8 +2,6 @@ import { ActionTypes } from '../createStore';
 import isPlainObject from '../utils/isPlainObject';
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
-import invariant from 'invariant';
-import warning from 'warning';
 
 function getErrorMessage(key, action) {
   var actionType = action && action.type;
@@ -19,8 +17,7 @@ function verifyStateShape(initialState, currentState) {
   var reducerKeys = Object.keys(currentState);
 
   if (reducerKeys.length === 0) {
-    warning(
-      false,
+    console.error(
       'Store does not have a valid reducer. Make sure the argument passed ' +
       'to combineReducers is an object whose values are reducers.'
     );
@@ -28,8 +25,7 @@ function verifyStateShape(initialState, currentState) {
   }
 
   if (!isPlainObject(initialState)) {
-    warning(
-      false,
+    console.error(
       'initialState has unexpected type of "' +
       ({}).toString.call(initialState).match(/\s([a-z|A-Z]+)/)[1] +
       '". Expected initialState to be an object with the following ' +
@@ -42,12 +38,13 @@ function verifyStateShape(initialState, currentState) {
     key => reducerKeys.indexOf(key) < 0
   );
 
-  warning(
-    unexpectedKeys.length === 0,
-    `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
-    `"${unexpectedKeys.join('", "')}" in initialState will be ignored. ` +
-    `Expected to find one of the known reducer keys instead: "${reducerKeys.join('", "')}"`
-  );
+  if (unexpectedKeys.length > 0) {
+    console.error(
+      `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
+      `"${unexpectedKeys.join('", "')}" in initialState will be ignored. ` +
+      `Expected to find one of the known reducer keys instead: "${reducerKeys.join('", "')}"`
+    );
+  }
 }
 
 /**
@@ -72,24 +69,26 @@ export default function combineReducers(reducers) {
 
   Object.keys(finalReducers).forEach(key => {
     var reducer = finalReducers[key];
-    invariant(
-      typeof reducer(undefined, { type: ActionTypes.INIT }) !== 'undefined',
-      `Reducer "${key}" returned undefined during initialization. ` +
-      `If the state passed to the reducer is undefined, you must ` +
-      `explicitly return the initial state. The initial state may ` +
-      `not be undefined.`
-    );
+    if (typeof reducer(undefined, { type: ActionTypes.INIT }) === 'undefined') {
+      throw new Error(
+        `Reducer "${key}" returned undefined during initialization. ` +
+        `If the state passed to the reducer is undefined, you must ` +
+        `explicitly return the initial state. The initial state may ` +
+        `not be undefined.`
+      );
+    }
 
     var type = Math.random().toString(36).substring(7).split('').join('.');
-    invariant(
-      typeof reducer(undefined, { type }) !== 'undefined',
-      `Reducer "${key}" returned undefined when probed with a random type. ` +
-      `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
-      `namespace. They are considered private. Instead, you must return the ` +
-      `current state for any unknown actions, unless it is undefined, ` +
-      `in which case you must return the initial state, regardless of the ` +
-      `action type. The initial state may not be undefined.`
-    );
+    if (typeof reducer(undefined, { type }) === 'undefined') {
+      throw new Error(
+        `Reducer "${key}" returned undefined when probed with a random type. ` +
+        `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
+        `namespace. They are considered private. Instead, you must return the ` +
+        `current state for any unknown actions, unless it is undefined, ` +
+        `in which case you must return the initial state, regardless of the ` +
+        `action type. The initial state may not be undefined.`
+      );
+    }
   });
 
   var defaultState = mapValues(finalReducers, () => undefined);
@@ -98,10 +97,9 @@ export default function combineReducers(reducers) {
   return function combination(state = defaultState, action) {
     var finalState = mapValues(finalReducers, (reducer, key) => {
       var newState = reducer(state[key], action);
-      invariant(
-        typeof newState !== 'undefined',
-        getErrorMessage(key, action)
-      );
+      if (typeof newState === 'undefined') {
+        throw new Error(getErrorMessage(key, action));
+      }
       return newState;
     });
 
