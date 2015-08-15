@@ -1,4 +1,3 @@
-import invariant from 'invariant';
 import isPlainObject from './utils/isPlainObject';
 
 /**
@@ -32,10 +31,9 @@ export var ActionTypes = {
  * and subscribe to changes.
  */
 export default function createStore(reducer, initialState) {
-  invariant(
-    typeof reducer === 'function',
-    'Expected the reducer to be a function.'
-  );
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
 
   var currentReducer = reducer;
   var currentState = initialState;
@@ -92,15 +90,13 @@ export default function createStore(reducer, initialState) {
    * return something else (for example, a Promise you can await).
    */
   function dispatch(action) {
-    invariant(
-      isPlainObject(action),
-      'Actions must be plain objects. Use custom middleware for async actions.'
-    );
+    if (!isPlainObject(action)) {
+      throw new Error('Actions must be plain objects. Use custom middleware for async actions.');
+    }
 
-    invariant(
-      isDispatching === false,
-      'Reducers may not dispatch actions.'
-    );
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
 
     try {
       isDispatching = true;
