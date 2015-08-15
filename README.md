@@ -125,7 +125,7 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 ### Discussion
 
-Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack community.
+Join the **#redux** channel of the [Reactiflux](http://reactiflux.com) Slack community.
 
 ### Thanks
 
@@ -140,7 +140,7 @@ Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack co
 * [Cycle](https://github.com/staltz/cycle) for showing how often a function is the best tool;
 * [React](https://github.com/facebook/react) for the pragmatic innovation.
 
-Special thanks to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
+Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
 
 ### Patrons
 
