@@ -45,6 +45,33 @@ describe('todos reducer', () => {
       completed: false,
       id: 0
     }]);
+
+    expect(
+      todos([{
+        text: 'Run the tests',
+        completed: false,
+        id: 1
+      }, {
+        text: 'Use Redux',
+        completed: false,
+        id: 0
+      }], {
+        type: types.ADD_TODO,
+        text: 'Fix the tests'
+      })
+    ).toEqual([{
+      text: 'Fix the tests',
+      completed: false,
+      id: 2
+    }, {
+      text: 'Run the tests',
+      completed: false,
+      id: 1
+    }, {
+      text: 'Use Redux',
+      completed: false,
+      id: 0
+    }]);
   });
 
   it('should handle DELETE_TODO', () => {
@@ -183,6 +210,36 @@ describe('todos reducer', () => {
       text: 'Use Redux',
       completed: false,
       id: 0
+    }]);
+  });
+
+  it('should not generate duplicate ids after CLEAR_COMPLETED', () => {
+    expect(
+      [{
+        type: types.COMPLETE_TODO,
+        id: 0
+      }, {
+        type: types.CLEAR_COMPLETED
+      }, {
+        type: types.ADD_TODO,
+        text: 'Write more tests'
+      }].reduce(todos, [{
+        id: 0,
+        completed: false,
+        text: 'Use Redux'
+      }, {
+        id: 1,
+        completed: false,
+        text: 'Write tests'
+      }])
+    ).toEqual([{
+      text: 'Write more tests',
+      completed: false,
+      id: 2
+    }, {
+      text: 'Write tests',
+      completed: false,
+      id: 1
     }]);
   });
 });
