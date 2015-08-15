@@ -52,7 +52,7 @@ npm install --save-dev redux-devtools
 
 The whole state of your app is stored in an object tree inside a single *store*.  
 The only way to change the state tree is to emit an *action*, an object describing what happened.  
-To specify how the state tree is transformed by the actions, you write pure *reducers*.
+To specify how the actions transform the state tree, you write pure *reducers*.
 
 That’s it!
 
@@ -64,11 +64,11 @@ import { createStore } from 'redux';
  * It describes how an action transforms the state into the next state.
  *
  * The shape of the state is up to you: it can be a primitive, an array, an object,
- * or even an Immutable.js data structure. The only important part is you should
- * return a new object if the state changes, instead of mutating the parameter.
+ * or even an Immutable.js data structure. The only important part is that you should
+ * not mutate the state object, but return a new object if the state changes.
  *
  * In this example, we use a `switch` statement and strings, but you can use a helper that
- * follows a different convention (such as function maps) that makes sense for your project.
+ * follows a different convention (such as function maps) if it makes sense for your project.
  */
 function counter(state = 0, action) {
   switch (action.type) {
@@ -81,7 +81,7 @@ function counter(state = 0, action) {
   }
 }
 
-// Create a Redux store that holds the state of your app.
+// Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
 let store = createStore(counter);
 
@@ -125,7 +125,7 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 ### Discussion
 
-Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack community.
+Join the **#redux** channel of the [Reactiflux](http://reactiflux.com) Slack community.
 
 ### Thanks
 
@@ -140,7 +140,7 @@ Join the **#redux** channel of the [Reactiflux](http://reactiflux.com/) Slack co
 * [Cycle](https://github.com/staltz/cycle) for showing how often a function is the best tool;
 * [React](https://github.com/facebook/react) for the pragmatic innovation.
 
-Special thanks to [Jamie Paton](http://jdpaton.github.io/) for handing over the `redux` NPM package name.
+Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
 
 ### Patrons
 
