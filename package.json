@@ -31,17 +31,17 @@
     "url": "https://github.com/rackt/redux.git"
   },
   "keywords": [
-    "flux",
     "redux",
     "reducer",
-    "react",
-    "reactjs",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
     "hot",
-    "reload",
-    "hmr",
     "live",
-    "edit",
-    "webpack"
+    "replay",
+    "flux",
+    "elm"
   ],
   "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
   "license": "MIT",

@@ -2,13 +2,12 @@
   "name": "redux-async-example",
   "version": "0.0.0",
   "description": "Redux async example",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/redux.git"
+    "url": "https://github.com/rackt/redux.git"
   },
   "keywords": [
     "react",
@@ -23,9 +22,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/redux/issues"
+    "url": "https://github.com/rackt/redux/issues"
   },
-  "homepage": "https://github.com/gaearon/redux#readme",
+  "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "isomorphic-fetch": "^2.1.1",
     "react": "^0.13.3",

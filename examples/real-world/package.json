@@ -2,30 +2,18 @@
   "name": "redux-real-world-example",
   "version": "0.0.0",
   "description": "Redux real-world example",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/redux.git"
+    "url": "https://github.com/rackt/redux.git"
   },
-  "keywords": [
-    "react",
-    "reactjs",
-    "hot",
-    "reload",
-    "hmr",
-    "live",
-    "edit",
-    "webpack",
-    "flux"
-  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/redux/issues"
+    "url": "https://github.com/rackt/redux/issues"
   },
-  "homepage": "https://github.com/gaearon/redux#readme",
+  "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "humps": "^0.6.0",
     "isomorphic-fetch": "^2.1.1",

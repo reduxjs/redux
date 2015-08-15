@@ -2,7 +2,6 @@
   "name": "redux-counter-example",
   "version": "0.0.0",
   "description": "Redux counter example",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "mocha --recursive --compilers js:babel/register",
@@ -10,24 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/redux.git"
+    "url": "https://github.com/rackt/redux.git"
   },
-  "keywords": [
-    "react",
-    "reactjs",
-    "hot",
-    "reload",
-    "hmr",
-    "live",
-    "edit",
-    "webpack",
-    "flux"
-  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/redux/issues"
+    "url": "https://github.com/rackt/redux/issues"
   },
-  "homepage": "https://github.com/gaearon/redux#readme",
+  "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "react": "^0.13.3",
     "react-redux": "^0.8.0",
