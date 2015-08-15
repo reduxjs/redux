@@ -432,10 +432,13 @@ render() {
 Conveniently, this gives your components access to the router state!
 You can also upgrade to React Router 1.0 which shouldn’t have this problem. (Let us know if it does!)
 
-### I have some weird context error
+### Could not find "store" in either the context or props
 
-If you have context issues, [make sure you don’t have duplicate React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) on the page.
-Also make sure you didn’t forget to wrap your root component in [`<Provider>`](#provider-store).
+If you have context issues,
+
+1. [Make sure you don’t have duplicate React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) on the page.
+2. Make sure you didn’t forget to wrap your root component in [`<Provider>`](#provider-store).
+3. If you use React Router, something like `<Provider>{() => routes}</Provider>` won’t work. Due to the way context works in React 0.13, it’s important that the `<Provider>` children are *created* inside that function. Just referencing an outside variable doesn’t do the trick. Instead of `<Provider>{() => routes}</Provider>`, write `<Provider>{createRoutes}</Provider>` where `createRoutes()` is a functional that actually *creates* (and returns) the routes.
 
 ## License
 
