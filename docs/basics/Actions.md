@@ -106,7 +106,7 @@ The `dispatch()` function can be accessed directly from the store as [`store.dis
 
 export const ADD_TODO = 'ADD_TODO';
 export const COMPLETE_TODO = 'COMPLETE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
 
 /*
  * other constants
