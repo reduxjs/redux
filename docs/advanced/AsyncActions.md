@@ -19,7 +19,7 @@ Even if you call an asynchronous API, you need to dispatch actions to change the
   The reducers may handle this action by merging the new data into the state they manage and resetting `isFetching`. The UI would hide the spinner, and display the fetched data.
 
 * **An action informing the reducers that the request failed.**
-  
+
   The reducers may handle this action by resetting `isFetching`. Maybe, some reducers will also want to store the error message so the UI can display it.
 
 You may use a dedicated `status` field in your actions:
@@ -34,8 +34,8 @@ Or you can define separate types for them:
 
 ```js
 { type: 'FETCH_POSTS_REQUEST' }
-{ type: 'FETCH_POSTS_SUCCESS', error: 'Oops' }
-{ type: 'FETCH_POSTS_FAILURE', response: { ... } }
+{ type: 'FETCH_POSTS_FAILURE', error: 'Oops' }
+{ type: 'FETCH_POSTS_SUCCESS', response: { ... } }
 ```
 
 Choosing whether to use a single action type with flags, or multiple action types, is up to you. It’s a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
