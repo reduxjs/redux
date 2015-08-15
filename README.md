@@ -52,7 +52,7 @@ npm install --save-dev redux-devtools
 
 The whole state of your app is stored in an object tree inside a single *store*.  
 The only way to change the state tree is to emit an *action*, an object describing what happened.  
-To specify how the state tree is transformed by the actions, you write pure *reducers*.
+To specify how the actions transform the state tree, you write pure *reducers*.
 
 That’s it!
 
@@ -81,7 +81,7 @@ function counter(state = 0, action) {
   }
 }
 
-// Create a Redux store that holds the state of your app.
+// Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
 let store = createStore(counter);
 
