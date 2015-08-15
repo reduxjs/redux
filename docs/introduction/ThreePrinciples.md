@@ -45,7 +45,7 @@ store.dispatch({
 
 **To specify how the state tree is transformed by actions, you write pure [reducers](../Glossary.md#reducer).**
 
-Reducers are just pure functions that take the previous state and an action, and return the next state. You can start with a single reducer, but as your app grows, you can split it into smaller reducers that manage specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.
+Reducers are just pure functions that take the previous state and an action, and return the next state. Remember to return new state objects, instead of mutating the previous state. You can start with a single reducer, but as your app grows, you can split it into smaller reducers that manage specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
