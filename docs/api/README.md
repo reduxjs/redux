@@ -23,7 +23,7 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
 
 ### Importing
 
-Every function described below is a top-level export. You can import any of them like this:
+Every function described above is a top-level export. You can import any of them like this:
 
 #### ES6
 
