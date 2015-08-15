@@ -316,10 +316,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 
 // applyMiddleware takes createStore() and returns
 // a function with a compatible API.
-let createStoreWithMiddleware = applyMiddleware(
-  logger,
-  crashReporter
-)(createStore);
+let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore);
 
 // Use it like you would use createStore()
 let todoApp = combineReducers(reducers);
