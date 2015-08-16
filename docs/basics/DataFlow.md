@@ -87,7 +87,7 @@ The data lifecycle in any Redux app follows these 4 steps:
     };
     ```
 
-  While [`combineReducers()`](../api/combineReducers.md) is a handy helper utility, but you don’t have to use it; feel free to write your own root reducer!
+  While [`combineReducers()`](../api/combineReducers.md) is a handy helper utility, you don’t have to use it; feel free to write your own root reducer!
 
 4. **The Redux store saves the complete state tree returned by the root reducer.**
 
