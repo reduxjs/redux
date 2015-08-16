@@ -19,7 +19,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      'redux': path.join(__dirname, '..', '..', 'src')
+      'redux': path.join(__dirname, '..', '..', '..', 'src')
     },
     extensions: ['', '.js']
   },
@@ -32,7 +32,11 @@ module.exports = {
     }, {
       test: /\.js$/,
       loaders: ['babel'],
-      include: path.join(__dirname, '..', '..', 'src')
+      include: path.join(__dirname, '..', '..', '..', 'src')
+    }, {
+      test: /\.css?$/,
+      loaders: ['style', 'raw'],
+      include: __dirname
     }]
   }
 };
