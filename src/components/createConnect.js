@@ -30,8 +30,8 @@ export default function createConnect(React) {
       wrapActionCreators(mapDispatchToProps) :
       mapDispatchToProps || defaultMapDispatchToProps;
     const finalMergeProps = mergeProps || defaultMergeProps;
-    const shouldUpdateStateProps = finalMapStateToProps.length >= 2;
-    const shouldUpdateDispatchProps = finalMapDispatchToProps.length >= 2;
+    const shouldUpdateStateProps = finalMapStateToProps.length > 1;
+    const shouldUpdateDispatchProps = finalMapDispatchToProps.length > 1;
 
     // Helps track hot reloading.
     const version = nextVersion++;
