@@ -30,13 +30,18 @@ export default function createConnect(React) {
       wrapActionCreators(mapDispatchToProps) :
       mapDispatchToProps || defaultMapDispatchToProps;
     const finalMergeProps = mergeProps || defaultMergeProps;
+    const shouldUpdateStateProps = finalMapStateToProps.length >= 2;
+    const shouldUpdateDispatchProps = finalMapDispatchToProps.length >= 2;
 
     // Helps track hot reloading.
     const version = nextVersion++;
 
-    function computeStateProps(store) {
+    function computeStateProps(store, props) {
       const state = store.getState();
-      const stateProps = finalMapStateToProps(state);
+      const stateProps = shouldUpdateStateProps ?
+        finalMapStateToProps(state, props) :
+        finalMapStateToProps(state);
+
       invariant(
         isPlainObject(stateProps),
         '`mapStateToProps` must return an object. Instead received %s.',
@@ -45,9 +50,12 @@ export default function createConnect(React) {
       return stateProps;
     }
 
-    function computeDispatchProps(store) {
+    function computeDispatchProps(store, props) {
       const { dispatch } = store;
-      const dispatchProps = finalMapDispatchToProps(dispatch);
+      const dispatchProps = shouldUpdateDispatchProps ?
+        finalMapDispatchToProps(dispatch, props) :
+        finalMapDispatchToProps(dispatch);
+
       invariant(
         isPlainObject(dispatchProps),
         '`mapDispatchToProps` must return an object. Instead received %s.',
@@ -95,15 +103,15 @@ export default function createConnect(React) {
             `or explicitly pass "store" as a prop to "${this.constructor.displayName}".`
           );
 
-          this.stateProps = computeStateProps(this.store);
-          this.dispatchProps = computeDispatchProps(this.store);
+          this.stateProps = computeStateProps(this.store, props);
+          this.dispatchProps = computeDispatchProps(this.store, props);
           this.state = {
             props: this.computeNextState()
           };
         }
 
         recomputeStateProps() {
-          const nextStateProps = computeStateProps(this.store);
+          const nextStateProps = computeStateProps(this.store, this.props);
           if (shallowEqual(nextStateProps, this.stateProps)) {
             return false;
           }
@@ -113,7 +121,7 @@ export default function createConnect(React) {
         }
 
         recomputeDispatchProps() {
-          const nextDispatchProps = computeDispatchProps(this.store);
+          const nextDispatchProps = computeDispatchProps(this.store, this.props);
           if (shallowEqual(nextDispatchProps, this.dispatchProps)) {
             return false;
           }
@@ -123,6 +131,16 @@ export default function createConnect(React) {
         }
 
         computeNextState(props = this.props) {
+          const propsHaveChanged = !shallowEqual(this.props, props);
+
+          if (shouldUpdateStateProps && propsHaveChanged) {
+            this.stateProps = computeStateProps(this.store, props);
+          }
+
+          if (shouldUpdateDispatchProps && propsHaveChanged) {
+            this.dispatchProps = computeDispatchProps(this.store, props);
+          }
+
           return computeNextState(
             this.stateProps,
             this.dispatchProps,
