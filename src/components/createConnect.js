@@ -110,8 +110,16 @@ export default function createConnect(React) {
           };
         }
 
-        recomputeStateProps() {
-          const nextStateProps = computeStateProps(this.store, this.props);
+        computeNextState(props = this.props) {
+          return computeNextState(
+            this.stateProps,
+            this.dispatchProps,
+            props
+          );
+        }
+
+        updateStateProps(props = this.props) {
+          const nextStateProps = computeStateProps(this.store, props);
           if (shallowEqual(nextStateProps, this.stateProps)) {
             return false;
           }
@@ -120,8 +128,8 @@ export default function createConnect(React) {
           return true;
         }
 
-        recomputeDispatchProps() {
-          const nextDispatchProps = computeDispatchProps(this.store, this.props);
+        updateDispatchProps(props = this.props) {
+          const nextDispatchProps = computeDispatchProps(this.store, props);
           if (shallowEqual(nextDispatchProps, this.dispatchProps)) {
             return false;
           }
@@ -130,25 +138,7 @@ export default function createConnect(React) {
           return true;
         }
 
-        computeNextState(props = this.props) {
-          const propsHaveChanged = !shallowEqual(this.props, props);
-
-          if (shouldUpdateStateProps && propsHaveChanged) {
-            this.stateProps = computeStateProps(this.store, props);
-          }
-
-          if (shouldUpdateDispatchProps && propsHaveChanged) {
-            this.dispatchProps = computeDispatchProps(this.store, props);
-          }
-
-          return computeNextState(
-            this.stateProps,
-            this.dispatchProps,
-            props
-          );
-        }
-
-        recomputeState(props = this.props) {
+        updateState(props = this.props) {
           const nextState = this.computeNextState(props);
           if (!shallowEqual(nextState, this.state.props)) {
             this.setState({
@@ -181,7 +171,15 @@ export default function createConnect(React) {
 
         componentWillReceiveProps(nextProps) {
           if (!shallowEqual(nextProps, this.props)) {
-            this.recomputeState(nextProps);
+            if (shouldUpdateStateProps) {
+              this.updateStateProps(nextProps);
+            }
+
+            if (shouldUpdateDispatchProps) {
+              this.updateDispatchProps(nextProps);
+            }
+
+            this.updateState(nextProps);
           }
         }
 
@@ -190,8 +188,8 @@ export default function createConnect(React) {
         }
 
         handleChange() {
-          if (this.recomputeStateProps()) {
-            this.recomputeState();
+          if (this.updateStateProps()) {
+            this.updateState();
           }
         }
 
@@ -227,9 +225,9 @@ export default function createConnect(React) {
 
           // Update the state and bindings.
           this.trySubscribe();
-          this.recomputeStateProps();
-          this.recomputeDispatchProps();
-          this.recomputeState();
+          this.updateStateProps();
+          this.updateDispatchProps();
+          this.updateState();
         };
       }
 
