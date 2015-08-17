@@ -123,6 +123,8 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 * [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
 * [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
 
+If you’re new to the NPM ecosystem and have troubles getting a project up and running, or aren’t sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
+
 ### Discussion
 
 Join the **#redux** channel of the [Reactiflux](http://reactiflux.com) Slack community.
