@@ -225,7 +225,7 @@ describe('React', () => {
       expect('x' in propsAfter).toEqual(false, 'x prop must be removed');
     });
 
-    it('should remove undefined props without mapDispatchToProps', () => {
+    it('should remove undefined props without mapDispatch', () => {
       const store = createStore(() => ({}));
       let props = { x: true };
       let container;
@@ -403,6 +403,208 @@ describe('React', () => {
       ).toNotThrow();
       const decorated = TestUtils.findRenderedComponentWithType(container, Container);
       expect(decorated.isSubscribed()).toBe(true);
+    });
+
+    it('should not invoke mapState when props change if it only has one argument', () => {
+      const store = createStore(stringBuilder);
+
+      let invocationCount = 0;
+
+      @connect(() => {
+        invocationCount++;
+        return {};
+      })
+      class WithoutProps extends Component {
+        render() {
+          return <div {...this.props}/>;
+        }
+      }
+
+      class OuterComponent extends Component {
+        constructor() {
+          super();
+          this.state = { foo: 'FOO' };
+        }
+
+        setFoo(foo) {
+          this.setState({ foo });
+        }
+
+        render() {
+          return (
+            <div>
+              <WithoutProps {...this.state} />
+            </div>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <OuterComponent ref='outerComponent' />
+          )}
+        </Provider>
+      );
+
+      tree.refs.outerComponent.setFoo('BAR');
+      tree.refs.outerComponent.setFoo('DID');
+
+      expect(invocationCount).toEqual(2);
+    });
+
+    it('should invoke mapState every time props are changed if it has a second argument', () => {
+      const store = createStore(stringBuilder);
+
+      let propsPassedIn;
+      let invocationCount = 0;
+
+      @connect((state, props) => {
+        invocationCount++;
+        propsPassedIn = props;
+        return {};
+      })
+      class WithProps extends Component {
+        render() {
+          return <div {...this.props}/>;
+        }
+      }
+
+      class OuterComponent extends Component {
+        constructor() {
+          super();
+          this.state = { foo: 'FOO' };
+        }
+
+        setFoo(foo) {
+          this.setState({ foo });
+        }
+
+        render() {
+          return (
+            <div>
+              <WithProps {...this.state} />
+            </div>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <OuterComponent ref='outerComponent' />
+          )}
+        </Provider>
+      );
+
+      tree.refs.outerComponent.setFoo('BAR');
+      tree.refs.outerComponent.setFoo('BAZ');
+
+      expect(invocationCount).toEqual(4);
+      expect(propsPassedIn).toEqual({
+        foo: 'BAZ'
+      });
+    });
+
+    it('should not invoke mapDispatch when props change if it only has one argument', () => {
+      const store = createStore(stringBuilder);
+
+      let invocationCount = 0;
+
+      @connect(null, () => {
+        invocationCount++;
+        return {};
+      })
+      class WithoutProps extends Component {
+        render() {
+          return <div {...this.props}/>;
+        }
+      }
+
+      class OuterComponent extends Component {
+        constructor() {
+          super();
+          this.state = { foo: 'FOO' };
+        }
+
+        setFoo(foo) {
+          this.setState({ foo });
+        }
+
+        render() {
+          return (
+            <div>
+              <WithoutProps {...this.state} />
+            </div>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <OuterComponent ref='outerComponent' />
+          )}
+        </Provider>
+      );
+
+      tree.refs.outerComponent.setFoo('BAR');
+      tree.refs.outerComponent.setFoo('DID');
+
+      expect(invocationCount).toEqual(1);
+    });
+
+    it('should invoke mapDispatch every time props are changed if it has a second argument', () => {
+      const store = createStore(stringBuilder);
+
+      let propsPassedIn;
+      let invocationCount = 0;
+
+      @connect(null, (dispatch, props) => {
+        invocationCount++;
+        propsPassedIn = props;
+        return {};
+      })
+      class WithProps extends Component {
+        render() {
+          return <div {...this.props}/>;
+        }
+      }
+
+      class OuterComponent extends Component {
+        constructor() {
+          super();
+          this.state = { foo: 'FOO' };
+        }
+
+        setFoo(foo) {
+          this.setState({ foo });
+        }
+
+        render() {
+          return (
+            <div>
+              <WithProps {...this.state} />
+            </div>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          {() => (
+            <OuterComponent ref='outerComponent' />
+          )}
+        </Provider>
+      );
+
+      tree.refs.outerComponent.setFoo('BAR');
+      tree.refs.outerComponent.setFoo('BAZ');
+
+      expect(invocationCount).toEqual(3);
+      expect(propsPassedIn).toEqual({
+        foo: 'BAZ'
+      });
     });
 
     it('should pass dispatch and avoid subscription if arguments are falsy', () => {
