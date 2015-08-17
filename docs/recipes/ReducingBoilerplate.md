@@ -215,7 +215,7 @@ class Posts extends Component {
   }
 
   render() {
-    if (this.props.isLoading) {
+    if (this.props.isFetching) {
       return <p>Loading...</p>;
     }
 
@@ -297,7 +297,7 @@ class Posts extends Component {
   }
 
   render() {
-    if (this.props.isLoading) {
+    if (this.props.isFetching) {
       return <p>Loading...</p>;
     }
 
