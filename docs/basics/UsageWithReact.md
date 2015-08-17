@@ -52,7 +52,7 @@ It is advisable that only top-level components of your app (such as route handle
 
 In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest that you pass props down whenever possible.
 
-## Desigining Component Hierarchy
+## Designing Component Hierarchy
 
 Remember how we [designed the shape of the root state object](Reducers.md)? It’s time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
 
