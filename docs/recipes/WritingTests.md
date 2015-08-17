@@ -140,6 +140,55 @@ describe('todos reducer', () => {
   });
 ```
 
+### Middleware
+
+Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
+
+#### Example
+
+```js
+import expect from 'expect';
+import * as types from '../../constants/ActionTypes';
+import singleDispatch from '../../middleware/singleDispatch';
+
+const fakeStore = fakeData => ({
+  getState() {
+    return fakeData;
+  }
+});
+
+const dispatchWithStoreOf = (storeData, action) => {
+  let dispatched = null;
+  const dispatch = singleDispatch(fakeStore(storeData))(action => dispatched = action);
+  dispatch(action);
+  return dispatched;
+};
+
+describe('middleware', () => {
+  it('should dispatch if store is empty', () => {
+    const action = {
+      type: types.ADD_TODO
+    };
+    
+    expect(
+      dispatchWithStoreOf({}, action)
+    ).toEqual(action);
+  });
+
+  it('should not dispatch if store already has type', () => {
+    const action = {
+      type: types.ADD_TODO
+    };
+    
+    expect(
+      dispatchWithStoreOf({
+        [types.ADD_TODO]: 'dispatched'
+      }, action)
+    ).toNotExist();
+  });
+});
+```
+
 ### Components
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
