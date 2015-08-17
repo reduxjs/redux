@@ -230,7 +230,7 @@ Connects a React component to a Redux store.
 
 * [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props. If `ownProps` is passed in as a second argument then `mapStateToProps` will be re-invoked whenever the component receives new props.
 
-* [`mergeProps(stateProps, dispatchProps, parentProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `{ ...parentProps, ...stateProps, ...dispatchProps }` is used by default.
+* [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `{ ...ownProps, ...stateProps, ...dispatchProps }` is used by default.
 
 #### Returns
 
@@ -372,6 +372,18 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
+##### Inject `todos` of a specific user depending on props
+
+```js
+import * as actionCreators from './actionCreators';
+
+function mapStateToProps(state, ownProps) {
+  return { todos: state.todos[ownProps.userId] };
+}
+
+export default connect(mapStateToProps)(TodoApp);
+```
+
 ##### Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
 
 ```js
@@ -381,10 +393,10 @@ function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-function mergeProps(stateProps, dispatchProps, parentProps) {
-  return Object.assign({}, parentProps, {
-    todos: stateProps.todos[parentProps.userId],
-    addTodo: (text) => dispatchProps.addTodo(parentProps.userId, text)
+function mergeProps(stateProps, dispatchProps, ownProps) {
+  return Object.assign({}, ownProps, {
+    todos: stateProps.todos[ownProps.userId],
+    addTodo: (text) => dispatchProps.addTodo(ownProps.userId, text)
   });
 }
 
