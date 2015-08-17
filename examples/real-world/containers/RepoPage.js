@@ -71,36 +71,28 @@ RepoPage.propTypes = {
   loadStargazers: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state) {
-  return {
-    entities: state.entities,
-    stargazersByRepo: state.pagination.stargazersByRepo
-  };
-}
-
-function mergeProps(stateProps, dispatchProps, ownProps) {
-  const { entities, stargazersByRepo } = stateProps;
+function mapStateToProps(state, ownProps) {
   const { login, name } = ownProps.params;
+  const {
+    pagination: { stargazersByRepo },
+    entities: { users, repos }
+  } = state;
 
   const fullName = `${login}/${name}`;
-  const repo = entities.repos[fullName];
-  const owner = entities.users[login];
-
   const stargazersPagination = stargazersByRepo[fullName] || { ids: [] };
-  const stargazers = stargazersPagination.ids.map(id => entities.users[id]);
+  const stargazers = stargazersPagination.ids.map(id => users[id]);
 
-  return Object.assign({}, dispatchProps, {
+  return {
     fullName,
     name,
-    repo,
-    owner,
     stargazers,
-    stargazersPagination
-  });
+    stargazersPagination,
+    repo: repos[fullName],
+    owner: users[login]
+  };
 }
 
 export default connect(
   mapStateToProps,
-  { loadRepo, loadStargazers },
-  mergeProps
+  { loadRepo, loadStargazers }
 )(RepoPage);

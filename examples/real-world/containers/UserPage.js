@@ -72,33 +72,27 @@ UserPage.propTypes = {
   loadStarred: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state) {
-  return {
-    entities: state.entities,
-    starredByUser: state.pagination.starredByUser
-  };
-}
-
-function mergeProps(stateProps, dispatchProps, ownProps) {
-  const { entities, starredByUser } = stateProps;
+function mapStateToProps(state, ownProps) {
   const { login } = ownProps.params;
+  const {
+    pagination: { starredByUser },
+    entities: { users, repos }
+  } = state;
 
-  const user = entities.users[login];
   const starredPagination = starredByUser[login] || { ids: [] };
-  const starredRepos = starredPagination.ids.map(id => entities.repos[id]);
-  const starredRepoOwners = starredRepos.map(repo => entities.users[repo.owner]);
+  const starredRepos = starredPagination.ids.map(id => repos[id]);
+  const starredRepoOwners = starredRepos.map(repo => users[repo.owner]);
 
-  return Object.assign({}, dispatchProps, {
+  return {
     login,
-    user,
-    starredPagination,
     starredRepos,
-    starredRepoOwners
-  });
+    starredRepoOwners,
+    starredPagination,
+    user: users[login]
+  };
 }
 
 export default connect(
   mapStateToProps,
-  { loadUser, loadStarred },
-  mergeProps
+  { loadUser, loadStarred }
 )(UserPage);
