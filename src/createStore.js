@@ -1,4 +1,5 @@
 import isPlainObject from './utils/isPlainObject';
+import { StateAndEffect } from './utils/sideEffects';
 
 /**
  * These are private action types reserved by Redux.
@@ -101,6 +102,15 @@ export default function createStore(reducer, initialState) {
     try {
       isDispatching = true;
       currentState = currentReducer(currentState, action);
+
+      if(currentState instanceof StateAndEffect) {
+        var effect = currentState.effect;
+        // Since side effects may dispatch at any time, don't run them
+        // immediately since we don't want cascading dispatches
+        setTimeout(() => effect(dispatch, getState), 0);
+
+        currentState = currentState.state;
+      }
     } finally {
       isDispatching = false;
     }
