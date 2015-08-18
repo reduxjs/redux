@@ -1,4 +1,4 @@
-import { ADD_TODO, DISPATCH_IN_MIDDLE, THROW_ERROR } from './actionTypes';
+import { ADD_TODO, DISPATCH_IN_MIDDLE, THROW_ERROR, UNKNOWN_ACTION } from './actionTypes';
 
 export function addTodo(text) {
   return { type: ADD_TODO, text };
@@ -30,4 +30,10 @@ export function throwError() {
   return {
     type: THROW_ERROR
   };
+}
+
+export function unknownAction() {
+  return {
+    type: UNKNOWN_ACTION
+  }
 }
