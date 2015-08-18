@@ -1,6 +1,6 @@
 import expect from 'expect';
 import { createStore, combineReducers } from '../src/index';
-import { addTodo, dispatchInMiddle, throwError } from './helpers/actionCreators';
+import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators';
 import * as reducers from './helpers/reducers';
 
 describe('createStore', () => {
@@ -49,7 +49,7 @@ describe('createStore', () => {
     const store = createStore(reducers.todos);
     expect(store.getState()).toEqual([]);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(store.getState()).toEqual([]);
 
     store.dispatch(addTodo('Hello'));
@@ -78,7 +78,7 @@ describe('createStore', () => {
       text: 'Hello'
     }]);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(store.getState()).toEqual([{
       id: 1,
       text: 'Hello'
@@ -163,11 +163,11 @@ describe('createStore', () => {
     const listenerB = expect.createSpy(() => {});
 
     let unsubscribeA = store.subscribe(listenerA);
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(listenerA.calls.length).toBe(1);
     expect(listenerB.calls.length).toBe(0);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(0);
 
@@ -175,7 +175,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(0);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(1);
 
@@ -183,7 +183,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(1);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
@@ -191,7 +191,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
@@ -199,7 +199,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
-    store.dispatch({});
+    store.dispatch(unknownAction());
     expect(listenerA.calls.length).toBe(4);
     expect(listenerB.calls.length).toBe(2);
   });
@@ -217,8 +217,8 @@ describe('createStore', () => {
     });
     store.subscribe(listenerC);
 
-    store.dispatch({});
-    store.dispatch({});
+    store.dispatch(unknownAction());
+    store.dispatch(unknownAction());
 
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(1);
@@ -241,7 +241,7 @@ describe('createStore', () => {
   it('should only accept plain object actions', () => {
     const store = createStore(reducers.todos);
     expect(() =>
-      store.dispatch({})
+      store.dispatch(unknownAction())
     ).toNotThrow();
 
     function AwesomeMap() { }
@@ -281,7 +281,7 @@ describe('createStore', () => {
     const store = createStore(reducers.dispatchInTheMiddleOfReducer);
 
     expect(() =>
-      store.dispatch(dispatchInMiddle(store.dispatch.bind(store, {})))
+      store.dispatch(dispatchInMiddle(store.dispatch.bind(store, unknownAction())))
     ).toThrow(/may not dispatch/);
   });
 
@@ -292,7 +292,14 @@ describe('createStore', () => {
     ).toThrow();
 
     expect(() =>
-      store.dispatch({})
+      store.dispatch(unknownAction())
     ).toNotThrow();
+  });
+
+  it('should only accept actions with a `type`', () => {
+    const store = createStore(reducers.todos);
+    expect(() =>
+      store.dispatch({})
+    ).toThrow(/Actions must specify a `type`/);
   });
 });
