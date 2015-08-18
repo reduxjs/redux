@@ -30,7 +30,7 @@ Why is this beneficial? **It is often claimed that constants are unnecessary, an
 
 * It helps keep the naming consistent because all action types are gathered in a single place.
 * Sometimes you want to see all existing actions before working on a new feature. It may be that the action you need was already added by somebody on the team, but you didn’t know.
-* The list of action types that were added, removed, and changed in a Pull Request, helps everyone on the team keep track of scope and implementation of new features.
+* The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
 * If you make a typo when importing an action constant, you will get `undefined`. This is much easier to notice than a typo when you wonder why nothing happens when the action is dispatched.
 
 It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgment.
@@ -73,7 +73,7 @@ dispatch(addTodo('Use Redux'))
 
 Action creators have often been criticized as boilerplate. Well, you don’t have to write them! **You can use object literals if you feel this better suits your project.** There are, however, some benefits for writing action creators you should know about.
 
-Let’s say a designer comes back to us after reviewing our prototype, and tells that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with [redux-thunk](https://github.com/gaearon/redux-thunk) middleware an adding an early exit:
+Let’s say a designer comes back to us after reviewing our prototype, and tells that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with [redux-thunk](https://github.com/gaearon/redux-thunk) middleware and adding an early exit:
 
 ```js
 function addTodoWithoutCheck(text) {
@@ -97,7 +97,7 @@ export function addTodo(text) {
 }
 ```
 
-We just modified how `addTodo` action creator behaves, completely invisible to the calling code. **We don’t have to worry about looking at each place where todos are being added, to make sure they have this check.** Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions, and it’s very handy when the application is under heavy development, and the requirements change often.
+We just modified how `addTodo` action creator behaves, completely invisible to the calling code. **We don’t have to worry about looking at each place where todos are being added, to make sure they have this check.** Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions. It’s very handy when the application is under heavy development, and the requirements change often.
 
 ### Generating Action Creators
 
@@ -497,4 +497,4 @@ function createReducer(initialState, handlers) {
 
 This wasn’t difficult, was it? Redux doesn’t provide such a helper function by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to a “catch all” handler. All of this depends on the conventions you choose for your team on a specific project.
 
-Redux reducer API is `(state, action) => state`, but how you create those reducers is up to you.
+The Redux reducer API is `(state, action) => state`, but how you create those reducers is up to you.
