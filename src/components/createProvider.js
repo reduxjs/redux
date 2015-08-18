@@ -10,7 +10,8 @@ export default function createProvider(React) {
     };
 
     static propTypes = {
-      children: PropTypes.func.isRequired
+      children: PropTypes.func.isRequired,
+      store: storeShape.isRequired
     };
 
     getChildContext() {
