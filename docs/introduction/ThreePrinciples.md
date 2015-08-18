@@ -71,7 +71,7 @@ function todos(state = [], action) {
         completed: true
       }),
       ...state.slice(action.index + 1)
-    ]
+    ];
   default:
     return state;
   }
