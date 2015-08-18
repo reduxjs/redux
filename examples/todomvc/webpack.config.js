@@ -17,12 +17,6 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
-  resolve: {
-    alias: {
-      'redux': path.join(__dirname, '..', '..', 'src')
-    },
-    extensions: ['', '.js']
-  },
   module: {
     loaders: [{
       test: /\.js$/,
