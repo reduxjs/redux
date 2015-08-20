@@ -307,7 +307,7 @@ store.dispatch(selectReddit('reactjs'));
 
 store.dispatch(requestPosts('reactjs'));
 fetch(`http://www.reddit.com/r/${reddit}.json`)
-  .then(req => req.json())
+  .then(response => response.json())
   .then(json =>
     store.dispatch(receivePosts(reddit, json))
   )
@@ -378,7 +378,7 @@ export function fetchPosts(reddit) {
     // Return a promise to wait for
     // (this is not required by thunk middleware, but it is convenient for us)
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
-      .then(req => req.json())
+      .then(response => response.json())
       .then(json =>
         // We can dispatch many times!
         dispatch(receivePosts(reddit, json))
@@ -418,7 +418,7 @@ function fetchPosts(reddit) {
   return dispatch => {
     dispatch(requestPosts(reddit));
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
-      .then(req => req.json())
+      .then(response => response.json())
       .then(json => dispatch(receivePosts(reddit, json)));
   };
 }
