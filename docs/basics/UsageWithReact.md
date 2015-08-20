@@ -324,7 +324,7 @@ class App extends Component {
             dispatch(completeTodo(index))
           } />
         <Footer
-          filter={visibilityFilter}
+          filter={this.props.visibilityFilter}
           onFilterChange={nextFilter =>
             dispatch(setVisibilityFilter(nextFilter))
           } />
