@@ -1,6 +1,6 @@
 # `createStore(reducer, [initialState])`
 
-Creates a Redux [store](Store.md) that holds the complete state tree of your app.  
+Creates a Redux [store](Store.md) that holds the complete state tree of your app.
 There should only be a single store in your app.
 
 #### Arguments

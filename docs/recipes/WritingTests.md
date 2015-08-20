@@ -4,7 +4,7 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 ### Setting Up
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.  
+We recommend [Mocha](http://mochajs.org/) as the testing engine.
 Note that it runs in a Node environment, so you won’t have access to DOM.
 
 ```

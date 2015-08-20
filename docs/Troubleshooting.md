@@ -1,6 +1,6 @@
 # Troubleshooting
 
-This is a place to share common problems and solutions to them.  
+This is a place to share common problems and solutions to them.
 The examples use React, but you should still find them useful if you use something else.
 
 ### Nothing happens when I dispatch an action
@@ -74,7 +74,7 @@ return [
   ...state.slice(action.index + 1)
 ]
 
-// After
+// After:
 return update(state, {
   [action.index]: {
     completed: {
@@ -188,5 +188,5 @@ You can then pass `dispatch` down to other components manually, if you want to.
 
 ## Something else doesn’t work
 
-Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/rackt/redux/issues).  
+Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/rackt/redux/issues).
 If you figure it out, [edit this document](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.
