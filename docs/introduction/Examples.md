@@ -1,6 +1,6 @@
 # Examples
 
-Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).  
+Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).
 **To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
 
 >##### Note on Copying

@@ -1,10 +1,10 @@
 # [Redux](http://rackt.github.io/redux)
 
-Redux is a predictable state container for JavaScript apps.  
+Redux is a predictable state container for JavaScript apps.
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/gaearon/redux-devtools).
 
-You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.  
+You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.
 It is tiny (2kB) and has no dependencies.
 
 [![build status](https://img.shields.io/travis/rackt/redux/master.svg?style=flat-square)](https://travis-ci.org/rackt/redux) 
@@ -15,13 +15,13 @@ It is tiny (2kB) and has no dependencies.
 
 ### Testimonials
 
->[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)  
+>[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
 >Jing Chen, creator of Flux
 
->[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
+>[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
 >Bill Fisher, creator of Flux
 
->[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
+>[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
 >André Staltz, creator of Cycle
 
 ### Developer Experience
@@ -30,7 +30,7 @@ I wrote Redux while working on my React Europe talk called [“Hot Reloading wit
 
 ### Influences
 
-Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
+Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
 Whether you have used them or not, Redux takes a few minutes to get started with.
 
 ### Installation
@@ -50,8 +50,8 @@ npm install --save-dev redux-devtools
 
 ### The Gist
 
-The whole state of your app is stored in an object tree inside a single *store*.  
-The only way to change the state tree is to emit an *action*, an object describing what happened.  
+The whole state of your app is stored in an object tree inside a single *store*.
+The only way to change the state tree is to emit an *action*, an object describing what happened.
 To specify how the actions transform the state tree, you write pure *reducers*.
 
 That’s it!
@@ -146,7 +146,7 @@ Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `
 
 ### Patrons
 
-The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
+The work on Redux was [funded by the community](https://www.patreon.com/reactdx).
 Meet some of the outstanding companies that made it possible:
 
 * [Webflow](http://webflow.com/)

@@ -1,9 +1,9 @@
 # Store
 
-A store holds the whole [state tree](../Glossary.md#state) of your application.  
-The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.  
+A store holds the whole [state tree](../Glossary.md#state) of your application.
+The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.
 
-A store is not a class. It’s just an object with a few methods on it.  
+A store is not a class. It’s just an object with a few methods on it.
 To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
 
 >##### A Note for Flux Users
@@ -22,7 +22,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 
 ### <a id='getState'></a>[`getState()`](#getState)
 
-Returns the current state tree of your application.  
+Returns the current state tree of your application.
 It is equal to the last value returned by the store’s reducer.
 
 #### Returns
@@ -122,7 +122,7 @@ handleChange();
 
 >##### Deprecated
 
->This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
+>This API has been [deprecated](https://github.com/rackt/redux/issues/350).
 >It will be removed when we find a better solution for this problem.
 
 Returns the reducer currently used by the store to calculate the state.
@@ -139,7 +139,7 @@ It is an advanced API. You might only need this if you implement a hot reloading
 
 >##### Deprecated
 
->This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
+>This API has been [deprecated](https://github.com/rackt/redux/issues/350).
 >It will be removed when we find a better solution for this problem.
 
 Replaces the reducer currently used by the store to calculate the state.
