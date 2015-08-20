@@ -2,6 +2,7 @@ import { ActionTypes } from '../createStore';
 import isPlainObject from '../utils/isPlainObject';
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
+import { StateAndEffect, withSideEffect } from '../utils/sideEffects';
 
 function getErrorMessage(key, action) {
   var actionType = action && action.type;
@@ -95,10 +96,15 @@ export default function combineReducers(reducers) {
   var stateShapeVerified;
 
   return function combination(state = defaultState, action) {
+    var sideEffects = [];
     var finalState = mapValues(finalReducers, (reducer, key) => {
       var newState = reducer(state[key], action);
       if (typeof newState === 'undefined') {
         throw new Error(getErrorMessage(key, action));
+      }
+      else if(newState instanceof StateAndEffect) {
+        sideEffects.push(newState.effect);
+        return newState.state;
       }
       return newState;
     });
@@ -119,6 +125,11 @@ export default function combineReducers(reducers) {
       }
     }
 
+    if(sideEffects.length) {
+      return withSideEffect(finalState, (dispatch, getState) => {
+        sideEffects.forEach(e => e(dispatch, getState));
+      });
+    }
     return finalState;
   };
 }
