@@ -83,7 +83,7 @@ Or create a **bound action creator** that automatically dispatches:
 
 ```js
 const boundAddTodo = (text) => dispatch(addTodo(text));
-const boundCompleteTodo = (index) => dispatch(CompleteTodo(index));
+const boundCompleteTodo = (index) => dispatch(completeTodo(index));
 ```
 
 You’ll be able to call them directly:
