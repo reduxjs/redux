@@ -38,6 +38,7 @@ Dispatches an action. This is the only way to trigger a state change.
 The store’s reducing function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
 
 >##### A Note for Flux Users
+
 >If you attempt to call `dispatch` from inside the [reducer](../Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn’t cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
 
 >In Redux, subscriptions are called after the root reducer has returned the new state, so you *may* dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../Glossary.md#action-creator).
