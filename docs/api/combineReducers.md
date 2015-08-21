@@ -82,13 +82,7 @@ export default combineReducers({
 
 ```js
 import { createStore, combineReducers } from 'redux';
-
 import reducer from './reducers/index';
-console.log(reducers);
-// {
-//   todos: Function,
-//   counter: Function
-// }
 
 let store = createStore(reducer);
 console.log(store.getState());
