@@ -1,5 +1,6 @@
 import path from 'path';
 import Express from 'express';
+import qs from 'qs';
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -17,8 +18,15 @@ app.use(handleRender);
 
 function handleRender(req, res) {
 
+  // Read the counter from the request, if provided
+  const params = qs.parse(req.query);
+  const counter = parseInt(params.counter) || 0;
+
+  // Compile an initial state
+  let initialState = { counter };
+
   // Create a new Redux store instance
-  const store = createStore(counterApp);
+  const store = createStore(counterApp, initialState);
 
   // Render the component to a string
   const html = React.renderToString(
@@ -27,10 +35,10 @@ function handleRender(req, res) {
     </Provider>);
 
   // Grab the initial state from our Redux store
-  const initialState = store.getState();
+  const finalState = store.getState();
 
   // Send the rendered page back to the client
-  res.send(renderFullPage(html, initialState));
+  res.send(renderFullPage(html, finalState));
 }
 
 function renderFullPage(html, initialState) {

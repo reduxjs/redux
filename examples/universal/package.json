@@ -18,9 +18,11 @@
   "dependencies": {
     "babel": "^5.8.21",
     "express": "^4.13.3",
+    "qs": "^4.0.0",
     "react": "^0.13.3",
     "react-redux": "^0.9.0",
     "redux": "^1.0.1",
+    "redux-thunk": "^0.1.0",
     "serve-static": "^1.10.0"
   },
   "devDependencies": {

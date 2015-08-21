@@ -3,53 +3,44 @@
 The most common use case for server-side rendering is to handle the _initial render_ when a user (or search engine crawler) first requests our app.  When the server receives the request, it renders the required component(s) into an HTML string, and then sends it as a response to the client.  From that point on, the client takes over rendering duties.
 
 ### Redux on the server
+
 When using a store like Redux, we must also send the initial state of our app along in our response.  To do this, we need to: create a fresh, new Redux store instance on every request, optionally dispatch some actions, pull the state out of store, and then pass the state along to the client.  On the client side, a new Redux store will be created and initialized with the state provided from the server.
 
 Redux's **_only_** job on the server side is to provide the **initial state** of our app.
 
------
-
-In the following recipe, we are going to look at how to set up server-side rendering, using the [Todo List app](../basics/ExampleTodoList.html) that we built in [Basics](../basics/) as a guide.
-
 ## Setting Up
 
-### File Structure
-We are going to put the actions, reducers, and components from the Todo List app into a `shared/` folder, since they will be used by both the client and server. Note that we have moved our client-side entrypoint into the `client/` folder.
-
-    server.jsx
-    client/index.jsx
-    shared/actions.js
-    shared/reducers.js
-    shared/containers/App.js
-    shared/components/AddTodo.js
-    shared/components/Footer.js
-    shared/components/Todo.js
-    shared/components/TodoList.js
-
+In the following recipe, we are going to look at how to set up server-side rendering. We'll use the simplistic [Counter app](https://github.com/rackt/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
 
 ### Install Packages
+
 For this example, we'll be using [Express](http://expressjs.com/) as a simple web server.
 
 We also need to install the React bindings for Redux, since they are not included in Redux by default.
 
-
-    npm install --save express react-redux
+    npm install --save react-redux express serve-static
 
 
 ## The Server Side
 
-**server.jsx**
+The following is the outline for what our server side is going to look like. We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server. We do the same with the `serve-static` middleware to be able to serve up our client javascript bundle. If you're unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
 
-The following is the outline for what our server side is going to look like.  We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server.  If you're unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
+**server.js**
+
 ```js
-import Express             from 'express';
-import React               from 'react';
-import { createStore }     from 'redux';
-import { Provider }        from 'react-redux';
-import todoApp             from './shared/reducers';
-import App                 from './shared/containers/App';
+import path from 'path';
+import Express from 'express';
+import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import counterApp from './reducers';
+import App from './containers/App';
 
-var app = Express();
+const app = Express();
+const port = 8080;
+
+// Use this middleware to server up static files built into the dist directory
+app.use(require('serve-static')(path.join(__dirname, 'dist')));
 
 // This is fired every time the server side receives a request
 app.use(handleRender);
@@ -58,55 +49,61 @@ app.use(handleRender);
 function handleRender(req, res) { // ... }
 function renderFullPage(html, initialState) { //... }
 
-export default app;
+app.listen(port);
 ```
 
-**Handling The Request**
+### Handling The Request
 
 The first thing that we need to do on every request is create a new Redux store instance. The only purpose of this store instance is to provide the initial state of our application.
 
-When rendering, we will wrap `<App/>`, our root component, inside a `<Provider>` to make the store available to all components in the component tree.
+When rendering, we will wrap `<App/>`, our root component, inside a `<Provider>` to make the store available to all components in the component tree, as we saw in [Usage with React](/docs/basics/UsageWithReact.html).
 
-The key step in server side rendering is to render the initial HTML of our component _**before**_ we send it to the client side.  To do this, we use [React.renderToString](https://facebook.github.io/react/docs/top-level-api.html#react.rendertostring).
+The key step in server side rendering is to render the initial HTML of our component _**before**_ we send it to the client side. To do this, we use [React.renderToString](https://facebook.github.io/react/docs/top-level-api.html#react.rendertostring).
 
 We then get the initial state from our Redux store using **store.getState()**.  We will see how this is passed along in our `renderFullPage` function.
 
 ```js
 function handleRender(req, res) {
-    // Create a new Redux store instance
-    var store = createStore(todoApp);
 
-      // Render the component to a string
-      var html = React.renderToString(
-        <Provider store={store}>
-          { () => <App/> }
-        </Provider>);
+  // Create a new Redux store instance
+  const store = createStore(counterApp);
 
-      // Grab the initial state from our Redux store
-      var initialState = store.getState();
+  // Render the component to a string
+  const html = React.renderToString(
+    <Provider store={store}>
+      { () => <App/> }
+    </Provider>);
 
-      res.send(renderFullPage(html, initialState));
-  }
+  // Grab the initial state from our Redux store
+  const initialState = store.getState();
+
+  // Send the rendered page back to the client
+  res.send(renderFullPage(html, initialState));
+}
 ```
 
-**Inject our initial component HTML and state**
+### Inject our initial component HTML and state
 
 The final step on the server side is to inject our initial component HTML and initial state into a template to be rendered on the client side.  To pass along the state, we add a `<script>` tag that will attach `initialState` to `window.__INITIAL_STATE__`.
 
 The initialState will then be available on the client side by accessing `window.__INITIAL_STATE__`.
+
+We also include our bundle file for the client-side application via a script tag. The `serve-static` middleware included above will serve up this file. We'll see what that file contains in just a bit.
 
 ```js
 function renderFullPage(html, initialState) {
   return `
     <!doctype html>
     <html>
+      <head>
+        <title>Redux Universal Example</title>
+      </head>
       <body>
         <div id="app">${html}</div>
         <script>
-         ${/* put this here for the client to pick up, you'll need your
-              components to pick up this stuff on the first render */}
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
         </script>
+        <script src="/bundle.js"></script>
       </body>
     </html>
     `;
@@ -118,24 +115,23 @@ function renderFullPage(html, initialState) {
 
 The client side is very straightforward.  All we need to do is grab the initial state from `window.__INITIAL_STATE__`, and pass it to our createStore function as the initial state.
 
-Let's take a look at our new `client/index.jsx`:
+Let's take a look at our new client file:
 
-**client/index.jsx**
+**client.js**
+
 ```js
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import App from '../shared/containers/App';
-import todoApp from '../shared/reducers';
+import App from './containers/App';
+import counterApp from './reducers';
 
 const initialState = window.__INITIAL_STATE__;
 
-let store = createStore(todoApp, initialState);
+let store = createStore(counterApp, initialState);
 
 let rootElement = document.getElementById('app');
 React.render(
-  // The child must be wrapped in a function
-  // to work around an issue in React 0.13.
   <Provider store={store}>
     {() => <App/>}
   </Provider>,
@@ -143,11 +139,59 @@ React.render(
 );
 
 ```
-And that's it!  That is all we need to do to implement server side rendering.
 
-From here, the only other step is fetching any data that we need to generate our initial state.
+You can set up your build tool of choice (webpack, browserify, etc.) to compile a bundle file into `dist/bundle.js`.
 
-## Async Data Fetching
+When the page loads, the bundle file will be started up and [React.render](https://facebook.github.io/react/docs/top-level-api.html#react.render) will hook into the `data-react-id` attributes from the server-rendered HTML. This will connect our newly-started React instance to the virtual DOM used on the server. Since we have the same initial state for our Redux store and used the same code for all our view components, the result will be the same real DOM.
+
+And that's it! That is all we need to do to implement server side rendering.
+
+But the result is pretty vanilla. It essentially renders a static view from dynamic code. What we need to do next is build an initial state dynamically to allow that rendered view to be dynamic.
+
+## Preparing the Initial State
+
+Because the client side executes ongoing code, it can start with an empty initial state and obtain any necessary state on demand and over time. On the server side, execution is synchronous and we only get one shot to render our view. We need to be able to compile our initial state during the request, which will have to react to input and obtain external state (such as that from an API or database).
+
+### Processing Request Parameters
+
+The only input for server side code is the request made when loading up a page in your app in your browser. You may choose to configure the server during it's boot (such as when you are running in a development vs. production environment), but that configuration is static.
+
+The request contains information about the URL requested, including any query parameters, which will be useful when using something like [react-router](https://github.com/rackt/react-router). It can also contain headers with inputs like cookies or authorization, or POST body data. Let's see how we can set the initial counter state based on a query parameter.
+
+**server.js**
+
+```js
+import qs from 'qs'; // Add this at the top of the file
+
+function handleRender(req, res) {
+
+  // Read the counter from the request, if provided
+  const params = qs.parse(req.query);
+  const counter = parseInt(params.counter) || 0;
+
+  // Compile an initial state
+  let initialState = { counter };
+
+  // Create a new Redux store instance
+  const store = createStore(counterApp, initialState);
+
+  // Render the component to a string
+  const html = React.renderToString(
+    <Provider store={store}>
+      { () => <App/> }
+    </Provider>);
+
+  // Grab the initial state from our Redux store
+  const finalState = store.getState();
+
+  // Send the rendered page back to the client
+  res.send(renderFullPage(html, finalState));
+}
+```
+The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:8080/?counter=100](http://localhost:8080/?counter=100) in your browser, you'll see the counter starts at 100. In the rendered HTML, you'll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
+
+### Async Data Fetching
+
 Fetching data asynchronously during server side rendering is a common point of confusion.  The first thing to understand is that you can fetch your data however you want, **as long as it is available _before_ we send our response to the client**.
 
 **examples**
