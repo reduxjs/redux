@@ -15,7 +15,7 @@ The resulting reducer calls every child reducer, and gather their results into a
 
 1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
 
-> Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend the use of `reducers/index.js` with a call to combineReducers.
+> Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend exporting a single reducer obtained using `combineReducers()` from `reducers/index.js` instead. An example is included below.
 
 #### Returns
 
@@ -36,19 +36,6 @@ Any reducer passed to `combineReducers` must satisfy these rules:
 While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them.
 
 #### Example
-
-#### `reducers/index.js`
-
-```js
-import { combineReducers } from 'redux';
-import todos from './todos';
-import counter from './counter';
-
-export default combineReducers({
-  todos,
-  counter
-});
-```
 
 #### `reducers/todos.js`
 
@@ -76,6 +63,19 @@ export default function counter(state = 0, action) {
     return state;
   }
 }
+```
+
+#### `reducers/index.js`
+
+```js
+import { combineReducers } from 'redux';
+import todos from './todos';
+import counter from './counter';
+
+export default combineReducers({
+  todos,
+  counter
+});
 ```
 
 #### `App.js`
