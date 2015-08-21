@@ -230,7 +230,7 @@ Connects a React component to a Redux store.
 
 * [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props. If `ownProps` is specified as a second argument then `mapDispatchToProps` will be re-invoked whenever the component receives new props.
 
-* [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `{ ...ownProps, ...stateProps, ...dispatchProps }` is used by default.
+* [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `Object.assign({}, ownProps, stateProps, dispatchProps)` is used by default.
 
 #### Returns
 
@@ -347,7 +347,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ ...todoActionCreators, ...counterActionCreators }, dispatch)
+    actions: bindActionCreators(Object.assign({}, todoActionCreators, counterActionCreators), dispatch)
   };
 }
 
@@ -366,7 +366,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ ...todoActionCreators, ...counterActionCreators}, dispatch);
+  return bindActionCreators(Object.assign({}, todoActionCreators, counterActionCreators), dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
@@ -394,11 +394,10 @@ function mapStateToProps(state) {
 }
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
-  return {
-    ...ownProps,
+  return Object.assign({}, ownProps, {
     todos: stateProps.todos[ownProps.userId],
     addTodo: (text) => dispatchProps.addTodo(ownProps.userId, text)
-  };
+  });
 }
 
 export default connect(mapStateToProps, actionCreators, mergeProps)(TodoApp);
