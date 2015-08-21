@@ -366,7 +366,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, todoActionCreators, counterActionCreators), dispatch);
+  return bindActionCreators({ ...todoActionCreators, ...counterActionCreators}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
@@ -394,10 +394,11 @@ function mapStateToProps(state) {
 }
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
-  return Object.assign({}, ownProps, {
+  return {
+    ...ownProps,
     todos: stateProps.todos[ownProps.userId],
     addTodo: (text) => dispatchProps.addTodo(ownProps.userId, text)
-  });
+  };
 }
 
 export default connect(mapStateToProps, actionCreators, mergeProps)(TodoApp);
