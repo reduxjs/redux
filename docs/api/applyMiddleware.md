@@ -220,7 +220,7 @@ store.dispatch({
 
 * If you use other store enhancers in addition to `applyMiddleware`, make sure to put `applyMiddleware` before them in the composition chain because the middleware is potentially asynchronous. For example, it should go before [redux-devtools](https://github.com/gaearon/redux-devtools) because otherwise the DevTools won’t see the raw actions emitted by the Promise middleware and such.
 
-* If you want to conditionally apply a middleware, make sure to only import it when it's needed:
+* If you want to conditionally apply a middleware, make sure to only import it when it’s needed:
 
   ```js
   let middleware = [a, b];
