@@ -135,7 +135,7 @@ class App extends Component {
             dispatch(addTodo(text))
           } />
         <TodoList
-          todos={this.props.visibleTodos}
+          todos={visibleTodos}
           onTodoClick={index =>
             dispatch(completeTodo(index))
           } />
