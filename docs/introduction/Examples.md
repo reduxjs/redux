@@ -27,7 +27,7 @@ Redux is distributed with a few examples in its [source code](https://github.com
 Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) example:
 
 ```
-git clone https://github.com/gaearon/redux.git
+git clone https://github.com/rackt/redux.git
 
 cd redux
 npm install
@@ -49,7 +49,7 @@ It covers:
 Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) example:
 
 ```
-git clone https://github.com/gaearon/redux.git
+git clone https://github.com/rackt/redux.git
 
 cd redux
 npm install
@@ -72,7 +72,7 @@ It covers:
 Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) example:
 
 ```
-git clone https://github.com/gaearon/redux.git
+git clone https://github.com/rackt/redux.git
 
 cd redux
 npm install
@@ -95,7 +95,7 @@ It covers:
 Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-world) example:
 
 ```
-git clone https://github.com/gaearon/redux.git
+git clone https://github.com/rackt/redux.git
 
 cd redux
 npm install
@@ -119,4 +119,3 @@ It covers:
 ## More Examples
 
 You can find more examples in [Awesome Redux](https://github.com/xgrommx/awesome-redux).
-
