@@ -267,6 +267,40 @@ export default function jsdomReact() {
 
 Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
 
+#### Testing decorated React components
+
+In order to achieve separation of concerns and create reusable components, we often wrap one component inside another using decorators. For example, consider the `App` component:
+
+```js
+class App extends Component { /* ... */ }
+export default connect(select)(App);
+```
+
+You would normally import the class like this:
+
+```js
+import App from './App';
+```
+
+Such component becomes hard to test because when you import the component, you're actually holding the wrapper component, not the App component itself. In order to be able to test the App component itself without having to deal with the decorator, it's recommended to also export the undecorated component:
+
+```js
+export class App extends Component { /* ... */ }
+export default connect(select)(App);
+```
+
+Since the default export is still the decorated component, the import statement pictured above will work as before so you won't have to change your application code. However, you can now import the undecorated App components in your test file like this:
+
+```js
+import { App } from './App';
+```
+
+And if you need both:
+
+```js
+import Component, { App } from './App';
+```
+
 ### Glossary
 
 - [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
