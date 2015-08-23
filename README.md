@@ -252,7 +252,11 @@ A React component class that injects state and action creators into your compone
 export default connect()(TodoApp);
 ```
 
-##### Inject `dispatch` and every field in the global state (SLOW! TodoApp will rerender after each action)
+##### Inject `dispatch` and every field in the global state
+
+>Don’t do this! It kills any performance optimisations because `TodoApp` will rerender after any action.  
+>It’s better to have more granular `connect()` on several components in your view hierarchy.
+
 ```js
 export default connect(state => state)(TodoApp);
 ```
