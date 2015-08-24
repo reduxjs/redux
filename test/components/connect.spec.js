@@ -1,6 +1,6 @@
 import expect from 'expect';
 import jsdom from 'mocha-jsdom';
-import React, { createClass, PropTypes, Component } from 'react';
+import React, { createClass, Children, PropTypes, Component } from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { createStore } from 'redux';
 import { connect } from '../../src/index';
@@ -25,7 +25,7 @@ describe('React', () => {
       }
 
       render() {
-        return this.props.children();
+        return Children.only(this.props.children);
       }
     }
 
@@ -47,9 +47,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <Container pass="through" />
-          )}
+          <Container pass="through" />
         </ProviderMock>
       );
 
@@ -73,7 +71,7 @@ describe('React', () => {
 
       const container = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => <Container pass='through' baz={50} />}
+          <Container pass='through' baz={50} />
         </ProviderMock>
       );
       const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
@@ -98,9 +96,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <Container />
-          )}
+          <Container />
         </ProviderMock>
       );
 
@@ -128,9 +124,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <Container />
-          )}
+          <Container />
         </ProviderMock>
       );
 
@@ -171,7 +165,7 @@ describe('React', () => {
         render() {
           return (
             <ProviderMock store={store}>
-              {() => <ConnectContainer bar={this.state.bar} />}
+              <ConnectContainer bar={this.state.bar} />
              </ProviderMock>
           );
         }
@@ -207,9 +201,7 @@ describe('React', () => {
 
       TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <HolderContainer ref={instance => container = instance} />
-          )}
+          <HolderContainer ref={instance => container = instance} />
         </ProviderMock>
       );
 
@@ -252,9 +244,7 @@ describe('React', () => {
 
       TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <HolderContainer ref={instance => container = instance} />
-          )}
+          <HolderContainer ref={instance => container = instance} />
         </ProviderMock>
       );
 
@@ -308,7 +298,7 @@ describe('React', () => {
         render() {
           return (
             <ProviderMock store={store}>
-              {() => <ConnectContainer bar={this.state.bar} />}
+              <ConnectContainer bar={this.state.bar} />
              </ProviderMock>
           );
         }
@@ -359,7 +349,7 @@ describe('React', () => {
         render() {
           return (
             <ProviderMock store={store}>
-              {() => <Container extra={this.state.extra} />}
+              <Container extra={this.state.extra} />
             </ProviderMock>
           );
         }
@@ -394,7 +384,7 @@ describe('React', () => {
 
       const container = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => <Container pass='through' />}
+          <Container pass='through' />
         </ProviderMock>
       );
       const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
@@ -441,16 +431,14 @@ describe('React', () => {
         }
       }
 
-      const tree = TestUtils.renderIntoDocument(
+      let outerComponent;
+      TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <OuterComponent ref='outerComponent' />
-          )}
+          <OuterComponent ref={c => outerComponent = c} />
         </ProviderMock>
       );
-
-      tree.refs.outerComponent.setFoo('BAR');
-      tree.refs.outerComponent.setFoo('DID');
+      outerComponent.setFoo('BAR');
+      outerComponent.setFoo('DID');
 
       expect(invocationCount).toEqual(2);
     });
@@ -491,16 +479,15 @@ describe('React', () => {
         }
       }
 
-      const tree = TestUtils.renderIntoDocument(
+      let outerComponent;
+      TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <OuterComponent ref='outerComponent' />
-          )}
+          <OuterComponent ref={c => outerComponent = c} />
         </ProviderMock>
       );
 
-      tree.refs.outerComponent.setFoo('BAR');
-      tree.refs.outerComponent.setFoo('BAZ');
+      outerComponent.setFoo('BAR');
+      outerComponent.setFoo('BAZ');
 
       expect(invocationCount).toEqual(4);
       expect(propsPassedIn).toEqual({
@@ -542,16 +529,15 @@ describe('React', () => {
         }
       }
 
-      const tree = TestUtils.renderIntoDocument(
+      let outerComponent;
+      TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <OuterComponent ref='outerComponent' />
-          )}
+          <OuterComponent ref={c => outerComponent = c} />
         </ProviderMock>
       );
 
-      tree.refs.outerComponent.setFoo('BAR');
-      tree.refs.outerComponent.setFoo('DID');
+      outerComponent.setFoo('BAR');
+      outerComponent.setFoo('DID');
 
       expect(invocationCount).toEqual(1);
     });
@@ -592,16 +578,15 @@ describe('React', () => {
         }
       }
 
-      const tree = TestUtils.renderIntoDocument(
+      let outerComponent;
+      TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <OuterComponent ref='outerComponent' />
-          )}
+          <OuterComponent ref={c => outerComponent = c} />
         </ProviderMock>
       );
 
-      tree.refs.outerComponent.setFoo('BAR');
-      tree.refs.outerComponent.setFoo('BAZ');
+      outerComponent.setFoo('BAR');
+      outerComponent.setFoo('BAZ');
 
       expect(invocationCount).toEqual(3);
       expect(propsPassedIn).toEqual({
@@ -624,7 +609,7 @@ describe('React', () => {
 
         const container = TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            {() => <Container pass='through' />}
+            <Container pass='through' />
           </ProviderMock>
         );
         const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
@@ -669,9 +654,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <Container />
-          )}
+          <Container />
         </ProviderMock>
       );
 
@@ -701,9 +684,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <Container />
-          )}
+          <Container />
         </ProviderMock>
       );
 
@@ -750,9 +731,7 @@ describe('React', () => {
         render() {
           return (
             <ProviderMock store={store}>
-              {() => (
-                <Container pass={this.state.pass} />
-              )}
+              <Container pass={this.state.pass} />
             </ProviderMock>
           );
         }
@@ -827,7 +806,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => 1, () => ({}), () => ({})) }
+            {makeContainer(() => 1, () => ({}), () => ({}))}
           </ProviderMock>
         );
       }).toThrow(/mapState/);
@@ -835,7 +814,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => 'hey', () => ({}), () => ({})) }
+            {makeContainer(() => 'hey', () => ({}), () => ({}))}
           </ProviderMock>
         );
       }).toThrow(/mapState/);
@@ -843,7 +822,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => new AwesomeMap(), () => ({}), () => ({})) }
+            {makeContainer(() => new AwesomeMap(), () => ({}), () => ({}))}
           </ProviderMock>
         );
       }).toThrow(/mapState/);
@@ -851,7 +830,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => ({}), () => 1, () => ({})) }
+            {makeContainer(() => ({}), () => 1, () => ({}))}
           </ProviderMock>
         );
       }).toThrow(/mapDispatch/);
@@ -859,7 +838,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => ({}), () => 'hey', () => ({})) }
+            {makeContainer(() => ({}), () => 'hey', () => ({}))}
           </ProviderMock>
         );
       }).toThrow(/mapDispatch/);
@@ -867,7 +846,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => ({}), () => new AwesomeMap(), () => ({})) }
+            {makeContainer(() => ({}), () => new AwesomeMap(), () => ({}))}
           </ProviderMock>
         );
       }).toThrow(/mapDispatch/);
@@ -875,7 +854,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => ({}), () => ({}), () => 1) }
+            {makeContainer(() => ({}), () => ({}), () => 1)}
           </ProviderMock>
         );
       }).toThrow(/mergeProps/);
@@ -883,7 +862,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => ({}), () => ({}), () => 'hey') }
+            {makeContainer(() => ({}), () => ({}), () => 'hey')}
           </ProviderMock>
         );
       }).toThrow(/mergeProps/);
@@ -891,7 +870,7 @@ describe('React', () => {
       expect(() => {
         TestUtils.renderIntoDocument(
           <ProviderMock store={store}>
-            { () => makeContainer(() => ({}), () => ({}), () => new AwesomeMap()) }
+            {makeContainer(() => ({}), () => ({}), () => new AwesomeMap())}
           </ProviderMock>
         );
       }).toThrow(/mergeProps/);
@@ -939,8 +918,8 @@ describe('React', () => {
       let container;
       TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => <ContainerBefore ref={instance => container = instance} />}
-         </ProviderMock>
+          <ContainerBefore ref={instance => container = instance} />
+        </ProviderMock>
       );
       const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
       expect(stub.props.foo).toEqual(undefined);
@@ -1075,9 +1054,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <ProviderMock store={store}>
-          {() => (
-            <Decorated />
-          )}
+          <Decorated />
         </ProviderMock>
       );
 
