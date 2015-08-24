@@ -11,7 +11,7 @@ function getNextPageUrl(response) {
     return null;
   }
 
-  const nextLink = link.split(',').filter(s => s.indexOf('rel="next"') > -1)[0];
+  const nextLink = link.split(',').find(s => s.indexOf('rel="next"') > -1);
   if (!nextLink) {
     return null;
   }
