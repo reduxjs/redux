@@ -159,7 +159,7 @@ const fakeStore = fakeData => ({
 
 const dispatchWithStoreOf = (storeData, action) => {
   let dispatched = null;
-  const dispatch = singleDispatch(fakeStore(storeData))(action => dispatched = action);
+  const dispatch = singleDispatch(fakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
   dispatch(action);
   return dispatched;
 };
