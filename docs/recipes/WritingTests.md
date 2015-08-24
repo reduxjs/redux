@@ -293,6 +293,10 @@ And if you need both:
 import Component, { App } from './App';
 ```
 
+> ##### A note on using ES6 exports with CommonJS `require`
+
+> If you are using ES6 in your application sources, but write your tests in ES5. Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require("./App.js")`. Instead you have to use `require("./App.js").default`.
+
 ### Glossary
 
 - [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
