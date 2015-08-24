@@ -1,14 +1,13 @@
 import expect from 'expect';
-import jsdomReact from './jsdomReact';
-import React, { PropTypes, Component } from 'react/addons';
+import jsdom from 'mocha-jsdom';
+import React, { PropTypes, Component } from 'react';
+import TestUtils from 'react-addons-test-utils';
 import { createStore } from 'redux';
 import { Provider } from '../../src/index';
 
-const { TestUtils } = React.addons;
-
 describe('React', () => {
   describe('Provider', () => {
-    jsdomReact();
+    jsdom();
 
     class Child extends Component {
       static contextTypes = {

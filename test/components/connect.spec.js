@@ -1,17 +1,21 @@
 import expect from 'expect';
-import jsdomReact from './jsdomReact';
-import React, { createClass, PropTypes, Component } from 'react/addons';
+import jsdom from 'mocha-jsdom';
+import React, { createClass, PropTypes, Component } from 'react';
+import TestUtils from 'react-addons-test-utils';
 import { createStore } from 'redux';
 import { connect } from '../../src/index';
 
-const { TestUtils } = React.addons;
-
 describe('React', () => {
   describe('connect', () => {
-    jsdomReact();
+    jsdom();
 
-    // Mock minimal Provider interface
-    class Provider extends Component {
+    class Passthrough extends Component {
+      render() {
+        return <div {...this.props} />;
+      }
+    }
+
+    class ProviderMock extends Component {
       static childContextTypes = {
         store: PropTypes.object.isRequired
       }
@@ -42,11 +46,11 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <Container pass="through" />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       const container = TestUtils.findRenderedComponentWithType(tree, Container);
@@ -63,20 +67,20 @@ describe('React', () => {
       @connect(({ foo, baz }) => ({ foo, baz }))
       class Container extends Component {
         render() {
-          return <div {...this.props} />;
+          return <Passthrough {...this.props} />;
         }
       }
 
       const container = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => <Container pass='through' baz={50} />}
-        </Provider>
+        </ProviderMock>
       );
-      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-      expect(div.props.pass).toEqual('through');
-      expect(div.props.foo).toEqual('bar');
-      expect(div.props.baz).toEqual(42);
-      expect(div.props.hello).toEqual(undefined);
+      const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
+      expect(stub.props.pass).toEqual('through');
+      expect(stub.props.foo).toEqual('bar');
+      expect(stub.props.baz).toEqual(42);
+      expect(stub.props.hello).toEqual(undefined);
       expect(() =>
         TestUtils.findRenderedComponentWithType(container, Container)
       ).toNotThrow();
@@ -88,25 +92,24 @@ describe('React', () => {
       @connect(state => ({ string: state }) )
       class Container extends Component {
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         }
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <Container />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
-      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-
-      expect(div.props.string).toBe('');
+      const stub = TestUtils.findRenderedComponentWithType(tree, Passthrough);
+      expect(stub.props.string).toBe('');
       store.dispatch({ type: 'APPEND', body: 'a'});
-      expect(div.props.string).toBe('a');
+      expect(stub.props.string).toBe('a');
       store.dispatch({ type: 'APPEND', body: 'b'});
-      expect(div.props.string).toBe('ab');
+      expect(stub.props.string).toBe('ab');
     });
 
     it('should handle dispatches before componentDidMount', () => {
@@ -119,20 +122,20 @@ describe('React', () => {
         }
 
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         }
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <Container />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
-      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-      expect(div.props.string).toBe('a');
+      const stub = TestUtils.findRenderedComponentWithType(tree, Passthrough);
+      expect(stub.props.string).toBe('a');
     });
 
     it('should handle additional prop changes in addition to slice', () => {
@@ -144,7 +147,7 @@ describe('React', () => {
       class ConnectContainer extends Component {
         render() {
           return (
-              <div {...this.props} pass={this.props.bar.baz} />
+            <Passthrough {...this.props} pass={this.props.bar.baz} />
           );
         }
       }
@@ -167,17 +170,17 @@ describe('React', () => {
 
         render() {
           return (
-            <Provider store={store}>
+            <ProviderMock store={store}>
               {() => <ConnectContainer bar={this.state.bar} />}
-             </Provider>
+             </ProviderMock>
           );
         }
       }
 
       const container = TestUtils.renderIntoDocument(<Container />);
-      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-      expect(div.props.foo).toEqual('bar');
-      expect(div.props.pass).toEqual('through');
+      const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
+      expect(stub.props.foo).toEqual('bar');
+      expect(stub.props.pass).toEqual('through');
     });
 
     it('should remove undefined props', () => {
@@ -189,7 +192,7 @@ describe('React', () => {
       class ConnectContainer extends Component {
         render() {
           return (
-              <div {...this.props} />
+            <Passthrough {...this.props} />
           );
         }
       }
@@ -203,22 +206,22 @@ describe('React', () => {
       }
 
       TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <HolderContainer ref={instance => container = instance} />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       const propsBefore = {
-        ...TestUtils.findRenderedDOMComponentWithTag(container, 'div').props
+        ...TestUtils.findRenderedComponentWithType(container, Passthrough).props
       };
 
       props = {};
       container.forceUpdate();
 
       const propsAfter = {
-        ...TestUtils.findRenderedDOMComponentWithTag(container, 'div').props
+        ...TestUtils.findRenderedComponentWithType(container, Passthrough).props
       };
 
       expect(propsBefore.x).toEqual(true);
@@ -234,7 +237,7 @@ describe('React', () => {
       class ConnectContainer extends Component {
         render() {
           return (
-              <div {...this.props} />
+            <Passthrough {...this.props} />
           );
         }
       }
@@ -248,22 +251,22 @@ describe('React', () => {
       }
 
       TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <HolderContainer ref={instance => container = instance} />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       const propsBefore = {
-        ...TestUtils.findRenderedDOMComponentWithTag(container, 'div').props
+        ...TestUtils.findRenderedComponentWithType(container, Passthrough).props
       };
 
       props = {};
       container.forceUpdate();
 
       const propsAfter = {
-        ...TestUtils.findRenderedDOMComponentWithTag(container, 'div').props
+        ...TestUtils.findRenderedComponentWithType(container, Passthrough).props
       };
 
       expect(propsBefore.x).toEqual(true);
@@ -279,7 +282,7 @@ describe('React', () => {
       class ConnectContainer extends Component {
         render() {
           return (
-              <div {...this.props} pass={this.props.bar.baz} />
+            <Passthrough {...this.props} pass={this.props.bar.baz} />
           );
         }
       }
@@ -304,17 +307,17 @@ describe('React', () => {
 
         render() {
           return (
-            <Provider store={store}>
+            <ProviderMock store={store}>
               {() => <ConnectContainer bar={this.state.bar} />}
-             </Provider>
+             </ProviderMock>
           );
         }
       }
 
       const container = TestUtils.renderIntoDocument(<Container />);
-      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-      expect(div.props.foo).toEqual('bar');
-      expect(div.props.pass).toEqual('');
+      const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
+      expect(stub.props.foo).toEqual('bar');
+      expect(stub.props.pass).toEqual('');
     });
 
     it('should allow for merge to incorporate state and prop changes', () => {
@@ -343,7 +346,7 @@ describe('React', () => {
       )
       class Container extends Component {
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         };
       }
 
@@ -355,24 +358,23 @@ describe('React', () => {
 
         render() {
           return (
-            <Provider store={store}>
+            <ProviderMock store={store}>
               {() => <Container extra={this.state.extra} />}
-            </Provider>
+            </ProviderMock>
           );
         }
       }
 
       const tree = TestUtils.renderIntoDocument(<OuterContainer />);
-      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-
-      expect(div.props.stateThing).toBe('');
-      div.props.mergedDoSomething('a');
-      expect(div.props.stateThing).toBe('HELLO az');
-      div.props.mergedDoSomething('b');
-      expect(div.props.stateThing).toBe('HELLO azbz');
+      const stub = TestUtils.findRenderedComponentWithType(tree, Passthrough);
+      expect(stub.props.stateThing).toBe('');
+      stub.props.mergedDoSomething('a');
+      expect(stub.props.stateThing).toBe('HELLO az');
+      stub.props.mergedDoSomething('b');
+      expect(stub.props.stateThing).toBe('HELLO azbz');
       tree.setState({extra: 'Z'});
-      div.props.mergedDoSomething('c');
-      expect(div.props.stateThing).toBe('HELLO azbzcZ');
+      stub.props.mergedDoSomething('c');
+      expect(stub.props.stateThing).toBe('HELLO azbzcZ');
     });
 
     it('should merge actionProps into WrappedComponent', () => {
@@ -386,18 +388,18 @@ describe('React', () => {
       )
       class Container extends Component {
         render() {
-          return <div {...this.props} />;
+          return <Passthrough {...this.props} />;
         }
       }
 
       const container = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => <Container pass='through' />}
-        </Provider>
+        </ProviderMock>
       );
-      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-      expect(div.props.dispatch).toEqual(store.dispatch);
-      expect(div.props.foo).toEqual('bar');
+      const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
+      expect(stub.props.dispatch).toEqual(store.dispatch);
+      expect(stub.props.foo).toEqual('bar');
       expect(() =>
         TestUtils.findRenderedComponentWithType(container, Container)
       ).toNotThrow();
@@ -416,7 +418,7 @@ describe('React', () => {
       })
       class WithoutProps extends Component {
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         }
       }
 
@@ -440,11 +442,11 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <OuterComponent ref='outerComponent' />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       tree.refs.outerComponent.setFoo('BAR');
@@ -466,7 +468,7 @@ describe('React', () => {
       })
       class WithProps extends Component {
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         }
       }
 
@@ -490,11 +492,11 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <OuterComponent ref='outerComponent' />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       tree.refs.outerComponent.setFoo('BAR');
@@ -517,7 +519,7 @@ describe('React', () => {
       })
       class WithoutProps extends Component {
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         }
       }
 
@@ -541,11 +543,11 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <OuterComponent ref='outerComponent' />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       tree.refs.outerComponent.setFoo('BAR');
@@ -567,7 +569,7 @@ describe('React', () => {
       })
       class WithProps extends Component {
         render() {
-          return <div {...this.props}/>;
+          return <Passthrough {...this.props}/>;
         }
       }
 
@@ -591,11 +593,11 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <OuterComponent ref='outerComponent' />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       tree.refs.outerComponent.setFoo('BAR');
@@ -616,19 +618,19 @@ describe('React', () => {
         @connect(...connectArgs)
         class Container extends Component {
           render() {
-            return <div {...this.props} />;
+            return <Passthrough {...this.props} />;
           }
         }
 
         const container = TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             {() => <Container pass='through' />}
-          </Provider>
+          </ProviderMock>
         );
-        const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-        expect(div.props.dispatch).toEqual(store.dispatch);
-        expect(div.props.foo).toBe(undefined);
-        expect(div.props.pass).toEqual('through');
+        const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
+        expect(stub.props.dispatch).toEqual(store.dispatch);
+        expect(stub.props.foo).toBe(undefined);
+        expect(stub.props.pass).toEqual('through');
         expect(() =>
           TestUtils.findRenderedComponentWithType(container, Container)
         ).toNotThrow();
@@ -661,16 +663,16 @@ describe('React', () => {
       )
       class Container extends Component {
         render() {
-          return <div {...this.props} />;
+          return <Passthrough {...this.props} />;
         }
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <Container />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       const connector = TestUtils.findRenderedComponentWithType(tree, Container);
@@ -684,7 +686,7 @@ describe('React', () => {
       const spy = expect.createSpy(() => ({}));
       function render({ string }) {
         spy();
-        return <div string={string}/>;
+        return <Passthrough string={string}/>;
       }
 
       @connect(
@@ -698,16 +700,16 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <Container />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
-      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      const stub = TestUtils.findRenderedComponentWithType(tree, Passthrough);
       expect(spy.calls.length).toBe(1);
-      expect(div.props.string).toBe('');
+      expect(stub.props.string).toBe('');
       store.dispatch({ type: 'APPEND', body: 'a'});
       expect(spy.calls.length).toBe(2);
       store.dispatch({ type: 'APPEND', body: 'b'});
@@ -721,7 +723,7 @@ describe('React', () => {
       const spy = expect.createSpy(() => ({}));
       function render({ string, pass }) {
         spy();
-        return <div string={string} pass={pass} passVal={pass.val} />;
+        return <Passthrough string={string} pass={pass} passVal={pass.val} />;
       }
 
       @connect(
@@ -747,63 +749,63 @@ describe('React', () => {
 
         render() {
           return (
-            <Provider store={store}>
+            <ProviderMock store={store}>
               {() => (
                 <Container pass={this.state.pass} />
               )}
-            </Provider>
+            </ProviderMock>
           );
         }
       }
 
       const tree = TestUtils.renderIntoDocument(<Root />);
-      const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      const stub = TestUtils.findRenderedComponentWithType(tree, Passthrough);
       expect(spy.calls.length).toBe(1);
-      expect(div.props.string).toBe('');
-      expect(div.props.pass).toBe('');
+      expect(stub.props.string).toBe('');
+      expect(stub.props.pass).toBe('');
 
       store.dispatch({ type: 'APPEND', body: 'a'});
       expect(spy.calls.length).toBe(2);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe('');
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe('');
 
       tree.setState({ pass: '' });
       expect(spy.calls.length).toBe(2);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe('');
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe('');
 
       tree.setState({ pass: 'through' });
       expect(spy.calls.length).toBe(3);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe('through');
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe('through');
 
       tree.setState({ pass: 'through' });
       expect(spy.calls.length).toBe(3);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe('through');
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe('through');
 
       const obj = { prop: 'val' };
       tree.setState({ pass: obj });
       expect(spy.calls.length).toBe(4);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe(obj);
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe(obj);
 
       tree.setState({ pass: obj });
       expect(spy.calls.length).toBe(4);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe(obj);
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe(obj);
 
       const obj2 = Object.assign({}, obj, { val: 'otherval' });
       tree.setState({ pass: obj2 });
       expect(spy.calls.length).toBe(5);
-      expect(div.props.string).toBe('a');
-      expect(div.props.pass).toBe(obj2);
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.pass).toBe(obj2);
 
       obj2.val = 'mutation';
       tree.setState({ pass: obj2 });
       expect(spy.calls.length).toBe(5);
-      expect(div.props.string).toBe('a');
-      expect(div.props.passVal).toBe('otherval');
+      expect(stub.props.string).toBe('a');
+      expect(stub.props.passVal).toBe('otherval');
     });
 
     it('should throw an error if mapState, mapDispatch, or mergeProps returns anything but a plain object', () => {
@@ -814,7 +816,7 @@ describe('React', () => {
           @connect(mapState, mapDispatch, mergeProps)
           class Container extends Component {
             render() {
-              return <div />;
+              return <Passthrough />;
             }
           }
         );
@@ -824,73 +826,73 @@ describe('React', () => {
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => 1, () => ({}), () => ({})) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mapState/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => 'hey', () => ({}), () => ({})) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mapState/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => new AwesomeMap(), () => ({}), () => ({})) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mapState/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => ({}), () => 1, () => ({})) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mapDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => ({}), () => 'hey', () => ({})) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mapDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => ({}), () => new AwesomeMap(), () => ({})) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mapDispatch/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => ({}), () => ({}), () => 1) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mergeProps/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => ({}), () => ({}), () => 'hey') }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mergeProps/);
 
       expect(() => {
         TestUtils.renderIntoDocument(
-          <Provider store={store}>
+          <ProviderMock store={store}>
             { () => makeContainer(() => ({}), () => ({}), () => new AwesomeMap()) }
-          </Provider>
+          </ProviderMock>
         );
       }).toThrow(/mergeProps/);
     });
@@ -905,7 +907,7 @@ describe('React', () => {
       class ContainerBefore extends Component {
         render() {
           return (
-              <div {...this.props} />
+            <Passthrough {...this.props} />
           );
         }
       }
@@ -917,7 +919,7 @@ describe('React', () => {
       class ContainerAfter extends Component {
         render() {
           return (
-              <div {...this.props} />
+            <Passthrough {...this.props} />
           );
         }
       }
@@ -929,20 +931,20 @@ describe('React', () => {
       class ContainerNext extends Component {
         render() {
           return (
-              <div {...this.props} />
+            <Passthrough {...this.props} />
           );
         }
       }
 
       let container;
       TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => <ContainerBefore ref={instance => container = instance} />}
-         </Provider>
+         </ProviderMock>
       );
-      const div = TestUtils.findRenderedDOMComponentWithTag(container, 'div');
-      expect(div.props.foo).toEqual(undefined);
-      expect(div.props.scooby).toEqual('doo');
+      const stub = TestUtils.findRenderedComponentWithType(container, Passthrough);
+      expect(stub.props.foo).toEqual(undefined);
+      expect(stub.props.scooby).toEqual('doo');
 
       function imitateHotReloading(TargetClass, SourceClass) {
         // Crude imitation of hot reloading that does the job
@@ -957,12 +959,12 @@ describe('React', () => {
       }
 
       imitateHotReloading(ContainerBefore, ContainerAfter);
-      expect(div.props.foo).toEqual('baz');
-      expect(div.props.scooby).toEqual('foo');
+      expect(stub.props.foo).toEqual('baz');
+      expect(stub.props.scooby).toEqual('foo');
 
       imitateHotReloading(ContainerBefore, ContainerNext);
-      expect(div.props.foo).toEqual('bar');
-      expect(div.props.scooby).toEqual('boo');
+      expect(stub.props.foo).toEqual('bar');
+      expect(stub.props.scooby).toEqual('boo');
     });
 
     it('should set the displayName correctly', () => {
@@ -995,7 +997,7 @@ describe('React', () => {
     it('should expose the wrapped component as WrappedComponent', () => {
       class Container extends Component {
         render() {
-          return <div />;
+          return <Passthrough />;
         }
       }
 
@@ -1008,7 +1010,7 @@ describe('React', () => {
     it('should use the store from the props instead of from the context if present', () => {
       class Container extends Component {
         render() {
-          return <div />;
+          return <Passthrough />;
         }
       }
 
@@ -1034,7 +1036,7 @@ describe('React', () => {
     it('should throw an error if the store is not in the props or context', () => {
       class Container extends Component {
         render() {
-          return <div />;
+          return <Passthrough />;
         }
       }
 
@@ -1064,7 +1066,7 @@ describe('React', () => {
         }
 
         render() {
-          return <div />;
+          return <Passthrough />;
         }
       }
 
@@ -1072,11 +1074,11 @@ describe('React', () => {
       const Decorated = decorator(Container);
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider store={store}>
+        <ProviderMock store={store}>
           {() => (
             <Decorated />
           )}
-        </Provider>
+        </ProviderMock>
       );
 
       const decorated = TestUtils.findRenderedComponentWithType(tree, Decorated);
