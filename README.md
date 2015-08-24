@@ -4,7 +4,7 @@ React Redux
 Official React bindings for [Redux](https://github.com/gaearon/redux).  
 Performant and flexible.
 
-[![npm version](https://img.shields.io/npm/v/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
+[![build status](https://img.shields.io/travis/rackt/react-redux/master.svg?style=flat-square)](https://travis-ci.org/rackt/react-redux) [![npm version](https://img.shields.io/npm/v/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
 [![npm downloads](https://img.shields.io/npm/dm/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
 [![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
 
