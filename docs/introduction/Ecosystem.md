@@ -19,6 +19,10 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-batched-updates](https://github.com/acdlite/redux-batched-updates) — Batch React updates that occur as a result of Redux dispatches
 * [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 
+## Components
+
+* [redux-form](https://github.com/erikras/redux-form) — Keep React form state in Redux
+
 ## Utilities
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
