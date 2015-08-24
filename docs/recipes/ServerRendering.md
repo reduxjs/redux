@@ -39,7 +39,7 @@ import App from './containers/App';
 const app = Express();
 const port = 8080;
 
-// Use this middleware to server up static files built into the dist directory
+// Use this middleware to serve up static files built into the dist directory
 app.use(require('serve-static')(path.join(__dirname, 'dist')));
 
 // This is fired every time the server side receives a request
