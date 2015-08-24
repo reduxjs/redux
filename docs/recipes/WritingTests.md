@@ -18,22 +18,14 @@ To use it together with [Babel](http://babeljs.io), add this to `scripts` in you
   ...
   "scripts": {
     ...
-    "test": "mocha --require babelhook --recursive",
+    "test": "mocha --compilers js:babel/register --recursive",
     "test:watch": "npm test -- --watch",
   },
   ...
 }
 ```
 
-Then create a file named `babelhook.js` beside it:
-
-```js
-require('babel/register')({
-  // for options see https://babeljs.io/docs/usage/require/
-});
-```
-
-Run `npm test` to run it once, or `npm run test:watch` to test on every file change.
+and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
 
 ### Action Creators
 
