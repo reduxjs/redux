@@ -18,7 +18,7 @@
     "humps": "^0.6.0",
     "isomorphic-fetch": "^2.1.1",
     "lodash": "^3.10.1",
-    "normalizr": "^0.1.3",
+    "normalizr": "^1.0.0",
     "react": "^0.13.3",
     "react-redux": "^0.9.0",
     "react-router": "^1.0.0-beta3",
