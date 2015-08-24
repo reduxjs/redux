@@ -13,6 +13,7 @@ Performant and flexible.
 
 ## Table of Contents
 
+- [Installation](#installation)
 - [React Native](#react-native)
 - [Quick Start](#quick-start)
 - [API](#api)
@@ -20,6 +21,17 @@ Performant and flexible.
   - [`connect([mapStateToProps], [mapDispatchToProps], [mergeProps])`](#connectmapstatetoprops-mapdispatchtoprops-mergeprops)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
+
+## Installation
+
+```
+npm install --save react-redux
+```
+
+Be careful! **“React” goes first.**  
+There is a project called `redux-react` but it is [completely unrelated](https://github.com/cgarvis/redux-react/issues/1).  
+
+React Redux requires **React 0.13 or later.**
 
 ## React Native
 
