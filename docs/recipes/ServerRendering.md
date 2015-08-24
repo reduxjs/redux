@@ -190,8 +190,66 @@ function handleRender(req, res) {
 ```
 The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:8080/?counter=100](http://localhost:8080/?counter=100) in your browser, you'll see the counter starts at 100. In the rendered HTML, you'll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
 
-### Async Data Fetching
+### Async State Fetching
 
-Fetching data asynchronously during server side rendering is a common point of confusion.  The first thing to understand is that you can fetch your data however you want, **as long as it is available _before_ we send our response to the client**.
+The most common issue with server side rendering is dealing with state that comes in asynchronously. Rendering on the server is synchronous by nature, so it's necessary to map any asynchronous fetches into a synchronous operation.
 
-**examples**
+The easiest way to do this is to pass through some callback back to your synchronous code. In this case, that will be a function that will reference the response object and send back our rendered HTML to the client. Don't worry, it's not as hard as it may sound.
+
+For our example, we'll imagine there is an external datastore that contains the counter's initial value (Counter As A Service, or CaaS). We'll make a mock call over to them and build our initial state from the result. We'll start by building out our API call:
+
+**api/counter.js**
+
+```js
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+export function fetchCounter(callback) {
+  setTimeout(() => {
+    callback(getRandomInt(1, 100));
+  }, 500);
+}
+```
+
+Again, this is just a mock API, so we use `setTimeout` to simulate a network request that takes 500 milliseconds to respond (this should be much faster with a real world API). We pass in a callback that returns a random number asynchronously. If you're using a Promise-based API client, then you would issue this callback in your `then` handler.
+
+On the server side, we simply wrap our existing code in the `fetchCounter` and recieve the result in the callback:
+
+**server.js**
+
+```js
+// Add this to our imports
+import { fetchCounter } from './api/counter';
+
+function handleRender(req, res) {
+
+  // Query our mock API asynchronously
+  fetchCounter(apiResult => {
+
+    // Read the counter from the request, if provided
+    const params = qs.parse(req.query);
+    const counter = parseInt(params.counter) || apiResult || 0;
+
+    // Compile an initial state
+    let initialState = { counter };
+
+    // Create a new Redux store instance
+    const store = createStore(counterApp, initialState);
+
+    // Render the component to a string
+    const html = React.renderToString(
+      <Provider store={store}>
+        { () => <App/> }
+      </Provider>);
+
+    // Grab the initial state from our Redux store
+    const finalState = store.getState();
+
+    // Send the rendered page back to the client
+    res.send(renderFullPage(html, finalState));
+  });
+}
+```
+
+Because we `res.send()` inside of the callback, the server will hold open the connection and won't send any data until that callback executes. You'll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
