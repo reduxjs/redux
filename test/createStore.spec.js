@@ -8,12 +8,10 @@ describe('createStore', () => {
     const store = createStore(combineReducers(reducers));
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(5);
+    expect(methods.length).toBe(3);
     expect(methods).toContain('subscribe');
     expect(methods).toContain('dispatch');
     expect(methods).toContain('getState');
-    expect(methods).toContain('getReducer');
-    expect(methods).toContain('replaceReducer');
   });
 
   it('should require a reducer function', () => {
@@ -91,69 +89,6 @@ describe('createStore', () => {
     }, {
       id: 2,
       text: 'World'
-    }]);
-  });
-
-  it('should preserve the state when replacing a reducer', () => {
-    const store = createStore(reducers.todos);
-    store.dispatch(addTodo('Hello'));
-    store.dispatch(addTodo('World'));
-    expect(store.getState()).toEqual([{
-      id: 1,
-      text: 'Hello'
-    }, {
-      id: 2,
-      text: 'World'
-    }]);
-
-    let nextStore = createStore(reducers.todosReverse);
-    store.replaceReducer(nextStore.getReducer());
-    expect(store.getState()).toEqual([{
-      id: 1,
-      text: 'Hello'
-    }, {
-      id: 2,
-      text: 'World'
-    }]);
-
-    store.dispatch(addTodo('Perhaps'));
-    expect(store.getState()).toEqual([{
-      id: 3,
-      text: 'Perhaps'
-    }, {
-      id: 1,
-      text: 'Hello'
-    }, {
-      id: 2,
-      text: 'World'
-    }]);
-
-    nextStore = createStore(reducers.todos);
-    store.replaceReducer(nextStore.getReducer());
-    expect(store.getState()).toEqual([{
-      id: 3,
-      text: 'Perhaps'
-    }, {
-      id: 1,
-      text: 'Hello'
-    }, {
-      id: 2,
-      text: 'World'
-    }]);
-
-    store.dispatch(addTodo('Surely'));
-    expect(store.getState()).toEqual([{
-      id: 3,
-      text: 'Perhaps'
-    }, {
-      id: 1,
-      text: 'Hello'
-    }, {
-      id: 2,
-      text: 'World'
-    }, {
-      id: 4,
-      text: 'Surely'
     }]);
   });
 
