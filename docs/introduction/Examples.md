@@ -1,26 +1,9 @@
 # Examples
 
-Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).  
-**To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
+Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).
 
 >##### Note on Copying
->If you copy Redux examples outside their folders, remove these lines from their `webpack.config.js`:
->
->```js
->alias: {
->   'redux': path.join(__dirname, '..', '..', 'src')
->},
->```
->and
->```js
->{
->   test: /\.js$/,
->   loaders: ['babel'],
->   include: path.join(__dirname, '..', '..', 'src')
->},
-```
->
-> Otherwise they’ll try to resolve Redux to a relative `src` folder, and the build will fail.
+>If you copy Redux examples outside their folders, you can delete some lines at the end of their `webpack.config.js` files. They follow a “You can safely delete these lines in your project.” comment.
 
 ## Counter
 
@@ -29,13 +12,10 @@ Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) e
 ```
 git clone https://github.com/rackt/redux.git
 
-cd redux
+cd redux/examples/counter
 npm install
-
-cd examples/counter
-npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
@@ -51,13 +31,10 @@ Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) e
 ```
 git clone https://github.com/rackt/redux.git
 
-cd redux
+cd redux/examples/todomvc
 npm install
-
-cd examples/todomvc
-npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
@@ -74,13 +51,10 @@ Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) examp
 ```
 git clone https://github.com/rackt/redux.git
 
-cd redux
+cd redux/examples/async
 npm install
-
-cd examples/async
-npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
@@ -97,13 +71,10 @@ Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-wo
 ```
 git clone https://github.com/rackt/redux.git
 
-cd redux
+cd redux/examples/real-world
 npm install
-
-cd examples/real-world
-npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
