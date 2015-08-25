@@ -1,11 +1,21 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer from '../reducers';
+import reducer from '../reducers';
+import switchReducer from './switchReducer';
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunk
-)(createStore);
+function onHotReload(useReducer) {
+  module.hot.accept('../reducers', () => {
+    const nextReducer = require('../reducers');
+    useReducer(nextReducer);
+  });
+}
+
+const finalCreateStore = compose(
+  switchReducer(onHotReload),
+  applyMiddleware(thunk),
+  createStore
+);
 
 export default function configureStore(initialState) {
-  return createStoreWithMiddleware(rootReducer, initialState);
+  return finalCreateStore(reducer, initialState);
 }
