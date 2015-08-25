@@ -7,13 +7,15 @@ reducing function you can pass to [`createStore`](createStore.md).
 
 The resulting reducer calls every child reducer, and gather their results into a single state object. The shape of the state object matches the keys of the passed `reducers`.
 
->##### A Note for Flux Users
+> ##### A Note for Flux Users
 
->This function helps you organize your reducers to manage their own slices of state, similar to how you would have different Flux Stores to manage different state. With Redux, there is just one store, but `combineReducers` helps you keep the same logical division between reducers.
+> This function helps you organize your reducers to manage their own slices of state, similar to how you would have different Flux Stores to manage different state. With Redux, there is just one store, but `combineReducers` helps you keep the same logical division between reducers.
 
 #### Arguments
 
-1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. One handy way to obtain it is to use ES6 `import * as reducers` syntax, but you can also construct this object manually. See the notes below for some rules every passed reducer must follow.
+1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
+
+> Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend exporting a single reducer obtained using `combineReducers()` from `reducers/index.js` instead. An example is included below.
 
 #### Returns
 
@@ -35,10 +37,10 @@ While `combineReducers` attempts to check that your reducers conform to some of 
 
 #### Example
 
-#### `reducers.js`
+#### `reducers/todos.js`
 
 ```js
-export function todos(state = [], action) {
+export default function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
     return state.concat([action.text]);
@@ -46,8 +48,12 @@ export function todos(state = [], action) {
     return state;
   }
 }
+```
 
-export function counter(state = 0, action) {
+#### `reducers/counter.js`
+
+```js
+export default function counter(state = 0, action) {
   switch (action.type) {
   case 'INCREMENT':
     return state + 1;
@@ -59,19 +65,25 @@ export function counter(state = 0, action) {
 }
 ```
 
+#### `reducers/index.js`
+
+```js
+import { combineReducers } from 'redux';
+import todos from './todos';
+import counter from './counter';
+
+export default combineReducers({
+  todos,
+  counter
+});
+```
+
 #### `App.js`
 
 ```js
 import { createStore, combineReducers } from 'redux';
+import reducer from './reducers/index';
 
-import * as reducers from './reducers';
-console.log(reducers);
-// {
-//   todos: Function,
-//   counter: Function
-// }
-
-let reducer = combineReducers(reducers);
 let store = createStore(reducer);
 console.log(store.getState());
 // {
