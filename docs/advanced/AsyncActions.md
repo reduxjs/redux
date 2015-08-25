@@ -316,7 +316,25 @@ fetch(`http://www.reddit.com/r/${reddit}.json`)
   });
 ```
 
-We can do the same from our components. However, it quickly gets tedious. Usually you want some kind of common logic before performing a request, such as looking up something in the state, and maybe deciding not to fetch because the data is cached.
+>##### Note on `fetch`
+
+>We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don’t yet support it natively, we suggest that you use [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) library:
+
+>```js
+// Do this in every file where you use `fetch`
+>import fetch from 'isomorphic-fetch';
+>```
+
+>Internally, it uses [`whatwg-fetch` polyfill](https://github.com/github/fetch) on the client, and [`node-fetch`](https://github.com/bitinn/node-fetch) on the server, so you won’t need to change API calls if you change your app to be [universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
+
+>Be aware that any `fetch` polyfill assumes a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill is already present. The easiest way to ensure you have a Promise polyfill is to enable Babel’s ES6 polyfill in your entry point before any other code runs:
+
+>```js
+>// Do this once before any other code in your app
+>import 'babel-core/polyfill';
+>```
+
+We can call the APIs and dispatch the relevant actions from our components, too. However, it quickly gets tedious. Usually you want some kind of common logic before performing a request, such as looking up something in the state, and maybe deciding not to fetch because the data is cached.
 
 Clearly, actions can’t express control flow. The best tool for control flow is a function. A function can have an `if` statement, or an early `return`. If a function has access to a `dispatch` method, it can call it many times, potentially asynchronously. Does this ring a bell?
 
@@ -352,6 +370,8 @@ If this doesn’t make sense, you need to go back to the [middleware introductio
 #### `actions.js`
 
 ```js
+import fetch from 'isomorphic-fetch';
+
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 function requestPosts(reddit) {
   return {
@@ -414,6 +434,26 @@ The nice thing about thunks is that they can dispatch results of each other:
 #### `actions.js`
 
 ```js
+import fetch from 'isomorphic-fetch';
+
+export const REQUEST_POSTS = 'REQUEST_POSTS';
+function requestPosts(reddit) {
+  return {
+    type: REQUEST_POSTS,
+    reddit
+  };
+}
+
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+function receivePosts(reddit, json) {
+  return {
+    type: RECEIVE_POSTS,
+    reddit: reddit,
+    posts: json.data.children.map(child => child.data),
+    receivedAt: Date.now()
+  };
+}
+
 function fetchPosts(reddit) {
   return dispatch => {
     dispatch(requestPosts(reddit));
