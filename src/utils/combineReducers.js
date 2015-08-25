@@ -3,6 +3,8 @@ import isPlainObject from '../utils/isPlainObject';
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 
+/* eslint-disable no-console */
+
 function getErrorMessage(key, action) {
   var actionType = action && action.type;
   var actionName = actionType && `"${actionType.toString()}"` || 'an action';
@@ -17,7 +19,7 @@ function verifyStateShape(initialState, currentState) {
   var reducerKeys = Object.keys(currentState);
 
   if (reducerKeys.length === 0) {
-    console.error( // eslint-disable-line no-console
+    console.error(
       'Store does not have a valid reducer. Make sure the argument passed ' +
       'to combineReducers is an object whose values are reducers.'
     );
@@ -25,7 +27,7 @@ function verifyStateShape(initialState, currentState) {
   }
 
   if (!isPlainObject(initialState)) {
-    console.error( // eslint-disable-line no-console
+    console.error(
       'initialState has unexpected type of "' +
       ({}).toString.call(initialState).match(/\s([a-z|A-Z]+)/)[1] +
       '". Expected initialState to be an object with the following ' +
@@ -39,7 +41,7 @@ function verifyStateShape(initialState, currentState) {
   );
 
   if (unexpectedKeys.length > 0) {
-    console.error( // eslint-disable-line no-console
+    console.error(
       `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
       `"${unexpectedKeys.join('", "')}" in initialState will be ignored. ` +
       `Expected to find one of the known reducer keys instead: "${reducerKeys.join('", "')}"`
