@@ -96,7 +96,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export function receivePosts(reddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit: reddit,
+    reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
@@ -384,7 +384,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 function receivePosts(reddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit: reddit,
+    reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
@@ -448,7 +448,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 function receivePosts(reddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit: reddit,
+    reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
