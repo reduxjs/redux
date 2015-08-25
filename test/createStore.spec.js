@@ -237,6 +237,20 @@ describe('createStore', () => {
     });
     store.dispatch(addTodo('Hello'));
   });
+  
+  it('should pass the correct action to subscribers', done => {
+    const store = createStore(reducers.todos);
+    const stop = 100;
+    let i = 0;
+    store.subscribe(action => {
+      expect(action.text).toEqual(i);
+      i++;
+      if (i === stop) done();
+    });
+    for (let j = 0; j < stop; j++) {
+      store.dispatch(addTodo(j));
+    }
+  });
 
   it('should only accept plain object actions', () => {
     const store = createStore(reducers.todos);
