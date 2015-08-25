@@ -51,7 +51,7 @@ export default class Explore extends Component {
   }
 
   handleGoClick() {
-    this.props.onChange(this.getInputValue())
+    this.props.onChange(this.getInputValue());
   }
 }
 

@@ -3,9 +3,7 @@ import merge from 'lodash/object/merge';
 import paginate from './paginate';
 import { combineReducers } from 'redux';
 
-/**
- * Updates an entity cache in response to any action with response.entities.
- */
+// Updates an entity cache in response to any action with response.entities.
 export function entities(state = { users: {}, repos: {} }, action) {
   if (action.response && action.response.entities) {
     return merge({}, state, action.response.entities);
@@ -14,9 +12,7 @@ export function entities(state = { users: {}, repos: {} }, action) {
   return state;
 }
 
-/**
- * Updates error message to notify about the failed fetches.
- */
+// Updates error message to notify about the failed fetches.
 export function errorMessage(state = null, action) {
   const { type, error } = action;
 
@@ -29,9 +25,7 @@ export function errorMessage(state = null, action) {
   return state;
 }
 
-/**
- * Updates the pagination data for different actions.
- */
+// Updates the pagination data for different actions.
 export const pagination = combineReducers({
   starredByUser: paginate({
     mapActionToKey: action => action.login,

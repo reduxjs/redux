@@ -6,7 +6,7 @@ import * as CounterActions from '../actions/counter';
 function mapStateToProps(state) {
   return {
     counter: state.counter
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {

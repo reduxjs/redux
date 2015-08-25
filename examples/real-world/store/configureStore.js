@@ -11,9 +11,7 @@ const createStoreWithMiddleware = applyMiddleware(
   loggerMiddleware
 )(createStore);
 
-/**
- * Creates a preconfigured store for this example.
- */
+// Creates a preconfigured store for this example.
 export default function configureStore(initialState) {
   return createStoreWithMiddleware(reducer, initialState);
 }

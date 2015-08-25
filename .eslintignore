@@ -1,3 +1,4 @@
+webpack.config.*.js
 lib
 node_modules
 examples/todomvc/node_modules
@@ -6,3 +7,9 @@ examples/todomvc/webpack.config.js
 examples/counter/node_modules
 examples/counter/server.js
 examples/counter/webpack.config.js
+examples/async/node_modules
+examples/async/server.js
+examples/async/webpack.config.js
+examples/real-world/node_modules
+examples/real-world/server.js
+examples/real-world/webpack.config.js

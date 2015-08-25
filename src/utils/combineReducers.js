@@ -17,7 +17,7 @@ function verifyStateShape(initialState, currentState) {
   var reducerKeys = Object.keys(currentState);
 
   if (reducerKeys.length === 0) {
-    console.error(
+    console.error( // eslint-disable-line no-console
       'Store does not have a valid reducer. Make sure the argument passed ' +
       'to combineReducers is an object whose values are reducers.'
     );
@@ -25,7 +25,7 @@ function verifyStateShape(initialState, currentState) {
   }
 
   if (!isPlainObject(initialState)) {
-    console.error(
+    console.error( // eslint-disable-line no-console
       'initialState has unexpected type of "' +
       ({}).toString.call(initialState).match(/\s([a-z|A-Z]+)/)[1] +
       '". Expected initialState to be an object with the following ' +
@@ -39,7 +39,7 @@ function verifyStateShape(initialState, currentState) {
   );
 
   if (unexpectedKeys.length > 0) {
-    console.error(
+    console.error( // eslint-disable-line no-console
       `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
       `"${unexpectedKeys.join('", "')}" in initialState will be ignored. ` +
       `Expected to find one of the known reducer keys instead: "${reducerKeys.join('", "')}"`
@@ -111,7 +111,7 @@ export default function combineReducers(reducers) {
     ) ||
       // React Native
       typeof __DEV__ !== 'undefined' &&
-      __DEV__ //eslint-disable-line no-undef
+      __DEV__ // eslint-disable-line no-undef
     ) {
       if (!stateShapeVerified) {
         verifyStateShape(state, finalState);

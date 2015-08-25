@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TodoApp from './TodoApp';
-import { createStore, combineReducers } from 'redux';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from '../reducers';
 

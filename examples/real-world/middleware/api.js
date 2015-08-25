@@ -2,9 +2,7 @@ import { Schema, arrayOf, normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import 'isomorphic-fetch';
 
-/**
- * Extracts the next page URL from Github API response.
- */
+// Extracts the next page URL from Github API response.
 function getNextPageUrl(response) {
   const link = response.headers.get('link');
   if (!link) {
@@ -21,16 +19,12 @@ function getNextPageUrl(response) {
 
 const API_ROOT = 'https://api.github.com/';
 
-/**
- * Fetches an API response and normalizes the result JSON according to schema.
- * This makes every API response have the same shape, regardless of how nested it was.
- */
+// Fetches an API response and normalizes the result JSON according to schema.
+// This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, schema) {
-  if (endpoint.indexOf(API_ROOT) === -1) {
-    endpoint = API_ROOT + endpoint;
-  }
+  const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
 
-  return fetch(endpoint)
+  return fetch(fullUrl)
     .then(response =>
       response.json().then(json => ({ json, response}))
     ).then(({ json, response }) => {
@@ -68,9 +62,7 @@ repoSchema.define({
   owner: userSchema
 });
 
-/**
- * Schemas for Github API responses.
- */
+// Schemas for Github API responses.
 export const Schemas = {
   USER: userSchema,
   USER_ARRAY: arrayOf(userSchema),
@@ -78,15 +70,11 @@ export const Schemas = {
   REPO_ARRAY: arrayOf(repoSchema)
 };
 
-/**
- * Action key that carries API call info interpreted by this Redux middleware.
- */
+// Action key that carries API call info interpreted by this Redux middleware.
 export const CALL_API = Symbol('Call API');
 
-/**
- * A Redux middleware that interprets actions with CALL_API info specified.
- * Performs the call and promises when such actions are dispatched.
- */
+// A Redux middleware that interprets actions with CALL_API info specified.
+// Performs the call and promises when such actions are dispatched.
 export default store => next => action => {
   const callAPI = action[CALL_API];
   if (typeof callAPI === 'undefined') {
