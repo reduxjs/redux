@@ -3,7 +3,7 @@ import createStoreShape from '../utils/createStoreShape';
 function isUsingOwnerContext(React) {
   const { version } = React;
   if (typeof version !== 'string') {
-    return false;
+    return true;
   }
 
   const sections = version.split('.');
