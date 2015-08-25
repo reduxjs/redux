@@ -43,7 +43,7 @@ describe('React', () => {
 
     it('should warn once when using a single element before React 0.14', () => {
       const store = createStore(() => ({}));
-      ['0.13.0-beta', '0.13.0', '0.13.3'].forEach(version => {
+      ['0.13.0-beta', '0.13.0', '0.13.3', undefined].forEach(version => {
         const LocalProvider = createProvider({ ...React, version });
         // Trick React into checking propTypes every time:
         LocalProvider.displayName = Math.random().toString();
