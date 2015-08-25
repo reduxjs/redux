@@ -32,7 +32,7 @@ function callApi(endpoint, schema) {
 
   return fetch(endpoint)
     .then(response =>
-      response.json().then(json => ({ json, response}))
+      response.json().then(json => ({ json, response }))
     ).then(({ json, response }) => {
       if (!response.ok) {
         return Promise.reject(json);
