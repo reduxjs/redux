@@ -24,7 +24,7 @@
 * [Recipes](/docs/recipes/README.md)
   * [Migrating to Redux](/docs/recipes/MigratingToRedux.md)
   * [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
-  * Server Rendering
+  * [Server Rendering](/docs/recipes/ServerRendering.md)
   * [Computing Derived Data](/docs/recipes/ComputingDerivedData.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)
 * [Troubleshooting](/docs/Troubleshooting.md)
