@@ -29,7 +29,7 @@ npm install --save react-redux
 ```
 
 Be careful! **“React” goes first.**  
-There is a project called `redux-react` but it is [completely unrelated](https://github.com/cgarvis/redux-react/issues/1).  
+There is a project called `redux-react`, but it is [completely unrelated](https://github.com/cgarvis/redux-react/issues/1).  
 
 React Redux requires **React 0.13 or later.**
 
@@ -74,7 +74,7 @@ It is advisable that only top-level components of your app (such as route handle
 </table>
 </center>
 
-### “Dumb” component is unaware of Redux
+### “Dumb” components are unaware of Redux
 
 Let’s say we have a `<Counter />` “dumb” component with a number `value` prop, and an `onIncrement` function prop that it will call when user presses an “Increment” button:
 
@@ -92,11 +92,11 @@ export default class Counter extends Component {
 }
 ```
 
-### “Smart” component is `connect()`-ed to Redux
+### “Smart” components are `connect()`-ed to Redux
 
 Here’s how we hook it up to the Redux Store.
 
-We will use `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. The `connect()` function lets you specify *which exact* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
+We will use the `connect()` function provided by `react-redux` to turn a “dumb” `Counter` into a smart component. The `connect()` function lets you specify *which exact* state from the Redux store your component wants to track. This lets you subscribe on any level of granularity.
 
 ##### `containers/CounterContainer.js`
 
@@ -135,17 +135,17 @@ export default connect(
 // See more recipes in detailed connect() examples below.
 ```
 
-Whether to put `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
+Whether to put the `connect()` call in the same file as the “dumb” component, or separately, is up to you.  
 Ask yourself whether you'd want to reuse this component but bind it to different data, or not.
 
 ### Nesting
 
-You can have many `connect()`-ed components in your app at any depth, and you can even nest them. It is however preferable that you try to only `connect()` top-level components such as route handlers, so the data flow in your application stays predictable.
+You can have many `connect()`-ed components in your app at any depth, and you can even nest them. It is, however, preferable that you try to only `connect()` top-level components such as route handlers, so the data flow in your application stays predictable.
 
 ### Support for Decorators
 
-You might have noticed that we used parens twice. This is called partial applications, and it lets people
-use ES7 decorator proposal syntax:
+You might have noticed that we used parens twice when calling `connect()`. This is called partial application, and it lets people
+use ES7’s proposed decorator syntax:
 
 ```js
 // Unstable syntax! It might change or break in production.
@@ -153,17 +153,17 @@ use ES7 decorator proposal syntax:
 export default class CounterContainer { ... }
 ```
 
-Don’t forget decorators are experimental! And they desugar to function calls anyway as example above demonstrates.
+Don’t forget decorators are experimental! They desugar to function calls anyway as the example above demonstrates.
 
 ### Additional Flexibility
 
-This is the most basic usage, but `connect()` supports many other different patterns: just passing the vanilla `dispatch()` function down, binding multiple action creators, putting them as `actions` prop, selecting parts of state and binding action creators depending on `props`, and so on. Check out `connect()` docs below to learn more.
+This is the most basic usage, but `connect()` supports many other patterns: just passing the vanilla `dispatch()` function down, binding multiple action creators, passing them in an `actions` prop, selecting parts of state and binding action creators depending on `props`, and so on. Check out the `connect()` docs below to learn more.
 
 ### Injecting Redux Store
 
-Finally, how do we actually hook it up to a Redux store? We need to create the store somewhere at the root of our component hierarchy. For client apps, the root component is a good place. For server rendering, you can do this in the request handler.
+Finally, how do we actually hook it up to the Redux store? We need to create the store somewhere at the root of our component hierarchy. For client apps, the root component is a good place. For server rendering, you can do this in the request handler.
 
-The trick is to wrap the whole view hierarchy into `<Provider>{() => ... }</Provider>` where `Provider` is imported from `react-redux`. One gotcha is that **the child of `Provider` must be a function**. This is to work around an issue about how context (undocumented feature we have to rely on to pass Redux data to components below) works in React 0.13. In React 0.14, you will be able to put your view hierarchy in `<Provider>` without wrapping it into a function.
+The trick is to wrap the whole view hierarchy into a `<Provider>{() => ... }</Provider>` where `Provider` is imported from `react-redux`. One gotcha is that **the child of `Provider` must be a function**. This is to work around an issue about how context (undocumented feature we have to rely on to pass Redux data to components below) works in React 0.13. In React 0.14, you will be able to put your view hierarchy in `<Provider>` without wrapping it into a function.
 
 ```js
 import { Component } from 'react';
@@ -188,7 +188,7 @@ React.render((
 
 ### `<Provider store>`
 
-Makes Redux store available to the `connect()` calls in the component hierarchy below. Normally, you can’t use `connect()` without wrapping the root component in `<Provider>`. (If you *really* need to, you can manually pass `store` as a prop to every `connect()`ed component, but we only recommend to do this for stubbing `store` in unit tests, or in non-fully-React codebases. Normally, you should just use `<Provider>`.)
+Makes the Redux store available to the `connect()` calls in the component hierarchy below. Normally, you can’t use `connect()` without wrapping the root component in `<Provider>`. (If you *really* need to, you can manually pass `store` as a prop to every `connect()`ed component, but we only recommend to do this for stubbing `store` in unit tests, or in non-fully-React codebases. Normally, you should just use `<Provider>`.)
 
 #### Props
 
@@ -238,9 +238,9 @@ Connects a React component to a Redux store.
 
 #### Arguments
 
-* [`mapStateToProps(state, [ownProps]): stateProps`] \(*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapStateToProps` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store. If `ownProps` is specified as a second argument then `mapStateToProps` will be re-invoked whenever the component receives new props.
+* [`mapStateToProps(state, [ownProps]): stateProps`] \(*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapStateToProps` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store. If `ownProps` is specified as a second argument, then `mapStateToProps` will be re-invoked whenever the component receives new props.
 
-* [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props. If `ownProps` is specified as a second argument then `mapDispatchToProps` will be re-invoked whenever the component receives new props.
+* [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use the [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props. If `ownProps` is specified as a second argument, then `mapDispatchToProps` will be re-invoked whenever the component receives new props.
 
 * [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `Object.assign({}, ownProps, stateProps, dispatchProps)` is used by default.
 
@@ -250,11 +250,11 @@ A React component class that injects state and action creators into your compone
 
 #### Remarks
 
-* It needs to be invoked two times. First time with its arguments described above, and second time, with the component: `connect(mapStateToProps, mapDispatchToProps, mergeProps)(MyComponent)`.
+* It needs to be invoked two times. The first time with its arguments described above, and a second time, with the component: `connect(mapStateToProps, mapDispatchToProps, mergeProps)(MyComponent)`.
 
 * The `mapStateToProps` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
 
-* **To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.** You may also pass `store` as a prop to the `connect()`ed component, but it's not recommended because it's just too much trouble. Only do this for in non-fully-React codebases or to stub store in a unit test.
+* **To use `connect()`, the root component of your app must be wrapped into `<Provider>{() => ... }</Provider>` before being rendered.** You may also pass `store` as a prop to the `connect()`ed component, but it's not recommended, because it's just too much trouble. Only do this for non-fully-React codebases or to stub the store in a unit test.
 
 #### Examples
 
@@ -266,7 +266,7 @@ export default connect()(TodoApp);
 
 ##### Inject `dispatch` and every field in the global state
 
->Don’t do this! It kills any performance optimisations because `TodoApp` will rerender after any action.  
+>Don’t do this! It kills any performance optimisations because `TodoApp` will rerender after every action.  
 >It’s better to have more granular `connect()` on several components in your view hierarchy.
 
 ```js
@@ -429,7 +429,7 @@ See the link above.
 In short,
 
 * Reducers should never mutate state, they must return new objects, or React Redux won’t see the updates.
-* Make sure you either bind action creators with `mapDispatchToState` argument to `connect()` or with `bindActionCreators()` method, or that you manually call `dispatch()`. Just calling your `MyActionCreators.addTodo()` function won’t work because it just *returns* an action, but not *dispatches* it.
+* Make sure you either bind action creators with the `mapDispatchToProps` argument to `connect()` or with the `bindActionCreators()` method, or that you manually call `dispatch()`. Just calling your `MyActionCreators.addTodo()` function won’t work because it just *returns* an action, but does not *dispatch* it.
 
 ### My views aren’t updating on route change with React Router 0.13
 
@@ -464,7 +464,7 @@ You can also upgrade to React Router 1.0 which shouldn’t have this problem. (L
 
 If you have context issues,
 
-1. [Make sure you don’t have duplicate React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) on the page.
+1. [Make sure you don’t have a duplicate instance of React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) on the page.
 2. Make sure you didn’t forget to wrap your root component in [`<Provider>`](#provider-store).
 3. If you use React Router, something like `<Provider>{() => routes}</Provider>` won’t work. Due to the way context works in React 0.13, it’s important that the `<Provider>` children are *created* inside that function. Just referencing an outside variable doesn’t do the trick. Instead of `<Provider>{() => routes}</Provider>`, write `<Provider>{createRoutes}</Provider>` where `createRoutes()` is a function that actually *creates* (and returns) the route configuration.
 
