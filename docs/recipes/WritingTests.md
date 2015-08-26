@@ -1,4 +1,4 @@
-# Writing tests
+# Writing Tests
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
 
@@ -138,55 +138,6 @@ describe('todos reducer', () => {
       id: 0
     }]);
   });
-```
-
-### Middleware
-
-Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
-
-#### Example
-
-```js
-import expect from 'expect';
-import * as types from '../../constants/ActionTypes';
-import singleDispatch from '../../middleware/singleDispatch';
-
-const fakeStore = fakeData => ({
-  getState() {
-    return fakeData;
-  }
-});
-
-const dispatchWithStoreOf = (storeData, action) => {
-  let dispatched = null;
-  const dispatch = singleDispatch(fakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
-  dispatch(action);
-  return dispatched;
-};
-
-describe('middleware', () => {
-  it('should dispatch if store is empty', () => {
-    const action = {
-      type: types.ADD_TODO
-    };
-    
-    expect(
-      dispatchWithStoreOf({}, action)
-    ).toEqual(action);
-  });
-
-  it('should not dispatch if store already has type', () => {
-    const action = {
-      type: types.ADD_TODO
-    };
-    
-    expect(
-      dispatchWithStoreOf({
-        [types.ADD_TODO]: 'dispatched'
-      }, action)
-    ).toNotExist();
-  });
-});
 ```
 
 ### Components
@@ -355,9 +306,66 @@ And if you need both:
 import ConnectedApp, { App } from './App';
 ```
 
+In the app itself, you would still import it normally:
+
+```js
+import App from './App';
+```
+
+You would only use the named export for tests.
+
 >##### A Note on Mixing ES6 Modules and CommonJS
 
 >If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
+
+### Middleware
+
+Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
+
+#### Example
+
+```js
+import expect from 'expect';
+import * as types from '../../constants/ActionTypes';
+import singleDispatch from '../../middleware/singleDispatch';
+
+const fakeStore = fakeData => ({
+  getState() {
+    return fakeData;
+  }
+});
+
+const dispatchWithStoreOf = (storeData, action) => {
+  let dispatched = null;
+  const dispatch = singleDispatch(fakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
+  dispatch(action);
+  return dispatched;
+};
+
+describe('middleware', () => {
+  it('should dispatch if store is empty', () => {
+    const action = {
+      type: types.ADD_TODO
+    };
+    
+    expect(
+      dispatchWithStoreOf({}, action)
+    ).toEqual(action);
+  });
+
+  it('should not dispatch if store already has type', () => {
+    const action = {
+      type: types.ADD_TODO
+    };
+    
+    expect(
+      dispatchWithStoreOf({
+        [types.ADD_TODO]: 'dispatched'
+      }, action)
+    ).toNotExist();
+  });
+});
+```
 
 ### Glossary
 
