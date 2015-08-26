@@ -9,6 +9,12 @@ export default class Explore extends Component {
     this.handleGoClick = this.handleGoClick.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      this.setInputValue(nextProps.value);
+    }
+  }
+
   getInputValue() {
     return findDOMNode(this.refs.input).value;
   }
@@ -20,30 +26,6 @@ export default class Explore extends Component {
     findDOMNode(this.refs.input).value = val;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      this.setInputValue(nextProps.value);
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        <p>Type a username or repo full name and hit 'Go':</p>
-        <input size='45'
-               ref='input'
-               defaultValue={this.props.value}
-               onKeyUp={this.handleKeyUp} />
-        <button onClick={this.handleGoClick}>
-          Go!
-        </button>
-        <p>
-          Code on <a href={GITHUB_REPO} target='_blank'>Github</a>.
-        </p>
-      </div>
-    );
-  }
-
   handleKeyUp(e) {
     if (e.keyCode === 13) {
       this.handleGoClick();
@@ -52,6 +34,24 @@ export default class Explore extends Component {
 
   handleGoClick() {
     this.props.onChange(this.getInputValue());
+  }
+
+  render() {
+    return (
+      <div>
+        <p>Type a username or repo full name and hit 'Go':</p>
+        <input size="45"
+               ref="input"
+               defaultValue={this.props.value}
+               onKeyUp={this.handleKeyUp} />
+        <button onClick={this.handleGoClick}>
+          Go!
+        </button>
+        <p>
+          Code on <a href={GITHUB_REPO} target="_blank">Github</a>.
+        </p>
+      </div>
+    );
   }
 }
 

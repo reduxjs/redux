@@ -6,8 +6,8 @@ import TodoTextInput from '../../components/TodoTextInput';
 
 const { TestUtils } = React.addons;
 
-function setup(editing=false) {
-  let props = {
+function setup( editing = false ) {
+  const props = {
     todo: {
       id: 0,
       text: 'Use Redux',
@@ -18,7 +18,7 @@ function setup(editing=false) {
     completeTodo: expect.createSpy()
   };
 
-  let renderer = TestUtils.createRenderer();
+  const renderer = TestUtils.createRenderer();
 
   renderer.render(
     <TodoItem {...props} />
@@ -27,7 +27,7 @@ function setup(editing=false) {
   let output = renderer.getRenderOutput();
 
   if (editing) {
-    let label = output.props.children.props.children[1];
+    const label = output.props.children.props.children[1];
     label.props.onDoubleClick({});
     output = renderer.getRenderOutput();
   }
@@ -43,19 +43,18 @@ describe('components', () => {
   jsdomReact();
 
   describe('TodoItem', () => {
-
     it('initial render', () => {
       const { output } = setup();
 
       expect(output.type).toBe('li');
       expect(output.props.className).toBe('');
 
-      let div = output.props.children;
+      const div = output.props.children;
 
       expect(div.type).toBe('div');
       expect(div.props.className).toBe('view');
 
-      let [input, label, button] = div.props.children;
+      const [input, label, button] = div.props.children;
 
       expect(input.type).toBe('input');
       expect(input.props.checked).toBe(false);
@@ -69,23 +68,23 @@ describe('components', () => {
 
     it('input onChange should call completeTodo', () => {
       const { output, props } = setup();
-      let input = output.props.children.props.children[0];
+      const input = output.props.children.props.children[0];
       input.props.onChange({});
       expect(props.completeTodo).toHaveBeenCalledWith(0);
     });
 
     it('button onClick should call deleteTodo', () => {
       const { output, props } = setup();
-      let button = output.props.children.props.children[2];
+      const button = output.props.children.props.children[2];
       button.props.onClick({});
       expect(props.deleteTodo).toHaveBeenCalledWith(0);
     });
 
     it('label onDoubleClick should put component in edit state', () => {
       const { output, renderer } = setup();
-      let label = output.props.children.props.children[1];
+      const label = output.props.children.props.children[1];
       label.props.onDoubleClick({});
-      let updated = renderer.getRenderOutput();
+      const updated = renderer.getRenderOutput();
       expect(updated.type).toBe('li');
       expect(updated.props.className).toBe('editing');
     });
@@ -96,7 +95,7 @@ describe('components', () => {
       expect(output.type).toBe('li');
       expect(output.props.className).toBe('editing');
 
-      let input = output.props.children;
+      const input = output.props.children;
       expect(input.type).toBe(TodoTextInput);
       expect(input.props.text).toBe('Use Redux');
       expect(input.props.editing).toBe(true);
@@ -117,7 +116,7 @@ describe('components', () => {
     it('TodoTextInput onSave should exit component from edit state', () => {
       const { output, renderer } = setup(true);
       output.props.children.props.onSave('Use Redux');
-      let updated = renderer.getRenderOutput();
+      const updated = renderer.getRenderOutput();
       expect(updated.type).toBe('li');
       expect(updated.props.className).toBe('');
     });

@@ -26,35 +26,12 @@ class MainSection extends Component {
     this.setState({ filter });
   }
 
-  render() {
-    const { todos, actions } = this.props;
-    const { filter } = this.state;
-
-    const filteredTodos = todos.filter(TODO_FILTERS[filter]);
-    const completedCount = todos.reduce((count, todo) =>
-      todo.completed ? count + 1 : count,
-      0
-    );
-
-    return (
-      <section className='main'>
-        {this.renderToggleAll(completedCount)}
-        <ul className='todo-list'>
-          {filteredTodos.map(todo =>
-            <TodoItem key={todo.id} todo={todo} {...actions} />
-          )}
-        </ul>
-        {this.renderFooter(completedCount)}
-      </section>
-    );
-  }
-
   renderToggleAll(completedCount) {
     const { todos, actions } = this.props;
     if (todos.length > 0) {
       return (
-        <input className='toggle-all'
-               type='checkbox'
+        <input className="toggle-all"
+               type="checkbox"
                checked={completedCount === todos.length}
                onChange={actions.completeAll} />
       );
@@ -75,6 +52,29 @@ class MainSection extends Component {
                 onShow={this.handleShow.bind(this)} />
       );
     }
+  }
+
+  render() {
+    const { todos, actions } = this.props;
+    const { filter } = this.state;
+
+    const filteredTodos = todos.filter(TODO_FILTERS[filter]);
+    const completedCount = todos.reduce((count, todo) =>
+      todo.completed ? count + 1 : count,
+      0
+    );
+
+    return (
+      <section className="main">
+        {this.renderToggleAll(completedCount)}
+        <ul className="todo-list">
+          {filteredTodos.map(todo =>
+            <TodoItem key={todo.id} todo={todo} {...actions} />
+          )}
+        </ul>
+        {this.renderFooter(completedCount)}
+      </section>
+    );
   }
 }
 
