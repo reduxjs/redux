@@ -134,7 +134,7 @@ The client side is very straightforward. All we need to do is grab the initial s
 
 Let’s take a look at our new client file:
 
-##### `client.js`
+#### `client.js`
 
 ```js
 import React from 'react';
@@ -175,7 +175,7 @@ The only input for server side code is the request made when loading up a page i
 
 The request contains information about the URL requested, including any query parameters, which will be useful when using something like [React Router](https://github.com/rackt/react-router). It can also contain headers with inputs like cookies or authorization, or POST body data. Let’s see how we can set the initial counter state based on a query parameter.
 
-##### `server.js`
+#### `server.js`
 
 ```js
 import qs from 'qs'; // Add this at the top of the file
@@ -216,7 +216,7 @@ The easiest way to do this is to pass through some callback back to your synchro
 
 For our example, we’ll imagine there is an external datastore that contains the counter’s initial value (Counter As A Service, or CaaS). We’ll make a mock call over to them and build our initial state from the result. We’ll start by building out our API call:
 
-##### `api/counter.js`
+#### `api/counter.js`
 
 ```js
 function getRandomInt(min, max) {
@@ -234,7 +234,7 @@ Again, this is just a mock API, so we use `setTimeout` to simulate a network req
 
 On the server side, we simply wrap our existing code in the `fetchCounter` and recieve the result in the callback:
 
-##### `server.js`
+#### `server.js`
 
 ```js
 // Add this to our imports
