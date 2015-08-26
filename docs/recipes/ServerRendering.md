@@ -124,7 +124,7 @@ function renderFullPage(html, initialState) {
 }
 ```
 
->#### Note on String Interpolation Syntax
+>##### Note on String Interpolation Syntax
 
 >In the example above, we use ES6 [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings) syntax. It lets us write multiline strings and interpolate values, but it requires ES6 support. If you’d like to write your Node code using ES6, check out [Babel require hook](https://babeljs.io/docs/usage/require/) documentation. Or you can just keep writing ES5 code.
 
