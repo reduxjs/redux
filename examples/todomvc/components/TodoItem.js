@@ -35,15 +35,15 @@ class TodoItem extends Component {
       );
     } else {
       element = (
-        <div className='view'>
-          <input className='toggle'
-                 type='checkbox'
+        <div className="view">
+          <input className="toggle"
+                 type="checkbox"
                  checked={todo.completed}
                  onChange={() => completeTodo(todo.id)} />
           <label onDoubleClick={this.handleDoubleClick.bind(this)}>
             {todo.text}
           </label>
-          <button className='destroy'
+          <button className="destroy"
                   onClick={() => deleteTodo(todo.id)} />
         </div>
       );

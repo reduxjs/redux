@@ -29,6 +29,18 @@ class UserPage extends Component {
     }
   }
 
+  handleLoadMoreClick() {
+    this.props.loadStarred(this.props.login, true);
+  }
+
+  renderRepo([repo, owner]) {
+    return (
+      <Repo repo={repo}
+            owner={owner}
+            key={repo.fullName} />
+    );
+  }
+
   render() {
     const { user, login } = this.props;
     if (!user) {
@@ -47,18 +59,6 @@ class UserPage extends Component {
               {...starredPagination} />
       </div>
     );
-  }
-
-  renderRepo([repo, owner]) {
-    return (
-      <Repo repo={repo}
-            owner={owner}
-            key={repo.fullName} />
-    );
-  }
-
-  handleLoadMoreClick() {
-    this.props.loadStarred(this.props.login, true);
   }
 }
 

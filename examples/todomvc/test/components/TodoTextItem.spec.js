@@ -6,7 +6,7 @@ import TodoTextInput from '../../components/TodoTextInput';
 const { TestUtils } = React.addons;
 
 function setup(propOverrides) {
-  let props = Object.assign({
+  const props = Object.assign({
     onSave: expect.createSpy(),
     text: 'Use Redux',
     placeholder: 'What needs to be done?',
@@ -14,7 +14,7 @@ function setup(propOverrides) {
     newTodo: false
   }, propOverrides);
 
-  let renderer = TestUtils.createRenderer();
+  const renderer = TestUtils.createRenderer();
 
   renderer.render(
     <TodoTextInput {...props} />
@@ -35,7 +35,6 @@ describe('components', () => {
   jsdomReact();
 
   describe('TodoTextInput', () => {
-
     it('should render correctly', () => {
       const { output } = setup();
       expect(output.props.placeholder).toEqual('What needs to be done?');
@@ -56,7 +55,7 @@ describe('components', () => {
     it('should update value on change', () => {
       const { output, renderer } = setup();
       output.props.onChange({ target: { value: 'Use Radox' }});
-      let updated = renderer.getRenderOutput();
+      const updated = renderer.getRenderOutput();
       expect(updated.props.value).toEqual('Use Radox');
     });
 
@@ -69,7 +68,7 @@ describe('components', () => {
     it('should reset state on return key press if newTodo', () => {
       const { output, renderer } = setup({ newTodo: true });
       output.props.onKeyDown({ which: 13, target: { value: 'Use Redux' }});
-      let updated = renderer.getRenderOutput();
+      const updated = renderer.getRenderOutput();
       expect(updated.props.value).toEqual('');
     });
 

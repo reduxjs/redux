@@ -223,7 +223,6 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(1);
     expect(listenerC.calls.length).toBe(2);
-
   });
 
   it('should provide an up-to-date state when a subscriber is notified', done => {

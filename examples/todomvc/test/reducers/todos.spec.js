@@ -3,7 +3,6 @@ import todos from '../../reducers/todos';
 import * as types from '../../constants/ActionTypes';
 
 describe('todos reducer', () => {
-
   it('should handle initial state', () => {
     expect(
       todos(undefined, {})
@@ -20,8 +19,7 @@ describe('todos reducer', () => {
         type: types.ADD_TODO,
         text: 'Run the tests'
       })
-    ).toEqual([
-      {
+    ).toEqual([{
       text: 'Run the tests',
       completed: false,
       id: 0

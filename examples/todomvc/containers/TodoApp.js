@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
@@ -18,6 +18,11 @@ class TodoApp extends Component {
     );
   }
 }
+
+TodoApp.propTypes = {
+  todos: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
 
 function select(state) {
   return {

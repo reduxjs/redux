@@ -10,6 +10,35 @@ class App extends Component {
     this.handleDismissClick = this.handleDismissClick.bind(this);
   }
 
+  handleDismissClick(e) {
+    this.props.resetErrorMessage();
+    e.preventDefault();
+  }
+
+  handleChange(nextValue) {
+    // Available thanks to contextTypes below
+    const { router } = this.context;
+    router.transitionTo(`/${nextValue}`);
+  }
+
+  renderErrorMessage() {
+    const { errorMessage } = this.props;
+    if (!errorMessage) {
+      return null;
+    }
+
+    return (
+      <p style={{ backgroundColor: '#e99', padding: 10 }}>
+        <b>{errorMessage}</b>
+        {' '}
+        (<a href="#"
+            onClick={this.handleDismissClick}>
+          Dismiss
+        </a>)
+      </p>
+    );
+  }
+
   render() {
     // Injected by React Router
     const { location, children } = this.props;
@@ -26,46 +55,19 @@ class App extends Component {
       </div>
     );
   }
-
-  renderErrorMessage() {
-    const { errorMessage } = this.props;
-    if (!errorMessage) {
-      return null;
-    }
-
-    return (
-      <p style={{ backgroundColor: '#e99', padding: 10 }}>
-        <b>{errorMessage}</b>
-        {' '}
-        (<a href='#'
-            onClick={this.handleDismissClick}>
-          Dismiss
-        </a>)
-      </p>
-    );
-  }
-
-  handleDismissClick(e) {
-    this.props.resetErrorMessage();
-    e.preventDefault();
-  }
-
-  handleChange(nextValue) {
-    // Available thanks to contextTypes below
-    const { router } = this.context;
-    router.transitionTo(`/${nextValue}`);
-  }
 }
 
 App.propTypes = {
   errorMessage: PropTypes.string,
+  resetErrorMessage: PropTypes.func.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired
   }),
   params: PropTypes.shape({
     userLogin: PropTypes.string,
     repoName: PropTypes.string
-  }).isRequired
+  }).isRequired,
+  children: PropTypes.node
 };
 
 App.contextTypes = {

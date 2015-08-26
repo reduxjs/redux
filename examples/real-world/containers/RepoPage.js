@@ -28,6 +28,17 @@ class RepoPage extends Component {
     }
   }
 
+  handleLoadMoreClick() {
+    this.props.loadStargazers(this.props.fullName, true);
+  }
+
+  renderUser(user) {
+    return (
+      <User user={user}
+            key={user.login} />
+    );
+  }
+
   render() {
     const { repo, owner, name } = this.props;
     if (!repo || !owner) {
@@ -48,23 +59,13 @@ class RepoPage extends Component {
       </div>
     );
   }
-
-  renderUser(user) {
-    return (
-      <User user={user}
-            key={user.login} />
-    );
-  }
-
-  handleLoadMoreClick() {
-    this.props.loadStargazers(this.props.fullName, true);
-  }
 }
 
 RepoPage.propTypes = {
   repo: PropTypes.object,
   fullName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  owner: PropTypes.string.isRequired,
   stargazers: PropTypes.array.isRequired,
   stargazersPagination: PropTypes.object,
   loadRepo: PropTypes.func.isRequired,

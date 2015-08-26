@@ -31,17 +31,18 @@ class TodoTextInput extends Component {
 
   render() {
     return (
-      <input className={classnames({
-              edit: this.props.editing,
-              'new-todo': this.props.newTodo
-             })}
-             type='text'
-             placeholder={this.props.placeholder}
-             autoFocus='true'
-             value={this.state.text}
-             onBlur={this.handleBlur.bind(this)}
-             onChange={this.handleChange.bind(this)}
-             onKeyDown={this.handleSubmit.bind(this)} />
+      <input className={
+        classnames({
+          edit: this.props.editing,
+          'new-todo': this.props.newTodo
+        })}
+        type="text"
+        placeholder={this.props.placeholder}
+        autoFocus="true"
+        value={this.state.text}
+        onBlur={this.handleBlur.bind(this)}
+        onChange={this.handleChange.bind(this)}
+        onKeyDown={this.handleSubmit.bind(this)} />
     );
   }
 }
