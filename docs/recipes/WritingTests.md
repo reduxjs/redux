@@ -261,22 +261,25 @@ Call it before running any component tests. Note this is a dirty workaround, and
 
 ### Connected Components
 
-In order to achieve separation of concerns and create reusable components, we often wrap one component inside another using decorators. For example, consider the `App` component:
+If you use a library like [React Redux](https://github.com/rackt/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://github.com/rackt/react-redux#connectmapstatetoprops-mapdispatchtoprops-mergeprops). This lets you inject Redux state into a regular React component.
+
+Consider the following `App` component:
 
 ```js
 import { connect } from 'react-redux';
 
 class App extends Component { /* ... */ }
+
 export default connect(mapStateToProps)(App);
 ```
 
-In a unit test, you would normally import the class like this:
+In a unit test, you would normally import the `App` component like this:
 
 ```js
 import App from './App';
 ```
 
-However when you import the component, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
+However when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
 
 In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 
@@ -311,6 +314,6 @@ import ConnectedApp, { App } from './App';
 
 - [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
 
-- [jsdom](https://github.com/tmpvar/jsdom): An in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
+- [jsdom](https://github.com/tmpvar/jsdom): A plain JavaScript implementation of the DOM API. jsdom allows us to run the tests without browser.
 
-- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): The main idea of shallow rendering is to instantiate a component and get the result of its `render` method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements). That means it is possible to access its children, props and test if it works as expected.
+- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): Shallow rendering lets you instantiate a component and get the result of its `render` method just a single level deep instead of rendering components recursively to a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements). That means it is possible to access its children, props and test if it works as expected. This also means that you changing a child component won’t affect the tests for parent component.
