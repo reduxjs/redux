@@ -259,43 +259,53 @@ export default function jsdomReact() {
 
 Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
 
-#### Testing decorated React components
+### Connected Components
 
 In order to achieve separation of concerns and create reusable components, we often wrap one component inside another using decorators. For example, consider the `App` component:
 
 ```js
+import { connect } from 'react-redux';
+
 class App extends Component { /* ... */ }
-export default connect(select)(App);
+export default connect(mapStateToProps)(App);
 ```
 
-You would normally import the class like this:
+In a unit test, you would normally import the class like this:
 
 ```js
 import App from './App';
 ```
 
-Such component becomes hard to test because when you import the component, you're actually holding the wrapper component, not the App component itself. In order to be able to test the App component itself without having to deal with the decorator, it's recommended to also export the undecorated component:
+However when you import the component, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
+
+In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 
 ```js
+import { connect } from 'react-redux';
+
+// Use named export for unconnected component (for tests)
 export class App extends Component { /* ... */ }
-export default connect(select)(App);
+
+// Use default export for the connected component (for app)
+export default connect(mapDispatchToProps)(App);
 ```
 
-Since the default export is still the decorated component, the import statement pictured above will work as before so you won't have to change your application code. However, you can now import the undecorated App components in your test file like this:
+Since the default export is still the decorated component, the import statement pictured above will work as before so you won’t have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
 
 ```js
+// Note the curly brances: grab the named export instead of default export
 import { App } from './App';
 ```
 
 And if you need both:
 
 ```js
-import Component, { App } from './App';
+import ConnectedApp, { App } from './App';
 ```
 
-> ##### A note on using ES6 exports with CommonJS `require`
+>##### A Note on Mixing ES6 Modules and CommonJS
 
-> If you are using ES6 in your application sources, but write your tests in ES5. Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require("./App.js")`. Instead you have to use `require("./App.js").default`.
+>If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
 
 ### Glossary
 
