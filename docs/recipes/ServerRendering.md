@@ -14,11 +14,11 @@ In the following recipe, we are going to look at how to set up server-side rende
 
 ### Install Packages
 
-For this example, we'll be using [Express](http://expressjs.com/) as a simple web server.
+For this example, we'll be using [Express](http://expressjs.com/) as a simple web server. We'll include the [serve-static](https://www.npmjs.com/package/serve-static) middleware to handle static files, which we'll see in just a bit.
 
 We also need to install the React bindings for Redux, since they are not included in Redux by default.
 
-    npm install --save react-redux express serve-static
+    npm install --save express serve-static react-redux
 
 
 ## The Server Side
