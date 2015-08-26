@@ -3,6 +3,8 @@ import isPlainObject from '../utils/isPlainObject';
 import mapValues from '../utils/mapValues';
 import pick from '../utils/pick';
 
+/* eslint-disable no-console */
+
 function getErrorMessage(key, action) {
   var actionType = action && action.type;
   var actionName = actionType && `"${actionType.toString()}"` || 'an action';
@@ -111,7 +113,7 @@ export default function combineReducers(reducers) {
     ) ||
       // React Native
       typeof __DEV__ !== 'undefined' &&
-      __DEV__ //eslint-disable-line no-undef
+      __DEV__ // eslint-disable-line no-undef
     ) {
       if (!stateShapeVerified) {
         verifyStateShape(state, finalState);

@@ -1,10 +1,8 @@
 import merge from 'lodash/object/merge';
 import union from 'lodash/array/union';
 
-/**
- * Creates a reducer managing pagination, given the action types to handle,
- * and a function telling how to extract the key from an action.
- */
+// Creates a reducer managing pagination, given the action types to handle,
+// and a function telling how to extract the key from an action.
 export default function paginate({ types, mapActionToKey }) {
   if (!Array.isArray(types) || types.length !== 3) {
     throw new Error('Expected types to be an array of three elements.');

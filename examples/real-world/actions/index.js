@@ -3,10 +3,9 @@ import { CALL_API, Schemas } from '../middleware/api';
 export const USER_REQUEST = 'USER_REQUEST';
 export const USER_SUCCESS = 'USER_SUCCESS';
 export const USER_FAILURE = 'USER_FAILURE';
-/**
- * Fetches a single user from Github API.
- * Relies on the custom API middleware defined in ../middleware/api.js.
- */
+
+// Fetches a single user from Github API.
+// Relies on the custom API middleware defined in ../middleware/api.js.
 function fetchUser(login) {
   return {
     [CALL_API]: {
@@ -16,10 +15,9 @@ function fetchUser(login) {
     }
   };
 }
-/**
- * Fetches a single user from Github API unless it is cached.
- * Relies on Redux Thunk middleware.
- */
+
+// Fetches a single user from Github API unless it is cached.
+// Relies on Redux Thunk middleware.
 export function loadUser(login, requiredFields = []) {
   return (dispatch, getState) => {
     const user = getState().entities.users[login];
@@ -34,10 +32,9 @@ export function loadUser(login, requiredFields = []) {
 export const REPO_REQUEST = 'REPO_REQUEST';
 export const REPO_SUCCESS = 'REPO_SUCCESS';
 export const REPO_FAILURE = 'REPO_FAILURE';
-/**
- * Fetches a single repository from Github API.
- * Relies on the custom API middleware defined in ../middleware/api.js.
- */
+
+// Fetches a single repository from Github API.
+// Relies on the custom API middleware defined in ../middleware/api.js.
 function fetchRepo(fullName) {
   return {
     [CALL_API]: {
@@ -47,10 +44,9 @@ function fetchRepo(fullName) {
     }
   };
 }
-/**
- * Fetches a single repository from Github API unless it is cached.
- * Relies on Redux Thunk middleware.
- */
+
+// Fetches a single repository from Github API unless it is cached.
+// Relies on Redux Thunk middleware.
 export function loadRepo(fullName, requiredFields = []) {
   return (dispatch, getState) => {
     const repo = getState().entities.repos[fullName];
@@ -65,10 +61,9 @@ export function loadRepo(fullName, requiredFields = []) {
 export const STARRED_REQUEST = 'STARRED_REQUEST';
 export const STARRED_SUCCESS = 'STARRED_SUCCESS';
 export const STARRED_FAILURE = 'STARRED_FAILURE';
-/**
- * Fetches a page of starred repos by a particular user.
- * Relies on the custom API middleware defined in ../middleware/api.js.
- */
+
+// Fetches a page of starred repos by a particular user.
+// Relies on the custom API middleware defined in ../middleware/api.js.
 function fetchStarred(login, nextPageUrl) {
   return {
     login,
@@ -79,11 +74,10 @@ function fetchStarred(login, nextPageUrl) {
     }
   };
 }
-/**
- * Fetches a page of starred repos by a particular user.
- * Bails out if page is cached and user didn’t specifically request next page.
- * Relies on Redux Thunk middleware.
- */
+
+// Fetches a page of starred repos by a particular user.
+// Bails out if page is cached and user didn’t specifically request next page.
+// Relies on Redux Thunk middleware.
 export function loadStarred(login, nextPage) {
   return (dispatch, getState) => {
     const {
@@ -99,14 +93,12 @@ export function loadStarred(login, nextPage) {
   };
 }
 
-
 export const STARGAZERS_REQUEST = 'STARGAZERS_REQUEST';
 export const STARGAZERS_SUCCESS = 'STARGAZERS_SUCCESS';
 export const STARGAZERS_FAILURE = 'STARGAZERS_FAILURE';
-/**
- * Fetches a page of stargazers for a particular repo.
- * Relies on the custom API middleware defined in ../middleware/api.js.
- */
+
+// Fetches a page of stargazers for a particular repo.
+// Relies on the custom API middleware defined in ../middleware/api.js.
 function fetchStargazers(fullName, nextPageUrl) {
   return {
     fullName,
@@ -117,11 +109,10 @@ function fetchStargazers(fullName, nextPageUrl) {
     }
   };
 }
-/**
- * Fetches a page of stargazers for a particular repo.
- * Bails out if page is cached and user didn’t specifically request next page.
- * Relies on Redux Thunk middleware.
- */
+
+// Fetches a page of stargazers for a particular repo.
+// Bails out if page is cached and user didn’t specifically request next page.
+// Relies on Redux Thunk middleware.
 export function loadStargazers(fullName, nextPage) {
   return (dispatch, getState) => {
     const {
@@ -138,9 +129,8 @@ export function loadStargazers(fullName, nextPage) {
 }
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE';
-/**
- * Resets the currently visible error message.
- */
+
+// Resets the currently visible error message.
 export function resetErrorMessage() {
   return {
     type: RESET_ERROR_MESSAGE

@@ -35,7 +35,7 @@ class AsyncApp extends Component {
     dispatch(fetchPostsIfNeeded(selectedReddit));
   }
 
-  render () {
+  render() {
     const { selectedReddit, posts, isFetching, lastUpdated } = this.props;
     return (
       <div>
