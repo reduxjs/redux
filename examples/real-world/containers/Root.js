@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
 import configureStore from '../store/configureStore';
@@ -15,10 +15,10 @@ export default class Root extends Component {
         <Provider store={store}>
           {() =>
             <Router history={this.props.history}>
-              <Route path='/' component={App}>
-                <Route path='/:login/:name'
+              <Route path="/" component={App}>
+                <Route path="/:login/:name"
                        component={RepoPage} />
-                <Route path='/:login'
+                <Route path="/:login"
                        component={UserPage} />
               </Route>
             </Router>
@@ -28,3 +28,7 @@ export default class Root extends Component {
     );
   }
 }
+
+Root.propTypes = {
+  history: PropTypes.object.isRequired,
+};

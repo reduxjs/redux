@@ -27,7 +27,6 @@ describe('containers', () => {
   jsdomReact();
 
   describe('App', () => {
-
     it('should display initial count', () => {
       const { p } = setup();
       expect(p.textContent).toMatch(/^Clicked: 0 times/);

@@ -16,11 +16,10 @@ var cmdArgs = [
   { cmd: 'webpack', args: ['index.js'] }
 ];
 
-for (let dir of exampleDirs) {
-
-  for (let cmdArg of cmdArgs) {
+for (const dir of exampleDirs) {
+  for (const cmdArg of cmdArgs) {
     // declare opts in this scope to avoid https://github.com/joyent/node/issues/9158
-    let opts = {
+    const opts = {
       cwd: path.join(__dirname, dir),
       stdio: 'inherit'
     };

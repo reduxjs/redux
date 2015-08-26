@@ -1,5 +1,5 @@
 {
-  "extends": "eslint-config-airbnb",
+  "extends": "airbnb",
   "env": {
     "browser": true,
     "mocha": true,
@@ -16,10 +16,8 @@
     "no-var": 0,
     "vars-on-top": 0,
 
-    //Temporarirly disabled due to a possible bug in babel-eslint (todomvc example)
-    "block-scoped-var": 0,
-    // Temporarily disabled for test/* until babel/babel-eslint#33 is resolved
-    "padded-blocks": 0
+    // Disable comma-dangle unless need to support it
+    "comma-dangle": 0
   },
   "plugins": [
     "react"

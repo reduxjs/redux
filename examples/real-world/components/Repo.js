@@ -9,7 +9,7 @@ export default class Repo extends Component {
     const { name, description } = repo;
 
     return (
-      <div className='Repo'>
+      <div className="Repo">
         <h3>
           <Link to={`/${login}/${name}`}>
             {name}
