@@ -7,9 +7,9 @@ import counterApp from './reducers';
 
 const initialState = window.__INITIAL_STATE__;
 
-let store = createStore(counterApp, initialState);
+const store = createStore(counterApp, initialState);
 
-let rootElement = document.getElementById('app');
+const rootElement = document.getElementById('app');
 
 React.render(
   <Provider store={store}>

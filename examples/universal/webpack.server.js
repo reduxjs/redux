@@ -1,4 +1,4 @@
-/*eslint-disable no-console*/
+/* eslint-disable no-console */
 
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
