@@ -64,6 +64,26 @@ It covers:
 * Caching responses and showing a spinner while data is fetching;
 * Invalidating the cached data.
 
+## Universal
+
+Run the [Universal](https://github.com/rackt/redux/tree/master/examples/universal) example:
+
+```
+git clone https://github.com/rackt/redux.git
+
+cd redux/examples/universal
+npm install
+npm start & npm run client
+
+open http://localhost:8080/
+```
+
+It covers:
+
+* [Universal rendering](/docs/recipes/ServerRendering.md) with Redux and React
+* Prefetching state based on input and via asynchronous fetches.
+* Passing state from the server to the client
+
 ## Real World
 
 Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-world) example:
