@@ -75,7 +75,7 @@ cd redux/examples/universal
 npm install
 npm start & npm run client
 
-open http://localhost:8080/
+open http://localhost:3000/
 ```
 
 It covers:
