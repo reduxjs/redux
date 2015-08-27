@@ -63,4 +63,10 @@ function renderFullPage(html, initialState) {
     `;
 }
 
-app.listen(port);
+app.listen(port, (error) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.info('==> 🌎  Listening on port 8080. Open up http://localhost:8080/ in your browser.');
+  }
+});
