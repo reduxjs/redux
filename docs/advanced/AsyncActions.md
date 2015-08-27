@@ -294,14 +294,15 @@ Remember that reducers are just functions, so you can use functional composition
 ## Async Action Creators
 
 Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard
- way to do it with Redux is to use the redux-thunk middleware. We'll explain how middleware works in general [later](Middleware.md); for now, the 
- important thing you need to know is that, by using this specific middleware, an action creator, instead of returning an action object, can 
- return a function - this way, the function creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
+ way to do it with Redux is to use the redux-thunk middleware. We'll explain how middleware works in general [later](Middleware.md); for now, there 
+ is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead an action object.
+ This way, the function creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
  
-The function returned by the action creator will get executed by the redux-thunk middleware, and doesn't need to be pure; it is thus allowed to have 
-side effects, including executing asynchronous API calls. The function can also dispatch actions - like those synchronous actions we defined earlier.
+When a function creator returns a function, that function will get executed by the redux-thunk middleware. This function doesn't need to be pure; 
+it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions - 
+like those synchronous actions we defined earlier.
 
-We can still define these special thunk action creators inside action.js:
+We can still define these special thunk action creators inside our action.js file:
 
 #### `actions.js`
 
@@ -328,14 +329,17 @@ function receivePosts(reddit, json) {
 
 // thunk action creator
 export function fetchPosts(reddit) {
-  // thunk middleware knows how to handle functions; it will also pass the dispatch method as an argument to the
-  // function, that will thus be able to dispatch actions itself
+
+  // thunk middleware knows how to handle functions; it will also pass the dispatch method as an 
+  // argument to the function, that will thus be able to dispatch actions itself
   return function (dispatch) {
+  
     // first dispatch: the app state is updated to inform that the API call is starting
     dispatch(requestPosts(reddit));
 
-    // the Redux thunk-middleware passes the return value of the function it calls as the return value of the
-    // dispatch method which is applied to the thunk action creator.
+    // the function called by the thunk middleware can return a value, that is passed on as the return 
+    // value of the dispatch method which is applied to the thunk action creator.
+    
     // In this case, we return a promise to wait for; 
     // this is not required by thunk middleware, but it is convenient for us
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
@@ -368,7 +372,7 @@ export function fetchPosts(reddit) {
 >```
 
 How do we include the Redux-thunk middleware in the dispatch mechanism? We use the applyMiddleware method
-from Redux.
+from Redux, as shown below:
 
 #### `index.js`
 
