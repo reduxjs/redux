@@ -8,7 +8,7 @@ import App from './containers/App';
 import { fetchCounter } from './api/counter';
 
 const app = Express();
-const port = 8080;
+const port = 3000;
 
 // Use this middleware to server up static files built into dist
 app.use(require('serve-static')(path.join(__dirname, 'dist')));
@@ -63,4 +63,10 @@ function renderFullPage(html, initialState) {
     `;
 }
 
-app.listen(port);
+app.listen(port, (error) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.info(`==> 🌎  Listening on port ${port}. Open up http://localhost:${port}/ in your browser.`);
+  }
+});

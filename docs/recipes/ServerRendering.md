@@ -51,7 +51,7 @@ import counterApp from './reducers';
 import App from './containers/App';
 
 const app = Express();
-const port = 8080;
+const port = 3000;
 
 // Use this middleware to serve up static files built into the dist directory
 app.use(require('serve-static')(path.join(__dirname, 'dist')));
@@ -206,7 +206,7 @@ function handleRender(req, res) {
 }
 ```
 
-The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:8080/?counter=100](http://localhost:8080/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
+The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
 
 ### Async State Fetching
 
