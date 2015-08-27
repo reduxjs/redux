@@ -1,3 +1,8 @@
 language: node_js
 node_js:
-  - "iojs"
+  - "iojs-2"
+script:
+  - npm run lint
+  - npm test
+  - npm run build:examples
+  - npm run test:examples

@@ -3,7 +3,87 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [1.0.1](https://github.com/rackt/redux/compare/v1.0.0...v1.0.1) - 2015/08/15
+
+* Fixes “process is not defined” on React Native ([#525](https://github.com/rackt/redux/issues/525), [#526](https://github.com/rackt/redux/pull/526))
+* Removes dependencies on `invariant` and `warning` ([#528](https://github.com/rackt/redux/pull/528))
+* Fixes TodoMVC example ([#524](https://github.com/rackt/redux/issues/524), [#529](https://github.com/rackt/redux/pull/529))
+
+## [1.0.0](https://github.com/rackt/redux/compare/v1.0.0-rc...v1.0.0) - 2015/08/14
+
+### Breaking Changes
+
+* If `dispatch` is attempted while reducer is executing, an error is thrown. Note that you can dispatch from lifecycle hooks just fine. It's only reducers that are not allowed to dispatch. (https://github.com/rackt/redux/issues/368) 
+
+### New Home
+
+We moved under [rackt](https://github.com/rackt) Github org. This won't affect you, but the new official URL is https://github.com/rackt/redux. We did this because we share values, and we want to collaborate on creating better tools, libraries, documentation, and examples. Redux stays independent of React, but we will work closely with React Router community to figure out a better integration.
+
+### Docs!
+
+[We have real docs now.](http://rackt.github.io/redux/) There are a few missing pieces, but it's a terrific effort, so thanks to everybody who contributed in the past month to get this shipped. Thanks to [Gitbook](https://github.com/GitbookIO/gitbook) for providing great tooling, too.
+
+### Examples!
+
+There's been no shortage of great examples in [Awesome Redux](https://github.com/xgrommx/awesome-redux), but we're shipping two new built-in examples in 1.0. One of them is a [very simple async application](https://github.com/rackt/redux/tree/master/examples/async). Creating it is covered in [async tutorial](http://rackt.github.io/redux/docs/advanced/AsyncActions.html). Another example we ship is a [“real-world” example](https://github.com/rackt/redux/tree/master/examples/real-world). It's a port of somewhat well-known [flux-react-router-example](https://github.com/gaearon/flux-react-router-example) to Redux, and shows advanced techniques such as caching, data normalization, custom API middleware, and pagination. Hopefully this example will help answer some commonly asked questions.
+
+### Other Improvements
+
+* Unsubscribing during a dispatch is now fixed: https://github.com/rackt/redux/pull/462
+* `bindActionCreators` now can also accept a function as the first argument: https://github.com/rackt/redux/pull/352
+* Dispatching from iframe now works: https://github.com/rackt/redux/issues/304
+* Symbols can be used as action types: https://github.com/rackt/redux/pull/295 (Note: we don't recommend you to do this, because they're not serializable, so you can't record/replay user sessions.)
+
+## [1.0.0-rc](https://github.com/rackt/redux/compare/v1.0.0-alpha...v1.0.0-rc) - 2015/07/13
+
+### Big Changes
+
+* React-specific code has been moved to [react-redux](https://github.com/rackt/react-redux) and will be versioned separately
+* `createStore` no longer implicitly combines reducers
+* All middleware is now “smart” middleware 
+* `createStore` no longer accepts middleware
+* The thunk middleware is no longer included by default
+
+### Correctness Changes
+
+* `combineReducers` now throws if you return `undefined` state
+* `combineReducers` throws if you have no `default` case
+* (React) Components now update correctly in response to the actions fired in `componentDidMount` 
+* Dispatch from the middleware sends the dispatch through the whole middleware chain
+
+**Read the [detailed upgrade notes on the release page.](https://github.com/rackt/redux/releases/tag/v1.0.0-rc)**
+
+## [1.0.0-alpha](https://github.com/rackt/redux/compare/v0.12.0...v1.0.0-alpha) - 2015/06/30
+
+### Naming
+
+* “Stateless Stores” are now called reducers. (https://github.com/rackt/redux/issues/137#issuecomment-114178411)
+* The “Redux instance” is now called “The Store”. (https://github.com/rackt/redux/issues/137#issuecomment-113252359)
+* The dispatcher is removed completely. (https://github.com/rackt/redux/pull/166#issue-90113962)
+
+### API changes
+
+* <s>`composeStores`</s> is now `composeReducers`.
+* <s>`createDispatcher`</s> is gone.
+* <s>`createRedux`</s> is now `createStore`.
+* `<Provider>` now accepts `store` prop instead of <s>`redux`</s>.
+* The new `createStore` signature is `createStore(reducer: Function | Object, initialState: any, middlewares: Array | ({ getState, dispatch }) => Array)`.
+* If the first argument to `createStore` is an object, `composeReducers` is automatically applied to it.
+* The “smart” middleware signature changed. It now accepts an object instead of a single `getState` function. The `dispatch` function lets you “recurse” the middleware chain and is useful for async: #113 (comment).
+
+### Correctness changes
+
+* The `dispatch` provided by the default thunk middleware now walks the whole middleware chain.
+* It is enforced now that raw Actions at the end of the middleware chain have to be plain objects.
+* Nested dispatches are now handled gracefully. (#110, #119)
+
+### Internal changes
+
+* The object in React context is renamed from <s>`redux`</s> to `store`.
+* Some tests are rewritten for clarity, focus and edge cases.
+* Redux in examples is now aliased to the source code for easier work on master.
+
+**Read the [detailed upgrade notes on the release page.](https://github.com/rackt/redux/releases/tag/v1.0.0-alpha)**
 
 ## [0.12.0] - 2015/06/19
 No breaking changes this time.
@@ -43,23 +123,23 @@ import { provide, Connector } from 'redux/react-native';
 
 Changes introduced in 0.10.1:
 
-* `Connector` now throws if `select` returns something other than a plain object (https://github.com/gaearon/redux/pull/85)
-* The custom dispatcher API is tweaked so `setState` now returns the state that was actually set. This makes custom dispatchers more composable. (https://github.com/gaearon/redux/pull/77)
+* `Connector` now throws if `select` returns something other than a plain object (https://github.com/rackt/redux/pull/85)
+* The custom dispatcher API is tweaked so `setState` now returns the state that was actually set. This makes custom dispatchers more composable. (https://github.com/rackt/redux/pull/77)
 
 Happy reducing!
 
 ## [0.10.0] - 2015/06/13
 ### Middleware
 
-Redux 1.0 is within striking distance! Can you believe how quickly Redux has matured? @gaearon made the first commit only [14 days ago](https://github.com/gaearon/redux/commit/8bc14659780c044baac1432845fe1e4ca5123a8d).
+Redux 1.0 is within striking distance! Can you believe how quickly Redux has matured? @rackt made the first commit only [14 days ago](https://github.com/rackt/redux/commit/8bc14659780c044baac1432845fe1e4ca5123a8d).
 
 The 0.10 release is a follow-up to 0.9, with a focus on what we're calling (at least for now) **middleware**.
 
-You can read all about middleware [here](https://github.com/gaearon/redux/blob/master/docs/middleware.md). We plan to release some official middleware soon, but of course we'd also love to see middleware created by the community.
+You can read all about middleware [here](https://github.com/rackt/redux/blob/master/docs/middleware.md). We plan to release some official middleware soon, but of course we'd also love to see middleware created by the community.
 
 ### Breaking changes
 
-Just a small one: Redux includes a feature that enables you to return a function from an action creator to perform asynchronous dispatches. The function receives a callback and `getState()` as parameters. This has behavior has been re-implemented as middleware and moved into a separate module called [`thunkMiddleware()`](https://github.com/gaearon/redux/blob/master/src/middleware/thunk.js). It is included automatically when using the `createRedux(stores)` shortcut, but not when using `createDispatcher()`.
+Just a small one: Redux includes a feature that enables you to return a function from an action creator to perform asynchronous dispatches. The function receives a callback and `getState()` as parameters. This has behavior has been re-implemented as middleware and moved into a separate module called [`thunkMiddleware()`](https://github.com/rackt/redux/blob/master/src/middleware/thunk.js). It is included automatically when using the `createRedux(stores)` shortcut, but not when using `createDispatcher()`.
 
 ### Tests
 
@@ -190,7 +270,7 @@ New:
 * Fine-grained subscriptions via the new `<Connector select={fn}>` prop
 * Less surprising, more consistent API
 
-Read the discussion: https://github.com/gaearon/redux/pull/46
+Read the discussion: https://github.com/rackt/redux/pull/46
 
 ## [0.7.0] - 2015/06/06
 * Change second parameter in callback-style action creator from `state` to `read: (Store) => state` (#44)
@@ -244,7 +324,7 @@ It also now accepts a second `transformProps` argument to be just as expressive 
 * Add a few early invariants
 
 ## [0.5.0] - 2015/06/03
-* Store function names are no longer significant, but you have to pass an object with all your Stores to the `root` (or `Root`). Fixes https://github.com/gaearon/redux/issues/16
+* Store function names are no longer significant, but you have to pass an object with all your Stores to the `root` (or `Root`). Fixes https://github.com/rackt/redux/issues/16
 
 ```js
 import { root } from 'redux';
@@ -265,10 +345,10 @@ export default class TodoApp {
 ```
 
 ## [0.4.0] - 2015/06/03
-* Bring decorators back, now on top of the lower-level container components (https://github.com/gaearon/redux/pull/15, thanks Florent)
+* Bring decorators back, now on top of the lower-level container components (https://github.com/rackt/redux/pull/15, thanks Florent)
 * Require `stores` passed to `Container` to be an array
-* Fix build on Windows (https://github.com/gaearon/redux/pull/11, thanks Mike)
-* Reduce context footprint (https://github.com/gaearon/redux/pull/12, thanks Florent again!)
+* Fix build on Windows (https://github.com/rackt/redux/pull/11, thanks Mike)
+* Reduce context footprint (https://github.com/rackt/redux/pull/12, thanks Florent again!)
 
 ## [0.3.1] - 2015/06/03
 * Remove old files from build
@@ -277,8 +357,8 @@ export default class TodoApp {
 Complete rewrite.
 
 * **No more strings,** now using module bindings for injecting stores and actions
-* Only use decorator for top-level component, keep dumb components pure and testable (https://github.com/gaearon/redux/issues/5)
-* Remove transaction logic (will be re-implemented on top of https://github.com/gaearon/redux/issues/6)
+* Only use decorator for top-level component, keep dumb components pure and testable (https://github.com/rackt/redux/issues/5)
+* Remove transaction logic (will be re-implemented on top of https://github.com/rackt/redux/issues/6)
 
 ```js
 // The smart component may inject actions
@@ -315,27 +395,27 @@ Minor caveat: Store function names are now significant.
 
 ## 0.2.0 - 2015/06/02
 * Initial public release.
-  See examples in [README](https://github.com/gaearon/redux/blob/master/README.md) and the
-  [examples](https://github.com/gaearon/redux/tree/master/examples) folder.
+  See examples in [README](https://github.com/rackt/redux/blob/master/README.md) and the
+  [examples](https://github.com/rackt/redux/tree/master/examples) folder.
   Alpha quality :-)
 
-[unreleased]: https://github.com/gaearon/redux/compare/v0.12.0...HEAD
-[0.12.0]: https://github.com/gaearon/redux/compare/v0.11.1...v0.12.0
-[0.11.1]: https://github.com/gaearon/redux/compare/v0.11.0...v0.11.1
-[0.11.0]: https://github.com/gaearon/redux/compare/v0.10.1...v0.11.0
-[0.10.1]: https://github.com/gaearon/redux/compare/v0.10.0...v0.10.1
-[0.10.0]: https://github.com/gaearon/redux/compare/v0.9.0...v0.10.0
-[0.9.0]: https://github.com/gaearon/redux/compare/v0.8.1...v0.9.0
-[0.8.1]: https://github.com/gaearon/redux/compare/v0.8.0...v0.8.1
-[0.8.0]: https://github.com/gaearon/redux/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/gaearon/redux/compare/v0.6.2...v0.7.0
-[0.6.2]: https://github.com/gaearon/redux/compare/v0.6.1...v0.6.2
-[0.6.1]: https://github.com/gaearon/redux/compare/v0.6.0...v0.6.1
-[0.6.0]: https://github.com/gaearon/redux/compare/v0.5.1...v0.6.0
-[0.5.1]: https://github.com/gaearon/redux/compare/v0.5.0...v0.5.1
-[0.5.0]: https://github.com/gaearon/redux/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/gaearon/redux/compare/v0.3.1...v0.4.0
-[0.3.1]: https://github.com/gaearon/redux/compare/v0.3.0...v0.3.1
-[0.3.0]: https://github.com/gaearon/redux/compare/v0.2.2...v0.3.0
-[0.2.2]: https://github.com/gaearon/redux/compare/v0.2.1...v0.2.2
-[0.2.1]: https://github.com/gaearon/redux/compare/v0.2.0...v0.2.1
+[unreleased]: https://github.com/rackt/redux/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/rackt/redux/compare/v0.11.1...v0.12.0
+[0.11.1]: https://github.com/rackt/redux/compare/v0.11.0...v0.11.1
+[0.11.0]: https://github.com/rackt/redux/compare/v0.10.1...v0.11.0
+[0.10.1]: https://github.com/rackt/redux/compare/v0.10.0...v0.10.1
+[0.10.0]: https://github.com/rackt/redux/compare/v0.9.0...v0.10.0
+[0.9.0]: https://github.com/rackt/redux/compare/v0.8.1...v0.9.0
+[0.8.1]: https://github.com/rackt/redux/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/rackt/redux/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/rackt/redux/compare/v0.6.2...v0.7.0
+[0.6.2]: https://github.com/rackt/redux/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/rackt/redux/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/rackt/redux/compare/v0.5.1...v0.6.0
+[0.5.1]: https://github.com/rackt/redux/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/rackt/redux/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/rackt/redux/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/rackt/redux/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/rackt/redux/compare/v0.2.2...v0.3.0
+[0.2.2]: https://github.com/rackt/redux/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/rackt/redux/compare/v0.2.0...v0.2.1

@@ -1,0 +1,11 @@
+# Motivation
+
+As the requirements to JavaScript single-page applications get more sophisticated, **more state needs to be managed** by the JavaScript code than ever before. This state may include server responses, cached data, and data created locally, but not yet persisted to the server. It also includes the UI state, such as the active route, the selected tab, whether to show a spinner or pagination controls, and so on.
+
+Managing ever-changing state is hard. If a model can update another model, then a view can update a model that updates another model, and this, in turn, might cause another view to update. At some point you no longer know what happens in your app. **You no longer control when, why, and how the state is updated.** When the system is opaque and non-deterministic, it’s hard to reproduce bugs or add new features.
+
+As if this wasn’t bad enough, consider the **new requirements becoming common in front-end product development**, such as handling optimistic updates, rendering on the server, fetching data before performing route transitions, and so on. We the front-end developers are finding ourselves surrounded by the complexity we never had to deal with before. [Is it time we give up?](http://www.quirksmode.org/blog/archives/2015/07/stop_pushing_th.html)
+
+A lot of this complexity comes from the fact that **we’re mixing two concepts** that are very hard for the human mind to reason about: **mutation and asynchronicity.** I call them [Mentos and Coke](https://en.wikipedia.org/wiki/Diet_Coke_and_Mentos_eruption). Both can be great in separation, but together, they are a mess. Libraries like [React](http://facebook.github.io/react) attempt to solve this problem in the view layer by removing asynchrony and direct DOM manipulation. However, React leaves managing the state of your data up to you.
+
+Following the steps of [Flux](http://facebook.github.io/flux), [CQRS](http://martinfowler.com/bliki/CQRS.html), and [Event Sourcing](http://martinfowler.com/eaaDev/EventSourcing.html), **Redux attempts to make state mutations predictable** by imposing certain restrictions on how and when updates can happen. These restrictions are reflected in the [three principles](ThreePrinciples.md) of Redux.

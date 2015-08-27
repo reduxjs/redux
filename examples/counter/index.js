@@ -1,7 +1,7 @@
 import React from 'react';
-import App from './containers/App';
+import Root from './containers/Root';
 
 React.render(
-  <App />,
+  <Root />,
   document.getElementById('root')
 );

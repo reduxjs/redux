@@ -1,38 +1,34 @@
 {
-  "name": "counter-redux",
+  "name": "redux-counter-example",
   "version": "0.0.0",
-  "description": "Counter example for redux",
-  "main": "server.js",
+  "description": "Redux counter example",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "mocha --recursive --compilers js:babel-core/register",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/redux.git"
+    "url": "https://github.com/rackt/redux.git"
   },
-  "keywords": [
-    "react",
-    "reactjs",
-    "hot",
-    "reload",
-    "hmr",
-    "live",
-    "edit",
-    "webpack",
-    "flux"
-  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/redux/issues"
+    "url": "https://github.com/rackt/redux/issues"
   },
-  "homepage": "https://github.com/gaearon/redux#readme",
+  "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "react": "^0.13.3",
-    "redux": "^0.12.0"
+    "react-redux": "^1.0.1",
+    "redux": "^1.0.1",
+    "redux-thunk": "^0.1.0"
   },
   "devDependencies": {
-    "babel-core": "^5.5.8",
+    "babel-core": "^5.6.18",
     "babel-loader": "^5.1.4",
+    "expect": "^1.6.0",
+    "jsdom": "^5.6.1",
+    "mocha": "^2.2.5",
+    "mocha-jsdom": "^1.0.0",
     "node-libs-browser": "^0.5.2",
     "react-hot-loader": "^1.2.7",
     "webpack": "^1.9.11",
