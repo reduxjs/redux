@@ -232,7 +232,7 @@ export function fetchCounter(callback) {
 
 Again, this is just a mock API, so we use `setTimeout` to simulate a network request that takes 500 milliseconds to respond (this should be much faster with a real world API). We pass in a callback that returns a random number asynchronously. If you’re using a Promise-based API client, then you would issue this callback in your `then` handler.
 
-On the server side, we simply wrap our existing code in the `fetchCounter` and recieve the result in the callback:
+On the server side, we simply wrap our existing code in the `fetchCounter` and receive the result in the callback:
 
 #### `server.js`
 
