@@ -2,9 +2,8 @@ import path from 'path';
 import Express from 'express';
 import qs from 'qs';
 import React from 'react';
-import { createStore } from 'redux';
+import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
-import counterApp from './reducers';
 import App from './containers/App';
 import { fetchCounter } from './api/counter';
 
@@ -30,7 +29,7 @@ function handleRender(req, res) {
     let initialState = { counter };
 
     // Create a new Redux store instance
-    const store = createStore(counterApp, initialState);
+    const store = configureStore(initialState);
 
     // Render the component to a string
     const html = React.renderToString(
