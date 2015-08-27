@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "An example of a universally-rendered Redux application",
   "scripts": {
-    "start": "node bin/server.js",
+    "start": "npm run server & npm run client",
+    "server": "node bin/server.js",
     "client": "webpack && node webpack.server.js"
   },
   "repository": {
