@@ -213,7 +213,7 @@ export default function createConnect(React) {
        ) ||
         // React Native
         typeof __DEV__ !== 'undefined' &&
-        __DEV__ //eslint-disable-line no-undef
+        __DEV__ // eslint-disable-line no-undef
       ) {
         Connect.prototype.componentWillUpdate = function componentWillUpdate() {
           if (this.version === version) {
