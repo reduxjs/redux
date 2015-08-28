@@ -17,8 +17,7 @@ module.exports = {
     publicPath: 'http://' + host + ':' + port + '/dist/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     loaders: [{
