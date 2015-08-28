@@ -18,5 +18,5 @@ new WebpackDevServer(webpack(config), {
     console.error(err);
   }
 
-  console.info(`==> 🚧  Webpack development server listening on port ${config.devServerPort}`);
+  console.info('==> 🚧  Webpack development server listening on port ' + config.devServerPort);
 });
