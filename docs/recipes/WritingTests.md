@@ -57,7 +57,7 @@ describe('actions', () => {
     };
     expect(actions.addTodo(text)).toEqual(expectedAction);
   });
-}
+});
 ```
 
 ### Reducers
@@ -183,11 +183,10 @@ can be tested like:
 ```js
 import expect from 'expect';
 import jsdomReact from '../jsdomReact';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Header from '../../components/Header';
 import TodoTextInput from '../../components/TodoTextInput';
-
-const { TestUtils } = React.addons;
 
 function setup() {
   let props = {
@@ -248,7 +247,7 @@ npm install --save-dev jsdom mocha-jsdom
 Then add a `jsdomReact()` helper function that looks like this:  
 
 ```js
-import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
+import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
 import jsdom from 'mocha-jsdom';
 
 export default function jsdomReact() {
@@ -347,7 +346,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({}, action)
     ).toEqual(action);
@@ -357,7 +356,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({
         [types.ADD_TODO]: 'dispatched'
