@@ -294,11 +294,11 @@ Remember that reducers are just functions, so you can use functional composition
 ## Async Action Creators
 
 Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard
- way to do it with Redux is to use the [edux-thunk middleware](https://github.com/gaearon/redux-thunk). We'll explain how middleware works in general [later](Middleware.md); for now, there 
+ way to do it with Redux is to use the [redux-thunk middleware](https://github.com/gaearon/redux-thunk). We'll explain how middleware works in general [later](Middleware.md); for now, there 
  is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead an action object.
  This way, the function creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
  
-When a function creator returns a function, that function will get executed by the redux-thunk middleware. This function doesn't need to be pure; 
+When a function creator returns a function, that function will get executed by the Redux-Thunk middleware. This function doesn't need to be pure; 
 it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions - 
 like those synchronous actions we defined earlier.
 
