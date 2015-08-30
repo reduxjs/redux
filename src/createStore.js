@@ -36,7 +36,7 @@ export default function createStore(reducer, initialState) {
   }
 
   var currentReducer = reducer;
-  var currentState = initialState;
+  var currentState;
   var listeners = [];
   var isDispatching = false;
 
@@ -136,17 +136,28 @@ export default function createStore(reducer, initialState) {
     dispatch({ type: ActionTypes.INIT });
   }
 
+  /**
+   * Resets the state tree, if no value is provided, defaults to the initialState
+   * provided to the reducer.
+   *
+   * @returns {void}
+   */
+  function resetState(newState = initialState) {
+    currentState = newState;
+    dispatch({ type: ActionTypes.INIT });
+  }
 
   // When a store is created, an "INIT" action is dispatched so that every
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
-  dispatch({ type: ActionTypes.INIT });
+  resetState();
 
   return {
     dispatch,
     subscribe,
     getState,
     getReducer,
-    replaceReducer
+    replaceReducer,
+    resetState
   };
 }
