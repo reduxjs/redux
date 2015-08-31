@@ -136,3 +136,13 @@ export function resetErrorMessage() {
     type: RESET_ERROR_MESSAGE
   };
 }
+
+export const SET_INPUT_VALUE = 'SET_INPUT_VALUE';
+
+// Set the input form value to the user typed text.
+export function setInputValue(text) {
+  return {
+    type: SET_INPUT_VALUE,
+    text: text
+  };
+}

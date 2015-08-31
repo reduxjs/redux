@@ -25,6 +25,16 @@ export function errorMessage(state = null, action) {
   return state;
 }
 
+// Input typed value and clear form to replace with location on api response.
+export function inputValue(state = null, action) {
+  if (action.type === ActionTypes.SET_INPUT_VALUE) {
+    return action.text;
+  } else if (action.response) {
+    return null;
+  }
+  return state;
+}
+
 // Updates the pagination data for different actions.
 export const pagination = combineReducers({
   starredByUser: paginate({
