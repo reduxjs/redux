@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/todos';
 
-class TodoApp extends Component {
+class App extends Component {
   render() {
     const { todos, dispatch } = this.props;
     const actions = bindActionCreators(TodoActions, dispatch);
@@ -19,15 +19,15 @@ class TodoApp extends Component {
   }
 }
 
-TodoApp.propTypes = {
+App.propTypes = {
   todos: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired
 };
 
-function select(state) {
+function mapStateToProps(state) {
   return {
     todos: state.todos
   };
 }
 
-export default connect(select)(TodoApp);
+export default connect(mapStateToProps)(App);
