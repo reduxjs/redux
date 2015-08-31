@@ -163,11 +163,11 @@ describe('createStore', () => {
     const listenerB = expect.createSpy(() => {});
 
     let unsubscribeA = store.subscribe(listenerA);
-    store.dispatch({});
+    store.dispatch(addTodo('Hello'));
     expect(listenerA.calls.length).toBe(1);
     expect(listenerB.calls.length).toBe(0);
 
-    store.dispatch({});
+    store.dispatch(addTodo('World'));
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(0);
 
@@ -175,7 +175,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(0);
 
-    store.dispatch({});
+    store.dispatch(addTodo('Hello'));
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(1);
 
@@ -183,7 +183,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(1);
 
-    store.dispatch({});
+    store.dispatch(addTodo('World'));
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
@@ -191,7 +191,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
-    store.dispatch({});
+    store.dispatch(addTodo('Hello'));
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
@@ -199,7 +199,7 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(3);
     expect(listenerB.calls.length).toBe(2);
 
-    store.dispatch({});
+    store.dispatch(addTodo('World'));
     expect(listenerA.calls.length).toBe(4);
     expect(listenerB.calls.length).toBe(2);
   });
@@ -217,8 +217,8 @@ describe('createStore', () => {
     });
     store.subscribe(listenerC);
 
-    store.dispatch({});
-    store.dispatch({});
+    store.dispatch(addTodo('Hello'));
+    store.dispatch(addTodo('World'));
 
     expect(listenerA.calls.length).toBe(2);
     expect(listenerB.calls.length).toBe(1);
@@ -293,5 +293,15 @@ describe('createStore', () => {
     expect(() =>
       store.dispatch({})
     ).toNotThrow();
+  });
+
+  it('should not trigger listeners unless the state has changed',  () => {
+    const store = createStore(reducers.todos);
+    const listenerA = expect.createSpy(() => {});
+    store.subscribe(listenerA);
+    store.dispatch({});
+    expect(listenerA.calls.length).toBe(0);
+    store.dispatch(addTodo('Hello'));
+    expect(listenerA.calls.length).toBe(1);
   });
 });

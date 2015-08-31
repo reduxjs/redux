@@ -98,6 +98,8 @@ export default function createStore(reducer, initialState) {
       throw new Error('Reducers may not dispatch actions.');
     }
 
+    var lastState = currentState;
+
     try {
       isDispatching = true;
       currentState = currentReducer(currentState, action);
@@ -105,7 +107,9 @@ export default function createStore(reducer, initialState) {
       isDispatching = false;
     }
 
-    listeners.slice().forEach(listener => listener());
+    if (lastState !== currentState) {
+      listeners.slice().forEach(listener => listener());
+    }
     return action;
   }
 
