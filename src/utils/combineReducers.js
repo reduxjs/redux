@@ -96,7 +96,7 @@ export default function combineReducers(reducers) {
   var defaultState = mapValues(finalReducers, () => undefined);
   var stateShapeVerified;
 
-  return function combination(state = defaultState, action) {
+  return function combination(state = defaultState, action = {}) {
     var finalState = mapValues(finalReducers, (reducer, key) => {
       var newState = reducer(state[key], action);
       if (typeof newState === 'undefined') {
