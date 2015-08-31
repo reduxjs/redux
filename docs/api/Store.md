@@ -15,7 +15,6 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`getReducer()`](#getReducer)
 - [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store Methods
@@ -115,23 +114,6 @@ function handleChange() {
 let unsubscribe = store.subscribe(handleChange);
 handleChange();
 ```
-
-<hr>
-
-### <a id='getReducer'></a>[`getReducer()`](#getReducer)
-
->##### Deprecated
-
->This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
->It will be removed when we find a better solution for this problem.
-
-Returns the reducer currently used by the store to calculate the state.
-
-It is an advanced API. You might only need this if you implement a hot reloading mechanism for Redux.
-
-#### Returns
-
-(*Function*): The store’s current reducer.
 
 <hr>
 

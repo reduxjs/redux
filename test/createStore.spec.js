@@ -8,11 +8,10 @@ describe('createStore', () => {
     const store = createStore(combineReducers(reducers));
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(5);
+    expect(methods.length).toBe(4);
     expect(methods).toContain('subscribe');
     expect(methods).toContain('dispatch');
     expect(methods).toContain('getState');
-    expect(methods).toContain('getReducer');
     expect(methods).toContain('replaceReducer');
   });
 
@@ -106,8 +105,7 @@ describe('createStore', () => {
       text: 'World'
     }]);
 
-    let nextStore = createStore(reducers.todosReverse);
-    store.replaceReducer(nextStore.getReducer());
+    store.replaceReducer(reducers.todosReverse);
     expect(store.getState()).toEqual([{
       id: 1,
       text: 'Hello'
@@ -128,8 +126,7 @@ describe('createStore', () => {
       text: 'World'
     }]);
 
-    nextStore = createStore(reducers.todos);
-    store.replaceReducer(nextStore.getReducer());
+    store.replaceReducer(reducers.todos);
     expect(store.getState()).toEqual([{
       id: 3,
       text: 'Perhaps'

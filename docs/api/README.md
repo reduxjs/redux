@@ -18,7 +18,6 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
   * [getState()](Store.md#getState)
   * [dispatch(action)](Store.md#dispatch)
   * [subscribe(listener)](Store.md#subscribe)
-  * [getReducer()](Store.md#getReducer)
   * [replaceReducer(nextReducer)](Store.md#replaceReducer)
 
 ### Importing
