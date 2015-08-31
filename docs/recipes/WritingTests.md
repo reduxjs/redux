@@ -57,7 +57,7 @@ describe('actions', () => {
     };
     expect(actions.addTodo(text)).toEqual(expectedAction);
   });
-}
+});
 ```
 
 ### Reducers
