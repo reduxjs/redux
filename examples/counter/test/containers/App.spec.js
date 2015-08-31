@@ -2,7 +2,7 @@ import expect from 'expect';
 import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import { Provider } from 'react-redux';
-import CounterApp from '../../containers/CounterApp';
+import App from '../../containers/App';
 import configureStore from '../../store/configureStore';
 
 const { TestUtils } = React.addons;
@@ -11,7 +11,7 @@ function setup(initialState) {
   const store = configureStore(initialState);
   const app = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      {() => <CounterApp />}
+      {() => <App />}
     </Provider>
   );
   return {
