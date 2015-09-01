@@ -301,9 +301,10 @@ import { createStore } from 'redux';
 import { selectReddit, requestPosts, receivePosts } from './actions';
 import rootReducer from './reducers';
 
+const reddit = 'reactjs';
 const store = createStore(rootReducer);
 
-store.dispatch(selectReddit('reactjs'));
+store.dispatch(selectReddit(reddit));
 
 store.dispatch(requestPosts('reactjs'));
 fetch(`http://www.reddit.com/r/${reddit}.json`)
