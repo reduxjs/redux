@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.0](https://github.com/rackt/redux/compare/v1.0.1...v2.0.0) - 2015/09/01
+
+### Breaking Changes
+
+* Removes `getReducer()` from the Store public API ([#668](https://github.com/rackt/redux/issues/668))
+* Fixes `compose()` to act like a normal `compose()` ([#669](https://github.com/rackt/redux/issues/669))
+* Relies on `process.env.NODE_ENV` being polyfilled ([#671](https://github.com/rackt/redux/issues/671))
+
 ## [1.0.1](https://github.com/rackt/redux/compare/v1.0.0...v1.0.1) - 2015/08/15
 
 * Fixes “process is not defined” on React Native ([#525](https://github.com/rackt/redux/issues/525), [#526](https://github.com/rackt/redux/pull/526))
