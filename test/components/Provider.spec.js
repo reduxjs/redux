@@ -171,10 +171,10 @@ describe('React', () => {
       expect(child.context.store).toBe(store);
     });
 
-    it('should replace just the reducer when receiving a new store in props', () => {
+    it('should warn once when receiving a new store in props', () => {
       const store1 = createStore((state = 10) => state + 1);
       const store2 = createStore((state = 10) => state * 2);
-      const spy = expect.createSpy(() => ({}));
+      const store3 = createStore((state = 10) => state * state);
 
       class ProviderContainer extends Component {
         state = { store: store1 };
@@ -192,18 +192,26 @@ describe('React', () => {
       const child = TestUtils.findRenderedComponentWithType(container, Child);
       expect(child.context.store.getState()).toEqual(11);
 
-      child.context.store.subscribe(spy);
-      child.context.store.dispatch({});
-      expect(spy.calls.length).toEqual(1);
-      expect(child.context.store.getState()).toEqual(12);
-
+      let spy = expect.spyOn(console, 'error');
       container.setState({ store: store2 });
-      expect(spy.calls.length).toEqual(2);
-      expect(child.context.store.getState()).toEqual(24);
+      spy.destroy();
 
-      child.context.store.dispatch({});
-      expect(spy.calls.length).toEqual(3);
-      expect(child.context.store.getState()).toEqual(48);
+      expect(child.context.store.getState()).toEqual(11);
+      expect(spy.calls.length).toBe(1);
+      expect(spy.calls[0].arguments[0]).toBe(
+        '<Provider> does not support changing `store` on the fly. ' +
+        'It is most likely that you see this error because you updated to ' +
+        'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' +
+        'automatically. See https://github.com/rackt/react-redux/releases/' +
+        'tag/v2.0.0 for the migration instructions.'
+      );
+
+      spy = expect.spyOn(console, 'error');
+      container.setState({ store: store3 });
+      spy.destroy();
+
+      expect(child.context.store.getState()).toEqual(11);
+      expect(spy.calls.length).toBe(0);
     });
   });
 });

@@ -52,7 +52,7 @@
     "mocha-jsdom": "~0.4.0",
     "react": "^0.14.0-beta3",
     "react-addons-test-utils": "^0.14.0-beta3",
-    "redux": "^1.0.1",
+    "redux": "^2.0.0",
     "rimraf": "^2.3.4",
     "webpack": "^1.11.0"
   },
@@ -60,6 +60,6 @@
     "invariant": "^2.0.0"
   },
   "peerDependencies": {
-    "redux": "^1.0.0 || 1.0.0-rc"
+    "redux": "^2.0.0"
   }
 }
