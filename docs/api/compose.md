@@ -1,17 +1,17 @@
 # `compose(...functions)`
 
-Composes functions from left to right.
+Composes functions from right to left.
 
 This is a functional programming utility, and is included in Redux as a convenience.  
 You might want to use it to apply several [store enhancers](../Glossary.md#store-enhancer) in a row.
 
 #### Arguments
 
-1. (*arguments*): The functions to compose. Each function is expected to accept a function as an argument and to return a function.
+1. (*arguments*): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on.
 
 #### Returns
 
-(*Function*): The final function obtained by composing the given functions from left to right.
+(*Function*): The final function obtained by composing the given functions from right to left.
 
 #### Example
 
@@ -39,20 +39,16 @@ if (process.env.NODE_ENV === 'production') {
     require('redux-devtools').devTools(),
     require('redux-devtools').persistState(
       window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-    ),
-    createStore
-  );
+    )
+  )(createStore);
 
-  // Same code without the compose helper:
+  // Same code without the `compose` helper:
   //
-  // finalCreateStore =
-  //   applyMiddleware(middleware)(
-  //     devTools()(
-  //       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))(
-  //         createStore
-  //       )
-  //     )
-  //   );
+  // finalCreateStore = applyMiddleware(middleware)(
+  //   require('redux-devtools').devTools()(
+  //     require('redux-devtools').persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))()
+  //   )
+  // )(createStore);
 }
 
 let store = finalCreateStore(reducer);
