@@ -466,7 +466,7 @@ If you have context issues,
 
 1. [Make sure you don’t have a duplicate instance of React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) on the page.
 2. Make sure you didn’t forget to wrap your root component in [`<Provider>`](#provider-store).
-3. If you use React Router, something like `<Provider>{() => routes}</Provider>` won’t work. Due to the way context works in React 0.13, it’s important that the `<Provider>` children are *created* inside that function. Just referencing an outside variable doesn’t do the trick. Instead of `<Provider>{() => routes}</Provider>`, write `<Provider>{createRoutes}</Provider>` where `createRoutes()` is a function that actually *creates* (and returns) the route configuration.
+3. If you use React Router, something like `<Provider>{() => router}</Provider>` won’t work. Due to the way context works in React 0.13, it’s important that the `<Provider>` children are *created* inside that function. Just referencing an outside variable doesn’t do the trick. Instead of `<Provider>{() => router}</Provider>`, write `<Provider>{() => createRouter()}</Provider>` where `createRouter()` is a function that actually *creates* (and returns) the router.
 
 ### Invariant Violation: addComponentAsRefTo(...): Only a ReactOwner can have refs. This usually means that you're trying to add a ref to a component that doesn't have an owner
 
