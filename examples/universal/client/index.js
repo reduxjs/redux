@@ -1,8 +1,10 @@
 import 'babel-core/polyfill';
+
 import React from 'react';
-import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
-import App from './containers/App';
+
+import configureStore from '../common/store/configureStore';
+import App from '../common/containers/App';
 
 const initialState = window.__INITIAL_STATE__;
 

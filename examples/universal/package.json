@@ -4,7 +4,7 @@
   "description": "An example of a universally-rendered Redux application",
   "scripts": {
     "start": "npm run server & npm run client",
-    "server": "node bin/server.js",
+    "server": "node server",
     "client": "webpack && node webpack.server.js"
   },
   "repository": {
