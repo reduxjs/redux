@@ -1,17 +1,19 @@
 import path from 'path';
 import Express from 'express';
 import qs from 'qs';
+
 import React from 'react';
-import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
-import App from './containers/App';
-import { fetchCounter } from './api/counter';
+
+import configureStore from '../common/store/configureStore';
+import App from '../common/containers/App';
+import { fetchCounter } from '../common/api/counter';
 
 const app = Express();
 const port = 3000;
 
 // Use this middleware to server up static files built into dist
-app.use(require('serve-static')(path.join(__dirname, 'dist')));
+app.use(require('serve-static')(path.join(__dirname, '../dist')));
 
 // This is fired every time the server side receives a request
 app.use(handleRender);

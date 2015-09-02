@@ -1,1 +1,2 @@
-require('./client.js');
+require('babel/register');
+require('./server');
