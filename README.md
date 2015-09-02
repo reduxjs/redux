@@ -230,6 +230,9 @@ React.render(
 
 Connects a React component to a Redux store.
 
+It does not modify the component class passed to it.
+Instead, it *returns* a new, connected component class, for you to use.
+
 #### Arguments
 
 * [`mapStateToProps(state, [ownProps]): stateProps`] \(*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapStateToProps` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store. If `ownProps` is specified as a second argument, then `mapStateToProps` will be re-invoked whenever the component receives new props.
@@ -245,6 +248,8 @@ A React component class that injects state and action creators into your compone
 #### Remarks
 
 * It needs to be invoked two times. The first time with its arguments described above, and a second time, with the component: `connect(mapStateToProps, mapDispatchToProps, mergeProps)(MyComponent)`.
+
+* It does not modify the passed React component. It returns a new, connected component, that you should use instead.
 
 * The `mapStateToProps` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/faassen/reselect) to efficiently compose selectors and [compute derived data](http://gaearon.github.io/redux/docs/recipes/ComputingDerivedData.html).
 
