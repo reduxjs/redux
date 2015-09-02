@@ -230,7 +230,7 @@ React.render(
 
 Connects a React component to a Redux store.
 
-It does not modify the component class passed to it.
+It does not modify the component class passed to it.  
 Instead, it *returns* a new, connected component class, for you to use.
 
 #### Arguments
