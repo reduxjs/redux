@@ -20,35 +20,37 @@ React bindings for Redux embrace the idea of [separating “smart” and “dumb
 
 It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be “dumb” and receive all data via props.
 
-<center>
 <table>
     <thead>
         <tr>
             <th></th>
-            <th>Location</th>
-            <th>Aware of Redux</th>
-            <th>To read data</th>
-            <th>To change data</th>
+            <th scope="col" style="text-align:left">“Smart” Components</th>
+            <th scope="col" style="text-align:left">“Dumb” Components</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-          <td>“Smart” Components</td>
+          <th scope="row" style="text-align:right">Location</th>
           <td>Top level, route handlers</td>
-          <td>Yes</th>
-          <td>Subscribe to Redux state</td>
-          <td>Dispatch Redux actions</td>
+          <td>Middle and leaf components</td>
         </tr>
         <tr>
-          <td>“Dumb” Components</td>
-          <td>Middle and leaf components</td>
+          <th scope="row" style="text-align:right">Aware of Redux</th>
+          <td>Yes</th>
           <td>No</th>
+        </tr>
+        <tr>
+          <th scope="row" style="text-align:right">To read data</th>
+          <td>Subscribe to Redux state</td>
           <td>Read data from props</td>
+        </tr>
+        <tr>
+          <th scope="row" style="text-align:right">To change data</th>
+          <td>Dispatch Redux actions</td>
           <td>Invoke callbacks from props</td>
         </tr>
     </tbody>
 </table>
-</center>
 
 In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest that you pass props down whenever possible.
 
@@ -271,7 +273,7 @@ First, we need to import `Provider` from [`react-redux`](http://github.com/gaear
 #### `index.js`
 
 ```js
-import React from 'react'; 
+import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './containers/App';
