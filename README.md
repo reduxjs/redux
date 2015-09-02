@@ -267,7 +267,8 @@ export default connect()(TodoApp);
 ##### Inject `dispatch` and every field in the global state
 
 >Don’t do this! It kills any performance optimisations because `TodoApp` will rerender after every action.  
->It’s better to have more granular `connect()` on several components in your view hierarchy.
+>It’s better to have more granular `connect()` on several components in your view hierarchy that each only  
+>listen to a relevant slice of the state.
 
 ```js
 export default connect(state => state)(TodoApp);
