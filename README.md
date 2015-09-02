@@ -8,9 +8,6 @@ Performant and flexible.
 [![npm downloads](https://img.shields.io/npm/dm/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
 [![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
 
-
->**Note: There is a project called `redux-react` on NPM that is [completely unrelated](https://github.com/cgarvis/redux-react/issues/1) to the official bindings. This documentation (and any other official Redux documentation) is for `react-redux`.**
-
 ## Table of Contents
 
 - [Installation](#installation)
@@ -27,9 +24,6 @@ Performant and flexible.
 ```
 npm install --save react-redux
 ```
-
-Be careful! **“React” goes first.**  
-There is a project called `redux-react`, but it is [completely unrelated](https://github.com/cgarvis/redux-react/issues/1).  
 
 React Redux requires **React 0.13 or later.**
 
