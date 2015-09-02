@@ -1,3 +1,5 @@
+/* eslint-disable no-console, no-use-before-define */
+
 import path from 'path';
 import Express from 'express';
 import qs from 'qs';
@@ -9,7 +11,7 @@ import configureStore from '../common/store/configureStore';
 import App from '../common/containers/App';
 import { fetchCounter } from '../common/api/counter';
 
-const app = Express();
+const app = new Express();
 const port = 3000;
 
 // Use this middleware to server up static files built into dist
@@ -19,16 +21,14 @@ app.use(require('serve-static')(path.join(__dirname, '../dist')));
 app.use(handleRender);
 
 function handleRender(req, res) {
-
   // Query our mock API asynchronously
   fetchCounter(apiResult => {
-
     // Read the counter from the request, if provided
     const params = qs.parse(req.query);
-    const counter = parseInt(params.counter) || apiResult || 0;
+    const counter = parseInt(params.counter, 10) || apiResult || 0;
 
     // Compile an initial state
-    let initialState = { counter };
+    const initialState = { counter };
 
     // Create a new Redux store instance
     const store = configureStore(initialState);
