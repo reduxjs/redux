@@ -74,7 +74,7 @@ return [
   ...state.slice(action.index + 1)
 ]
 
-// After
+// After:
 return update(state, {
   [action.index]: {
     completed: {

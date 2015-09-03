@@ -29,7 +29,7 @@ let finalCreateStore;
 
 // In production, we want to use just the middleware.
 // In development, we want to use some store enhancers from redux-devtools.
-// UglifyJS will eliminate the dead code depending on the build environment.
+// [UglifyJS](https://github.com/mishoo/UglifyJS2) will eliminate the dead code depending on the build environment.
 
 if (process.env.NODE_ENV === 'production') {
   finalCreateStore = applyMiddleware(...middleware)(createStore);
