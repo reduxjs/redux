@@ -250,7 +250,7 @@ function posts(state = {
   }
 }
 
-function postsByReddit(state = { }, action) {
+function postsByReddit(state = {}, action) {
   switch (action.type) {
   case INVALIDATE_REDDIT:
   case RECEIVE_POSTS:
@@ -293,14 +293,9 @@ Remember that reducers are just functions, so you can use functional composition
 
 ## Async Action Creators
 
-Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard
- way to do it with Redux is to use the [redux-thunk middleware](https://github.com/gaearon/redux-thunk). We'll explain how middleware works in general [later](Middleware.md); for now, there 
- is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead an action object.
- This way, the function creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
+Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard way to do it with Redux is to use the [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). It comes in a separate package called `redux-thunk`. We’ll explain how middleware works in general [later](Middleware.md); for now, there is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead an action object. This way, the function creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
  
-When a function creator returns a function, that function will get executed by the Redux Thunk middleware. This function doesn't need to be pure; 
-it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions - 
-like those synchronous actions we defined earlier.
+When a function creator returns a function, that function will get executed by the Redux Thunk middleware. This function doesn’t need to be pure; it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions—like those synchronous actions we defined earlier.
 
 We can still define these special thunk action creators inside our `actions.js` file:
 
@@ -327,28 +322,41 @@ function receivePosts(reddit, json) {
   };
 }
 
-// thunk action creator
+// Meet our first thunk action creator!
+// Though its insides are different, you would use it just like any other action creator:
+// store.dispatch(fetchPosts('reactjs'));
+
 export function fetchPosts(reddit) {
 
-  // thunk middleware knows how to handle functions; it will also pass the dispatch method as an 
-  // argument to the function, that will thus be able to dispatch actions itself
+  // Thunk middleware knows how to handle functions.
+  // It passes the dispatch method as an argument to the function,
+  // thus making it able to dispatch actions itself.
+
   return function (dispatch) {
-  
-    // first dispatch: the app state is updated to inform that the API call is starting
+
+    // First dispatch: the app state is updated to inform
+    // that the API call is starting.
+
     dispatch(requestPosts(reddit));
 
-    // the function called by the thunk middleware can return a value, that is passed on as the return 
-    // value of the dispatch method which is applied to the thunk action creator.
-    
-    // In this case, we return a promise to wait for; 
-    // this is not required by thunk middleware, but it is convenient for us
+    // The function called by the thunk middleware can return a value,
+    // that is passed on as the return value of the dispatch method.
+
+    // In this case, we return a promise to wait for.
+    // This is not required by thunk middleware, but it is convenient for us.
+
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(response => response.json())
       .then(json =>
-        // We can dispatch many times! Here, we update the app state with the results of the API call
+
+        // We can dispatch many times!
+        // Here, we update the app state with the results of the API call.
+
         dispatch(receivePosts(reddit, json))
       );
-      // NB: in a real world app, you also want to catch any error in the network call
+
+      // Note: in a real world app, you also want to
+      // catch any error in the network call.
   };
 }
 ```
@@ -371,8 +379,7 @@ export function fetchPosts(reddit) {
 >import 'babel-core/polyfill';
 >```
 
-How do we include the Redux-thunk middleware in the dispatch mechanism? We use the applyMiddleware method
-from Redux, as shown below:
+How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
 
 #### `index.js`
 
@@ -442,6 +449,13 @@ function shouldFetchPosts(state, reddit) {
 }
 
 export function fetchPostsIfNeeded(reddit) {
+
+  // Note that the function also receives getState()
+  // which lets you choose what to dispatch next.
+
+  // This is useful for avoiding a network request if
+  // a cached value is already available.
+
   return (dispatch, getState) => {
     if (shouldFetchPosts(getState(), reddit)) {
       // Dispatch a thunk from thunk!

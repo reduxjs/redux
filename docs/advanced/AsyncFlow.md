@@ -8,9 +8,8 @@ Asynchronous middleware like [redux-thunk](https://github.com/gaearon/redux-thun
 
 When the last middleware in the chain dispatches an action, it has to be a plain object. This is when the [synchronous Redux data flow](../basics/DataFlow.md) takes place.
 
-Check out [the full source code for the async example](ExampleRedditAPI.md)
+Check out [the full source code for the async example](ExampleRedditAPI.md).
 
 ## Next Steps
 
-Now you saw an example of what middleware can do in Redux, it's time to learn how it actually works, and how you can create your own. 
-Go on to the next detailed section about [Middleware](/docs/advanced/Middleware.md). 
+Now you saw an example of what middleware can do in Redux, it’s time to learn how it actually works, and how you can create your own. Go on to the next detailed section about [Middleware](Middleware.md). 
