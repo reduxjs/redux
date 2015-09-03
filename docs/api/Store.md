@@ -53,7 +53,7 @@ The store’s reducing function will be called with the current [`getState()`](#
 
 <sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
 
-However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [intents](../Glossary.md#intent). Intents are usually asynchronous primitives like Promises, Observables, or thunks.
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
 
 Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
 
