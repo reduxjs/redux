@@ -110,7 +110,7 @@ If you’re coming from Flux, there is a single important difference you need to
 
 This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
-### Documentation
+### Documentation [PDF](http://rackt.github.io/redux.pdf)
 
 * [Introduction](http://rackt.github.io/redux/docs/introduction/index.html)
 * [Basics](http://rackt.github.io/redux/docs/basics/index.html)
