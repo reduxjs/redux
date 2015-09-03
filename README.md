@@ -470,7 +470,7 @@ If your views depend on global state or context, you might find that views decor
 
 > This is because `connect()` implements [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) by default, assuming that your component will produce the same results given the same props and state. This is a similar concept to React's [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html).
 
-The _best_ solution to this is to make your components pure and pass any external state to them via props. This will ensure that your views do not re-render unless they actually need to re-render and will greatly speed up your application.
+The _best_ solution to this is to make sure that your components are pure and pass any external state to them via props. This will ensure that your views do not re-render unless they actually need to re-render and will greatly speed up your application.
 
 If that's not practical for whatever reason (for example, if you're using a library that depends heavily on Context), you can pass the `pure: false` option to `connect()`:
 
