@@ -1065,7 +1065,7 @@ describe('React', () => {
       expect(decorated.refs.wrappedInstance.someInstanceMethod()).toBe(someData);
     });
 
-    it.only('should wrap impure components without supressing updates', () => {
+    it('should wrap impure components without supressing updates', () => {
       const store = createStore(() => ({}));
 
       class ImpureComponent extends Component {
@@ -1078,7 +1078,7 @@ describe('React', () => {
         }
       }
 
-      const decorator = connect(state => state);
+      const decorator = connect(state => state, null, null, { pure: false });
       const Decorated = decorator(ImpureComponent);
 
       class StatefulWrapper extends Component {
