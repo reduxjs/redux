@@ -242,8 +242,7 @@ Instead, it *returns* a new, connected component class, for you to use.
 * [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `Object.assign({}, ownProps, stateProps, dispatchProps)` is used by default.
 
 * [`options`] *(Object)* If specified, further customizes the behavior of the connector.
-
-  * [`pure`] *(Boolean)*: If true, implements `shouldComponentUpdate` and shallowly compares the result of `mergeProps`, preventing unnecessary updates, assuming that the component is a "pure" component and does not rely on any input or state other than its props and the Redux store. *Defaults to `true`.*
+  * [`pure`] *(Boolean)*: If true, implements `shouldComponentUpdate` and shallowly compares the result of `mergeProps`, preventing unnecessary updates, assuming that the component is a “pure” component and does not rely on any input or state other than its props and the selected Redux store’s state. *Defaults to `true`.*
 
 #### Returns
 
@@ -466,27 +465,25 @@ You can also upgrade to React Router 1.0 which shouldn’t have this problem. (L
 
 ### My views aren't updating when something changes outside of Redux
 
-If your views depend on global state or context, you might find that views decorated with `connect()` will fail to update.
+If your views depend on global state or [React “context”](www.youtube.com/watch?v=H7vlH-wntD4), you might find that views decorated with `connect()` will fail to update.
 
-> This is because `connect()` implements [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) by default, assuming that your component will produce the same results given the same props and state. This is a similar concept to React's [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html).
+>This is because `connect()` implements [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) by default, assuming that your component will produce the same results given the same props and state. This is a similar concept to React's [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html).
 
 The _best_ solution to this is to make sure that your components are pure and pass any external state to them via props. This will ensure that your views do not re-render unless they actually need to re-render and will greatly speed up your application.
 
-If that's not practical for whatever reason (for example, if you're using a library that depends heavily on Context), you can pass the `pure: false` option to `connect()`:
+If that's not practical for whatever reason (for example, if you’re using a library that depends heavily on React context), you may pass the `pure: false` option to `connect()`:
 
 ```
 function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-const options = {
+export default connect(mapStateToProps, null, null, {
   pure: false
-};
-
-export default connect(mapStateToProps, null, null, options)(TodoApp);
+})(TodoApp);
 ```
 
-This will remove the assumption that `TodoApp` is pure and cause it to update whenever its parent component renders.
+This will remove the assumption that `TodoApp` is pure and cause it to update whenever its parent component renders. Note that this will make your application less performant, so only do this if you have no other option.
 
 ### Could not find "store" in either the context or props
 
