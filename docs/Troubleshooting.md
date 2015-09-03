@@ -126,7 +126,7 @@ export function addTodo(text) {
 #### `AddTodo.js`
 
 ```js
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { addTodo } from './TodoActions';
 
 class AddTodo extends Component {
@@ -161,7 +161,7 @@ If you’re somewhere deep in the component hierarchy, it is cumbersome to pass 
 The fixed code looks like this:
 #### `AddTodo.js`
 ```js
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTodo } from './TodoActions';
 
@@ -181,7 +181,7 @@ class AddTodo extends Component {
 }
 
 // In addition to the state, `connect` puts `dispatch` in our props.
-export default connect(AddTodo, state => ({}))
+export default connect()(AddTodo);
 ```
 
 You can then pass `dispatch` down to other components manually, if you want to.
