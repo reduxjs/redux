@@ -1,13 +1,14 @@
 import 'babel-core/polyfill';
+
 import React from 'react';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import App from './containers/App';
-import counterApp from './reducers';
+
+import configureStore from '../common/store/configureStore';
+import App from '../common/containers/App';
 
 const initialState = window.__INITIAL_STATE__;
 
-const store = createStore(counterApp, initialState);
+const store = configureStore(initialState);
 
 const rootElement = document.getElementById('app');
 

@@ -1,5 +1,13 @@
 {
-	"structure": {
-  	"summary": "docs/README.md"
-	}
+  "gitbook": "2.3.0",
+  "structure": {
+    "summary": "docs/README.md"
+  },
+  "plugins": ["edit-link"],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/rackt/redux/tree/master",
+      "label": "Edit This Page"
+    }
+  }
 }

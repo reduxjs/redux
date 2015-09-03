@@ -8,14 +8,15 @@ new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
   historyApiFallback: true,
+  noInfo: true,
   headers: {'Access-Control-Allow-Origin': '*'},
   stats: {
     colors: true
   }
-}).listen(3000, 'localhost', function errorCallback(err) {
+}).listen(config.devServerPort, 'localhost', function errorCallback(err) {
   if (err) {
-    console.log(err);
+    console.error(err);
   }
 
-  console.log('Listening at localhost:3000');
+  console.info('==> 🚧  Webpack development server listening on port ' + config.devServerPort);
 });

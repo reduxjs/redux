@@ -15,7 +15,6 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`getReducer()`](#getReducer)
 - [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store Methods
@@ -54,7 +53,7 @@ The store’s reducing function will be called with the current [`getState()`](#
 
 <sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
 
-However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [intents](../Glossary.md#intent). Intents are usually asynchronous primitives like Promises, Observables, or thunks.
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
 
 Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
 
@@ -115,23 +114,6 @@ function handleChange() {
 let unsubscribe = store.subscribe(handleChange);
 handleChange();
 ```
-
-<hr>
-
-### <a id='getReducer'></a>[`getReducer()`](#getReducer)
-
->##### Deprecated
-
->This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
->It will be removed when we find a better solution for this problem.
-
-Returns the reducer currently used by the store to calculate the state.
-
-It is an advanced API. You might only need this if you implement a hot reloading mechanism for Redux.
-
-#### Returns
-
-(*Function*): The store’s current reducer.
 
 <hr>
 

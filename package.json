@@ -1,6 +1,6 @@
 {
   "name": "redux",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Predictable state container for JavaScript apps",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
@@ -22,8 +22,9 @@
     "postversion": "git push && git push --tags && npm run clean && npm run docs:publish",
     "prepublish": "npm run clean && npm run build",
     "docs:clean": "rimraf _book",
-    "docs:build": "gitbook build -g rackt/redux",
-    "docs:watch": "gitbook serve",
+    "docs:prepare": "gitbook install",
+    "docs:build": "npm run docs:prepare && gitbook build -g rackt/redux",
+    "docs:watch": "npm run docs:prepare && gitbook serve",
     "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:rackt/redux gh-pages --force"
   },
   "repository": {

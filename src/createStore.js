@@ -110,18 +110,6 @@ export default function createStore(reducer, initialState) {
   }
 
   /**
-   * Returns the reducer currently used by the store to calculate the state.
-   *
-   * It is likely that you will only need this function if you implement a hot
-   * reloading mechanism for Redux.
-   *
-   * @returns {Function} The reducer used by the current store.
-   */
-  function getReducer() {
-    return currentReducer;
-  }
-
-  /**
    * Replaces the reducer currently used by the store to calculate the state.
    *
    * You might need this if your app implements code splitting and you want to
@@ -136,7 +124,6 @@ export default function createStore(reducer, initialState) {
     dispatch({ type: ActionTypes.INIT });
   }
 
-
   // When a store is created, an "INIT" action is dispatched so that every
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
@@ -146,7 +133,6 @@ export default function createStore(reducer, initialState) {
     dispatch,
     subscribe,
     getState,
-    getReducer,
     replaceReducer
   };
 }

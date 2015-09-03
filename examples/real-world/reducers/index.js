@@ -4,7 +4,7 @@ import paginate from './paginate';
 import { combineReducers } from 'redux';
 
 // Updates an entity cache in response to any action with response.entities.
-export function entities(state = { users: {}, repos: {} }, action) {
+function entities(state = { users: {}, repos: {} }, action) {
   if (action.response && action.response.entities) {
     return merge({}, state, action.response.entities);
   }
@@ -13,7 +13,7 @@ export function entities(state = { users: {}, repos: {} }, action) {
 }
 
 // Updates error message to notify about the failed fetches.
-export function errorMessage(state = null, action) {
+function errorMessage(state = null, action) {
   const { type, error } = action;
 
   if (type === ActionTypes.RESET_ERROR_MESSAGE) {
@@ -26,7 +26,7 @@ export function errorMessage(state = null, action) {
 }
 
 // Updates the pagination data for different actions.
-export const pagination = combineReducers({
+const pagination = combineReducers({
   starredByUser: paginate({
     mapActionToKey: action => action.login,
     types: [
@@ -44,3 +44,11 @@ export const pagination = combineReducers({
     ]
   })
 });
+
+const rootReducer = combineReducers({
+  entities,
+  pagination,
+  errorMessage
+});
+
+export default rootReducer;

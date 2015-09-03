@@ -105,16 +105,7 @@ export default function combineReducers(reducers) {
       return newState;
     });
 
-    if ((
-      // Node-like CommonJS environments (Browserify, Webpack)
-      typeof process !== 'undefined' &&
-      typeof process.env !== 'undefined' &&
-      process.env.NODE_ENV !== 'production'
-    ) ||
-      // React Native
-      typeof __DEV__ !== 'undefined' &&
-      __DEV__ // eslint-disable-line no-undef
-    ) {
+    if (process.env.NODE_ENV !== 'production') {
       if (!stateShapeVerified) {
         verifyStateShape(state, finalState);
         stateShapeVerified = true;

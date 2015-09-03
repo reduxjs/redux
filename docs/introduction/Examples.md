@@ -21,8 +21,8 @@ open http://localhost:3000/
 
 It covers:
 
-* Basic Redux flow;
-* Testing.
+* Basic Redux flow
+* Testing
 
 ## TodoMVC
 
@@ -40,9 +40,9 @@ open http://localhost:3000/
 
 It covers:
 
-* Redux flow with two reducers;
-* Updating nested data;
-* Testing.
+* Redux flow with two reducers
+* Updating nested data
+* Testing
 
 ## Async
 
@@ -60,9 +60,29 @@ open http://localhost:3000/
 
 It covers:
 
-* Basic async Redux flow with [redux-thunk](https://github.com/gaearon/redux-thunk);
-* Caching responses and showing a spinner while data is fetching;
-* Invalidating the cached data.
+* Basic async Redux flow with [redux-thunk](https://github.com/gaearon/redux-thunk)
+* Caching responses and showing a spinner while data is fetching
+* Invalidating the cached data
+
+## Universal
+
+Run the [Universal](https://github.com/rackt/redux/tree/master/examples/universal) example:
+
+```
+git clone https://github.com/rackt/redux.git
+
+cd redux/examples/universal
+npm install
+npm start & npm run client
+
+open http://localhost:3000/
+```
+
+It covers:
+
+* [Universal rendering](/docs/recipes/ServerRendering.md) with Redux and React
+* Prefetching state based on input and via asynchronous fetches.
+* Passing state from the server to the client
 
 ## Real World
 
@@ -80,12 +100,12 @@ open http://localhost:3000/
 
 It covers:
 
-* Real-world async Redux flow;
-* Keeping entities in a normalized entity cache;
-* A custom middleware for API calls;
-* Caching responses and showing a spinner while data is fetching;
-* Pagination;
-* Routing.
+* Real-world async Redux flow
+* Keeping entities in a normalized entity cache
+* A custom middleware for API calls
+* Caching responses and showing a spinner while data is fetching
+* Pagination
+* Routing
 
 ## More Examples
 

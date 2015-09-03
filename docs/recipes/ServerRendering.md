@@ -51,7 +51,7 @@ import counterApp from './reducers';
 import App from './containers/App';
 
 const app = Express();
-const port = 8080;
+const port = 3000;
 
 // Use this middleware to serve up static files built into the dist directory
 app.use(require('serve-static')(path.join(__dirname, 'dist')));
@@ -206,7 +206,7 @@ function handleRender(req, res) {
 }
 ```
 
-The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:8080/?counter=100](http://localhost:8080/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
+The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
 
 ### Async State Fetching
 
@@ -232,7 +232,7 @@ export function fetchCounter(callback) {
 
 Again, this is just a mock API, so we use `setTimeout` to simulate a network request that takes 500 milliseconds to respond (this should be much faster with a real world API). We pass in a callback that returns a random number asynchronously. If you’re using a Promise-based API client, then you would issue this callback in your `then` handler.
 
-On the server side, we simply wrap our existing code in the `fetchCounter` and recieve the result in the callback:
+On the server side, we simply wrap our existing code in the `fetchCounter` and receive the result in the callback:
 
 #### `server.js`
 
@@ -270,6 +270,16 @@ function handleRender(req, res) {
 ```
 
 Because we `res.send()` inside of the callback, the server will hold open the connection and won’t send any data until that callback executes. You’ll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
+
+### Security Considerations
+
+Because we have introduced more code that relies on user generated content (UGC) and input, we have increased our attack surface area for our application. It is important for any application that you ensure your input is properly sanitized to prevent things like cross-site scripting (XSS) attacks or code injections.
+
+In our example, we take a rudimentary approach to security. When we obtain the parameters from the request, we use `parseInt` on the `counter` parameter to ensure this value is a number. If we did not do this, you could easily get dangerous data into the rendered HTML by providing a script tag in the request. That might look like this: `?counter=</script><script>doSomethingBad();</script>`
+
+For our simplistic example, coercing our input into a number is sufficiently secure. If you’re handling more complex input, such as freeform text, then you should run that input through an appropriate sanitization function, such as [validator.js](https://www.npmjs.com/package/validator).
+
+Furthermore, you can add additional layers of security by sanitizing your state output. `JSON.stringify` can be subject to script injections. To counter this, you can scrub the JSON string of HTML tags and other dangerous characters. This can be done with either a simple text replacement on the string or via more sophisticated libraries such as [serialize-javascript](https://github.com/yahoo/serialize-javascript).
 
 ## Next Steps
 
