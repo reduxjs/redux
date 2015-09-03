@@ -15,7 +15,7 @@ Performant and flexible.
 - [Quick Start](#quick-start)
 - [API](#api)
   - [`<Provider store>`](#provider-store)
-  - [`connect([mapStateToProps], [mapDispatchToProps], [mergeProps])`](#connectmapstatetoprops-mapdispatchtoprops-mergeprops)
+  - [`connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])`](#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
 
@@ -226,7 +226,7 @@ React.render(
 );
 ```
 
-### `connect([mapStateToProps], [mapDispatchToProps], [mergeProps])`
+### `connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])`
 
 Connects a React component to a Redux store.
 
@@ -240,6 +240,10 @@ Instead, it *returns* a new, connected component class, for you to use.
 * [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use the [`bindActionCreators()`](http://gaearon.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props. If `ownProps` is specified as a second argument, then `mapDispatchToProps` will be re-invoked whenever the component receives new props.
 
 * [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `Object.assign({}, ownProps, stateProps, dispatchProps)` is used by default.
+
+* [`options`] *(Object)* If specified, further customizes the behavior of the connector.
+
+  * [`pure`] *(Boolean)*: If true, implements `shouldComponentUpdate` and shallowly compares the result of `mergeProps`, preventing unnecessary updates, assuming that the component is a "pure" component and does not rely on any input or state other than its props and the Redux store. *Defaults to `true`.*
 
 #### Returns
 
@@ -459,6 +463,30 @@ render() {
 
 Conveniently, this gives your components access to the router state!
 You can also upgrade to React Router 1.0 which shouldn’t have this problem. (Let us know if it does!)
+
+### My views aren't updating when something changes outside of Redux
+
+If your views depend on global state or context, you might find that views decorated with `connect()` will fail to update.
+
+> This is because `connect()` implements [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) by default, assuming that your component will produce the same results given the same props and state. This is a similar concept to React's [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html).
+
+The _best_ solution to this is to make sure that your components are pure and pass any external state to them via props. This will ensure that your views do not re-render unless they actually need to re-render and will greatly speed up your application.
+
+If that's not practical for whatever reason (for example, if you're using a library that depends heavily on Context), you can pass the `pure: false` option to `connect()`:
+
+```
+function mapStateToProps(state) {
+  return { todos: state.todos };
+}
+
+const options = {
+  pure: false
+};
+
+export default connect(mapStateToProps, null, null, options)(TodoApp);
+```
+
+This will remove the assumption that `TodoApp` is pure and cause it to update whenever its parent component renders.
 
 ### Could not find "store" in either the context or props
 

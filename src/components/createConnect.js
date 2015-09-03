@@ -11,6 +11,9 @@ const defaultMergeProps = (stateProps, dispatchProps, parentProps) => ({
   ...stateProps,
   ...dispatchProps
 });
+const defaultOptions = {
+  pure: true
+};
 
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
@@ -23,7 +26,7 @@ export default function createConnect(React) {
   const { Component, PropTypes } = React;
   const storeShape = createStoreShape(PropTypes);
 
-  return function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
+  return function connect(mapStateToProps, mapDispatchToProps, mergeProps, options) {
     const shouldSubscribe = Boolean(mapStateToProps);
     const finalMapStateToProps = mapStateToProps || defaultMapStateToProps;
     const finalMapDispatchToProps = isPlainObject(mapDispatchToProps) ?
@@ -32,6 +35,7 @@ export default function createConnect(React) {
     const finalMergeProps = mergeProps || defaultMergeProps;
     const shouldUpdateStateProps = finalMapStateToProps.length > 1;
     const shouldUpdateDispatchProps = finalMapDispatchToProps.length > 1;
+    const finalOptions = {...defaultOptions, ...options} || defaultOptions;
 
     // Helps track hot reloading.
     const version = nextVersion++;
@@ -88,7 +92,7 @@ export default function createConnect(React) {
         };
 
         shouldComponentUpdate(nextProps, nextState) {
-          return !shallowEqual(this.state.props, nextState.props);
+          return !finalOptions.pure || !shallowEqual(this.state.props, nextState.props);
         }
 
         constructor(props, context) {

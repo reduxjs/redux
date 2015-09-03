@@ -1064,5 +1064,54 @@ describe('React', () => {
       expect(decorated.getWrappedInstance().someInstanceMethod()).toBe(someData);
       expect(decorated.refs.wrappedInstance.someInstanceMethod()).toBe(someData);
     });
+
+    it('should wrap impure components without supressing updates', () => {
+      const store = createStore(() => ({}));
+
+      class ImpureComponent extends Component {
+        static contextTypes = {
+          statefulValue: React.PropTypes.number
+        };
+
+        render() {
+          return <Passthrough statefulValue={this.context.statefulValue} />;
+        }
+      }
+
+      const decorator = connect(state => state, null, null, { pure: false });
+      const Decorated = decorator(ImpureComponent);
+
+      class StatefulWrapper extends Component {
+        state = {
+          value: 0
+        };
+
+        static childContextTypes = {
+          statefulValue: React.PropTypes.number
+        };
+
+        getChildContext() {
+          return {
+            statefulValue: this.state.value
+          };
+        }
+
+        render() {
+          return <Decorated />;
+        };
+      }
+
+      const tree = TestUtils.renderIntoDocument(
+        <ProviderMock store={store}>
+          <StatefulWrapper />
+        </ProviderMock>
+      );
+
+      const target = TestUtils.findRenderedComponentWithType(tree, Passthrough);
+      const wrapper = TestUtils.findRenderedComponentWithType(tree, StatefulWrapper);
+      expect(target.props.statefulValue).toEqual(0);
+      wrapper.setState({ value: 1 });
+      expect(target.props.statefulValue).toEqual(1);
+    });
   });
 });
