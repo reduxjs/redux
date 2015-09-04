@@ -138,6 +138,7 @@ describe('todos reducer', () => {
       id: 0
     }]);
   });
+});
 ```
 
 ### Components
