@@ -1,0 +1,36 @@
+{
+  "name": "redux-real-world-example",
+  "version": "0.0.0",
+  "description": "Redux real-world example",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rackt/redux.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rackt/redux/issues"
+  },
+  "homepage": "http://rackt.github.io/redux",
+  "dependencies": {
+    "humps": "^0.6.0",
+    "isomorphic-fetch": "^2.1.1",
+    "lodash": "^3.10.1",
+    "normalizr": "^1.0.0",
+    "react": "^0.13.3",
+    "react-redux": "^1.0.1",
+    "react-router": "1.0.0-beta3",
+    "redux": "^1.0.1",
+    "redux-logger": "0.0.1",
+    "redux-thunk": "^0.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.6.18",
+    "babel-loader": "^5.1.4",
+    "react-hot-loader": "^1.3.0",
+    "webpack": "^1.9.11",
+    "webpack-dev-server": "^1.9.0"
+  }
+}

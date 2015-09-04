@@ -1,0 +1,1173 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Async Actions | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.3.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-edit-link/plugin.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/advanced/AsyncFlow.html" />
+    
+    
+    <link rel="prev" href="../../docs/advanced/index.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="3.1" data-basepath="../.." data-revision="Sat Sep 05 2015 01:55:19 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="3.1" data-path="docs/advanced/AsyncActions.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncActions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Async Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/AsyncFlow.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.2.</b>
+                        
+                        Async Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/Middleware.html">
+            
+                
+                    <a href="../../docs/advanced/Middleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.</b>
+                        
+                        Middleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" >
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+                
+                    <a href="../../docs/advanced/ExampleRedditAPI.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.5.</b>
+                        
+                        Example: Reddit API
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+                
+                    <a href="../../docs/recipes/ServerRendering.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.3.</b>
+                        
+                        Server Rendering
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8" data-path="PATRONS.html">
+            
+                
+                    <a href="../../PATRONS.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>8.</b>
+                        
+                        Patrons
+                    </a>
+            
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <a id="edit-link" href="https://github.com/rackt/redux/tree/master/docs/advanced/AsyncActions.md" class="btn fa fa-edit pull-left">&nbsp;&nbsp;Edit This Page</a><h1 id="async-actions">Async Actions</h1>
+<p>In the <a href="../basics/index.html">basics guide</a>, we built a simple todo application. It was fully synchronous. Every time an action was dispatched, the state was updated immediately.</p>
+<p>In this guide, we will build a different, asynchronous application. It will use the Reddit API to show the current headlines for a select subreddit. How does asynchronicity fit into Redux flow?</p>
+<h2 id="actions">Actions</h2>
+<p>When you call an asynchronous API, there are two crucial moments in time: the moment you start the call, and the moment when you receive an answer (or a timeout).</p>
+<p>Each of these two moments can usually require a change in the application state; to do that, you need to dispatch normal actions that will be processed by reducers synchronously. Usually, for any API request you&#x2019;ll want to dispatch at least three different kinds of actions:</p>
+<ul>
+<li><p><strong>An action informing the reducers that the request began.</strong></p>
+<p>The reducers may handle this action by toggling an <code>isFetching</code> flag in the state. This way the UI knows it&#x2019;s time to show a spinner.</p>
+</li>
+<li><p><strong>An action informing the reducers that the request finished successfully.</strong></p>
+<p>The reducers may handle this action by merging the new data into the state they manage and resetting <code>isFetching</code>. The UI would hide the spinner, and display the fetched data.</p>
+</li>
+<li><p><strong>An action informing the reducers that the request failed.</strong></p>
+<p>The reducers may handle this action by resetting <code>isFetching</code>. Maybe, some reducers will also want to store the error message so the UI can display it.</p>
+</li>
+</ul>
+<p>You may use a dedicated <code>status</code> field in your actions:</p>
+<pre><code class="lang-js">{ type: <span class="hljs-string">&apos;FETCH_POSTS&apos;</span> }
+{ type: <span class="hljs-string">&apos;FETCH_POSTS&apos;</span>, status: <span class="hljs-string">&apos;error&apos;</span>, error: <span class="hljs-string">&apos;Oops&apos;</span> }
+{ type: <span class="hljs-string">&apos;FETCH_POSTS&apos;</span>, status: <span class="hljs-string">&apos;success&apos;</span>, response: { ... } }
+</code></pre>
+<p>Or you can define separate types for them:</p>
+<pre><code class="lang-js">{ type: <span class="hljs-string">&apos;FETCH_POSTS_REQUEST&apos;</span> }
+{ type: <span class="hljs-string">&apos;FETCH_POSTS_FAILURE&apos;</span>, error: <span class="hljs-string">&apos;Oops&apos;</span> }
+{ type: <span class="hljs-string">&apos;FETCH_POSTS_SUCCESS&apos;</span>, response: { ... } }
+</code></pre>
+<p>Choosing whether to use a single action type with flags, or multiple action types, is up to you. It&#x2019;s a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like <a href="https://github.com/acdlite/redux-actions" target="_blank">redux-actions</a>.</p>
+<p>Whatever convention you choose, stick with it throughout the application.<br>We&#x2019;ll use separate types in this tutorial.</p>
+<h2 id="synchronous-action-creators">Synchronous Action Creators</h2>
+<p>Let&#x2019;s start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a reddit to display:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> SELECT_REDDIT = <span class="hljs-string">&apos;SELECT_REDDIT&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">selectReddit</span>(<span class="hljs-params">reddit</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: SELECT_REDDIT,
+    reddit
+  };
+}
+</code></pre>
+<p>They can also press a &#x201C;refresh&#x201D; button to update it:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> INVALIDATE_REDDIT = <span class="hljs-string">&apos;INVALIDATE_REDDIT&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">invalidateReddit</span>(<span class="hljs-params">reddit</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: INVALIDATE_REDDIT,
+    reddit
+  };
+}
+</code></pre>
+<p>These were the actions governed by the user interaction. We will also have another kind of action, governed by the network requests. We will see how to dispatch them later, but for now, we just want to define them.</p>
+<p>When it&#x2019;s time to fetch the posts for some reddit, we will dispatch a <code>REQUEST_POSTS</code> action:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> REQUEST_POSTS = <span class="hljs-string">&apos;REQUEST_POSTS&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestPosts</span>(<span class="hljs-params">reddit</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: REQUEST_POSTS,
+    reddit
+  };
+}
+</code></pre>
+<p>It is important for it to be separate from <code>SELECT_REDDIT</code> or <code>INVALIDATE_REDDIT</code>. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular reddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it&#x2019;s not wise to couple fetching to some particular UI event early on.</p>
+<p>Finally, when the network request comes through, we will dispatch <code>RECEIVE_POSTS</code>:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RECEIVE_POSTS = <span class="hljs-string">&apos;RECEIVE_POSTS&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">receivePosts</span>(<span class="hljs-params">reddit, json</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: RECEIVE_POSTS,
+    reddit,
+    posts: json.data.children.map(child =&gt; child.data),
+    receivedAt: <span class="hljs-built_in">Date</span>.now()
+  };
+}
+</code></pre>
+<p>This is all we need to know for now. The particular mechanism to dispatch these actions together with network requests will be discussed later.</p>
+<blockquote>
+<h5 id="note-on-error-handling">Note on Error Handling</h5>
+<p>In a real app, you&#x2019;d also want to dispatch an action on request failure. We won&#x2019;t implement error handling in this tutorial, but the <a href="../introduction/Examples.html#real-world">real world example</a> shows one of the possible approaches.</p>
+</blockquote>
+<h2 id="designing-the-state-shape">Designing the State Shape</h2>
+<p>Just like in the basic tutorial, you&#x2019;ll need to <a href="../basics/Reducers.html#designing-the-state-shape">design the shape of your application&#x2019;s state</a> before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.</p>
+<p>This part is often confusing to beginners, because it is not immediately clear what information describes the state of an asynchronous application, and how to organize it in a single tree.</p>
+<p>We&#x2019;ll start with the most common use case: lists. Web applications often show lists of things. For example, a list of posts, or a list of friends. You&#x2019;ll need to figure out what sorts of lists your app can show. You want to store them separately in the state, because this way you can cache them and only fetch again if necessary.</p>
+<p>Here&#x2019;s what the state shape for our &#x201C;Reddit headlines&#x201D; app might look like:</p>
+<pre><code class="lang-js">{
+  selectedReddit: <span class="hljs-string">&apos;frontend&apos;</span>,
+  postsByReddit: {
+    frontend: {
+      isFetching: <span class="hljs-literal">true</span>,
+      didInvalidate: <span class="hljs-literal">false</span>,
+      items: []
+    },
+    reactjs: {
+      isFetching: <span class="hljs-literal">false</span>,
+      didInvalidate: <span class="hljs-literal">false</span>,
+      lastUpdated: <span class="hljs-number">1439478405547</span>,
+      items: [{
+        id: <span class="hljs-number">42</span>,
+        title: <span class="hljs-string">&apos;Confusion about Flux and Relay&apos;</span>
+      }, {
+        id: <span class="hljs-number">500</span>,
+        title: <span class="hljs-string">&apos;Creating a Simple Application Using React JS and Flux Architecture&apos;</span>
+      }]
+    }
+  }
+}
+</code></pre>
+<p>There are a few important bits here:</p>
+<ul>
+<li><p>We store each subreddit&#x2019;s information separately so we can cache every subreddit. When the user switches between them the second time, the update will be instant, and we won&#x2019;t need to refetch unless we want to. Don&#x2019;t worry about all these items being in memory: unless you&#x2019;re dealing with tens of thousands of items, and your user rarely closes the tab, you won&#x2019;t need any sort of cleanup.</p>
+</li>
+<li><p>For every list of items, you&#x2019;ll want to store <code>isFetching</code> to show a spinner, <code>didInvalidate</code> so you can later toggle it when the data is stale, <code>lastUpdated</code> so you know when it was fetched the last time, and the <code>items</code> themselves. In a real app, you&#x2019;ll also want to store pagination state like <code>fetchedPageCount</code> and <code>nextPageUrl</code>.</p>
+</li>
+</ul>
+<blockquote>
+<h5 id="note-on-nested-entities">Note on Nested Entities</h5>
+<p>In this example, we store the received items together with the pagination information. However, this approach won&#x2019;t work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.</p>
+<p>If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The <a href="../introduction/Examples.html#real-world">real world example</a> shows this approach, together with <a href="https://github.com/gaearon/normalizr" target="_blank">normalizr</a> to normalize the nested API responses. With this approach, your state might look like this:</p>
+<pre><code class="lang-js">{
+  selectedReddit: <span class="hljs-string">&apos;frontend&apos;</span>,
+  entities: {
+    users: {
+      <span class="hljs-number">2</span>: {
+        id: <span class="hljs-number">2</span>,
+        name: <span class="hljs-string">&apos;Andrew&apos;</span>
+      }
+    },
+    posts: {
+      <span class="hljs-number">42</span>: {
+        id: <span class="hljs-number">42</span>,
+        title: <span class="hljs-string">&apos;Confusion about Flux and Relay&apos;</span>,
+        author: <span class="hljs-number">2</span>
+      },
+      <span class="hljs-number">100</span>: {
+        id: <span class="hljs-number">100</span>,
+        title: <span class="hljs-string">&apos;Creating a Simple Application Using React JS and Flux Architecture&apos;</span>,
+        author: <span class="hljs-number">2</span>
+      }
+    }
+  },
+  postsByReddit: {
+    frontend: {
+      isFetching: <span class="hljs-literal">true</span>,
+      didInvalidate: <span class="hljs-literal">false</span>,
+      items: []
+    },
+    reactjs: {
+      isFetching: <span class="hljs-literal">false</span>,
+      didInvalidate: <span class="hljs-literal">false</span>,
+      lastUpdated: <span class="hljs-number">1439478405547</span>,
+      items: [<span class="hljs-number">42</span>, <span class="hljs-number">100</span>]
+    }
+  }
+}
+</code></pre>
+<p>In this guide, we won&#x2019;t normalize entities, but it&#x2019;s something you should consider for a more dynamic application.</p>
+</blockquote>
+<h2 id="handling-actions">Handling Actions</h2>
+<p>Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.</p>
+<blockquote>
+<h5 id="note-on-reducer-composition">Note on Reducer Composition</h5>
+<p>Here, we assume that you understand reducer composition with <a href="../api/combineReducers.html"><code>combineReducers()</code></a>, as described in the <a href="../basics/Reducers.html#splitting-reducers">Splitting Reducers</a> section on the <a href="../basics/index.html">basics guide</a>. If you don&#x2019;t, please <a href="../basics/Reducers.html#splitting-reducers">read it first</a>.</p>
+</blockquote>
+<h4 id="-reducers-js"><code>reducers.js</code></h4>
+<pre><code class="lang-js">import { combineReducers } from &apos;redux&apos;;
+import {
+  SELECT_REDDIT, INVALIDATE_REDDIT,
+  REQUEST_POSTS, RECEIVE_POSTS
+} from &apos;../actions&apos;;
+
+function selectedReddit(state = &apos;reactjs&apos;, action) {
+  switch (action.type) {
+  case SELECT_REDDIT:
+    return action.reddit;
+  default:
+    return state;
+  }
+}
+
+function posts(state = {
+  isFetching: false,
+  didInvalidate: false,
+  items: []
+}, action) {
+  switch (action.type) {
+  case INVALIDATE_REDDIT:
+    return Object.assign({}, state, {
+      didInvalidate: true
+    });
+  case REQUEST_POSTS:
+    return Object.assign({}, state, {
+      isFetching: true,
+      didInvalidate: false
+    });
+  case RECEIVE_POSTS:
+    return Object.assign({}, state, {
+      isFetching: false,
+      didInvalidate: false,
+      items: action.posts,
+      lastUpdated: action.receivedAt
+    });
+  default:
+    return state;
+  }
+}
+
+function postsByReddit(state = {}, action) {
+  switch (action.type) {
+  case INVALIDATE_REDDIT:
+  case RECEIVE_POSTS:
+  case REQUEST_POSTS:
+    return Object.assign({}, state, {
+      [action.reddit]: posts(state[action.reddit], action)
+    });
+  default:
+    return state;
+  }
+}
+
+const rootReducer = combineReducers({
+  postsByReddit,
+  selectedReddit
+});
+
+export default rootReducer;
+</code></pre>
+<p>In this code, there are two interesting parts:</p>
+<ul>
+<li><p>We use ES6 computed property syntax so we can update <code>state[action.reddit]</code> with <code>Object.assign()</code> in a terse way. This:</p>
+<pre><code class="lang-js">  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, {
+    [action.reddit]: posts(state[action.reddit], action)
+  });
+</code></pre>
+<p>is equivalent to this:</p>
+<pre><code class="lang-js">  <span class="hljs-keyword">let</span> nextState = {};
+  nextState[action.reddit] = posts(state[action.reddit], action);
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.assign({}, state, nextState);
+</code></pre>
+</li>
+<li>We extracted <code>posts(state, action)</code> that manages the state of a specific post list. This is just <a href="../basics/Reducers.html#splitting-reducers">reducer composition</a>! It is our choice how to split the reducer into smaller reducers, and in this case, we&#x2019;re delegating updating items inside an object to a <code>posts</code> reducer. The <a href="../introduction/Examples.html#real-world">real world example</a> goes even further, showing how to create a reducer factory for parameterized pagination reducers.</li>
+</ul>
+<p>Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.</p>
+<h2 id="async-action-creators">Async Action Creators</h2>
+<p>Finally, how do we use the synchronous action creators we <a href="#synchronous-action-creators">defined earlier</a> together with network requests? The standard way to do it with Redux is to use the <a href="https://github.com/gaearon/redux-thunk" target="_blank">Redux Thunk middleware</a>. It comes in a separate package called <code>redux-thunk</code>. We&#x2019;ll explain how middleware works in general <a href="Middleware.html">later</a>; for now, there is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead an action object. This way, the function creator becomes a <a href="https://en.wikipedia.org/wiki/Thunk" target="_blank">thunk</a>.</p>
+<p>When a function creator returns a function, that function will get executed by the Redux Thunk middleware. This function doesn&#x2019;t need to be pure; it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions&#x2014;like those synchronous actions we defined earlier.</p>
+<p>We can still define these special thunk action creators inside our <code>actions.js</code> file:</p>
+<h4 id="-actions-js"><code>actions.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> fetch <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;isomorphic-fetch&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> REQUEST_POSTS = <span class="hljs-string">&apos;REQUEST_POSTS&apos;</span>;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestPosts</span>(<span class="hljs-params">reddit</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: REQUEST_POSTS,
+    reddit
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RECEIVE_POSTS = <span class="hljs-string">&apos;RECEIVE_POSTS&apos;</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">receivePosts</span>(<span class="hljs-params">reddit, json</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: RECEIVE_POSTS,
+    reddit,
+    posts: json.data.children.map(child =&gt; child.data),
+    receivedAt: <span class="hljs-built_in">Date</span>.now()
+  };
+}
+
+<span class="hljs-comment">// Meet our first thunk action creator!</span>
+<span class="hljs-comment">// Though its insides are different, you would use it just like any other action creator:</span>
+<span class="hljs-comment">// store.dispatch(fetchPosts(&apos;reactjs&apos;));</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchPosts</span>(<span class="hljs-params">reddit</span>) </span>{
+
+  <span class="hljs-comment">// Thunk middleware knows how to handle functions.</span>
+  <span class="hljs-comment">// It passes the dispatch method as an argument to the function,</span>
+  <span class="hljs-comment">// thus making it able to dispatch actions itself.</span>
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">dispatch</span>) </span>{
+
+    <span class="hljs-comment">// First dispatch: the app state is updated to inform</span>
+    <span class="hljs-comment">// that the API call is starting.</span>
+
+    dispatch(requestPosts(reddit));
+
+    <span class="hljs-comment">// The function called by the thunk middleware can return a value,</span>
+    <span class="hljs-comment">// that is passed on as the return value of the dispatch method.</span>
+
+    <span class="hljs-comment">// In this case, we return a promise to wait for.</span>
+    <span class="hljs-comment">// This is not required by thunk middleware, but it is convenient for us.</span>
+
+    <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">`http://www.reddit.com/r/<span class="hljs-subst">${reddit}</span>.json`</span>)
+      .then(response =&gt; response.json())
+      .then(json =&gt;
+
+        <span class="hljs-comment">// We can dispatch many times!</span>
+        <span class="hljs-comment">// Here, we update the app state with the results of the API call.</span>
+
+        dispatch(receivePosts(reddit, json))
+      );
+
+      <span class="hljs-comment">// Note: in a real world app, you also want to</span>
+      <span class="hljs-comment">// catch any error in the network call.</span>
+  };
+}
+</code></pre>
+<blockquote>
+<h5 id="note-on-fetch">Note on <code>fetch</code></h5>
+<p>We use <a href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API" target="_blank"><code>fetch</code> API</a> in the examples. It is a new API for making network requests that replaces <code>XMLHttpRequest</code> for most common needs. Because most browsers don&#x2019;t yet support it natively, we suggest that you use <a href="https://github.com/matthew-andrews/isomorphic-fetch" target="_blank"><code>isomorphic-fetch</code></a> library:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// Do this in every file where you use `fetch`</span>
+<span class="hljs-keyword">import</span> fetch <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;isomorphic-fetch&apos;</span>;
+</code></pre>
+<p>Internally, it uses <a href="https://github.com/github/fetch" target="_blank"><code>whatwg-fetch</code> polyfill</a> on the client, and <a href="https://github.com/bitinn/node-fetch" target="_blank"><code>node-fetch</code></a> on the server, so you won&#x2019;t need to change API calls if you change your app to be <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9" target="_blank">universal</a>.</p>
+<p>Be aware that any <code>fetch</code> polyfill assumes a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Promise</a> polyfill is already present. The easiest way to ensure you have a Promise polyfill is to enable Babel&#x2019;s ES6 polyfill in your entry point before any other code runs:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// Do this once before any other code in your app</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">&apos;babel-core/polyfill&apos;</span>;
+</code></pre>
+</blockquote>
+<p>How do we include the Redux Thunk middleware in the dispatch mechanism? We use the <a href="../api/applyMiddleware.html"><code>applyMiddleware()</code></a> method from Redux, as shown below:</p>
+<h4 id="-index-js"><code>index.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> thunkMiddleware <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux-thunk&apos;</span>;
+<span class="hljs-keyword">import</span> loggerMiddleware <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux-logger&apos;</span>;
+<span class="hljs-keyword">import</span> { createStore, applyMiddleware } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;redux&apos;</span>;
+<span class="hljs-keyword">import</span> { selectReddit, fetchPosts } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./actions&apos;</span>;
+<span class="hljs-keyword">import</span> rootReducer <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./reducers&apos;</span>;
+
+<span class="hljs-keyword">const</span> createStoreWithMiddleware = applyMiddleware(
+  thunkMiddleware, <span class="hljs-comment">// lets us dispatch() functions</span>
+  loggerMiddleware <span class="hljs-comment">// neat middleware that logs actions</span>
+)(createStore);
+
+<span class="hljs-keyword">const</span> store = createStoreWithMiddleware(rootReducer);
+
+store.dispatch(selectReddit(<span class="hljs-string">&apos;reactjs&apos;</span>));
+store.dispatch(fetchPosts(<span class="hljs-string">&apos;reactjs&apos;</span>)).then(() =&gt;
+  <span class="hljs-built_in">console</span>.log(store.getState());
+);
+</code></pre>
+<p>The nice thing about thunks is that they can dispatch results of each other:</p>
+<h4 id="-actions-js"><code>actions.js</code></h4>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> fetch <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;isomorphic-fetch&apos;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> REQUEST_POSTS = <span class="hljs-string">&apos;REQUEST_POSTS&apos;</span>;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestPosts</span>(<span class="hljs-params">reddit</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: REQUEST_POSTS,
+    reddit
+  };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RECEIVE_POSTS = <span class="hljs-string">&apos;RECEIVE_POSTS&apos;</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">receivePosts</span>(<span class="hljs-params">reddit, json</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    type: RECEIVE_POSTS,
+    reddit,
+    posts: json.data.children.map(child =&gt; child.data),
+    receivedAt: <span class="hljs-built_in">Date</span>.now()
+  };
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchPosts</span>(<span class="hljs-params">reddit</span>) </span>{
+  <span class="hljs-keyword">return</span> dispatch =&gt; {
+    dispatch(requestPosts(reddit));
+    <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">`http://www.reddit.com/r/<span class="hljs-subst">${reddit}</span>.json`</span>)
+      .then(response =&gt; response.json())
+      .then(json =&gt; dispatch(receivePosts(reddit, json)));
+  };
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">shouldFetchPosts</span>(<span class="hljs-params">state, reddit</span>) </span>{
+  <span class="hljs-keyword">const</span> posts = state.postsByReddit[reddit];
+  <span class="hljs-keyword">if</span> (!posts) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posts.isFetching) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> posts.didInvalidate;
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchPostsIfNeeded</span>(<span class="hljs-params">reddit</span>) </span>{
+
+  <span class="hljs-comment">// Note that the function also receives getState()</span>
+  <span class="hljs-comment">// which lets you choose what to dispatch next.</span>
+
+  <span class="hljs-comment">// This is useful for avoiding a network request if</span>
+  <span class="hljs-comment">// a cached value is already available.</span>
+
+  <span class="hljs-keyword">return</span> (dispatch, getState) =&gt; {
+    <span class="hljs-keyword">if</span> (shouldFetchPosts(getState(), reddit)) {
+      <span class="hljs-comment">// Dispatch a thunk from thunk!</span>
+      <span class="hljs-keyword">return</span> dispatch(fetchPosts(reddit));
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-comment">// Let the calling code know there&apos;s nothing to wait for.</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve();
+    }
+  };
+}
+</code></pre>
+<p>This lets us write more sophisticated async control flow gradually, while the consuming code can stay pretty much the same:</p>
+<h4 id="-index-js"><code>index.js</code></h4>
+<pre><code class="lang-js">store.dispatch(fetchPostsIfNeeded(<span class="hljs-string">&apos;reactjs&apos;</span>)).then(() =&gt;
+  <span class="hljs-built_in">console</span>.log(store.getState());
+);
+</code></pre>
+<blockquote>
+<h5 id="note-about-server-rendering">Note about Server Rendering</h5>
+<p>Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.</p>
+</blockquote>
+<p><a href="https://github.com/gaearon/redux-thunk" target="_blank">Thunk middleware</a> isn&#x2019;t the only way to orchestrate asynchronous actions in Redux. You can use <a href="https://github.com/acdlite/redux-promise" target="_blank">redux-promise</a> or <a href="https://github.com/pburtchaell/redux-promise-middleware" target="_blank">redux-promise-middleware</a> to dispatch Promises instead of functions. You can dispatch Observables with <a href="https://github.com/acdlite/redux-rx" target="_blank">redux-rx</a>. You can even write a custom middleware to describe calls to your API, like the <a href="../introduction/Examples.html#real-world">real world example</a> does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.</p>
+<h2 id="connecting-to-ui">Connecting to UI</h2>
+<p>Dispatching async actions is no different from dispatching synchronous actions, so we won&#x2019;t discuss this in detail. See <a href="../basics/UsageWithReact.html">Usage with React</a> for an introduction into using Redux from React components. See <a href="ExampleRedditAPI.html">Example: Reddit API</a> for the complete source code discussed in this example.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>Read <a href="AsyncFlow.html">Async Flow</a> to recap how async actions fit into the Redux flow.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/advanced/index.html" class="navigation navigation-prev " aria-label="Previous page: Advanced"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/advanced/AsyncFlow.html" class="navigation navigation-next " aria-label="Next page: Async Flow"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-edit-link/plugin.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2},"edit-link":{"base":"https://github.com/rackt/redux/tree/master","label":"Edit This Page"}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
