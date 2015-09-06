@@ -189,6 +189,10 @@ export default function createConnect(React) {
         }
 
         handleChange() {
+          if (!this.unsubscribe) {
+            return;
+          }
+
           if (this.updateStateProps()) {
             this.updateState();
           }

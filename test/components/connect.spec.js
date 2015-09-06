@@ -1,6 +1,7 @@
 import expect from 'expect';
 import jsdom from 'mocha-jsdom';
 import React, { createClass, Children, PropTypes, Component } from 'react';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import { createStore } from 'redux';
 import { connect } from '../../src/index';
@@ -643,7 +644,7 @@ describe('React', () => {
       };
 
       @connect(
-        state => ({string: state}),
+        state => ({ string: state }),
         dispatch => ({ dispatch })
       )
       class Container extends Component {
@@ -652,16 +653,50 @@ describe('React', () => {
         }
       }
 
-      const tree = TestUtils.renderIntoDocument(
+      const div = document.createElement('div');
+      ReactDOM.render(
         <ProviderMock store={store}>
           <Container />
-        </ProviderMock>
+        </ProviderMock>,
+        div
       );
 
-      const connector = TestUtils.findRenderedComponentWithType(tree, Container);
       expect(spy.calls.length).toBe(0);
-      connector.componentWillUnmount();
+      ReactDOM.unmountComponentAtNode(div);
       expect(spy.calls.length).toBe(1);
+    });
+
+    it('should not attempt to set state after unmounting', () => {
+      const store = createStore(stringBuilder);
+      let mapStateToPropsCalls = 0;
+
+      @connect(
+        () => ({ calls: ++mapStateToPropsCalls }),
+        dispatch => ({ dispatch })
+      )
+      class Container extends Component {
+        render() {
+          return <Passthrough {...this.props} />;
+        }
+      }
+
+      const div = document.createElement('div');
+      store.subscribe(() =>
+        ReactDOM.unmountComponentAtNode(div)
+      );
+      ReactDOM.render(
+        <ProviderMock store={store}>
+          <Container />
+        </ProviderMock>,
+        div
+      );
+
+      expect(mapStateToPropsCalls).toBe(2);
+      const spy = expect.spyOn(console, 'error');
+      store.dispatch({ type: 'APPEND', body: 'a'});
+      spy.destroy();
+      expect(spy.calls.length).toBe(0);
+      expect(mapStateToPropsCalls).toBe(2);
     });
 
     it('should shallowly compare the selected state to prevent unnecessary updates', () => {
