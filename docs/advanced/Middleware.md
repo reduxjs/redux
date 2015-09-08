@@ -269,7 +269,7 @@ The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ship
 * It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.
 md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we will see [later](AsyncActions.md).
+* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
 
 * To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
@@ -361,20 +361,20 @@ const crashReporter = store => next => action => {
 
 /**
  * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
- * Makes `dispatch` return a function to cancel the interval in this case.
+ * Makes `dispatch` return a function to cancel the timeout in this case.
  */
 const timeoutScheduler = store => next => action => {
   if (!action.meta || !action.meta.delay) {
     return next(action);
   }
 
-  let intervalId = setTimeout(
+  let timeoutId = setTimeout(
     () => next(action),
     action.meta.delay
   );
 
   return function cancel() {
-    clearInterval(intervalId);
+    clearTimeout(timeoutId);
   };
 };
 
