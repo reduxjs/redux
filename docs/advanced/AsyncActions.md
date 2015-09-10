@@ -385,14 +385,20 @@ How do we include the Redux Thunk middleware in the dispatch mechanism? We use t
 
 ```js
 import thunkMiddleware from 'redux-thunk';
-import loggerMiddleware from 'redux-logger';
+import createLogger from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
 import { selectReddit, fetchPosts } from './actions';
 import rootReducer from './reducers';
 
+const logger = createLogger({
+  level: 'info',
+  collapsed: true,
+  predicate (getState, action) => action.type
+});
+
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
+  logger // neat middleware that logs actions
 )(createStore);
 
 const store = createStoreWithMiddleware(rootReducer);
