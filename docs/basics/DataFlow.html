@@ -762,17 +762,17 @@
 <li><p><strong>The root reducer may combine the output of multiple reducers into a single state tree.</strong></p>
 <p>How you structure the root reducer is completely up to you. Redux ships with a <a href="../api/combineReducers.html"><code>combineReducers()</code></a> helper function, useful for &#x201C;splitting&#x201D; the root reducer into separate functions that each manage one branch of the state tree.</p>
 <p>Here&#x2019;s how <a href="../api/combineReducers.html"><code>combineReducers()</code></a> works. Let&#x2019;s say you have two reducers, one for a list of todos, and another for the currently selected filter setting:</p>
-<pre><code class="lang-js"> function todos(state = [], action) {
-   // Somehow calculate it...
-   return nextState;
+<pre><code class="lang-js"> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+   <span class="hljs-comment">// Somehow calculate it...</span>
+   <span class="hljs-keyword">return</span> nextState;
  }
 
- function visibleTodoFilter(state = &apos;SHOW_ALL&apos;, action) {
-   // Somehow calculate it...
-   return nextState;
+ <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">visibleTodoFilter</span>(<span class="hljs-params">state = 'SHOW_ALL', action</span>) </span>{
+   <span class="hljs-comment">// Somehow calculate it...</span>
+   <span class="hljs-keyword">return</span> nextState;
  }
 
- let todoApp = combineReducers({
+ <span class="hljs-keyword">let</span> todoApp = combineReducers({
    todos,
    visibleTodoFilter
  });
