@@ -848,18 +848,18 @@ Todo.propTypes = {
 };
 </code></pre>
 <h4 id="-components-todolist-js"><code>components/TodoList.js</code></h4>
-<pre><code class="lang-js">import React, { Component, PropTypes } from &apos;react&apos;;
-import Todo from &apos;./Todo&apos;;
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> React, { Component, PropTypes } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> Todo <span class="hljs-keyword">from</span> <span class="hljs-string">'./Todo'</span>;
 
-export default class TodoList extends Component {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TodoList</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
   render() {
-    return (
-      &lt;ul&gt;
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ul</span>&gt;</span>
         {this.props.todos.map((todo, index) =&gt;
-          &lt;Todo {...todo}
-                key={index}
-                onClick={() =&gt; this.props.onTodoClick(index)} /&gt;
-        )}
+          <span class="hljs-tag">&lt;<span class="hljs-title">Todo</span> {<span class="hljs-attribute">...todo</span>}
+                <span class="hljs-attribute">key</span>=<span class="hljs-value">{index}</span>
+                <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{()</span> =&gt;</span> this.props.onTodoClick(index)} /&gt;
+        )</span>}
       &lt;/ul&gt;
     );
   }
