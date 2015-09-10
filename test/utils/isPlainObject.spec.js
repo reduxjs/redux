@@ -1,6 +1,6 @@
 import expect from 'expect';
 import isPlainObject from '../../src/utils/isPlainObject';
-import contextify from 'contextify';
+import vm from 'vm';
 
 describe('isPlainObject', () => {
   it('should return true only if plain object', () => {
@@ -8,8 +8,8 @@ describe('isPlainObject', () => {
       this.prop = 1;
     }
 
-    const sandbox = contextify();
-    sandbox.run('var fromAnotherRealm = {};');
+    const sandbox = { fromAnotherRealm: false };
+    vm.runInNewContext('fromAnotherRealm = {}', sandbox);
 
     expect(isPlainObject(sandbox.fromAnotherRealm)).toBe(true);
     expect(isPlainObject(new Test())).toBe(false);
@@ -18,7 +18,5 @@ describe('isPlainObject', () => {
     expect(isPlainObject(null)).toBe(false);
     expect(isPlainObject()).toBe(false);
     expect(isPlainObject({ 'x': 1, 'y': 2 })).toBe(true);
-
-    sandbox.dispose();
   });
 });
