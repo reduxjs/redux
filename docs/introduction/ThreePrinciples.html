@@ -756,38 +756,38 @@ store.dispatch({
 <h3 id="mutations-are-written-as-pure-functions">Mutations are written as pure functions</h3>
 <p><strong>To specify how the state tree is transformed by actions, you write pure <a href="../Glossary.html#reducer">reducers</a>.</strong></p>
 <p>Reducers are just pure functions that take the previous state and an action, and return the next state. Remember to return new state objects, instead of mutating the previous state. You can start with a single reducer, but as your app grows, you can split it into smaller reducers that manage specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.</p>
-<pre><code class="lang-js">function visibilityFilter(state = &apos;SHOW_ALL&apos;, action) {
-  switch (action.type) {
-  case &apos;SET_VISIBILITY_FILTER&apos;:
-    return action.filter;
-  default:
-    return state;
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">visibilityFilter</span>(<span class="hljs-params">state = 'SHOW_ALL', action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'SET_VISIBILITY_FILTER'</span>:
+    <span class="hljs-keyword">return</span> action.filter;
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
   }
 }
 
-function todos(state = [], action) {
-  switch (action.type) {
-  case &apos;ADD_TODO&apos;:
-    return [...state, {
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">todos</span>(<span class="hljs-params">state = [], action</span>) </span>{
+  <span class="hljs-keyword">switch</span> (action.type) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'ADD_TODO'</span>:
+    <span class="hljs-keyword">return</span> [...state, {
       text: action.text,
-      completed: false
+      completed: <span class="hljs-literal">false</span>
     }];
-  case &apos;COMPLETE_TODO&apos;:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
+  <span class="hljs-keyword">case</span> <span class="hljs-string">'COMPLETE_TODO'</span>:
+    <span class="hljs-keyword">return</span> [
+      ...state.slice(<span class="hljs-number">0</span>, action.index),
+      <span class="hljs-built_in">Object</span>.assign({}, state[action.index], {
+        completed: <span class="hljs-literal">true</span>
       }),
-      ...state.slice(action.index + 1)
+      ...state.slice(action.index + <span class="hljs-number">1</span>)
     ];
-  default:
-    return state;
+  <span class="hljs-keyword">default</span>:
+    <span class="hljs-keyword">return</span> state;
   }
 }
 
-import { combineReducers, createStore } from &apos;redux&apos;;
-let reducer = combineReducers({ visibilityFilter, todos });
-let store = createStore(reducer);
+<span class="hljs-keyword">import</span> { combineReducers, createStore } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux'</span>;
+<span class="hljs-keyword">let</span> reducer = combineReducers({ visibilityFilter, todos });
+<span class="hljs-keyword">let</span> store = createStore(reducer);
 </code></pre>
 <p>That&#x2019;s it! Now you know what Redux is all about.</p>
 
