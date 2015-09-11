@@ -1,6 +1,6 @@
 # Store
 
-In the previous sections, we defined the [actions](Action.md) that represent the facts about “what happened” and the [reducers](Reducers.md) that update the state according to those actions.
+In the previous sections, we defined the [actions](Actions.md) that represent the facts about “what happened” and the [reducers](Reducers.md) that update the state according to those actions.
 
 The **Store** is the object that brings them together. The store has the following responsibilities:
 
