@@ -292,10 +292,33 @@ describe('createStore', () => {
     ).toNotThrow();
   });
 
-  it('should only accept actions with a `type`', () => {
+  it('should throw if action type is missing', () => {
     const store = createStore(reducers.todos);
     expect(() =>
       store.dispatch({})
     ).toThrow(/Actions may not have an undefined "type" property/);
+  });
+
+  it('should throw if action type is undefined', () => {
+    const store = createStore(reducers.todos);
+    expect(() =>
+      store.dispatch({ type: undefined })
+    ).toThrow(/Actions may not have an undefined "type" property/);
+  });
+
+  it('should not throw if action type is falsy', () => {
+    const store = createStore(reducers.todos);
+    expect(() =>
+      store.dispatch({ type: false })
+    ).toNotThrow();
+    expect(() =>
+      store.dispatch({ type: 0 })
+    ).toNotThrow();
+    expect(() =>
+      store.dispatch({ type: null })
+    ).toNotThrow();
+    expect(() =>
+      store.dispatch({ type: '' })
+    ).toNotThrow();
   });
 });
