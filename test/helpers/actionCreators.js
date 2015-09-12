@@ -35,5 +35,5 @@ export function throwError() {
 export function unknownAction() {
   return {
     type: UNKNOWN_ACTION
-  }
+  };
 }
