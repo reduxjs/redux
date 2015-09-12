@@ -296,6 +296,6 @@ describe('createStore', () => {
     const store = createStore(reducers.todos);
     expect(() =>
       store.dispatch({})
-    ).toThrow(/Actions must specify a `type`/);
+    ).toThrow(/Actions may not have an undefined "type" property/);
   });
 });
