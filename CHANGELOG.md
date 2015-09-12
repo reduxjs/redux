@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0](https://github.com/rackt/redux/compare/v2.0.0...v3.0.0) - 2015/09/13
+
+### Breaking Changes
+
+* Action objects now must have a `type` property other than `undefined` ([#541](https://github.com/rackt/redux/issues/541), [#564](https://github.com/rackt/redux/pull/564))
+
+### Other Changes
+
+* `replaceReducer()` is un-deprecated.
+
 ## [2.0.0](https://github.com/rackt/redux/compare/v1.0.1...v2.0.0) - 2015/09/01
 
 ### Breaking Changes
