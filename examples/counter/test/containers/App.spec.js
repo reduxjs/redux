@@ -38,7 +38,7 @@ describe('containers', () => {
       expect(p.textContent).toMatch(/^Clicked: 1 times/);
     });
 
-    it('should display updated count after descrement button click', () => {
+    it('should display updated count after decrement button click', () => {
       const { buttons, p } = setup();
       TestUtils.Simulate.click(buttons[1]);
       expect(p.textContent).toMatch(/^Clicked: -1 times/);
