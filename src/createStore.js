@@ -94,6 +94,10 @@ export default function createStore(reducer, initialState) {
       throw new Error('Actions must be plain objects. Use custom middleware for async actions.');
     }
 
+    if (!action.type) {
+      throw new Error('Actions must specify a `type`.');
+    }
+
     if (isDispatching) {
       throw new Error('Reducers may not dispatch actions.');
     }
