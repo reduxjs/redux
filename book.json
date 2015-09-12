@@ -3,7 +3,7 @@
   "structure": {
     "summary": "docs/README.md"
   },
-  "plugins": ["edit-link"],
+  "plugins": ["edit-link", "prism"],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/rackt/redux/tree/master",
