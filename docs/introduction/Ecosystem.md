@@ -29,6 +29,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the reducers
 * [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
+* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) - Integration tools between Redux & [ImmutableJs](https://github.com/facebook/immutable-js/)
 
 ## Developer Tools
 
