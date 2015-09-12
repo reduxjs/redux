@@ -53,7 +53,7 @@
     "react": "^0.14.0-beta3",
     "react-addons-test-utils": "^0.14.0-beta3",
     "react-dom": "^0.14.0-beta3",
-    "redux": "^2.0.0",
+    "redux": "^3.0.0",
     "rimraf": "^2.3.4",
     "webpack": "^1.11.0"
   },
@@ -61,6 +61,6 @@
     "invariant": "^2.0.0"
   },
   "peerDependencies": {
-    "redux": "^2.0.0"
+    "redux": "^2.0.0 || ^3.0.0"
   }
 }
