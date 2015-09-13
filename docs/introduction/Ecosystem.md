@@ -16,13 +16,16 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-thunk](http://github.com/gaearon/redux-thunk) — The easiest way to write async action creators
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
-* [redux-batched-updates](https://github.com/acdlite/redux-batched-updates) — Batch React updates that occur as a result of Redux dispatches
 * [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 * [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Detects state mutations between and outside redux dispatches. For development use only.
 
 ## Components
 
 * [redux-form](https://github.com/erikras/redux-form) — Keep React form state in Redux
+
+## Store enhancers
+
+* [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Batch calls to subscribe handlers with a custom function, including debouncing or React batched updates.
 
 ## Utilities
 
