@@ -117,7 +117,14 @@ export default function createStore(reducer, initialState) {
       isDispatching = false;
     }
 
-    listeners.slice().forEach(listener => listener());
+    listeners.slice().forEach(listener => {
+      try{
+        listener();
+      }
+      catch(err){
+        console.error(err);
+      }
+    });
     return action;
   }
 
