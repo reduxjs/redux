@@ -80,7 +80,7 @@ open http://localhost:3000/
 
 It covers:
 
-* [Universal rendering](/docs/recipes/ServerRendering.md) with Redux and React
+* [Universal rendering](../recipes/ServerRendering.md) with Redux and React
 * Prefetching state based on input and via asynchronous fetches.
 * Passing state from the server to the client
 
