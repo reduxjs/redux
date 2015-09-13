@@ -150,6 +150,11 @@ Join the **#redux** channel of the [Reactiflux](http://reactiflux.com) Slack com
 
 Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
 
+### Change Log
+
+This project adheres to [Semantic Versioning](http://semver.org/).  
+Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/rackt/redux/releases) page.
+
 ### Patrons
 
 The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
