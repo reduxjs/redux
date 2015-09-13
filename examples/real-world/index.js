@@ -1,6 +1,6 @@
 import 'babel-core/polyfill';
 import React from 'react';
-import BrowserHistory from 'react-router/lib/BrowserHistory';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
 import configureStore from './store/configureStore';
@@ -8,7 +8,7 @@ import App from './containers/App';
 import UserPage from './containers/UserPage';
 import RepoPage from './containers/RepoPage';
 
-const history = new BrowserHistory();
+const history = createBrowserHistory();
 const store = configureStore();
 
 React.render(

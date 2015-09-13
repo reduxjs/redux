@@ -17,8 +17,8 @@ class App extends Component {
 
   handleChange(nextValue) {
     // Available thanks to contextTypes below
-    const { router } = this.context;
-    router.transitionTo(`/${nextValue}`);
+    const { history } = this.context;
+    history.pushState(null, `/${nextValue}`);
   }
 
   renderErrorMessage() {
@@ -71,7 +71,7 @@ App.propTypes = {
 };
 
 App.contextTypes = {
-  router: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

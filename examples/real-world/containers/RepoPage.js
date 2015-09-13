@@ -65,7 +65,7 @@ RepoPage.propTypes = {
   repo: PropTypes.object,
   fullName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  owner: PropTypes.string.isRequired,
+  owner: PropTypes.object.isRequired,
   stargazers: PropTypes.array.isRequired,
   stargazersPagination: PropTypes.object,
   loadRepo: PropTypes.func.isRequired,
