@@ -118,10 +118,9 @@ export default function createStore(reducer, initialState) {
     }
 
     listeners.slice().forEach(listener => {
-      try{
+      try {
         listener();
-      }
-      catch(err){
+      } catch (err) {
         console.error(err);
       }
     });
