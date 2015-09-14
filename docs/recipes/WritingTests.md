@@ -330,7 +330,7 @@ import expect from 'expect';
 import * as types from '../../constants/ActionTypes';
 import singleDispatch from '../../middleware/singleDispatch';
 
-const fakeStore = fakeData => ({
+const createFakeStore = fakeData => ({
   getState() {
     return fakeData;
   }
@@ -338,7 +338,7 @@ const fakeStore = fakeData => ({
 
 const dispatchWithStoreOf = (storeData, action) => {
   let dispatched = null;
-  const dispatch = singleDispatch(fakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
+  const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
   dispatch(action);
   return dispatched;
 };
