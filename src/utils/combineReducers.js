@@ -15,8 +15,11 @@ function getErrorMessage(key, action) {
   );
 }
 
-function verifyStateShape(initialState, currentState) {
-  var reducerKeys = Object.keys(currentState);
+function verifyStateShape(inputState, outputState, action) {
+  var reducerKeys = Object.keys(outputState);
+  var argumentName = action && action.type === ActionTypes.INIT ?
+    'initialState argument passed to createStore' :
+    'previous state received by the reducer';
 
   if (reducerKeys.length === 0) {
     console.error(
@@ -26,25 +29,26 @@ function verifyStateShape(initialState, currentState) {
     return;
   }
 
-  if (!isPlainObject(initialState)) {
+  if (!isPlainObject(inputState)) {
     console.error(
-      'initialState has unexpected type of "' +
-      ({}).toString.call(initialState).match(/\s([a-z|A-Z]+)/)[1] +
-      '". Expected initialState to be an object with the following ' +
+      `The ${argumentName} has unexpected type of "` +
+      ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
+      `". Expected argument to be an object with the following ` +
       `keys: "${reducerKeys.join('", "')}"`
     );
     return;
   }
 
-  var unexpectedKeys = Object.keys(initialState).filter(
+  var unexpectedKeys = Object.keys(inputState).filter(
     key => reducerKeys.indexOf(key) < 0
   );
 
   if (unexpectedKeys.length > 0) {
     console.error(
       `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
-      `"${unexpectedKeys.join('", "')}" in initialState will be ignored. ` +
-      `Expected to find one of the known reducer keys instead: "${reducerKeys.join('", "')}"`
+      `"${unexpectedKeys.join('", "')}" found in ${argumentName}. ` +
+      `Expected to find one of the known reducer keys instead: ` +
+      `"${reducerKeys.join('", "')}". Unexpected keys will be ignored.`
     );
   }
 }
@@ -94,7 +98,6 @@ export default function combineReducers(reducers) {
   });
 
   var defaultState = mapValues(finalReducers, () => undefined);
-  var stateShapeVerified;
 
   return function combination(state = defaultState, action) {
     var finalState = mapValues(finalReducers, (reducer, key) => {
@@ -106,10 +109,7 @@ export default function combineReducers(reducers) {
     });
 
     if (process.env.NODE_ENV !== 'production') {
-      if (!stateShapeVerified) {
-        verifyStateShape(state, finalState);
-        stateShapeVerified = true;
-      }
+      verifyStateShape(state, finalState, action);
     }
 
     return finalState;
