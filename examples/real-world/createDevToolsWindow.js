@@ -22,6 +22,6 @@ export default function createDevToolsWindow(store) {
     <DebugPanel top right bottom left>
       <DevTools store={store} monitor={LogMonitor} />
     </DebugPanel>,
-    win.document.body
+    win.document.body.appendChild(document.createElement('div'))
   ), 10);
 }
