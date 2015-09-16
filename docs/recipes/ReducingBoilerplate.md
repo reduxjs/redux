@@ -141,7 +141,7 @@ export const removeTodo = makeActionCreator('REMOVE_TODO', 'id');
 See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions) for examples of such utilities.
 
 Note that such utilities add magic to your code.  
-Are magic and indirection really worth it to avoid a few extra few lines of code?
+Are magic and indirection really worth it to avoid a few extra lines of code?
 
 ## Async Action Creators
 
