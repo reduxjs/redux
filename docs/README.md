@@ -20,6 +20,7 @@
   * [Middleware](/docs/advanced/Middleware.md)
   * Usage with React Router
   * [Example: Reddit API](/docs/advanced/ExampleRedditAPI.md)
+  * [Example: Async Actions with Thunk Middleware](/docs/advanced/ExampleThunkMiddleware.md)
   * Next Steps
 * [Recipes](/docs/recipes/README.md)
   * [Migrating to Redux](/docs/recipes/MigratingToRedux.md)
