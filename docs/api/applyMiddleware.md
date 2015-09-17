@@ -16,6 +16,39 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 
 (*Function*) A store enhancer that applies the given middleware. The store enhancer is a function that needs to be applied to `createStore`. It will return a different `createStore` which has the middleware enabled.
 
+#### Example: Custom Logger Middleware
+
+```js
+import { createStore, applyMiddleware } from 'redux';
+import todos from './reducers';
+
+function logger({ getState }) {
+  return (next) => (action) => {
+    console.log('will dispatch', action);
+
+    // Call the next dispatch method in the middleware chain.
+    let returnValue = next(action);
+
+    console.log('state after dispatch', getState());
+
+    // This will likely be the action itself, unless
+    // a middleware further in chain changed it.
+    return returnValue;
+  };
+}
+
+let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
+let store = createStoreWithMiddleware(todos, ['Use Redux']);
+
+store.dispatch({
+  type: 'ADD_TODO',
+  text: 'Understand the middleware'
+});
+// (These lines will be logged by the middleware:)
+// will dispatch: { type: 'ADD_TODO', text: 'Understand the middleware' }
+// state after dispatch: ['Use Redux', 'Understand the middleware']
+```
+
 #### Example: Using Thunk Middleware for Async Actions
 
 ```js
@@ -179,40 +212,6 @@ export default connect(
   })
 );
 ```
-
-#### Example: Custom Logger Middleware
-
-```js
-import { createStore, applyMiddleware } from 'redux';
-import todos from './reducers';
-
-function logger({ getState }) {
-  return (next) => (action) => {
-    console.log('will dispatch', action);
-
-    // Call the next dispatch method in the middleware chain.
-    let returnValue = next(action);
-
-    console.log('state after dispatch', getState());
-
-    // This will likely be the action itself, unless
-    // a middleware further in chain changed it.
-    return returnValue;
-  };
-}
-
-let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
-let store = createStoreWithMiddleware(todos, ['Use Redux']);
-
-store.dispatch({
-  type: 'ADD_TODO',
-  text: 'Understand the middleware'
-});
-// (These lines will be logged by the middleware:)
-// will dispatch: { type: 'ADD_TODO', text: 'Understand the middleware' }
-// state after dispatch: ['Use Redux', 'Understand the middleware']
-```
-
 
 #### Tips
 
