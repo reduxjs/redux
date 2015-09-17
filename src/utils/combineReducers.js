@@ -72,11 +72,12 @@ function verifyStateShape(inputState, outputState, action) {
 
 export default function combineReducers(reducers) {
   var finalReducers = pick(reducers, (val) => typeof val === 'function');
+  var sanityError;
 
   Object.keys(finalReducers).forEach(key => {
     var reducer = finalReducers[key];
-    if (typeof reducer(undefined, { type: ActionTypes.INIT }) === 'undefined') {
-      throw new Error(
+    if (!sanityError && typeof reducer(undefined, { type: ActionTypes.INIT }) === 'undefined') {
+      sanityError = new Error(
         `Reducer "${key}" returned undefined during initialization. ` +
         `If the state passed to the reducer is undefined, you must ` +
         `explicitly return the initial state. The initial state may ` +
@@ -85,8 +86,8 @@ export default function combineReducers(reducers) {
     }
 
     var type = Math.random().toString(36).substring(7).split('').join('.');
-    if (typeof reducer(undefined, { type }) === 'undefined') {
-      throw new Error(
+    if (!sanityError && typeof reducer(undefined, { type }) === 'undefined') {
+      sanityError = new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +
         `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
         `namespace. They are considered private. Instead, you must return the ` +
@@ -100,6 +101,9 @@ export default function combineReducers(reducers) {
   var defaultState = mapValues(finalReducers, () => undefined);
 
   return function combination(state = defaultState, action) {
+    if (sanityError) {
+      throw sanityError;
+    }
     var finalState = mapValues(finalReducers, (reducer, key) => {
       var newState = reducer(state[key], action);
       if (typeof newState === 'undefined') {
