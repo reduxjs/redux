@@ -37,7 +37,7 @@ import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '.
 console.log(store.getState());
 
 // Every time the state changes, log it
-let unsubscribe = store.subscribe(() =>
+store.subscribe(() =>
   console.log(store.getState())
 );
 
@@ -49,8 +49,6 @@ store.dispatch(completeTodo(0));
 store.dispatch(completeTodo(1));
 store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
 
-// Stop listening to state updates
-unsubscribe();
 ```
 
 You can see how this causes the state held by the store to change:
