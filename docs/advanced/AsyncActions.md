@@ -275,17 +275,17 @@ In this code, there are two interesting parts:
 
 * We use ES6 computed property syntax so we can update `state[action.reddit]` with `Object.assign()` in a terse way. This:
 
-    ```js
-    return Object.assign({}, state, {
-      [action.reddit]: posts(state[action.reddit], action)
-    });
-    ```
+  ```js
+  return Object.assign({}, state, {
+    [action.reddit]: posts(state[action.reddit], action)
+  });
+  ```
   is equivalent to this:
 
   ```js
-    let nextState = {};
-    nextState[action.reddit] = posts(state[action.reddit], action);
-    return Object.assign({}, state, nextState);
+  let nextState = {};
+  nextState[action.reddit] = posts(state[action.reddit], action);
+  return Object.assign({}, state, nextState);
   ```
 * We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.html#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
 
