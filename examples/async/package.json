@@ -42,7 +42,7 @@
     "mocha": "^2.2.5",
     "mocha-jsdom": "^1.0.0",
     "node-libs-browser": "^0.5.2",
-    "react-transform-webpack-hmr": "^0.1.4",
+    "react-transform-hmr": "^1.0.0",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.9.0"
   }

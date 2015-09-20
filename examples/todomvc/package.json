@@ -4,7 +4,7 @@
   "description": "Redux TodoMVC example",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha --recursive --compilers js:babel-core/register",
+    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register",
     "test:watch": "npm test -- --watch"
   },
   "repository": {
@@ -32,7 +32,7 @@
     "mocha-jsdom": "^1.0.0",
     "node-libs-browser": "^0.5.2",
     "raw-loader": "^0.5.1",
-    "react-transform-webpack-hmr": "^0.1.4",
+    "react-transform-hmr": "^1.0.0",
     "style-loader": "^0.12.3",
     "todomvc-app-css": "^2.0.1",
     "webpack": "^1.9.11",
