@@ -1,30 +1,46 @@
 var path = require('path');
 var webpack = require('webpack');
-var host = 'localhost';
-var port = 3001;
 
 module.exports = {
-  devServerPort: port,
   devtool: 'inline-source-map',
   entry: [
-    'webpack-dev-server/client?http://' + host + ':' + port,
-    'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     './client/index.js'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: 'http://' + host + ':' + port + '/dist/'
+    publicPath: '/dist/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
   ],
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['babel?optional=runtime'],
+      loader: 'babel',
       exclude: /node_modules/,
-      include: __dirname
+      include: __dirname,
+      query: {
+        optional: ['runtime'],
+        stage: 2,
+        env: {
+          development: {
+            plugins: [
+              'react-transform'
+            ],
+            extra: {
+              'react-transform': [{
+                target:  'react-transform-hmr',
+                imports: ['react'],
+                locals:  ['module']
+              }]
+            }
+          }
+        }
+      }
     }]
   }
 };

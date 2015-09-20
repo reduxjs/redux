@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run server & npm run client",
     "server": "node server",
-    "client": "webpack && node webpack.server.js"
+    "client": "webpack"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "babel-runtime": "^5.8.20",
     "react-transform-hmr": "^1.0.0",
     "webpack": "^1.11.0",
-    "webpack-dev-server": "^1.10.1"
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
   }
 }

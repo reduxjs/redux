@@ -4,6 +4,11 @@ import path from 'path';
 import Express from 'express';
 import qs from 'qs';
 
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackConfig from '../webpack.config';
+
 import React from 'react';
 import { Provider } from 'react-redux';
 
@@ -13,6 +18,11 @@ import { fetchCounter } from '../common/api/counter';
 
 const app = new Express();
 const port = 3000;
+
+// Use this middleware to set up hot module reloading via webpack.
+const compiler = webpack(webpackConfig);
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+app.use(webpackHotMiddleware(compiler, { log: console.log, path: '/__webpack_hmr', heartbeat: 10 * 1000 }));
 
 // Use this middleware to server up static files built into dist
 app.use(require('serve-static')(path.join(__dirname, '../dist')));
