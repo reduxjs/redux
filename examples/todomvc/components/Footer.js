@@ -26,7 +26,7 @@ class Footer extends Component {
 
     return (
       <a className={classnames({ selected: filter === selectedFilter })}
-         style={{ cursor: 'hand' }}
+         style={{ cursor: 'pointer' }}
          onClick={() => onShow(filter)}>
         {title}
       </a>
