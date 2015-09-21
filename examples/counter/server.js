@@ -8,7 +8,7 @@ var port = 3000;
 
 var compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
-app.use(webpackHotMiddleware(compiler, { log: console.log, path: '/__webpack_hmr', heartbeat: 10 * 1000 }));
+app.use(webpackHotMiddleware(compiler));
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + '/index.html');

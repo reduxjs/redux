@@ -22,7 +22,7 @@ const port = 3000;
 // Use this middleware to set up hot module reloading via webpack.
 const compiler = webpack(webpackConfig);
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
-app.use(webpackHotMiddleware(compiler, { log: console.log, path: '/__webpack_hmr', heartbeat: 10 * 1000 }));
+app.use(webpackHotMiddleware(compiler));
 
 // This is fired every time the server side receives a request
 app.use(handleRender);
