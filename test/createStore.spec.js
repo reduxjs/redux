@@ -8,11 +8,13 @@ describe('createStore', () => {
     const store = createStore(combineReducers(reducers));
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(4);
+    expect(methods.length).toBe(6);
     expect(methods).toContain('subscribe');
     expect(methods).toContain('dispatch');
     expect(methods).toContain('getState');
     expect(methods).toContain('replaceReducer');
+    expect(methods).toContain('begin');
+    expect(methods).toContain('commit');
   });
 
   it('should require a reducer function', () => {
@@ -320,5 +322,24 @@ describe('createStore', () => {
     expect(() =>
       store.dispatch({ type: '' })
     ).toNotThrow();
+  });
+
+  it('should not call listeners if begin() called', () => {
+    const store = createStore(reducers.todos);
+    let called = false;
+    store.subscribe(() => {
+      called = true;
+    });
+
+    store.dispatch({type: 'test'});
+    expect(called).toBe(true);
+    called = false;
+
+    store.begin();
+    store.dispatch({type: 'test'});
+    expect(called).toBe(false);
+
+    store.commit();
+    expect(called).toBe(true);
   });
 });
