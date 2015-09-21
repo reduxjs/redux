@@ -38,12 +38,15 @@
     "babel-loader": "^5.1.4",
     "babel-plugin-react-transform": "^1.0.3",
     "expect": "^1.6.0",
+    "express": "^4.13.3",
     "jsdom": "^5.6.1",
     "mocha": "^2.2.5",
     "mocha-jsdom": "^1.0.0",
     "node-libs-browser": "^0.5.2",
     "react-transform-hmr": "^1.0.0",
     "webpack": "^1.9.11",
-    "webpack-dev-server": "^1.9.0"
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-dev-server": "^1.9.0",
+    "webpack-hot-middleware": "^2.2.0"
   }
 }

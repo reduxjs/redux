@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "description": "Redux real-world example",
   "scripts": {
-    "start": "concurrent 'npm run server' 'npm run client'",
-    "server": "node server.js",
-    "client": "webpack"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
