@@ -64,8 +64,7 @@
     "isparta": "^3.0.3",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
-    "webpack": "^1.9.6",
-    "webpack-dev-server": "^1.8.2"
+    "webpack": "^1.9.6"
   },
   "npmName": "redux",
   "npmFileMap": [
