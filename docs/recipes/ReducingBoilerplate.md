@@ -103,7 +103,7 @@ We just modified how `addTodo` action creator behaves, completely invisible to t
 
 Some frameworks like [Flummox](https://github.com/acdlite/flummox) generate action type constants automatically from the action creator function definitions. The idea is that you don’t need to both define `ADD_TODO` constant and `addTodo()` action creator. Under the hood, such solutions still generate action type constants, but they’re created implicitly so it’s a level of indirection and can cause confusion. We recommend creating your action type constants explicitly.
 
- Writing simple action creators can be tiresome and often ends up generating redundant boilerplate code:
+Writing simple action creators can be tiresome and often ends up generating redundant boilerplate code:
 
 ```js
 export function addTodo(text) {
@@ -150,7 +150,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo');
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo');
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id');
 ```
-There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhereing to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action). 
+There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action). 
 
 ## Async Action Creators
 
