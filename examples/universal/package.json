@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "description": "An example of a universally-rendered Redux application",
   "scripts": {
-    "start": "npm run server & npm run client",
-    "server": "node server",
-    "client": "webpack && node webpack.server.js"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
@@ -31,8 +29,9 @@
     "babel-loader": "^5.3.2",
     "babel-plugin-react-transform": "^1.0.3",
     "babel-runtime": "^5.8.20",
-    "react-transform-webpack-hmr": "^0.1.4",
+    "react-transform-hmr": "^1.0.0",
     "webpack": "^1.11.0",
-    "webpack-dev-server": "^1.10.1"
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
   }
 }
