@@ -24,9 +24,6 @@ const compiler = webpack(webpackConfig);
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
 app.use(webpackHotMiddleware(compiler, { log: console.log, path: '/__webpack_hmr', heartbeat: 10 * 1000 }));
 
-// Use this middleware to server up static files built into dist
-app.use(require('serve-static')(path.join(__dirname, '../dist')));
-
 // This is fired every time the server side receives a request
 app.use(handleRender);
 
@@ -69,7 +66,7 @@ function renderFullPage(html, initialState) {
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
         </script>
-        <script src="/bundle.js"></script>
+        <script src="/static/bundle.js"></script>
       </body>
     </html>
     `;
