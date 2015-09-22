@@ -39,6 +39,7 @@ export default function createStore(reducer, initialState) {
   var currentState = initialState;
   var listeners = [];
   var isDispatching = false;
+  var inTransaction = false;
 
   /**
    * Reads the state tree managed by the store.
@@ -117,8 +118,40 @@ export default function createStore(reducer, initialState) {
       isDispatching = false;
     }
 
-    listeners.slice().forEach(listener => listener());
+    if (!inTransaction) {
+      listeners.slice().forEach(listener => listener());
+    }
     return action;
+  }
+
+  /**
+   * Start transaction
+   *
+   * No one listeners will be called until commit() transaction.
+   *
+   * @return {void}
+   */
+  function begin() {
+    if (inTransaction) {
+      throw new Error(
+        'Only one transaction may be started with begin() call.'
+      );
+    }
+    inTransaction = true;
+  }
+
+  /**
+   * Commit
+   * @return {void}
+   */
+  function commit() {
+    if (!inTransaction) {
+      throw new Error(
+        'You must call begin() before commit().'
+      );
+    }
+    inTransaction = false;
+    listeners.slice().forEach(listener => listener());
   }
 
   /**
@@ -142,6 +175,8 @@ export default function createStore(reducer, initialState) {
   dispatch({ type: ActionTypes.INIT });
 
   return {
+    begin,
+    commit,
     dispatch,
     subscribe,
     getState,
