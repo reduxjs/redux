@@ -297,7 +297,7 @@ export default connect(mapDispatchToProps)(App);
 Since the default export is still the decorated component, the import statement pictured above will work as before so you won’t have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
 
 ```js
-// Note the curly brances: grab the named export instead of default export
+// Note the curly braces: grab the named export instead of default export
 import { App } from './App';
 ```
 
