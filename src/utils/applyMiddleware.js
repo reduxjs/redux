@@ -26,7 +26,7 @@ export default function applyMiddleware(...middlewares) {
       getState: store.getState,
       dispatch: (action) => dispatch(action)
     };
-    chain = middlewares.map(middleware => middleware(middlewareAPI));
+    chain = middlewares.map(middleware => middleware.length === 2 ? middleware.bind(undefined, middlewareAPI) : middleware(middlewareAPI));
     dispatch = compose(...chain)(store.dispatch);
 
     return {

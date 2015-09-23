@@ -7,9 +7,9 @@ import { thunk } from '../helpers/middleware';
 describe('applyMiddleware', () => {
   it('wraps dispatch method with middleware once', () => {
     function test(spyOnMethods) {
-      return methods => {
+      return (methods, next) => {
         spyOnMethods(methods);
-        return next => action => next(action);
+        return action => next(action);
       };
     }
 
