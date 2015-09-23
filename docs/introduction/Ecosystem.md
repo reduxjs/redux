@@ -10,6 +10,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [react-redux](https://github.com/gaearon/react-redux) — React
 * [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
+* [ng2-redux](https://github.com/wbuchwalter/ng2-redux) — Angular 2
 
 ## Middleware
 
@@ -33,7 +34,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the reducers
 * [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
-* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) - Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
+* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
+* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
 
 ## Developer Tools
 
