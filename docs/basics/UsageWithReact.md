@@ -66,6 +66,7 @@ I see the following components (and their props) emerge from this brief:
   - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
 * **`TodoList`** is a list showing visible todos.
   - `todos: Array` is an array of todo items with `{ text, completed }` shape.
+  - `filteringCriteria(todo: object)` contains the rules for how TodoList should filter its list of todos.
   - `onTodoClick(index: number)` is a callback to invoke when a todo is clicked.
 * **`Todo`** is a single todo item.
   - `text: string` is the text to show.
@@ -247,6 +248,7 @@ export default class App extends Component {
             text: 'Learn to connect it to React',
             completed: false
           }]}
+          filteringCriteria={function(todo){return true}}
           onTodoClick={todo =>
             console.log('todo clicked', todo)
           } />
@@ -351,7 +353,6 @@ App.propTypes = {
     'SHOW_ACTIVE'
   ]).isRequired
 };
-
 
 function selectTodos(filter) {
   switch (filter) {
