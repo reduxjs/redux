@@ -126,7 +126,7 @@ For PDF, ePub, and MOBI exports for offline reading, and instructions on how to 
 
 * [Counter](http://rackt.github.io/redux/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
 * [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
-* [Todos with Undo/Redo functionality](https://github.com/rackt/redux/tree/master/examples/todos-with-undo)
+* [Todos with Undo](https://github.com/rackt/redux/tree/master/examples/todos-with-undo) ([source](https://github.com/rackt/redux/tree/master/examples/todos-with-undo))
 * [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
 * [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
 
