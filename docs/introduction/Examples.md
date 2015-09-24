@@ -44,6 +44,25 @@ It covers:
 * Updating nested data
 * Testing
 
+## Todos with Undo
+
+Run the [todos-with-undo](https://github.com/rackt/redux/tree/master/examples/todos-with-undo) example:
+
+```
+git clone https://github.com/rackt/redux.git
+
+cd redux/examples/todos-with-undo
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+It covers:
+
+* Redux flow with two reducers
+* Undo/Redo functionality in Redux with [redux-undo](https://github.com/omnidan/redux-undo)
+
 ## Async
 
 Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) example:
