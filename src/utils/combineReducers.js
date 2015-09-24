@@ -85,7 +85,7 @@ export default function combineReducers(reducers) {
       );
     }
 
-    var type = Math.random().toString(36).substring(7).split('').join('.');
+    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
     if (!sanityError && typeof reducer(undefined, { type }) === 'undefined') {
       sanityError = new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +
