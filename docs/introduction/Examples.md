@@ -92,7 +92,7 @@ git clone https://github.com/rackt/redux.git
 
 cd redux/examples/universal
 npm install
-npm start & npm run client
+npm start
 
 open http://localhost:3000/
 ```
