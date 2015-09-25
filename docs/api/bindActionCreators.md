@@ -10,7 +10,7 @@ For convenience, you can also pass a single function as the first argument, and 
 
 #### Parameters
 
-1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values action creators.
+1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values are action creators.
 
 2. `dispatch` (*Function*): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
 
