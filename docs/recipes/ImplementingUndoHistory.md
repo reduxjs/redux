@@ -30,9 +30,12 @@ library that does this.
 
 ## Introducing redux-undo
 
-[redux-undo](https://github.com/omnidan/redux-undo) is a library that provides simple undo/redo functionality for any part of your redux tree.
+[redux-undo](https://github.com/omnidan/redux-undo) is a library that provides
+simple undo/redo functionality for any part of your redux tree.
 
-In this recipe, you will learn how to make the [Todo List example](http://rackt.github.io/redux/docs/basics/ExampleTodoList.html) undoable - all it takes are [two lines of code](https://twitter.com/dan_abramov/status/647040825826918400) and a few terminal commands!
+In this recipe, you will learn how to make the [Todo List example](http://rackt.github.io/redux/docs/basics/ExampleTodoList.html)
+undoable - all it takes are [two lines of code](https://twitter.com/dan_abramov/status/647040825826918400)
+and a few terminal commands!
 
 You can find the full source of this recipe in [the redux examples folder](https://github.com/rackt/redux/tree/master/examples/todos-with-undo).
 
@@ -44,7 +47,8 @@ First of all, you need to run `npm install --save redux-undo`
 
 ## Making your reducer undoable
 
-In the `combineReducers` function, you have to wrap the reducer (in this case, `todos`) with the `undoable` function, like this:
+In the `combineReducers` function, you have to wrap the reducer (in this case,
+`todos`) with the `undoable` function, like this:
 
 ```js
 // in reducers.js
@@ -58,7 +62,10 @@ const todoApp = combineReducers({
 });
 ```
 
-The `distinctState()` filter makes sure not to store changes if the state didn't change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for undo/redo actions.
+The `distinctState()` filter makes sure not to store changes if the state didn't
+change. There are [many other options](https://github.com/omnidan/redux-undo#configuration)
+to configure your undoable reducer, like setting the action type for undo/redo
+actions.
 
 
 ## Updating your select function
@@ -76,7 +83,8 @@ Now the `todos` part of the state looks like this:
 }
 ```
 
-Which means you need to access your state with `state.todos.present` instead of just `state.todos` now:
+Which means you need to access your state with `state.todos.present` instead of
+just `state.todos` now:
 
 ```js
 // in containers/App.js
@@ -89,7 +97,8 @@ function select(state) {
 }
 ```
 
-In order to disable the undo/redo buttons when they are not needed, you need to check if the `past`/`future` are empty:
+In order to disable the undo/redo buttons when they are not needed, you need to
+check if the `past`/`future` are empty:
 
 ```js
 // in containers/App.js
@@ -107,9 +116,11 @@ function select(state) {
 
 ## Adding the buttons
 
-Now all you need to do is add the buttons so the user can use the undo/redo functionality.
+Now all you need to do is add the buttons so the user can use the undo/redo
+functionality.
 
-First of all, you create functions that dispatch the undo/redo actions and pass them to the `Footer` component:
+First of all, you create functions that dispatch the undo/redo actions and pass
+them to the `Footer` component:
 
 ```js
 // in containers/App.js
