@@ -7,3 +7,5 @@ These are some use cases and code snippets to get you started with Redux in a re
 * [Server Rendering](ServerRendering.md)
 * [Writing Tests](WritingTests.md)
 * [Computing Derived Data](ComputingDerivedData.md)
+* [Implementing Undo History](ImplementingUndoHistory.md)
+
