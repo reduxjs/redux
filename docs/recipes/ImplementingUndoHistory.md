@@ -1,5 +1,35 @@
 # Implementing Undo History
 
+To add undo functionality (or any other functionality) to your existing
+reducers, you need to create a higher-order reducer, which is a function
+(reducer) that returns a reducer. This returned reducer is enhanced with undo
+functionality (or any other functionality). It could look like this:
+
+```js
+export default function undoable(reducer) {
+  return (state, action) => {
+    switch (action.type) {
+    case 'UNDO_ACTION':
+      return undo(state); // undo here and return the past state
+    case 'REDO_ACTION':
+      return redo(state); // redo here and return the future state
+    default:
+      let res = reducer(state, action);
+      return {
+        present: res,
+        history: updateHistory(res, state.history) // store `res` in history
+      }
+    }
+  }
+}
+```
+
+Fortunately, you won't have to implement all that, because there's already a
+library that does this.
+
+
+## Introducing redux-undo
+
 [redux-undo](https://github.com/omnidan/redux-undo) is a library that provides simple undo/redo functionality for any part of your redux tree.
 
 In this recipe, you will learn how to make the [Todo List example](http://rackt.github.io/redux/docs/basics/ExampleTodoList.html) undoable - all it takes are [two lines of code](https://twitter.com/dan_abramov/status/647040825826918400) and a few terminal commands!
@@ -123,7 +153,7 @@ export default class Footer extends Component {
       </p>
     );
   }
-  
+
   render() {
     return (
       <div>
