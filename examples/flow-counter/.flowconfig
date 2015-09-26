@@ -1,0 +1,16 @@
+[ignore]
+.*/node_modules/
+# .*/node_modules/webpack/.*
+# .*/node_modules/redux/examples/.*
+# .*/node_modules/redux/lib/.*
+# Ignoring analyzing redux for now since I can't find a way for it to not also select redux-thunk (need a better regex)
+# module.name_mapper='^\(redux\)$' -> '\1/src/index'
+
+[include]
+
+[libs]
+interfaces/
+
+
+[options]
+module.system=node
