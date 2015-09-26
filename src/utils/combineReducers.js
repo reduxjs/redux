@@ -76,7 +76,15 @@ export default function combineReducers(reducers) {
 
   Object.keys(finalReducers).forEach(key => {
     var reducer = finalReducers[key];
-    if (!sanityError && typeof reducer(undefined, { type: ActionTypes.INIT }) === 'undefined') {
+    var initialState;
+
+    try {
+      initialState = reducer(undefined, { type: ActionTypes.INIT });
+    } catch (e) {
+      sanityError = e;
+    }
+
+    if (!sanityError && typeof initialState === 'undefined') {
       sanityError = new Error(
         `Reducer "${key}" returned undefined during initialization. ` +
         `If the state passed to the reducer is undefined, you must ` +

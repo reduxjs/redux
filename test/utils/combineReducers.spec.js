@@ -84,6 +84,17 @@ describe('Utils', () => {
       );
     });
 
+    it('should catch error thrown in reducer when initializing and re-throw', () => {
+      const reducer = combineReducers({
+        throwingReducer() {
+          throw new Error('Error thrown in reducer');
+        }
+      });
+      expect(() => reducer({})).toThrow(
+        /Error thrown in reducer/
+      );
+    });
+
     it('should allow a symbol to be used as an action type', () => {
       const increment = Symbol('INCREMENT');
 
