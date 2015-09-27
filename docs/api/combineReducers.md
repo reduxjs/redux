@@ -2,8 +2,7 @@
 
 As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
 
-The `combineReducers` helper function turns an object whose values are different reducing functions into a single
-reducing function you can pass to [`createStore`](createStore.md).
+The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
 
 The resulting reducer calls every child reducer, and gather their results into a single state object. The shape of the state object matches the keys of the passed `reducers`.
 
