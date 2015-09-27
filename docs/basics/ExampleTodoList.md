@@ -2,6 +2,36 @@
 
 This is the complete source code of the tiny todo app we built during the [basics tutorial](./README.md).
 
+## File Structure
+If you're wanting to build this example on your own, use the following file structure below. For files not listed in the source code below, _i.e. index.html, webpack.config.js, server.js, etc._, the examples in [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) work just fine. Simply copy and paste them into your directory.
+
+**NOTE:** Styles for TodoMVC won't be present for this example.
+
+```
+example-todo-list
+├─ components
+│  ├── AddTodo.js
+│  ├── Footer.js
+│  ├── Todo.js
+│  └── TodoList.js
+├─ containers
+│  └── App.js
+├─ .babelrc
+├─ actions.js
+├─ index.html
+├─ index.js
+├─ package.json
+├─ reducers.js
+├─ server.js
+└─ webpack.config.js
+```
+
+## Up & Running
+Once you have all your files added:
+* run `npm install`
+* run `npm start`
+* open up 'http://localhost:3000/' in your browser
+
 ## Entry Point
 
 #### `index.js`
