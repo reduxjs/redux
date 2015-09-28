@@ -66,6 +66,7 @@ I see the following components (and their props) emerge from this brief:
   - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
 * **`TodoList`** is a list showing visible todos.
   - `todos: Array` is an array of todo items with `{ text, completed }` shape.
+  - `filteringCriteria(todo: object)` contains the rules for how TodoList should filter its list of todos.
   - `onTodoClick(index: number)` is a callback to invoke when a todo is clicked.
 * **`Todo`** is a single todo item.
   - `text: string` is the text to show.
@@ -152,17 +153,20 @@ export default class TodoList extends Component {
   render() {
     return (
       <ul>
-        {this.props.todos.map((todo, index) =>
-          <Todo {...todo}
-                key={index}
-                onClick={() => this.props.onTodoClick(index)} />
-        )}
+        {this.props.todos.map((todo, index) => {
+          if (this.props.filteringCriteria(todo)) {
+            return <Todo {...todo}
+                         key={index}
+                         onClick={() => this.props.onTodoClick(index)}/>
+          }
+        })}
       </ul>
     );
   }
 }
 
 TodoList.propTypes = {
+  filteringCriteria: PropTypes.func.isRequired,
   onTodoClick: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
@@ -244,6 +248,7 @@ export default class App extends Component {
             text: 'Learn to connect it to React',
             completed: false
           }]}
+          filteringCriteria={function(todo){return true}}
           onTodoClick={todo =>
             console.log('todo clicked', todo)
           } />
@@ -313,7 +318,7 @@ import Footer from '../components/Footer';
 class App extends Component {
   render() {
     // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    const { dispatch, todos, filteringCriteria, visibilityFilter } = this.props;
     return (
       <div>
         <AddTodo
@@ -321,7 +326,8 @@ class App extends Component {
             dispatch(addTodo(text))
           } />
         <TodoList
-          todos={visibleTodos}
+          todos={todos}
+          filteringCriteria={filteringCriteria}
           onTodoClick={index =>
             dispatch(completeTodo(index))
           } />
@@ -336,7 +342,8 @@ class App extends Component {
 }
 
 App.propTypes = {
-  visibleTodos: PropTypes.arrayOf(PropTypes.shape({
+  filteringCriteria: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   })),
@@ -347,14 +354,14 @@ App.propTypes = {
   ]).isRequired
 };
 
-function selectTodos(todos, filter) {
+function selectTodos(filter) {
   switch (filter) {
   case VisibilityFilters.SHOW_ALL:
-    return todos;
+    return function(todo){return true}
   case VisibilityFilters.SHOW_COMPLETED:
-    return todos.filter(todo => todo.completed);
+    return function(todo){return todo.completed};
   case VisibilityFilters.SHOW_ACTIVE:
-    return todos.filter(todo => !todo.completed);
+    return function(todo){return !todo.completed};
   }
 }
 
@@ -362,8 +369,9 @@ function selectTodos(todos, filter) {
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
   return {
-    visibleTodos: selectTodos(state.todos, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter
+    todos: state.todos,
+    visibilityFilter: state.visibilityFilter,
+    filteringCriteria: selectTodos(state.visibilityFilter)
   };
 }
 

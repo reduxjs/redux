@@ -127,7 +127,7 @@ import Footer from '../components/Footer';
 class App extends Component {
   render() {
     // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    const { dispatch, todos, filteringCriteria, visibilityFilter } = this.props;
     return (
       <div>
         <AddTodo
@@ -135,7 +135,8 @@ class App extends Component {
             dispatch(addTodo(text))
           } />
         <TodoList
-          todos={visibleTodos}
+          todos={todos}
+          filteringCriteria={filteringCriteria}
           onTodoClick={index =>
             dispatch(completeTodo(index))
           } />
@@ -150,6 +151,7 @@ class App extends Component {
 }
 
 App.propTypes = {
+  filteringCriteria: PropTypes.func.isRequired,
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
@@ -161,14 +163,14 @@ App.propTypes = {
   ]).isRequired
 };
 
-function selectTodos(todos, filter) {
+function selectTodos(filter) {
   switch (filter) {
   case VisibilityFilters.SHOW_ALL:
-    return todos;
+    return function(todo){return true}
   case VisibilityFilters.SHOW_COMPLETED:
-    return todos.filter(todo => todo.completed);
+    return function(todo){return todo.completed};
   case VisibilityFilters.SHOW_ACTIVE:
-    return todos.filter(todo => !todo.completed);
+    return function(todo){return !todo.completed};
   }
 }
 
@@ -176,8 +178,9 @@ function selectTodos(todos, filter) {
 // Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
   return {
-    visibleTodos: selectTodos(state.todos, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter
+    todos: state.todos,
+    visibilityFilter: state.visibilityFilter,
+    filteringCriteria: selectTodos(state.visibilityFilter)
   };
 }
 
@@ -301,17 +304,20 @@ export default class TodoList extends Component {
   render() {
     return (
       <ul>
-        {this.props.todos.map((todo, index) =>
-          <Todo {...todo}
-                key={index}
-                onClick={() => this.props.onTodoClick(index)} />
-        )}
+        {this.props.todos.map((todo, index) => {
+          if (this.props.filteringCriteria(todo)) {
+            return <Todo {...todo}
+                         key={index}
+                         onClick={() => this.props.onTodoClick(index)}/>
+          }
+        })}
       </ul>
     );
   }
 }
 
 TodoList.propTypes = {
+  filteringCriteria: PropTypes.func.isRequired,
   onTodoClick: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
