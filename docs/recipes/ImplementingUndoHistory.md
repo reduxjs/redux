@@ -1,9 +1,42 @@
 # Implementing Undo History
 
-To add undo functionality (or any other functionality) to your existing
-reducers, you need to create a higher-order reducer, which is a function
-(reducer) that returns a reducer. This returned reducer is enhanced with undo
-functionality (or any other functionality). It could look like this:
+First of all, we need to think about how to store the history. We can inspire
+ourselves by the Elm Architecture and look at the [elm-undo-redo implementation](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
+
+That doesn't seem to hard to in Redux, we can just set our state to:
+
+```js
+{
+  past: [...past states...],
+  present: present_state,
+  future: [...future states...]
+}
+```
+
+Then, we can simply define actions like `UNDO_ACTION` and `REDO_ACTIONS`. Now we
+need to make reducers that handle these actions:
+
+ * `undo` reducer logic
+  * remove the *last* element from `past`
+  * set `present` to the element we removed in the previous step
+  * insert the old `present` state at the *beginning* of the `future` array
+
+ * `redo` reducer logic (like `undo`, but the other way around)
+  * remove the *first* element from `future`
+  * set `present` to the element we removed in the previous step
+  * insert the old `present` state at the *end* of the `past` array
+
+Of course we also need a way to insert new state. We will handle the other
+actions as usual and then call an `insert` function:
+
+ * `insert` logic
+  * insert the new state at the end of `past`
+  * set `present` to the new state
+  * clear the `future`
+
+That's all we need for adding undo/redo functionality to our app, but it's
+still a lot of work to do this for each part of the state. We can create a
+function that creates and returns a reducer, like this:
 
 ```js
 export default function undoable(reducer) {
@@ -24,8 +57,13 @@ export default function undoable(reducer) {
 }
 ```
 
+Such a function is called a *higher-order/enhanced reducer*, because it takes an
+existing reducer, *enhances* it with undo/redo functionality and then returns a
+new reducer. This doesn't just work for undo/redo, you could enhance your
+reducers with anything.
+
 Fortunately, you won't have to implement all that, because there's already a
-library that does this.
+library that does exactly this.
 
 
 ## Introducing redux-undo
