@@ -244,8 +244,8 @@ export default class App extends Component {
             text: 'Learn to connect it to React',
             completed: false
           }]}
-          onTodoClick={todoIndex =>
-            console.log('todo clicked', todoIndex)
+          onTodoClick={index =>
+            console.log('todo clicked', index)
           } />
         <Footer
           filter='SHOW_ALL'
