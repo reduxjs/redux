@@ -3,7 +3,7 @@
 First of all, we need to think about how to store the history. We can inspire
 ourselves by the Elm Architecture and look at the [elm-undo-redo implementation](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
 
-That doesn't seem to hard to in Redux, we can just set our state to:
+That doesn't seem too hard to do in Redux, we can just set our state to:
 
 ```js
 {
