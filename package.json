@@ -44,7 +44,10 @@
     "flux",
     "elm"
   ],
-  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
+  "authors": [
+    "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
+    "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rackt/redux/issues"
