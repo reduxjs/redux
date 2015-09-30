@@ -1,0 +1,33 @@
+{
+  "name": "redux-shopping-cart-example",
+  "version": "0.0.0",
+  "description": "Redux shopping-cart example",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rackt/redux.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rackt/redux/issues"
+  },
+  "homepage": "http://rackt.github.io/redux",
+  "dependencies": {
+    "react": "^0.13.3",
+    "react-redux": "^3.0.1",
+    "redux": "^3.0.2",
+    "redux-thunk": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.6.18",
+    "babel-loader": "^5.1.4",
+    "babel-plugin-react-transform": "^1.0.3",
+    "express": "^4.13.3",
+    "redux-logger": "^2.0.1",
+    "webpack": "^1.9.11",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
+  }
+}
