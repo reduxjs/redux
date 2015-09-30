@@ -1,13 +1,25 @@
 import type { Middleware, MiddlewareAPI, Dispatch, Store } from 'redux';
 
-declare module 'redux-thunk' {
-  declare type Thunk<State, Dispatchable> = (dispatch: Dispatch<Dispatchable>, getState: () => State) => ?Dispatchable;
-  declare type ThunkMiddlewareDispatchable<State, Dispatchable> = Thunk<State, Dispatchable> | Dispatchable;
+// For now declaring these types globally with a namespace, so I can
+// export the default function in the module
+declare type reduxThunk$Thunk<State, Dispatchable> = (dispatch: Dispatch<Dispatchable>, getState: () => State) => ?Dispatchable;
+declare type reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable> = reduxThunk$Thunk<State, Dispatchable> | Dispatchable;
 
-  // Cannot find a way to export the default function with the correct type signature
-  // declare var exports: {
-  //   <State, Dispatchable>(
-  //     api: MiddlewareAPI<State, ThunkMiddlewareDispatchable<State, Dispatchable>>
-  //   ) : (next: Dispatch<Dispatchable>) => Dispatch<ThunkMiddlewareDispatchable<State, Dispatchable>>
-  // };
+declare module 'redux-thunk' {
+  declare var exports: {
+    <State, Dispatchable>(
+      api: MiddlewareAPI<State, reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable>>
+    ) : (next: Dispatch<Dispatchable>) => Dispatch<reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable>>
+  };
 }
+
+// function thunk<State, Dispatchable: Object>(_ref: MiddlewareAPI<State, ThunkMiddlewareDispatchable<State, Dispatchable>>) : (next: Dispatch<Dispatchable>) => Dispatch<ThunkMiddlewareDispatchable<State, Dispatchable>> {
+//   var dispatch = _ref.dispatch;
+//   var getState = _ref.getState;
+//
+//   return function (next) {
+//     return function (action: ThunkMiddlewareDispatchable<State, Dispatchable>) : ?ThunkMiddlewareDispatchable<State, Dispatchable> {
+//       return typeof action === 'function' ? action(dispatch, getState) : next(action);
+//     };
+//   };
+// }

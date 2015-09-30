@@ -1,7 +1,8 @@
 /* @flow */
 
 import type { Action, AppState } from '../types';
-import type { Thunk } from 'redux-thunk';
+
+type Thunk<S, D> = reduxThunk$Thunk<S, D>;
 
 export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 export const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
