@@ -17,8 +17,8 @@ const store = createStoreWithMiddleware(reducer);
 store.dispatch(getAllProducts());
 
 React.render(
-    <Provider store={store}>
-        {() => <App />}
-    </Provider>,
-    document.getElementById('root')
+  <Provider store={store}>
+    {() => <App />}
+  </Provider>,
+  document.getElementById('root')
 );
