@@ -10,7 +10,7 @@ export type CounterProps = {
   incrementAsync: () => any,
 };
 
-class Counter extends Component<any, CounterProps, any> {
+class Counter extends Component<{}, CounterProps, {}> {
   render() : ReactElement<any, any, any> {
     let { increment, incrementIfOdd, incrementAsync, decrement, counter } = this.props;
     return (

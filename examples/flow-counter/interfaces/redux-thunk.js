@@ -1,4 +1,4 @@
-import type { Middleware, MiddlewareAPI, Dispatch, Store } from 'redux';
+import type { MiddlewareAPI, Dispatch } from 'redux';
 
 // For now declaring these types globally with a namespace, so I can
 // export the default function in the module
