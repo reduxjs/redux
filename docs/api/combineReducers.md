@@ -80,7 +80,7 @@ export default combineReducers({
 #### `App.js`
 
 ```js
-import { createStore, combineReducers } from 'redux';
+import { createStore } from 'redux';
 import reducer from './reducers/index';
 
 let store = createStore(reducer);
