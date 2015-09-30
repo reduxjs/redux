@@ -25,6 +25,7 @@
     "babel-loader": "^5.1.4",
     "babel-plugin-react-transform": "^1.0.3",
     "express": "^4.13.3",
+    "json-loader": "^0.5.3",
     "redux-logger": "^2.0.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
