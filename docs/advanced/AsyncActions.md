@@ -381,7 +381,7 @@ export function fetchPosts(reddit) {
 
 How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
 
-#### `index.js`
+#### `configureStore.js`
 
 ```js
 import thunkMiddleware from 'redux-thunk';
@@ -472,7 +472,7 @@ export function fetchPostsIfNeeded(reddit) {
 
 This lets us write more sophisticated async control flow gradually, while the consuming code can stay pretty much the same:
 
-#### `index.js`
+#### `configureStore.js`
 
 ```js
 store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
