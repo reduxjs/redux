@@ -150,8 +150,9 @@ function postsByReddit(state = { }, action) {
 }
 
 const rootReducer = combineReducers({
-  postsByReddit,
-  selectedReddit
+  selectedReddit,
+  posts
+  postsByReddit
 });
 
 export default rootReducer;
