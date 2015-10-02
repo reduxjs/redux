@@ -206,11 +206,10 @@ class SandwichShop extends Component {
 }
 
 export default connect(
-  SandwichShop,
   state => ({
     sandwiches: state.sandwiches
   })
-);
+)(SandwichShop);
 ```
 
 #### Tips
