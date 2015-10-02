@@ -96,9 +96,8 @@ class TodoListContainer extends Component {
 }
 
 export default connect(
-  TodoListContainer,
   state => ({ todos: state.todos })
-)
+)(TodoListContainer);
 ```
 
 #### Tips
