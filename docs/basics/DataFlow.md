@@ -10,7 +10,7 @@ The data lifecycle in any Redux app follows these 4 steps:
 
 1. **You call** [`store.dispatch(action)`](../api/Store.md#dispatch).
 
-  An action is a plain object describing *what happened*. For example:
+  An [action](Actions.md) is a plain object describing *what happened*. For example:
 
     ```js
     { type: 'LIKE_ARTICLE', articleId: 42 };
@@ -24,7 +24,7 @@ The data lifecycle in any Redux app follows these 4 steps:
 
 2. **The Redux store calls the reducer function you gave it.**
 
-  The store will pass two arguments to the reducer, the current state tree and the action. For example, in the todo app, the root reducer might receive something like this:
+  The [store](Store.md) will pass two arguments to the [reducer](Reducers.md): the current state tree and the action. For example, in the todo app, the root reducer might receive something like this:
 
     ```js
     // The current application state (list of todos and chosen filter)
