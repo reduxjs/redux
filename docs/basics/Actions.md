@@ -7,8 +7,12 @@ First, let’s define some actions.
 Here’s an example action which represents adding a new todo item:
 
 ```js
+const ADD_TODO = 'ADD_TODO';
+```
+
+```js
 {
-  type: 'ADD_TODO',
+  type: ADD_TODO,
   text: 'Build my first Redux app'
 }
 ```
