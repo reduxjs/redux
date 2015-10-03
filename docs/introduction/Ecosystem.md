@@ -29,6 +29,11 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Customize batching and debouncing calls to the store subscribers
 * [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — History transitions based on arbitrary actions
 
+## Reducer Enhancers
+
+* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later commited or reverted
+* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
+
 ## Utilities
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
@@ -36,7 +41,6 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
 * [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
-* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
 
 ## Developer Tools
