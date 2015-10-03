@@ -27,6 +27,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ## Store Enhancers
 
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Customize batching and debouncing calls to the store subscribers
+* [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — History transitions based on arbitrary actions
 
 ## Utilities
 
