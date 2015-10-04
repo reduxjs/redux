@@ -302,7 +302,7 @@ export default todoApp;
 Note that this is completely equivalent to:
 
 ```js
-export default function todoApp(state, action) {
+export default function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
