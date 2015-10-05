@@ -1,6 +1,4 @@
-// Redux utility functions
 import { combineReducers } from 'redux';
-// Redux Undo store enhancer
 import undoable, { distinctState } from 'redux-undo';
 
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';

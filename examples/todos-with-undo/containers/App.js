@@ -8,7 +8,6 @@ import Footer from '../components/Footer';
 
 class App extends Component {
   render() {
-    // Injected by connect() call:
     const { dispatch, visibleTodos, visibilityFilter } = this.props;
     return (
       <div>
@@ -56,17 +55,16 @@ function selectTodos(todos, filter) {
   }
 }
 
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
 function select(state) {
-  // don't forget to append `.present` to all undoable parts of the state
+  const presentTodos = state.todos.present;
+  const undoHistory = state.todos.history;
+
   return {
-    visibleTodos: selectTodos(state.todos.present, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter,
-    undoDisabled: state.todos.history.past.length === 0, // disable undo button when undo is not possible (past not available)
-    redoDisabled: state.todos.history.future.length === 0 // disable redo button when redo is not possible (future not available)
+    undoDisabled: undoHistory.past.length === 0,
+    redoDisabled: undoHistory.future.length === 0,
+    visibleTodos: selectTodos(presentTodos, state.visibilityFilter),
+    visibilityFilter: state.visibilityFilter
   };
 }
 
-// Wrap the component to inject dispatch and state into it
 export default connect(select)(App);
