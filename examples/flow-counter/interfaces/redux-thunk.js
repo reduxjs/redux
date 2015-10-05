@@ -1,15 +1,13 @@
-import type { MiddlewareAPI, Dispatch } from 'redux';
-
 // For now declaring these types globally with a namespace, so I can
 // export the default function in the module
-declare type reduxThunk$Thunk<State, Dispatchable> = (dispatch: Dispatch<Dispatchable>, getState: () => State) => ?Dispatchable;
+declare type reduxThunk$Thunk<State, Dispatchable> = (dispatch: redux$Dispatch<Dispatchable>, getState: () => State) => ?Dispatchable;
 declare type reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable> = reduxThunk$Thunk<State, Dispatchable> | Dispatchable;
 
 declare module 'redux-thunk' {
   declare var exports: {
     <State, Dispatchable>(
-      api: MiddlewareAPI<State, reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable>>
-    ) : (next: Dispatch<Dispatchable>) => Dispatch<reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable>>
+      api: redux$MiddlewareAPI<State, reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable>>
+    ) : (next: redux$Dispatch<Dispatchable>) => redux$Dispatch<reduxThunk$ThunkMiddlewareDispatchable<State, Dispatchable>>
   };
 }
 
