@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { addToCart } from '../actions';
 import { getVisibleProducts } from '../reducers/products';
@@ -19,6 +19,16 @@ class ProductsContainer extends Component {
       </ProductsList>
     );
   }
+}
+
+ProductsContainer.propTypes = {
+  products: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    quantity: PropTypes.number.isRequired,
+  })).isRequired,
+  addToCart: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
