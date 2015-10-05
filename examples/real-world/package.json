@@ -33,7 +33,7 @@
     "babel-core": "^5.6.18",
     "babel-loader": "^5.1.4",
     "redux-devtools": "^2.1.5",
-    "babel-plugin-react-transform": "^1.0.3",
+    "babel-plugin-react-transform": "^1.1.0",
     "concurrently": "^0.1.1",
     "express": "^4.13.3",
     "react-transform-hmr": "^1.0.0",
