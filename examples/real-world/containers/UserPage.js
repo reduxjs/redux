@@ -72,8 +72,8 @@ UserPage.propTypes = {
   loadStarred: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
-  const { login } = ownProps.params;
+function mapStateToProps(state) {
+  const { login } = state.router.params;
   const {
     pagination: { starredByUser },
     entities: { users, repos }
@@ -92,7 +92,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { loadUser, loadStarred }
-)(UserPage);
+export default connect(mapStateToProps, {
+  loadUser,
+  loadStarred
+})(UserPage);

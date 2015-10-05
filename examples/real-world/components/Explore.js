@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, findDOMNode } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 const GITHUB_REPO = 'https://github.com/rackt/redux';
 
@@ -16,14 +16,14 @@ export default class Explore extends Component {
   }
 
   getInputValue() {
-    return findDOMNode(this.refs.input).value;
+    return this.refs.input.value;
   }
 
   setInputValue(val) {
     // Generally mutating DOM is a bad idea in React components,
     // but doing this for a single uncontrolled field is less fuss
     // than making it controlled and maintaining a state for it.
-    findDOMNode(this.refs.input).value = val;
+    this.refs.input.value = val;
   }
 
   handleKeyUp(e) {

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { pushState } from 'redux-router';
 import Explore from '../components/Explore';
 import { resetErrorMessage } from '../actions';
 
@@ -16,9 +17,7 @@ class App extends Component {
   }
 
   handleChange(nextValue) {
-    // Available thanks to contextTypes below
-    const { history } = this.context;
-    history.pushState(null, `/${nextValue}`);
+    this.props.pushState(null, `/${nextValue}`);
   }
 
   renderErrorMessage() {
@@ -40,14 +39,10 @@ class App extends Component {
   }
 
   render() {
-    // Injected by React Router
-    const { location, children } = this.props;
-    const { pathname } = location;
-    const value = pathname.substring(1);
-
+    const { children, inputValue } = this.props;
     return (
       <div>
-        <Explore value={value}
+        <Explore value={inputValue}
                  onChange={this.handleChange} />
         <hr />
         {this.renderErrorMessage()}
@@ -58,29 +53,23 @@ class App extends Component {
 }
 
 App.propTypes = {
+  // Injected by React Redux
   errorMessage: PropTypes.string,
   resetErrorMessage: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
-  }),
-  params: PropTypes.shape({
-    userLogin: PropTypes.string,
-    repoName: PropTypes.string
-  }).isRequired,
+  pushState: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired,
+  // Injected by React Router
   children: PropTypes.node
-};
-
-App.contextTypes = {
-  history: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    errorMessage: state.errorMessage
+    errorMessage: state.errorMessage,
+    inputValue: state.router.location.pathname.substring(1)
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { resetErrorMessage }
-)(App);
+export default connect(mapStateToProps, {
+  resetErrorMessage,
+  pushState
+})(App);
