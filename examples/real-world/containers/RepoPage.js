@@ -65,15 +65,15 @@ RepoPage.propTypes = {
   repo: PropTypes.object,
   fullName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  owner: PropTypes.object.isRequired,
+  owner: PropTypes.object,
   stargazers: PropTypes.array.isRequired,
   stargazersPagination: PropTypes.object,
   loadRepo: PropTypes.func.isRequired,
   loadStargazers: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
-  const { login, name } = ownProps.params;
+function mapStateToProps(state) {
+  const { login, name } = state.router.params;
   const {
     pagination: { stargazersByRepo },
     entities: { users, repos }
@@ -93,7 +93,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { loadRepo, loadStargazers }
-)(RepoPage);
+export default connect(mapStateToProps, {
+  loadRepo,
+  loadStargazers
+})(RepoPage);
