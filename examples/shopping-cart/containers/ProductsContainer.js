@@ -14,8 +14,7 @@ class ProductsContainer extends Component {
           <ProductItem
             key={product.id}
             product={product}
-            onAddToCartClicked={() => this.props.addToCart(product.id)}
-          />
+            onAddToCartClicked={() => this.props.addToCart(product.id)} />
         )}
       </ProductsList>
     );

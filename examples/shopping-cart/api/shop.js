@@ -1,8 +1,6 @@
 /**
  * Mocking client-server processing
  */
-'use strict';
-
 var Shop = exports;
 
 var _products = require('./products.json');

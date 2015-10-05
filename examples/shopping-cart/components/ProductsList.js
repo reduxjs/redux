@@ -1,13 +1,7 @@
-'use strict';
+import React, { Component, PropTypes } from 'react';
 
-var React = require('react');
-
-var ProductsList = React.createClass({
-  propTypes: {
-    title: React.PropTypes.string.isRequired
-  },
-
-  render: function () {
+export default class ProductsList extends Component {
+  render() {
     return (
       <div className="shop-wrap">
         <h2 className="uk-h2">{this.props.title}</h2>
@@ -15,6 +9,8 @@ var ProductsList = React.createClass({
       </div>
     );
   }
-});
+};
 
-module.exports = ProductsList;
+ProductsList.propTypes = {
+  title: PropTypes.string.isRequired
+};
