@@ -21,5 +21,11 @@ describe('Utils', () => {
       expect(compose(b, c, a)(final)('')).toBe('bca');
       expect(compose(c, a, b)(final)('')).toBe('cab');
     });
+
+    it('ignores falsey arguments', () => {
+      const square = x => x * x;
+      expect(() => { return compose(square, undefined)(5); }).toNotThrow();
+      expect(compose(square, undefined)(5)).toBe(25);
+    });
   });
 });
