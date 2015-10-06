@@ -112,6 +112,45 @@ describe('Utils', () => {
       expect(reducer({counter: 0}, { type: increment }).counter).toEqual(1);
     });
 
+    it('should maintain referential equality if the reducers it is combining do', () => {
+      const reducer = combineReducers({
+        child1(state = {}) {
+          return state;
+        },
+        child2(state = {}) {
+          return state;
+        },
+        child3(state = {}) {
+          return state;
+        }
+      });
+
+      const initialState = reducer(undefined, '@@INIT');
+      expect(reducer(initialState, { type: 'FOO' })).toBe(initialState);
+    });
+
+    it('should not have referential equality if one of the reducers changes something', () => {
+      const reducer = combineReducers({
+        child1(state = {}) {
+          return state;
+        },
+        child2(state = { count: 0 }, action) {
+          switch (action.type) {
+          case 'increment':
+            return { count: state.count + 1 };
+          default:
+            return state;
+          }
+        },
+        child3(state = {}) {
+          return state;
+        }
+      });
+
+      const initialState = reducer(undefined, '@@INIT');
+      expect(reducer(initialState, { type: 'increment' })).toNotBe(initialState);
+    });
+
     it('should throw an error on first call if a reducer attempts to handle a private action', () => {
       const reducer = combineReducers({
         counter(state, action) {
