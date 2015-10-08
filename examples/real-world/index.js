@@ -19,5 +19,14 @@ if (process.env.NODE_ENV !== 'production') {
   // In production, you should ensure process.env.NODE_ENV
   // is envified so that Uglify can eliminate this
   // module and its dependencies as dead code.
-  require('./createDevToolsWindow')(store);
+  try {
+    require('./createDevToolsWindow')(store);
+  } catch (e) {
+    const errorMsg = (
+      'Couldn\'t open the dev Tools, probably the popup window ' +
+      'was blocked or see the thrown error on the javascript console.\n'
+    );
+    console.log(errorMsg, e);
+    alert(errorMsg);
+  }
 }
