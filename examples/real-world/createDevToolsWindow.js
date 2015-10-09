@@ -7,10 +7,8 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
  * Based on https://gist.github.com/tlrobinson/1e63d15d3e5f33410ef7#gistcomment-1560218.
  */
 export default function createDevToolsWindow(store) {
-  // Window name.
+  // Give it a name so it reuses the same window
   const name = 'Redux DevTools';
-
-  // Give it a name so it reuses the same window.
   const win = window.open(
     null,
     name,
@@ -18,9 +16,9 @@ export default function createDevToolsWindow(store) {
   );
 
   if (!win) {
-    console.warn(
-      'Couldn\'t open the dev Tools, probably the popup window ' +
-      'was blocked, please enable the popup window for the current page.\n'
+    console.error(
+      'Couldn\'t open Redux DevTools due to a popup blocker. ' +
+      'Please disable the popup blocker for the current page.'
     );
     return;
   }
