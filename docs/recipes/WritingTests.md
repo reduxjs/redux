@@ -4,7 +4,7 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 ### Setting Up
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.  
+We recommend [Mocha](http://mochajs.org/) as the testing engine.
 Note that it runs in a Node environment, so you won’t have access to DOM.
 
 ```
@@ -64,7 +64,7 @@ describe('actions', () => {
 
 A reducer should return the new state after applying the action to the previous state, and that’s the behavior tested below.
 
-#### Example  
+#### Example
 
 ```js
 import { ADD_TODO } from '../constants/ActionTypes';
@@ -246,7 +246,7 @@ Shallow rendering currently [throws an error if `setState` is called](https://gi
 npm install --save-dev jsdom mocha-jsdom
 ```
 
-Then add a `jsdomReact()` helper function that looks like this:  
+Then add a `jsdomReact()` helper function that looks like this:
 
 ```js
 import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
@@ -348,7 +348,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({}, action)
     ).toEqual(action);
@@ -358,7 +358,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({
         [types.ADD_TODO]: 'dispatched'
