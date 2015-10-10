@@ -44,11 +44,9 @@ It is reasonable to suggest that our state shape should change to answer these q
 ```js
 {
   counter: {
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     present: 10,
-    history: {
-      past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-      future: []
-    }
+    future: []
   }
 }
 ```
@@ -58,11 +56,9 @@ Now, if user presses “Undo”, we want it to change to move into the past:
 ```js
 {
   counter: {
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     present: 9,
-    history: {
-      past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      future: [10]
-    }
+    future: [10]
   }
 }
 ```
@@ -72,11 +68,9 @@ And further yet:
 ```js
 {
   counter: {
+    past: [0, 1, 2, 3, 4, 5, 6, 7],
     present: 8,
-    history: {
-      past: [0, 1, 2, 3, 4, 5, 6, 7],
-      future: [9, 10]
-    }
+    future: [9, 10]
   }
 }
 ```
@@ -86,11 +80,9 @@ When the user presses “Redo”, we want to move one step back into the future:
 ```js
 {
   counter: {
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     present: 9,
-    history: {
-      past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      future: [10]
-    }
+    future: [10]
   }
 }
 ```
@@ -100,11 +92,9 @@ Finally, if the user performs an action (e.g. decrement the counter) while we’
 ```js
 {
   counter: {
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     present: 8,
-    history: {
-      past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-      future: []
-    }
+    future: []
   }
 }
 ```
@@ -114,11 +104,9 @@ The interesting part here is that it does not matter whether we want to keep an 
 ```js
 {
   counter: {
+    past: [0, 1, 2],
     present: 3,
-    history: {
-      past: [0, 1, 2],
-      future: [4]
-    }
+    future: [4]
   }
 }
 ```
@@ -126,17 +114,15 @@ The interesting part here is that it does not matter whether we want to keep an 
 ```js
 {
   todos: {
+    past: [
+      [],
+      [{ text: 'Use Redux' }],
+      [{ text: 'Use Redux', complete: true }]
+    ],
     present: [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo' }],
-    history: {
-      past: [
-        [],
-        [{ text: 'Use Redux' }],
-        [{ text: 'Use Redux', complete: true }]
-      ],
-      future: [
-        [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true }]
-      ]
-    }
+    future: [
+      [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true }]
+    ]
   }
 }
 ```
@@ -145,11 +131,9 @@ In general, it looks like this:
 
 ```js
 {
+  past: Array<T>,
   present: T,
-  history: {
-    past: Array<T>,
-    future: Array<T>
-  }
+  future: Array<T>
 }
 ```
 
@@ -157,15 +141,13 @@ It is also up to us whether to keep a single top-level history:
 
 ```js
 {
+  past: [
+    { counterA: 1, counterB: 1 },
+    { counterA: 1, counterB: 0 },
+    { counterA: 0, counterB: 0 }
+  ],
   present: { counterA: 2, counterB: 1 },
-  history: {
-    past: [
-      { counterA: 1, counterB: 1 },
-      { counterA: 1, counterB: 0 },
-      { counterA: 0, counterB: 0 }
-    ],
-    future: []
-  }
+  future: []
 }
 ```
 
@@ -174,18 +156,14 @@ Or many granular histories so user can undo and redo actions in them independent
 ```js
 {
   counterA: {
+    past: [1, 0],
     present: 2,
-    history: {
-      past: [1, 0],
-      future: []
-    }
+    future: []
   },
   counterB: {
+    past: [0],
     present: 1,
-    history: {
-      past: [0],
-      future: []
-    }
+    future: []
   }
 }
 ```
@@ -198,11 +176,9 @@ Regardless of the specific data type, the shape of the undo history state is the
 
 ```js
 {
+  past: Array<T>,
   present: T,
-  history: {
-    past: Array<T>,
-    future: Array<T>
-  }
+  future: Array<T>
 }
 ```
 
@@ -230,37 +206,30 @@ Let’s talk through the algorithm to manipulate the state shape described above
 
 ```js
 const initialState = {
+  past: [],
   present: null, // (?) How do we initialize the present?
-  history: {
-    past: [],
-    future: []
-  }
+  future: []
 };
 
 function undoable(state = initialState, action) {
-  const { present, history } = state;
-  const { past, future } = history;
+  const { past, present, future } = state;
 
   switch (action.type) {
   case 'UNDO':
     const previous = past[past.length - 1];
     const newPast = past.slice(0, past.length - 1);
     return {
+      past: newPast,
       present: previous,
-      history: {
-        past: newPast,
-        future: [present, ...future]
-      }
+      future: [present, ...future]
     };
   case 'REDO':
     const next = future[0];
     const newFuture = future.slice(1);
     return {
+      past: [...past, present],
       present: next,
-      history: {
-        past: [...past, present],
-        future: newFuture
-      }
+      future: newFuture
     };
   default:
     // (?) How do we handle other actions?
@@ -316,38 +285,31 @@ Now that we have a better understanding of reducer enhancers, we can see that th
 function undoable(reducer) {
   // Call the reducer with empty action to populate the initial state
   const initialState = {
+    past: [],
     present: reducer(undefined, {}),
-    history: {
-      past: [],
-      future: []
-    }
+    future: []
   };
 
   // Return a reducer that handles undo and redo
   return function (state = initialState, action) {
-    const { present, history } = state;
-    const { past, future } = history;
+    const { past, present, future } = state;
 
     switch (action.type) {
     case 'UNDO':
       const previous = past[past.length - 1];
       const newPast = past.slice(0, past.length - 1);
       return {
+        past: newPast,
         present: previous,
-        history: {
-          past: newPast,
-          future: [present, ...future]
-        }
+        future: [present, ...future]
       };
     case 'REDO':
       const next = future[0];
       const newFuture = future.slice(1);
       return {
+        past: [...past, present],
         present: next,
-        history: {
-          past: [...past, present],
-          future: newFuture
-        }
+        future: newFuture
       };
     default:
       // Delegate handling the action to the passed reducer
@@ -356,11 +318,9 @@ function undoable(reducer) {
         return state;
       }
       return {
+        past: [...past, present],
         present: newPresent,
-        history: {
-          past: [...past, present],
-          future: []
-        }
+        future: []
       };
     }
   };
@@ -396,7 +356,7 @@ store.dispatch({
 });
 ```
 
-There is an important gotcha: you need to remember to append `.present` to the current state when you retrieve it. You may also check `.history.past.length` and `.history.future.length` to determine whether to enable or to disable the Undo and Redo buttons, respectively.
+There is an important gotcha: you need to remember to append `.present` to the current state when you retrieve it. You may also check `.past.length` and `.future.length` to determine whether to enable or to disable the Undo and Redo buttons, respectively.
 
 You might have heard that Redux was influenced by [Elm Architecture](https://github.com/evancz/elm-architecture-tutorial/). It shouldn’t come as a surprise that this example is very similar to [elm-undo-redo package](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
 
@@ -445,17 +405,15 @@ Now the `todos` part of the state looks like this:
 {
   visibilityFilter: 'SHOW_ALL',
   todos: {
+    past: [
+      [],
+      [{ text: 'Use Redux' }],
+      [{ text: 'Use Redux', complete: true }]
+    ],
     present: [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo' }],
-    history: {
-      past: [
-        [],
-        [{ text: 'Use Redux' }],
-        [{ text: 'Use Redux', complete: true }]
-      ],
-      future: [
-        [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true }]
-      ]
-    }
+    future: [
+      [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true }]
+    ]
   }
 }
 ```
@@ -475,19 +433,16 @@ function select(state) {
 }
 ```
 
-In order to disable the Undo and Redo buttons when there is nothing to undo or redo, you need to check whether the `past` and `future` in the `history` are empty:
+In order to disable the Undo and Redo buttons when there is nothing to undo or redo, you need to check whether the `past` and `future` arrays are empty:
 
 #### `containers/App.js`
 
 ```js
 function select(state) {
-  const presentTodos = state.todos.present;
-  const undoHistory = state.todos.history;
-
   return {
-    undoDisabled: undoHistory.past.length === 0,
-    redoDisabled: undoHistory.future.length === 0,
-    visibleTodos: selectTodos(presentTodos, state.visibilityFilter),
+    undoDisabled: state.todos.past.length === 0,
+    redoDisabled: state.todos.future.length === 0,
+    visibleTodos: selectTodos(state.todos.present, state.visibilityFilter),
     visibilityFilter: state.visibilityFilter
   };
 }
