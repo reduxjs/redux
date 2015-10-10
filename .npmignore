@@ -1,0 +1,14 @@
+*.log
+/.*/
+/_book/
+/coverage/
+/docs/
+/examples/
+/test/
+/.eslint*
+/.flowconfig
+/.gitignore
+/.npmignore
+/.travis.yml
+/book.json
+/webpack.*

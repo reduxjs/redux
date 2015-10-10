@@ -1,0 +1,1207 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Implementing Undo History | Redux</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.4.3">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../../gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-edit-link/plugin.css">
+        
+    
+        
+        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-prism/prism.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../../docs/Troubleshooting.html" />
+    
+    
+    <link rel="prev" href="../../docs/recipes/ComputingDerivedData.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="4.6" data-basepath="../.." data-revision="Sat Oct 10 2015 14:16:35 GMT+0300 (MSK)">
+    
+
+<div class="book-summary">
+    <div class="book-search" role="search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Read Me
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/introduction/index.html">
+            
+                
+                    <a href="../../docs/introduction/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Introduction
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="docs/introduction/Motivation.html">
+            
+                
+                    <a href="../../docs/introduction/Motivation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Motivation
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/introduction/ThreePrinciples.html">
+            
+                
+                    <a href="../../docs/introduction/ThreePrinciples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Three Principles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/introduction/PriorArt.html">
+            
+                
+                    <a href="../../docs/introduction/PriorArt.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Prior Art
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="docs/introduction/Ecosystem.html">
+            
+                
+                    <a href="../../docs/introduction/Ecosystem.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        Ecosystem
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="docs/introduction/Examples.html">
+            
+                
+                    <a href="../../docs/introduction/Examples.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Examples
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/basics/index.html">
+            
+                
+                    <a href="../../docs/basics/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Basics
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1" data-path="docs/basics/Actions.html">
+            
+                
+                    <a href="../../docs/basics/Actions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.1.</b>
+                        
+                        Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/basics/Reducers.html">
+            
+                
+                    <a href="../../docs/basics/Reducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.2.</b>
+                        
+                        Reducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/basics/Store.html">
+            
+                
+                    <a href="../../docs/basics/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.3.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="docs/basics/DataFlow.html">
+            
+                
+                    <a href="../../docs/basics/DataFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.4.</b>
+                        
+                        Data Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="docs/basics/UsageWithReact.html">
+            
+                
+                    <a href="../../docs/basics/UsageWithReact.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.5.</b>
+                        
+                        Usage with React
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="docs/basics/ExampleTodoList.html">
+            
+                
+                    <a href="../../docs/basics/ExampleTodoList.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.6.</b>
+                        
+                        Example: Todo List
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/advanced/index.html">
+            
+                
+                    <a href="../../docs/advanced/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Advanced
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.1" data-path="docs/advanced/AsyncActions.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncActions.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                        Async Actions
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="docs/advanced/AsyncFlow.html">
+            
+                
+                    <a href="../../docs/advanced/AsyncFlow.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.2.</b>
+                        
+                        Async Flow
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="docs/advanced/Middleware.html">
+            
+                
+                    <a href="../../docs/advanced/Middleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.</b>
+                        
+                        Middleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" >
+            
+            <span><b>3.4.</b> Usage with React Router</span>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="docs/advanced/ExampleRedditAPI.html">
+            
+                
+                    <a href="../../docs/advanced/ExampleRedditAPI.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.5.</b>
+                        
+                        Example: Reddit API
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" >
+            
+            <span><b>3.6.</b> Next Steps</span>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="docs/recipes/index.html">
+            
+                
+                    <a href="../../docs/recipes/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Recipes
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="docs/recipes/MigratingToRedux.html">
+            
+                
+                    <a href="../../docs/recipes/MigratingToRedux.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        Migrating to Redux
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="docs/recipes/ReducingBoilerplate.html">
+            
+                
+                    <a href="../../docs/recipes/ReducingBoilerplate.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                        Reducing Boilerplate
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.3" data-path="docs/recipes/ServerRendering.html">
+            
+                
+                    <a href="../../docs/recipes/ServerRendering.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.3.</b>
+                        
+                        Server Rendering
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.4" data-path="docs/recipes/WritingTests.html">
+            
+                
+                    <a href="../../docs/recipes/WritingTests.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.4.</b>
+                        
+                        Writing Tests
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4.5" data-path="docs/recipes/ComputingDerivedData.html">
+            
+                
+                    <a href="../../docs/recipes/ComputingDerivedData.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.5.</b>
+                        
+                        Computing Derived Data
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="4.6" data-path="docs/recipes/ImplementingUndoHistory.html">
+            
+                
+                    <a href="../../docs/recipes/ImplementingUndoHistory.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.6.</b>
+                        
+                        Implementing Undo History
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="docs/Troubleshooting.html">
+            
+                
+                    <a href="../../docs/Troubleshooting.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Troubleshooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="docs/Glossary.html">
+            
+                
+                    <a href="../../docs/Glossary.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        Glossary
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="docs/api/index.html">
+            
+                
+                    <a href="../../docs/api/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        API Reference
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="docs/api/createStore.html">
+            
+                
+                    <a href="../../docs/api/createStore.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        createStore
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="docs/api/Store.html">
+            
+                
+                    <a href="../../docs/api/Store.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.2.</b>
+                        
+                        Store
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="docs/api/combineReducers.html">
+            
+                
+                    <a href="../../docs/api/combineReducers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.3.</b>
+                        
+                        combineReducers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="docs/api/applyMiddleware.html">
+            
+                
+                    <a href="../../docs/api/applyMiddleware.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.4.</b>
+                        
+                        applyMiddleware
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="docs/api/bindActionCreators.html">
+            
+                
+                    <a href="../../docs/api/bindActionCreators.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.5.</b>
+                        
+                        bindActionCreators
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docs/api/compose.html">
+            
+                
+                    <a href="../../docs/api/compose.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.6.</b>
+                        
+                        compose
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8" data-path="CHANGELOG.html">
+            
+                
+                    <a href="../../CHANGELOG.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>8.</b>
+                        
+                        Change Log
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="9" data-path="PATRONS.html">
+            
+                
+                    <a href="../../PATRONS.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.</b>
+                        
+                        Patrons
+                    </a>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >Redux</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <a id="edit-link" href="https://github.com/rackt/redux/tree/master/docs/recipes/ImplementingUndoHistory.md" class="btn fa fa-edit pull-left">&nbsp;&nbsp;Edit This Page</a><h1 id="implementing-undo-history">Implementing Undo History</h1>
+<p>Building an Undo and Redo functionality into an app has traditionally required conscious effort from the developer. It is not an easy problem with classical MVC frameworks because you need to keep track of every past state by cloning all relevant models. In addition, you need to be mindful of the undo stack because the user-initiated changes should be undoable.</p>
+<p>This means that implementing Undo and Redo in an MVC application usually forces you to rewrite parts of your application to use a specific data mutation pattern like <a href="https://en.wikipedia.org/wiki/Command_pattern" target="_blank">Command</a>.</p>
+<p>With Redux, however, implementing undo history is a breeze. There are three reasons for this:</p>
+<ul>
+<li>There are no multiple models&#x2014;just a state subtree that you want to keep track of.</li>
+<li>The state is already immutable, and mutations are already described as discrete actions, which is close to the undo stack mental model.</li>
+<li>The reducer <code>(state, action) =&gt; state</code> signature makes it natural to implement generic &#x201C;reducer enhancers&#x201D; or &#x201C;higher order reducers&#x201D;. They are functions that take your reducer and enhance it with some additional functionality while preserving its signature. Undo history is exactly such a case.</li>
+</ul>
+<p>Before proceeding, make sure you have worked through the <a href="../basics/index.html">basics tutorial</a> and understand <a href="../basics/Reducers.html">reducer composition</a> well. This recipe will build on top of the example described in the <a href="../basics/index.html">basics tutorial</a>.</p>
+<p>In the first part of this recipe, we will explain the underlying concepts that make Undo and Redo possible to implement in a generic way.</p>
+<p>In the second part of this recipe, we will show how to use <a href="https://github.com/omnidan/redux-undo" target="_blank">Redux Undo</a> package that provides this functionality out of the box.</p>
+<p><a href="https://twitter.com/dan_abramov/status/647038407286390784" target="_blank"><img src="http://i.imgur.com/lvDFHkH.gif" alt="demo of todos-with-undo"></a></p>
+<h2 id="understanding-undo-history">Understanding Undo History</h2>
+<h3 id="designing-the-state-shape">Designing the State Shape</h3>
+<p>Undo history is also part of your app&#x2019;s state, and there is no reason why we should approach it differently. Regardless of the type of the state changing over time, when you implement Undo and Redo, you want to keep track of the <em>history</em> of this state at different points in time.</p>
+<p>For example, the state shape of a counter app might look like this:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token number">10</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>If we wanted to implement Undo and Redo in such an app, we&#x2019;d need to store more state so we can answer the following questions:</p>
+<ul>
+<li>Is there anything left to undo or redo?</li>
+<li>What is the current state?</li>
+<li>What are the past (and future) states in the undo stack?</li>
+</ul>
+<p>It is reasonable to suggest that our state shape should change to answer these questions:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Now, if user presses &#x201C;Undo&#x201D;, we want it to change to move into the past:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">9</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>And further yet:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>When the user presses &#x201C;Redo&#x201D;, we want to move one step back into the future:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">9</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Finally, if the user performs an action (e.g. decrement the counter) while we&#x2019;re in the middle of the undo stack, we&#x2019;re going to discard the existing future:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The interesting part here is that it does not matter whether we want to keep an undo stack of numbers, strings, arrays, or objects. The structure will always be the same:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counter<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  todos<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Implement Undo&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Implement Undo&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>In general, it looks like this:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  past<span class="token punctuation">:</span> Array<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+  present<span class="token punctuation">:</span> T<span class="token punctuation">,</span>
+  future<span class="token punctuation">:</span> Array<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>It is also up to us whether to keep a single top-level history:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  past<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span> counterA<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> counterB<span class="token punctuation">:</span> <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> counterA<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> counterB<span class="token punctuation">:</span> <span class="token number">0</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> counterA<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> counterB<span class="token punctuation">:</span> <span class="token number">0</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  present<span class="token punctuation">:</span> <span class="token punctuation">{</span> counterA<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span> counterB<span class="token punctuation">:</span> <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Or many granular histories so user can undo and redo actions in them independently:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  counterA<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  counterB<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>We will see later how the approach we take lets us choose how granular Undo and Redo need to be.</p>
+<h3 id="designing-the-algorithm">Designing the Algorithm</h3>
+<p>Regardless of the specific data type, the shape of the undo history state is the same:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  past<span class="token punctuation">:</span> Array<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+  present<span class="token punctuation">:</span> T<span class="token punctuation">,</span>
+  future<span class="token punctuation">:</span> Array<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Let&#x2019;s talk through the algorithm to manipulate the state shape described above. We can define two actions to operate on this state: <code>UNDO</code> and <code>REDO</code>. In our reducer, we will do the following steps to handle these actions:</p>
+<h4 id="handling-undo">Handling Undo</h4>
+<ul>
+<li>Remove the <em>last</em> element from the <code>past</code>.</li>
+<li>Set the <code>present</code> to the element we removed in the previous step.</li>
+<li>Insert the old <code>present</code> state at the <em>beginning</em> of the <code>future</code>.</li>
+</ul>
+<h4 id="handling-redo">Handling Redo</h4>
+<ul>
+<li>Remove the <em>first</em> element from the <code>future</code>.</li>
+<li>Set the <code>present</code> to the element we removed in the previous step.</li>
+<li>Insert the old <code>present</code> state at the <em>end</em> of the <code>past</code>.</li>
+</ul>
+<h4 id="handling-other-actions">Handling Other Actions</h4>
+<ul>
+<li>Insert the <code>present</code> at the end of the <code>past</code>.</li>
+<li>Set the <code>present</code> to the new state after handling the action.</li>
+<li>Clear the <code>future</code>.</li>
+</ul>
+<h3 id="first-attempt-writing-a-reducer">First Attempt: Writing a Reducer</h3>
+<pre><code class="lang-js"><span class="token keyword">const</span> initialState <span class="token operator">=</span> <span class="token punctuation">{</span>
+  past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  present<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// (?) How do we initialize the present?</span>
+  future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">undoable</span><span class="token punctuation">(</span>state <span class="token operator">=</span> initialState<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> past<span class="token punctuation">,</span> present<span class="token punctuation">,</span> future <span class="token punctuation">}</span> <span class="token operator">=</span> state<span class="token punctuation">;</span>
+
+  <span class="token keyword">switch</span> <span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> <span class="token string">&apos;UNDO&apos;</span><span class="token punctuation">:</span>
+    <span class="token keyword">const</span> previous <span class="token operator">=</span> past<span class="token punctuation">[</span>past<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> newPast <span class="token operator">=</span> past<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> past<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      past<span class="token punctuation">:</span> newPast<span class="token punctuation">,</span>
+      present<span class="token punctuation">:</span> previous<span class="token punctuation">,</span>
+      future<span class="token punctuation">:</span> <span class="token punctuation">[</span>present<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>future<span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">case</span> <span class="token string">&apos;REDO&apos;</span><span class="token punctuation">:</span>
+    <span class="token keyword">const</span> next <span class="token operator">=</span> future<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> newFuture <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>past<span class="token punctuation">,</span> present<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      present<span class="token punctuation">:</span> next<span class="token punctuation">,</span>
+      future<span class="token punctuation">:</span> newFuture
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">default</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">// (?) How do we handle other actions?</span>
+    <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+`
+</code></pre>
+<p>This implementation isn&#x2019;t usable because it leaves out three important questions:</p>
+<ul>
+<li>Where do we get the initial <code>present</code> state from? We don&#x2019;t seem to know it beforehand.</li>
+<li>Where do we react to the external actions to save the <code>present</code> to the <code>past</code>?</li>
+<li>How do we actually delegate the control over the <code>present</code> state to a custom reducer?</li>
+</ul>
+<p>It seems that reducer isn&#x2019;t the right abstraction, but we&#x2019;re very close.</p>
+<h3 id="meet-reducer-enhancers">Meet Reducer Enhancers</h3>
+<p>You might be familiar with <a href="https://en.wikipedia.org/wiki/Higher-order_function" target="_blank">higher order functions</a>. If you use React, you might be familiar with <a href="https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750" target="_blank">higher order components</a>. Here is a variation on the same pattern, applied to reducers.</p>
+<p>A <em>reducer enhancer</em> (or a <em>higher order reducer</em>) is a function that takes a reducer, and returns a new reducer that is able to handle new actions, or to hold more state, delegating control to the inner reducer for the actions it doesn&#x2019;t understand. This isn&#x2019;t a new pattern&#x2014;technically, <a href="../api/combineReducers.html"><code>combineReducers()</code></a> is also a reducer enhancer because it takes reducers and returns a new reducer.</p>
+<p>A reducer enhancer that doesn&#x2019;t do anything looks like this:</p>
+<pre><code class="lang-js"><span class="token keyword">function</span> <span class="token function">doNothingWith</span><span class="token punctuation">(</span>reducer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Just call the passed reducer</span>
+    <span class="token keyword">return</span> <span class="token function">reducer</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>A reducer enhancer that combines other reducers might look like this:</p>
+<pre><code class="lang-js"><span class="token keyword">function</span> <span class="token function">combineReducers</span><span class="token punctuation">(</span>reducers<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>reducers<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span>nextState<span class="token punctuation">,</span> key<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// Call every reducer with the part of the state it manages</span>
+      nextState<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> reducers<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">(</span>state<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> nextState<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="second-attempt-writing-a-reducer-enhancer">Second Attempt: Writing a Reducer Enhancer</h3>
+<p>Now that we have a better understanding of reducer enhancers, we can see that this is exactly what <code>undoable</code> should have been:</p>
+<pre><code class="lang-js"><span class="token keyword">function</span> <span class="token function">undoable</span><span class="token punctuation">(</span>reducer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Call the reducer with empty action to populate the initial state</span>
+  <span class="token keyword">const</span> initialState <span class="token operator">=</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token function">reducer</span><span class="token punctuation">(</span>undefined<span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token comment" spellcheck="true">// Return a reducer that handles undo and redo</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>state <span class="token operator">=</span> initialState<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> past<span class="token punctuation">,</span> present<span class="token punctuation">,</span> future <span class="token punctuation">}</span> <span class="token operator">=</span> state<span class="token punctuation">;</span>
+
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">case</span> <span class="token string">&apos;UNDO&apos;</span><span class="token punctuation">:</span>
+      <span class="token keyword">const</span> previous <span class="token operator">=</span> past<span class="token punctuation">[</span>past<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> newPast <span class="token operator">=</span> past<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> past<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        past<span class="token punctuation">:</span> newPast<span class="token punctuation">,</span>
+        present<span class="token punctuation">:</span> previous<span class="token punctuation">,</span>
+        future<span class="token punctuation">:</span> <span class="token punctuation">[</span>present<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>future<span class="token punctuation">]</span>
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> <span class="token string">&apos;REDO&apos;</span><span class="token punctuation">:</span>
+      <span class="token keyword">const</span> next <span class="token operator">=</span> future<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> newFuture <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>past<span class="token punctuation">,</span> present<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        present<span class="token punctuation">:</span> next<span class="token punctuation">,</span>
+        future<span class="token punctuation">:</span> newFuture
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">default</span><span class="token punctuation">:</span>
+      <span class="token comment" spellcheck="true">// Delegate handling the action to the passed reducer</span>
+      <span class="token keyword">const</span> newPresent <span class="token operator">=</span> <span class="token function">reducer</span><span class="token punctuation">(</span>present<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>present <span class="token operator">===</span> newPresent<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        past<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>past<span class="token punctuation">,</span> present<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        present<span class="token punctuation">:</span> newPresent<span class="token punctuation">,</span>
+        future<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>We can now wrap any reducer into <code>undoable</code> reducer enhancer to teach it to react to <code>UNDO</code> and <code>REDO</code> actions.</p>
+<pre><code class="lang-js"><span class="token comment" spellcheck="true">// This is a reducer</span>
+<span class="token keyword">function</span> <span class="token function">todos</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/* ... */</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// This is also a reducer!</span>
+<span class="token keyword">const</span> undoableTodos <span class="token operator">=</span> <span class="token function">undoable</span><span class="token punctuation">(</span>todos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> createStore <span class="token punctuation">}</span> from <span class="token string">&apos;redux&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token function">createStore</span><span class="token punctuation">(</span>undoableTodos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  type<span class="token punctuation">:</span> <span class="token string">&apos;ADD_TODO&apos;</span><span class="token punctuation">,</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  type<span class="token punctuation">:</span> <span class="token string">&apos;ADD_TODO&apos;</span><span class="token punctuation">,</span>
+  text<span class="token punctuation">:</span> <span class="token string">&apos;Implement Undo&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  type<span class="token punctuation">:</span> <span class="token string">&apos;UNDO&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>There is an important gotcha: you need to remember to append <code>.present</code> to the current state when you retrieve it. You may also check <code>.past.length</code> and <code>.future.length</code> to determine whether to enable or to disable the Undo and Redo buttons, respectively.</p>
+<p>You might have heard that Redux was influenced by <a href="https://github.com/evancz/elm-architecture-tutorial/" target="_blank">Elm Architecture</a>. It shouldn&#x2019;t come as a surprise that this example is very similar to <a href="http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0" target="_blank">elm-undo-redo package</a>.</p>
+<h2 id="using-redux-undo">Using Redux Undo</h2>
+<p>This was all very informative, but can&#x2019;t we just drop a library and use it instead of implementing <code>undoable</code> ourselves? Sure, we can! Meet <a href="https://github.com/omnidan/redux-undo" target="_blank">Redux Undo</a>, a library that provides simple Undo and Redo functionality for any part of your Redux tree.</p>
+<p>In this part of the recipe, you will learn how to make the <a href="http://rackt.github.io/redux/docs/basics/ExampleTodoList.html" target="_blank">Todo List example</a> undoable. You can find the full source of this recipe in the <a href="https://github.com/rackt/redux/tree/master/examples/todos-with-undo" target="_blank"><code>todos-with-undo</code> example that comes with Redux</a>.</p>
+<h3 id="installation">Installation</h3>
+<p>First of all, you need to run</p>
+<pre><code>npm install --save redux-undo
+</code></pre><p>This installs the package that provides the <code>undoable</code> reducer enhancer.</p>
+<h3 id="wrapping-the-reducer">Wrapping the Reducer</h3>
+<p>You will need to the reducer you wish to enhance with <code>undoable</code> function. For example, if you use <a href="../api/combineReducers.html"><code>combineReducers()</code></a>, your code might look like this:</p>
+<h4 id="-reducers-js"><code>reducers.js</code></h4>
+<pre><code class="lang-js"><span class="token keyword">import</span> undoable<span class="token punctuation">,</span> <span class="token punctuation">{</span> distinctState <span class="token punctuation">}</span> from <span class="token string">&apos;redux-undo&apos;</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/* ... */</span>
+
+<span class="token keyword">const</span> todoApp <span class="token operator">=</span> <span class="token function">combineReducers</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  visibilityFilter<span class="token punctuation">,</span>
+  todos<span class="token punctuation">:</span> <span class="token function">undoable</span><span class="token punctuation">(</span>todos<span class="token punctuation">,</span> <span class="token punctuation">{</span> filter<span class="token punctuation">:</span> <span class="token function">distinctState</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>The <code>distinctState()</code> filter serves to ignore the actions that didn&#x2019;t result in a state change. There are <a href="https://github.com/omnidan/redux-undo#configuration" target="_blank">many other options</a> to configure your undoable reducer, like setting the action type for Undo and Redo actions.</p>
+<p>You may wrap one or more reducers in <code>undoable</code> at any level of the reducer composition hierarchy. We choose to wrap <code>todos</code> instead of the top-level combined reducer so that changes to <code>visibilityFilter</code> are not reflected in the undo history.</p>
+<h3 id="updating-the-selectors">Updating the Selectors</h3>
+<p>Now the <code>todos</code> part of the state looks like this:</p>
+<pre><code class="lang-js"><span class="token punctuation">{</span>
+  visibilityFilter<span class="token punctuation">:</span> <span class="token string">&apos;SHOW_ALL&apos;</span><span class="token punctuation">,</span>
+  todos<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    past<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    present<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Implement Undo&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    future<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> text<span class="token punctuation">:</span> <span class="token string">&apos;Implement Undo&apos;</span><span class="token punctuation">,</span> complete<span class="token punctuation">:</span> <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This means you need to access your state with <code>state.todos.present</code> instead of
+just <code>state.todos</code>:</p>
+<h4 id="-containers-app-js"><code>containers/App.js</code></h4>
+<pre><code class="lang-js"><span class="token keyword">function</span> <span class="token function">select</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> presentTodos <span class="token operator">=</span> state<span class="token punctuation">.</span>todos<span class="token punctuation">.</span>present<span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    visibleTodos<span class="token punctuation">:</span> <span class="token function">selectTodos</span><span class="token punctuation">(</span>presentTodos<span class="token punctuation">,</span> state<span class="token punctuation">.</span>visibilityFilter<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    visibilityFilter<span class="token punctuation">:</span> state<span class="token punctuation">.</span>visibilityFilter
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>In order to disable the Undo and Redo buttons when there is nothing to undo or redo, you need to check whether the <code>past</code> and <code>future</code> arrays are empty:</p>
+<h4 id="-containers-app-js"><code>containers/App.js</code></h4>
+<pre><code class="lang-js"><span class="token keyword">function</span> <span class="token function">select</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    undoDisabled<span class="token punctuation">:</span> state<span class="token punctuation">.</span>todos<span class="token punctuation">.</span>past<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    redoDisabled<span class="token punctuation">:</span> state<span class="token punctuation">.</span>todos<span class="token punctuation">.</span>future<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    visibleTodos<span class="token punctuation">:</span> <span class="token function">selectTodos</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>todos<span class="token punctuation">.</span>present<span class="token punctuation">,</span> state<span class="token punctuation">.</span>visibilityFilter<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    visibilityFilter<span class="token punctuation">:</span> state<span class="token punctuation">.</span>visibilityFilter
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="adding-the-buttons">Adding the Buttons</h3>
+<p>Now all you need to do is add the buttons for the Undo and Redo actions.</p>
+<p>First of all, you need to import <code>ActionCreators</code> from <code>redux-undo</code> and pass their bound versions to the <code>Footer</code> component:</p>
+<h4 id="-containers-app-js"><code>containers/App.js</code></h4>
+<pre><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> ActionCreators <span class="token punctuation">}</span> from <span class="token string">&apos;redux-undo&apos;</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/* ... */</span>
+
+<span class="token keyword">class</span> <span class="token class-name">App</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">{</span>
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> dispatch<span class="token punctuation">,</span> visibleTodos<span class="token punctuation">,</span> visibilityFilter <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
+        <span class="token punctuation">{</span><span class="token comment" spellcheck="true">/* ... */</span><span class="token punctuation">}</span>
+        <span class="token operator">&lt;</span>Footer
+          filter<span class="token operator">=</span><span class="token punctuation">{</span>visibilityFilter<span class="token punctuation">}</span>
+          onFilterChange<span class="token operator">=</span><span class="token punctuation">{</span>nextFilter <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token function">setVisibilityFilter</span><span class="token punctuation">(</span>nextFilter<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+          onUndo<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span>ActionCreators<span class="token punctuation">.</span><span class="token function">undo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+          onRedo<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span>ActionCreators<span class="token punctuation">.</span><span class="token function">redo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+          undoDisabled<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>undoDisabled<span class="token punctuation">}</span>
+          redoDisabled<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>redoDisabled<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Now you can render the buttons in the footer:</p>
+<h4 id="-components-footer-js"><code>components/Footer.js</code></h4>
+<pre><code class="lang-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Footer</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">{</span>
+
+  <span class="token comment" spellcheck="true">/* ... */</span>
+
+  <span class="token function">renderUndo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>p<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>onUndo<span class="token punctuation">}</span> disabled<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>undoDisabled<span class="token punctuation">}</span><span class="token operator">&gt;</span>Undo<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>onRedo<span class="token punctuation">}</span> disabled<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>redoDisabled<span class="token punctuation">}</span><span class="token operator">&gt;</span>Redo<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">&gt;</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
+        <span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">renderFilters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+        <span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">renderUndo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This is it! Run <code>npm install</code> and <code>npm start</code> in the <a href="https://github.com/rackt/redux/tree/master/examples/todos-with-undo" target="_blank">example folder</a> and try it out!</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../docs/recipes/ComputingDerivedData.html" class="navigation navigation-prev " aria-label="Previous page: Computing Derived Data"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../docs/Troubleshooting.html" class="navigation navigation-next " aria-label="Next page: Troubleshooting"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-edit-link/plugin.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2},"edit-link":{"base":"https://github.com/rackt/redux/tree/master","label":"Edit This Page"}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

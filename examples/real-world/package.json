@@ -1,0 +1,44 @@
+{
+  "name": "redux-real-world-example",
+  "version": "0.0.0",
+  "description": "Redux real-world example",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rackt/redux.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rackt/redux/issues"
+  },
+  "homepage": "http://rackt.github.io/redux",
+  "dependencies": {
+    "history": "^1.9.0",
+    "humps": "^0.6.0",
+    "isomorphic-fetch": "^2.1.1",
+    "lodash": "^3.10.1",
+    "normalizr": "^1.0.0",
+    "react": "^0.14.0-rc1",
+    "react-dom": "^0.14.0-rc1",
+    "react-redux": "^2.1.2",
+    "react-router": "^1.0.0-rc1",
+    "redux": "^3.0.0",
+    "redux-logger": "^2.0.2",
+    "redux-router": "^1.0.0-beta3",
+    "redux-thunk": "^0.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.6.18",
+    "babel-loader": "^5.1.4",
+    "redux-devtools": "^2.1.5",
+    "babel-plugin-react-transform": "^1.1.0",
+    "concurrently": "^0.1.1",
+    "express": "^4.13.3",
+    "react-transform-hmr": "^1.0.0",
+    "webpack": "^1.9.11",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
+  }
+}

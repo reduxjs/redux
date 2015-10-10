@@ -1,0 +1,43 @@
+{
+  "name": "redux-todomvc-example",
+  "version": "0.0.0",
+  "description": "Redux TodoMVC example",
+  "scripts": {
+    "start": "node server.js",
+    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register",
+    "test:watch": "npm test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rackt/redux.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rackt/redux/issues"
+  },
+  "homepage": "http://rackt.github.io/redux",
+  "dependencies": {
+    "classnames": "^2.1.2",
+    "react": "^0.13.3",
+    "react-redux": "^2.1.2",
+    "redux": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.6.18",
+    "babel-loader": "^5.1.4",
+    "babel-plugin-react-transform": "^1.1.0",
+    "expect": "^1.8.0",
+    "express": "^4.13.3",
+    "jsdom": "^5.6.1",
+    "mocha": "^2.2.5",
+    "mocha-jsdom": "^1.0.0",
+    "node-libs-browser": "^0.5.2",
+    "raw-loader": "^0.5.1",
+    "react-transform-hmr": "^1.0.0",
+    "style-loader": "^0.12.3",
+    "todomvc-app-css": "^2.0.1",
+    "webpack": "^1.9.11",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
+  }
+}

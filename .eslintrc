@@ -1,0 +1,25 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "mocha": true,
+    "node": true
+  },
+  "rules": {
+    "valid-jsdoc": 2,
+
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2,
+
+    // Disable until Flow supports let and const
+    "no-var": 0,
+    "vars-on-top": 0,
+
+    // Disable comma-dangle unless need to support it
+    "comma-dangle": 0
+  },
+  "plugins": [
+    "react"
+  ]
+}
