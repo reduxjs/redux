@@ -4,7 +4,7 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 ### Setting Up
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.  
+We recommend [Mocha](http://mochajs.org/) as the testing engine.
 Note that it runs in a Node environment, so you won’t have access to DOM.
 
 ```
@@ -60,11 +60,78 @@ describe('actions', () => {
 });
 ```
 
+If you write async action creators
+
+```js
+function fetchTodosRequest() {
+  return {
+    type: ADD_TODOS_REQUEST
+  };
+}
+
+function fetchTodosSuccess(body) {
+  return {
+    type: ADD_TODOS_SUCCESS,
+    body
+  };
+}
+
+function fetchTodosFailure(ex) {
+  return {
+    type: ADD_TODOS_FAILURE,
+    ex
+  };
+}
+
+export function fetchTodos(data) {
+  return dispatch => {
+    dispatch(fetchTodosRequest());
+    return fetch('http://example.com/todos')
+      .then(res => res.json())
+      .then(json => dispatch(addTodosSuccess(json.body)))
+      .catch(ex => dispatch(addTodosFailure(ex)));
+  };
+}
+```
+
+can be tested like:
+
+```js
+import expect from 'expect';
+import * as actions from '../../actions/TodoActions';
+import * as types from '../../constants/ActionTypes';
+import nock from 'nock';
+
+describe('async actions', () => {
+  afterEach(() => nock.cleanAll() );
+
+  it('creates FETCH_TODO_SUCCESS when fechting todos has been done', (done) => {
+    nock('http://example.com/')
+      .get('/todos')
+      .reply(200, { todos: ['do something'] });
+
+    let expectedActions = [
+      { type: types.FETCH_TODO_REQUEST },
+      { type: types.FETCH_TODO_SUCCESS, body: { todos: ['do something']  } }
+    ]
+
+    function mockDispatch(action) {
+      var expectedAction = expectedActions.shift();
+      expect(action).toEqual(expectedAction);
+      if (!expectedActions.length) {
+        done();
+      }
+    }
+    actions.fetchTodos()(mockDispatch);
+  });
+});
+```
+
 ### Reducers
 
 A reducer should return the new state after applying the action to the previous state, and that’s the behavior tested below.
 
-#### Example  
+#### Example
 
 ```js
 import { ADD_TODO } from '../constants/ActionTypes';
@@ -246,7 +313,7 @@ Shallow rendering currently [throws an error if `setState` is called](https://gi
 npm install --save-dev jsdom mocha-jsdom
 ```
 
-Then add a `jsdomReact()` helper function that looks like this:  
+Then add a `jsdomReact()` helper function that looks like this:
 
 ```js
 import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
@@ -348,7 +415,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({}, action)
     ).toEqual(action);
@@ -358,7 +425,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({
         [types.ADD_TODO]: 'dispatched'
