@@ -64,6 +64,8 @@ describe('actions', () => {
 
 For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it’s best to completely mock the Redux store for tests. You can still use [`applyMiddleware()`](../api/applyMiddleware.md) with a mock store, as shown below. You can also use [nock](https://github.com/pgte/nock) to mock the HTTP requests.
 
+#### Example
+
 ```js
 function fetchTodosRequest() {
   return {
