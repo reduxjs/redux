@@ -1,5 +1,46 @@
 import expect from 'expect';
+import { applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import * as actions from '../../actions/counter';
+
+const middlewares = [thunk];
+
+/*
+ * Creates a mock of Redux store with middleware.
+ */
+function mockStore(getState, expectedActions, onLastAction) {
+  if (!Array.isArray(expectedActions)) {
+    throw new Error('expectedActions should be an array of expected actions.');
+  }
+  if (typeof onLastAction !== 'undefined' && typeof onLastAction !== 'function') {
+    throw new Error('onLastAction should either be undefined or function.');
+  }
+
+  function mockStoreWithoutMiddleware() {
+    return {
+      getState() {
+        return typeof getState === 'function' ?
+          getState() :
+          getState;
+      },
+
+      dispatch(action) {
+        const expectedAction = expectedActions.shift();
+        expect(action).toEqual(expectedAction);
+        if (onLastAction && !expectedActions.length) {
+          onLastAction();
+        }
+        return action;
+      }
+    };
+  }
+
+  const mockStoreWithMiddleware = applyMiddleware(
+    ...middlewares
+  )(mockStoreWithoutMiddleware);
+
+  return mockStoreWithMiddleware();
+}
 
 describe('actions', () => {
   it('increment should create increment action', () => {
@@ -10,32 +51,26 @@ describe('actions', () => {
     expect(actions.decrement()).toEqual({ type: actions.DECREMENT_COUNTER });
   });
 
-  it('incrementIfOdd should create increment action', () => {
-    const fn = actions.incrementIfOdd();
-    expect(fn).toBeA('function');
-    const dispatch = expect.createSpy();
-    const getState = () => ({ counter: 1 });
-    fn(dispatch, getState);
-    expect(dispatch).toHaveBeenCalledWith({ type: actions.INCREMENT_COUNTER });
+  it('incrementIfOdd should create increment action', (done) => {
+    const expectedActions = [
+      { type: actions.INCREMENT_COUNTER }
+    ];
+    const store = mockStore({ counter: 1 }, expectedActions, done);
+    store.dispatch(actions.incrementIfOdd());
   });
 
-  it('incrementIfOdd shouldnt create increment action if counter is even', () => {
-    const fn = actions.incrementIfOdd();
-    const dispatch = expect.createSpy();
-    const getState = () => ({ counter: 2 });
-    fn(dispatch, getState);
-    expect(dispatch.calls.length).toBe(0);
+  it('incrementIfOdd shouldnt create increment action if counter is even', (done) => {
+    const expectedActions = [];
+    const store = mockStore({ counter: 2 }, expectedActions);
+    store.dispatch(actions.incrementIfOdd());
+    done();
   });
 
-  // There's no nice way to test this at the moment...
-  it('incrementAsync', (done) => {
-    const fn = actions.incrementAsync(1);
-    expect(fn).toBeA('function');
-    const dispatch = expect.createSpy();
-    fn(dispatch);
-    setTimeout(() => {
-      expect(dispatch).toHaveBeenCalledWith({ type: actions.INCREMENT_COUNTER });
-      done();
-    }, 5);
+  it('incrementAsync should create increment action', (done) => {
+    const expectedActions = [
+      { type: actions.INCREMENT_COUNTER }
+    ];
+    const store = mockStore({ counter: 0 }, expectedActions, done);
+    store.dispatch(actions.incrementAsync(100));
   });
 });

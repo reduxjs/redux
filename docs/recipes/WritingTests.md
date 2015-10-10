@@ -60,7 +60,9 @@ describe('actions', () => {
 });
 ```
 
-If you write async action creators
+### Async Action Creators
+
+For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it’s best to completely mock the Redux store for tests. You can still use [`applyMiddleware()`](../api/applyMiddleware.md) with a mock store, as shown below. You can also use [nock](https://github.com/pgte/nock) to mock the HTTP requests.
 
 ```js
 function fetchTodosRequest() {
@@ -98,31 +100,67 @@ can be tested like:
 
 ```js
 import expect from 'expect';
-import * as actions from '../../actions/TodoActions';
+import { applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import * as actions from '../../actions/counter';
 import * as types from '../../constants/ActionTypes';
 import nock from 'nock';
 
-describe('async actions', () => {
-  afterEach(() => nock.cleanAll() );
+const middlewares = [thunk];
 
-  it('creates FETCH_TODO_SUCCESS when fechting todos has been done', (done) => {
+/**
+ * Creates a mock of Redux store with middleware.
+ */
+function mockStore(getState, expectedActions, onLastAction) {
+  if (!Array.isArray(expectedActions)) {
+    throw new Error('expectedActions should be an array of expected actions.');
+  }
+  if (typeof onLastAction !== 'undefined' && typeof onLastAction !== 'function') {
+    throw new Error('onLastAction should either be undefined or function.');
+  }
+
+  function mockStoreWithoutMiddleware() {
+    return {
+      getState() {
+        return typeof getState === 'function' ?
+          getState() :
+          getState;
+      },
+
+      dispatch(action) {
+        const expectedAction = expectedActions.shift();
+        expect(action).toEqual(expectedAction);
+        if (onLastAction && !expectedActions.length) {
+          onLastAction();
+        }
+        return action;
+      }
+    }
+  }
+
+  const mockStoreWithMiddleware = applyMiddleware(
+    ...middlewares
+  )(mockStoreWithoutMiddleware);
+
+  return mockStoreWithMiddleware();
+}
+
+describe('async actions', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('creates FETCH_TODO_SUCCESS when fetching todos has been done', (done) => {
     nock('http://example.com/')
       .get('/todos')
       .reply(200, { todos: ['do something'] });
 
-    let expectedActions = [
+    const expectedActions = [
       { type: types.FETCH_TODO_REQUEST },
       { type: types.FETCH_TODO_SUCCESS, body: { todos: ['do something']  } }
     ]
-
-    function mockDispatch(action) {
-      var expectedAction = expectedActions.shift();
-      expect(action).toEqual(expectedAction);
-      if (!expectedActions.length) {
-        done();
-      }
-    }
-    actions.fetchTodos()(mockDispatch);
+    const store = mockStore({ todos: [] }, expectedActions, done);
+    store.dispatch(actions.fetchTodos());
   });
 });
 ```

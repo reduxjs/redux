@@ -16,7 +16,7 @@ export default function createDevToolsWindow(store) {
   );
 
   if (!win) {
-    console.error(
+    console.error( // eslint-disable-line no-console
       'Couldn\'t open Redux DevTools due to a popup blocker. ' +
       'Please disable the popup blocker for the current page.'
     );
