@@ -292,7 +292,7 @@ React.render(
 );
 ```
 
-This makes our store instance available to the components below. (Internally, this is done via React's [undocumented “context” feature](http://www.youtube.com/watch?v=H7vlH-wntD4), but it’s not exposed directly in the API so don’t worry about it.)
+This makes our store instance available to the components below. (Internally, this is done via React's ["context" feature](http://facebook.github.io/react/docs/context.html).)
 
 Then, we **wrap the components we want to connect to Redux with the `connect()` function from [`react-redux`](http://github.com/gaearon/react-redux)**. Try to only do this for a top-level component, or route handlers. While technically you can `connect()` any component in your app to Redux store, avoid doing this too deeply, because it will make the data flow harder to trace.
 
