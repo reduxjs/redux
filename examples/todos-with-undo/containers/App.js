@@ -56,13 +56,10 @@ function selectTodos(todos, filter) {
 }
 
 function select(state) {
-  const presentTodos = state.todos.present;
-  const undoHistory = state.todos.history;
-
   return {
-    undoDisabled: undoHistory.past.length === 0,
-    redoDisabled: undoHistory.future.length === 0,
-    visibleTodos: selectTodos(presentTodos, state.visibilityFilter),
+    undoDisabled: state.todos.past.length === 0,
+    redoDisabled: state.todos.future.length === 0,
+    visibleTodos: selectTodos(state.todos.present, state.visibilityFilter),
     visibilityFilter: state.visibilityFilter
   };
 }
