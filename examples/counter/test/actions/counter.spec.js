@@ -5,7 +5,7 @@ import * as actions from '../../actions/counter';
 
 const middlewares = [thunk];
 
-/**
+/*
  * Creates a mock of Redux store with middleware.
  */
 function mockStore(getState, expectedActions, onLastAction) {
@@ -32,7 +32,7 @@ function mockStore(getState, expectedActions, onLastAction) {
         }
         return action;
       }
-    }
+    };
   }
 
   const mockStoreWithMiddleware = applyMiddleware(
