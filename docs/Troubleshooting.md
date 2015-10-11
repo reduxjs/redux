@@ -31,7 +31,7 @@ function todos(state = [], action) {
     state.actions[action.index].completed = true;
   }
 
-  return state
+  return state;
 }
 ```
 
