@@ -27,7 +27,8 @@
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "isomorphic-fetch": "^2.1.1",
-    "react": "^0.13.3",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
     "react-redux": "^2.1.2",
     "redux": "^3.0.0",
     "redux-logger": "^2.0.2",
