@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
+import React, { findDOMNode, Component, PropTypes } from 'react';
 
 export default class AddTodo extends Component {
   handleClick() {
