@@ -284,7 +284,7 @@ let store = createStore(todoApp);
 let rootElement = document.getElementById('root');
 React.render(
   // The child must be wrapped in a function
-  // to work around an issue in React 0.13.
+  // the following is to work around an issue in React 0.13, but with React 0.14 and later versions, you no longer need to wrap <Provider> child into a function.
   <Provider store={store}>
     {() => <App />}
   </Provider>,
