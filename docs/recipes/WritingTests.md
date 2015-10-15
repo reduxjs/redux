@@ -252,6 +252,12 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
+First, we will install [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html):
+
+```
+npm install --save-dev react-addons-test-utils
+```
+
 To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering). This lets individual tests assert on whether the callbacks were called when expected.
 
 #### Example
@@ -290,12 +296,10 @@ can be tested like:
 
 ```js
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Header from '../../components/Header';
 import TodoTextInput from '../../components/TodoTextInput';
-
-const { TestUtils } = React.addons;
 
 function setup() {
   let props = {
@@ -314,8 +318,6 @@ function setup() {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('Header', () => {
     it('should render correctly', () => {
       const { output } = setup();
@@ -363,7 +365,18 @@ global.window = document.defaultView;
 global.navigator = global.window.navigator;
 ```
 
-It’s important that this code is evaluated *before* React is imported. To ensure this, modify your `mocha` command to include `--require ./test/setup.js` in the options.
+It’s important that this code is evaluated *before* React is imported. To ensure this, modify your `mocha` command to include `--require ./test/setup.js` in the options in your `package.json`:
+
+```js
+{
+  ...
+  "scripts": {
+    ...
+    "test": "mocha --compilers js:babel/register --recursive --require ./test/setup.js",
+  },
+  ...
+}
+```
 
 ### Connected Components
 
@@ -475,7 +488,7 @@ describe('middleware', () => {
 
 ### Glossary
 
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test Utilities for React.
 
 - [jsdom](https://github.com/tmpvar/jsdom): A plain JavaScript implementation of the DOM API. jsdom allows us to run the tests without browser.
 
