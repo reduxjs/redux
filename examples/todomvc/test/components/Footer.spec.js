@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import Footer from '../../components/Footer';
 import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters';
@@ -36,8 +35,6 @@ function getTextContent(elem) {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('Footer', () => {
     it('should render container', () => {
       const { output } = setup();

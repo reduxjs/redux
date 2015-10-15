@@ -4,7 +4,7 @@
   "description": "Redux counter example",
   "scripts": {
     "start": "node server.js",
-    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register",
+    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register --require ./test/setup.js",
     "test:watch": "npm test -- --watch"
   },
   "repository": {
@@ -30,7 +30,6 @@
     "express": "^4.13.3",
     "jsdom": "^5.6.1",
     "mocha": "^2.2.5",
-    "mocha-jsdom": "^1.0.0",
     "node-libs-browser": "^0.5.2",
     "react-transform-hmr": "^1.0.0",
     "webpack": "^1.9.11",

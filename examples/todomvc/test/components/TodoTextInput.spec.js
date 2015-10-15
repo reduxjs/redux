@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import TodoTextInput from '../../components/TodoTextInput';
 
@@ -32,8 +31,6 @@ function setup(propOverrides) {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('TodoTextInput', () => {
     it('should render correctly', () => {
       const { output } = setup();

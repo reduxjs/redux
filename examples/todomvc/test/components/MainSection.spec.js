@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import MainSection from '../../components/MainSection';
 import TodoItem from '../../components/TodoItem';
@@ -40,8 +39,6 @@ function setup(propOverrides) {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('MainSection', () => {
     it('should render container', () => {
       const { output } = setup();

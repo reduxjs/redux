@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import Header from '../../components/Header';
 import TodoTextInput from '../../components/TodoTextInput';
@@ -23,8 +22,6 @@ function setup() {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('Header', () => {
     it('should render correctly', () => {
       const { output } = setup();
