@@ -8,7 +8,7 @@
       "extra": {
         "react-transform": {
           "transforms": [{
-            "transform":  "react-transform-hmr",
+            "transform": "react-transform-hmr",
             "imports": ["react"],
             "locals":  ["module"]
           }]
