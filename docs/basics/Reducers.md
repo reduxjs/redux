@@ -193,7 +193,7 @@ Is there a way to make it easier to comprehend? It seems like `todos` and `visib
 function todos(state = [], action) {
   switch (action.type) {
   case ADD_TODO:
-    return [...state, {
+    return [...state.todos, {
       text: action.text,
       completed: false
     }];
