@@ -108,7 +108,7 @@ export default function combineReducers(reducers) {
 
   var defaultState = mapValues(finalReducers, () => undefined);
 
-  return function combination(state = defaultState, action) {
+  return function combination(state = defaultState, action, ...rest) {
     if (sanityError) {
       throw sanityError;
     }
@@ -116,7 +116,7 @@ export default function combineReducers(reducers) {
     var hasChanged = false;
     var finalState = mapValues(finalReducers, (reducer, key) => {
       var previousStateForKey = state[key];
-      var nextStateForKey = reducer(previousStateForKey, action);
+      var nextStateForKey = reducer(previousStateForKey, action, ...rest);
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action);
         throw new Error(errorMessage);
