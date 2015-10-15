@@ -173,10 +173,12 @@ function makeSandwichesForEverybody() {
 // This is very useful for server side rendering, because I can wait
 // until data is available, then synchronously render the app.
 
+import { renderToString } from 'react-dom/server';
+
 store.dispatch(
   makeSandwichesForEverybody()
 ).then(() =>
-  response.send(React.renderToString(<MyApp store={store} />))
+  response.send(renderToString(<MyApp store={store} />))
 );
 
 // I can also dispatch a thunk async action from a component

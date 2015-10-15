@@ -10,6 +10,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack.config';
 
 import React from 'react';
+import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 
 import configureStore from '../common/store/configureStore';
@@ -41,10 +42,11 @@ function handleRender(req, res) {
     const store = configureStore(initialState);
 
     // Render the component to a string
-    const html = React.renderToString(
+    const html = renderToString(
       <Provider store={store}>
-        { () => <App/> }
-      </Provider>);
+        <App />
+      </Provider>
+    );
 
     // Grab the initial state from our Redux store
     const finalState = store.getState();

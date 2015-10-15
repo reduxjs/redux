@@ -10,9 +10,10 @@ This is the complete source code of the Reddit headline fetching example we buil
 import 'babel-core/polyfill';
 
 import React from 'react';
+import { render } from 'react-dom';
 import Root from './containers/Root';
 
-React.render(
+render(
   <Root />,
   document.getElementById('root')
 );
@@ -195,7 +196,7 @@ export default class Root extends Component {
   render() {
     return (
       <Provider store={store}>
-        {() => <AsyncApp />}
+        <AsyncApp />
       </Provider>
     );
   }

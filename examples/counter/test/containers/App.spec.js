@@ -1,24 +1,21 @@
 import expect from 'expect';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import { Provider } from 'react-redux';
 import App from '../../containers/App';
 import configureStore from '../../store/configureStore';
-
-const { TestUtils } = React.addons;
 
 function setup(initialState) {
   const store = configureStore(initialState);
   const app = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      {() => <App />}
+      <App />
     </Provider>
   );
   return {
     app: app,
-    buttons: TestUtils.scryRenderedDOMComponentsWithTag(app, 'button').map(button => {
-      return button.getDOMNode();
-    }),
-    p: TestUtils.findRenderedDOMComponentWithTag(app, 'p').getDOMNode()
+    buttons: TestUtils.scryRenderedDOMComponentsWithTag(app, 'button'),
+    p: TestUtils.findRenderedDOMComponentWithTag(app, 'p')
   };
 }
 

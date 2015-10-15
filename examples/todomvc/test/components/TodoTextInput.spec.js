@@ -1,8 +1,7 @@
 import expect from 'expect';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import TodoTextInput from '../../components/TodoTextInput';
-
-const { TestUtils } = React.addons;
 
 function setup(propOverrides) {
   const props = Object.assign({
