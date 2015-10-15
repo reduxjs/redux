@@ -1,8 +1,7 @@
 import expect from 'expect';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Counter from '../../components/Counter';
-
-const { TestUtils } = React.addons;
 
 function setup() {
   const actions = {
@@ -15,10 +14,8 @@ function setup() {
   return {
     component: component,
     actions: actions,
-    buttons: TestUtils.scryRenderedDOMComponentsWithTag(component, 'button').map(button => {
-      return button.getDOMNode();
-    }),
-    p: TestUtils.findRenderedDOMComponentWithTag(component, 'p').getDOMNode()
+    buttons: TestUtils.scryRenderedDOMComponentsWithTag(component, 'button'),
+    p: TestUtils.findRenderedDOMComponentWithTag(component, 'p')
   };
 }
 
