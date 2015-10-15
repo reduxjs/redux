@@ -19,6 +19,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
 * [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 * [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Warns about state mutations in development
+* [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Analytics middleware for Redux
 
 ## Components
 
