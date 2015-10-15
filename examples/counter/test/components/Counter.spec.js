@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import Counter from '../../components/Counter';
 
@@ -24,8 +23,6 @@ function setup() {
 }
 
 describe('Counter component', () => {
-  jsdomReact();
-
   it('should display count', () => {
     const { p } = setup();
     expect(p.textContent).toMatch(/^Clicked: 1 times/);

@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import { Provider } from 'react-redux';
 import App from '../../containers/App';
@@ -24,8 +23,6 @@ function setup(initialState) {
 }
 
 describe('containers', () => {
-  jsdomReact();
-
   describe('App', () => {
     it('should display initial count', () => {
       const { p } = setup();

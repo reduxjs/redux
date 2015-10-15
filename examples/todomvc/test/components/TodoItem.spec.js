@@ -1,5 +1,4 @@
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
 import React from 'react/addons';
 import TodoItem from '../../components/TodoItem';
 import TodoTextInput from '../../components/TodoTextInput';
@@ -40,8 +39,6 @@ function setup( editing = false ) {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('TodoItem', () => {
     it('initial render', () => {
       const { output } = setup();

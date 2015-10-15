@@ -347,25 +347,23 @@ describe('components', () => {
 
 #### Fixing Broken `setState()`
 
-Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
+Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
 
 ```
-npm install --save-dev jsdom mocha-jsdom
+npm install --save-dev jsdom
 ```
 
-Then add a `jsdomReact()` helper function that looks like this:
+Then create a `setup.js` file in your test directory:
 
 ```js
-import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
-import jsdom from 'mocha-jsdom';
+import { jsdom } from 'jsdom';
 
-export default function jsdomReact() {
-  jsdom();
-  ExecutionEnvironment.canUseDOM = true;
-}
+global.document = jsdom('<!doctype html><html><body></body></html>');
+global.window = document.defaultView;
+global.navigator = global.window.navigator;
 ```
 
-Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
+It’s important that this code is evaluated *before* React is imported. To ensure this, modify your `mocha` command to include `--require ./test/setup.js` in the options.
 
 ### Connected Components
 
