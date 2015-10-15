@@ -8,6 +8,7 @@ This is the complete source code of the tiny todo app we built during the [basic
 
 ```js
 import React from 'react';
+import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './containers/App';
@@ -16,11 +17,11 @@ import todoApp from './reducers';
 let store = createStore(todoApp);
 
 let rootElement = document.getElementById('root');
-React.render(
+render(
   // The child must be wrapped in a function
   // to work around an issue in React 0.13.
   <Provider store={store}>
-    {() => <App />}
+    <App />
   </Provider>,
   rootElement
 );
@@ -190,7 +191,7 @@ export default connect(select)(App);
 #### `components/AddTodo.js`
 
 ```js
-import React, { findDOMNode, Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 export default class AddTodo extends Component {
   render() {
@@ -205,7 +206,7 @@ export default class AddTodo extends Component {
   }
 
   handleClick(e) {
-    const node = findDOMNode(this.refs.input);
+    const node = this.refs.input;
     const text = node.value.trim();
     this.props.onAddClick(text);
     node.value = '';
