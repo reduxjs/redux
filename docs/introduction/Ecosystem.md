@@ -34,8 +34,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later commited or reverted
 * [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
-* [redux-ignore](https://github.com/omnidan/redux-ignore) — ignore redux actions by array or filter function
-* [redux-recycle](https://github.com/omnidan/redux-recycle) — reset the redux state on certain actions
+* [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
+* [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
 
 ## Utilities
 
