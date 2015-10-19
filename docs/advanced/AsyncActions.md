@@ -47,6 +47,8 @@ We’ll use separate types in this tutorial.
 
 Let’s start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a reddit to display:
 
+#### `actions.js`
+
 ```js
 export const SELECT_REDDIT = 'SELECT_REDDIT';
 
