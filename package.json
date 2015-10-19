@@ -60,7 +60,7 @@
     "babel-loader": "^5.1.4",
     "eslint": "^1.2.1",
     "eslint-config-airbnb": "0.0.8",
-    "eslint-plugin-react": "^3.2.3",
+    "eslint-plugin-react": "~3.5.1",
     "expect": "^1.8.0",
     "gitbook-cli": "^0.3.4",
     "isparta": "^3.0.3",
