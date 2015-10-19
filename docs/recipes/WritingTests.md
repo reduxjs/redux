@@ -1,11 +1,11 @@
 # Writing Tests
 
-Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
+Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.
 
 ### Setting Up
 
 We recommend [Mocha](http://mochajs.org/) as the testing engine.
-Note that it runs in a Node environment, so you won’t have access to DOM.
+Note that it runs in a Node environment, so you won’t have access to the DOM.
 
 ```
 npm install --save-dev mocha
@@ -349,7 +349,7 @@ describe('components', () => {
 
 #### Fixing Broken `setState()`
 
-Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
+Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
 
 ```
 npm install --save-dev jsdom
@@ -398,7 +398,7 @@ In a unit test, you would normally import the `App` component like this:
 import App from './App';
 ```
 
-However when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
+However, when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
 
 In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 
