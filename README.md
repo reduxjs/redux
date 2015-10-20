@@ -136,7 +136,7 @@ If you’re new to the NPM ecosystem and have troubles getting a project up and 
 
 ### Discussion
 
-Join the **#redux** channel of the [Reactiflux](http://reactiflux.com) Slack community.
+Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflux](http://reactiflux.com) Discord community.
 
 ### Thanks
 
