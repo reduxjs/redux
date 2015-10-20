@@ -36,6 +36,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
 * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
+* [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
 
 ## Utilities
 
