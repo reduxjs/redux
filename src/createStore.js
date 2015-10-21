@@ -37,7 +37,7 @@ export default function createStore(reducer, initialState) {
 
   var currentReducer = reducer;
   var currentState = initialState;
-  var listeners = [];
+  var listeners = new Set();
   var isDispatching = false;
 
   /**
@@ -58,11 +58,10 @@ export default function createStore(reducer, initialState) {
    * @returns {Function} A function to remove this change listener.
    */
   function subscribe(listener) {
-    listeners.push(listener);
+    listeners.add(listener);
 
     return function unsubscribe() {
-      var index = listeners.indexOf(listener);
-      listeners.splice(index, 1);
+      listeners.delete(listener);
     };
   }
 
@@ -117,7 +116,10 @@ export default function createStore(reducer, initialState) {
       isDispatching = false;
     }
 
-    listeners.slice().forEach(listener => listener());
+    for(let listener of listeners.values()){
+      listener();
+    }
+
     return action;
   }
 
