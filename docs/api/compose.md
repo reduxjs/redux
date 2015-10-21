@@ -46,9 +46,11 @@ if (process.env.NODE_ENV === 'production') {
   //
   // finalCreateStore = applyMiddleware(middleware)(
   //   require('redux-devtools').devTools()(
-  //     require('redux-devtools').persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))()
+  //     require('redux-devtools').persistState(
+  //       window.location.href.match(/[?&]debug_session=([^&]+)\b/)
+  //     )(createStore)
   //   )
-  // )(createStore);
+  // );
 }
 
 let store = finalCreateStore(reducer);
