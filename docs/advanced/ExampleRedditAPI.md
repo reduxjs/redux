@@ -67,7 +67,7 @@ function fetchPosts(reddit) {
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(req => req.json())
       .then(json => dispatch(receivePosts(reddit, json)));
-  }
+  };
 }
 
 function shouldFetchPosts(state, reddit) {
