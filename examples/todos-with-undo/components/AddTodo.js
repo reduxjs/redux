@@ -5,7 +5,7 @@ export default class AddTodo extends Component {
     e.preventDefault();
     const node = this.refs.input;
     const text = node.value.trim();
-    if(text){
+    if (text) {
       this.props.onAddSubmit(text);
       node.value = '';
     }
