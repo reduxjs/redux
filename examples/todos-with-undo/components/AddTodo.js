@@ -1,25 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class AddTodo extends Component {
-  handleClick() {
+  handleSubmit(e) {
+    e.preventDefault();
     const node = this.refs.input;
     const text = node.value.trim();
-    this.props.onAddClick(text);
-    node.value = '';
+    if(text){
+      this.props.onAddSubmit(text);
+      node.value = '';
+    }
   }
 
   render() {
     return (
       <div>
-        <input type="text" ref="input" />
-        <button onClick={(e) => this.handleClick(e)}>
-          Add
-        </button>
+        <form onSubmit={(e) => this.handleSubmit(e)}>
+          <input type="text" ref="input" />
+          <button>
+            Add
+          </button>
+        </form>
       </div>
     );
   }
 }
 
 AddTodo.propTypes = {
-  onAddClick: PropTypes.func.isRequired
+  onAddSubmit: PropTypes.func.isRequired
 };
