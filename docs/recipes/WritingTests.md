@@ -131,11 +131,16 @@ function mockStore(getState, expectedActions, done) {
 
       dispatch(action) {
         const expectedAction = expectedActions.shift();
-        expect(action).toEqual(expectedAction);
-        if (done && !expectedActions.length) {
-          done();
+        
+        try {
+          expect(action).toEqual(expectedAction);
+          if (done && !expectedActions.length) {
+            done();
+          }
+          return action;
+        } catch (e) {
+          done(e);
         }
-        return action;
       }
     }
   }
