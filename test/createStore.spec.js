@@ -201,6 +201,23 @@ describe('createStore', () => {
     expect(listenerB.calls.length).toBe(2);
   });
 
+  it('should only remove relevant listener no matter how many times unsubscribe called', () => {
+    const store = createStore(reducers.todos);
+    const listenerA = expect.createSpy(() => {});
+    const listenerB = expect.createSpy(() => {});
+
+    const unsubscribeA = store.subscribe(listenerA);
+    store.subscribe(listenerB);
+
+    unsubscribeA();
+    unsubscribeA();
+
+    store.dispatch(unknownAction());
+    expect(listenerA.calls.length).toBe(0);
+    expect(listenerB.calls.length).toBe(1);
+  });
+
+
   it('should support removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos);
     const listenerA = expect.createSpy(() => {});
