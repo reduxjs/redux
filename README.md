@@ -32,7 +32,7 @@ I wrote Redux while working on my React Europe talk called [“Hot Reloading wit
 ### Influences
 
 Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
-Whether you have used them or not, Redux takes a few minutes to get started with.
+Whether you have used them or not, Redux only takes a few minutes to get started with.
 
 ### Installation
 
