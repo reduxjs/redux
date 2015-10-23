@@ -206,7 +206,7 @@ describe('createStore', () => {
     const listenerA = expect.createSpy(() => {});
     const listenerB = expect.createSpy(() => {});
 
-    let unsubscribeA = store.subscribe(listenerA);
+    const unsubscribeA = store.subscribe(listenerA);
     store.subscribe(listenerB);
 
     unsubscribeA();
