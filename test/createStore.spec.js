@@ -217,7 +217,6 @@ describe('createStore', () => {
     expect(listenerB.calls.length).toBe(1);
   });
 
-
   it('should support removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos);
     const listenerA = expect.createSpy(() => {});
