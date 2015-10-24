@@ -69,31 +69,31 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 ```js
 function fetchTodosRequest() {
   return {
-    type: ADD_TODOS_REQUEST
+    type: FETCH_TODOS_REQUEST
   };
 }
 
 function fetchTodosSuccess(body) {
   return {
-    type: ADD_TODOS_SUCCESS,
+    type: FETCH_TODOS_SUCCESS,
     body
   };
 }
 
 function fetchTodosFailure(ex) {
   return {
-    type: ADD_TODOS_FAILURE,
+    type: FETCH_TODOS_FAILURE,
     ex
   };
 }
 
-export function fetchTodos(data) {
+export function fetchTodos() {
   return dispatch => {
     dispatch(fetchTodosRequest());
     return fetch('http://example.com/todos')
       .then(res => res.json())
-      .then(json => dispatch(addTodosSuccess(json.body)))
-      .catch(ex => dispatch(addTodosFailure(ex)));
+      .then(json => dispatch(fetchTodosSuccess(json.body)))
+      .catch(ex => dispatch(fetchTodosFailure(ex)));
   };
 }
 ```
@@ -131,7 +131,7 @@ function mockStore(getState, expectedActions, done) {
 
       dispatch(action) {
         const expectedAction = expectedActions.shift();
-        
+
         try {
           expect(action).toEqual(expectedAction);
           if (done && !expectedActions.length) {
@@ -157,14 +157,14 @@ describe('async actions', () => {
     nock.cleanAll();
   });
 
-  it('creates FETCH_TODO_SUCCESS when fetching todos has been done', (done) => {
+  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', (done) => {
     nock('http://example.com/')
       .get('/todos')
       .reply(200, { todos: ['do something'] });
 
     const expectedActions = [
-      { type: types.FETCH_TODO_REQUEST },
-      { type: types.FETCH_TODO_SUCCESS, body: { todos: ['do something']  } }
+      { type: types.FETCH_TODOS_REQUEST },
+      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
     ]
     const store = mockStore({ todos: [] }, expectedActions, done);
     store.dispatch(actions.fetchTodos());
