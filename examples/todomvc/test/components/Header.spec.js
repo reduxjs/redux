@@ -38,7 +38,7 @@ describe('components', () => {
       expect(input.props.placeholder).toBe('What needs to be done?');
     });
 
-    it('should call call addTodo if length of text is greater than 0', () => {
+    it('should call addTodo if length of text is greater than 0', () => {
       const { output, props } = setup();
       const input = output.props.children[1];
       input.props.onSave('');
