@@ -1,13 +1,13 @@
 import shop from '../api/shop';
-
-export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS';
+import * as types from '../constants/ActionTypes';
 
 function receiveProducts(products) {
   return {
-    type: RECEIVE_PRODUCTS,
+    type: types.RECEIVE_PRODUCTS,
     products: products
   };
 }
+
 export function getAllProducts() {
   return dispatch => {
     shop.getProducts(products => {
@@ -16,14 +16,13 @@ export function getAllProducts() {
   };
 }
 
-export const ADD_TO_CART = 'ADD_TO_CART';
-
 function addToCartUnsafe(productId) {
   return {
-    type: ADD_TO_CART,
+    type: types.ADD_TO_CART,
     productId
   };
 }
+
 export function addToCart(productId) {
   return (dispatch, getState) => {
     if (getState().products.byId[productId].inventory > 0) {
@@ -32,19 +31,16 @@ export function addToCart(productId) {
   };
 }
 
-export const CHECKOUT_REQUEST = 'CHECKOUT_REQUEST';
-export const CHECKOUT_SUCCESS = 'CHECKOUT_SUCCESS';
-export const CHECKOUT_FAILURE = 'CHECKOUT_FAILURE';
 export function checkout(products) {
   return (dispatch, getState) => {
     const cart = getState().cart;
 
     dispatch({
-      type: CHECKOUT_REQUEST
+      type: types.CHECKOUT_REQUEST
     });
     shop.buyProducts(products, () => {
       dispatch({
-        type: CHECKOUT_SUCCESS,
+        type: types.CHECKOUT_SUCCESS,
         cart
       });
       // Replace the line above with line below to rollback on failure:
