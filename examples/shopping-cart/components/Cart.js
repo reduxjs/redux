@@ -29,7 +29,7 @@ export default class Cart extends Component {
   }
 }
 
-Cart.PropTypes = {
+Cart.propTypes = {
   products: PropTypes.array,
   total: PropTypes.string,
   onCheckoutClicked: PropTypes.func

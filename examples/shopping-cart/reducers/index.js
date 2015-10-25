@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { default as cart, getQuantity, getAddedIds } from './cart';
-import { default as products, getProduct } from './products';
+import { default as cartReducer, getQuantity, getAddedIds } from './cart';
+import { default as productsReducer, getProduct } from './products';
 
 export function getTotal(state) {
   const { cart, products } = state;
@@ -20,6 +20,6 @@ export function getCartProducts(state) {
 }
 
 export default combineReducers({
-  cart,
-  products
+  cartReducer,
+  productsReducer
 });

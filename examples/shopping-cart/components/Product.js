@@ -6,6 +6,6 @@ export default class Product extends Component {
   }
 }
 
-Product.PropTypes = {
+Product.propTypes = {
   children: PropTypes.renderable
 };
