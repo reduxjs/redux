@@ -14,8 +14,8 @@ class CartContainer extends Component {
         total={total}
         onCheckoutClicked={() => this.props.checkout()} />
     );
-  };
-};
+  }
+}
 
 CartContainer.propTypes = {
   products: PropTypes.arrayOf(PropTypes.shape({
@@ -33,7 +33,7 @@ const mapStateToProps = (state) => {
     products: getCartProducts(state),
     total: getTotal(state)
   };
-}
+};
 
 export default connect(
   mapStateToProps,

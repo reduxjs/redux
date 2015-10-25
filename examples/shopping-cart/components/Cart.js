@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Product from './Product';
 
 export default class Cart extends Component {
   render() {
@@ -10,7 +11,7 @@ export default class Cart extends Component {
       products.map(product =>
         <Product key={product.id}>
           {product.title} - &euro;{product.price} x {product.quantity}
-        </Product>;
+        </Product>
     );
 
     return (
@@ -29,18 +30,7 @@ export default class Cart extends Component {
 }
 
 Cart.PropTypes = {
-  products: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired,
-  })).isRequired,
-  total: PropTypes.string.isRequired,
-  onCheckoutClicked: PropTypes.func.isRequired
-}
-
-var Product = React.createClass({
-  render() {
-    return <div > {this.props.children} </div>;
-  }
-});
+  products: PropTypes.array,
+  total: PropTypes.string,
+  onCheckoutClicked: PropTypes.func
+};

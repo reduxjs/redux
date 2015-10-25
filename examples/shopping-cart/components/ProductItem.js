@@ -15,7 +15,7 @@ export default class ProductItem extends Component {
       </div>
     );
   }
-};
+}
 
 ProductItem.propTypes = {
   product: PropTypes.shape({

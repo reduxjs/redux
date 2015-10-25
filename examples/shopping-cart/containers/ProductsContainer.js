@@ -29,7 +29,7 @@ ProductsContainer.propTypes = {
     quantity: PropTypes.number.isRequired,
   })).isRequired,
   addToCart: PropTypes.func.isRequired
-}
+};
 
 function mapStateToProps(state) {
   return {
@@ -40,4 +40,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   { addToCart }
-)(ProductsContainer)
+)(ProductsContainer);

@@ -9,8 +9,9 @@ export default class ProductsList extends Component {
       </div>
     );
   }
-};
+}
 
 ProductsList.propTypes = {
+  children: PropTypes.renderable,
   title: PropTypes.string.isRequired
 };
