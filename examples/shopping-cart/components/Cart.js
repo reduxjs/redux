@@ -15,12 +15,11 @@ export default class Cart extends Component {
     );
 
     return (
-      <div className="cart uk-panel uk-panel-box uk-panel-box-primary">
-        <div className="uk-badge uk-margin-bottom">Your Cart</div>
-        <div className="uk-margin-small-bottom">{nodes}</div>
-        <div className="uk-margin-small-bottom">Total: &euro;{total}</div>
-        <button className="uk-button uk-button-large uk-button-success uk-align-right"
-          onClick={onCheckoutClicked}
+      <div>
+        <h3>Your Cart</h3>
+        <div>{nodes}</div>
+        <p>Total: &euro;{total}</p>
+        <button onClick={onCheckoutClicked}
           disabled={hasProducts ? '' : 'disabled'}>
           Checkout
         </button>
