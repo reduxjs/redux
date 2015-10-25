@@ -378,7 +378,7 @@ This installs the package that provides the `undoable` reducer enhancer.
 
 ### Wrapping the Reducer
 
-You will need to the reducer you wish to enhance with `undoable` function. For example, if you use [`combineReducers()`](../api/combineReducers.md), your code might look like this:
+You will need to wrap the reducer you wish to enhance with `undoable` function. For example, if you use [`combineReducers()`](../api/combineReducers.md), your code might look like this:
 
 #### `reducers.js`
 
