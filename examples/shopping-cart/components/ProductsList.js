@@ -12,6 +12,6 @@ export default class ProductsList extends Component {
 }
 
 ProductsList.propTypes = {
-  children: PropTypes.renderable,
+  children: PropTypes.node,
   title: PropTypes.string.isRequired
 };

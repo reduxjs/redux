@@ -18,7 +18,6 @@ export default class ProductItem extends Component {
 
 ProductItem.propTypes = {
   product: PropTypes.shape({
-    image: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     inventory: PropTypes.number.isRequired

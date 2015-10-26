@@ -2,10 +2,13 @@ import React, { Component, PropTypes } from 'react';
 
 export default class Product extends Component {
   render() {
-    return <div> {this.props.children} </div>;
+    const { price, quantity, title } = this.props;
+    return <div> {title} - &euro;{price} x {quantity} </div>;
   }
 }
 
 Product.propTypes = {
-  children: PropTypes.renderable
+  price: PropTypes.number,
+  quantity: PropTypes.number,
+  title: PropTypes.string
 };

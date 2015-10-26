@@ -26,7 +26,7 @@ ProductsContainer.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired,
+    inventory: PropTypes.number.isRequired,
   })).isRequired,
   addToCart: PropTypes.func.isRequired
 };

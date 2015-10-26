@@ -9,9 +9,11 @@ export default class Cart extends Component {
     const nodes = !hasProducts ?
       <div>Please add some products to cart.</div> :
       products.map(product =>
-        <Product key={product.id}>
-          {product.title} - &euro;{product.price} x {product.quantity}
-        </Product>
+        <Product
+          title={product.title}
+          price={product.price}
+          quantity={product.quantity}
+          key={product.id}/>
     );
 
     return (
