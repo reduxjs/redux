@@ -1,7 +1,7 @@
-import mapValues from '../utils/mapValues';
+import mapValues from '../utils/mapValues'
 
 function bindActionCreator(actionCreator, dispatch) {
-  return (...args) => dispatch(actionCreator(...args));
+  return (...args) => dispatch(actionCreator(...args))
 }
 
 /**
@@ -27,17 +27,17 @@ function bindActionCreator(actionCreator, dispatch) {
  */
 export default function bindActionCreators(actionCreators, dispatch) {
   if (typeof actionCreators === 'function') {
-    return bindActionCreator(actionCreators, dispatch);
+    return bindActionCreator(actionCreators, dispatch)
   }
 
   if (typeof actionCreators !== 'object' || actionCreators === null || actionCreators === undefined) {  // eslint-disable-line no-eq-null
     throw new Error(
       `bindActionCreators expected an object or a function, instead received ${actionCreators === null ? 'null' : typeof actionCreators}. ` +
       `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
-    );
+    )
   }
 
   return mapValues(actionCreators, actionCreator =>
     bindActionCreator(actionCreator, dispatch)
-  );
+  )
 }

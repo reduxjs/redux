@@ -1,4 +1,4 @@
-import compose from './compose';
+import compose from './compose'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -18,20 +18,20 @@ import compose from './compose';
  */
 export default function applyMiddleware(...middlewares) {
   return (next) => (reducer, initialState) => {
-    var store = next(reducer, initialState);
-    var dispatch = store.dispatch;
-    var chain = [];
+    var store = next(reducer, initialState)
+    var dispatch = store.dispatch
+    var chain = []
 
     var middlewareAPI = {
       getState: store.getState,
       dispatch: (action) => dispatch(action)
-    };
-    chain = middlewares.map(middleware => middleware(middlewareAPI));
-    dispatch = compose(...chain)(store.dispatch);
+    }
+    chain = middlewares.map(middleware => middleware(middlewareAPI))
+    dispatch = compose(...chain)(store.dispatch)
 
     return {
       ...store,
       dispatch
-    };
-  };
+    }
+  }
 }
