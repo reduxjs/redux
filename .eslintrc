@@ -2,10 +2,7 @@
   "extends": "rackt",
   "rules": {
     "valid-jsdoc": 2,
-
     // Disable until Flow supports let and const
-    "no-var": 0,
-    "vars-on-top": 0
-
+    "no-var": 0
   }
 }
