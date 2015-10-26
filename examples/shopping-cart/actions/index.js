@@ -44,7 +44,7 @@ export function checkout(products) {
         cart
       });
       // Replace the line above with line below to rollback on failure:
-      // dispatch({ type: CHECKOUT_FAILURE, cart });
+      // dispatch({ type: types.CHECKOUT_FAILURE, cart });
     });
   };
 }
