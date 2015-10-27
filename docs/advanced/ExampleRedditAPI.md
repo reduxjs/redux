@@ -7,16 +7,16 @@ This is the complete source code of the Reddit headline fetching example we buil
 #### `index.js`
 
 ```js
-import 'babel-core/polyfill';
+import 'babel-core/polyfill'
 
-import React from 'react';
-import { render } from 'react-dom';
-import Root from './containers/Root';
+import React from 'react'
+import { render } from 'react-dom'
+import Root from './containers/Root'
 
 render(
   <Root />,
   document.getElementById('root')
-);
+)
 ```
 
 ## Action Creators and Constants
@@ -24,32 +24,32 @@ render(
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-export const SELECT_REDDIT = 'SELECT_REDDIT';
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+export const SELECT_REDDIT = 'SELECT_REDDIT'
+export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT'
 
 export function selectReddit(reddit) {
   return {
     type: SELECT_REDDIT,
     reddit
-  };
+  }
 }
 
 export function invalidateReddit(reddit) {
   return {
     type: INVALIDATE_REDDIT,
     reddit
-  };
+  }
 }
 
 function requestPosts(reddit) {
   return {
     type: REQUEST_POSTS,
     reddit
-  };
+  }
 }
 
 function receivePosts(reddit, json) {
@@ -58,35 +58,35 @@ function receivePosts(reddit, json) {
     reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 
 function fetchPosts(reddit) {
   return dispatch => {
-    dispatch(requestPosts(reddit));
+    dispatch(requestPosts(reddit))
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(req => req.json())
-      .then(json => dispatch(receivePosts(reddit, json)));
-  };
+      .then(json => dispatch(receivePosts(reddit, json)))
+  }
 }
 
 function shouldFetchPosts(state, reddit) {
-  const posts = state.postsByReddit[reddit];
+  const posts = state.postsByReddit[reddit]
   if (!posts) {
-    return true;
+    return true
   } else if (posts.isFetching) {
-    return false;
+    return false
   } else {
-    return posts.didInvalidate;
+    return posts.didInvalidate
   }
 }
 
 export function fetchPostsIfNeeded(reddit) {
   return (dispatch, getState) => {
     if (shouldFetchPosts(getState(), reddit)) {
-      return dispatch(fetchPosts(reddit));
+      return dispatch(fetchPosts(reddit))
     }
-  };
+  }
 }
 ```
 
@@ -95,18 +95,18 @@ export function fetchPostsIfNeeded(reddit) {
 #### `reducers.js`
 
 ```js
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
-} from './actions';
+} from './actions'
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
   case SELECT_REDDIT:
-    return action.reddit;
+    return action.reddit
   default:
-    return state;
+    return state
   }
 }
 
@@ -116,46 +116,46 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-  case INVALIDATE_REDDIT:
-    return Object.assign({}, state, {
-      didInvalidate: true
-    });
-  case REQUEST_POSTS:
-    return Object.assign({}, state, {
-      isFetching: true,
-      didInvalidate: false
-    });
-  case RECEIVE_POSTS:
-    return Object.assign({}, state, {
-      isFetching: false,
-      didInvalidate: false,
-      items: action.posts,
-      lastUpdated: action.receivedAt
-    });
-  default:
-    return state;
+    case INVALIDATE_REDDIT:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      })
+    case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_POSTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: action.posts,
+        lastUpdated: action.receivedAt
+      })
+    default:
+      return state
   }
 }
 
 function postsByReddit(state = { }, action) {
   switch (action.type) {
-  case INVALIDATE_REDDIT:
-  case RECEIVE_POSTS:
-  case REQUEST_POSTS:
-    return Object.assign({}, state, {
-      [action.reddit]: posts(state[action.reddit], action)
-    });
-  default:
-    return state;
+    case INVALIDATE_REDDIT:
+    case RECEIVE_POSTS:
+    case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        [action.reddit]: posts(state[action.reddit], action)
+      })
+    default:
+      return state
   }
 }
 
 const rootReducer = combineReducers({
   postsByReddit,
   selectedReddit
-});
+})
 
-export default rootReducer;
+export default rootReducer
 ```
 
 ## Store
@@ -163,20 +163,20 @@ export default rootReducer;
 #### `configureStore.js`
 
 ```js
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
-import rootReducer from './reducers';
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
+import rootReducer from './reducers'
 
-const loggerMiddleware = createLogger();
+const loggerMiddleware = createLogger()
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
   loggerMiddleware
-)(createStore);
+)(createStore)
 
 export default function configureStore(initialState) {
-  return createStoreWithMiddleware(rootReducer, initialState);
+  return createStoreWithMiddleware(rootReducer, initialState)
 }
 ```
 
@@ -185,12 +185,12 @@ export default function configureStore(initialState) {
 #### `containers/Root.js`
 
 ```js
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
-import configureStore from '../configureStore';
-import AsyncApp from './AsyncApp';
+import React, { Component } from 'react'
+import { Provider } from 'react-redux'
+import configureStore from '../configureStore'
+import AsyncApp from './AsyncApp'
 
-const store = configureStore();
+const store = configureStore()
 
 export default class Root extends Component {
   render() {
@@ -198,7 +198,7 @@ export default class Root extends Component {
       <Provider store={store}>
         <AsyncApp />
       </Provider>
-    );
+    )
   }
 }
 ```
@@ -206,50 +206,50 @@ export default class Root extends Component {
 #### `containers/AsyncApp.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions';
-import Picker from '../components/Picker';
-import Posts from '../components/Posts';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
+import Picker from '../components/Picker'
+import Posts from '../components/Posts'
 
 class AsyncApp extends Component {
   constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleRefreshClick = this.handleRefreshClick.bind(this);
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit } = this.props;
-    dispatch(fetchPostsIfNeeded(selectedReddit));
+    const { dispatch, selectedReddit } = this.props
+    dispatch(fetchPostsIfNeeded(selectedReddit))
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedReddit !== this.props.selectedReddit) {
-      const { dispatch, selectedReddit } = nextProps;
-      dispatch(fetchPostsIfNeeded(selectedReddit));
+      const { dispatch, selectedReddit } = nextProps
+      dispatch(fetchPostsIfNeeded(selectedReddit))
     }
   }
 
   handleChange(nextReddit) {
-    this.props.dispatch(selectReddit(nextReddit));
+    this.props.dispatch(selectReddit(nextReddit))
   }
 
   handleRefreshClick(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const { dispatch, selectedReddit } = this.props;
-    dispatch(invalidateReddit(selectedReddit));
-    dispatch(fetchPostsIfNeeded(selectedReddit));
+    const { dispatch, selectedReddit } = this.props
+    dispatch(invalidateReddit(selectedReddit))
+    dispatch(fetchPostsIfNeeded(selectedReddit))
   }
 
-  render () {
-    const { selectedReddit, posts, isFetching, lastUpdated } = this.props;
+  render() {
+    const { selectedReddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
         <Picker value={selectedReddit}
                 onChange={this.handleChange}
-                options={['reactjs', 'frontend']} />
+                options={[ 'reactjs', 'frontend' ]} />
         <p>
           {lastUpdated &&
             <span>
@@ -276,7 +276,7 @@ class AsyncApp extends Component {
           </div>
         }
       </div>
-    );
+    )
   }
 }
 
@@ -286,10 +286,10 @@ AsyncApp.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
   dispatch: PropTypes.func.isRequired
-};
+}
 
 function mapStateToProps(state) {
-  const { selectedReddit, postsByReddit } = state;
+  const { selectedReddit, postsByReddit } = state
   const {
     isFetching,
     lastUpdated,
@@ -297,17 +297,17 @@ function mapStateToProps(state) {
   } = postsByReddit[selectedReddit] || {
     isFetching: true,
     items: []
-  };
+  }
 
   return {
     selectedReddit,
     posts,
     isFetching,
     lastUpdated
-  };
+  }
 }
 
-export default connect(mapStateToProps)(AsyncApp);
+export default connect(mapStateToProps)(AsyncApp)
 ```
 
 ## Dumb Components
@@ -315,11 +315,11 @@ export default connect(mapStateToProps)(AsyncApp);
 #### `components/Picker.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
 export default class Picker extends Component {
-  render () {
-    const { value, onChange, options } = this.props;
+  render() {
+    const { value, onChange, options } = this.props
 
     return (
       <span>
@@ -333,7 +333,7 @@ export default class Picker extends Component {
           }
         </select>
       </span>
-    );
+    )
   }
 }
 
@@ -343,27 +343,27 @@ Picker.propTypes = {
   ).isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired
-};
+}
 ```
 
 #### `components/Posts.js`
 
 ```js
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'
 
 export default class Posts extends Component {
-  render () {
+  render() {
     return (
       <ul>
         {this.props.posts.map((post, i) =>
           <li key={i}>{post.title}</li>
         )}
       </ul>
-    );
+    )
   }
 }
 
 Posts.propTypes = {
   posts: PropTypes.array.isRequired
-};
+}
 ```
