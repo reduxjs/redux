@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
 export default class Todo extends Component {
   render() {
@@ -11,7 +11,7 @@ export default class Todo extends Component {
         }}>
         {this.props.text}
       </li>
-    );
+    )
   }
 }
 
@@ -19,4 +19,4 @@ Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
   text: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired
-};
+}
