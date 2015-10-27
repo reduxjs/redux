@@ -38,26 +38,26 @@ export function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 ```
 can be tested like:
 
 ```js
-import expect from 'expect';
-import * as actions from '../../actions/TodoActions';
-import * as types from '../../constants/ActionTypes';
+import expect from 'expect'
+import * as actions from '../../actions/TodoActions'
+import * as types from '../../constants/ActionTypes'
 
 describe('actions', () => {
   it('should create an action to add a todo', () => {
-    const text = 'Finish docs';
+    const text = 'Finish docs'
     const expectedAction = {
       type: types.ADD_TODO,
       text
-    };
-    expect(actions.addTodo(text)).toEqual(expectedAction);
-  });
-});
+    }
+    expect(actions.addTodo(text)).toEqual(expectedAction)
+  })
+})
 ```
 
 ### Async Action Creators
@@ -70,55 +70,55 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 function fetchTodosRequest() {
   return {
     type: FETCH_TODOS_REQUEST
-  };
+  }
 }
 
 function fetchTodosSuccess(body) {
   return {
     type: FETCH_TODOS_SUCCESS,
     body
-  };
+  }
 }
 
 function fetchTodosFailure(ex) {
   return {
     type: FETCH_TODOS_FAILURE,
     ex
-  };
+  }
 }
 
 export function fetchTodos() {
   return dispatch => {
-    dispatch(fetchTodosRequest());
+    dispatch(fetchTodosRequest())
     return fetch('http://example.com/todos')
       .then(res => res.json())
       .then(json => dispatch(fetchTodosSuccess(json.body)))
-      .catch(ex => dispatch(fetchTodosFailure(ex)));
-  };
+      .catch(ex => dispatch(fetchTodosFailure(ex)))
+  }
 }
 ```
 
 can be tested like:
 
 ```js
-import expect from 'expect';
-import { applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import * as actions from '../../actions/counter';
-import * as types from '../../constants/ActionTypes';
-import nock from 'nock';
+import expect from 'expect'
+import { applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import * as actions from '../../actions/counter'
+import * as types from '../../constants/ActionTypes'
+import nock from 'nock'
 
-const middlewares = [thunk];
+const middlewares = [ thunk ]
 
 /**
  * Creates a mock of Redux store with middleware.
  */
 function mockStore(getState, expectedActions, done) {
   if (!Array.isArray(expectedActions)) {
-    throw new Error('expectedActions should be an array of expected actions.');
+    throw new Error('expectedActions should be an array of expected actions.')
   }
   if (typeof done !== 'undefined' && typeof done !== 'function') {
-    throw new Error('done should either be undefined or function.');
+    throw new Error('done should either be undefined or function.')
   }
 
   function mockStoreWithoutMiddleware() {
@@ -126,20 +126,20 @@ function mockStore(getState, expectedActions, done) {
       getState() {
         return typeof getState === 'function' ?
           getState() :
-          getState;
+          getState
       },
 
       dispatch(action) {
-        const expectedAction = expectedActions.shift();
+        const expectedAction = expectedActions.shift()
 
         try {
-          expect(action).toEqual(expectedAction);
+          expect(action).toEqual(expectedAction)
           if (done && !expectedActions.length) {
-            done();
+            done()
           }
-          return action;
+          return action
         } catch (e) {
-          done(e);
+          done(e)
         }
       }
     }
@@ -147,29 +147,29 @@ function mockStore(getState, expectedActions, done) {
 
   const mockStoreWithMiddleware = applyMiddleware(
     ...middlewares
-  )(mockStoreWithoutMiddleware);
+  )(mockStoreWithoutMiddleware)
 
-  return mockStoreWithMiddleware();
+  return mockStoreWithMiddleware()
 }
 
 describe('async actions', () => {
   afterEach(() => {
-    nock.cleanAll();
-  });
+    nock.cleanAll()
+  })
 
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', (done) => {
     nock('http://example.com/')
       .get('/todos')
-      .reply(200, { todos: ['do something'] });
+      .reply(200, { todos: ['do something'] })
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
       { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
     ]
-    const store = mockStore({ todos: [] }, expectedActions, done);
-    store.dispatch(actions.fetchTodos());
-  });
-});
+    const store = mockStore({ todos: [] }, expectedActions, done)
+    store.dispatch(actions.fetchTodos())
+  })
+})
 ```
 
 ### Reducers
@@ -179,45 +179,52 @@ A reducer should return the new state after applying the action to the previous 
 #### Example
 
 ```js
-import { ADD_TODO } from '../constants/ActionTypes';
+import { ADD_TODO } from '../constants/ActionTypes'
 
-const initialState = [{
-  text: 'Use Redux',
-  completed: false,
-  id: 0
-}];
+const initialState = [
+  {
+    text: 'Use Redux',
+    completed: false,
+    id: 0
+  }
+]
 
 export default function todos(state = initialState, action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [{
-      id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-      completed: false,
-      text: action.text
-    }, ...state];
+    case ADD_TODO:
+      return [
+        {
+          id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
+          completed: false,
+          text: action.text
+        }, 
+        ...state
+      ]
 
-  default:
-    return state;
+    default:
+      return state
   }
 }
 ```
 can be tested like:
 
 ```js
-import expect from 'expect';
-import reducer from '../../reducers/todos';
-import * as types from '../../constants/ActionTypes';
+import expect from 'expect'
+import reducer from '../../reducers/todos'
+import * as types from '../../constants/ActionTypes'
 
 describe('todos reducer', () => {
   it('should return the initial state', () => {
     expect(
       reducer(undefined, {})
-    ).toEqual([{
-      text: 'Use Redux',
-      completed: false,
-      id: 0
-    }]);
-  });
+    ).toEqual([
+      {
+        text: 'Use Redux',
+        completed: false,
+        id: 0
+      }
+    ])
+  })
 
   it('should handle ADD_TODO', () => {
     expect(
@@ -225,32 +232,46 @@ describe('todos reducer', () => {
         type: types.ADD_TODO,
         text: 'Run the tests'
       })
-    ).toEqual([{
-      text: 'Run the tests',
-      completed: false,
-      id: 0
-    }]);
+    ).toEqual(
+      [
+        {
+          text: 'Run the tests',
+          completed: false,
+          id: 0
+        }
+      ]
+    )
 
     expect(
-      reducer([{
-        text: 'Use Redux',
-        completed: false,
-        id: 0
-      }], {
-        type: types.ADD_TODO,
-        text: 'Run the tests'
-      })
-    ).toEqual([{
-      text: 'Run the tests',
-      completed: false,
-      id: 1
-    }, {
-      text: 'Use Redux',
-      completed: false,
-      id: 0
-    }]);
-  });
-});
+      reducer(
+        [
+          {
+            text: 'Use Redux',
+            completed: false,
+            id: 0
+          }
+        ], 
+        {
+          type: types.ADD_TODO,
+          text: 'Run the tests'
+        }
+      )
+    ).toEqual(
+      [
+        {
+          text: 'Run the tests',
+          completed: false,
+          id: 1
+        }, 
+        {
+          text: 'Use Redux',
+          completed: false,
+          id: 0
+        }
+      ]
+    )
+  })
+})
 ```
 
 ### Components
@@ -268,13 +289,13 @@ To test the components we make a `setup()` helper that passes the stubbed callba
 #### Example
 
 ```js
-import React, { PropTypes, Component } from 'react';
-import TodoTextInput from './TodoTextInput';
+import React, { PropTypes, Component } from 'react'
+import TodoTextInput from './TodoTextInput'
 
 class Header extends Component {
   handleSave(text) {
     if (text.length !== 0) {
-      this.props.addTodo(text);
+      this.props.addTodo(text)
     }
   }
 
@@ -286,70 +307,70 @@ class Header extends Component {
                          onSave={this.handleSave.bind(this)}
                          placeholder='What needs to be done?' />
       </header>
-    );
+    )
   }
 }
 
 Header.propTypes = {
   addTodo: PropTypes.func.isRequired
-};
+}
 
-export default Header;
+export default Header
 ```
 
 can be tested like:
 
 ```js
-import expect from 'expect';
-import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import Header from '../../components/Header';
-import TodoTextInput from '../../components/TodoTextInput';
+import expect from 'expect'
+import React from 'react'
+import TestUtils from 'react-addons-test-utils'
+import Header from '../../components/Header'
+import TodoTextInput from '../../components/TodoTextInput'
 
 function setup() {
   let props = {
     addTodo: expect.createSpy()
-  };
+  }
 
-  let renderer = TestUtils.createRenderer();
-  renderer.render(<Header {...props} />);
-  let output = renderer.getRenderOutput();
+  let renderer = TestUtils.createRenderer()
+  renderer.render(<Header {...props} />)
+  let output = renderer.getRenderOutput()
 
   return {
     props,
     output,
     renderer
-  };
+  }
 }
 
 describe('components', () => {
   describe('Header', () => {
     it('should render correctly', () => {
-      const { output } = setup();
+      const { output } = setup()
 
-      expect(output.type).toBe('header');
-      expect(output.props.className).toBe('header');
+      expect(output.type).toBe('header')
+      expect(output.props.className).toBe('header')
 
-      let [h1, input] = output.props.children;
+      let [ h1, input ] = output.props.children
 
-      expect(h1.type).toBe('h1');
-      expect(h1.props.children).toBe('todos');
+      expect(h1.type).toBe('h1')
+      expect(h1.props.children).toBe('todos')
 
-      expect(input.type).toBe(TodoTextInput);
-      expect(input.props.newTodo).toBe(true);
-      expect(input.props.placeholder).toBe('What needs to be done?');
-    });
+      expect(input.type).toBe(TodoTextInput)
+      expect(input.props.newTodo).toBe(true)
+      expect(input.props.placeholder).toBe('What needs to be done?')
+    })
 
     it('should call addTodo if length of text is greater than 0', () => {
-      const { output, props } = setup();
-      let input = output.props.children[1];
-      input.props.onSave('');
-      expect(props.addTodo.calls.length).toBe(0);
-      input.props.onSave('Use Redux');
-      expect(props.addTodo.calls.length).toBe(1);
-    });
-  });
-});
+      const { output, props } = setup()
+      let input = output.props.children[1]
+      input.props.onSave('')
+      expect(props.addTodo.calls.length).toBe(0)
+      input.props.onSave('Use Redux')
+      expect(props.addTodo.calls.length).toBe(1)
+    })
+  })
+})
 ```
 
 #### Fixing Broken `setState()`
@@ -363,11 +384,11 @@ npm install --save-dev jsdom
 Then create a `setup.js` file in your test directory:
 
 ```js
-import { jsdom } from 'jsdom';
+import { jsdom } from 'jsdom'
 
-global.document = jsdom('<!doctype html><html><body></body></html>');
-global.window = document.defaultView;
-global.navigator = global.window.navigator;
+global.document = jsdom('<!doctype html><html><body></body></html>')
+global.window = document.defaultView
+global.navigator = global.window.navigator
 ```
 
 It’s important that this code is evaluated *before* React is imported. To ensure this, modify your `mocha` command to include `--require ./test/setup.js` in the options in your `package.json`:
@@ -390,17 +411,17 @@ If you use a library like [React Redux](https://github.com/rackt/react-redux), y
 Consider the following `App` component:
 
 ```js
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
 class App extends Component { /* ... */ }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(App)
 ```
 
 In a unit test, you would normally import the `App` component like this:
 
 ```js
-import App from './App';
+import App from './App'
 ```
 
 However, when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
@@ -408,32 +429,32 @@ However, when you import it, you’re actually holding the wrapper component ret
 In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 
 ```js
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
 // Use named export for unconnected component (for tests)
 export class App extends Component { /* ... */ }
 
 // Use default export for the connected component (for app)
-export default connect(mapDispatchToProps)(App);
+export default connect(mapDispatchToProps)(App)
 ```
 
 Since the default export is still the decorated component, the import statement pictured above will work as before so you won’t have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
 
 ```js
 // Note the curly braces: grab the named export instead of default export
-import { App } from './App';
+import { App } from './App'
 ```
 
 And if you need both:
 
 ```js
-import ConnectedApp, { App } from './App';
+import ConnectedApp, { App } from './App'
 ```
 
 In the app itself, you would still import it normally:
 
 ```js
-import App from './App';
+import App from './App'
 ```
 
 You would only use the named export for tests.
@@ -449,46 +470,46 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 #### Example
 
 ```js
-import expect from 'expect';
-import * as types from '../../constants/ActionTypes';
-import singleDispatch from '../../middleware/singleDispatch';
+import expect from 'expect'
+import * as types from '../../constants/ActionTypes'
+import singleDispatch from '../../middleware/singleDispatch'
 
 const createFakeStore = fakeData => ({
   getState() {
-    return fakeData;
+    return fakeData
   }
-});
+})
 
 const dispatchWithStoreOf = (storeData, action) => {
-  let dispatched = null;
-  const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
-  dispatch(action);
-  return dispatched;
+  let dispatched = null
+  const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt)
+  dispatch(action)
+  return dispatched
 };
 
 describe('middleware', () => {
   it('should dispatch if store is empty', () => {
     const action = {
       type: types.ADD_TODO
-    };
+    }
 
     expect(
       dispatchWithStoreOf({}, action)
-    ).toEqual(action);
-  });
+    ).toEqual(action)
+  })
 
   it('should not dispatch if store already has type', () => {
     const action = {
       type: types.ADD_TODO
-    };
+    }
 
     expect(
       dispatchWithStoreOf({
         [types.ADD_TODO]: 'dispatched'
       }, action)
-    ).toNotExist();
-  });
-});
+    ).toNotExist()
+  })
+})
 ```
 
 ### Glossary
