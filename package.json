@@ -69,6 +69,7 @@
     "rollup": "^0.20.2",
     "rollup-plugin-babel": "^1.0.0",
     "rollup-plugin-replace": "^1.0.1",
+    "uglifyjs": "^2.4.10",
     "webpack": "^1.9.6"
   },
   "npmName": "redux",
