@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react';
-import Product from './Product';
+import React, { Component, PropTypes } from 'react'
+import Product from './Product'
 
 export default class Cart extends Component {
   render() {
-    const { products, total, onCheckoutClicked } = this.props;
+    const { products, total, onCheckoutClicked } = this.props
 
-    const hasProducts = products.length > 0;
+    const hasProducts = products.length > 0
     const nodes = !hasProducts ?
       <div>Please add some products to cart.</div> :
       products.map(product =>
@@ -14,19 +14,19 @@ export default class Cart extends Component {
           price={product.price}
           quantity={product.quantity}
           key={product.id}/>
-    );
+    )
 
     return (
       <div>
         <h3>Your Cart</h3>
         <div>{nodes}</div>
-        <p>Total: &euro;{total}</p>
+        <p>Total: &euro{total}</p>
         <button onClick={onCheckoutClicked}
           disabled={hasProducts ? '' : 'disabled'}>
           Checkout
         </button>
       </div>
-    );
+    )
   }
 }
 
@@ -34,4 +34,4 @@ Cart.propTypes = {
   products: PropTypes.array,
   total: PropTypes.string,
   onCheckoutClicked: PropTypes.func
-};
+}

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import ProductsContainer from './ProductsContainer';
-import CartContainer from './CartContainer';
+import React, { Component } from 'react'
+import ProductsContainer from './ProductsContainer'
+import CartContainer from './CartContainer'
 
 export default class App extends Component {
   render() {
@@ -10,6 +10,6 @@ export default class App extends Component {
         <hr/>
         <CartContainer />
       </div>
-    );
+    )
   }
 }
