@@ -1,39 +1,39 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
-const GITHUB_REPO = 'https://github.com/rackt/redux';
+const GITHUB_REPO = 'https://github.com/rackt/redux'
 
 export default class Explore extends Component {
   constructor(props) {
-    super(props);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.handleGoClick = this.handleGoClick.bind(this);
+    super(props)
+    this.handleKeyUp = this.handleKeyUp.bind(this)
+    this.handleGoClick = this.handleGoClick.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
-      this.setInputValue(nextProps.value);
+      this.setInputValue(nextProps.value)
     }
   }
 
   getInputValue() {
-    return this.refs.input.value;
+    return this.refs.input.value
   }
 
   setInputValue(val) {
     // Generally mutating DOM is a bad idea in React components,
     // but doing this for a single uncontrolled field is less fuss
     // than making it controlled and maintaining a state for it.
-    this.refs.input.value = val;
+    this.refs.input.value = val
   }
 
   handleKeyUp(e) {
     if (e.keyCode === 13) {
-      this.handleGoClick();
+      this.handleGoClick()
     }
   }
 
   handleGoClick() {
-    this.props.onChange(this.getInputValue());
+    this.props.onChange(this.getInputValue())
   }
 
   render() {
@@ -54,11 +54,11 @@ export default class Explore extends Component {
           Move the DevTools with Ctrl+W or hide them with Ctrl+H.
         </p>
       </div>
-    );
+    )
   }
 }
 
 Explore.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired
-};
+}

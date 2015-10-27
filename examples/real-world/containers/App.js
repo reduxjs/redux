@@ -1,29 +1,29 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
-import Explore from '../components/Explore';
-import { resetErrorMessage } from '../actions';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { pushState } from 'redux-router'
+import Explore from '../components/Explore'
+import { resetErrorMessage } from '../actions'
 
 class App extends Component {
   constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleDismissClick = this.handleDismissClick.bind(this);
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleDismissClick = this.handleDismissClick.bind(this)
   }
 
   handleDismissClick(e) {
-    this.props.resetErrorMessage();
-    e.preventDefault();
+    this.props.resetErrorMessage()
+    e.preventDefault()
   }
 
   handleChange(nextValue) {
-    this.props.pushState(null, `/${nextValue}`);
+    this.props.pushState(null, `/${nextValue}`)
   }
 
   renderErrorMessage() {
-    const { errorMessage } = this.props;
+    const { errorMessage } = this.props
     if (!errorMessage) {
-      return null;
+      return null
     }
 
     return (
@@ -35,11 +35,11 @@ class App extends Component {
           Dismiss
         </a>)
       </p>
-    );
+    )
   }
 
   render() {
-    const { children, inputValue } = this.props;
+    const { children, inputValue } = this.props
     return (
       <div>
         <Explore value={inputValue}
@@ -48,7 +48,7 @@ class App extends Component {
         {this.renderErrorMessage()}
         {children}
       </div>
-    );
+    )
   }
 }
 
@@ -60,16 +60,16 @@ App.propTypes = {
   inputValue: PropTypes.string.isRequired,
   // Injected by React Router
   children: PropTypes.node
-};
+}
 
 function mapStateToProps(state) {
   return {
     errorMessage: state.errorMessage,
     inputValue: state.router.location.pathname.substring(1)
-  };
+  }
 }
 
 export default connect(mapStateToProps, {
   resetErrorMessage,
   pushState
-})(App);
+})(App)
