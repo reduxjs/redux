@@ -25,13 +25,13 @@ function todos(state = [], action) {
     state.push({
       text: action.text,
       completed: false
-    });
+    })
   case 'COMPLETE_TODO':
     // Wrong! This mutates state[action.index].
-    state[action.index].completed = true;
+    state[action.index].completed = true
   }
 
-  return state;
+  return state
 }
 ```
 
@@ -40,24 +40,27 @@ It needs to be rewritten like this:
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    // Return a new array
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case 'COMPLETE_TODO':
-    // Return a new array
-    return [
-      ...state.slice(0, action.index),
-      // Copy the object before mutating
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case 'ADD_TODO':
+      // Return a new array
+      return [
+        ...state, 
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case 'COMPLETE_TODO':
+      // Return a new array
+      return [
+        ...state.slice(0, action.index),
+        // Copy the object before mutating
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ]
+    default:
+      return state
   }
 }
 ```
@@ -81,7 +84,7 @@ return update(state, {
       $set: true
     }
   }
-});
+})
 ```
 
 Finally, to update objects, you’ll need something like `_.extend` from Underscore, or better, an [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) polyfill.
@@ -119,20 +122,20 @@ If you define an action creator, calling it will *not* automatically dispatch th
 
 ```js
 export function addTodo(text) {
-  return { type: 'ADD_TODO', text };
+  return { type: 'ADD_TODO', text }
 }
 ```
 
 #### `AddTodo.js`
 
 ```js
-import React, { Component } from 'react';
-import { addTodo } from './TodoActions';
+import React, { Component } from 'react'
+import { addTodo } from './TodoActions'
 
 class AddTodo extends Component {
   handleClick() {
     // Won't work!
-    addTodo('Fix the issue');
+    addTodo('Fix the issue')
   }
 
   render() {
@@ -140,7 +143,7 @@ class AddTodo extends Component {
       <button onClick={() => this.handleClick()}>
         Add
       </button>
-    );
+    )
   }
 }
 ```
@@ -152,7 +155,7 @@ The fix is to call [`dispatch()`](api/Store.md#dispatch) method on the [store](a
 ```js
 handleClick() {
   // Works! (but you need to grab store somehow)
-  store.dispatch(addTodo('Fix the issue'));
+  store.dispatch(addTodo('Fix the issue'))
 }
 ```
 
@@ -161,14 +164,14 @@ If you’re somewhere deep in the component hierarchy, it is cumbersome to pass 
 The fixed code looks like this:
 #### `AddTodo.js`
 ```js
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { addTodo } from './TodoActions';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { addTodo } from './TodoActions'
 
 class AddTodo extends Component {
   handleClick() {
     // Works!
-    this.props.dispatch(addTodo('Fix the issue'));
+    this.props.dispatch(addTodo('Fix the issue'))
   }
 
   render() {
@@ -176,12 +179,12 @@ class AddTodo extends Component {
       <button onClick={() => this.handleClick()}>
         Add
       </button>
-    );
+    )
   }
 }
 
 // In addition to the state, `connect` puts `dispatch` in our props.
-export default connect()(AddTodo);
+export default connect()(AddTodo)
 ```
 
 You can then pass `dispatch` down to other components manually, if you want to.
