@@ -14,7 +14,7 @@ The data lifecycle in any Redux app follows these 4 steps:
 
     ```js
     { type: 'LIKE_ARTICLE', articleId: 42 };
-    { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Megan' } };
+    { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Mary' } };
     { type: 'ADD_TODO', text: 'Read the Redux docs.'};
     ```
 
