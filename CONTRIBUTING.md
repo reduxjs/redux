@@ -1,16 +1,21 @@
 # Contributing
-We are always grateful for any contributions made by the community.  By contributing to Redux, you agree to abide by the [code of conduct]().
+We are open to, and grateful for, any contributions made by the community.  By contributing to Redux, you agree to abide by the [code of conduct]().
+
+## Reporting Issues and Asking Questions
+Before opening an issue, please search the issue tracker to make sure your issue hasn't already been reported.
+
+Please ask any general or implementation specific questions on Stack Overflow.
 
 ## Getting Started
 
-First, visit the [Issues page]() to find out what open issues need to be addressed.
+First, visit the [Issue tracker]() to find a list of open issues that need attention.
 
 Fork, then clone the repo:
 ```
 git clone https://github.com/your-username/redux.git
 ```
 
-### Building The Documentation
+### Docs
 ##### Preparing to build the documentation
 To install the latest version of `gitbooks` and prepare to build the documentation, run the following:
 ```
@@ -25,6 +30,12 @@ npm run docs:build
 To watch and re-build documentation when changes occur, run the following:
 ```
 npm run docs:watch
+```
+
+##### Publishing the documentation
+To publish the documentation, run the following:
+```
+npm run docs:publish
 ```
 
 ##### Cleaning up built documentation
