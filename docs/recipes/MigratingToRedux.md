@@ -27,5 +27,4 @@ Your process will look like this:
 
 ## From Backbone
 
-Backbone's model layer is way too different compared with Redux one, so one possible option is to rewrite your app's model layer from scratch.   
-Or you can use [backbone-redux](https://github.com/redbooth/backbone-redux) that will help you with migrating and/or using Backbone and Redux together.
+Backbone’s model layer is quite different from Redux, so we don’t suggest to mix them. If possible, it is best that you rewrite your app’s model layer from scratch instead of connecting Backbone to Redux. However, if a rewrite is not feasible, you may use [backbone-redux](https://github.com/redbooth/backbone-redux) to migrate gradually, and keep the Redux store in sync with Backbone models and collections.
