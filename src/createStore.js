@@ -1,4 +1,7 @@
+/* @flow */
 import isPlainObject from './utils/isPlainObject';
+
+import type {Reducer, Store} from '../flow/types';
 
 /**
  * These are private action types reserved by Redux.
@@ -30,7 +33,7 @@ export var ActionTypes = {
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, initialState) {
+export default function createStore<State, Action>(reducer: Reducer<State, Action>, initialState?: State) : Store<State, Action> {
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.');
   }

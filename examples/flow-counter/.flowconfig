@@ -1,0 +1,11 @@
+[ignore]
+.*/node_modules/
+
+[include]
+
+[libs]
+interfaces/
+
+
+[options]
+module.system=node
