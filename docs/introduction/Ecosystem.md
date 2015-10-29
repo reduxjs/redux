@@ -11,6 +11,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [react-redux](https://github.com/gaearon/react-redux) — React
 * [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
 * [ng2-redux](https://github.com/wbuchwalter/ng2-redux) — Angular 2
+* [backbone-redux](https://github.com/redbooth/backbone-redux) — Backbone
 
 ## Middleware
 
