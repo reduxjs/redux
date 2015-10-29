@@ -126,6 +126,24 @@ It covers:
 * Pagination
 * Routing
 
+## Shopping Cart
+
+Run the [Shopping Cart](https://github.com/rackt/redux/tree/master/examples/shopping-cart) example:
+
+```
+git clone https://github.com/rackt/redux.git
+
+cd redux/examples/shopping-cart
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+It covers:
+
+* Data denormalization
+
 ## More Examples
 
 You can find more examples in [Awesome Redux](https://github.com/xgrommx/awesome-redux).
