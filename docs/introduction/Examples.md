@@ -142,7 +142,7 @@ open http://localhost:3000/
 
 It covers:
 
-* Denormalization
+* Data denormalization
 
 ## More Examples
 
