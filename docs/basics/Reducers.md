@@ -16,13 +16,16 @@ You’ll often find that you need to store some data, as well as some UI state, 
 ```js
 {
   visibilityFilter: 'SHOW_ALL',
-  todos: [{
-    text: 'Consider using Redux',
-    completed: true,
-  }, {
-    text: 'Keep all state in a single tree',
-    completed: false
-  }]
+  todos: [
+    {
+      text: 'Consider using Redux',
+      completed: true,
+    },
+    {
+      text: 'Keep all state in a single tree',
+      completed: false
+    }
+  ]
 }
 ```
 
@@ -51,21 +54,21 @@ With this out of the way, let’s start writing our reducer by gradually teachin
 We’ll start by specifying the initial state. Redux will call our reducer with an `undefined` state for the first time. This is our chance to return the initial state of our app:
 
 ```js
-import { VisibilityFilters } from './actions';
+import { VisibilityFilters } from './actions'
 
 const initialState = {
   visibilityFilter: VisibilityFilters.SHOW_ALL,
   todos: []
-};
+}
 
 function todoApp(state, action) {
   if (typeof state === 'undefined') {
-    return initialState;
+    return initialState
   }
 
   // For now, don’t handle any actions
   // and just return the state given to us.
-  return state;
+  return state
 }
 ```
 
@@ -75,7 +78,7 @@ One neat trick is to use the [ES6 default arguments syntax](https://developer.mo
 function todoApp(state = initialState, action) {
   // For now, don’t handle any actions
   // and just return the state given to us.
-  return state;
+  return state
 }
 ```
 
@@ -84,12 +87,12 @@ Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `vis
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    default:
+      return state
   }
 }
 ```
@@ -117,19 +120,22 @@ We have two more actions to handle! Let’s extend our reducer to handle `ADD_TO
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-    return Object.assign({}, state, {
-      todos: [...state.todos, {
-        text: action.text,
-        completed: false
-      }]
-    });    
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      })    
+    default:
+      return state
   }
 }
 ```
@@ -148,7 +154,7 @@ case COMPLETE_TODO:
       }),
       ...state.todos.slice(action.index + 1)
     ]
-  });
+  })
 ```
 
 Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it’s a good idea to use a helper like [react-addons-update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
@@ -160,29 +166,32 @@ Here is our code so far. It is rather verbose:
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-    return Object.assign({}, state, {
-      todos: [...state.todos, {
-        text: action.text,
-        completed: false
-      }]
-    });
-  case COMPLETE_TODO:
-    return Object.assign({}, state, {
-      todos: [
-        ...state.todos.slice(0, action.index),
-        Object.assign({}, state.todos[action.index], {
-          completed: true
-        }),
-        ...state.todos.slice(action.index + 1)
-      ]
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      })
+    case COMPLETE_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos.slice(0, action.index),
+          Object.assign({}, state.todos[action.index], {
+            completed: true
+          }),
+          ...state.todos.slice(action.index + 1)
+        ]
+      })
+    default:
+      return state
   }
 }
 ```
@@ -190,39 +199,34 @@ function todoApp(state = initialState, action) {
 Is there a way to make it easier to comprehend? It seems like `todos` and `visibilityFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
 
 ```js
-function todos(state = [], action) {
-  switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
-  }
-}
-
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-  case COMPLETE_TODO:
-    return Object.assign({}, state, {
-      todos: todos(state.todos, action)
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      })
+    case COMPLETE_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos.slice(0, action.index),
+          Object.assign({}, state.todos[action.index], {
+            completed: true
+          }),
+          ...state.todos.slice(action.index + 1)
+        ]
+      })
+    default:
+      return state
   }
 }
 ```
@@ -235,9 +239,9 @@ Let’s explore reducer composition more. Can we also extract a reducer managing
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
-    return action.filter;
+    return action.filter
   default:
-    return state;
+    return state
   }
 }
 ```
@@ -247,30 +251,33 @@ Now we can rewrite the main reducer as a function that calls the reducers managi
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case COMPLETE_TODO:
+      return [
+        ...state.slice(0, action.index),
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ]
+    default:
+      return state
   }
 }
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
   }
 }
 
@@ -278,7 +285,7 @@ function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
-  };
+  }
 }
 ```
 
@@ -289,14 +296,14 @@ This is already looking good! When the app is larger, we can split the reducers 
 Finally, Redux provides a utility called [`combineReducers()`](../api/combineReducers.md) that does the same boilerplate logic that the `todoApp` above currently does. With its help, we can rewrite `todoApp` like this:
 
 ```js
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
 const todoApp = combineReducers({
   visibilityFilter,
   todos
-});
+})
 
-export default todoApp;
+export default todoApp
 ```
 
 Note that this is completely equivalent to:
@@ -306,7 +313,7 @@ export default function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
-  };
+  }
 }
 ```
 
@@ -317,7 +324,7 @@ const reducer = combineReducers({
   a: doSomethingWithA,
   b: processB,
   c: c
-});
+})
 ```
 
 ```js
@@ -326,7 +333,7 @@ function reducer(state, action) {
     a: doSomethingWithA(state.a, action),
     b: processB(state.b, action),
     c: c(state.c, action)
-  };
+  }
 }
 ```
 
@@ -337,10 +344,10 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 >Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
 
 >```js
->import { combineReducers } from 'redux';
->import * as reducers from './reducers';
+>import { combineReducers } from 'redux'
+>import * as reducers from './reducers'
 >
->const todoApp = combineReducers(reducers);
+>const todoApp = combineReducers(reducers)
 >```
 >
 >Because `import *` is still new syntax, we don’t use it anymore in the documentation to avoid [confusion](https://github.com/rackt/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
@@ -350,45 +357,48 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 #### `reducers.js`
 
 ```js
-import { combineReducers } from 'redux';
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
-const { SHOW_ALL } = VisibilityFilters;
+import { combineReducers } from 'redux'
+import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
   }
 }
 
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case COMPLETE_TODO:
+      return [
+        ...state.slice(0, action.index),
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ]
+    default:
+      return state
   }
 }
 
 const todoApp = combineReducers({
   visibilityFilter,
   todos
-});
+})
 
-export default todoApp;
+export default todoApp
 ```
 
 ## Next Steps

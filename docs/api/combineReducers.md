@@ -41,10 +41,10 @@ While `combineReducers` attempts to check that your reducers conform to some of 
 ```js
 export default function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    return state.concat([action.text]);
-  default:
-    return state;
+    case 'ADD_TODO':
+      return state.concat([ action.text ])
+    default:
+      return state
   }
 }
 ```
@@ -54,12 +54,12 @@ export default function todos(state = [], action) {
 ```js
 export default function counter(state = 0, action) {
   switch (action.type) {
-  case 'INCREMENT':
-    return state + 1;
-  case 'DECREMENT':
-    return state - 1;
-  default:
-    return state;
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    default:
+      return state
   }
 }
 ```
@@ -67,24 +67,24 @@ export default function counter(state = 0, action) {
 #### `reducers/index.js`
 
 ```js
-import { combineReducers } from 'redux';
-import todos from './todos';
-import counter from './counter';
+import { combineReducers } from 'redux'
+import todos from './todos'
+import counter from './counter'
 
 export default combineReducers({
   todos,
   counter
-});
+})
 ```
 
 #### `App.js`
 
 ```js
-import { createStore } from 'redux';
-import reducer from './reducers/index';
+import { createStore } from 'redux'
+import reducer from './reducers/index'
 
-let store = createStore(reducer);
-console.log(store.getState());
+let store = createStore(reducer)
+console.log(store.getState())
 // {
 //   counter: 0,
 //   todos: []
@@ -93,11 +93,11 @@ console.log(store.getState());
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Use Redux'
-});
-console.log(store.getState());
+})
+console.log(store.getState())
 // {
 //   counter: 0,
-//   todos: ['Use Redux']
+//   todos: [ 'Use Redux' ]
 // }
 ```
 

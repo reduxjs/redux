@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 
 export default class User extends Component {
   render() {
-    const { login, avatarUrl, name } = this.props.user;
+    const { login, avatarUrl, name } = this.props.user
 
     return (
       <div className="User">
@@ -14,7 +14,7 @@ export default class User extends Component {
           </h3>
         </Link>
       </div>
-    );
+    )
   }
 }
 
@@ -24,4 +24,4 @@ User.propTypes = {
     avatarUrl: PropTypes.string.isRequired,
     name: PropTypes.string
   }).isRequired
-};
+}

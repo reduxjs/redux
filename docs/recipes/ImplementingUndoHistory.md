@@ -44,7 +44,7 @@ It is reasonable to suggest that our state shape should change to answer these q
 ```js
 {
   counter: {
-    past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
     present: 10,
     future: []
   }
@@ -56,9 +56,9 @@ Now, if user presses “Undo”, we want it to change to move into the past:
 ```js
 {
   counter: {
-    past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
     present: 9,
-    future: [10]
+    future: [ 10 ]
   }
 }
 ```
@@ -68,9 +68,9 @@ And further yet:
 ```js
 {
   counter: {
-    past: [0, 1, 2, 3, 4, 5, 6, 7],
+    past: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
     present: 8,
-    future: [9, 10]
+    future: [ 9, 10 ]
   }
 }
 ```
@@ -80,9 +80,9 @@ When the user presses “Redo”, we want to move one step back into the future:
 ```js
 {
   counter: {
-    past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
     present: 9,
-    future: [10]
+    future: [ 10 ]
   }
 }
 ```
@@ -92,7 +92,7 @@ Finally, if the user performs an action (e.g. decrement the counter) while we’
 ```js
 {
   counter: {
-    past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
     present: 8,
     future: []
   }
@@ -104,9 +104,9 @@ The interesting part here is that it does not matter whether we want to keep an 
 ```js
 {
   counter: {
-    past: [0, 1, 2],
+    past: [ 0, 1, 2 ],
     present: 3,
-    future: [4]
+    future: [ 4 ]
   }
 }
 ```
@@ -116,12 +116,12 @@ The interesting part here is that it does not matter whether we want to keep an 
   todos: {
     past: [
       [],
-      [{ text: 'Use Redux' }],
-      [{ text: 'Use Redux', complete: true }]
+      [ { text: 'Use Redux' } ],
+      [ { text: 'Use Redux', complete: true } ]
     ],
-    present: [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo' }],
+    present: [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo' } ],
     future: [
-      [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true }]
+      [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true } ]
     ]
   }
 }
@@ -156,12 +156,12 @@ Or many granular histories so user can undo and redo actions in them independent
 ```js
 {
   counterA: {
-    past: [1, 0],
+    past: [ 1, 0 ],
     present: 2,
     future: []
   },
   counterB: {
-    past: [0],
+    past: [ 0 ],
     present: 1,
     future: []
   }
@@ -209,31 +209,31 @@ const initialState = {
   past: [],
   present: null, // (?) How do we initialize the present?
   future: []
-};
+}
 
 function undoable(state = initialState, action) {
-  const { past, present, future } = state;
+  const { past, present, future } = state
 
   switch (action.type) {
-  case 'UNDO':
-    const previous = past[past.length - 1];
-    const newPast = past.slice(0, past.length - 1);
-    return {
-      past: newPast,
-      present: previous,
-      future: [present, ...future]
-    };
-  case 'REDO':
-    const next = future[0];
-    const newFuture = future.slice(1);
-    return {
-      past: [...past, present],
-      present: next,
-      future: newFuture
-    };
-  default:
-    // (?) How do we handle other actions?
-    return state;
+    case 'UNDO':
+      const previous = past[past.length - 1]
+      const newPast = past.slice(0, past.length - 1)
+      return {
+        past: newPast,
+        present: previous,
+        future: [ present, ...future ]
+      }
+    case 'REDO':
+      const next = future[0]
+      const newFuture = future.slice(1)
+      return {
+        past: [ ...past, present ],
+        present: next,
+        future: newFuture
+      }
+    default:
+      // (?) How do we handle other actions?
+      return state
   }
 }
 ````
@@ -258,8 +258,8 @@ A reducer enhancer that doesn’t do anything looks like this:
 function doNothingWith(reducer) {
   return function (state, action) {
     // Just call the passed reducer
-    return reducer(state, action);
-  };
+    return reducer(state, action)
+  }
 }
 ```
 
@@ -270,10 +270,10 @@ function combineReducers(reducers) {
   return function (state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
       // Call every reducer with the part of the state it manages
-      nextState[key] = reducers[key](state[key], action);
-      return nextState;
-    }, {});
-  };
+      nextState[key] = reducers[key](state[key], action)
+      return nextState
+    }, {})
+  }
 }
 ```
 
@@ -288,42 +288,42 @@ function undoable(reducer) {
     past: [],
     present: reducer(undefined, {}),
     future: []
-  };
+  }
 
   // Return a reducer that handles undo and redo
   return function (state = initialState, action) {
-    const { past, present, future } = state;
+    const { past, present, future } = state
 
     switch (action.type) {
-    case 'UNDO':
-      const previous = past[past.length - 1];
-      const newPast = past.slice(0, past.length - 1);
-      return {
-        past: newPast,
-        present: previous,
-        future: [present, ...future]
-      };
-    case 'REDO':
-      const next = future[0];
-      const newFuture = future.slice(1);
-      return {
-        past: [...past, present],
-        present: next,
-        future: newFuture
-      };
-    default:
-      // Delegate handling the action to the passed reducer
-      const newPresent = reducer(present, action);
-      if (present === newPresent) {
-        return state;
-      }
-      return {
-        past: [...past, present],
-        present: newPresent,
-        future: []
-      };
+      case 'UNDO':
+        const previous = past[past.length - 1]
+        const newPast = past.slice(0, past.length - 1)
+        return {
+          past: newPast,
+          present: previous,
+          future: [ present, ...future ]
+        }
+      case 'REDO':
+        const next = future[0]
+        const newFuture = future.slice(1)
+        return {
+          past: [ ...past, present ],
+          present: next,
+          future: newFuture
+        }
+      default:
+        // Delegate handling the action to the passed reducer
+        const newPresent = reducer(present, action)
+        if (present === newPresent) {
+          return state
+        }
+        return {
+          past: [ ...past, present ],
+          present: newPresent,
+          future: []
+        }
     }
-  };
+  }
 }
 ```
 
@@ -336,24 +336,24 @@ function todos(state = [], action) {
 }
 
 // This is also a reducer!
-const undoableTodos = undoable(todos);
+const undoableTodos = undoable(todos)
 
-import { createStore } from 'redux';
-const store = createStore(undoableTodos);
+import { createStore } from 'redux'
+const store = createStore(undoableTodos)
 
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Use Redux'
-});
+})
 
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Implement Undo'
-});
+})
 
 store.dispatch({
   type: 'UNDO'
-});
+})
 ```
 
 There is an important gotcha: you need to remember to append `.present` to the current state when you retrieve it. You may also check `.past.length` and `.future.length` to determine whether to enable or to disable the Undo and Redo buttons, respectively.
@@ -383,14 +383,14 @@ You will need to wrap the reducer you wish to enhance with `undoable` function. 
 #### `reducers.js`
 
 ```js
-import undoable, { distinctState } from 'redux-undo';
+import undoable, { distinctState } from 'redux-undo'
 
 /* ... */
 
 const todoApp = combineReducers({
   visibilityFilter,
   todos: undoable(todos, { filter: distinctState() })
-});
+})
 ```
 
 The `distinctState()` filter serves to ignore the actions that didn’t result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
@@ -407,12 +407,12 @@ Now the `todos` part of the state looks like this:
   todos: {
     past: [
       [],
-      [{ text: 'Use Redux' }],
-      [{ text: 'Use Redux', complete: true }]
+      [ { text: 'Use Redux' } ],
+      [ { text: 'Use Redux', complete: true } ]
     ],
-    present: [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo' }],
+    present: [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo' } ],
     future: [
-      [{ text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true }]
+      [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true } ]
     ]
   }
 }
@@ -425,11 +425,11 @@ just `state.todos`:
 
 ```js
 function select(state) {
-  const presentTodos = state.todos.present;
+  const presentTodos = state.todos.present
   return {
     visibleTodos: selectTodos(presentTodos, state.visibilityFilter),
     visibilityFilter: state.visibilityFilter
-  };
+  }
 }
 ```
 
@@ -457,13 +457,13 @@ First of all, you need to import `ActionCreators` from `redux-undo` and pass the
 #### `containers/App.js`
 
 ```js
-import { ActionCreators } from 'redux-undo';
+import { ActionCreators } from 'redux-undo'
 
 /* ... */
 
 class App extends Component {
   render() {
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
         {/* ... */}
@@ -475,7 +475,7 @@ class App extends Component {
           undoDisabled={this.props.undoDisabled}
           redoDisabled={this.props.redoDisabled} />
       </div>
-    );
+    )
   }
 }
 ```
@@ -495,7 +495,7 @@ export default class Footer extends Component {
         <button onClick={this.props.onUndo} disabled={this.props.undoDisabled}>Undo</button>
         <button onClick={this.props.onRedo} disabled={this.props.redoDisabled}>Redo</button>
       </p>
-    );
+    )
   }
 
   render() {
@@ -504,7 +504,7 @@ export default class Footer extends Component {
         {this.renderFilters()}
         {this.renderUndo()}
       </div>
-    );
+    )
   }
 }
 ```

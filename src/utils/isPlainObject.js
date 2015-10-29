@@ -1,5 +1,5 @@
-var fnToString = (fn) => Function.prototype.toString.call(fn);
-var objStringValue = fnToString(Object);
+var fnToString = (fn) => Function.prototype.toString.call(fn)
+var objStringValue = fnToString(Object)
 
 /**
  * @param {any} obj The object to inspect.
@@ -7,18 +7,18 @@ var objStringValue = fnToString(Object);
  */
 export default function isPlainObject(obj) {
   if (!obj || typeof obj !== 'object') {
-    return false;
+    return false
   }
 
-  var proto = typeof obj.constructor === 'function' ? Object.getPrototypeOf(obj) : Object.prototype;
+  var proto = typeof obj.constructor === 'function' ? Object.getPrototypeOf(obj) : Object.prototype
 
   if (proto === null) {
-    return true;
+    return true
   }
 
-  var constructor = proto.constructor;
+  var constructor = proto.constructor
 
   return typeof constructor === 'function'
     && constructor instanceof constructor
-    && fnToString(constructor) === objStringValue;
+    && fnToString(constructor) === objStringValue
 }

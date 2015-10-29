@@ -31,17 +31,17 @@ The most naïve solution is just to log the action and the next state yourself e
 Say, you call this when creating a todo:
 
 ```js
-store.dispatch(addTodo('Use Redux'));
+store.dispatch(addTodo('Use Redux'))
 ```
 
 To log the action and state, you can change it to something like this:
 
 ```js
-let action = addTodo('Use Redux');
+let action = addTodo('Use Redux')
 
-console.log('dispatching', action);
-store.dispatch(action);
-console.log('next state', store.getState());
+console.log('dispatching', action)
+store.dispatch(action)
+console.log('next state', store.getState())
 ```
 
 This produces the desired effect, but you wouldn’t want to do it every time.
@@ -52,16 +52,16 @@ You can extract logging into a function:
 
 ```js
 function dispatchAndLog(store, action) {
-  console.log('dispatching', action);
-  store.dispatch(action);
-  console.log('next state', store.getState());
+  console.log('dispatching', action)
+  store.dispatch(action)
+  console.log('next state', store.getState())
 }
 ```
 
 You can then use it everywhere instead of `store.dispatch()`:
 
 ```js
-dispatchAndLog(store, addTodo('Use Redux'));
+dispatchAndLog(store, addTodo('Use Redux'))
 ```
 
 We could end this here, but it’s not very convenient to import a special function every time.
@@ -71,13 +71,13 @@ We could end this here, but it’s not very convenient to import a special funct
 What if we just replace the `dispatch` function on the store instance? The Redux store is just a plain object with [a few methods](../api/Store.md), and we’re writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
 
 ```js
-let next = store.dispatch;
+let next = store.dispatch
 store.dispatch = function dispatchAndLog(action) {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
-};
+  console.log('dispatching', action)
+  let result = next(action)
+  console.log('next state', store.getState())
+  return result
+}
 ```
 
 This is already closer to what we want!  No matter where we dispatch an action, it is guaranteed to be logged. Monkeypatching never feels right, but we can live with this for now.
@@ -96,39 +96,39 @@ If logging and crash reporting are separate utilities, they might look like this
 
 ```js
 function patchStoreToAddLogging(store) {
-  let next = store.dispatch;
+  let next = store.dispatch
   store.dispatch = function dispatchAndLog(action) {
-    console.log('dispatching', action);
-    let result = next(action);
-    console.log('next state', store.getState());
-    return result;
-  };
+    console.log('dispatching', action)
+    let result = next(action)
+    console.log('next state', store.getState())
+    return result
+  }
 }
 
 function patchStoreToAddCrashReporting(store) {
-  let next = store.dispatch;
+  let next = store.dispatch
   store.dispatch = function dispatchAndReportErrors(action) {
     try {
-      return next(action);
+      return next(action)
     } catch (err) {
-      console.error('Caught an exception!', err);
+      console.error('Caught an exception!', err)
       Raven.captureException(err, {
         extra: {
           action,
           state: store.getState()
         }
-      });
-      throw err;
+      })
+      throw err
     }
-  };
+  }
 }
 ```
 
 If these functions are published as separate modules, we can later use them to patch our store:
 
 ```js
-patchStoreToAddLogging(store);
-patchStoreToAddCrashReporting(store);
+patchStoreToAddLogging(store)
+patchStoreToAddCrashReporting(store)
 ```
 
 Still, this isn’t nice.
@@ -139,17 +139,17 @@ Monkeypatching is a hack. “Replace any method you like”, what kind of API is
 
 ```js
 function logger(store) {
-  let next = store.dispatch;
+  let next = store.dispatch
 
   // Previously:
   // store.dispatch = function dispatchAndLog(action) {
 
   return function dispatchAndLog(action) {
-    console.log('dispatching', action);
-    let result = next(action);
-    console.log('next state', store.getState());
-    return result;
-  };
+    console.log('dispatching', action)
+    let result = next(action)
+    console.log('next state', store.getState())
+    return result
+  }
 }
 ```
 
@@ -157,20 +157,20 @@ We could provide a helper inside Redux that would apply the actual monkeypatchin
 
 ```js
 function applyMiddlewareByMonkeypatching(store, middlewares) {
-  middlewares = middlewares.slice();
-  middlewares.reverse();
+  middlewares = middlewares.slice()
+  middlewares.reverse()
 
   // Transform dispatch function with each middleware.
   middlewares.forEach(middleware =>
     store.dispatch = middleware(store)
-  );
+  )
 }
 ```
 
 We could use it to apply multiple middleware like this:
 
 ```js
-applyMiddlewareByMonkeypatching(store, [logger, crashReporter]);
+applyMiddlewareByMonkeypatching(store, [ logger, crashReporter ])
 ```
 
 However, it is still monkeypatching.  
@@ -183,14 +183,14 @@ Why do we even overwrite `dispatch`? Of course, to be able to call it later, but
 ```js
 function logger(store) {
   // Must point to the function returned by the previous middleware:
-  let next = store.dispatch;
+  let next = store.dispatch
 
   return function dispatchAndLog(action) {
-    console.log('dispatching', action);
-    let result = next(action);
-    console.log('next state', store.getState());
-    return result;
-  };
+    console.log('dispatching', action)
+    let result = next(action)
+    console.log('next state', store.getState())
+    return result
+  }
 }
 ```
 
@@ -204,11 +204,11 @@ But there’s also a different way to enable chaining. The middleware could acce
 function logger(store) {
   return function wrapDispatchToAddLogging(next) {
     return function dispatchAndLog(action) {
-      console.log('dispatching', action);
-      let result = next(action);
-      console.log('next state', store.getState());
-      return result;
-    };
+      console.log('dispatching', action)
+      let result = next(action)
+      console.log('next state', store.getState())
+      return result
+    }
   }
 }
 ```
@@ -217,24 +217,24 @@ It’s a [“we need to go deeper”](http://knowyourmeme.com/memes/we-need-to-g
 
 ```js
 const logger = store => next => action => {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
-};
+  console.log('dispatching', action)
+  let result = next(action)
+  console.log('next state', store.getState())
+  return result
+}
 
 const crashReporter = store => next => action => {
   try {
-    return next(action);
+    return next(action)
   } catch (err) {
-    console.error('Caught an exception!', err);
+    console.error('Caught an exception!', err)
     Raven.captureException(err, {
       extra: {
         action,
         state: store.getState()
       }
-    });
-    throw err;
+    })
+    throw err
   }
 }
 ```
@@ -252,15 +252,15 @@ Instead of `applyMiddlewareByMonkeypatching()`, we could write `applyMiddleware(
 // That's *not* Redux API.
 
 function applyMiddleware(store, middlewares) {
-  middlewares = middlewares.slice();
-  middlewares.reverse();
+  middlewares = middlewares.slice()
+  middlewares.reverse()
 
-  let dispatch = store.dispatch;
+  let dispatch = store.dispatch
   middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
-  );
+  )
 
-  return Object.assign({}, store, { dispatch });
+  return Object.assign({}, store, { dispatch })
 }
 ```
 
@@ -279,24 +279,24 @@ Given this middleware we just wrote:
 
 ```js
 const logger = store => next => action => {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
-};
+  console.log('dispatching', action)
+  let result = next(action)
+  console.log('next state', store.getState())
+  return result
+}
 
 const crashReporter = store => next => action => {
   try {
-    return next(action);
+    return next(action)
   } catch (err) {
-    console.error('Caught an exception!', err);
+    console.error('Caught an exception!', err)
     Raven.captureException(err, {
       extra: {
         action,
         state: store.getState()
       }
-    });
-    throw err;
+    })
+    throw err
   }
 }
 ```
@@ -304,22 +304,22 @@ const crashReporter = store => next => action => {
 Here’s how to apply it to a Redux store:
 
 ```js
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 
 // applyMiddleware takes createStore() and returns
 // a function with a compatible API.
-let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore);
+let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore)
 
 // Use it like you would use createStore()
-let todoApp = combineReducers(reducers);
-let store = createStoreWithMiddleware(todoApp);
+let todoApp = combineReducers(reducers)
+let store = createStoreWithMiddleware(todoApp)
 ```
 
 That’s it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
 
 ```js
 // Will flow through both logger and crashReporter middleware!
-store.dispatch(addTodo('Use Redux'));
+store.dispatch(addTodo('Use Redux'))
 ```
 
 ## Seven Examples
@@ -333,29 +333,29 @@ Each function below is a valid Redux middleware. They are not equally useful, bu
  * Logs all actions and states after they are dispatched.
  */
 const logger = store => next => action => {
-  console.group(action.type);
-  console.info('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  console.groupEnd(action.type);
-  return result;
-};
+  console.group(action.type)
+  console.info('dispatching', action)
+  let result = next(action)
+  console.log('next state', store.getState())
+  console.groupEnd(action.type)
+  return result
+}
 
 /**
  * Sends crash reports as state is updated and listeners are notified.
  */
 const crashReporter = store => next => action => {
   try {
-    return next(action);
+    return next(action)
   } catch (err) {
-    console.error('Caught an exception!', err);
+    console.error('Caught an exception!', err)
     Raven.captureException(err, {
       extra: {
         action,
         state: store.getState()
       }
-    });
-    throw err;
+    })
+    throw err
   }
 }
 
@@ -365,18 +365,18 @@ const crashReporter = store => next => action => {
  */
 const timeoutScheduler = store => next => action => {
   if (!action.meta || !action.meta.delay) {
-    return next(action);
+    return next(action)
   }
 
   let timeoutId = setTimeout(
     () => next(action),
     action.meta.delay
-  );
+  )
 
   return function cancel() {
-    clearTimeout(timeoutId);
-  };
-};
+    clearTimeout(timeoutId)
+  }
+}
 
 /**
  * Schedules actions with { meta: { raf: true } } to be dispatched inside a rAF loop 
@@ -384,39 +384,39 @@ const timeoutScheduler = store => next => action => {
  * this case.
  */
 const rafScheduler = store => next => {
-  let queuedActions = [];
-  let frame = null;
+  let queuedActions = []
+  let frame = null
 
   function loop() {
-    frame = null;
+    frame = null
     try {
       if (queuedActions.length) {
-        next(queuedActions.shift());
+        next(queuedActions.shift())
       }
     } finally {
-      maybeRaf();
+      maybeRaf()
     }
   }
 
   function maybeRaf() {
     if (queuedActions.length && !frame) {
-      frame = requestAnimationFrame(loop);
+      frame = requestAnimationFrame(loop)
     }
   }
 
   return action => {
     if (!action.meta || !action.meta.raf) {
-      return next(action);
+      return next(action)
     }
 
-    queuedActions.push(action);
-    maybeRaf();
+    queuedActions.push(action)
+    maybeRaf()
 
     return function cancel() {
       queuedActions = queuedActions.filter(a => a !== action)
-    };
-  };
-};
+    }
+  }
+}
 
 /**
  * Lets you dispatch promises in addition to actions.
@@ -425,11 +425,11 @@ const rafScheduler = store => next => {
  */
 const vanillaPromise = store => next => action => {
   if (typeof action.then !== 'function') {
-    return next(action);
+    return next(action)
   }
 
-  return Promise.resolve(action).then(store.dispatch);
-};
+  return Promise.resolve(action).then(store.dispatch)
+}
 
 /**
  * Lets you dispatch special actions with a { promise } field.
@@ -445,17 +445,17 @@ const readyStatePromise = store => next => action => {
   }
 
   function makeAction(ready, data) {
-    let newAction = Object.assign({}, action, { ready }, data);
-    delete newAction.promise;
-    return newAction;
+    let newAction = Object.assign({}, action, { ready }, data)
+    delete newAction.promise
+    return newAction
   }
 
-  next(makeAction(false));
+  next(makeAction(false))
   return action.promise.then(
     result => next(makeAction(true, { result })),
     error => next(makeAction(true, { error }))
-  );
-};
+  )
+}
 
 /**
  * Lets you dispatch a function instead of an action.
@@ -469,7 +469,7 @@ const readyStatePromise = store => next => action => {
 const thunk = store => next => action =>
   typeof action === 'function' ?
     action(store.dispatch, store.getState) :
-    next(action);
+    next(action)
 
 
 // You can use all of them! (It doesn’t mean you should.)
@@ -481,7 +481,7 @@ let createStoreWithMiddleware = applyMiddleware(
   readyStatePromise,
   logger,
   crashReporter
-)(createStore);
-let todoApp = combineReducers(reducers);
-let store = createStoreWithMiddleware(todoApp);
+)(createStore)
+let todoApp = combineReducers(reducers)
+let store = createStoreWithMiddleware(todoApp)
 ```

@@ -51,9 +51,9 @@ Does it make sense to use Redux together with Rx? Sure! They work great together
 function toObservable(store) {
   return {
     subscribe({ onNext }) {
-      let dispose = store.subscribe(() => onNext(store.getState()));
-      onNext(store.getState());
-      return { dispose };
+      let dispose = store.subscribe(() => onNext(store.getState()))
+      onNext(store.getState())
+      return { dispose }
     }
   }
 }

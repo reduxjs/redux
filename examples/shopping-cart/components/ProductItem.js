@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import Product from './Product';
+import React, { Component, PropTypes } from 'react'
+import Product from './Product'
 
 export default class ProductItem extends Component {
   render() {
-    const { product } = this.props;
+    const { product } = this.props
 
     return (
       <div
@@ -17,7 +17,7 @@ export default class ProductItem extends Component {
           {product.inventory > 0 ? 'Add to cart' : 'Sold Out'}
         </button>
       </div>
-    );
+    )
   }
 }
 
@@ -28,4 +28,4 @@ ProductItem.propTypes = {
     inventory: PropTypes.number.isRequired
   }).isRequired,
   onAddToCartClicked: PropTypes.func.isRequired
-};
+}

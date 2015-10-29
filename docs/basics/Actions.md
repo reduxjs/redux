@@ -7,7 +7,7 @@ First, let’s define some actions.
 Here’s an example action which represents adding a new todo item:
 
 ```js
-const ADD_TODO = 'ADD_TODO';
+const ADD_TODO = 'ADD_TODO'
 ```
 
 ```js
@@ -20,7 +20,7 @@ const ADD_TODO = 'ADD_TODO';
 Actions are plain JavaScript objects. Actions must have a `type` property that indicates the type of action being performed. Types should typically be defined as string constants. Once your app is large enough, you may want to move them into a separate module.
 
 ```js
-import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
+import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 ```
 
 >##### Note on Boilerplate
@@ -60,8 +60,8 @@ function addTodoWithDispatch(text) {
   const action = {
     type: ADD_TODO,
     text
-  };
-  dispatch(action);
+  }
+  dispatch(action)
 }
 ```
 
@@ -72,29 +72,29 @@ function addTodo(text) {
   return {
     type: ADD_TODO,
     text
-  };
+  }
 }
 ```
 
 This makes them more portable and easier to test. To actually initiate a dispatch, pass the result to the `dispatch()` function:
 
 ```js
-dispatch(addTodo(text));
-dispatch(completeTodo(index));
+dispatch(addTodo(text))
+dispatch(completeTodo(index))
 ```
 
 Or create a **bound action creator** that automatically dispatches:
 
 ```js
-const boundAddTodo = (text) => dispatch(addTodo(text));
-const boundCompleteTodo = (index) => dispatch(completeTodo(index));
+const boundAddTodo = (text) => dispatch(addTodo(text))
+const boundCompleteTodo = (index) => dispatch(completeTodo(index))
 ```
 
 You’ll be able to call them directly:
 
 ```
-boundAddTodo(text);
-boundCompleteTodo(index);
+boundAddTodo(text)
+boundCompleteTodo(index)
 ```
 
 The `dispatch()` function can be accessed directly from the store as [`store.dispatch()`](../api/Store.md#dispatch), but more likely you'll access it using a helper like [react-redux](http://github.com/gaearon/react-redux)'s `connect()`. You can use [`bindActionCreators()`](../api/bindActionCreators.md) to automatically bind many action creators to a `dispatch()` function.
@@ -108,9 +108,9 @@ The `dispatch()` function can be accessed directly from the store as [`store.dis
  * action types
  */
 
-export const ADD_TODO = 'ADD_TODO';
-export const COMPLETE_TODO = 'COMPLETE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
+export const ADD_TODO = 'ADD_TODO'
+export const COMPLETE_TODO = 'COMPLETE_TODO'
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 
 /*
  * other constants
@@ -120,22 +120,22 @@ export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
   SHOW_ACTIVE: 'SHOW_ACTIVE'
-};
+}
 
 /*
  * action creators
  */
 
 export function addTodo(text) {
-  return { type: ADD_TODO, text };
+  return { type: ADD_TODO, text }
 }
 
 export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index };
+  return { type: COMPLETE_TODO, index }
 }
 
 export function setVisibilityFilter(filter) {
-  return { type: SET_VISIBILITY_FILTER, filter };
+  return { type: SET_VISIBILITY_FILTER, filter }
 }
 ```
 

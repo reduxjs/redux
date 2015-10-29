@@ -1,14 +1,14 @@
 {
-  "extends": "airbnb",
+  "extends": "rackt",
   "rules": {
     "valid-jsdoc": 2,
-
     // Disable until Flow supports let and const
     "no-var": 0,
-    "vars-on-top": 0,
-
-    // Disable Airbnb-specific rules unless need to support it
-    "comma-dangle": 0,
-    "id-length": 0
-  }
+    "react/jsx-uses-react": 1,
+    "react/jsx-no-undef": 2,
+    "react/wrap-multilines": 2
+  },
+  "plugins": [
+    "react"
+  ]
 }
