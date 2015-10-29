@@ -83,12 +83,16 @@ function mapStateToProps(state) {
   const starredRepos = starredPagination.ids.map(id => repos[id]);
   const starredRepoOwners = starredRepos.map(repo => users[repo.owner]);
 
+  const lowercaseLogin = login.toLowerCase();
+  const username = Object.keys(users).find(
+    k => k.toLowerCase() === lowercaseLogin);
+
   return {
-    login,
+    login: username || login,
     starredRepos,
     starredRepoOwners,
     starredPagination,
-    user: users[login]
+    user: users[username],
   };
 }
 
