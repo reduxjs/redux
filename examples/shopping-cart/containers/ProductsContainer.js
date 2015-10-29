@@ -9,7 +9,7 @@ class ProductsContainer extends Component {
   render() {
     const { products } = this.props
     return (
-      <ProductsList title="Flux Shop Demo (Redux)">
+      <ProductsList title="Products">
         {products.map(product =>
           <ProductItem
             key={product.id}
