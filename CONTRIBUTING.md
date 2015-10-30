@@ -33,10 +33,9 @@ npm run build:umd:min
 ```
 
 ### Linting and Testing
-#### Linting
-To lint the code, run the following:
+To run both linting and testing at once, run the following:
 ```
-npm run lint
+npm run check
 ```
 
 #### Testing
@@ -48,6 +47,12 @@ npm run test
 To continuously watch and run tests, run the following:
 ```
 npm run test:watch
+```
+
+#### Linting
+To lint the code, run the following:
+```
+npm run lint
 ```
 
 ### Docs
