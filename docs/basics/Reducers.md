@@ -233,7 +233,7 @@ function todoApp(state = initialState, action) {
       return {
         ...state,
         todos: todos(state.todos, action)
-      };
+      }
     default:
       return state
   }
