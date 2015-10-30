@@ -16,12 +16,12 @@ git clone https://github.com/your-username/redux.git
 ```
 
 ### Docs
-##### Preparing to build the documentation
+#### Preparing to build the documentation
 To install the latest version of `gitbooks` and prepare to build the documentation, run the following:
 ```
 npm run docs:prepare
 ```
-##### Building the documentation
+#### Building the documentation
 To build the documentation, run the following:
 ```
 npm run docs:build
@@ -32,25 +32,29 @@ To watch and re-build documentation when changes occur, run the following:
 npm run docs:watch
 ```
 
-##### Publishing the documentation
+#### Publishing the documentation
 To publish the documentation, run the following:
 ```
 npm run docs:publish
 ```
 
-##### Cleaning up built documentation
+#### Cleaning up built documentation
 To remove previously built documentation, run the following:
 ```
 npm run docs:clean
 ```
 
 ### Building and Testing Examples
-Redux comes with official examples to demonstrate various concepts and practices. 
+Redux comes with [official examples](http://rackt.github.io/redux/docs/introduction/Examples.html) to demonstrate various concepts and best practices.
+
+When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
 
 To build and test the official Redux examples, run the following:
 ```
 npm run build:examples
 npm run test:examples
 ```
+
+Please visit the [Examples page](http://rackt.github.io/redux/docs/introduction/Examples.html) for information on running an individual example.
 
 ## Submitting Changes
