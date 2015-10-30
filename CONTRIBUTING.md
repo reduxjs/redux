@@ -1,14 +1,14 @@
 # Contributing
-We are open to, and grateful for, any contributions made by the community.  By contributing to Redux, you agree to abide by the [code of conduct]().
+We are open to, and grateful for, any contributions made by the community.  By contributing to Redux, you agree to abide by the [code of conduct](https://github.com/rackt/redux/blob/master/CODE_OF_CONDUCT.md).
 
 ## Reporting Issues and Asking Questions
-Before opening an issue, please search the issue tracker to make sure your issue hasn't already been reported.
+Before opening an issue, please search the [issue tracker](https://github.com/rackt/redux/issues) to make sure your issue hasn't already been reported.
 
-Please ask any general or implementation specific questions on Stack Overflow.
+Please ask any general and implementation specific questions on [Stack Overflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) for support.
 
 ## Getting Started
 
-First, visit the [Issue tracker]() to find a list of open issues that need attention.
+First, visit the [Issue tracker](https://github.com/rackt/redux/issues) to find a list of open issues that need attention.
 
 Fork, then clone the repo:
 ```
