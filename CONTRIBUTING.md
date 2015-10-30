@@ -16,6 +16,8 @@ git clone https://github.com/your-username/redux.git
 ```
 
 ### Building
+
+#### Build Redux
 To build Redux:
 ```
 npm run build
@@ -32,14 +34,13 @@ npm run build:umd
 npm run build:umd:min
 ```
 
-### Linting and Testing
+### Testing and Linting
 To run both linting and testing at once, run the following:
 ```
 npm run check
 ```
 
-#### Testing
-To run tests:
+To only run tests:
 ```
 npm run test
 ```
@@ -49,8 +50,7 @@ To continuously watch and run tests, run the following:
 npm run test:watch
 ```
 
-#### Linting
-To lint the code, run the following:
+To perform linting with `eslint`, run the following:
 ```
 npm run lint
 ```
@@ -84,11 +84,12 @@ To remove previously built documentation, run the following:
 npm run docs:clean
 ```
 
-### Building and Testing Examples
+### Examples
 Redux comes with [official examples](http://rackt.github.io/redux/docs/introduction/Examples.html) to demonstrate various concepts and best practices.
 
 When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
 
+#### Building and testing the examples
 To build and test the official Redux examples, run the following:
 ```
 npm run build:examples
