@@ -199,6 +199,29 @@ function todoApp(state = initialState, action) {
 Is there a way to make it easier to comprehend? It seems like `todos` and `visibilityFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
 
 ```js
+function todos(state = [], action) {
+  switch (action.type) {
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case COMPLETE_TODO:
+      return [
+        ...state.slice(0, action.index),
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ]
+    default:
+      return state
+  }
+}
+
 function todoApp(state = initialState, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
@@ -206,25 +229,11 @@ function todoApp(state = initialState, action) {
         visibilityFilter: action.filter
       })
     case ADD_TODO:
-      return Object.assign({}, state, {
-        todos: [
-          ...state.todos,
-          {
-            text: action.text,
-            completed: false
-          }
-        ]
-      })
     case COMPLETE_TODO:
-      return Object.assign({}, state, {
-        todos: [
-          ...state.todos.slice(0, action.index),
-          Object.assign({}, state.todos[action.index], {
-            completed: true
-          }),
-          ...state.todos.slice(action.index + 1)
-        ]
-      })
+      return {
+        ...state,
+        todos: todos(state.todos, action)
+      };
     default:
       return state
   }
