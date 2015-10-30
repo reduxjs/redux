@@ -6,13 +6,48 @@ Before opening an issue, please search the [issue tracker](https://github.com/ra
 
 Please ask any general and implementation specific questions on [Stack Overflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) for support.
 
-## Getting Started
+## Development
 
-First, visit the [Issue tracker](https://github.com/rackt/redux/issues) to find a list of open issues that need attention.
+Visit the [Issue tracker](https://github.com/rackt/redux/issues) to find a list of open issues that need attention.
 
 Fork, then clone the repo:
 ```
 git clone https://github.com/your-username/redux.git
+```
+
+### Building
+To build Redux:
+```
+npm run build
+```
+
+To build the lib:
+```
+npm run build:lib
+```
+
+For a UMD build:
+```
+npm run build:umd
+npm run build:umd:min
+```
+
+### Linting and Testing
+#### Linting
+To lint the code, run the following:
+```
+npm run lint
+```
+
+#### Testing
+To run tests:
+```
+npm run test
+```
+
+To continuously watch and run tests, run the following:
+```
+npm run test:watch
 ```
 
 ### Docs
@@ -58,3 +93,8 @@ npm run test:examples
 Please visit the [Examples page](http://rackt.github.io/redux/docs/introduction/Examples.html) for information on running an individual example.
 
 ## Submitting Changes
+* Open a new issue in the [Issue tracker](https://github.com/rackt/redux/issues).
+* Fork the repo.
+* Create a new feature branch based off the `master` branch.
+* Make sure all tests pass and there are no linting errors.
+* Submit a pull request, referencing any issues it addresses.
