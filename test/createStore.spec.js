@@ -4,7 +4,7 @@ import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/
 import * as reducers from './helpers/reducers'
 
 describe('createStore', () => {
-  it('should expose the public API', () => {
+  it('exposes the public API', () => {
     const store = createStore(combineReducers(reducers))
     const methods = Object.keys(store)
 
@@ -15,7 +15,7 @@ describe('createStore', () => {
     expect(methods).toContain('replaceReducer')
   })
 
-  it('should require a reducer function', () => {
+  it('requires a reducer function', () => {
     expect(() =>
       createStore()
     ).toThrow()
@@ -33,7 +33,7 @@ describe('createStore', () => {
     ).toNotThrow()
   })
 
-  it('should pass the initial action and the initial state', () => {
+  it('passes the initial action and the initial state', () => {
     const store = createStore(reducers.todos, [
       {
         id: 1,
@@ -48,7 +48,7 @@ describe('createStore', () => {
     ])
   })
 
-  it('should apply the reducer to the previous state', () => {
+  it('applies the reducer to the previous state', () => {
     const store = createStore(reducers.todos)
     expect(store.getState()).toEqual([])
 
@@ -75,7 +75,7 @@ describe('createStore', () => {
     ])
   })
 
-  it('should apply the reducer to the initial state', () => {
+  it('applies the reducer to the initial state', () => {
     const store = createStore(reducers.todos, [
       {
         id: 1,
@@ -109,7 +109,7 @@ describe('createStore', () => {
     ])
   })
 
-  it('should preserve the state when replacing a reducer', () => {
+  it('preserves the state when replacing a reducer', () => {
     const store = createStore(reducers.todos)
     store.dispatch(addTodo('Hello'))
     store.dispatch(addTodo('World'))
@@ -188,7 +188,7 @@ describe('createStore', () => {
     ])
   })
 
-  it('should support multiple subscriptions', () => {
+  it('supports multiple subscriptions', () => {
     const store = createStore(reducers.todos)
     const listenerA = expect.createSpy(() => {})
     const listenerB = expect.createSpy(() => {})
@@ -235,7 +235,7 @@ describe('createStore', () => {
     expect(listenerB.calls.length).toBe(2)
   })
 
-  it('should only remove listener once when unsubscribe is called', () => {
+  it('only removes listener once when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
     const listenerA = expect.createSpy(() => {})
     const listenerB = expect.createSpy(() => {})
@@ -251,7 +251,7 @@ describe('createStore', () => {
     expect(listenerB.calls.length).toBe(1)
   })
 
-  it('should only remove relevant listener when unsubscribe is called', () => {
+  it('only removes relevant listener when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
     const listener = expect.createSpy(() => {})
 
@@ -265,7 +265,7 @@ describe('createStore', () => {
     expect(listener.calls.length).toBe(1)
   })
 
-  it('should support removing a subscription within a subscription', () => {
+  it('supports removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos)
     const listenerA = expect.createSpy(() => {})
     const listenerB = expect.createSpy(() => {})
@@ -286,7 +286,7 @@ describe('createStore', () => {
     expect(listenerC.calls.length).toBe(2)
   })
 
-  it('should provide an up-to-date state when a subscriber is notified', done => {
+  it('provides an up-to-date state when a subscriber is notified', done => {
     const store = createStore(reducers.todos)
     store.subscribe(() => {
       expect(store.getState()).toEqual([
@@ -300,7 +300,7 @@ describe('createStore', () => {
     store.dispatch(addTodo('Hello'))
   })
 
-  it('should only accept plain object actions', () => {
+  it('only accepts plain object actions', () => {
     const store = createStore(reducers.todos)
     expect(() =>
       store.dispatch(unknownAction())
@@ -314,7 +314,7 @@ describe('createStore', () => {
     )
   })
 
-  it('should handle nested dispatches gracefully', () => {
+  it('handles nested dispatches gracefully', () => {
     function foo(state = 0, action) {
       return action.type === 'foo' ? 1 : state
     }
@@ -339,7 +339,7 @@ describe('createStore', () => {
     })
   })
 
-  it('should not allow dispatch() from within a reducer', () => {
+  it('does not allow dispatch() from within a reducer', () => {
     const store = createStore(reducers.dispatchInTheMiddleOfReducer)
 
     expect(() =>
@@ -358,21 +358,21 @@ describe('createStore', () => {
     ).toNotThrow()
   })
 
-  it('should throw if action type is missing', () => {
+  it('throws if action type is missing', () => {
     const store = createStore(reducers.todos)
     expect(() =>
       store.dispatch({})
     ).toThrow(/Actions may not have an undefined "type" property/)
   })
 
-  it('should throw if action type is undefined', () => {
+  it('throws if action type is undefined', () => {
     const store = createStore(reducers.todos)
     expect(() =>
       store.dispatch({ type: undefined })
     ).toThrow(/Actions may not have an undefined "type" property/)
   })
 
-  it('should not throw if action type is falsy', () => {
+  it('does not throw if action type is falsy', () => {
     const store = createStore(reducers.todos)
     expect(() =>
       store.dispatch({ type: false })

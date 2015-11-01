@@ -10,7 +10,7 @@ describe('bindActionCreators', () => {
     store = createStore(todos)
   })
 
-  it('should wrap the action creators with the dispatch function', () => {
+  it('wraps the action creators with the dispatch function', () => {
     const boundActionCreators = bindActionCreators(actionCreators, store.dispatch)
     expect(
       Object.keys(boundActionCreators)
@@ -27,7 +27,7 @@ describe('bindActionCreators', () => {
     ])
   })
 
-  it('should support wrapping a single function only', () => {
+  it('supports wrapping a single function only', () => {
     const actionCreator = actionCreators.addTodo
     const boundActionCreator = bindActionCreators(actionCreator, store.dispatch)
 
@@ -38,7 +38,7 @@ describe('bindActionCreators', () => {
     ])
   })
 
-  it('should throw for an undefined actionCreator', () => {
+  it('throws for an undefined actionCreator', () => {
     expect(() => {
       bindActionCreators(undefined, store.dispatch)
     }).toThrow(
@@ -47,7 +47,7 @@ describe('bindActionCreators', () => {
     )
   })
 
-  it('should throw for a null actionCreator', () => {
+  it('throws for a null actionCreator', () => {
     expect(() => {
       bindActionCreators(null, store.dispatch)
     }).toThrow(
@@ -56,7 +56,7 @@ describe('bindActionCreators', () => {
     )
   })
 
-  it('should throw for a primitive actionCreator', () => {
+  it('throws for a primitive actionCreator', () => {
     expect(() => {
       bindActionCreators('string', store.dispatch)
     }).toThrow(

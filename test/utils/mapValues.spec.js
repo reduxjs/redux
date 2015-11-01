@@ -2,7 +2,7 @@ import expect from 'expect'
 import mapValues from '../../src/utils/mapValues'
 
 describe('mapValues', () => {
-  it('should return object with mapped values', () => {
+  it('returns object with mapped values', () => {
     const test = {
       a: 'c',
       b: 'd'

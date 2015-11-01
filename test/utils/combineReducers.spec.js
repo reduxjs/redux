@@ -4,7 +4,7 @@ import createStore, { ActionTypes } from '../../src/createStore'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
-    it('should return a composite reducer that maps the state keys to given reducers', () => {
+    it('returns a composite reducer that maps the state keys to given reducers', () => {
       const reducer = combineReducers({
         counter: (state = 0, action) =>
         action.type === 'increment' ? state + 1 : state,
@@ -31,7 +31,7 @@ describe('Utils', () => {
       ).toEqual([ 'stack' ])
     })
 
-    it('should throw an error if a reducer returns undefined handling an action', () => {
+    it('throws an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
         counter(state = 0, action) {
           switch (action && action.type) {
@@ -66,7 +66,7 @@ describe('Utils', () => {
       )
     })
 
-    it('should throw an error on first call if a reducer returns undefined initializing', () => {
+    it('throws an error on first call if a reducer returns undefined initializing', () => {
       const reducer = combineReducers({
         counter(state, action) {
           switch (action.type) {
@@ -84,7 +84,7 @@ describe('Utils', () => {
       )
     })
 
-    it('should catch error thrown in reducer when initializing and re-throw', () => {
+    it('catches error thrown in reducer when initializing and re-throw', () => {
       const reducer = combineReducers({
         throwingReducer() {
           throw new Error('Error thrown in reducer')
@@ -95,7 +95,7 @@ describe('Utils', () => {
       )
     })
 
-    it('should allow a symbol to be used as an action type', () => {
+    it('allows a symbol to be used as an action type', () => {
       const increment = Symbol('INCREMENT')
 
       const reducer = combineReducers({
@@ -112,7 +112,7 @@ describe('Utils', () => {
       expect(reducer({ counter: 0 }, { type: increment }).counter).toEqual(1)
     })
 
-    it('should maintain referential equality if the reducers it is combining do', () => {
+    it('maintains referential equality if the reducers it is combining do', () => {
       const reducer = combineReducers({
         child1(state = { }) {
           return state
@@ -129,7 +129,7 @@ describe('Utils', () => {
       expect(reducer(initialState, { type: 'FOO' })).toBe(initialState)
     })
 
-    it('should not have referential equality if one of the reducers changes something', () => {
+    it('does not have referential equality if one of the reducers changes something', () => {
       const reducer = combineReducers({
         child1(state = { }) {
           return state
@@ -151,7 +151,7 @@ describe('Utils', () => {
       expect(reducer(initialState, { type: 'increment' })).toNotBe(initialState)
     })
 
-    it('should throw an error on first call if a reducer attempts to handle a private action', () => {
+    it('throws an error on first call if a reducer attempts to handle a private action', () => {
       const reducer = combineReducers({
         counter(state, action) {
           switch (action.type) {
@@ -172,7 +172,7 @@ describe('Utils', () => {
       )
     })
 
-    it('should warn if no reducers are passed to combineReducers', () => {
+    it('warns if no reducers are passed to combineReducers', () => {
       const spy = expect.spyOn(console, 'error')
       const reducer = combineReducers({ })
       reducer({ })
@@ -182,7 +182,7 @@ describe('Utils', () => {
       spy.restore()
     })
 
-    it('should warn if input state object does not match state object returned by reducer', () => {
+    it('warns if input state object does not match state object returned by reducer', () => {
       const spy = expect.spyOn(console, 'error')
       const reducer = combineReducers({
         foo(state = { bar: 1 }) {
