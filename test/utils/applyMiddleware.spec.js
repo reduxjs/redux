@@ -29,7 +29,7 @@ describe('applyMiddleware', () => {
     expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' }, { id: 2, text: 'Flux FTW!' } ])
   })
 
-  it('should pass recursive dispatches through the middleware chain', () => {
+  it('passes recursive dispatches through the middleware chain', () => {
     function test(spyOnMethods) {
       return () => next => action => {
         spyOnMethods(action)

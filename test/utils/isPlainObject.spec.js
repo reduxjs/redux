@@ -3,7 +3,7 @@ import isPlainObject from '../../src/utils/isPlainObject'
 import vm from 'vm'
 
 describe('isPlainObject', () => {
-  it('should return true only if plain object', () => {
+  it('returns true only if plain object', () => {
     function Test() {
       this.prop = 1
     }
