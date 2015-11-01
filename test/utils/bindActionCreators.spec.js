@@ -47,7 +47,7 @@ describe('bindActionCreators', () => {
     )
   })
 
-  it('throwfor a null actionCreator', () => {
+  it('throws for a null actionCreator', () => {
     expect(() => {
       bindActionCreators(null, store.dispatch)
     }).toThrow(
