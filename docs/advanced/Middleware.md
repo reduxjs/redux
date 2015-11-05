@@ -22,7 +22,7 @@ How do we approach this with Redux?
 
 ### Attempt #1: Logging Manually
 
-The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../api/Store.md#dispatch). It’s not really a solution, but just a first step towards understanding the problem.
+The most native solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../api/Store.md#dispatch). It’s not really a solution, but just a first step towards understanding the problem.
 
 >##### Note
 
