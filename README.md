@@ -36,6 +36,12 @@ Whether you have used them or not, Redux only takes a few minutes to get started
 
 ### Installation
 
+To install devDependencies (Required):
+
+```
+npm install
+```
+
 To install the stable version:
 
 ```
