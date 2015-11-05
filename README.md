@@ -20,7 +20,7 @@ It is tiny (2kB) and has no dependencies.
 >Jing Chen, creator of Flux
 
 >[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
->Bill Fisher, creator of Flux
+>Bill Fisher, author of Flux documentation
 
 >[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
 >André Staltz, creator of Cycle
