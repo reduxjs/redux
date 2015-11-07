@@ -62,7 +62,7 @@ const initialState = {
 }
 
 function todoApp(state, action) {
-  if (typeof state === 'undefined') {
+  if (typeof state === undefined) {
     return initialState
   }
 
