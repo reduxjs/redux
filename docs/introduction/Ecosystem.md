@@ -13,6 +13,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [ng2-redux](https://github.com/wbuchwalter/ng2-redux) — Angular 2
 * [backbone-redux](https://github.com/redbooth/backbone-redux) — Backbone
 * [redux-falcor](https://github.com/ekosz/redux-falcor) — Falcor
+* [deku-redux](https://github.com/troch/deku-redux) — Deku
 
 ## Middleware
 
