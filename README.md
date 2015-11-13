@@ -31,7 +31,7 @@ I wrote Redux while working on my React Europe talk called [“Hot Reloading wit
 
 ### Influences
 
-Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
+Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
 Whether you have used them or not, Redux only takes a few minutes to get started with.
 
 ### Installation
@@ -42,16 +42,16 @@ To install the stable version:
 npm install --save redux
 ```
 
-Most likely, you’ll also need [the React bindings](http://github.com/gaearon/react-redux) and [the developer tools](http://github.com/gaearon/redux-devtools).
+Most likely, you’ll also need [the React bindings](https://github.com/rackt/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
 
 ```
 npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
 
-This assumes that you’re using [npm](http://npmjs.com/) package manager with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
+This assumes that you’re using [npm](https://www.npmjs.com/) package manager with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
 
-If you don’t yet use [npm](http://npmjs.com/) or a modern module bundler, and would rather prefer a single-file [UMD](https://github.com/umdjs/umd) build that makes `Redux` available as a global object, you can grab a pre-built version from [cdnjs](https://cdnjs.com/libraries/redux). We *don’t* recommend this approach for any serious application, as most of the libraries complementary to Redux are only available on [npm](http://npmjs.com/).
+If you don’t yet use [npm](https://www.npmjs.com/) or a modern module bundler, and would rather prefer a single-file [UMD](https://github.com/umdjs/umd) build that makes `Redux` available as a global object, you can grab a pre-built version from [cdnjs](https://cdnjs.com/libraries/redux). We *don’t* recommend this approach for any serious application, as most of the libraries complementary to Redux are only available on [npm](https://www.npmjs.com/).
 
 ### The Gist
 
@@ -137,19 +137,19 @@ If you’re new to the NPM ecosystem and have troubles getting a project up and 
 
 ### Discussion
 
-Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflux](http://reactiflux.com) Discord community.
+Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflux](http://www.reactiflux.com) Discord community.
 
 ### Thanks
 
 * [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
-* [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
-* [Developing ClojureScript with Figwheel](http://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
+* [Turning the database inside-out](http://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
+* [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
 * [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) for Hot Module Replacement;
 * [Flummox](https://github.com/acdlite/flummox) for teaching me to approach Flux without boilerplate or singletons;
 * [disto](https://github.com/threepointone/disto) for a proof of concept of hot reloadable Stores;
 * [NuclearJS](https://github.com/optimizely/nuclear-js) for proving this architecture can be performant;
 * [Om](https://github.com/omcljs/om) for popularizing the idea of a single state atom;
-* [Cycle](https://github.com/staltz/cycle) for showing how often a function is the best tool;
+* [Cycle](https://github.com/cyclejs/cycle-core) for showing how often a function is the best tool;
 * [React](https://github.com/facebook/react) for the pragmatic innovation.
 
 Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
@@ -164,7 +164,7 @@ Every release, along with the migration instructions, is documented on the Githu
 The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
 Meet some of the outstanding companies that made it possible:
 
-* [Webflow](http://webflow.com/)
+* [Webflow](https://webflow.com/)
 * [Chess iX](http://www.chess-ix.com/)
 
 [See the full list of Redux patrons.](PATRONS.md)
