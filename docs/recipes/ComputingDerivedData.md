@@ -85,7 +85,7 @@ Reselect provides a function `createSelector` for creating memoized selectors. `
 
 Let's define a memoized selector named `visibleTodosSelector` to replace `select`:
 
-#### `selectors/TodoSelectors.js`
+#### `selectors/todoSelectors.js`
 
 ```js
 import { createSelector } from 'reselect'
@@ -146,7 +146,7 @@ import { addTodo, completeTodo, setVisibilityFilter } from '../actions'
 import AddTodo from '../components/AddTodo'
 import TodoList from '../components/TodoList'
 import Footer from '../components/Footer'
-import { visibleTodosSelector } from '../selectors/todoSelectors.js'
+import { visibleTodosSelector } from '../selectors/todoSelectors'
 
 class App extends Component {
   render() {
