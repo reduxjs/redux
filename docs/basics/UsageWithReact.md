@@ -14,18 +14,18 @@ We will use React to build our simple todo app.
 npm install --save react-redux
 ```
 
-## Smart and Dumb Components
+## Container and Presentational Components
 
-React bindings for Redux embrace the idea of [separating “smart” and “dumb” components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
+React bindings for Redux embrace the idea of [separating container and presentational components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
 
-It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be “dumb” and receive all data via props.
+It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be presentational and receive all data via props.
 
 <table>
     <thead>
         <tr>
             <th></th>
-            <th scope="col" style="text-align:left">“Smart” Components</th>
-            <th scope="col" style="text-align:left">“Dumb” Components</th>
+            <th scope="col" style="text-align:left">Container Components</th>
+            <th scope="col" style="text-align:left">Presentational Components</th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +52,7 @@ It is advisable that only top-level components of your app (such as route handle
     </tbody>
 </table>
 
-In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest that you pass props down whenever possible.
+In this todo app, we will only have a single container component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest container components, we suggest that you pass props down whenever possible.
 
 ## Designing Component Hierarchy
 
@@ -75,13 +75,13 @@ I see the following components (and their props) emerge from this brief:
   - `filter: string` is the current filter: `'SHOW_ALL'`, `'SHOW_COMPLETED'` or `'SHOW_ACTIVE'`.
   - `onFilterChange(nextFilter: string)`: Callback to invoke when user chooses a different filter.
 
-These are all “dumb” components. They don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them.
+These are all presentational components. They don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them.
 
 If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
 
 Let’s write them! We don’t need to think about binding to Redux yet. You can just give them fake data while you experiment until they render correctly.
 
-## Dumb Components
+## Presentational Components
 
 These are all normal React components, so we won’t stop to examine them in detail. Here they go:
 

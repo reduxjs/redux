@@ -323,7 +323,7 @@ export default connect(state => ({
 }))(Posts)
 ```
 
-This is much less typing! If you’d like, you can still have “vanilla” action creators like `loadPostsSuccess` which you’d use from a “smart” `loadPosts` action creator.
+This is much less typing! If you’d like, you can still have “vanilla” action creators like `loadPostsSuccess` which you’d use from a container `loadPosts` action creator.
 
 **Finally, you can write your own middleware.** Let’s say you want to generalize the pattern above and describe your async action creators like this instead:
 

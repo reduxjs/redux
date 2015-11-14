@@ -180,7 +180,7 @@ export default function configureStore(initialState) {
 }
 ```
 
-## Smart Components
+## Container Components
 
 #### `containers/Root.js`
 
@@ -310,7 +310,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(AsyncApp)
 ```
 
-## Dumb Components
+## Presentational Components
 
 #### `components/Picker.js`
 
