@@ -114,7 +114,7 @@ const todoApp = combineReducers({
 export default todoApp
 ```
 
-## Smart Components
+## Container Components
 
 #### `containers/App.js`
 
@@ -187,7 +187,7 @@ function select(state) {
 export default connect(select)(App)
 ```
 
-## Dumb Components
+## Presentational Components
 
 #### `components/AddTodo.js`
 
