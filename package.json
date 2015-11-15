@@ -4,6 +4,11 @@
   "description": "Predictable state container for JavaScript apps",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "scripts": {
     "clean": "rimraf lib dist coverage",
     "lint": "eslint src test examples",
