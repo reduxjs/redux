@@ -9,17 +9,17 @@ Let's revisit the [Todos List example](../basics/UsageWithReact.md):
 #### `containers/App.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
-import Footer from '../components/Footer';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions'
+import AddTodo from '../components/AddTodo'
+import TodoList from '../components/TodoList'
+import Footer from '../components/Footer'
 
 class App extends Component {
   render() {
     // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
         <AddTodo
@@ -37,7 +37,7 @@ class App extends Component {
             dispatch(setVisibilityFilter(nextFilter))
           } />
       </div>
-    );
+    )
   }
 }
 
@@ -51,16 +51,16 @@ App.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}
 
 function selectTodos(todos, filter) {
   switch (filter) {
-  case VisibilityFilters.SHOW_ALL:
-    return todos;
-  case VisibilityFilters.SHOW_COMPLETED:
-    return todos.filter(todo => todo.completed);
-  case VisibilityFilters.SHOW_ACTIVE:
-    return todos.filter(todo => !todo.completed);
+    case VisibilityFilters.SHOW_ALL:
+      return todos
+    case VisibilityFilters.SHOW_COMPLETED:
+      return todos.filter(todo => todo.completed)
+    case VisibilityFilters.SHOW_ACTIVE:
+      return todos.filter(todo => !todo.completed)
   }
 }
 
@@ -68,11 +68,11 @@ function select(state) {
   return {
     visibleTodos: selectTodos(state.todos, state.visibilityFilter),
     visibilityFilter: state.visibilityFilter
-  };
+  }
 }
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(App);
+export default connect(select)(App)
 ```
 
 In the above example, `select` calls `selectTodos` to calculate `visibleTodos`. This works great, but there is a drawback: `visibleTodos` is calculated every time the component is updated. If the state tree is large, or the calculation expensive, repeating the calculation on every update may cause performance problems. Reselect can help to avoid these unnecessary recalculations.
@@ -85,35 +85,35 @@ Reselect provides a function `createSelector` for creating memoized selectors. `
 
 Let's define a memoized selector named `visibleTodosSelector` to replace `select`:
 
-#### `selectors/TodoSelectors.js`
+#### `selectors/todoSelectors.js`
 
 ```js
-import { createSelector } from 'reselect';
-import { VisibilityFilters } from './actions';
+import { createSelector } from 'reselect'
+import { VisibilityFilters } from './actions'
 
 function selectTodos(todos, filter) {
   switch (filter) {
-  case VisibilityFilters.SHOW_ALL:
-    return todos;
-  case VisibilityFilters.SHOW_COMPLETED:
-    return todos.filter(todo => todo.completed);
-  case VisibilityFilters.SHOW_ACTIVE:
-    return todos.filter(todo => !todo.completed);
+    case VisibilityFilters.SHOW_ALL:
+      return todos
+    case VisibilityFilters.SHOW_COMPLETED:
+      return todos.filter(todo => todo.completed)
+    case VisibilityFilters.SHOW_ACTIVE:
+      return todos.filter(todo => !todo.completed)
   }
 }
 
-const visibilityFilterSelector = (state) => state.visibilityFilter;
-const todosSelector = (state) => state.todos;
+const visibilityFilterSelector = (state) => state.visibilityFilter
+const todosSelector = (state) => state.todos
 
 export const visibleTodosSelector = createSelector(
-  [visibilityFilterSelector, todosSelector],
+  [ visibilityFilterSelector, todosSelector ],
   (visibilityFilter, todos) => {
     return {
       visibleTodos: selectTodos(todos, visibilityFilter),
       visibilityFilter
-    };
+    }
   }
-);
+)
 ```
 
 In the example above, `visibilityFilterSelector` and `todosSelector` are input-selectors. They are created as ordinary non-memoized selector functions because they do not transform the data they select. `visibleTodosSelector` on the other hand is a memoized selector. It takes `visibilityFilterSelector` and `todosSelector` as input-selectors, and a transform function that calculates the filtered todos list.
@@ -123,14 +123,14 @@ In the example above, `visibilityFilterSelector` and `todosSelector` are input-s
 A memoized selector can itself be an input-selector to another memoized selector. Here is `visibleTodosSelector` being used as an input-selector to a selector that further filters the todos by keyword:
 
 ```js
-const keywordSelector = (state) => state.keyword;
+const keywordSelector = (state) => state.keyword
 
 const keywordFilterSelector = createSelector(
-  [visibleTodosSelector, keywordSelector],
+  [ visibleTodosSelector, keywordSelector ],
   (visibleTodos, keyword) => visibleTodos.filter(
     todo => todo.indexOf(keyword) > -1
   )
-);
+)
 ```
 
 ### Connecting a Selector to the Redux Store
@@ -140,18 +140,18 @@ If you are using react-redux, you connect a memoized selector to the Redux store
 #### `containers/App.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { addTodo, completeTodo, setVisibilityFilter } from '../actions';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
-import Footer from '../components/Footer';
-import { visibleTodosSelector } from '../selectors/todoSelectors.js';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { addTodo, completeTodo, setVisibilityFilter } from '../actions'
+import AddTodo from '../components/AddTodo'
+import TodoList from '../components/TodoList'
+import Footer from '../components/Footer'
+import { visibleTodosSelector } from '../selectors/todoSelectors'
 
 class App extends Component {
   render() {
     // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
         <AddTodo
@@ -169,7 +169,7 @@ class App extends Component {
             dispatch(setVisibilityFilter(nextFilter))
           } />
       </div>
-    );
+    )
   }
 }
 
@@ -183,9 +183,9 @@ App.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}
 
 // Pass the selector to the connect component
-export default connect(visibleTodosSelector)(App);
+export default connect(visibleTodosSelector)(App)
 ```
 

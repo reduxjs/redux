@@ -18,21 +18,21 @@ You might want to use it to apply several [store enhancers](../Glossary.md#store
 This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a few developer tools from the [redux-devtools](https://github.com/gaearon/redux-devtools) package.
 
 ```js
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import * as reducers from '../reducers/index';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import * as reducers from '../reducers/index'
 
-let reducer = combineReducers(reducers);
-let middleware = [thunk];
+let reducer = combineReducers(reducers)
+let middleware = [ thunk ]
 
-let finalCreateStore;
+let finalCreateStore
 
 // In production, we want to use just the middleware.
 // In development, we want to use some store enhancers from redux-devtools.
 // UglifyJS will eliminate the dead code depending on the build environment.
 
 if (process.env.NODE_ENV === 'production') {
-  finalCreateStore = applyMiddleware(...middleware)(createStore);
+  finalCreateStore = applyMiddleware(...middleware)(createStore)
 } else {
   finalCreateStore = compose(
     applyMiddleware(...middleware),
@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
     require('redux-devtools').persistState(
       window.location.href.match(/[?&]debug_session=([^&]+)\b/)
     )
-  )(createStore);
+  )(createStore)
 
   // Same code without the `compose` helper:
   //
@@ -50,10 +50,10 @@ if (process.env.NODE_ENV === 'production') {
   //       window.location.href.match(/[?&]debug_session=([^&]+)\b/)
   //     )(createStore)
   //   )
-  // );
+  // )
 }
 
-let store = finalCreateStore(reducer);
+let store = finalCreateStore(reducer)
 ```
 
 #### Tips

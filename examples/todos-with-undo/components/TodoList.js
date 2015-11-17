@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import Todo from './Todo';
+import React, { Component, PropTypes } from 'react'
+import Todo from './Todo'
 
 export default class TodoList extends Component {
   render() {
@@ -11,7 +11,7 @@ export default class TodoList extends Component {
                 onClick={() => this.props.onTodoClick(index)} />
         )}
       </ul>
-    );
+    )
   }
 }
 
@@ -21,4 +21,4 @@ TodoList.propTypes = {
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   }).isRequired).isRequired
-};
+}

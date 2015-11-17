@@ -1,19 +1,19 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
 export default class Footer extends Component {
   renderFilter(filter, name) {
     if (filter === this.props.filter) {
-      return name;
+      return name
     }
 
     return (
       <a href="#" onClick={e => {
-        e.preventDefault();
-        this.props.onFilterChange(filter);
+        e.preventDefault()
+        this.props.onFilterChange(filter)
       }}>
         {name}
       </a>
-    );
+    )
   }
 
   renderFilters() {
@@ -28,7 +28,7 @@ export default class Footer extends Component {
         {this.renderFilter('SHOW_ACTIVE', 'Active')}
         .
       </p>
-    );
+    )
   }
 
   renderUndo() {
@@ -37,7 +37,7 @@ export default class Footer extends Component {
         <button onClick={this.props.onUndo} disabled={this.props.undoDisabled}>Undo</button>
         <button onClick={this.props.onRedo} disabled={this.props.redoDisabled}>Redo</button>
       </p>
-    );
+    )
   }
 
   render() {
@@ -46,7 +46,7 @@ export default class Footer extends Component {
         {this.renderFilters()}
         {this.renderUndo()}
       </div>
-    );
+    )
   }
 }
 
@@ -61,4 +61,4 @@ Footer.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}

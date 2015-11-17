@@ -62,18 +62,18 @@ To learn how to describe asynchronous API calls, read the current state inside a
 #### Example
 
 ```js
-import { createStore } from 'redux';
-let store = createStore(todos, ['Use Redux']);
+import { createStore } from 'redux'
+let store = createStore(todos, [ 'Use Redux' ])
 
 function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 
-store.dispatch(addTodo('Read the docs'));
-store.dispatch(addTodo('Read about the middleware'));
+store.dispatch(addTodo('Read the docs'))
+store.dispatch(addTodo('Read about the middleware'))
 ```
 
 <hr>
@@ -98,21 +98,21 @@ To unsubscribe the change listener, invoke the function returned by `subscribe`.
 
 ```js
 function select(state) {
-  return state.some.deep.property;
+  return state.some.deep.property
 }
 
-let currentValue;
+let currentValue
 function handleChange() {
-  let previousValue = currentValue;
-  currentValue = select(store.getState());
+  let previousValue = currentValue
+  currentValue = select(store.getState())
   
   if (previousValue !== currentValue) {
-    console.log('Some deep nested property changed from', previousValue, 'to', currentValue);
+    console.log('Some deep nested property changed from', previousValue, 'to', currentValue)
   }
 }
 
-let unsubscribe = store.subscribe(handleChange);
-handleChange();
+let unsubscribe = store.subscribe(handleChange)
+handleChange()
 ```
 
 <hr>

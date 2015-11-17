@@ -16,26 +16,26 @@ There should only be a single store in your app.
 #### Example
 
 ```js
-import { createStore } from 'redux';
+import { createStore } from 'redux'
 
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    return state.concat([action.text]);
-  default:
-    return state;
+    case 'ADD_TODO':
+      return state.concat([ action.text ])
+    default:
+      return state
   }
 }
 
-let store = createStore(todos, ['Use Redux']);
+let store = createStore(todos, [ 'Use Redux' ])
 
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Read the docs'
-});
+})
 
-console.log(store.getState());
-// ['Use Redux', 'Read the docs']
+console.log(store.getState())
+// [ 'Use Redux', 'Read the docs' ]
 ```
 
 #### Tips

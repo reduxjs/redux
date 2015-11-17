@@ -20,7 +20,7 @@ It is tiny (2kB) and has no dependencies.
 >Jing Chen, creator of Flux
 
 >[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
->Bill Fisher, creator of Flux
+>Bill Fisher, author of Flux documentation
 
 >[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
 >André Staltz, creator of Cycle
@@ -31,7 +31,7 @@ I wrote Redux while working on my React Europe talk called [“Hot Reloading wit
 
 ### Influences
 
-Redux evolves the ideas of [Flux](https://facebook.github.io/flux), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
+Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
 Whether you have used them or not, Redux only takes a few minutes to get started with.
 
 ### Installation
@@ -42,16 +42,16 @@ To install the stable version:
 npm install --save redux
 ```
 
-Most likely, you’ll also need [the React bindings](http://github.com/gaearon/react-redux) and [the developer tools](http://github.com/gaearon/redux-devtools).
+Most likely, you’ll also need [the React bindings](https://github.com/rackt/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
 
 ```
 npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
 
-This assumes that you’re using [npm](http://npmjs.com/) package manager with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
+This assumes that you’re using [npm](https://www.npmjs.com/) package manager with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
 
-If you don’t yet use [npm](http://npmjs.com/) or a modern module bundler, and would rather prefer a single-file [UMD](https://github.com/umdjs/umd) build that makes `Redux` available as a global object, you can grab a pre-built version from [cdnjs](https://cdnjs.com/libraries/redux). We *don’t* recommend this approach for any serious application, as most of the libraries complementary to Redux are only available on [npm](http://npmjs.com/).
+If you don’t yet use [npm](https://www.npmjs.com/) or a modern module bundler, and would rather prefer a single-file [UMD](https://github.com/umdjs/umd) build that makes `Redux` available as a global object, you can grab a pre-built version from [cdnjs](https://cdnjs.com/libraries/redux). We *don’t* recommend this approach for any serious application, as most of the libraries complementary to Redux are only available on [npm](https://www.npmjs.com/).
 
 ### The Gist
 
@@ -62,7 +62,7 @@ To specify how the actions transform the state tree, you write pure *reducers*.
 That’s it!
 
 ```js
-import { createStore } from 'redux';
+import { createStore } from 'redux'
 
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
@@ -78,30 +78,30 @@ import { createStore } from 'redux';
 function counter(state = 0, action) {
   switch (action.type) {
   case 'INCREMENT':
-    return state + 1;
+    return state + 1
   case 'DECREMENT':
-    return state - 1;
+    return state - 1
   default:
-    return state;
+    return state
   }
 }
 
 // Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
-let store = createStore(counter);
+let store = createStore(counter)
 
 // You can subscribe to the updates manually, or use bindings to your view layer.
 store.subscribe(() =>
   console.log(store.getState())
-);
+)
 
 // The only way to mutate the internal state is to dispatch an action.
 // The actions can be serialized, logged or stored and later replayed.
-store.dispatch({ type: 'INCREMENT' });
+store.dispatch({ type: 'INCREMENT' })
 // 1
-store.dispatch({ type: 'INCREMENT' });
+store.dispatch({ type: 'INCREMENT' })
 // 2
-store.dispatch({ type: 'DECREMENT' });
+store.dispatch({ type: 'DECREMENT' })
 // 1
 ```
 
@@ -131,24 +131,25 @@ For PDF, ePub, and MOBI exports for offline reading, and instructions on how to 
 * [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
 * [Universal](http://rackt.github.io/redux/docs/introduction/Examples.html#universal) ([source](https://github.com/rackt/redux/tree/master/examples/universal))
 * [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
+* [Shopping Cart](http://rackt.github.io/redux/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/rackt/redux/tree/master/examples/shopping-cart))
 
 If you’re new to the NPM ecosystem and have troubles getting a project up and running, or aren’t sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
 ### Discussion
 
-Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflux](http://reactiflux.com) Discord community.
+Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflux](http://www.reactiflux.com) Discord community.
 
 ### Thanks
 
 * [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
-* [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
-* [Developing ClojureScript with Figwheel](http://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
+* [Turning the database inside-out](http://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
+* [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
 * [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) for Hot Module Replacement;
 * [Flummox](https://github.com/acdlite/flummox) for teaching me to approach Flux without boilerplate or singletons;
 * [disto](https://github.com/threepointone/disto) for a proof of concept of hot reloadable Stores;
 * [NuclearJS](https://github.com/optimizely/nuclear-js) for proving this architecture can be performant;
 * [Om](https://github.com/omcljs/om) for popularizing the idea of a single state atom;
-* [Cycle](https://github.com/staltz/cycle) for showing how often a function is the best tool;
+* [Cycle](https://github.com/cyclejs/cycle-core) for showing how often a function is the best tool;
 * [React](https://github.com/facebook/react) for the pragmatic innovation.
 
 Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
@@ -163,7 +164,7 @@ Every release, along with the migration instructions, is documented on the Githu
 The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
 Meet some of the outstanding companies that made it possible:
 
-* [Webflow](http://webflow.com/)
+* [Webflow](https://webflow.com/)
 * [Chess iX](http://www.chess-ix.com/)
 
 [See the full list of Redux patrons.](PATRONS.md)

@@ -11,6 +11,9 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [react-redux](https://github.com/gaearon/react-redux) — React
 * [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
 * [ng2-redux](https://github.com/wbuchwalter/ng2-redux) — Angular 2
+* [backbone-redux](https://github.com/redbooth/backbone-redux) — Backbone
+* [redux-falcor](https://github.com/ekosz/redux-falcor) — Falcor
+* [deku-redux](https://github.com/troch/deku-redux) — Deku
 
 ## Middleware
 
@@ -20,6 +23,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 * [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Warns about state mutations in development
 * [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Analytics middleware for Redux
+* [redux-gen](https://github.com/weo-edu/redux-gen) — Generator middleware for Redux
 
 ## Components
 
@@ -32,7 +36,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ## Reducer Enhancers
 
-* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later commited or reverted
+* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later committed or reverted
 * [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
 * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
