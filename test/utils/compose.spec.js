@@ -21,5 +21,11 @@ describe('Utils', () => {
       expect(compose(b, c, a)(final)('')).toBe('bca')
       expect(compose(c, a, b)(final)('')).toBe('cab')
     })
+
+    it('can be seeded with multiple arguments', () => {
+      const square = x => x * x
+      const add = (x, y) => x + y
+      expect(compose(square, add)(1, 2)).toBe(9)
+    })
   })
 })
