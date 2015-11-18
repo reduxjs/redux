@@ -1,6 +1,6 @@
 import expect from 'expect'
 import { combineReducers } from '../../src'
-import createStore, { ActionTypes } from '../../src/createStore'
+import createStore from '../../src/createStore'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -151,7 +151,7 @@ describe('Utils', () => {
       expect(reducer(initialState, { type: 'increment' })).toNotBe(initialState)
     })
 
-    it('throws an error on first call if a reducer attempts to handle a private action', () => {
+    it('throws an error if reducer does not return current state for all unknown action types', () => {
       const reducer = combineReducers({
         counter(state, action) {
           switch (action.type) {
@@ -159,16 +159,14 @@ describe('Utils', () => {
               return state + 1
             case 'decrement':
               return state - 1
-            // Never do this in your code:
-            case ActionTypes.INIT:
-              return 0
             default:
-              return undefined
+              return 0
           }
         }
       })
+
       expect(() => reducer()).toThrow(
-        /"counter".*private/
+        /"counter".*probed/
       )
     })
 

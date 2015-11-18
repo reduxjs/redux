@@ -7,7 +7,7 @@ import isPlainObject from './utils/isPlainObject'
  * Do not reference these action types directly in your code.
  */
 export var ActionTypes = {
-  INIT: '@@redux/INIT'
+  INIT: '@@redux/INIT_' + Math.random().toString(36).substring(7).split('').join('.')
 }
 
 /**
