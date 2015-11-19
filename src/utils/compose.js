@@ -6,7 +6,9 @@
  * left. For example, compose(f, g, h) is identical to arg => f(g(h(arg))).
  */
 export default function compose(...funcs) {
-  return (...args) => funcs.slice(0, -1).reduceRight((composed, f) =>
-    f(composed), funcs[funcs.length - 1](...args)
-  )
+  return (...args) => {
+    return funcs.length ?
+      funcs.slice(0, -1).reduceRight((composed, f) => f(composed), funcs[funcs.length - 1](...args)) :
+      args[0]
+  }
 }

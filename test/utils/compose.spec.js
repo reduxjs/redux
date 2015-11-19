@@ -27,5 +27,11 @@ describe('Utils', () => {
       const add = (x, y) => x + y
       expect(compose(square, add)(1, 2)).toBe(9)
     })
+
+    it('returns the first given argument if given no functions', () => {
+      expect(compose()(1, 2)).toBe(1)
+      expect(compose()(3)).toBe(3)
+      expect(compose()()).toBe(undefined)
+    })
   })
 })
