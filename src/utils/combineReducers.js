@@ -65,7 +65,6 @@ function assertReducerSanity(reducers) {
       )
     }
 
-
     var randomState = Math.random().toString(36).substring(7).split('').join('.')
     if (reducer(randomState, { type: ActionTypes.INIT }) !== randomState) {
       throw new Error(
