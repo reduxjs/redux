@@ -122,6 +122,8 @@ function mockStore(getState, expectedActions, done) {
   }
 
   function mockStoreWithoutMiddleware() {
+    let hasDoneBefore = false
+  
     return {
       getState() {
         return typeof getState === 'function' ?
@@ -130,16 +132,22 @@ function mockStore(getState, expectedActions, done) {
       },
 
       dispatch(action) {
+        if (hasDoneBefore) {
+          return
+        }
+      
         const expectedAction = expectedActions.shift()
 
         try {
           expect(action).toEqual(expectedAction)
           if (done && !expectedActions.length) {
             done()
+            hasDoneBefore = true
           }
           return action
         } catch (e) {
           done(e)
+          hasDoneBefore = true
         }
       }
     }
