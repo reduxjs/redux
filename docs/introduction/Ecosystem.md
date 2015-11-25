@@ -6,7 +6,36 @@ For an extensive list of everything related to Redux, we recommend [Awesome Redu
 
 On this page we will only feature a few of them that the Redux maintainers have vetted personally. Don’t let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don’t hesitate to submit a PR if you’ve built something wonderful with Redux.
 
-## Bindings
+## Learning Redux
+
+### Screencasts
+
+* **[Getting Started by Redux (30 free videos)](https://egghead.io/series/getting-started-with-redux)** — Learn the basics of Redux directly from its creator 
+
+### Example Apps
+
+* [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
+* [Shopping Cart (Flux Comparison)](https://github.com/voronianski/flux-comparison/tree/master/redux) — A shopping cart example from Flux Comparison
+
+### Tutorials and Articles
+
+* [Redux Tutorial](https://github.com/happypoulp/redux-tutorial) — Learn how to use Redux step by step
+* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux) — An intro to Redux
+* [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6) — A visual explanation of Redux data flow
+* [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container) — Learn the basic concepts of Redux
+* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4) — A guide to creating a universal app with data fetching and routing
+* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
+* [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a#.l033pyr02) — In-depth guide to implementing Redux middleware
+* [A Simple Way to Route with Redux](http://jlongster.com/A-Simple-Way-to-Route-with-Redux) — An introduction to Redux Simple Router
+
+### Talks
+
+* [Live React: Hot Reloading and Time Travel](http://youtube.com/watch?v=xsSnOQynTHs) — See how constraints enforced by Redux make hot reloading with time travel easy
+* [Cleaning the Tar: Using React within the Firefox Developer Tools](https://www.youtube.com/watch?v=qUlRpybs7_c) — Learn how to gradually migrate existing MVC applications to Redux
+
+## Using Redux
+
+### Bindings
 
 * [react-redux](https://github.com/gaearon/react-redux) — React
 * [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
@@ -15,7 +44,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-falcor](https://github.com/ekosz/redux-falcor) — Falcor
 * [deku-redux](https://github.com/troch/deku-redux) — Deku
 
-## Middleware
+### Middleware
 
 * [redux-thunk](http://github.com/gaearon/redux-thunk) — The easiest way to write async action creators
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
@@ -25,21 +54,21 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Analytics middleware for Redux
 * [redux-gen](https://github.com/weo-edu/redux-gen) — Generator middleware for Redux
 
-## Routing
+### Routing
 
 * [redux-router](https://github.com/rackt/redux-router) — Redux bindings for React Router
 * [redux-simple-router](https://github.com/jlongster/redux-simple-router) — Ruthlessly simple bindings to keep React Router and Redux in sync
 
-## Components
+### Components
 
 * [redux-form](https://github.com/erikras/redux-form) — Keep React form state in Redux
 
-## Store Enhancers
+### Store Enhancers
 
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Customize batching and debouncing calls to the store subscribers
 * [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — History transitions based on arbitrary actions
 
-## Reducer Enhancers
+### Reducer Enhancers
 
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later committed or reverted
 * [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
@@ -47,7 +76,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
 * [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
 
-## Utilities
+### Utilities
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
 * [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the reducers
@@ -58,33 +87,15 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) - Mock redux store for testing your app
 
-## Developer Tools
+### Developer Tools
 
 * [redux-devtools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
 
-## Community Conventions
+### Community Conventions
 
 * [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — A human-friendly standard for Flux action objects
 * [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — An opinionated standard for nested reducer composition
 * [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling reducers, action types and actions
-
-## Talks
-
-* [Live React: Hot Reloading and Time Travel](http://youtube.com/watch?v=xsSnOQynTHs) — See how constraints enforced by Redux make hot reloading with time travel easy
-* [Cleaning the Tar: Using React within the Firefox Developer Tools](https://www.youtube.com/watch?v=qUlRpybs7_c) — Learn how to gradually migrate existing MVC applications to Redux
-
-## Tutorials and Articles
-
-* [redux-tutorial](https://github.com/happypoulp/redux-tutorial) — Learn how to use Redux step by step
-* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux) — An intro to Redux
-* [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6) — A visual explanation of Redux data flow
-* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4) — A guide to creating a universal app with data fetching and routing
-* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
-
-## Example Apps
-
-* [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
-* [Shopping Cart (Flux Comparison)](https://github.com/voronianski/flux-comparison/tree/master/redux) — A shopping cart example from Flux Comparison
 
 ## More
 
