@@ -10,7 +10,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Screencasts
 
-* **[Getting Started by Redux (30 free videos)](https://egghead.io/series/getting-started-with-redux)** — Learn the basics of Redux directly from its creator 
+* **[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)** — Learn the basics of Redux directly from its creator (30 free videos)
 
 ### Example Apps
 
