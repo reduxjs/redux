@@ -7,8 +7,14 @@
  */
 export default function compose(...funcs) {
   return (...args) => {
-    return funcs.length ?
-      funcs.slice(0, -1).reduceRight((composed, f) => f(composed), funcs[funcs.length - 1](...args)) :
-      args[0]
+    if (funcs.length === 0) {
+      // We weren't given any functions, just return the first passed in arg.
+      return args[0];
+    }
+
+    const last = funcs[funcs.length - 1];
+    const rest = funcs.slice(0, -1);
+
+    return rest.reduceRight((composed, f) => f(composed), last(...args));
   }
 }
