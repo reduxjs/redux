@@ -5,7 +5,7 @@ Redux is distributed with a few examples in its [source code](https://github.com
 >##### Note on Copying
 >If you copy Redux examples outside their folders, you can delete some lines at the end of their `webpack.config.js` files. They follow a “You can safely delete these lines in your project.” comment.
 
-## Counter
+## [Counter](examples/counter)
 
 Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) example:
 
@@ -24,7 +24,7 @@ It covers:
 * Basic Redux flow
 * Testing
 
-## TodoMVC
+## [TodoMVC](examples/todomvc)
 
 Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) example:
 
@@ -44,7 +44,7 @@ It covers:
 * Updating nested data
 * Testing
 
-## Todos with Undo
+## [Todos with Undo](examples/todos-with-undo)
 
 Run the [todos-with-undo](https://github.com/rackt/redux/tree/master/examples/todos-with-undo) example:
 
@@ -63,7 +63,7 @@ It covers:
 * Redux flow with two reducers
 * Undo/Redo functionality in Redux with [redux-undo](https://github.com/omnidan/redux-undo)
 
-## Async
+## [Async](examples/async)
 
 Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) example:
 
@@ -103,7 +103,7 @@ It covers:
 * Prefetching state based on input and via asynchronous fetches.
 * Passing state from the server to the client
 
-## Real World
+## [Real World](examples/real-world)
 
 Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-world) example:
 
@@ -126,7 +126,7 @@ It covers:
 * Pagination
 * Routing
 
-## Shopping Cart
+## [Shopping Cart](examples/shopping-cart)
 
 Run the [Shopping Cart](https://github.com/rackt/redux/tree/master/examples/shopping-cart) example:
 
