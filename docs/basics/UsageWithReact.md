@@ -242,7 +242,7 @@ export default class App extends Component {
               {
                 text: 'Use Redux',
                 completed: true
-              }, 
+              },
               {
                 text: 'Learn to connect it to React',
                 completed: false
