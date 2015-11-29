@@ -59,9 +59,9 @@ function assertReducerSanity(reducers) {
     if (typeof initialState === 'undefined') {
       throw new Error(
         `Reducer "${key}" returned undefined during initialization. ` +
-        `If the state passed to the reducer is undefined, you must ` +
-        `explicitly return the initial state. The initial state may ` +
-        `not be undefined.`
+        `Reducers should never return undefined. Make sure this reducer ` +
+        `has a catch-all clause for unknown action types and that it returns a ` +
+        `default initial state if the state passed to it is undefined.`
       )
     }
 

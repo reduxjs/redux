@@ -84,6 +84,25 @@ describe('Utils', () => {
       )
     })
 
+    it('throws an error if reducer does not have a catch-all clause for unknown action types', () => {
+      const reducer = combineReducers({
+        counter(state = 0, action) {
+          switch (action.type) {
+            case 'increment':
+              return state + 1
+            case 'decrement':
+              return state - 1
+            case undefined:
+              return state
+          }
+        }
+      })
+
+      expect(() => reducer()).toThrow(
+        /"counter".*initialization/
+      )
+    })
+
     it('catches error thrown in reducer when initializing and re-throw', () => {
       const reducer = combineReducers({
         throwingReducer() {
@@ -151,7 +170,7 @@ describe('Utils', () => {
       expect(reducer(initialState, { type: 'increment' })).toNotBe(initialState)
     })
 
-    it('throws an error if reducer does not return current state for all unknown action types', () => {
+    it('throws an error if reducer does not return current state for unknown action types', () => {
       const reducer = combineReducers({
         counter(state, action) {
           switch (action.type) {
