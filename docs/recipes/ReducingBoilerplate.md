@@ -333,7 +333,7 @@ export function loadPosts(userId) {
     // Types of actions to emit before and after
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
     // Check the cache (optional):
-    shouldCallAPI: (state) => !state.users[userId],
+    shouldCallAPI: (state) => !state.posts[userId],
     // Perform the fetching:
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     // Arguments to inject in begin/end actions
@@ -403,7 +403,7 @@ After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddlew
 export function loadPosts(userId) {
   return {
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    shouldCallAPI: (state) => !state.users[userId],
+    shouldCallAPI: (state) => !state.posts[userId],
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     payload: { userId }
   }
@@ -412,7 +412,7 @@ export function loadPosts(userId) {
 export function loadComments(postId) {
   return {
     types: ['LOAD_COMMENTS_REQUEST', 'LOAD_COMMENTS_SUCCESS', 'LOAD_COMMENTS_FAILURE'],
-    shouldCallAPI: (state) => !state.posts[postId],
+    shouldCallAPI: (state) => !state.comments[postId],
     callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
     payload: { postId }
   }
