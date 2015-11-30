@@ -138,7 +138,7 @@ Here’s what the state shape for our “Reddit headlines” app might look like
         {
           id: 42,
           title: 'Confusion about Flux and Relay'
-        }, 
+        },
         {
           id: 500,
           title: 'Creating a Simple Application Using React JS and Flux Architecture'
@@ -337,7 +337,7 @@ export function fetchPosts(reddit) {
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function (dispatch) {
+  return dispatch => {
 
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
