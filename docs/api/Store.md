@@ -101,11 +101,11 @@ function select(state) {
   return state.some.deep.property
 }
 
-let currentValue
+let currentValue = select(store.getState())
 function handleChange() {
   let previousValue = currentValue
   currentValue = select(store.getState())
-  
+
   if (previousValue !== currentValue) {
     console.log('Some deep nested property changed from', previousValue, 'to', currentValue)
   }
