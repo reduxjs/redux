@@ -26,12 +26,14 @@ function todos(state = [], action) {
       text: action.text,
       completed: false
     })
+    return state
   case 'COMPLETE_TODO':
     // Wrong! This mutates state[action.index].
     state[action.index].completed = true
+    return state
+  default:
+    return state
   }
-
-  return state
 }
 ```
 
@@ -43,7 +45,7 @@ function todos(state = [], action) {
     case 'ADD_TODO':
       // Return a new array
       return [
-        ...state, 
+        ...state,
         {
           text: action.text,
           completed: false
