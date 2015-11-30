@@ -20,19 +20,19 @@ For example, a reducer like this is wrong because it mutates the state:
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    // Wrong! This mutates state
-    state.push({
-      text: action.text,
-      completed: false
-    })
-    return state
-  case 'COMPLETE_TODO':
-    // Wrong! This mutates state[action.index].
-    state[action.index].completed = true
-    return state
-  default:
-    return state
+    case 'ADD_TODO':
+      // Wrong! This mutates state
+      state.push({
+        text: action.text,
+        completed: false
+      })
+      return state
+    case 'COMPLETE_TODO':
+      // Wrong! This mutates state[action.index].
+      state[action.index].completed = true
+      return state
+    default:
+      return state
   }
 }
 ```
