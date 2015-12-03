@@ -364,6 +364,8 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired
+  }).isRequired).isRequired
 }
 ```
