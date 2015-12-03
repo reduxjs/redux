@@ -26,16 +26,14 @@ function bindActionCreator(actionCreator, dispatch) {
  * function.
  */
 export default function bindActionCreators(actionCreators, dispatch) {
-  if (typeof actionCreators === 'function') {
+  if (typeof actionCreators === 'function')
     return bindActionCreator(actionCreators, dispatch)
-  }
 
-  if (typeof actionCreators !== 'object' || actionCreators === null || actionCreators === undefined) {  // eslint-disable-line no-eq-null
+  if (typeof actionCreators !== 'object' || actionCreators === null || actionCreators === undefined)  // eslint-disable-line no-eq-null
     throw new Error(
-      `bindActionCreators expected an object or a function, instead received ${actionCreators === null ? 'null' : typeof actionCreators}. ` +
-      `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
+      `bindActionCreators expected an object or a function, instead received ${actionCreators === null ? 'null' : typeof actionCreators}.
+      Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
     )
-  }
 
   return mapValues(actionCreators, actionCreator =>
     bindActionCreator(actionCreator, dispatch)

@@ -31,9 +31,8 @@ export var ActionTypes = {
  * and subscribe to changes.
  */
 export default function createStore(reducer, initialState) {
-  if (typeof reducer !== 'function') {
+  if (typeof reducer !== 'function')
     throw new Error('Expected the reducer to be a function.')
-  }
 
   var currentReducer = reducer
   var currentState = initialState
@@ -62,9 +61,7 @@ export default function createStore(reducer, initialState) {
     var isSubscribed = true
 
     return function unsubscribe() {
-      if (!isSubscribed) {
-        return
-      }
+      if (!isSubscribed) return
 
       isSubscribed = false
       var index = listeners.indexOf(listener)
@@ -98,23 +95,20 @@ export default function createStore(reducer, initialState) {
    * return something else (for example, a Promise you can await).
    */
   function dispatch(action) {
-    if (!isPlainObject(action)) {
+    if (!isPlainObject(action))
       throw new Error(
         'Actions must be plain objects. ' +
         'Use custom middleware for async actions.'
       )
-    }
 
-    if (typeof action.type === 'undefined') {
+    if (typeof action.type === 'undefined')
       throw new Error(
         'Actions may not have an undefined "type" property. ' +
         'Have you misspelled a constant?'
       )
-    }
 
-    if (isDispatching) {
+    if (isDispatching)
       throw new Error('Reducers may not dispatch actions.')
-    }
 
     try {
       isDispatching = true

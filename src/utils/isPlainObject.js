@@ -6,15 +6,11 @@ var objStringValue = fnToString(Object)
  * @returns {boolean} True if the argument appears to be a plain object.
  */
 export default function isPlainObject(obj) {
-  if (!obj || typeof obj !== 'object') {
-    return false
-  }
+  if (!obj || typeof obj !== 'object') return false
 
   var proto = typeof obj.constructor === 'function' ? Object.getPrototypeOf(obj) : Object.prototype
 
-  if (proto === null) {
-    return true
-  }
+  if (proto === null) return true
 
   var constructor = proto.constructor
 
