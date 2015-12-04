@@ -65,7 +65,7 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-By contrast, in Redux action creators are **pure functions** with zero side-effects. They simply return an action:
+By contrast, in Redux action creators simply return an action:
 
 ```js
 function addTodo(text) {
