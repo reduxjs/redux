@@ -159,7 +159,8 @@ For PDF, ePub, and MOBI exports for offline reading, and instructions on how to 
 * [Universal](http://rackt.github.io/redux/docs/introduction/Examples.html#universal) ([source](https://github.com/rackt/redux/tree/master/examples/universal))
 * [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
 * [Shopping Cart](http://rackt.github.io/redux/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/rackt/redux/tree/master/examples/shopping-cart))
-
+* [Snowflake] (https://github.com/bartonhammond/snowflake) -  ReactNative, Redux, ReactRedux, Parse.com, Immutable, Jest (88%  coverage)- iOS & Android
+  
 If you’re new to the NPM ecosystem and have troubles getting a project up and running, or aren’t sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
 ### Discussion
