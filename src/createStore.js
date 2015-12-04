@@ -92,12 +92,17 @@ export default function createStore(reducer, initialState) {
    * a `type` property which may not be `undefined`. It is a good idea to use
    * string constants for action types.
    *
+   * @param {Function} callback An optional function to be called when any and all
+   * promises returned by listeners have been resolved. This can be used for cases
+   * when you need to perform a callback after asyncronous changes or rendering
+   * caused by an action have been completed.
+   *
    * @returns {Object} For convenience, the same action object you dispatched.
    *
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  function dispatch(action) {
+  function dispatch(action, callback=null) {
     if (!isPlainObject(action)) {
       throw new Error(
         'Actions must be plain objects. ' +
@@ -123,7 +128,16 @@ export default function createStore(reducer, initialState) {
       isDispatching = false
     }
 
-    listeners.slice().forEach(listener => listener())
+    var listenerPromises = listeners.slice().reduce((promises, listener) => {
+      var response = listener()
+      if (response && typeof response.then === 'function') {
+        promises.push(response)
+      }
+      return promises
+    }, [])
+
+    Promise.all(listenerPromises).then(callback)
+
     return action
   }
 
