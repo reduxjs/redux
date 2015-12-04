@@ -12,5 +12,12 @@ describe('mapValues', () => {
       b: 'db'
     })
   })
+  it('returns input object when called with identity function', () => {
+    const test = {
+      a: 'c',
+      b: 'd'
+    }
+    expect(mapValues(test, (val, key) => val,true)).toBe(test)
+  })
 })
 
