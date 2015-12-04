@@ -47,7 +47,7 @@ The store’s reducing function will be called with the current [`getState()`](#
 
 #### Returns
 
-(Object<sup>†</sup>): The dispatched action.
+(Object<sup>†</sup>): The dispatched action or the return value of the middleware chain e.g. a Promise of the dispatch action object.
 
 #### Notes
 
