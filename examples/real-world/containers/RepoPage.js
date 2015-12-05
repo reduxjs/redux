@@ -54,7 +54,6 @@ class RepoPage extends Component {
         <List renderItem={this.renderUser}
               items={stargazers}
               onLoadMoreClick={this.handleLoadMoreClick}
-              nextPageUrl={this.nexPageUrl}
               loadingLabel={`Loading stargazers of ${name}...`}
               {...stargazersPagination} />
       </div>

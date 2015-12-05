@@ -55,7 +55,6 @@ class UserPage extends Component {
         <List renderItem={this.renderRepo}
               items={zip(starredRepos, starredRepoOwners)}
               onLoadMoreClick={this.handleLoadMoreClick}
-              nextPageUrl={this.nexPageUrl}
               loadingLabel={`Loading ${login}’s starred...`}
               {...starredPagination} />
       </div>
