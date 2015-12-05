@@ -11,7 +11,7 @@ This makes it easy to create universal apps, as the state from your server can b
 ```js
 console.log(store.getState())
 
-/* returns
+/* Prints
 {
   visibilityFilter: 'SHOW_ALL',
   todos: [
