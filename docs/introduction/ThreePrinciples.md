@@ -46,7 +46,7 @@ store.dispatch({
 })
 ```
 
-### Actions are written as pure functions
+### Transformation is written as pure functions
 
 **To specify how the state tree is transformed by actions, you write pure [reducers](../Glossary.md#reducer).**
 
