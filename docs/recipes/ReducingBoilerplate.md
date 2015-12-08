@@ -150,7 +150,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action). 
+There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
 ## Async Action Creators
 
@@ -346,53 +346,51 @@ The middleware that interprets such actions could look like this:
 
 ```js
 function callAPIMiddleware({ dispatch, getState }) {
-  return function (next) {
-    return function (action) {
-      const {
-        types,
-        callAPI,
-        shouldCallAPI = () => true,
-        payload = {}
-      } = action
+  return next => action => {
+    const {
+      types,
+      callAPI,
+      shouldCallAPI = () => true,
+      payload = {}
+    } = action
 
-      if (!types) {
-        // Normal action: pass it on
-        return next(action)
-      }
-
-      if (
-        !Array.isArray(types) ||
-        types.length !== 3 ||
-        !types.every(type => typeof type === 'string')
-      ) {
-        throw new Error('Expected an array of three string types.')
-      }
-
-      if (typeof callAPI !== 'function') {
-        throw new Error('Expected fetch to be a function.')
-      }
-
-      if (!shouldCallAPI(getState())) {
-        return
-      }
-
-      const [ requestType, successType, failureType ] = types
-
-      dispatch(Object.assign({}, payload, {
-        type: requestType
-      }))
-
-      return callAPI().then(
-        response => dispatch(Object.assign({}, payload, {
-          response: response,
-          type: successType
-        })),
-        error => dispatch(Object.assign({}, payload, {
-          error: error,
-          type: failureType
-        }))
-      )
+    if (!types) {
+      // Normal action: pass it on
+      return next(action)
     }
+
+    if (
+      !Array.isArray(types) ||
+      types.length !== 3 ||
+      !types.every(type => typeof type === 'string')
+    ) {
+      throw new Error('Expected an array of three string types.')
+    }
+
+    if (typeof callAPI !== 'function') {
+      throw new Error('Expected fetch to be a function.')
+    }
+
+    if (!shouldCallAPI(getState())) {
+      return
+    }
+
+    const [ requestType, successType, failureType ] = types
+
+    dispatch(Object.assign({}, payload, {
+      type: requestType
+    }))
+
+    return callAPI().then(
+      response => dispatch(Object.assign({}, payload, {
+        response,
+        type: successType
+      })),
+      error => dispatch(Object.assign({}, payload, {
+        error,
+        type: failureType
+      }))
+    )
   }
 }
 ```
