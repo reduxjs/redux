@@ -14,7 +14,7 @@ export default class AddTodo extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={(e) => this.handleSubmit(e)}>
+        <form onSubmit={e => this.handleSubmit(e)}>
           <input type="text" ref="input" />
           <button>
             Add

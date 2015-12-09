@@ -1,4 +1,4 @@
-var fnToString = (fn) => Function.prototype.toString.call(fn)
+var fnToString = fn => Function.prototype.toString.call(fn)
 var objStringValue = fnToString(Object)
 
 /**

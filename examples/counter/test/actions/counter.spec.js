@@ -51,7 +51,7 @@ describe('actions', () => {
     expect(actions.decrement()).toEqual({ type: actions.DECREMENT_COUNTER })
   })
 
-  it('incrementIfOdd should create increment action', (done) => {
+  it('incrementIfOdd should create increment action', done => {
     const expectedActions = [
       { type: actions.INCREMENT_COUNTER }
     ]
@@ -59,14 +59,14 @@ describe('actions', () => {
     store.dispatch(actions.incrementIfOdd())
   })
 
-  it('incrementIfOdd shouldnt create increment action if counter is even', (done) => {
+  it('incrementIfOdd shouldnt create increment action if counter is even', done => {
     const expectedActions = []
     const store = mockStore({ counter: 2 }, expectedActions)
     store.dispatch(actions.incrementIfOdd())
     done()
   })
 
-  it('incrementAsync should create increment action', (done) => {
+  it('incrementAsync should create increment action', done => {
     const expectedActions = [
       { type: actions.INCREMENT_COUNTER }
     ]

@@ -6,7 +6,7 @@ import fs from 'fs'
 import path from 'path'
 import { spawnSync } from 'child_process'
 
-var exampleDirs = fs.readdirSync(__dirname).filter((file) => {
+var exampleDirs = fs.readdirSync(__dirname).filter(file => {
   return fs.statSync(path.join(__dirname, file)).isDirectory()
 })
 

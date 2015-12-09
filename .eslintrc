@@ -6,7 +6,8 @@
     "no-var": 0,
     "react/jsx-uses-react": 1,
     "react/jsx-no-undef": 2,
-    "react/wrap-multilines": 2
+    "react/wrap-multilines": 2,
+    "arrow-parens": [2, "as-needed"]
   },
   "plugins": [
     "react"

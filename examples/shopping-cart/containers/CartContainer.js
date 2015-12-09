@@ -28,7 +28,7 @@ CartContainer.propTypes = {
   checkout: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     products: getCartProducts(state),
     total: getTotal(state)
