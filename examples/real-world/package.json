@@ -15,7 +15,7 @@
   },
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
-    "history": "^1.9.0",
+    "history": "1.13.1",
     "humps": "^0.6.0",
     "isomorphic-fetch": "^2.1.1",
     "lodash": "^3.10.1",
