@@ -2,6 +2,7 @@ import expect from 'expect'
 import { createStore, combineReducers } from '../src/index'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
+import ActionTypes from '../src/utils/actionTypes'
 
 describe('createStore', () => {
   it('exposes the public API', () => {
@@ -29,7 +30,7 @@ describe('createStore', () => {
     ).toThrow()
 
     expect(() =>
-      createStore(() => {})
+      createStore(() => ({}))
     ).toNotThrow()
   })
 
@@ -90,7 +91,7 @@ describe('createStore', () => {
     ])
 
     store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([ 
+    expect(store.getState()).toEqual([
       {
         id: 1,
         text: 'Hello'
@@ -140,11 +141,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -156,11 +157,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -172,15 +173,15 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
-      }, 
+      },
       {
         id: 4,
         text: 'Surely'
@@ -386,5 +387,47 @@ describe('createStore', () => {
     expect(() =>
       store.dispatch({ type: '' })
     ).toNotThrow()
+  })
+
+  it('throws an error if reducer returns undefined handling an action', () => {
+    const store = createStore((state = 0, action) => {
+      switch (action && action.type) {
+        case 'whatever':
+          return undefined
+        default:
+          return state
+      }
+    })
+
+    expect(
+      () => store.dispatch({ type: 'whatever' })
+    ).toThrow(
+    /"whatever"/
+    )
+  })
+
+  it('throws an error on first call if reducer returns undefined initializing', () => {
+    expect(
+      () => createStore(() => {})
+    ).toThrow(
+      /initialization/
+    )
+  })
+
+  it('throws an error on if reducer attempts to handle a private action', () => {
+    const reducer = (state, action) => {
+      switch (action.type) {
+        // Never do this in your code:
+        case ActionTypes.INIT:
+          return 0
+        default:
+          return undefined
+      }
+    }
+    expect(
+      () => createStore(reducer)
+    ).toThrow(
+      /private/
+    )
   })
 })

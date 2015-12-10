@@ -1,5 +1,6 @@
 import isPlainObject from './utils/isPlainObject'
 import ActionTypes from './utils/actionTypes'
+import { assertStateNotUndefined, assertReducerSanity } from './utils/assertions'
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -25,6 +26,7 @@ export default function createStore(reducer, initialState) {
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.')
   }
+  assertReducerSanity(reducer);
 
   var currentReducer = reducer
   var currentState = initialState
@@ -110,6 +112,7 @@ export default function createStore(reducer, initialState) {
     try {
       isDispatching = true
       currentState = currentReducer(currentState, action)
+      assertStateNotUndefined(currentState, action);
     } finally {
       isDispatching = false
     }
