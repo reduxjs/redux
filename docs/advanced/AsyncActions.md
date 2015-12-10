@@ -384,6 +384,8 @@ export function fetchPosts(reddit) {
 >import 'babel-core/polyfill'
 >```
 
+> If you already are using `babel-loader`, since the [v6.0](https://github.com/babel/babel-loader) comes with many polyfills including `fetch()` and promises. So you won't need to install `isomorphic-fetch` or `import 'babel-core/polyfill'` to have access to promises and `fetch`.
+
 How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
 
 #### `index.js`
