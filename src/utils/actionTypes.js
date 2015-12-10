@@ -5,5 +5,6 @@
  * Do not reference these action types directly in your code.
  */
 export default {
-  INIT: '@@redux/INIT'
+  INIT: '@@redux/INIT',
+  PROBE: '@@redux/PROBE_UNKNOWN_ACTION_'
 }

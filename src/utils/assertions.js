@@ -27,7 +27,7 @@ export function assertReducerSanity(reducer, name) {
     )
   }
 
-  var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.')
+  var type = ActionTypes.PROBE + Math.random().toString(36).substring(7).split('').join('.')
   if (typeof reducer(undefined, { type }) === 'undefined') {
     throw new Error(
       `Reducer ${name} returned undefined when probed with a random type. ` +
