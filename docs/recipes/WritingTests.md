@@ -62,7 +62,7 @@ describe('actions', () => {
 
 ### Async Action Creators
 
-For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it’s best to completely mock the Redux store for tests. You can still use [`applyMiddleware()`](../api/applyMiddleware.md) with a mock store, as shown below (you can find the following code in [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store)). You can also use [nock](https://github.com/pgte/nock) to mock the HTTP requests.
+For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it’s best to completely mock the Redux store for tests. You can apply the middleware to a mock store using [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store). You can also use [nock](https://github.com/pgte/nock) to mock the HTTP requests.
 
 #### Example
 
@@ -103,54 +103,14 @@ can be tested like:
 ```js
 import expect from 'expect'
 import { applyMiddleware } from 'redux'
+import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import * as actions from '../../actions/counter'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
 
 const middlewares = [ thunk ]
-
-/**
- * Creates a mock of Redux store with middleware.
- */
-function mockStore(getState, expectedActions, done) {
-  if (!Array.isArray(expectedActions)) {
-    throw new Error('expectedActions should be an array of expected actions.')
-  }
-  if (typeof done !== 'undefined' && typeof done !== 'function') {
-    throw new Error('done should either be undefined or function.')
-  }
-
-  function mockStoreWithoutMiddleware() {
-    return {
-      getState() {
-        return typeof getState === 'function' ?
-          getState() :
-          getState
-      },
-
-      dispatch(action) {
-        const expectedAction = expectedActions.shift()
-
-        try {
-          expect(action).toEqual(expectedAction)
-          if (done && !expectedActions.length) {
-            done()
-          }
-          return action
-        } catch (e) {
-          done(e)
-        }
-      }
-    }
-  }
-
-  const mockStoreWithMiddleware = applyMiddleware(
-    ...middlewares
-  )(mockStoreWithoutMiddleware)
-
-  return mockStoreWithMiddleware()
-}
+const mockStore = configureMockStore(middlewares)
 
 describe('async actions', () => {
   afterEach(() => {
