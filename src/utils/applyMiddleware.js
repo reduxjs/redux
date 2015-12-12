@@ -19,8 +19,8 @@ import compose from './compose'
 export default function applyMiddleware(...middlewares) {
   return (next) => (reducer, initialState) => {
     var store = next(reducer, initialState)
-    var dispatch = store.dispatch
     var chain = []
+    var dispatch
 
     var middlewareAPI = {
       getState: store.getState,
