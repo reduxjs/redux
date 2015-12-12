@@ -72,7 +72,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
 * [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
-* [redux-search](https://github.com/treasure-data/redux-search) - Automatically index resources in a web worker and search them without blocking
+* [redux-search](https://github.com/treasure-data/redux-search) — Automatically index resources in a web worker and search them without blocking
 
 ### Utilities
 
@@ -83,7 +83,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
 * [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
-* [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) - Mock redux store for testing your app
+* [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
 
 ### Developer Tools
 
@@ -97,7 +97,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Translations
 
-* [中文文档](http://camsong.github.io/redux-in-chinese/) - A Chinese version of Redux documentation.
+* [中文文档](http://camsong.github.io/redux-in-chinese/) — Chinese
+* [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
 
 ## More
 
