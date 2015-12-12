@@ -95,6 +95,10 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — An opinionated standard for nested reducer composition
 * [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling reducers, action types and actions
 
+### Translations
+
+* [中文文档](http://camsong.github.io/redux-in-chinese/) - A Chinese version of Redux documentation.
+
 ## More
 
 [Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
