@@ -97,7 +97,7 @@ function assertReducerSanity(reducers) {
  */
 
 export default function combineReducers(reducers) {
-  var finalReducers = pick(reducers, (val) => typeof val === 'function')
+  var finalReducers = pick(reducers, val => typeof val === 'function')
   var sanityError
 
   try {
