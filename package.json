@@ -1,6 +1,6 @@
 {
   "name": "redux",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Predictable state container for JavaScript apps",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
