@@ -8,7 +8,6 @@
 export default function compose(...funcs) {
   return (...args) => {
     if (funcs.length === 0) {
-      // We weren't given any functions, just return the first passed in arg.
       return args[0]
     }
 
