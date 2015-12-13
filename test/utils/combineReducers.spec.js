@@ -182,7 +182,7 @@ describe('Utils', () => {
       spy.restore()
     })
 
-    it('warns if input state object does not match state object returned by reducer', () => {
+    it('warns if input state does not match reducer shape', () => {
       const spy = expect.spyOn(console, 'error')
       const reducer = combineReducers({
         foo(state = { bar: 1 }) {
@@ -192,6 +192,9 @@ describe('Utils', () => {
           return state
         }
       })
+
+      reducer()
+      expect(spy.calls.length).toBe(0)
 
       reducer({ foo: { bar: 2 } })
       expect(spy.calls.length).toBe(0)
