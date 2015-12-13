@@ -15,8 +15,8 @@ function getUndefinedStateErrorMessage(key, action) {
   )
 }
 
-function getUnexpectedStateKeyWarningMessage(inputState, outputState, action) {
-  var reducerKeys = Object.keys(outputState)
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
+  var reducerKeys = Object.keys(reducers)
   var argumentName = action && action.type === ActionTypes.INIT ?
     'initialState argument passed to createStore' :
     'previous state received by the reducer'
@@ -37,9 +37,7 @@ function getUnexpectedStateKeyWarningMessage(inputState, outputState, action) {
     )
   }
 
-  var unexpectedKeys = Object.keys(inputState).filter(
-    key => reducerKeys.indexOf(key) < 0
-  )
+  var unexpectedKeys = Object.keys(inputState).filter(key => !reducers.hasOwnProperty(key))
 
   if (unexpectedKeys.length > 0) {
     return (
@@ -106,11 +104,16 @@ export default function combineReducers(reducers) {
     sanityError = e
   }
 
-  var defaultState = mapValues(finalReducers, () => undefined)
-
-  return function combination(state = defaultState, action) {
+  return function combination(state = {}, action) {
     if (sanityError) {
       throw sanityError
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
+      if (warningMessage) {
+        console.error(warningMessage)
+      }
     }
 
     var hasChanged = false
@@ -124,13 +127,6 @@ export default function combineReducers(reducers) {
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
       return nextStateForKey
     })
-
-    if (process.env.NODE_ENV !== 'production') {
-      var warningMessage = getUnexpectedStateKeyWarningMessage(state, finalState, action)
-      if (warningMessage) {
-        console.error(warningMessage)
-      }
-    }
 
     return hasChanged ? finalState : state
   }
