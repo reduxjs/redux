@@ -120,7 +120,7 @@ describe('async actions', () => {
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', (done) => {
     nock('http://example.com/')
       .get('/todos')
-      .reply(200, { todos: ['do something'] })
+      .reply(200, { body: { todos: ['do something'] }})
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
