@@ -153,7 +153,7 @@ function logger(store) {
 }
 ```
 
-We could provide a helper inside Redux that would apply the actual monkeypatching as an implementation detail:
+We could provide a helper inside Redux that would apply the actual Monkeypatching as an implementation detail:
 
 ```js
 function applyMiddlewareByMonkeypatching(store, middlewares) {
@@ -173,7 +173,7 @@ We could use it to apply multiple middleware like this:
 applyMiddlewareByMonkeypatching(store, [ logger, crashReporter ])
 ```
 
-However, it is still monkeypatching.  
+However, it is still Monkeypatching.  
 The fact that we hide it inside the library doesn’t alter this fact.
 
 ### Attempt #5: Removing Monkeypatching
