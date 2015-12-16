@@ -101,8 +101,6 @@ export function fetchTodos() {
 can be tested like:
 
 ```js
-import expect from 'expect'
-import { applyMiddleware } from 'redux'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import * as actions from '../../actions/counter'
