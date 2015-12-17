@@ -73,7 +73,7 @@ UserPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { login } = state.router.params
+  const login = state.routing.path.split('/')[1]
   const {
     pagination: { starredByUser },
     entities: { users, repos }
