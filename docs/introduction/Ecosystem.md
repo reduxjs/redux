@@ -20,6 +20,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ### Tutorials and Articles
 
 * [Redux Tutorial](https://github.com/happypoulp/redux-tutorial) — Learn how to use Redux step by step
+* [Redux Egghead Course Notes](https://github.com/tayiorbeii/egghead.io_redux_course_notes) — Notes on the Redux [Egghead video course](https://egghead.io/series/getting-started-with-redux)
 * [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux) — An intro to Redux
 * [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6) — A visual explanation of Redux data flow
 * [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container) — Learn the basic concepts of Redux
