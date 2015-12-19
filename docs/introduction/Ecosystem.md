@@ -92,7 +92,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ### Developer Tools
 
 * [Redux DevTools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
-* [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) — A Chome extension wrapping Redux DevTools and providing additional functionality
+* [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) — A Chrome extension wrapping Redux DevTools and providing additional functionality
 
 ### Community Conventions
 
