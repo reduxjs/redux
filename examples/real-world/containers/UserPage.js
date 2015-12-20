@@ -72,8 +72,8 @@ UserPage.propTypes = {
   loadStarred: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
-  const login = state.routing.path.split('/')[1]
+function mapStateToProps(state, props) {
+  const { login } = props.params
   const {
     pagination: { starredByUser },
     entities: { users, repos }
