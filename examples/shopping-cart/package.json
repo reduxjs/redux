@@ -22,11 +22,15 @@
     "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
-    "babel-core": "^5.6.18",
-    "babel-loader": "^5.1.4",
-    "babel-plugin-react-transform": "^1.0.3",
+    "babel-core": "^6.3.15",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-react-transform": "^2.0.0-beta1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-2": "^6.3.13",
     "express": "^4.13.3",
     "json-loader": "^0.5.3",
+    "react-transform-hmr": "^1.0.0",
     "redux-logger": "^2.0.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
