@@ -59,8 +59,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Routing
 
-* [redux-router](https://github.com/rackt/redux-router) — Redux bindings for React Router
-* [redux-simple-router](https://github.com/jlongster/redux-simple-router) — Ruthlessly simple bindings to keep React Router and Redux in sync
+* [redux-simple-router](https://github.com/rackt/redux-simple-router) — Ruthlessly simple bindings to keep React Router and Redux in sync
+* [redux-router](https://github.com/acdlite/redux-router) — Redux bindings for React Router
 
 ### Components
 
