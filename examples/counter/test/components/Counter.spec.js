@@ -15,14 +15,14 @@ function setup() {
     component: component,
     actions: actions,
     buttons: TestUtils.scryRenderedDOMComponentsWithTag(component, 'button'),
-    p: TestUtils.findRenderedDOMComponentWithTag(component, 'p')
+    span: TestUtils.findRenderedDOMComponentWithTag(component, 'span')
   }
 }
 
 describe('Counter component', () => {
   it('should display count', () => {
-    const { p } = setup()
-    expect(p.textContent).toMatch(/^Clicked: 1 times/)
+    const { span } = setup()
+    expect(span.textContent).toMatch(/^Clicked: 1 times/)
   })
 
   it('first button should call increment', () => {
