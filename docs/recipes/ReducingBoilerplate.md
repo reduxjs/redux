@@ -150,7 +150,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
+There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
 ## Async Action Creators
 
