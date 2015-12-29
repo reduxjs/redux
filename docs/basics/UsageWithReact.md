@@ -75,19 +75,20 @@ I see the following components and their props emerge from this brief:
 * **`Link`** is a link with a callback.
   - `onClick()` is a callback to invoke when link is clicked.
 
-
-* **`AddTodo`** is an input field with a button.
-  - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
-
-* **`FilterLink`**
-
-* **`VisibleTodoList`**
-
 These are all presentational components. They don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them.
 
 If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
 
-Let’s write them! We don’t need to think about binding to Redux yet.
+We also have some container components that connects to Redux. The container components are responsible for getting and transforming state. Remember that changes result in a new state as state is immutable.
+
+* **`AddTodo`** is an input field with a button.
+  - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
+
+* **`FilterLink`** gets active link from Redux and pass it as props to the presentational component, Link.
+
+* **`VisibleTodoList`** gets todos from Redux, filter the todos and pass them as props to the presentational component, TodoList.
+
+Let’s write the components! We begin with the presentational components, so we don’t need to think about binding to Redux yet.
 
 ## Presentational Components
 
@@ -170,7 +171,35 @@ const Footer = () => (
 export default Footer
 ```
 
-We'll now write some container components.
+#### `components/Link.js`
+```js
+import React from "react";
+
+const Link = ({
+  active,
+  children,
+  onClick
+}) => {
+  if (active) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href="#"
+       onClick={e => {
+         e.preventDefault();
+         onClick();
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+
+export default Link
+```
+
+We'll now write the container components.
 
 #### `containers/AddTodo.js`
 
