@@ -52,7 +52,7 @@ This table describes the characteristics of container and presentational compone
     </tbody>
 </table>
 
-In this todo app, we will have three container components that pass props to presentational components. We suggest that you do not nest container components and that you pass props down whenever possible.
+We suggest that you do not nest container components beyond necessity. Start by having a few top-level container components pass the props down to the presentational component tree. When you notice that components in the middle of that tree pass too many props down without actually using them, it is a good time to introduce some containers.
 
 ## Designing Component Hierarchy
 
