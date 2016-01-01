@@ -73,7 +73,7 @@ RepoPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { login, name } = state.router.params
+  const [ login, name ] = state.routing.path.substring(1).split('/')
   const {
     pagination: { stargazersByRepo },
     entities: { users, repos }
