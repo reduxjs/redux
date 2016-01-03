@@ -39,7 +39,7 @@ describe('todo actions', () => {
   })
 
   it('clearCompleted should create CLEAR_COMPLETED action', () => {
-    expect(actions.clearCompleted('Use Redux')).toEqual({
+    expect(actions.clearCompleted()).toEqual({
       type: types.CLEAR_COMPLETED
     })
   })
