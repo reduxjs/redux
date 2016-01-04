@@ -1,9 +1,6 @@
 {
   "gitbook": "2.4.3",
-  "structure": {
-    "summary": "docs/README.md"
-  },
-  "plugins": ["edit-link", "prism", "-highlight", "github"],
+  "plugins": ["prism", "-highlight", "github"],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/rackt/redux/tree/master",

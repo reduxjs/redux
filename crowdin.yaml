@@ -1,0 +1,37 @@
+project_identifier: redux
+api_key_env: CROWDIN_API_KEY
+base_path: .
+files:
+  - source: '/docs/**/*.md'
+    translation: '/translations/%locale%/**/%original_file_name%'
+    languages_mapping:
+      locale:
+        'af': 'af'
+        'ar': 'ar'
+        'ca': 'ca'
+        'cs': 'cs'
+        'da': 'da'
+        'de': 'de'
+        'el': 'el'
+        'es-ES': 'es-ES'
+        'fi': 'fi'
+        'fr': 'fr'
+        'he': 'he'
+        'hu': 'hu'
+        'it': 'it'
+        'ja': 'ja'
+        'ko': 'ko'
+        'nl': 'nl'
+        'no': 'no'
+        'pl': 'pl'
+        'pt-BR': 'pt-BR'
+        'pt-PT': 'pt-PT'
+        'ro': 'ro'
+        'ru': 'ru'
+        'sr': 'sr'
+        'sv-SE': 'sv-SE'
+        'tr': 'tr'
+        'uk': 'uk'
+        'vi': 'vi'
+        'zh-CN': 'zh-CN'
+        'zh-TW': 'zh-TW'
