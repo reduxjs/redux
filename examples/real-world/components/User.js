@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
 const User = (props) => {
-    const { login, avatarUrl, name } = props.user
-    return (
+  const { login, avatarUrl, name } = props.user
+  return (
       <div className="User">
         <Link to={`/${login}`}>
           <img src={avatarUrl} width="72" height="72" />
@@ -24,4 +24,4 @@ User.propTypes = {
   }).isRequired
 }
 
-export default User;
+export default User

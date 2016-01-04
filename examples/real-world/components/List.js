@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 
-function renderLoadMore(props){
-    const { isFetching, onLoadMoreClick } = props
-    return (
+function renderLoadMore(props) {
+  const { isFetching, onLoadMoreClick } = props
+  return (
       <button style={{ fontSize: '150%' }}
               onClick={onLoadMoreClick}
               disabled={isFetching}>
@@ -12,22 +12,22 @@ function renderLoadMore(props){
 }
 
 const  List = (props) =>{
-    const {
-      isFetching, nextPageUrl, pageCount,
-      items, renderItem, loadingLabel
-    } = props
+  const {
+  isFetching, nextPageUrl, pageCount,
+  items, renderItem, loadingLabel
+  } = props
 
-    const isEmpty = items.length === 0
-    if (isEmpty && isFetching) {
-      return <h2><i>{loadingLabel}</i></h2>
-    }
+  const isEmpty = items.length === 0
+  if (isEmpty && isFetching) {
+    return <h2><i>{loadingLabel}</i></h2>
+  }
 
-    const isLastPage = !nextPageUrl
-    if (isEmpty && isLastPage) {
-      return <h1><i>Nothing here!</i></h1>
-    }
+  const isLastPage = !nextPageUrl
+  if (isEmpty && isLastPage) {
+    return <h1><i>Nothing here!</i></h1>
+  }
 
-    return (
+  return (
       <div>
         {items.map(renderItem)}
         {pageCount > 0 && !isLastPage && renderLoadMore(props)}
@@ -51,4 +51,4 @@ List.defaultProps = {
   loadingLabel: 'Loading...'
 }
 
-export default List;
+export default List

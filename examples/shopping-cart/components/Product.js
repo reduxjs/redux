@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 
 const Product = ({ price, quantity, title }) => {
-    return <div> {title} - &#36;{price} {quantity ? `x ${quantity}` : null} </div>
+  return <div> {title} - &#36;{price} {quantity ? `x ${quantity}` : null} </div>
 }
 
 Product.propTypes = {
@@ -10,4 +10,4 @@ Product.propTypes = {
   title: PropTypes.string
 }
 
-export default Product;
+export default Product

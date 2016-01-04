@@ -1,7 +1,7 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes } from 'react'
 
-const Posts = ({props}) => {
-    return (
+const Posts = ( props ) => {
+  return (
       <ul>
         {props.posts.map((post, i) =>
           <li key={i}>{post.title}</li>

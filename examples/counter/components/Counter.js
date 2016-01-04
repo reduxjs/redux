@@ -1,7 +1,7 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes } from 'react'
 
-const Counter = ({increment, incrementIfOdd, incrementAsync, decrement, counter}) => {
-    return (
+const Counter = ({ increment, incrementIfOdd, incrementAsync, decrement, counter }) => {
+  return (
       <p>
         Clicked: {counter} times
         {' '}

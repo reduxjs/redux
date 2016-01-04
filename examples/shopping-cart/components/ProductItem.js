@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import Product from './Product'
 
-const ProductItem = ({product,onAddToCartClicked}) => {
-    return (
+const ProductItem = ({ product,onAddToCartClicked }) => {
+  return (
       <div
         style={{ marginBottom: 20 }}>
         <Product
@@ -27,4 +27,4 @@ ProductItem.propTypes = {
 }
 
 
-export default ProductItem;
+export default ProductItem

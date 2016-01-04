@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 
 const ProductsList = (props) =>{
-    return (
+  return (
       <div>
         <h3>{props.title}</h3>
         <div>{props.children}</div>
@@ -14,4 +14,4 @@ ProductsList.propTypes = {
   title: PropTypes.string.isRequired
 }
 
-export default ProductsList;
+export default ProductsList

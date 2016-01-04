@@ -1,19 +1,18 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import Product from './Product'
 
 const Cart = ({ products, total, onCheckoutClicked }) => {
-    const hasProducts = products.length > 0
-    const nodes = !hasProducts ?
+  const hasProducts = products.length > 0
+  const nodes = !hasProducts ?
       <em>Please add some products to cart.</em> :
-      products.map(product =>
+        products.map(product =>
         <Product
           title={product.title}
           price={product.price}
           quantity={product.quantity}
           key={product.id}/>
     )
-
-    return (
+  return (
       <div>
         <h3>Your Cart</h3>
         <div>{nodes}</div>
@@ -32,4 +31,5 @@ Cart.propTypes = {
   onCheckoutClicked: PropTypes.func
 }
 
-export default Cart;
+export default Cart
+

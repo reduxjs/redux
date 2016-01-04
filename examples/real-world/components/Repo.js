@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
 const Repo = (props) =>{
-    const { repo, owner } = props
-    const { login } = owner
-    const { name, description } = repo
-    return (
+  const { repo, owner } = props
+  const { login } = owner
+  const { name, description } = repo
+  return (
       <div className="Repo">
         <h3>
           <Link to={`/${login}/${name}`}>
@@ -34,4 +34,4 @@ Repo.propTypes = {
   }).isRequired
 }
 
-export default Repo;
+export default Repo
