@@ -33,6 +33,7 @@
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "react-addons-test-utils": "^0.14.0",
+    "react-stateless-wrapper": "^1.0.2",
     "react-transform-hmr": "^1.0.0",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",

@@ -2,6 +2,9 @@ import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Counter from '../../components/Counter'
+import { wrap } from 'react-stateless-wrapper'
+
+let WrappedComponent = wrap(Counter)
 
 function setup() {
   const actions = {
@@ -10,7 +13,7 @@ function setup() {
     incrementAsync: expect.createSpy(),
     decrement: expect.createSpy()
   }
-  const component = TestUtils.renderIntoDocument(<Counter counter={1} {...actions} />)
+  const component = TestUtils.renderIntoDocument(<WrappedComponent counter={1} {...actions} />)
   return {
     component: component,
     actions: actions,
