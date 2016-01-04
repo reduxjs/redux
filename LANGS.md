@@ -3,7 +3,7 @@
  * [العربية](translations/ar)
  * [Català](translations/ca)
  * [Čeština](translations/cs)
- * [Danske](translations/da)
+ * [Dansk](translations/da)
  * [Deutsch](translations/de)
  * [ελληνικά](translations/el)
  * [Español](translations/es-ES)
