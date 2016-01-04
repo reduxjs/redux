@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Product from './Product'
 
-export default class ProductItem extends Component {
-  render() {
-    const { product } = this.props
-
+const ProductItem = ({product,onAddToCartClicked}) => {
     return (
       <div
         style={{ marginBottom: 20 }}>
@@ -12,13 +9,12 @@ export default class ProductItem extends Component {
           title={product.title}
           price={product.price} />
         <button
-          onClick={this.props.onAddToCartClicked}
+          onClick={onAddToCartClicked}
           disabled={product.inventory > 0 ? '' : 'disabled'}>
           {product.inventory > 0 ? 'Add to cart' : 'Sold Out'}
         </button>
       </div>
     )
-  }
 }
 
 ProductItem.propTypes = {
@@ -29,3 +25,6 @@ ProductItem.propTypes = {
   }).isRequired,
   onAddToCartClicked: PropTypes.func.isRequired
 }
+
+
+export default ProductItem;

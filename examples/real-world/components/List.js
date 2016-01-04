@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 
-export default class List extends Component {
-  renderLoadMore() {
-    const { isFetching, onLoadMoreClick } = this.props
+function renderLoadMore(props){
+    const { isFetching, onLoadMoreClick } = props
     return (
       <button style={{ fontSize: '150%' }}
               onClick={onLoadMoreClick}
@@ -10,13 +9,13 @@ export default class List extends Component {
         {isFetching ? 'Loading...' : 'Load More'}
       </button>
     )
-  }
+}
 
-  render() {
+const  List = (props) =>{
     const {
       isFetching, nextPageUrl, pageCount,
       items, renderItem, loadingLabel
-    } = this.props
+    } = props
 
     const isEmpty = items.length === 0
     if (isEmpty && isFetching) {
@@ -31,10 +30,10 @@ export default class List extends Component {
     return (
       <div>
         {items.map(renderItem)}
-        {pageCount > 0 && !isLastPage && this.renderLoadMore()}
+        {pageCount > 0 && !isLastPage && renderLoadMore(props)}
       </div>
     )
-  }
+  
 }
 
 List.propTypes = {
@@ -51,3 +50,5 @@ List.defaultProps = {
   isFetching: true,
   loadingLabel: 'Loading...'
 }
+
+export default List;

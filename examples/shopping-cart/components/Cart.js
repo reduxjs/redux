@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Product from './Product'
 
-export default class Cart extends Component {
-  render() {
-    const { products, total, onCheckoutClicked } = this.props
-
+const Cart = ({ products, total, onCheckoutClicked }) => {
     const hasProducts = products.length > 0
     const nodes = !hasProducts ?
       <em>Please add some products to cart.</em> :
@@ -27,7 +24,6 @@ export default class Cart extends Component {
         </button>
       </div>
     )
-  }
 }
 
 Cart.propTypes = {
@@ -35,3 +31,5 @@ Cart.propTypes = {
   total: PropTypes.string,
   onCheckoutClicked: PropTypes.func
 }
+
+export default Cart;
