@@ -141,7 +141,7 @@ export function setVisibilityFilter(filter) {
 
 ## Next Steps
 
-Now let’s [define some reducers](Reducers.md) to specify how the state updates when you dispatch these actions!
+Now let’s [define some reducers](Reducers.md) to specify show the state updates when you dispatch these actions!
 
 >##### Note for Advanced Users
 >If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async actions](../advanced/AsyncActions.md) in the [advanced tutorial](../advanced/README.md) to learn how to handle AJAX responses and compose action creators into async control flow.
