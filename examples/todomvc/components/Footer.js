@@ -26,8 +26,7 @@ class Footer extends Component {
 
     return (
       <RefreshLink toData={{ filter: filter }}
-                   activeCssClass='selected'
-                   style={{ cursor: 'pointer' }}>
+                   activeCssClass='selected'>
         {title}
       </RefreshLink>
     )
