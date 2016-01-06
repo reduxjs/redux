@@ -10,11 +10,6 @@ const TODO_FILTERS = {
 }
 
 class MainSection extends Component {
-  constructor(props, context) {
-    super(props, context)
-    this.state = { filter: SHOW_ALL }
-  }
-
   handleClearCompleted() {
     const atLeastOneCompleted = this.props.todos.some(todo => todo.completed)
     if (atLeastOneCompleted) {
@@ -39,8 +34,7 @@ class MainSection extends Component {
   }
 
   renderFooter(completedCount) {
-    const { todos } = this.props
-    const { filter } = this.state
+    const { filter, todos } = this.props
     const activeCount = todos.length - completedCount
 
     if (todos.length) {
@@ -56,8 +50,7 @@ class MainSection extends Component {
   }
 
   render() {
-    const { todos, actions } = this.props
-    const { filter } = this.state
+    const { filter, todos, actions } = this.props
 
     const filteredTodos = todos.filter(TODO_FILTERS[filter])
     const completedCount = todos.reduce((count, todo) =>

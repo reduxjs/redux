@@ -9,7 +9,7 @@ import { start, StateInfoConfig } from 'navigation'
 
 StateInfoConfig.build([
     { key: 'todomvc', initial: 'app', states: [
-        { key: 'app', route: '{filter?}' }
+        { key: 'app', route: '{filter?}', defaults: { filter: 'all' }, trackCrumbTrail: false }
     ]}   
 ]);
 

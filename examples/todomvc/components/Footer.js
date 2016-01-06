@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import classnames from 'classnames'
 import { SHOW_ALL, SHOW_COMPLETED, SHOW_ACTIVE } from '../constants/TodoFilters'
+import { RefreshLink } from 'navigation-react'
 
 const FILTER_TITLES = {
   [SHOW_ALL]: 'All',
@@ -25,11 +26,11 @@ class Footer extends Component {
     const { filter: selectedFilter, onShow } = this.props
 
     return (
-      <a className={classnames({ selected: filter === selectedFilter })}
-         style={{ cursor: 'pointer' }}
-         onClick={() => onShow(filter)}>
+      <RefreshLink toData={{ filter: filter }}
+                   activeCssClass='selected'
+                   style={{ cursor: 'pointer' }}>
         {title}
-      </a>
+      </RefreshLink>
     )
   }
 
