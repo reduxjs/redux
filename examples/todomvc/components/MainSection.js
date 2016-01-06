@@ -67,6 +67,7 @@ class MainSection extends Component {
 }
 
 MainSection.propTypes = {
+  filter: PropTypes.string.isRequired,
   todos: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired
 }

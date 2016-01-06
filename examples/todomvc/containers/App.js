@@ -18,6 +18,7 @@ class App extends Component {
 }
 
 App.propTypes = {
+  filter: PropTypes.string.isRequired,
   todos: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired
 }
