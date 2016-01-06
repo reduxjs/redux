@@ -64,7 +64,6 @@ class Footer extends Component {
 Footer.propTypes = {
   completedCount: PropTypes.number.isRequired,
   activeCount: PropTypes.number.isRequired,
-  filter: PropTypes.string.isRequired,
   onClearCompleted: PropTypes.func.isRequired,
 }
 

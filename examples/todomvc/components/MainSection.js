@@ -30,14 +30,13 @@ class MainSection extends Component {
   }
 
   renderFooter(completedCount) {
-    const { todos, filter } = this.props
+    const { todos } = this.props
     const activeCount = todos.length - completedCount
 
     if (todos.length) {
       return (
         <Footer completedCount={completedCount}
                 activeCount={activeCount}
-                filter={filter}
                 onClearCompleted={this.handleClearCompleted.bind(this)} />
       )
     }
