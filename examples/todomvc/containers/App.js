@@ -7,11 +7,11 @@ import * as TodoActions from '../actions/todos'
 
 class App extends Component {
   render() {
-    const { todos, actions } = this.props
+    const { todos, actions, filter } = this.props
     return (
       <div>
         <Header addTodo={actions.addTodo} />
-        <MainSection todos={todos} actions={actions} filter={this.props.filter} />
+        <MainSection todos={todos} actions={actions} filter={filter} />
       </div>
     )
   }
