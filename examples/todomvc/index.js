@@ -16,13 +16,13 @@ StateInfoConfig.build([
 const store = configureStore()
 
 var todomvc = StateInfoConfig.dialogs.todomvc;
-todomvc.states.app.navigated =  () => {
+todomvc.states.app.navigated =  (data) => {
     render(
         <Provider store={store}>
-            <App />
+            <App filter={data.filter} />
         </Provider>,
         document.getElementById('root')
-    );    
+    )
 }
 
 start();

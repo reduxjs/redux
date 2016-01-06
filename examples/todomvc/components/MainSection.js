@@ -49,7 +49,8 @@ class MainSection extends Component {
                 activeCount={activeCount}
                 filter={filter}
                 onClearCompleted={this.handleClearCompleted.bind(this)}
-                onShow={this.handleShow.bind(this)} />
+                onShow={this.handleShow.bind(this)}
+                filter={this.props.filter} />
       )
     }
   }
