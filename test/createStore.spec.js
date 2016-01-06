@@ -90,7 +90,7 @@ describe('createStore', () => {
     ])
 
     store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([ 
+    expect(store.getState()).toEqual([
       {
         id: 1,
         text: 'Hello'
@@ -140,11 +140,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -156,11 +156,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -172,15 +172,15 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
-      }, 
+      },
       {
         id: 4,
         text: 'Surely'
@@ -263,6 +263,33 @@ describe('createStore', () => {
 
     store.dispatch(unknownAction())
     expect(listener.calls.length).toBe(1)
+  })
+
+  it('removes listeners immediately when unsubscribe is called', () => {
+    const store = createStore(reducers.todos)
+
+    const unsubscribeHandles = []
+    const doUnsubscribeAll = () => unsubscribeHandles.forEach(unsubscribe => unsubscribe() )
+
+    const listener1 = expect.createSpy(() => {})
+    unsubscribeHandles.push(store.subscribe(listener1))
+    const listener2 = expect.createSpy(() => {})
+    unsubscribeHandles.push(store.subscribe(listener2))
+
+    const listener3 = () => doUnsubscribeAll()
+    unsubscribeHandles.push(store.subscribe(listener3))
+
+    const listener4 = expect.createSpy(() => {})
+    unsubscribeHandles.push(store.subscribe(listener4))
+    const listener5 = expect.createSpy(() => {})
+    unsubscribeHandles.push(store.subscribe(listener5))
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    // listener3 is the one removing the others so obviously it got executed
+    expect(listener4.calls.length).toBe(0)
+    expect(listener5.calls.length).toBe(0)
   })
 
   it('supports removing a subscription within a subscription', () => {
