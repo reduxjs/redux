@@ -68,7 +68,6 @@ Footer.propTypes = {
   activeCount: PropTypes.number.isRequired,
   filter: PropTypes.string.isRequired,
   onClearCompleted: PropTypes.func.isRequired,
-  onShow: PropTypes.func.isRequired
 }
 
 export default Footer
