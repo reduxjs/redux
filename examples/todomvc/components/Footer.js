@@ -23,7 +23,7 @@ class Footer extends Component {
 
   renderFilterLink(filter) {
     const title = FILTER_TITLES[filter]
-    const { filter: selectedFilter, onShow } = this.props
+    const { filter: selectedFilter } = this.props
 
     return (
       <RefreshLink toData={{ filter: filter }}
