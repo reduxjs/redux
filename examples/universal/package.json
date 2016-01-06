@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "An example of a universally-rendered Redux application",
   "scripts": {
+    "clean": "rimraf dist",
+    "build:webpack": "NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build": "npm run clean && npm run build:webpack",
     "start": "node server/index.js"
   },
   "repository": {
@@ -31,6 +34,7 @@
     "babel-plugin-react-transform": "^1.1.0",
     "babel-runtime": "^5.8.20",
     "react-transform-hmr": "^1.0.0",
+    "rimraf": "^2.5.0",
     "webpack": "^1.11.0",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.2.0"
