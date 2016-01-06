@@ -38,7 +38,13 @@ export default function createStore(reducer, initialState) {
   var currentReducer = reducer
   var currentState = initialState
   var listeners = []
-  var isDispatching = false
+  var isDispatchingToReducers = false
+
+
+  // Solves https://github.com/rackt/redux/issues/1180
+  var isDispatchingToListeners = false
+  var hasUnsubscribedInListener = false
+
 
   /**
    * Reads the state tree managed by the store.
@@ -65,10 +71,15 @@ export default function createStore(reducer, initialState) {
       if (!isSubscribed) {
         return
       }
-
       isSubscribed = false
       var index = listeners.indexOf(listener)
-      listeners.splice(index, 1)
+      if ( isDispatchingToListeners ) {
+        hasUnsubscribedInListener = true
+        listeners[index] = undefined // Do not change the array length, because we are currently iterating it!
+      }
+      else {
+        listeners.splice(index, 1)
+      }
     }
   }
 
@@ -112,18 +123,38 @@ export default function createStore(reducer, initialState) {
       )
     }
 
-    if (isDispatching) {
+    if (isDispatchingToReducers) {
       throw new Error('Reducers may not dispatch actions.')
     }
 
     try {
-      isDispatching = true
+      isDispatchingToReducers = true
       currentState = currentReducer(currentState, action)
     } finally {
-      isDispatching = false
+      isDispatchingToReducers = false
     }
 
-    listeners.slice().forEach(listener => listener())
+
+    try {
+      isDispatchingToListeners = true
+      // No need to copy the array. If a listener gets unsubscribed during dispatch
+      // we just replace it by "undefined" to avoid messing up with the iteration
+      listeners.forEach(listener => {
+        if ( typeof listener !== 'undefined' ) {
+          listener()
+        }
+      })
+    } finally {
+      isDispatchingToListeners = false
+    }
+
+    // As we may have unsubscribed inside a listener, putting undefined items in the listeners array,
+    // we now need to eventually cleanup that array of these undefined listeners
+    if ( hasUnsubscribedInListener ) {
+      listeners = listeners.filter(listener => typeof listener !== 'undefined')
+      hasUnsubscribedInListener = false
+    }
+
     return action
   }
 
