@@ -6,13 +6,9 @@ import App from './containers/App'
 import configureStore from './store/configureStore'
 import 'todomvc-app-css/index.css'
 import { start, StateInfoConfig } from 'navigation'
+import configureStateInfo from './routes'
 
-StateInfoConfig.build([
-    { key: 'todomvc', initial: 'app', states: [
-        { key: 'app', route: '{filter?}', defaults: { filter: 'all' }, trackCrumbTrail: false }
-    ] }   
-])
-
+configureStateInfo();
 const store = configureStore()
 
 var todomvc = StateInfoConfig.dialogs.todomvc

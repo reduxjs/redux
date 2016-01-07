@@ -4,13 +4,10 @@ import TestUtils from 'react-addons-test-utils'
 import Footer from '../../components/Footer'
 import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters'
 import { StateInfoConfig, StateController, StateContext } from 'navigation'
+import configureStateInfo from '../../routes'
 
 function setup(propOverrides) {
-  StateInfoConfig.build([
-    { key: 'todomvc', initial: 'app', states: [
-      { key: 'app', route: '{filter?}', defaults: { filter: 'all' }, trackCrumbTrail: false }
-    ] }   
-  ])
+  configureStateInfo();
   StateController.navigate('todomvc')
 
   const props = Object.assign({
