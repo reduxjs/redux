@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react'
-import classnames from 'classnames'
 import { SHOW_ALL, SHOW_COMPLETED, SHOW_ACTIVE } from '../constants/TodoFilters'
 import { RefreshLink } from 'navigation-react'
 
@@ -64,7 +63,7 @@ class Footer extends Component {
 Footer.propTypes = {
   completedCount: PropTypes.number.isRequired,
   activeCount: PropTypes.number.isRequired,
-  onClearCompleted: PropTypes.func.isRequired,
+  onClearCompleted: PropTypes.func.isRequired
 }
 
 export default Footer
