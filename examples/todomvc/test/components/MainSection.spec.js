@@ -4,6 +4,7 @@ import TestUtils from 'react-addons-test-utils'
 import MainSection from '../../components/MainSection'
 import TodoItem from '../../components/TodoItem'
 import Footer from '../../components/Footer'
+import { SHOW_ALL, SHOW_COMPLETED } from '../../constants/TodoFilters'
 
 function setup(propOverrides) {
   const props = Object.assign({
@@ -25,7 +26,7 @@ function setup(propOverrides) {
       completeAll: expect.createSpy(),
       clearCompleted: expect.createSpy()
     },
-    filter: 'all'
+    filter: SHOW_ALL
   }, propOverrides)
 
   const renderer = TestUtils.createRenderer()
@@ -121,7 +122,7 @@ describe('components', () => {
       })
 
       it('should filter items', () => {
-        const { output, props } = setup({ filter: 'completed' })
+        const { output, props } = setup({ filter: SHOW_COMPLETED })
         const [ , list ] = output.props.children
         expect(list.props.children.length).toBe(1)
         expect(list.props.children[0].props.todo).toBe(props.todos[1])

@@ -2,6 +2,7 @@ import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Footer from '../../components/Footer'
+import { SHOW_ACTIVE } from '../../constants/TodoFilters'
 import { StateController, StateContext } from 'navigation'
 import configureStateInfo from '../../routes'
 
@@ -84,7 +85,7 @@ describe('components', () => {
       renderer.render(filterLink)
       const a = renderer.getRenderOutput()
       StateController.navigateLink(a.props.href.substring(1))
-      expect(StateContext.data.filter).toBe('active')
+      expect(StateContext.data.filter).toBe(SHOW_ACTIVE)
     })
 
     it('shouldnt show clear button when no completed todos', () => {
