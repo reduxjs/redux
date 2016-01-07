@@ -2,12 +2,11 @@ import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Footer from '../../components/Footer'
-import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters'
-import { StateInfoConfig, StateController, StateContext } from 'navigation'
+import { StateController, StateContext } from 'navigation'
 import configureStateInfo from '../../routes'
 
 function setup(propOverrides) {
-  configureStateInfo();
+  configureStateInfo()
   StateController.navigate('todomvc')
 
   const props = Object.assign({
@@ -78,7 +77,7 @@ describe('components', () => {
     })
 
     it('should set filter when a filter is clicked', () => {
-      const { output, props } = setup()
+      const { output } = setup()
       const [ , filters ] = output.props.children
       const filterLink = filters.props.children[1].props.children
       var renderer = TestUtils.createRenderer()

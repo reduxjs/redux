@@ -8,7 +8,7 @@ import 'todomvc-app-css/index.css'
 import { start, StateInfoConfig } from 'navigation'
 import configureStateInfo from './routes'
 
-configureStateInfo();
+configureStateInfo()
 const store = configureStore()
 
 var todomvc = StateInfoConfig.dialogs.todomvc
