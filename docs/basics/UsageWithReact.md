@@ -377,6 +377,9 @@ export default connect(select)(App)
 
 That’s it! The tiny todo app now functions correctly.
 
+>##### Note on callbacks and render efficiency
+>In the render method above, we pass callbacks to the child components, e.g. `text => dispatch(addTodo(text))`. Because we recreate these callbacks on every render of the container component, React may think that the child components' props have changed, and rerender them unnecessarily. For best performance, you can pass action creators as the second argument to `connect()`, as described in React Redux [detailed documentation](https://github.com/rackt/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options).
+
 ## Next Steps
 
 Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
