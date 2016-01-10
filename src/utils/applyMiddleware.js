@@ -1,4 +1,4 @@
-import compose from './compose'
+import compose from '@f/compose'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method

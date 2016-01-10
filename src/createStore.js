@@ -1,4 +1,4 @@
-import isPlainObject from './utils/isPlainObject'
+import isPlainObject from '@f/is-object'
 
 /**
  * These are private action types reserved by Redux.

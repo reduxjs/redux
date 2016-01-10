@@ -1,5 +1,5 @@
 import expect from 'expect'
-import pick from '../../src/utils/pick'
+import pick from '@f/pick'
 
 describe('pick', () => {
   it('returns object with picked values', () => {
@@ -8,7 +8,7 @@ describe('pick', () => {
       age: 20
     }
     expect(
-      pick(test, x => typeof x === 'string')
+      pick(x => typeof x === 'string', test)
     ).toEqual({
       name: 'lily'
     })

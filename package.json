@@ -81,5 +81,11 @@
         "*.js"
       ]
     }
-  ]
+  ],
+  "dependencies": {
+    "@f/compose": "^0.1.2",
+    "@f/is-object": "^1.1.2",
+    "@f/map-obj": "^1.2.2",
+    "@f/pick": "^1.1.2"
+  }
 }
