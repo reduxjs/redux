@@ -1,5 +1,5 @@
 import expect from 'expect'
-import mapValues from '../../src/utils/mapValues'
+import mapValues from '@f/map-obj'
 
 describe('mapValues', () => {
   it('returns object with mapped values', () => {
@@ -7,7 +7,8 @@ describe('mapValues', () => {
       a: 'c',
       b: 'd'
     }
-    expect(mapValues(test, (val, key) => val + key)).toEqual({
+
+    expect(mapValues((val, key) => val + key, test)).toEqual({
       a: 'ca',
       b: 'db'
     })

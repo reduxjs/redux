@@ -1,4 +1,4 @@
-import mapValues from './mapValues'
+import mapValues from '@f/map-obj'
 
 function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))
@@ -37,7 +37,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     )
   }
 
-  return mapValues(actionCreators, actionCreator =>
+  return mapValues(actionCreator =>
     bindActionCreator(actionCreator, dispatch)
-  )
+  , actionCreators)
 }

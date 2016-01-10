@@ -1,7 +1,7 @@
 import { ActionTypes } from '../createStore'
-import isPlainObject from './isPlainObject'
-import mapValues from './mapValues'
-import pick from './pick'
+import isPlainObject from '@f/is-object'
+import mapValues from '@f/map-obj'
+import pick from '@f/pick'
 
 /* eslint-disable no-console */
 
@@ -95,7 +95,7 @@ function assertReducerSanity(reducers) {
  */
 
 export default function combineReducers(reducers) {
-  var finalReducers = pick(reducers, (val) => typeof val === 'function')
+  var finalReducers = pick((val) => typeof val === 'function', reducers)
   var sanityError
 
   try {
@@ -117,7 +117,7 @@ export default function combineReducers(reducers) {
     }
 
     var hasChanged = false
-    var finalState = mapValues(finalReducers, (reducer, key) => {
+    var finalState = mapValues((reducer, key) => {
       var previousStateForKey = state[key]
       var nextStateForKey = reducer(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
@@ -126,7 +126,7 @@ export default function combineReducers(reducers) {
       }
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
       return nextStateForKey
-    })
+    }, finalReducers)
 
     return hasChanged ? finalState : state
   }
