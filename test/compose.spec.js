@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { compose } from '../../src'
+import { compose } from '../src'
 
 describe('Utils', () => {
   describe('compose', () => {
