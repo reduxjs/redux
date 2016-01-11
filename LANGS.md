@@ -26,5 +26,5 @@
  * [Türk](translations/tr)
  * [Український](translations/uk)
  * [Tiếng Việt](translations/vi)
- * [中文](translations/zh-CN)
+ * [简体中文](translations/zh-CN)
  * [繁體中文](translations/zh-TW)
