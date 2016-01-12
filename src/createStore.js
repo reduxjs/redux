@@ -38,12 +38,7 @@ export default function createStore(reducer, initialState) {
   var currentReducer = reducer
   var currentState = initialState
   var listeners = []
-  var isDispatchingToReducers = false
-
-
-  // Solves https://github.com/rackt/redux/issues/1180
-  var isDispatchingToListeners = false
-  var hasUnsubscribedInListener = false
+  var isDispatching = false
 
 
   /**
@@ -73,13 +68,7 @@ export default function createStore(reducer, initialState) {
       }
       isSubscribed = false
       var index = listeners.indexOf(listener)
-      if ( isDispatchingToListeners ) {
-        hasUnsubscribedInListener = true
-        listeners[index] = undefined // Do not change the array length, because we are currently iterating it!
-      }
-      else {
-        listeners.splice(index, 1)
-      }
+      listeners.splice(index, 1)
     }
   }
 
@@ -123,37 +112,23 @@ export default function createStore(reducer, initialState) {
       )
     }
 
-    if (isDispatchingToReducers) {
+    if (isDispatching) {
       throw new Error('Reducers may not dispatch actions.')
     }
 
     try {
-      isDispatchingToReducers = true
+      isDispatching = true
       currentState = currentReducer(currentState, action)
     } finally {
-      isDispatchingToReducers = false
+      isDispatching = false
     }
 
-
-    try {
-      isDispatchingToListeners = true
-      // No need to copy the array. If a listener gets unsubscribed during dispatch
-      // we just replace it by "undefined" to avoid messing up with the iteration
-      listeners.forEach(listener => {
-        if ( typeof listener !== 'undefined' ) {
-          listener()
-        }
-      })
-    } finally {
-      isDispatchingToListeners = false
-    }
-
-    // As we may have unsubscribed inside a listener, putting undefined items in the listeners array,
-    // we now need to eventually cleanup that array of these undefined listeners
-    if ( hasUnsubscribedInListener ) {
-      listeners = listeners.filter(listener => typeof listener !== 'undefined')
-      hasUnsubscribedInListener = false
-    }
+    listeners.slice().forEach(listener => {
+      // Check if subscription still exists (#1180)
+      if (listeners.includes(listener)) {
+        listener();
+      }
+    });
 
     return action
   }
