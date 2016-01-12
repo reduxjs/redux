@@ -107,7 +107,7 @@ function renderFullPage(html, initialState) {
         <title>Redux Universal Example</title>
       </head>
       <body>
-        <div id="app">${html}</div>
+        <div id="root">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
