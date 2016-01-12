@@ -48,7 +48,10 @@ export default function createStore(reducer, initialState) {
   function getState() {
     return currentState
   }
-
+  function setState(state){
+	  currentState=state;
+	  listeners.slice().forEach(listener => listener())
+  }
   /**
    * Adds a change listener. It will be called any time an action is dispatched,
    * and some part of the state tree may potentially have changed. You may then
@@ -146,7 +149,15 @@ export default function createStore(reducer, initialState) {
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT })
-
+if(__TEST__){
+	return {
+		dispatch,
+	    subscribe,
+	    getState,
+	    replaceReducer,
+	    setState
+	}
+}
   return {
     dispatch,
     subscribe,
