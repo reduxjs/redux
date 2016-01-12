@@ -1,4 +1,4 @@
-import mapValues from './mapValues'
+import mapValues from './utils/mapValues'
 
 function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))

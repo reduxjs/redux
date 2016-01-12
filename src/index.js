@@ -1,8 +1,8 @@
 import createStore from './createStore'
-import combineReducers from './utils/combineReducers'
-import bindActionCreators from './utils/bindActionCreators'
-import applyMiddleware from './utils/applyMiddleware'
-import compose from './utils/compose'
+import combineReducers from './combineReducers'
+import bindActionCreators from './bindActionCreators'
+import applyMiddleware from './applyMiddleware'
+import compose from './compose'
 
 export {
   createStore,

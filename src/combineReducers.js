@@ -1,7 +1,7 @@
-import { ActionTypes } from '../createStore'
-import isPlainObject from './isPlainObject'
-import mapValues from './mapValues'
-import pick from './pick'
+import { ActionTypes } from './createStore'
+import isPlainObject from './utils/isPlainObject'
+import mapValues from './utils/mapValues'
+import pick from './utils/pick'
 
 /* eslint-disable no-console */
 
