@@ -292,6 +292,37 @@ describe('createStore', () => {
     expect(listener5.calls.length).toBe(0)
   })
 
+  it('not fire immediately a listener added inside another listener', () => {
+    const store = createStore(reducers.todos)
+
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+
+    let listener3Added = false;
+    const maybeAddThirdListener = () => {
+      if ( !listener3Added ) {
+        listener3Added = true;
+        store.subscribe(() => listener3())
+      }
+    }
+
+    // Listener 1 is normal
+    store.subscribe(() => listener1())
+
+    // Listener 2 adds the 3rd listener another listener
+    store.subscribe(() => {
+      listener2()
+      maybeAddThirdListener()
+    })
+
+    store.dispatch(unknownAction())
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(1)
+  })
+
   it('supports removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos)
     const listenerA = expect.createSpy(() => {})
