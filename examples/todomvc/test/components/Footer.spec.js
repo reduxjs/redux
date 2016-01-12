@@ -2,15 +2,18 @@ import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Footer from '../../components/Footer'
-import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters'
+import { SHOW_ACTIVE } from '../../constants/TodoFilters'
+import { StateController, StateContext } from 'navigation'
+import configureStateInfo from '../../routes'
 
 function setup(propOverrides) {
+  configureStateInfo()
+  StateController.navigate('todomvc')
+
   const props = Object.assign({
     completedCount: 0,
     activeCount: 0,
-    filter: SHOW_ALL,
-    onClearCompleted: expect.createSpy(),
-    onShow: expect.createSpy()
+    onClearCompleted: expect.createSpy()
   }, propOverrides)
 
   const renderer = TestUtils.createRenderer()
@@ -56,13 +59,16 @@ describe('components', () => {
     it('should render filters', () => {
       const { output } = setup()
       const [ , filters ] = output.props.children
+      var renderer = TestUtils.createRenderer()
       expect(filters.type).toBe('ul')
       expect(filters.props.className).toBe('filters')
       expect(filters.props.children.length).toBe(3)
       filters.props.children.forEach(function checkFilter(filter, i) {
         expect(filter.type).toBe('li')
-        const a = filter.props.children
-        expect(a.props.className).toBe(i === 0 ? 'selected' : '')
+        const link = filter.props.children
+        renderer.render(link)
+        const a = renderer.getRenderOutput()
+        expect(a.props.className).toBe(i === 0 ? 'selected' : undefined)
         expect(a.props.children).toBe({
           0: 'All',
           1: 'Active',
@@ -71,12 +77,15 @@ describe('components', () => {
       })
     })
 
-    it('should call onShow when a filter is clicked', () => {
-      const { output, props } = setup()
+    it('should set filter when a filter is clicked', () => {
+      const { output } = setup()
       const [ , filters ] = output.props.children
       const filterLink = filters.props.children[1].props.children
-      filterLink.props.onClick({})
-      expect(props.onShow).toHaveBeenCalledWith(SHOW_ACTIVE)
+      var renderer = TestUtils.createRenderer()
+      renderer.render(filterLink)
+      const a = renderer.getRenderOutput()
+      StateController.navigateLink(a.props.href.substring(1))
+      expect(StateContext.data.filter).toBe(SHOW_ACTIVE)
     })
 
     it('shouldnt show clear button when no completed todos', () => {

@@ -18,6 +18,8 @@
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "classnames": "^2.1.2",
+    "navigation": "^1.3.0",
+    "navigation-react": "^1.2.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",

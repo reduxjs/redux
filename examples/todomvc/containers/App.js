@@ -7,11 +7,11 @@ import * as TodoActions from '../actions/todos'
 
 class App extends Component {
   render() {
-    const { todos, actions } = this.props
+    const { todos, actions, filter } = this.props
     return (
       <div>
         <Header addTodo={actions.addTodo} />
-        <MainSection todos={todos} actions={actions} />
+        <MainSection todos={todos} actions={actions} filter={filter} />
       </div>
     )
   }
@@ -19,7 +19,8 @@ class App extends Component {
 
 App.propTypes = {
   todos: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  filter: PropTypes.string.isRequired
 }
 
 function mapStateToProps(state) {
