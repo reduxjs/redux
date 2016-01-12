@@ -292,7 +292,7 @@ describe('createStore', () => {
     expect(listener5.calls.length).toBe(0)
   })
 
-  it('not fire immediately a listener added inside another listener', () => {
+  it('not fire immediately if a listener is added inside another listener', () => {
     const store = createStore(reducers.todos)
 
     const listener1 = expect.createSpy(() => {})
