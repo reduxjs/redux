@@ -64,8 +64,8 @@ function receivePosts(reddit, json) {
 function fetchPosts(reddit) {
   return dispatch => {
     dispatch(requestPosts(reddit))
-    return fetch(`http://www.reddit.com/r/${reddit}.json`)
-      .then(req => req.json())
+    return fetch(`https://www.reddit.com/r/${reddit}.json`)
+      .then(response => response.json())
       .then(json => dispatch(receivePosts(reddit, json)))
   }
 }
@@ -103,10 +103,10 @@ import {
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_REDDIT:
-    return action.reddit
-  default:
-    return state
+    case SELECT_REDDIT:
+      return action.reddit
+    default:
+      return state
   }
 }
 
@@ -180,7 +180,7 @@ export default function configureStore(initialState) {
 }
 ```
 
-## Smart Components
+## Container Components
 
 #### `containers/Root.js`
 
@@ -310,7 +310,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(AsyncApp)
 ```
 
-## Dumb Components
+## Presentational Components
 
 #### `components/Picker.js`
 
@@ -364,6 +364,8 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired
+  }).isRequired).isRequired
 }
 ```

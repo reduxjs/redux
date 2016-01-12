@@ -266,8 +266,7 @@ function applyMiddleware(store, middlewares) {
 
 The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
 
-* It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.
-md#getState).
+* It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.md#getState).
 
 * It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
 

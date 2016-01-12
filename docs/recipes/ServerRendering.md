@@ -107,7 +107,7 @@ function renderFullPage(html, initialState) {
         <title>Redux Universal Example</title>
       </head>
       <body>
-        <div id="app">${html}</div>
+        <div id="root">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
@@ -266,7 +266,7 @@ function handleRender(req, res) {
 }
 ```
 
-Because we `res.send()` inside of the callback, the server will hold open the connection and won’t send any data until that callback executes. You’ll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
+Because we call `res.send()` inside of the callback, the server will hold open the connection and won’t send any data until that callback executes. You’ll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
 
 ### Security Considerations
 

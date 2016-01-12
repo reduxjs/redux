@@ -14,7 +14,7 @@ function getNextPageUrl(response) {
     return null
   }
 
-  return nextLink.split('')[0].slice(1, -1)
+  return nextLink.split(';')[0].slice(1, -1)
 }
 
 const API_ROOT = 'https://api.github.com/'
@@ -33,7 +33,7 @@ function callApi(endpoint, schema) {
       }
 
       const camelizedJson = camelizeKeys(json)
-      const nextPageUrl = getNextPageUrl(response) || undefined
+      const nextPageUrl = getNextPageUrl(response)
 
       return Object.assign({},
         normalize(camelizedJson, schema),
