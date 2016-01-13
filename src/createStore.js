@@ -126,9 +126,9 @@ export default function createStore(reducer, initialState) {
     listeners.slice().forEach(listener => {
       // Check if subscription still exists (#1180)
       if (listeners.includes(listener)) {
-        listener();
+        listener()
       }
-    });
+    })
 
     return action
   }

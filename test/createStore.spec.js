@@ -299,10 +299,10 @@ describe('createStore', () => {
     const listener2 = expect.createSpy(() => {})
     const listener3 = expect.createSpy(() => {})
 
-    let listener3Added = false;
+    let listener3Added = false
     const maybeAddThirdListener = () => {
       if ( !listener3Added ) {
-        listener3Added = true;
+        listener3Added = true
         store.subscribe(() => listener3())
       }
     }
