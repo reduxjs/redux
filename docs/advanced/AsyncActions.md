@@ -384,6 +384,8 @@ export function fetchPosts(reddit) {
 >import 'babel-core/polyfill'
 >```
 
+> If you already are using `babel-loader` with Webpack, since [Babel](https://github.com/babel/babel-loader) comes with [core.js](https://github.com/zloirock/core-js), a library with many polyfills including promises and more. You won't need to install `import 'babel-core/polyfill'` to have access to promises.
+
 How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
 
 #### `index.js`
