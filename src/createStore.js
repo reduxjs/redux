@@ -58,7 +58,7 @@ export default function createStore(reducer, initialState) {
    * @returns {Function} A function to remove this change listener.
    */
   function subscribe(listener) {
-    listeners.push(listener)
+    listeners = listeners.concat([ listener ])
     var isSubscribed = true
 
     return function unsubscribe() {
@@ -68,7 +68,10 @@ export default function createStore(reducer, initialState) {
 
       isSubscribed = false
       var index = listeners.indexOf(listener)
-      listeners.splice(index, 1)
+      listeners = [
+        ...listeners.slice(0, index),
+        ...listeners.slice(index + 1)
+      ]
     }
   }
 
@@ -123,7 +126,7 @@ export default function createStore(reducer, initialState) {
       isDispatching = false
     }
 
-    listeners.slice().forEach(listener => listener())
+    listeners.forEach(listener => listener())
     return action
   }
 
