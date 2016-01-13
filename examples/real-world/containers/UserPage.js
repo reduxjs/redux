@@ -42,6 +42,7 @@ class UserPage extends Component {
   }
 
   render() {
+	  console.log("UserPage Rerender");
     const { user, login } = this.props
     if (!user) {
       return <h1><i>Loading {login}’s profile...</i></h1>

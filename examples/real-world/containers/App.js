@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { pushState } from 'redux-router'
 import Explore from '../components/Explore'
 import { resetErrorMessage } from '../actions'
+import Counter from './Counter'
 
 class App extends Component {
   constructor(props) {
@@ -42,10 +43,12 @@ class App extends Component {
     const { children, inputValue } = this.props
     return (
       <div>
+      <Counter/>
         <Explore value={inputValue}
                  onChange={this.handleChange} />
         <hr />
         {this.renderErrorMessage()}
+       
         {children}
       </div>
     )
