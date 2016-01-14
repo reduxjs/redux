@@ -154,7 +154,7 @@ export default class TodoList extends Component {
       <ul>
         {this.props.todos.map((todo, index) =>
           <Todo {...todo}
-                key={index}
+                key={index + todo.text}
                 onClick={() => this.props.onTodoClick(index)} />
         )}
       </ul>
