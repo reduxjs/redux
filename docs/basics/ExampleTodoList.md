@@ -52,12 +52,18 @@ export const VisibilityFilters = {
  * action creators
  */
 
+let nextTodoId = 0;
+
 export function addTodo(text) {
-  return { type: ADD_TODO, text }
+  return {
+    type: ADD_TODO,
+    id: nextTodoId++,
+    text
+  };
 }
 
-export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index }
+export function completeTodo(id) {
+  return { type: COMPLETE_TODO, id }
 }
 
 export function setVisibilityFilter(filter) {
@@ -83,24 +89,39 @@ function visibilityFilter(state = SHOW_ALL, action) {
   }
 }
 
+function todo(state, action) {
+  switch (action.type) {
+    case ADD_TODO:
+      return {
+        id: action.id,
+        text: action.text,
+        completed: false
+      }
+    case COMPLETE_TODO:
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        completed: true
+      }
+    default:
+      return state
+  }
+}
+
 function todos(state = [], action) {
   switch (action.type) {
     case ADD_TODO:
       return [
         ...state,
-        {
-          text: action.text,
-          completed: false
-        }
+        todo(undefined, action)
       ]
     case COMPLETE_TODO:
-      return [
-        ...state.slice(0, action.index),
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map(t =>
+        todo(t, action)
+      )
     default:
       return state
   }
@@ -138,8 +159,8 @@ class App extends Component {
           } />
         <TodoList
           todos={visibleTodos}
-          onTodoClick={index =>
-            dispatch(completeTodo(index))
+          onTodoClick={id =>
+            dispatch(completeTodo(id))
           } />
         <Footer
           filter={visibilityFilter}
@@ -155,7 +176,7 @@ App.propTypes = {
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
-  })),
+  }).isRequired).isRequired,
   visibilityFilter: PropTypes.oneOf([
     'SHOW_ALL',
     'SHOW_COMPLETED',
@@ -303,10 +324,11 @@ export default class TodoList extends Component {
   render() {
     return (
       <ul>
-        {this.props.todos.map((todo, index) =>
-          <Todo {...todo}
-                key={index}
-                onClick={() => this.props.onTodoClick(index)} />
+        {this.props.todos.map(todo =>
+          <Todo
+            key={todo.id}
+            {...todo}
+            onClick={() => this.props.onTodoClick(todo.id)} />
         )}
       </ul>
     )

@@ -65,7 +65,7 @@ function fetchPosts(subreddit) {
   return dispatch => {
     dispatch(requestPosts(subreddit))
     return fetch(`http://www.reddit.com/r/${subreddit}.json`)
-      .then(req => req.json())
+      .then(response => response.json())
       .then(json => dispatch(receivePosts(subreddit, json)))
   }
 }
@@ -103,10 +103,10 @@ import {
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_SUBREDDIT:
-    return action.subreddit
-  default:
-    return state
+    case SELECT_SUBREDDIT:
+      return action.subreddit
+    default:
+      return state
   }
 }
 
@@ -364,6 +364,8 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired
+  }).isRequired).isRequired
 }
 ```

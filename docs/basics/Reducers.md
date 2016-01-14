@@ -230,10 +230,9 @@ function todoApp(state = initialState, action) {
       })
     case ADD_TODO:
     case COMPLETE_TODO:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         todos: todos(state.todos, action)
-      }
+      })
     default:
       return state
   }

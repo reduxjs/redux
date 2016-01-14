@@ -11,6 +11,7 @@ This makes it easy to create universal apps, as the state from your server can b
 ```js
 console.log(store.getState())
 
+/* Prints
 {
   visibilityFilter: 'SHOW_ALL',
   todos: [
@@ -24,6 +25,7 @@ console.log(store.getState())
     }
   ]
 }
+*/
 ```
 
 ### State is read-only
@@ -44,7 +46,7 @@ store.dispatch({
 })
 ```
 
-### Mutations are written as pure functions
+### Changes are made with pure functions
 
 **To specify how the state tree is transformed by actions, you write pure [reducers](../Glossary.md#reducer).**
 
