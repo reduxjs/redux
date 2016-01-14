@@ -28,50 +28,50 @@ import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const SELECT_REDDIT = 'SELECT_REDDIT'
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT'
+export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
-export function selectReddit(reddit) {
+export function selectSubreddit(subreddit) {
   return {
-    type: SELECT_REDDIT,
-    reddit
+    type: SELECT_SUBREDDIT,
+    subreddit
   }
 }
 
-export function invalidateReddit(reddit) {
+export function invalidateSubreddit(subreddit) {
   return {
-    type: INVALIDATE_REDDIT,
-    reddit
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
   }
 }
 
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
 }
 
-function fetchPosts(reddit) {
+function fetchPosts(subreddit) {
   return dispatch => {
-    dispatch(requestPosts(reddit))
-    return fetch(`https://www.reddit.com/r/${reddit}.json`)
-      .then(response => response.json())
-      .then(json => dispatch(receivePosts(reddit, json)))
+    dispatch(requestPosts(subreddit))
+    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
+      .then(req => req.json())
+      .then(json => dispatch(receivePosts(subreddit, json)))
   }
 }
 
-function shouldFetchPosts(state, reddit) {
-  const posts = state.postsByReddit[reddit]
+function shouldFetchPosts(state, subreddit) {
+  const posts = state.postsBySubreddit[subreddit]
   if (!posts) {
     return true
   } else if (posts.isFetching) {
@@ -81,10 +81,10 @@ function shouldFetchPosts(state, reddit) {
   }
 }
 
-export function fetchPostsIfNeeded(reddit) {
+export function fetchPostsIfNeeded(subreddit) {
   return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), reddit)) {
-      return dispatch(fetchPosts(reddit))
+    if (shouldFetchPosts(getState(), subreddit)) {
+      return dispatch(fetchPosts(subreddit))
     }
   }
 }
@@ -97,16 +97,16 @@ export function fetchPostsIfNeeded(reddit) {
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_REDDIT, INVALIDATE_REDDIT,
+  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
 } from './actions'
 
-function selectedReddit(state = 'reactjs', action) {
+function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-    case SELECT_REDDIT:
-      return action.reddit
-    default:
-      return state
+  case SELECT_SUBREDDIT:
+    return action.subreddit
+  default:
+    return state
   }
 }
 
@@ -116,7 +116,7 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-    case INVALIDATE_REDDIT:
+    case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
         didInvalidate: true
       })
@@ -137,13 +137,13 @@ function posts(state = {
   }
 }
 
-function postsByReddit(state = { }, action) {
+function postsBySubreddit(state = { }, action) {
   switch (action.type) {
-    case INVALIDATE_REDDIT:
+    case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
-        [action.reddit]: posts(state[action.reddit], action)
+        [action.subreddit]: posts(state[action.subreddit], action)
       })
     default:
       return state
@@ -151,8 +151,8 @@ function postsByReddit(state = { }, action) {
 }
 
 const rootReducer = combineReducers({
-  postsByReddit,
-  selectedReddit
+  postsBySubreddit,
+  selectedSubreddit
 })
 
 export default rootReducer
@@ -208,7 +208,7 @@ export default class Root extends Component {
 ```js
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
+import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
@@ -220,34 +220,34 @@ class AsyncApp extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit } = this.props
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    const { dispatch, selectedSubreddit } = this.props
+    dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedReddit !== this.props.selectedReddit) {
-      const { dispatch, selectedReddit } = nextProps
-      dispatch(fetchPostsIfNeeded(selectedReddit))
+    if (nextProps.selectedSubreddit !== this.props.selectedSubreddit) {
+      const { dispatch, selectedSubreddit } = nextProps
+      dispatch(fetchPostsIfNeeded(selectedSubreddit))
     }
   }
 
-  handleChange(nextReddit) {
-    this.props.dispatch(selectReddit(nextReddit))
+  handleChange(nextSubreddit) {
+    this.props.dispatch(selectSubreddit(nextSubreddit))
   }
 
   handleRefreshClick(e) {
     e.preventDefault()
 
-    const { dispatch, selectedReddit } = this.props
-    dispatch(invalidateReddit(selectedReddit))
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    const { dispatch, selectedSubreddit } = this.props
+    dispatch(invalidateSubreddit(selectedSubreddit))
+    dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
   render() {
-    const { selectedReddit, posts, isFetching, lastUpdated } = this.props
+    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
-        <Picker value={selectedReddit}
+        <Picker value={selectedSubreddit}
                 onChange={this.handleChange}
                 options={[ 'reactjs', 'frontend' ]} />
         <p>
@@ -281,7 +281,7 @@ class AsyncApp extends Component {
 }
 
 AsyncApp.propTypes = {
-  selectedReddit: PropTypes.string.isRequired,
+  selectedSubreddit: PropTypes.string.isRequired,
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
@@ -289,18 +289,18 @@ AsyncApp.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { selectedReddit, postsByReddit } = state
+  const { selectedSubreddit, postsBySubreddit } = state
   const {
     isFetching,
     lastUpdated,
     items: posts
-  } = postsByReddit[selectedReddit] || {
+  } = postsBySubreddit[selectedSubreddit] || {
     isFetching: true,
     items: []
   }
 
   return {
-    selectedReddit,
+    selectedSubreddit,
     posts,
     isFetching,
     lastUpdated
@@ -364,8 +364,6 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired
-  }).isRequired).isRequired
+  posts: PropTypes.array.isRequired
 }
 ```

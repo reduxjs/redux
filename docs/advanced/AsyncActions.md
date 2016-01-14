@@ -45,17 +45,17 @@ We’ll use separate types in this tutorial.
 
 ## Synchronous Action Creators
 
-Let’s start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a reddit to display:
+Let’s start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a subreddit to display:
 
 #### `actions.js`
 
 ```js
-export const SELECT_REDDIT = 'SELECT_REDDIT'
+export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 
-export function selectReddit(reddit) {
+export function selectSubreddit(subreddit) {
   return {
-    type: SELECT_REDDIT,
-    reddit
+    type: SELECT_SUBREDDIT,
+    subreddit
   }
 }
 ```
@@ -63,42 +63,42 @@ export function selectReddit(reddit) {
 They can also press a “refresh” button to update it:
 
 ```js
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT'
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
-export function invalidateReddit(reddit) {
+export function invalidateSubreddit(subreddit) {
   return {
-    type: INVALIDATE_REDDIT,
-    reddit
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
   }
 }
 ```
 
 These were the actions governed by the user interaction. We will also have another kind of action, governed by the network requests. We will see how to dispatch them later, but for now, we just want to define them.
 
-When it’s time to fetch the posts for some reddit, we will dispatch a `REQUEST_POSTS` action:
+When it’s time to fetch the posts for some subreddit, we will dispatch a `REQUEST_POSTS` action:
 
 ```js
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 
-export function requestPosts(reddit) {
+export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 ```
 
-It is important for it to be separate from `SELECT_REDDIT` or `INVALIDATE_REDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular reddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it’s not wise to couple fetching to some particular UI event early on.
+It is important for it to be separate from `SELECT_SUBREDDIT` or `INVALIDATE_SUBREDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular subreddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it’s not wise to couple fetching to some particular UI event early on.
 
 Finally, when the network request comes through, we will dispatch `RECEIVE_POSTS`:
 
 ```js
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 
-export function receivePosts(reddit, json) {
+export function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
@@ -109,7 +109,7 @@ This is all we need to know for now. The particular mechanism to dispatch these 
 
 >##### Note on Error Handling
 
->In a real app, you’d also want to dispatch an action on request failure. We won’t implement error handling in this tutorial, but the [real world example](../introduction/Examples.md#real-world) shows one of the possible approaches.
+>In a real app, you’d also want to dispatch an action on request failure. We won’t implement error handling in this tutorial, but the [real world example](../introduction/Examples.html#real-world) shows one of the possible approaches.
 
 ## Designing the State Shape
 
@@ -123,8 +123,8 @@ Here’s what the state shape for our “Reddit headlines” app might look like
 
 ```js
 {
-  selectedReddit: 'frontend',
-  postsByReddit: {
+  selectedSubreddit: 'frontend',
+  postsBySubreddit: {
     frontend: {
       isFetching: true,
       didInvalidate: false,
@@ -138,7 +138,7 @@ Here’s what the state shape for our “Reddit headlines” app might look like
         {
           id: 42,
           title: 'Confusion about Flux and Relay'
-        },
+        }, 
         {
           id: 500,
           title: 'Creating a Simple Application Using React JS and Flux Architecture'
@@ -159,11 +159,11 @@ There are a few important bits here:
 
 >In this example, we store the received items together with the pagination information. However, this approach won’t work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
 
->If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.md#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
+>If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.html#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
 
 >```js
 > {
->   selectedReddit: 'frontend',
+>   selectedSubreddit: 'frontend',
 >   entities: {
 >     users: {
 >       2: {
@@ -184,7 +184,7 @@ There are a few important bits here:
 >       }
 >     }
 >   },
->   postsByReddit: {
+>   postsBySubreddit: {
 >     frontend: {
 >       isFetching: true,
 >       didInvalidate: false,
@@ -215,14 +215,14 @@ Before going into the details of dispatching actions together with network reque
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_REDDIT, INVALIDATE_REDDIT,
+  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
 } from '../actions'
 
-function selectedReddit(state = 'reactjs', action) {
+function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-    case SELECT_REDDIT:
-      return action.reddit
+    case SELECT_SUBREDDIT:
+      return action.subreddit
     default:
       return state
   }
@@ -234,7 +234,7 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-    case INVALIDATE_REDDIT:
+    case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
         didInvalidate: true
       })
@@ -255,13 +255,13 @@ function posts(state = {
   }
 }
 
-function postsByReddit(state = {}, action) {
+function postsBySubreddit(state = {}, action) {
   switch (action.type) {
-    case INVALIDATE_REDDIT:
+    case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
-        [action.reddit]: posts(state[action.reddit], action)
+        [action.subreddit]: posts(state[action.subreddit], action)
       })
     default:
       return state
@@ -269,8 +269,8 @@ function postsByReddit(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
-  postsByReddit,
-  selectedReddit
+  postsBySubreddit,
+  selectedSubreddit
 })
 
 export default rootReducer
@@ -278,21 +278,21 @@ export default rootReducer
 
 In this code, there are two interesting parts:
 
-* We use ES6 computed property syntax so we can update `state[action.reddit]` with `Object.assign()` in a terse way. This:
+* We use ES6 computed property syntax so we can update `state[action.subreddit]` with `Object.assign()` in a terse way. This:
 
   ```js
   return Object.assign({}, state, {
-    [action.reddit]: posts(state[action.reddit], action)
+    [action.subreddit]: posts(state[action.subreddit], action)
   })
   ```
   is equivalent to this:
 
   ```js
   let nextState = {}
-  nextState[action.reddit] = posts(state[action.reddit], action)
+  nextState[action.subreddit] = posts(state[action.subreddit], action)
   return Object.assign({}, state, nextState)
   ```
-* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.md#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
+* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.html#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
 
 Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
 
@@ -310,18 +310,18 @@ We can still define these special thunk action creators inside our `actions.js` 
 import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
@@ -331,18 +331,18 @@ function receivePosts(reddit, json) {
 // Though its insides are different, you would use it just like any other action creator:
 // store.dispatch(fetchPosts('reactjs'))
 
-export function fetchPosts(reddit) {
+export function fetchPosts(subreddit) {
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return dispatch => {
+  return function (dispatch) {
 
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
-    dispatch(requestPosts(reddit))
+    dispatch(requestPosts(subreddit))
 
     // The function called by the thunk middleware can return a value,
     // that is passed on as the return value of the dispatch method.
@@ -350,14 +350,14 @@ export function fetchPosts(reddit) {
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
 
-    return fetch(`https://www.reddit.com/r/${reddit}.json`)
+    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json =>
 
         // We can dispatch many times!
         // Here, we update the app state with the results of the API call.
 
-        dispatch(receivePosts(reddit, json))
+        dispatch(receivePosts(subreddit, json))
       )
 
       // In a real world app, you also want to
@@ -392,7 +392,7 @@ How do we include the Redux Thunk middleware in the dispatch mechanism? We use t
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
-import { selectReddit, fetchPosts } from './actions'
+import { selectSubreddit, fetchPosts } from './actions'
 import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
@@ -404,7 +404,7 @@ const createStoreWithMiddleware = applyMiddleware(
 
 const store = createStoreWithMiddleware(rootReducer)
 
-store.dispatch(selectReddit('reactjs'))
+store.dispatch(selectSubreddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>
   console.log(store.getState())
 )
@@ -418,34 +418,34 @@ The nice thing about thunks is that they can dispatch results of each other:
 import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
 }
 
-function fetchPosts(reddit) {
+function fetchPosts(subreddit) {
   return dispatch => {
-    dispatch(requestPosts(reddit))
-    return fetch(`https://www.reddit.com/r/${reddit}.json`)
+    dispatch(requestPosts(subreddit))
+    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(reddit, json)))
+      .then(json => dispatch(receivePosts(subreddit, json)))
   }
 }
 
-function shouldFetchPosts(state, reddit) {
-  const posts = state.postsByReddit[reddit]
+function shouldFetchPosts(state, subreddit) {
+  const posts = state.postsBySubreddit[subreddit]
   if (!posts) {
     return true
   } else if (posts.isFetching) {
@@ -455,7 +455,7 @@ function shouldFetchPosts(state, reddit) {
   }
 }
 
-export function fetchPostsIfNeeded(reddit) {
+export function fetchPostsIfNeeded(subreddit) {
 
   // Note that the function also receives getState()
   // which lets you choose what to dispatch next.
@@ -464,9 +464,9 @@ export function fetchPostsIfNeeded(reddit) {
   // a cached value is already available.
 
   return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), reddit)) {
+    if (shouldFetchPosts(getState(), subreddit)) {
       // Dispatch a thunk from thunk!
-      return dispatch(fetchPosts(reddit))
+      return dispatch(fetchPosts(subreddit))
     } else {
       // Let the calling code know there's nothing to wait for.
       return Promise.resolve()
@@ -487,9 +487,9 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 >##### Note about Server Rendering
 
->Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns completes. Then your store will already be hydrated with the state you need before rendering.
+>Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.
 
-[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.md#real-world) does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
+[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.html#real-world) does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
 
 ## Connecting to UI
 
