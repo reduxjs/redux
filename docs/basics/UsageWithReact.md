@@ -79,18 +79,18 @@ These are all presentational components. They don’t know *where* the data come
 
 If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
 
-We also have some container components that connects to Redux. The container components are responsible for getting and transforming state. Remember that changes result in a new state as state is immutable.
+We also have some container components that connect to Redux. Container components calculate the props to pass to the presentational components they wrap based on the current state of the Redux store.
 
 * **`AddTodo`** is an input field with a button.
   - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
 
-* **`FilterLink`** gets active link from Redux and pass it as props to the presentational component, Link.
+* **`FilterLink`** gets the current visibility filter and passes it as a prop to `Link` component.
 
-* **`VisibleTodoList`** gets todos from Redux, filter the todos and pass them as props to the presentational component, TodoList.
+* **`VisibleTodoList`** gets todos from Redux, filters the todos and passes them as props to the presentational component, TodoList.
 
 Let’s write the components! We begin with the presentational components, so we don’t need to think about binding to Redux yet.
 
-## Presentational Components
+### Presentational Components
 
 These are all normal React components, so we'll not stop and examine them in detail. Here they are:
 
@@ -99,18 +99,11 @@ These are all normal React components, so we'll not stop and examine them in det
 ```js
 import React from "react";
 
-const Todo = ({
-  onClick,
-  completed,
-  text
-}) => (
+const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
     style={{
-      textDecoration:
-        completed ?
-          "line-through" :
-          "none"
+      textDecoration: completed ? "line-through" : "none"
     }}
   >
     {text}
@@ -126,10 +119,7 @@ export default Todo
 import React from "react";
 import Todo from "./Todo";
 
-const TodoList = ({
-  todos,
-  onTodoClick
-}) => (
+const TodoList = ({ todos, onTodoClick }) => (
   <ul>
     {todos.map(todo =>
       <Todo
@@ -175,11 +165,7 @@ export default Footer
 ```js
 import React from "react";
 
-const Link = ({
-  active,
-  children,
-  onClick
-}) => {
+const Link = ({ active, children, onClick }) => {
   if (active) {
     return <span>{children}</span>;
   }
@@ -199,7 +185,7 @@ const Link = ({
 export default Link
 ```
 
-We'll now write the container components.
+### Container Components
 
 #### `containers/AddTodo.js`
 
@@ -278,10 +264,7 @@ import { connect } from "react-redux";
 import { toggleTodo } from "../actions";
 import TodoList from "../components/TodoList";
 
-const getVisibleTodos = (
-  todos,
-  filter
-) => {
+const getVisibleTodos = (todos, filter) => {
   switch (filter) {
     case "SHOW_ALL":
       return todos;
@@ -307,9 +290,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch
-) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     onTodoClick: (id) => {
       dispatch(toggleTodo(id));
