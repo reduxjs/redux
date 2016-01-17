@@ -92,7 +92,7 @@ Let’s write the components! We begin with the presentational components, so we
 
 ### Presentational Components
 
-These are all normal React components, so we'll not stop and examine them in detail. Here they are:
+These are all normal React components, so we'll not stop and examine them in detail. We write functional stateless components unless we need to use either React state or the React life-cycle functions.
 
 #### `components/Todo.js`
 
@@ -187,6 +187,8 @@ export default Link
 
 ### Container Components
 
+We will now write the container components. Container components use connect() to retrieve data from Redux state.
+
 #### `containers/AddTodo.js`
 
 ```js
@@ -224,34 +226,15 @@ import { connect } from "react-redux";
 import { setVisibilityFilter } from "../actions";
 import Link from "../components/Link";
 
-const mapStateToProps = (
-  state,
-  ownProps
-) => {
-  return {
-    active:
-      ownProps.filter ===
-      state.visibilityFilter
-  };
+const mapStateToProps = (state, ownProps) => {
+  return { active: ownProps.filter === state.visibilityFilter };
 };
 
-const mapDispatchToProps = (
-  dispatch,
-  ownProps
-) => {
-  return {
-    onClick: () => {
-      dispatch(
-        setVisibilityFilter(ownProps.filter)
-      );
-    }
-  };
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return { onClick: () => { dispatch(setVisibilityFilter(ownProps.filter)); }};
 }
 
-const FilterLink = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Link);
+const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link);
 
 export default FilterLink
 ```
@@ -291,22 +274,15 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    onTodoClick: (id) => {
-      dispatch(toggleTodo(id));
-    }
-  };
+  return { onTodoClick: (id) => { dispatch(toggleTodo(id)); }};
 };
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList);
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
 export default VisibleTodoList
 ```
 
-Then we'll write the `TodoApp` component that assembles the app.
+Then we’ll write the `TodoApp` component that renders these components together.
 
 #### `components/TodoApp.js`
 
@@ -356,8 +332,6 @@ render(
   document.getElementById("app")
 );
 ```
-
-That’s it! Our todo app now functions correctly.
 
 This makes our store instance available to the components below. (Internally, this is done via React’s [“context” feature](http://facebook.github.io/react/docs/context.html).)
 
