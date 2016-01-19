@@ -1,7 +1,7 @@
 import expect from 'expect'
-import { bindActionCreators, createStore } from '../../src'
-import { todos } from '../helpers/reducers'
-import * as actionCreators from '../helpers/actionCreators'
+import { bindActionCreators, createStore } from '../src'
+import { todos } from './helpers/reducers'
+import * as actionCreators from './helpers/actionCreators'
 
 describe('bindActionCreators', () => {
   let store

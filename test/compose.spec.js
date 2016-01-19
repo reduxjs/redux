@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { compose } from '../../src'
+import { compose } from '../src'
 
 describe('Utils', () => {
   describe('compose', () => {
@@ -20,6 +20,18 @@ describe('Utils', () => {
       expect(compose(a, b, c)(final)('')).toBe('abc')
       expect(compose(b, c, a)(final)('')).toBe('bca')
       expect(compose(c, a, b)(final)('')).toBe('cab')
+    })
+
+    it('can be seeded with multiple arguments', () => {
+      const square = x => x * x
+      const add = (x, y) => x + y
+      expect(compose(square, add)(1, 2)).toBe(9)
+    })
+
+    it('returns the first given argument if given no functions', () => {
+      expect(compose()(1, 2)).toBe(1)
+      expect(compose()(3)).toBe(3)
+      expect(compose()()).toBe(undefined)
     })
   })
 })

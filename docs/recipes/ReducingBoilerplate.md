@@ -150,7 +150,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action). 
+There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
 ## Async Action Creators
 
@@ -333,7 +333,7 @@ export function loadPosts(userId) {
     // Types of actions to emit before and after
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
     // Check the cache (optional):
-    shouldCallAPI: (state) => !state.users[userId],
+    shouldCallAPI: (state) => !state.posts[userId],
     // Perform the fetching:
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     // Arguments to inject in begin/end actions
@@ -346,53 +346,51 @@ The middleware that interprets such actions could look like this:
 
 ```js
 function callAPIMiddleware({ dispatch, getState }) {
-  return function (next) {
-    return function (action) {
-      const {
-        types,
-        callAPI,
-        shouldCallAPI = () => true,
-        payload = {}
-      } = action
+  return next => action => {
+    const {
+      types,
+      callAPI,
+      shouldCallAPI = () => true,
+      payload = {}
+    } = action
 
-      if (!types) {
-        // Normal action: pass it on
-        return next(action)
-      }
-
-      if (
-        !Array.isArray(types) ||
-        types.length !== 3 ||
-        !types.every(type => typeof type === 'string')
-      ) {
-        throw new Error('Expected an array of three string types.')
-      }
-
-      if (typeof callAPI !== 'function') {
-        throw new Error('Expected fetch to be a function.')
-      }
-
-      if (!shouldCallAPI(getState())) {
-        return
-      }
-
-      const [ requestType, successType, failureType ] = types
-
-      dispatch(Object.assign({}, payload, {
-        type: requestType
-      }))
-
-      return callAPI().then(
-        response => dispatch(Object.assign({}, payload, {
-          response: response,
-          type: successType
-        })),
-        error => dispatch(Object.assign({}, payload, {
-          error: error,
-          type: failureType
-        }))
-      )
+    if (!types) {
+      // Normal action: pass it on
+      return next(action)
     }
+
+    if (
+      !Array.isArray(types) ||
+      types.length !== 3 ||
+      !types.every(type => typeof type === 'string')
+    ) {
+      throw new Error('Expected an array of three string types.')
+    }
+
+    if (typeof callAPI !== 'function') {
+      throw new Error('Expected fetch to be a function.')
+    }
+
+    if (!shouldCallAPI(getState())) {
+      return
+    }
+
+    const [ requestType, successType, failureType ] = types
+
+    dispatch(Object.assign({}, payload, {
+      type: requestType
+    }))
+
+    return callAPI().then(
+      response => dispatch(Object.assign({}, payload, {
+        response,
+        type: successType
+      })),
+      error => dispatch(Object.assign({}, payload, {
+        error,
+        type: failureType
+      }))
+    )
   }
 }
 ```
@@ -403,7 +401,7 @@ After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddlew
 export function loadPosts(userId) {
   return {
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    shouldCallAPI: (state) => !state.users[userId],
+    shouldCallAPI: (state) => !state.posts[userId],
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     payload: { userId }
   }
@@ -412,7 +410,7 @@ export function loadPosts(userId) {
 export function loadComments(postId) {
   return {
     types: ['LOAD_COMMENTS_REQUEST', 'LOAD_COMMENTS_SUCCESS', 'LOAD_COMMENTS_FAILURE'],
-    shouldCallAPI: (state) => !state.posts[postId],
+    shouldCallAPI: (state) => !state.comments[postId],
     callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
     payload: { postId }
   }
