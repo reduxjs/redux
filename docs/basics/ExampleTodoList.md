@@ -324,11 +324,11 @@ export default class TodoList extends Component {
   render() {
     return (
       <ul>
-        {this.props.todos.map(todo =>
+        {this.props.todos.map((todo,idx) =>
           <Todo
-            key={todo.id}
+            key={idx}
             {...todo}
-            onClick={() => this.props.onTodoClick(todo.id)} />
+            onClick={() => this.props.onTodoClick(idx)} />
         )}
       </ul>
     )
