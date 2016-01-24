@@ -102,21 +102,6 @@ describe('components', () => {
         footer.props.onClearCompleted()
         expect(props.actions.clearCompleted).toHaveBeenCalled()
       })
-
-      it('onClearCompleted shouldnt call clearCompleted if no todos completed', () => {
-        const { output, props } = setup({ 
-          todos: [
-            {
-              text: 'Use Redux',
-              completed: false,
-              id: 0
-            }
-          ]
-        })
-        const [ , , footer ] = output.props.children
-        footer.props.onClearCompleted()
-        expect(props.actions.clearCompleted.calls.length).toBe(0)
-      })
     })
 
     describe('todo list', () => {
