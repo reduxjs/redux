@@ -36,10 +36,10 @@ export default function (state = {}, action) {
           accumulator[key] = node  // return the unchanged node if the node removed is not a child
         } else {
           // node being removed is a child of this node, so copy the childIds array and remove it
-          const childIdsWithoutNode = [...node.childIds] // copy childIds array
+          const childIdsWithoutNode = [ ...node.childIds ] // copy childIds array
           childIdsWithoutNode.splice(childIndex, 1)      // mutable remove
           accumulator[key] =
-            Object.assign({}, node, {childIds: childIdsWithoutNode}) // copy and replace childIds array
+            Object.assign({}, node, { childIds: childIdsWithoutNode }) // copy and replace childIds array
         }
       }
       return accumulator
