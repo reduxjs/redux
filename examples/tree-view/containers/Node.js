@@ -8,6 +8,7 @@ class Node extends Component {
     super(props)
     this.handleIncrementClick = this.handleIncrementClick.bind(this)
     this.handleAddChildClick = this.handleAddChildClick.bind(this)
+    this.handleRemoveClick = this.handleRemoveClick.bind(this)
   }
 
   handleIncrementClick() {
@@ -23,6 +24,13 @@ class Node extends Component {
     addChild(id, childId)
   }
 
+  handleRemoveClick(e) {
+    e.preventDefault()
+
+    const { removeNode, id } = this.props
+    removeNode(id)
+  }
+
   renderChild(childId) {
     return (
       <li key={childId}>
@@ -32,14 +40,18 @@ class Node extends Component {
   }
 
   render() {
-    const { counter, childIds } = this.props
+    const { counter, childIds, id } = this.props
     return (
-      <div>
+      <div title={id}>
         Counter: {counter}
         {' '}
         <button onClick={this.handleIncrementClick}>
           +
         </button>
+        {' '}
+        <a href='#' onClick={this.handleRemoveClick}>
+          Remove
+        </a>
         <ul>
           {childIds.map(this.renderChild)}
           <li key='add'>
