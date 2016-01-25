@@ -1,8 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { syncHistory } from 'react-router-redux'
 import { browserHistory } from 'react-router'
-import createHistory from 'history/lib/createBrowserHistory'
-import routes from '../routes'
 import thunk from 'redux-thunk'
 import api from '../middleware/api'
 import rootReducer from '../reducers'
