@@ -174,7 +174,7 @@ It covers:
 * Normalized state
 * Reducer composition
 * State representing a tree view
-* Granual re-rendering of a large subtree
+* Granular re-rendering of a large subtree
 
 ## More Examples
 
