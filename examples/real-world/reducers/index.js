@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actions'
-import merge from 'lodash/object/merge'
+import merge from 'lodash/merge'
 import paginate from './paginate'
 import { routerStateReducer as router } from 'redux-router'
 import { combineReducers } from 'redux'

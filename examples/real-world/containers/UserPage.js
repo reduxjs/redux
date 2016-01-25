@@ -4,7 +4,7 @@ import { loadUser, loadStarred } from '../actions'
 import User from '../components/User'
 import Repo from '../components/Repo'
 import List from '../components/List'
-import zip from 'lodash/array/zip'
+import zip from 'lodash/zip'
 
 function loadData(props) {
   const { login } = props
