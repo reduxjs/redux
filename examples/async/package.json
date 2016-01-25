@@ -27,12 +27,12 @@
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "isomorphic-fetch": "^2.1.1",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "react-redux": "^4.0.0",
-    "redux": "^3.0.0",
-    "redux-logger": "^2.0.2",
-    "redux-thunk": "^0.1.0"
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "react-redux": "^4.0.6",
+    "redux": "^3.0.6",
+    "redux-logger": "^2.4.0",
+    "redux-thunk": "^1.0.3"
   },
   "devDependencies": {
     "babel-core": "^5.6.18",

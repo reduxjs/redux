@@ -18,10 +18,10 @@
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "classnames": "^2.1.2",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "react-redux": "^4.0.0",
-    "redux": "^3.0.0"
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "react-redux": "^4.0.6",
+    "redux": "^3.0.6"
   },
   "devDependencies": {
     "babel-core": "^5.6.18",
