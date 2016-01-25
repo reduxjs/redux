@@ -153,6 +153,29 @@ It covers:
 * Using only [React Redux](https://github.com/rackt/react-redux) to bind action creators 
 * Conditional middleware (logging example)
 
+## Tree View
+
+Run the [Tree View](https://github.com/rackt/redux/tree/master/examples/tree-view) example:
+
+```
+git clone https://github.com/rackt/redux.git
+
+cd redux/examples/tree-view
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+This is an example of performant rendering.
+
+It covers:
+
+* Normalized state
+* Reducer composition
+* State representing a tree view
+* Granual re-rendering of a large subtree
+
 ## More Examples
 
 You can find more examples in [Awesome Redux](https://github.com/xgrommx/awesome-redux).
