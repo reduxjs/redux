@@ -59,7 +59,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Routing
 
-* [redux-simple-router](https://github.com/rackt/redux-simple-router) — Ruthlessly simple bindings to keep React Router and Redux in sync
+* [react-router-redux](https://github.com/rackt/react-router-redux) — Ruthlessly simple bindings to keep react-router and redux in sync
 * [redux-router](https://github.com/acdlite/redux-router) — Redux bindings for React Router
 
 ### Components
@@ -83,7 +83,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
 * [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the reducers
 * [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
-* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators 
+* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
 * [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
