@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
 import paginate from './paginate'
-import { routerStateReducer as router } from 'redux-router'
+import { routeReducer } from 'react-router-redux'
 import { combineReducers } from 'redux'
 
 // Updates an entity cache in response to any action with response.entities.
@@ -50,7 +50,9 @@ const rootReducer = combineReducers({
   entities,
   pagination,
   errorMessage,
-  router
+  routeReducer,
+  routing: routeReducer
 })
+
 
 export default rootReducer
