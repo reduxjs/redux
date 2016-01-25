@@ -1,6 +1,7 @@
 export const INCREMENT = 'INCREMENT'
 export const CREATE_NODE = 'CREATE_NODE'
 export const ADD_CHILD = 'ADD_CHILD'
+export const REMOVE_NODE = 'REMOVE_NODE'
 
 export function increment(nodeId) {
   return {
@@ -22,5 +23,12 @@ export function addChild(nodeId, childId) {
     type: ADD_CHILD,
     nodeId,
     childId
+  }
+}
+
+export function removeNode(nodeId) {
+  return {
+    type: REMOVE_NODE,
+    nodeId
   }
 }
