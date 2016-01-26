@@ -18,7 +18,7 @@ npm install --save react-redux
 
 React bindings for Redux embrace the idea of [separating container and presentational components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
 
-It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be presentational and receive all data via props.
+This table describes the characteristics of container and presentational components.
 
 <table>
     <thead>
@@ -52,18 +52,16 @@ It is advisable that only top-level components of your app (such as route handle
     </tbody>
 </table>
 
-In this todo app, we will only have a single container component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest container components, we suggest that you pass props down whenever possible.
+We suggest that you do not nest container components beyond necessity. Start by having a few top-level container components pass the props down to the presentational component tree. When you notice that components in the middle of that tree pass too many props down without actually using them, it is a good time to introduce some containers.
 
 ## Designing Component Hierarchy
 
 Remember how we [designed the shape of the root state object](Reducers.md)? It’s time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
 
-Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incomplete todos.
+Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only active todos.
 
-I see the following components (and their props) emerge from this brief:
+I see the following components and their props emerge from this brief:
 
-* **`AddTodo`** is an input field with a button.
-  - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
 * **`TodoList`** is a list showing visible todos.
   - `todos: Array` is an array of todo items with `{ text, completed }` shape.
   - `onTodoClick(index: number)` is a callback to invoke when a todo is clicked.
@@ -74,196 +72,238 @@ I see the following components (and their props) emerge from this brief:
 * **`Footer`** is a component where we let user change visible todo filter.
   - `filter: string` is the current filter: `'SHOW_ALL'`, `'SHOW_COMPLETED'` or `'SHOW_ACTIVE'`.
   - `onFilterChange(nextFilter: string)`: Callback to invoke when user chooses a different filter.
+* **`Link`** is a link with a callback.
+  - `onClick()` is a callback to invoke when link is clicked.
 
 These are all presentational components. They don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them.
 
 If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
 
-Let’s write them! We don’t need to think about binding to Redux yet. You can just give them fake data while you experiment until they render correctly.
+We also have some container components that connect to Redux. Container components calculate the props to pass to the presentational components they wrap based on the current state of the Redux store.
 
-## Presentational Components
+* **`AddTodo`** is an input field with a button.
+  - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
 
-These are all normal React components, so we won’t stop to examine them in detail. Here they go:
+* **`FilterLink`** gets the current visibility filter and passes it as a prop to `Link` component.
 
-#### `components/AddTodo.js`
+* **`VisibleTodoList`** gets todos from Redux, filters the todos and passes them as props to the presentational component, TodoList.
 
-```js
-import React, { Component, PropTypes } from 'react'
+Let’s write the components! We begin with the presentational components, so we don’t need to think about binding to Redux yet.
 
-export default class AddTodo extends Component {
-  render() {
-    return (
-      <div>
-        <input type='text' ref='input' />
-        <button onClick={e => this.handleClick(e)}>
-          Add
-        </button>
-      </div>
-    )
-  }
+### Presentational Components
 
-  handleClick(e) {
-    const node = this.refs.input
-    const text = node.value.trim()
-    this.props.onAddClick(text)
-    node.value = ''
-  }
-}
-
-AddTodo.propTypes = {
-  onAddClick: PropTypes.func.isRequired
-}
-```
+These are all normal React components, so we'll not stop and examine them in detail. We write functional stateless components unless we need to use either React state or the React life-cycle functions.
 
 #### `components/Todo.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React from "react";
 
-export default class Todo extends Component {
-  render() {
-    return (
-      <li
-        onClick={this.props.onClick}
-        style={{
-          textDecoration: this.props.completed ? 'line-through' : 'none',
-          cursor: this.props.completed ? 'default' : 'pointer'
-        }}>
-        {this.props.text}
-      </li>
-    )
-  }
-}
+const Todo = ({ onClick, completed, text }) => (
+  <li
+    onClick={onClick}
+    style={{
+      textDecoration: completed ? "line-through" : "none"
+    }}
+  >
+    {text}
+  </li>
+);
 
-Todo.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  text: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired
-}
+export default Todo
 ```
 
 #### `components/TodoList.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
-import Todo from './Todo'
+import React from "react";
+import Todo from "./Todo";
 
-export default class TodoList extends Component {
-  render() {
-    return (
-      <ul>
-        {this.props.todos.map((todo, index) =>
-          <Todo {...todo}
-                key={index}
-                onClick={() => this.props.onTodoClick(index)} />
-        )}
-      </ul>
-    )
-  }
-}
+const TodoList = ({ todos, onTodoClick }) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => onTodoClick(todo.id)}
+      />
+    )}
+  </ul>
+);
 
-TodoList.propTypes = {
-  onTodoClick: PropTypes.func.isRequired,
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
-  }).isRequired).isRequired
-}
+export default TodoList
 ```
 
 #### `components/Footer.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React from "react";
+import FilterLink from "./FilterLink";
 
-export default class Footer extends Component {
-  renderFilter(filter, name) {
-    if (filter === this.props.filter) {
-      return name
-    }
+const Footer = () => (
+  <p>
+    Show:
+    {" "}
+    <FilterLink filter="SHOW_ALL">
+      All
+    </FilterLink>
+    {", "}
+    <FilterLink filter="SHOW_ACTIVE">
+      Active
+    </FilterLink>
+    {", "}
+    <FilterLink filter="SHOW_COMPLETED">
+      Completed
+    </FilterLink>
+  </p>
+);
 
-    return (
-      <a href='#' onClick={e => {
-        e.preventDefault()
-        this.props.onFilterChange(filter)
-      }}>
-        {name}
-      </a>
-    )
-  }
-
-  render() {
-    return (
-      <p>
-        Show:
-        {' '}
-        {this.renderFilter('SHOW_ALL', 'All')}
-        {', '}
-        {this.renderFilter('SHOW_COMPLETED', 'Completed')}
-        {', '}
-        {this.renderFilter('SHOW_ACTIVE', 'Active')}
-        .
-      </p>
-    )
-  }
-}
-
-Footer.propTypes = {
-  onFilterChange: PropTypes.func.isRequired,
-  filter: PropTypes.oneOf([
-    'SHOW_ALL',
-    'SHOW_COMPLETED',
-    'SHOW_ACTIVE'
-  ]).isRequired
-}
+export default Footer
 ```
 
-That’s it! We can verify that they work correctly by writing a dummy `App` to render them:
+#### `components/Link.js`
+```js
+import React from "react";
 
-#### `containers/App.js`
+const Link = ({ active, children, onClick }) => {
+  if (active) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href="#"
+       onClick={e => {
+         e.preventDefault();
+         onClick();
+       }}
+    >
+      {children}
+    </a>
+  );
+};
+
+export default Link
+```
+
+### Container Components
+
+We will now write the container components. Container components use connect() to retrieve data from Redux state.
+
+#### `containers/AddTodo.js`
 
 ```js
-import React, { Component } from 'react'
-import AddTodo from '../components/AddTodo'
-import TodoList from '../components/TodoList'
-import Footer from '../components/Footer'
+import React from "react";
+import { connect } from "react-redux";
+import { addTodo } from "../actions";
 
-export default class App extends Component {
-  render() {
-    return (
-      <div>
-        <AddTodo
-          onAddClick={text =>
-            console.log('add todo', text)
-          } />
-        <TodoList
-          todos={
-            [
-              {
-                text: 'Use Redux',
-                completed: true
-              },
-              {
-                text: 'Learn to connect it to React',
-                completed: false
-              }
-            ]
-          }
-          onTodoClick={index =>
-            console.log('todo clicked', index)
-          } />
-        <Footer
-          filter='SHOW_ALL'
-          onFilterChange={filter =>
-            console.log('filter change', filter)
-          } />
-      </div>
-    )
-  }
-}
+let AddTodo = ({ dispatch }) => {
+  let input;
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node;
+      }} />
+      <button onClick={() => {
+        dispatch(addTodo(input.value));
+        input.value = "";
+      }}>
+        Add Todo
+      </button>
+    </div>
+  );
+};
+AddTodo = connect()(AddTodo);
+
+export default AddTodo
 ```
 
-This is what I see when I render `<App />`:
+#### `containers/FilterLink.js`
+
+```js
+import React from "react";
+import { connect } from "react-redux";
+import { setVisibilityFilter } from "../actions";
+import Link from "../components/Link";
+
+const mapStateToProps = (state, ownProps) => {
+  return { active: ownProps.filter === state.visibilityFilter };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return { onClick: () => { dispatch(setVisibilityFilter(ownProps.filter)); }};
+}
+
+const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link);
+
+export default FilterLink
+```
+
+#### `containers/VisibleTodoList.js`
+
+```js
+import React from "react";
+import { connect } from "react-redux";
+import { toggleTodo } from "../actions";
+import TodoList from "../components/TodoList";
+
+const getVisibleTodos = (todos, filter) => {
+  switch (filter) {
+    case "SHOW_ALL":
+      return todos;
+    case "SHOW_COMPLETED":
+      return todos.filter(
+        t => t.completed
+      );
+    case "SHOW_ACTIVE":
+      return todos.filter(
+        t => !t.completed
+      );
+  }
+}
+
+const mapStateToProps = (
+  state
+) => {
+  return {
+    todos: getVisibleTodos(
+      state.todos,
+      state.visibilityFilter
+    )
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return { onTodoClick: (id) => { dispatch(toggleTodo(id)); }};
+};
+
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
+
+export default VisibleTodoList
+```
+
+Then we’ll write the `TodoApp` component that renders these components together.
+
+#### `components/TodoApp.js`
+
+```js
+import React from "react";
+import AddTodo from "../containers/AddTodo";
+import Footer from "./Footer";
+import VisibleTodoList from "../containers/VisibleTodoList";
+
+const TodoApp = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+  </div>
+);
+
+export default TodoApp
+```
+
+This is what I see when I render `<TodoApp />`:
 
 <img src='http://i.imgur.com/lj4QTfD.png' width='40%'>
 
@@ -271,29 +311,26 @@ By itself, it’s not very interesting. Let’s connect it to Redux!
 
 ## Connecting to Redux
 
-We need to make two changes to connect our `App` component to Redux and make it dispatch actions and read state from the Redux store.
+We need to make two changes to connect our `TodoApp` component to Redux and make it dispatch actions and read state from the Redux store.
 
 First, we need to import `Provider` from [`react-redux`](http://github.com/gaearon/react-redux), which we installed earlier, and **wrap the root component in `<Provider>`** before rendering.
 
 #### `index.js`
 
 ```js
-import React from 'react'
-import { render } from 'react-dom'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import App from './containers/App'
-import todoApp from './reducers'
+import "babel-core/polyfill";
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { todoStore } from "./store";
+import TodoApp from "./components/TodoApp";
 
-let store = createStore(todoApp)
-
-let rootElement = document.getElementById('root')
 render(
-  <Provider store={store}>
-    <App />
+  <Provider store={todoStore}>
+    <TodoApp />
   </Provider>,
-  rootElement
-)
+  document.getElementById("app")
+);
 ```
 
 This makes our store instance available to the components below. (Internally, this is done via React’s [“context” feature](http://facebook.github.io/react/docs/context.html).)
@@ -302,80 +339,7 @@ Then, we **wrap the components we want to connect to Redux with the `connect()` 
 
 **Any component wrapped with `connect()` call will receive a [`dispatch`](../api/Store.md#dispatch) function as a prop, and any state it needs from the global state.** In most cases you will only pass the first argument to `connect()`, which is a function we call a **selector**. This function takes the global Redux store’s state, and returns the props you need for the component. In the simplest case, you can just return the `state` given to you (i.e. pass identity function), but you may also wish to transform it first.
 
-To make performant memoized transformations with composable selectors, check out [reselect](https://github.com/faassen/reselect). In this example, we won’t use it, but it works great for larger apps.
-
-#### `containers/App.js`
-
-```js
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions'
-import AddTodo from '../components/AddTodo'
-import TodoList from '../components/TodoList'
-import Footer from '../components/Footer'
-
-class App extends Component {
-  render() {
-    // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props
-    return (
-      <div>
-        <AddTodo
-          onAddClick={text =>
-            dispatch(addTodo(text))
-          } />
-        <TodoList
-          todos={visibleTodos}
-          onTodoClick={index =>
-            dispatch(completeTodo(index))
-          } />
-        <Footer
-          filter={visibilityFilter}
-          onFilterChange={nextFilter =>
-            dispatch(setVisibilityFilter(nextFilter))
-          } />
-      </div>
-    )
-  }
-}
-
-App.propTypes = {
-  visibleTodos: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
-  }).isRequired).isRequired,
-  visibilityFilter: PropTypes.oneOf([
-    'SHOW_ALL',
-    'SHOW_COMPLETED',
-    'SHOW_ACTIVE'
-  ]).isRequired
-}
-
-function selectTodos(todos, filter) {
-  switch (filter) {
-    case VisibilityFilters.SHOW_ALL:
-      return todos
-    case VisibilityFilters.SHOW_COMPLETED:
-      return todos.filter(todo => todo.completed)
-    case VisibilityFilters.SHOW_ACTIVE:
-      return todos.filter(todo => !todo.completed)
-  }
-}
-
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
-function select(state) {
-  return {
-    visibleTodos: selectTodos(state.todos, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter
-  }
-}
-
-// Wrap the component to inject dispatch and state into it
-export default connect(select)(App)
-```
-
-That’s it! The tiny todo app now functions correctly.
+To make performant memorized transformations with composing selectors, check out [reselect](https://github.com/faassen/reselect). In this example, we won’t use it, but it works great for larger apps.
 
 ## Next Steps
 
