@@ -15,7 +15,6 @@
   },
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
-    "history": "^1.17.0",
     "humps": "^0.6.0",
     "isomorphic-fetch": "^2.1.1",
     "lodash": "^4.0.0",
@@ -23,10 +22,10 @@
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-redux": "^4.0.6",
-    "react-router": "^1.0.3",
+    "react-router": "2.0.0-rc5",
+    "react-router-redux": "^2.1.0",
     "redux": "^3.0.6",
     "redux-logger": "^2.4.0",
-    "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^1.0.3"
   },
   "devDependencies": {
