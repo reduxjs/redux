@@ -3,7 +3,7 @@
 The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
 Meet some of the outstanding companies and individuals that made it possible:
 
-* [Webflow](https://webflow.com/)
+* [Webflow](https://github.com/webflow)
 * [Chess iX](http://www.chess-ix.com/)
 * [Herman J. Radtke III](http://hermanradtke.com)
 * [Ken Wheeler](http://kenwheeler.github.io/)
