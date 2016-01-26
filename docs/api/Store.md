@@ -80,7 +80,7 @@ store.dispatch(addTodo('Read about the middleware'))
 
 ### <a id='subscribe'></a>[`subscribe(listener)`](#subscribe)
 
-Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
+Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback. Note, the listener should not expect to see all states changes, as the state might have been updated multiple times before the listener is notified.
 
 It is a low-level API. Most likely, instead of using it directly, you’ll use React (or other) bindings. If you feel that the callback needs to be invoked with the current state, you might want to [convert the store to an Observable or write a custom `observeStore` utility instead](https://github.com/rackt/redux/issues/303#issuecomment-125184409).
 

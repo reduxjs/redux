@@ -53,6 +53,9 @@ export default function createStore(reducer, initialState) {
    * Adds a change listener. It will be called any time an action is dispatched,
    * and some part of the state tree may potentially have changed. You may then
    * call `getState()` to read the current state tree inside the callback.
+   * Note, the listener should not expect to see all states changes, as the
+   * state might have been updated multiple times before the listener is
+   * notified.
    *
    * @param {Function} listener A callback to be invoked on every dispatch.
    * @returns {Function} A function to remove this change listener.
