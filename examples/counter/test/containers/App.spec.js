@@ -15,39 +15,39 @@ function setup(initialState) {
   return {
     app: app,
     buttons: TestUtils.scryRenderedDOMComponentsWithTag(app, 'button'),
-    p: TestUtils.findRenderedDOMComponentWithTag(app, 'p')
+    span: TestUtils.findRenderedDOMComponentWithTag(app, 'span')
   }
 }
 
 describe('containers', () => {
   describe('App', () => {
     it('should display initial count', () => {
-      const { p } = setup()
-      expect(p.textContent).toMatch(/^Clicked: 0 times/)
+      const { span } = setup()
+      expect(span.textContent).toMatch(/^Clicked: 0 times/)
     })
 
     it('should display updated count after increment button click', () => {
-      const { buttons, p } = setup()
+      const { buttons, span } = setup()
       TestUtils.Simulate.click(buttons[0])
-      expect(p.textContent).toMatch(/^Clicked: 1 times/)
+      expect(span.textContent).toMatch(/^Clicked: 1 times/)
     })
 
     it('should display updated count after decrement button click', () => {
-      const { buttons, p } = setup()
+      const { buttons, span } = setup()
       TestUtils.Simulate.click(buttons[1])
-      expect(p.textContent).toMatch(/^Clicked: -1 times/)
+      expect(span.textContent).toMatch(/^Clicked: -1 times/)
     })
 
     it('shouldnt change if even and if odd button clicked', () => {
-      const { buttons, p } = setup()
+      const { buttons, span } = setup()
       TestUtils.Simulate.click(buttons[2])
-      expect(p.textContent).toMatch(/^Clicked: 0 times/)
+      expect(span.textContent).toMatch(/^Clicked: 0 times/)
     })
 
     it('should change if odd and if odd button clicked', () => {
-      const { buttons, p } = setup({ counter: 1 })
+      const { buttons, span } = setup({ counter: 1 })
       TestUtils.Simulate.click(buttons[2])
-      expect(p.textContent).toMatch(/^Clicked: 2 times/)
+      expect(span.textContent).toMatch(/^Clicked: 2 times/)
     })
   })
 })
