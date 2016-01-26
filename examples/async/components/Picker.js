@@ -1,10 +1,7 @@
-import React, { Component, PropTypes } from 'react'
-
-export default class Picker extends Component {
-  render() {
-    const { value, onChange, options } = this.props
-
-    return (
+import React, { PropTypes } from 'react'
+/* Changing the syntax for Stateless function in more functional syntax */
+const Picker = ({ value, onChange, options }) => {
+  return (
       <span>
         <h1>{value}</h1>
         <select onChange={e => onChange(e.target.value)}
@@ -17,7 +14,6 @@ export default class Picker extends Component {
         </select>
       </span>
     )
-  }
 }
 
 Picker.propTypes = {
@@ -27,3 +23,4 @@ Picker.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired
 }
+export default Picker
