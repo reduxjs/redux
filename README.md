@@ -193,7 +193,7 @@ Every release, along with the migration instructions, is documented on the Githu
 The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
 Meet some of the outstanding companies that made it possible:
 
-* [Webflow](https://webflow.com/)
+* [Webflow](https://github.com/webflow)
 * [Chess iX](http://www.chess-ix.com/)
 
 [See the full list of Redux patrons.](PATRONS.md)
