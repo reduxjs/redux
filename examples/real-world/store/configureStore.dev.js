@@ -9,8 +9,7 @@ import rootReducer from '../reducers'
 
 const reduxRouterMiddleware = syncHistory(browserHistory)
 const finalCreateStore = compose(
-  applyMiddleware(thunk, api, reduxRouterMiddleware),
-  applyMiddleware(createLogger()),
+  applyMiddleware(thunk, api, reduxRouterMiddleware, createLogger()),
   DevTools.instrument()
 )(createStore)
 
