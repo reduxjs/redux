@@ -9,11 +9,7 @@ Sometimes, you are trying to dispatch an action, but your view does not update. 
 
 #### Never mutate reducer arguments
 
-It is tempting to modify the `state` or `action` passed to you by Redux. Don’t do this!
-
-Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don’t use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
-
-Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](http://github.com/gaearon/redux-devtools).
+It’s tempting to modify the `state` (or objects nested within it) or `action` passed to you by Redux. Don’t do this!
 
 For example, a reducer like this is wrong because it mutates the state:
 
@@ -37,7 +33,31 @@ function todos(state = [], action) {
 }
 ```
 
-It needs to be rewritten like this:
+Redux depends on you never mutating the objects it passes to your reducer, or objects nested within them. **Every single time you change state, you must return a new state object.** Even if you don’t use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
+
+Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](http://github.com/gaearon/redux-devtools).
+
+To avoid mutating arrays you can use things like `.slice()`, `.concat()`, and spread (`...state`) to extract the elements you want to retain and combine them with any new elements you may want to add, while omitting elements you don’t want.
+
+To avoid mutating objects you’ll generally want to use a utility like `extend()` from Underscore, `assign()` from Lodash, or [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) or a polyfill for it.
+
+`Object.assign()` mutates its first argument, so make sure that you use it correctly. For example, instead of returning something like `Object.assign(state, { completed: true })` from your reducers, return `Object.assign({}, state, { completed: true })`. This way you don’t mutate the previous `state`.
+
+If you’re using Babel 6 you can alternatively use the [proposed object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) by enabling [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) or a preset that includes it. (At the time of this writing the proposal is stage 2 and therefore the plugin is included directly in [`babel-preset-stage-2`](http://babeljs.io/docs/plugins/preset-stage-2/) and indirectly in lower numbered stage presets.) Example:
+
+```js
+// Before:
+state[action.index] = Object.assign({}, state[action.index], {
+  completed: true
+})
+
+// After:
+state[action.index] = { ...state[action.index], completed: true }
+```
+
+Note that non-standard language features are subject to change, and it’s unwise to rely on them in large codebases.
+
+The earlier example needs to be rewritten to not mutate state. Here’s a corrected version using the techniques we’ve discussed:
 
 ```js
 function todos(state = [], action) {
@@ -52,15 +72,13 @@ function todos(state = [], action) {
         }
       ]
     case 'COMPLETE_TODO':
-      // Return a new array
-      return [
-        ...state.slice(0, action.index),
-        // Copy the object before mutating
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      // Copy elements to a new array
+      state = [...state]
+      // Copy the object before mutating
+      state[action.index] = Object.assign({}, state[action.index], {
+        completed: true
+      })
+      return state
     default:
       return state
   }
@@ -71,15 +89,15 @@ It’s more code, but it’s exactly what makes Redux predictable and efficient.
 
 ```js
 // Before:
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+// Copy elements to a new array
+state = [...state]
+// Copy the object before mutating
+state[action.index] = Object.assign({}, state[action.index], {
+  completed: true
+})
+return state
 
-// After
+// After:
 return update(state, {
   [action.index]: {
     completed: {
@@ -88,32 +106,6 @@ return update(state, {
   }
 })
 ```
-
-Finally, to update objects, you’ll need something like `_.extend` from Underscore, or better, an [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) polyfill.
-
-Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`.
-
-If you’re using Babel 6 you can alternatively use the [proposed object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) by enabling [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) or a preset that includes it. (At the time of this writing the proposal is stage 2 and therefore the plugin is included directly in [`babel-preset-stage-2`](http://babeljs.io/docs/plugins/preset-stage-2/) and indirectly in lower numbered stage presets.) Example:
-
-```js
-// Before:
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
-
-// After:
-return [
-  ...state.slice(0, action.index),
-  { ...state[action.index], completed: true },
-  ...state.slice(action.index + 1)
-]
-```
-
-Note that experimental language features are subject to change, and it’s unwise to rely on them in large codebases.
 
 #### Don’t forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
