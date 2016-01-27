@@ -31,6 +31,12 @@ function mockStore(getState, expectedActions, onLastAction) {
           onLastAction()
         }
         return action
+      },
+
+      verifyNoPendingActions() {
+        if(expectedActions.length > 0) {
+          throw new Error('There is undispatched actions:\n  ' + JSON.stringify(expectedActions))
+        }
       }
     }
   }
@@ -59,11 +65,11 @@ describe('actions', () => {
     store.dispatch(actions.incrementIfOdd())
   })
 
-  it('incrementIfOdd shouldnt create increment action if counter is even', (done) => {
+  it('incrementIfOdd shouldnt create increment action if counter is even', () => {
     const expectedActions = []
     const store = mockStore({ counter: 2 }, expectedActions)
     store.dispatch(actions.incrementIfOdd())
-    done()
+    store.verifyNoPendingActions()
   })
 
   it('incrementAsync should create increment action', (done) => {
