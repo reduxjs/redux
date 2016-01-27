@@ -93,7 +93,7 @@ Finally, to update objects, you’ll need something like `_.extend` from Undersc
 
 Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`.
 
-You can also enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/):
+If you’re using Babel 6 you can alternatively use the [proposed object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) by enabling [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) or a preset that includes it. (At the time of this writing the proposal is stage 2 and therefore the plugin is included directly in [`babel-preset-stage-2`](http://babeljs.io/docs/plugins/preset-stage-2/) and indirectly in lower numbered stage presets.) Example:
 
 ```js
 // Before:
