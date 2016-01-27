@@ -155,7 +155,7 @@ export default TodoList
 
 ```js
 import React from 'react'
-import FilterLink from './FilterLink'
+import FilterLink from '../containers/FilterLink'
 
 const Footer = () => (
   <p>
@@ -397,16 +397,16 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import todoApp from './reducers'
-import App from './components/App';
+import App from './components/App'
 
 let store = createStore(todoApp)
 
 render(
   <Provider store={todoStore}>
-    <TodoApp />
+    <App />
   </Provider>,
   document.getElementById('root')
-);
+)
 ```
 
 ## Next Steps
