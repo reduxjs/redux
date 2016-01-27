@@ -296,12 +296,12 @@ describe('createStore', () => {
     const listener2 = expect.createSpy(() => {})
     const listener3 = expect.createSpy(() => {})
 
-    unsubscribeHandles.push(store.subscribe(() => listener1())))
+    unsubscribeHandles.push(store.subscribe(() => listener1()))
     unsubscribeHandles.push(store.subscribe(() => {
       listener2()
       doUnsubscribeAll()
-    })))
-    unsubscribeHandles.push(store.subscribe(() => listener3())))
+    }))
+    unsubscribeHandles.push(store.subscribe(() => listener3()))
 
     store.dispatch(unknownAction())
     store.dispatch(unknownAction())
