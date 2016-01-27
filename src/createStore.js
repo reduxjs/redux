@@ -40,6 +40,7 @@ export default function createStore(reducer, initialState) {
   var listeners = []
   var isDispatching = false
 
+
   /**
    * Reads the state tree managed by the store.
    *
@@ -68,7 +69,6 @@ export default function createStore(reducer, initialState) {
       if (!isSubscribed) {
         return
       }
-
       isSubscribed = false
       var index = listeners.indexOf(listener)
       listeners.splice(index, 1)
@@ -126,7 +126,13 @@ export default function createStore(reducer, initialState) {
       isDispatching = false
     }
 
-    listeners.slice().forEach(listener => listener())
+    listeners.slice().forEach(listener => {
+      // Check if subscription still exists (#1180)
+      if (listeners.includes(listener)) {
+        listener()
+      }
+    })
+
     return action
   }
 
