@@ -114,7 +114,7 @@ These are all normal React components, so we won’t examine them in detail. We 
 #### `components/Todo.js`
 
 ```js
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 const Todo = ({ onClick, completed, text }) => (
   <li
@@ -125,7 +125,13 @@ const Todo = ({ onClick, completed, text }) => (
   >
     {text}
   </li>
-);
+)
+
+Todo.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  completed: PropTypes.bool.isRequired,
+  text: PropTypes.string.isRequired
+}
 
 export default Todo
 ```
@@ -133,8 +139,8 @@ export default Todo
 #### `components/TodoList.js`
 
 ```js
-import React from 'react'
-import Todo from './Todo';
+import React, { PropTypes } from 'react'
+import Todo from './Todo'
 
 const TodoList = ({ todos, onTodoClick }) => (
   <ul>
@@ -146,9 +152,49 @@ const TodoList = ({ todos, onTodoClick }) => (
       />
     )}
   </ul>
-);
+)
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired
+  }).isRequired).isRequired,
+  onTodoClick: PropTypes.func.isRequired
+}
 
 export default TodoList
+```
+
+#### `components/Link.js`
+
+```js
+import React, { PropTypes } from 'react'
+
+const Link = ({ active, children, onClick }) => {
+  if (active) {
+    return <span>{children}</span>
+  }
+
+  return (
+    <a href="#"
+       onClick={e => {
+         e.preventDefault()
+         onClick()
+       }}
+    >
+      {children}
+    </a>
+  )
+}
+
+Link.propTypes = {
+  active: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+export default Link
 ```
 
 #### `components/Footer.js`
@@ -173,33 +219,9 @@ const Footer = () => (
       Completed
     </FilterLink>
   </p>
-);
+)
 
 export default Footer
-```
-
-#### `components/Link.js`
-```js
-import React from 'react'
-
-const Link = ({ active, children, onClick }) => {
-  if (active) {
-    return <span>{children}</span>
-  }
-
-  return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
-    >
-      {children}
-    </a>
-  );
-};
-
-export default Link
 ```
 
 #### `components/App.js`
@@ -216,7 +238,7 @@ const App = () => (
     <VisibleTodoList />
     <Footer />
   </div>
-);
+)
 
 export default App
 ```
@@ -242,8 +264,8 @@ const getVisibleTodos = (todos, filter) => {
 const mapStateToProps = (state) => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
-  };
-};
+  }
+}
 ```
 
 In addition to reading the state, container components can dispatch actions. In a similar fashion, you can define a function called `mapDispatchToProps()` that receives the [`dispatch()`](../api/Store.md#dispatch) method and returns callback props that you want to inject into the presentational component. For example, we want the `VisibleTodoList` to inject a prop called `onTodoClick` into the `TodoList` component, and we want `onTodoClick` to dispatch a `TOGGLE_TODO` action:
@@ -254,8 +276,8 @@ const mapDispatchToProps = (dispatch) => {
     onTodoClick: (id) => {
       dispatch(toggleTodo(id))
     }
-  };
-};
+  }
+}
 ```
 
 Finally, we create the `VisibleTodoList` by calling `connect()` and passing these two functions:
@@ -278,7 +300,6 @@ Find the rest of the container components defined below:
 #### `containers/FilterLink.js`
 
 ```js
-import React from 'react'
 import { connect } from 'react-redux'
 import { setVisibilityFilter } from '../actions'
 import Link from '../components/Link'
@@ -286,15 +307,15 @@ import Link from '../components/Link'
 const mapStateToProps = (state, ownProps) => {
   return {
     active: ownProps.filter === state.visibilityFilter
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
       dispatch(setVisibilityFilter(ownProps.filter))
     }
-  };
+  }
 }
 
 const FilterLink = connect(
@@ -308,7 +329,6 @@ export default FilterLink
 #### `containers/VisibleTodoList.js`
 
 ```js
-import React from 'react'
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
@@ -327,16 +347,16 @@ const getVisibleTodos = (todos, filter) => {
 const mapStateToProps = (state) => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onTodoClick: (id) => {
       dispatch(toggleTodo(id))
     }
-  };
-};
+  }
+}
 
 const VisibleTodoList = connect(
   mapStateToProps,
@@ -356,7 +376,7 @@ import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
 let AddTodo = ({ dispatch }) => {
-  let input;
+  let input
 
   return (
     <div>
@@ -370,8 +390,8 @@ let AddTodo = ({ dispatch }) => {
         Add Todo
       </button>
     </div>
-  );
-};
+  )
+}
 AddTodo = connect()(AddTodo)
 
 export default AddTodo

@@ -29,28 +29,28 @@ render(
 #### `actions/index.js`
 
 ```js
-let nextTodoId = 0;
+let nextTodoId = 0
 export const addTodo = (text) => {
   return {
-    type: "ADD_TODO",
+    type: 'ADD_TODO',
     id: nextTodoId++,
     text
-  };
-};
+  }
+}
 
 export const setVisibilityFilter = (filter) => {
   return {
-    type: "SET_VISIBILITY_FILTER",
+    type: 'SET_VISIBILITY_FILTER',
     filter
-  };
-};
+  }
+}
 
 export const toggleTodo = (id) => {
   return {
-    type: "TOGGLE_TODO",
+    type: 'TOGGLE_TODO',
     id
-  };
-};
+  }
+}
 ```
 
 ## Reducers
@@ -60,70 +60,70 @@ export const toggleTodo = (id) => {
 ```js
 const todo = (state, action) => {
   switch (action.type) {
-    case "ADD_TODO":
+    case 'ADD_TODO':
       return {
         id: action.id,
         text: action.text,
         completed: false
-      };
-    case "TOGGLE_TODO":
+      }
+    case 'TOGGLE_TODO':
       if (state.id !== action.id) {
-        return state;
+        return state
       }
 
       return {
         ...state,
         completed: !state.completed
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const todos = (state = [], action) => {
   switch (action.type) {
-    case "ADD_TODO":
+    case 'ADD_TODO':
       return [
         ...state,
         todo(undefined, action)
-      ];
-    case "TOGGLE_TODO":
+      ]
+    case 'TOGGLE_TODO':
       return state.map(t =>
         todo(t, action)
-      );
+      )
     default:
-      return state;
+      return state
   }
-};
+}
 ```
 
 #### `reducers/visibilityFilter.js`
 
 ```js
 export const visibilityFilter = (
-  state = "SHOW_ALL",
+  state = 'SHOW_ALL',
   action
 ) => {
   switch (action.type) {
-    case "SET_VISIBILITY_FILTER":
-      return action.filter;
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter
     default:
-      return state;
+      return state
   }
-};
+}
 ```
 
 #### `reducers/index.js`
 
 ```js
-import { combineReducers } from "redux";
-import { todos } from "./todos";
-import { visibilityFilter } from "./visibilityFilter";
+import { combineReducers } from 'redux'
+import { todos } from './todos'
+import { visibilityFilter } from './visibilityFilter'
 
 const todoApp = combineReducers({
   todos,
   visibilityFilter
-});
+})
 
 export default todoApp
 ```
@@ -144,7 +144,7 @@ const Todo = ({ onClick, completed, text }) => (
   >
     {text}
   </li>
-);
+)
 
 Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
@@ -171,7 +171,7 @@ const TodoList = ({ todos, onTodoClick }) => (
       />
     )}
   </ul>
-);
+)
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
@@ -203,8 +203,8 @@ const Link = ({ active, children, onClick }) => {
     >
       {children}
     </a>
-  );
-};
+  )
+}
 
 Link.propTypes = {
   active: PropTypes.bool.isRequired,
@@ -237,7 +237,7 @@ const Footer = () => (
       Completed
     </FilterLink>
   </p>
-);
+)
 
 export default Footer
 ```
@@ -256,7 +256,7 @@ const App = () => (
     <VisibleTodoList />
     <Footer />
   </div>
-);
+)
 
 export default App
 ```
@@ -266,7 +266,6 @@ export default App
 #### `containers/VisibleTodoList.js`
 
 ```js
-import React from 'react'
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
@@ -285,16 +284,16 @@ const getVisibleTodos = (todos, filter) => {
 const mapStateToProps = (state) => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onTodoClick: (id) => {
       dispatch(toggleTodo(id))
     }
-  };
-};
+  }
+}
 
 const VisibleTodoList = connect(
   mapStateToProps,
@@ -307,7 +306,6 @@ export default VisibleTodoList
 #### `containers/FilterLink.js`
 
 ```js
-import React from 'react'
 import { connect } from 'react-redux'
 import { setVisibilityFilter } from '../actions'
 import Link from '../components/Link'
@@ -315,15 +313,15 @@ import Link from '../components/Link'
 const mapStateToProps = (state, ownProps) => {
   return {
     active: ownProps.filter === state.visibilityFilter
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
       dispatch(setVisibilityFilter(ownProps.filter))
     }
-  };
+  }
 }
 
 const FilterLink = connect(
@@ -344,7 +342,7 @@ import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
 let AddTodo = ({ dispatch }) => {
-  let input;
+  let input
 
   return (
     <div>
@@ -358,8 +356,8 @@ let AddTodo = ({ dispatch }) => {
         Add Todo
       </button>
     </div>
-  );
-};
+  )
+}
 AddTodo = connect()(AddTodo)
 
 export default AddTodo
