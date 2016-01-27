@@ -286,36 +286,32 @@ describe('createStore', () => {
     expect(listenerC.calls.length).toBe(2)
   })
 
-  // See final decision here: https://github.com/rackt/redux/issues/1180
   it('removes listeners NOT immediately when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
 
     const unsubscribeHandles = []
     const doUnsubscribeAll = () => unsubscribeHandles.forEach(unsubscribe => unsubscribe() )
-
+    
     const listener1 = expect.createSpy(() => {})
-    unsubscribeHandles.push(store.subscribe(listener1))
     const listener2 = expect.createSpy(() => {})
-    unsubscribeHandles.push(store.subscribe(listener2))
+    const listener3 = expect.createSpy(() => {})
 
-    const listener3 = () => doUnsubscribeAll()
-    unsubscribeHandles.push(store.subscribe(listener3))
-
-    const listener4 = expect.createSpy(() => {})
-    unsubscribeHandles.push(store.subscribe(listener4))
-    const listener5 = expect.createSpy(() => {})
-    unsubscribeHandles.push(store.subscribe(listener5))
+    unsubscribeHandles.push(store.subscribe(() => listener1())))
+    unsubscribeHandles.push(store.subscribe(() => {
+      listener2()
+      doUnsubscribeAll()
+    })))
+    unsubscribeHandles.push(store.subscribe(() => listener3())))
 
     store.dispatch(unknownAction())
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
     expect(listener2.calls.length).toBe(1)
-    // listener3 is the one removing the others so obviously it got executed
-    expect(listener4.calls.length).toBe(1)
-    expect(listener5.calls.length).toBe(1)
+    // listener3 is called! decided in #1180
+    expect(listener3.calls.length).toBe(1)
   })
 
-  it('not fire immediately if a listener is added inside another listener', () => {
+  it('does not fire immediately if a listener is added inside another listener', () => {
     const store = createStore(reducers.todos)
 
     const listener1 = expect.createSpy(() => {})
@@ -324,16 +320,13 @@ describe('createStore', () => {
 
     let listener3Added = false
     const maybeAddThirdListener = () => {
-      if ( !listener3Added ) {
+      if (!listener3Added) {
         listener3Added = true
         store.subscribe(() => listener3())
       }
     }
 
-    // Listener 1 is normal
     store.subscribe(() => listener1())
-
-    // Listener 2 adds the 3rd listener another listener
     store.subscribe(() => {
       listener2()
       maybeAddThirdListener()
