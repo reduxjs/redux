@@ -109,7 +109,7 @@ Let’s write the components! We begin with the presentational components so we 
 
 ### Presentational Components
 
-These are all normal React components, so we'll not stop and examine them in detail. We write functional stateless components unless we need to use either React state or the React life-cycle functions.
+These are all normal React components, so we won’t examine them in detail. We write functional stateless components unless we need to use local state or the lifecycle methods. This doesn’t mean that presentational components *have to* be functions—it’s just easier to define them this way. If and when you need to add local state, lifecycle methods, or performance optimizations, you can convert them to classes.
 
 #### `components/Todo.js`
 
@@ -241,10 +241,7 @@ const getVisibleTodos = (todos, filter) => {
 
 const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(
-      state.todos,
-      state.visibilityFilter
-    )
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
   };
 };
 ```
@@ -329,10 +326,7 @@ const getVisibleTodos = (todos, filter) => {
 
 const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(
-      state.todos,
-      state.visibilityFilter
-    )
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
   };
 };
 
