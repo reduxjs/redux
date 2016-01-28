@@ -28,7 +28,7 @@ export var ActionTypes = {
  * an object with the same shape as `combineReducers` keys.
  *
  * @param {Function} enhancer The store enhancer. You may optionally specify it
- * to enhance the store with third-party capabilities such as the middleware,
+ * to enhance the store with third-party capabilities such as middleware,
  * time travel, persistence, etc. The only store enhancer that ships with Redux
  * is `applyMiddleware()`.
  *
