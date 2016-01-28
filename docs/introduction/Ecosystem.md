@@ -86,7 +86,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
 * [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
-* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
+* [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineReducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
 
