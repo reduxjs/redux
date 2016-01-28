@@ -1,4 +1,5 @@
 import isPlainObject from './utils/isPlainObject'
+import compose from './compose'
 
 /**
  * These are private action types reserved by Redux.
@@ -30,7 +31,15 @@ export var ActionTypes = {
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, initialState) {
+export default function createStore(reducer, initialState, ...enhancers) {
+  if (typeof initialState === 'function') {
+    enhancers.unshift(initialState)
+    initialState = undefined
+  }
+  if (enhancers.length > 0) {
+    return compose(...enhancers)(createStore)(reducer, initialState)
+  }
+
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.')
   }
