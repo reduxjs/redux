@@ -69,6 +69,7 @@
     "expect": "^1.8.0",
     "gitbook-cli": "^0.3.4",
     "isparta": "^3.0.3",
+    "loose-envify": "^1.1.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6"
