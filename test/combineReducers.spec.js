@@ -1,6 +1,6 @@
 import expect from 'expect'
 import { combineReducers } from '../src'
-import createStore, { ActionTypes } from '../src/createStore'
+import createStore from '../src/createStore'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -66,7 +66,8 @@ describe('Utils', () => {
       )
     })
 
-    it('throws an error on first call if a reducer returns undefined initializing', () => {
+    it('throws an error on first call if a reducer could potentially return undefined when ' +
+       'undefined state is passed to it', () => {
       const reducer = combineReducers({
         counter(state, action) {
           switch (action.type) {
@@ -79,9 +80,24 @@ describe('Utils', () => {
           }
         }
       })
-      expect(() => reducer({ })).toThrow(
-        /"counter".*initialization/
-      )
+
+      expect(() => reducer(0, { type: 'increment' })).toThrow(/"counter".*initialization/)
+    })
+
+    it('throws an error on first call if a reducer could potentially return undefined for ' +
+       'unknown action types', () => {
+      const reducer = combineReducers({
+        counter(state = 0, action) {
+          switch (action.type) {
+            case 'increment':
+              return state + 1
+            case 'decrement':
+              return state - 1
+          }
+        }
+      })
+
+      expect(() => reducer(0, { type: 'increment' })).toThrow(/"counter".*initialization/)
     })
 
     it('catches error thrown in reducer when initializing and re-throw', () => {
@@ -149,27 +165,6 @@ describe('Utils', () => {
 
       const initialState = reducer(undefined, '@@INIT')
       expect(reducer(initialState, { type: 'increment' })).toNotBe(initialState)
-    })
-
-    it('throws an error on first call if a reducer attempts to handle a private action', () => {
-      const reducer = combineReducers({
-        counter(state, action) {
-          switch (action.type) {
-            case 'increment':
-              return state + 1
-            case 'decrement':
-              return state - 1
-            // Never do this in your code:
-            case ActionTypes.INIT:
-              return 0
-            default:
-              return undefined
-          }
-        }
-      })
-      expect(() => reducer()).toThrow(
-        /"counter".*private/
-      )
     })
 
     it('warns if no reducers are passed to combineReducers', () => {
