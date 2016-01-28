@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { syncHistory } from 'react-router-redux'
 import { browserHistory } from 'react-router'
 import DevTools from '../containers/DevTools'
@@ -13,8 +13,10 @@ export default function configureStore(initialState) {
   const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware(thunk, api, reduxRouterMiddleware, createLogger()),
-    DevTools.instrument()
+    compose(
+      applyMiddleware(thunk, api, reduxRouterMiddleware, createLogger()),
+      DevTools.instrument()
+    )
   )
   
   // Required for replaying actions from devtools to work

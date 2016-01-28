@@ -1,5 +1,4 @@
 import isPlainObject from './utils/isPlainObject'
-import compose from './compose'
 
 /**
  * These are private action types reserved by Redux.
@@ -28,16 +27,26 @@ export var ActionTypes = {
  * If you use `combineReducers` to produce the root reducer function, this must be
  * an object with the same shape as `combineReducers` keys.
  *
+ * @param {Function} enhancer The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as the middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, initialState, ...enhancers) {
-  if (typeof initialState === 'function') {
-    enhancers.unshift(initialState)
+export default function createStore(reducer, initialState, enhancer) {
+  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = initialState
     initialState = undefined
   }
-  if (enhancers.length > 0) {
-    return compose(...enhancers)(createStore)(reducer, initialState)
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.')
+    }
+
+    return enhancer(createStore)(reducer, initialState)
   }
 
   if (typeof reducer !== 'function') {
