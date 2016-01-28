@@ -138,7 +138,7 @@ Here’s what the state shape for our “Reddit headlines” app might look like
         {
           id: 42,
           title: 'Confusion about Flux and Relay'
-        }, 
+        },
         {
           id: 500,
           title: 'Creating a Simple Application Using React JS and Flux Architecture'
@@ -384,7 +384,7 @@ export function fetchPosts(subreddit) {
 >import 'babel-core/polyfill'
 >```
 
-How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
+How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) store enhancer from Redux, as shown below:
 
 #### `index.js`
 
@@ -397,12 +397,13 @@ import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
-)(createStore)
-
-const store = createStoreWithMiddleware(rootReducer)
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+    loggerMiddleware // neat middleware that logs actions
+  )
+)
 
 store.dispatch(selectSubreddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>

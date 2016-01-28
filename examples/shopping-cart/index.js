@@ -12,8 +12,10 @@ const middleware = process.env.NODE_ENV === 'production' ?
   [ thunk ] :
   [ thunk, logger() ]
 
-const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore)
-const store = createStoreWithMiddleware(reducer)
+const store = createStore(
+  reducer,
+  applyMiddleware(...middleware)
+)
 
 store.dispatch(getAllProducts())
 
