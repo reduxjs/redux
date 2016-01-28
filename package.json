@@ -81,5 +81,10 @@
         "*.js"
       ]
     }
-  ]
+  ],
+  "browserify": {
+    "transform": [
+      "loose-envify"
+    ]
+  }
 }
