@@ -90,7 +90,7 @@ describe('createStore', () => {
     ])
 
     store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([ 
+    expect(store.getState()).toEqual([
       {
         id: 1,
         text: 'Hello'
@@ -140,11 +140,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -156,11 +156,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -172,15 +172,15 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
-      }, 
+      },
       {
         id: 4,
         text: 'Surely'
@@ -284,6 +284,59 @@ describe('createStore', () => {
     expect(listenerA.calls.length).toBe(2)
     expect(listenerB.calls.length).toBe(1)
     expect(listenerC.calls.length).toBe(2)
+  })
+
+  it('removes listeners NOT immediately when unsubscribe is called', () => {
+    const store = createStore(reducers.todos)
+
+    const unsubscribeHandles = []
+    const doUnsubscribeAll = () => unsubscribeHandles.forEach(unsubscribe => unsubscribe() )
+    
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+
+    unsubscribeHandles.push(store.subscribe(() => listener1()))
+    unsubscribeHandles.push(store.subscribe(() => {
+      listener2()
+      doUnsubscribeAll()
+    }))
+    unsubscribeHandles.push(store.subscribe(() => listener3()))
+
+    store.dispatch(unknownAction())
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    // listener3 is called! decided in #1180
+    expect(listener3.calls.length).toBe(1)
+  })
+
+  it('does not fire immediately if a listener is added inside another listener', () => {
+    const store = createStore(reducers.todos)
+
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+
+    let listener3Added = false
+    const maybeAddThirdListener = () => {
+      if (!listener3Added) {
+        listener3Added = true
+        store.subscribe(() => listener3())
+      }
+    }
+
+    store.subscribe(() => listener1())
+    store.subscribe(() => {
+      listener2()
+      maybeAddThirdListener()
+    })
+
+    store.dispatch(unknownAction())
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(1)
   })
 
   it('provides an up-to-date state when a subscriber is notified', done => {
