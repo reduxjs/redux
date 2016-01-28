@@ -286,12 +286,14 @@ describe('createStore', () => {
     expect(listenerC.calls.length).toBe(2)
   })
 
-  it('removes listeners NOT immediately when unsubscribe is called', () => {
+  it('delays unsubscribe until the end of current dispatch', () => {
     const store = createStore(reducers.todos)
 
     const unsubscribeHandles = []
-    const doUnsubscribeAll = () => unsubscribeHandles.forEach(unsubscribe => unsubscribe() )
-    
+    const doUnsubscribeAll = () => unsubscribeHandles.forEach(
+      unsubscribe => unsubscribe()
+    )
+
     const listener1 = expect.createSpy(() => {})
     const listener2 = expect.createSpy(() => {})
     const listener3 = expect.createSpy(() => {})
@@ -304,14 +306,17 @@ describe('createStore', () => {
     unsubscribeHandles.push(store.subscribe(() => listener3()))
 
     store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(1)
+
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
     expect(listener2.calls.length).toBe(1)
-    // listener3 is called! decided in #1180
     expect(listener3.calls.length).toBe(1)
   })
 
-  it('does not fire immediately if a listener is added inside another listener', () => {
+  it('delays subscribe until the end of current dispatch', () => {
     const store = createStore(reducers.todos)
 
     const listener1 = expect.createSpy(() => {})
@@ -333,6 +338,10 @@ describe('createStore', () => {
     })
 
     store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(0)
+
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(2)
     expect(listener2.calls.length).toBe(2)
