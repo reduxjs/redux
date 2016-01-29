@@ -65,6 +65,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ### Components
 
 * [redux-form](https://github.com/erikras/redux-form) — Keep React form state in Redux
+* [react-redux-form](https://github.com/davidkpiano/react-redux-form) — Create forms easily in React with Redux
 
 ### Enhancers
 
