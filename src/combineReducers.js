@@ -2,8 +2,7 @@ import { ActionTypes } from './createStore'
 import isPlainObject from './utils/isPlainObject'
 import mapValues from './utils/mapValues'
 import pick from './utils/pick'
-
-/* eslint-disable no-console */
+import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key, action) {
   var actionType = action && action.type
@@ -112,7 +111,7 @@ export default function combineReducers(reducers) {
     if (process.env.NODE_ENV !== 'production') {
       var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
       if (warningMessage) {
-        console.error(warningMessage)
+        warning(warningMessage)
       }
     }
 
