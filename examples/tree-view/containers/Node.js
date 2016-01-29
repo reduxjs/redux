@@ -42,8 +42,8 @@ class Node extends Component {
         </button>
         <ul>
           {childIds.map(this.renderChild)}
-          <li key='add'>
-            <a href='#' onClick={this.handleAddChildClick}>
+          <li key="add">
+            <a href="#" onClick={this.handleAddChildClick}>
               Add child
             </a>
           </li>
