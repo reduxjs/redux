@@ -11,7 +11,11 @@ import warning from './utils/warning'
 */
 function isCrushed() {}
 
-if (isCrushed.name !== 'isCrushed' && process.env.NODE_ENV !== 'production') {
+if (
+  process.env.NODE_ENV !== 'production' &&
+  setInterval.name === 'setInterval' &&
+  isCrushed.name !== 'isCrushed'
+) {
   warning(
     'You are currently using minified code outside of NODE_ENV === \'production\'. ' +
     'This means that you are running a slower development build of Redux. ' +
