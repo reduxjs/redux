@@ -17,9 +17,9 @@
   },
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6",
-    "redux": "^3.1.0"
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "redux": "^3.1.2"
   },
   "devDependencies": {
     "babel-core": "^5.6.18",
@@ -30,7 +30,7 @@
     "jsdom": "^5.6.1",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
-    "react-addons-test-utils": "^0.14.0",
+    "react-addons-test-utils": "^0.14.7",
     "react-transform-hmr": "^1.0.0",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",

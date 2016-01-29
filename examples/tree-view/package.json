@@ -15,10 +15,10 @@
   },
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6",
-    "react-redux": "^4.1.0",
-    "redux": "^3.1.0"
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-redux": "^4.1.1",
+    "redux": "^3.1.2"
   },
   "devDependencies": {
     "babel-core": "^5.6.18",
