@@ -567,6 +567,5 @@ describe('createStore', () => {
     expect(() =>
       store.subscribe(undefined)
     ).toThrow()
-
   })
 })
