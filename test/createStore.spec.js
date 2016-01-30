@@ -536,4 +536,16 @@ describe('createStore', () => {
       createStore(reducers.todos, {})
     ).toNotThrow()
   })
+
+  it('throws if nextReducer is not a function', () => {
+    const store = createStore(reducers.todos)
+
+    expect(() =>
+      store.replaceReducer()
+    ).toThrow('Expected the nextReducer to be a function.')
+
+    expect(() =>
+      store.replaceReducer(() => {})
+    ).toNotThrow()
+  })
 })
