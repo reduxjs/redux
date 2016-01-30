@@ -2,6 +2,40 @@ function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))
 }
 
+var caches
+var resolveBoundActionCreator
+
+if (
+  typeof WeakMap === 'function' &&
+  Object.prototype.toString.call(new WeakMap()) === '[object WeakMap]'
+) {
+  caches = new WeakMap()
+  resolveBoundActionCreator = bindActionCreatorWithCache
+} else {
+  resolveBoundActionCreator = bindActionCreator
+}
+
+function getCache(dispatch) {
+  if (!caches) {
+    return
+  }
+  var cache = caches.get(dispatch)
+  if (!cache) {
+    cache = new WeakMap()
+    caches.set(dispatch, cache)
+  }
+  return cache
+}
+
+function bindActionCreatorWithCache(actionCreator, dispatch, cache) {
+  var boundActionCreator = cache.get(actionCreator)
+  if (!boundActionCreator) {
+    boundActionCreator = bindActionCreator(actionCreator, dispatch)
+    cache.set(actionCreator, boundActionCreator)
+  }
+  return boundActionCreator
+}
+
 /**
  * Turns an object whose values are action creators, into an object with the
  * same keys, but with every function wrapped into a `dispatch` call so they
@@ -24,8 +58,10 @@ function bindActionCreator(actionCreator, dispatch) {
  * function.
  */
 export default function bindActionCreators(actionCreators, dispatch) {
+  var cache = getCache(dispatch)
+
   if (typeof actionCreators === 'function') {
-    return bindActionCreator(actionCreators, dispatch)
+    return resolveBoundActionCreator(actionCreators, dispatch, cache)
   }
 
   if (typeof actionCreators !== 'object' || actionCreators === null) {
@@ -41,7 +77,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     var key = keys[i]
     var actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
-      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+      boundActionCreators[key] = resolveBoundActionCreator(actionCreator, dispatch, cache)
     }
   }
   return boundActionCreators
