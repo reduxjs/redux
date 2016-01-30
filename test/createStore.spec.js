@@ -109,6 +109,25 @@ describe('createStore', () => {
     ])
   })
 
+  it('throws if nextReduce is not a function when replaceing a reducer', () => {
+    const store = createStore(reducers.todos)
+    expect(() =>
+      store.replaceReducer()
+    ).toThrow()
+
+    expect(() =>
+      store.replaceReducer('test')
+    ).toThrow()
+
+    expect(() =>
+      store.replaceReducer({})
+    ).toThrow()
+
+    expect(() =>
+      store.replaceReducer(() => {})
+    ).toNotThrow()
+  })
+
   it('preserves the state when replacing a reducer', () => {
     const store = createStore(reducers.todos)
     store.dispatch(addTodo('Hello'))
