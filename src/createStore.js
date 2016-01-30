@@ -159,8 +159,12 @@ export default function createStore(reducer, initialState, enhancer) {
    * @returns {void}
    */
   function replaceReducer(nextReducer) {
-    currentReducer = nextReducer
-    dispatch({ type: ActionTypes.INIT })
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.')
+    } else {
+      currentReducer = nextReducer
+      dispatch({ type: ActionTypes.INIT })
+    }
   }
 
   // When a store is created, an "INIT" action is dispatched so that every
