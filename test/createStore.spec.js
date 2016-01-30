@@ -548,4 +548,24 @@ describe('createStore', () => {
       store.replaceReducer(() => {})
     ).toNotThrow()
   })
+
+  it('throws if listener is not a function', () => {
+    const store = createStore(reducers.todos)
+
+    expect(() =>
+      store.subscribe()
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe('')
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(null)
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(undefined)
+    ).toThrow()
+  })
 })

@@ -79,6 +79,10 @@ export default function createStore(reducer, initialState, enhancer) {
    * @returns {Function} A function to remove this change listener.
    */
   function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected listener to be a function.')
+    }
+
     listeners.push(listener)
     var isSubscribed = true
 
