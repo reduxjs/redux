@@ -1,7 +1,5 @@
 import { ActionTypes } from './createStore'
 import isPlainObject from './utils/isPlainObject'
-import mapValues from './utils/mapValues'
-import pick from './utils/pick'
 import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key, action) {
@@ -92,11 +90,18 @@ function assertReducerSanity(reducers) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-
 export default function combineReducers(reducers) {
-  var finalReducers = pick(reducers, (val) => typeof val === 'function')
-  var sanityError
+  var reducerKeys = Object.keys(reducers)
+  var finalReducers = {}
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i]
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key]
+    }
+  }
+  var finalReducerKeys = Object.keys(finalReducers)
 
+  var sanityError
   try {
     assertReducerSanity(finalReducers)
   } catch (e) {
@@ -116,17 +121,19 @@ export default function combineReducers(reducers) {
     }
 
     var hasChanged = false
-    var finalState = mapValues(finalReducers, (reducer, key) => {
+    var nextState = {}
+    for (var i = 0; i < finalReducerKeys.length; i++) {
+      var key = finalReducerKeys[i]
+      var reducer = finalReducers[key]
       var previousStateForKey = state[key]
       var nextStateForKey = reducer(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
       }
+      nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
-      return nextStateForKey
-    })
-
-    return hasChanged ? finalState : state
+    }
+    return hasChanged ? nextState : state
   }
 }

@@ -5,9 +5,16 @@ import * as actionCreators from './helpers/actionCreators'
 
 describe('bindActionCreators', () => {
   let store
+  let actionCreatorFunctions
 
   beforeEach(() => {
     store = createStore(todos)
+    actionCreatorFunctions = { ...actionCreators }
+    Object.keys(actionCreatorFunctions).forEach(key => {
+      if (typeof actionCreatorFunctions[key] !== 'function') {
+        delete actionCreatorFunctions[key]
+      }
+    })
   })
 
   it('wraps the action creators with the dispatch function', () => {
@@ -15,7 +22,7 @@ describe('bindActionCreators', () => {
     expect(
       Object.keys(boundActionCreators)
     ).toEqual(
-      Object.keys(actionCreators)
+      Object.keys(actionCreatorFunctions)
     )
 
     const action = boundActionCreators.addTodo('Hello')
@@ -25,6 +32,22 @@ describe('bindActionCreators', () => {
     expect(store.getState()).toEqual([
       { id: 1, text: 'Hello' }
     ])
+  })
+
+  it('skips non-function values in the passed object', () => {
+    const boundActionCreators = bindActionCreators({
+      ...actionCreators,
+      foo: 42,
+      bar: 'baz',
+      wow: undefined,
+      much: {},
+      test: null
+    }, store.dispatch)
+    expect(
+      Object.keys(boundActionCreators)
+    ).toEqual(
+      Object.keys(actionCreatorFunctions)
+    )
   })
 
   it('supports wrapping a single function only', () => {
