@@ -321,4 +321,9 @@ describe('createStore', () => {
       store.dispatch({ type: '' })
     ).toNotThrow();
   });
+
+  it('should throw if replaceReducer is not passed a function', () => {
+    const store = createStore(reducers.todos)
+    expect(() => store.replaceReducer()).toThrow();
+  });
 });

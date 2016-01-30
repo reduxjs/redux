@@ -132,6 +132,10 @@ export default function createStore(reducer, initialState) {
    * @returns {void}
    */
   function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the reducer to be a function.')
+    }
+
     currentReducer = nextReducer;
     dispatch({ type: ActionTypes.INIT });
   }
