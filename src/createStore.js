@@ -80,7 +80,7 @@ export default function createStore(reducer, initialState, enhancer) {
    */
   function subscribe(listener) {
     if (typeof listener !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.')
+      throw new Error('Expected listener to be a function.')
     }
 
     listeners.push(listener)
