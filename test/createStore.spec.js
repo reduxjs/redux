@@ -555,5 +555,18 @@ describe('createStore', () => {
     expect(() =>
       store.subscribe()
     ).toThrow()
+
+    expect(() =>
+      store.subscribe('')
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(null)
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(undefined)
+    ).toThrow()
+
   })
 })
