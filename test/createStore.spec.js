@@ -373,8 +373,8 @@ describe('createStore', () => {
       expect(listener3.calls.length).toBe(1)
       expect(listener4.calls.length).toBe(1)
     })
-    const unsubscribe2 = store.subscribe(listener2)
-    const unsubscribe3 = store.subscribe(listener3)
+    store.subscribe(listener2)
+    store.subscribe(listener3)
 
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
