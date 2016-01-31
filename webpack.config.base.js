@@ -1,5 +1,7 @@
 'use strict';
 
+var webpack = require('webpack');
+
 module.exports = {
   module: {
     loaders: [
@@ -10,7 +12,7 @@ module.exports = {
     library: 'Redux',
     libraryTarget: 'umd'
   },
-  resolve: {
-    extensions: ['', '.js']
-  }
+  plugins: [
+    new webpack.optimize.OccurenceOrderPlugin()
+  ]
 };
