@@ -2,7 +2,6 @@
 // import React from 'react'
 // import TestUtils from 'react-addons-test-utils'
 // import Footer from '../../components/Footer'
-// import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters'
 //
 // function setup(propOverrides) {
 //   const props = Object.assign({
