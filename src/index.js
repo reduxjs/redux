@@ -13,7 +13,7 @@ function isCrushed() {}
 
 if (
   process.env.NODE_ENV !== 'production' &&
-  setInterval.name === 'setInterval' &&
+  typeof isCrushed.name === 'string' &&
   isCrushed.name !== 'isCrushed'
 ) {
   warning(
