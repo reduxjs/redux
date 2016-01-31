@@ -55,8 +55,15 @@ export default function createStore(reducer, initialState, enhancer) {
 
   var currentReducer = reducer
   var currentState = initialState
-  var listeners = []
+  var currentListeners = []
+  var nextListeners = currentListeners
   var isDispatching = false
+
+  function beforeMutatingListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice()
+    }
+  }
 
   /**
    * Reads the state tree managed by the store.
@@ -95,8 +102,10 @@ export default function createStore(reducer, initialState, enhancer) {
       throw new Error('Expected listener to be a function.')
     }
 
-    listeners.push(listener)
     var isSubscribed = true
+
+    beforeMutatingListeners()
+    nextListeners.push(listener)
 
     return function unsubscribe() {
       if (!isSubscribed) {
@@ -104,8 +113,10 @@ export default function createStore(reducer, initialState, enhancer) {
       }
 
       isSubscribed = false
-      var index = listeners.indexOf(listener)
-      listeners.splice(index, 1)
+
+      beforeMutatingListeners()
+      var index = nextListeners.indexOf(listener)
+      nextListeners.splice(index, 1)
     }
   }
 
@@ -160,9 +171,9 @@ export default function createStore(reducer, initialState, enhancer) {
       isDispatching = false
     }
 
-    var currentListeners = listeners.slice()
-    for (var i = 0; i < currentListeners.length; i++) {
-      currentListeners[i]()
+    var listeners = currentListeners = nextListeners
+    for (var i = 0; i < listeners.length; i++) {
+      listeners[i]()
     }
 
     return action
