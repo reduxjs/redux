@@ -348,6 +348,48 @@ describe('createStore', () => {
     expect(listener3.calls.length).toBe(1)
   })
 
+  it('uses the last snapshot of subscribers during nested dispatch', () => {
+    const store = createStore(reducers.todos)
+
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+    const listener4 = expect.createSpy(() => {})
+
+    let unsubscribe4
+    const unsubscribe1 = store.subscribe(() => {
+      listener1()
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(0)
+      expect(listener3.calls.length).toBe(0)
+      expect(listener4.calls.length).toBe(0)
+
+      unsubscribe1()
+      unsubscribe4 = store.subscribe(listener4)
+      store.dispatch(unknownAction())
+
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(1)
+      expect(listener3.calls.length).toBe(1)
+      expect(listener4.calls.length).toBe(1)
+    })
+    const unsubscribe2 = store.subscribe(listener2)
+    const unsubscribe3 = store.subscribe(listener3)
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
+    expect(listener4.calls.length).toBe(1)
+
+    unsubscribe4()
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(3)
+    expect(listener3.calls.length).toBe(3)
+    expect(listener4.calls.length).toBe(1)
+  })
+
   it('provides an up-to-date state when a subscriber is notified', done => {
     const store = createStore(reducers.todos)
     store.subscribe(() => {
