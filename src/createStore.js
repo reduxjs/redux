@@ -148,7 +148,11 @@ export default function createStore(reducer, initialState, enhancer) {
       isDispatching = false
     }
 
-    listeners.slice().forEach(listener => listener())
+    var currentListeners = listeners.slice()
+    for (var i = 0; i < currentListeners.length; i++) {
+      currentListeners[i]()
+    }
+
     return action
   }
 
