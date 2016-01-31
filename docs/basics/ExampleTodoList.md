@@ -17,7 +17,7 @@ import App from './components/App'
 let store = createStore(todoApp)
 
 render(
-  <Provider store={todoStore}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')
