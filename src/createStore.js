@@ -59,7 +59,7 @@ export default function createStore(reducer, initialState, enhancer) {
   var nextListeners = currentListeners
   var isDispatching = false
 
-  function beforeMutatingListeners() {
+  function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
       nextListeners = currentListeners.slice()
     }
@@ -104,7 +104,7 @@ export default function createStore(reducer, initialState, enhancer) {
 
     var isSubscribed = true
 
-    beforeMutatingListeners()
+    ensureCanMutateNextListeners()
     nextListeners.push(listener)
 
     return function unsubscribe() {
@@ -114,7 +114,7 @@ export default function createStore(reducer, initialState, enhancer) {
 
       isSubscribed = false
 
-      beforeMutatingListeners()
+      ensureCanMutateNextListeners()
       var index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
     }
