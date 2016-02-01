@@ -7,3 +7,6 @@ script:
   - npm test
   - npm run build:examples
   - npm run test:examples
+branches:
+  only:
+    - master
