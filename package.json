@@ -59,6 +59,7 @@
   },
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
+    "lodash": "^4.1.0",
     "loose-envify": "^1.1.0"
   },
   "devDependencies": {
