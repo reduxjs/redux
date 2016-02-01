@@ -13,13 +13,13 @@ var config = {
     library: 'Redux',
     libraryTarget: 'umd'
   },
-  plugins : [
+  plugins: [
     {
       apply: function apply(compiler) {
         compiler.parser.plugin('expression global', function expressionGlobalPlugin() {
           this.state.module.addVariable('global', "(function() { return this; }()) || Function('return this')()")
           return false
-        });
+        })
       }
     },
     new webpack.optimize.OccurenceOrderPlugin(),
