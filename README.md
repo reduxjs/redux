@@ -135,7 +135,7 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 So, what are you waiting for?
 
-#### [Watch the 30 Free Videos!](https://egghead.io/series/getting-started-with-redux)
+#### [Watch the 30 Free Videos!](https://egghead.io/series/getting-started-with-redux) 
 
 If you enjoyed my course, consider supporting Egghead by [buying a subscription](https://egghead.io/pricing). Subscribers have access to the source code for the example in every one of my videos, as well as to tons of advanced lessons on other topics, including JavaScript in depth, React, Angular, and more. Many [Egghead instructors](https://egghead.io/instructors) are also open source library authors, so buying a subscription is a nice way to thank them for the work that they’ve done.
 
@@ -154,7 +154,7 @@ For PDF, ePub, and MOBI exports for offline reading, and instructions on how to 
 ### Examples
 
 * [Counter](http://rackt.github.io/redux/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
-* [Todos](http://rackt.github.io/redux/docs/introduction/Examples.html#todos) ([source](https://github.com/rackt/redux/tree/master/examples/todos))
+* [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
 * [Todos with Undo](http://rackt.github.io/redux/docs/introduction/Examples.html#todos-with-undo) ([source](https://github.com/rackt/redux/tree/master/examples/todos-with-undo))
 * [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
 * [Universal](http://rackt.github.io/redux/docs/introduction/Examples.html#universal) ([source](https://github.com/rackt/redux/tree/master/examples/universal))

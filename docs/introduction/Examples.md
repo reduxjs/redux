@@ -37,14 +37,14 @@ It covers:
 * Basic Redux flow
 * Testing
 
-## Todos
+## TodoMVC
 
-Run the [Todos](https://github.com/rackt/redux/tree/master/examples/todos) example:
+Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) example:
 
 ```
 git clone https://github.com/rackt/redux.git
 
-cd redux/examples/todos
+cd redux/examples/todomvc
 npm install
 npm start
 
@@ -163,7 +163,7 @@ It covers:
 * Queries defined alongside reducers
 * Example of rollback on failure
 * Safe conditional action dispatching
-* Using only [React Redux](https://github.com/rackt/react-redux) to bind action creators
+* Using only [React Redux](https://github.com/rackt/react-redux) to bind action creators 
 * Conditional middleware (logging example)
 
 ## Tree View
