@@ -6,7 +6,7 @@ import isPlainObject from 'lodash/isPlainObject'
  * If the current state is undefined, you must return the initial state.
  * Do not reference these action types directly in your code.
  */
-export var ActionTypes = {
+export var actionTypes = {
   INIT: '@@redux/INIT'
 }
 
@@ -195,13 +195,13 @@ export default function createStore(reducer, initialState, enhancer) {
     }
 
     currentReducer = nextReducer
-    dispatch({ type: ActionTypes.INIT })
+    dispatch({ type: actionTypes.INIT })
   }
 
   // When a store is created, an "INIT" action is dispatched so that every
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
-  dispatch({ type: ActionTypes.INIT })
+  dispatch({ type: actionTypes.INIT })
 
   return {
     dispatch,
