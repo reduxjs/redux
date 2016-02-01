@@ -38,7 +38,7 @@ if (env === 'production') {
         unsafe_comps: true,
         screw_ie8: true,
         warnings: false
-       }
+      }
     })
   )
 }
