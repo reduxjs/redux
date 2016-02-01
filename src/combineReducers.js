@@ -1,4 +1,4 @@
-import { ActionTypes } from './createStore'
+import ActionTypes from './utils/actionTypes'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
 

@@ -1,14 +1,5 @@
 import isPlainObject from 'lodash/isPlainObject'
-
-/**
- * These are private action types reserved by Redux.
- * For any unknown actions, you must return the current state.
- * If the current state is undefined, you must return the initial state.
- * Do not reference these action types directly in your code.
- */
-export var ActionTypes = {
-  INIT: '@@redux/INIT'
-}
+import ActionTypes from './utils/actionTypes'
 
 /**
  * Creates a Redux store that holds the state tree.
