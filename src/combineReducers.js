@@ -1,4 +1,4 @@
-import { ActionTypes } from './createStore'
+import { actionTypes } from './createStore'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
 
@@ -14,7 +14,7 @@ function getUndefinedStateErrorMessage(key, action) {
 
 function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   var reducerKeys = Object.keys(reducers)
-  var argumentName = action && action.type === ActionTypes.INIT ?
+  var argumentName = action && action.type === actionTypes.INIT ?
     'initialState argument passed to createStore' :
     'previous state received by the reducer'
 
@@ -49,7 +49,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
 function assertReducerSanity(reducers) {
   Object.keys(reducers).forEach(key => {
     var reducer = reducers[key]
-    var initialState = reducer(undefined, { type: ActionTypes.INIT })
+    var initialState = reducer(undefined, { type: actionTypes.INIT })
 
     if (typeof initialState === 'undefined') {
       throw new Error(
@@ -64,7 +64,7 @@ function assertReducerSanity(reducers) {
     if (typeof reducer(undefined, { type }) === 'undefined') {
       throw new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +
-        `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
+        `Don't try to handle ${actionTypes.INIT} or other actions in "redux/*" ` +
         `namespace. They are considered private. Instead, you must return the ` +
         `current state for any unknown actions, unless it is undefined, ` +
         `in which case you must return the initial state, regardless of the ` +

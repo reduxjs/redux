@@ -1,6 +1,6 @@
 import expect from 'expect'
 import { combineReducers } from '../src'
-import createStore, { ActionTypes } from '../src/createStore'
+import createStore, { actionTypes } from '../src/createStore'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -160,7 +160,7 @@ describe('Utils', () => {
             case 'decrement':
               return state - 1
             // Never do this in your code:
-            case ActionTypes.INIT:
+            case actionTypes.INIT:
               return 0
             default:
               return undefined
