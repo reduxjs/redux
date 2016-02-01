@@ -1,7 +1,7 @@
 {
-  "name": "redux-todomvc-example",
+  "name": "redux-todos-example",
   "version": "0.0.0",
-  "description": "Redux TodoMVC example",
+  "description": "Redux Todos example",
   "scripts": {
     "start": "node server.js",
     "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register --require ./test/setup.js",
@@ -36,7 +36,6 @@
     "react-addons-test-utils": "^0.14.7",
     "react-transform-hmr": "^1.0.0",
     "style-loader": "^0.12.3",
-    "todomvc-app-css": "^2.0.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.2.0"
