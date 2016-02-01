@@ -3,6 +3,7 @@
 * [Read Me](/README.md)
 * [Introduction](/docs/introduction/README.md)
   * [Motivation](/docs/introduction/Motivation.md)
+  * [When Not To Use](/docs/introduction/WhenNotToUse.md)
   * [Three Principles](/docs/introduction/ThreePrinciples.md)
   * [Prior Art](/docs/introduction/PriorArt.md)
   * [Ecosystem](/docs/introduction/Ecosystem.md)
