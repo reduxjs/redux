@@ -135,7 +135,7 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 So, what are you waiting for?
 
-#### [Watch the 30 Free Videos!](https://egghead.io/series/getting-started-with-redux) 
+#### [Watch the 30 Free Videos!](https://egghead.io/series/getting-started-with-redux)
 
 If you enjoyed my course, consider supporting Egghead by [buying a subscription](https://egghead.io/pricing). Subscribers have access to the source code for the example in every one of my videos, as well as to tons of advanced lessons on other topics, including JavaScript in depth, React, Angular, and more. Many [Egghead instructors](https://egghead.io/instructors) are also open source library authors, so buying a subscription is a nice way to thank them for the work that they’ve done.
 
@@ -153,14 +153,16 @@ For PDF, ePub, and MOBI exports for offline reading, and instructions on how to 
 
 ### Examples
 
+* [Counter Vanilla](http://rackt.github.io/redux/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/rackt/redux/tree/master/examples/counter-vanilla))
 * [Counter](http://rackt.github.io/redux/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
-* [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
+* [Todos](http://rackt.github.io/redux/docs/introduction/Examples.html#todos) ([source](https://github.com/rackt/redux/tree/master/examples/todos))
 * [Todos with Undo](http://rackt.github.io/redux/docs/introduction/Examples.html#todos-with-undo) ([source](https://github.com/rackt/redux/tree/master/examples/todos-with-undo))
+* [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
+* [Shopping Cart](http://rackt.github.io/redux/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/rackt/redux/tree/master/examples/shopping-cart))
+* [Tree View](http://rackt.github.io/redux/docs/introduction/Examples.html#tree-view) ([source](https://github.com/rackt/redux/tree/master/examples/tree-view))
 * [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
 * [Universal](http://rackt.github.io/redux/docs/introduction/Examples.html#universal) ([source](https://github.com/rackt/redux/tree/master/examples/universal))
 * [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
-* [Shopping Cart](http://rackt.github.io/redux/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/rackt/redux/tree/master/examples/shopping-cart))
-* [Tree View](http://rackt.github.io/redux/docs/introduction/Examples.html#tree-view) ([source](https://github.com/rackt/redux/tree/master/examples/tree-view))
 
 If you’re new to the NPM ecosystem and have troubles getting a project up and running, or aren’t sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
