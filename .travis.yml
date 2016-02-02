@@ -3,7 +3,9 @@ node_js:
   - "4"
   - "5"
 script:
-  - npm run check
+  - npm run check:lib
+  - npm run build
+  - npm run check:examples
 branches:
   only:
     - master
