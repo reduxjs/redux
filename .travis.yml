@@ -3,10 +3,7 @@ node_js:
   - "4"
   - "5"
 script:
-  - npm run lint
-  - npm test
-  - npm run build:examples
-  - npm run test:examples
+  - npm run check
 branches:
   only:
     - master

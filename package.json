@@ -16,7 +16,7 @@
     "test:watch": "npm test -- --watch",
     "test:cov": "babel-node $(npm bin)/isparta cover $(npm bin)/_mocha -- --recursive",
     "test:examples": "babel-node examples/testAll.js",
-    "check": "npm run lint && npm run test",
+    "check": "npm run lint && npm run test && npm run build:examples && npm run test:examples",
     "build:lib": "babel src --out-dir lib",
     "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/redux.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/redux.min.js",
