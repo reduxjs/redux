@@ -18,8 +18,8 @@
     "babel-polyfill": "^6.3.14",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-redux": "^4.1.1",
-    "redux": "^3.1.2",
+    "react-redux": "^4.2.1",
+    "redux": "^3.2.1",
     "redux-thunk": "^1.0.3",
     "redux-undo": "^0.6.0"
   },

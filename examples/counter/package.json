@@ -19,7 +19,8 @@
   "dependencies": {
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "redux": "^3.1.2"
+    "react-redux": "^4.2.1",
+    "redux": "^3.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
