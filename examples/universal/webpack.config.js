@@ -25,17 +25,8 @@ module.exports = {
         exclude: /node_modules/,
         include: __dirname,
         query: {
-          plugins: [
-          [
-            "react-transform", {
-              transforms: [{
-                transform: "react-transform-hmr",
-                imports: ["react"],
-                locals: ["module"]
-              }]
-            }
-          ]
-        ]}
+          presets: [ 'react-hmre' ]
+        }
       }
     ]
   }
