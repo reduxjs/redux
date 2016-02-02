@@ -25,10 +25,9 @@ function todo(state, action) {
       if (state.id !== action.id) {
         return state
       }
-      return {
-        ...state,
+      return Object.assign({}, state, {
         completed: true
-      }
+      })
     default:
       return state
   }

@@ -17,7 +17,7 @@ export default class AddTodo extends Component {
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type="text" ref="input" />
           <button>
-            Add
+            Addx
           </button>
         </form>
       </div>
