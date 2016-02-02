@@ -37,9 +37,9 @@
     "babel-preset-react-hmre": "^1.0.1",
     "concurrently": "^0.1.1",
     "express": "^4.13.3",
-    "redux-devtools": "^3.0.2",
+    "redux-devtools": "^3.1.0",
     "redux-devtools-dock-monitor": "^1.0.1",
-    "redux-devtools-log-monitor": "^1.0.2",
+    "redux-devtools-log-monitor": "^1.0.3",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.2.0"
