@@ -20,8 +20,7 @@
     "react-dom": "^0.14.7",
     "react-redux": "^4.2.1",
     "redux": "^3.2.1",
-    "redux-thunk": "^1.0.3",
-    "redux-undo": "^0.6.0"
+    "redux-undo": "^1.0.0-beta2"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
