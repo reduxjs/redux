@@ -15,7 +15,7 @@ describe('createStore', () => {
     expect(methods).toContain('replaceReducer')
   })
 
-  it('requires a reducer function', () => {
+  it('throws if reducer is not a function', () => {
     expect(() =>
       createStore()
     ).toThrow()
@@ -90,7 +90,7 @@ describe('createStore', () => {
     ])
 
     store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([ 
+    expect(store.getState()).toEqual([
       {
         id: 1,
         text: 'Hello'
@@ -140,11 +140,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -156,11 +156,11 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
@@ -172,15 +172,15 @@ describe('createStore', () => {
       {
         id: 3,
         text: 'Perhaps'
-      }, 
+      },
       {
         id: 1,
         text: 'Hello'
-      }, 
+      },
       {
         id: 2,
         text: 'World'
-      }, 
+      },
       {
         id: 4,
         text: 'Surely'
@@ -286,6 +286,110 @@ describe('createStore', () => {
     expect(listenerC.calls.length).toBe(2)
   })
 
+  it('delays unsubscribe until the end of current dispatch', () => {
+    const store = createStore(reducers.todos)
+
+    const unsubscribeHandles = []
+    const doUnsubscribeAll = () => unsubscribeHandles.forEach(
+      unsubscribe => unsubscribe()
+    )
+
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+
+    unsubscribeHandles.push(store.subscribe(() => listener1()))
+    unsubscribeHandles.push(store.subscribe(() => {
+      listener2()
+      doUnsubscribeAll()
+    }))
+    unsubscribeHandles.push(store.subscribe(() => listener3()))
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(1)
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(1)
+  })
+
+  it('delays subscribe until the end of current dispatch', () => {
+    const store = createStore(reducers.todos)
+
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+
+    let listener3Added = false
+    const maybeAddThirdListener = () => {
+      if (!listener3Added) {
+        listener3Added = true
+        store.subscribe(() => listener3())
+      }
+    }
+
+    store.subscribe(() => listener1())
+    store.subscribe(() => {
+      listener2()
+      maybeAddThirdListener()
+    })
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(0)
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(1)
+  })
+
+  it('uses the last snapshot of subscribers during nested dispatch', () => {
+    const store = createStore(reducers.todos)
+
+    const listener1 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {})
+    const listener3 = expect.createSpy(() => {})
+    const listener4 = expect.createSpy(() => {})
+
+    let unsubscribe4
+    const unsubscribe1 = store.subscribe(() => {
+      listener1()
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(0)
+      expect(listener3.calls.length).toBe(0)
+      expect(listener4.calls.length).toBe(0)
+
+      unsubscribe1()
+      unsubscribe4 = store.subscribe(listener4)
+      store.dispatch(unknownAction())
+
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(1)
+      expect(listener3.calls.length).toBe(1)
+      expect(listener4.calls.length).toBe(1)
+    })
+    store.subscribe(listener2)
+    store.subscribe(listener3)
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
+    expect(listener4.calls.length).toBe(1)
+
+    unsubscribe4()
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(1)
+    expect(listener2.calls.length).toBe(3)
+    expect(listener3.calls.length).toBe(3)
+    expect(listener4.calls.length).toBe(1)
+  })
+
   it('provides an up-to-date state when a subscriber is notified', done => {
     const store = createStore(reducers.todos)
     store.subscribe(() => {
@@ -386,5 +490,124 @@ describe('createStore', () => {
     expect(() =>
       store.dispatch({ type: '' })
     ).toNotThrow()
+  })
+
+  it('accepts enhancer as the third argument', () => {
+    const emptyArray = []
+    const spyEnhancer = vanillaCreateStore => (...args) => {
+      expect(args[0]).toBe(reducers.todos)
+      expect(args[1]).toBe(emptyArray)
+      expect(args.length).toBe(2)
+      const vanillaStore = vanillaCreateStore(...args)
+      return {
+        ...vanillaStore,
+        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+      }
+    }
+
+    const store = createStore(reducers.todos, emptyArray, spyEnhancer)
+    const action = addTodo('Hello')
+    store.dispatch(action)
+    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+  })
+
+  it('accepts enhancer as the second argument if initial state is missing', () => {
+    const spyEnhancer = vanillaCreateStore => (...args) => {
+      expect(args[0]).toBe(reducers.todos)
+      expect(args[1]).toBe(undefined)
+      expect(args.length).toBe(2)
+      const vanillaStore = vanillaCreateStore(...args)
+      return {
+        ...vanillaStore,
+        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+      }
+    }
+
+    const store = createStore(reducers.todos, spyEnhancer)
+    const action = addTodo('Hello')
+    store.dispatch(action)
+    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+  })
+
+  it('throws if enhancer is neither undefined nor a function', () => {
+    expect(() =>
+      createStore(reducers.todos, undefined, {})
+    ).toThrow()
+
+    expect(() =>
+      createStore(reducers.todos, undefined, [])
+    ).toThrow()
+
+    expect(() =>
+      createStore(reducers.todos, undefined, null)
+    ).toThrow()
+
+    expect(() =>
+      createStore(reducers.todos, undefined, false)
+    ).toThrow()
+
+    expect(() =>
+      createStore(reducers.todos, undefined, undefined)
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, undefined, x => x)
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, x => x)
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, [])
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, {})
+    ).toNotThrow()
+  })
+
+  it('throws if nextReducer is not a function', () => {
+    const store = createStore(reducers.todos)
+
+    expect(() =>
+      store.replaceReducer()
+    ).toThrow('Expected the nextReducer to be a function.')
+
+    expect(() =>
+      store.replaceReducer(() => {})
+    ).toNotThrow()
+  })
+
+  it('throws if listener is not a function', () => {
+    const store = createStore(reducers.todos)
+
+    expect(() =>
+      store.subscribe()
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe('')
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(null)
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(undefined)
+    ).toThrow()
   })
 })

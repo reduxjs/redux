@@ -236,7 +236,7 @@ function undoable(state = initialState, action) {
       return state
   }
 }
-````
+```
 
 This implementation isn’t usable because it leaves out three important questions:
 

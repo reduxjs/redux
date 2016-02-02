@@ -272,6 +272,8 @@ The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ship
 
 * To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
+Because it is cumbersome to apply functions to `createStore()` before using it, `createStore()` accepts an optional last argument to specify such functions.
+
 ### The Final Approach
 
 Given this middleware we just wrote:
@@ -305,13 +307,12 @@ Here’s how to apply it to a Redux store:
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
-// applyMiddleware takes createStore() and returns
-// a function with a compatible API.
-let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore)
-
-// Use it like you would use createStore()
 let todoApp = combineReducers(reducers)
-let store = createStoreWithMiddleware(todoApp)
+let store = createStore(
+  todoApp,
+  // applyMiddleware() tells createStore() how to handle middleware
+  applyMiddleware(logger, crashReporter)
+)
 ```
 
 That’s it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
@@ -378,8 +379,8 @@ const timeoutScheduler = store => next => action => {
 }
 
 /**
- * Schedules actions with { meta: { raf: true } } to be dispatched inside a rAF loop 
- * frame.  Makes `dispatch` return a function to remove the action from the queue in 
+ * Schedules actions with { meta: { raf: true } } to be dispatched inside a rAF loop
+ * frame.  Makes `dispatch` return a function to remove the action from the queue in
  * this case.
  */
 const rafScheduler = store => next => {
@@ -472,15 +473,17 @@ const thunk = store => next => action =>
 
 
 // You can use all of them! (It doesn’t mean you should.)
-let createStoreWithMiddleware = applyMiddleware(
-  rafScheduler,
-  timeoutScheduler,
-  thunk,
-  vanillaPromise,
-  readyStatePromise,
-  logger,
-  crashReporter
-)(createStore)
 let todoApp = combineReducers(reducers)
-let store = createStoreWithMiddleware(todoApp)
+let store = createStore(
+  todoApp,
+  applyMiddleware(
+    rafScheduler,
+    timeoutScheduler,
+    thunk,
+    vanillaPromise,
+    readyStatePromise,
+    logger,
+    crashReporter
+  )
+)
 ```

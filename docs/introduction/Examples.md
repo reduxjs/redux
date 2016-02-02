@@ -5,6 +5,19 @@ Redux is distributed with a few examples in its [source code](https://github.com
 >##### Note on Copying
 >If you copy Redux examples outside their folders, you can delete some lines at the end of their `webpack.config.js` files. They follow a “You can safely delete these lines in your project.” comment.
 
+## Counter Vanilla
+
+Run the [Counter Vanilla](https://github.com/rackt/redux/tree/master/examples/counter-vanilla) example:
+
+```
+git clone https://github.com/rackt/redux.git
+
+cd redux/examples/counter-vanilla
+open index.html
+```
+
+It does not require a build system or a view framework and exists to show the raw Redux API used with ES5.
+
 ## Counter
 
 Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) example:
@@ -174,7 +187,7 @@ It covers:
 * Normalized state
 * Reducer composition
 * State representing a tree view
-* Granual re-rendering of a large subtree
+* Granular re-rendering of a large subtree
 
 ## More Examples
 

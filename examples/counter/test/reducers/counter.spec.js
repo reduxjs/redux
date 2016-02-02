@@ -1,22 +1,21 @@
 import expect from 'expect'
-import counter from '../../reducers/counter'
-import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../../actions/counter'
+import counter from '../../reducers'
 
 describe('reducers', () => {
   describe('counter', () => {
-    it('should handle initial state', () => {
+    it('should provide the initial state', () => {
       expect(counter(undefined, {})).toBe(0)
     })
 
-    it('should handle INCREMENT_COUNTER', () => {
-      expect(counter(1, { type: INCREMENT_COUNTER })).toBe(2)
+    it('should handle INCREMENT action', () => {
+      expect(counter(1, { type: 'INCREMENT' })).toBe(2)
     })
 
-    it('should handle DECREMENT_COUNTER', () => {
-      expect(counter(1, { type: DECREMENT_COUNTER })).toBe(0)
+    it('should handle DECREMENT action', () => {
+      expect(counter(1, { type: 'DECREMENT' })).toBe(0)
     })
 
-    it('should handle unknown action type', () => {
+    it('should ignore unknown actions', () => {
       expect(counter(1, { type: 'unknown' })).toBe(1)
     })
   })

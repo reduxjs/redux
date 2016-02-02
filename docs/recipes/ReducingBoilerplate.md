@@ -97,7 +97,7 @@ export function addTodo(text) {
 }
 ```
 
-We just modified how `addTodo` action creator behaves, completely invisible to the calling code. **We don’t have to worry about looking at each place where todos are being added, to make sure they have this check.** Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions. It’s very handy when the application is under heavy development, and the requirements change often.
+We just modified how the `addTodo` action creator behaves, completely invisible to the calling code. **We don’t have to worry about looking at each place where todos are being added, to make sure they have this check.** Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions. It’s very handy when the application is under heavy development, and the requirements change often.
 
 ### Generating Action Creators
 
@@ -150,11 +150,11 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
+There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help reduce boilerplate code and enforce adherence to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
 ## Async Action Creators
 
-[Middleware](../Glossary.html#middleware) lets you inject custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
+[Middleware](../Glossary.md#middleware) lets you inject custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
 
 Without any middleware, [`dispatch`](../api/Store.md#dispatch) only accepts a plain object, so we have to perform AJAX calls inside our components:
 
@@ -249,7 +249,7 @@ The simplest example of middleware is [redux-thunk](https://github.com/gaearon/r
 
 >##### Note
 
->Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”: it’s about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
+>Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It’s about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
 
 Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
 
