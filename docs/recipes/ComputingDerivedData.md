@@ -61,48 +61,44 @@ Let's define a memoized selector named `getVisibleTodos` to replace the non-memo
 ```js
 import { createSelector } from 'reselect'
 
-const selectTodos = (todos, filter) => {
-  switch (filter) {
-    case 'SHOW_ALL':
-      return todos
-    case 'SHOW_COMPLETED':
-      return todos.filter(t => t.completed)
-    case 'SHOW_ACTIVE':
-      return todos.filter(t => !t.completed)
-  }
-}
-
-const visibilityFilterSelector = (state) => state.visibilityFilter
-const todosSelector = (state) => state.todos
+const getVisibilityFilter = (state) => state.visibilityFilter
+const getTodos = (state) => state.todos
 
 export const getVisibleTodos = createSelector(
-  [ visibilityFilterSelector, todosSelector ],
+  [ getVisibilityFilter, getTodos ],
   (visibilityFilter, todos) => {
-    return selectTodos(todos, visibilityFilter)
+    switch (filter) {
+      case 'SHOW_ALL':
+        return todos
+      case 'SHOW_COMPLETED':
+        return todos.filter(t => t.completed)
+      case 'SHOW_ACTIVE':
+        return todos.filter(t => !t.completed)
+    }
   }
 )
 ```
 
-In the example above, `visibilityFilterSelector` and `todosSelector` are input-selectors. They are created as ordinary non-memoized selector functions because they do not transform the data they select. `getVisibleTodos` on the other hand is a memoized selector. It takes `visibilityFilterSelector` and `todosSelector` as input-selectors, and a transform function that calculates the filtered todos list.
+In the example above, `getVisibilityFilter` and `getTodos` are input-selectors. They are created as ordinary non-memoized selector functions because they do not transform the data they select. `getVisibleTodos` on the other hand is a memoized selector. It takes `getVisibilityFilter` and `getTodos` as input-selectors, and a transform function that calculates the filtered todos list.
 
 ### Composing Selectors
 
 A memoized selector can itself be an input-selector to another memoized selector. Here is `getVisibleTodos` being used as an input-selector to a selector that further filters the todos by keyword:
 
 ```js
-const keywordSelector = (state) => state.keyword
+const getKeyword = (state) => state.keyword
 
-const keywordFilterSelector = createSelector(
-  [ getVisibleTodos, keywordSelector ],
+const getVisibleTodosFilteredByKeyword = createSelector(
+  [ getVisibleTodos, getKeyword ],
   (visibleTodos, keyword) => visibleTodos.filter(
-    todo => todo.indexOf(keyword) > -1
+    todo => todo.text.indexOf(keyword) > -1
   )
 )
 ```
 
 ### Connecting a Selector to the Redux Store
 
-If you are using react-redux, you connect a memoized selector to the Redux store using `connect`:
+If you are using [React Redux](https://github.com/rackt/react-redux), you can call selectors as regular functions inside `mapStateToProps()`:
 
 #### `containers/VisibleTodoList.js`
 
@@ -134,3 +130,6 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
+## Next Steps
+
+Check out the [official documentation](https://github.com/rackt/reselect) of Reselect as well as its [FAQ](https://github.com/rackt/reselect#faq). Most Redux projects start using Reselect when they have performance problems because of too many derived computations and wasted re-renders, so make sure you are familiar with it before you build something big. It can also be useful to study [its source code](https://github.com/rackt/reselect/blob/master/src/index.js) so you don’t think it’s magic.
