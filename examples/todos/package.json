@@ -1,7 +1,7 @@
 {
-  "name": "redux-todomvc-example",
+  "name": "redux-todos-example",
   "version": "0.0.0",
-  "description": "Redux TodoMVC example",
+  "description": "Redux Todos example",
   "scripts": {
     "start": "node server.js",
     "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register --require ./test/setup.js",
@@ -18,11 +18,10 @@
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
     "babel-polyfill": "^6.3.14",
-    "classnames": "^2.1.2",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-redux": "^4.2.1",
-    "redux": "^3.2.1"
+    "react-redux": "^4.1.2",
+    "redux": "^3.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
@@ -37,10 +36,7 @@
     "jsdom": "^5.6.1",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
-    "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^0.14.7",
-    "style-loader": "^0.12.3",
-    "todomvc-app-css": "^2.0.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.2.0"
