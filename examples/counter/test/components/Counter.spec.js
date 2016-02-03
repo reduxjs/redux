@@ -49,6 +49,12 @@ describe('Counter component', () => {
     expect(actions.onIncrement).toHaveBeenCalled()
   })
 
+  it('third button should call onIncrement if the counter is odd and negative', () => {
+    const { buttons, actions } = setup(-43)
+    TestUtils.Simulate.click(buttons[2])
+    expect(actions.onIncrement).toHaveBeenCalled()
+  })
+
   it('fourth button should call onIncrement in a second', (done) => {
     const { buttons, actions } = setup()
     TestUtils.Simulate.click(buttons[3])

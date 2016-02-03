@@ -52,7 +52,7 @@
 
       document.getElementById('incrementIfOdd')
         .addEventListener('click', function () {
-          if (store.getState() % 2 === 1) {
+          if (store.getState() % 2 !== 0) {
             store.dispatch({ type: 'INCREMENT' })
           }
         })
