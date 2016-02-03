@@ -57,12 +57,11 @@ class App extends Component {
             </a>
           }
         </p>
-        {isFetching && isEmpty && <h2>Loading...</h2>}
-        {!isFetching && isEmpty && <h2>Empty.</h2>}
-        {posts.length > 0 &&
-          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <Posts posts={posts} />
-          </div>
+        {isEmpty
+          ? (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>)
+          : <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+              <Posts posts={posts} />
+            </div>
         }
       </div>
     )
