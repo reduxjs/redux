@@ -179,7 +179,7 @@ import { renderToString } from 'react-dom/server'
 function handleRender(req, res) {
   // Read the counter from the request, if provided
   const params = qs.parse(req.query)
-  const counter = parseInt(params.counter) || 0
+  const counter = parseInt(params.counter, 10) || 0
 
   // Compile an initial state
   let initialState = { counter }
@@ -242,7 +242,7 @@ function handleRender(req, res) {
   fetchCounter(apiResult => {
     // Read the counter from the request, if provided
     const params = qs.parse(req.query)
-    const counter = parseInt(params.counter) || apiResult || 0
+    const counter = parseInt(params.counter, 10) || apiResult || 0
 
     // Compile an initial state
     let initialState = { counter }
