@@ -87,9 +87,23 @@ export function syncHistoryWithStore(history, store, {
   return Object.assign({}, history, {
     // The listeners are subscribed to the store instead of history
     listen(listener) {
-      return store.subscribe(() =>
-        listener(getLocationInStore(true))
-      )
+      // History listeners expect a synchronous call
+      listener(getLocationInStore(true))
+
+      // Keep track of whether we unsubscribed, as Redux store
+      // only applies changes in subscriptions on next dispatch
+      let unsubscribed = false
+      const unsubscribeFromStore = store.subscribe(() => {
+        if (!unsubscribed) {
+          listener(getLocationInStore(true))
+        }
+      })
+
+      // Let user unsubscribe later
+      return () => {
+        unsubscribed = true
+        unsubscribeFromStore()
+      }
     },
 
     // It also provides a way to destroy internal listeners
