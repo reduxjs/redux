@@ -72,8 +72,8 @@ UserPage.propTypes = {
   loadStarred: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state, props) {
-  const { login } = props.params
+function mapStateToProps(state, ownProps) {
+  const { login } = ownProps.params
   const {
     pagination: { starredByUser },
     entities: { users, repos }
