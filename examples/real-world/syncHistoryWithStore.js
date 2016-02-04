@@ -22,6 +22,17 @@ export function syncHistoryWithStore(history, store, {
   selectLocationState = state => state.routing,
   adjustUrlOnReplay = false
 } = {}) {
+  // Fail early if the reducer is not mounted
+  if (typeof selectLocationState(store.getState()) === 'undefined') {
+    throw new Error(
+      'Expected the routing state to be available either as `state.routing` ' +
+      'or as the custom expression you can specify as `selectLocationState` ' +
+      'named argument in the `syncHistoryWithStore()` options. Did you ' +
+      'forget to put the `reducer` exported from `syncHistoryWithStore` into ' +
+      'your `combineReducers()` call?'
+    )
+  }
+
   let initialLocation
   let currentLocation
   let isTimeTraveling
