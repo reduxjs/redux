@@ -1,7 +1,8 @@
 export const WILL_NAVIGATE = '@@react-router/WILL_NAVIGATE'
 
 const initialState = {
-  locationBeforeTransitions: null
+  locationBeforeTransitions: null,
+  historyIndex: 0
 }
 
 // Mount this reducer to handle location changes
@@ -10,7 +11,8 @@ export const reducer = (state = initialState, action) => {
     case WILL_NAVIGATE:
       // Use a descriptive name to make it less tempting to reach into it
       return {
-        locationBeforeTransitions: action.locationBeforeTransitions
+        locationBeforeTransitions: action.locationBeforeTransitions,
+        historyIndex: action.historyIndex
       }
     default:
       return state
@@ -33,6 +35,7 @@ export function syncHistoryWithStore(history, store, {
     )
   }
 
+  let curHistoryIndex = 0;
   let initialLocation
   let currentLocation
   let isTimeTraveling
@@ -46,6 +49,8 @@ export function syncHistoryWithStore(history, store, {
       (useInitialIfEmpty ? initialLocation : undefined)
   }
 
+  const getHistoryIndexInStore = () => selectLocationState(store.getState()).historyIndex || 0
+
   // Whenever store changes due to time travel, keep address bar in sync
   const handleStoreChange = () => {
     const locationInStore = getLocationInStore(true)
@@ -56,7 +61,10 @@ export function syncHistoryWithStore(history, store, {
     // Update address bar to reflect store state
     isTimeTraveling = true
     currentLocation = locationInStore
-    history.replace(locationInStore)
+    // Usually negative if going back in time
+    const historyIndexToGo = getHistoryIndexInStore() - curHistoryIndex + 1; // TODO whats up with this off by one
+    history.go(historyIndexToGo)
+    curHistoryIndex = historyIndexToGo;
     isTimeTraveling = false
   }
 
@@ -89,8 +97,11 @@ export function syncHistoryWithStore(history, store, {
     // Tell the store to update by dispatching an action
     store.dispatch({
       type: WILL_NAVIGATE,
-      locationBeforeTransitions: location
+      locationBeforeTransitions: location,
+      historyIndex: curHistoryIndex
     })
+
+    curHistoryIndex += 1;
   }
   unsubscribeFromHistory = history.listen(handleLocationChange)
 
