@@ -2,7 +2,7 @@ var glob = require('glob')
 var fs = require('fs')
 var es3ify = require('es3ify')
 
-glob('./@(lib|dist)/**/*.js', function (err, files) {
+glob('./@(lib|dist|es)/**/*.js', function (err, files) {
   if (err) {
     throw err
   }
