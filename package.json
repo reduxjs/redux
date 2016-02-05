@@ -11,7 +11,7 @@
     "src"
   ],
   "scripts": {
-    "clean": "rimraf lib dist coverage",
+    "clean": "rimraf lib dist es coverage",
     "lint": "eslint src test examples",
     "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
