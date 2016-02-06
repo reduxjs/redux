@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage",
-    "lint": "eslint src test examples",
+    "lint": "eslint src test examples build",
     "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
     "test:cov": "cross-env BABEL_ENV=commonjs babel-node $(npm bin)/isparta cover $(npm bin)/_mocha -- --recursive",
@@ -24,7 +24,7 @@
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/redux.js",
     "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/redux.min.js",
     "build:examples": "cross-env BABEL_ENV=commonjs babel-node examples/buildAll.js",
-    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min && node ./prepublish",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min && node ./build/es3ify",
     "prepublish": "npm run clean && npm run check:src && npm run build",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
@@ -59,7 +59,8 @@
   },
   "homepage": "http://rackt.github.io/redux",
   "dependencies": {
-    "lodash": "^4.2.0",
+    "lodash": "^4.2.1",
+    "lodash-es": "^4.2.1",
     "loose-envify": "^1.1.0"
   },
   "devDependencies": {
