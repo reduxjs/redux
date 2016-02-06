@@ -196,7 +196,7 @@ The work on Redux was [funded by the community](https://www.patreon.com/reactdx)
 Meet some of the outstanding companies that made it possible:
 
 * [Webflow](https://github.com/webflow)
-* [Chess iX](http://www.chess-ix.com/)
+* [Ximedes](https://www.ximedes.com/)
 
 [See the full list of Redux patrons.](PATRONS.md)
 
