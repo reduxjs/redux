@@ -43,6 +43,8 @@ var fs = require('fs')
 if (fs.existsSync(reduxSrc) && fs.existsSync(reduxNodeModules)) {
   // Resolve Redux to source
   module.exports.resolve = { alias: { 'redux': reduxSrc } }
+  // Our root .babelrc needs this flag for CommonJS output
+  process.env.BABEL_ENV = 'commonjs'
   // Compile Redux from source
   module.exports.module.loaders.push({
     test: /\.js$/,
