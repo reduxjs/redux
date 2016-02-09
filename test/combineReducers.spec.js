@@ -52,7 +52,7 @@ describe('Utils', () => {
       expect(
         () => reducer({ counter: 0 }, { type: 'whatever' })
       ).toThrow(
-      /"counter".*"whatever"/
+      /"whatever".*"counter"/
       )
       expect(
         () => reducer({ counter: 0 }, null)
