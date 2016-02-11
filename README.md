@@ -45,16 +45,38 @@ To install the stable version:
 npm install --save redux
 ```
 
-Most likely, you’ll also need [the React bindings](https://github.com/rackt/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
+This requires using the [npm](https://www.npmjs.com/) package manager. It includes a [UMD](https://github.com/umdjs/umd) build, which is compatible with many popular JavaScript module loaders and environments.
+
+#### Other Installation Methods
+
+We **strongly** recommend using [npm](https://www.npmjs.com/) over these other options, as most of the [libraries complementary to Redux](#complementary-libraries) are only available on [npm](https://www.npmjs.com/).
+
+However, if you don’t yet use [npm](https://www.npmjs.com/) or a modern module bundler, you have a few options.
+
+##### Bower
+
+If you're using [Bower](http://bower.io/), this command will install the stable version of Redux:
+
+```
+bower install redux=https://npmcdn.com/redux/dist/redux.js
+```
+
+##### CDNs
+
+Redux is available via [cdnjs](https://cdnjs.com/libraries/redux) and [npmcdn](https://npmcdn.com/redux/dist/redux.min.js). The files on these CDNs are [UMD](https://github.com/umdjs/umd) builds, which means that they will export a browser global, `window.redux`, if you're not using a tool like [Webpack](http://webpack.github.io), [Browserify](http://browserify.org/), or [RequireJS](http://requirejs.org/) to build your library.
+
+An example of using the global Redux object can be seen in [the vanilla counter example](https://github.com/rackt/redux/blob/765a3a5742a591adba7ae8b61e0516c49ca594bd/examples/counter-vanilla/index.html).
+
+#### Complementary Libraries
+
+Most likely, you’ll also need [the React bindings](https://github.com/rackt/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools) while working with Redux.
 
 ```
 npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
 
-This assumes that you’re using [npm](https://www.npmjs.com/) package manager with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
-
-If you don’t yet use [npm](https://www.npmjs.com/) or a modern module bundler, and would rather prefer a single-file [UMD](https://github.com/umdjs/umd) build that makes `Redux` available as a global object, you can grab a pre-built version from [cdnjs](https://cdnjs.com/libraries/redux). We *don’t* recommend this approach for any serious application, as most of the libraries complementary to Redux are only available on [npm](https://www.npmjs.com/).
+Use of the extensions requires that you’re using [npm](https://www.npmjs.com/) in conjunction with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
 
 ### The Gist
 
