@@ -71,10 +71,10 @@ const todo = (state, action) => {
         return state
       }
 
-      return {
-        ...state,
+      return Object.assign({}, state, {
         completed: !state.completed
-      }
+      })
+      
     default:
       return state
   }
