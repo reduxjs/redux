@@ -1,14 +1,14 @@
 # Contributing
-We are open to, and grateful for, any contributions made by the community.  By contributing to Redux, you agree to abide by the [code of conduct](https://github.com/rackt/redux/blob/master/CODE_OF_CONDUCT.md).
+We are open to, and grateful for, any contributions made by the community.  By contributing to Redux, you agree to abide by the [code of conduct](https://github.com/reactjs/redux/blob/master/CODE_OF_CONDUCT.md).
 
 ## Reporting Issues and Asking Questions
-Before opening an issue, please search the [issue tracker](https://github.com/rackt/redux/issues) to make sure your issue hasn't already been reported.
+Before opening an issue, please search the [issue tracker](https://github.com/reactjs/redux/issues) to make sure your issue hasn't already been reported.
 
 Please ask any general and implementation specific questions on [Stack Overflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) for support.
 
 ## Development
 
-Visit the [Issue tracker](https://github.com/rackt/redux/issues) to find a list of open issues that need attention.
+Visit the [Issue tracker](https://github.com/reactjs/redux/issues) to find a list of open issues that need attention.
 
 Fork, then clone the repo:
 ```
@@ -90,9 +90,9 @@ npm run docs:clean
 ```
 
 ### Examples
-Redux comes with [official examples](http://rackt.github.io/redux/docs/introduction/Examples.html) to demonstrate various concepts and best practices.
+Redux comes with [official examples](http://redux.js.org/docs/introduction/Examples.html) to demonstrate various concepts and best practices.
 
-When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused. 
+When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
 
 >For ease of development, the webpack configs for the examples are set up so that the `redux` module is aliased to the project `src` folder when inside of the Redux folder. If an example is moved out of the Redux folder, they will instead use the version of Redux from `node_modules`.
 
@@ -103,16 +103,16 @@ npm run build:examples
 npm run test:examples
 ```
 
-Please visit the [Examples page](http://rackt.github.io/redux/docs/introduction/Examples.html) for information on running an individual example.
+Please visit the [Examples page](http://redux.js.org/docs/introduction/Examples.html) for information on running an individual example.
 
 ###New Features
 Please open an issue with a proposal for a new feature or refactoring before starting on the work. We don't want you to waste your efforts on a pull request that we won't want to accept.
 
 ###Style
-[rackt](https://github.com/rackt) is trying to keep a standard style across its various projects, which can be found over in [eslint-config-rackt](https://github.com/rackt/eslint-config-rackt). If you have a style change proposal, it should first be proposed there. If accepted, we will be happy to accept a PR to implement it here.
+The [reactjs](https://github.com/reactjs) GitHub org is trying to keep a standard style across its various projects, which can be found over in [eslint-config-reactjs](https://github.com/reactjs/eslint-config-reactjs). If you have a style change proposal, it should first be proposed there. If accepted, we will be happy to accept a PR to implement it here.
 
 ## Submitting Changes
-* Open a new issue in the [Issue tracker](https://github.com/rackt/redux/issues).
+* Open a new issue in the [Issue tracker](https://github.com/reactjs/redux/issues).
 * Fork the repo.
 * Create a new feature branch based off the `master` branch.
 * Make sure all tests pass and there are no linting errors.

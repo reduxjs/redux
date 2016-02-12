@@ -1,16 +1,16 @@
 # Examples
 
-Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).
+Redux is distributed with a few examples in its [source code](https://github.com/reactjs/redux/tree/master/examples).
 
 >##### Note on Copying
 >If you copy Redux examples outside their folders, you can delete some lines at the end of their `webpack.config.js` files. They follow a “You can safely delete these lines in your project.” comment.
 
 ## Counter Vanilla
 
-Run the [Counter Vanilla](https://github.com/rackt/redux/tree/master/examples/counter-vanilla) example:
+Run the [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/counter-vanilla
 open index.html
@@ -20,10 +20,10 @@ It does not require a build system or a view framework and exists to show the ra
 
 ## Counter
 
-Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) example:
+Run the [Counter](https://github.com/reactjs/redux/tree/master/examples/counter) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/counter
 npm install
@@ -32,16 +32,16 @@ npm start
 open http://localhost:3000/
 ```
 
-This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/rackt/react-redux) bindings instead.
+This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/reactjs/react-redux) bindings instead.
 
 This example includes tests.
 
 ## Todos
 
-Run the [Todos](https://github.com/rackt/redux/tree/master/examples/todos) example:
+Run the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todos
 npm install
@@ -50,16 +50,16 @@ npm start
 open http://localhost:3000/
 ```
 
-This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how reducers can delegate handling actions to other reducers, and how you can use [React Redux](https://github.com/rackt/react-redux) to generate container components from your presentational components.
+This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how reducers can delegate handling actions to other reducers, and how you can use [React Redux](https://github.com/reactjs/react-redux) to generate container components from your presentational components.
 
 This example includes tests.
 
 ## Todos with Undo
 
-Run the [Todos with Undo](https://github.com/rackt/redux/tree/master/examples/todos-with-undo) example:
+Run the [Todos with Undo](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todos-with-undo
 npm install
@@ -72,10 +72,10 @@ This is a variation on the previous example. It is almost identical, but additio
 
 ## TodoMVC
 
-Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) example:
+Run the [TodoMVC](https://github.com/reactjs/redux/tree/master/examples/todomvc) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todomvc
 npm install
@@ -90,10 +90,10 @@ This example includes tests.
 
 ## Shopping Cart
 
-Run the [Shopping Cart](https://github.com/rackt/redux/tree/master/examples/shopping-cart) example:
+Run the [Shopping Cart](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/shopping-cart
 npm install
@@ -106,10 +106,10 @@ This example shows important idiomatic Redux patterns that become important as y
 
 ## Tree View
 
-Run the [Tree View](https://github.com/rackt/redux/tree/master/examples/tree-view) example:
+Run the [Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/tree-view
 npm install
@@ -124,10 +124,10 @@ This example includes tests.
 
 ## Async
 
-Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) example:
+Run the [Async](https://github.com/reactjs/redux/tree/master/examples/async) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/async
 npm install
@@ -140,10 +140,10 @@ This example includes reading from an asynchronous API, fetching data in respons
 
 ## Universal
 
-Run the [Universal](https://github.com/rackt/redux/tree/master/examples/universal) example:
+Run the [Universal](https://github.com/reactjs/redux/tree/master/examples/universal) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/universal
 npm install
@@ -156,10 +156,10 @@ This is a basic demonstration of [server rendering](../recipes/ServerRendering.m
 
 ## Real World
 
-Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-world) example:
+Run the [Real World](https://github.com/reactjs/redux/tree/master/examples/real-world) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/real-world
 npm install

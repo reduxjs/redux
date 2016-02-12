@@ -28,13 +28,13 @@
     "prepublish": "npm run clean && npm run check:src && npm run build",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
-    "docs:build": "npm run docs:prepare && gitbook build -g rackt/redux",
+    "docs:build": "npm run docs:prepare && gitbook build -g reactjs/redux",
     "docs:watch": "npm run docs:prepare && gitbook serve",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:rackt/redux gh-pages --force"
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:reactjs/redux gh-pages --force"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rackt/redux.git"
+    "url": "https://github.com/reactjs/redux.git"
   },
   "keywords": [
     "redux",
@@ -55,9 +55,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rackt/redux/issues"
+    "url": "https://github.com/reactjs/redux/issues"
   },
-  "homepage": "http://rackt.github.io/redux",
+  "homepage": "http://redux.js.org",
   "dependencies": {
     "lodash": "^4.2.1",
     "lodash-es": "^4.2.1",

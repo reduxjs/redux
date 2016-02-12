@@ -98,7 +98,7 @@ const getVisibleTodosFilteredByKeyword = createSelector(
 
 ### Connecting a Selector to the Redux Store
 
-If you are using [React Redux](https://github.com/rackt/react-redux), you can call selectors as regular functions inside `mapStateToProps()`:
+If you are using [React Redux](https://github.com/reactjs/react-redux), you can call selectors as regular functions inside `mapStateToProps()`:
 
 #### `containers/VisibleTodoList.js`
 

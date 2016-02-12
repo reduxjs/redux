@@ -1,4 +1,4 @@
-# [Redux](http://rackt.github.io/redux)
+# [Redux](http://redux.js.org)
 
 Redux is a predictable state container for JavaScript apps.  
 
@@ -7,7 +7,7 @@ It helps you write applications that behave consistently, run in different envir
 You can use Redux together with [React](https://facebook.github.io/react/), or with any other view library.  
 It is tiny (2kB, including dependencies).
 
-[![build status](https://img.shields.io/travis/rackt/redux/master.svg?style=flat-square)](https://travis-ci.org/rackt/redux)
+[![build status](https://img.shields.io/travis/reactjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reactjs/redux)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![npm downloads](https://img.shields.io/npm/dm/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on discord](https://img.shields.io/badge/discord-%23redux%20%40%20reactiflux-61dafb.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZ6au5t)
@@ -45,7 +45,7 @@ To install the stable version:
 npm install --save redux
 ```
 
-Most likely, you’ll also need [the React bindings](https://github.com/rackt/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
+Most likely, you’ll also need [the React bindings](https://github.com/reactjs/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
 
 ```
 npm install --save react-redux
@@ -141,28 +141,28 @@ If you enjoyed my course, consider supporting Egghead by [buying a subscription]
 
 ### Documentation
 
-* [Introduction](http://rackt.github.io/redux/docs/introduction/index.html)
-* [Basics](http://rackt.github.io/redux/docs/basics/index.html)
-* [Advanced](http://rackt.github.io/redux/docs/advanced/index.html)
-* [Recipes](http://rackt.github.io/redux/docs/recipes/index.html)
-* [Troubleshooting](http://rackt.github.io/redux/docs/Troubleshooting.html)
-* [Glossary](http://rackt.github.io/redux/docs/Glossary.html)
-* [API Reference](http://rackt.github.io/redux/docs/api/index.html)
+* [Introduction](http://redux.js.org/docs/introduction/index.html)
+* [Basics](http://redux.js.org/docs/basics/index.html)
+* [Advanced](http://redux.js.org/docs/advanced/index.html)
+* [Recipes](http://redux.js.org/docs/recipes/index.html)
+* [Troubleshooting](http://redux.js.org/docs/Troubleshooting.html)
+* [Glossary](http://redux.js.org/docs/Glossary.html)
+* [API Reference](http://redux.js.org/docs/api/index.html)
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
 ### Examples
 
-* [Counter Vanilla](http://rackt.github.io/redux/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/rackt/redux/tree/master/examples/counter-vanilla))
-* [Counter](http://rackt.github.io/redux/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
-* [Todos](http://rackt.github.io/redux/docs/introduction/Examples.html#todos) ([source](https://github.com/rackt/redux/tree/master/examples/todos))
-* [Todos with Undo](http://rackt.github.io/redux/docs/introduction/Examples.html#todos-with-undo) ([source](https://github.com/rackt/redux/tree/master/examples/todos-with-undo))
-* [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
-* [Shopping Cart](http://rackt.github.io/redux/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/rackt/redux/tree/master/examples/shopping-cart))
-* [Tree View](http://rackt.github.io/redux/docs/introduction/Examples.html#tree-view) ([source](https://github.com/rackt/redux/tree/master/examples/tree-view))
-* [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
-* [Universal](http://rackt.github.io/redux/docs/introduction/Examples.html#universal) ([source](https://github.com/rackt/redux/tree/master/examples/universal))
-* [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
+* [Counter Vanilla](http://redux.js.org/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla))
+* [Counter](http://redux.js.org/docs/introduction/Examples.html#counter) ([source](https://github.com/reactjs/redux/tree/master/examples/counter))
+* [Todos](http://redux.js.org/docs/introduction/Examples.html#todos) ([source](https://github.com/reactjs/redux/tree/master/examples/todos))
+* [Todos with Undo](http://redux.js.org/docs/introduction/Examples.html#todos-with-undo) ([source](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo))
+* [TodoMVC](http://redux.js.org/docs/introduction/Examples.html#todomvc) ([source](https://github.com/reactjs/redux/tree/master/examples/todomvc))
+* [Shopping Cart](http://redux.js.org/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart))
+* [Tree View](http://redux.js.org/docs/introduction/Examples.html#tree-view) ([source](https://github.com/reactjs/redux/tree/master/examples/tree-view))
+* [Async](http://redux.js.org/docs/introduction/Examples.html#async) ([source](https://github.com/reactjs/redux/tree/master/examples/async))
+* [Universal](http://redux.js.org/docs/introduction/Examples.html#universal) ([source](https://github.com/reactjs/redux/tree/master/examples/universal))
+* [Real World](http://redux.js.org/docs/introduction/Examples.html#real-world) ([source](https://github.com/reactjs/redux/tree/master/examples/real-world))
 
 If you’re new to the NPM ecosystem and have troubles getting a project up and running, or aren’t sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
@@ -188,7 +188,7 @@ Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `
 ### Change Log
 
 This project adheres to [Semantic Versioning](http://semver.org/).  
-Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/rackt/redux/releases) page.
+Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/reactjs/redux/releases) page.
 
 ### Patrons
 

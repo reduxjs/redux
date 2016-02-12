@@ -7,13 +7,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rackt/redux.git"
+    "url": "git+https://github.com/reactjs/redux.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rackt/redux/issues"
+    "url": "https://github.com/reactjs/redux/issues"
   },
-  "homepage": "http://rackt.github.io/redux",
+  "homepage": "http://redux.js.org",
   "dependencies": {
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.4.3",
