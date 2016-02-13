@@ -7,15 +7,19 @@ let AddTodo = ({ dispatch }) => {
 
   return (
     <div>
-      <input ref={node => {
-        input = node
-      }} />
-      <button onClick={() => {
-        dispatch(addTodo(input.value))
+      <form onSubmit={e => {
+        e.preventDefault()
+        if(input.value.trim())
+          dispatch(addTodo(input.value))
         input.value = ''
       }}>
-        Add Todo
-      </button>
+        <input ref={node => {
+          input = node
+        }} />
+        <button type="submit">
+          Add Todo
+        </button>
+      </form>
     </div>
   )
 }
