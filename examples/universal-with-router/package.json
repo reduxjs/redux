@@ -23,7 +23,7 @@
     "react-dom": "^0.14.7",
     "react-redux": "^4.2.1",
     "react-router": "^2.0.0",
-    "react-router-redux": "^3.0.0",
+    "react-router-redux": ">4.0.0-beta",
     "redux": "^3.2.1",
     "redux-thunk": "^1.0.3",
     "serve-static": "^1.10.0"
