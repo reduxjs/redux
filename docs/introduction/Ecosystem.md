@@ -121,4 +121,5 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ## More
 
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
+[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.  
+[React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES6, and more.
