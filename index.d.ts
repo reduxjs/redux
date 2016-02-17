@@ -1,8 +1,8 @@
-export interface ActionCreator {
-  (...args: any[]): any;
+export interface Action {
+  type: string;
 }
 
-export type Reducer<S> = (state: S, action: any) => S;
+export type Reducer<S> = (state: S, action: Action) => S;
 
 export type Dispatch = (action: any) => any;
 
@@ -15,24 +15,33 @@ export interface Middleware {
   <S>(api: MiddlewareAPI<S>): (next: Dispatch) => Dispatch;
 }
 
-export class Store<S> {
+export interface Store<S> {
   dispatch: Dispatch;
   getState: () => S;
   subscribe: (listener: () => void) => () => void;
   replaceReducer: (reducer: Reducer<S>) => void;
 }
 
-export type StoreCreator<S> = (reducer: Reducer<S>, initialState?: S) => Store<S>;
+export interface StoreCreator<S> {
+  (reducer: Reducer<S>): Store<S>;
+  (reducer: Reducer<S>, enhancer: StoreEnhancer): Store<S>;
+  (reducer: Reducer<S>, initialState: S): Store<S>;
+  (reducer: Reducer<S>, initialState: S, enhancer: StoreEnhancer): Store<S>;
+}
 
 export type StoreEnhancer = <S>(next: StoreCreator<S>) => StoreCreator<S>;
 
-export function createStore<S>(reducer: Reducer<S>, initialState?: S,
-                               enhancer?: StoreEnhancer): Store<S>;
-
-export function bindActionCreators<T extends ActionCreator|{[key: string]: ActionCreator}>(actionCreators: T, dispatch: Dispatch): T;
+export const createStore: StoreCreator;
 
 export function combineReducers<S>(reducers: {[key: string]: Reducer<any>}): Reducer<S>;
 export function applyMiddleware<S>(...middlewares: Middleware[]): StoreEnhancer;
+
+
+export interface ActionCreator {
+  (...args: any[]): any;
+}
+
+export function bindActionCreators<T extends ActionCreator|{[key: string]: ActionCreator}>(actionCreators: T, dispatch: Dispatch): T;
 
 // from DefinitelyTyped/compose-function
 // Hardcoded signatures for 2-4 parameters
