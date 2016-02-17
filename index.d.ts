@@ -22,14 +22,14 @@ export interface Store<S> {
   replaceReducer: (reducer: Reducer<S>) => void;
 }
 
-export interface StoreCreator<S> {
-  (reducer: Reducer<S>): Store<S>;
-  (reducer: Reducer<S>, enhancer: StoreEnhancer): Store<S>;
-  (reducer: Reducer<S>, initialState: S): Store<S>;
-  (reducer: Reducer<S>, initialState: S, enhancer: StoreEnhancer): Store<S>;
+export interface StoreCreator {
+  <S>(reducer: Reducer<S>): Store<S>;
+  <S>(reducer: Reducer<S>, enhancer: StoreEnhancer): Store<S>;
+  <S>(reducer: Reducer<S>, initialState: S): Store<S>;
+  <S>(reducer: Reducer<S>, initialState: S, enhancer: StoreEnhancer): Store<S>;
 }
 
-export type StoreEnhancer = <S>(next: StoreCreator<S>) => StoreCreator<S>;
+export type StoreEnhancer = (next: StoreCreator) => StoreCreator;
 
 export const createStore: StoreCreator;
 
