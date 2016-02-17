@@ -14,16 +14,19 @@ class Reddit extends Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
-    this.rootPath = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1)
   }
 
   componentDidMount() {
     const { dispatch, selectedReddit, params } = this.props
-    dispatch(selectReddit(params.id))
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    if (params.id) {
+      dispatch(selectReddit(params.id))
+      dispatch(fetchPostsIfNeeded(params.id))
+    } else {
+      dispatch(fetchPostsIfNeeded(selectedReddit))
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
+ componentWillReceiveProps(nextProps) {
     const { dispatch, params } = this.props
     if ( nextProps.params.id !== params.id ) {
       dispatch(selectReddit(nextProps.params.id))
@@ -32,7 +35,7 @@ class Reddit extends Component {
   }
 
   handleChange(nextReddit) {
-    this.context.router.push(this.rootPath + nextReddit)
+    this.context.router.push(`/${nextReddit}`)
   }
 
   handleRefreshClick(e) {
