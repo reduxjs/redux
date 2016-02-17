@@ -94,7 +94,7 @@ function mapStateToProps(state) {
     items: []
   }
 
-  return {selectedReddit, posts, isFetching, lastUpdated}
+  return { selectedReddit, posts, isFetching, lastUpdated }
 }
 
 export default connect(mapStateToProps)(Reddit)
