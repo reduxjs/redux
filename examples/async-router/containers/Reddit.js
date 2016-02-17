@@ -1,6 +1,6 @@
-import React, {Component, PropTypes} from 'react'
-import {connect} from 'react-redux'
-import {selectReddit, fetchPostsIfNeeded, invalidateReddit} from '../actions'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
@@ -14,7 +14,7 @@ class Reddit extends Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
-    this.rootPath = location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1)
+    this.rootPath = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1)
   }
 
   componentDidMount() {
@@ -49,7 +49,7 @@ class Reddit extends Component {
 
     return (
       <div>
-        <Picker value={selectedReddit} onChange={this.handleChange} options={['reactjs', 'frontend']}/>
+        <Picker value={selectedReddit} onChange={this.handleChange} options={ [ 'reactjs', 'frontend' ] }/>
         <p>
           {lastUpdated && <span>
             Last updated at

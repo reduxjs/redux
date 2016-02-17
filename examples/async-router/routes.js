@@ -7,7 +7,6 @@ import Layout from './components/Layout'
 import Home from './components/Home'
 import Sample from './components/Sample'
 import Reddit from './containers/Reddit'
-import Test from './components/Test'
 
 export default (
       <Route path="/" component={Layout}>
