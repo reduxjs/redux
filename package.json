@@ -89,6 +89,7 @@
     "babel-plugin-transform-es2015-unicode-regex": "^6.3.13",
     "babel-plugin-transform-object-rest-spread": "^6.3.13",
     "babel-register": "^6.3.13",
+    "chai": "^3.5.0",
     "cross-env": "^1.0.7",
     "es3ify": "^0.2.0",
     "eslint": "^1.10.3",
@@ -100,6 +101,8 @@
     "isparta": "^4.0.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
+    "typescript": "^1.7.5",
+    "typescript-definition-tester": "0.0.3",
     "webpack": "^1.9.6"
   },
   "npmName": "redux",
