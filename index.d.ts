@@ -1,13 +1,20 @@
-export interface Action {
-  type: string;
+export interface Action<T> {
+  type: T;
 }
 
 
 /* reducers */
 
-export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
+export type Reducer<S> = <A extends Action<any>>(state: S, action: A) => S;
 
-export function combineReducers<S>(reducers: {[key: string]: Reducer<any>}): Reducer<S>;
+export interface ReducersMapObject {
+  [key: string]: Reducer<any>;
+}
+
+export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
+export function combineReducers<S, M extends ReducersMapObject>(
+  reducers: M
+): Reducer<S>;
 
 
 /* store */
@@ -17,10 +24,14 @@ export interface Dispatch {
   <A, B>(action: A): B;
 }
 
+export interface Unsubscribe {
+  (): void;
+}
+
 export interface Store<S> {
   dispatch: Dispatch;
   getState(): S;
-  subscribe(listener: () => void): () => void;
+  subscribe(listener: () => void): Unsubscribe;
   replaceReducer(reducer: Reducer<S>): void;
 }
 
@@ -53,18 +64,27 @@ export function applyMiddleware(...middlewares: Middleware[]): StoreEnhancer;
 
 /* action creators */
 
-export interface ActionCreator {
-  <O>(...args: any[]): O;
+export interface ActionCreator<A> {
+  (...args: any[]): A;
 }
 
-export function bindActionCreators<
-  T extends ActionCreator|{[key: string]: ActionCreator}
->(actionCreators: T, dispatch: Dispatch): T;
+export interface ActionCreatorsMapObject {
+  [key: string]: ActionCreator<any>;
+}
+
+
+export function bindActionCreators<A extends ActionCreator<any>>(
+  actionCreator: A, dispatch: Dispatch
+): A;
+
+export function bindActionCreators<M extends ActionCreatorsMapObject>(
+  actionCreators: M, dispatch: Dispatch
+): M;
 
 
 /* compose */
 
-// from DefinitelyTyped/compose-function
+// copied from DefinitelyTyped/compose-function
 // Hardcoded signatures for 2-4 parameters
 export function compose<A, B, C>(f1: (b: B) => C,
                                  f2: (a: A) => B): (a: A) => C;
