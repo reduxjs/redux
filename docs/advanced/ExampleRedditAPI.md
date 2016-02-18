@@ -7,7 +7,7 @@ This is the complete source code of the Reddit headline fetching example we buil
 #### `index.js`
 
 ```js
-import 'babel-core/polyfill'
+import 'babel-polyfill'
 
 import React from 'react'
 import { render } from 'react-dom'
