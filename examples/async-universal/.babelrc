@@ -1,0 +1,9 @@
+{
+  "presets": ["es2015", "react"],
+  "plugins": ["transform-class-properties"], // needed to get local context.router
+  "env": {
+    "development": {
+      "presets": ["react-hmre"]
+    }
+  }
+}
