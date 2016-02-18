@@ -2,30 +2,33 @@ export interface Action {
   type: string;
 }
 
-export type Reducer<S> = (state: S, action: Action) => S;
 
-export type Dispatch = (action: any) => any;
+/* reducers */
 
-export interface MiddlewareAPI<S> {
-  dispatch: Dispatch;
-  getState: () => S;
-}
+export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
 
-export interface Middleware {
-  <S>(api: MiddlewareAPI<S>): (next: Dispatch) => Dispatch;
+export function combineReducers<S>(reducers: {[key: string]: Reducer<any>}): Reducer<S>;
+
+
+/* store */
+
+export interface Dispatch {
+  <A>(action: A): A;
+  <A, B>(action: A): B;
 }
 
 export interface Store<S> {
   dispatch: Dispatch;
-  getState: () => S;
-  subscribe: (listener: () => void) => () => void;
-  replaceReducer: (reducer: Reducer<S>) => void;
+  getState(): S;
+  subscribe(listener: () => void): () => void;
+  replaceReducer(reducer: Reducer<S>): void;
 }
 
 export interface StoreCreator {
   <S>(reducer: Reducer<S>): Store<S>;
-  <S>(reducer: Reducer<S>, enhancer: StoreEnhancer): Store<S>;
   <S>(reducer: Reducer<S>, initialState: S): Store<S>;
+
+  <S>(reducer: Reducer<S>, enhancer: StoreEnhancer): Store<S>;
   <S>(reducer: Reducer<S>, initialState: S, enhancer: StoreEnhancer): Store<S>;
 }
 
@@ -33,15 +36,33 @@ export type StoreEnhancer = (next: StoreCreator) => StoreCreator;
 
 export const createStore: StoreCreator;
 
-export function combineReducers<S>(reducers: {[key: string]: Reducer<any>}): Reducer<S>;
-export function applyMiddleware<S>(...middlewares: Middleware[]): StoreEnhancer;
 
+/* middleware */
 
-export interface ActionCreator {
-  (...args: any[]): any;
+export interface MiddlewareAPI<S> {
+  dispatch: Dispatch;
+  getState(): S;
 }
 
-export function bindActionCreators<T extends ActionCreator|{[key: string]: ActionCreator}>(actionCreators: T, dispatch: Dispatch): T;
+export interface Middleware {
+  <S>(api: MiddlewareAPI<S>): (next: Dispatch) => <A, B>(action: A) => B;
+}
+
+export function applyMiddleware(...middlewares: Middleware[]): StoreEnhancer;
+
+
+/* action creators */
+
+export interface ActionCreator {
+  <O>(...args: any[]): O;
+}
+
+export function bindActionCreators<
+  T extends ActionCreator|{[key: string]: ActionCreator}
+>(actionCreators: T, dispatch: Dispatch): T;
+
+
+/* compose */
 
 // from DefinitelyTyped/compose-function
 // Hardcoded signatures for 2-4 parameters
@@ -56,5 +77,5 @@ export function compose<A, B, C, D, E>(f1: (b: D) => E,
                                        f4: (a: A) => B): (a: A) => E;
 
 // Minimal typing for more than 4 parameters
-export function compose<Result>(f1: (a: any) => Result,
-                                ...functions: Function[]): (a: any) => Result;
+export function compose<I, R>(f1: (a: any) => R,
+                              ...functions: Function[]): (a: I) => R;
