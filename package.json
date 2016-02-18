@@ -101,7 +101,7 @@
     "isparta": "^4.0.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
-    "typescript": "^1.7.5",
+    "typescript": "^1.8.0",
     "typescript-definition-tester": "0.0.3",
     "webpack": "^1.9.6"
   },
