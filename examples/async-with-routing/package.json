@@ -1,7 +1,7 @@
 {
-  "name": "redux-async-example",
+  "name": "redux-async-with-routing-example",
   "version": "0.0.0",
-  "description": "Redux async example",
+  "description": "Redux async with routing example",
   "scripts": {
     "start": "node server.js"
   },
