@@ -381,7 +381,7 @@ export function fetchPosts(subreddit) {
 
 >```js
 >// Do this once before any other code in your app
->import 'babel-core/polyfill'
+>import 'babel-polyfill'
 >```
 
 How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) store enhancer from Redux, as shown below:
