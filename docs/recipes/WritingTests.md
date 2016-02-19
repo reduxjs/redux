@@ -11,7 +11,13 @@ Note that it runs in a Node environment, so you won’t have access to the DOM.
 npm install --save-dev mocha
 ```
 
-To use it together with [Babel](http://babeljs.io), add this to `scripts` in your `package.json`:
+To use it together with [Babel](http://babeljs.io), you will need to install `babel-register`:
+
+```js
+npm install --save-dev babel-register
+```
+
+Then, add this to `scripts` in your `package.json`:
 
 ```js
 {
