@@ -77,9 +77,19 @@ export function bindActionCreators<A extends ActionCreator<any>>(
   actionCreator: A, dispatch: Dispatch
 ): A;
 
+export function bindActionCreators<
+  A extends ActionCreator<any>,
+  B extends ActionCreator<any>
+>(actionCreator: A, dispatch: Dispatch): B;
+
 export function bindActionCreators<M extends ActionCreatorsMapObject>(
   actionCreators: M, dispatch: Dispatch
 ): M;
+
+export function bindActionCreators<
+  M extends ActionCreatorsMapObject,
+  N extends ActionCreatorsMapObject
+>(actionCreators: M, dispatch: Dispatch): N;
 
 
 /* compose */
