@@ -28,6 +28,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
 * [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a#.l033pyr02) — In-depth guide to implementing Redux middleware
 * [A Simple Way to Route with Redux](http://jlongster.com/A-Simple-Way-to-Route-with-Redux) — An introduction to Redux Simple Router
+* [Work with VK API (RU)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details) - Redux tutorial on russian. Make app and work with vk.com API
 
 ### Talks
 
