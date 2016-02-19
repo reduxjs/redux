@@ -93,7 +93,7 @@ Finally, to update objects, you’ll need something like `_.extend` from Undersc
 
 Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`.
 
-You can also enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel transform-object-rest-spread plugin](http://babeljs.io/docs/plugins/transform-object-rest-spread/):
+You can also enable the [object spread operator proposal](recipes/UsingObjectSpreadOperator.md) for a more succinct syntax:
 
 ```js
 // Before:
@@ -113,7 +113,7 @@ return [
 ]
 ```
 
-Note that experimental language features are subject to change, and it’s unwise to rely on them in large codebases.
+Note that experimental language features are subject to change.
 
 #### Don’t forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
