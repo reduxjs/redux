@@ -6,5 +6,6 @@ In the [basics walkthrough](../basics/README.md), we explored how to structure a
 * [Async Flow](AsyncFlow.md)
 * [Middleware](Middleware.md)
 * [Usage with React Router](UsageWithReactRouter.md)
+* [Object Spread Operator](ObjectSpreadOperator.md)
 * [Example: Reddit API](ExampleRedditAPI.md)
 * [Next Steps](NextSteps.md)
