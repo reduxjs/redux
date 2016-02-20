@@ -14,8 +14,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Example Apps
 
+* [Official Examples](Examples.md) — A few official examples covering different Redux techniques
 * [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
-* [Shopping Cart (Flux Comparison)](https://github.com/voronianski/flux-comparison/tree/master/redux) — A shopping cart example from Flux Comparison
 
 ### Tutorials and Articles
 
@@ -27,7 +27,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4) — A guide to creating a universal app with data fetching and routing
 * [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
 * [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a#.l033pyr02) — In-depth guide to implementing Redux middleware
-* [A Simple Way to Route with Redux](http://jlongster.com/A-Simple-Way-to-Route-with-Redux) — An introduction to Redux Simple Router
+* [Angular 2 — Introduction to Redux](https://medium.com/google-developer-experts/angular-2-introduction-to-redux-1cf18af27e6e) — An introduction to Redux fundamental concepts with an example in Angular 2
 * [Working with VK API (in Russian)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details) — A tutorial in Russian that demonstrates creating an app that consumes VK API
 
 ### Talks
