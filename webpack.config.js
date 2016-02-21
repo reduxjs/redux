@@ -24,11 +24,9 @@ var config = {
 if (env === 'production') {
   config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
-      compressor: {
+      compress: {
         pure_getters: true,
         unsafe: true,
-        unsafe_comps: true,
-        screw_ie8: true,
         warnings: false
       }
     })
