@@ -40,3 +40,4 @@
   * [compose](/docs/api/compose.md)
 * [Change Log](/CHANGELOG.md)
 * [Patrons](/PATRONS.md)
+* [Feedback](/docs/Feedback.md)
