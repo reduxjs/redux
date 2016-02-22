@@ -24,11 +24,14 @@
     "redux": "^3.1.2"
   },
   "devDependencies": {
+    "autobind-decorator": "^1.3.3",
     "babel-core": "^6.3.15",
     "babel-loader": "^6.2.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.0.1",
+    "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.3.13",
     "cross-env": "^1.0.7",
     "expect": "^1.8.0",

@@ -1,26 +1,28 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes, Component } from 'react'
+import autobind from 'autobind-decorator'
 
-const Link = ({ active, children, onClick }) => {
-  if (active) {
-    return <span>{children}</span>
+@autobind
+export class Link extends Component {
+  render() {
+    if (this.props.shouldActive) {
+      return <span>{children}</span>
+    }
+
+    return (
+      <a href="#" onClick={this._onClick}>
+        {this.props.children}
+      </a>
+    )
   }
 
-  return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
-    >
-      {children}
-    </a>
-  )
+  _onClick(e) {
+    e.preventDefault()
+    this.props.onLinkClick()
+  }
 }
 
 Link.propTypes = {
-  active: PropTypes.bool.isRequired,
+  shouldActive: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired
+  onLinkClick: PropTypes.func.isRequired
 }
-
-export default Link
