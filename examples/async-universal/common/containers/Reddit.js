@@ -17,21 +17,23 @@ class Reddit extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit, params } = this.props
+    const { dispatch, params } = this.props
     if (params.id) {
       dispatch(selectReddit(params.id))
       dispatch(fetchPostsIfNeeded(params.id))
-    } else {
-      dispatch(fetchPostsIfNeeded(selectedReddit))
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { dispatch, params } = this.props
+
     if (nextProps.params.id !== params.id) {
       dispatch(selectReddit(nextProps.params.id))
-      dispatch(fetchPostsIfNeeded(nextProps.params.id))
+      if (nextProps.params.id) {
+        dispatch(fetchPostsIfNeeded(nextProps.params.id))
+      }
     }
+
   }
 
   handleChange(nextReddit) {
@@ -53,7 +55,7 @@ class Reddit extends Component {
       <div>
         <Picker value={selectedReddit}
                 onChange={this.handleChange}
-                options={ [ 'reactjs', 'frontend' ] } />
+                options={ [ '', 'reactjs', 'frontend' ] } />
         <p>
           {lastUpdated &&
             <span>
@@ -61,7 +63,7 @@ class Reddit extends Component {
             {' '}
             </span>
           }
-          {!isFetching &&
+          {!isFetching && selectedReddit &&
             <a href="#"
                onClick={this.handleRefreshClick}>
               Refresh
@@ -94,7 +96,7 @@ function mapStateToProps(state) {
     lastUpdated,
     items: posts
   } = postsByReddit[selectedReddit] || {
-    isFetching: true,
+    isFetching: false,
     items: []
   }
 
