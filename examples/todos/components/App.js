@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
+import { connect } from 'react-redux'
 import {Footer} from './Footer'
-import AddTodo from '../containers/AddTodo'
+import AddTodo from './AddTodo'
 import { actions, store } from '../actions'
 import { todos } from "../actions/Todos"
 import { Link } from './Link'
@@ -9,23 +10,20 @@ import {TodoFactory} from './TodoFactory'
 import autobind from 'autobind-decorator'
 
 @autobind
-export class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props)
-    this.todoFactory = new TodoFactory(actions.toggleTodo)
+    this._todoFactory = new TodoFactory(actions.toggleTodo)
   }
 
   render() {
-    const todoListProps = {
-      todos: todos.visibleOnes(),
-      todoFactory: this.todoFactory
-    }
-
+    console.log(this.props.visibleTodos)
     return(
       <div>
         <AddTodo onAddTodo={actions.addTodo} />
         <TodoList
-          {...todoListProps} >
+          todos={this.props.visibleTodos}
+          todoFactory={this._todoFactory} >
         </TodoList>
         <Footer>
           <Link
@@ -54,3 +52,15 @@ export class App extends Component {
     }
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    visibleTodos: todos.visibleOnes()
+  }
+}
+
+const AppContainer = connect(
+    mapStateToProps
+)(App)
+
+export default AppContainer

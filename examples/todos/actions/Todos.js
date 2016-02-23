@@ -6,11 +6,10 @@ class Todos {
   }
 
   visibleOnes() {
-    let todos = this._store.todos
-    if(!todos) {
-      todos = []
-    }
-    switch (this._store.visibilityFilter) {
+    const state = this._store.getState()
+    const todos = state.todos
+
+    switch (state.visibilityFilter) {
       case 'SHOW_ALL':
         return todos
       case 'SHOW_COMPLETED':

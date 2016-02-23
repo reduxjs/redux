@@ -5,7 +5,7 @@ export class TodoList extends Component {
     return (
       <ul>
         {this.props.todos.map(todo =>
-          todoFactory.create(todo)
+          this.props.todoFactory.create(todo)
         )}
       </ul>
     )

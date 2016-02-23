@@ -1,3 +1,4 @@
+import React from 'react'
 import autobind from 'autobind-decorator'
 import Todo from './Todo'
 
@@ -6,6 +7,7 @@ export class TodoFactory {
   constructor(onTodoClick) {
     this._onTodoClick = onTodoClick
   }
+
   create(todo) {
     return (
       <Todo
