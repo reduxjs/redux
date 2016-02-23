@@ -17,7 +17,7 @@ class Reddit extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit, params } = this.props
+    const { dispatch, params } = this.props
     if (params.id) {
       dispatch(selectReddit(params.id))
       dispatch(fetchPostsIfNeeded(params.id))
@@ -33,7 +33,7 @@ class Reddit extends Component {
         dispatch(fetchPostsIfNeeded(nextProps.params.id))
       }
     }
-    
+
   }
 
   handleChange(nextReddit) {
