@@ -8,7 +8,7 @@ type State = {
   todos: string[];
 }
 
-const reducer: Reducer<State> = (state: State, action: Action<any>): State => {
+const reducer: Reducer<State> = (state: State, action: Action): State => {
   return state;
 }
 
@@ -54,8 +54,7 @@ unsubscribe();
 
 /* replaceReducer */
 
-const newReducer: Reducer<State> = (state: State,
-                                    action: Action<any>): State => {
+const newReducer: Reducer<State> = (state: State, action: Action): State => {
   return state;
 }
 

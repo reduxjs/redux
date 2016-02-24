@@ -6,13 +6,13 @@ import {
 
 type TodosState = string[];
 
-interface AddTodoAction extends Action<any> {
+interface AddTodoAction extends Action {
   text: string;
 }
 
 
 const todosReducer: Reducer<TodosState> = (state: TodosState,
-                                           action: Action<any>): TodosState => {
+                                           action: Action): TodosState => {
   switch (action.type) {
     case 'ADD_TODO':
       return [...state, (<AddTodoAction>action).text]
@@ -30,7 +30,9 @@ const todosState: TodosState = todosReducer([], {
 type CounterState = number;
 
 
-const counterReducer: Reducer<CounterState> = (state: CounterState, action: Action<any>): CounterState => {
+const counterReducer: Reducer<CounterState> = (
+  state: CounterState, action: Action
+): CounterState => {
   switch (action.type) {
     case 'INCREMENT':
       return state + 1
@@ -55,16 +57,3 @@ const rootState: RootState = rootReducer(undefined, {
   type: 'ADD_TODO',
   text: 'test',
 })
-
-
-interface RootReducers extends ReducersMapObject {
-  todos: Reducer<TodosState>;
-  counter: Reducer<CounterState>;
-}
-
-
-const rootReducerStrict: Reducer<RootState> =
-  combineReducers<RootState, RootReducers>({
-    todos: todosReducer,
-    counter: counterReducer,
-  })

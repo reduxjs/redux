@@ -2,7 +2,7 @@ import {Action as ReduxAction} from "../../index.d.ts";
 
 
 namespace FSA {
-  interface Action<P> extends ReduxAction<string> {
+  interface Action<P> extends ReduxAction {
     payload: P;
   }
 
@@ -16,7 +16,7 @@ namespace FSA {
 
 
 namespace FreeShapeAction {
-  interface Action extends ReduxAction<string> {
+  interface Action extends ReduxAction {
     [key: string]: any;
   }
 
@@ -32,7 +32,11 @@ namespace FreeShapeAction {
 namespace StringLiteralTypeAction {
   type ActionType = 'A' | 'B' | 'C';
 
-  const action: ReduxAction<ActionType> = {
+  interface Action extends ReduxAction {
+    type: ActionType;
+  }
+
+  const action: Action = {
     type: 'A'
   }
 
@@ -45,7 +49,11 @@ namespace EnumTypeAction {
     A, B, C
   }
 
-  const action: ReduxAction<ActionType> = {
+  interface Action extends ReduxAction {
+    type: ActionType;
+  }
+
+  const action: Action = {
     type: ActionType.A
   }
 

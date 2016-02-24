@@ -18,5 +18,5 @@ const t4: (a: string) => number = compose(
 const t5: number = compose(stringToNumber, numberToString, numberToNumber)(5);
 const t6: string = compose(numberToString, stringToNumber, numberToString, numberToNumber)(5);
 
-const t7: string = compose<string, string>(
+const t7: string = compose<string>(
   numberToString, numberToNumber, stringToNumber, numberToString, stringToNumber)("fo");

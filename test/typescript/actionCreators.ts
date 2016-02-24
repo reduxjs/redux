@@ -4,7 +4,7 @@ import {
 } from "../../index.d.ts";
 
 
-interface AddTodoAction extends Action<string> {
+interface AddTodoAction extends Action {
   text: string;
 }
 
