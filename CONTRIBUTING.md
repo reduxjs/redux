@@ -4,7 +4,9 @@ We are open to, and grateful for, any contributions made by the community.  By c
 ## Reporting Issues and Asking Questions
 Before opening an issue, please search the [issue tracker](https://github.com/reactjs/redux/issues) to make sure your issue hasn't already been reported.
 
-Please ask any general and implementation specific questions on [Stack Overflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) for support.
+For support or general "how do I do X with Redux"-type usage/implementation questions, please ask on [Stack Overflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50).
+
+GitHub issues are not just for reporting Redux bugs. We encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc.
 
 ## Development
 
