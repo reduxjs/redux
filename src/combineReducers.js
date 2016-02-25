@@ -126,7 +126,7 @@ export default function combineReducers(reducers) {
       var key = finalReducerKeys[i]
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
-      var nextStateForKey = reducer(previousStateForKey, action)
+      var nextStateForKey = reducer(previousStateForKey, action, nextState)
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
