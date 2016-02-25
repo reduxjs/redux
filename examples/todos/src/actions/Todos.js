@@ -1,4 +1,4 @@
-import { store } from './index'
+import { store } from '../reducers'
 
 class Todos {
   constructor(store) {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-export class TodoList extends Component {
+export default class TodoList extends Component {
   render() {
     return (
       <ul>

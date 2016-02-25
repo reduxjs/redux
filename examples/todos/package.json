@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register --require ./test/setup.js",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "test-browser": "karma start"
   },
   "repository": {
     "type": "git",
@@ -33,13 +34,27 @@
     "babel-preset-react-hmre": "^1.0.1",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.3.13",
+    "chai": "^3.5.0",
     "cross-env": "^1.0.7",
     "expect": "^1.8.0",
     "express": "^4.13.3",
+    "istanbul-instrumenter-loader": "^0.2.0",
     "jsdom": "^5.6.1",
+    "karma": "^0.13.21",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-mocha": "^0.2.2",
+    "karma-sinon": "^1.0.4",
+    "karma-sinon-chai": "^1.2.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.24",
+    "karma-webpack": "^1.7.0",
+    "lolex": "^1.4.0",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "react-addons-test-utils": "^0.14.7",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.2.0"

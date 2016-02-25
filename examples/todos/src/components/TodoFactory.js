@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import Todo from './Todo'
 
 @autobind
-export class TodoFactory {
+export default class TodoFactory {
   constructor(onTodoClick) {
     this._onTodoClick = onTodoClick
   }

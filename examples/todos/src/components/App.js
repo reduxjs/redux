@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Footer} from './Footer'
-import AddTodo from './AddTodo'
-import { actions, store } from '../actions'
-import { todos } from "../actions/Todos"
-import { Link } from './Link'
-import {TodoList} from './TodoList'
-import {TodoFactory} from './TodoFactory'
 import autobind from 'autobind-decorator'
+import Footer from './Footer'
+import AddTodo from './AddTodo'
+import { actions } from '../actions'
+import { todos } from "../actions/Todos"
+import Link from './Link'
+import TodoList from './TodoList'
+import TodoFactory from './TodoFactory'
 
 @autobind
 class App extends Component {
@@ -47,7 +47,7 @@ class App extends Component {
 
   _linkProps(filter) {
     return {
-      shouldActive: filter === store.visibilityFilter,
+      active: filter === this.props.visibilityFilter,
       onLinkClick: () => actions.setVisibilityFilter(filter)
     }
   }
@@ -55,6 +55,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    visibilityFilter: state.visibilityFilter,
     visibleTodos: todos.visibleOnes()
   }
 }

@@ -2,10 +2,10 @@ import React, { PropTypes, Component } from 'react'
 import autobind from 'autobind-decorator'
 
 @autobind
-export class Link extends Component {
+export default class Link extends Component {
   render() {
-    if (this.props.shouldActive) {
-      return <span>{children}</span>
+    if (this.props.active) {
+      return <span>{this.props.children}</span>
     }
 
     return (
@@ -22,7 +22,7 @@ export class Link extends Component {
 }
 
 Link.propTypes = {
-  shouldActive: PropTypes.bool.isRequired,
+  active: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
   onLinkClick: PropTypes.func.isRequired
 }
