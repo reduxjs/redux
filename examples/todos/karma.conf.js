@@ -24,20 +24,15 @@ module.exports = function(config) {
       devtool: 'inline-source-map',
       module: {
 
-        loaders: [
-          {
+        loaders: [{
           test: /\.(js|jsx)$/, exclude: /(bower_components|node_modules)/,
           //loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-0,plugins[]=transform-runtime,plugins[]=transform-decorators-legacy'
           loader: 'babel',
-        },
-        {
-          test: /sinon\.js$/,
-          loader: 'imports?define=>false,require=>false'
-        }],
+        }]/*,
         postLoaders: [{
           test: /\.(js|jsx)$/, exclude: /(node_modules|bower_components|tests)/,
           loader: 'istanbul-instrumenter'
-        }]
+        }]*/
       }
     },
     resolve: {
