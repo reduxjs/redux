@@ -11,7 +11,7 @@ module.exports = function(config) {
     preprocessors: {
       'tests.webpack.js': [ 'webpack', 'sourcemap' ]
     },
-    reporters: [ 'progress', 'spec', 'coverage' ],
+    reporters: [ 'mocha', 'coverage' ],
     coverageReporter: {
       dir: 'build/reports/coverage',
       reporters: [

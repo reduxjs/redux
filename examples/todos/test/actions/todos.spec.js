@@ -46,6 +46,7 @@ describe('todo actions', () => {
     constructor() {
       this.dispatchTimes = 0
     }
+
     dispatch(obj) {
       this.lastDispatched = obj
       this.dispatchTimes++
