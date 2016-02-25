@@ -24,7 +24,7 @@ export default function applyMiddleware(...middlewares) {
 
     var middlewareAPI = {
       getState: store.getState,
-      dispatch: (action) => dispatch(action)
+      dispatch: (action) => store.dispatch(action)
     }
     chain = middlewares.map(middleware => middleware(middlewareAPI))
     dispatch = compose(...chain)(store.dispatch)
