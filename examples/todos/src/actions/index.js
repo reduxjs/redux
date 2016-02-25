@@ -1,7 +1,9 @@
 import { store } from '../reducers'
+import autobind from 'autobind-decorator'
 
 let nextTodoId = 0
 
+@autobind
 export default class Actions {
   constructor(store) {
     this._store = store

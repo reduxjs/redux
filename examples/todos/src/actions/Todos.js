@@ -1,5 +1,7 @@
 import { store } from '../reducers'
+import autobind from 'autobind-decorator'
 
+@autobind
 class Todos {
   constructor(store) {
     this._store = store
