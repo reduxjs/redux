@@ -8,7 +8,7 @@ export default class Actions {
   }
 
   addTodo(text) {
-    store.dispatch({
+    this._store.dispatch({
       type: 'ADD_TODO',
       id: nextTodoId++,
       text
@@ -16,14 +16,14 @@ export default class Actions {
   }
 
   setVisibilityFilter(filter) {
-    store.dispatch({
+    this._store.dispatch({
       type: 'SET_VISIBILITY_FILTER',
       filter
     })
   }
 
   toggleTodo(id) {
-    store.dispatch({
+    this._store.dispatch({
       type: 'TOGGLE_TODO',
       id
     })
