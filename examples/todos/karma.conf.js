@@ -1,6 +1,7 @@
 // Karma configuration
 // Generated on Thu Feb 25 2016 15:03:11 GMT+1100 (AEDT)
 var webpack = require('karma-webpack')
+var path = require('path')
 
 module.exports = function(config) {
   config.set({
@@ -28,18 +29,23 @@ module.exports = function(config) {
           test: /\.(js|jsx)$/, exclude: /(bower_components|node_modules)/,
           //loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-0,plugins[]=transform-runtime,plugins[]=transform-decorators-legacy'
           loader: 'babel',
+        },
+        {
+          test: /\.(js|jsx)$/,
+          include: path.resolve('src/'),
+          loader: 'isparta'
         }]/*,
         postLoaders: [{
           test: /\.(js|jsx)$/, exclude: /(node_modules|bower_components|tests)/,
           loader: 'istanbul-instrumenter'
         }]*/
       }
-    },
+    }/*,
     resolve: {
       alias: {
         'sinon': 'sinon/pkg/sinon'
       }
-    },
+    }*/,
     webpackMiddleware: { noInfo: true },
 
     // base path that will be used to resolve all patterns (eg. files, exclude)

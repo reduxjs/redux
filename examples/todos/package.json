@@ -38,6 +38,7 @@
     "cross-env": "^1.0.7",
     "expect": "^1.8.0",
     "express": "^4.13.3",
+    "isparta-loader": "^2.0.0",
     "istanbul-instrumenter-loader": "^0.2.0",
     "jsdom": "^5.6.1",
     "karma": "^0.13.21",
