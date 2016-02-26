@@ -4,6 +4,7 @@
   "description": "Predictable state container for JavaScript apps",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
+  "typings": "./index.d.ts",
   "files": [
     "dist",
     "lib",
@@ -99,6 +100,8 @@
     "isparta": "^4.0.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
+    "typescript": "^1.8.0",
+    "typescript-definition-tester": "0.0.4",
     "webpack": "^1.9.6"
   },
   "npmName": "redux",
