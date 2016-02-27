@@ -36,7 +36,7 @@
     "babel-register": "^6.3.13",
     "chai": "^3.5.0",
     "cross-env": "^1.0.7",
-    "expect": "^1.8.0",
+    "expect": "^1.14.0",
     "express": "^4.13.3",
     "isparta-loader": "^2.0.0",
     "istanbul-instrumenter-loader": "^0.2.0",

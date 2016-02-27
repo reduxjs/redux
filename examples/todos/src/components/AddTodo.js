@@ -8,7 +8,7 @@ export default class AddTodo extends Component {
       <div>
         <form onSubmit={this._onSubmit}>
           <input ref={node => {
-            this.input = node
+            this._input = node
           }} />
           <button type="submit">
             Add Todo
@@ -20,11 +20,12 @@ export default class AddTodo extends Component {
   
   _onSubmit(e) {
     e.preventDefault()
-    if (!this.input.value.trim()) {
+    const value = this._input.value.trim()
+    if (!value) {
       return
     }
-    this.props.onAddTodo(this.input.value)
-    this.input.value = ''
+    this._input.value = ''
+    this.props.onAddTodo(value)
   }
 }
 
