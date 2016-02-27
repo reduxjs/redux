@@ -109,7 +109,7 @@ This is all we need to know for now. The particular mechanism to dispatch these 
 
 >##### Note on Error Handling
 
->In a real app, you’d also want to dispatch an action on request failure. We won’t implement error handling in this tutorial, but the [real world example](../introduction/Examples.html#real-world) shows one of the possible approaches.
+>In a real app, you’d also want to dispatch an action on request failure. We won’t implement error handling in this tutorial, but the [real world example](../introduction/Examples.md#real-world) shows one of the possible approaches.
 
 ## Designing the State Shape
 
@@ -138,7 +138,7 @@ Here’s what the state shape for our “Reddit headlines” app might look like
         {
           id: 42,
           title: 'Confusion about Flux and Relay'
-        }, 
+        },
         {
           id: 500,
           title: 'Creating a Simple Application Using React JS and Flux Architecture'
@@ -159,7 +159,7 @@ There are a few important bits here:
 
 >In this example, we store the received items together with the pagination information. However, this approach won’t work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
 
->If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.html#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
+>If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.md#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
 
 >```js
 > {
@@ -292,7 +292,7 @@ In this code, there are two interesting parts:
   nextState[action.subreddit] = posts(state[action.subreddit], action)
   return Object.assign({}, state, nextState)
   ```
-* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.html#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
+* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.md#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
 
 Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
 
@@ -381,10 +381,10 @@ export function fetchPosts(subreddit) {
 
 >```js
 >// Do this once before any other code in your app
->import 'babel-core/polyfill'
+>import 'babel-polyfill'
 >```
 
-How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
+How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) store enhancer from Redux, as shown below:
 
 #### `index.js`
 
@@ -397,12 +397,13 @@ import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
-)(createStore)
-
-const store = createStoreWithMiddleware(rootReducer)
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+    loggerMiddleware // neat middleware that logs actions
+  )
+)
 
 store.dispatch(selectSubreddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>
@@ -489,7 +490,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 >Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.
 
-[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.html#real-world) does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
+[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.md#real-world) does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
 
 ## Connecting to UI
 

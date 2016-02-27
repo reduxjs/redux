@@ -23,6 +23,7 @@
   * Next Steps
 * [Recipes](/docs/recipes/README.md)
   * [Migrating to Redux](/docs/recipes/MigratingToRedux.md)
+  * [Using Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
   * [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
   * [Server Rendering](/docs/recipes/ServerRendering.md)
   * [Writing Tests](/docs/recipes/WritingTests.md)

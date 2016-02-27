@@ -1,16 +1,29 @@
 # Examples
 
-Redux is distributed with a few examples in its [source code](https://github.com/rackt/redux/tree/master/examples).
+Redux is distributed with a few examples in its [source code](https://github.com/reactjs/redux/tree/master/examples).
 
 >##### Note on Copying
 >If you copy Redux examples outside their folders, you can delete some lines at the end of their `webpack.config.js` files. They follow a “You can safely delete these lines in your project.” comment.
 
-## Counter
+## Counter Vanilla
 
-Run the [Counter](https://github.com/rackt/redux/tree/master/examples/counter) example:
+Run the [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/counter-vanilla
+open index.html
+```
+
+It does not require a build system or a view framework and exists to show the raw Redux API used with ES5.
+
+## Counter
+
+Run the [Counter](https://github.com/reactjs/redux/tree/master/examples/counter) example:
+
+```
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/counter
 npm install
@@ -19,37 +32,34 @@ npm start
 open http://localhost:3000/
 ```
 
-It covers:
+This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/reactjs/react-redux) bindings instead.
 
-* Basic Redux flow
-* Testing
+This example includes tests.
 
-## TodoMVC
+## Todos
 
-Run the [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc) example:
+Run the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
-cd redux/examples/todomvc
+cd redux/examples/todos
 npm install
 npm start
 
 open http://localhost:3000/
 ```
 
-It covers:
+This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how reducers can delegate handling actions to other reducers, and how you can use [React Redux](https://github.com/reactjs/react-redux) to generate container components from your presentational components.
 
-* Redux flow with two reducers
-* Updating nested data
-* Testing
+This example includes tests.
 
 ## Todos with Undo
 
-Run the [todos-with-undo](https://github.com/rackt/redux/tree/master/examples/todos-with-undo) example:
+Run the [Todos with Undo](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todos-with-undo
 npm install
@@ -58,80 +68,32 @@ npm start
 open http://localhost:3000/
 ```
 
-It covers:
+This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your reducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
 
-* Redux flow with two reducers
-* Undo/Redo functionality in Redux with [redux-undo](https://github.com/omnidan/redux-undo)
+## TodoMVC
 
-## Async
-
-Run the [Async](https://github.com/rackt/redux/tree/master/examples/async) example:
+Run the [TodoMVC](https://github.com/reactjs/redux/tree/master/examples/todomvc) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
-cd redux/examples/async
+cd redux/examples/todomvc
 npm install
 npm start
 
 open http://localhost:3000/
 ```
 
-It covers:
+This is the classical [TodoMVC](http://todomvc.com/) example. It’s here for the sake of comparison, but it covers the same points as the Todos example.
 
-* Basic async Redux flow with [redux-thunk](https://github.com/gaearon/redux-thunk)
-* Caching responses and showing a spinner while data is fetching
-* Invalidating the cached data
-
-## Universal
-
-Run the [Universal](https://github.com/rackt/redux/tree/master/examples/universal) example:
-
-```
-git clone https://github.com/rackt/redux.git
-
-cd redux/examples/universal
-npm install
-npm start
-
-open http://localhost:3000/
-```
-
-It covers:
-
-* [Universal rendering](../recipes/ServerRendering.md) with Redux and React
-* Prefetching state based on input and via asynchronous fetches.
-* Passing state from the server to the client
-
-## Real World
-
-Run the [Real World](https://github.com/rackt/redux/tree/master/examples/real-world) example:
-
-```
-git clone https://github.com/rackt/redux.git
-
-cd redux/examples/real-world
-npm install
-npm start
-
-open http://localhost:3000/
-```
-
-It covers:
-
-* Real-world async Redux flow
-* Keeping entities in a normalized entity cache
-* A custom middleware for API calls
-* Caching responses and showing a spinner while data is fetching
-* Pagination
-* Routing
+This example includes tests.
 
 ## Shopping Cart
 
-Run the [Shopping Cart](https://github.com/rackt/redux/tree/master/examples/shopping-cart) example:
+Run the [Shopping Cart](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) example:
 
 ```
-git clone https://github.com/rackt/redux.git
+git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/shopping-cart
 npm install
@@ -140,18 +102,73 @@ npm start
 open http://localhost:3000/
 ```
 
-This is an example of idiomatic Redux development patterns.
+This example shows important idiomatic Redux patterns that become important as your app grows. In particular, it shows how to store entities in a normalized way by their IDs, how to compose reducers on several levels, and how to define selectors alongside the reducers so the knowledge about the state shape is encapsulated. It also demonstrates logging with [Redux Logger](https://github.com/fcomb/redux-logger) and conditional dispatching of actions with [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware.
 
-It covers:
+## Tree View
 
-* Normalized state
-* Explicit entity ID tracking
-* Reducer composition
-* Queries defined alongside reducers
-* Example of rollback on failure
-* Safe conditional action dispatching
-* Using only [React Redux](https://github.com/rackt/react-redux) to bind action creators 
-* Conditional middleware (logging example)
+Run the [Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view) example:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/tree-view
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from reducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
+
+This example includes tests.
+
+## Async
+
+Run the [Async](https://github.com/reactjs/redux/tree/master/examples/async) example:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/async
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware to encapsulate asynchronous side effects.
+
+## Universal
+
+Run the [Universal](https://github.com/reactjs/redux/tree/master/examples/universal) example:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/universal
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+This is a basic demonstration of [server rendering](../recipes/ServerRendering.md) with Redux and React. It shows how to prepare the initial store state on the server, and pass it down to the client so the client store can boot up from an existing state.
+
+## Real World
+
+Run the [Real World](https://github.com/reactjs/redux/tree/master/examples/real-world) example:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/real-world
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+This is the most advanced example. It is dense by design. It covers keeping fetched entities in a normalized cache, implementing a custom middleware for API calls, rendering partially loaded data, pagination, caching responses, displaying error messages, and routing. Additionally, it includes Redux DevTools.
 
 ## More Examples
 

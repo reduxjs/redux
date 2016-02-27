@@ -25,26 +25,7 @@ module.exports = {
         exclude: /node_modules/,
         include: __dirname,
         query: {
-          optional: [ 'runtime' ],
-          stage: 2,
-          env: {
-            development: {
-              plugins: [
-                'react-transform'
-              ],
-              extra: {
-                'react-transform': {
-                  transforms: [
-                    {
-                      transform:  'react-transform-hmr',
-                      imports: [ 'react' ],
-                      locals:  [ 'module' ]
-                    }
-                  ]
-                }
-              }
-            }
-          }
+          presets: [ 'react-hmre' ]
         }
       }
     ]
@@ -59,10 +40,12 @@ var fs = require('fs')
 if (fs.existsSync(reduxSrc) && fs.existsSync(reduxNodeModules)) {
   // Resolve Redux to source
   module.exports.resolve = { alias: { 'redux': reduxSrc } }
+  // Our root .babelrc needs this flag for CommonJS output
+  process.env.BABEL_ENV = 'commonjs'
   // Compile Redux from source
   module.exports.module.loaders.push({
     test: /\.js$/,
     loaders: [ 'babel' ],
-    include: reduxSrc
+    include: reduxSrc,
   })
 }

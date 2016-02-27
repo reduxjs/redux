@@ -25,10 +25,9 @@ function quantityById(state = initialState.quantityById, action) {
   switch (action.type) {
     case ADD_TO_CART:
       const { productId } = action
-      return {
-        ...state,
+      return Object.assign({}, state, {
         [productId]: (state[productId] || 0) + 1
-      }
+      })
     default:
       return state
   }

@@ -13,7 +13,7 @@ It is also possible to do the reverse and migrate from Redux to any of these lib
 
 Your process will look like this:
 
-* Create a function called `createFluxStore(reducer)` that creates a Flux store compatible with your existing app from a reducer function. Internally it might look similar to [`createStore`](../api/createStore.md) ([source](https://github.com/rackt/redux/blob/master/src/createStore.js)) implementation from Redux. Its dispatch handler should just call the `reducer` for any action, store the next state, and emit change.
+* Create a function called `createFluxStore(reducer)` that creates a Flux store compatible with your existing app from a reducer function. Internally it might look similar to [`createStore`](../api/createStore.md) ([source](https://github.com/reactjs/redux/blob/master/src/createStore.js)) implementation from Redux. Its dispatch handler should just call the `reducer` for any action, store the next state, and emit change.
 
 * This allows you to gradually rewrite every Flux Store in your app as a reducer, but still export `createFluxStore(reducer)` so the rest of your app is not aware that this is happening and sees the Flux stores.
 
@@ -27,4 +27,4 @@ Your process will look like this:
 
 ## From Backbone
 
-Backbone’s model layer is quite different from Redux, so we don’t suggest to mix them. If possible, it is best that you rewrite your app’s model layer from scratch instead of connecting Backbone to Redux. However, if a rewrite is not feasible, you may use [backbone-redux](https://github.com/redbooth/backbone-redux) to migrate gradually, and keep the Redux store in sync with Backbone models and collections.
+Backbone’s model layer is quite different from Redux, so we don’t suggest mixing them. If possible, it is best that you rewrite your app’s model layer from scratch instead of connecting Backbone to Redux. However, if a rewrite is not feasible, you may use [backbone-redux](https://github.com/redbooth/backbone-redux) to migrate gradually, and keep the Redux store in sync with Backbone models and collections.

@@ -82,7 +82,13 @@ store.dispatch(addTodo('Read about the middleware'))
 
 Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
 
-It is a low-level API. Most likely, instead of using it directly, you’ll use React (or other) bindings. If you feel that the callback needs to be invoked with the current state, you might want to [convert the store to an Observable or write a custom `observeStore` utility instead](https://github.com/rackt/redux/issues/303#issuecomment-125184409).
+You may call [`dispatch()`](#dispatch) from a change listener, with the following caveats:
+
+1. The subscriptions are snapshotted just before every [`dispatch()`](#dispatch) call. If you subscribe or unsubscribe while the listeners are being invoked, this will not have any effect on the [`dispatch()`](#dispatch) that is currently in progress. However, the next [`dispatch()`](#dispatch) call, whether nested or not, will use a more recent snapshot of the subscription list.
+
+2. The listener should not expect to see all state changes, as the state might have been updated multiple times during a nested [`dispatch()`](#dispatch) before the listener is called. It is, however, guaranteed that all subscribers registered before the [`dispatch()`](#dispatch) started will be called with the latest state by the time it exits.
+
+It is a low-level API. Most likely, instead of using it directly, you’ll use React (or other) bindings. If you feel that the callback needs to be invoked with the current state, you might want to [convert the store to an Observable or write a custom `observeStore` utility instead](https://github.com/reactjs/redux/issues/303#issuecomment-125184409).
 
 To unsubscribe the change listener, invoke the function returned by `subscribe`.
 

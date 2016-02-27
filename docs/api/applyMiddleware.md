@@ -14,7 +14,7 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 
 #### Returns
 
-(*Function*) A store enhancer that applies the given middleware. The store enhancer is a function that needs to be applied to `createStore`. It will return a different `createStore` which has the middleware enabled.
+(*Function*) A store enhancer that applies the given middleware. The store enhancer signature is `createStore => createStore'` but the easiest way to apply it is to pass it to [`createStore()`](./createStore.md) as the last `enhancer` argument.
 
 #### Example: Custom Logger Middleware
 
@@ -37,8 +37,11 @@ function logger({ getState }) {
   }
 }
 
-let createStoreWithMiddleware = applyMiddleware(logger)(createStore)
-let store = createStoreWithMiddleware(todos, [ 'Use Redux' ])
+let store = createStore(
+  todos,
+  [ 'Use Redux' ],
+  applyMiddleware(logger)
+)
 
 store.dispatch({
   type: 'ADD_TODO',
@@ -56,12 +59,9 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 
-// applyMiddleware supercharges createStore with middleware:
-let createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
-
-// We can use it exactly like “vanilla” createStore.
 let reducer = combineReducers(reducers)
-let store = createStoreWithMiddleware(reducer)
+// applyMiddleware supercharges createStore with middleware:
+let store = createStore(reducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')
@@ -229,7 +229,12 @@ export default connect(
     let d = require('another-debug-middleware');
     middleware = [ ...middleware, c, d ];
   }
-  const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
+
+  const store = createStore(
+    reducer,
+    initialState,
+    applyMiddleware(...middleware)
+  )
   ```
 
   This makes it easier for bundling tools to cut out unneeded modules and reduces the size of your builds.
@@ -237,3 +242,5 @@ export default connect(
 * Ever wondered what `applyMiddleware` itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, `applyMiddleware` is an example of the most powerful Redux extension mechanism called [store enhancers](../Glossary.md#store-enhancer). It is highly unlikely you’ll ever want to write a store enhancer yourself. Another example of a store enhancer is [redux-devtools](https://github.com/gaearon/redux-devtools). Middleware is less powerful than a store enhancer, but it is easier to write.
 
 * Middleware sounds much more complicated than it really is. The only way to really understand middleware is to see how the existing middleware works, and try to write your own. The function nesting can be intimidating, but most of the middleware you’ll find are, in fact, 10-liners, and the nesting and composability is what makes the middleware system powerful.
+
+* To apply multiple store enhancers, you may use [`compose()`](./compose.md).

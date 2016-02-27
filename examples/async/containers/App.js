@@ -37,6 +37,7 @@ class App extends Component {
 
   render() {
     const { selectedReddit, posts, isFetching, lastUpdated } = this.props
+    const isEmpty = posts.length === 0
     return (
       <div>
         <Picker value={selectedReddit}
@@ -56,16 +57,11 @@ class App extends Component {
             </a>
           }
         </p>
-        {isFetching && posts.length === 0 &&
-          <h2>Loading...</h2>
-        }
-        {!isFetching && posts.length === 0 &&
-          <h2>Empty.</h2>
-        }
-        {posts.length > 0 &&
-          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <Posts posts={posts} />
-          </div>
+        {isEmpty
+          ? (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>)
+          : <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+              <Posts posts={posts} />
+            </div>
         }
       </div>
     )

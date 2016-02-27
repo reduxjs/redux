@@ -4,7 +4,7 @@ import { loadUser, loadStarred } from '../actions'
 import User from '../components/User'
 import Repo from '../components/Repo'
 import List from '../components/List'
-import zip from 'lodash/array/zip'
+import zip from 'lodash/zip'
 
 function loadData(props) {
   const { login } = props
@@ -72,8 +72,8 @@ UserPage.propTypes = {
   loadStarred: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
-  const { login } = state.router.params
+function mapStateToProps(state, ownProps) {
+  const { login } = ownProps.params
   const {
     pagination: { starredByUser },
     entities: { users, repos }

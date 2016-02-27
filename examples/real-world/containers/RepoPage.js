@@ -72,8 +72,8 @@ RepoPage.propTypes = {
   loadStargazers: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
-  const { login, name } = state.router.params
+function mapStateToProps(state, ownProps) {
+  const { login, name } = ownProps.params
   const {
     pagination: { stargazersByRepo },
     entities: { users, repos }

@@ -7,7 +7,7 @@ You might want to use it to apply several [store enhancers](../Glossary.md#store
 
 #### Arguments
 
-1. (*arguments*): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on.
+1. (*arguments*): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on. The exception is the right-most argument which can accept multiple parameters, as it will provide the signature for the resulting composed function.
 
 #### Returns
 
@@ -20,40 +20,16 @@ This example demonstrates how to use `compose` to enhance a [store](Store.md) wi
 ```js
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import * as reducers from '../reducers/index'
+import DevTools from './containers/DevTools'
+import reducer from '../reducers/index'
 
-let reducer = combineReducers(reducers)
-let middleware = [ thunk ]
-
-let finalCreateStore
-
-// In production, we want to use just the middleware.
-// In development, we want to use some store enhancers from redux-devtools.
-// UglifyJS will eliminate the dead code depending on the build environment.
-
-if (process.env.NODE_ENV === 'production') {
-  finalCreateStore = applyMiddleware(...middleware)(createStore)
-} else {
-  finalCreateStore = compose(
-    applyMiddleware(...middleware),
-    require('redux-devtools').devTools(),
-    require('redux-devtools').persistState(
-      window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-    )
-  )(createStore)
-
-  // Same code without the `compose` helper:
-  //
-  // finalCreateStore = applyMiddleware(middleware)(
-  //   require('redux-devtools').devTools()(
-  //     require('redux-devtools').persistState(
-  //       window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-  //     )(createStore)
-  //   )
-  // )
-}
-
-let store = finalCreateStore(reducer)
+const store = createStore(
+  reducer,
+  compose(
+    applyMiddleware(thunk),
+    DevTools.instrument()
+  )
+)
 ```
 
 #### Tips

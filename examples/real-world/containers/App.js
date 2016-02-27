@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { pushState } from 'redux-router'
+import { browserHistory } from 'react-router'
 import Explore from '../components/Explore'
 import { resetErrorMessage } from '../actions'
 
@@ -17,7 +17,7 @@ class App extends Component {
   }
 
   handleChange(nextValue) {
-    this.props.pushState(null, `/${nextValue}`)
+    browserHistory.push(`/${nextValue}`)
   }
 
   renderErrorMessage() {
@@ -56,20 +56,18 @@ App.propTypes = {
   // Injected by React Redux
   errorMessage: PropTypes.string,
   resetErrorMessage: PropTypes.func.isRequired,
-  pushState: PropTypes.func.isRequired,
   inputValue: PropTypes.string.isRequired,
   // Injected by React Router
   children: PropTypes.node
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     errorMessage: state.errorMessage,
-    inputValue: state.router.location.pathname.substring(1)
+    inputValue: ownProps.location.pathname.substring(1)
   }
 }
 
 export default connect(mapStateToProps, {
-  resetErrorMessage,
-  pushState
+  resetErrorMessage
 })(App)

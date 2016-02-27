@@ -4,10 +4,9 @@ import { RECEIVE_PRODUCTS, ADD_TO_CART } from '../constants/ActionTypes'
 function products(state, action) {
   switch (action.type) {
     case ADD_TO_CART:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         inventory: state.inventory - 1
-      }
+      })
     default:
       return state
   }
@@ -16,20 +15,19 @@ function products(state, action) {
 function byId(state = {}, action) {
   switch (action.type) {
     case RECEIVE_PRODUCTS:
-      return {
-        ...state,
-        ...action.products.reduce((obj, product) => {
+      return Object.assign({},
+        state,
+        action.products.reduce((obj, product) => {
           obj[product.id] = product
           return obj
         }, {})
-      }
+      )
     default:
       const { productId } = action
       if (productId) {
-        return {
-          ...state,
+        return Object.assign({}, state, {
           [productId]: products(state[productId], action)
-        }
+        })
       }
       return state
   }

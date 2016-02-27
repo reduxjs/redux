@@ -14,8 +14,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Example Apps
 
+* [Official Examples](Examples.md) — A few official examples covering different Redux techniques
 * [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
-* [Shopping Cart (Flux Comparison)](https://github.com/voronianski/flux-comparison/tree/master/redux) — A shopping cart example from Flux Comparison
 
 ### Tutorials and Articles
 
@@ -26,8 +26,10 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container) — Learn the basic concepts of Redux
 * [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4) — A guide to creating a universal app with data fetching and routing
 * [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
+* [Secure Your React and Redux App with JWT Authentication](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/) — Learn how to add JWT authentication to your React and Redux app
 * [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a#.l033pyr02) — In-depth guide to implementing Redux middleware
-* [A Simple Way to Route with Redux](http://jlongster.com/A-Simple-Way-to-Route-with-Redux) — An introduction to Redux Simple Router
+* [Angular 2 — Introduction to Redux](https://medium.com/google-developer-experts/angular-2-introduction-to-redux-1cf18af27e6e) — An introduction to Redux fundamental concepts with an example in Angular 2
+* [Working with VK API (in Russian)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details) — A tutorial in Russian that demonstrates creating an app that consumes VK API
 
 ### Talks
 
@@ -59,12 +61,12 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Routing
 
-* [redux-simple-router](https://github.com/rackt/redux-simple-router) — Ruthlessly simple bindings to keep React Router and Redux in sync
-* [redux-router](https://github.com/acdlite/redux-router) — Redux bindings for React Router
+* [react-router-redux](https://github.com/reactjs/react-router-redux) — Ruthlessly simple bindings to keep React Router and Redux in sync
 
 ### Components
 
 * [redux-form](https://github.com/erikras/redux-form) — Keep React form state in Redux
+* [react-redux-form](https://github.com/davidkpiano/react-redux-form) — Create forms easily in React with Redux
 
 ### Enhancers
 
@@ -77,22 +79,35 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
 * [redux-search](https://github.com/treasure-data/redux-search) — Automatically index resources in a web worker and search them without blocking
 * [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store enhancers that synchronize Redux stores across Electron processes
+* [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
 
 ### Utilities
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
 * [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the reducers
 * [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
-* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators 
+* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
-* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
+* [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineReducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
 
-### Developer Tools
+### DevTools
 
 * [Redux DevTools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
 * [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) — A Chrome extension wrapping Redux DevTools and providing additional functionality
+
+### DevTools Monitors
+
+* [Log Monitor](https://github.com/gaearon/redux-devtools-log-monitor) — The default monitor for Redux DevTools with a tree view
+* [Dock Monitor](https://github.com/gaearon/redux-devtools-dock-monitor) — A resizable and movable dock for Redux DevTools monitors
+* [Slider Monitor](https://github.com/calesce/redux-slider-monitor) — A custom monitor for Redux DevTools to replay recorded Redux actions
+* [Inspector](https://github.com/alexkuz/redux-devtools-inspector) — A custom monitor for Redux DevTools that lets you filter actions, inspect diffs, and pin deep paths in the state to observe their changes
+* [Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor) — A monitor for Redux Devtools that diffs the Redux store mutations between actions
+* [Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/) — Filterable tree view monitor for Redux DevTools
+* [Chart Monitor](https://github.com/romseguy/redux-devtools-chart-monitor) — A chart monitor for Redux DevTools
+* [Filter Actions](https://github.com/zalmoxisus/redux-devtools-filter-actions) — Redux DevTools composable monitor with the ability to filter actions
+
 
 ### Community Conventions
 
@@ -108,4 +123,5 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ## More
 
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
+[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.  
+[React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES6, and more.

@@ -236,7 +236,7 @@ function undoable(state = initialState, action) {
       return state
   }
 }
-````
+```
 
 This implementation isn’t usable because it leaves out three important questions:
 
@@ -364,7 +364,7 @@ You might have heard that Redux was influenced by [Elm Architecture](https://git
 
 This was all very informative, but can’t we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
 
-In this part of the recipe, you will learn how to make the [Todo List example](http://rackt.github.io/redux/docs/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/rackt/redux/tree/master/examples/todos-with-undo).
+In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/docs/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo).
 
 ### Installation
 
@@ -378,22 +378,44 @@ This installs the package that provides the `undoable` reducer enhancer.
 
 ### Wrapping the Reducer
 
-You will need to wrap the reducer you wish to enhance with `undoable` function. For example, if you use [`combineReducers()`](../api/combineReducers.md), your code might look like this:
+You will need to wrap the reducer you wish to enhance with `undoable` function. For example, if you exported a `todos` reducer from a dedicated file, you will want to change it to export the result of calling `undoable()` with the reducer you wrote:
 
-#### `reducers.js`
+#### `reducers/todos.js`
 
 ```js
 import undoable, { distinctState } from 'redux-undo'
 
 /* ... */
 
-const todoApp = combineReducers({
-  visibilityFilter,
-  todos: undoable(todos, { filter: distinctState() })
+const todos = (state = [], action) => {
+  /* ... */
+}
+
+const undoableTodos = undoable(todos, {
+  filter: distinctState()
 })
+
+export default undoableTodos
 ```
 
 The `distinctState()` filter serves to ignore the actions that didn’t result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
+
+Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
+
+#### `reducers/index.js`
+
+```js
+import { combineReducers } from 'redux'
+import todos from './todos'
+import visibilityFilter from './visibilityFilter'
+
+const todoApp = combineReducers({
+  todos,
+  visibilityFilter
+})
+
+export default todoApp
+```
 
 You may wrap one or more reducers in `undoable` at any level of the reducer composition hierarchy. We choose to wrap `todos` instead of the top-level combined reducer so that changes to `visibilityFilter` are not reflected in the undo history.
 
@@ -421,30 +443,13 @@ Now the `todos` part of the state looks like this:
 This means you need to access your state with `state.todos.present` instead of
 just `state.todos`:
 
-#### `containers/App.js`
+#### `containers/VisibleTodoList.js`
 
 ```js
-function select(state) {
-  const presentTodos = state.todos.present
+const mapStateToProps = (state) => {
   return {
-    visibleTodos: selectTodos(presentTodos, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter
+    todos: getVisibleTodos(state.todos.present, state.visibilityFilter)
   }
-}
-```
-
-In order to disable the Undo and Redo buttons when there is nothing to undo or redo, you need to check whether the `past` and `future` arrays are empty:
-
-#### `containers/App.js`
-
-```js
-function select(state) {
-  return {
-    undoDisabled: state.todos.past.length === 0,
-    redoDisabled: state.todos.future.length === 0,
-    visibleTodos: selectTodos(state.todos.present, state.visibilityFilter),
-    visibilityFilter: state.visibilityFilter
-  };
 }
 ```
 
@@ -452,61 +457,82 @@ function select(state) {
 
 Now all you need to do is add the buttons for the Undo and Redo actions.
 
-First of all, you need to import `ActionCreators` from `redux-undo` and pass their bound versions to the `Footer` component:
+First, create a new container component called `UndoRedo` for these buttons. We won’t bother to split the presentational part into a separate file because it is very small:
 
-#### `containers/App.js`
+#### `containers/UndoRedo.js`
 
 ```js
-import { ActionCreators } from 'redux-undo'
+import React from 'react'
 
 /* ... */
 
-class App extends Component {
-  render() {
-    const { dispatch, visibleTodos, visibilityFilter } = this.props
-    return (
-      <div>
-        {/* ... */}
-        <Footer
-          filter={visibilityFilter}
-          onFilterChange={nextFilter => dispatch(setVisibilityFilter(nextFilter))}
-          onUndo={() => dispatch(ActionCreators.undo())}
-          onRedo={() => dispatch(ActionCreators.redo())}
-          undoDisabled={this.props.undoDisabled}
-          redoDisabled={this.props.redoDisabled} />
-      </div>
-    )
-  }
-}
+let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
+  <p>
+    <button onClick={onUndo} disabled={!canUndo}>
+      Undo
+    </button>
+    <button onClick={onRedo} disabled={!canRedo}>
+      Redo
+    </button>
+  </p>
+)
 ```
 
-Now you can render the buttons in the footer:
+You will use `connect()` from [React Redux](https://github.com/reactjs/react-redux) to generate a container component. To determine whether to enable Undo and Redo buttons, you can check `state.todos.past.length` and `state.todos.future.length`. You won’t need to write action creators for performing undo and redo because Redux Undo already provides them:
 
-#### `components/Footer.js`
+#### `containers/UndoRedo.js`
 
 ```js
-export default class Footer extends Component {
+/* ... */
 
-  /* ... */
+import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import { connect } from 'react-redux'
 
-  renderUndo() {
-    return (
-      <p>
-        <button onClick={this.props.onUndo} disabled={this.props.undoDisabled}>Undo</button>
-        <button onClick={this.props.onRedo} disabled={this.props.redoDisabled}>Redo</button>
-      </p>
-    )
-  }
+/* ... */
 
-  render() {
-    return (
-      <div>
-        {this.renderFilters()}
-        {this.renderUndo()}
-      </div>
-    )
+const mapStateToProps = (state) => {
+  return {
+    canUndo: state.todos.past.length > 0,
+    canRedo: state.todos.future.length > 0
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onUndo: () => dispatch(UndoActionCreators.undo()),
+    onRedo: () => dispatch(UndoActionCreators.redo())
+  }
+}
+
+UndoRedo = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UndoRedo)
+
+export default UndoRedo
 ```
 
-This is it! Run `npm install` and `npm start` in the [example folder](https://github.com/rackt/redux/tree/master/examples/todos-with-undo) and try it out!
+Now you can add `UndoRedo` component to the `App` component:
+
+#### `components/App.js`
+
+```js
+import React from 'react'
+import Footer from './Footer'
+import AddTodo from '../containers/AddTodo'
+import VisibleTodoList from '../containers/VisibleTodoList'
+import UndoRedo from '../containers/UndoRedo'
+
+const App = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+    <UndoRedo />
+  </div>
+)
+
+export default App
+```
+
+This is it! Run `npm install` and `npm start` in the [example folder](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) and try it out!

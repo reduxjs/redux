@@ -7,7 +7,7 @@ This is the complete source code of the Reddit headline fetching example we buil
 #### `index.js`
 
 ```js
-import 'babel-core/polyfill'
+import 'babel-polyfill'
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -170,13 +170,15 @@ import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  loggerMiddleware
-)(createStore)
-
 export default function configureStore(initialState) {
-  return createStoreWithMiddleware(rootReducer, initialState)
+  return createStore(
+    rootReducer,
+    initialState,
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware
+    )
+  )
 }
 ```
 
