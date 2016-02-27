@@ -11,18 +11,21 @@ describe('bindActionCreators', () => {
     store = createStore(todos)
     actionCreatorFunctions = { ...actionCreators }
     Object.keys(actionCreatorFunctions).forEach(key => {
-      if (typeof actionCreatorFunctions[key] !== 'function') {
+      if (typeof actionCreatorFunctions[key] !== 'function' &&
+          typeof actionCreatorFunctions[key] !== 'object') {
         delete actionCreatorFunctions[key]
       }
     })
   })
 
   it('wraps the action creators with the dispatch function', () => {
-    const boundActionCreators = bindActionCreators(actionCreators, store.dispatch)
+    const notNestedActionCreators = { ...actionCreatorFunctions }
+    delete notNestedActionCreators.nestedActions
+    const boundActionCreators = bindActionCreators(notNestedActionCreators, store.dispatch)
     expect(
       Object.keys(boundActionCreators)
     ).toEqual(
-      Object.keys(actionCreatorFunctions)
+      Object.keys(notNestedActionCreators)
     )
 
     const action = boundActionCreators.addTodo('Hello')
@@ -40,7 +43,6 @@ describe('bindActionCreators', () => {
       foo: 42,
       bar: 'baz',
       wow: undefined,
-      much: {},
       test: null
     }, store.dispatch)
     expect(
@@ -56,6 +58,22 @@ describe('bindActionCreators', () => {
 
     const action = boundActionCreator('Hello')
     expect(action).toEqual(actionCreator('Hello'))
+    expect(store.getState()).toEqual([
+      { id: 1, text: 'Hello' }
+    ])
+  })
+
+  it('supports a nested object of action creators', () => {
+    const boundActionCreators = bindActionCreators(actionCreators, store.dispatch)
+    const { nestedActions } = boundActionCreators
+
+    expect(nestedActions).toBeA('object')
+    expect(nestedActions.addTodo).toBeA('function')
+
+    const action = nestedActions.addTodo('Hello')
+    expect(action).toEqual(
+      actionCreators.nestedActions.addTodo('Hello')
+    )
     expect(store.getState()).toEqual([
       { id: 1, text: 'Hello' }
     ])
