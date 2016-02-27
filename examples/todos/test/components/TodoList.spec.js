@@ -22,10 +22,6 @@ describe('TodoList', () => {
 
     const result = renderer.getRenderOutput()
     expect(result.props.children).to.have.lengthOf(todos.length)
-    /*
-    const expected = <ul><li>1</li>, <li>2</li>, <li>3</li></ul>
-    expect(result).to.equal(expected)
-    */
   })
 
   function todo(id) {
