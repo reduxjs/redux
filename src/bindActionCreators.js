@@ -1,4 +1,4 @@
-import mapValues from './utils/mapValues'
+import mapNestedValues from './utils/mapNestedValues'
 
 function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))
@@ -37,7 +37,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     )
   }
 
-  return mapValues(actionCreators, actionCreator =>
+  return mapNestedValues(actionCreators, actionCreator =>
     bindActionCreator(actionCreator, dispatch)
   )
 }

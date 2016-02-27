@@ -4,6 +4,10 @@ export function addTodo(text) {
   return { type: ADD_TODO, text }
 }
 
+export const nestedActions = {
+  addTodo
+}
+
 export function addTodoAsync(text) {
   return dispatch => new Promise(resolve => setImmediate(() => {
     dispatch(addTodo(text))
