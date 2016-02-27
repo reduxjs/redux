@@ -11,14 +11,15 @@ describe('bindActionCreators', () => {
     store = createStore(todos)
     actionCreatorFunctions = { ...actionCreators }
     Object.keys(actionCreatorFunctions).forEach(key => {
-      if (typeof actionCreatorFunctions[key] !== 'function') {
+      if (typeof actionCreatorFunctions[key] !== 'function' &&
+          typeof actionCreatorFunctions[key] !== 'object') {
         delete actionCreatorFunctions[key]
       }
     })
   })
 
   it('wraps the action creators with the dispatch function', () => {
-    const notNestedActionCreators = { ...actionCreators }
+    const notNestedActionCreators = { ...actionCreatorFunctions }
     delete notNestedActionCreators.nestedActions
     const boundActionCreators = bindActionCreators(notNestedActionCreators, store.dispatch)
     expect(
@@ -42,7 +43,6 @@ describe('bindActionCreators', () => {
       foo: 42,
       bar: 'baz',
       wow: undefined,
-      much: {},
       test: null
     }, store.dispatch)
     expect(

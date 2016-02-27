@@ -9,7 +9,11 @@ import traverse from 'traverse'
 export default function mapNestedValues(obj, fn) {
   return traverse(obj).map( function (node) {
     if (this.isLeaf) {
-      this.update(fn(node, this.key))
+      if (typeof node === 'function') {
+        this.update(fn(node, this.key))
+      } else {
+        this.remove()
+      }
     }
   })
 }
