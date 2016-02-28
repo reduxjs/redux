@@ -16,7 +16,7 @@ The components, `AddTodo`(1 instance), `TodoList`(1 instance), `Footer`(1 instan
 
 As components only ask for minimal direct dependencies at construction, their logic can be easily unit tested, regardless of whether it is a leaf component(e.g., `Link`) or a branch component(e.g., `TodoList`). 
 
-Unit tests(or specs) for components are under (`test/components`)[https://github.com/weicheng113/redux/tree/master/examples/todos/test/components].
+Unit tests(or specs) for components are under [`test/components`](https://github.com/weicheng113/redux/tree/master/examples/todos/test/components).
 
 
 ---
