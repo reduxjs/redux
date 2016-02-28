@@ -1,3 +1,23 @@
+# Purpose
+
+Rewrite todo app(examples/todos) to maximize 'unit testability'.
+
+http://code.tutsplus.com/tutorials/solid-part-1-the-single-responsibility-principle--net-36074
+### Theory and Reasoning
+Components creation and wiring should happen right in the factories and application entry point, which is one of the keys to make components easy to be unit tested.
+This is a practice in OOP world, which was mentioned Nat Pryce(author of Growing Object Oriented Software), Misko Hevery(Creator of AngularJS) and other places. The process of components creation is like an
+inverted tree, using small components to assemble large ones, started from leaf components. There are two kinds of components, finite instance components and infinite instance components.
+And infinite ones will be created by factories.
+
+### Example by Todo(examples/todos)
+src/components/App.js is the entry point of app. We create and wire up components here. 
+The components, AddTodo(1 instance), TodoList(1 instance), Footer(1 instance) as well as Link(3 instances), are examples of finite instance components.
+Whereas, the component, Todo, is an example of infinite instance component, which will be created by component factory, TodoFactory in this case.
+As components only ask for minimal direct dependencies at construction, their logic can be easily unit tested, 
+regardless of whether it is a leaf component(e.g., Link) or a branch component(e.g., TodoList). Unit tests(or specs) for components are under test/components.
+
+
+
 # [Redux](http://redux.js.org)
 
 Redux is a predictable state container for JavaScript apps.  
