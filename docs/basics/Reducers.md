@@ -336,7 +336,7 @@ const reducer = combineReducers({
 ```
 
 ```js
-function reducer(state, action) {
+function reducer(state = {}, action) {
   return {
     a: doSomethingWithA(state.a, action),
     b: processB(state.b, action),
