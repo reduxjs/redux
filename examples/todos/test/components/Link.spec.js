@@ -6,7 +6,7 @@ import { expect } from 'chai'
 
 describe('Link', () => {
   let renderer
-  const anyText = "text"
+  const anyText = 'text'
   let node
 
   beforeEach(() => {

@@ -6,13 +6,13 @@ import { expect } from 'chai'
 
 describe('AddTodo', () => {
   let node
-  
+
   beforeEach(() => {
     node = document.createElement('div')
   })
 
   it('submit should trigger onAddTodo with input text', (done) => {
-    const text = "text"
+    const text = 'text'
     const component = render((
       <AddTodo
         onAddTodo = {(received) => {
@@ -31,7 +31,7 @@ describe('AddTodo', () => {
   })
 
   it('input content should be cleared after submitted', (done) => {
-    const text = "text"
+    const text = 'text'
     const component = render((
       <AddTodo
         onAddTodo = {() => {

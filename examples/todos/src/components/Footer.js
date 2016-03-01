@@ -13,5 +13,5 @@ export default class Footer extends Component {
 }
 
 Footer.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 }

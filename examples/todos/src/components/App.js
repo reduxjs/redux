@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator'
 import Footer from './Footer'
 import AddTodo from './AddTodo'
 import { actions } from '../actions'
-import { todos } from "../actions/Todos"
+import { todos } from '../actions/Todos'
 import Link from './Link'
 import TodoList from './TodoList'
 import TodoFactory from './TodoFactory'
@@ -17,7 +17,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.visibleTodos)
     return(
       <div>
         <AddTodo onAddTodo={actions.addTodo} />
@@ -27,17 +26,17 @@ class App extends Component {
         </TodoList>
         <Footer>
           <Link
-            {...this._linkProps("SHOW_ALL")} >
+            {...this._linkProps('SHOW_ALL')} >
             All
           </Link>
           {", "}
           <Link
-            {...this._linkProps("SHOW_ACTIVE")} >
+            {...this._linkProps('SHOW_ACTIVE')} >
             Active
           </Link>
           {", "}
           <Link
-            {...this._linkProps("SHOW_COMPLETED")} >
+            {...this._linkProps('SHOW_COMPLETED')} >
             Completed
           </Link>
         </Footer>

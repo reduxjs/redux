@@ -10,14 +10,14 @@ export default class AddTodo extends Component {
           <input ref={node => {
             this._input = node
           }} />
-          <button type="submit">
+          <button type='submit'>
             Add Todo
           </button>
         </form>
       </div>
     )
   }
-  
+
   _onSubmit(e) {
     e.preventDefault()
     const value = this._input.value.trim()

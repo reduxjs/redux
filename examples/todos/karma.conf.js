@@ -1,9 +1,9 @@
 // Karma configuration
 // Generated on Thu Feb 25 2016 15:03:11 GMT+1100 (AEDT)
-var webpack = require('karma-webpack')
+//var webpack = require('karma-webpack')
 var path = require('path')
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     // list of files / patterns to load in the browser
     files: [
@@ -25,16 +25,16 @@ module.exports = function(config) {
       devtool: 'inline-source-map',
       module: {
 
-        loaders: [{
+        loaders: [ {
           test: /\.(js|jsx)$/, exclude: /(bower_components|node_modules)/,
           //loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-0,plugins[]=transform-runtime,plugins[]=transform-decorators-legacy'
-          loader: 'babel',
+          loader: 'babel'
         },
         {
           test: /\.(js|jsx)$/,
           include: path.resolve('src/'),
           loader: 'isparta'
-        }]/*,
+        } ]/*,
         postLoaders: [{
           test: /\.(js|jsx)$/, exclude: /(node_modules|bower_components|tests)/,
           loader: 'istanbul-instrumenter'
@@ -54,9 +54,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon'],
-
-
+    frameworks: [ 'mocha', 'sinon' ],
 
     // list of files to exclude
     exclude: [
@@ -82,7 +80,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: [ 'Chrome' ],
 
 
     // Continuous Integration mode

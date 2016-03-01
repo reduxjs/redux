@@ -12,7 +12,7 @@ describe('TodoList', () => {
   })
 
   it('should display a collection of todos', () => {
-    const todos = [todo(1), todo(2), todo(3)]
+    const todos = [ todo(1), todo(2), todo(3) ]
     const todoFactory = new MockTodoFactory()
     renderer.render(
       <TodoList
@@ -25,7 +25,7 @@ describe('TodoList', () => {
   })
 
   function todo(id) {
-    return {id, text: 'text', completed: true}
+    return { id, text: 'text', completed: true }
   }
 
   class MockTodoFactory extends TodoFactory {

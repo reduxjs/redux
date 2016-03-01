@@ -6,7 +6,7 @@ import { expect } from 'chai'
 
 describe('Todo', () => {
   let renderer
-  const anyText = "text"
+  const anyText = 'text'
   let node
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('Todo', () => {
     )
 
     const result = renderer.getRenderOutput()
-    expect(result.props.style).to.deep.equal({textDecoration: 'line-through'})
+    expect(result.props.style).to.deep.equal({ textDecoration: 'line-through' })
   })
 
   it('should be displayed as normal text when it is not completed', () => {
@@ -35,7 +35,7 @@ describe('Todo', () => {
     )
 
     const result = renderer.getRenderOutput()
-    expect(result.props.style).to.deep.equal({textDecoration: 'none'})
+    expect(result.props.style).to.deep.equal({ textDecoration: 'none' })
   })
 
   it('should receive onClick event when click on the todo', (done) => {
@@ -53,7 +53,7 @@ describe('Todo', () => {
     Simulate.click(li)
   })
 
-  function anyBoolean(){
+  function anyBoolean() {
     return Math.random() < .5
   }
 })
