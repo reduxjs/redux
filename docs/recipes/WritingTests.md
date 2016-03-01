@@ -337,9 +337,9 @@ describe('components', () => {
 })
 ```
 
-#### Fixing Broken `setState()`
+#### Fixing Broken `setState()` in older React versions
 
-Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
+In React <= 0.13, 0.14.4 and 0.14.5, Shallow rendering [used to throw an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
 
 ```
 npm install --save-dev jsdom
