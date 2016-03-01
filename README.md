@@ -1,6 +1,6 @@
 # Purpose
 
-Rewrite todos app([`examples/todos`](https://github.com/weicheng113/redux/tree/master/examples/todos)) to maximize *unit testability*.
+Rewrote todos app([`examples/todos`](https://github.com/weicheng113/redux/tree/master/examples/todos)) to maximize *unit testability*.
 
 ### Theory and Reasoning
 Components creation and wiring should happen right in the factories and application entry point, which is one of the keys to make components easy to be unit tested. 
