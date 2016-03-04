@@ -5,11 +5,7 @@ function childIds(state, action) {
     case ADD_CHILD:
       return [ ...state, action.childId ]
     case REMOVE_CHILD:
-      const index = state.indexOf(action.childId)
-      return [
-        ...state.slice(0, index),
-        ...state.slice(index + 1)
-      ]
+      return state.filter(id => id !== action.childId)
     default:
       return state
   }
