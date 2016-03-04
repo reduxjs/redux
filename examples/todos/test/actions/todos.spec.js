@@ -1,9 +1,21 @@
-import expect from 'expect'
-import * as actions from '../../actions'
+import Actions from '../../src/actions'
+// sinon from 'sinon'
+import { expect } from 'chai'
 
 describe('todo actions', () => {
+  let store
+  let actions
+
+  beforeEach(() => {
+    store = new MockStore()
+    actions = new Actions(store)
+  })
+
   it('addTodo should create ADD_TODO action', () => {
-    expect(actions.addTodo('Use Redux')).toEqual({
+    actions.addTodo('Use Redux')
+
+    expect(store.dispatchTimes).to.equal(1)
+    expect(store.lastDispatched).to.deep.equal({
       type: 'ADD_TODO',
       id: 0,
       text: 'Use Redux'
@@ -11,16 +23,33 @@ describe('todo actions', () => {
   })
 
   it('setVisibilityFilter should create SET_VISIBILITY_FILTER action', () => {
-    expect(actions.setVisibilityFilter('active')).toEqual({
+    actions.setVisibilityFilter('active')
+
+    expect(store.dispatchTimes).to.equal(1)
+    expect(store.lastDispatched).to.deep.equal({
       type: 'SET_VISIBILITY_FILTER',
       filter: 'active'
     })
   })
 
   it('toogleTodo should create TOGGLE_TODO action', () => {
-    expect(actions.toggleTodo(1)).toEqual({
+    actions.toggleTodo(1)
+
+    expect(store.dispatchTimes).to.equal(1)
+    expect(store.lastDispatched).to.deep.equal({
       type: 'TOGGLE_TODO',
       id: 1
     })
   })
+
+  class MockStore {
+    constructor() {
+      this.dispatchTimes = 0
+    }
+
+    dispatch(obj) {
+      this.lastDispatched = obj
+      this.dispatchTimes++
+    }
+  }
 })
