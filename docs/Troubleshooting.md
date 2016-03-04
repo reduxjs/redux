@@ -53,14 +53,15 @@ function todos(state = [], action) {
       ]
     case 'COMPLETE_TODO':
       // Return a new array
-      return [
-        ...state.slice(0, action.index),
-        // Copy the object before mutating
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if(index === action.index) {
+          // Copy the object before mutating
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }
@@ -71,13 +72,14 @@ It’s more code, but it’s exactly what makes Redux predictable and efficient.
 
 ```js
 // Before:
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if(index === action.index) {
+    return Object.assign({}, todo, {
+      completed: true
+    })
+  }
+  return todo
+})
 
 // After
 return update(state, {
@@ -97,20 +99,22 @@ You can also enable the [object spread operator proposal](recipes/UsingObjectSpr
 
 ```js
 // Before:
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if(index === action.index) {
+    return Object.assign({}, todo, {
+      completed: true
+    })
+  }
+  return todo
+})
 
 // After:
-return [
-  ...state.slice(0, action.index),
-  { ...state[action.index], completed: true },
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if(index === action.index) {
+    return { ...todo, completed: true }
+  }
+  return todo
+})
 ```
 
 Note that experimental language features are subject to change.
