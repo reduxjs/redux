@@ -148,7 +148,7 @@ Finally, the implementation of the `COMPLETE_TODO` handler shouldn’t come as a
 case COMPLETE_TODO:
   return Object.assign({}, state, {
     todos: state.todos.map((todo, index) => {
-      if(index === action.index) {
+      if (index === action.index) {
         return Object.assign({}, todo, {
           completed: true
         })
@@ -213,7 +213,7 @@ function todos(state = [], action) {
       ]
     case COMPLETE_TODO:
       return state.map(todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })
@@ -272,7 +272,7 @@ function todos(state = [], action) {
       ]
     case COMPLETE_TODO:
       return state.map((todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })
@@ -394,7 +394,7 @@ function todos(state = [], action) {
       ]
     case COMPLETE_TODO:
       return state.map((todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })

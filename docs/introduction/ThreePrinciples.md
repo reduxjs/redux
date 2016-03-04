@@ -75,7 +75,7 @@ function todos(state = [], action) {
       ]
     case 'COMPLETE_TODO':
       return state.map((todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })
