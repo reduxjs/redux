@@ -148,7 +148,7 @@ Finally, the implementation of the `COMPLETE_TODO` handler shouldn’t come as a
 case COMPLETE_TODO:
   return Object.assign({}, state, {
     todos: state.todos.map((todo, index) => {
-      if(index === action.index) {
+      if (index === action.index) {
         return Object.assign({}, todo, {
           completed: true
         })
@@ -158,7 +158,7 @@ case COMPLETE_TODO:
   })
 ```
 
-Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it’s a good idea to use a helper like [react-addons-update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
+Because we want to update a specific item in the array without resorting to mutations, we have to create a new array with the same items except the item at the index. If you find yourself often writing such operations, it’s a good idea to use a helper like [react-addons-update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
 
 ## Splitting Reducers
 
@@ -213,7 +213,7 @@ function todos(state = [], action) {
       ]
     case COMPLETE_TODO:
       return state.map(todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })
@@ -272,7 +272,7 @@ function todos(state = [], action) {
       ]
     case COMPLETE_TODO:
       return state.map((todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })
@@ -394,7 +394,7 @@ function todos(state = [], action) {
       ]
     case COMPLETE_TODO:
       return state.map((todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           return Object.assign({}, todo, {
             completed: true
           })

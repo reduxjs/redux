@@ -54,7 +54,7 @@ function todos(state = [], action) {
     case 'COMPLETE_TODO':
       // Return a new array
       return state.map((todo, index) => {
-        if(index === action.index) {
+        if (index === action.index) {
           // Copy the object before mutating
           return Object.assign({}, todo, {
             completed: true
@@ -73,7 +73,7 @@ It’s more code, but it’s exactly what makes Redux predictable and efficient.
 ```js
 // Before:
 return state.map((todo, index) => {
-  if(index === action.index) {
+  if (index === action.index) {
     return Object.assign({}, todo, {
       completed: true
     })
@@ -100,7 +100,7 @@ You can also enable the [object spread operator proposal](recipes/UsingObjectSpr
 ```js
 // Before:
 return state.map((todo, index) => {
-  if(index === action.index) {
+  if (index === action.index) {
     return Object.assign({}, todo, {
       completed: true
     })
@@ -110,7 +110,7 @@ return state.map((todo, index) => {
 
 // After:
 return state.map((todo, index) => {
-  if(index === action.index) {
+  if (index === action.index) {
     return { ...todo, completed: true }
   }
   return todo
