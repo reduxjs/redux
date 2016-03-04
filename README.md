@@ -76,7 +76,8 @@ import { createStore } from 'redux'
  * not mutate the state object, but return a new object if the state changes.
  *
  * In this example, we use a `switch` statement and strings, but you can use a helper that
- * follows a different convention (such as function maps) if it makes sense for your project.
+ * follows a different convention (such as function maps) if it makes sense for your
+ * project.
  */
 function counter(state = 0, action) {
   switch (action.type) {
