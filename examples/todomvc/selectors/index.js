@@ -19,11 +19,11 @@ export const getVisibleTodos = createSelector(
 )
 
 export const getActiveCount = createSelector(
-  [getTodos],
+  [ getTodos ],
   (todos) => todos.filter(todo => !todo.completed).length
 )
 
 export const getCompletedCount = createSelector(
-  [getTodos],
+  [ getTodos ],
   (todos) => todos.filter(todo => todo.completed).length
 )

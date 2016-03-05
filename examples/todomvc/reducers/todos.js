@@ -28,7 +28,7 @@ const todo = (state, action) => {
   }
 }
 
-const initialState = [{ id: 0, text: 'Use Redux', completed: false }]
+const initialState = [ { id: 0, text: 'Use Redux', completed: false } ]
 
 const todos = (state = initialState, action) => {
   switch (action.type) {
