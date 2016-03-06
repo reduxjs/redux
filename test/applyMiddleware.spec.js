@@ -11,12 +11,9 @@ describe('applyMiddleware', () => {
       return next => action => next(action)
     }
 
-    const spy = expect.spyOn(console, 'error')
-
-    applyMiddleware(dispatchingMiddleware)(createStore)(reducers.todos)
-
-    expect(spy.calls.length).toEqual(1)
-    spy.restore()
+    expect(() =>
+      applyMiddleware(dispatchingMiddleware)(createStore)(reducers.todos)
+    ).toThrow()
   })
 
   it('wraps dispatch method with middleware once', () => {

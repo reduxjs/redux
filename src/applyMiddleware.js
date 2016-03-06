@@ -1,5 +1,4 @@
 import compose from './compose'
-import warning from './utils/warning'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -20,12 +19,11 @@ import warning from './utils/warning'
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer, initialState, enhancer) => {
     var store = createStore(reducer, initialState, enhancer)
-    var dispatch = (...args) => {
-      warning(
-        `Calling dispatch while constructing your middleware is discouraged. ` +
-        `Other middleware will not be applied to this dispatch.`
+    var dispatch = () => {
+      throw new Error(
+        `Dispatching while constructing your middleware is not allowed. ` +
+        `Other middleware would not be applied to this dispatch.`
       )
-      store.dispatch(...args)
     }
     var chain = []
 
