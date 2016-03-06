@@ -6,11 +6,11 @@
   "plugins": ["edit-link", "prism", "-highlight", "github"],
   "pluginsConfig": {
     "edit-link": {
-      "base": "https://github.com/rackt/redux/tree/master",
+      "base": "https://github.com/reactjs/redux/tree/master",
       "label": "Edit This Page"
     },
     "github": {
-      "url": "https://github.com/rackt/redux/"
+      "url": "https://github.com/reactjs/redux/"
     }
   }
 }
