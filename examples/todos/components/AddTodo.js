@@ -1,19 +1,18 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { addTodo } from '../actions'
+import React, { PropTypes } from 'react'
 
-let AddTodo = ({ dispatch }) => {
+const AddTodo = ({ onAddTodo }) => {
   let input
 
   return (
     <div>
       <form onSubmit={e => {
         e.preventDefault()
-        if (!input.value.trim()) {
+        const value = input.value.trim()
+        if (!value) {
           return
         }
-        dispatch(addTodo(input.value))
         input.value = ''
+        onAddTodo(value)
       }}>
         <input ref={node => {
           input = node
@@ -25,6 +24,9 @@ let AddTodo = ({ dispatch }) => {
     </div>
   )
 }
-AddTodo = connect()(AddTodo)
+
+AddTodo.propTypes = {
+  onAddTodo: PropTypes.func.isRequired
+}
 
 export default AddTodo

@@ -30,6 +30,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-register": "^6.3.13",
+    "chai": "^3.5.0",
     "cross-env": "^1.0.7",
     "expect": "^1.8.0",
     "express": "^4.13.3",
@@ -37,6 +38,7 @@
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "react-addons-test-utils": "^0.14.7",
+    "react-stateless-wrapper": "^1.0.2",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.9.1"
