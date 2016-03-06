@@ -4,7 +4,7 @@
   "description": "Redux counter example",
   "scripts": {
     "start": "node server.js",
-    "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register --require ./test/setup.js",
+    "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register",
     "test:watch": "npm test -- --watch"
   },
   "repository": {
@@ -30,9 +30,9 @@
     "babel-preset-react-hmre": "^1.0.1",
     "babel-register": "^6.3.13",
     "cross-env": "^1.0.7",
+    "enzyme": "^2.0.0",
     "expect": "^1.6.0",
     "express": "^4.13.3",
-    "jsdom": "^5.6.1",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "react-addons-test-utils": "^0.14.7",
