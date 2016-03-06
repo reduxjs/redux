@@ -27,12 +27,12 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "babel-preset-react-hmre": "^1.0.1",
+    "babel-preset-react-hmre": "^1.1.1",
     "express": "^4.13.3",
     "json-loader": "^0.5.3",
     "redux-logger": "^2.0.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
-    "webpack-hot-middleware": "^2.2.0"
+    "webpack-hot-middleware": "^2.9.1"
   }
 }
