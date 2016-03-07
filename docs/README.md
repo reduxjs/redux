@@ -29,6 +29,7 @@
   * [Writing Tests](/docs/recipes/WritingTests.md)
   * [Computing Derived Data](/docs/recipes/ComputingDerivedData.md)
   * [Implementing Undo History](/docs/recipes/ImplementingUndoHistory.md)
+* [FAQ](/docs/FAQ.md)
 * [Troubleshooting](/docs/Troubleshooting.md)
 * [Glossary](/docs/Glossary.md)
 * [API Reference](/docs/api/README.md)
