@@ -33,6 +33,14 @@ Then, add this to `scripts` in your `package.json`:
 
 and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
 
+**If you are using [babel 6](https://babeljs.io/docs/setup/#mocha)** you should also install the `es2015` transformation and add the `.babelrc` file to your project
+
+```
+npm install babel-preset-es2015 --save-dev
+
+echo '{ "presets": ["es2015"] }' > .babelrc
+```
+
 ### Action Creators
 
 In Redux, action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.
