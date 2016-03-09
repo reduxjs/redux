@@ -60,6 +60,7 @@
   },
   "homepage": "http://redux.js.org",
   "dependencies": {
+    "express": "~4.5.1",
     "lodash": "^4.2.1",
     "lodash-es": "^4.2.1",
     "loose-envify": "^1.1.0"
@@ -102,7 +103,9 @@
     "rimraf": "^2.3.4",
     "typescript": "^1.8.0",
     "typescript-definition-tester": "0.0.4",
-    "webpack": "^1.9.6"
+    "webpack": "^1.9.6",
+    "webpack-dev-middleware": "latest",
+    "webpack-hot-middleware": "latest"
   },
   "npmName": "redux",
   "npmFileMap": [
