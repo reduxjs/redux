@@ -102,7 +102,9 @@
     "rimraf": "^2.3.4",
     "typescript": "^1.8.0",
     "typescript-definition-tester": "0.0.4",
-    "webpack": "^1.9.6"
+    "webpack": "^1.9.6",
+    "webpack-dev-middleware": "latest",
+    "webpack-hot-middleware": "latest"
   },
   "npmName": "redux",
   "npmFileMap": [
