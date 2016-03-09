@@ -37,13 +37,13 @@ describe('TodoList component', () => {
   })
 
   it('should render an active todo', () => {
-    const items = [mockItem({text: 'Todo'})]
+    const items = [ mockItem({ text: 'Todo' }) ]
     const { todo } = setup(items)
     expect(todo.length).toEqual(1)
   })
 
   it('should render an active and completed todos', () => {
-    const items = [mockItem({id: 1}), mockItem({id: 2, completed: true})]
+    const items = [ mockItem({ id: 1 }), mockItem({ id: 2, completed: true }) ]
     const { todo } = setup(items)
     expect(todo.length).toEqual(items.length)
     expect(todo.at(0).props().id).toEqual(1)
@@ -52,14 +52,14 @@ describe('TodoList component', () => {
   })
 
   it('should have a completed todo', () => {
-    const items = [mockItem({ completed: true })]
+    const items = [ mockItem({ completed: true }) ]
     const { todo } = setup(items)
     expect(todo.length).toEqual(items.length)
     expect(todo.at(0).props().completed).toEqual(true)
   })
 
   it('should call onTodoClick handler on Todo tag', () => {
-    const items = [mockItem()]
+    const items = [ mockItem() ]
     const { actions, todo } = setup(items)
     todo.simulate('click')
     expect(actions.onTodoClick).toHaveBeenCalled()

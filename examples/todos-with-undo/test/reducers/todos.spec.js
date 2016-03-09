@@ -5,7 +5,7 @@ describe('todos reducer', () => {
   it('should handle initial state', () => {
     expect(
       todos(undefined, {})
-    ).toEqual({future:[], past: [], present: []})
+    ).toEqual({ future:[], past: [], present: [] })
   })
 
   it('should handle ADD_TODO', () => {
@@ -18,11 +18,7 @@ describe('todos reducer', () => {
     ).toEqual({
       future: [],
       past: [],
-      present: [{
-          text: 'Run the tests',
-          completed: false,
-          id: 0
-      }]
+      present: [ { text: 'Run the tests', completed: false, id: 0 } ]
     })
 
     expect(
@@ -40,11 +36,7 @@ describe('todos reducer', () => {
     ).toEqual({
       future: [],
       past: [],
-      present: [{
-          text: 'Use Redux',
-          completed: false,
-          id: 1
-      }]
+      present: [ { text: 'Use Redux', completed: false, id: 1 } ]
     })
 
     expect(
@@ -66,11 +58,7 @@ describe('todos reducer', () => {
     ).toEqual({
       future: [],
       past: [],
-      present: [{
-        text: 'Fix the tests',
-        completed: false,
-        id: 2
-      }]
+      present: [ { text: 'Fix the tests', completed: false, id: 2 } ]
     })
   })
 

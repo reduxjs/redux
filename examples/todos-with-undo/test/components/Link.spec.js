@@ -3,7 +3,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Link from '../../components/Link'
 
-function setup({active, text}) {
+function setup({ active, text }) {
   const actions = {
     onClick: expect.createSpy()
   }
@@ -30,7 +30,7 @@ describe('Link component', () => {
   })
 
   it('should render a span tag if active', () => {
-    const { span } = setup({ active: true, text: 'Completed'})
+    const { span } = setup({ active: true, text: 'Completed' })
     expect(span.length).toEqual(1)
     expect(span.text()).toMatch(/^Completed/)
   })
