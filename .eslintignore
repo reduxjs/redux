@@ -1,4 +1,4 @@
-**/dist/*
-**/node_modules/*
+**/dist/**
+**/node_modules/**
 **/server.js
 **/webpack.config*.js
