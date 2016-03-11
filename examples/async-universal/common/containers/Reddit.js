@@ -16,14 +16,6 @@ class Reddit extends Component {
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
-  componentDidMount() {
-    const { dispatch, params } = this.props
-    if (params.id) {
-      dispatch(selectReddit(params.id))
-      dispatch(fetchPostsIfNeeded(params.id))
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     const { dispatch, params } = this.props
 

@@ -40,8 +40,10 @@ function handleRender(req, res) {
         // Create a new Redux store instance
         const store = configureStore()
 
+        const { params } = renderProps
+        
         // Query our API asynchronously
-        fetchData(store, req.path.slice(1), () => {
+        fetchData(store, params.id, () => {
 
           const html = renderToString(
             <Provider store={store}>
