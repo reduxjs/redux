@@ -112,6 +112,7 @@ import thunk from 'redux-thunk'
 import * as actions from '../../actions/counter'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
+import expect from 'expect'; // You can use any testing library
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
@@ -130,8 +131,16 @@ describe('async actions', () => {
       { type: types.FETCH_TODOS_REQUEST },
       { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
     ]
-    const store = mockStore({ todos: [] }, expectedActions, done)
+    const store = mockStore({ todos: [] })
+
     store.dispatch(actions.fetchTodos())
+      .then(() => {
+        const actions = store.getActions()
+
+        expect(actions[0].type).toEqual(types.FETCH_TODOS_REQUEST)
+
+        done()
+      })
   })
 })
 ```
