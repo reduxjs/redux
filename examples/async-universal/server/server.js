@@ -14,7 +14,6 @@ import { Provider } from 'react-redux'
 import { match, RouterContext } from 'react-router'
 
 import configureStore from '../common/store/configureStore'
-import { fetchData } from '../common/api/reddit'
 import routes from '../common/routes'
 
 const app = new Express()
