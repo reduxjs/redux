@@ -41,13 +41,13 @@ function handleRender(req, res) {
         const store = configureStore()
 
         const { params } = renderProps
-        
+
         // Query our API asynchronously
         fetchData(store, params.id, () => {
 
           const html = renderToString(
             <Provider store={store}>
-              <RouterContext { ...renderProps}/>
+              <RouterContext { ...renderProps} />
             </Provider>
           )
 
