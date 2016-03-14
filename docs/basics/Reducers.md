@@ -250,7 +250,9 @@ Let’s explore reducer composition more. Can we also extract a reducer managing
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
-    return action.filter
+    return Object.assign({}, state, {
+      visibilityFilter: action.filter
+    })
   default:
     return state
   }
@@ -287,7 +289,9 @@ function todos(state = [], action) {
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
-      return action.filter
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
     default:
       return state
   }
@@ -376,7 +380,9 @@ const { SHOW_ALL } = VisibilityFilters
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
-      return action.filter
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
     default:
       return state
   }
