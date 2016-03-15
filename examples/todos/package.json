@@ -34,7 +34,6 @@
     "enzyme": "^2.0.0",
     "expect": "^1.8.0",
     "express": "^4.13.3",
-    "jsdom": "^8.1.0",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "react-addons-test-utils": "^0.14.7",
