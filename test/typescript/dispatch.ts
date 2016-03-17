@@ -9,4 +9,4 @@ const dispatchResult: Action = dispatch({type: 'TYPE'});
 
 type Thunk<O> = () => O;
 
-const dispatchThunkResult: number = dispatch(() => 42);
+const dispatchThunkResult: number = dispatch<Thunk<number>, number>(() => 42);

@@ -75,6 +75,10 @@ export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
 
 /* store */
 
+export interface MiddlewareDispatch {
+    <TMiddlewareAction, TMiddlewareActionResult>(action: TMiddlewareAction): TMiddlewareActionResult;
+}
+
 /**
  * A *dispatching function* (or simply *dispatch function*) is a function that
  * accepts an action or an async action; it then may or may not dispatch one
@@ -93,7 +97,9 @@ export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
  */
-export type Dispatch = (action: any) => any;
+export interface Dispatch extends MiddlewareDispatch {
+    (action: Action): Action;
+}
 
 /**
  * Function to remove listener added by `Store.subscribe()`.
@@ -265,7 +271,7 @@ export interface MiddlewareAPI<S> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S>(api: MiddlewareAPI<S>): (next: Dispatch) => (action: any) => any;
+  <S>(api: MiddlewareAPI<S>): (next: MiddlewareDispatch) => MiddlewareDispatch;
 }
 
 /**
