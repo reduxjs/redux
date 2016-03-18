@@ -104,6 +104,9 @@
     "typescript-definition-tester": "0.0.4",
     "webpack": "^1.9.6"
   },
+  "engines": {
+    "node" : ">=4"
+  },
   "npmName": "redux",
   "npmFileMap": [
     {
