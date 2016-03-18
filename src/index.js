@@ -16,6 +16,7 @@ if (
   typeof isCrushed.name === 'string' &&
   isCrushed.name !== 'isCrushed'
 ) {
+  /* Commented out temporarily
   warning(
     'You are currently using minified code outside of NODE_ENV === \'production\'. ' +
     'This means that you are running a slower development build of Redux. ' +
@@ -23,6 +24,7 @@ if (
     'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' +
     'to ensure you have the correct code for your production build.'
   )
+   */
 }
 
 export {
