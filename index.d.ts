@@ -75,10 +75,6 @@ export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
 
 /* store */
 
-export interface MiddlewareDispatch {
-    <TMiddlewareAction, TMiddlewareActionResult>(action: TMiddlewareAction): TMiddlewareActionResult;
-}
-
 /**
  * A *dispatching function* (or simply *dispatch function*) is a function that
  * accepts an action or an async action; it then may or may not dispatch one
@@ -97,7 +93,7 @@ export interface MiddlewareDispatch {
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
  */
-export interface Dispatch extends MiddlewareDispatch {
+export interface Dispatch<S> {
     (action: Action): Action;
 }
 
@@ -142,7 +138,7 @@ export interface Store<S> {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  dispatch: Dispatch;
+  dispatch: Dispatch<S>;
 
   /**
    * Reads the state tree managed by the store.
@@ -257,7 +253,7 @@ export const createStore: StoreCreator;
 /* middleware */
 
 export interface MiddlewareAPI<S> {
-  dispatch: Dispatch;
+  dispatch: Dispatch<S>;
   getState(): S;
 }
 
@@ -271,7 +267,7 @@ export interface MiddlewareAPI<S> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S>(api: MiddlewareAPI<S>): (next: MiddlewareDispatch) => MiddlewareDispatch;
+  <S>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => any;
 }
 
 /**
@@ -343,19 +339,19 @@ export interface ActionCreatorsMapObject {
  *   creator wrapped into the `dispatch` call. If you passed a function as
  *   `actionCreator`, the return value will also be a single function.
  */
-export function bindActionCreators<A extends ActionCreator<any>>(actionCreator: A, dispatch: Dispatch): A;
+export function bindActionCreators<A extends ActionCreator<any>>(actionCreator: A, dispatch: Dispatch<any>): A;
 
 export function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
-  >(actionCreator: A, dispatch: Dispatch): B;
+  >(actionCreator: A, dispatch: Dispatch<any>): B;
 
-export function bindActionCreators<M extends ActionCreatorsMapObject>(actionCreators: M, dispatch: Dispatch): M;
+export function bindActionCreators<M extends ActionCreatorsMapObject>(actionCreators: M, dispatch: Dispatch<any>): M;
 
 export function bindActionCreators<
   M extends ActionCreatorsMapObject,
   N extends ActionCreatorsMapObject
-  >(actionCreators: M, dispatch: Dispatch): N;
+  >(actionCreators: M, dispatch: Dispatch<any>): N;
 
 
 /* compose */
