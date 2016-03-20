@@ -3,12 +3,13 @@ import chai from 'chai'
 import chaiGen from 'chai-generator'
 
 import {
+  fetchPosts,
   fetchPostsIfNeeded,
-  fetchPostsIfNeededWatcher,
-  fetchPosts
+  fetchPostsIfNeededWatcher
 } from './reddit'
 import * as actions from '../actions'
 import * as selectors from '../reducers/selectors'
+import * as api from '../api'
 
 chai.use(chaiGen)
 const expect = chai.expect
@@ -28,13 +29,7 @@ describe('reddit saga', function () {
     expect(saga).to.deep.yield(select(selectors.postsByReddit))
 
     const postsByReddit = {}
-    expect(saga.next(postsByReddit)).to.deep.yield(put(actions.requestPosts(reddit)))
-
-    expect(saga).to.deep.yield(call(fetchPosts, reddit))
-
-    const json = { data: { children: [] } }
-    const posts = json.data.children.map(child => child.data)
-    expect(saga.next(json)).to.deep.yield(put(actions.receivePosts(reddit, posts)))
+    expect(saga.next(postsByReddit)).to.deep.yield(call(fetchPosts, reddit))
   })
 
   it('should not fetch posts if already fetching', function () {
@@ -54,13 +49,7 @@ describe('reddit saga', function () {
     expect(saga).to.deep.yield(select(selectors.postsByReddit))
 
     const postsByReddit = { myReddit: { didInvalidate: true } }
-    expect(saga.next(postsByReddit)).to.deep.yield(put(actions.requestPosts(reddit)))
-
-    expect(saga).to.deep.yield(call(fetchPosts, reddit))
-
-    const json = { data: { children: [] } }
-    const posts = json.data.children.map(child => child.data)
-    expect(saga.next(json)).to.deep.yield(put(actions.receivePosts(reddit, posts)))
+    expect(saga.next(postsByReddit)).to.deep.yield(call(fetchPosts, reddit))
   })
 
   it('should not fetch posts if not invalidated', function () {
@@ -71,5 +60,17 @@ describe('reddit saga', function () {
 
     const postsByReddit = { myReddit: { didInvalidate: false } }
     expect(saga.next(postsByReddit)).to.return(void 0)
+  })
+
+  it('should fetch posts', function () {
+    const reddit = 'myReddit'
+    const saga = fetchPosts(reddit)
+    expect(saga).to.deep.yield(put(actions.requestPosts(reddit)))
+
+    expect(saga).to.deep.yield(call(api.fetchPosts, reddit))
+
+    const json = { data: { children: [] } }
+    const posts = json.data.children.map(child => child.data)
+    expect(saga.next(json)).to.deep.yield(put(actions.receivePosts(reddit, posts)))
   })
 })

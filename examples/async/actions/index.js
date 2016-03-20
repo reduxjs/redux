@@ -28,7 +28,7 @@ export function requestPosts(reddit) {
 export function receivePosts(reddit, posts) {
   return {
     type: RECEIVE_POSTS,
-    reddit: reddit,
+    reddit,
     posts,
     receivedAt: Date.now()
   }

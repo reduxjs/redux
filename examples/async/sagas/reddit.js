@@ -1,14 +1,9 @@
 import { put, call, select } from 'redux-saga/effects'
 import { takeEvery } from 'redux-saga'
-import fetch from 'isomorphic-fetch'
 
 import * as actions from '../actions'
 import * as selectors from '../reducers/selectors'
-
-export function fetchPosts(reddit) {
-  return fetch(`https://www.reddit.com/r/${reddit}.json`)
-    .then(response => response.json())
-}
+import * as api from '../api'
 
 function shouldFetchPosts(posts) {
   if (!posts) {
@@ -20,13 +15,17 @@ function shouldFetchPosts(posts) {
   return posts.didInvalidate
 }
 
+export function* fetchPosts(reddit) {
+  yield put(actions.requestPosts(reddit))
+  const json = yield call(api.fetchPosts, reddit)
+  const posts = json.data.children.map(child => child.data)
+  yield put(actions.receivePosts(reddit, posts))
+}
+
 export function* fetchPostsIfNeeded({ reddit }) {
   const posts = yield select(selectors.postsByReddit)
   if (shouldFetchPosts(posts[reddit])) {
-    yield put(actions.requestPosts(reddit))
-    const json = yield call(fetchPosts, reddit)
-    const posts = json.data.children.map(child => child.data)
-    yield put(actions.receivePosts(reddit, posts))
+    yield call(fetchPosts, reddit)
   }
 }
 
