@@ -1,7 +1,7 @@
 {
-  "name": "redux-async-example",
+  "name": "redux-async-saga-example",
   "version": "0.0.0",
-  "description": "Redux async example",
+  "description": "Redux async saga example",
   "scripts": {
     "start": "node server.js",
     "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-register --require babel-polyfill \"**/*.spec.js\""
