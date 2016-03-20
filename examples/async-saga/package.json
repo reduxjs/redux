@@ -4,7 +4,7 @@
   "description": "Redux async example",
   "scripts": {
     "start": "node server.js",
-    "test": "jasmine"
+    "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-register --require babel-polyfill \"**/*.spec.js\""
   },
   "repository": {
     "type": "git",
@@ -44,9 +44,10 @@
     "babel-preset-react-hmre": "^1.1.1",
     "chai": "^3.5.0",
     "chai-generator": "^2.0.3",
+    "cross-env": "^1.0.7",
     "expect": "^1.6.0",
     "express": "^4.13.3",
-    "jasmine": "^2.4.1",
+    "mocha": "^2.4.5",
     "node-libs-browser": "^0.5.2",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
