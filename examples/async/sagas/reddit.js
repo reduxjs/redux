@@ -19,7 +19,7 @@ function shouldFetchPosts(posts) {
   return posts.didInvalidate
 }
 
-function* fetchPostsIfNeeded({ reddit }) {
+export function* fetchPostsIfNeeded({ reddit }) {
   const posts = yield select(state => state.postsByReddit[reddit])
   if (shouldFetchPosts(posts)) {
     yield put(actions.requestPosts(reddit))
