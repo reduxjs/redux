@@ -25,11 +25,11 @@ export function requestPosts(reddit) {
   }
 }
 
-export function receivePosts(reddit, json) {
+export function receivePosts(reddit, posts) {
   return {
     type: RECEIVE_POSTS,
     reddit: reddit,
-    posts: json.data.children.map(child => child.data),
+    posts,
     receivedAt: Date.now()
   }
 }
