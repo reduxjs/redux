@@ -33,6 +33,7 @@
     "react-redux": "^4.2.1",
     "redux": "^3.2.1",
     "redux-logger": "^2.4.0",
+    "redux-saga": "^0.9.4",
     "redux-thunk": "^1.0.3"
   },
   "devDependencies": {
