@@ -1,31 +1,21 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
-export default class Repo extends Component {
-
-  render() {
-    const { repo, owner } = this.props
-    const { login } = owner
-    const { name, description } = repo
-
-    return (
-      <div className="Repo">
-        <h3>
-          <Link to={`/${login}/${name}`}>
-            {name}
-          </Link>
-          {' by '}
-          <Link to={`/${login}`}>
-            {login}
-          </Link>
-        </h3>
-        {description &&
-          <p>{description}</p>
-        }
-      </div>
-    )
-  }
-}
+const Repo = ({ repo: { name, description }, owner: { login } }) =>
+  <div className="Repo">
+    <h3>
+      <Link to={`/${login}/${name}`}>
+        {name}
+      </Link>
+      {' by '}
+      <Link to={`/${login}`}>
+        {login}
+      </Link>
+    </h3>
+    {description &&
+      <p>{description}</p>
+    }
+  </div>
 
 Repo.propTypes = {
   repo: PropTypes.shape({
@@ -36,3 +26,5 @@ Repo.propTypes = {
     login: PropTypes.string.isRequired
   }).isRequired
 }
+
+export default Repo
