@@ -61,7 +61,7 @@ describe('actions', () => {
       type: types.ADD_TODO,
       text
     }
-    expect(actions.addTodo(text)).toEqual(expectedAction)
+    expect(actions.addTodo(text)).to.deep.equal(expectedAction)
   })
 })
 ```
