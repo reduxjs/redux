@@ -94,7 +94,7 @@ export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
  * before passing them to the next middleware.
  */
 export interface Dispatch<S> {
-    (action: Action): Action;
+    <A extends Action>(action: A): A;
 }
 
 /**
@@ -267,7 +267,7 @@ export interface MiddlewareAPI<S> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => any;
+  <S>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => Dispatch<S>;
 }
 
 /**

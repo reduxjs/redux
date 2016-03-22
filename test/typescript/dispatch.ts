@@ -13,3 +13,4 @@ declare module "../../index.d.ts" {
 }
 
 const dispatchThunkResult: number = dispatch(() => 42);
+const dispatchedTimerId: number = dispatch(d => setTimeout(() => d({type: 'TYPE'}), 1000));
