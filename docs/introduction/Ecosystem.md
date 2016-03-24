@@ -80,7 +80,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-search](https://github.com/treasure-data/redux-search) — Automatically index resources in a web worker and search them without blocking
 * [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store enhancers that synchronize Redux stores across Electron processes
 * [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
-* [redux-side-effects](https://github.com/salsita/redux-side-effects) - Utilize Generators for declarative yielding of side effects from your pure reducers
+* [redux-side-effects](https://github.com/salsita/redux-side-effects) — Utilize Generators for declarative yielding of side effects from your pure reducers
 
 ### Utilities
 
