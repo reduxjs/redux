@@ -9,7 +9,8 @@
     "dist",
     "lib",
     "es",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage",
