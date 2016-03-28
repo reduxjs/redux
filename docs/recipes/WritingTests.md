@@ -134,13 +134,11 @@ describe('async actions', () => {
     const store = mockStore({ todos: [] })
 
     store.dispatch(actions.fetchTodos())
-      .then(() => {
-        const actions = store.getActions()
-
-        expect(actions[0].type).toEqual(types.FETCH_TODOS_REQUEST)
-
-        done()
+      .then(() => { // return of async actions
+        expect(store.getActions()).toEqual(expectedActions)
       })
+      .then(done) // test passed
+      .catch(done) // test failed
   })
 })
 ```
