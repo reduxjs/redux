@@ -9,4 +9,4 @@
  * (...args) => f(g(h(...args))).
  */
  
-export default (...funcs) => (...args) => funcs.length == 0 ? args[0] : funcs.reduceRight((composed, f)=> f.apply(this, Array.isArray(composed) ? composed : [composed]), args)
+export default (...funcs) => (...args) => funcs.length == 0 ? args[0] : funcs.reduceRight((composed, f)=> f.apply(this, Array.isArray(composed) ? composed : [ composed ]), args)
