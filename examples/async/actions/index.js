@@ -60,5 +60,6 @@ export function fetchPostsIfNeeded(reddit) {
     if (shouldFetchPosts(getState(), reddit)) {
       return dispatch(fetchPosts(reddit));
     }
+    return null;
   };
 }

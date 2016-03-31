@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import Product from './Product';
 
-const ProductItem = ({ product }) => (
+const ProductItem = ({ product, onAddToCartClicked }) => (
   <div style={{ marginBottom: 20 }}>
     <Product title={product.title} price={product.price} />
     <button
-      onClick={this.props.onAddToCartClicked}
+      onClick={onAddToCartClicked}
       disabled={product.inventory > 0 ? '' : 'disabled'}
     >
       {product.inventory > 0 ? 'Add to cart' : 'Sold Out'}

@@ -26,11 +26,10 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   }
 
   if (!isPlainObject(inputState)) {
+    const argumentType = ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1];
     return (
-      `The ${argumentName} has unexpected type of "` +
-      ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
-      '". Expected argument to be an object with the following ' +
-      `keys: "${reducerKeys.join('", "')}"`
+      `The ${argumentName} has unexpected type of "${argumentType}". ` +
+      `Expected argument to be an object with the following keys: "${reducerKeys.join('", "')}"`
     );
   }
 
@@ -44,6 +43,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
       `"${reducerKeys.join('", "')}". Unexpected keys will be ignored.`
     );
   }
+  return null;
 }
 
 function assertReducerSanity(reducers) {
@@ -60,7 +60,8 @@ function assertReducerSanity(reducers) {
       );
     }
 
-    const type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+    const randomId = Math.random().toString(36).substring(7).split('').join('.');
+    const type = `@@redux/PROBE_UNKNOWN_ACTION_${randomId}`;
     if (typeof reducer(undefined, { type }) === 'undefined') {
       throw new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +

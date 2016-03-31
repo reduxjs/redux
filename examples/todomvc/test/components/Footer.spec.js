@@ -82,7 +82,7 @@ describe('components', () => {
     it('shouldnt show clear button when no completed todos', () => {
       const { output } = setup({ completedCount: 0 });
       const [, , clear] = output.props.children;
-      expect(clear).toBe(undefined);
+      expect(clear).toBe(null);
     });
 
     it('should render clear button when completed todos', () => {

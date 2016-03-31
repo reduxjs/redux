@@ -36,17 +36,20 @@ export const ActionTypes = {
  * and subscribe to changes.
  */
 export default function createStore(reducer, initialState, enhancer) {
+  let currentState = initialState;
+  let currentEnhancer = enhancer;
+
   if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = initialState;
-    initialState = undefined;
+    currentEnhancer = initialState;
+    currentState = undefined;
   }
 
-  if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
+  if (typeof currentEnhancer !== 'undefined') {
+    if (typeof currentEnhancer !== 'function') {
       throw new Error('Expected the enhancer to be a function.');
     }
 
-    return enhancer(createStore)(reducer, initialState);
+    return currentEnhancer(createStore)(reducer, currentState);
   }
 
   if (typeof reducer !== 'function') {
@@ -54,7 +57,6 @@ export default function createStore(reducer, initialState, enhancer) {
   }
 
   let currentReducer = reducer;
-  let currentState = initialState;
   let currentListeners = [];
   let nextListeners = currentListeners;
   let isDispatching = false;

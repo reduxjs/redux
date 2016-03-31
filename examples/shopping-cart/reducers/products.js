@@ -18,8 +18,9 @@ function byId(state = {}, action) {
       return Object.assign({},
         state,
         action.products.reduce((obj, product) => {
-          obj[product.id] = product;
-          return obj;
+          const newObj = obj;
+          newObj[product.id] = product;
+          return newObj;
         }, {})
       );
     default: {

@@ -1,7 +1,6 @@
 import * as tt from 'typescript-definition-tester';
 
-
-describe('TypeScript definitions', () => {
+describe('TypeScript definitions', function compileTS() {
   this.timeout(0);
 
   it('should compile against index.d.ts', (done) => {

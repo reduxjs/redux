@@ -42,7 +42,7 @@ function getAllDescendantIds(state, nodeId) {
 function deleteMany(state, ids) {
   const newState = Object.assign({}, state);
   ids.forEach(id => delete newState[id]);
-  return state;
+  return newState;
 }
 
 export default function (state = {}, action) {
