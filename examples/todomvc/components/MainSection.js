@@ -36,6 +36,8 @@ class MainSection extends Component {
         />
       );
     }
+
+    return null;
   }
 
   renderFooter(completedCount) {
@@ -53,6 +55,8 @@ class MainSection extends Component {
         />
       );
     }
+
+    return null;
   }
 
   render() {

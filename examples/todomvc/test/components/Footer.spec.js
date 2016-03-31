@@ -27,10 +27,10 @@ function getTextContent(elem) {
   const children = Array.isArray(elem.props.children) ?
     elem.props.children : [elem.props.children];
 
-  return children.reduce((out, child) => {
+  return children.reduce((out, child) => (
     // Children are either elements or text strings
-    return out + (child.props ? getTextContent(child) : child);
-  }, '');
+    out + (child.props ? getTextContent(child) : child)
+  ), '');
 }
 
 describe('components', () => {

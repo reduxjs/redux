@@ -1,22 +1,20 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { checkout } from '../actions';
 import { getTotal, getCartProducts } from '../reducers';
 import Cart from '../components/Cart';
 
-class CartContainer extends Component {
-  render() {
-    const { products, total } = this.props;
+const CartContainer = (props) => {
+  const { products, total } = props;
 
-    return (
-      <Cart
-        products={products}
-        total={total}
-        onCheckoutClicked={() => this.props.checkout()}
-      />
-    );
-  }
-}
+  return (
+    <Cart
+      products={products}
+      total={total}
+      onCheckoutClicked={() => props.checkout()}
+    />
+  );
+};
 
 CartContainer.propTypes = {
   products: PropTypes.arrayOf(PropTypes.shape({

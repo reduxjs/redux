@@ -4,7 +4,7 @@ import * as types from '../constants/ActionTypes';
 function receiveProducts(products) {
   return {
     type: types.RECEIVE_PRODUCTS,
-    products: products,
+    products,
   };
 }
 

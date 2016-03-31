@@ -43,6 +43,8 @@ class Footer extends Component {
         </button>
       );
     }
+
+    return null;
   }
 
   render() {
