@@ -27,7 +27,7 @@ In general, use Redux when you have reasonable amounts of data changing over tim
 - [Stack Overflow: Why should I use Redux in this example?](http://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
 - [Stack Overflow: What could be the downsides of using Redux instead of Flux?](http://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
 
-### Can Redux only be used with React?  
+### Can Redux only be used with React?
 
 Redux can be used as a data store for any UI layer. The most common usage is with React and React Native, but there are bindings available for Angular, Angular 2, Vue, Mithril, and more. Redux simply provides a subscription mechanism which can be used by any other code. That said it is most useful when combined with a declarative view implementation that can infer the UI updates from the state changes.
 
@@ -467,103 +467,94 @@ For non-connected components, you may want to check what props are being passed 
 #### Further information
 
 **Discussions**
-- [Stack Overflow - Can a React Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
+- [Stack Overflow: Can a React Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
 - [A Deep Dive into React Perf Debugging](http://benchling.engineering/deep-dive-react-perf-debugging/)
 
 
-### How can I speed up my mapStateToProps?
+### How can I speed up my `mapStateToProps`?
 
-While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it's still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does.  The common recommended approach is to create memoized "selector" functions using the [Reselect](https://github.com/reactjs/reselect) library.  These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed.  This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
+While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it’s still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reactjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
 
 #### Further information
+
 **Documentation**
 - [Recipes: Computed Derived Data](recipes/ComputingDerivedData.md)
 
 **Discussions**
+- [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
+- [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
 
-- [#815 - Working with Data Structures](https://github.com/reactjs/redux/issues/815)
-- [Reselect #47 - Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
+### Why don’t I have `this.props.dispatch` available in my connected component?
 
+The `connect()` function takes two primary arguments, both optional. The first, `mapStateToProps`, is a function you provide to pull data from the store when it changes, and pass those values as props to your component. The second, `mapDispatchToProps`, is a function you provide to make use of the store’s `dispatch` function, usually by creating pre-bound versions of action creators that will automatically dispatch their actions as soon as they are called.
 
-### Why don't I have `this.props.dispatch` available in my connected component?
-
-The `connect` function takes two primary arguments, both optional.  The first, `mapStateToProps`, is a function you provide to pull data from the store when it changes, and pass those values as props to your component.  The second, `mapDispatchToProps`, is a function you provide to make use of the store's `dispatch` function, usually by creating pre-bound versions of action creators that will automatically dispatch their actions as soon as they are called.
-
-If you do not provide your own `mapDispatchToProps` function when calling `connect`, React Redux will provide a default version, which simply returns the `dispatch` function as a prop.  That means that if you _do_ provide your own function, `dispatch` is _not_ automatically provided.  If you still want it available as a prop, you need to explicitly return it yourself in your `mapDispatchToProps` implementation.
-
+If you do not provide your own `mapDispatchToProps` function when calling `connect()`, React Redux will provide a default version, which simply returns the `dispatch` function as a prop. That means that if you *do* provide your own function, `dispatch` is *not* automatically provided.  If you still want it available as a prop, you need to explicitly return it yourself in your `mapDispatchToProps` implementation.
 
 #### Further information
-**Documentation**
-- [React Redux API: connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 
+**Documentation**
+- [React Redux API: connect()](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 
 **Discussions**
-
-- [React Redux #89 - can i wrap multi actionCreators into one props with name?](https://github.com/reactjs/react-redux/issues/89)
-- [React Redux #145 - consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
-- [React Redux #255 - this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
-- [Stack Overflow - http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710](How to get simple dispatch from this.props using connect w/ Redux?)
-
+- [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reactjs/react-redux/issues/89)
+- [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
+- [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
+- [Stack Overflow: http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710](How to get simple dispatch from this.props using connect w/ Redux?)
 
 ### Should I only connect my top component, or can I connect multiple components in my tree?
 
-Early Redux documentation advised that you should only have a few connected components, near the top of your component tree.  However, time and experience has shown that that generally requires a few components to know too much about the data requirements of all their descendants, and forces them to pass down a confusing number of props.  
+Early Redux documentation advised that you should only have a few connected components near the top of your component tree.  However, time and experience has shown that that generally requires a few components to know too much about the data requirements of all their descendants, and forces them to pass down a confusing number of props.
 
-The current suggested best practice is to categorize your components as "presentational" or "container", and extract a connected container component wherever it makes sense:
+The current suggested best practice is to categorize your components as “presentational” or “container” components, and extract a connected container component wherever it makes sense:
 
-> Emphasizing "one container component at the top" in Redux examples was a mistake. Don't take this as a maxim.  Try to keep your presentation components separate. Create container components by connecting them when it's convenient.  Whenever you feel like you're duplicating code in parent components to provide data for same kinds of children, time to extract a container.  Generally as soon as you feel a parent knows too much about "personal" data / actions of its children, time to extract a container.
+> Emphasizing “one container component at the top” in Redux examples was a mistake. Don’t take this as a maxim. Try to keep your presentation components separate. Create container components by connecting them when it’s convenient. Whenever you feel like you’re duplicating code in parent components to provide data for same kinds of children, time to extract a container. Generally as soon as you feel a parent knows too much about “personal” data or actions of its children, time to extract a container.
 
 In general, try to find a balance between understandable data flow and areas of responsibility with your components.
 
 #### Further information
+
 **Documentation**
 - [Basics: Usage with React](basics/UsageWithReact.md)
 
-
 **Discussions**
 - [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
-- [Twitter - emphasizing "one container" was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
-- [#419 - Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
-- [#756 - container vs component?](https://github.com/reactjs/redux/issues/756)
-- [#1176 - Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
-- [Stack Overflow - can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
-
-
+- [Twitter: emphasizing "one container" was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
+- [#419: Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
+- [#756: container vs component?](https://github.com/reactjs/redux/issues/756)
+- [#1176: Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
+- [Stack Overflow: can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
 
 ## Miscellaneous
 
-### Are there any larger, "real" Redux projects?
+### Are there any larger, “real” Redux projects?
 
-The Redux "examples" folder has several sample projects of varying complexity, including a "real-world" example.  While many companies are using Redux, most of their applications are proprietary and not available.  A large number of Redux-related projects can be found on Github, such as [Sound-Redux](https://github.com/andrewngu/sound-redux).
+The Redux “examples” folder has several sample projects of varying complexity, including a “real-world” example. While many companies are using Redux, most of their applications are proprietary and not available. A large number of Redux-related projects can be found on Github, such as [SoundRedux](https://github.com/andrewngu/sound-redux).
 
 #### Further information
+
 **Documentation**
 - [Introduction: Examples](introduction/Examples.md)
 
-
 **Discussions**
-
-- [Reddit - Large open source react/redux projects?](https://www.reddit.com/r/reactjs/comments/496db2/large_open_source_reactredux_projects/)
-- [HN - Is there any huge web application built using Redux?](https://news.ycombinator.com/item?id=10710240)
-
+- [Reddit: Large open source react/redux projects?](https://www.reddit.com/r/reactjs/comments/496db2/large_open_source_reactredux_projects/)
+- [HN: Is there any huge web application built using Redux?](https://news.ycombinator.com/item?id=10710240)
 
 ### How can I implement authentication in Redux?
 
-Authentication is essential to any real application. When going about authentication you must keep in mind that nothing changes with how you should organize your application and you should implement authentication in the same way you would any other feature.  It is straightforward:
+Authentication is essential to any real application. When going about authentication you must keep in mind that nothing changes with how you should organize your application and you should implement authentication in the same way you would any other feature. It is relatively straightforward:
 
-1. Create action constants for LoginSuccess, LoginFailure, etc.
+1. Create action constants for `LOGIN_SUCCESS`, `LOGIN_FAILURE`, etc.
 
-2. Create actionCreators that take in a type, credentials, a flag that signifies if authentication is true or false, a token, or errorMessage as a payload.
+2. Create action creators that take in credentials, a flag that signifies whether authentication succeeded, a token, or an error message as the payload.
 
-3. Create an async action creator with redux-thunk middleware or any middleware you see fit to fire a network request to an api that returns a token if the credentials are valid and proceeds to save in local storage or a response to the user if it is a failure which is handled by the appropriate actionCreators that you made in step 2.
+3. Create an async action creator with Redux Thunk middleware or any middleware you see fit to fire a network request to an API that returns a token if the credentials are valid. Then save the token in the local storage or show a response to the user if it failed. You can perform these side effects from the action creators you wrote in the previous step.
 
-4. Create a reducer that can return the next state for each possible authentication case (LoginSuccess, LogoutFailure).
+4. Create a reducer that returns the next state for each possible authentication case (`LOGIN_SUCCESS`, `LOGIN_FAILURE`, etc).
 
 #### Further information
 
 **Discussions**
-
 - [Authentication with JWT by Auth0](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/)
 - [Tips to Handle Authentication in Redux](https://medium.com/@MattiaManzati/tips-to-handle-authentication-in-redux-2-introducing-redux-saga-130d6872fbe7)
 - [react-redux-jwt-auth-example](https://github.com/joshgeller/react-redux-jwt-auth-example)
