@@ -313,6 +313,9 @@ It’s generally suggested that selectors are defined alongside reducers and exp
 - [Stack Overflow: How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
 - [Redux Best Practices](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
 - [Rules For Structuring (Redux) Applications ](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
+- [A Better File Structure for React/Redux Applications](http://marmelab.com/blog/2015/12/17/react-directory-structure.html)
+- [Organizing Large React Applications](http://engineering.kapost.com/2016/01/organizing-large-react-applications/)
+- [Four Strategies for Organizing Code](https://medium.com/@msandin/strategies-for-organizing-code-2c9d690b6f33)
 
 ### How should I split my logic between reducers and action creators? Where should my “business logic” go?
 
@@ -352,6 +355,7 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 - [Reddit: What's the best place to keep the initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
 - [Reddit: Help designing Redux state for a single page app](https://www.reddit.com/r/reactjs/comments/48k852/help_designing_redux_state_for_a_single_page/)
 - [Reddit: Redux performance issues with a large state object?](https://www.reddit.com/r/reactjs/comments/41wdqn/redux_performance_issues_with_a_large_state_object/)
+- [Reddit: React/Redux for Ultra Large Scale apps](https://www.reddit.com/r/javascript/comments/49box8/reactredux_for_ultra_large_scale_apps/)
 - [Twitter: Redux scaling](https://twitter.com/NickPresta/status/684058236828266496)
 
 ### Won’t calling “all my reducers” for each action be slow?
