@@ -23,9 +23,9 @@ In general, use Redux when you have reasonable amounts of data changing over tim
 - [React How-To](https://github.com/petehunt/react-howto)
 - [Twitter: Don’t use Redux until...](https://twitter.com/dan_abramov/status/699241546248536064)
 - [The Case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
-- [StackOverflow: Why use Redux over Facebook Flux?](http://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
-- [StackOverflow: Why should I use Redux in this example?](http://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
-- [StackOverflow: What could be the downsides of using Redux instead of Flux?](http://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
+- [Stack Overflow: Why use Redux over Facebook Flux?](http://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
+- [Stack Overflow: Why should I use Redux in this example?](http://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
+- [Stack Overflow: What could be the downsides of using Redux instead of Flux?](http://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
 
 ### Can Redux only be used with React?  
 
@@ -63,8 +63,8 @@ In general, remember that reducers are just functions—you can organize them an
 **Discussions**
 - [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reactjs/redux/issues/601)
 - [#1400: Is passing top-level state object to branch reducer an anti-pattern?](https://github.com/reactjs/redux/issues/1400)
-- [StackOverflow: Accessing other parts of the state when using combined reducers?](http://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
-- [StackOverflow: Reducing an entire subtree with redux combineReducers](http://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
+- [Stack Overflow: Accessing other parts of the state when using combined reducers?](http://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
+- [Stack Overflow: Reducing an entire subtree with redux combineReducers](http://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
 - [Sharing State Between Redux Reducers](https://invalidpatent.wordpress.com/2016/02/18/sharing-state-between-redux-reducers/)
 
 
@@ -97,8 +97,8 @@ There are a number of community packages that implement various approaches for s
 - [#1098 - Using Redux in reusable React component](https://github.com/reactjs/redux/issues/1098)
 - [#1287 - How to choose between Redux's store and React's state?](https://github.com/reactjs/redux/issues/1287)
 - [#1385 - What are the disadvantages of storing all your state in a single immutable atom?](https://github.com/reactjs/redux/issues/1385)
-- [StackOverflow - Why is state all in one place, even state that isn't global?](http://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
-- [StackOverflow - Should all component state be kept in Redux store?](http://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
+- [Stack Overflow - Why is state all in one place, even state that isn't global?](http://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
+- [Stack Overflow - Should all component state be kept in Redux store?](http://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
 
 
 ### Can I put functions, promises, or other non-serializable items in my store state?
@@ -155,8 +155,8 @@ Similarly, while you _can_ reference your store instance by importing it directl
 **Discussions**
 
 - [#1346 - Is it bad practice to just have a 'stores' directory?](https://github.com/reactjs/redux/issues/1436)
-- [StackOverflow - Redux multiple stores, why not?](http://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
-- [StackOverflow - Accessing Redux state in an action creator](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
+- [Stack Overflow - Redux multiple stores, why not?](http://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
+- [Stack Overflow - Accessing Redux state in an action creator](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
 
 
 ### Is it OK to have more than one middleware chain in my store enhancer?  What is the difference between "next" and "dispatch" in a middleware function?
@@ -216,8 +216,8 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 - [#628 - Solution for simple action creation with less boilerplate](https://github.com/reactjs/redux/issues/628)
 - [#1024 - Proposal: Declarative reducers](https://github.com/reactjs/redux/issues/1024)
 - [#1167 - Reducer without switch](https://github.com/reactjs/redux/issues/1167)
-- [StackOverflow - Why do you need 'Actions' as data in Redux?](http://stackoverflow.com/q/34759047/62937)
-- [StackOverflow - What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
+- [Stack Overflow - Why do you need 'Actions' as data in Redux?](http://stackoverflow.com/q/34759047/62937)
+- [Stack Overflow - What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
 
 
 ### Is there always a 1-1 mapping between reducers and actions?
@@ -234,7 +234,7 @@ The actual suggested pattern is to have independent sub-reducer functions that a
 - [Twitter - most common Redux misconception](https://twitter.com/dan_abramov/status/682923564006248448)
 - [#1167 - Reducer without switch](https://github.com/reactjs/redux/issues/1167)
 - [Reduxible #8 - Reducers and action creators aren't a one-to-one mapping](https://github.com/reduxible/reduxible/issues/8)
-- [StackOverflow - Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
+- [Stack Overflow - Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
 
 ### How can I represent "side effects" such as AJAX calls?  Why do we need things like "action creators", "thunks", and "middleware" to do async behavior?
 
@@ -262,12 +262,12 @@ The simplest and most common way to do this is adding the [redux-thunk](https://
 - [#533 - Simpler introduction to async action creators](https://github.com/reactjs/redux/issues/533)
 - [#569 - Proposal: API for explicit side effects](https://github.com/reactjs/redux/pull/569)
 - [#1139 - An alternative side effect model based on generators and sagas](https://github.com/reactjs/redux/issues/1139)
-- [StackOverflow - Why do we need middleware for async flow in Redux?](http://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux)
-- [StackOverflow - How to dispatch a Redux action with a timeout?](http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559)
-- [StackOverflow - Where should I put synchronous side effects linked to actions in redux?](http://stackoverflow.com/questions/32982237/where-should-i-put-synchronous-side-effects-linked-to-actions-in-redux/33036344)
-- [StackOverflow - How to handle complex side-effects in Redux?](http://stackoverflow.com/questions/32925837/how-to-handle-complex-side-effects-in-redux/33036594)
-- [StackOverflow - How to unit test async Redux actions to mock ajax response](http://stackoverflow.com/questions/33011729/how-to-unit-test-async-redux-actions-to-mock-ajax-response/33053465)
-- [StackOverflow - How to fire AJAX calls in response to the state changes with Redux?](http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447)
+- [Stack Overflow - Why do we need middleware for async flow in Redux?](http://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux)
+- [Stack Overflow - How to dispatch a Redux action with a timeout?](http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559)
+- [Stack Overflow - Where should I put synchronous side effects linked to actions in redux?](http://stackoverflow.com/questions/32982237/where-should-i-put-synchronous-side-effects-linked-to-actions-in-redux/33036344)
+- [Stack Overflow - How to handle complex side-effects in Redux?](http://stackoverflow.com/questions/32925837/how-to-handle-complex-side-effects-in-redux/33036594)
+- [Stack Overflow - How to unit test async Redux actions to mock ajax response](http://stackoverflow.com/questions/33011729/how-to-unit-test-async-redux-actions-to-mock-ajax-response/33053465)
+- [Stack Overflow - How to fire AJAX calls in response to the state changes with Redux?](http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447)
 - [Reddit - Help performing Async API calls with Redux-Promise Middleware.](https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/)
 - [Twitter - possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
 - [Redux Side-Effects and You](https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3)
@@ -285,9 +285,9 @@ In general, ask if these actions are related but independent, or might actually 
 
 - [#597 - Valid to dispatch multiple actions from an event handler?](https://github.com/reactjs/redux/issues/597)
 - [#959 - Multiple actions one dispatch?](https://github.com/reactjs/redux/issues/959)
-- [StackOverflow - Should I use one or several action types to represent this async action?](http://stackoverflow.com/questions/33637740/should-i-use-one-or-several-action-types-to-represent-this-async-action/33816695)
-- [StackOverflow - Do events and actions have a 1:1 relationship in Redux?](http://stackoverflow.com/questions/35406707/do-events-and-actions-have-a-11-relationship-in-redux/35410524)
-- [StackOverflow - Should actions be handled by reducers to related actions or generated by action creators themselves?](http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-reducers-to-rel/33226443#33226443)
+- [Stack Overflow - Should I use one or several action types to represent this async action?](http://stackoverflow.com/questions/33637740/should-i-use-one-or-several-action-types-to-represent-this-async-action/33816695)
+- [Stack Overflow - Do events and actions have a 1:1 relationship in Redux?](http://stackoverflow.com/questions/35406707/do-events-and-actions-have-a-11-relationship-in-redux/35410524)
+- [Stack Overflow - Should actions be handled by reducers to related actions or generated by action creators themselves?](http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-reducers-to-rel/33226443#33226443)
 
 
 ## Code Structure
@@ -308,7 +308,7 @@ It's generally suggested that selectors should be defined alongside reducers and
 - [#839 - Emphasize defining selectors alongside reducers](https://github.com/reactjs/redux/issues/839)
 - [#943 - Reducer querying](https://github.com/reactjs/redux/issues/943)
 - [React-Boilerplate #27 - Application Structure](https://github.com/mxstbr/react-boilerplate/issues/27)
-- [StackOverflow - How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
+- [Stack Overflow - How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
 - [Redux Best Practices](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
 - [Rules For Structuring (Redux) Applications ](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
 
@@ -327,7 +327,7 @@ This comment sums up the dichotomy nicely:
 
 - [#1165 - Where to put business logic / validation?](https://github.com/reactjs/redux/issues/1165)
 - [#1171 - Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reactjs/redux/issues/1171 )
-- [StackOverflow - Accessing Redux state in an action creator??](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
+- [Stack Overflow - Accessing Redux state in an action creator??](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
 
 
 ## Performance
@@ -367,8 +367,8 @@ If you actually are concerned about reducer performance, you can use a utility s
 
 - [#912 - Proposal: action filter utility](https://github.com/reactjs/redux/issues/912)
 - [#1303 - Redux Performance with Large Store and frequent updates](https://github.com/reactjs/redux/issues/1303)
-- [StackOverflow - State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
-- [StackOverflow - How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
+- [Stack Overflow - State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
+- [Stack Overflow - How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
 
 
 ### Do I have to deep-copy my state in a reducer? Isn't copying my state going to be slow?
@@ -414,7 +414,7 @@ Redux does not store a history of actions itself.  However, the Redux DevTools d
 
 **Discussions**
 
-- [StackOverflow - Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
+- [Stack Overflow - Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
 - [Reddit - What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
 
 
@@ -446,7 +446,7 @@ Note that "updating data immutably" does _not_ mean that you must use the Immuta
 - [#1262 - Immutable data + bad performance](https://github.com/reactjs/redux/issues/1262)
 - [React-Redux #235 - Predicate function for updating component](https://github.com/reactjs/react-redux/issues/235)
 - [React-Redux #291 - Should mapStateToProps be called every time an action is dispatched?](https://github.com/reactjs/react-redux/issues/291)
-- [StackOverflow - Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
+- [Stack Overflow - Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist - state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
 - [Pros and Cons of Using Immutability with React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
@@ -474,7 +474,7 @@ For non-connected components, you may want to check what props are being passed 
 
 **Discussions**
 
-- [StackOverflow - Can a React-Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
+- [Stack Overflow - Can a React-Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
 
 
@@ -509,7 +509,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 - [React-Redux #89 - can i wrap multi actionCreators into one props with name?](https://github.com/reactjs/react-redux/issues/89)
 - [React-Redux #145 - consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
 - [React-Redux #255 - this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
-- [StackOverflow - http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710](How to get simple dispatch from this.props using connect w/ Redux?)
+- [Stack Overflow - http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710](How to get simple dispatch from this.props using connect w/ Redux?)
 
 
 ### Should I only connect my top component, or can I connect multiple components in my tree?
@@ -533,7 +533,7 @@ In general, try to find a balance between understandable data flow and areas of 
 - [#419 - Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
 - [#756 - container vs component?](https://github.com/reactjs/redux/issues/756)
 - [#1176 - Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
-- [StackOverflow - can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
+- [Stack Overflow - can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
 
 
 
@@ -541,7 +541,7 @@ In general, try to find a balance between understandable data flow and areas of 
 
 ### Are there any larger, "real" Redux projects?
 
-The Redux "examples" folder has several sample projects of varying complexity, including a "real-world" example.  While many companies are using Redux, most of their applications are proprietary and not available.  A large number of Redux-related projects can be found on Github, such as [StackOverflowund-Redux](https://github.com/andrewngu/sound-redux).
+The Redux "examples" folder has several sample projects of varying complexity, including a "real-world" example.  While many companies are using Redux, most of their applications are proprietary and not available.  A large number of Redux-related projects can be found on Github, such as [Sound-Redux](https://github.com/andrewngu/sound-redux).
 
 #### Further information
 **Documentation**
