@@ -142,7 +142,7 @@ Some valid reasons for using multiple stores in Redux might include:
 * Solving a performance issue caused by too frequent updates of some part of the state, when confirmed by profiling the app.
 * Isolating a Redux app as a component in a bigger application, in which case you might want to create a store per root component instance.
 
-However, creating new stores shouldn’t be your first instinct, especially if you come from Flux background. Try reducer composition first, and only use multiple stores if it doesn’t solve your problem.
+However, creating new stores shouldn’t be your first instinct, especially if you come from a Flux background. Try reducer composition first, and only use multiple stores if it doesn’t solve your problem.
 
 Similarly, while you *can* reference your store instance by importing it directly, this is not a recommended pattern in Redux. If you create a store instance and export it from a module, it will become a singleton. This means it will be harder to isolate a Redux app as a component of a larger app, if this is ever necessary, or to enable server rendering, because on the server you want to create separate store instances for every request.
 
@@ -225,7 +225,7 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 
 ### Is there always a one-to-one mapping between reducers and actions?
 
-No. We suggest you to write independent small reducer functions that are each responsible for updates to a specific slice of state. We call this pattern “reducer composition”. A given action could be handled by all, some, or none of them. This keep components decoupled from the actual data changes, as one action may affect different parts of the state tree, and there is no need for the component to be aware of this. Some users do choose to bind them more tightly together, such as the “ducks” file structure, but there is definitely no one-to-one mapping by default, and you should break out of such paradigm any time you feel you want to handle an action in many reducers.
+No. We suggest you write independent small reducer functions that are each responsible for updates to a specific slice of state. We call this pattern “reducer composition”. A given action could be handled by all, some, or none of them. This keep components decoupled from the actual data changes, as one action may affect different parts of the state tree, and there is no need for the component to be aware of this. Some users do choose to bind them more tightly together, such as the “ducks” file structure, but there is definitely no one-to-one mapping by default, and you should break out of such a paradigm any time you feel you want to handle an action in many reducers.
 
 #### Further information
 
@@ -500,7 +500,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 - [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reactjs/react-redux/issues/89)
 - [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
 - [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
-- [Stack Overflow: http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710](How to get simple dispatch from this.props using connect w/ Redux?)
+- [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
 ### Should I only connect my top component, or can I connect multiple components in my tree?
 
@@ -519,7 +519,7 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Discussions**
 - [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
-- [Twitter: emphasizing "one container" was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
+- [Twitter: emphasizing “one container” was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
 - [#419: Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
 - [#756: container vs component?](https://github.com/reactjs/redux/issues/756)
 - [#1176: Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
