@@ -72,7 +72,11 @@ export default function createStore(reducer, initialState, enhancer) {
    */
   function getState() {
     if (isDispatching) {
-      throw new Error('Reducers may not access store state.')
+      throw new Error(
+        'You may not call store.getState() while the reducer is executing.' +
+        'The reducer has already received the state as an argument.' +
+        'Pass it down from the top reducer instead of reading it from the store.'
+      )
     }
 
     return currentState
@@ -115,7 +119,7 @@ export default function createStore(reducer, initialState, enhancer) {
     ensureCanMutateNextListeners()
     nextListeners.push(listener)
 
-    return function unsubscribe() {     
+    return function unsubscribe() {
       if (!isSubscribed) {
         return
       }

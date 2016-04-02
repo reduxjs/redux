@@ -464,7 +464,7 @@ describe('createStore', () => {
 
     expect(() =>
       store.dispatch(getStateInMiddle(store.getState.bind(store)))
-    ).toThrow(/may not access store state/)
+    ).toThrow(/You may not call store.getState()/)
   })
 
   it('does not allow subscribe() from within a reducer', () => {
