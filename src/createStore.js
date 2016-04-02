@@ -115,13 +115,13 @@ export default function createStore(reducer, initialState, enhancer) {
     ensureCanMutateNextListeners()
     nextListeners.push(listener)
 
-    return function unsubscribe() {
-      if (isDispatching) {
-        throw new Error('Reducers may not unsubscribe.')
-      }
-
+    return function unsubscribe() {     
       if (!isSubscribed) {
         return
+      }
+
+      if (isDispatching) {
+        throw new Error('Reducers may not unsubscribe.')
       }
 
       isSubscribed = false
