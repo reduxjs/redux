@@ -71,6 +71,10 @@ export default function createStore(reducer, initialState, enhancer) {
    * @returns {any} The current state tree of your application.
    */
   function getState() {
+    if (isDispatching) {
+      throw new Error('Reducers may not access store state.')
+    }
+
     return currentState
   }
 
@@ -102,12 +106,20 @@ export default function createStore(reducer, initialState, enhancer) {
       throw new Error('Expected listener to be a function.')
     }
 
+    if (isDispatching) {
+      throw new Error('Reducers may not subscribe.')
+    }
+
     var isSubscribed = true
 
     ensureCanMutateNextListeners()
     nextListeners.push(listener)
 
     return function unsubscribe() {
+      if (isDispatching) {
+        throw new Error('Reducers may not unsubscribe.')
+      }
+
       if (!isSubscribed) {
         return
       }
