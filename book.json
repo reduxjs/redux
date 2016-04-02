@@ -3,7 +3,7 @@
   "structure": {
     "summary": "docs/README.md"
   },
-  "plugins": ["edit-link", "prism", "-highlight", "github"],
+  "plugins": ["edit-link", "prism", "-highlight", "github", "anker-enable"],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/reactjs/redux/tree/master",
