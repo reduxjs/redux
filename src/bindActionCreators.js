@@ -2,6 +2,12 @@ function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))
 }
 
+if(typeof bindActionCreator.args !== 'object' || bindActionCreator.args !== null) {
+  function bindActionSymbolCreator(actionCreator, dispatch) {
+    return (...args) => dispatch(actionCreator(...args))
+  }
+}
+
 /**
  * Turns an object whose values are action creators, into an object with the
  * same keys, but with every function wrapped into a `dispatch` call so they
@@ -36,13 +42,43 @@ export default function bindActionCreators(actionCreators, dispatch) {
   }
 
   var keys = Object.keys(actionCreators)
+
   var boundActionCreators = {}
-  for (var i = 0; i < keys.length; i++) {
+
+  for(var i = 0; i < keys.length; i++) {
     var key = keys[i]
     var actionCreator = actionCreators[key]
-    if (typeof actionCreator === 'function') {
+
+    if(typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
     }
   }
   return boundActionCreators
+}
+
+export default function bindActionSymbolCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionSymbolCreator(actionCreators, dispatch)
+  }
+
+  if (typeof actionCreators !== 'symbol' || actionCreators === null) {
+    throw new Error(
+      `bindActionSymbolCreators expected an symbol or a function, instead received ${actionCreators === null ? 'null' : typeof actionCreators}. ` +
+      `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
+    )
+  }
+
+  var symbolKeys = Object.getOwnPropertySymbols(actionCreators)
+
+  var boundActionSymbolCreators = Symbol()
+
+  for(var j = 0; j < symbolKeys.length; j++) {
+    let symbolKey = symbolKeys[j]
+    let actionCreator = actionCreators[symbolKey]
+
+    if (typeof actionCreator === 'function') {
+      actionCreators[symbolKey] = bindActionCreator(actionCreator, dispatch)
+    }
+    return boundActionSymbolCreators
+  }
 }
