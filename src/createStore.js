@@ -73,7 +73,10 @@ export default function createStore(reducer, initialState, enhancer) {
   function getState() {
     return currentState
   }
-
+  
+  if (typeof getState !== 'function' || getState == 'undefined') {
+    throw new Error('Expected getState to be a function.')
+  }
   /**
    * Adds a change listener. It will be called any time an action is dispatched,
    * and some part of the state tree may potentially have changed. You may then
@@ -172,7 +175,7 @@ export default function createStore(reducer, initialState, enhancer) {
     }
 
     var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
+    for (let i = 0; i < listeners.length; i++) {
       listeners[i]()
     }
 
