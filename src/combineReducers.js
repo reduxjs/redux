@@ -4,7 +4,7 @@ import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key, action) {
   var actionType = action && action.type
-  var actionName = actionType && `"${actionType.toString()}"` || 'an action'
+  const actionName = actionType && `"${actionType.toString()}"` || 'an action'
 
   return (
     `Given action ${actionName}, reducer "${key}" returned undefined. ` +
@@ -14,7 +14,7 @@ function getUndefinedStateErrorMessage(key, action) {
 
 function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   var reducerKeys = Object.keys(reducers)
-  var argumentName = action && action.type === ActionTypes.INIT ?
+  const argumentName = action && action.type === ActionTypes.INIT ?
     'initialState argument passed to createStore' :
     'previous state received by the reducer'
 
@@ -93,7 +93,7 @@ function assertReducerSanity(reducers) {
 export default function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
-  for (var i = 0; i < reducerKeys.length; i++) {
+  for (let i = 0; i < reducerKeys.length; i++) {
     var key = reducerKeys[i]
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
@@ -114,7 +114,7 @@ export default function combineReducers(reducers) {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
+      const warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
       if (warningMessage) {
         warning(warningMessage)
       }
@@ -122,7 +122,7 @@ export default function combineReducers(reducers) {
 
     var hasChanged = false
     var nextState = {}
-    for (var i = 0; i < finalReducerKeys.length; i++) {
+    for (let i = 0; i < finalReducerKeys.length; i++) {
       var key = finalReducerKeys[i]
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
