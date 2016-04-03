@@ -36,6 +36,15 @@ export default function bindActionCreators(actionCreators, dispatch) {
   }
 
   var keys = Object.keys(actionCreators)
+
+  if (typeof keys !== 'object' || !keys instanceof Function || keys === null) {
+
+    throw new Error(
+      `Properties of keys should be enumerable values. Have you modified 'keys'
+      in the source code with slice/push or any other method?`
+    )
+  }
+  
   var boundActionCreators = {}
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i]
