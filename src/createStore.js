@@ -35,20 +35,7 @@ export var ActionTypes = {
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, initialState, enhancer) {
-  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = initialState
-    initialState = undefined
-  }
-
-  if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
-      throw new Error('Expected the enhancer to be a function.')
-    }
-
-    return enhancer(createStore)(reducer, initialState)
-  }
-
+export function createStore(reducer, initialState) {
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.')
   }
@@ -198,15 +185,49 @@ export default function createStore(reducer, initialState, enhancer) {
     dispatch({ type: ActionTypes.INIT })
   }
 
-  // When a store is created, an "INIT" action is dispatched so that every
-  // reducer returns their initial state. This effectively populates
-  // the initial state tree.
-  dispatch({ type: ActionTypes.INIT })
-
   return {
     dispatch,
     subscribe,
     getState,
     replaceReducer
   }
+}
+
+/**
+ *
+ * TODO: Docs.
+ *
+ * @param {Function} reducer @see createStore
+ *
+ * @param {any} [initialState] @see createStore
+ *
+ * @param {Function} enhancer The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
+ * @returns {Store} An initialized Redux store that lets you read the state,
+ * dispatch actions and subscribe to changes.
+ */
+export default function initializeStore(reducer, initialState, enhancer) {
+  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = initialState
+    initialState = undefined
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.')
+    }
+  }
+
+  var finalCreateStore = enhancer ? enhancer(createStore) : createStore
+  var store = finalCreateStore(reducer, initialState)
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+  store.dispatch({ type: ActionTypes.INIT })
+
+  return store
 }

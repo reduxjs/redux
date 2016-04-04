@@ -1,5 +1,6 @@
 import expect from 'expect'
 import { createStore, combineReducers } from '../src/index'
+import { ActionTypes } from '../src/createStore'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 
@@ -610,4 +611,19 @@ describe('createStore', () => {
       store.subscribe(undefined)
     ).toThrow()
   })
+
+  it('fully initializes store before dispatching init action', () => {
+    const spyEnhancer = vanillaCreateStore => (...args) => {
+      const vanillaStore = vanillaCreateStore(...args)
+      return {
+        ...vanillaStore,
+        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+      }
+    }
+
+    const store = createStore(reducers.todos, spyEnhancer)
+
+    expect(store.dispatch).toHaveBeenCalledWith({ type: ActionTypes.INIT })
+  })
+
 })
