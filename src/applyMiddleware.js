@@ -7,23 +7,21 @@ import compose from './compose'
  *
  * See `redux-thunk` package as an example of the Redux middleware.
  *
- * Because middleware is potentially asynchronous, this should be the first
- * store enhancer in the composition chain.
- *
- * Note that each middleware will be given the `dispatch` and `getState` functions
+ * Note that each middleware will be given the `dispatch`, `schedule` and `getState` functions
  * as named arguments.
  *
  * @param {...Function} middlewares The middleware chain to be applied.
  * @returns {Function} A store enhancer applying the middleware.
  */
 export default function applyMiddleware(...middlewares) {
-  return (createStore) => (reducer, initialState, enhancer) => {
-    var store = createStore(reducer, initialState, enhancer)
+  return (createStore) => (reducer, initialState, schedule) => {
+    var store = createStore(reducer, initialState, schedule)
     var dispatch = store.dispatch
     var chain = []
 
     var middlewareAPI = {
       getState: store.getState,
+      schedule: schedule,
       dispatch: (action) => dispatch(action)
     }
     chain = middlewares.map(middleware => middleware(middlewareAPI))

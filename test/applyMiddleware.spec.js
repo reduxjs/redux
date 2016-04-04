@@ -23,6 +23,7 @@ describe('applyMiddleware', () => {
 
     expect(Object.keys(spy.calls[0].arguments[0])).toEqual([
       'getState',
+      'schedule',
       'dispatch'
     ])
 

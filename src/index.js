@@ -1,4 +1,5 @@
 import createStore from './createStore'
+import enhanceCreateStore from './enhanceCreateStore'
 import combineReducers from './combineReducers'
 import bindActionCreators from './bindActionCreators'
 import applyMiddleware from './applyMiddleware'
@@ -27,6 +28,7 @@ if (
 
 export {
   createStore,
+  enhanceCreateStore,
   combineReducers,
   bindActionCreators,
   applyMiddleware,
