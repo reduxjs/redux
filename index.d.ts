@@ -194,9 +194,8 @@ export interface Store<S> {
  * @template S State object type.
  */
 export interface StoreCreator {
-  <S>(reducer: Reducer<S>, enhancer?: StoreEnhancer): Store<S>;
-  <S>(reducer: Reducer<S>, initialState: S,
-      enhancer?: StoreEnhancer): Store<S>;
+  <S>(reducer: Reducer<S>, enhancer?: StoreEnhancer<S>): Store<S>;
+  <S>(reducer: Reducer<S>, initialState: S, enhancer?: StoreEnhancer<S>): Store<S>;
 }
 
 /**
@@ -217,7 +216,9 @@ export interface StoreCreator {
  * without the app being aware it is happening. Amusingly, the Redux
  * middleware implementation is itself a store enhancer.
  */
-export type StoreEnhancer = (next: StoreCreator) => StoreCreator;
+export type StoreEnhancer<S> = (next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
+export type GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
+export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, initialState: S) => Store<S>;
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -287,7 +288,7 @@ export interface Middleware {
  * @param middlewares The middleware chain to be applied.
  * @returns A store enhancer applying the middleware.
  */
-export function applyMiddleware(...middlewares: Middleware[]): StoreEnhancer;
+export function applyMiddleware(...middlewares: Middleware[]): GenericStoreEnhancer;
 
 
 /* action creators */

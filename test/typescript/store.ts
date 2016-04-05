@@ -1,5 +1,5 @@
 import {
-  Store, createStore, Reducer, Action, StoreEnhancer,
+  Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
   StoreCreator, Unsubscribe
 } from "../../index.d.ts";
 
@@ -21,13 +21,15 @@ const storeWithInitialState: Store<State> = createStore(reducer, {
   todos: []
 });
 
-const enhancer: StoreEnhancer = (next: StoreCreator) => next;
+const genericEnhancer: GenericStoreEnhancer = next => next;
+const specificEnhencer: StoreEnhancer<State> = next => next;
 
-const storeWithEnhancer: Store<State> = createStore(reducer, enhancer);
+const storeWithGenericEnhancer: Store<State> = createStore(reducer, genericEnhancer);
+const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhencer);
 
 const storeWithInitialStateAndEnhancer: Store<State> = createStore(reducer, {
   todos: []
-}, enhancer);
+}, genericEnhancer);
 
 
 /* dispatch */
