@@ -1,6 +1,6 @@
 import {
   Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
-  StoreCreator, Unsubscribe
+  StoreCreator, StoreEnhancerStoreCreator, Unsubscribe
 } from "../../index.d.ts";
 
 
@@ -21,7 +21,7 @@ const storeWithInitialState: Store<State> = createStore(reducer, {
   todos: []
 });
 
-const genericEnhancer: GenericStoreEnhancer = next => next;
+const genericEnhancer: GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => next;
 const specificEnhencer: StoreEnhancer<State> = next => next;
 
 const storeWithGenericEnhancer: Store<State> = createStore(reducer, genericEnhancer);
