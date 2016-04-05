@@ -213,7 +213,7 @@ class Posts extends Component {
     )
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.loadData(this.props.userId)
   }
 
@@ -295,7 +295,7 @@ import { connect } from 'react-redux'
 import { loadPosts } from './actionCreators'
 
 class Posts extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(loadPosts(this.props.userId))
   }
 
