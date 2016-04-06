@@ -111,7 +111,12 @@ export default function createStore(reducer, initialState, enhancer) {
     }
 
     if (isDispatching) {
-      throw new Error('Reducers may not subscribe.')
+      throw new Error(
+        'You may not call store.subscribe() while the reducer is executing. ' +
+        'If you would like to be notified after the store has been updated, subscribe from a ' +
+        'component and invoke store.getState() in the callback to access the latest state. ' +
+        'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
+      )
     }
 
     var isSubscribed = true
@@ -125,7 +130,10 @@ export default function createStore(reducer, initialState, enhancer) {
       }
 
       if (isDispatching) {
-        throw new Error('Reducers may not unsubscribe.')
+        throw new Error(
+          'You may not unsubscribe from a store listener while the reducer is executing. ' +
+          'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
+        )
       }
 
       isSubscribed = false

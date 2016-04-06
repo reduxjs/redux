@@ -472,7 +472,7 @@ describe('createStore', () => {
 
     expect(() =>
       store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
-    ).toThrow(/may not subscribe/)
+    ).toThrow(/You may not call store.subscribe()/)
   })
 
   it('does not allow unsubscribe from subscribe() from within a reducer', () => {
@@ -481,7 +481,7 @@ describe('createStore', () => {
 
     expect(() =>
       store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
-    ).toThrow(/may not unsubscribe/)
+    ).toThrow(/You may not unsubscribe from a store/)
   })
 
   it('recovers from an error within a reducer', () => {
