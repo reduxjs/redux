@@ -93,13 +93,14 @@ function assertReducerSanity(reducers) {
 export default function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
+  var finalReducerKeys = []
   for (var i = 0; i < reducerKeys.length; i++) {
     var key = reducerKeys[i]
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
+      finalReducerKeys.push(key)
     }
   }
-  var finalReducerKeys = Object.keys(finalReducers)
 
   var sanityError
   try {
