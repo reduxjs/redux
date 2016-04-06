@@ -371,7 +371,7 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 ```js
 import { combineReducers } from 'redux'
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
-const { SHOW_ALL } = VisibilityFilters
+const { SHOW_ALL } = VisibilityFilters.SHOW_ALL
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
