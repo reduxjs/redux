@@ -29,11 +29,10 @@ render(
 #### `actions/index.js`
 
 ```js
-let nextTodoId = 0
-export const addTodo = (text) => {
+export const addTodo = (text, id) => {
   return {
     type: 'ADD_TODO',
-    id: nextTodoId++,
+    id: id,
     text
   }
 }
@@ -342,7 +341,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
-let AddTodo = ({ dispatch }) => {
+let AddTodo = ({ dispatch, nextId }) => {
   let input
 
   return (
@@ -352,7 +351,7 @@ let AddTodo = ({ dispatch }) => {
         if (!input.value.trim()) {
           return
         }
-        dispatch(addTodo(input.value))
+        dispatch(addTodo(input.value, nextId))
         input.value = ''
       }}>
         <input ref={node => {
@@ -365,7 +364,14 @@ let AddTodo = ({ dispatch }) => {
     </div>
   )
 }
-AddTodo = connect()(AddTodo)
+const mapStateToProps = (state) => {
+  const lastLargestId = state.todos.map((todo) => todo.id).sort().reverse()[0]
+  return {
+    nextId: (state.todos.length > 0 ? lastLargestId + 1 : 0)
+  }
+}
+
+AddTodo = connect(mapStateToProps)(AddTodo)
 
 export default AddTodo
 ```
