@@ -1,12 +1,12 @@
 {
-  "extends": "rackt",
-  "rules": {
-    "valid-jsdoc": 2,
-    // Disable until Flow supports let and const
-    "no-var": 0,
-    "react/jsx-uses-react": 1,
-    "react/jsx-no-undef": 2,
-    "react/wrap-multilines": 2
+  "extends": "airbnb",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    },
   },
   "plugins": [
     "react"

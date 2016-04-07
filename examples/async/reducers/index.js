@@ -1,42 +1,42 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
-  REQUEST_POSTS, RECEIVE_POSTS
-} from '../actions'
+  REQUEST_POSTS, RECEIVE_POSTS,
+} from '../actions';
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
     case SELECT_REDDIT:
-      return action.reddit
+      return action.reddit;
     default:
-      return state
+      return state;
   }
 }
 
 function posts(state = {
   isFetching: false,
   didInvalidate: false,
-  items: []
+  items: [],
 }, action) {
   switch (action.type) {
     case INVALIDATE_REDDIT:
       return Object.assign({}, state, {
-        didInvalidate: true
-      })
+        didInvalidate: true,
+      });
     case REQUEST_POSTS:
       return Object.assign({}, state, {
         isFetching: true,
-        didInvalidate: false
-      })
+        didInvalidate: false,
+      });
     case RECEIVE_POSTS:
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
         items: action.posts,
-        lastUpdated: action.receivedAt
-      })
+        lastUpdated: action.receivedAt,
+      });
     default:
-      return state
+      return state;
   }
 }
 
@@ -46,16 +46,16 @@ function postsByReddit(state = { }, action) {
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
-        [action.reddit]: posts(state[action.reddit], action)
-      })
+        [action.reddit]: posts(state[action.reddit], action),
+      });
     default:
-      return state
+      return state;
   }
 }
 
 const rootReducer = combineReducers({
   postsByReddit,
-  selectedReddit
-})
+  selectedReddit,
+});
 
-export default rootReducer
+export default rootReducer;

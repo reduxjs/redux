@@ -1,49 +1,49 @@
-import React from 'react'
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import * as actions from '../actions'
+import React, { PropTypes } from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 export class Node extends Component {
   constructor(props) {
-    super(props)
-    this.handleIncrementClick = this.handleIncrementClick.bind(this)
-    this.handleRemoveClick = this.handleRemoveClick.bind(this)
-    this.handleAddChildClick = this.handleAddChildClick.bind(this)
-    this.renderChild = this.renderChild.bind(this)
+    super(props);
+    this.handleIncrementClick = this.handleIncrementClick.bind(this);
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    this.handleAddChildClick = this.handleAddChildClick.bind(this);
+    this.renderChild = this.renderChild.bind(this);
   }
 
   handleIncrementClick() {
-    const { increment, id } = this.props
-    increment(id)
+    const { increment, id } = this.props;
+    increment(id);
   }
 
   handleAddChildClick(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { addChild, createNode, id } = this.props
-    const childId = createNode().nodeId
-    addChild(id, childId)
+    const { addChild, createNode, id } = this.props;
+    const childId = createNode().nodeId;
+    addChild(id, childId);
   }
 
   handleRemoveClick(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { removeChild, deleteNode, parentId, id } = this.props
-    removeChild(parentId, id)
-    deleteNode(id)
+    const { removeChild, deleteNode, parentId, id } = this.props;
+    removeChild(parentId, id);
+    deleteNode(id);
   }
 
   renderChild(childId) {
-    const { id } = this.props
+    const { id } = this.props;
     return (
       <li key={childId}>
         <ConnectedNode id={childId} parentId={id} />
       </li>
-    )
+    );
   }
 
   render() {
-    const { counter, parentId, childIds } = this.props
+    const { counter, parentId, childIds } = this.props;
     return (
       <div>
         Counter: {counter}
@@ -53,8 +53,11 @@ export class Node extends Component {
         </button>
         {' '}
         {typeof parentId !== 'undefined' ?
-          <a href="#" onClick={this.handleRemoveClick}
-             style={{ color: 'lightgray', textDecoration: 'none' }}>
+          <a
+            href="#"
+            onClick={this.handleRemoveClick}
+            style={{ color: 'lightgray', textDecoration: 'none' }}
+          >
             ×
           </a> :
           null
@@ -68,13 +71,25 @@ export class Node extends Component {
           </li>
         </ul>
       </div>
-    )
+    );
   }
 }
 
+Node.propTypes = {
+  id: PropTypes.number,
+  counter: PropTypes.number,
+  increment: PropTypes.func,
+  addChild: PropTypes.func,
+  childIds: PropTypes.array,
+  createNode: PropTypes.func,
+  removeChild: PropTypes.func,
+  deleteNode: PropTypes.func,
+  parentId: PropTypes.number,
+};
+
 function mapStateToProps(state, ownProps) {
-  return state[ownProps.id]
+  return state[ownProps.id];
 }
 
-const ConnectedNode = connect(mapStateToProps, actions)(Node)
-export default ConnectedNode
+const ConnectedNode = connect(mapStateToProps, actions)(Node);
+export default ConnectedNode;

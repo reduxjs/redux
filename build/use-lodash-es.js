@@ -1,10 +1,10 @@
-module.exports = function () {
+module.exports = function useLodashEs() {
   return {
     visitor: {
       ImportDeclaration(path) {
-        var source = path.node.source
-        source.value = source.value.replace(/^lodash($|\/)/, 'lodash-es$1')
-      }
-    }
-  }
-}
+        const source = path.node.source;
+        source.value = source.value.replace(/^lodash($|\/)/, 'lodash-es$1');
+      },
+    },
+  };
+};

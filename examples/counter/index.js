@@ -1,11 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
-import Counter from './components/Counter'
-import counter from './reducers'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import Counter from './components/Counter';
+import counter from './reducers';
 
-const store = createStore(counter)
-const rootEl = document.getElementById('root')
+const store = createStore(counter);
+const rootEl = document.getElementById('root');
 
 function render() {
   ReactDOM.render(
@@ -14,9 +14,9 @@ function render() {
       onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
       onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
     />,
-    rootEl  
-  )
+    rootEl
+  );
 }
 
-render()
-store.subscribe(render)
+render();
+store.subscribe(render);

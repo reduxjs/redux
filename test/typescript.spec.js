@@ -1,14 +1,13 @@
-import * as tt from 'typescript-definition-tester'
+import * as tt from 'typescript-definition-tester';
 
-
-describe('TypeScript definitions', function () {
-  this.timeout(0)
+describe('TypeScript definitions', function compileTS() {
+  this.timeout(0);
 
   it('should compile against index.d.ts', (done) => {
     tt.compileDirectory(
-      __dirname + '/typescript',
+      `${__dirname}/typescript`,
       fileName => fileName.match(/\.ts$/),
       () => done()
-    )
-  })
-})
+    );
+  });
+});

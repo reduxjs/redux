@@ -1,6 +1,6 @@
-import React from 'react'
-import { ActionCreators as UndoActionCreators } from 'redux-undo'
-import { connect } from 'react-redux'
+import React, { PropTypes } from 'react';
+import { ActionCreators as UndoActionCreators } from 'redux-undo';
+import { connect } from 'react-redux';
 
 let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
   <p>
@@ -11,25 +11,32 @@ let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
       Redo
     </button>
   </p>
-)
+);
 
-const mapStateToProps = (state) => {
-  return {
+UndoRedo.propTypes = {
+  canUndo: PropTypes.bool,
+  canRedo: PropTypes.bool,
+  onUndo: PropTypes.func,
+  onRedo: PropTypes.func,
+};
+
+const mapStateToProps = (state) => (
+  {
     canUndo: state.todos.past.length > 0,
-    canRedo: state.todos.future.length > 0
+    canRedo: state.todos.future.length > 0,
   }
-}
+);
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = (dispatch) => (
+  {
     onUndo: () => dispatch(UndoActionCreators.undo()),
-    onRedo: () => dispatch(UndoActionCreators.redo())
+    onRedo: () => dispatch(UndoActionCreators.redo()),
   }
-}
+);
 
 UndoRedo = connect(
   mapStateToProps,
   mapDispatchToProps
-)(UndoRedo)
+)(UndoRedo);
 
-export default UndoRedo
+export default UndoRedo;
