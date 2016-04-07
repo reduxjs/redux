@@ -45,7 +45,7 @@ It’s called a reducer because it’s the type of function you would pass to [`
 
 * Mutate its arguments;
 * Perform side effects like API calls and routing transitions;
-* Calling non-pure functions, e.g. `Date.now()` or `Math.random()`.
+* Call non-pure functions, e.g. `Date.now()` or `Math.random()`.
 
 We’ll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
 
