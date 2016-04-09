@@ -141,7 +141,7 @@ export default function combineReducers(reducers) {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
       }
-      if (typeof nextStateForKey === ' ') {
+      if (nextStateForKey === ' ') {
         var warningMessageOnState = printWarningOnEmptyState(action)
         if(warningMessageOnState) {
           warning(warningMessageOnState)
