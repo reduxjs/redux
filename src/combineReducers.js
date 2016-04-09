@@ -12,6 +12,16 @@ function getUndefinedStateErrorMessage(key, action) {
   )
 }
 
+function printWarningOnEmptyState(action) {
+  var actionType = action && action.type
+  var actionName = actionType && `"${actionType.toString()}"` || 'an action'
+
+  return (
+    `Given action ${actionName} returned your previous state` +
+    `Are you sure you need this action to be empty?`
+  )
+}
+
 function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   var reducerKeys = Object.keys(reducers)
   var argumentName = action && action.type === ActionTypes.INIT ?
@@ -130,6 +140,12 @@ export default function combineReducers(reducers) {
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
+      }
+      if (typeof nextStateForKey === previousStateForKey) {
+        var warningMessageOnState = printWarningOnEmptyState(action)
+        if(warningMessageOnState) {
+          warning(warningMessageOnState)
+        }
       }
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
