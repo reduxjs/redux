@@ -10,14 +10,15 @@
  */
  
 export default function compose(...funcs) {
+  const isEmpty = funcs.length === 0
+  const last = isEmpty ? null : funcs[funcs.length - 1]
+  const rest = isEmpty ? [] : funcs.slice(0, -1)
+    
   return (...args) => {
-    if (funcs.length === 0) {
+    if (isEmpty) {
       return args[0]
+    }else {
+      return rest.reduceRight((composed, f) => f(composed), last(...args))
     }
-
-    const last = funcs[funcs.length - 1]
-    const rest = funcs.slice(0, -1)
-
-    return rest.reduceRight((composed, f) => f(composed), last(...args))
   }
 }
