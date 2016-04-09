@@ -18,7 +18,7 @@ function printWarningOnEmptyState(action) {
 
   return (
     `Given action ${actionName} returned your previous state` +
-    `Are you sure you need this action to be empty?`
+    `Are you sure you want this action to be empty?`
   )
 }
 
