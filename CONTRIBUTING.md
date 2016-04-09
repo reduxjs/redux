@@ -66,7 +66,7 @@ The result will be in the `dist` folder.
 To run both linting and testing at once, run the following:
 
 ```
-npm run check
+npm run check:src
 ```
 
 To only run linting:
