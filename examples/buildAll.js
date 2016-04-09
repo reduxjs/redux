@@ -10,9 +10,7 @@ var exampleDirs = fs.readdirSync(__dirname).filter((file) => {
   return fs.statSync(path.join(__dirname, file)).isDirectory()
 })
 
-// Ordering is important here. `npm install` must come first.
 var cmdArgs = [
-  { cmd: 'npm', args: [ 'install' ] },
   { cmd: 'webpack', args: [ 'index.js' ] }
 ]
 
