@@ -18,7 +18,7 @@ function printWarningOnEmptyState(action) {
 
   return (
     `Given action ${actionName} returned your previous state` +
-    `Are you sure you want this action to be empty?`
+    `Are you sure you need this action to be empty?`
   )
 }
 
@@ -141,7 +141,7 @@ export default function combineReducers(reducers) {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
       }
-      if (nextStateForKey === ' ') {
+      if (typeof nextStateForKey === previousStateForKey) {
         var warningMessageOnState = printWarningOnEmptyState(action)
         if(warningMessageOnState) {
           warning(warningMessageOnState)
