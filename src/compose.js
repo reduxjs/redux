@@ -18,3 +18,4 @@ export default function compose(...funcs) {
   }else{
     return (...args) => args[0];
   }
+}
