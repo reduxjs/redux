@@ -99,6 +99,8 @@ boundCompleteTodo(index)
 
 The `dispatch()` function can be accessed directly from the store as [`store.dispatch()`](../api/Store.md#dispatch), but more likely you'll access it using a helper like [react-redux](http://github.com/gaearon/react-redux)'s `connect()`. You can use [`bindActionCreators()`](../api/bindActionCreators.md) to automatically bind many action creators to a `dispatch()` function.
 
+Action creators can also be asynchronous and have side-effects. You can read about [async actions](../advanced/AsyncActions.md) in the [advanced tutorial](../advanced/README.md) to learn how to handle AJAX responses and compose action creators into async control flow. Don’t skip ahead to async actions until you’ve completed the basics tutorial, as it covers other important concepts that are prerequisite for the advanced tutorial and async actions.
+
 ## Source Code
 
 ### `actions.js`
@@ -143,5 +145,3 @@ export function setVisibilityFilter(filter) {
 
 Now let’s [define some reducers](Reducers.md) to specify how the state updates when you dispatch these actions!
 
->##### Note for Advanced Users
->If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async actions](../advanced/AsyncActions.md) in the [advanced tutorial](../advanced/README.md) to learn how to handle AJAX responses and compose action creators into async control flow.
