@@ -177,6 +177,7 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [#946: Best way to update related state fields with split reducers?](https://github.com/reactjs/redux/issues/946)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reactjs/redux/issues/994)
 - [#1255: Normalizr usage with nested objects in React/Redux](https://github.com/reactjs/redux/issues/1255)
+- [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
 
 ## Store Setup
 
