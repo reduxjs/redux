@@ -1,12 +1,9 @@
-/* eslint-disable no-console, no-use-before-define */
-
 import Express from 'express'
 
 import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import config from '../webpack.config'
-
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { Provider } from 'react-redux'
