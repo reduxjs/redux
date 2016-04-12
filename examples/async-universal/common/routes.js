@@ -3,7 +3,7 @@ import Route from 'react-router/lib/Route'
 
 import Reddit from './containers/Reddit'
 
-export default(
+export default (
   <Route path="/" component={Reddit}>
     <Route path=":id" component={Reddit}/>
   </Route>
