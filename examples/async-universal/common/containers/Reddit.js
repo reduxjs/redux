@@ -12,18 +12,6 @@ class Reddit extends Component {
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
-  static fetchData(dispatch, params) {
-    const subreddit = params.id
-    if (subreddit) {
-      return Promise.all([
-        dispatch(selectReddit(subreddit)),
-        dispatch(fetchPostsIfNeeded(subreddit))
-      ])
-    } else {
-      return Promise.resolve()
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     const { dispatch, params } = this.props
 
@@ -78,6 +66,18 @@ class Reddit extends Component {
         }
       </div>
     )
+  }
+}
+
+Reddit.fetchData = (dispatch, params) => {
+  const subreddit = params.id
+  if (subreddit) {
+    return Promise.all([
+      dispatch(selectReddit(subreddit)),
+      dispatch(fetchPostsIfNeeded(subreddit))
+    ])
+  } else {
+    return Promise.resolve()
   }
 }
 
