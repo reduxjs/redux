@@ -28,27 +28,26 @@ function handleRender(req, res) {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     } else if (renderProps) {
+      // Create a new Redux store instance
+      const store = configureStore()
 
-        // Create a new Redux store instance
-        const store = configureStore()
+      // Grab static fetchData
+      const { components, params } = renderProps
+      const fetchData = components[ components.length - 1 ].fetchData
 
-        // Grab static fetchData
-        const { components, params } = renderProps
-        const fetchData = components[ components.length - 1 ].fetchData
+      // Query our API asynchronously
+      fetchData(store.dispatch, params).then(() => {
 
-        // Query our API asynchronously
-        fetchData(store.dispatch, params).then(() => {
+        const html = renderToString(
+          <Provider store={store}>
+            <RouterContext { ...renderProps} />
+          </Provider>
+        )
 
-          const html = renderToString(
-            <Provider store={store}>
-              <RouterContext { ...renderProps} />
-            </Provider>
-          )
+        const finalState = store.getState()
 
-          const finalState = store.getState()
-
-          res.status(200).send(renderFullPage(html, finalState))
-        })
+        res.status(200).send(renderFullPage(html, finalState))
+      })
 
     } else {
       res.status(404).send('Not found')
