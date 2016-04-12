@@ -6,10 +6,6 @@ import Posts from '../components/Posts'
 
 class Reddit extends Component {
 
-  static contextTypes = {
-    router: PropTypes.object
-  }
-
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
@@ -80,6 +76,10 @@ class Reddit extends Component {
       </div>
     )
   }
+}
+
+Reddit.contextTypes = {
+  router: PropTypes.object
 }
 
 Reddit.propTypes = {
