@@ -95,6 +95,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineReducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
+* [redux-actions-assertions](https://github.com/dmitry-zaets/redux-actions-assertions) — Assertions for Redux actions testing
 
 ### DevTools
 
