@@ -37,6 +37,9 @@ export interface Action {
  * side-effects. This is what enables exciting features like hot reloading and
  * time travel.
  *
+ * *Do not put calls into reducers that have themselves are impure or may
+ * may have side-effects.*
+ *
  * @template S State object type.
  */
 export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
