@@ -82,6 +82,8 @@ store.dispatch(addTodo('Read about the middleware'))
 
 Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
 
+This provides a simple way to persist the state to e.g. localStorage.
+
 You may call [`dispatch()`](#dispatch) from a change listener, with the following caveats:
 
 1. The subscriptions are snapshotted just before every [`dispatch()`](#dispatch) call. If you subscribe or unsubscribe while the listeners are being invoked, this will not have any effect on the [`dispatch()`](#dispatch) that is currently in progress. However, the next [`dispatch()`](#dispatch) call, whether nested or not, will use a more recent snapshot of the subscription list.
