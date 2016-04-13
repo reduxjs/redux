@@ -125,6 +125,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [中文文档](http://camsong.github.io/redux-in-chinese/) — Chinese
 * [繁體中文文件](https://github.com/chentsulin/redux) — Traditional Chinese
 * [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
+* [Redux en Español](http://es.redux.js.org/) - Spanish
 
 ## More
 
