@@ -20,7 +20,7 @@ Each of these two moments can usually require a change in the application state;
 
 * **An action informing the reducers that the request failed.**
 
-  The reducers may handle this action by resetting `isFetching`. Maybe, some reducers will also want to store the error message so the UI can display it.
+  The reducers may handle this action by resetting `isFetching`. Additionally, some reducers may want to store the error message so the UI can display it.
 
 You may use a dedicated `status` field in your actions:
 
