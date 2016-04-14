@@ -53,7 +53,20 @@ Finally, we’ll add one more action type for changing the currently visible tod
 
 **Action creators** are exactly that—functions that create actions. It's easy to conflate the terms “action” and “action creator,” so do your best to use the proper term.
 
-In [traditional Flux](http://facebook.github.io/flux) implementations, action creators often trigger a dispatch when invoked, like so:
+In Redux action creators simply return an action:
+
+```js
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  }
+}
+```
+
+This makes them portable and easy to test.
+
+In Flux [traditional Flux](http://facebook.github.io/flux) action creators often trigger a dispatch when invoked, like so:
 
 ```js
 function addTodoWithDispatch(text) {
@@ -65,18 +78,7 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-By contrast, in Redux action creators simply return an action:
-
-```js
-function addTodo(text) {
-  return {
-    type: ADD_TODO,
-    text
-  }
-}
-```
-
-This makes them more portable and easier to test. To actually initiate a dispatch, pass the result to the `dispatch()` function:
+In Redux to actually initiate a dispatch, pass the result to the `dispatch()` function:
 
 ```js
 dispatch(addTodo(text))
