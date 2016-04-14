@@ -1,42 +1,40 @@
-import Express from 'express'
+var webpack = require('webpack')
+var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
+var config = require('../webpack.config')
+var React = require('react')
+var renderToString = require('react-dom/server').renderToString
+var Provider = require('react-redux').Provider
+var match = require('react-router/lib/match')
+var RouterContext = require('react-router/lib/RouterContext')
 
-import webpack from 'webpack'
-import webpackDevMiddleware from 'webpack-dev-middleware'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import config from '../webpack.config'
-import React from 'react'
-import { renderToString } from 'react-dom/server'
-import { Provider } from 'react-redux'
-import { match, RouterContext } from 'react-router'
+var configureStore = require('../common/store/configureStore').default
+var routes = require('../common/routes').default
 
-import configureStore from '../common/store/configureStore'
-import routes from '../common/routes'
+var app = new (require('express'))()
+var port = 3000
 
-const app = new Express()
-const port = 3000
-
-const compiler = webpack(config)
+var compiler = webpack(config)
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
 app.use(webpackHotMiddleware(compiler))
 
 app.use(handleRender)
 
 function handleRender(req, res) {
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+  match({ routes, location: req.url }, function(error, redirectLocation, renderProps) {
     if (error) {
       res.status(500).send(error.message)
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     } else if (renderProps) {
       // Create a new Redux store instance
-      const store = configureStore()
+      var store = configureStore()
 
       // Grab static fetchData
-      const { components, params } = renderProps
-      const fetchData = components[ components.length - 1 ].fetchData
+      var fetchData = renderProps.components[ renderProps.components.length - 1 ].fetchData
 
       // Query our API asynchronously
-      fetchData(store.dispatch, params).then(() => {
+      fetchData(store.dispatch, renderProps.params).then(() => {
 
         const html = renderToString(
           <Provider store={store}>
@@ -44,7 +42,7 @@ function handleRender(req, res) {
           </Provider>
         )
 
-        const finalState = store.getState()
+        var finalState = store.getState()
 
         res.status(200).send(renderFullPage(html, finalState))
       })
@@ -73,7 +71,7 @@ function renderFullPage(html, initialState) {
     `
 }
 
-app.listen(port, (error) => {
+app.listen(port, function(error) {
   if (error) {
     console.error(error)
   } else {
