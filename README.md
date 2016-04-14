@@ -45,6 +45,17 @@ To install the stable version:
 npm install --save redux
 ```
 
+This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
+If you don’t, you can [access these files on npmcdn](https://npmcdn.com/redux/), download them, or point your package manager to them.
+
+Most commonly people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](http://webpack.github.io), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](http://rollupjs.org), we support that as well.
+
+If you don’t use a module bundler, it’s also fine. The `redux` npm package includes precompiled production and development [UMD](https://github.com/umdjs/umd) builds in the [`dist` folder](https://npmcdn.com/redux/dist/). They can be used directly without a bundler and are thus compatible with many popular JavaScript module loaders and environments. For example, you can drop a UMD build as a [`<script>` tag](https://npmcdn.com/redux/dist/redux.js) on the page, or [tell Bower to install it](https://github.com/reactjs/redux/pull/1181#issuecomment-167361975). The UMD builds make Redux available as a `window.Redux` global variable.
+
+The Redux source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in [any modern browser](http://caniuse.com/#feat=es5). You don’t need to use Babel or a module bundler to [get started with Redux](https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html).
+
+#### Complementary Packages
+
 Most likely, you’ll also need [the React bindings](https://github.com/reactjs/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
 
 ```
@@ -52,9 +63,7 @@ npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
 
-This assumes that you’re using [npm](https://www.npmjs.com/) package manager with a module bundler like [Webpack](http://webpack.github.io) or [Browserify](http://browserify.org/) to consume [CommonJS modules](http://webpack.github.io/docs/commonjs.html).
-
-If you don’t yet use [npm](https://www.npmjs.com/) or a modern module bundler, and would rather prefer a single-file [UMD](https://github.com/umdjs/umd) build that makes `Redux` available as a global object, you can grab a pre-built version from [cdnjs](https://cdnjs.com/libraries/redux). We *don’t* recommend this approach for any serious application, as most of the libraries complementary to Redux are only available on [npm](https://www.npmjs.com/).
+Note that unlike Redux itself, many packages in the Redux ecosystem don’t provide UMD builds, so we recommend using CommonJS module bundlers like [Webpack](http://webpack.github.io) and [Browserify](http://browserify.org/) for the most comfortable development experience.
 
 ### The Gist
 
