@@ -66,7 +66,7 @@ function addTodo(text) {
 
 This makes them portable and easy to test.
 
-In Flux [traditional Flux](http://facebook.github.io/flux) action creators often trigger a dispatch when invoked, like so:
+In [traditional Flux](http://facebook.github.io/flux) action creators often trigger a dispatch when invoked, like so:
 
 ```js
 function addTodoWithDispatch(text) {
@@ -78,7 +78,8 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-In Redux to actually initiate a dispatch, pass the result to the `dispatch()` function:
+In Redux this is *not* the case.  
+Instead, to actually initiate a dispatch, pass the result to the `dispatch()` function:
 
 ```js
 dispatch(addTodo(text))
