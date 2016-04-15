@@ -10,8 +10,8 @@
  */
 
 export default function compose(...funcs) {
-  if (!funcs.length) {
-    return (...args) => args[0]
+  if (funcs.length === 0) {
+    return arg => arg
   } else {
     const last = funcs[funcs.length - 1]
     const rest = funcs.slice(0, -1)
