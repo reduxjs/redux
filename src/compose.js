@@ -1,3 +1,5 @@
+import { head, tail, reverse, reduce } from 'lodash';
+
 /**
  * Composes single-argument functions from right to left. The rightmost
  * function can take multiple arguments as it provides the signature for
@@ -10,11 +12,12 @@
  */
 
 export default function compose(...funcs) {
-  if (!funcs.length) {
-    return (...args) => args[0]
+  if (funcs.length === 0) {
+    return func => func;
   } else {
-    const last = funcs[funcs.length - 1]
-    const rest = funcs.slice(0, -1)
-    return (...args) => rest.reduceRight((composed, f) => f(composed), last(...args))
+    reverse(funcs);
+    const first = head(funcs);
+    const rest = tail(funcs);
+    return (...args) => reduce(rest, (composed, func) => func(composed), first(...args));
   }
 }
