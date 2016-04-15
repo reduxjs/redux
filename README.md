@@ -103,7 +103,11 @@ function counter(state = 0, action) {
 // Its API is { subscribe, dispatch, getState }.
 let store = createStore(counter)
 
-// You can subscribe to the updates manually, or use bindings to your view layer.
+/**
+ * You can subscribe to the updates manually (e.g. to persist the 
+ * current state into localStorage on every change), or use bindings 
+ * to your view layer.
+ */
 store.subscribe(() =>
   console.log(store.getState())
 )
