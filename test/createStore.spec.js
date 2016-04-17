@@ -378,15 +378,15 @@ describe('createStore', () => {
 
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(1)
     expect(listener4.calls.length).toBe(1)
 
     unsubscribe4()
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(3)
-    expect(listener3.calls.length).toBe(3)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
     expect(listener4.calls.length).toBe(1)
   })
 
