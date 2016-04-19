@@ -63,7 +63,8 @@
   "dependencies": {
     "lodash": "^4.2.1",
     "lodash-es": "^4.2.1",
-    "loose-envify": "^1.1.0"
+    "loose-envify": "^1.1.0",
+    "symbol-observable": "^0.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.3.15",
@@ -101,6 +102,7 @@
     "isparta": "^4.0.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",
+    "rxjs": "^5.0.0-beta.6",
     "typescript": "^1.8.0",
     "typescript-definition-tester": "0.0.4",
     "webpack": "^1.9.6"
