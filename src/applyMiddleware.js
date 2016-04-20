@@ -19,7 +19,7 @@ import compose from './compose'
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer, initialState, enhancer) => {
     var store = createStore(reducer, initialState, enhancer)
-    var dispatch
+    var dispatch = store.dispatch
     var chain = []
 
     var middlewareAPI = {
