@@ -218,24 +218,20 @@ export default function createStore(reducer, initialState, enhancer) {
        */
       subscribe(observer) {
         if (typeof observer !== 'object') {
-          throw new TypeError('Expected observer to be an object')
+          throw new TypeError('Expected the observer to be an object.')
         }
 
-        var observeState = () => {
+        function observeState() {
           if (observer.next) {
             observer.next(getState())
           }
         }
 
-        // send initial state to observer
         observeState()
-
-        // send subsequent states to observer
         var unsubscribe = outerSubscribe(observeState)
-
-        // return an unsubscribable
         return { unsubscribe }
       },
+
       [$$observable]() {
         return this
       }
