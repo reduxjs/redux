@@ -94,4 +94,22 @@ describe('applyMiddleware', () => {
       done()
     })
   })
+
+  it('keeps unwrapped dispatch available while middleware is initializing', () => {
+    // This is documenting the existing behavior in Redux 3.x.
+    // We plan to forbid this in Redux 4.x.
+
+    function earlyDispatch({ dispatch }) {
+      dispatch(addTodo('Hello'))
+      return () => action => action
+    }
+
+    const store = createStore(reducers.todos, applyMiddleware(earlyDispatch))
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+  })
 })
