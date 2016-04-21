@@ -84,7 +84,7 @@ Adds a change listener. It will be called any time an action is dispatched, and 
 
 You may call [`dispatch()`](#dispatch) from a change listener, with the following caveats:
 
-1. The listener should only call [`dispatch()`](#dispatch) either in responce to user actions or under specific conditions (e. g. dispatching an action when the store has a specific field). Calling [`dispatch()`](#dispatch) without any conditions is technically possible, however it leads to infinite loop as every [`dispatch()`](#dispatch) call usually triggers the listener again.
+1. The listener should only call [`dispatch()`](#dispatch) either in response to user actions or under specific conditions (e. g. dispatching an action when the store has a specific field). Calling [`dispatch()`](#dispatch) without any conditions is technically possible, however it leads to infinite loop as every [`dispatch()`](#dispatch) call usually triggers the listener again.
 
 2. The subscriptions are snapshotted just before every [`dispatch()`](#dispatch) call. If you subscribe or unsubscribe while the listeners are being invoked, this will not have any effect on the [`dispatch()`](#dispatch) that is currently in progress. However, the next [`dispatch()`](#dispatch) call, whether nested or not, will use a more recent snapshot of the subscription list.
 
