@@ -53,7 +53,20 @@ Finally, we’ll add one more action type for changing the currently visible tod
 
 **Action creators** are exactly that—functions that create actions. It's easy to conflate the terms “action” and “action creator,” so do your best to use the proper term.
 
-In [traditional Flux](http://facebook.github.io/flux) implementations, action creators often trigger a dispatch when invoked, like so:
+In Redux action creators simply return an action:
+
+```js
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  }
+}
+```
+
+This makes them portable and easy to test.
+
+In [traditional Flux](http://facebook.github.io/flux) action creators often trigger a dispatch when invoked, like so:
 
 ```js
 function addTodoWithDispatch(text) {
@@ -65,18 +78,8 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-By contrast, in Redux action creators simply return an action:
-
-```js
-function addTodo(text) {
-  return {
-    type: ADD_TODO,
-    text
-  }
-}
-```
-
-This makes them more portable and easier to test. To actually initiate a dispatch, pass the result to the `dispatch()` function:
+In Redux this is *not* the case.  
+Instead, to actually initiate a dispatch, pass the result to the `dispatch()` function:
 
 ```js
 dispatch(addTodo(text))
@@ -98,6 +101,8 @@ boundCompleteTodo(index)
 ```
 
 The `dispatch()` function can be accessed directly from the store as [`store.dispatch()`](../api/Store.md#dispatch), but more likely you'll access it using a helper like [react-redux](http://github.com/gaearon/react-redux)'s `connect()`. You can use [`bindActionCreators()`](../api/bindActionCreators.md) to automatically bind many action creators to a `dispatch()` function.
+
+Action creators can also be asynchronous and have side-effects. You can read about [async actions](../advanced/AsyncActions.md) in the [advanced tutorial](../advanced/README.md) to learn how to handle AJAX responses and compose action creators into async control flow. Don’t skip ahead to async actions until you’ve completed the basics tutorial, as it covers other important concepts that are prerequisite for the advanced tutorial and async actions.
 
 ## Source Code
 
@@ -143,5 +148,3 @@ export function setVisibilityFilter(filter) {
 
 Now let’s [define some reducers](Reducers.md) to specify how the state updates when you dispatch these actions!
 
->##### Note for Advanced Users
->If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async actions](../advanced/AsyncActions.md) in the [advanced tutorial](../advanced/README.md) to learn how to handle AJAX responses and compose action creators into async control flow.

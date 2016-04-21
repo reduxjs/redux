@@ -11,14 +11,20 @@ Note that it runs in a Node environment, so you won’t have access to the DOM.
 npm install --save-dev mocha
 ```
 
-To use it together with [Babel](http://babeljs.io), add this to `scripts` in your `package.json`:
+To use it together with [Babel](http://babeljs.io), you will need to install `babel-register`:
+
+```js
+npm install --save-dev babel-register
+```
+
+Then, add this to `scripts` in your `package.json`:
 
 ```js
 {
   ...
   "scripts": {
     ...
-    "test": "mocha --compilers js:babel-core/register --recursive",
+    "test": "mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
   },
   ...
@@ -106,6 +112,7 @@ import thunk from 'redux-thunk'
 import * as actions from '../../actions/counter'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
+import expect from 'expect'; // You can use any testing library
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
@@ -115,7 +122,7 @@ describe('async actions', () => {
     nock.cleanAll()
   })
 
-  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', (done) => {
+  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
     nock('http://example.com/')
       .get('/todos')
       .reply(200, { body: { todos: ['do something'] }})
@@ -124,8 +131,12 @@ describe('async actions', () => {
       { type: types.FETCH_TODOS_REQUEST },
       { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
     ]
-    const store = mockStore({ todos: [] }, expectedActions, done)
-    store.dispatch(actions.fetchTodos())
+    const store = mockStore({ todos: [] })
+
+    return store.dispatch(actions.fetchTodos())
+      .then(() => { // return of async actions
+        expect(store.getActions()).toEqual(expectedActions)
+      })
   })
 })
 ```
@@ -331,9 +342,9 @@ describe('components', () => {
 })
 ```
 
-#### Fixing Broken `setState()`
+#### Fixing Broken `setState()` in older React versions
 
-Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
+In React <= 0.13, 0.14.4 and 0.14.5, Shallow rendering [used to throw an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
 
 ```
 npm install --save-dev jsdom
@@ -356,7 +367,7 @@ It’s important that this code is evaluated *before* React is imported. To ensu
   ...
   "scripts": {
     ...
-    "test": "mocha --compilers js:babel/register --recursive --require ./test/setup.js",
+    "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
   },
   ...
 }

@@ -45,7 +45,7 @@ It’s called a reducer because it’s the type of function you would pass to [`
 
 * Mutate its arguments;
 * Perform side effects like API calls and routing transitions;
-* Calling non-pure functions, e.g. `Date.now()` or `Math.random()`.
+* Call non-pure functions, e.g. `Date.now()` or `Math.random()`.
 
 We’ll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
 
@@ -99,7 +99,7 @@ function todoApp(state = initialState, action) {
 
 Note that:
 
-1. **We don’t mutate the `state`.** We create a copy with [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). `Object.assign(state, { visibilityFilter: action.filter })` is also wrong: it will mutate the first argument. You **must** supply an empty object as the first parameter. You can also enable the experimental [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for ES7 to write `{ ...state, ...newState }` instead.
+1. **We don’t mutate the `state`.** We create a copy with [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). `Object.assign(state, { visibilityFilter: action.filter })` is also wrong: it will mutate the first argument. You **must** supply an empty object as the first parameter. You can also enable the [object spread operator proposal](../recipes/UsingObjectSpreadOperator.md) to write `{ ...state, ...newState }` instead.
 
 2. **We return the previous `state` in the `default` case.** It’s important to return the previous `state` for any unknown action.
 
@@ -147,17 +147,18 @@ Finally, the implementation of the `COMPLETE_TODO` handler shouldn’t come as a
 ```js
 case COMPLETE_TODO:
   return Object.assign({}, state, {
-    todos: [
-      ...state.todos.slice(0, action.index),
-      Object.assign({}, state.todos[action.index], {
-        completed: true
-      }),
-      ...state.todos.slice(action.index + 1)
-    ]
+    todos: state.todos.map((todo, index) => {
+      if (index === action.index) {
+        return Object.assign({}, todo, {
+          completed: true
+        })
+      }
+      return todo
+    })
   })
 ```
 
-Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it’s a good idea to use a helper like [react-addons-update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
+Because we want to update a specific item in the array without resorting to mutations, we have to create a new array with the same items except the item at the index. If you find yourself often writing such operations, it’s a good idea to use a helper like [react-addons-update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
 
 ## Splitting Reducers
 
@@ -182,13 +183,14 @@ function todoApp(state = initialState, action) {
       })
     case COMPLETE_TODO:
       return Object.assign({}, state, {
-        todos: [
-          ...state.todos.slice(0, action.index),
-          Object.assign({}, state.todos[action.index], {
-            completed: true
-          }),
-          ...state.todos.slice(action.index + 1)
-        ]
+        todos: state.todos.map((todo, index) => {
+          if(index === action.index) {
+            return Object.assign({}, todo, {
+              completed: true
+            })
+          }
+          return todo
+        })
       })
     default:
       return state
@@ -210,13 +212,14 @@ function todos(state = [], action) {
         }
       ]
     case COMPLETE_TODO:
-      return [
-        ...state.slice(0, action.index),
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }
@@ -268,13 +271,14 @@ function todos(state = [], action) {
         }
       ]
     case COMPLETE_TODO:
-      return [
-        ...state.slice(0, action.index),
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }
@@ -336,7 +340,7 @@ const reducer = combineReducers({
 ```
 
 ```js
-function reducer(state, action) {
+function reducer(state = {}, action) {
   return {
     a: doSomethingWithA(state.a, action),
     b: processB(state.b, action),
@@ -389,13 +393,14 @@ function todos(state = [], action) {
         }
       ]
     case COMPLETE_TODO:
-      return [
-        ...state.slice(0, action.index),
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }

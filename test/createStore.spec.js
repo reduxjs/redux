@@ -2,6 +2,8 @@ import expect from 'expect'
 import { createStore, combineReducers } from '../src/index'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
+import * as Rx from 'rxjs'
+import $$observable from 'symbol-observable'
 
 describe('createStore', () => {
   it('exposes the public API', () => {
@@ -609,5 +611,119 @@ describe('createStore', () => {
     expect(() =>
       store.subscribe(undefined)
     ).toThrow()
+  })
+
+  describe('Symbol.observable interop point', () => {
+    it('should exist', () => {
+      const store = createStore(() => {})
+      expect(typeof store[$$observable]).toBe('function')
+    })
+
+    describe('returned value', () => {
+      it('should be subscribable', () => {
+        const store = createStore(() => {})
+        const obs = store[$$observable]()
+        expect(typeof obs.subscribe).toBe('function')
+      })
+
+      it('should throw a TypeError if an observer object is not supplied to subscribe', () => {
+        const store = createStore(() => {})
+        const obs = store[$$observable]()
+
+        expect(function () {
+          obs.subscribe()
+        }).toThrow()
+
+        expect(function () {
+          obs.subscribe(() => {})
+        }).toThrow()
+
+        expect(function () {
+          obs.subscribe({})
+        }).toNotThrow()
+      })
+
+      it('should return a subscription object when subscribed', () => {
+        const store = createStore(() => {})
+        const obs = store[$$observable]()
+        const sub = obs.subscribe({})
+        expect(typeof sub.unsubscribe).toBe('function')
+      })
+    })
+
+    it('should pass an integration test with no unsubscribe', () => {
+      function foo(state = 0, action) {
+        return action.type === 'foo' ? 1 : state
+      }
+
+      function bar(state = 0, action) {
+        return action.type === 'bar' ? 2 : state
+      }
+
+      const store = createStore(combineReducers({ foo, bar }))
+      const observable = store[$$observable]()
+      const results = []
+
+      observable.subscribe({
+        next(state) {
+          results.push(state)
+        }
+      })
+
+      store.dispatch({ type: 'foo' })
+      store.dispatch({ type: 'bar' })
+
+      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 }, { foo: 1, bar: 2 } ])
+    })
+
+    it('should pass an integration test with an unsubscribe', () => {
+      function foo(state = 0, action) {
+        return action.type === 'foo' ? 1 : state
+      }
+
+      function bar(state = 0, action) {
+        return action.type === 'bar' ? 2 : state
+      }
+
+      const store = createStore(combineReducers({ foo, bar }))
+      const observable = store[$$observable]()
+      const results = []
+
+      const sub = observable.subscribe({
+        next(state) {
+          results.push(state)
+        }
+      })
+
+      store.dispatch({ type: 'foo' })
+      sub.unsubscribe()
+      store.dispatch({ type: 'bar' })
+
+      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 } ])
+    })
+
+    it('should pass an integration test with a common library (RxJS)', () => {
+      function foo(state = 0, action) {
+        return action.type === 'foo' ? 1 : state
+      }
+
+      function bar(state = 0, action) {
+        return action.type === 'bar' ? 2 : state
+      }
+
+      const store = createStore(combineReducers({ foo, bar }))
+      const observable = Rx.Observable.from(store)
+      const results = []
+
+      const sub = observable
+        .map(state => ({ fromRx: true, ...state }))
+        .subscribe(state => results.push(state))
+
+      store.dispatch({ type: 'foo' })
+      sub.unsubscribe()
+      store.dispatch({ type: 'bar' })
+
+      expect(results).toEqual([ { foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true } ])
+    })
   })
 })

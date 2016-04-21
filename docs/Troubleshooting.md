@@ -53,14 +53,15 @@ function todos(state = [], action) {
       ]
     case 'COMPLETE_TODO':
       // Return a new array
-      return [
-        ...state.slice(0, action.index),
-        // Copy the object before mutating
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          // Copy the object before mutating
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }
@@ -71,13 +72,14 @@ It’s more code, but it’s exactly what makes Redux predictable and efficient.
 
 ```js
 // Before:
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if (index === action.index) {
+    return Object.assign({}, todo, {
+      completed: true
+    })
+  }
+  return todo
+})
 
 // After
 return update(state, {
@@ -93,27 +95,29 @@ Finally, to update objects, you’ll need something like `_.extend` from Undersc
 
 Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`.
 
-You can also enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/):
+You can also enable the [object spread operator proposal](recipes/UsingObjectSpreadOperator.md) for a more succinct syntax:
 
 ```js
 // Before:
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if (index === action.index) {
+    return Object.assign({}, todo, {
+      completed: true
+    })
+  }
+  return todo
+})
 
 // After:
-return [
-  ...state.slice(0, action.index),
-  { ...state[action.index], completed: true },
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if (index === action.index) {
+    return { ...todo, completed: true }
+  }
+  return todo
+})
 ```
 
-Note that experimental language features are subject to change, and it’s unwise to rely on them in large codebases.
+Note that experimental language features are subject to change.
 
 #### Don’t forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
@@ -190,6 +194,10 @@ export default connect()(AddTodo)
 ```
 
 You can then pass `dispatch` down to other components manually, if you want to.
+
+#### Make sure mapStateToProps is correct
+
+It's possible you're correctly dispatching an action and applying your reducer but the corresponding state is not being correctly translated into props.
 
 ## Something else doesn’t work
 

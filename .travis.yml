@@ -9,3 +9,15 @@ script:
 branches:
   only:
     - master
+cache:
+  directories:
+  - $HOME/.npm
+  - examples/async/node_modules
+  - examples/counter/node_modules
+  - examples/real-world/node_modules
+  - examples/shopping-cart/node_modules
+  - examples/todomvc/node_modules
+  - examples/todos/node_modules
+  - examples/todos-with-undo/node_modules
+  - examples/tree-view/node_modules
+  - examples/universal/node_modules

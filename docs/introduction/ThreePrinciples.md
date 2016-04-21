@@ -18,7 +18,7 @@ console.log(store.getState())
     {
       text: 'Consider using Redux',
       completed: true,
-    }, 
+    },
     {
       text: 'Keep all state in a single tree',
       completed: false
@@ -74,13 +74,14 @@ function todos(state = [], action) {
         }
       ]
     case 'COMPLETE_TODO':
-      return [
-        ...state.slice(0, action.index),
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }
