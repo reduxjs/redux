@@ -173,7 +173,7 @@ export default function createStore(reducer, initialState, enhancer) {
     }
 
     var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
+    for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i]()
     }
 

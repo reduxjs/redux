@@ -35,10 +35,10 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   }
 
   var unexpectedKeys = Object.keys(inputState).filter(key => !reducers.hasOwnProperty(key))
-
-  if (unexpectedKeys.length > 0) {
+  var unexpectedKeysLength = unexpectedKeys.length
+  if (unexpectedKeysLength > 0) {
     return (
-      `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +
+      `Unexpected ${unexpectedKeysLength > 1 ? 'keys' : 'key'} ` +
       `"${unexpectedKeys.join('", "')}" found in ${argumentName}. ` +
       `Expected to find one of the known reducer keys instead: ` +
       `"${reducerKeys.join('", "')}". Unexpected keys will be ignored.`
@@ -47,7 +47,9 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
 }
 
 function assertReducerSanity(reducers) {
-  Object.keys(reducers).forEach(key => {
+  var reducerKeys = Object.keys(reducers)
+  for (var i = 0, l = reducerKeys.length; i < l; i++) {
+    var key = reducerKeys[i]
     var reducer = reducers[key]
     var initialState = reducer(undefined, { type: ActionTypes.INIT })
 
@@ -71,7 +73,7 @@ function assertReducerSanity(reducers) {
         `action type. The initial state may not be undefined.`
       )
     }
-  })
+  }
 }
 
 /**
@@ -93,7 +95,7 @@ function assertReducerSanity(reducers) {
 export default function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
-  for (var i = 0; i < reducerKeys.length; i++) {
+  for (var i = 0, l = reducerKeys.length; i < l; i++) {
     var key = reducerKeys[i]
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
@@ -122,7 +124,7 @@ export default function combineReducers(reducers) {
 
     var hasChanged = false
     var nextState = {}
-    for (var i = 0; i < finalReducerKeys.length; i++) {
+    for (var i = 0, l = finalReducerKeys.length; i < l; i++) {
       var key = finalReducerKeys[i]
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
