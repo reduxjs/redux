@@ -258,7 +258,7 @@ export default (() => {
   // property is exposed, let’s enhance our stores to support it.
   // https://github.com/zalmoxisus/redux-devtools-extension
   if (process.env.NODE_ENV === 'development') {
-    if (window.devToolsExtension) {
+    if (typeof window !== 'undefined' && window.devToolsExtension) {
       return window.devToolsExtension()(createStore)
     }
   }
