@@ -36,7 +36,7 @@ export var ActionTypes = {
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, initialState, enhancer) {
+function createStore(reducer, initialState, enhancer) {
   if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
     enhancer = initialState
     initialState = undefined
@@ -251,3 +251,16 @@ export default function createStore(reducer, initialState, enhancer) {
     [$$observable]: observable
   }
 }
+
+export default (() => {
+  // React works out of the box with its developer tools Chrome extension, we
+  // want Redux to as well. If we are in development, and a `devToolsExtension`
+  // property is exposed, let’s enhance our stores to support it.
+  // https://github.com/zalmoxisus/redux-devtools-extension
+  if (process.env.NODE_ENV === 'development') {
+    if (window.devToolsExtension) {
+      return window.devToolsExtension()(createStore)
+    }
+  }
+  return createStore
+})()
