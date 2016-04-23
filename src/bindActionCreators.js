@@ -42,6 +42,8 @@ export default function bindActionCreators(actionCreators, dispatch) {
     var actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+    } else if (typeof actionCreator === 'object' && actionCreator !== null) {
+      boundActionCreators[key] = bindActionCreators(actionCreator, dispatch)
     }
   }
   return boundActionCreators
