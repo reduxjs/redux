@@ -41,7 +41,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     var key = keys[i]
     var actionCreator = actionCreators[key]
     var nestedBoundActionCreators = bindActionCreators(actionCreator, dispatch)
-    if (Object.keys(nestedBoundActionCreators).length > 0) {
+    if (typeof actionCreator === 'function' || Object.keys(actionCreator).length > 0) {
       boundActionCreators[key] = nestedBoundActionCreators
     }
   }
