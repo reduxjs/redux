@@ -64,7 +64,7 @@
     "lodash": "^4.2.1",
     "lodash-es": "^4.2.1",
     "loose-envify": "^1.1.0",
-    "symbol-observable": "^0.2.1"
+    "symbol-observable": "^0.2.3"
   },
   "devDependencies": {
     "babel-cli": "^6.3.15",
