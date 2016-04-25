@@ -8,7 +8,8 @@ import $$observable from 'symbol-observable'
  * Do not reference these action types directly in your code.
  */
 export var ActionTypes = {
-  INIT: '@@redux/INIT'
+  INIT: '@@redux/INIT',
+  HYDRATE: '@@redux/HYDRATE'
 }
 
 /**
