@@ -1,5 +1,6 @@
 {
   "gitbook": "2.4.3",
+  "title": "Redux",
   "structure": {
     "summary": "docs/README.md"
   },
