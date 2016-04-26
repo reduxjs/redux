@@ -1,4 +1,4 @@
-# [Redux](http://redux.js.org)
+# <a href='http://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60'></a>
 
 Redux is a predictable state container for JavaScript apps.  
 
@@ -194,6 +194,10 @@ Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflu
 * [React](https://github.com/facebook/react) for the pragmatic innovation.
 
 Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
+
+### Logo
+
+You can find the official logo [on GitHub](https://github.com/reactjs/redux/tree/master/logo).
 
 ### Change Log
 
