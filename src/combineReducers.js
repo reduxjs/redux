@@ -102,18 +102,20 @@ export default function combineReducers(reducers) {
   var finalReducerKeys = Object.keys(finalReducers)
 
   var sanityError
-  try {
-    assertReducerSanity(finalReducers)
-  } catch (e) {
-    sanityError = e
+  if (process.env.NODE_ENV !== 'production') {
+    try {
+      assertReducerSanity(finalReducers)
+    } catch (e) {
+      sanityError = e
+    }
   }
 
   return function combination(state = {}, action) {
-    if (sanityError) {
-      throw sanityError
-    }
-
     if (process.env.NODE_ENV !== 'production') {
+      if (sanityError) {
+        throw sanityError
+      }
+    
       var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
       if (warningMessage) {
         warning(warningMessage)
@@ -127,9 +129,11 @@ export default function combineReducers(reducers) {
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
       var nextStateForKey = reducer(previousStateForKey, action)
-      if (typeof nextStateForKey === 'undefined') {
-        var errorMessage = getUndefinedStateErrorMessage(key, action)
-        throw new Error(errorMessage)
+      if (process.env.NODE_ENV !== 'production') {
+        if (typeof nextStateForKey === 'undefined') {
+          var errorMessage = getUndefinedStateErrorMessage(key, action)
+          throw new Error(errorMessage)
+        }
       }
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
