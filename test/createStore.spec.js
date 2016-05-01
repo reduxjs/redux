@@ -296,12 +296,12 @@ describe('createStore', () => {
     const maybeAddThirdListener = () => {
       if (!listener3Added) {
         listener3Added = true
-        store.subscribe(() => listener3())
+        store.subscribe(listener3)
       }
     }
 
-    store.subscribe(() => listener1())
-    store.subscribe(() => listener2())
+    store.subscribe(listener1)
+    store.subscribe(listener2)
 
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
