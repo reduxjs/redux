@@ -6,7 +6,7 @@ import * as reducers from './helpers/reducers'
 
 describe('createStore', () => {
   it('exposes the public API', () => {
-    const store = createStore(combineReducers(reducers))
+    const store = createStore(() => {})
     const methods = Object.keys(store)
 
     expect(methods.length).toBe(4)
