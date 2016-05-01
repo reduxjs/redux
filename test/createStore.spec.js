@@ -488,7 +488,7 @@ describe('createStore', () => {
     it('delays unsubscribe until the end of current dispatch', () => {
       const store = createStore(reducers.todos)
 
-      const doUnsubscribeAll = () => unsubscribeHandles.forEach(
+      const doUnsubscribeAll = () => unsubscribeHandlers.forEach(
         unsubscribe => unsubscribe()
       )
 
@@ -496,7 +496,7 @@ describe('createStore', () => {
       const listener2 = createSpy().andCall(() => doUnsubscribeAll())
       const listener3 = createSpy()
 
-      const unsubscribeHandles = [ listener1, listener2 , listener3 ].map(listener => {
+      const unsubscribeHandlers = [ listener1, listener2 , listener3 ].map(listener => {
         return store.subscribe(listener)
       })
 
