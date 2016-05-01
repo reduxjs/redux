@@ -244,14 +244,11 @@ describe('createStore', () => {
   it('supports removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos)
     const listenerA = createSpy()
-    const listenerB = createSpy()
+    const listenerB = createSpy().andCall(() => unSubB())
     const listenerC = createSpy()
 
     store.subscribe(listenerA)
-    const unSubB = store.subscribe(() => {
-      listenerB()
-      unSubB()
-    })
+    const unSubB = store.subscribe(listenerB)
     store.subscribe(listenerC)
 
     store.dispatch(unknownAction())
@@ -265,21 +262,17 @@ describe('createStore', () => {
   it('delays unsubscribe until the end of current dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const unsubscribeHandles = []
     const doUnsubscribeAll = () => unsubscribeHandles.forEach(
       unsubscribe => unsubscribe()
     )
 
     const listener1 = createSpy()
-    const listener2 = createSpy()
+    const listener2 = createSpy().andCall(() => doUnsubscribeAll())
     const listener3 = createSpy()
 
-    unsubscribeHandles.push(store.subscribe(() => listener1()))
-    unsubscribeHandles.push(store.subscribe(() => {
-      listener2()
-      doUnsubscribeAll()
-    }))
-    unsubscribeHandles.push(store.subscribe(() => listener3()))
+    const unsubscribeHandles = [ listener1, listener2 , listener3 ].map(listener => {
+      return store.subscribe(listener)
+    })
 
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
@@ -296,7 +289,7 @@ describe('createStore', () => {
     const store = createStore(reducers.todos)
 
     const listener1 = createSpy()
-    const listener2 = createSpy()
+    const listener2 = createSpy().andCall(() => maybeAddThirdListener())
     const listener3 = createSpy()
 
     let listener3Added = false
@@ -308,10 +301,7 @@ describe('createStore', () => {
     }
 
     store.subscribe(() => listener1())
-    store.subscribe(() => {
-      listener2()
-      maybeAddThirdListener()
-    })
+    store.subscribe(() => listener2())
 
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
@@ -327,14 +317,7 @@ describe('createStore', () => {
   it('uses the last snapshot of subscribers during nested dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = createSpy()
-    const listener2 = createSpy()
-    const listener3 = createSpy()
-    const listener4 = createSpy()
-
-    let unsubscribe4
-    const unsubscribe1 = store.subscribe(() => {
-      listener1()
+    const listener1 = createSpy().andCall(() => {
       expect(listener1.calls.length).toBe(1)
       expect(listener2.calls.length).toBe(0)
       expect(listener3.calls.length).toBe(0)
@@ -349,6 +332,12 @@ describe('createStore', () => {
       expect(listener3.calls.length).toBe(1)
       expect(listener4.calls.length).toBe(1)
     })
+    const listener2 = createSpy()
+    const listener3 = createSpy()
+    const listener4 = createSpy()
+
+    let unsubscribe4
+    const unsubscribe1 = store.subscribe(listener1)
     store.subscribe(listener2)
     store.subscribe(listener3)
 
