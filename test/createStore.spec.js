@@ -17,18 +17,15 @@ describe('createStore', () => {
   })
 
   it('throws if reducer is not a function', () => {
-    expect(() =>
-      createStore()
-    ).toThrow()
+    const nonFuncs = [ undefined, true, 123, 'test', {}, [] ]
+    for (let nonFunc of nonFuncs) {
+      expect(() => {
+        createStore(nonFunc)
+      }).toThrow()
+    }
+  })
 
-    expect(() =>
-      createStore('test')
-    ).toThrow()
-
-    expect(() =>
-      createStore({})
-    ).toThrow()
-
+  it('accepts a function as reducer', () => {
     expect(() =>
       createStore(() => {})
     ).toNotThrow()
