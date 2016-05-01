@@ -72,6 +72,85 @@ describe('createStore', () => {
     ])
   })
 
+  it('accepts enhancer as the third argument', () => {
+    const emptyArray = []
+    const spyEnhancer = vanillaCreateStore => (...args) => {
+      expect(args[0]).toBe(reducers.todos)
+      expect(args[1]).toBe(emptyArray)
+      expect(args.length).toBe(2)
+      const vanillaStore = vanillaCreateStore(...args)
+      return {
+        ...vanillaStore,
+        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+      }
+    }
+
+    const store = createStore(reducers.todos, emptyArray, spyEnhancer)
+    const action = addTodo('Hello')
+    store.dispatch(action)
+    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+  })
+
+  it('accepts enhancer as the second argument if initial state is missing', () => {
+    const spyEnhancer = vanillaCreateStore => (...args) => {
+      expect(args[0]).toBe(reducers.todos)
+      expect(args[1]).toBe(undefined)
+      expect(args.length).toBe(2)
+      const vanillaStore = vanillaCreateStore(...args)
+      return {
+        ...vanillaStore,
+        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+      }
+    }
+
+    const store = createStore(reducers.todos, spyEnhancer)
+    const action = addTodo('Hello')
+    store.dispatch(action)
+    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+  })
+
+  it('throws if enhancer is neither undefined nor a function', () => {
+    for (let badValue of without(nonFunctions, undefined)) {
+      expect(() =>
+        createStore(reducers.todos, undefined, badValue)
+      ).toThrow()
+    }
+  })
+
+  it('accepts either undefined or a function as enhancer', () => {
+    expect(() =>
+      createStore(reducers.todos, undefined, undefined)
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, undefined, x => x)
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, x => x)
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, [])
+    ).toNotThrow()
+
+    expect(() =>
+      createStore(reducers.todos, {})
+    ).toNotThrow()
+  })
+
   describe('replaceReducer', () => {
     it('throws if nextReducer is not a function', () => {
       const store = createStore(reducers.todos)
@@ -476,87 +555,6 @@ describe('createStore', () => {
           store.dispatch({ type: falsyValue })
         ).toNotThrow()
       }
-    })
-  })
-
-  describe('createStore', () => {
-    it('accepts enhancer as the third argument', () => {
-      const emptyArray = []
-      const spyEnhancer = vanillaCreateStore => (...args) => {
-        expect(args[0]).toBe(reducers.todos)
-        expect(args[1]).toBe(emptyArray)
-        expect(args.length).toBe(2)
-        const vanillaStore = vanillaCreateStore(...args)
-        return {
-          ...vanillaStore,
-          dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
-        }
-      }
-
-      const store = createStore(reducers.todos, emptyArray, spyEnhancer)
-      const action = addTodo('Hello')
-      store.dispatch(action)
-      expect(store.dispatch).toHaveBeenCalledWith(action)
-      expect(store.getState()).toEqual([
-        {
-          id: 1,
-          text: 'Hello'
-        }
-      ])
-    })
-
-    it('accepts enhancer as the second argument if initial state is missing', () => {
-      const spyEnhancer = vanillaCreateStore => (...args) => {
-        expect(args[0]).toBe(reducers.todos)
-        expect(args[1]).toBe(undefined)
-        expect(args.length).toBe(2)
-        const vanillaStore = vanillaCreateStore(...args)
-        return {
-          ...vanillaStore,
-          dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
-        }
-      }
-
-      const store = createStore(reducers.todos, spyEnhancer)
-      const action = addTodo('Hello')
-      store.dispatch(action)
-      expect(store.dispatch).toHaveBeenCalledWith(action)
-      expect(store.getState()).toEqual([
-        {
-          id: 1,
-          text: 'Hello'
-        }
-      ])
-    })
-
-    it('throws if enhancer is neither undefined nor a function', () => {
-      for (let badValue of without(nonFunctions, undefined)) {
-        expect(() =>
-          createStore(reducers.todos, undefined, badValue)
-        ).toThrow()
-      }
-    })
-
-    it('does not throw if enhancer is either undefined or a function', () => {
-      expect(() =>
-        createStore(reducers.todos, undefined, undefined)
-      ).toNotThrow()
-
-      expect(() =>
-        createStore(reducers.todos, undefined, x => x)
-      ).toNotThrow()
-
-      expect(() =>
-        createStore(reducers.todos, x => x)
-      ).toNotThrow()
-
-      expect(() =>
-        createStore(reducers.todos, [])
-      ).toNotThrow()
-
-      expect(() =>
-        createStore(reducers.todos, {})
-      ).toNotThrow()
     })
   })
 
