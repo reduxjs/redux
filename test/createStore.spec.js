@@ -1,8 +1,14 @@
 import expect from 'expect'
 import { createSpy } from 'expect'
+import { without } from 'lodash'
 import { createStore, combineReducers } from '../src/index'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
+
+const falsyValues = [ '', 0, -0, NaN, null ]
+const nonFunctions = [ null, undefined, false, true, 42, 'test', {}, [] ]
+const nonPlainObjects = [ null, undefined, false, true, 42, 'test', [], new (function AwesomeMap() {})() ]
+
 
 describe('createStore', () => {
   it('exposes the public API', () => {
@@ -17,10 +23,9 @@ describe('createStore', () => {
   })
 
   it('throws if reducer is not a function', () => {
-    const nonFuncs = [ undefined, true, 123, 'test', {}, [] ]
-    for (let nonFunc of nonFuncs) {
+    for (let nonFunction of nonFunctions) {
       expect(() => {
-        createStore(nonFunc)
+        createStore(nonFunction)
       }).toThrow()
     }
   })
@@ -375,12 +380,11 @@ describe('createStore', () => {
       store.dispatch(unknownAction())
     ).toNotThrow()
 
-    function AwesomeMap() { }
-    [ null, undefined, 42, 'hey', new AwesomeMap() ].forEach(nonObject =>
-      expect(() =>
-        store.dispatch(nonObject)
-      ).toThrow(/plain/)
-    )
+    for (let nonPlainObject of nonPlainObjects) {
+      expect(() => {
+        store.dispatch(nonPlainObject)
+      }).toThrow(/plain/)
+    }
   })
 
   it('handles nested dispatches gracefully', () => {
@@ -443,18 +447,12 @@ describe('createStore', () => {
 
   it('does not throw if action type is falsy', () => {
     const store = createStore(reducers.todos)
-    expect(() =>
-      store.dispatch({ type: false })
-    ).toNotThrow()
-    expect(() =>
-      store.dispatch({ type: 0 })
-    ).toNotThrow()
-    expect(() =>
-      store.dispatch({ type: null })
-    ).toNotThrow()
-    expect(() =>
-      store.dispatch({ type: '' })
-    ).toNotThrow()
+
+    for (let falsyValue of falsyValues) {
+      expect(() =>
+        store.dispatch({ type: falsyValue })
+      ).toNotThrow()
+    }
   })
 
   it('accepts enhancer as the third argument', () => {
@@ -507,22 +505,14 @@ describe('createStore', () => {
   })
 
   it('throws if enhancer is neither undefined nor a function', () => {
-    expect(() =>
-      createStore(reducers.todos, undefined, {})
-    ).toThrow()
+    for (let badValue of without(nonFunctions, undefined)) {
+      expect(() =>
+        createStore(reducers.todos, undefined, badValue)
+      ).toThrow()
+    }
+  })
 
-    expect(() =>
-      createStore(reducers.todos, undefined, [])
-    ).toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, null)
-    ).toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, false)
-    ).toThrow()
-
+  it('does not throw if enhancer is either undefined or a function', () => {
     expect(() =>
       createStore(reducers.todos, undefined, undefined)
     ).toNotThrow()
@@ -547,9 +537,15 @@ describe('createStore', () => {
   it('throws if nextReducer is not a function', () => {
     const store = createStore(reducers.todos)
 
-    expect(() =>
-      store.replaceReducer()
-    ).toThrow('Expected the nextReducer to be a function.')
+    for (let nonFunction of nonFunctions) {
+      expect(() =>
+        store.replaceReducer(nonFunction)
+      ).toThrow('Expected the nextReducer to be a function.')
+    }
+  })
+
+  it('accepts a function as nextReducer', () => {
+    const store = createStore(reducers.todos)
 
     expect(() =>
       store.replaceReducer(() => {})
@@ -559,20 +555,10 @@ describe('createStore', () => {
   it('throws if listener is not a function', () => {
     const store = createStore(reducers.todos)
 
-    expect(() =>
-      store.subscribe()
-    ).toThrow()
-
-    expect(() =>
-      store.subscribe('')
-    ).toThrow()
-
-    expect(() =>
-      store.subscribe(null)
-    ).toThrow()
-
-    expect(() =>
-      store.subscribe(undefined)
-    ).toThrow()
+    for (let nonFunction of nonFunctions) {
+      expect(() => {
+        store.subscribe(nonFunction)
+      }).toThrow()
+    }
   })
 })
