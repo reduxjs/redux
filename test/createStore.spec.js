@@ -32,18 +32,14 @@ describe('createStore', () => {
   })
 
   it('passes the initial action and the initial state', () => {
-    const store = createStore(reducers.todos, [
+    const initialState = [
       {
         id: 1,
         text: 'Hello'
       }
-    ])
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
+    ]
+    const store = createStore(reducers.todos, initialState)
+    expect(store.getState()).toEqual(initialState)
   })
 
   it('applies the reducer to the previous state', () => {
@@ -74,26 +70,17 @@ describe('createStore', () => {
   })
 
   it('applies the reducer to the initial state', () => {
-    const store = createStore(reducers.todos, [
+    const initialState = [
       {
         id: 1,
         text: 'Hello'
       }
-    ])
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
+    ]
+    const store = createStore(reducers.todos, initialState)
+    expect(store.getState()).toEqual(initialState)
 
     store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
+    expect(store.getState()).toEqual(initialState)
 
     store.dispatch(addTodo('World'))
     expect(store.getState()).toEqual([
@@ -108,10 +95,7 @@ describe('createStore', () => {
   })
 
   it('preserves the state when replacing a reducer', () => {
-    const store = createStore(reducers.todos)
-    store.dispatch(addTodo('Hello'))
-    store.dispatch(addTodo('World'))
-    expect(store.getState()).toEqual([
+    const initialState = [
       {
         id: 1,
         text: 'Hello'
@@ -120,18 +104,12 @@ describe('createStore', () => {
         id: 2,
         text: 'World'
       }
-    ])
+    ]
+    const store = createStore(reducers.todos, initialState)
+    expect(store.getState()).toEqual(initialState)
 
     store.replaceReducer(reducers.todosReverse)
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }, {
-        id: 2,
-        text: 'World'
-      }
-    ])
+    expect(store.getState()).toEqual(initialState)
 
     store.dispatch(addTodo('Perhaps'))
     expect(store.getState()).toEqual([
