@@ -115,6 +115,8 @@ export default function createStore(reducer, initialState, enhancer) {
 
       isSubscribed = false
 
+      listener()
+
       ensureCanMutateNextListeners()
       var index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
