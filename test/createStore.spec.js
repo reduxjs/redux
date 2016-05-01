@@ -1,4 +1,5 @@
 import expect from 'expect'
+import { createSpy } from 'expect'
 import { createStore, combineReducers } from '../src/index'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
@@ -190,8 +191,8 @@ describe('createStore', () => {
 
   it('supports multiple subscriptions', () => {
     const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
+    const listenerA = createSpy()
+    const listenerB = createSpy()
 
     let unsubscribeA = store.subscribe(listenerA)
     store.dispatch(unknownAction())
@@ -237,8 +238,8 @@ describe('createStore', () => {
 
   it('only removes listener once when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
+    const listenerA = createSpy()
+    const listenerB = createSpy()
 
     const unsubscribeA = store.subscribe(listenerA)
     store.subscribe(listenerB)
@@ -253,7 +254,7 @@ describe('createStore', () => {
 
   it('only removes relevant listener when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listener = expect.createSpy(() => {})
+    const listener = createSpy()
 
     store.subscribe(listener)
     const unsubscribeSecond = store.subscribe(listener)
@@ -267,9 +268,9 @@ describe('createStore', () => {
 
   it('supports removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
-    const listenerC = expect.createSpy(() => {})
+    const listenerA = createSpy()
+    const listenerB = createSpy()
+    const listenerC = createSpy()
 
     store.subscribe(listenerA)
     const unSubB = store.subscribe(() => {
@@ -294,9 +295,9 @@ describe('createStore', () => {
       unsubscribe => unsubscribe()
     )
 
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
+    const listener1 = createSpy()
+    const listener2 = createSpy()
+    const listener3 = createSpy()
 
     unsubscribeHandles.push(store.subscribe(() => listener1()))
     unsubscribeHandles.push(store.subscribe(() => {
@@ -319,9 +320,9 @@ describe('createStore', () => {
   it('delays subscribe until the end of current dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
+    const listener1 = createSpy()
+    const listener2 = createSpy()
+    const listener3 = createSpy()
 
     let listener3Added = false
     const maybeAddThirdListener = () => {
@@ -351,10 +352,10 @@ describe('createStore', () => {
   it('uses the last snapshot of subscribers during nested dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
-    const listener4 = expect.createSpy(() => {})
+    const listener1 = createSpy()
+    const listener2 = createSpy()
+    const listener3 = createSpy()
+    const listener4 = createSpy()
 
     let unsubscribe4
     const unsubscribe1 = store.subscribe(() => {
