@@ -113,7 +113,7 @@ describe('createStore', () => {
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch: createSpy(vanillaStore.dispatch).andCallThrough()
       }
     }
 
@@ -137,7 +137,7 @@ describe('createStore', () => {
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch: createSpy(vanillaStore.dispatch).andCallThrough()
       }
     }
 
@@ -510,7 +510,7 @@ describe('createStore', () => {
       expect(listener2.calls.length).toBe(1)
       expect(listener3.calls.length).toBe(1)
     })
-    
+
     it('handles nested dispatches gracefully', () => {
       function foo(state = 0, action) {
         return action.type === 'foo' ? 1 : state
