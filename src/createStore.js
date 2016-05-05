@@ -176,6 +176,7 @@ export default function createStore(reducer, initialState, enhancer) {
     for (var i = 0; i < listeners.length; i++) {
       /**
        *  add action parameter to listeners,so that subscribers can dictate action
+       *  and use action to customize developer's code stuff
        */
 
       //listeners[i]()
