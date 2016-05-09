@@ -14,18 +14,6 @@ function createStoreBase(reducer, initialState, onChange) {
   }
 
   function dispatch(action) {
-    if (!isPlainObject(action)) {
-      throw new Error(
-        'Actions must be plain objects. ' +
-        'Use custom middleware for async actions.'
-      )
-    }
-    if (typeof action.type === 'undefined') {
-      throw new Error(
-        'Actions may not have an undefined "type" property. ' +
-        'Have you misspelled a constant?'
-      )
-    }
     if (isDispatching) {
       throw new Error('Reducers may not dispatch actions.')
     }
@@ -47,6 +35,37 @@ function createStoreBase(reducer, initialState, onChange) {
   }
 }
 
+function coreEnhancer(nextCreateStoreBase) {
+  return (reducer, initialState, onChange) => {
+    const storeBase = nextCreateStoreBase(reducer, initialState, onChange)
+
+    function dispatch(action) {
+      if (!isPlainObject(action)) {
+        throw new Error(
+          'Actions must be plain objects. ' +
+          'Use custom middleware for async actions.'
+        )
+      }
+      if (typeof action.type === 'undefined') {
+        throw new Error(
+          'Actions may not have an undefined "type" property. ' +
+          'Have you misspelled a constant?'
+        )
+      }
+      return storeBase.dispatch(action)
+    }
+
+    function getState() {
+      return storeBase.getState()
+    }
+
+    return {
+      dispatch,
+      getState
+    }
+  }
+}
+
 export default function createStore(reducer, initialState, enhancer) {
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.')
@@ -60,7 +79,7 @@ export default function createStore(reducer, initialState, enhancer) {
   }
 
   enhancer = enhancer || (x => x)
-  var createFinalStoreBase = enhancer(createStoreBase)
+  var createFinalStoreBase = enhancer(coreEnhancer(createStoreBase))
 
   var storeBase
   var currentListeners = []
