@@ -495,22 +495,27 @@ describe('createStore', () => {
   })
 
   it('accepts enhancer as the third argument', () => {
+    const spyActions = []
     const emptyArray = []
     const spyEnhancer = vanillaCreateStore => (...args) => {
       expect(args[0]).toBe(reducers.todos)
       expect(args[1]).toBe(emptyArray)
-      expect(args.length).toBe(2)
+      expect(args[2]).toBeA('function')
+      expect(args.length).toBe(3)
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch(action) {
+          spyActions.push(action)
+          return vanillaStore.dispatch(action)
+        }
       }
     }
 
     const store = createStore(reducers.todos, emptyArray, spyEnhancer)
     const action = addTodo('Hello')
     store.dispatch(action)
-    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(spyActions).toContain(action)
     expect(store.getState()).toEqual([
       {
         id: 1,
@@ -520,21 +525,26 @@ describe('createStore', () => {
   })
 
   it('accepts enhancer as the second argument if initial state is missing', () => {
+    const spyActions = []
     const spyEnhancer = vanillaCreateStore => (...args) => {
       expect(args[0]).toBe(reducers.todos)
       expect(args[1]).toBe(undefined)
-      expect(args.length).toBe(2)
+      expect(args[2]).toBeA('function')
+      expect(args.length).toBe(3)
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch(action) {
+          spyActions.push(action)
+          return vanillaStore.dispatch(action)
+        }
       }
     }
 
     const store = createStore(reducers.todos, spyEnhancer)
     const action = addTodo('Hello')
     store.dispatch(action)
-    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(spyActions).toContain(action)
     expect(store.getState()).toEqual([
       {
         id: 1,
