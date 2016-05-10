@@ -1,20 +1,23 @@
 import { combineReducers } from 'redux'
-import { default as cart, getQuantity, getAddedIds } from './cart'
-import { default as products, getProduct } from './products'
+import cart, * as fromCart from './cart'
+import products, * as fromProducts from './products'
 
 export function getTotal(state) {
-  return getAddedIds(state.cart).reduce((total, id) =>
-    total + getProduct(state.products, id).price * getQuantity(state.cart, id),
+  return fromCart.getAddedIds(state.cart).reduce((total, id) =>
+    total + (
+      fromProducts.getProduct(state.products, id).price *
+      fromCart.getQuantity(state.cart, id)
+    ),
     0
   ).toFixed(2)
 }
 
 export function getCartProducts(state) {
-  return getAddedIds(state.cart).map(id => Object.assign(
+  return fromCart.getAddedIds(state.cart).map(id => Object.assign(
     {},
-    getProduct(state.products, id),
+    fromProducts.getProduct(state.products, id),
     {
-      quantity: getQuantity(state.cart, id)
+      quantity: fromCart.getQuantity(state.cart, id)
     }
   ))
 }
