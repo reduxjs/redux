@@ -142,15 +142,15 @@ function todoApp(state = initialState, action) {
 
 Just like before, we never write directly to `state` or its fields, and instead we return new objects. The new `todos` is equal to the old `todos` concatenated with a single new item at the end. The fresh todo was constructed using the data from the action.
 
-Finally, the implementation of the `COMPLETE_TODO` handler shouldn’t come as a complete surprise:
+Finally, the implementation of the `TOGGLE_TODO` handler shouldn’t come as a complete surprise:
 
 ```js
-case COMPLETE_TODO:
+case TOGGLE_TODO:
   return Object.assign({}, state, {
     todos: state.todos.map((todo, index) => {
       if (index === action.index) {
         return Object.assign({}, todo, {
-          completed: true
+          completed: !todo.completed
         })
       }
       return todo
@@ -181,12 +181,12 @@ function todoApp(state = initialState, action) {
           }
         ]
       })
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: state.todos.map((todo, index) => {
           if(index === action.index) {
             return Object.assign({}, todo, {
-              completed: true
+              completed: !todo.completed
             })
           }
           return todo
@@ -211,11 +211,11 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: true
+            completed: !todo.completed
           })
         }
         return todo
@@ -232,7 +232,7 @@ function todoApp(state = initialState, action) {
         visibilityFilter: action.filter
       })
     case ADD_TODO:
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: todos(state.todos, action)
       })
@@ -270,11 +270,11 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: true
+            completed: !todo.completed
           })
         }
         return todo
@@ -370,7 +370,7 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 
 ```js
 import { combineReducers } from 'redux'
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -392,11 +392,11 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: true
+            completed: !todo.completed
           })
         }
         return todo
