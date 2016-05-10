@@ -31,7 +31,7 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER)
 Now that we have created a store, let’s verify our program works! Even without any UI, we can already test the update logic.
 
 ```js
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions'
+import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from './actions'
 
 // Log the initial state
 console.log(store.getState())
@@ -46,8 +46,8 @@ let unsubscribe = store.subscribe(() =>
 store.dispatch(addTodo('Learn about actions'))
 store.dispatch(addTodo('Learn about reducers'))
 store.dispatch(addTodo('Learn about store'))
-store.dispatch(completeTodo(0))
-store.dispatch(completeTodo(1))
+store.dispatch(toggleTodo(0))
+store.dispatch(toggleTodo(1))
 store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
 
 // Stop listening to state updates

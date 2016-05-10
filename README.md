@@ -103,7 +103,10 @@ function counter(state = 0, action) {
 // Its API is { subscribe, dispatch, getState }.
 let store = createStore(counter)
 
-// You can subscribe to the updates manually, or use bindings to your view layer.
+// You can use subscribe() to update the UI in response to state changes.
+// Normally you’d use a view binding library (e.g. React Redux) rather than subscribe() directly.
+// However it can also be handy to persist the current state in the localStorage.
+
 store.subscribe(() =>
   console.log(store.getState())
 )
