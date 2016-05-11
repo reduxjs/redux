@@ -62,6 +62,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Analytics middleware for Redux
 * [redux-gen](https://github.com/weo-edu/redux-gen) — Generator middleware for Redux
 * [redux-saga](https://github.com/yelouafi/redux-saga) — An alternative side effect model for Redux apps
+* [redux-cut](https://github.com/leonaves/redux-cut) — Block redux actions based on provided criteria
 
 ### Routing
 
