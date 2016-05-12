@@ -28,7 +28,6 @@ if (env === 'production') {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
-        screw_ie8: true,
         warnings: false
       }
     })
