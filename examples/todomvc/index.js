@@ -13,7 +13,8 @@ const stateNavigator = configureRouter()
 stateNavigator.states.todomvc.navigated = function (data) {
   render(
     <Provider store={store}>
-      <App filter={data.filter} stateNavigator={stateNavigator} />
+      <App filter={data.filter}
+           stateNavigator={stateNavigator} />
     </Provider>,
     document.getElementById('root')
   )
