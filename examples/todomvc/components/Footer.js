@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
-import classnames from 'classnames'
 import { SHOW_ALL, SHOW_COMPLETED, SHOW_ACTIVE } from '../constants/TodoFilters'
+import { RefreshLink } from 'navigation-react'
 
 const FILTER_TITLES = {
   [SHOW_ALL]: 'All',
@@ -22,14 +22,14 @@ class Footer extends Component {
 
   renderFilterLink(filter) {
     const title = FILTER_TITLES[filter]
-    const { filter: selectedFilter, onShow } = this.props
+    const { stateNavigator } = this.props
 
     return (
-      <a className={classnames({ selected: filter === selectedFilter })}
-         style={{ cursor: 'pointer' }}
-         onClick={() => onShow(filter)}>
+      <RefreshLink toData={{ filter: filter }}
+                   activeCssClass="selected"
+                   stateNavigator={stateNavigator} >
         {title}
-      </a>
+      </RefreshLink>
     )
   }
 
@@ -65,9 +65,8 @@ class Footer extends Component {
 Footer.propTypes = {
   completedCount: PropTypes.number.isRequired,
   activeCount: PropTypes.number.isRequired,
-  filter: PropTypes.string.isRequired,
   onClearCompleted: PropTypes.func.isRequired,
-  onShow: PropTypes.func.isRequired
+  stateNavigator: PropTypes.object.isRequired
 }
 
 export default Footer
