@@ -25,7 +25,7 @@ class Footer extends Component {
     const { stateNavigator } = this.props
 
     return (
-      <RefreshLink toData={{ filter: filter }}
+      <RefreshLink navigationData={{ filter: filter }}
                    activeCssClass="selected"
                    stateNavigator={stateNavigator} >
         {title}

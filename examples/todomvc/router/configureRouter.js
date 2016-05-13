@@ -1,5 +1,5 @@
 import { StateNavigator } from 'navigation'
-import { SHOW_ALL } from './constants/TodoFilters'
+import { SHOW_ALL } from '../constants/TodoFilters'
 
 export default function configureRouter() {
   return new StateNavigator([
