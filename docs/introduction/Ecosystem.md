@@ -56,9 +56,12 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [redux-thunk](http://github.com/gaearon/redux-thunk) — The easiest way to write async action creators
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
+* [redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware) — Redux middleware for fetching data with axios HTTP client
+* [redux-observable](https://github.com/blesh/redux-observable/) — RxJS middleware for Redux
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
 * [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 * [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Warns about state mutations in development
+* [redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action) — Warns about actions that produced no state changes in development
 * [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Analytics middleware for Redux
 * [redux-gen](https://github.com/weo-edu/redux-gen) — Generator middleware for Redux
 * [redux-saga](https://github.com/yelouafi/redux-saga) — An alternative side effect model for Redux apps
