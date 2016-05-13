@@ -112,7 +112,8 @@ describe('components', () => {
         const { output, props } = setup({ filter: SHOW_COMPLETED })
         const [ , list ] = output.props.children
         expect(list.props.children.length).toBe(1)
-        expect(list.props.children[0].props.todo).toBe(props.todos[1])      })
+        expect(list.props.children[0].props.todo).toBe(props.todos[1])      
+      })
     })
   })
 })
