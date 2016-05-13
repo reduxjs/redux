@@ -11,11 +11,6 @@ describe('todos reducer', () => {
         text: 'Use Redux',
         completed: false,
         id: 0
-      },
-      {
-        text: 'Use Navigation',
-        completed: false,
-        id: 1
       }
     ])
   })
