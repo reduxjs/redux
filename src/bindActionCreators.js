@@ -35,14 +35,13 @@ export default function bindActionCreators(actionCreators, dispatch) {
     )
   }
 
-  var keys = Object.keys(actionCreators)
   var boundActionCreators = {}
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i]
-    var actionCreator = actionCreators[key]
-    if (typeof actionCreator === 'function') {
-      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
-    }
-  }
+  Object.keys(actionCreators)
+    .forEach(key => {
+      var actionCreator = actionCreators[key]
+      if (typeof actionCreator === 'function') {
+        boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+      }
+    })
   return boundActionCreators
 }
