@@ -17,6 +17,14 @@ To use it together with [Babel](http://babeljs.io), you will need to install `ba
 npm install --save-dev babel-register
 ```
 
+and configure it to use ES2015 features in `.babelrc`:
+
+```js
+{
+  "presets": ["es2015"]
+}
+```
+
 Then, add this to `scripts` in your `package.json`:
 
 ```js
