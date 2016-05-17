@@ -113,7 +113,7 @@ export default function combineReducers(reducers) {
       throw sanityError
     }
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV !== 'production') {
       var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
       if (warningMessage) {
         warning(warningMessage)
