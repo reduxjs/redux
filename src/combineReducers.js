@@ -134,6 +134,7 @@ export default function combineReducers(reducers) {
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
+    hasChanged = hasChanged || Object.keys(state).length !== finalReducerKeys.length
     return hasChanged ? nextState : state
   }
 }

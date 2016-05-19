@@ -237,5 +237,24 @@ describe('Utils', () => {
 
       spy.restore()
     })
+
+    it('removes unexpected keys when previous state does not match reducer shape', () => {
+      const spy = expect.spyOn(console, 'error')
+      const reducer = combineReducers({
+        foo(state = { bar: 1 }) {
+          return state
+        },
+        baz(state = { qux: 3 }) {
+          return state
+        }
+      })
+
+      const newState = reducer({ foo: { bar: 1 }, baz: { qux: 3 }, unknown: 1 })
+      expect(newState).toEqual({ foo: { bar: 1 }, baz: { qux: 3 } })
+      expect(spy.calls[0].arguments[0]).toMatch(
+          /Unexpected key "unknown".*previous state.*instead: "foo", "baz"/
+      )
+      spy.restore()
+    })
   })
 })
