@@ -5,7 +5,7 @@ Meet some of the outstanding companies and individuals that made it possible:
 
 * [Webflow](https://github.com/webflow)
 * [Ximedes](https://www.ximedes.com/)
-* [Herman J. Radtke III](http://hermanradtke.com)
+* [HauteLook](http://hautelook.github.io/)
 * [Ken Wheeler](http://kenwheeler.github.io/)
 * [Chung Yen Li](https://www.facebook.com/prototocal.lee)
 * [Sunil Pai](https://twitter.com/threepointone)
