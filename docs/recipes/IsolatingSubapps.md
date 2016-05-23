@@ -1,6 +1,6 @@
 # Isolating Redux Subapps
 
-Consider the case of a "big" app that embeds smaller "subapps":
+Consider the case of a “big” app that embeds smaller “subapps”:
 
 ```js
 import React, { Component } from 'react'
