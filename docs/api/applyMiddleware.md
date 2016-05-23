@@ -225,9 +225,9 @@ export default connect(
   ```js
   let middleware = [ a, b ]
   if (process.env.NODE_ENV !== 'production') {
-    let c = require('some-debug-middleware');
-    let d = require('another-debug-middleware');
-    middleware = [ ...middleware, c, d ];
+    let c = require('some-debug-middleware')
+    let d = require('another-debug-middleware')
+    middleware = [ ...middleware, c, d ]
   }
 
   const store = createStore(

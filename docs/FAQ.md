@@ -521,7 +521,7 @@ const mapStateToProps = (state) => {
   return {
     objects: state.objectIds.map(id => state.objects[id])
   }
-};
+}
 ```
 
 Even though the array might contain the exact same object references each time, the array itself is a different reference, so the shallow equality check fails and React Redux would re-render the wrapped component.
