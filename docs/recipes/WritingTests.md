@@ -120,7 +120,7 @@ import thunk from 'redux-thunk'
 import * as actions from '../../actions/counter'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
-import expect from 'expect'; // You can use any testing library
+import expect from 'expect' // You can use any testing library
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
@@ -462,7 +462,7 @@ const dispatchWithStoreOf = (storeData, action) => {
   const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt)
   dispatch(action)
   return dispatched
-};
+}
 
 describe('middleware', () => {
   it('should dispatch if store is empty', () => {
