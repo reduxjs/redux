@@ -48,7 +48,7 @@ function callApi(endpoint, schema) {
 // consumption by reducers, because we can easily build a normalized tree
 // and keep it updated as we fetch more data.
 
-// Read more about Normalizr: https://github.com/gaearon/normalizr
+// Read more about Normalizr: https://github.com/paularmstrong/normalizr
 
 // GitHub's API may return results with uppercase letters while the query
 // doesn't contain any. For example, "someuser" could result in "SomeUser"
