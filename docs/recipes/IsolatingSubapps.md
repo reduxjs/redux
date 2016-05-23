@@ -24,15 +24,15 @@ actions, and won't see or communicate with each other.
 
 It's best not to mix this approach with standard Redux reducer composition.
 For typical unified web products, stick with reducer composition. For
-"product hubs", "dashboards", or enterprise software that groups disparate
+“product hubs”, “dashboards”, or enterprise software that groups disparate
 tools into a unified package, give the subapp approach a try.
 
 The subapp approach is also useful for large teams that are divided by product
 or feature verticals. These teams can ship subapps independently or in combination
-with an enclosing "app shell".
+with an enclosing “app shell”.
 
 Below is a subapp's root connected component.
-As usual, it can render more components, connected or not, as chilren.
+As usual, it can render more components, connected or not, as children.
 Usually we'd render it in `<Provider>` and be done with it.
 
 ```js
@@ -43,7 +43,7 @@ export default connect(mapStateToProps)(App)
 However, we don't have to call `ReactDOM.render(<Provider><App /></Provider>)`
 if we're interested in hiding the fact that the subapp component is a Redux app.
 
-Maybe we want to be able to run multiple instances of it in the same "bigger" app
+Maybe we want to be able to run multiple instances of it in the same “bigger” app
 and keep it as a complete black box, with Redux being an implementation detail.
 
 To hide Redux behind a React API, we can wrap it in a special component that
