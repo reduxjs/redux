@@ -11,6 +11,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ### Screencasts
 
 * **[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)** — Learn the basics of Redux directly from its creator (30 free videos)
+* **[Learn Redux](https://learnredux.com)** — Build a simple photo app that will simplify the core ideas behind Redux, React Router and React.js
 
 ### Example Apps
 
