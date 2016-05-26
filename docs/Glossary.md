@@ -114,10 +114,10 @@ See the complete [store API reference](api/Store.md#dispatch) for more details.
 ## Store creator
 
 ```js
-type StoreCreator = (reducer: Reducer, initialState: ?State) => Store
+type StoreCreator = (reducer: Reducer, preloadedState: ?State) => Store
 ```
 
-A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(reducer, initialState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
+A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(reducer, preloadedState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
 
 ## Store enhancer
 

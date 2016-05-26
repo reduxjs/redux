@@ -15,7 +15,7 @@ function getUndefinedStateErrorMessage(key, action) {
 function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   var reducerKeys = Object.keys(reducers)
   var argumentName = action && action.type === ActionTypes.INIT ?
-    'initialState argument passed to createStore' :
+    'preloadedState argument passed to createStore' :
     'previous state received by the reducer'
 
   if (reducerKeys.length === 0) {
