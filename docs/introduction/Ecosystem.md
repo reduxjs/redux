@@ -21,21 +21,23 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### Tutorials and Articles
 
-* [Redux Tutorial](https://github.com/happypoulp/redux-tutorial) — Learn how to use Redux step by step
-* [Redux Egghead Course Notes](https://github.com/tayiorbeii/egghead.io_redux_course_notes) — Notes on the Redux [Egghead video course](https://egghead.io/series/getting-started-with-redux)
-* [Integrating Data with React Native](http://makeitopen.com/tutorials/building-the-f8-app/data/) — An intro to using Redux with React Native
-* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux) — An intro to Redux
-* [Leveling Up with React: Redux](https://css-tricks.com/learning-react-redux/) — Another great intro to Redux
-* [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6) — A visual explanation of Redux data flow
-* [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container) — Learn the basic concepts of Redux
-* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4) — A guide to creating a universal app with data fetching and routing
-* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
-* [Getting Started with React, Redux, and Immutable](http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/) — A test-driven intro to refactoring a React app to use Redux
-* [Secure Your React and Redux App with JWT Authentication](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/) — Learn how to add JWT authentication to your React and Redux app
-* [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a#.l033pyr02) — In-depth guide to implementing Redux middleware
-* [Build an Image Gallery Using Redux Saga](http://joelhooks.com/blog/2016/03/20/build-an-image-gallery-using-redux-saga) — An intro to using Redux with Redux Saga
-* [Angular 2 — Introduction to Redux](https://medium.com/google-developer-experts/angular-2-introduction-to-redux-1cf18af27e6e) — An introduction to Redux fundamental concepts with an example in Angular 2
-* [Working with VK API (in Russian)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details) — A tutorial in Russian that demonstrates creating an app that consumes VK API
+* [Redux Tutorial](https://github.com/happypoulp/redux-tutorial)
+* [Redux Egghead Course Notes](https://github.com/tayiorbeii/egghead.io_redux_course_notes)
+* [Integrating Data with React Native](http://makeitopen.com/tutorials/building-the-f8-app/data/)
+* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux)
+* [Leveling Up with React: Redux](https://css-tricks.com/learning-react-redux/)
+* [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6)
+* [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container)
+* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4)
+* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
+* [Getting Started with React, Redux, and Immutable](http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/)
+* [Secure Your React and Redux App with JWT Authentication](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/)
+* [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
+* [Angular 2 — Introduction to Redux](https://medium.com/google-developer-experts/angular-2-introduction-to-redux-1cf18af27e6e)
+* [Apollo Client: GraphQL with React and Redux](https://medium.com/apollo-stack/apollo-client-graphql-with-react-and-redux-49b35d0f2641)
+* [Using redux-saga To Simplify Your Growing React Native Codebase](https://shift.infinite.red/using-redux-saga-to-simplify-your-growing-react-native-codebase-2b8036f650de)
+* [Build an Image Gallery Using Redux Saga](http://joelhooks.com/blog/2016/03/20/build-an-image-gallery-using-redux-saga)
+* [Working with VK API (in Russian)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details)
 
 ### Talks
 
@@ -68,6 +70,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-gen](https://github.com/weo-edu/redux-gen) — Generator middleware for Redux
 * [redux-saga](https://github.com/yelouafi/redux-saga) — An alternative side effect model for Redux apps
 * [redux-action-tree](https://github.com/cerebral/redux-action-tree) — Composable Cerebral-style signals for Redux
+* [apollo-client](https://github.com/apollostack/apollo-client) — A simple caching client for any GraphQL server and UI framework built on top of Redux
 
 ### Routing
 
