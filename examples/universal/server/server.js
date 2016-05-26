@@ -36,10 +36,10 @@ function handleRender(req, res) {
     const counter = parseInt(params.counter, 10) || apiResult || 0
 
     // Compile an initial state
-    const initialState = { counter }
+    const preloadedState = { counter }
 
     // Create a new Redux store instance
-    const store = configureStore(initialState)
+    const store = configureStore(preloadedState)
 
     // Render the component to a string
     const html = renderToString(

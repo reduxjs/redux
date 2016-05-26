@@ -3,10 +3,10 @@ import thunk from 'redux-thunk'
 import api from '../middleware/api'
 import rootReducer from '../reducers'
 
-export default function configureStore(initialState) {
+export default function configureStore(preloadedState) {
   return createStore(
     rootReducer,
-    initialState,
+    preloadedState,
     applyMiddleware(thunk, api)
   )
 }
