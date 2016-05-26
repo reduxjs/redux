@@ -56,7 +56,7 @@ function handleRender(req, res) {
   })
 }
 
-function renderFullPage(html, initialState) {
+function renderFullPage(html, preloadedState) {
   return `
     <!doctype html>
     <html>
@@ -66,7 +66,7 @@ function renderFullPage(html, initialState) {
       <body>
         <div id="app">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
