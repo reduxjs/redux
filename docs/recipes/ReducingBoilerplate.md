@@ -368,7 +368,7 @@ function callAPIMiddleware({ dispatch, getState }) {
     }
 
     if (typeof callAPI !== 'function') {
-      throw new Error('Expected fetch to be a function.')
+      throw new Error('Expected callAPI to be a function.')
     }
 
     if (!shouldCallAPI(getState())) {
