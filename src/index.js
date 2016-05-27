@@ -1,8 +1,8 @@
-import createStore from './createStore'
-import combineReducers from './combineReducers'
-import bindActionCreators from './bindActionCreators'
-import applyMiddleware from './applyMiddleware'
-import compose from './compose'
+export createStore from './createStore'
+export combineReducers from './combineReducers'
+export bindActionCreators from './bindActionCreators'
+export applyMiddleware from './applyMiddleware'
+export compose from './compose'
 import warning from './utils/warning'
 
 /*
@@ -23,12 +23,4 @@ if (
     'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' +
     'to ensure you have the correct code for your production build.'
   )
-}
-
-export {
-  createStore,
-  combineReducers,
-  bindActionCreators,
-  applyMiddleware,
-  compose
 }
