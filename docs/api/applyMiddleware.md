@@ -232,7 +232,7 @@ export default connect(
 
   const store = createStore(
     reducer,
-    initialState,
+    preloadedState,
     applyMiddleware(...middleware)
   )
   ```

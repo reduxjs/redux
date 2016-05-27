@@ -188,14 +188,14 @@ export interface Store<S> {
 /**
  * A store creator is a function that creates a Redux store. Like with
  * dispatching function, we must distinguish the base store creator,
- * `createStore(reducer, initialState)` exported from the Redux package, from
+ * `createStore(reducer, preloadedState)` exported from the Redux package, from
  * store creators that are returned from the store enhancers.
  *
  * @template S State object type.
  */
 export interface StoreCreator {
   <S>(reducer: Reducer<S>, enhancer?: StoreEnhancer<S>): Store<S>;
-  <S>(reducer: Reducer<S>, initialState: S, enhancer?: StoreEnhancer<S>): Store<S>;
+  <S>(reducer: Reducer<S>, preloadedState: S, enhancer?: StoreEnhancer<S>): Store<S>;
 }
 
 /**
@@ -218,7 +218,7 @@ export interface StoreCreator {
  */
 export type StoreEnhancer<S> = (next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
 export type GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
-export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, initialState: S) => Store<S>;
+export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, preloadedState: S) => Store<S>;
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -234,7 +234,7 @@ export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, initialState: S
  * @param reducer A function that returns the next state tree, given the
  *   current state tree and the action to handle.
  *
- * @param [initialState] The initial state. You may optionally specify it to
+ * @param [preloadedState] The initial state. You may optionally specify it to
  *   hydrate the state from the server in universal apps, or to restore a
  *   previously serialized user session. If you use `combineReducers` to
  *   produce the root reducer function, this must be an object with the same

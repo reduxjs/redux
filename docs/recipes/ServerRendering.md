@@ -53,7 +53,7 @@ app.use(handleRender)
 
 // We are going to fill these out in the sections to follow
 function handleRender(req, res) { /* ... */ }
-function renderFullPage(html, initialState) { /* ... */ }
+function renderFullPage(html, preloadedState) { /* ... */ }
 
 app.listen(port)
 ```
@@ -83,23 +83,23 @@ function handleRender(req, res) {
   )
 
   // Grab the initial state from our Redux store
-  const initialState = store.getState()
+  const preloadedState = store.getState()
 
   // Send the rendered page back to the client
-  res.send(renderFullPage(html, initialState))
+  res.send(renderFullPage(html, preloadedState))
 }
 ```
 
 ### Inject Initial Component HTML and State
 
-The final step on the server side is to inject our initial component HTML and initial state into a template to be rendered on the client side. To pass along the state, we add a `<script>` tag that will attach `initialState` to `window.__INITIAL_STATE__`.
+The final step on the server side is to inject our initial component HTML and initial state into a template to be rendered on the client side. To pass along the state, we add a `<script>` tag that will attach `preloadedState` to `window.__PRELOADED_STATE__`.
 
-The `initialState` will then be available on the client side by accessing `window.__INITIAL_STATE__`.
+The `preloadedState` will then be available on the client side by accessing `window.__PRELOADED_STATE__`.
 
 We also include our bundle file for the client-side application via a script tag. This is whatever output your bundling tool provides for your client entry point. It may be a static file or a URL to a hot reloading development server.
 
 ```js
-function renderFullPage(html, initialState) {
+function renderFullPage(html, preloadedState) {
   return `
     <!doctype html>
     <html>
@@ -109,7 +109,7 @@ function renderFullPage(html, initialState) {
       <body>
         <div id="root">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
@@ -124,7 +124,7 @@ function renderFullPage(html, initialState) {
 
 ## The Client Side
 
-The client side is very straightforward. All we need to do is grab the initial state from `window.__INITIAL_STATE__`, and pass it to our [`createStore()`](../api/createStore.md) function as the initial state.
+The client side is very straightforward. All we need to do is grab the initial state from `window.__PRELOADED_STATE__`, and pass it to our [`createStore()`](../api/createStore.md) function as the initial state.
 
 Let’s take a look at our new client file:
 
@@ -139,10 +139,10 @@ import App from './containers/App'
 import counterApp from './reducers'
 
 // Grab the state from a global injected into server-generated HTML
-const initialState = window.__INITIAL_STATE__
+const preloadedState = window.__PRELOADED_STATE__
 
 // Create Redux store with initial state
-const store = createStore(counterApp, initialState)
+const store = createStore(counterApp, preloadedState)
 
 render(
   <Provider store={store}>
@@ -182,10 +182,10 @@ function handleRender(req, res) {
   const counter = parseInt(params.counter, 10) || 0
 
   // Compile an initial state
-  let initialState = { counter }
+  let preloadedState = { counter }
 
   // Create a new Redux store instance
-  const store = createStore(counterApp, initialState)
+  const store = createStore(counterApp, preloadedState)
 
   // Render the component to a string
   const html = renderToString(
@@ -202,7 +202,7 @@ function handleRender(req, res) {
 }
 ```
 
-The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__INITIAL_STATE__` variable has the counter set in it.
+The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__PRELOADED_STATE__` variable has the counter set in it.
 
 ### Async State Fetching
 
@@ -245,10 +245,10 @@ function handleRender(req, res) {
     const counter = parseInt(params.counter, 10) || apiResult || 0
 
     // Compile an initial state
-    let initialState = { counter }
+    let preloadedState = { counter }
 
     // Create a new Redux store instance
-    const store = createStore(counterApp, initialState)
+    const store = createStore(counterApp, preloadedState)
 
     // Render the component to a string
     const html = renderToString(
