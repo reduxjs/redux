@@ -17,7 +17,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [Official Examples](Examples.md) — A few official examples covering different Redux techniques
 * [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
-* [grafgiti](https://github.com/mohebifar/grafgiti) — Create graffity on your GitHub contributions wall
+* [grafgiti](https://github.com/mohebifar/grafgiti) — Create graffiti on your GitHub contributions wall
 
 ### Tutorials and Articles
 
