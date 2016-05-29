@@ -38,8 +38,7 @@ export var ActionTypes = {
  */
 export default function createStore(reducer, preloadedState, enhancer) {
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState
-    preloadedState = undefined
+    [enhancer, preloadedState] = [preloadedState, undefined];
   }
 
   if (typeof enhancer !== 'undefined') {
