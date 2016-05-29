@@ -33,6 +33,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
       `keys: "${reducerKeys.join('", "')}"`
     )
   }
+  
 
   var unexpectedKeys = Object.keys(inputState).filter(key => !reducers.hasOwnProperty(key))
 
@@ -46,32 +47,58 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   }
 }
 
-function assertReducerSanity(reducers) {
-  Object.keys(reducers).forEach(key => {
-    var reducer = reducers[key]
-    var initialState = reducer(undefined, { type: ActionTypes.INIT })
 
-    if (typeof initialState === 'undefined') {
-      throw new Error(
-        `Reducer "${key}" returned undefined during initialization. ` +
-        `If the state passed to the reducer is undefined, you must ` +
-        `explicitly return the initial state. The initial state may ` +
-        `not be undefined.`
-      )
-    }
+function cleanReducerTree(rootReducerTree) {
+  
+  function _cleanReducerTree(reducerTree) {
+    let finalReducers = {}
 
-    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.')
-    if (typeof reducer(undefined, { type }) === 'undefined') {
-      throw new Error(
-        `Reducer "${key}" returned undefined when probed with a random type. ` +
-        `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
-        `namespace. They are considered private. Instead, you must return the ` +
-        `current state for any unknown actions, unless it is undefined, ` +
-        `in which case you must return the initial state, regardless of the ` +
-        `action type. The initial state may not be undefined.`
-      )
-    }
-  })
+    Object.keys(reducerTree).forEach(key => {
+       
+      if (reducerTree[key] && typeof reducerTree[key] == 'object') {
+        let nextLevelReducer = reducerTree[key]
+
+        if (nextLevelReducer.length) {
+          throw new Error(
+            `Reducer object at "${key}" was empty.  Every item in the ` +
+            `reducer tree must either be a function or a non-empty object`
+          )
+        }
+
+        finalReducers[key] = _cleanReducerTree(nextLevelReducer)
+      } else if (typeof reducerTree[key] == 'function') {
+        var reducer = reducerTree[key]
+        var initialState = reducer(undefined, { type: ActionTypes.INIT })
+
+        if (typeof initialState === 'undefined') {
+          throw new Error(
+            `Reducer "${key}" returned undefined during initialization. ` +
+            `If the state passed to the reducer is undefined, you must ` +
+            `explicitly return the initial state. The initial state may ` +
+            `not be undefined.`
+          )
+        }
+
+        var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.')
+        if (typeof reducer(undefined, { type }) === 'undefined') {
+          throw new Error(
+            `Reducer "${key}" returned undefined when probed with a random type. ` +
+            `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
+            `namespace. They are considered private. Instead, you must return the ` +
+            `current state for any unknown actions, unless it is undefined, ` +
+            `in which case you must return the initial state, regardless of the ` +
+            `action type. The initial state may not be undefined.`
+          )
+        }
+
+        finalReducers[key] = reducer 
+      } 
+    })
+
+    return finalReducers
+  }
+  
+  return _cleanReducerTree(rootReducerTree)
 }
 
 /**
@@ -90,50 +117,107 @@ function assertReducerSanity(reducers) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-export default function combineReducers(reducers) {
-  var reducerKeys = Object.keys(reducers)
-  var finalReducers = {}
-  for (var i = 0; i < reducerKeys.length; i++) {
-    var key = reducerKeys[i]
-    if (typeof reducers[key] === 'function') {
-      finalReducers[key] = reducers[key]
-    }
-  }
-  var finalReducerKeys = Object.keys(finalReducers)
+//export default function combineReducers(reducers) {
+//  var reducerKeys = Object.keys(reducers)
+//  var finalReducers = {}
+//
+//  for (var i = 0; i < reducerKeys.length; i++) {
+//    var key = reducerKeys[i]
+//    if (typeof reducers[key] === 'function') {
+//      finalReducers[key] = reducers[key]
+//    }
+//  }
+//  var finalReducerKeys = Object.keys(finalReducers)
+//
+//  var sanityError
+//  try {
+//    assertReducerSanity(finalReducers)
+//  } catch (e) {
+//    sanityError = e
+//  }
+//
+//  return function combination(state = {}, action) {
+//    if (sanityError) {
+//      throw sanityError
+//    }
+//
+//    if (process.env.NODE_ENV !== 'production') {
+//      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
+//      if (warningMessage) {
+//        warning(warningMessage)
+//      }
+//    }
+//
+//    var hasChanged = false
+//    var nextState = {}
+//    for (var i = 0; i < finalReducerKeys.length; i++) {
+//      var key = finalReducerKeys[i]
+//      var reducer = finalReducers[key]
+//      var previousStateForKey = state[key]
+//      var nextStateForKey = reducer(previousStateForKey, action, nextState)
+//      
+//      if (typeof nextStateForKey === 'undefined') {
+//        var errorMessage = getUndefinedStateErrorMessage(key, action)
+//        throw new Error(errorMessage)
+//      }
+//
+//      nextState[key] = nextStateForKey
+//      hasChanged = hasChanged || nextStateForKey !== previousStateForKey
+//    }
+//    return hasChanged ? nextState : state
+//  }
+//}
 
-  var sanityError
+
+export default function combineReducers(rootReducerTree) { 
+  var finalReducers, sanityError
+
   try {
-    assertReducerSanity(finalReducers)
+    finalReducers = cleanReducerTree(rootReducerTree)
   } catch (e) {
     sanityError = e
   }
-
-  return function combination(state = {}, action) {
+  
+  function reducer(topLevelState = {}, action) {
     if (sanityError) {
       throw sanityError
     }
 
-    if (process.env.NODE_ENV !== 'production') {
-      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
-      if (warningMessage) {
-        warning(warningMessage)
+    function reduce(reducerTree, state) {
+      
+      if (process.env.NODE_ENV !== 'production') {
+        var warningMessage = getUnexpectedStateShapeWarningMessage(state, reducerTree, action)
+        if (warningMessage) {
+          warning(warningMessage)
+        }
       }
+
+      let nextState = {}
+      let hasChanged = false
+      Object.keys(reducerTree).forEach((key) => {
+        let nextStateForKey, prevStateForKey = state[key] || {}
+        
+        if (typeof reducerTree[key] === 'object') {
+          nextStateForKey = reduce(reducerTree[key], prevStateForKey)  
+        } else if (typeof reducerTree[key] === 'function') {
+          nextStateForKey = reducerTree[key](state[key], action, topLevelState)  
+        }
+
+        if (typeof nextStateForKey === 'undefined') {
+          var errorMessage = getUndefinedStateErrorMessage(key, action)
+          throw new Error(errorMessage)
+        }
+
+        hasChanged = hasChanged || nextStateForKey !== prevStateForKey
+        nextState[key] = nextStateForKey
+      })
+
+      return hasChanged ? nextState : state
     }
 
-    var hasChanged = false
-    var nextState = {}
-    for (var i = 0; i < finalReducerKeys.length; i++) {
-      var key = finalReducerKeys[i]
-      var reducer = finalReducers[key]
-      var previousStateForKey = state[key]
-      var nextStateForKey = reducer(previousStateForKey, action, nextState)
-      if (typeof nextStateForKey === 'undefined') {
-        var errorMessage = getUndefinedStateErrorMessage(key, action)
-        throw new Error(errorMessage)
-      }
-      nextState[key] = nextStateForKey
-      hasChanged = hasChanged || nextStateForKey !== previousStateForKey
-    }
-    return hasChanged ? nextState : state
+    return reduce(finalReducers, topLevelState)
   }
+
+  return reducer
 }
+
