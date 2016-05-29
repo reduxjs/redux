@@ -117,58 +117,6 @@ function cleanReducerTree(rootReducerTree) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-//export default function combineReducers(reducers) {
-//  var reducerKeys = Object.keys(reducers)
-//  var finalReducers = {}
-//
-//  for (var i = 0; i < reducerKeys.length; i++) {
-//    var key = reducerKeys[i]
-//    if (typeof reducers[key] === 'function') {
-//      finalReducers[key] = reducers[key]
-//    }
-//  }
-//  var finalReducerKeys = Object.keys(finalReducers)
-//
-//  var sanityError
-//  try {
-//    assertReducerSanity(finalReducers)
-//  } catch (e) {
-//    sanityError = e
-//  }
-//
-//  return function combination(state = {}, action) {
-//    if (sanityError) {
-//      throw sanityError
-//    }
-//
-//    if (process.env.NODE_ENV !== 'production') {
-//      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
-//      if (warningMessage) {
-//        warning(warningMessage)
-//      }
-//    }
-//
-//    var hasChanged = false
-//    var nextState = {}
-//    for (var i = 0; i < finalReducerKeys.length; i++) {
-//      var key = finalReducerKeys[i]
-//      var reducer = finalReducers[key]
-//      var previousStateForKey = state[key]
-//      var nextStateForKey = reducer(previousStateForKey, action, nextState)
-//      
-//      if (typeof nextStateForKey === 'undefined') {
-//        var errorMessage = getUndefinedStateErrorMessage(key, action)
-//        throw new Error(errorMessage)
-//      }
-//
-//      nextState[key] = nextStateForKey
-//      hasChanged = hasChanged || nextStateForKey !== previousStateForKey
-//    }
-//    return hasChanged ? nextState : state
-//  }
-//}
-
-
 export default function combineReducers(rootReducerTree) { 
   var finalReducers, sanityError
 
