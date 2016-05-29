@@ -1,5 +1,6 @@
 **Do you want to request a *feature* or report a *bug*?**  
-(If this is a *usage question*, please **do not post it here** - post it on [Stack Overflow](http://stackoverflow.com/questions/tagged/redux) instead. If this is not a "feature" or a "bug", or the phrase "How do I...?" applies, then it's probably a usage question.)
+
+(If this is a *usage question*, please **do not post it here**—post it on [Stack Overflow](http://stackoverflow.com/questions/tagged/redux) instead. If this is not a “feature” or a “bug”, or the phrase “How do I...?” applies, then it's probably a usage question.)
 
 
 
@@ -15,6 +16,6 @@
 
 
 
-**Which versions of Redux, and which browser / OS are affected by this issue? Did this work in previous versions of Redux?**
+**Which versions of Redux, and which browser and OS are affected by this issue? Did this work in previous versions of Redux?**
 
 
