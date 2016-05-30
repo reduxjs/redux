@@ -18,9 +18,7 @@ function setup(propOverrides) {
     <TodoTextInput {...props} />
   )
 
-  let output = renderer.getRenderOutput()
-
-  output = renderer.getRenderOutput()
+  const output = renderer.getRenderOutput()
 
   return {
     props: props,
