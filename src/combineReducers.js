@@ -126,7 +126,9 @@ export default function combineReducers(rootReducerTree) {
     sanityError = e
   }
   
-  function reducer(topLevelState = {}, action) {
+  function reducer(topLevelState = {}, action, stateWindow) {
+    stateWindow = stateWindow || topLevelState
+
     if (sanityError) {
       throw sanityError
     }
@@ -148,7 +150,7 @@ export default function combineReducers(rootReducerTree) {
         if (typeof reducerTree[key] === 'object') {
           nextStateForKey = reduce(reducerTree[key], prevStateForKey)  
         } else if (typeof reducerTree[key] === 'function') {
-          nextStateForKey = reducerTree[key](state[key], action, topLevelState)  
+          nextStateForKey = reducerTree[key](state[key], action, stateWindow)  
         }
 
         if (typeof nextStateForKey === 'undefined') {

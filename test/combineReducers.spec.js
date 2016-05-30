@@ -42,6 +42,24 @@ describe('Utils', () => {
       expect(lastCall.arguments[1]).toEqual({ type: 'QUX' })
       expect(lastCall.arguments[2]).toEqual({ foo: { bar: 0 } })
     })
+    
+    it('can be chained and still correctly pass top-level state', () => {
+      var subreducers = {
+        bar : () => { return {} }
+      }
+      const spy = expect.spyOn(subreducers, 'bar').andCallThrough()
+      
+      var reducers = {
+        foo: combineReducers(subreducers)
+      }
+
+      const rootReducer = combineReducers(reducers)
+      rootReducer({ foo: { bar: 0 } }, { type: 'QUX' })
+      var lastCall = spy.calls[spy.calls.length - 1]
+      expect(lastCall.arguments[0]).toEqual(0)
+      expect(lastCall.arguments[1]).toEqual({ type: 'QUX' })
+      expect(lastCall.arguments[2]).toEqual({ foo: { bar: 0 } })
+    })
 
     it('ignores all props which are not a function or a non-empty object', () => {
       const reducer = combineReducers({
