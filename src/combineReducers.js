@@ -113,14 +113,15 @@ export default function combineReducers(reducers) {
       throw sanityError
     }
 
+    var hasChanged = false
     if (process.env.NODE_ENV !== 'production') {
       var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
       if (warningMessage) {
         warning(warningMessage)
+        hasChanged = true
       }
     }
 
-    var hasChanged = false
     var nextState = {}
     for (var i = 0; i < finalReducerKeys.length; i++) {
       var key = finalReducerKeys[i]
