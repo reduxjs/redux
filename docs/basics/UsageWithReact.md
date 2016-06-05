@@ -8,7 +8,7 @@ We will use React to build our simple todo app.
 
 ## Installing React Redux
 
-[React bindings](https://github.com/gaearon/react-redux) are not included in Redux by default. You need to install them explicitly:
+[React bindings](https://github.com/reactjs/react-redux) are not included in Redux by default. You need to install them explicitly:
 
 ```
 npm install --save react-redux
@@ -293,7 +293,7 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-These are the basics of the React Redux API, but there are a few shortcuts and power options so we encourage you to check out [its documentation](https://github.com/reactjs/react-redux) in detail. In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/rackt/reselect).
+These are the basics of the React Redux API, but there are a few shortcuts and power options so we encourage you to check out [its documentation](https://github.com/reactjs/react-redux) in detail. In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/reactjs/reselect).
 
 Find the rest of the container components defined below:
 
