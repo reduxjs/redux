@@ -1,25 +1,26 @@
 # Isolating Redux Subapps
 
-Consider the case of a “big” app that embeds smaller “subapps”:
+Consider the case of a “big” app (contained in a `<BigApp>` component)
+that embeds smaller “subapps” (contained in `<SubApp>` components):
 
 ```js
 import React, { Component } from 'react'
-import Subapp from './subapp/Root'
+import SubApp from './subapp'
 
 class BigApp extends Component {
   render() {
     return (
       <div>
-        <Subapp />
-        <Subapp />
-        <Subapp />
+        <SubApp />
+        <SubApp />
+        <SubApp />
       </div>
     )
   }
 }
 ```
 
-These `<Subapp>`s will be completely independent. They won’t share data or
+These `<SubApp>`s will be completely independent. They won’t share data or
 actions, and won’t see or communicate with each other.
 
 It’s best not to mix this approach with standard Redux reducer composition.
@@ -55,7 +56,7 @@ import { Provider } from 'react-redux'
 import reducer from './reducers'
 import App from './App'
 
-class Root extends Component {
+class SubApp extends Component {
   constructor(props) {
     super(props)
     this.store = createStore(reducer)
