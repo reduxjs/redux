@@ -31,7 +31,7 @@ describe('Utils', () => {
       ).toEqual([ 'stack' ])
     })
 
-    it.only('warns if a reducer prop is undefined', () => {
+    it('warns if a reducer prop is undefined', () => {
       const spy = expect.spyOn(console, 'error')
 
       let isNotDefined
