@@ -110,10 +110,12 @@ function select(state) {
 }
 
 let currentValue
-function handleChange() {
+function handleChange(action) {
+  console.log('Action executed:', action);
+
   let previousValue = currentValue
   currentValue = select(store.getState())
-  
+
   if (previousValue !== currentValue) {
     console.log('Some deep nested property changed from', previousValue, 'to', currentValue)
   }

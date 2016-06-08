@@ -406,6 +406,18 @@ describe('createStore', () => {
     store.dispatch(addTodo('Hello'))
   })
 
+  it('provides access to the action when a subscriber is notified', done => {
+    const store = createStore(reducers.todos)
+    store.subscribe((action) => {
+      expect(action).toEqual({
+        type: 'ADD_TODO',
+        text: 'Hello'
+      })
+      done()
+    })
+    store.dispatch(addTodo('Hello'))
+  })
+
   it('only accepts plain object actions', () => {
     const store = createStore(reducers.todos)
     expect(() =>

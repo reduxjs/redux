@@ -38,8 +38,9 @@ console.log(store.getState())
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-let unsubscribe = store.subscribe(() =>
-  console.log(store.getState())
+let unsubscribe = store.subscribe((action) =>
+  console.log('Action:', action)
+  console.log('New state:', store.getState())
 )
 
 // Dispatch some actions
