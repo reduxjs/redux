@@ -174,7 +174,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
     var listeners = currentListeners = nextListeners
     for (var i = 0; i < listeners.length; i++) {
-      listeners[i]()
+      listeners[i](action)
     }
 
     return action

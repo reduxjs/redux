@@ -171,7 +171,7 @@ export interface Store<S> {
    * @param listener A callback to be invoked on every dispatch.
    * @returns A function to remove this change listener.
    */
-  subscribe(listener: () => void): Unsubscribe;
+  subscribe(listener: (action: Action) => void): Unsubscribe;
 
   /**
    * Replaces the reducer currently used by the store to calculate the state.
