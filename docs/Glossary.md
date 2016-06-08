@@ -96,7 +96,7 @@ See [`applyMiddleware(...middlewares)`](./api/applyMiddleware.md) for a detailed
 type Store = {
   dispatch: Dispatch
   getState: () => State
-  subscribe: (listener: () => void) => () => void
+  subscribe: (listener: (action: Action) => void) => () => void
   replaceReducer: (reducer: Reducer) => void
 }
 ```
