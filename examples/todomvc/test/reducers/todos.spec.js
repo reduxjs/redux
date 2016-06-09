@@ -1,54 +1,26 @@
 import expect from 'expect'
 import todos from '../../reducers/todos'
-import * as types from '../../constants/ActionTypes'
+import * as ActionTypes from '../../constants/ActionTypes'
 
 describe('todos reducer', () => {
   it('should handle initial state', () => {
+    const initialState = { id: 0, text: 'Use Redux', complete: false }
     expect(
-      todos(undefined, {})
-    ).toEqual([
-      {
-        text: 'Use Redux',
-        completed: false,
-        id: 0
-      }
-    ])
+      todos(initialState, {})
+    ).toEqual(initialState)
   })
 
   it('should handle ADD_TODO', () => {
     expect(
       todos([], {
-        type: types.ADD_TODO,
+        type: ActionTypes.ADD_TODO,
         text: 'Run the tests'
       })
     ).toEqual([
       {
+        id: 0,
         text: 'Run the tests',
-        completed: false,
-        id: 0
-      }
-    ])
-
-    expect(
-      todos([
-        {
-          text: 'Use Redux',
-          completed: false,
-          id: 0
-        }
-      ], {
-        type: types.ADD_TODO,
-        text: 'Run the tests'
-      })
-    ).toEqual([
-      {
-        text: 'Run the tests',
-        completed: false,
-        id: 1
-      }, {
-        text: 'Use Redux',
-        completed: false,
-        id: 0
+        completed: false
       }
     ])
 
@@ -57,29 +29,54 @@ describe('todos reducer', () => {
         {
           text: 'Run the tests',
           completed: false,
-          id: 1
-        }, {
-          text: 'Use Redux',
-          completed: false,
           id: 0
         }
       ], {
-        type: types.ADD_TODO,
-        text: 'Fix the tests'
+        type: ActionTypes.ADD_TODO,
+        text: 'Use Redux',
+        id: 1
       })
     ).toEqual([
       {
-        text: 'Fix the tests',
-        completed: false,
-        id: 2
-      }, {
         text: 'Run the tests',
         completed: false,
-        id: 1
+        id: 0
       }, {
         text: 'Use Redux',
         completed: false,
+        id: 1
+      }
+    ])
+
+    expect(
+      todos([
+        {
+          text: 'Run the tests',
+          completed: false,
+          id: 0
+        }, {
+          text: 'Use Redux',
+          completed: false,
+          id: 1
+        }
+      ], {
+        type: ActionTypes.ADD_TODO,
+        text: 'Fix the tests',
+        id: 2
+      })
+    ).toEqual([
+      {
+        text: 'Run the tests',
+        completed: false,
         id: 0
+      }, {
+        text: 'Use Redux',
+        completed: false,
+        id: 1
+      }, {
+        text: 'Fix the tests',
+        completed: false,
+        id: 2
       }
     ])
   })
@@ -97,7 +94,7 @@ describe('todos reducer', () => {
           id: 0
         }
       ], {
-        type: types.DELETE_TODO,
+        type: ActionTypes.DELETE_TODO,
         id: 1
       })
     ).toEqual([
@@ -122,17 +119,18 @@ describe('todos reducer', () => {
           id: 0
         }
       ], {
-        type: types.EDIT_TODO,
-        text: 'Fix the tests',
-        id: 1
+        type: ActionTypes.EDIT_TODO,
+        id: 0,
+        text: 'Use Redux!'
       })
     ).toEqual([
       {
-        text: 'Fix the tests',
+        text: 'Run the tests',
         completed: false,
         id: 1
-      }, {
-        text: 'Use Redux',
+      },
+      {
+        text: 'Use Redux!',
         completed: false,
         id: 0
       }
@@ -152,7 +150,7 @@ describe('todos reducer', () => {
           id: 0
         }
       ], {
-        type: types.COMPLETE_TODO,
+        type: ActionTypes.COMPLETE_TODO,
         id: 1
       })
     ).toEqual([
@@ -160,62 +158,8 @@ describe('todos reducer', () => {
         text: 'Run the tests',
         completed: true,
         id: 1
-      }, {
-        text: 'Use Redux',
-        completed: false,
-        id: 0
-      }
-    ])
-  })
-
-  it('should handle COMPLETE_ALL', () => {
-    expect(
-      todos([
-        {
-          text: 'Run the tests',
-          completed: true,
-          id: 1
-        }, {
-          text: 'Use Redux',
-          completed: false,
-          id: 0
-        }
-      ], {
-        type: types.COMPLETE_ALL
-      })
-    ).toEqual([
+      },
       {
-        text: 'Run the tests',
-        completed: true,
-        id: 1
-      }, {
-        text: 'Use Redux',
-        completed: true,
-        id: 0
-      }
-    ])
-
-    // Unmark if all todos are currently completed
-    expect(
-      todos([
-        {
-          text: 'Run the tests',
-          completed: true,
-          id: 1
-        }, {
-          text: 'Use Redux',
-          completed: true,
-          id: 0
-        }
-      ], {
-        type: types.COMPLETE_ALL
-      })
-    ).toEqual([
-      {
-        text: 'Run the tests',
-        completed: false,
-        id: 1
-      }, {
         text: 'Use Redux',
         completed: false,
         id: 0
@@ -232,54 +176,93 @@ describe('todos reducer', () => {
           id: 1
         }, {
           text: 'Use Redux',
-          completed: false,
+          completed: true,
           id: 0
         }
       ], {
-        type: types.CLEAR_COMPLETED
+        type: ActionTypes.CLEAR_COMPLETED
+      })
+    ).toEqual([])
+  })
+
+  it('should handle COMPLETE_ALL', () => {
+    expect(
+      todos([
+        {
+          text: 'Run the tests',
+          completed: true,
+          id: 1
+        }, {
+          text: 'Use Redux',
+          completed: true,
+          id: 0
+        }
+      ], {
+        type: ActionTypes.COMPLETE_ALL
       })
     ).toEqual([
       {
+        text: 'Run the tests',
+        completed: false,
+        id: 1
+      }, {
         text: 'Use Redux',
         completed: false,
         id: 0
       }
     ])
-  })
 
-  it('should not generate duplicate ids after CLEAR_COMPLETED', () => {
     expect(
-      [
+      todos([
         {
-          type: types.COMPLETE_TODO,
+          text: 'Run the tests',
+          completed: false,
+          id: 1
+        }, {
+          text: 'Use Redux',
+          completed: true,
           id: 0
-        }, {
-          type: types.CLEAR_COMPLETED
-        }, {
-          type: types.ADD_TODO,
-          text: 'Write more tests'
         }
-      ].reduce(todos, [
-        {
-          id: 0,
-          completed: false,
-          text: 'Use Redux'
-        }, {
-          id: 1,
-          completed: false,
-          text: 'Write tests'
-        }
-      ])
+      ], {
+        type: ActionTypes.COMPLETE_ALL
+      })
     ).toEqual([
       {
-        text: 'Write more tests',
-        completed: false,
-        id: 2
-      }, {
-        text: 'Write tests',
-        completed: false,
+        text: 'Run the tests',
+        completed: true,
         id: 1
+      }, {
+        text: 'Use Redux',
+        completed: true,
+        id: 0
+      }
+    ])
+
+    expect(
+      todos([
+        {
+          text: 'Run the tests',
+          completed: false,
+          id: 1
+        }, {
+          text: 'Use Redux',
+          completed: false,
+          id: 0
+        }
+      ], {
+        type: ActionTypes.COMPLETE_ALL
+      })
+    ).toEqual([
+      {
+        text: 'Run the tests',
+        completed: true,
+        id: 1
+      }, {
+        text: 'Use Redux',
+        completed: true,
+        id: 0
       }
     ])
   })
+
 })
