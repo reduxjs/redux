@@ -150,10 +150,6 @@ Not all examples have tests. If you see an example project without tests, you ar
 
 Please visit the [Examples page](http://redux.js.org/docs/introduction/Examples.html) for information on running individual examples.
 
-### Style
-
-The [reactjs](https://github.com/reactjs) GitHub org is trying to keep a standard style across its various projects, which can be found over in [eslint-config-reactjs](https://github.com/reactjs/eslint-config-reactjs). If you have a style change proposal, it should first be proposed there. If accepted, we will be happy to accept a PR to implement it here.
-
 ### Sending a Pull Request
 
 For non-trivial changes, please open an issue with a proposal for a new feature or refactoring before starting on the work. We don’t want you to waste your efforts on a pull request that we won’t want to accept.
