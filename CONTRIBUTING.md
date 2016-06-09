@@ -137,8 +137,6 @@ Redux comes with [official examples](http://redux.js.org/docs/introduction/Examp
 
 When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
 
-For development convenience, the Webpack configs for the examples are set up so that the `redux` module is aliased to the project `src` folder when inside of the Redux folder. If an example is moved out of the Redux folder, it will instead use the version of Redux from `node_modules`.
-
 #### Building and Testing the Examples
 
 To build and test the official Redux examples, run the following:
