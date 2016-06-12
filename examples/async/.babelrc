@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015", "react"],
+  "presets": ["es2015-webpack", "react"],
   "plugins": ["transform-object-rest-spread"]
 }
