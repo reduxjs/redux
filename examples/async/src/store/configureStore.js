@@ -1,13 +1,12 @@
 import { createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
+import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
-import rootReducer from '../reducers'
+import reducer from '../reducers'
 
-export default function configureStore(preloadedState) {
+export default function configureStore() {
   const store = createStore(
-    rootReducer,
-    preloadedState,
-    applyMiddleware(thunkMiddleware, createLogger())
+    reducer,
+    applyMiddleware(thunk, createLogger())
   )
 
   if (module.hot) {

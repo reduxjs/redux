@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
-import Picker from '../components/Picker'
-import Posts from '../components/Posts'
+import * as actions from '../actions'
+import Picker from './Picker'
+import Posts from './Posts'
 
 class App extends Component {
   constructor(props) {
@@ -12,27 +12,30 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit } = this.props
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    this.maybeFetchPosts()
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedReddit !== this.props.selectedReddit) {
-      const { dispatch, selectedReddit } = nextProps
-      dispatch(fetchPostsIfNeeded(selectedReddit))
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedReddit !== prevProps.selectedReddit) {
+      this.maybeFetchPosts()
     }
   }
 
+  maybeFetchPosts(invalidateCache = false) {
+    const { selectedReddit } = this.props
+    if (invalidateCache) {
+      this.props.invalidateReddit(selectedReddit)
+    }
+    this.props.fetchPostsIfNeeded(selectedReddit)
+  }
+
   handleChange(nextReddit) {
-    this.props.dispatch(selectReddit(nextReddit))
+    this.props.selectReddit(nextReddit)
   }
 
   handleRefreshClick(e) {
     e.preventDefault()
-
-    const { dispatch, selectedReddit } = this.props
-    dispatch(invalidateReddit(selectedReddit))
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    this.maybeFetchPosts(true)
   }
 
   render() {
@@ -73,7 +76,9 @@ App.propTypes = {
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
-  dispatch: PropTypes.func.isRequired
+  selectReddit: PropTypes.func.isRequired,
+  invalidateReddit: PropTypes.func.isRequired,
+  fetchPostsIfNeeded: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
@@ -95,4 +100,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, actions)(App)
