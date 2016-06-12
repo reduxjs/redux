@@ -134,3 +134,50 @@ It is an advanced API. You might need this if your app implements code splitting
 #### Arguments
 
 1. `reducer` (*Function*) The next reducer for the store to use.
+
+#### Returns
+
+(nextReducer): A new Reducer that replaces the previous one.
+
+##### Example
+
+```js
+import { replaceReducer, combineReducers, createStore } from 'redux'
+
+const store = createStore(/* Some reducer */)
+
+function select(state) {
+  return state.some.deep.property
+}
+
+let currentValue
+let called = false // false, handleChange() hasn't been called yet
+
+function handleChange() {
+
+  called = true // true, since we called handleChange()
+  
+  let previousValue = currentValue
+  currentValue = select(store.getState())
+
+  if (previousValue !== currentValue) {
+    console.log('Some deep nested property changed from', previousValue, 'to', currentValue)
+  }
+
+}
+
+let unsubscribe = store.subscribe(handleChange)
+handleChange()
+
+function callReducer(store) {
+  // loads our new reducer now as handleChange() has been called
+  if (called === true) {
+     const nextReducer = combineReducers(require('./someOtherReducer'));
+      store.replaceReducer(nextReducer);
+  }
+  return store;
+}
+callReducer(store);
+```
+<hr>
+
