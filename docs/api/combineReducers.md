@@ -43,7 +43,7 @@ A popular convention is to name reducers after the state slices they manage, so 
 
 #### 
 
-Using `combineReducers` can be a good way to enforce separation of concerns in your reducer graph.  Each sub-reducer receives the previous state for its specific reducer path and is only responsible for returning the next state for that same path.  However, as your application becomes more sophisticated sometimes you'll have a need to allow a sub-reducer to access some part of the global state.  This in particular can happen when you manage some global cached resource in your state that you don't want to duplicate for each sub-reducer that needs it (eg. when you use [Normalizr](https://github.com/paularmstrong/normalizr)).  `combineReducers` handles this use case by allowing you each sub-reducer to optionally access the global state.
+Using `combineReducers` can be a good way to enforce separation of concerns in your reducer graph.  Each sub-reducer receives the previous state for its specific reducer path and is only responsible for returning the next state for that same path.  However, as your application becomes more sophisticated sometimes you'll need to cheat and allow a sub-reducer to access some part of the global state.  This in particular can happen when you manage some global cached resource in your state that you don't want to duplicate for each sub-reducer that needs it (eg. when you use [Normalizr](https://github.com/paularmstrong/normalizr)).   `combineReducers` handles this use case by allowing each sub-reducer to optionally access the global state if it happens to need it.
 
 For example, if you had a state shape like...
 
