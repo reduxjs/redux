@@ -412,7 +412,7 @@ import { connect } from 'react-redux'
 export class App extends Component { /* ... */ }
 
 // Use default export for the connected component (for app)
-export default connect(mapDispatchToProps)(App)
+export default connect(mapStateToProps)(App)
 ```
 
 Since the default export is still the decorated component, the import statement pictured above will work as before so you won’t have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
