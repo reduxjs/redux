@@ -150,7 +150,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function dispatch() {
     var actions = []
-    var i;
+    var i
     for (i = 0; i < arguments.length; i++) {
       var action = arguments[i]
 
