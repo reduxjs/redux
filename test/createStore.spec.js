@@ -77,6 +77,20 @@ describe('createStore', () => {
     ])
   })
 
+  it('can handle multiple dispatches', () => {
+    const store = createStore(reducers.todos)
+    store.dispatch(addTodo('Hello'), addTodo('World'))
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }, {
+        id: 2,
+        text: 'World'
+      }
+    ])
+  })
+
   it('applies the reducer to the initial state', () => {
     const store = createStore(reducers.todos, [
       {
