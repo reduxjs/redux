@@ -1,4 +1,4 @@
-# Isolating Redux Subapps
+# Isolating Redux Sub-Apps
 
 Consider the case of a “big” app (contained in a `<BigApp>` component)
 that embeds smaller “sub-apps” (contained in `<SubApp>` components):
