@@ -210,9 +210,9 @@ describe('Utils', () => {
         /Unexpected key "bar".*createStore.*instead: "foo", "baz"/
       )
 
-      createStore(reducer, { bar: 2, qux: 4 })
+      createStore(reducer, { bar: 2, qux: 4, thud: 5 })
       expect(spy.calls[1].arguments[0]).toMatch(
-        /Unexpected keys "bar", "qux".*createStore.*instead: "foo", "baz"/
+        /Unexpected keys "qux", "thud".*createStore.*instead: "foo", "baz"/
       )
 
       createStore(reducer, 1)
@@ -220,14 +220,14 @@ describe('Utils', () => {
         /createStore has unexpected type of "Number".*keys: "foo", "baz"/
       )
 
-      reducer({ bar: 2 })
+      reducer({ corge: 2 })
       expect(spy.calls[3].arguments[0]).toMatch(
-        /Unexpected key "bar".*reducer.*instead: "foo", "baz"/
+        /Unexpected key "corge".*reducer.*instead: "foo", "baz"/
       )
 
-      reducer({ bar: 2, qux: 4 })
+      reducer({ fred: 2, grault: 4 })
       expect(spy.calls[4].arguments[0]).toMatch(
-        /Unexpected keys "bar", "qux".*reducer.*instead: "foo", "baz"/
+        /Unexpected keys "fred", "grault".*reducer.*instead: "foo", "baz"/
       )
 
       reducer(1)
@@ -235,6 +235,27 @@ describe('Utils', () => {
         /reducer has unexpected type of "Number".*keys: "foo", "baz"/
       )
 
+      spy.restore()
+    })
+
+    it('only warns for unexpected keys once', () => {
+      const spy = expect.spyOn(console, 'error')
+      const foo = (state = { foo: 1 }) => state
+      const bar = (state = { bar: 2 }) => state
+
+      expect(spy.calls.length).toBe(0)
+      const reducer = combineReducers({ foo, bar })
+      const state = { foo: 1, bar: 2, qux: 3 }
+      reducer(state, {})
+      reducer(state, {})
+      reducer(state, {})
+      reducer(state, {})
+      expect(spy.calls.length).toBe(1)
+      reducer({ ...state, baz: 5 }, {})
+      reducer({ ...state, baz: 5 }, {})
+      reducer({ ...state, baz: 5 }, {})
+      reducer({ ...state, baz: 5 }, {})
+      expect(spy.calls.length).toBe(2)
       spy.restore()
     })
   })
