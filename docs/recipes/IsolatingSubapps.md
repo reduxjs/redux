@@ -24,7 +24,7 @@ These `<SubApp>`s will be completely independent. They won’t share data or
 actions, and won’t see or communicate with each other.
 
 It’s best not to mix this approach with standard Redux reducer composition.
-For typical unified web products, stick with reducer composition. For
+For typical web apps, stick with reducer composition. For
 “product hubs”, “dashboards”, or enterprise software that groups disparate
 tools into a unified package, give the sub-app approach a try.
 
