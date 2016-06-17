@@ -1,5 +1,6 @@
 import expect from 'expect'
 import { combineReducers } from '../src'
+import Immutable from 'immutable'
 import createStore, { ActionTypes } from '../src/createStore'
 
 describe('Utils', () => {
@@ -29,6 +30,66 @@ describe('Utils', () => {
       expect(
         Object.keys(reducer({ }, { type: 'push' }))
       ).toEqual([ 'stack' ])
+    })
+
+    it('can use custom create/get/keys methods', () => {
+      const create = (obj) =>
+        obj instanceof Immutable.Map ? obj : new Immutable.Map(obj)
+      const get = (obj, key) =>
+        obj.get(key)
+      const keys = (obj) =>
+        obj.keySeq().toArray()
+      const stack = (state = [], action) =>
+        action.type === 'PUSH' ? state.concat(action.value) : state
+      const PUSH_ONE = { type: 'PUSH', value: 1 }
+
+      const reducer = combineReducers({ stack }, { create, get, keys })
+
+      const s1 = reducer(undefined, PUSH_ONE)
+      expect(s1.get('stack')).toEqual( [ 1 ] )
+
+      const spy = expect.spyOn(console, 'error')
+
+      // throws for non-objects
+      expect(
+        () => reducer(2, PUSH_ONE)
+      ).toThrow(
+        /Could not get key "stack"/
+      )
+      expect(spy.calls[0].arguments[0]).toMatch(
+        /The previous state received.*type of "Number"/
+      )
+
+      // throws if it can't get a prop
+      expect(() =>
+        reducer({ stack: [] }, PUSH_ONE)
+      ).toThrow(
+        /Could not get key "stack".*/
+      )
+      expect(spy.calls[1].arguments[0]).toMatch(
+        /The provided options.keys failed.*/
+      )
+
+      // warns when it gets an unexpected key
+      reducer(create({ boof: 1 }), PUSH_ONE)
+      expect(spy.calls[2].arguments[0]).toMatch(
+        /Unexpected key "boof".*/
+      )
+
+      // warns when it can't check for unexpectedKeys
+      reducer({ get: () => [] }, PUSH_ONE)
+      expect(spy.calls[3].arguments[0]).toMatch(
+        /The provided options.keys failed on previous state.*/
+      )
+
+      // warns unexpected keys if it tries default key iterator
+      const reducer2 = combineReducers({ stack }, { create, get }) // no keys
+      reducer2(create(), {})
+      expect(spy.calls[4].arguments[0]).toMatch(
+        /Unexpected keys "size".*/
+      )
+
+      spy.restore()
     })
 
     it('throws an error if a reducer returns undefined handling an action', () => {
