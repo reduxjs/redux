@@ -101,6 +101,7 @@
     "expect": "^1.8.0",
     "gitbook-cli": "^0.3.4",
     "glob": "^6.0.4",
+    "immutable": "3.8.1",
     "isparta": "^4.0.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.3.4",

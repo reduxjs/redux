@@ -1,5 +1,4 @@
 import { ActionTypes } from './createStore'
-import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key, action) {
@@ -12,8 +11,7 @@ function getUndefinedStateErrorMessage(key, action) {
   )
 }
 
-function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
-  var reducerKeys = Object.keys(reducers)
+function getUnexpectedStateShapeWarningMessage(inputState, keysMethod, reducers, reducerKeys, action) {
   var argumentName = action && action.type === ActionTypes.INIT ?
     'preloadedState argument passed to createStore' :
     'previous state received by the reducer'
@@ -25,7 +23,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
     )
   }
 
-  if (!isPlainObject(inputState)) {
+  if (typeof inputState !== 'object') {
     return (
       `The ${argumentName} has unexpected type of "` +
       ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
@@ -34,7 +32,14 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
     )
   }
 
-  var unexpectedKeys = Object.keys(inputState).filter(key => !reducers.hasOwnProperty(key))
+  try {
+    var unexpectedKeys = keysMethod(inputState).filter(key => !reducers.hasOwnProperty(key))
+  } catch (e) {
+    return (
+      `The provided options.keys failed on ${argumentName}. ` +
+      'Could not check for unexpectedKeys.'
+    )
+  }
 
   if (unexpectedKeys.length > 0) {
     return (
@@ -87,10 +92,23 @@ function assertReducerSanity(reducers) {
  * if the state passed to them was undefined, and the current state for any
  * unrecognized action.
  *
+ * @param {Object} [options={
+ *   create: (obj) => obj,
+ *   get: (obj, key) => obj[key],
+ *   keys: (obj) => Object.keys(obj)
+ * }] An optional object that defines how to create a new state, how to
+ * get a property from the state object, and how to iterate over the keys
+ * of a state object.
+ *
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-export default function combineReducers(reducers) {
+export default function combineReducers(reducers, options) {
+  options = Object.assign({
+    create: (obj) => obj,
+    get: (obj, key) => obj[key],
+    keys: (obj) => Object.keys(obj)
+  }, options)
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
   for (var i = 0; i < reducerKeys.length; i++) {
@@ -108,32 +126,43 @@ export default function combineReducers(reducers) {
     sanityError = e
   }
 
-  return function combination(state = {}, action) {
+  return function combination(state = options.create({}), action) {
     if (sanityError) {
       throw sanityError
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, options.keys, finalReducers, finalReducerKeys, action)
       if (warningMessage) {
         warning(warningMessage)
       }
     }
 
     var hasChanged = false
-    var nextState = {}
+    var nextStateDescriptor = {}
     for (var i = 0; i < finalReducerKeys.length; i++) {
       var key = finalReducerKeys[i]
       var reducer = finalReducers[key]
-      var previousStateForKey = state[key]
-      var nextStateForKey = reducer(previousStateForKey, action)
+
+      try {
+        var previousStateForKey = options.get(state, key)
+      } catch (e) {
+        throw new Error(`Could not get key "${key}" using ${options.get}`)
+      }
+
+      try {
+        var nextStateForKey = reducer(previousStateForKey, action)
+      } catch (e) {
+        throw new Error(`Reducer for key "${key}" failed`)
+      }
+
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
       }
-      nextState[key] = nextStateForKey
+      nextStateDescriptor[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
-    return hasChanged ? nextState : state
+    return hasChanged ? options.create(nextStateDescriptor) : state
   }
 }
