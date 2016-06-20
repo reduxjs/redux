@@ -122,7 +122,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   }
 
   /**
-   * Dispatches an action. It is the only way to trigger a state change.
+   * Dispatches action(s). It is the only way to trigger a state change.
    *
    * The `reducer` function, used to create the store, will be called with the
    * current state tree and the given `action`. Its return value will
@@ -139,45 +139,55 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * a good idea to keep actions serializable so you can record and replay user
    * sessions, or use the time travelling `redux-devtools`. An action must have
    * a `type` property which may not be `undefined`. It is a good idea to use
-   * string constants for action types.
+   * string constants for action types. Can handle multiple dispatches so to
+   * keep re-renders at a minimum.
    *
-   * @returns {Object} For convenience, the same action object you dispatched.
+   * @returns {Object|Array} For convenience, the same action object you dispatched.
+   * If multiple actions are supplied, then will be returned as an Array.
    *
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  function dispatch(action) {
-    if (!isPlainObject(action)) {
-      throw new Error(
-        'Actions must be plain objects. ' +
-        'Use custom middleware for async actions.'
-      )
-    }
+  function dispatch() {
+    var actions = []
+    var i
+    for (i = 0; i < arguments.length; i++) {
+      var action = arguments[i]
 
-    if (typeof action.type === 'undefined') {
-      throw new Error(
-        'Actions may not have an undefined "type" property. ' +
-        'Have you misspelled a constant?'
-      )
-    }
+      if (!isPlainObject(action)) {
+        throw new Error(
+          'Actions must be plain objects. ' +
+          'Use custom middleware for async actions.'
+        )
+      }
 
-    if (isDispatching) {
-      throw new Error('Reducers may not dispatch actions.')
-    }
+      if (typeof action.type === 'undefined') {
+        throw new Error(
+          'Actions may not have an undefined "type" property. ' +
+          'Have you misspelled a constant?'
+        )
+      }
 
-    try {
-      isDispatching = true
-      currentState = currentReducer(currentState, action)
-    } finally {
-      isDispatching = false
+      if (isDispatching) {
+        throw new Error('Reducers may not dispatch actions.')
+      }
+
+      try {
+        isDispatching = true
+        currentState = currentReducer(currentState, action)
+      } finally {
+        isDispatching = false
+      }
+
+      actions.push(action)
     }
 
     var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
+    for (i = 0; i < listeners.length; i++) {
       listeners[i]()
     }
 
-    return action
+    return actions.length > 1 ? actions : actions[0]
   }
 
   /**
