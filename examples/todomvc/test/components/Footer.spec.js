@@ -1,6 +1,6 @@
 import expect from 'expect'
 import React from 'react'
-import TestUtils from 'react-addons-test-utils'
+import { shallow } from 'enzyme'
 import Footer from '../../components/Footer'
 import { SHOW_ALL, SHOW_ACTIVE } from '../../constants/TodoFilters'
 
@@ -12,91 +12,74 @@ function setup(propOverrides) {
     onClearCompleted: expect.createSpy(),
     onShow: expect.createSpy()
   }, propOverrides)
+  
+  const titles = [
+    'All',
+    'Active',
+    'Completed'
+  ]
 
-  const renderer = TestUtils.createRenderer()
-  renderer.render(<Footer {...props} />)
-  const output = renderer.getRenderOutput()
+  const component = shallow(
+    <Footer {...props} />
+  )
 
   return {
+    component: component,
     props: props,
-    output: output
+    titles: titles,
+    footer: component.find('footer')
   }
 }
 
-function getTextContent(elem) {
-  const children = Array.isArray(elem.props.children) ?
-    elem.props.children : [ elem.props.children ]
+describe('<Footer />', () => {
+  it('should render a component', () => {
+    const { footer } = setup()
+    expect(footer.length).toEqual(1)
+    expect(footer.find('.footer').length).toEqual(1)
+  })
 
-  return children.reduce(function concatText(out, child) {
-    // Children are either elements or text strings
-    return out + (child.props ? getTextContent(child) : child)
-  }, '')
-}
+  it('should display active count when 0', () => {
+    const { footer } = setup({ activeCount: 0 })
+    expect(footer.find('.todo-count').text()).toEqual('No items left')
+  })
 
-describe('components', () => {
-  describe('Footer', () => {
-    it('should render container', () => {
-      const { output } = setup()
-      expect(output.type).toBe('footer')
-      expect(output.props.className).toBe('footer')
+  it('should display active count when above 0', () => {
+    const { footer } = setup({ activeCount: 1 })
+    expect(footer.find('.todo-count').text()).toEqual('1 item left')
+  })
+
+  it('should render filters', () => {
+    const { footer, titles } = setup()
+    expect(footer.find('ul').length).toEqual(1)
+    expect(footer.find('.filters').length).toEqual(1)
+    expect(footer.find('li').length).toBe(3)
+    
+    footer.find('li').forEach((elem, i) => {
+      expect(elem.find('a').hasClass('selected'))
+        .toEqual(i === 0 ? true : false)
+      expect(elem.find('a').text()).toEqual(titles[i])
     })
+  })
 
-    it('should display active count when 0', () => {
-      const { output } = setup({ activeCount: 0 })
-      const [ count ] = output.props.children
-      expect(getTextContent(count)).toBe('No items left')
-    })
+  it('should call onShow when a filter is clicked', () => {
+    const { component, props } = setup()
+    component.find('a').at(1).simulate('click')
+    expect(props.onShow).toHaveBeenCalledWith(SHOW_ACTIVE)
+  })
 
-    it('should display active count when above 0', () => {
-      const { output } = setup({ activeCount: 1 })
-      const [ count ] = output.props.children
-      expect(getTextContent(count)).toBe('1 item left')
-    })
+  it('shouldnt show clear button when no completed todos', () => {
+    const { component } = setup({ completedCount: 0 })
+    expect(component.find('.clear-completed').length).toEqual(0)
+  })
 
-    it('should render filters', () => {
-      const { output } = setup()
-      const [ , filters ] = output.props.children
-      expect(filters.type).toBe('ul')
-      expect(filters.props.className).toBe('filters')
-      expect(filters.props.children.length).toBe(3)
-      filters.props.children.forEach(function checkFilter(filter, i) {
-        expect(filter.type).toBe('li')
-        const a = filter.props.children
-        expect(a.props.className).toBe(i === 0 ? 'selected' : '')
-        expect(a.props.children).toBe({
-          0: 'All',
-          1: 'Active',
-          2: 'Completed'
-        }[i])
-      })
-    })
+  it('should render clear button when completed todos', () => {
+    const { component } = setup({ completedCount: 1 })
+    expect(component.find('.clear-completed').length).toEqual(1)
+  })
 
-    it('should call onShow when a filter is clicked', () => {
-      const { output, props } = setup()
-      const [ , filters ] = output.props.children
-      const filterLink = filters.props.children[1].props.children
-      filterLink.props.onClick({})
-      expect(props.onShow).toHaveBeenCalledWith(SHOW_ACTIVE)
-    })
-
-    it('shouldnt show clear button when no completed todos', () => {
-      const { output } = setup({ completedCount: 0 })
-      const [ , , clear ] = output.props.children
-      expect(clear).toBe(undefined)
-    })
-
-    it('should render clear button when completed todos', () => {
-      const { output } = setup({ completedCount: 1 })
-      const [ , , clear ] = output.props.children
-      expect(clear.type).toBe('button')
-      expect(clear.props.children).toBe('Clear completed')
-    })
-
-    it('should call onClearCompleted on clear button click', () => {
-      const { output, props } = setup({ completedCount: 1 })
-      const [ , , clear ] = output.props.children
-      clear.props.onClick({})
-      expect(props.onClearCompleted).toHaveBeenCalled()
-    })
+  it('should call onClearCompleted on clear button click', () => {
+    const { component, props } = setup({ completedCount: 1 })
+    component.find('.clear-completed').at(0).simulate('click')
+    expect(props.onClearCompleted).toHaveBeenCalled()
   })
 })
