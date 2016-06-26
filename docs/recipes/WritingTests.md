@@ -255,13 +255,13 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-First, we will install [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html):
+First, we will install [Enzyme](http://airbnb.io/enzyme/). Enzyme uses the [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html) underneath, but is more convenient, readable, and powerful.
 
 ```
-npm install --save-dev react-addons-test-utils
+npm install --save-dev enzyme
 ```
 
-To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering). This lets individual tests assert on whether the callbacks were called when expected.
+To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [shallow rendering](http://airbnb.io/enzyme/docs/api/shallow.html). This lets individual tests assert on whether the callbacks were called when expected.
 
 #### Example
 
@@ -300,85 +300,47 @@ can be tested like:
 ```js
 import expect from 'expect'
 import React from 'react'
-import TestUtils from 'react-addons-test-utils'
+import { shallow } from 'enzyme'
 import Header from '../../components/Header'
-import TodoTextInput from '../../components/TodoTextInput'
 
 function setup() {
-  let props = {
+  const props = {
     addTodo: expect.createSpy()
   }
 
-  let renderer = TestUtils.createRenderer()
-  renderer.render(<Header {...props} />)
-  let output = renderer.getRenderOutput()
+  const enzymeWrapper = shallow(<Header {...props} />)
 
   return {
     props,
-    output,
-    renderer
+    enzymeWrapper
   }
 }
 
 describe('components', () => {
   describe('Header', () => {
-    it('should render correctly', () => {
-      const { output } = setup()
+    it('should render self and subcomponents', () => {
+      const { enzymeWrapper } = setup()
 
-      expect(output.type).toBe('header')
-      expect(output.props.className).toBe('header')
+      expect(enzymeWrapper.find('header').hasClass('header')).toBe(true)
 
-      let [ h1, input ] = output.props.children
+      expect(enzymeWrapper.find('h1').text()).toBe('todos')
 
-      expect(h1.type).toBe('h1')
-      expect(h1.props.children).toBe('todos')
-
-      expect(input.type).toBe(TodoTextInput)
-      expect(input.props.newTodo).toBe(true)
-      expect(input.props.placeholder).toBe('What needs to be done?')
+      const todoInputProps = enzymeWrapper.find('TodoTextInput').props()
+      expect(todoInputProps.newTodo).toBe(true)
+      expect(todoInputProps.placeholder).toEqual('What needs to be done?')
     })
 
     it('should call addTodo if length of text is greater than 0', () => {
-      const { output, props } = setup()
-      let input = output.props.children[1]
-      input.props.onSave('')
+      const { enzymeWrapper, props } = setup()
+      const input = enzymeWrapper.find('TodoTextInput')
+      input.props().onSave('')
       expect(props.addTodo.calls.length).toBe(0)
-      input.props.onSave('Use Redux')
+      input.props().onSave('Use Redux')
       expect(props.addTodo.calls.length).toBe(1)
     })
   })
 })
-```
 
-#### Fixing Broken `setState()` in older React versions
-
-In React <= 0.13, 0.14.4 and 0.14.5, Shallow rendering [used to throw an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
-
-```
-npm install --save-dev jsdom
-```
-
-Then create a `setup.js` file in your test directory:
-
-```js
-import { jsdom } from 'jsdom'
-
-global.document = jsdom('<!doctype html><html><body></body></html>')
-global.window = document.defaultView
-global.navigator = global.window.navigator
-```
-
-It’s important that this code is evaluated *before* React is imported. To ensure this, modify your `mocha` command to include `--require ./test/setup.js` in the options in your `package.json`:
-
-```js
-{
-  ...
-  "scripts": {
-    ...
-    "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
-  },
-  ...
-}
 ```
 
 ### Connected Components
@@ -491,8 +453,8 @@ describe('middleware', () => {
 
 ### Glossary
 
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test Utilities for React.
+- [Enzyme](http://airbnb.io/enzyme/): Enzyme is a JavaScript Testing utility for React that makes it easier to assert, manipulate, and traverse your React Components' output.
 
-- [jsdom](https://github.com/tmpvar/jsdom): A plain JavaScript implementation of the DOM API. jsdom allows us to run the tests without browser.
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test Utilities for React. Used by Enzyme.
 
-- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): Shallow rendering lets you instantiate a component and get the result of its `render` method just a single level deep instead of rendering components recursively to a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements). That means it is possible to access its children, props and test if it works as expected. This also means that changing a child component won’t affect the tests for parent component.
+- [Shallow rendering](http://airbnb.io/enzyme/docs/api/shallow.html): Shallow rendering lets you instantiate a component and effectively get the result of its `render` method just a single level deep instead of rendering components recursively to a DOM. Shallow rendering is useful for unit tests, where you test a particular component only, and importantly not its children. This also means that changing a child component won’t affect the tests for the parent component. Testing a component and all its children can be accomplished with [Enzyme's `mount()` method](http://airbnb.io/enzyme/docs/api/mount.html), aka full DOM rendering.
