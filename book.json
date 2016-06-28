@@ -1,8 +1,9 @@
 {
-  "gitbook": "2.4.3",
+  "gitbook": "3.0.0",
+  "root": "docs",
   "title": "Redux",
   "structure": {
-    "summary": "docs/README.md"
+    "summary": "README.md"
   },
   "plugins": ["edit-link", "prism", "-highlight", "github", "anker-enable"],
   "pluginsConfig": {
