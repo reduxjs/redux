@@ -105,6 +105,27 @@ export interface Unsubscribe {
 }
 
 /**
+ * Represents an observer of an observable.
+ */
+export interface Observer<S> {
+  next(state: S): void;
+}
+
+/**
+ * A disposable resource returned after subscribing to an observable.
+ */
+export interface Subscription {
+  unsubscribe: Unsubscribe;
+}
+
+/**
+ * Represents an observable stream returned by `Store.observable()`.
+ */
+export interface Observable<S> {
+  subscribe(observer: Observer<S>): Subscription;
+}
+
+/**
  * A store is an object that holds the application’s state tree.
  * There should only be a single store in a Redux app, as the composition
  * happens on the reducer level.
@@ -183,6 +204,14 @@ export interface Store<S> {
    * @param nextReducer The reducer for the store to use instead.
    */
   replaceReducer(nextReducer: Reducer<S>): void;
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/zenparsing/es-observable
+   */
+  observable(): Observable<S>;
 }
 
 /**
