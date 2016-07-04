@@ -55,3 +55,32 @@ function counter(state = 0, action) {
 ```
 
 This is the basic structure that a typical Redux reducer function uses.
+
+## Basic State Shape
+
+Redux encourages you to think about your application in terms of the data you need to manage.  The data at any given point in time is the "*state*" of your application, and the structure and organization of that state is typically referred to as its "*shape*".  The shape of your state plays a major role in how you structure your reducer logic.
+
+A Redux state almost always has a plain Javascript object as the top of the state tree. The most common way to organize data within that top-level object is to further divide data into sub-trees, where each top-level key represents some "domain" or "slice" of related data.  For example, a basic Todo app's state might look like: 
+
+```js
+{
+  visibilityFilter: 'SHOW_ALL',
+  todos: [
+    {
+      text: 'Consider using Redux',
+      completed: true,
+    },
+    {
+      text: 'Keep all state in a single tree',
+      completed: false
+    }
+  ]
+}
+```
+
+
+## Splitting Up Reducer Logic
+
+Obviously, for any meaningful application, putting _all_ your update logic into a single reducer function is quickly going to become unmaintainable.  While there's no single rule for how long a function should be, it's generally agreed that functions should be relatively short and ideally only do one specific thing.  Because of this, the natural response for any programmer looking at a very large chunk of code is to try to break that code into smaller pieces that are easier to understand.
+
+Since a Redux reducer is *just* a function, the same concept applies.  You can split some of your reducer logic out into another function, and call that new function from the original "higher-level" reducer function.  
