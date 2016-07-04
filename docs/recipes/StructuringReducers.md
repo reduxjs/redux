@@ -5,9 +5,12 @@ At its core, Redux is really a fairly simple design pattern: all your "write" lo
 Redux puts some basic constraints on how that write logic function should work.  As described in [Reducers](../basics/Reducers.md), this write logic function:
 
 - Should have a signature of `(previousState, action) => newState`.  Because this is the effectively the same type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce), we refer to this "write logic function" as a **"reducer"**.
-- Should be "pure", which means it does not mutate its arguments, perform side effects like API calls or modifying values outside of the function, or call non-pure functions like `Date.now()` or `Math.random()`.  This also means that updates should be done in an "immutable" fashion, which means always returning new objects with the updated data, rather than directly modifying the original state tree in-place.
+- Should be "pure", which means it does not mutate its arguments, perform side effects like API calls or modifying values outside of the function, or call non-pure functions like `Date.now()` or `Math.random()`.  This also means that updates should be done in an ***"immutable"*** fashion, which means **always returning new objects with the updated data**, rather than directly modifying the original state tree in-place.
 
-Beyond that, Redux does not really care how you actually structure your reducer logic as long as it obeys those basic rules.  This is both a source of freedom and a source of confusion.  However, there are a number of common patterns that are widely used when writing reducers, as well as a number of related topics and concepts to be aware of.  As an application increases in complexity, many of these patterns play a crucial role in managing reducer code complexity, handling real-world data, and optimizing UI performance.
+>##### Note on immutability, side effects, and mutation
+> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function.  For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else.  For React Redux, `connect` checks to see if the values returned from a `mapStateToProps` function have changed in order to see if a component needs to update.  Direct mutation can cause both of these scenarios to not work correctly.  Other side effects like generating unique IDs or timestamps also make the code unpredictable and harder to debug.  
+
+Beyond that, Redux does not really care how you actually structure your reducer logic as long as it obeys those basic rules.  This is both a source of freedom and a source of confusion.  However, there are a number of common patterns that are widely used when writing reducers, as well as a number of related topics and concepts to be aware of.  As an application increases in complexity, these patterns play a crucial role in managing reducer code complexity, handling real-world data, and optimizing UI performance.  This document describes many of those patterns and concepts.
 
 
 ## Basic Reducer Structure
@@ -81,22 +84,80 @@ A Redux state almost always has a plain Javascript object as the top of the stat
 In this example, `todos` and `visibilityFilter` are both top-level keys in the state, and each represents a "slice" of data for some particular concept.
 
 
+## Basic Immutable Data Updates
+
+One of the most common problems for someone learning Redux is the concept of updating data "immutably", rather than directly mutating the existing data.  Most people have learned how to program using mutable data, so both the idea of "immutable updates" and the details of how to do so can be confusing.
+
+First, here's an example of what direct mutation looks like:
+
+```js
+const firstObject = {a : 42};
+const secondObject = firstObject;
+
+// Direct mutation - we are overwriting the previous value inside of firstObject
+firstObject.a = 123;
+
+console.log(firstObject.a); 
+// 123
+console.log(secondObject.a); 
+// 123, because both variables are pointing to the same object in memory
+```
+
+If we did something like this in a reducer, it would break the rule against direct mutations and side effects.  In order to properly return a new value without modifying the original, we need to make *copies* of the original data, modify the copies, and return the newly updated copies.  This generally means making *shallow copies* (a new reference that still points to all the old data inside), rather than *deep copies* (copying every level of nested data).
+
+There's a variety of functions and syntax that can be used to do immutable updates with plain Javascript objects and arrays:
+
+- Arrays:
+  - `Array.slice()` will return a shallow copy of the array
+  - The Array spread operator acts the same as `slice`: `const newArray = [...oldArray]`
+  - `Array.concat()` will return a new array with all the old items, plus the old items at the end
+  - `Array.map()` runs a callback function once for each item in the original array, and returns a new array containing the return value from each call
+  - `Array.filter()` runs a callback function once for each item in the original array, and returns a new array containing *only* the items the callback returned truthy for
+  
+  
+You should ***never*** call methods like `push`, `pop`, `shift`, `unshift`, or `splice` on the **original** array.  You *can* safely call those methods on a *copy* of the array, because that isn't the original.
+####TODO
+
+- Objects
+  - `Object.assign()` takes multiple parameter objects.  The first parameter acts as a target object, and `assign` will copy all fields from the second parameter onto the target object, copy fields from the third parameter onto the target object, and so on for all parameters.  This means that in order to safely copy an object, you should pass a new empty object as the first parameter.  You can also pass the "new" data as a later parameter: `const newObject = Object.assign({}, oldObject, {fieldToOverwrite : newValue})`.
+  - The Object spread operator is not yet an official part of the Javascript language (it is currently a Stage 2 proposal).  However, the syntax has been enabled with a compiler such as Babel, it acts the same as `assign`:  `const newObject = {...oldObject, {fieldToOverwrite : newValue}`.
+  
+  
+Here are some examples of what 
+  
+  
+- Other approaches:
+  - There are several specialized data structure libraries, like Immutable.js, that enforce this kind of behavior through their own APIs
+  - There are a number of utility libraries that abstract out the process of making copies and applying updates.  
+####TODO
+
+
+
 ## Splitting Up Reducer Logic
 
 Obviously, for any meaningful application, putting *all* your update logic into a single reducer function is quickly going to become unmaintainable.  While there's no single rule for how long a function should be, it's generally agreed that functions should be relatively short and ideally only do one specific thing.  Because of this, the natural response for any programmer looking at a very large chunk of code is to try to break that code into smaller pieces that are easier to understand.
 
 Since a Redux reducer is *just* a function, the same concept applies.  You can split some of your reducer logic out into another function, and call that new function from the original "higher-level" reducer function.  These new functions would typically fall into one of three categories:
 
-1. Small utility functions containing some reusable chunk of logic that is needed in multiple places
+1. Small utility functions containing some reusable chunk of logic that is needed in multiple places (which may or may not be actually related to the specific business logic)
 2. Functions for handling a specific update case, which often need parameters other than the typical `(state, action)` pair
 3. Functions which handle *all* updates for a given slice of state.  These functions do generally have the typical `(state, action)` parameter signature
 
-In addition, the initial, "top-level" reducer function is typical referred to as a "*root reducer*", since it handles the top of the state tree.
+The initial, "top-level" reducer function is typical referred to as a "*root reducer*", since it handles the top of the state tree.  While there aren't widely used specific terms for the other types of functions, for the purposes of this article we will refer to them as:
+
+1. *utility functions* (reusable logic that is *not* business-related) and *utility reducers* (reusable logic that *is* business-related)
+2. *case reducers*
+3. *slice reducers*
+
+The term "*sub-reducer*" is also sometimes used for any function that is not the root reducer.
 
 
 Breaking down a complex process into smaller, more understandable parts is usually described with the term ***[functional decomposition](http://stackoverflow.com/questions/947874/what-is-functional-decomposition)***.  This term and concept can be applied generically to any code.  However, in Redux it is *very* common to structure reducer logic using approach #3, where update logic is delegated to other functions based on slice of state.  Redux refers to this concept as ***reducer composition***, and it is by far the most widely-used approach to structuring reducer logic.  In fact, it's so common that Redux includes a utility function called [`combineReducers()`](../api/combineReducers.md), which specifically abstracts the process of delegating work to other reducer functions based on slices of state. However, it's important to note that it is not the *only* pattern that can be used.  In fact, it's entirely possible to use all three approaches for splitting up logic into functions, and usually a good idea as well.
 
-For example, let's say that our initial reducer looks like this:
+
+## Splitting Reducers Using Functional Decomposition and Reducer Composition
+
+Let's say that our initial reducer looks like this:
 
 ```js
 const initialState = {
