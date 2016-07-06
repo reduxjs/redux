@@ -9,10 +9,11 @@ Beyond that, Redux does not really care how you actually structure your reducer 
 
 ### Prerequisite Concepts for Writing Reducers
 
-Some of these concepts are already described elsewhere in the Redux documentation.  Others are generic and applicable outside of Redux itself, and there are numerous existing articles that cover these concepts in detail.  These concepts and techniques form the foundation of writing solid Redux reducer logic, and it's vital that they are **thoroughly understood** before moving on to more advanced and Redux-specific techniques.  A recommended reading list is available at:
+Some of these concepts are already described elsewhere in the Redux documentation.  Others are generic and applicable outside of Redux itself, and there are numerous existing articles that cover these concepts in detail.  These concepts and techniques form the foundation of writing solid Redux reducer logic.
 
+It is vital that these Prerequisite Concepts are **thoroughly understood** before moving on to more advanced and Redux-specific techniques. A recommended reading list is available at:
 
-#### [Prerequisite Concepts](./reducers/00-PrerequisiteConcepts.md)  
+## [Prerequisite Concepts](./reducers/00-PrerequisiteConcepts.md)  
   
 It's also important to note that some of these suggestions may or may not be directly applicable based on architectural decisions in a specific application.  For example, an application using Immutable.js Maps to store data would likely have its reducer logic structured at least somewhat differently than an application using plain Javascript objects.  This documentation primarily assumes use of plain Javascript objects, but many of the principles would still apply if using other tools.
   
