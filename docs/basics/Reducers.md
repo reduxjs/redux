@@ -105,7 +105,7 @@ Note that:
 
 >##### Note on `Object.assign`
 
->[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, but is not implemented by most browsers yet. You’ll need to either use a polyfill, a [Babel plugin](https://www.npmjs.com/package/babel-plugin-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
+>[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, but is not implemented by most browsers yet. You’ll need to either use a polyfill, a [Babel plugin](https://www.npmjs.com/package/babel-plugin-transform-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
 
 >##### Note on `switch` and Boilerplate
 
