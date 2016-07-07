@@ -1,5 +1,6 @@
-# Basic Reducer Structure
+# Basic Reducer Structure and State Shape
 
+## Basic Reducer Structure
 First and foremost, it's important to understand that your entire application really only has **one single reducer function**: the function that you've passed into `createStore` as the first argument.  That one single reducer function ultimately needs to do several things:
 
 - If the incoming `state` value is undefined, it probably needs to return some default state value to initialize the overall state
@@ -67,3 +68,19 @@ A Redux state almost always has a plain Javascript object as the top of the stat
 ```
 
 In this example, `todos` and `visibilityFilter` are both top-level keys in the state, and each represents a "slice" of data for some particular concept.
+
+Because the store represents the core of your application, you should **define your state shape in terms of your domain data, not your UI tree**.  There will *rarely* be a 1-to-1 correspondence between your UI tree and your state shape.  The exception to that might be if you are explicitly tracking various aspects of UI data in your Redux store as well, but even then the shape of the UI data and the shape of the domain data would likely be different.
+
+A more typical app's state shape might look roughly like:
+
+```js
+{
+    domainData1 : {},
+    domainData2 : {},
+    domainData3 : {},
+    ui : {
+        uiState1 : {},
+        uiState2 : {},
+    }
+}
+```

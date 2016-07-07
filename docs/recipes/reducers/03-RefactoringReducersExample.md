@@ -1,5 +1,6 @@
 # Splitting Reducers Using Functional Decomposition and Reducer Composition
 
+It may be helpful to see examples of what the different types of sub-reducer functions look like, how they fit together, and how a large single reducer function can be refactored into a composition of several smaller sub-reducers.  (**Note**: this example is deliberately written in a verbose style in order to illustrate the concepts and the process of refactoring, rather than perfectly concise code.)
 
 Let's say that our initial reducer looks like this:
 
