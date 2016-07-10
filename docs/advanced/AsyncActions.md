@@ -492,7 +492,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 [Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux:
 - You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions.
-- You can use [redux-rx](https://github.com/acdlite/redux-rx) to dispatch Observables.
+- You can use [redux-rx](https://github.com/acdlite/redux-rx) or [redux-observable](https://github.com/redux-observable/redux-observable) to dispatch Observables.
 - You can use the [redux-saga](https://github.com/yelouafi/redux-saga/) middleware to build more complex asynchronous actions.
 - You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.md#real-world) does.
 
