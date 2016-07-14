@@ -1,4 +1,4 @@
-# Splitting Reducers Using Functional Decomposition and Reducer Composition
+# Splitting Reducer Logic Using Functional Decomposition and Reducer Composition
 
 It may be helpful to see examples of what the different types of sub-reducer functions look like, how they fit together, and how a large single reducer function can be refactored into a composition of several smaller sub-reducers.  (**Note**: this example is deliberately written in a verbose style in order to illustrate the concepts and the process of refactoring, rather than perfectly concise code.)
 
@@ -36,6 +36,19 @@ function appReducer(state = initialState, action) {
 
                     return Object.assign({}, todo, {
                         completed : !todo.completed
+                    })
+                  })
+            });
+        } 
+        case 'EDIT_TODO' : {
+            return Object.assign({}, state, {
+                todos : state.todos.map(todo => {
+                    if (todo.id !== action.id) {
+                      return todo;
+                    }
+
+                    return Object.assign({}, todo, {
+                        text : !action.text
                     })
                   })
             });
@@ -83,12 +96,23 @@ function appReducer(state = initialState, action) {
             
             return updateObject(state, {todos : newTodos});
         } 
+        case 'EDIT_TODO' : {
+            const newTodos = state.todos.map(todo => {
+                if (todo.id !== action.id) {
+                  return todo;
+                }
+                
+                return updateObject(todo, {text : action.text});
+            });
+            
+            return updateObject(state, {todos : newTodos});
+        } 
         default : return state;
     }
 }
 ```
 
-That reduced the duplication and made things a bit easier to read.  Next, we can split each specific case into its own function:
+That reduced the duplication and made things a bit easier to read.  There's also a repeated pattern with trying to update a specific item in an array that we could extract to a function:  
 
 ```js
 function updateObject(oldObject, newValues) {
@@ -96,6 +120,82 @@ function updateObject(oldObject, newValues) {
     // Then copy fields from newValues to the new object, overwriting any existing fields.
     // This gives us a new updated copy, without modifying the original
     return Object.assign({}, oldObject, newValues);
+}
+
+
+function updateItemInArray(array, itemId, updateItemCallback) {
+    const updatedItems = array.map(item => {
+        if(item.id !== itemId) {
+            // Since we only want to update one item, preserve all others as they are now
+            return item;
+        }
+        
+        // Use the provided callback to create an updated item
+        const updatedItem = updateItemCallback(item);
+        return updatedItem;
+    });
+    
+    return updatedItems;
+}
+
+function appReducer(state = initialState, action) {
+    switch(action.type) {
+        case 'SET_VISIBILITY_FILTER' : { 
+            return updateObject(state, {visibilityFilter : action.filter });
+        }
+        case 'ADD_TODO' : {
+            const newTodos = state.todos.concat({
+                id: action.id,
+                text: action.text,
+                completed: false
+            });
+            
+            return updateObject(state, {todos : newTodos});
+        }
+        case 'TOGGLE_TODO' : {
+            const newTodos = updateItemInArray(state.todos, action.id, todo => {
+                return updateObject(todo, {completed : !todo.completed});
+            });
+            
+            return updateObject(state, {todos : newTodos});
+        } 
+        case 'EDIT_TODO' : {
+            const newTodos = updateItemInArray(state.todos, action.id, todo => {
+                return updateObject(todo, {text : action.text});
+            });
+            
+            return updateObject(state, {todos : newTodos});
+        } 
+        default : return state;
+    }
+}
+```
+
+
+
+Next, we can split each specific case into its own function:
+
+```js
+function updateObject(oldObject, newValues) {
+    // Copy fields from oldObject to a new empty object.
+    // Then copy fields from newValues to the new object, overwriting any existing fields.
+    // This gives us a new updated copy, without modifying the original
+    return Object.assign({}, oldObject, newValues);
+}
+
+function updateItemInArray(array, itemId, updateItemCallback) {
+    const updatedItems = array.map(item => {
+        if(item.id !== itemId) {
+            // Since we only want to update one item, preserve all others as they are now
+            return item;
+        }
+        
+        // Use the provided callback to create an updated item
+        const updatedItem = updateItemCallback(item);
+        return updatedItem;
+    });
+    
+    return updatedItems;
 }
 
 function setVisibilityFilter(state, action) {
@@ -113,14 +213,18 @@ function addTodo(state, action) {
 }
 
 function toggleTodo(state, action) {
-    const newTodos = state.todos.map(todo => {
-        if (todo.id !== action.id) {
-          return todo;
-        }
-        
+    const newTodos = updateItemInArray(state.todos, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
     });
+    
+    return updateObject(state, {todos : newTodos});
+}
 
+function editTodo(state, action) {
+    const newTodos = updateItemInArray(state.todos, action.id, todo => {
+        return updateObject(todo, {text : action.text});
+    });
+    
     return updateObject(state, {todos : newTodos});
 }
 
@@ -128,7 +232,8 @@ function appReducer(state = initialState, action) {
     switch(action.type) {
         case 'SET_VISIBILITY_FILTER' : return setVisibilityFilter(state, action);
         case 'ADD_TODO' : return addTodo(state, action);
-        case 'TOGGLE_TODO' : return addTodo(state, action);
+        case 'TOGGLE_TODO' : return toggleTodo(state, action);
+        case 'EDIT_TODO' : return editTodo(state, action);
         default : return state;
     }
 }
@@ -144,6 +249,22 @@ function updateObject(oldObject, newValues) {
     return Object.assign({}, oldObject, newValues);
 }
 
+function updateItemInArray(array, itemId, updateItemCallback) {
+    const updatedItems = array.map(item => {
+        if(item.id !== itemId) {
+            // Since we only want to update one item, preserve all others as they are now
+            return item;
+        }
+        
+        // Use the provided callback to create an updated item
+        const updatedItem = updateItemCallback(item);
+        return updatedItem;
+    });
+    
+    return updatedItems;
+}
+
+
 function setVisibilityFilter(visibilityState, action) {
     // Technically, we don't even care about the previous state
     return action.filter;
@@ -156,6 +277,7 @@ function visibilityReducer(visibilityState = 'SHOW_ALL', action) {
     }
 };
 
+
 function addTodo(todosState, action) {
     const newTodos = todosState.concat({
         id: action.id,
@@ -167,14 +289,18 @@ function addTodo(todosState, action) {
 }
 
 function toggleTodo(todosState, action) {
-    const newTodos = todosState.map(todo => {
-        if (todo.id !== action.id) {
-          return todo;
-        }
-        
+    const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
     });
+    
+    return newTodos;
+}
 
+function editTodo(todosState, action) {
+    const newTodos = updateItemInArray(todosState, action.id, todo => {
+        return updateObject(todo, {text : action.text});
+    });
+    
     return newTodos;
 }
 
@@ -182,6 +308,7 @@ function todosReducer(todosState = [], action) {
     switch(action.type) {
         case 'ADD_TODO' : return addTodo(todosState, action);
         case 'TOGGLE_TODO' : return toggleTodo(todosState, action);
+        case 'EDIT_TODO' : return toggleTodo(todosState, action);
         default : return todosState;
     }
 }
@@ -206,6 +333,21 @@ function updateObject(oldObject, newValues) {
     // Then copy fields from newValues to the new object, overwriting any existing fields.
     // This gives us a new updated copy, without modifying the original
     return Object.assign({}, oldObject, newValues);
+}
+
+function updateItemInArray(array, itemId, updateItemCallback) {
+    const updatedItems = array.map(item => {
+        if(item.id !== itemId) {
+            // Since we only want to update one item, preserve all others as they are now
+            return item;
+        }
+        
+        // Use the provided callback to create an updated item
+        const updatedItem = updateItemCallback(item);
+        return updatedItem;
+    });
+    
+    return updatedItems;
 }
 
 function createReducer(initialState, handlers) {
@@ -242,20 +384,25 @@ function addTodo(todosState, action) {
 }
 
 function toggleTodo(todosState, action) {
-    const newTodos = todosState.map(todo => {
-        if (todo.id !== action.id) {
-          return todo;
-        }
-        
+    const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
     });
+    
+    return newTodos;
+}
 
+function editTodo(todosState, action) {
+    const newTodos = updateItemInArray(todosState, action.id, todo => {
+        return updateObject(todo, {text : action.text});
+    });
+    
     return newTodos;
 }
 
 const todosReducer = createReducer([], {
     'ADD_TODO' : addTodo,
     'TOGGLE_TODO' : toggleTodo
+    'EDIT_TODO' : editTodo
 });
 
 // Root reducer
@@ -266,3 +413,5 @@ const appReducer = combineReducers({
 ```
 
 We now have examples of all three kinds of split-up reducer functions:  helper utilities like `updateObject` and `createReducer`; handlers for specific cases like `setVisibilityFilter` and `addTodo`; and slice-of-state handlers like `visibilityReducer` and `todosReducer`.  We also can see that `appReducer` is an example of a "root reducer".
+
+Although the final result in this example is noticeably longer than the original version, this is primarily due to the extraction of the utility functions, the addition of comments, and some deliberate verbosity for the sake of clarity, such as separate return statements.  Looking at each function individually, the amount of responsibility is now smaller, and the intent is hopefully clearer.  Also, in a real application, these functions would probably then be split into separate files such as `reducerUtilities.js`, `visibilityReducer.js`, `todosReducer.js`, and `rootReducer.js`.
