@@ -7,7 +7,7 @@ As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
 - Should be "pure", which means it does not mutate its arguments, perform side effects like API calls or modifying values outside of the function, or call non-pure functions like `Date.now()` or `Math.random()`.  This also means that updates should be done in an ***"immutable"*** fashion, which means **always returning new objects with the updated data**, rather than directly modifying the original state tree in-place.
 
 >##### Note on immutability, side effects, and mutation
-> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function.  For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else.  For React Redux, `connect` checks to see if the values returned from a `mapStateToProps` function have changed in order to see if a component needs to update.  Direct mutation can cause both of these scenarios to not work correctly.  Other side effects like generating unique IDs or timestamps also make the code unpredictable and harder to debug.  
+> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function.  For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else.  For React Redux, `connect` checks to see if the values returned from a `mapStateToProps` function have changed in order to see if a component needs to update.  Direct mutation can cause both of these scenarios to not work correctly.  Other side effects like generating unique IDs or timestamps in a reducer also make the code unpredictable and harder to debug.  
 
 
 Because of these rules, it's important that the following core concepts are fully understood before moving on to other specific techniques for organizing Redux reducers:
@@ -17,13 +17,15 @@ Because of these rules, it's important that the following core concepts are full
 **Key concepts**:
 
 - Thinking in terms of state and state shape
-- Pure functions without side effects
 - Delegating update responsibility by slice of state (*reducer composition*)
+- Higher order reducers
 
 **Reading list**:
 
 - [Redux Docs: Reducers](../../basics/Reducers.md)
 - [Redux Docs: Reducing Boilerplate](../ReducingBoilerplate.md)
+- [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
+- [Redux Docs: `combineReducers`](../../api/combineReducers.md)
 
 #### Pure Functions and Side Effects
 
@@ -56,13 +58,14 @@ Because of these rules, it's important that the following core concepts are full
 - [Javascript and Immutability](http://t4d.io/javascript-and-immutability/)
 - [Immutable Data using ES6 and Beyond](http://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
 - [Immutable Data from Scratch](https://ryanfunduk.com/articles/immutable-data-from-scratch/)
+- [Redux Docs: Using the Object Spread Operator](../UsingObjectSpreadOperator.md)
 
 
 #### Normalizing Data
 
 **Key Concepts**:
 
-- Defining each item a single time
+- Storing a single definition for a given item
 - Referring to items by IDs
 - Using objects keyed by item IDs as lookup tables, and arrays of IDs to track ordering
 
