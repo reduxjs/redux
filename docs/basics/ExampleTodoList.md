@@ -58,7 +58,7 @@ export const toggleTodo = (id) => {
 #### `reducers/todos.js`
 
 ```js
-const todo = (state, action) => {
+const todo = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return {
