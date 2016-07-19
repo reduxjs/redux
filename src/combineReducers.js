@@ -102,6 +102,13 @@ export default function combineReducers(reducers) {
   var finalReducers = {}
   for (var i = 0; i < reducerKeys.length; i++) {
     var key = reducerKeys[i]
+
+    if (process.env.NODE_ENV !== 'production') {
+      if (typeof reducers[key] === 'undefined') {
+        warning(`No reducer provided for key "${key}"`)
+      }
+    }
+
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
     }

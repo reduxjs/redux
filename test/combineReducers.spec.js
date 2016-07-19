@@ -31,6 +31,24 @@ describe('Utils', () => {
       ).toEqual([ 'stack' ])
     })
 
+    it('warns if a reducer prop is undefined', () => {
+      const spy = expect.spyOn(console, 'error')
+
+      let isNotDefined
+      combineReducers({ isNotDefined })
+      expect(spy.calls[0].arguments[0]).toMatch(
+        /No reducer provided for key "isNotDefined"/
+      )
+
+      spy.reset()
+      combineReducers({ thing: undefined })
+      expect(spy.calls[0].arguments[0]).toMatch(
+        /No reducer provided for key "thing"/
+      )
+
+      spy.restore()
+    })
+
     it('throws an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
         counter(state = 0, action) {
