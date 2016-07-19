@@ -1,13 +1,20 @@
 import expect from 'expect'
+import { createSpy } from 'expect'
+import { without } from 'lodash'
 import { createStore, combineReducers } from '../src/index'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'
 import $$observable from 'symbol-observable'
 
+const falsyValues = [ '', 0, -0, NaN, null ]
+const nonFunctions = [ null, undefined, false, true, 42, 'test', {}, [] ]
+const nonPlainObjects = [ null, undefined, false, true, 42, 'test', [], new (function AwesomeMap() {})() ]
+
+
 describe('createStore', () => {
   it('exposes the public API', () => {
-    const store = createStore(combineReducers(reducers))
+    const store = createStore(() => {})
     const methods = Object.keys(store)
 
     expect(methods.length).toBe(4)
@@ -18,86 +25,42 @@ describe('createStore', () => {
   })
 
   it('throws if reducer is not a function', () => {
-    expect(() =>
-      createStore()
-    ).toThrow()
+    for (let nonFunction of nonFunctions) {
+      expect(() => {
+        createStore(nonFunction)
+      }).toThrow()
+    }
+  })
 
-    expect(() =>
-      createStore('test')
-    ).toThrow()
-
-    expect(() =>
-      createStore({})
-    ).toThrow()
-
+  it('accepts a function as reducer', () => {
     expect(() =>
       createStore(() => {})
     ).toNotThrow()
   })
 
-  it('passes the initial action and the initial state', () => {
-    const store = createStore(reducers.todos, [
+  it('accepts an initial state', () => {
+    const initialState = [
       {
         id: 1,
         text: 'Hello'
       }
-    ])
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
-  })
-
-  it('applies the reducer to the previous state', () => {
-    const store = createStore(reducers.todos)
-    expect(store.getState()).toEqual([])
-
-    store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([])
-
-    store.dispatch(addTodo('Hello'))
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
-
-    store.dispatch(addTodo('World'))
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }, {
-        id: 2,
-        text: 'World'
-      }
-    ])
+    ]
+    const store = createStore(reducers.todos, initialState)
+    expect(store.getState()).toEqual(initialState)
   })
 
   it('applies the reducer to the initial state', () => {
-    const store = createStore(reducers.todos, [
+    const initialState = [
       {
         id: 1,
         text: 'Hello'
       }
-    ])
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
+    ]
+    const store = createStore(reducers.todos, initialState)
+    expect(store.getState()).toEqual(initialState)
 
     store.dispatch(unknownAction())
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
+    expect(store.getState()).toEqual(initialState)
 
     store.dispatch(addTodo('World'))
     expect(store.getState()).toEqual([
@@ -111,386 +74,33 @@ describe('createStore', () => {
     ])
   })
 
-  it('preserves the state when replacing a reducer', () => {
-    const store = createStore(reducers.todos)
-    store.dispatch(addTodo('Hello'))
-    store.dispatch(addTodo('World'))
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      },
-      {
-        id: 2,
-        text: 'World'
-      }
-    ])
-
-    store.replaceReducer(reducers.todosReverse)
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }, {
-        id: 2,
-        text: 'World'
-      }
-    ])
-
-    store.dispatch(addTodo('Perhaps'))
-    expect(store.getState()).toEqual([
-      {
-        id: 3,
-        text: 'Perhaps'
-      },
-      {
-        id: 1,
-        text: 'Hello'
-      },
-      {
-        id: 2,
-        text: 'World'
-      }
-    ])
-
-    store.replaceReducer(reducers.todos)
-    expect(store.getState()).toEqual([
-      {
-        id: 3,
-        text: 'Perhaps'
-      },
-      {
-        id: 1,
-        text: 'Hello'
-      },
-      {
-        id: 2,
-        text: 'World'
-      }
-    ])
-
-    store.dispatch(addTodo('Surely'))
-    expect(store.getState()).toEqual([
-      {
-        id: 3,
-        text: 'Perhaps'
-      },
-      {
-        id: 1,
-        text: 'Hello'
-      },
-      {
-        id: 2,
-        text: 'World'
-      },
-      {
-        id: 4,
-        text: 'Surely'
-      }
-    ])
-  })
-
-  it('supports multiple subscriptions', () => {
-    const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
-
-    let unsubscribeA = store.subscribe(listenerA)
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(1)
-    expect(listenerB.calls.length).toBe(0)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(0)
-
-    const unsubscribeB = store.subscribe(listenerB)
-    expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(0)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(1)
-
-    unsubscribeA()
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(1)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    unsubscribeB()
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    unsubscribeA = store.subscribe(listenerA)
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(4)
-    expect(listenerB.calls.length).toBe(2)
-  })
-
-  it('only removes listener once when unsubscribe is called', () => {
-    const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
-
-    const unsubscribeA = store.subscribe(listenerA)
-    store.subscribe(listenerB)
-
-    unsubscribeA()
-    unsubscribeA()
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(0)
-    expect(listenerB.calls.length).toBe(1)
-  })
-
-  it('only removes relevant listener when unsubscribe is called', () => {
-    const store = createStore(reducers.todos)
-    const listener = expect.createSpy(() => {})
-
-    store.subscribe(listener)
-    const unsubscribeSecond = store.subscribe(listener)
-
-    unsubscribeSecond()
-    unsubscribeSecond()
-
-    store.dispatch(unknownAction())
-    expect(listener.calls.length).toBe(1)
-  })
-
-  it('supports removing a subscription within a subscription', () => {
-    const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
-    const listenerC = expect.createSpy(() => {})
-
-    store.subscribe(listenerA)
-    const unSubB = store.subscribe(() => {
-      listenerB()
-      unSubB()
-    })
-    store.subscribe(listenerC)
-
-    store.dispatch(unknownAction())
-    store.dispatch(unknownAction())
-
-    expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(1)
-    expect(listenerC.calls.length).toBe(2)
-  })
-
-  it('delays unsubscribe until the end of current dispatch', () => {
-    const store = createStore(reducers.todos)
-
-    const unsubscribeHandles = []
-    const doUnsubscribeAll = () => unsubscribeHandles.forEach(
-      unsubscribe => unsubscribe()
-    )
-
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
-
-    unsubscribeHandles.push(store.subscribe(() => listener1()))
-    unsubscribeHandles.push(store.subscribe(() => {
-      listener2()
-      doUnsubscribeAll()
-    }))
-    unsubscribeHandles.push(store.subscribe(() => listener3()))
-
-    store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(1)
-
-    store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(1)
-  })
-
-  it('delays subscribe until the end of current dispatch', () => {
-    const store = createStore(reducers.todos)
-
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
-
-    let listener3Added = false
-    const maybeAddThirdListener = () => {
-      if (!listener3Added) {
-        listener3Added = true
-        store.subscribe(() => listener3())
-      }
-    }
-
-    store.subscribe(() => listener1())
-    store.subscribe(() => {
-      listener2()
-      maybeAddThirdListener()
-    })
-
-    store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(0)
-
-    store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(2)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(1)
-  })
-
-  it('uses the last snapshot of subscribers during nested dispatch', () => {
-    const store = createStore(reducers.todos)
-
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
-    const listener4 = expect.createSpy(() => {})
-
-    let unsubscribe4
-    const unsubscribe1 = store.subscribe(() => {
-      listener1()
-      expect(listener1.calls.length).toBe(1)
-      expect(listener2.calls.length).toBe(0)
-      expect(listener3.calls.length).toBe(0)
-      expect(listener4.calls.length).toBe(0)
-
-      unsubscribe1()
-      unsubscribe4 = store.subscribe(listener4)
-      store.dispatch(unknownAction())
-
-      expect(listener1.calls.length).toBe(1)
-      expect(listener2.calls.length).toBe(1)
-      expect(listener3.calls.length).toBe(1)
-      expect(listener4.calls.length).toBe(1)
-    })
-    store.subscribe(listener2)
-    store.subscribe(listener3)
-
-    store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(2)
-    expect(listener4.calls.length).toBe(1)
-
-    unsubscribe4()
-    store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(3)
-    expect(listener3.calls.length).toBe(3)
-    expect(listener4.calls.length).toBe(1)
-  })
-
-  it('provides an up-to-date state when a subscriber is notified', done => {
-    const store = createStore(reducers.todos)
-    store.subscribe(() => {
-      expect(store.getState()).toEqual([
-        {
-          id: 1,
-          text: 'Hello'
-        }
-      ])
-      done()
-    })
-    store.dispatch(addTodo('Hello'))
-  })
-
-  it('only accepts plain object actions', () => {
-    const store = createStore(reducers.todos)
-    expect(() =>
-      store.dispatch(unknownAction())
-    ).toNotThrow()
-
-    function AwesomeMap() { }
-    [ null, undefined, 42, 'hey', new AwesomeMap() ].forEach(nonObject =>
+  it('throws if enhancer is neither undefined nor a function', () => {
+    for (let badValue of without(nonFunctions, undefined)) {
       expect(() =>
-        store.dispatch(nonObject)
-      ).toThrow(/plain/)
-    )
-  })
-
-  it('handles nested dispatches gracefully', () => {
-    function foo(state = 0, action) {
-      return action.type === 'foo' ? 1 : state
+        createStore(reducers.todos, undefined, badValue)
+      ).toThrow()
     }
-
-    function bar(state = 0, action) {
-      return action.type === 'bar' ? 2 : state
-    }
-
-    const store = createStore(combineReducers({ foo, bar }))
-
-    store.subscribe(function kindaComponentDidUpdate() {
-      const state = store.getState()
-      if (state.bar === 0) {
-        store.dispatch({ type: 'bar' })
-      }
-    })
-
-    store.dispatch({ type: 'foo' })
-    expect(store.getState()).toEqual({
-      foo: 1,
-      bar: 2
-    })
   })
 
-  it('does not allow dispatch() from within a reducer', () => {
-    const store = createStore(reducers.dispatchInTheMiddleOfReducer)
-
+  it('accepts either undefined or a function as enhancer', () => {
     expect(() =>
-      store.dispatch(dispatchInMiddle(store.dispatch.bind(store, unknownAction())))
-    ).toThrow(/may not dispatch/)
-  })
-
-  it('recovers from an error within a reducer', () => {
-    const store = createStore(reducers.errorThrowingReducer)
-    expect(() =>
-      store.dispatch(throwError())
-    ).toThrow()
-
-    expect(() =>
-      store.dispatch(unknownAction())
+      createStore(reducers.todos, undefined, undefined)
     ).toNotThrow()
-  })
 
-  it('throws if action type is missing', () => {
-    const store = createStore(reducers.todos)
     expect(() =>
-      store.dispatch({})
-    ).toThrow(/Actions may not have an undefined "type" property/)
-  })
+      createStore(reducers.todos, undefined, x => x)
+    ).toNotThrow()
 
-  it('throws if action type is undefined', () => {
-    const store = createStore(reducers.todos)
     expect(() =>
-      store.dispatch({ type: undefined })
-    ).toThrow(/Actions may not have an undefined "type" property/)
-  })
+      createStore(reducers.todos, x => x)
+    ).toNotThrow()
 
-  it('does not throw if action type is falsy', () => {
-    const store = createStore(reducers.todos)
     expect(() =>
-      store.dispatch({ type: false })
+      createStore(reducers.todos, [])
     ).toNotThrow()
+
     expect(() =>
-      store.dispatch({ type: 0 })
-    ).toNotThrow()
-    expect(() =>
-      store.dispatch({ type: null })
-    ).toNotThrow()
-    expect(() =>
-      store.dispatch({ type: '' })
+      createStore(reducers.todos, {})
     ).toNotThrow()
   })
 
@@ -503,7 +113,7 @@ describe('createStore', () => {
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch: createSpy(vanillaStore.dispatch).andCallThrough()
       }
     }
 
@@ -527,7 +137,7 @@ describe('createStore', () => {
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch: createSpy(vanillaStore.dispatch).andCallThrough()
       }
     }
 
@@ -543,74 +153,429 @@ describe('createStore', () => {
     ])
   })
 
-  it('throws if enhancer is neither undefined nor a function', () => {
-    expect(() =>
-      createStore(reducers.todos, undefined, {})
-    ).toThrow()
+  describe('replaceReducer', () => {
+    it('throws if nextReducer is not a function', () => {
+      const store = createStore(reducers.todos)
 
-    expect(() =>
-      createStore(reducers.todos, undefined, [])
-    ).toThrow()
+      for (let nonFunction of nonFunctions) {
+        expect(() =>
+          store.replaceReducer(nonFunction)
+        ).toThrow('Expected the nextReducer to be a function.')
+      }
+    })
 
-    expect(() =>
-      createStore(reducers.todos, undefined, null)
-    ).toThrow()
+    it('accepts a function as nextReducer', () => {
+      const store = createStore(reducers.todos)
 
-    expect(() =>
-      createStore(reducers.todos, undefined, false)
-    ).toThrow()
+      expect(() =>
+        store.replaceReducer(() => {})
+      ).toNotThrow()
+    })
 
-    expect(() =>
-      createStore(reducers.todos, undefined, undefined)
-    ).toNotThrow()
+    it('preserves the state when replacing a reducer', () => {
+      const initialState = [
+        {
+          id: 1,
+          text: 'Hello'
+        },
+        {
+          id: 2,
+          text: 'World'
+        }
+      ]
+      const store = createStore(reducers.todos, initialState)
+      expect(store.getState()).toEqual(initialState)
 
-    expect(() =>
-      createStore(reducers.todos, undefined, x => x)
-    ).toNotThrow()
+      store.replaceReducer(reducers.todosReverse)
+      expect(store.getState()).toEqual(initialState)
 
-    expect(() =>
-      createStore(reducers.todos, x => x)
-    ).toNotThrow()
+      store.dispatch(addTodo('Perhaps'))
+      expect(store.getState()).toEqual([
+        {
+          id: 3,
+          text: 'Perhaps'
+        },
+        {
+          id: 1,
+          text: 'Hello'
+        },
+        {
+          id: 2,
+          text: 'World'
+        }
+      ])
 
-    expect(() =>
-      createStore(reducers.todos, [])
-    ).toNotThrow()
+      store.replaceReducer(reducers.todos)
+      expect(store.getState()).toEqual([
+        {
+          id: 3,
+          text: 'Perhaps'
+        },
+        {
+          id: 1,
+          text: 'Hello'
+        },
+        {
+          id: 2,
+          text: 'World'
+        }
+      ])
 
-    expect(() =>
-      createStore(reducers.todos, {})
-    ).toNotThrow()
+      store.dispatch(addTodo('Surely'))
+      expect(store.getState()).toEqual([
+        {
+          id: 3,
+          text: 'Perhaps'
+        },
+        {
+          id: 1,
+          text: 'Hello'
+        },
+        {
+          id: 2,
+          text: 'World'
+        },
+        {
+          id: 4,
+          text: 'Surely'
+        }
+      ])
+    })
   })
 
-  it('throws if nextReducer is not a function', () => {
-    const store = createStore(reducers.todos)
+  describe('subscribe/unsubscribe', () => {
+    it('throws if listener is not a function', () => {
+      const store = createStore(reducers.todos)
 
-    expect(() =>
-      store.replaceReducer()
-    ).toThrow('Expected the nextReducer to be a function.')
+      for (let nonFunction of nonFunctions) {
+        expect(() => {
+          store.subscribe(nonFunction)
+        }).toThrow()
+      }
+    })
 
-    expect(() =>
-      store.replaceReducer(() => {})
-    ).toNotThrow()
+    it('accepts a function as a listener', () => {
+      const store = createStore(reducers.todos)
+
+      expect(() => {
+        store.subscribe(() => {})
+      }).toNotThrow()
+    })
+
+    it('supports multiple subscriptions', () => {
+      const store = createStore(reducers.todos)
+      const listenerA = createSpy()
+      const listenerB = createSpy()
+
+      let unsubscribeA = store.subscribe(listenerA)
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(1)
+      expect(listenerB.calls.length).toBe(0)
+
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(2)
+      expect(listenerB.calls.length).toBe(0)
+
+      const unsubscribeB = store.subscribe(listenerB)
+      expect(listenerA.calls.length).toBe(2)
+      expect(listenerB.calls.length).toBe(0)
+
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(3)
+      expect(listenerB.calls.length).toBe(1)
+
+      unsubscribeA()
+      expect(listenerA.calls.length).toBe(3)
+      expect(listenerB.calls.length).toBe(1)
+
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(3)
+      expect(listenerB.calls.length).toBe(2)
+
+      unsubscribeB()
+      expect(listenerA.calls.length).toBe(3)
+      expect(listenerB.calls.length).toBe(2)
+
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(3)
+      expect(listenerB.calls.length).toBe(2)
+
+      unsubscribeA = store.subscribe(listenerA)
+      expect(listenerA.calls.length).toBe(3)
+      expect(listenerB.calls.length).toBe(2)
+
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(4)
+      expect(listenerB.calls.length).toBe(2)
+    })
+
+    it('only removes listener once when unsubscribe is called', () => {
+      const store = createStore(reducers.todos)
+      const listenerA = createSpy()
+      const listenerB = createSpy()
+
+      const unsubscribeA = store.subscribe(listenerA)
+      store.subscribe(listenerB)
+
+      unsubscribeA()
+      unsubscribeA()
+
+      store.dispatch(unknownAction())
+      expect(listenerA.calls.length).toBe(0)
+      expect(listenerB.calls.length).toBe(1)
+    })
+
+    it('only removes relevant listener when unsubscribe is called', () => {
+      const store = createStore(reducers.todos)
+      const listener = createSpy()
+
+      store.subscribe(listener)
+      const unsubscribeSecond = store.subscribe(listener)
+
+      unsubscribeSecond()
+      unsubscribeSecond()
+
+      store.dispatch(unknownAction())
+      expect(listener.calls.length).toBe(1)
+    })
+
+    it('supports removing a subscription within a subscription', () => {
+      const store = createStore(reducers.todos)
+      const listenerA = createSpy()
+      const listenerB = createSpy().andCall(() => unSubB())
+      const listenerC = createSpy()
+
+      store.subscribe(listenerA)
+      const unSubB = store.subscribe(listenerB)
+      store.subscribe(listenerC)
+
+      store.dispatch(unknownAction())
+      store.dispatch(unknownAction())
+
+      expect(listenerA.calls.length).toBe(2)
+      expect(listenerB.calls.length).toBe(1)
+      expect(listenerC.calls.length).toBe(2)
+    })
   })
 
-  it('throws if listener is not a function', () => {
-    const store = createStore(reducers.todos)
+  describe('dispatch', () => {
+    it('only accepts plain object actions', () => {
+      const store = createStore(reducers.todos)
+      expect(() =>
+        store.dispatch(unknownAction())
+      ).toNotThrow()
 
-    expect(() =>
-      store.subscribe()
-    ).toThrow()
+      for (let nonPlainObject of nonPlainObjects) {
+        expect(() => {
+          store.dispatch(nonPlainObject)
+        }).toThrow(/plain/)
+      }
+    })
 
-    expect(() =>
-      store.subscribe('')
-    ).toThrow()
+    it('throws if action type is missing', () => {
+      const store = createStore(reducers.todos)
+      expect(() =>
+        store.dispatch({})
+      ).toThrow(/Actions may not have an undefined "type" property/)
+    })
 
-    expect(() =>
-      store.subscribe(null)
-    ).toThrow()
+    it('throws if action type is undefined', () => {
+      const store = createStore(reducers.todos)
+      expect(() =>
+        store.dispatch({ type: undefined })
+      ).toThrow(/Actions may not have an undefined "type" property/)
+    })
 
-    expect(() =>
-      store.subscribe(undefined)
-    ).toThrow()
+    it('does not throw if action type is falsy', () => {
+      const store = createStore(reducers.todos)
+
+      for (let falsyValue of falsyValues) {
+        expect(() =>
+          store.dispatch({ type: falsyValue })
+        ).toNotThrow()
+      }
+    })
+
+    it('does not allow dispatch() from within a reducer', () => {
+      const store = createStore(reducers.dispatchInTheMiddleOfReducer)
+
+      expect(() =>
+        store.dispatch(dispatchInMiddle(store.dispatch.bind(store, unknownAction())))
+      ).toThrow(/may not dispatch/)
+    })
+
+    it('recovers from an error within a reducer', () => {
+      const store = createStore(reducers.errorThrowingReducer)
+      expect(() =>
+        store.dispatch(throwError())
+      ).toThrow()
+
+      expect(() =>
+        store.dispatch(unknownAction())
+      ).toNotThrow()
+    })
+
+    it('applies the reducer to the previous state', () => {
+      const store = createStore(reducers.todos)
+      expect(store.getState()).toEqual([])
+
+      store.dispatch(unknownAction())
+      expect(store.getState()).toEqual([])
+
+      store.dispatch(addTodo('Hello'))
+      expect(store.getState()).toEqual([
+        {
+          id: 1,
+          text: 'Hello'
+        }
+      ])
+
+      store.dispatch(addTodo('World'))
+      expect(store.getState()).toEqual([
+        {
+          id: 1,
+          text: 'Hello'
+        }, {
+          id: 2,
+          text: 'World'
+        }
+      ])
+    })
+
+    it('provides an up-to-date state when a subscriber is notified', done => {
+      const store = createStore(reducers.todos)
+      store.subscribe(() => {
+        expect(store.getState()).toEqual([
+          {
+            id: 1,
+            text: 'Hello'
+          }
+        ])
+        done()
+      })
+      store.dispatch(addTodo('Hello'))
+    })
+
+    it('delays subscribe until the end of current dispatch', () => {
+      const store = createStore(reducers.todos)
+
+      const listener1 = createSpy()
+      const listener2 = createSpy().andCall(() => maybeAddThirdListener())
+      const listener3 = createSpy()
+
+      let listener3Added = false
+      const maybeAddThirdListener = () => {
+        if (!listener3Added) {
+          listener3Added = true
+          store.subscribe(listener3)
+        }
+      }
+
+      store.subscribe(listener1)
+      store.subscribe(listener2)
+
+      store.dispatch(unknownAction())
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(1)
+      expect(listener3.calls.length).toBe(0)
+
+      store.dispatch(unknownAction())
+      expect(listener1.calls.length).toBe(2)
+      expect(listener2.calls.length).toBe(2)
+      expect(listener3.calls.length).toBe(1)
+    })
+
+    it('delays unsubscribe until the end of current dispatch', () => {
+      const store = createStore(reducers.todos)
+
+      const doUnsubscribeAll = () => unsubscribeHandlers.forEach(
+        unsubscribe => unsubscribe()
+      )
+
+      const listener1 = createSpy()
+      const listener2 = createSpy().andCall(() => doUnsubscribeAll())
+      const listener3 = createSpy()
+
+      const unsubscribeHandlers = [ listener1, listener2 , listener3 ].map(listener => {
+        return store.subscribe(listener)
+      })
+
+      store.dispatch(unknownAction())
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(1)
+      expect(listener3.calls.length).toBe(1)
+
+      store.dispatch(unknownAction())
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(1)
+      expect(listener3.calls.length).toBe(1)
+    })
+
+    it('handles nested dispatches gracefully', () => {
+      function foo(state = 0, action) {
+        return action.type === 'foo' ? 1 : state
+      }
+
+      function bar(state = 0, action) {
+        return action.type === 'bar' ? 2 : state
+      }
+
+      const store = createStore(combineReducers({ foo, bar }))
+
+      store.subscribe(function kindaComponentDidUpdate() {
+        const state = store.getState()
+        if (state.bar === 0) {
+          store.dispatch({ type: 'bar' })
+        }
+      })
+
+      store.dispatch({ type: 'foo' })
+      expect(store.getState()).toEqual({
+        foo: 1,
+        bar: 2
+      })
+    })
+
+    it('uses the last snapshot of subscribers during nested dispatch', () => {
+      const store = createStore(reducers.todos)
+
+      const listener1 = createSpy().andCall(() => {
+        expect(listener1.calls.length).toBe(1)
+        expect(listener2.calls.length).toBe(0)
+        expect(listener3.calls.length).toBe(0)
+        expect(listener4.calls.length).toBe(0)
+
+        unsubscribe1()
+        unsubscribe4 = store.subscribe(listener4)
+        store.dispatch(unknownAction())
+
+        expect(listener1.calls.length).toBe(1)
+        expect(listener2.calls.length).toBe(1)
+        expect(listener3.calls.length).toBe(1)
+        expect(listener4.calls.length).toBe(1)
+      })
+      const listener2 = createSpy()
+      const listener3 = createSpy()
+      const listener4 = createSpy()
+
+      let unsubscribe4
+      const unsubscribe1 = store.subscribe(listener1)
+      store.subscribe(listener2)
+      store.subscribe(listener3)
+
+      store.dispatch(unknownAction())
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(2)
+      expect(listener3.calls.length).toBe(2)
+      expect(listener4.calls.length).toBe(1)
+
+      unsubscribe4()
+      store.dispatch(unknownAction())
+      expect(listener1.calls.length).toBe(1)
+      expect(listener2.calls.length).toBe(3)
+      expect(listener3.calls.length).toBe(3)
+      expect(listener4.calls.length).toBe(1)
+    })
   })
 
   describe('Symbol.observable interop point', () => {
