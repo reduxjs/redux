@@ -39,9 +39,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     !unexpectedKeyCache[key]
   )
 
-  unexpectedKeys.forEach(key => {
-    unexpectedKeyCache[key] = true
-  })
+  unexpectedKeys.forEach(key => unexpectedKeyCache[key] = true)
 
   if (unexpectedKeys.length > 0) {
     return (
@@ -81,6 +79,46 @@ function assertReducerSanity(reducers) {
   })
 }
 
+function getReducers(config) {
+  var reducerKeys = Object.keys(config)
+  var reducers = {}
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i]
+
+    if (process.env.NODE_ENV !== 'production') {
+      if (typeof config[key] === 'undefined') {
+        warning(`No reducer provided for key "${key}"`)
+      }
+    }
+
+    if (typeof config[key] === 'function') {
+      reducers[key] = config[key]
+    }
+  }
+  return reducers
+}
+
+function getNextState(keys, reducers, state, action) {
+  var hasChanged = false
+  var nextState = {}
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i]
+    var reducer = reducers[key]
+    var previousStateForKey = state[key]
+    var nextStateForKey = reducer(previousStateForKey, action)
+
+    if (typeof nextStateForKey === 'undefined') {
+      var errorMessage = getUndefinedStateErrorMessage(key, action)
+      throw new Error(errorMessage)
+    }
+
+    nextState[key] = nextStateForKey
+    hasChanged = hasChanged || nextStateForKey !== previousStateForKey
+  }
+
+  return hasChanged ? nextState : state
+}
+
 /**
  * Turns an object whose values are different reducer functions, into a single
  * reducer function. It will call every child reducer, and gather their results
@@ -97,61 +135,24 @@ function assertReducerSanity(reducers) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-export default function combineReducers(reducers) {
-  var reducerKeys = Object.keys(reducers)
-  var finalReducers = {}
-  for (var i = 0; i < reducerKeys.length; i++) {
-    var key = reducerKeys[i]
 
-    if (process.env.NODE_ENV !== 'production') {
-      if (typeof reducers[key] === 'undefined') {
-        warning(`No reducer provided for key "${key}"`)
-      }
-    }
-
-    if (typeof reducers[key] === 'function') {
-      finalReducers[key] = reducers[key]
-    }
-  }
-  var finalReducerKeys = Object.keys(finalReducers)
-
+export default function combineReducers(config) {
+  var reducers = getReducers(config)
+  var keys = Object.keys(reducers)
   if (process.env.NODE_ENV !== 'production') {
     var unexpectedKeyCache = {}
   }
 
-  var sanityError
-  try {
-    assertReducerSanity(finalReducers)
-  } catch (e) {
-    sanityError = e
-  }
-
   return function combination(state = {}, action) {
-    if (sanityError) {
-      throw sanityError
-    }
+    assertReducerSanity(reducers)
 
     if (process.env.NODE_ENV !== 'production') {
-      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache)
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, reducers, action, unexpectedKeyCache)
       if (warningMessage) {
         warning(warningMessage)
       }
     }
 
-    var hasChanged = false
-    var nextState = {}
-    for (var i = 0; i < finalReducerKeys.length; i++) {
-      var key = finalReducerKeys[i]
-      var reducer = finalReducers[key]
-      var previousStateForKey = state[key]
-      var nextStateForKey = reducer(previousStateForKey, action)
-      if (typeof nextStateForKey === 'undefined') {
-        var errorMessage = getUndefinedStateErrorMessage(key, action)
-        throw new Error(errorMessage)
-      }
-      nextState[key] = nextStateForKey
-      hasChanged = hasChanged || nextStateForKey !== previousStateForKey
-    }
-    return hasChanged ? nextState : state
+    return getNextState(keys, reducers, state, action)
   }
 }
