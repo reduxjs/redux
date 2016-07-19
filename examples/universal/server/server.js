@@ -66,7 +66,7 @@ function renderFullPage(html, preloadedState) {
       <body>
         <div id="app">${html}</div>
         <script>
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
