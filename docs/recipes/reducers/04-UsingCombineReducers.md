@@ -80,7 +80,7 @@ console.log(store.getState());
 // {renamedDefaultReducer : 0, secondNamedReducer : 1, someSpecificStateKeyName : 2}
 ```
 
-Notice that because we used the ES6 shorthand for defining an object literal, the key names in the resulting state are the same as the variable names from the imports.  It's generally not a good practice to actually include words like "reducer" in your state key names - the keys should simply reflect the domain or type of data they hold.
+Notice that because we used the ES6 shorthand for defining an object literal, the key names in the resulting state are the same as the variable names from the imports.  However, the resulting names are a bit odd.  It's generally not a good practice to actually include words like "reducer" in your state key names - the keys should simply reflect the domain or type of data they hold.  This means we should either explicitly specify the names of the keys in the slice reducer object to define the keys in the output state object, or carefully rename the variables for the imported slice reducers to set up the keys when using the shorthand object literal syntax.
 
 A better usage might look like:
 
