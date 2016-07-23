@@ -19,6 +19,7 @@ Because of these rules, it's important that the following core concepts are full
 - Thinking in terms of state and state shape
 - Delegating update responsibility by slice of state (*reducer composition*)
 - Higher order reducers
+- Defining reducer initial state
 
 **Reading list**:
 
@@ -26,6 +27,9 @@ Because of these rules, it's important that the following core concepts are full
 - [Redux Docs: Reducing Boilerplate](../ReducingBoilerplate.md)
 - [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
 - [Redux Docs: `combineReducers`](../../api/combineReducers.md)
+- [The Power of Higher-Order Reducers](http://slides.com/omnidan/hor#/)
+- [Stack Overflow: Store initial state and `combineReducers](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
+
 
 #### Pure Functions and Side Effects
 

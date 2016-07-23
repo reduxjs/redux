@@ -327,7 +327,7 @@ Notice that because the two "slice of state" reducers are now getting only their
 Now, we can use Redux's built-in `combineReducers` utility to handle the "slice-of-state" logic.  Also, since the "per-action" reducer functions are following a consistent pattern, and many people don't like using switch statements, we can define a helper function that lets us organize them with a lookup table:
 
 ```js
-// Reusable utilities
+// Reusable utility functions
 function updateObject(oldObject, newValues) {
     // Copy fields from oldObject to a new empty object.
     // Then copy fields from newValues to the new object, overwriting any existing fields.
@@ -361,18 +361,18 @@ function createReducer(initialState, handlers) {
 }
 
 
-// Handler for a specific case
+// Handler for a specific case ("case reducer")
 function setVisibilityFilter(visibilityState, action) {
     // Technically, we don't even care about the previous state
     return action.filter;
 }
 
-// Handler for an entire slice of state
+// Handler for an entire slice of state ("slice reducer")
 const visibilityReducer = createReducer('SHOW_ALL', {
     'SET_VISIBILITY_FILTER' : setVisibilityFilter
 });
 
-
+// Case reducer
 function addTodo(todosState, action) {
     const newTodos = todosState.concat({
         id: action.id,
@@ -383,6 +383,7 @@ function addTodo(todosState, action) {
     return newTodos;
 }
 
+// Case reducer
 function toggleTodo(todosState, action) {
     const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
@@ -391,6 +392,7 @@ function toggleTodo(todosState, action) {
     return newTodos;
 }
 
+// Case reducer
 function editTodo(todosState, action) {
     const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {text : action.text});
@@ -399,19 +401,20 @@ function editTodo(todosState, action) {
     return newTodos;
 }
 
+// Slice reducer
 const todosReducer = createReducer([], {
     'ADD_TODO' : addTodo,
     'TOGGLE_TODO' : toggleTodo
     'EDIT_TODO' : editTodo
 });
 
-// Root reducer
+// "Root reducer"
 const appReducer = combineReducers({
     visibilityFilter : visibilityReducer,
     todos : todosReducer
 });
 ```
 
-We now have examples of all three kinds of split-up reducer functions:  helper utilities like `updateObject` and `createReducer`; handlers for specific cases like `setVisibilityFilter` and `addTodo`; and slice-of-state handlers like `visibilityReducer` and `todosReducer`.  We also can see that `appReducer` is an example of a "root reducer".
+We now have examples of several kinds of split-up reducer functions:  helper utilities like `updateObject` and `createReducer`; handlers for specific cases like `setVisibilityFilter` and `addTodo`; and slice-of-state handlers like `visibilityReducer` and `todosReducer`.  We also can see that `appReducer` is an example of a "root reducer".
 
 Although the final result in this example is noticeably longer than the original version, this is primarily due to the extraction of the utility functions, the addition of comments, and some deliberate verbosity for the sake of clarity, such as separate return statements.  Looking at each function individually, the amount of responsibility is now smaller, and the intent is hopefully clearer.  Also, in a real application, these functions would probably then be split into separate files such as `reducerUtilities.js`, `visibilityReducer.js`, `todosReducer.js`, and `rootReducer.js`.
