@@ -45,7 +45,7 @@ console.log(initializedStore.getState());
 As discussed in [Reducers](../../basics/Reducers.md), Redux will dispatch a "dummy" action during startup, which is intended to force the root reducer to return its desired initial state.  The returned initial state value also effectively defines the desired shape of the state, which is generally an object with specific keys and values.
 
 
-`combineReducers` takes an object full of slice reducer functions, and creates a function that returns a function that outputs a corresponding state object.  This means that he naming of the keys in the slice reducer object will define the naming of the keys in the output state object.  The correlation between these names is not always apparent, especially when using ES6 features such as default module exports and object literal shorthands.
+`combineReducers` takes an object full of slice reducer functions, and creates a function that returns a function that outputs a corresponding state object.  This means that the naming of the keys in the input slice reducer object will define the naming of the keys in the output state object.  The correlation between these names is not always apparent, especially when using ES6 features such as default module exports and object literal shorthands.
 
 Also, `combineReducers` will provide its own initial state value if appropriate, which is an empty object.  It will then call each slice reducer with their individual state slices to request their initial data.  Since the object is empty, all of the slices will also be `undefined`, and each slice reducer should then return their own initial state.  However, if an existing object is provided to `combineReducers` as the initial state, then the keys in the existing object will be used as the initial values for the corresponding slice reducers.
 
@@ -70,9 +70,9 @@ import renamedDefaultReducerfrom "./reducers";
 import {firstNamedReducer, secondNamedReducer as renamedSecondReducer} from "./reducers"; 
 
 const rootReducer = combineReducers({
-    renamedDefaultReducer,
-    secondNamedReducer,
-    someSpecificStateKeyName : firstNamedReducer
+    renamedDefaultReducer,                          // key name same as the variable name
+    secondNamedReducer,                             // key name same as the variable name
+    someSpecificStateKeyName : firstNamedReducer    // specific key name instead of the variable name
 });
 
 const store = createStore(rootReducer);
@@ -90,9 +90,9 @@ import {combineReducers, createStore} from "redux";
 import defaultState, {firstNamedReducer, secondNamedReducer as secondState} from "./reducers";
 
 const rootReducer = combineReducers({
-    defaultState,                   // carefully renamed default export
-    firstState : firstNamedReducer, // explicitly specified key name instead of the variable name
-    secondState,                    // carefully renamed named export
+    defaultState,                   // key name same as the carefully renamed default export
+    firstState : firstNamedReducer, // specific key name instead of the variable name
+    secondState,                    // key name same as the carefully renamed named export
 });
 
 const reducerInitializedStore = createStore(rootReducer);
