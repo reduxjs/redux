@@ -28,7 +28,8 @@ Because of these rules, it's important that the following core concepts are full
 - [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
 - [Redux Docs: `combineReducers`](../../api/combineReducers.md)
 - [The Power of Higher-Order Reducers](http://slides.com/omnidan/hor#/)
-- [Stack Overflow: Store initial state and `combineReducers](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
+- [Stack Overflow: Store initial state and `combineReducers`](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
+- [Stack Overflow: State key names and `combineReducers`](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer)
 
 
 #### Pure Functions and Side Effects
@@ -69,9 +70,11 @@ Because of these rules, it's important that the following core concepts are full
 
 **Key Concepts**:
 
+- Splitting relational/nested data up into separate tables
 - Storing a single definition for a given item
 - Referring to items by IDs
 - Using objects keyed by item IDs as lookup tables, and arrays of IDs to track ordering
+- Associating items in relationships
 
 
 **Reading List**:
@@ -81,3 +84,4 @@ Because of these rules, it's important that the following core concepts are full
 - [Normalizr Documentation](https://github.com/paularmstrong/normalizr)
 - [Redux Without Profanity: Normalizr](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
+- [Wikipedia: Associative Entity](https://en.wikipedia.org/wiki/Associative_entity)
