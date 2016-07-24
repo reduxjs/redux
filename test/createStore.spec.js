@@ -1,13 +1,13 @@
 import expect from 'expect'
 import { createStore, combineReducers } from '../src/index'
-import { 
-  addTodo, 
-  dispatchInMiddle, 
+import {
+  addTodo,
+  dispatchInMiddle,
   getStateInMiddle,
   subscribeInMiddle,
   unsubscribeInMiddle,
-  throwError, 
-  unknownAction 
+  throwError,
+  unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'
@@ -388,17 +388,39 @@ describe('createStore', () => {
 
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(1)
     expect(listener4.calls.length).toBe(1)
 
     unsubscribe4()
     store.dispatch(unknownAction())
     expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(3)
-    expect(listener3.calls.length).toBe(3)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
     expect(listener4.calls.length).toBe(1)
   })
+
+  it('notifies a listener unsubscribed with nested dispatch with the new state', () => {
+    const store = createStore(reducers.todos)
+
+    var firstCall = true
+    const listener1 = expect.createSpy().andCall(() => {
+      unsubscribe2()
+      if (firstCall) {
+        firstCall = false
+        store.dispatch(unknownAction())
+      }
+    })
+    const listener2 = expect.createSpy()
+
+    store.subscribe(listener1)
+    let unsubscribe2 = store.subscribe(listener2)
+
+    store.dispatch(unknownAction())
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(1)
+  })
+
 
   it('provides an up-to-date state when a subscriber is notified', done => {
     const store = createStore(reducers.todos)
