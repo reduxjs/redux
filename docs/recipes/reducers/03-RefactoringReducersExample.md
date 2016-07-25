@@ -48,7 +48,7 @@ function appReducer(state = initialState, action) {
                     }
 
                     return Object.assign({}, todo, {
-                        text : !action.text
+                        text : action.text
                     })
                   })
             });
