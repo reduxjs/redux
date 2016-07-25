@@ -2,16 +2,19 @@ import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Header from '../components/Header'
-import MainSection from '../components/MainSection'
-import * as TodoActions from '../actions'
+import TodosList from '../components/TodosList'
+import Footer from '../components/Footer'
+import * as TodoActions from '../actions/TodoActions'
+import * as FilterActions from '../actions/FilterActions'
 
 class App extends Component {
   render() {
-    const { todos, actions } = this.props
+    const { todos, filter, todoActions, filterActions } = this.props
     return (
       <div>
-        <Header addTodo={actions.addTodo} />
-        <MainSection todos={todos} actions={actions} />
+        <Header addTodo={todoActions.addTodo} />
+        <TodosList todos={todos} actions={todoActions} filter={filter}/>
+        <Footer todos={todos} filterActions={filterActions} todoActions={todoActions} />
       </div>
     )
   }
@@ -19,18 +22,22 @@ class App extends Component {
 
 App.propTypes = {
   todos: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  filter: PropTypes.string.isRequired,
+  todoActions: PropTypes.object.isRequired,
+  filterActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos
+    todos: state.todos,
+    filter: state.filter
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(TodoActions, dispatch)
+    todoActions: bindActionCreators(TodoActions, dispatch),
+    filterActions: bindActionCreators(FilterActions, dispatch)
   }
 }
 

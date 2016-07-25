@@ -14,6 +14,16 @@ class TodoItem extends Component {
     this.setState({ editing: true })
   }
 
+  handleClick(evt) {
+    evt.preventDefault();
+    // because of linkState call in render, field will get value from this.state.editValue
+    setTimeout(function () {
+        if(!this.state.editing){
+            this.refs.toggleCompleted.getDOMNode().click();
+        }
+    }.bind(this), 200);
+  }
+
   handleSave(id, text) {
     if (text.length === 0) {
       this.props.deleteTodo(id)
@@ -36,11 +46,11 @@ class TodoItem extends Component {
     } else {
       element = (
         <div className="view">
-          <input className="toggle"
+          <input ref="toggleCompleted" className="toggle"
                  type="checkbox"
                  checked={todo.completed}
                  onChange={() => completeTodo(todo.id)} />
-          <label onDoubleClick={this.handleDoubleClick.bind(this)}>
+          <label onDoubleClick={this.handleDoubleClick.bind(this)} onClick={this.handleClick.bind(this)}>
             {todo.text}
           </label>
           <button className="destroy"

@@ -16,7 +16,7 @@ export default function todos(state = initialState, action) {
           id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
           completed: false,
           text: action.text
-        }, 
+        },
         ...state
       ]
 
@@ -28,15 +28,15 @@ export default function todos(state = initialState, action) {
     case EDIT_TODO:
       return state.map(todo =>
         todo.id === action.id ?
-          Object.assign({}, todo, { text: action.text }) :
-          todo
+        Object.assign({}, todo, { text: action.text }) :
+        todo
       )
 
     case COMPLETE_TODO:
       return state.map(todo =>
         todo.id === action.id ?
-          Object.assign({}, todo, { completed: !todo.completed }) :
-          todo
+        Object.assign({}, todo, { completed: !todo.completed }) :
+        todo
       )
 
     case COMPLETE_ALL:
@@ -52,3 +52,4 @@ export default function todos(state = initialState, action) {
       return state
   }
 }
+
