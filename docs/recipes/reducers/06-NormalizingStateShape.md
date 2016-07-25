@@ -169,7 +169,7 @@ This could be expanded in a number of ways.  For example, an application that do
 
 ## Relationships and Tables
 
-Because we're treating a portion of our Redux store as a "database", many of the principles of database design also apply here as well.  For example, if we have a many-to-many relationship, we can model that using an intermediate table that simply stores the IDs of the corresponding items (often known as a "join table" or an "associative table").  For consistency, we would probably also want to use the same `byId` and `allIds` approach that we used for the actual item tables, like this:
+Because we're treating a portion of our Redux store as a "database", many of the principles of database design also apply here as well.  For example, if we have a many-to-many relationship, we can model that using an intermediate table that stores the IDs of the corresponding items (often known as a "join table" or an "associative table").  For consistency, we would probably also want to use the same `byId` and `allIds` approach that we used for the actual item tables, like this:
 
 ```js
 {
@@ -201,4 +201,4 @@ Because we're treating a portion of our Redux store as a "database", many of the
 }
 ```
 
-Behaviors like "Look up all books by this author" then become an O(n) operation, with a linear scan of the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, an O(n) action is likely to have sufficiently fast performance for most use cases
+Behaviors like "Look up all books by this author" then become an O(n) operation, with a linear scan of the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, an O(n) operation is likely to have sufficiently fast performance for most use cases
