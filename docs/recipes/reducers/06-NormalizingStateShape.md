@@ -117,15 +117,15 @@ An example of a normalized state structure for the blog example above might look
     },
     users : {
         byId : {
-            "user1: " {
+            "user1" : {
                 username : "user1",
                 name : "User 1",
             }
-            "user2: " {
+            "user2" : {
                 username : "user2",
                 name : "User 2",
             }
-            "user3: " {
+            "user3" : {
                 username : "user3",
                 name : "User 3",
             }
@@ -140,7 +140,7 @@ This state structure is much flatter overall.  Compared to the original nested f
 - Because each each item is only defined in one place, we don't have to try to make changes in multiple places if that item is updated.
 - The reducer logic doesn't have to deal with deep levels of nesting, so it will probably be much simpler.
 - The logic for retrieving or updating a given item is now fairly simple and consistent.  Given an item's type and its ID, we can directly look it up in a couple simple steps, without having to dig through other objects to find it.
-- Since each data type is separated, an update like changing the text of a comment would only require new copies of the "comments > byId > comment" portion of the tree.  This will generally mean fewer portions of the UI that need to update because their data has changed.  In contrast, updating a comment in the original nested shape would have required updating the the comment object, the parent post object, and the array of all post objects, and likely have caused _all_ of the Post components and Comment components to re-render themselves.
+- Since each data type is separated, an update like changing the text of a comment would only require new copies of the "comments > byId > comment" portion of the tree.  This will generally mean fewer portions of the UI that need to update because their data has changed.  In contrast, updating a comment in the original nested shape would have required updating the the comment object, the parent post object, and the array of all post objects, and likely have caused _all_ of the Post components and Comment components in the UI to re-render themselves.
 
 Note that a normalized state structure generally implies that more components are connected and each responsible for looking up their own data, as opposed to a few connected components looking up large amounts of data and passing all that data downwards.  As it turns out, having connected parent components simply pass item IDs to connected children is a good pattern for optimizing UI performance in a React Redux application, so keeping state normalized plays a key role in improving performance.
 
@@ -164,7 +164,7 @@ A typical application will likely have a mixture of relational data and non-rela
 }
 ```
 
-This could be expanded in a number of ways.  For example, an application that does a lot of editing of entities might want to keep two sets of "tables" in the state, one for the "current" item values and one for the "work-in-progress" item values.  When an item is edited, its values could be copied into the "work-in-progress" section, and any actions that update it would be applied to the "work-in-progress" copy, allowing the editing form to be controlled by that set of data while another part of the UI still refers to the original version.  "Resetting" the edit form would simply require removing the item from the "WIP" section and re-copying it over, while "applying" the edits would involve copying the values from the "WIP" section to the "current" section.
+This could be expanded in a number of ways.  For example, an application that does a lot of editing of entities might want to keep two sets of "tables" in the state, one for the "current" item values and one for the "work-in-progress" item values.  When an item is edited, its values could be copied into the "work-in-progress" section, and any actions that update it would be applied to the "work-in-progress" copy, allowing the editing form to be controlled by that set of data while another part of the UI still refers to the original version.  "Resetting" the edit form would simply require removing the item from the "work-in-progress" section and re-copying the original data from "current" to "work-in-progress", while "applying" the edits would involve copying the values from the "work-in-progress" section to the "current" section.
 
 
 ## Relationships and Tables
@@ -201,4 +201,4 @@ Because we're treating a portion of our Redux store as a "database", many of the
 }
 ```
 
-Behaviors like "Look up all books by this author" then become an O(n) operation, with a linear scan of the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, an O(n) action is likely to have sufficiently fast performance.
+Behaviors like "Look up all books by this author" then become an O(n) operation, with a linear scan of the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, an O(n) action is likely to have sufficiently fast performance for most use cases
