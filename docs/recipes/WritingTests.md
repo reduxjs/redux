@@ -33,7 +33,7 @@ Then, add this to `scripts` in your `package.json`:
   "scripts": {
     ...
     "test": "mocha --compilers js:babel-register --recursive",
-    "test:watch": "npm test -- --watch",
+    "test:watch": "npm test -- --watch"
   },
   ...
 }
