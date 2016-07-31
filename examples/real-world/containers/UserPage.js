@@ -44,7 +44,7 @@ class UserPage extends Component {
   render() {
     const { user, login } = this.props
     if (!user) {
-      return <h1><i>Loading {login}’s profile...</i></h1>
+      return <h1><i>Loading {login}'s profile...</i></h1>
     }
 
     const { starredRepos, starredRepoOwners, starredPagination } = this.props
@@ -55,7 +55,7 @@ class UserPage extends Component {
         <List renderItem={this.renderRepo}
               items={zip(starredRepos, starredRepoOwners)}
               onLoadMoreClick={this.handleLoadMoreClick}
-              loadingLabel={`Loading ${login}’s starred...`}
+              loadingLabel={`Loading ${login}'s starred...`}
               {...starredPagination} />
       </div>
     )

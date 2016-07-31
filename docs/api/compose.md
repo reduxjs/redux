@@ -34,4 +34,4 @@ const store = createStore(
 
 #### Tips
 
-* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don’t give it too much credit!
+* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don't give it too much credit!

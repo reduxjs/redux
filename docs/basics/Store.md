@@ -10,9 +10,9 @@ The **Store** is the object that brings them together. The store has the followi
 * Registers listeners via [`subscribe(listener)`](../api/Store.md#subscribe);
 * Handles unregistering of listeners via the function returned by [`subscribe(listener)`](../api/Store.md#subscribe).
 
-It’s important to note that you’ll only have a single store in a Redux application. When you want to split your data handling logic, you’ll use [reducer composition](Reducers.md#splitting-reducers) instead of many stores.
+It's important to note that you'll only have a single store in a Redux application. When you want to split your data handling logic, you'll use [reducer composition](Reducers.md#splitting-reducers) instead of many stores.
 
-It’s easy to create a store if you have a reducer. In the [previous section](Reducers.md), we used [`combineReducers()`](../api/combineReducers.md) to combine several reducers into one. We will now import it, and pass it to [`createStore()`](../api/createStore.md).
+It's easy to create a store if you have a reducer. In the [previous section](Reducers.md), we used [`combineReducers()`](../api/combineReducers.md) to combine several reducers into one. We will now import it, and pass it to [`createStore()`](../api/createStore.md).
 
 ```js
 import { createStore } from 'redux'
@@ -28,7 +28,7 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER)
 
 ## Dispatching Actions
 
-Now that we have created a store, let’s verify our program works! Even without any UI, we can already test the update logic.
+Now that we have created a store, let's verify our program works! Even without any UI, we can already test the update logic.
 
 ```js
 import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from './actions'
@@ -58,7 +58,7 @@ You can see how this causes the state held by the store to change:
 
 <img src='http://i.imgur.com/zMMtoMz.png' width='70%'>
 
-We specified the behavior of our app before we even started writing the UI. We won’t do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won’t need to mock anything because they are just functions. Call them, and make assertions on what they return.
+We specified the behavior of our app before we even started writing the UI. We won't do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won't need to mock anything because they are just functions. Call them, and make assertions on what they return.
 
 ## Source Code
 
