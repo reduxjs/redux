@@ -76,7 +76,7 @@ function fetchStarred(login, nextPageUrl) {
 }
 
 // Fetches a page of starred repos by a particular user.
-// Bails out if page is cached and user didn’t specifically request next page.
+// Bails out if page is cached and user didn't specifically request next page.
 // Relies on Redux Thunk middleware.
 export function loadStarred(login, nextPage) {
   return (dispatch, getState) => {
@@ -111,7 +111,7 @@ function fetchStargazers(fullName, nextPageUrl) {
 }
 
 // Fetches a page of stargazers for a particular repo.
-// Bails out if page is cached and user didn’t specifically request next page.
+// Bails out if page is cached and user didn't specifically request next page.
 // Relies on Redux Thunk middleware.
 export function loadStargazers(fullName, nextPage) {
   return (dispatch, getState) => {

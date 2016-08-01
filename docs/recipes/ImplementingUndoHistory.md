@@ -23,7 +23,7 @@ In the second part of this recipe, we will show how to use [Redux Undo](https://
 
 ### Designing the State Shape
 
-Undo history is also part of your app’s state, and there is no reason why we should approach it differently. Regardless of the type of the state changing over time, when you implement Undo and Redo, you want to keep track of the *history* of this state at different points in time.
+Undo history is also part of your app's state, and there is no reason why we should approach it differently. Regardless of the type of the state changing over time, when you implement Undo and Redo, you want to keep track of the *history* of this state at different points in time.
 
 For example, the state shape of a counter app might look like this:
 
@@ -33,7 +33,7 @@ For example, the state shape of a counter app might look like this:
 }
 ```
 
-If we wanted to implement Undo and Redo in such an app, we’d need to store more state so we can answer the following questions:
+If we wanted to implement Undo and Redo in such an app, we'd need to store more state so we can answer the following questions:
 
 * Is there anything left to undo or redo?
 * What is the current state?
@@ -87,7 +87,7 @@ When the user presses “Redo”, we want to move one step back into the future:
 }
 ```
 
-Finally, if the user performs an action (e.g. decrement the counter) while we’re in the middle of the undo stack, we’re going to discard the existing future:
+Finally, if the user performs an action (e.g. decrement the counter) while we're in the middle of the undo stack, we're going to discard the existing future:
 
 ```js
 {
@@ -182,7 +182,7 @@ Regardless of the specific data type, the shape of the undo history state is the
 }
 ```
 
-Let’s talk through the algorithm to manipulate the state shape described above. We can define two actions to operate on this state: `UNDO` and `REDO`. In our reducer, we will do the following steps to handle these actions:
+Let's talk through the algorithm to manipulate the state shape described above. We can define two actions to operate on this state: `UNDO` and `REDO`. In our reducer, we will do the following steps to handle these actions:
 
 #### Handling Undo
 
@@ -238,21 +238,21 @@ function undoable(state = initialState, action) {
 }
 ```
 
-This implementation isn’t usable because it leaves out three important questions:
+This implementation isn't usable because it leaves out three important questions:
 
-* Where do we get the initial `present` state from? We don’t seem to know it beforehand.
+* Where do we get the initial `present` state from? We don't seem to know it beforehand.
 * Where do we react to the external actions to save the `present` to the `past`?
 * How do we actually delegate the control over the `present` state to a custom reducer?
 
-It seems that reducer isn’t the right abstraction, but we’re very close.
+It seems that reducer isn't the right abstraction, but we're very close.
 
 ### Meet Reducer Enhancers
 
 You might be familiar with [higher order functions](https://en.wikipedia.org/wiki/Higher-order_function). If you use React, you might be familiar with [higher order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750). Here is a variation on the same pattern, applied to reducers.
 
-A *reducer enhancer* (or a *higher order reducer*) is a function that takes a reducer, and returns a new reducer that is able to handle new actions, or to hold more state, delegating control to the inner reducer for the actions it doesn’t understand. This isn’t a new pattern—technically, [`combineReducers()`](../api/combineReducers.md) is also a reducer enhancer because it takes reducers and returns a new reducer.
+A *reducer enhancer* (or a *higher order reducer*) is a function that takes a reducer, and returns a new reducer that is able to handle new actions, or to hold more state, delegating control to the inner reducer for the actions it doesn't understand. This isn't a new pattern—technically, [`combineReducers()`](../api/combineReducers.md) is also a reducer enhancer because it takes reducers and returns a new reducer.
 
-A reducer enhancer that doesn’t do anything looks like this:
+A reducer enhancer that doesn't do anything looks like this:
 
 ```js
 function doNothingWith(reducer) {
@@ -358,11 +358,11 @@ store.dispatch({
 
 There is an important gotcha: you need to remember to append `.present` to the current state when you retrieve it. You may also check `.past.length` and `.future.length` to determine whether to enable or to disable the Undo and Redo buttons, respectively.
 
-You might have heard that Redux was influenced by [Elm Architecture](https://github.com/evancz/elm-architecture-tutorial/). It shouldn’t come as a surprise that this example is very similar to [elm-undo-redo package](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
+You might have heard that Redux was influenced by [Elm Architecture](https://github.com/evancz/elm-architecture-tutorial/). It shouldn't come as a surprise that this example is very similar to [elm-undo-redo package](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
 
 ## Using Redux Undo
 
-This was all very informative, but can’t we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
+This was all very informative, but can't we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
 
 In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/docs/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo).
 
@@ -398,7 +398,7 @@ const undoableTodos = undoable(todos, {
 export default undoableTodos
 ```
 
-The `distinctState()` filter serves to ignore the actions that didn’t result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
+The `distinctState()` filter serves to ignore the actions that didn't result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
 
 Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
 
@@ -457,7 +457,7 @@ const mapStateToProps = (state) => {
 
 Now all you need to do is add the buttons for the Undo and Redo actions.
 
-First, create a new container component called `UndoRedo` for these buttons. We won’t bother to split the presentational part into a separate file because it is very small:
+First, create a new container component called `UndoRedo` for these buttons. We won't bother to split the presentational part into a separate file because it is very small:
 
 #### `containers/UndoRedo.js`
 
@@ -478,7 +478,7 @@ let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
 )
 ```
 
-You will use `connect()` from [React Redux](https://github.com/reactjs/react-redux) to generate a container component. To determine whether to enable Undo and Redo buttons, you can check `state.todos.past.length` and `state.todos.future.length`. You won’t need to write action creators for performing undo and redo because Redux Undo already provides them:
+You will use `connect()` from [React Redux](https://github.com/reactjs/react-redux) to generate a container component. To determine whether to enable Undo and Redo buttons, you can check `state.todos.past.length` and `state.todos.future.length`. You won't need to write action creators for performing undo and redo because Redux Undo already provides them:
 
 #### `containers/UndoRedo.js`
 

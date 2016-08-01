@@ -6,7 +6,7 @@ We will use React in the examples below, but the same techniques can be used wit
 
 ### Redux on the Server
 
-When using Redux with server rendering, we must also send the state of our app along in our response, so the client can use it as the initial state. This is important because, if we preload any data before generating the HTML, we want the client to also have access to this data. Otherwise, the markup generated on the client won’t match the server markup, and the client would have to load the data again.
+When using Redux with server rendering, we must also send the state of our app along in our response, so the client can use it as the initial state. This is important because, if we preload any data before generating the HTML, we want the client to also have access to this data. Otherwise, the markup generated on the client won't match the server markup, and the client would have to load the data again.
 
 To send the data down to the client, we need to:
 
@@ -16,15 +16,15 @@ To send the data down to the client, we need to:
 * and then pass the state along to the client.
 
 On the client side, a new Redux store will be created and initialized with the state provided from the server.  
-Redux’s **_only_** job on the server side is to provide the **initial state** of our app.
+Redux's **_only_** job on the server side is to provide the **initial state** of our app.
 
 ## Setting Up
 
-In the following recipe, we are going to look at how to set up server-side rendering. We’ll use the simplistic [Counter app](https://github.com/reactjs/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
+In the following recipe, we are going to look at how to set up server-side rendering. We'll use the simplistic [Counter app](https://github.com/reactjs/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
 
 ### Install Packages
 
-For this example, we’ll be using [Express](http://expressjs.com/) as a simple web server. We also need to install the React bindings for Redux, since they are not included in Redux by default.
+For this example, we'll be using [Express](http://expressjs.com/) as a simple web server. We also need to install the React bindings for Redux, since they are not included in Redux by default.
 
 ```
 npm install --save express react-redux
@@ -32,7 +32,7 @@ npm install --save express react-redux
 
 ## The Server Side
 
-The following is the outline for what our server side is going to look like. We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server. If you’re unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
+The following is the outline for what our server side is going to look like. We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server. If you're unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
 
 ##### `server.js`
 
@@ -120,13 +120,13 @@ function renderFullPage(html, preloadedState) {
 
 >##### Note on String Interpolation Syntax
 
->In the example above, we use ES6 [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings) syntax. It lets us write multiline strings and interpolate values, but it requires ES6 support. If you’d like to write your Node code using ES6, check out [Babel require hook](https://babeljs.io/docs/usage/require/) documentation. Or you can just keep writing ES5 code.
+>In the example above, we use ES6 [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings) syntax. It lets us write multiline strings and interpolate values, but it requires ES6 support. If you'd like to write your Node code using ES6, check out [Babel require hook](https://babeljs.io/docs/usage/require/) documentation. Or you can just keep writing ES5 code.
 
 ## The Client Side
 
 The client side is very straightforward. All we need to do is grab the initial state from `window.__PRELOADED_STATE__`, and pass it to our [`createStore()`](../api/createStore.md) function as the initial state.
 
-Let’s take a look at our new client file:
+Let's take a look at our new client file:
 
 #### `client.js`
 
@@ -156,7 +156,7 @@ You can set up your build tool of choice (Webpack, Browserify, etc.) to compile 
 
 When the page loads, the bundle file will be started up and [`ReactDOM.render()`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.render) will hook into the `data-react-id` attributes from the server-rendered HTML. This will connect our newly-started React instance to the virtual DOM used on the server. Since we have the same initial state for our Redux store and used the same code for all our view components, the result will be the same real DOM.
 
-And that’s it! That is all we need to do to implement server side rendering.
+And that's it! That is all we need to do to implement server side rendering.
 
 But the result is pretty vanilla. It essentially renders a static view from dynamic code. What we need to do next is build an initial state dynamically to allow that rendered view to be dynamic.
 
@@ -168,7 +168,7 @@ Because the client side executes ongoing code, it can start with an empty initia
 
 The only input for server side code is the request made when loading up a page in your app in your browser. You may choose to configure the server during its boot (such as when you are running in a development vs. production environment), but that configuration is static.
 
-The request contains information about the URL requested, including any query parameters, which will be useful when using something like [React Router](https://github.com/reactjs/react-router). It can also contain headers with inputs like cookies or authorization, or POST body data. Let’s see how we can set the initial counter state based on a query parameter.
+The request contains information about the URL requested, including any query parameters, which will be useful when using something like [React Router](https://github.com/reactjs/react-router). It can also contain headers with inputs like cookies or authorization, or POST body data. Let's see how we can set the initial counter state based on a query parameter.
 
 #### `server.js`
 
@@ -202,15 +202,15 @@ function handleRender(req, res) {
 }
 ```
 
-The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100) in your browser, you’ll see the counter starts at 100. In the rendered HTML, you’ll see the counter output as 100 and the `__PRELOADED_STATE__` variable has the counter set in it.
+The code reads from the Express `Request` object passed into our server middleware. The parameter is parsed into a number and then set in the initial state. If you visit [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100) in your browser, you'll see the counter starts at 100. In the rendered HTML, you'll see the counter output as 100 and the `__PRELOADED_STATE__` variable has the counter set in it.
 
 ### Async State Fetching
 
-The most common issue with server side rendering is dealing with state that comes in asynchronously. Rendering on the server is synchronous by nature, so it’s necessary to map any asynchronous fetches into a synchronous operation.
+The most common issue with server side rendering is dealing with state that comes in asynchronously. Rendering on the server is synchronous by nature, so it's necessary to map any asynchronous fetches into a synchronous operation.
 
-The easiest way to do this is to pass through some callback back to your synchronous code. In this case, that will be a function that will reference the response object and send back our rendered HTML to the client. Don’t worry, it’s not as hard as it may sound.
+The easiest way to do this is to pass through some callback back to your synchronous code. In this case, that will be a function that will reference the response object and send back our rendered HTML to the client. Don't worry, it's not as hard as it may sound.
 
-For our example, we’ll imagine there is an external datastore that contains the counter’s initial value (Counter As A Service, or CaaS). We’ll make a mock call over to them and build our initial state from the result. We’ll start by building out our API call:
+For our example, we'll imagine there is an external datastore that contains the counter's initial value (Counter As A Service, or CaaS). We'll make a mock call over to them and build our initial state from the result. We'll start by building out our API call:
 
 #### `api/counter.js`
 
@@ -226,7 +226,7 @@ export function fetchCounter(callback) {
 }
 ```
 
-Again, this is just a mock API, so we use `setTimeout` to simulate a network request that takes 500 milliseconds to respond (this should be much faster with a real world API). We pass in a callback that returns a random number asynchronously. If you’re using a Promise-based API client, then you would issue this callback in your `then` handler.
+Again, this is just a mock API, so we use `setTimeout` to simulate a network request that takes 500 milliseconds to respond (this should be much faster with a real world API). We pass in a callback that returns a random number asynchronously. If you're using a Promise-based API client, then you would issue this callback in your `then` handler.
 
 On the server side, we simply wrap our existing code in the `fetchCounter` and receive the result in the callback:
 
@@ -266,7 +266,7 @@ function handleRender(req, res) {
 }
 ```
 
-Because we call `res.send()` inside of the callback, the server will hold open the connection and won’t send any data until that callback executes. You’ll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
+Because we call `res.send()` inside of the callback, the server will hold open the connection and won't send any data until that callback executes. You'll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
 
 ### Security Considerations
 
@@ -274,7 +274,7 @@ Because we have introduced more code that relies on user generated content (UGC)
 
 In our example, we take a rudimentary approach to security. When we obtain the parameters from the request, we use `parseInt` on the `counter` parameter to ensure this value is a number. If we did not do this, you could easily get dangerous data into the rendered HTML by providing a script tag in the request. That might look like this: `?counter=</script><script>doSomethingBad();</script>`
 
-For our simplistic example, coercing our input into a number is sufficiently secure. If you’re handling more complex input, such as freeform text, then you should run that input through an appropriate sanitization function, such as [validator.js](https://www.npmjs.com/package/validator).
+For our simplistic example, coercing our input into a number is sufficiently secure. If you're handling more complex input, such as freeform text, then you should run that input through an appropriate sanitization function, such as [validator.js](https://www.npmjs.com/package/validator).
 
 Furthermore, you can add additional layers of security by sanitizing your state output. `JSON.stringify` can be subject to script injections. To counter this, you can scrub the JSON string of HTML tags and other dangerous characters. This can be done with either a simple text replacement on the string or via more sophisticated libraries such as [serialize-javascript](https://github.com/yahoo/serialize-javascript).
 

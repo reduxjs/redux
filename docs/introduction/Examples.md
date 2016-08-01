@@ -81,7 +81,7 @@ npm start
 open http://localhost:3000/
 ```
 
-This is the classical [TodoMVC](http://todomvc.com/) example. It’s here for the sake of comparison, but it covers the same points as the Todos example.
+This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the sake of comparison, but it covers the same points as the Todos example.
 
 This example includes tests.
 

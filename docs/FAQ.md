@@ -10,7 +10,7 @@
   - [How do I share state between two reducers? Do I have to use combineReducers?](#reducers-share-state) 
   - [Do I have to use the switch statement to handle actions?](#reducers-use-switch) 
 - **Organizing State**
-  - [Do I have to put all my state into Redux? Should I ever use React’s setState()?](#organizing-state-only-redux-state) 
+  - [Do I have to put all my state into Redux? Should I ever use React's setState()?](#organizing-state-only-redux-state) 
   - [Can I put functions, promises, or other non-serializable items in my store state?](#organizing-state-non-serializable) 
   - [How do I organize nested or duplicate data in my state?](#organizing-state-nested-data) 
 - **Store Setup**
@@ -27,15 +27,15 @@
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](#structure-business-logic) 
 - **Performance**
   - [How well does Redux “scale” in terms of performance and architecture?](#performance-scaling)
-  - [Won’t calling “all my reducers” for each action be slow?](#performance-all-reducers)
-  - [Do I have to deep-clone my state in a reducer? Isn’t copying my state going to be slow?](#performance-clone-state)
+  - [Won't calling “all my reducers” for each action be slow?](#performance-all-reducers)
+  - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#performance-clone-state)
   - [How can I reduce the number of store update events?](#performance-update-events)
   - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#performance-state-memory)
 - **React Redux**
-  - [Why isn’t my component re-rendering, or my mapStateToProps running?](#react-not-rerendering)
+  - [Why isn't my component re-rendering, or my mapStateToProps running?](#react-not-rerendering)
   - [Why is my component re-rendering too often?](#react-rendering-too-often)
   - [How can I speed up my mapStateToProps?](#react-mapstate-speed)
-  - [Why don’t I have this.props.dispatch available in my connected component?](#react-props-dispatch)
+  - [Why don't I have this.props.dispatch available in my connected component?](#react-props-dispatch)
   - [Should I only connect my top component, or can I connect multiple components in my tree?](#react-multiple-components)
 - **Miscellaneous**
   - [Are there any larger, “real” Redux projects?](#miscellaneous-real-projects)
@@ -49,13 +49,13 @@
 
 Pete Hunt, one of the early contributors to React, says:
 
-> You’ll know when you need Flux. If you aren’t sure if you need it, you don’t need it.
+> You'll know when you need Flux. If you aren't sure if you need it, you don't need it.
 
 Similarly, Dan Abramov, one of the creators of Redux, says:
 
-> I would like to amend this: don’t use Redux until you have problems with vanilla React.
+> I would like to amend this: don't use Redux until you have problems with vanilla React.
 
-In general, use Redux when you have reasonable amounts of data changing over time, you need a single source of truth, and you find that approaches like keeping everything in a top-level React component’s state are no longer sufficient.
+In general, use Redux when you have reasonable amounts of data changing over time, you need a single source of truth, and you find that approaches like keeping everything in a top-level React component's state are no longer sufficient.
 
 #### Further information
 
@@ -64,7 +64,7 @@ In general, use Redux when you have reasonable amounts of data changing over tim
 
 **Discussions**
 - [React How-To](https://github.com/petehunt/react-howto)
-- [Twitter: Don’t use Redux until...](https://twitter.com/dan_abramov/status/699241546248536064)
+- [Twitter: Don't use Redux until...](https://twitter.com/dan_abramov/status/699241546248536064)
 - [The Case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
 - [Stack Overflow: Why use Redux over Facebook Flux?](http://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
 - [Stack Overflow: Why should I use Redux in this example?](http://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
@@ -82,7 +82,7 @@ Redux is originally written in ES6 and transpiled for production into ES5 with W
 
 > The new Counter Vanilla example is aimed to dispel the myth that Redux requires Webpack, React, hot reloading, sagas, action creators, constants, Babel, npm, CSS modules, decorators, fluent Latin, an Egghead subscription, a PhD, or an Exceeds Expectations O.W.L. level.
 
->Nope, it’s just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!
+>Nope, it's just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!
 
 
 ## Reducers
@@ -90,7 +90,7 @@ Redux is originally written in ES6 and transpiled for production into ES5 with W
 <a id="reducers-share-state"></a>
 ### How do I share state between two reducers? Do I have to use `combineReducers`?
 
-The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](api/combineReducers.md) utility function to make this pattern easier. However, it’s important to note that `combineReducers` is *not* required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
+The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](api/combineReducers.md) utility function to make this pattern easier. However, it's important to note that `combineReducers` is *not* required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
 
 Many users later want to try to share data between two reducers, but find that `combineReducers` does not allow them to do so. There are several approaches that can be used:
 
@@ -115,7 +115,7 @@ In general, remember that reducers are just functions—you can organize them an
 <a id="reducers-use-switch"></a>
 ### Do I have to use the `switch` statement to handle actions?
 
-No. You are welcome to use any approach you’d like to respond to an action in a reducer. The `switch` statement is the most common approach, but it’s fine to use `if` statements, a lookup table of functions, or to create a function that abstracts this away.
+No. You are welcome to use any approach you'd like to respond to an action in a reducer. The `switch` statement is the most common approach, but it's fine to use `if` statements, a lookup table of functions, or to create a function that abstracts this away.
 
 #### Further information
 
@@ -130,9 +130,9 @@ No. You are welcome to use any approach you’d like to respond to an action in 
 ## Organizing State
 
 <a id="organizing-state-only-redux-state"></a>
-### Do I have to put all my state into Redux? Should I ever use React’s `setState()`?
+### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
 
-There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component’s internal state. Find a balance that works for you, and go with it.
+There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state. Find a balance that works for you, and go with it.
 
 There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more.
 
@@ -150,7 +150,7 @@ There are a number of community packages that implement various approaches for s
 <a id="organizing-state-non-serializable"></a>
 ### Can I put functions, promises, or other non-serializable items in my store state?
 
-It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It’s *technically* possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store.
+It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It's *technically* possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store.
 
 #### Further information
 
@@ -193,11 +193,11 @@ Some valid reasons for using multiple stores in Redux might include:
 * Solving a performance issue caused by too frequent updates of some part of the state, when confirmed by profiling the app.
 * Isolating a Redux app as a component in a bigger application, in which case you might want to create a store per root component instance.
 
-However, creating new stores shouldn’t be your first instinct, especially if you come from a Flux background. Try reducer composition first, and only use multiple stores if it doesn’t solve your problem.
+However, creating new stores shouldn't be your first instinct, especially if you come from a Flux background. Try reducer composition first, and only use multiple stores if it doesn't solve your problem.
 
 Similarly, while you *can* reference your store instance by importing it directly, this is not a recommended pattern in Redux. If you create a store instance and export it from a module, it will become a singleton. This means it will be harder to isolate a Redux app as a component of a larger app, if this is ever necessary, or to enable server rendering, because on the server you want to create separate store instances for every request.
 
-With [React Redux](https://github.com/rackt/react-redux), the wrapper classes generated by the `connect()` function do actually look for `props.store` if it exists, but it’s best if you wrap your root component in `<Provider store={store}>` and let React Redux worry about passing the store down. This way components don’t need to worry about importing a store module, and isolating a Redux app or enabling server rendering is much easier to do later.
+With [React Redux](https://github.com/rackt/react-redux), the wrapper classes generated by the `connect()` function do actually look for `props.store` if it exists, but it's best if you wrap your root component in `<Provider store={store}>` and let React Redux worry about passing the store down. This way components don't need to worry about importing a store module, and isolating a Redux app or enabling server rendering is much easier to do later.
 
 #### Further information
 
@@ -255,11 +255,11 @@ The new state is not passed to the listeners in order to simplify implementing s
 <a id="actions-string-constants"></a>
 ### Why should `type` be a string, or at least serializable? Why should my action types be constants?
 
-As with state, serializable actions enable several of Redux’s defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it *is* okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.
+As with state, serializable actions enable several of Redux's defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it *is* okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.
 
-We can’t reliably enforce serializable actions for performance reasons, so Redux only checks that every action is a plain object, and that the `type` is defined. The rest is up to you, but you might find that keeping everything serializable helps debug and reproduce issues.
+We can't reliably enforce serializable actions for performance reasons, so Redux only checks that every action is a plain object, and that the `type` is defined. The rest is up to you, but you might find that keeping everything serializable helps debug and reproduce issues.
 
-Encapsulating and centralizing commonly used pieces of code is a key concept in programming. While it is certainly possible to manually create action objects everywhere, and write each `type` value by hand, defining reusable constants makes maintaining code easier. If you put constants in a separate file, you can [check your `import` statements against typos](https://www.npmjs.com/package/eslint-plugin-import) so you can’t accidentally use the wrong string.
+Encapsulating and centralizing commonly used pieces of code is a key concept in programming. While it is certainly possible to manually create action objects everywhere, and write each `type` value by hand, defining reusable constants makes maintaining code easier. If you put constants in a separate file, you can [check your `import` statements against typos](https://www.npmjs.com/package/eslint-plugin-import) so you can't accidentally use the wrong string.
 
 #### Further information
 
@@ -297,7 +297,7 @@ This is a long and complex topic, with a wide variety of opinions on how code sh
 
 Any meaningful web app needs to execute complex logic, usually including asynchronous work such as making AJAX requests. That code is no longer purely a function of its inputs, and the interactions with the outside world are known as [“side effects”](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)
 
-Redux is inspired by functional programming, and out of the box, has no place for side effects to be executed. In particular, reducer functions *must* always be pure functions of `(state, action) => newState`. However, Redux’s middleware makes it possible to intercept dispatched actions and add additional complex behavior around them, including side effects.
+Redux is inspired by functional programming, and out of the box, has no place for side effects to be executed. In particular, reducer functions *must* always be pure functions of `(state, action) => newState`. However, Redux's middleware makes it possible to intercept dispatched actions and add additional complex behavior around them, including side effects.
 
 In general, Redux suggests that code with side effects should be part of the action creation process. While that logic *can* be performed inside of a UI component, it generally makes sense to extract that logic into a reusable function so that the same logic can be called from multiple places—in other words, an action creator function.
 
@@ -330,11 +330,11 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 <a id="actions-multiple-actions"></a>
 ### Should I dispatch multiple actions in a row from one action creator?
 
-There’s no specific rule for how you should structure your actions. Using an async middleware like Redux Thunk certainly enables scenarios such as dispatching multiple distinct but related actions in a row, dispatching actions to represent progression of an AJAX request, dispatching actions conditionally based on state, or even dispatching an action and checking the updated state immediately afterwards.
+There's no specific rule for how you should structure your actions. Using an async middleware like Redux Thunk certainly enables scenarios such as dispatching multiple distinct but related actions in a row, dispatching actions to represent progression of an AJAX request, dispatching actions conditionally based on state, or even dispatching an action and checking the updated state immediately afterwards.
 
-In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of reducers with readability of the action log. For example, an action that includes the whole new state tree would make your reducer a one-liner, but the downside is now you have no history of *why* the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it’s a sign that you might want to introduce a new action type that is handled in a different way.
+In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of reducers with readability of the action log. For example, an action that includes the whole new state tree would make your reducer a one-liner, but the downside is now you have no history of *why* the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it's a sign that you might want to introduce a new action type that is handled in a different way.
 
-Try to avoid dispatching several times synchronously in a row in the places where you’re concerned about performance. If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don’t rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) that lets you dispatch several actions as if it was one and “unpack” them in the reducer, and [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) which lets you debounce subscriber calls for multiple dispatches.
+Try to avoid dispatching several times synchronously in a row in the places where you're concerned about performance. If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) that lets you dispatch several actions as if it was one and “unpack” them in the reducer, and [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) which lets you debounce subscriber calls for multiple dispatches.
 
 #### Further information
 
@@ -357,7 +357,7 @@ Since Redux is just a data store library, it has no direct opinion on how your p
 - Domain-style: separate folders per feature or domain, possibly with sub-folders per file type
 - “Ducks”: similar to domain style, but explicitly tying together actions and reducers, often by defining them in the same file
 
-It’s generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
+It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
 
 #### Further information
 
@@ -375,7 +375,7 @@ It’s generally suggested that selectors are defined alongside reducers and exp
 <a id="structure-business-logic"></a>
 ### How should I split my logic between reducers and action creators? Where should my “business logic” go?
 
-There’s no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator.
+There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator.
 
 This comment sums up the dichotomy nicely:
 
@@ -397,9 +397,9 @@ Find the balance between these two extremes, and you will master Redux.
 <a id="performance-scaling"></a>
 ### How well does Redux “scale” in terms of performance and architecture? 
 
-While there’s no single definitive answer to this, most of the time this should not be a concern in either case.
+While there's no single definitive answer to this, most of the time this should not be a concern in either case.
 
-The work done by Redux generally falls into a few areas: processing actions in middleware and reducers (including object duplication for immutable updates), notifying subscribers after actions are dispatched, and updating UI components based on the state changes. While it’s certainly *possible* for each of these to become a performance concern in sufficiently complex situations, there’s nothing inherently slow or inefficient about how Redux is implemented. In fact, React Redux in particular is heavily optimized to cut down on unnecessary re-renders.
+The work done by Redux generally falls into a few areas: processing actions in middleware and reducers (including object duplication for immutable updates), notifying subscribers after actions are dispatched, and updating UI components based on the state changes. While it's certainly *possible* for each of these to become a performance concern in sufficiently complex situations, there's nothing inherently slow or inefficient about how Redux is implemented. In fact, React Redux in particular is heavily optimized to cut down on unnecessary re-renders.
 
 As for architecture, anecdotal evidence is that Redux works well for varying project and team sizes. Redux is currently used by hundreds of companies and thousands of developers, with several hundred thousand monthly installations from NPM. One developer reported:
 
@@ -416,11 +416,11 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 - [Twitter: Redux scaling](https://twitter.com/NickPresta/status/684058236828266496)
 
 <a id="performance-all-reducers"></a>
-### Won’t calling “all my reducers” for each action be slow?
+### Won't calling “all my reducers” for each action be slow?
 
-It’s important to note that a Redux store really only has a single reducer function. The store passes the current state and dispatched action to that one reducer function, and lets the reducer handle things appropriately.
+It's important to note that a Redux store really only has a single reducer function. The store passes the current state and dispatched action to that one reducer function, and lets the reducer handle things appropriately.
 
-Obviously, trying to handle every possible action in a single function does not scale well, simply in terms of function size and readability, so it makes sense to split the actual work into separate functions that can be called by the top-level reducer. In particular, the common suggested pattern is to have a separate sub-reducer function that is responsible for managing updates to a particular slice of state at a specific key. The `combineReducers()` that comes with Redux is one of the many possible ways to achieve this. It’s also highly suggested to keep your store state as flat and as normalized as possible. Ultimately, though, you are in charge of organizing your reducer logic any way you want.
+Obviously, trying to handle every possible action in a single function does not scale well, simply in terms of function size and readability, so it makes sense to split the actual work into separate functions that can be called by the top-level reducer. In particular, the common suggested pattern is to have a separate sub-reducer function that is responsible for managing updates to a particular slice of state at a specific key. The `combineReducers()` that comes with Redux is one of the many possible ways to achieve this. It's also highly suggested to keep your store state as flat and as normalized as possible. Ultimately, though, you are in charge of organizing your reducer logic any way you want.
 
 However, even if you happen to have many different independent sub-reducers, and even have deeply nested state, reducer speed is unlikely to be a problem. JavaScript engines are capable of running a very large number of function calls per second, and most of your sub-reducers are probably just using a `switch` statement and returning the existing state by default in response to most actions.
 
@@ -435,13 +435,13 @@ If you actually are concerned about reducer performance, you can use a utility s
 - [Stack Overflow: How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
 
 <a id="performance-clone-state"></a>
-### Do I have to deep-clone my state in a reducer? Isn’t copying my state going to be slow?
+### Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?
 
 Immutably updating state generally means making shallow copies, not deep copies. Shallow copies are much faster than deep copies, because fewer objects and fields have to be copied, and it effectively comes down to moving some pointers around.
 
-However, you *do* need to create a copied and updated object for each level of nesting that is affected. Although that shouldn’t be particularly expensive, it’s another good reason why you should keep your state normalized and shallow if possible.
+However, you *do* need to create a copied and updated object for each level of nesting that is affected. Although that shouldn't be particularly expensive, it's another good reason why you should keep your state normalized and shallow if possible.
 
-> Common Redux misconception: you need to deeply clone the state. Reality: if something inside doesn’t change, keep its reference the same!
+> Common Redux misconception: you need to deeply clone the state. Reality: if something inside doesn't change, keep its reference the same!
 
 #### Further information
 
@@ -484,11 +484,11 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 ## React Redux
 
 <a id="react-not-rerendering"></a>
-### Why isn’t my component re-rendering, or my mapStateToProps running?
+### Why isn't my component re-rendering, or my mapStateToProps running?
 
 Accidentally mutating or modifying your state directly is by far the most common reason why components do not re-render after an action has been dispatched. Redux expects that your reducers will update their state “immutably”, which effectively means always making copies of your data, and applying your changes to the copies. If you return the same object from a reducer, Redux assumes that nothing has been changed, even if you made changes to its contents. Similarly, React Redux tries to improve performance by doing shallow equality reference checks on incoming props in `shouldComponentUpdate`, and if all references are the same, returns `false` to skip actually updating your original component.
 
-It’s important to remember that whenever you update a nested value, you must also return new copies of anything above it in your state tree. If you have `state.a.b.c.d`, and you want to make an update to `d`, you would also need to return new copies of `c`, `b`, `a`, and `state`. This [state tree mutation diagram](http://arqex.com/wp-content/uploads/2015/02/trees.png) demonstrates how a change deep in a tree requires changes all the way up.
+It's important to remember that whenever you update a nested value, you must also return new copies of anything above it in your state tree. If you have `state.a.b.c.d`, and you want to make an update to `d`, you would also need to return new copies of `c`, `b`, `a`, and `state`. This [state tree mutation diagram](http://arqex.com/wp-content/uploads/2015/02/trees.png) demonstrates how a change deep in a tree requires changes all the way up.
 
 Note that “updating data immutably” does *not* mean that you must use [Immutable.js](https://facebook.github.io/immutable-js/), although that is certainly an option. You can do immutable updates to plain JS objects and arrays using several different approaches:
 
@@ -528,7 +528,7 @@ Even though the array might contain the exact same object references each time, 
 
 The extra re-renders could be resolved by saving the array of objects into the state using a reducer, caching the mapped array using [Reselect](https://github.com/reactjs/reselect), or implementing `shouldComponentUpdate` in the component by hand and doing a more in-depth props comparison using a function such as `_.isEqual`. Be careful to not make your custom `shouldComponentUpdate()` more expensive than the rendering itself! Always use a profiler to check your assumptions about performance.
 
-For non-connected components, you may want to check what props are being passed in. A common issue is having a parent component re-bind a callback inside its render function, like `<Child onClick={this.handleClick.bind(this)} />`. That creates a new function reference every time the parent re-renders. It’s generally good practice to only bind callbacks once in the parent component’s constructor.
+For non-connected components, you may want to check what props are being passed in. A common issue is having a parent component re-bind a callback inside its render function, like `<Child onClick={this.handleClick.bind(this)} />`. That creates a new function reference every time the parent re-renders. It's generally good practice to only bind callbacks once in the parent component's constructor.
 
 #### Further information
 
@@ -540,7 +540,7 @@ For non-connected components, you may want to check what props are being passed 
 <a id="react-mapstate-speed"></a>
 ### How can I speed up my `mapStateToProps`?
 
-While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it’s still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reactjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
+While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it's still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reactjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
 
 #### Further information
 
@@ -552,9 +552,9 @@ While React Redux does work to minimize the number of times that your `mapStateT
 - [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
 
 <a id="react-props-dispatch"></a>
-### Why don’t I have `this.props.dispatch` available in my connected component?
+### Why don't I have `this.props.dispatch` available in my connected component?
 
-The `connect()` function takes two primary arguments, both optional. The first, `mapStateToProps`, is a function you provide to pull data from the store when it changes, and pass those values as props to your component. The second, `mapDispatchToProps`, is a function you provide to make use of the store’s `dispatch` function, usually by creating pre-bound versions of action creators that will automatically dispatch their actions as soon as they are called.
+The `connect()` function takes two primary arguments, both optional. The first, `mapStateToProps`, is a function you provide to pull data from the store when it changes, and pass those values as props to your component. The second, `mapDispatchToProps`, is a function you provide to make use of the store's `dispatch` function, usually by creating pre-bound versions of action creators that will automatically dispatch their actions as soon as they are called.
 
 If you do not provide your own `mapDispatchToProps` function when calling `connect()`, React Redux will provide a default version, which simply returns the `dispatch` function as a prop. That means that if you *do* provide your own function, `dispatch` is *not* automatically provided.  If you still want it available as a prop, you need to explicitly return it yourself in your `mapDispatchToProps` implementation.
 
@@ -576,7 +576,7 @@ Early Redux documentation advised that you should only have a few connected comp
 
 The current suggested best practice is to categorize your components as “presentational” or “container” components, and extract a connected container component wherever it makes sense:
 
-> Emphasizing “one container component at the top” in Redux examples was a mistake. Don’t take this as a maxim. Try to keep your presentation components separate. Create container components by connecting them when it’s convenient. Whenever you feel like you’re duplicating code in parent components to provide data for same kinds of children, time to extract a container. Generally as soon as you feel a parent knows too much about “personal” data or actions of its children, time to extract a container.
+> Emphasizing “one container component at the top” in Redux examples was a mistake. Don't take this as a maxim. Try to keep your presentation components separate. Create container components by connecting them when it's convenient. Whenever you feel like you're duplicating code in parent components to provide data for same kinds of children, time to extract a container. Generally as soon as you feel a parent knows too much about “personal” data or actions of its children, time to extract a container.
 
 In general, try to find a balance between understandable data flow and areas of responsibility with your components.
 

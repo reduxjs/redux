@@ -1,6 +1,6 @@
 # `combineReducers(reducers)`
 
-As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
+As your app grows more complex, you'll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
 
 The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
 
@@ -35,7 +35,7 @@ A popular convention is to name reducers after the state slices they manage, so 
 
 #### Notes
 
-This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don’t have to follow if you write the root reducer manually.
+This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don't have to follow if you write the root reducer manually.
 
 Any reducer passed to `combineReducers` must satisfy these rules:
 
@@ -118,4 +118,4 @@ console.log(store.getState())
 
 * This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
 
-* You may call `combineReducers` at any level of the reducer hierarchy. It doesn’t have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.
+* You may call `combineReducers` at any level of the reducer hierarchy. It doesn't have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.

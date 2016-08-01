@@ -4,7 +4,7 @@ We are open to, and grateful for, any contributions made by the community. By co
 
 ## Reporting Issues and Asking Questions
 
-Before opening an issue, please search the [issue tracker](https://github.com/reactjs/redux/issues) to make sure your issue hasn’t already been reported.
+Before opening an issue, please search the [issue tracker](https://github.com/reactjs/redux/issues) to make sure your issue hasn't already been reported.
 
 ### Bugs and Improvements
 
@@ -12,11 +12,11 @@ We use the issue tracker to keep track of bugs and improvements to Redux itself,
 
 ### Getting Help
 
-**For support or usage questions like “how do I do X with Redux” and “my code doesn’t work”, please search and ask on [StackOverflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) first.**
+**For support or usage questions like “how do I do X with Redux” and “my code doesn't work”, please search and ask on [StackOverflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) first.**
 
 We ask you to do this because StackOverflow has a much better job at keeping popular questions visible. Unfortunately good answers get lost and outdated on GitHub.
 
-Some questions take a long time to get an answer. **If your question gets closed or you don’t get a reply on StackOverflow for longer than a few days,** we encourage you to post an issue linking to your question. We will close your issue but this will give people watching the repo an opportunity to see your question and reply to it on StackOverflow if they know the answer.
+Some questions take a long time to get an answer. **If your question gets closed or you don't get a reply on StackOverflow for longer than a few days,** we encourage you to post an issue linking to your question. We will close your issue but this will give people watching the repo an opportunity to see your question and reply to it on StackOverflow if they know the answer.
 
 Please be considerate when doing this as this is not the primary purpose of the issue tracker.
 
@@ -89,7 +89,7 @@ npm run test:watch
 
 ### Docs
 
-Improvements to the documentation are always welcome. In the docs we abide by typographic rules, so instead of ' you should use ’. Same goes for “ ” and dashes (—) where appropriate. These rules only apply to the text, not to code blocks.
+Improvements to the documentation are always welcome. In the docs we abide by typographic rules, so instead of ' you should use '. Same goes for “ ” and dashes (—) where appropriate. These rules only apply to the text, not to code blocks.
 
 #### Installing Gitbook
 
@@ -152,7 +152,7 @@ Please visit the [Examples page](http://redux.js.org/docs/introduction/Examples.
 
 ### Sending a Pull Request
 
-For non-trivial changes, please open an issue with a proposal for a new feature or refactoring before starting on the work. We don’t want you to waste your efforts on a pull request that we won’t want to accept.
+For non-trivial changes, please open an issue with a proposal for a new feature or refactoring before starting on the work. We don't want you to waste your efforts on a pull request that we won't want to accept.
 
 On the other hand, sometimes the best way to start a conversation *is* to send a pull request. Use your best judgement!
 
@@ -166,6 +166,6 @@ In general, the contribution workflow looks like this:
 
 Please try to keep your pull request focused in scope and avoid including unrelated commits.
 
-After you have submitted your pull request, we’ll try to get back to you as soon as possible. We may suggest some changes or improvements.
+After you have submitted your pull request, we'll try to get back to you as soon as possible. We may suggest some changes or improvements.
 
 Thank you for contributing!
