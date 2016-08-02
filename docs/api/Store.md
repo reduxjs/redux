@@ -120,7 +120,7 @@ function handleChange() {
 }
 
 let unsubscribe = store.subscribe(handleChange)
-handleChange()
+unsubscribe()
 ```
 
 <hr>
