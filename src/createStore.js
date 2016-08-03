@@ -58,6 +58,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
   var currentState = preloadedState
   var currentListeners = []
   var nextListeners = currentListeners
+  var listeners = []
+  var listenerId = 0
   var isDispatching = false
 
   function ensureCanMutateNextListeners() {
@@ -140,8 +142,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      var index = nextListeners.indexOf(listener)
+      let index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
+
+      index = listeners.indexOf(listener)
+      if (index !== -1 && index > listenerId) {
+        listener()
+        listeners.splice(index, 1)
+      }
     }
   }
 
@@ -196,10 +204,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isDispatching = false
     }
 
-    var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
-      listeners[i]()
+    listeners = currentListeners = nextListeners
+    for (listenerId = 0; listenerId < listeners.length; listenerId++) {
+      listeners[listenerId]()
     }
+    currentListeners = nextListeners
+    listeners = []
+    listenerId = 0
 
     return action
   }
