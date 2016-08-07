@@ -1,14 +1,6 @@
 import expect from 'expect'
 import { createStore, combineReducers } from '../src/index'
-import { 
-  addTodo, 
-  dispatchInMiddle, 
-  getStateInMiddle,
-  subscribeInMiddle,
-  unsubscribeInMiddle,
-  throwError, 
-  unknownAction 
-} from './helpers/actionCreators'
+import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'
 import $$observable from 'symbol-observable'
@@ -459,31 +451,6 @@ describe('createStore', () => {
     expect(() =>
       store.dispatch(dispatchInMiddle(store.dispatch.bind(store, unknownAction())))
     ).toThrow(/may not dispatch/)
-  })
-
-  it('does not allow getState() from within a reducer', () => {
-    const store = createStore(reducers.getStateInTheMiddleOfReducer)
-
-    expect(() =>
-      store.dispatch(getStateInMiddle(store.getState.bind(store)))
-    ).toThrow(/You may not call store.getState()/)
-  })
-
-  it('does not allow subscribe() from within a reducer', () => {
-    const store = createStore(reducers.subscribeInTheMiddleOfReducer)
-
-    expect(() =>
-      store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
-    ).toThrow(/You may not call store.subscribe()/)
-  })
-
-  it('does not allow unsubscribe from subscribe() from within a reducer', () => {
-    const store = createStore(reducers.unsubscribeInTheMiddleOfReducer)
-    const unsubscribe = store.subscribe(() => {})
-
-    expect(() =>
-      store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
-    ).toThrow(/You may not unsubscribe from a store/)
   })
 
   it('recovers from an error within a reducer', () => {
