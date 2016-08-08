@@ -1,7 +1,7 @@
 import expect from 'expect'
 import React from 'react'
 import { shallow } from 'enzyme'
-import ConnectedNode, { Node } from '../containers/Node'
+import ConnectedNode, { Node } from './Node'
 
 function setup(id, counter, childIds, parentId) {
   const actions = {

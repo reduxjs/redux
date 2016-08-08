@@ -1,13 +1,13 @@
-import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
+import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import Node from './containers/Node'
-import configureStore from './store/configureStore'
+import reducer from './reducers'
 import generateTree from './generateTree'
+import Node from './containers/Node'
 
 const tree = generateTree()
-const store = configureStore(tree)
+const store = createStore(reducer, tree)
 
 render(
   <Provider store={store}>

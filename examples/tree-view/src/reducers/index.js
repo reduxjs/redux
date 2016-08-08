@@ -20,14 +20,16 @@ function node(state, action) {
         childIds: []
       }
     case INCREMENT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         counter: state.counter + 1
-      })
+      }
     case ADD_CHILD:
     case REMOVE_CHILD:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         childIds: childIds(state.childIds, action)
-      })
+      }
     default:
       return state
   }
@@ -40,7 +42,7 @@ function getAllDescendantIds(state, nodeId) {
 }
 
 function deleteMany(state, ids) {
-  state = Object.assign({}, state)
+  state = { ...state }
   ids.forEach(id => delete state[id])
   return state
 }
@@ -56,7 +58,8 @@ export default function (state = {}, action) {
     return deleteMany(state, [ nodeId, ...descendantIds ])
   }
 
-  return Object.assign({}, state, {
+  return {
+    ...state,
     [nodeId]: node(state[nodeId], action)
-  })
+  }
 }

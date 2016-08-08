@@ -1,6 +1,6 @@
 import expect from 'expect'
 import deepFreeze from 'deep-freeze'
-import reducer from '../reducers'
+import reducer from './index'
 import { increment, createNode, deleteNode, addChild, removeChild } from '../actions'
 
 describe('reducer', () => {
