@@ -1,10 +1,10 @@
 import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
-import MainSection from '../../components/MainSection'
-import TodoItem from '../../components/TodoItem'
-import Footer from '../../components/Footer'
-import { SHOW_ALL, SHOW_COMPLETED } from '../../constants/TodoFilters'
+import MainSection from './MainSection'
+import TodoItem from './TodoItem'
+import Footer from './Footer'
+import { SHOW_ALL, SHOW_COMPLETED } from '../constants/TodoFilters'
 
 function setup(propOverrides) {
   const props = Object.assign({

@@ -1,8 +1,8 @@
 import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
-import TodoItem from '../../components/TodoItem'
-import TodoTextInput from '../../components/TodoTextInput'
+import TodoItem from './TodoItem'
+import TodoTextInput from './TodoTextInput'
 
 function setup( editing = false ) {
   const props = {
