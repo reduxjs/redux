@@ -1,4 +1,4 @@
-# Redux Shopping Cart Example
+# Redux Real World Example
 
 This project template was built with [Create React App](https://github.com/facebookincubator/create-react-app).
 

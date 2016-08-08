@@ -1,15 +1,22 @@
 {
-  "name": "async",
+  "name": "real-world",
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
     "react-scripts": "0.3.0-alpha",
+    "redux-devtools": "^3.3.1",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11",
     "redux-logger": "^2.6.1"
   },
   "dependencies": {
+    "humps": "^1.1.0",
+    "normalizr": "^2.2.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
+    "react-router": "^2.6.1",
+    "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0"
   },
