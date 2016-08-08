@@ -1,5 +1,5 @@
 import expect from 'expect'
-import counter from '../../reducers'
+import counter from './index'
 
 describe('reducers', () => {
   describe('counter', () => {
