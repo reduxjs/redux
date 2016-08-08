@@ -27,12 +27,8 @@ export function getTotal(state) {
 }
 
 export function getCartProducts(state) {
-  return getAddedIds(state).map(id => Object.assign(
-    {},
-    getProduct(state, id),
-    {
-      quantity: getQuantity(state, id)
-    }
-  ))
+  return getAddedIds(state).map(id => ({
+    ...getProduct(state, id),
+    quantity: getQuantity(state, id)
+  }))
 }
-

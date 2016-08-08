@@ -1,8 +1,8 @@
 import expect from 'expect'
 import React from 'react'
 import { shallow } from 'enzyme'
-import Product from '../../components/Product'
-import ProductItem from '../../components/ProductItem'
+import Product from './Product'
+import ProductItem from './ProductItem'
 
 function setup(product) {
   const actions = {

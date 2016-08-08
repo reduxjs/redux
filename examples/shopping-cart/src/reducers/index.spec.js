@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { getTotal, getCartProducts } from '../../reducers'
+import { getTotal, getCartProducts } from './index'
 
 describe('selectors', () => {
   describe('getTotal', () => {
