@@ -1,9 +1,6 @@
 {
-  "gitbook": "2.4.3",
+  "gitbook": "3.x.x",
   "title": "Redux",
-  "structure": {
-    "summary": "docs/README.md"
-  },
   "plugins": ["edit-link", "prism", "-highlight", "github", "anker-enable"],
   "pluginsConfig": {
     "edit-link": {
@@ -12,6 +9,12 @@
     },
     "github": {
       "url": "https://github.com/reactjs/redux/"
+    },
+    "theme-default": {
+      "showLevel": true,
+      "styles": {
+        "website": "build/gitbook.css"
+      }
     }
   }
 }
