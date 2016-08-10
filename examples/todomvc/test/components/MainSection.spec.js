@@ -25,7 +25,9 @@ function setup(propOverrides) {
       completeTodo: expect.createSpy(),
       completeAll: expect.createSpy(),
       clearCompleted: expect.createSpy()
-    }
+    },
+    filter: SHOW_ALL,
+    stateNavigator: {}
   }, propOverrides)
 
   const renderer = TestUtils.createRenderer()
@@ -84,16 +86,6 @@ describe('components', () => {
         expect(footer.type).toBe(Footer)
         expect(footer.props.completedCount).toBe(1)
         expect(footer.props.activeCount).toBe(1)
-        expect(footer.props.filter).toBe(SHOW_ALL)
-      })
-
-      it('onShow should set the filter', () => {
-        const { output, renderer } = setup()
-        const [ , , footer ] = output.props.children
-        footer.props.onShow(SHOW_COMPLETED)
-        const updated = renderer.getRenderOutput()
-        const [ , , updatedFooter ] = updated.props.children
-        expect(updatedFooter.props.filter).toBe(SHOW_COMPLETED)
       })
 
       it('onClearCompleted should call clearCompleted', () => {
@@ -117,13 +109,10 @@ describe('components', () => {
       })
 
       it('should filter items', () => {
-        const { output, renderer, props } = setup()
-        const [ , , footer ] = output.props.children
-        footer.props.onShow(SHOW_COMPLETED)
-        const updated = renderer.getRenderOutput()
-        const [ , updatedList ] = updated.props.children
-        expect(updatedList.props.children.length).toBe(1)
-        expect(updatedList.props.children[0].props.todo).toBe(props.todos[1])
+        const { output, props } = setup({ filter: SHOW_COMPLETED })
+        const [ , list ] = output.props.children
+        expect(list.props.children.length).toBe(1)
+        expect(list.props.children[0].props.todo).toBe(props.todos[1])      
       })
     })
   })
