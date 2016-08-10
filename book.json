@@ -1,7 +1,7 @@
 {
   "gitbook": "3.x.x",
   "title": "Redux",
-  "plugins": ["edit-link", "prism", "-highlight", "github", "anker-enable"],
+  "plugins": ["edit-link", "prism", "-highlight", "github", "anchorjs"],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/reactjs/redux/tree/master",
