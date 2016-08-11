@@ -1,5 +1,6 @@
 'use strict';
 
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 var webpack = require('webpack')
 
 var env = process.env.NODE_ENV
@@ -14,6 +15,7 @@ var config = {
     libraryTarget: 'umd'
   },
   plugins: [
+    new LodashModuleReplacementPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env)
@@ -27,7 +29,6 @@ if (env === 'production') {
       compressor: {
         pure_getters: true,
         unsafe: true,
-        unsafe_comps: true,
         warnings: false
       }
     })
