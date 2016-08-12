@@ -1,5 +1,7 @@
 function bindActionCreator(actionCreator, dispatch) {
-  return (...args) => dispatch(actionCreator(...args))
+  const boundActionCreator = (...args) => dispatch(actionCreator(...args))
+  boundActionCreator.__isBoundActionCreator__ = true
+  return boundActionCreator
 }
 
 /**

@@ -1,8 +1,10 @@
 import expect from 'expect'
 import { createStore, combineReducers } from '../src/index'
+import { bindActionCreators } from '../src'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'
+import * as actionCreators from './helpers/actionCreators'
 import $$observable from 'symbol-observable'
 
 describe('createStore', () => {
@@ -417,6 +419,30 @@ describe('createStore', () => {
       expect(() =>
         store.dispatch(nonObject)
       ).toThrow(/plain/)
+    )
+  })
+
+  it('throws an error when dispatching dispatch', () => {
+    const store = createStore(reducers.todos)
+    expect(() => {
+      store.dispatch(store.dispatch)
+    }).toThrow(
+      'You have mistakenly dispatched the dispatch function.'
+    )
+  })
+
+  it('throws an error when dispatching a bound action creator', () => {
+    const store = createStore(combineReducers({
+      foo: (state = 0) => state,
+      bar: (state = 0) => state
+    }))
+    const actionCreator = actionCreators.addTodo
+    const boundActionCreator = bindActionCreators(actionCreator, store.dispatch)
+    expect(() => {
+      store.dispatch(boundActionCreator)
+    }).toThrow(
+      'You have dispatched an action creator that was bound using bindActionCreators. ' +
+      'You do not need to call dispatch, because bound action creators call dispatch when called.'
     )
   })
 

@@ -148,6 +148,21 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function dispatch(action) {
     if (!isPlainObject(action)) {
+      if (action) {
+        if (action.__isBoundActionCreator__) {
+          throw new Error(
+            'You have dispatched an action creator that was bound using bindActionCreators. ' +
+            'You do not need to call dispatch, because bound action creators call dispatch when called.'
+          )
+        }
+
+        if (action === dispatch) {
+          throw new Error(
+            'You have mistakenly dispatched the dispatch function.'
+          )
+        }
+      }
+
       throw new Error(
         'Actions must be plain objects. ' +
         'Use custom middleware for async actions.'
