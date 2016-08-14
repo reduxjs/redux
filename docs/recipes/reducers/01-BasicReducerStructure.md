@@ -18,9 +18,11 @@ function counter(state, action) {
 
   if (action.type === 'INCREMENT') {
     return state + 1;
-  } else if (action.type === 'DECREMENT') {
+  } 
+  else if (action.type === 'DECREMENT') {
     return state - 1;
-  } else {
+  } 
+  else {
     return state; // In case an action is passed in we don't understand
   }
 }

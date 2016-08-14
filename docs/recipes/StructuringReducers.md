@@ -29,3 +29,4 @@ It's also important to note that some of these suggestions may or may not be dir
 - [Normalizing State Shape](./reducers/06-NormalizingStateShape.md)
 - [Updating Normalized Data](./reducers/07-UpdatingNormalizedData.md)
 - [Reusing Reducer Logic](./reducers/08-ReusingReducerLogic.md)
+- [Immutable Update Patterns](./reducers/09-ImmutableUpdatePatterns.md)
