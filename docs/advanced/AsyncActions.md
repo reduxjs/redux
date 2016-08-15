@@ -2,7 +2,7 @@
 
 In the [basics guide](../basics/README.md), we built a simple todo application. It was fully synchronous. Every time an action was dispatched, the state was updated immediately.
 
-In this guide, we will build a different, asynchronous application. It will use the Reddit API to show the current headlines for a select subreddit. How does asynchronicity fit into Redux flow?
+In this guide, we will build a different, asynchronous application. It will use the Reddit API to show the current headlines for a selected subreddit. How does asynchronicity fit into Redux flow?
 
 ## Actions
 
