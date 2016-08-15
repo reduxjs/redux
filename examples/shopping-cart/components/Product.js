@@ -5,9 +5,9 @@ const Product = ({ price, quantity, title }) => (
 )
 
 Product.propTypes = {
-  price: PropTypes.number,
-  quantity: PropTypes.number,
-  title: PropTypes.string
+  price: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired
 }
 
 export default Product

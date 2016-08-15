@@ -27,9 +27,13 @@ const Cart = ({ products, total, onCheckoutClicked }) => {
 }
 
 Cart.propTypes = {
-  products: PropTypes.array,
-  total: PropTypes.string,
-  onCheckoutClicked: PropTypes.func
+  products: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    inventory: PropTypes.number.isRequired
+  }).isRequired).isRequired,
+  total: PropTypes.string.isRequired,
+  onCheckoutClicked: PropTypes.func.isRequired
 }
 
 export default Cart
