@@ -7,32 +7,32 @@ export default combineReducers({
   products
 })
 
-function getAddedIds(state) {
-  return fromCart.getAddedIds(state.cart)
-}
+const getAddedIds = (state) => (
+  fromCart.getAddedIds(state.cart)
+)
 
-function getQuantity(state, id) {
-  return fromCart.getQuantity(state.cart, id)
-}
+const getQuantity = (state, id) => (
+  fromCart.getQuantity(state.cart, id)
+)
 
-function getProduct(state, id) {
-  return fromProducts.getProduct(state.products, id)
-}
+const getProduct = (state, id) => (
+  fromProducts.getProduct(state.products, id)
+)
 
-export function getTotal(state) {
-  return getAddedIds(state).reduce((total, id) =>
+export const getTotal = (state) => (
+  getAddedIds(state).reduce((total, id) =>
     total + getProduct(state, id).price * getQuantity(state, id),
     0
   ).toFixed(2)
-}
+)
 
-export function getCartProducts(state) {
-  return getAddedIds(state).map(id => Object.assign(
+export const getCartProducts = (state) => (
+  getAddedIds(state).map(id => Object.assign(
     {},
     getProduct(state, id),
     {
       quantity: getQuantity(state, id)
     }
   ))
-}
+)
 

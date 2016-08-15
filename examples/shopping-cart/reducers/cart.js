@@ -9,7 +9,7 @@ const initialState = {
   quantityById: {}
 }
 
-function addedIds(state = initialState.addedIds, action) {
+const addedIds = (state = initialState.addedIds, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       if (state.indexOf(action.productId) !== -1) {
@@ -21,7 +21,7 @@ function addedIds(state = initialState.addedIds, action) {
   }
 }
 
-function quantityById(state = initialState.quantityById, action) {
+const quantityById = (state = initialState.quantityById, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       const { productId } = action
@@ -33,7 +33,7 @@ function quantityById(state = initialState.quantityById, action) {
   }
 }
 
-export default function cart(state = initialState, action) {
+const cart = (state = initialState, action) => {
   switch (action.type) {
     case CHECKOUT_REQUEST:
       return initialState
@@ -47,10 +47,12 @@ export default function cart(state = initialState, action) {
   }
 }
 
-export function getQuantity(state, productId) {
-  return state.quantityById[productId] || 0
-}
+export default cart
 
-export function getAddedIds(state) {
-  return state.addedIds
-}
+export const getQuantity = (state, productId) => (
+  state.quantityById[productId] || 0
+)
+
+export const getAddedIds = (state) => (
+  state.addedIds
+)
