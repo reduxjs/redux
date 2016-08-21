@@ -126,7 +126,7 @@ export default function combineReducers(reducers) {
     sanityError = e
   }
 
-  return function combination(state = {}, action) {
+  return function combination(state = {}, action, ...args) {
     if (sanityError) {
       throw sanityError
     }
@@ -144,7 +144,7 @@ export default function combineReducers(reducers) {
       var key = finalReducerKeys[i]
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
-      var nextStateForKey = reducer(previousStateForKey, action)
+      var nextStateForKey = reducer(previousStateForKey, action, ...args)
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
