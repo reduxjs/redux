@@ -213,28 +213,39 @@ describe('createStore', () => {
     expect(listenerB.calls.length).toBe(1)
 
     unsubscribeA()
-    expect(listenerA.calls.length).toBe(3)
+    expect(listenerA.calls.length).toBe(4)
     expect(listenerB.calls.length).toBe(1)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    unsubscribeB()
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
-
-    unsubscribeA = store.subscribe(listenerA)
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
 
     store.dispatch(unknownAction())
     expect(listenerA.calls.length).toBe(4)
     expect(listenerB.calls.length).toBe(2)
+
+    unsubscribeB()
+    expect(listenerA.calls.length).toBe(4)
+    expect(listenerB.calls.length).toBe(3)
+
+    store.dispatch(unknownAction())
+    expect(listenerA.calls.length).toBe(4)
+    expect(listenerB.calls.length).toBe(3)
+
+    unsubscribeA = store.subscribe(listenerA)
+    expect(listenerA.calls.length).toBe(4)
+    expect(listenerB.calls.length).toBe(3)
+
+    store.dispatch(unknownAction())
+    expect(listenerA.calls.length).toBe(5)
+    expect(listenerB.calls.length).toBe(3)
+  })
+
+  it('calls listener when unsubscribe is called', () => {
+    const store = createStore(reducers.todos)
+    const listener = expect.createSpy(() => {})
+
+    const unsubscribe = store.subscribe(listener)
+    expect(listener.calls.length).toBe(0)
+
+    unsubscribe()
+    expect(listener.calls.length).toBe(1)
   })
 
   it('only removes listener once when unsubscribe is called', () => {
@@ -247,24 +258,30 @@ describe('createStore', () => {
 
     unsubscribeA()
     unsubscribeA()
+    expect(listenerA.calls.length).toBe(1)
+    expect(listenerB.calls.length).toBe(0)
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(0)
+    expect(listenerA.calls.length).toBe(1)
     expect(listenerB.calls.length).toBe(1)
   })
 
   it('only removes relevant listener when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listener = expect.createSpy(() => {})
+    const listenerA = expect.createSpy(() => {})
+    const listenerB = expect.createSpy(() => {})
 
-    store.subscribe(listener)
-    const unsubscribeSecond = store.subscribe(listener)
+    store.subscribe(listenerA)
+    const unsubscribeB = store.subscribe(listenerB)
 
-    unsubscribeSecond()
-    unsubscribeSecond()
+    unsubscribeB()
+    unsubscribeB()
+    expect(listenerA.calls.length).toBe(0)
+    expect(listenerB.calls.length).toBe(1)
 
     store.dispatch(unknownAction())
-    expect(listener.calls.length).toBe(1)
+    expect(listenerA.calls.length).toBe(1)
+    expect(listenerB.calls.length).toBe(1)
   })
 
   it('supports removing a subscription within a subscription', () => {
@@ -281,10 +298,13 @@ describe('createStore', () => {
     store.subscribe(listenerC)
 
     store.dispatch(unknownAction())
-    store.dispatch(unknownAction())
+    expect(listenerA.calls.length).toBe(1)
+    expect(listenerB.calls.length).toBe(2)
+    expect(listenerC.calls.length).toBe(1)
 
+    store.dispatch(unknownAction())
     expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(1)
+    expect(listenerB.calls.length).toBe(2)
     expect(listenerC.calls.length).toBe(2)
   })
 
@@ -297,25 +317,24 @@ describe('createStore', () => {
     )
 
     const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
+    const listener2 = expect.createSpy(() => {}).andCall(() => {
+      doUnsubscribeAll()
+    })
     const listener3 = expect.createSpy(() => {})
 
-    unsubscribeHandles.push(store.subscribe(() => listener1()))
-    unsubscribeHandles.push(store.subscribe(() => {
-      listener2()
-      doUnsubscribeAll()
-    }))
-    unsubscribeHandles.push(store.subscribe(() => listener3()))
+    unsubscribeHandles.push(store.subscribe(listener1))
+    unsubscribeHandles.push(store.subscribe(listener2))
+    unsubscribeHandles.push(store.subscribe(listener3))
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(1)
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(1)
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
   })
 
   it('delays subscribe until the end of current dispatch', () => {
@@ -353,43 +372,49 @@ describe('createStore', () => {
   it('uses the last snapshot of subscribers during nested dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = expect.createSpy(() => {})
+    const listener1 = expect.createSpy().andCall(() => {
+      if (!unsubscribe4) {
+        expect(listener1.calls.length).toBe(1)
+        expect(listener2.calls.length).toBe(0)
+        expect(listener3.calls.length).toBe(0)
+        expect(listener4.calls.length).toBe(0)
+
+        unsubscribe4 = store.subscribe(listener4)
+        unsubscribe1()
+        expect(listener1.calls.length).toBe(2)
+
+        store.dispatch(unknownAction())
+
+        expect(listener1.calls.length).toBe(2)
+        expect(listener2.calls.length).toBe(1)
+        expect(listener3.calls.length).toBe(1)
+        expect(listener4.calls.length).toBe(1)
+
+      }
+    })
     const listener2 = expect.createSpy(() => {})
     const listener3 = expect.createSpy(() => {})
     const listener4 = expect.createSpy(() => {})
 
     let unsubscribe4
-    const unsubscribe1 = store.subscribe(() => {
-      listener1()
-      expect(listener1.calls.length).toBe(1)
-      expect(listener2.calls.length).toBe(0)
-      expect(listener3.calls.length).toBe(0)
-      expect(listener4.calls.length).toBe(0)
-
-      unsubscribe1()
-      unsubscribe4 = store.subscribe(listener4)
-      store.dispatch(unknownAction())
-
-      expect(listener1.calls.length).toBe(1)
-      expect(listener2.calls.length).toBe(1)
-      expect(listener3.calls.length).toBe(1)
-      expect(listener4.calls.length).toBe(1)
-    })
+    const unsubscribe1 = store.subscribe(listener1)
     store.subscribe(listener2)
     store.subscribe(listener3)
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(2)
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(1)
+    expect(listener3.calls.length).toBe(1)
     expect(listener4.calls.length).toBe(1)
 
     unsubscribe4()
+    expect(listener4.calls.length).toBe(2)
+
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(3)
-    expect(listener3.calls.length).toBe(3)
-    expect(listener4.calls.length).toBe(1)
+    expect(listener1.calls.length).toBe(2)
+    expect(listener2.calls.length).toBe(2)
+    expect(listener3.calls.length).toBe(2)
+    expect(listener4.calls.length).toBe(2)
   })
 
   it('provides an up-to-date state when a subscriber is notified', done => {
@@ -699,7 +724,7 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 } ])
+      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 }, { foo: 1, bar: 0 } ])
     })
 
     it('should pass an integration test with a common library (RxJS)', () => {

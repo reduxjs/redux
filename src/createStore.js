@@ -59,6 +59,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   var currentListeners = []
   var nextListeners = currentListeners
   var isDispatching = false
+  var needToNotify = true
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -114,6 +115,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
       }
 
       isSubscribed = false
+
+      listener()
 
       ensureCanMutateNextListeners()
       var index = nextListeners.indexOf(listener)
@@ -172,10 +175,12 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isDispatching = false
     }
 
+    needToNotify = true
     var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
+    for (var i = 0; needToNotify && i < listeners.length; i++) {
       listeners[i]()
     }
+    needToNotify = false
 
     return action
   }
