@@ -11,7 +11,8 @@ var config = {
   },
   output: {
     library: 'Redux',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
