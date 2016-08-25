@@ -49,6 +49,13 @@ describe('Utils', () => {
       spy.restore()
     })
 
+    it('accepts default value as secound params', () => {
+      const reducer = combineReducers({
+        fake: (i='') => i
+      }, { fake: 'hello' })
+      expect(reducer(undefined, {}).fake).toEqual('hello')
+    })
+
     it('throws an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
         counter(state = 0, action) {
