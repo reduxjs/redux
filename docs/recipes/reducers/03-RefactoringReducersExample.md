@@ -308,7 +308,7 @@ function todosReducer(todosState = [], action) {
     switch(action.type) {
         case 'ADD_TODO' : return addTodo(todosState, action);
         case 'TOGGLE_TODO' : return toggleTodo(todosState, action);
-        case 'EDIT_TODO' : return toggleTodo(todosState, action);
+        case 'EDIT_TODO' : return editTodo(todosState, action);
         default : return todosState;
     }
 }
