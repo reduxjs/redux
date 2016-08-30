@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "Redux async example",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -41,9 +43,14 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.1.1",
+    "cross-env": "^1.0.7",
+    "enzyme": "^2.0.0",
     "expect": "^1.6.0",
     "express": "^4.13.3",
+    "fetch-mock": "^4.1.1",
+    "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
+    "react-addons-test-utils": "^0.14.7",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.9.1"
