@@ -81,6 +81,8 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 #### Example
 
 ```js
+import fetch from 'isomorphic-fetch';
+
 function fetchTodosRequest() {
   return {
     type: FETCH_TODOS_REQUEST
