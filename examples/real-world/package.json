@@ -1,47 +1,31 @@
 {
-  "name": "redux-real-world-example",
-  "version": "0.0.0",
-  "description": "Redux real-world example",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/reactjs/redux.git"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/reactjs/redux/issues"
-  },
-  "homepage": "http://redux.js.org",
-  "dependencies": {
-    "babel-polyfill": "^6.3.14",
-    "humps": "^0.6.0",
-    "isomorphic-fetch": "^2.1.1",
-    "lodash": "^4.0.0",
-    "normalizr": "^2.0.0",
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7",
-    "react-redux": "^4.2.1",
-    "react-router": "2.0.0",
-    "react-router-redux": "^4.0.0-rc.1",
-    "redux": "^3.2.1",
-    "redux-logger": "^2.4.0",
-    "redux-thunk": "^1.0.3"
-  },
+  "name": "real-world",
+  "version": "0.0.1",
+  "private": true,
   "devDependencies": {
-    "babel-core": "^6.3.15",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-react-hmre": "^1.1.1",
-    "concurrently": "^0.1.1",
-    "express": "^4.13.3",
-    "redux-devtools": "^3.1.0",
-    "redux-devtools-dock-monitor": "^1.0.1",
-    "redux-devtools-log-monitor": "^1.0.3",
-    "webpack": "^1.9.11",
-    "webpack-dev-middleware": "^1.2.0",
-    "webpack-hot-middleware": "^2.9.1"
+    "react-scripts": "^0.4.0",
+    "redux-devtools": "^3.3.1",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11",
+    "redux-logger": "^2.6.1"
+  },
+  "dependencies": {
+    "humps": "^1.1.0",
+    "normalizr": "^2.2.1",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.6.1",
+    "react-router-redux": "^4.0.5",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/react-scripts/config/eslint.js"
   }
 }
