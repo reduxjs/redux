@@ -1,19 +1,18 @@
-import expect from 'expect'
 import React from 'react'
 import { shallow } from 'enzyme'
 import ConnectedNode, { Node } from './Node'
 
 function setup(id, counter, childIds, parentId) {
   const actions = {
-    increment: expect.createSpy(),
-    removeChild: expect.createSpy(),
-    deleteNode: expect.createSpy(),
-    createNode: expect.createSpy(),
-    addChild: expect.createSpy()
+    increment: jest.fn(),
+    removeChild: jest.fn(),
+    deleteNode: jest.fn(),
+    createNode: jest.fn(),
+    addChild: jest.fn()
   }
 
   const eventArgs = {
-    preventDefault: expect.createSpy()
+    preventDefault: jest.fn()
   }
 
   const component = shallow(
@@ -41,7 +40,7 @@ describe('Node component', () => {
     const { button, actions } = setup(1, 23, [])
     button.simulate('click')
 
-    expect(actions.increment).toHaveBeenCalledWith(1)
+    expect(actions.increment).toBeCalledWith(1)
   })
 
   it('should not render remove link', () => {
@@ -51,19 +50,19 @@ describe('Node component', () => {
 
   it('should call createNode action on Add child click', () => {
     const { addLink, actions, eventArgs } = setup(2, 1, [])
-    actions.createNode.andReturn({ nodeId: 3 })
+    actions.createNode.mockReturnValue({ nodeId: 3 })
     addLink.simulate('click', eventArgs)
 
-    expect(actions.createNode).toHaveBeenCalled()
+    expect(actions.createNode).toBeCalled()
   })
 
   it('should call addChild action on Add child click', () => {
     const { addLink, actions, eventArgs } = setup(2, 1, [])
-    actions.createNode.andReturn({ nodeId: 3 })
+    actions.createNode.mockReturnValue({ nodeId: 3 })
 
     addLink.simulate('click', eventArgs)
 
-    expect(actions.addChild).toHaveBeenCalledWith(2, 3)
+    expect(actions.addChild).toBeCalledWith(2, 3)
   })
 
   describe('when given childIds', () => {
@@ -78,14 +77,14 @@ describe('Node component', () => {
       const { removeLink, actions, eventArgs } = setup(2, 1, [], 1)
       removeLink.simulate('click', eventArgs)
 
-      expect(actions.removeChild).toHaveBeenCalledWith(1, 2)
+      expect(actions.removeChild).toBeCalledWith(1, 2)
     })
 
     it('should call deleteNode action on remove link click', () => {
       const { removeLink, actions, eventArgs } = setup(2, 1, [], 1)
       removeLink.simulate('click', eventArgs)
 
-      expect(actions.deleteNode).toHaveBeenCalledWith(2)
+      expect(actions.deleteNode).toBeCalledWith(2)
     })
   })
 })

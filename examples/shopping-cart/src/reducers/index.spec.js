@@ -1,4 +1,3 @@
-import expect from 'expect'
 import { getTotal, getCartProducts } from './index'
 
 describe('selectors', () => {

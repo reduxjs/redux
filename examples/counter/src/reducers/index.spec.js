@@ -1,4 +1,3 @@
-import expect from 'expect'
 import counter from './index'
 
 describe('reducers', () => {

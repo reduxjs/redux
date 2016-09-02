@@ -1,4 +1,3 @@
-import expect from 'expect'
 import React from 'react'
 import { shallow } from 'enzyme'
 import Product from './Product'
@@ -6,7 +5,7 @@ import ProductItem from './ProductItem'
 
 function setup(product) {
   const actions = {
-    onAddToCartClicked: expect.createSpy()
+    onAddToCartClicked: jest.fn()
   }
 
   const component = shallow(
@@ -50,7 +49,7 @@ describe('ProductItem component', () => {
   it('should call action on button click', () => {
     const { button, actions } = setup(productProps)
     button.simulate('click')
-    expect(actions.onAddToCartClicked).toHaveBeenCalled()
+    expect(actions.onAddToCartClicked).toBeCalled()
   })
 
   describe('when product inventory is 0', () => {

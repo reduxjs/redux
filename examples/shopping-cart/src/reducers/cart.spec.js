@@ -1,4 +1,3 @@
-import expect from 'expect'
 import cart from './cart'
 
 describe('reducers', () => {

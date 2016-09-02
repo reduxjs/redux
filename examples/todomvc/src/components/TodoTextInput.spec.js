@@ -1,11 +1,10 @@
-import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import TodoTextInput from './TodoTextInput'
 
 function setup(propOverrides) {
   const props = Object.assign({
-    onSave: expect.createSpy(),
+    onSave: jest.fn(),
     text: 'Use Redux',
     placeholder: 'What needs to be done?',
     editing: false,
@@ -56,7 +55,7 @@ describe('components', () => {
     it('should call onSave on return key press', () => {
       const { output, props } = setup()
       output.props.onKeyDown({ which: 13, target: { value: 'Use Redux' } })
-      expect(props.onSave).toHaveBeenCalledWith('Use Redux')
+      expect(props.onSave).toBeCalledWith('Use Redux')
     })
 
     it('should reset state on return key press if newTodo', () => {
@@ -69,13 +68,13 @@ describe('components', () => {
     it('should call onSave on blur', () => {
       const { output, props } = setup()
       output.props.onBlur({ target: { value: 'Use Redux' } })
-      expect(props.onSave).toHaveBeenCalledWith('Use Redux')
+      expect(props.onSave).toBeCalledWith('Use Redux')
     })
 
     it('shouldnt call onSave on blur if newTodo', () => {
       const { output, props } = setup({ newTodo: true })
       output.props.onBlur({ target: { value: 'Use Redux' } })
-      expect(props.onSave.calls.length).toBe(0)
+      expect(props.onSave).not.toBeCalled()
     })
   })
 })

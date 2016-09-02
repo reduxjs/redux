@@ -1,4 +1,3 @@
-import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Footer from './Footer'
@@ -9,8 +8,8 @@ function setup(propOverrides) {
     completedCount: 0,
     activeCount: 0,
     filter: SHOW_ALL,
-    onClearCompleted: expect.createSpy(),
-    onShow: expect.createSpy()
+    onClearCompleted: jest.fn(),
+    onShow: jest.fn()
   }, propOverrides)
 
   const renderer = TestUtils.createRenderer()
@@ -76,7 +75,7 @@ describe('components', () => {
       const [ , filters ] = output.props.children
       const filterLink = filters.props.children[1].props.children
       filterLink.props.onClick({})
-      expect(props.onShow).toHaveBeenCalledWith(SHOW_ACTIVE)
+      expect(props.onShow).toBeCalledWith(SHOW_ACTIVE)
     })
 
     it('shouldnt show clear button when no completed todos', () => {
@@ -96,7 +95,7 @@ describe('components', () => {
       const { output, props } = setup({ completedCount: 1 })
       const [ , , clear ] = output.props.children
       clear.props.onClick({})
-      expect(props.onClearCompleted).toHaveBeenCalled()
+      expect(props.onClearCompleted).toBeCalled()
     })
   })
 })

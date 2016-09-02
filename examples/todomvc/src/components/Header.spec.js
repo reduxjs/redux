@@ -1,4 +1,3 @@
-import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Header from './Header'
@@ -6,7 +5,7 @@ import TodoTextInput from './TodoTextInput'
 
 function setup() {
   const props = {
-    addTodo: expect.createSpy()
+    addTodo: jest.fn()
   }
 
   const renderer = TestUtils.createRenderer()
@@ -42,9 +41,9 @@ describe('components', () => {
       const { output, props } = setup()
       const input = output.props.children[1]
       input.props.onSave('')
-      expect(props.addTodo.calls.length).toBe(0)
+      expect(props.addTodo).not.toBeCalled()
       input.props.onSave('Use Redux')
-      expect(props.addTodo.calls.length).toBe(1)
+      expect(props.addTodo).toBeCalled()
     })
   })
 })

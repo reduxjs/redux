@@ -1,4 +1,3 @@
-import expect from 'expect'
 import * as actions from './index'
 
 describe('todo actions', () => {

@@ -1,4 +1,3 @@
-import expect from 'expect'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import MainSection from './MainSection'
@@ -20,11 +19,11 @@ function setup(propOverrides) {
       }
     ],
     actions: {
-      editTodo: expect.createSpy(),
-      deleteTodo: expect.createSpy(),
-      completeTodo: expect.createSpy(),
-      completeAll: expect.createSpy(),
-      clearCompleted: expect.createSpy()
+      editTodo: jest.fn(),
+      deleteTodo: jest.fn(),
+      completeTodo: jest.fn(),
+      completeAll: jest.fn(),
+      clearCompleted: jest.fn()
     }
   }, propOverrides)
 
@@ -73,7 +72,7 @@ describe('components', () => {
         const { output, props } = setup()
         const [ toggle ] = output.props.children
         toggle.props.onChange({})
-        expect(props.actions.completeAll).toHaveBeenCalled()
+        expect(props.actions.completeAll).toBeCalled()
       })
     })
 
@@ -100,7 +99,7 @@ describe('components', () => {
         const { output, props } = setup()
         const [ , , footer ] = output.props.children
         footer.props.onClearCompleted()
-        expect(props.actions.clearCompleted).toHaveBeenCalled()
+        expect(props.actions.clearCompleted).toBeCalled()
       })
     })
 

@@ -1,4 +1,3 @@
-import expect from 'expect'
 import todos from './todos'
 import * as types from '../constants/ActionTypes'
 

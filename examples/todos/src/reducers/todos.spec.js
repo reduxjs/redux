@@ -1,4 +1,3 @@
-import expect from 'expect'
 import todos from './todos'
 
 describe('todos reducer', () => {
