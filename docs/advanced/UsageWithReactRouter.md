@@ -3,7 +3,7 @@
 So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless if you need to time travel and rewind actions that triggers the change URL.
 
 ## Installing React Router
-`react-router` is available on npm :
+`react-router` is available on npm . This guides assumes you are using `react-router@^2.7.0`.
 
 `npm install --save react-router`
 
