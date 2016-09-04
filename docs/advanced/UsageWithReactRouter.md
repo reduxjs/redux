@@ -7,7 +7,7 @@ So you want to do routing with your Redux app. You can use it with [React Router
 
 `npm install --save react-router`
 
-## Configuring the fallback url
+## Configuring the Fallback URL
 
 Before implementing React Router, we need to configure our back-end. Indeed, our back-end is not currently aware of the declared routes in React Router. If you refresh your page or try to access directly an URL declared in React Router without having configured your back-end, you will get an 404. You will be first requesting a url that the back-end is not aware of, instead of asking to React Router. You need to configure a fallback URL, to serve index.html on an unknown URL so that in the front-end, React Router can handle the request.
 
@@ -28,7 +28,7 @@ You can add to your webpack.config.dev.js :
   }
 ```
 
-## Connecting the router with Redux App
+## Connecting the Router with Redux App
 
 Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
@@ -112,7 +112,7 @@ export default Footer
 
 Now if you click on `<FilterLink/>` you will see that your URL will change from `'/complete'`, `'/active'`, `'/'`. Even if you are going back with your browser, it will use your browser's history and effectively go to your previous URL.
 
-## Read the URL and applying it to the Redux Store
+## Reading From the URL
 
 Currently, the todos list are not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()` is still binded to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
 #### `components/App.js`
