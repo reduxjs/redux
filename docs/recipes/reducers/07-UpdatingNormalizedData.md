@@ -1,6 +1,6 @@
 # Managing Normalized Data
 
-As mentioned in [Normalizing State Shape](./06-NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store.  However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application.  There are some sample approaches that you can use.  We'll use the example of adding a new Comment to a Post.
+As mentioned in [Normalizing State Shape](./06-NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store.  However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application.  There are a variety of different approaches that you can use, based on your own preference.  We'll use the example of adding a new Comment to a Post.
 
 ## Standard Approaches
 
@@ -21,7 +21,7 @@ function commentsById(state = {}, action) {
 }
 ```
 
-This requires the least amount of work on the reducer side, but does require that the action creator potentially do a fair amount of work to organize the data into the correct shape before the action is dispatched.  It also doesn't solve potentially deleting an item.
+This requires the least amount of work on the reducer side, but does require that the action creator potentially do a fair amount of work to organize the data into the correct shape before the action is dispatched.  It also doesn't handle trying to delete an item.
 
 
 ### Slice Reducer Composition
@@ -189,7 +189,8 @@ import {Model, many, Schema} from "redux-orm";
 export class Post extends Model {
   static get fields() {
     return {
-      // Define a many-sided relation - one Post can have many Comments, at a field named "comments"
+      // Define a many-sided relation - one Post can have many Comments, 
+      // at a field named "comments"
       comments : many("Comment") 
     };
   }
@@ -204,7 +205,8 @@ export class Post extends Model {
       case "ADD_COMMENT" : {
         const {payload} = action;
         const {postId, commentId} = payload;
-        // Queue up the addition of a relation between this Comment ID and this Post instance
+        // Queue up the addition of a relation between this Comment ID 
+        // and this Post instance
         Post.withId(postId).comments.add(commentId);
         break;
       }
@@ -249,7 +251,9 @@ import { createStore, combineReducers } from 'redux'
 import {schema} from "./models";
 
 const rootReducer = combineReducers({
-  // Insert the auto-generated Redux-ORM reducer containing our model "tables"
+  // Insert the auto-generated Redux-ORM reducer.  This will
+  // initialize our model "tables", and hook up the reducer
+  // logic we defined on each Model subclass
   entities : schema.reducer()
 });
 
