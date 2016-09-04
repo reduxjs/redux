@@ -38,7 +38,7 @@ Along this chapter, we will be using the [Todos](https://github.com/reactjs/redu
 
 The `<Router />` component has to be a children of `<Provider />` so that route handlers can get access to the `store`. `<Provider />` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
 
-The `<Route />` component lets you define a component to be loaded whenever an url entered match with the property `path`. We added the optional `(:filter)` parameter so that it renders the `<App />` component if the url match '/'.
+The `<Route />` component lets you define a component to be loaded whenever an URL entered match with the property `path`. We added the optional `(:filter)` parameter so that it renders the `<App />` component if the URL match '/'.
 
 Passing the `browserHistory` is necessary if you want to remove the hash from URL (e.g : `http://localhost:3000/#/?_k=4sbb0i`). Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
 
@@ -157,6 +157,6 @@ Now that you know how to do basic routing, you can learn more about [React Route
 
 >##### Note About Other Routing Libraries
 
->*Redux Router* is an experimental library, it lets you keep entirely the state of your url inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
+>*Redux Router* is an experimental library, it lets you keep entirely the state of your URL inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
 
 >*React Router Redux* creates binding between your redux app and react-router and it keeps them in sync. Without this binding, you will not be able to rewind the actions with Time Travel. Unless you need this, React-router and Redux can operates completely apart.
