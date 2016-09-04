@@ -9,7 +9,11 @@ So you want to do routing with your Redux app. You can use it with [React Router
 
 ## Configuring the Fallback URL
 
-Before implementing React Router, we need to configure our back-end. Indeed, our back-end is not currently aware of the declared routes in React Router. If you refresh your page or try to access directly an URL declared in React Router without having configured your back-end, you will get an 404. You will be first requesting a url that the back-end is not aware of, instead of asking to React Router. You need to configure a fallback URL, to serve index.html on an unknown URL so that in the front-end, React Router can handle the request.
+Before implementing React Router, we need to configure our development server. Indeed, our development server is not currently aware of the declared routes in React Router. If you refresh your page or try to access directly an URL declared in React Router without having configured your development server, you will get a 404 HTTP error. You will be first requesting a url that the development server is not aware of, instead of asking to React Router. You need to configure a fallback URL, to serve index.html on an unknown URL so that in the front-end, React Router can handle the request.
+
+>##### Note on Create React App
+
+> If you are using Create React App, you won't need to configure a fallback URL, it is automatically done.
 
 ### Configuring express.js
 If you are serving your index.html from express.js :
@@ -32,7 +36,7 @@ You can add to your webpack.config.dev.js :
 
 Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
-The <Router /> component has to be a children of `<Provider/>` so the `<Router />` has access to the global `store`. `<Provider/>` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
+The `<Router />` component has to be a children of `<Provider/>` so the `<Router />` has access to the global `store`. `<Provider/>` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
 
 The `<Route>` component lets you define a component to be loaded whenever an url entered match with the property `path`. We added the optional `(:filter)` parameter so it will renders the `<App />` component if the url match '/'.
 
