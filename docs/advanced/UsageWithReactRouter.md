@@ -1,25 +1,15 @@
 # Usage with React Router
 
-So you want to do routing with your Redux app. You can use it with the react-router library. Redux will be the source of truth for your data and react-router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless if you need to time travel and rewind actions that triggers the change URL.
+So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless if you need to time travel and rewind actions that triggers the change URL.
 
-## Redux-router, react-router-redux, react-router
-Before starting, let's clarify the different routing libraries.
-
-### Redux-router
-Redux-router is an **experimental** library, it lets you keep entirely the state of your url inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
-
-### React-router-redux
-react-router-redux creates binding between your redux app and react-router and it keeps them in sync. Without this binding, you will not be able to rewind the actions with Time Travel. Unless you need this, React-router and Redux can operates completely apart.
-
-
-## Installing react-router
-react-router is available on npm :
+## Installing React Router
+`react-router` is available on npm :
 
 `npm install --save react-router`
 
 ## Configuring the fallback url
 
-Before implementing react-router, we need to configure our back-end. Indeed, our back-end is not currently aware of the declared routes in react-router. If you refresh your page or try to access directly an URL declared in react-router without having configured your back-end, you will get an 404. You will be first requesting a url that the back-end is not aware of, instead of asking to react-router. You need to configure a fallback URL, to serve index.html on an unknown URL so that in the front-end, react-router can handle the request.
+Before implementing React Router, we need to configure our back-end. Indeed, our back-end is not currently aware of the declared routes in React Router. If you refresh your page or try to access directly an URL declared in React Router without having configured your back-end, you will get an 404. You will be first requesting a url that the back-end is not aware of, instead of asking to React Router. You need to configure a fallback URL, to serve index.html on an unknown URL so that in the front-end, React Router can handle the request.
 
 ### Configuring express.js
 If you are serving your index.html from express.js :
@@ -69,9 +59,9 @@ Root.propTypes = {
 export default Root;
 ```
 
-## Navigating with react-router
+## Navigating with React Router
 
-react-router comes with a [<Link/>](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that let you navigate around your application. We can use it in our example and change our container `<FilterLink />` component so we can change the URL using `<FilterLink />. The `activeStyle={}` property lets you apply a style on the active state.
+React Router comes with a [<Link/>](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that let you navigate around your application. We can use it in our example and change our container `<FilterLink />` component so we can change the URL using `<FilterLink />. The `activeStyle={}` property lets you apply a style on the active state.
 
 
 #### `containers/FilterLink.js`
