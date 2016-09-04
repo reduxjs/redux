@@ -36,7 +36,7 @@ You can add to your webpack.config.dev.js :
 
 Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
-The `<Router />` component has to be a children of `<Provider />` so the `<Router />` has access to the global `store`. `<Provider />` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
+The `<Router />` component has to be a children of `<Provider />` so that route handlers can get access to the `store`. `<Provider />` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
 
 The `<Route />` component lets you define a component to be loaded whenever an url entered match with the property `path`. We added the optional `(:filter)` parameter so that it renders the `<App />` component if the url match '/'.
 
