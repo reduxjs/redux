@@ -19,7 +19,12 @@ import compose from './compose'
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer, preloadedState, enhancer) => {
     var store = createStore(reducer, preloadedState, enhancer)
-    var dispatch = store.dispatch
+    var dispatch = () => {
+      throw new Error(
+        `Dispatching while constructing your middleware is not allowed. ` +
+        `Other middleware would not be applied to this dispatch.`
+      )
+    }
     var chain = []
 
     var middlewareAPI = {
