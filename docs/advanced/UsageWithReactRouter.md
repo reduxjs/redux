@@ -15,18 +15,18 @@ Before implementing React Router, we need to configure our development server. I
 
 > If you are using Create React App, you won't need to configure a fallback URL, it is automatically done.
 
-### Configuring express.js
-If you are serving your index.html from express.js :
+### Configuring Express.js
+If you are serving your index.html from Express.js :
 ``` js
   app.get('/*', (req,res) => {
     res.sendfile(path.join(__dirname, 'index.html'))
   })
 ```
 
-### Configuring webpack-dev-server
-If you are serving your index.html from webpack-dev-server:
+### Configuring Webpack Dev Server
+If you are serving your index.html from Webpack Dev Server:
 You can add to your webpack.config.dev.js :
-```
+```js
   devServer: {
     historyApiFallback: true,
   }
@@ -36,9 +36,9 @@ You can add to your webpack.config.dev.js :
 
 Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
-The `<Router />` component has to be a children of `<Provider/>` so the `<Router />` has access to the global `store`. `<Provider/>` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
+The `<Router />` component has to be a children of `<Provider />` so the `<Router />` has access to the global `store`. `<Provider />` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
 
-The `<Route>` component lets you define a component to be loaded whenever an url entered match with the property `path`. We added the optional `(:filter)` parameter so that it renders the `<App />` component if the url match '/'.
+The `<Route />` component lets you define a component to be loaded whenever an url entered match with the property `path`. We added the optional `(:filter)` parameter so that it renders the `<App />` component if the url match '/'.
 
 Passing the `browserHistory` is necessary if you want to remove the hash from URL (e.g : `http://localhost:3000/#/?_k=4sbb0i`). Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
 
@@ -65,7 +65,7 @@ export default Root;
 
 ## Navigating with React Router
 
-React Router comes with a [<Link/>](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that let you navigate around your application. We can use it in our example and change our container `<FilterLink />` component so we can change the URL using `<FilterLink />. The `activeStyle={}` property lets you apply a style on the active state.
+React Router comes with a [<Link />](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that let you navigate around your application. We can use it in our example and change our container `<FilterLink />` component so we can change the URL using `<FilterLink />. The `activeStyle={}` property lets you apply a style on the active state.
 
 
 #### `containers/FilterLink.js`
@@ -109,12 +109,12 @@ const Footer = () => (
       Completed
     </FilterLink>
   </p>
-)
+);
 
 export default Footer
 ```
 
-Now if you click on `<FilterLink/>` you will see that your URL will change from `'/complete'`, `'/active'`, `'/'`. Even if you are going back with your browser, it will use your browser's history and effectively go to your previous URL.
+Now if you click on `<FilterLink />` you will see that your URL will change from `'/complete'`, `'/active'`, `'/'`. Even if you are going back with your browser, it will use your browser's history and effectively go to your previous URL.
 
 ## Reading From the URL
 
@@ -124,8 +124,8 @@ Currently, the todos list are not filtered even after the URL changed. This is b
 const mapStateToProps = (state, ownProps) => {
   return {
     todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
-  }
-}
+  };
+};
 ```
 
 Right now we are not passing anything to `<App />` so `ownProps` is an empty object. To filter our todos according to the URL, we want to pass the URL params to `<VisibleTodoList />`.
@@ -134,7 +134,7 @@ When previously we wrote:  `<Route path="/(:filter)" component={App} />`, it mad
 
 `params` property is an object with every param specified in the url. *e.g : `params` will be equal to `{ filter: 'completed' }` if we are navigating to `localhost:3000/completed`. We can now read the URL from `<App />`.*
 
-Note that we are using [ES6 destructuring](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) on the properties to pass in `params` to `<VisibleTodoList/>`.
+Note that we are using [ES6 destructuring](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) on the properties to pass in `params` to `<VisibleTodoList />`.
 
 #### `components/App.js`
 ```js
@@ -147,6 +147,6 @@ const App = ({ params }) => {
       />
       <Footer />
     </div>
-  )
-}
+  );
+};
 ```
