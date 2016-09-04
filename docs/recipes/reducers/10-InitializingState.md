@@ -5,7 +5,7 @@ There are two main ways to initialize state for your application.  The `createSt
 It's not always immediately clear how these two approaches interact.  Fortunately, the process does follow some predictable rules.  Here's how the pieces fit together.
 
 
-## Initializing State - Summary
+## Summary
 
 Without `combineReducers()` or similar manual code, `preloadedState` always wins over `state = ...` in the reducer because the `state` passed to the reducer *is* `preloadedState` and *is not* `undefined`, so the ES6 argument syntax doesn't apply.
 
@@ -14,7 +14,7 @@ With `combineReducers()` the behavior is more nuanced. Those reducers whose stat
 **In general, `preloadedState` wins over the state specified by the reducer. This lets reducers specify initial data that makes sense *to them* as default arguments, but also allows loading existing data (fully or partially) when you're hydrating the store from some persistent storage or the server.**
 
 
-## Initializing State - In Depth
+## In Depth
 
 
 ### Single Simple Reducer
@@ -113,6 +113,6 @@ function combined(state = {}, action) {
 In this case, `state` was specified so it didn't fall back to `{}`. It was an object with `a` field equal to `'horse'`, but without the `b` field. This is why the `a` reducer received `'horse'` as its `state` and gladly returned it, but the `b` reducer received `undefined` as its `state` and thus returned *its idea* of the default `state` (in our example, `'wat'`). This is how we get `{ a: 'horse', b: 'wat' }` in return.
 
 
-## Initializing State - Recap
+## Recap
 
 To sum this up, if you stick to Redux conventions and return the initial state from reducers when they're called with `undefined` as the `state` argument (the easiest way to implement this is to specify the `state` ES6 default argument value), you're going to have a nice useful behavior for combined reducers. **They will prefer the corresponding value in the `preloadedState` object you pass to the `createStore()` function, but if you didn't pass any, or if the corresponding field is not set, the default `state` argument specified by the reducer is chosen instead.** This approach works well because it provides both initialization and hydration of existing data, but lets individual reducers reset their state if their data was not preserved. Of course you can apply this pattern recursively, as you can use `combineReducers()` on many levels, or even compose reducers manually by calling reducers and giving them the relevant part of the state tree.
