@@ -16,7 +16,7 @@ Before integrating React Router, we need to configure our development server. In
 > If you are using Create React App, you won't need to configure a fallback URL, it is automatically done.
 
 ### Configuring Express
-If you are serving your index.html from Express.js :
+If you are serving your `index.html` from Express:
 ``` js
   app.get('/*', (req,res) => {
     res.sendfile(path.join(__dirname, 'index.html'))
@@ -24,8 +24,8 @@ If you are serving your index.html from Express.js :
 ```
 
 ### Configuring WebpackDevServer
-If you are serving your index.html from Webpack Dev Server:
-You can add to your webpack.config.dev.js :
+If you are serving your `index.html` from WebpackDevServer:
+You can add to your webpack.config.dev.js:
 ```js
   devServer: {
     historyApiFallback: true,
@@ -36,12 +36,67 @@ You can add to your webpack.config.dev.js :
 
 Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
-The `<Router />` component has to be a children of `<Provider />` so that route handlers can get access to the `store`. `<Provider />` is the higher-order component provided by react-redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
+First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
 
-The `<Route />` component lets you define a component to be loaded whenever an URL entered match with the property `path`. We added the optional `(:filter)` parameter so that it renders the `<App />` component if the URL match '/'.
+```js
+import { Router, Route, browserHistory } from 'react-router';
+```
 
-Passing the `browserHistory` is necessary if you want to remove the hash from URL (e.g : `http://localhost:3000/#/?_k=4sbb0i`). Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
+ You would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
 
+Normally, you would use them like this is in a React app:
+
+```js
+const Root = () => (
+  <Router>
+    <Route path="/" component={App} />
+  </Router>  
+);
+```
+
+However, in our Redux App we will still need `<Provider />`. `<Provider />` is the higher-order component provided by React Redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
+
+We will then import the `<Provider />` from React Redux:
+
+```js
+import { Provider } from 'react-redux';
+```
+
+We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](http://redux.js.org/docs/basics/UsageWithReact.html#passing-the-store).
+
+```js
+const Root = ({ store }) => (
+  <Provider store={store}>
+    <Router>
+      <Route path="/" component={App} />
+    </Router>
+  </Provider>
+);
+```
+
+Now `<App />` component will be rendered if the URL match '/'. Additionally, we will add the optional `(:filter)` parameter to `/`, we will need it further below when we will try to read the parameter `(:filter)` from the URL.
+
+```js
+<Route path="/(:filter)" component={App} />
+```
+
+You will probably want to remove the hash from URL (e.g : `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
+
+```js
+import { Router, Route, browserHistory } from 'react-router';
+```
+
+and pass it to the `<Router />` in order to remove the hash from the URL:
+
+```js
+    <Router history={browserHistory}>
+      <Route path="/(:filter)" component={App} />
+    </Router>
+```
+
+Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
+
+#### `components/Root.js`
 ``` js
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
