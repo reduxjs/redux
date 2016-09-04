@@ -4,6 +4,17 @@ import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
 
 describe('applyMiddleware', () => {
+  it('warns when dispatching during middleware setup', () => {
+    function dispatchingMiddleware(store) {
+      store.dispatch(addTodo('Dont dispatch in middleware setup'))
+      return next => action => next(action)
+    }
+
+    expect(() =>
+      applyMiddleware(dispatchingMiddleware)(createStore)(reducers.todos)
+    ).toThrow()
+  })
+
   it('wraps dispatch method with middleware once', () => {
     function test(spyOnMethods) {
       return methods => {
