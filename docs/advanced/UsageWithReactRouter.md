@@ -44,7 +44,6 @@ import { Router, Route, browserHistory } from 'react-router';
 
 In a React app, usually you would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
 
-
 ```js
 const Root = () => (
   <Router>
@@ -79,7 +78,7 @@ Now `<App />` component will be rendered if the URL match '/'. Additionally, we 
 <Route path="/(:filter)" component={App} />
 ```
 
-You will probably want to remove the hash from URL (e.g : `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
+You will probably want to remove the hash from URL (e.g: `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
 
 ```js
 import { Router, Route, browserHistory } from 'react-router';
@@ -186,7 +185,7 @@ Right now we are not passing anything to `<App />` so `ownProps` is an empty obj
 
 When previously we wrote:  `<Route path="/(:filter)" component={App} />`, it made available inside `App` a `params` property.
 
-`params` property is an object with every param specified in the url. *e.g : `params` will be equal to `{ filter: 'completed' }` if we are navigating to `localhost:3000/completed`. We can now read the URL from `<App />`.*
+`params` property is an object with every param specified in the url. *e.g: `params` will be equal to `{ filter: 'completed' }` if we are navigating to `localhost:3000/completed`. We can now read the URL from `<App />`.*
 
 Note that we are using [ES6 destructuring](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) on the properties to pass in `params` to `<VisibleTodoList />`.
 
