@@ -9,13 +9,13 @@ So you want to do routing with your Redux app. You can use it with [React Router
 
 ## Configuring the Fallback URL
 
-Before integrating React Router, we need to configure our development server. Indeed, our development server may be unaware of the declared routes in React Router configuration. If you refresh your page or try to access directly an URL declared in React Router configuration without having configured your development server, you will get a 404 HTTP error. You will be first requesting a url that the development server might be aware of, instead of asking to React Router. You need to configure a fallback URL, to serve index.html on an unknown URL so that in the front-end, React Router can handle the request.
+Before integrating React Router, we need to configure our development server. Indeed, our development server may be unaware of the declared routes in React Router configuration. For example, if you access `/todos` and refresh, your development server needs to be instructed to serve `index.html` because it is a single-page app. Here's how to enable this with popular development severs.
 
->##### Note on Create React App
+>### Note on Create React App
 
 > If you are using Create React App, you won't need to configure a fallback URL, it is automatically done.
 
-### Configuring Express.js
+### Configuring Express
 If you are serving your index.html from Express.js :
 ``` js
   app.get('/*', (req,res) => {
@@ -23,7 +23,7 @@ If you are serving your index.html from Express.js :
   })
 ```
 
-### Configuring Webpack Dev Server
+### Configuring WebpackDevServer
 If you are serving your index.html from Webpack Dev Server:
 You can add to your webpack.config.dev.js :
 ```js
