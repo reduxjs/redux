@@ -32,7 +32,7 @@ You can add to your webpack.config.dev.js :
   }
 ```
 
-## Connecting the Router with Redux App
+## Connecting React Router with Redux App
 
 Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
