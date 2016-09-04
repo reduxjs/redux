@@ -202,3 +202,7 @@ Because we're treating a portion of our Redux store as a "database", many of the
 ```
 
 Behaviors like "Look up all books by this author" then become an O(n) operation, with a linear scan of the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, an O(n) operation is likely to have sufficiently fast performance for most use cases
+
+## Normalizing Nested Data
+
+Because APIs frequently send back data in a nested form, that data needs to be transformed into a normalized shape before it can be included in the state tree.  The [Normalizr](https://github.com/paularmstrong/normalizr) library is usually used for this task.  You can define schema types and relations, feed the schema and the response data to Normalizr, and it will output a normalized transformation of the response.  That output can then be included in an action and used to update the store.  See the Normalizr documentation for more details on its usage.
