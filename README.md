@@ -89,15 +89,14 @@ import { createStore } from 'redux'
  * follows a different convention (such as function maps) if it makes sense for your
  * project.
  */
+ 
+actionTypes = {
+  "INCREMENT": function(state){ return state + 1 },
+  "DECREMENT": function(state){ return state - 1}
+}
+ 
 function counter(state = 0, action) {
-  switch (action.type) {
-  case 'INCREMENT':
-    return state + 1
-  case 'DECREMENT':
-    return state - 1
-  default:
-    return state
-  }
+  return actionTypes(action.type)(state);
 }
 
 // Create a Redux store holding the state of your app.
