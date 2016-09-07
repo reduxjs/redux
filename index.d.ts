@@ -419,7 +419,8 @@ export function compose<A, B, C, T1, T2, T3, R>(
 ): Func3<T1, T2, T3, R>;
 
 /* rest */
-export function compose<A, B, C, R>(
-  f1: (b: C) => R, f2: (a: B) => C, f3: (a: A) => B,
-  ...funcs: Function[]
+export function compose<R>(
+  f1: (b: any) => R, ...funcs: Function[]
 ): (...args: any[]) => R;
+
+export function compose<R>(...funcs: Function[]): (...args: any[]) => R;
