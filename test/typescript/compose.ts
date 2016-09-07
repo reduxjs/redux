@@ -33,3 +33,7 @@ const t10: string = compose(numberToString, stringToNumber,
 
 const t11: number = compose(stringToNumber, numberToString, stringToNumber,
   multiArgFn)('bar', 42, true);
+
+
+const funcs = [stringToNumber, numberToString, stringToNumber];
+const t12 = compose(...funcs)('bar', 42, true);
