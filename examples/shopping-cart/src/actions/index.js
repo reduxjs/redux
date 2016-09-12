@@ -21,8 +21,8 @@ export const addToCart = productId => (dispatch, getState) => {
   }
 }
 
-export const checkout = (products) => (dispatch, getState) => {
-  const cart = getState().cart
+export const checkout = products => (dispatch, getState) => {
+  const { cart } = getState()
 
   dispatch({
     type: types.CHECKOUT_REQUEST
