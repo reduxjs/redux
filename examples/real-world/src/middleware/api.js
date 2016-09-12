@@ -3,7 +3,7 @@ import { camelizeKeys } from 'humps'
 import 'isomorphic-fetch'
 
 // Extracts the next page URL from Github API response.
-function getNextPageUrl(response) {
+const getNextPageUrl = response => {
   const link = response.headers.get('link')
   if (!link) {
     return null
@@ -21,7 +21,7 @@ const API_ROOT = 'https://api.github.com/'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, schema) {
+const callApi = (endpoint, schema) => {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
 
   return fetch(fullUrl)
@@ -106,7 +106,7 @@ export default store => next => action => {
     throw new Error('Expected action types to be strings.')
   }
 
-  function actionWith(data) {
+  const actionWith = (data) => {
     const finalAction = Object.assign({}, action, data)
     delete finalAction[CALL_API]
     return finalAction
