@@ -58,7 +58,6 @@ export function addTodo(text) {
 can be tested like:
 
 ```js
-import expect from 'expect'
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 
@@ -188,7 +187,6 @@ export default function todos(state = initialState, action) {
 can be tested like:
 
 ```js
-import expect from 'expect'
 import reducer from '../../reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
@@ -300,7 +298,6 @@ export default Header
 can be tested like:
 
 ```js
-import expect from 'expect'
 import React from 'react'
 import { shallow } from 'enzyme'
 import Header from '../../components/Header'
@@ -411,7 +408,6 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 #### Example
 
 ```js
-import expect from 'expect'
 import * as types from '../../constants/ActionTypes'
 import singleDispatch from '../../middleware/singleDispatch'
 
