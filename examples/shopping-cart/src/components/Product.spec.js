@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Product from './Product'
 
-function setup(props) {
+const setup = props => {
   const component = shallow(
     <Product {...props} />
   )

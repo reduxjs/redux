@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import Cart from './Cart'
 import Product from './Product'
 
-function setup(total, products = []) {
+const setup = (total, products = []) => {
   const actions = {
     onCheckoutClicked: jest.fn()
   }
