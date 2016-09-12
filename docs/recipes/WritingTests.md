@@ -4,17 +4,17 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 ### Setting Up
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.
+We recommend [Jest](http://facebook.github.io/jest/) as the testing engine.
 Note that it runs in a Node environment, so you won't have access to the DOM.
 
 ```
-npm install --save-dev mocha
+npm install --save-dev jest
 ```
 
-To use it together with [Babel](http://babeljs.io), you will need to install `babel-register`:
+To use it together with [Babel](http://babeljs.io), you will need to install `babel-jest`:
 
 ```js
-npm install --save-dev babel-register
+npm install --save-dev babel-jest
 ```
 
 and configure it to use ES2015 features in `.babelrc`:
@@ -32,7 +32,7 @@ Then, add this to `scripts` in your `package.json`:
   ...
   "scripts": {
     ...
-    "test": "mocha --compilers js:babel-register --recursive",
+    "test": "jest",
     "test:watch": "npm test -- --watch"
   },
   ...
