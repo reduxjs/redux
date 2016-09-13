@@ -1,4 +1,3 @@
-import expect from 'expect'
 import { compose } from '../src'
 
 describe('Utils', () => {
