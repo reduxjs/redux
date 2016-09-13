@@ -2,7 +2,7 @@ import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import TodoTextInput from './TodoTextInput'
 
-function setup(propOverrides) {
+const setup = propOverrides => {
   const props = Object.assign({
     onSave: jest.fn(),
     text: 'Use Redux',

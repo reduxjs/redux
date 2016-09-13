@@ -8,8 +8,16 @@ const FILTER_TITLES = {
   [SHOW_COMPLETED]: 'Completed'
 }
 
-class Footer extends Component {
-  renderTodoCount() {
+export default class Footer extends Component {
+  static propTypes = {
+    completedCount: PropTypes.number.isRequired,
+    activeCount: PropTypes.number.isRequired,
+    filter: PropTypes.string.isRequired,
+    onClearCompleted: PropTypes.func.isRequired,
+    onShow: PropTypes.func.isRequired
+  }
+
+  renderTodoCount = () => {
     const { activeCount } = this.props
     const itemWord = activeCount === 1 ? 'item' : 'items'
 
@@ -20,7 +28,7 @@ class Footer extends Component {
     )
   }
 
-  renderFilterLink(filter) {
+  renderFilterLink = filter => {
     const title = FILTER_TITLES[filter]
     const { filter: selectedFilter, onShow } = this.props
 
@@ -33,7 +41,7 @@ class Footer extends Component {
     )
   }
 
-  renderClearButton() {
+  renderClearButton = () => {
     const { completedCount, onClearCompleted } = this.props
     if (completedCount > 0) {
       return (
@@ -61,13 +69,3 @@ class Footer extends Component {
     )
   }
 }
-
-Footer.propTypes = {
-  completedCount: PropTypes.number.isRequired,
-  activeCount: PropTypes.number.isRequired,
-  filter: PropTypes.string.isRequired,
-  onClearCompleted: PropTypes.func.isRequired,
-  onShow: PropTypes.func.isRequired
-}
-
-export default Footer
