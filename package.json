@@ -18,7 +18,7 @@
     "lint": "npm run lint:src && npm run lint:examples",
     "lint:src": "eslint src test build",
     "lint:examples": "eslint examples",
-    "test": "jest",
+    "test": "cross-env BABEL_ENV=commonjs jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "cross-env BABEL_ENV=commonjs babel-node $(npm bin)/isparta cover $(npm bin)/_mocha -- --recursive",
     "test:examples": "cross-env BABEL_ENV=commonjs babel-node examples/testAll.js",

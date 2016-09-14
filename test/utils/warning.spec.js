@@ -4,7 +4,7 @@ describe('Utils', () => {
   describe('warning', () => {
     it('calls console.error when available', () => {
       const preSpy = console.error
-      const spy = jest.fn(() => {})
+      const spy = jest.fn()
       console.error = spy
       try {
         warning('Test')

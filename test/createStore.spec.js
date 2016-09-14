@@ -191,8 +191,8 @@ describe('createStore', () => {
 
   it('supports multiple subscriptions', () => {
     const store = createStore(reducers.todos)
-    const listenerA = jest.fn(() => {})
-    const listenerB = jest.fn(() => {})
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
 
     let unsubscribeA = store.subscribe(listenerA)
     store.dispatch(unknownAction())
@@ -238,8 +238,8 @@ describe('createStore', () => {
 
   it('only removes listener once when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listenerA = jest.fn(() => {})
-    const listenerB = jest.fn(() => {})
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
 
     const unsubscribeA = store.subscribe(listenerA)
     store.subscribe(listenerB)
@@ -254,7 +254,7 @@ describe('createStore', () => {
 
   it('only removes relevant listener when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listener = jest.fn(() => {})
+    const listener = jest.fn()
 
     store.subscribe(listener)
     const unsubscribeSecond = store.subscribe(listener)
@@ -268,9 +268,9 @@ describe('createStore', () => {
 
   it('supports removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos)
-    const listenerA = jest.fn(() => {})
-    const listenerB = jest.fn(() => {})
-    const listenerC = jest.fn(() => {})
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
+    const listenerC = jest.fn()
 
     store.subscribe(listenerA)
     const unSubB = store.subscribe(() => {
@@ -295,9 +295,9 @@ describe('createStore', () => {
       unsubscribe => unsubscribe()
     )
 
-    const listener1 = jest.fn(() => {})
-    const listener2 = jest.fn(() => {})
-    const listener3 = jest.fn(() => {})
+    const listener1 = jest.fn()
+    const listener2 = jest.fn()
+    const listener3 = jest.fn()
 
     unsubscribeHandles.push(store.subscribe(() => listener1()))
     unsubscribeHandles.push(store.subscribe(() => {
@@ -320,9 +320,9 @@ describe('createStore', () => {
   it('delays subscribe until the end of current dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = jest.fn(() => {})
-    const listener2 = jest.fn(() => {})
-    const listener3 = jest.fn(() => {})
+    const listener1 = jest.fn()
+    const listener2 = jest.fn()
+    const listener3 = jest.fn()
 
     let listener3Added = false
     const maybeAddThirdListener = () => {
@@ -352,10 +352,10 @@ describe('createStore', () => {
   it('uses the last snapshot of subscribers during nested dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = jest.fn(() => {})
-    const listener2 = jest.fn(() => {})
-    const listener3 = jest.fn(() => {})
-    const listener4 = jest.fn(() => {})
+    const listener1 = jest.fn()
+    const listener2 = jest.fn()
+    const listener3 = jest.fn()
+    const listener4 = jest.fn()
 
     let unsubscribe4
     const unsubscribe1 = store.subscribe(() => {

@@ -12,7 +12,7 @@ describe('applyMiddleware', () => {
       }
     }
 
-    const spy = jest.fn(() => {})
+    const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodo('Use Redux'))
@@ -36,7 +36,7 @@ describe('applyMiddleware', () => {
       }
     }
 
-    const spy = jest.fn(() => {})
+    const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {

@@ -304,7 +304,7 @@ import Header from '../../components/Header'
 
 function setup() {
   const props = {
-    addTodo: jest.fn(() => {})
+    addTodo: jest.fn()
   }
 
   const enzymeWrapper = shallow(<Header {...props} />)

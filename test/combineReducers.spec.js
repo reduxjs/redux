@@ -32,7 +32,7 @@ describe('Utils', () => {
 
     it('warns if a reducer prop is undefined', () => {
       const preSpy = console.error
-      const spy = jest.fn(() => {})
+      const spy = jest.fn()
       console.error = spy
 
       let isNotDefined
@@ -194,7 +194,7 @@ describe('Utils', () => {
 
     it('warns if no reducers are passed to combineReducers', () => {
       const preSpy = console.error
-      const spy = jest.fn(() => {})
+      const spy = jest.fn()
       console.error = spy
 
       const reducer = combineReducers({ })
@@ -208,7 +208,7 @@ describe('Utils', () => {
 
     it('warns if input state does not match reducer shape', () => {
       const preSpy = console.error
-      const spy = jest.fn(() => {})
+      const spy = jest.fn()
       console.error = spy
 
       const reducer = combineReducers({
@@ -268,7 +268,7 @@ describe('Utils', () => {
 
     it('only warns for unexpected keys once', () => {
       const preSpy = console.error
-      const spy = jest.fn(() => {})
+      const spy = jest.fn()
       console.error = spy
 
       const foo = (state = { foo: 1 }) => state
