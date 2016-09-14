@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { combineReducers } from '../src'
 import createStore, { ActionTypes } from '../src/createStore'
 

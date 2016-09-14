@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import warning from '../../src/utils/warning'
 
 describe('Utils', () => {
