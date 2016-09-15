@@ -42,26 +42,39 @@ declare module 'react-redux' {
     withRef?: boolean
   };
 
+  declare type Null = null | void;
+
   declare function connect<A, OP>(
-    options?: ConnectOptions
-  ): Connector<OP, { dispatch: Dispatch<A> } & OP>;
+    ...rest: Array<void>
+  ): Connector<OP, $Supertype<{ dispatch: Dispatch<A> } & OP>>;
+
+  declare function connect<A, OP>(
+    mapStateToProps: Null,
+    mapDispatchToProps: Null,
+    mergeProps: Null,
+    options: ConnectOptions
+  ): Connector<OP, $Supertype<{ dispatch: Dispatch<A> } & OP>>;
 
   declare function connect<S, A, OP, SP>(
     mapStateToProps: MapStateToProps<S, OP, SP>,
+    mapDispatchToProps: Null,
+    mergeProps: Null,
     options?: ConnectOptions
-  ): Connector<OP, SP & { dispatch: Dispatch<A> }>;
+  ): Connector<OP, $Supertype<SP & { dispatch: Dispatch<A> } & OP>>;
 
   declare function connect<A, OP, DP>(
-    mapStateToProps: null,
+    mapStateToProps: Null,
     mapDispatchToProps: MapDispatchToProps<A, OP, DP>,
+    mergeProps: Null,
     options?: ConnectOptions
-  ): Connector<OP, DP & OP>;
+  ): Connector<OP, $Supertype<DP & OP>>;
 
   declare function connect<S, A, OP, SP, DP>(
     mapStateToProps: MapStateToProps<S, OP, SP>,
     mapDispatchToProps: MapDispatchToProps<A, OP, DP>,
+    mergeProps: Null,
     options?: ConnectOptions
-  ): Connector<OP, SP & DP>;
+  ): Connector<OP, $Supertype<SP & DP & OP>>;
 
   declare function connect<S, A, OP, SP, DP, P>(
     mapStateToProps: MapStateToProps<S, OP, SP>,
