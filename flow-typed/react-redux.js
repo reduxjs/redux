@@ -45,7 +45,7 @@ declare module 'react-redux' {
   declare type Null = null | void;
 
   declare function connect<A, OP>(
-    ...rest: Array<void>
+    ...rest: Array<void> // <= workaround for https://github.com/facebook/flow/issues/2360
   ): Connector<OP, $Supertype<{ dispatch: Dispatch<A> } & OP>>;
 
   declare function connect<A, OP>(
