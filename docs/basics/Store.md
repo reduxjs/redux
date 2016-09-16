@@ -58,7 +58,7 @@ You can see how this causes the state held by the store to change:
 
 <img src='http://i.imgur.com/zMMtoMz.png' width='70%'>
 
-We specified the behavior of our app before we even started writing the UI. We won't do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won't need to mock anything because they are just functions. Call them, and make assertions on what they return.
+We specified the behavior of our app before we even started writing the UI. We won't do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won't need to mock anything because they are just [pure](../introduction/ThreePrinciples.md#changes-are-made-with-pure-functions) functions. Call them, and make assertions on what they return.
 
 ## Source Code
 
