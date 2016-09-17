@@ -406,6 +406,15 @@ describe('createStore', () => {
     store.dispatch(addTodo('Hello'))
   })
 
+  it('does not leak private listeners array', done => {
+    const store = createStore(reducers.todos)
+    store.subscribe(function () {
+      expect(this).toNotBeA(Array)
+      done()
+    })
+    store.dispatch(addTodo('Hello'))
+  })
+
   it('only accepts plain object actions', () => {
     const store = createStore(reducers.todos)
     expect(() =>
