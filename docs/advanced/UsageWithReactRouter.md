@@ -172,7 +172,7 @@ Now if you click on `<FilterLink />` you will see that your URL will change from
 ## Reading From the URL
 
 Currently, the todo list is not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()` is still binded to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
-#### `components/App.js`
+#### `containers/VisibleTodoList.js`
 ```js
 const mapStateToProps = (state, ownProps) => {
   return {
