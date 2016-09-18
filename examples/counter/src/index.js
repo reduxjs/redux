@@ -12,6 +12,8 @@ const render = () => ReactDOM.render(
     value={store.getState()}
     onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
     onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
+    onMultiplyByTwo={() => store.dispatch({ type: 'MULTIPLY_BY_TWO' })}
+    onReset={() => store.dispatch({ type: 'RESET' })}
   />,
   rootEl
 )
