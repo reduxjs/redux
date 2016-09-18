@@ -5,22 +5,14 @@ import Explore from '../components/Explore'
 import { resetErrorMessage } from '../actions'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleDismissClick = this.handleDismissClick.bind(this)
-  }
-
-  handleDismissClick(e) {
+  handleDismissClick = e => {
     this.props.resetErrorMessage()
     e.preventDefault()
   }
 
-  handleChange(nextValue) {
-    browserHistory.push(`/${nextValue}`)
-  }
+  handleChange = nextValue => browserHistory.push(`/${nextValue}`)
 
-  renderErrorMessage() {
+  renderErrorMessage = () => {
     const { errorMessage } = this.props
     if (!errorMessage) {
       return null
@@ -61,12 +53,10 @@ App.propTypes = {
   children: PropTypes.node
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    errorMessage: state.errorMessage,
-    inputValue: ownProps.location.pathname.substring(1)
-  }
-}
+const mapStateToProps = (state, ownProps) => ({
+  errorMessage: state.errorMessage,
+  inputValue: ownProps.location.pathname.substring(1)
+})
 
 export default connect(mapStateToProps, {
   resetErrorMessage
