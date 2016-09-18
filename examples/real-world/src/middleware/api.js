@@ -106,7 +106,7 @@ export default store => next => action => {
     throw new Error('Expected action types to be strings.')
   }
 
-  const actionWith = (data) => {
+  const actionWith = data => {
     const finalAction = Object.assign({}, action, data)
     delete finalAction[CALL_API]
     return finalAction

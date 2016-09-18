@@ -5,7 +5,7 @@ import api from '../middleware/api'
 import rootReducer from '../reducers'
 import DevTools from '../containers/DevTools'
 
-const configureStore = (preloadedState) => {
+const configureStore = preloadedState => {
   const store = createStore(
     rootReducer,
     preloadedState,

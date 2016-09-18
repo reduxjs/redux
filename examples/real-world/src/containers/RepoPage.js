@@ -24,7 +24,7 @@ class RepoPage extends Component {
 
   handleLoadMoreClick = () => this.props.loadStargazers(this.props.fullName, true)
 
-  renderUser = (user) => <User user={user} key={user.login} />
+  renderUser = user => <User user={user} key={user.login} />
 
   render() {
     const { repo, owner, name } = this.props
