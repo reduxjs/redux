@@ -5,6 +5,14 @@ import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
 class App extends Component {
+  static propTypes = {
+    selectedReddit: PropTypes.string.isRequired,
+    posts: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.number,
+    dispatch: PropTypes.func.isRequired
+  }
+
   componentDidMount() {
     const { dispatch, selectedReddit } = this.props
     dispatch(fetchPostsIfNeeded(selectedReddit))
@@ -17,7 +25,9 @@ class App extends Component {
     }
   }
 
-  handleChange = nextReddit => this.props.dispatch(selectReddit(nextReddit))
+  handleChange = nextReddit => {
+    this.props.dispatch(selectReddit(nextReddit))
+  }
 
   handleRefreshClick = e => {
     e.preventDefault()
@@ -58,14 +68,6 @@ class App extends Component {
       </div>
     )
   }
-}
-
-App.propTypes = {
-  selectedReddit: PropTypes.string.isRequired,
-  posts: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  lastUpdated: PropTypes.number,
-  dispatch: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {

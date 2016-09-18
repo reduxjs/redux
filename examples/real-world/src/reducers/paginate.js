@@ -23,18 +23,21 @@ const paginate = ({ types, mapActionToKey }) => {
   }, action) => {
     switch (action.type) {
       case requestType:
-        return { ...state,
+        return {
+          ...state,
           isFetching: true
         }
       case successType:
-        return { ...state,
+        return {
+          ...state,
           isFetching: false,
           ids: union(state.ids, action.response.result),
           nextPageUrl: action.response.nextPageUrl,
           pageCount: state.pageCount + 1
         }
       case failureType:
-        return { ...state,
+        return {
+          ...state,
           isFetching: false
         }
       default:

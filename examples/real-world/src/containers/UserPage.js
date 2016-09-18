@@ -6,12 +6,22 @@ import Repo from '../components/Repo'
 import List from '../components/List'
 import zip from 'lodash/zip'
 
-const loadData = ({login, loadUser, loadStarred}) => {
+const loadData = ({ login, loadUser, loadStarred }) => {
   loadUser(login, [ 'name' ])
   loadStarred(login)
 }
 
 class UserPage extends Component {
+  static propTypes = {
+    login: PropTypes.string.isRequired,
+    user: PropTypes.object,
+    starredPagination: PropTypes.object,
+    starredRepos: PropTypes.array.isRequired,
+    starredRepoOwners: PropTypes.array.isRequired,
+    loadUser: PropTypes.func.isRequired,
+    loadStarred: PropTypes.func.isRequired
+  }
+
   componentWillMount() {
     loadData(this.props)
   }
@@ -22,12 +32,18 @@ class UserPage extends Component {
     }
   }
 
-  handleLoadMoreClick = () => this.props.loadStarred(this.props.login, true)
+  handleLoadMoreClick = () => {
+    this.props.loadStarred(this.props.login, true)
+  }
 
-  renderRepo = ([ repo, owner ]) => <Repo
-    repo={repo}
-    owner={owner}
-    key={repo.fullName} />
+  renderRepo([ repo, owner ]) {
+    return (
+      <Repo
+        repo={repo}
+        owner={owner}
+        key={repo.fullName} />
+    )
+  }
 
   render() {
     const { user, login } = this.props
@@ -48,16 +64,6 @@ class UserPage extends Component {
       </div>
     )
   }
-}
-
-UserPage.propTypes = {
-  login: PropTypes.string.isRequired,
-  user: PropTypes.object,
-  starredPagination: PropTypes.object,
-  starredRepos: PropTypes.array.isRequired,
-  starredRepoOwners: PropTypes.array.isRequired,
-  loadUser: PropTypes.func.isRequired,
-  loadStarred: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => {

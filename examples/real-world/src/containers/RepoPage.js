@@ -12,6 +12,17 @@ const loadData = props => {
 }
 
 class RepoPage extends Component {
+  static propTypes = {
+    repo: PropTypes.object,
+    fullName: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    owner: PropTypes.object,
+    stargazers: PropTypes.array.isRequired,
+    stargazersPagination: PropTypes.object,
+    loadRepo: PropTypes.func.isRequired,
+    loadStargazers: PropTypes.func.isRequired
+  }
+
   componentWillMount() {
     loadData(this.props)
   }
@@ -22,9 +33,13 @@ class RepoPage extends Component {
     }
   }
 
-  handleLoadMoreClick = () => this.props.loadStargazers(this.props.fullName, true)
+  handleLoadMoreClick = () => {
+    this.props.loadStargazers(this.props.fullName, true)
+  }
 
-  renderUser = user => <User user={user} key={user.login} />
+  renderUser(user) {
+    return <User user={user} key={user.login} />
+  }
 
   render() {
     const { repo, owner, name } = this.props
@@ -46,17 +61,6 @@ class RepoPage extends Component {
       </div>
     )
   }
-}
-
-RepoPage.propTypes = {
-  repo: PropTypes.object,
-  fullName: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  owner: PropTypes.object,
-  stargazers: PropTypes.array.isRequired,
-  stargazersPagination: PropTypes.object,
-  loadRepo: PropTypes.func.isRequired,
-  loadStargazers: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => {
