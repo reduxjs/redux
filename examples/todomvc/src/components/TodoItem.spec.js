@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils'
 import TodoItem from './TodoItem'
 import TodoTextInput from './TodoTextInput'
 
-function setup( editing = false ) {
+const setup = ( editing = false ) => {
   const props = {
     todo: {
       id: 0,
