@@ -24,8 +24,9 @@ export default class TodoTextInput extends Component {
     }
   }
 
-  handleChange = e => this.setState({ text: e.target.value })
-
+  handleChange = e => {
+    this.setState({ text: e.target.value })
+  }
 
   handleBlur = e => {
     if (!this.props.newTodo) {

@@ -1,7 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 
 class Counter extends Component {
-    
+  static propTypes = {
+    value: PropTypes.number.isRequired,
+    onIncrement: PropTypes.func.isRequired,
+    onDecrement: PropTypes.func.isRequired
+  }
+
   incrementIfOdd = () => {
     if (this.props.value % 2 !== 0) {
       this.props.onIncrement()
@@ -36,12 +41,6 @@ class Counter extends Component {
       </p>
     )
   }
-}
-
-Counter.propTypes = {
-  value: PropTypes.number.isRequired,
-  onIncrement: PropTypes.func.isRequired,
-  onDecrement: PropTypes.func.isRequired
 }
 
 export default Counter

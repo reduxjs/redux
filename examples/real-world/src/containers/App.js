@@ -5,14 +5,25 @@ import Explore from '../components/Explore'
 import { resetErrorMessage } from '../actions'
 
 class App extends Component {
+  static propTypes = {
+    // Injected by React Redux
+    errorMessage: PropTypes.string,
+    resetErrorMessage: PropTypes.func.isRequired,
+    inputValue: PropTypes.string.isRequired,
+    // Injected by React Router
+    children: PropTypes.node
+  }
+
   handleDismissClick = e => {
     this.props.resetErrorMessage()
     e.preventDefault()
   }
 
-  handleChange = nextValue => browserHistory.push(`/${nextValue}`)
+  handleChange = nextValue => {
+    browserHistory.push(`/${nextValue}`)
+  }
 
-  renderErrorMessage = () => {
+  renderErrorMessage() {
     const { errorMessage } = this.props
     if (!errorMessage) {
       return null
@@ -42,15 +53,6 @@ class App extends Component {
       </div>
     )
   }
-}
-
-App.propTypes = {
-  // Injected by React Redux
-  errorMessage: PropTypes.string,
-  resetErrorMessage: PropTypes.func.isRequired,
-  inputValue: PropTypes.string.isRequired,
-  // Injected by React Router
-  children: PropTypes.node
 }
 
 const mapStateToProps = (state, ownProps) => ({

@@ -3,6 +3,11 @@ import React, { Component, PropTypes } from 'react'
 const GITHUB_REPO = 'https://github.com/reactjs/redux'
 
 export default class Explore extends Component {
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
       this.setInputValue(nextProps.value)
@@ -26,7 +31,9 @@ export default class Explore extends Component {
     }
   }
 
-  handleGoClick = () => this.props.onChange(this.getInputValue())
+  handleGoClick = () => {
+    this.props.onChange(this.getInputValue())
+  }
 
   render() {
     return (
@@ -48,9 +55,4 @@ export default class Explore extends Component {
       </div>
     )
   }
-}
-
-Explore.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
 }

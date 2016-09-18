@@ -14,7 +14,9 @@ export default class TodoItem extends Component {
     editing: false
   }
 
-  handleDoubleClick = () => this.setState({ editing: true })
+  handleDoubleClick = () => {
+    this.setState({ editing: true })
+  }
 
   handleSave = (id, text) => {
     if (text.length === 0) {

@@ -17,11 +17,15 @@ export default class MainSection extends Component {
 
   state = { filter: SHOW_ALL }
 
-  handleClearCompleted = () => this.props.actions.clearCompleted()
+  handleClearCompleted = () => {
+    this.props.actions.clearCompleted()
+  }
 
-  handleShow = filter => this.setState({ filter })
+  handleShow = filter => {
+    this.setState({ filter })
+  }
 
-  renderToggleAll = completedCount => {
+  renderToggleAll(completedCount) {
     const { todos, actions } = this.props
     if (todos.length > 0) {
       return (
@@ -33,7 +37,7 @@ export default class MainSection extends Component {
     }
   }
 
-  renderFooter = completedCount => {
+  renderFooter(completedCount) {
     const { todos } = this.props
     const { filter } = this.state
     const activeCount = todos.length - completedCount

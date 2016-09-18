@@ -17,7 +17,7 @@ export default class Footer extends Component {
     onShow: PropTypes.func.isRequired
   }
 
-  renderTodoCount = () => {
+  renderTodoCount() {
     const { activeCount } = this.props
     const itemWord = activeCount === 1 ? 'item' : 'items'
 
@@ -28,7 +28,7 @@ export default class Footer extends Component {
     )
   }
 
-  renderFilterLink = filter => {
+  renderFilterLink(filter) {
     const title = FILTER_TITLES[filter]
     const { filter: selectedFilter, onShow } = this.props
 
@@ -41,7 +41,7 @@ export default class Footer extends Component {
     )
   }
 
-  renderClearButton = () => {
+  renderClearButton() {
     const { completedCount, onClearCompleted } = this.props
     if (completedCount > 0) {
       return (
