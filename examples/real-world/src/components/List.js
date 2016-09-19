@@ -1,6 +1,21 @@
 import React, { Component, PropTypes } from 'react'
 
 export default class List extends Component {
+  static propTypes = {
+    loadingLabel: PropTypes.string.isRequired,
+    pageCount: PropTypes.number,
+    renderItem: PropTypes.func.isRequired,
+    items: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    onLoadMoreClick: PropTypes.func.isRequired,
+    nextPageUrl: PropTypes.string
+  }
+
+  static defaultProps = {
+    isFetching: true,
+    loadingLabel: 'Loading...'
+  }
+
   renderLoadMore() {
     const { isFetching, onLoadMoreClick } = this.props
     return (
@@ -35,19 +50,4 @@ export default class List extends Component {
       </div>
     )
   }
-}
-
-List.propTypes = {
-  loadingLabel: PropTypes.string.isRequired,
-  pageCount: PropTypes.number,
-  renderItem: PropTypes.func.isRequired,
-  items: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  onLoadMoreClick: PropTypes.func.isRequired,
-  nextPageUrl: PropTypes.string
-}
-
-List.defaultProps = {
-  isFetching: true,
-  loadingLabel: 'Loading...'
 }

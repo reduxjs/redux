@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils'
 import Header from './Header'
 import TodoTextInput from './TodoTextInput'
 
-function setup() {
+const setup = () => {
   const props = {
     addTodo: jest.fn()
   }

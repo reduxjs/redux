@@ -4,20 +4,12 @@ import { connect } from 'react-redux'
 import * as actions from '../actions'
 
 export class Node extends Component {
-  constructor(props) {
-    super(props)
-    this.handleIncrementClick = this.handleIncrementClick.bind(this)
-    this.handleRemoveClick = this.handleRemoveClick.bind(this)
-    this.handleAddChildClick = this.handleAddChildClick.bind(this)
-    this.renderChild = this.renderChild.bind(this)
-  }
-
-  handleIncrementClick() {
+  handleIncrementClick = () => {
     const { increment, id } = this.props
     increment(id)
   }
 
-  handleAddChildClick(e) {
+  handleAddChildClick = e => {
     e.preventDefault()
 
     const { addChild, createNode, id } = this.props
@@ -25,7 +17,7 @@ export class Node extends Component {
     addChild(id, childId)
   }
 
-  handleRemoveClick(e) {
+  handleRemoveClick = e => {
     e.preventDefault()
 
     const { removeChild, deleteNode, parentId, id } = this.props
@@ -33,7 +25,7 @@ export class Node extends Component {
     deleteNode(id)
   }
 
-  renderChild(childId) {
+  renderChild = childId => {
     const { id } = this.props
     return (
       <li key={childId}>

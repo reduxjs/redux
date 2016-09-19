@@ -5,17 +5,22 @@ import Repo from '../components/Repo'
 import User from '../components/User'
 import List from '../components/List'
 
-function loadData(props) {
+const loadData = props => {
   const { fullName } = props
   props.loadRepo(fullName, [ 'description' ])
   props.loadStargazers(fullName)
 }
 
 class RepoPage extends Component {
-  constructor(props) {
-    super(props)
-    this.renderUser = this.renderUser.bind(this)
-    this.handleLoadMoreClick = this.handleLoadMoreClick.bind(this)
+  static propTypes = {
+    repo: PropTypes.object,
+    fullName: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    owner: PropTypes.object,
+    stargazers: PropTypes.array.isRequired,
+    stargazersPagination: PropTypes.object,
+    loadRepo: PropTypes.func.isRequired,
+    loadStargazers: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -28,15 +33,12 @@ class RepoPage extends Component {
     }
   }
 
-  handleLoadMoreClick() {
+  handleLoadMoreClick = () => {
     this.props.loadStargazers(this.props.fullName, true)
   }
 
   renderUser(user) {
-    return (
-      <User user={user}
-            key={user.login} />
-    )
+    return <User user={user} key={user.login} />
   }
 
   render() {
@@ -49,7 +51,7 @@ class RepoPage extends Component {
     return (
       <div>
         <Repo repo={repo}
-                    owner={owner} />
+              owner={owner} />
         <hr />
         <List renderItem={this.renderUser}
               items={stargazers}
@@ -61,18 +63,7 @@ class RepoPage extends Component {
   }
 }
 
-RepoPage.propTypes = {
-  repo: PropTypes.object,
-  fullName: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  owner: PropTypes.object,
-  stargazers: PropTypes.array.isRequired,
-  stargazersPagination: PropTypes.object,
-  loadRepo: PropTypes.func.isRequired,
-  loadStargazers: PropTypes.func.isRequired
-}
-
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   // We need to lower case the login/name due to the way GitHub's API behaves.
   // Have a look at ../middleware/api.js for more details.
   const login = ownProps.params.login.toLowerCase()

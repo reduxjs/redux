@@ -3,10 +3,9 @@ import React, { Component, PropTypes } from 'react'
 const GITHUB_REPO = 'https://github.com/reactjs/redux'
 
 export default class Explore extends Component {
-  constructor(props) {
-    super(props)
-    this.handleKeyUp = this.handleKeyUp.bind(this)
-    this.handleGoClick = this.handleGoClick.bind(this)
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
   componentWillReceiveProps(nextProps) {
@@ -15,24 +14,24 @@ export default class Explore extends Component {
     }
   }
 
-  getInputValue() {
+  getInputValue = () => {
     return this.refs.input.value
   }
 
-  setInputValue(val) {
+  setInputValue = (val) => {
     // Generally mutating DOM is a bad idea in React components,
     // but doing this for a single uncontrolled field is less fuss
     // than making it controlled and maintaining a state for it.
     this.refs.input.value = val
   }
 
-  handleKeyUp(e) {
+  handleKeyUp = (e) => {
     if (e.keyCode === 13) {
       this.handleGoClick()
     }
   }
 
-  handleGoClick() {
+  handleGoClick = () => {
     this.props.onChange(this.getInputValue())
   }
 
@@ -56,9 +55,4 @@ export default class Explore extends Component {
       </div>
     )
   }
-}
-
-Explore.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
 }

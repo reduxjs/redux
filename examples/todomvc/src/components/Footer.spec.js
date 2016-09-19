@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils'
 import Footer from './Footer'
 import { SHOW_ALL, SHOW_ACTIVE } from '../constants/TodoFilters'
 
-function setup(propOverrides) {
+const setup = propOverrides => {
   const props = Object.assign({
     completedCount: 0,
     activeCount: 0,
@@ -22,14 +22,15 @@ function setup(propOverrides) {
   }
 }
 
-function getTextContent(elem) {
+const getTextContent = elem => {
   const children = Array.isArray(elem.props.children) ?
     elem.props.children : [ elem.props.children ]
 
-  return children.reduce(function concatText(out, child) {
+  return children.reduce((out, child) =>
+    // Concatenate the text
     // Children are either elements or text strings
-    return out + (child.props ? getTextContent(child) : child)
-  }, '')
+    out + (child.props ? getTextContent(child) : child)
+  , '')
 }
 
 describe('components', () => {

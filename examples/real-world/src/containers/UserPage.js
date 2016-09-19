@@ -6,17 +6,20 @@ import Repo from '../components/Repo'
 import List from '../components/List'
 import zip from 'lodash/zip'
 
-function loadData(props) {
-  const { login } = props
-  props.loadUser(login, [ 'name' ])
-  props.loadStarred(login)
+const loadData = ({ login, loadUser, loadStarred }) => {
+  loadUser(login, [ 'name' ])
+  loadStarred(login)
 }
 
 class UserPage extends Component {
-  constructor(props) {
-    super(props)
-    this.renderRepo = this.renderRepo.bind(this)
-    this.handleLoadMoreClick = this.handleLoadMoreClick.bind(this)
+  static propTypes = {
+    login: PropTypes.string.isRequired,
+    user: PropTypes.object,
+    starredPagination: PropTypes.object,
+    starredRepos: PropTypes.array.isRequired,
+    starredRepoOwners: PropTypes.array.isRequired,
+    loadUser: PropTypes.func.isRequired,
+    loadStarred: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -29,22 +32,23 @@ class UserPage extends Component {
     }
   }
 
-  handleLoadMoreClick() {
+  handleLoadMoreClick = () => {
     this.props.loadStarred(this.props.login, true)
   }
 
   renderRepo([ repo, owner ]) {
     return (
-      <Repo repo={repo}
-            owner={owner}
-            key={repo.fullName} />
+      <Repo
+        repo={repo}
+        owner={owner}
+        key={repo.fullName} />
     )
   }
 
   render() {
     const { user, login } = this.props
     if (!user) {
-      return <h1><i>Loading {login}'s profile...</i></h1>
+      return <h1><i>Loading {login}{"'s profile..."}</i></h1>
     }
 
     const { starredRepos, starredRepoOwners, starredPagination } = this.props
@@ -62,17 +66,7 @@ class UserPage extends Component {
   }
 }
 
-UserPage.propTypes = {
-  login: PropTypes.string.isRequired,
-  user: PropTypes.object,
-  starredPagination: PropTypes.object,
-  starredRepos: PropTypes.array.isRequired,
-  starredRepoOwners: PropTypes.array.isRequired,
-  loadUser: PropTypes.func.isRequired,
-  loadStarred: PropTypes.func.isRequired
-}
-
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   // We need to lower case the login due to the way GitHub's API behaves.
   // Have a look at ../middleware/api.js for more details.
   const login = ownProps.params.login.toLowerCase()
