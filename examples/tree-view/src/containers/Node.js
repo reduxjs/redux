@@ -44,12 +44,11 @@ export class Node extends Component {
           +
         </button>
         {' '}
-        {typeof parentId !== 'undefined' ?
+        {typeof parentId !== 'undefined' &&
           <a href="#" onClick={this.handleRemoveClick}
              style={{ color: 'lightgray', textDecoration: 'none' }}>
             ×
-          </a> :
-          null
+          </a>
         }
         <ul>
           {childIds.map(this.renderChild)}
