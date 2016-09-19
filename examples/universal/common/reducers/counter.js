@@ -1,6 +1,6 @@
 import { SET_COUNTER, INCREMENT_COUNTER, DECREMENT_COUNTER } from '../actions'
 
-export default function counter(state = 0, action) {
+const counter = (state = 0, action) => {
   switch (action.type) {
     case SET_COUNTER:
       return action.payload
@@ -12,3 +12,5 @@ export default function counter(state = 0, action) {
       return state
   }
 }
+
+export default counter

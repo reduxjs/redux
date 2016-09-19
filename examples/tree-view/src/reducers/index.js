@@ -1,6 +1,6 @@
 import { INCREMENT, ADD_CHILD, REMOVE_CHILD, CREATE_NODE, DELETE_NODE } from '../actions'
 
-function childIds(state, action) {
+const childIds = (state, action) => {
   switch (action.type) {
     case ADD_CHILD:
       return [ ...state, action.childId ]
@@ -11,7 +11,7 @@ function childIds(state, action) {
   }
 }
 
-function node(state, action) {
+const node = (state, action) => {
   switch (action.type) {
     case CREATE_NODE:
       return {
@@ -35,19 +35,19 @@ function node(state, action) {
   }
 }
 
-function getAllDescendantIds(state, nodeId) {
-  return state[nodeId].childIds.reduce((acc, childId) => (
+const getAllDescendantIds = (state, nodeId) => (
+  state[nodeId].childIds.reduce((acc, childId) => (
     [ ...acc, childId, ...getAllDescendantIds(state, childId) ]
   ), [])
-}
+)
 
-function deleteMany(state, ids) {
+const deleteMany = (state, ids) => {
   state = { ...state }
   ids.forEach(id => delete state[id])
   return state
 }
 
-export default function (state = {}, action) {
+export default (state = {}, action) => {
   const { nodeId } = action
   if (typeof nodeId === 'undefined') {
     return state
