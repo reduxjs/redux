@@ -66,7 +66,7 @@ function addTodo(text) {
 
 This makes them portable and easy to test.
 
-In [traditional Flux](http://facebook.github.io/flux) action creators often trigger a dispatch when invoked, like so:
+In [traditional Flux](http://facebook.github.io/flux), action creators often trigger a dispatch when invoked, like so:
 
 ```js
 function addTodoWithDispatch(text) {
