@@ -1,4 +1,4 @@
-import expect from 'expect'
+/* eslint-disable no-console */
 import { combineReducers } from '../src'
 import createStore, { ActionTypes } from '../src/createStore'
 
@@ -32,21 +32,24 @@ describe('Utils', () => {
     })
 
     it('warns if a reducer prop is undefined', () => {
-      const spy = expect.spyOn(console, 'error')
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
 
       let isNotDefined
       combineReducers({ isNotDefined })
-      expect(spy.calls[0].arguments[0]).toMatch(
+      expect(spy.mock.calls[0][0]).toMatch(
         /No reducer provided for key "isNotDefined"/
       )
 
-      spy.reset()
+      spy.mockClear()
       combineReducers({ thing: undefined })
-      expect(spy.calls[0].arguments[0]).toMatch(
+      expect(spy.mock.calls[0][0]).toMatch(
         /No reducer provided for key "thing"/
       )
 
-      spy.restore()
+      spy.mockClear()
+      console.error = preSpy
     })
 
     it('throws an error if a reducer returns undefined handling an action', () => {
@@ -166,7 +169,7 @@ describe('Utils', () => {
       })
 
       const initialState = reducer(undefined, '@@INIT')
-      expect(reducer(initialState, { type: 'increment' })).toNotBe(initialState)
+      expect(reducer(initialState, { type: 'increment' })).not.toBe(initialState)
     })
 
     it('throws an error on first call if a reducer attempts to handle a private action', () => {
@@ -191,17 +194,24 @@ describe('Utils', () => {
     })
 
     it('warns if no reducers are passed to combineReducers', () => {
-      const spy = expect.spyOn(console, 'error')
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
+
       const reducer = combineReducers({ })
       reducer({ })
-      expect(spy.calls[0].arguments[0]).toMatch(
+      expect(spy.mock.calls[0][0]).toMatch(
         /Store does not have a valid reducer/
       )
-      spy.restore()
+      spy.mockClear()
+      console.error = preSpy
     })
 
     it('warns if input state does not match reducer shape', () => {
-      const spy = expect.spyOn(console, 'error')
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
+
       const reducer = combineReducers({
         foo(state = { bar: 1 }) {
           return state
@@ -212,69 +222,75 @@ describe('Utils', () => {
       })
 
       reducer()
-      expect(spy.calls.length).toBe(0)
+      expect(spy.mock.calls.length).toBe(0)
 
       reducer({ foo: { bar: 2 } })
-      expect(spy.calls.length).toBe(0)
+      expect(spy.mock.calls.length).toBe(0)
 
       reducer({
         foo: { bar: 2 },
         baz: { qux: 4 }
       })
-      expect(spy.calls.length).toBe(0)
+      expect(spy.mock.calls.length).toBe(0)
 
       createStore(reducer, { bar: 2 })
-      expect(spy.calls[0].arguments[0]).toMatch(
+      expect(spy.mock.calls[0][0]).toMatch(
         /Unexpected key "bar".*createStore.*instead: "foo", "baz"/
       )
 
       createStore(reducer, { bar: 2, qux: 4, thud: 5 })
-      expect(spy.calls[1].arguments[0]).toMatch(
+      expect(spy.mock.calls[1][0]).toMatch(
         /Unexpected keys "qux", "thud".*createStore.*instead: "foo", "baz"/
       )
 
       createStore(reducer, 1)
-      expect(spy.calls[2].arguments[0]).toMatch(
+      expect(spy.mock.calls[2][0]).toMatch(
         /createStore has unexpected type of "Number".*keys: "foo", "baz"/
       )
 
       reducer({ corge: 2 })
-      expect(spy.calls[3].arguments[0]).toMatch(
+      expect(spy.mock.calls[3][0]).toMatch(
         /Unexpected key "corge".*reducer.*instead: "foo", "baz"/
       )
 
       reducer({ fred: 2, grault: 4 })
-      expect(spy.calls[4].arguments[0]).toMatch(
+      expect(spy.mock.calls[4][0]).toMatch(
         /Unexpected keys "fred", "grault".*reducer.*instead: "foo", "baz"/
       )
 
       reducer(1)
-      expect(spy.calls[5].arguments[0]).toMatch(
+      expect(spy.mock.calls[5][0]).toMatch(
         /reducer has unexpected type of "Number".*keys: "foo", "baz"/
       )
 
-      spy.restore()
+      spy.mockClear()
+      console.error = preSpy
     })
 
     it('only warns for unexpected keys once', () => {
-      const spy = expect.spyOn(console, 'error')
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
+
       const foo = (state = { foo: 1 }) => state
       const bar = (state = { bar: 2 }) => state
 
-      expect(spy.calls.length).toBe(0)
+      expect(spy.mock.calls.length).toBe(0)
       const reducer = combineReducers({ foo, bar })
       const state = { foo: 1, bar: 2, qux: 3 }
       reducer(state, {})
       reducer(state, {})
       reducer(state, {})
       reducer(state, {})
-      expect(spy.calls.length).toBe(1)
+      expect(spy.mock.calls.length).toBe(1)
       reducer({ ...state, baz: 5 }, {})
       reducer({ ...state, baz: 5 }, {})
       reducer({ ...state, baz: 5 }, {})
       reducer({ ...state, baz: 5 }, {})
-      expect(spy.calls.length).toBe(2)
-      spy.restore()
+      expect(spy.mock.calls.length).toBe(2)
+
+      spy.mockClear()
+      console.error = preSpy
     })
   })
 })

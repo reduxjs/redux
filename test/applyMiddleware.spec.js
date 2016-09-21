@@ -1,4 +1,3 @@
-import expect from 'expect'
 import { createStore, applyMiddleware } from '../src/index'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
@@ -13,15 +12,15 @@ describe('applyMiddleware', () => {
       }
     }
 
-    const spy = expect.createSpy(() => {})
+    const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodo('Use Redux'))
     store.dispatch(addTodo('Flux FTW!'))
 
-    expect(spy.calls.length).toEqual(1)
+    expect(spy.mock.calls.length).toEqual(1)
 
-    expect(Object.keys(spy.calls[0].arguments[0])).toEqual([
+    expect(Object.keys(spy.mock.calls[0][0])).toEqual([
       'getState',
       'dispatch'
     ])
@@ -37,11 +36,11 @@ describe('applyMiddleware', () => {
       }
     }
 
-    const spy = expect.createSpy(() => {})
+    const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {
-      expect(spy.calls.length).toEqual(2)
+      expect(spy.mock.calls.length).toEqual(2)
     })
   })
 

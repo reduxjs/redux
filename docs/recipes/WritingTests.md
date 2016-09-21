@@ -304,7 +304,7 @@ import Header from '../../components/Header'
 
 function setup() {
   const props = {
-    addTodo: expect.createSpy()
+    addTodo: jest.fn()
   }
 
   const enzymeWrapper = shallow(<Header {...props} />)
@@ -333,9 +333,9 @@ describe('components', () => {
       const { enzymeWrapper, props } = setup()
       const input = enzymeWrapper.find('TodoTextInput')
       input.props().onSave('')
-      expect(props.addTodo.calls.length).toBe(0)
+      expect(props.addTodo.mock.calls.length).toBe(0)
       input.props().onSave('Use Redux')
-      expect(props.addTodo.calls.length).toBe(1)
+      expect(props.addTodo.mock.calls.length).toBe(1)
     })
   })
 })

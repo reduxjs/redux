@@ -18,9 +18,9 @@
     "lint": "npm run lint:src && npm run lint:examples",
     "lint:src": "eslint src test build",
     "lint:examples": "eslint examples",
-    "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-register --recursive",
+    "test": "cross-env BABEL_ENV=commonjs jest",
     "test:watch": "npm test -- --watch",
-    "test:cov": "cross-env BABEL_ENV=commonjs babel-node $(npm bin)/isparta cover $(npm bin)/_mocha -- --recursive",
+    "test:cov": "npm test -- --coverage",
     "test:examples": "cross-env BABEL_ENV=commonjs babel-node examples/testAll.js",
     "check:src": "npm run lint:src && npm run test",
     "check:examples": "npm run build:examples && npm run lint:examples && npm run test:examples",
@@ -73,6 +73,7 @@
     "babel-cli": "^6.3.15",
     "babel-core": "^6.3.15",
     "babel-eslint": "^4.1.6",
+    "babel-jest": "^15.0.0",
     "babel-loader": "^6.2.0",
     "babel-plugin-check-es2015-constants": "^6.3.13",
     "babel-plugin-transform-es2015-arrow-functions": "^6.3.13",
@@ -101,11 +102,9 @@
     "eslint": "^1.10.3",
     "eslint-config-rackt": "^1.1.1",
     "eslint-plugin-react": "^3.16.1",
-    "expect": "^1.8.0",
     "gitbook-cli": "^2.3.0",
     "glob": "^6.0.4",
-    "isparta": "^4.0.0",
-    "mocha": "^2.2.5",
+    "jest": "^15.1.1",
     "rimraf": "^2.3.4",
     "rxjs": "^5.0.0-beta.6",
     "typescript": "^1.8.0",
@@ -125,5 +124,8 @@
     "transform": [
       "loose-envify"
     ]
+  },
+  "jest": {
+    "testRegex": "(/test/.*\\.spec.js)$"
   }
 }
