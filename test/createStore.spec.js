@@ -408,7 +408,7 @@ describe('createStore', () => {
   it('does not leak private listeners array', done => {
     const store = createStore(reducers.todos)
     store.subscribe(function () {
-      expect(this).toNotBeA(Array)
+      expect(this).toBe(undefined)
       done()
     })
     store.dispatch(addTodo('Hello'))
