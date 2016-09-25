@@ -1,6 +1,5 @@
 import { Schema, arrayOf, normalize } from 'normalizr'
 import { camelizeKeys } from 'humps'
-import 'isomorphic-fetch'
 
 // Extracts the next page URL from Github API response.
 const getNextPageUrl = response => {
