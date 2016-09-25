@@ -4,7 +4,7 @@ At its core, Redux is really a fairly simple design pattern: all your "write" lo
 
 Redux puts some basic constraints on how that write logic function should work.  As described in [Reducers](../basics/Reducers.md), it has to have a signature of `(previousState, action) => newState`, is known as a ***reducer function***, and must be *pure* and predictable.
 
-Beyond that, Redux does not really care how you actually structure your reducer logic as long as it obeys those basic rules.  This is both a source of freedom and a source of confusion.  However, there are a number of common patterns that are widely used when writing reducers, as well as a number of related topics and concepts to be aware of.  As an application grows, these patterns play a crucial role in managing reducer code complexity, handling real-world data, and optimizing UI performance.  
+Beyond that, Redux does not really care how you actually structure your logic inside that reducer function, as long as it obeys those basic rules.  This is both a source of freedom and a source of confusion.  However, there are a number of common patterns that are widely used when writing reducers, as well as a number of related topics and concepts to be aware of.  As an application grows, these patterns play a crucial role in managing reducer code complexity, handling real-world data, and optimizing UI performance.  
 
 
 ### Prerequisite Concepts for Writing Reducers
@@ -13,7 +13,7 @@ Some of these concepts are already described elsewhere in the Redux documentatio
 
 It is vital that these Prerequisite Concepts are **thoroughly understood** before moving on to more advanced and Redux-specific techniques. A recommended reading list is available at:
 
-## [Prerequisite Concepts](./reducers/00-PrerequisiteConcepts.md)  
+#### [Prerequisite Concepts](./reducers/00-PrerequisiteConcepts.md)  
   
 It's also important to note that some of these suggestions may or may not be directly applicable based on architectural decisions in a specific application.  For example, an application using Immutable.js Maps to store data would likely have its reducer logic structured at least somewhat differently than an application using plain Javascript objects.  This documentation primarily assumes use of plain Javascript objects, but many of the principles would still apply if using other tools.
   

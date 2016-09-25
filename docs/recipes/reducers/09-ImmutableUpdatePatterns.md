@@ -4,7 +4,12 @@ The articles listed in [Prerequisite Concepts#Immutable Data Management](00-Prer
 
 ## Updating Nested Objects
 
-The key to updating nested data is that _every_ level of nesting must be copied and updated appropriately.  **One of the most common mistakes made when updating nested data is to create a new variable that references the same state object, and then mutate it**.  Defining a new variable does _not_ create a new actual object - it only creates another reference to the same object.  An example of this error would be:
+The key to updating nested data is **that _every_ level of nesting must be copied and updated appropriately**.  This is often a difficult concept for those learning Redux, and there are some specific problems that frequently occur when trying to update nested objects.  These lead to accidental direct mutation, and should be avoided.
+
+##### Common Mistake #1: New variables that point to the same objects
+
+
+Defining a new variable does _not_ create a new actual object - it only creates another reference to the same object.  An example of this error would be:
 
 ```js
 function updateNestedState(state, action) {
@@ -19,7 +24,29 @@ function updateNestedState(state, action) {
 }
 ```
 
-This function does correctly return a shallow copy of the top-level state object, but because the `nestedState` variable was still pointing at the existing object, the state was directly mutated.  This will almost always create problems later on.
+This function does correctly return a shallow copy of the top-level state object, but because the `nestedState` variable was still pointing at the existing object, the state was directly mutated.  
+
+
+##### Common Mistake #2: Only making a shallow copy of one level
+
+Another common version of this error looks like this:
+
+```js
+function updateNestedState(state, action) {
+    // Problem: this only does a shallow copy!
+    let newState = {...state};
+    
+    // ERROR: nestedState is still the same object!
+    newState.nestedState.nestedField = action.data;
+    
+    return newState;
+}
+```
+
+Doing a shallow copy of the top level is _not_ sufficient - the `nestedState` object should be copied as well.
+
+
+##### Correct Approach: Copying All Levels of Nested Data
 
 Unfortunately, the process of correctly applying immutable updates to deeply nested state can easily become verbose and hard to read.  Here's what an example of updating `state.first.second[someId].fourth` might look like:
 

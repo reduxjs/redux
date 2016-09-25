@@ -40,7 +40,7 @@ let store = createStore(counter);
 console.log(store.getState()); // 0
 ```
 
-The initial state is zero. Why?   Because the second argument to `createStore` was `undefined`. This is the `state` passed to your reducer the first time. When Redux initializes it dispatches a “dummy” action to fill the state. So your `counter` reducer was called with `state` equal to `undefined`. **This is exactly the case that “activates” the default argument.** Therefore, `state` is now `0` as per the default `state` value (`state = 0`). This state (`0`) will be returned.
+The initial state is zero. Why?   Because the second argument to `createStore` was `undefined`. This is the `state` passed to your reducer the first time. When Redux initializes it dispatches a "dummy" action to fill the state. So your `counter` reducer was called with `state` equal to `undefined`. **This is exactly the case that "activates" the default argument.** Therefore, `state` is now `0` as per the default `state` value (`state = 0`). This state (`0`) will be returned.
 
 Let's consider a different scenario:
 

@@ -7,7 +7,11 @@ As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
 - Should be "pure", which means it does not mutate its arguments, perform side effects like API calls or modifying values outside of the function, or call non-pure functions like `Date.now()` or `Math.random()`.  This also means that updates should be done in an ***"immutable"*** fashion, which means **always returning new objects with the updated data**, rather than directly modifying the original state tree in-place.
 
 >##### Note on immutability, side effects, and mutation
-> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function.  For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else.  For React Redux, `connect` checks to see if the values returned from a `mapStateToProps` function have changed in order to see if a component needs to update.  Direct mutation can cause both of these scenarios to not work correctly.  Other side effects like generating unique IDs or timestamps in a reducer also make the code unpredictable and harder to debug.  
+> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function:
+> - For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else. **Side effects like mutation or asynchronous behavior will cause time travel to alter behavior between steps, breaking the application**.
+> - For React Redux, `connect` checks to see if the props returned from a `mapStateToProps` function have changed in order to determine if a component needs to update.  To improve performance, `connect` takes some shortcuts that rely on the state being immutable, and uses shallow reference equality checks to detect changes. This means that **changes made to objects and arrays by direct mutation will not be detected, and components will not re-render**.
+>
+> Other side effects like generating unique IDs or timestamps in a reducer also make the code unpredictable and harder to debug and test.
 
 
 Because of these rules, it's important that the following core concepts are fully understood before moving on to other specific techniques for organizing Redux reducers:
@@ -36,8 +40,8 @@ Because of these rules, it's important that the following core concepts are full
 
 **Key Concepts**:  
 
-- What "side effects" are
-- What "pure functions" are
+- Side effects
+- Pure functions
 - How to think in terms of combining functions
 
 **Reading List**:
@@ -70,6 +74,7 @@ Because of these rules, it's important that the following core concepts are full
 
 **Key Concepts**:
 
+- Database structure and organization
 - Splitting relational/nested data up into separate tables
 - Storing a single definition for a given item
 - Referring to items by IDs

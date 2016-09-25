@@ -201,7 +201,7 @@ Because we're treating a portion of our Redux store as a "database", many of the
 }
 ```
 
-Behaviors like "Look up all books by this author" then become an O(n) operation, with a linear scan of the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, an O(n) operation is likely to have sufficiently fast performance for most use cases
+Operations like "Look up all books by this author" can then accomplished with a single loop over the join table.  Given the typical amounts of data in a client application and the speed of Javascript engines, this kind of operation is likely to have sufficiently fast performance for most use cases.
 
 ## Normalizing Nested Data
 
