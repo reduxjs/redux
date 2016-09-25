@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "humps": "^1.1.0",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.16.1",
     "normalizr": "^2.2.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
