@@ -1,6 +1,6 @@
 # Managing Normalized Data
 
-As mentioned in [Normalizing State Shape](./06-NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store.  However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application.  There are a variety of different approaches that you can use, based on your own preference.  We'll use the example of adding a new Comment to a Post.
+As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store.  However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application.  There are a variety of different approaches that you can use, based on your own preference.  We'll use the example of adding a new Comment to a Post.
 
 ## Standard Approaches
 

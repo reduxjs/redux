@@ -28,7 +28,7 @@ Unfortunately, this setup has a problem.  Because `combineReducers` will call ea
 
 ## Customizing Behavior with Higher-Order Reducers
 
-As defined in [Splitting Reducer Logic](02-SplittingReducerLogic.md), a _higher-order reducer_ is a function that takes a reducer function as an argument, and/or returns a new reducer function as a result.  It can also be viewed as a "reducer factory".  `combineReducers` is one example of a higher-order reducer.  We can use this pattern to create specialized versions of our own reducer functions, with each version only responding to specific actions.
+As defined in [Splitting Reducer Logic](SplittingReducerLogic.md), a _higher-order reducer_ is a function that takes a reducer function as an argument, and/or returns a new reducer function as a result.  It can also be viewed as a "reducer factory".  `combineReducers` is one example of a higher-order reducer.  We can use this pattern to create specialized versions of our own reducer functions, with each version only responding to specific actions.
 
 The two most common ways to specialize a reducer are to generate new action constants with a given prefix or suffix, or to attach additional info inside the action object.  Here's what those might look like:
 
