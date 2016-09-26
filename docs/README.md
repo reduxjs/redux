@@ -1,4 +1,4 @@
-## Table of Contents
+# Table of Contents
 
 * [Read Me](/README.md)
 * [Introduction](/docs/introduction/README.md)
@@ -30,6 +30,18 @@
   * [Computing Derived Data](/docs/recipes/ComputingDerivedData.md)
   * [Implementing Undo History](/docs/recipes/ImplementingUndoHistory.md)
   * [Isolating Subapps](/docs/recipes/IsolatingSubapps.md)
+  * [Structuring Reducers](/docs/recipes/StructuringReducers.md)
+    * [Prerequisite Concepts](/docs/recipes/reducers/00-PrerequisiteConcepts.md)
+    * [Basic Reducer Structure](/docs/recipes/reducers/01-BasicReducerStructure.md)
+    * [Splitting Reducer Logic](/docs/recipes/reducers/02-SplittingReducerLogic.md)
+    * [Refactoring Reducers Example](/docs/recipes/reducers/03-RefactoringReducersExample.md)
+    * [Using `combineReducers`](/docs/recipes/reducers/04-UsingCombineReducers.md)
+    * [Beyond `combineReducers`](/docs/recipes/reducers/05-BeyondCombineReducers.md)
+    * [Normalizing State Shape](/docs/recipes/reducers/06-NormalizingStateShape.md)
+    * [Updating Normalized Data](/docs/recipes/reducers/07-UpdatingNormalizedData.md)
+    * [Reusing Reducer Logic](/docs/recipes/reducers/08-ReusingReducerLogic.md)
+    * [Immutable Update Patterns](/docs/recipes/reducers/09-ImmutableUpdatePatterns.md)
+    * [Initializing State](/docs/recipes/reducers/10-InitializingState.md)
 * [FAQ](/docs/FAQ.md)
 * [Troubleshooting](/docs/Troubleshooting.md)
 * [Glossary](/docs/Glossary.md)
