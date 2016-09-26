@@ -48,7 +48,7 @@ function createCounterWithNamedType(counterName = '') {
 
 function createCounterWithNameData(counterName = '') {
     return function counter(state = 0, action) {
-        const {name = action};
+        const {name} = action;
         if(name !== counterName) return state;
         
         switch (action.type) {
