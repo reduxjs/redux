@@ -13,7 +13,7 @@ Some of these concepts are already described elsewhere in the Redux documentatio
 
 It is vital that these Prerequisite Concepts are **thoroughly understood** before moving on to more advanced and Redux-specific techniques. A recommended reading list is available at:
 
-#### [Prerequisite Concepts](./reducers/00-PrerequisiteConcepts.md)  
+#### [Prerequisite Concepts](./reducers/PrerequisiteConcepts.md)  
   
 It's also important to note that some of these suggestions may or may not be directly applicable based on architectural decisions in a specific application.  For example, an application using Immutable.js Maps to store data would likely have its reducer logic structured at least somewhat differently than an application using plain Javascript objects.  This documentation primarily assumes use of plain Javascript objects, but many of the principles would still apply if using other tools.
   
@@ -21,13 +21,13 @@ It's also important to note that some of these suggestions may or may not be dir
   
 ### Reducer Concepts and Techniques
 
-- [Basic Reducer Structure](./reducers/01-BasicReducerStructure.md)
-- [Splitting Reducer Logic](./reducers/02-SplittingReducerLogic.md)
-- [Refactoring Reducers Example](./reducers/03-RefactoringReducersExample.md)
-- [Using `combineReducers`](./reducers/04-UsingCombineReducers.md)
-- [Beyond `combineReducers`](./reducers/05-BeyondCombineReducers.md)
-- [Normalizing State Shape](./reducers/06-NormalizingStateShape.md)
-- [Updating Normalized Data](./reducers/07-UpdatingNormalizedData.md)
-- [Reusing Reducer Logic](./reducers/08-ReusingReducerLogic.md)
-- [Immutable Update Patterns](./reducers/09-ImmutableUpdatePatterns.md)
-- [Initializing State](./reducers/10-InitializingState.md)
+- [Basic Reducer Structure](./reducers/BasicReducerStructure.md)
+- [Splitting Reducer Logic](./reducers/SplittingReducerLogic.md)
+- [Refactoring Reducers Example](./reducers/RefactoringReducersExample.md)
+- [Using `combineReducers`](./reducers/UsingCombineReducers.md)
+- [Beyond `combineReducers`](./reducers/BeyondCombineReducers.md)
+- [Normalizing State Shape](./reducers/NormalizingStateShape.md)
+- [Updating Normalized Data](./reducers/UpdatingNormalizedData.md)
+- [Reusing Reducer Logic](./reducers/ReusingReducerLogic.md)
+- [Immutable Update Patterns](./reducers/ImmutableUpdatePatterns.md)
+- [Initializing State](./reducers/InitializingState.md)

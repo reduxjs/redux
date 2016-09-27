@@ -1,6 +1,6 @@
-# Splitting Reducer Logic Using Functional Decomposition and Reducer Composition
+# Refactoring Reducer Logic Using Functional Decomposition and Reducer Composition
 
-It may be helpful to see examples of what the different types of sub-reducer functions look like, how they fit together, and how a large single reducer function can be refactored into a composition of several smaller functions.
+It may be helpful to see examples of what the different types of sub-reducer functions look like and how they fit together.  Let's look at a demonstration of how a large single reducer function can be refactored into a composition of several smaller functions.
 
 > **Note**: this example is deliberately written in a verbose style in order to illustrate the concepts and the process of refactoring, rather than perfectly concise code.
 
