@@ -1,5 +1,5 @@
 {
-  "gitbook": "3.x.x",
+  "gitbook": ">=3.2.1",
   "title": "Redux",
   "plugins": ["edit-link", "prism", "-highlight", "github", "anchorjs"],
   "pluginsConfig": {
