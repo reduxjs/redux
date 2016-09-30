@@ -6,7 +6,7 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
 
 ### Top-Level Exports
 
-* [createStore(reducer, [preloadedState])](createStore.md)
+* [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
 * [combineReducers(reducers)](combineReducers.md)
 * [applyMiddleware(...middlewares)](applyMiddleware.md)
 * [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
