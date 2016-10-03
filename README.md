@@ -52,7 +52,8 @@ npm install --save redux
 ```
 
 This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
-If you don't, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
+
+If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 
 Most commonly people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](http://webpack.github.io), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](http://rollupjs.org), we support that as well.
 
