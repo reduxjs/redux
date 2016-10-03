@@ -25,20 +25,20 @@ const callApi = (endpoint, schema) => {
 
   return fetch(fullUrl)
     .then(response =>
-      response.json().then(json => ({ json, response }))
-    ).then(({ json, response }) => {
-      if (!response.ok) {
-        return Promise.reject(json)
-      }
+      response.json().then(json => {
+        if (!response.ok) {
+          return Promise.reject(json)
+        }
 
-      const camelizedJson = camelizeKeys(json)
-      const nextPageUrl = getNextPageUrl(response)
+        const camelizedJson = camelizeKeys(json)
+        const nextPageUrl = getNextPageUrl(response)
 
-      return Object.assign({},
-        normalize(camelizedJson, schema),
-        { nextPageUrl }
-      )
-    })
+        return Object.assign({},
+          normalize(camelizedJson, schema),
+          { nextPageUrl }
+        )
+      })
+    )
 }
 
 // We use this Normalizr schemas to transform API responses from a nested form
