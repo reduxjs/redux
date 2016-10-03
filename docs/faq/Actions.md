@@ -32,6 +32,7 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 - [Stack Overflow: Why do you need 'Actions' as data in Redux?](http://stackoverflow.com/q/34759047/62937)
 - [Stack Overflow: What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
 
+
 <a id="actions-reducer-mappings"></a>
 ### Is there always a one-to-one mapping between reducers and actions?
 
@@ -41,12 +42,14 @@ No. We suggest you write independent small reducer functions that are each respo
 
 **Documentation**
 - [Basics: Reducers](/docs/basics/Reducers.md)
+- [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
 
 **Discussions**
 - [Twitter: most common Redux misconception](https://twitter.com/dan_abramov/status/682923564006248448)
 - [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
 - [Reduxible #8: Reducers and action creators aren't a one-to-one mapping](https://github.com/reduxible/reduxible/issues/8)
 - [Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
+
 
 <a id="actions-side-effects"></a>
 ### How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?
@@ -68,6 +71,13 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 - [Advanced: Async Flow](/docs/advanced/AsyncFlow.md)
 - [Advanced: Middleware](/docs/advanced/Middleware.md)
 
+**Articles**
+- [Redux Side-Effects and You](https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3)
+- [Pure functionality and side effects in Redux](http://blog.hivejs.org/building-the-ui-2/)
+- [From Flux to Redux: Async Actions the easy way](http://danmaz74.me/2015/08/19/from-flux-to-redux-async-actions-the-easy-way/)
+- [React/Redux Links: "Redux Side Effects" category](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md)
+- [Gist: Redux-Thunk examples](https://gist.github.com/markerikson/ea4d0a6ce56ee479fe8b356e099f857e)
+
 **Discussions**
 - [#291: Trying to put API calls in the right place](https://github.com/reactjs/redux/issues/291)
 - [#455: Modeling side effects](https://github.com/reactjs/redux/issues/455)
@@ -82,8 +92,7 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 - [Stack Overflow: How to fire AJAX calls in response to the state changes with Redux?](http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447)
 - [Reddit: Help performing Async API calls with Redux-Promise Middleware.](https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/)
 - [Twitter: possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
-- [Redux Side-Effects and You](https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3)
-- [Pure functionality and side effects in Redux](http://blog.hivejs.org/building-the-ui-2/)
+
 
 <a id="actions-multiple-actions"></a>
 ### Should I dispatch multiple actions in a row from one action creator?
@@ -92,7 +101,7 @@ There's no specific rule for how you should structure your actions. Using an asy
 
 In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of reducers with readability of the action log. For example, an action that includes the whole new state tree would make your reducer a one-liner, but the downside is now you have no history of *why* the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it's a sign that you might want to introduce a new action type that is handled in a different way.
 
-Try to avoid dispatching several times synchronously in a row in the places where you're concerned about performance. If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) that lets you dispatch several actions as if it was one and “unpack” them in the reducer, and [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) which lets you debounce subscriber calls for multiple dispatches.
+Try to avoid dispatching several times synchronously in a row in the places where you're concerned about performance. If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) (a higher-order reducer that lets you dispatch several actions as if it was one and “unpack” them in the reducer), [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) (a store enhancer that lets you debounce subscriber calls for multiple dispatches), or [redux-batch](https://github.com/manaflair/redux-batch) (a store enhancer that handles dispatching an array of actions with a single subscriber notification).
 
 #### Further information
 
