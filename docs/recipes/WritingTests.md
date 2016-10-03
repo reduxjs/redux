@@ -80,24 +80,24 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 #### Example
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
 function fetchTodosRequest() {
   return {
-    type: FETCH_TODOS_REQUEST
+    type: 'ADD_TODOS_REQUEST'
   }
 }
 
 function fetchTodosSuccess(body) {
   return {
-    type: FETCH_TODOS_SUCCESS,
-    body
+    type: 'ADD_TODOS_SUCCESS',
+    body: body
   }
 }
 
 function fetchTodosFailure(ex) {
   return {
-    type: FETCH_TODOS_FAILURE,
+    type: 'ADD_TODOS_FAILURE',
     ex
   }
 }
@@ -116,33 +116,31 @@ export function fetchTodos() {
 can be tested like:
 
 ```js
+import nock from 'nock'
+import { fetchTodos } from './action'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import * as actions from '../../actions/counter'
-import * as types from '../../constants/ActionTypes'
-import nock from 'nock'
-import expect from 'expect' // You can use any testing library
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
 
 describe('async actions', () => {
-  afterEach(() => {
-    nock.cleanAll()
-  })
+  afterEach(() => nock.cleanAll());
 
-  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
+  it('creates ADD_TODOS_SUCCESS when fetching todos has been done', () => {
     nock('http://example.com/')
       .get('/todos')
-      .reply(200, { body: { todos: ['do something'] }})
+      .reply(200, { body: {todos: ['do something'] }})
 
-    const expectedActions = [
-      { type: types.FETCH_TODOS_REQUEST },
-      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
-    ]
     const store = mockStore({ todos: [] })
 
-    return store.dispatch(actions.fetchTodos())
+    const expectedActions = [
+      { type: "ADD_TODOS_REQUEST" },
+      { type: "ADD_TODOS_SUCCESS", body: { todos:
+      ['do something']  }}
+    ]
+
+    return store.dispatch(fetchTodos())
       .then(() => { // return of async actions
         expect(store.getActions()).toEqual(expectedActions)
       })
