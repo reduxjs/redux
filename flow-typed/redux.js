@@ -22,7 +22,7 @@ declare module 'redux' {
     replaceReducer(nextReducer: Reducer<S, A>): void
   };
 
-  declare type Reducer<S, A> = (state: S, action: A) => S;
+  declare type Reducer<S, A> = (state?: S, action: A) => S;
 
   declare type Middleware<S, A> =
     (api: MiddlewareAPI<S, A>) =>
