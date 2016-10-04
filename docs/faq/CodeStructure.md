@@ -19,23 +19,33 @@ Since Redux is just a data store library, it has no direct opinion on how your p
 
 It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
 
+While it ultimately doesn't matter how you lay out your code on disk, it's important to remember that actions and reducers shouldn't be considered in isolation.  It's entirely possible (and encouraged) for a reducer defined in one folder to respond to an action defined in another folder.
+
 #### Further information
+
+**Documentation**
+- [FAQ: Actions - "1:1 mapping between reducers and actions?"](/docs/faq/Actions.md#actions-reducer-mappings)
+
+**Articles**
+- [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
+- [Redux Best Practices](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
+- [Rules For Structuring (Redux) Applications ](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
+- [A Better File Structure for React/Redux Applications](http://marmelab.com/blog/2015/12/17/react-directory-structure.html)
+- [Organizing Large React Applications](http://engineering.kapost.com/2016/01/organizing-large-react-applications/)
+- [Four Strategies for Organizing Code](https://medium.com/@msandin/strategies-for-organizing-code-2c9d690b6f33)
+- [React/Redux Links: Architecture - Project File Structure](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#project-file-structure)
 
 **Discussions**
 - [#839: Emphasize defining selectors alongside reducers](https://github.com/reactjs/redux/issues/839)
 - [#943: Reducer querying](https://github.com/reactjs/redux/issues/943)
 - [React Boilerplate #27: Application Structure](https://github.com/mxstbr/react-boilerplate/issues/27)
 - [Stack Overflow: How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
-- [Redux Best Practices](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
-- [Rules For Structuring (Redux) Applications ](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
-- [A Better File Structure for React/Redux Applications](http://marmelab.com/blog/2015/12/17/react-directory-structure.html)
-- [Organizing Large React Applications](http://engineering.kapost.com/2016/01/organizing-large-react-applications/)
-- [Four Strategies for Organizing Code](https://medium.com/@msandin/strategies-for-organizing-code-2c9d690b6f33)
+
 
 <a id="structure-business-logic"></a>
 ### How should I split my logic between reducers and action creators? Where should my “business logic” go?
 
-There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator.
+There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator.  (For purposes of this question, other async approaches such as sagas and observables fall in the "action creator" category.)
 
 This comment sums up the dichotomy nicely:
 
@@ -44,7 +54,12 @@ This comment sums up the dichotomy nicely:
 
 Find the balance between these two extremes, and you will master Redux.
 
+
 #### Further information
+
+**Articles**
+- [Where do I put my business logic in a React/Redux application?](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
+- [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
 
 **Discussions**
 - [#1165: Where to put business logic / validation?](https://github.com/reactjs/redux/issues/1165)
