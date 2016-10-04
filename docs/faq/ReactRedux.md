@@ -30,6 +30,12 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 - [Troubleshooting](/docs/Troubleshooting.md)
 - [React Redux: Troubleshooting](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md)
 - [Recipes: Using the Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
+- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+
+**Articles**
+- [Pros and Cons of Using Immutability with React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [React/Redux Links: Immutable Data](https://github.com/markerikson/react-redux-links/blob/master/immutable-data.md)
 
 **Discussions**
 - [#1262: Immutable data + bad performance](https://github.com/reactjs/redux/issues/1262)
@@ -37,7 +43,7 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 - [React Redux #291: Should mapStateToProps be called every time an action is dispatched?](https://github.com/reactjs/react-redux/issues/291)
 - [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist: state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
-- [Pros and Cons of Using Immutability with React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+
 
 <a id="react-rendering-too-often"></a>
 ### Why is my component re-rendering too often?
@@ -60,10 +66,22 @@ For non-connected components, you may want to check what props are being passed 
 
 #### Further information
 
+**Documentation**
+- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+
+**Articles**
+- [A Deep Dive into React Perf Debugging](http://benchling.engineering/deep-dive-react-perf-debugging/)
+- [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
+- [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [React/Redux Links: React/Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md)
+
 **Discussions**
 - [Stack Overflow: Can a React Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
-- [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
-- [A Deep Dive into React Perf Debugging](http://benchling.engineering/deep-dive-react-perf-debugging/)
+
+**Libraries**
+- [Redux Addons Catalog: DevTools - Component Update Monitoring](https://github.com/markerikson/redux-ecosystem-links/blob/master/devtools.md#component-update-monitoring)
+
+
 
 <a id="react-mapstate-speed"></a>
 ### How can I speed up my `mapStateToProps`?
@@ -75,9 +93,13 @@ While React Redux does work to minimize the number of times that your `mapStateT
 **Documentation**
 - [Recipes: Computed Derived Data](/docs/recipes/ComputingDerivedData.md)
 
+**Articles**
+- [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
+
 **Discussions**
 - [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
 - [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
+
 
 <a id="react-props-dispatch"></a>
 ### Why don't I have `this.props.dispatch` available in my connected component?
@@ -97,6 +119,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 - [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
 - [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
+
 <a id="react-multiple-components"></a>
 ### Should I only connect my top component, or can I connect multiple components in my tree?
 
@@ -106,15 +129,23 @@ The current suggested best practice is to categorize your components as “prese
 
 > Emphasizing “one container component at the top” in Redux examples was a mistake. Don't take this as a maxim. Try to keep your presentation components separate. Create container components by connecting them when it's convenient. Whenever you feel like you're duplicating code in parent components to provide data for same kinds of children, time to extract a container. Generally as soon as you feel a parent knows too much about “personal” data or actions of its children, time to extract a container.
 
+In fact, benchmarks have shown that more connected components generally leads to better performance than fewer connected components.
+
 In general, try to find a balance between understandable data flow and areas of responsibility with your components.
 
 #### Further information
 
 **Documentation**
 - [Basics: Usage with React](/docs/basics/UsageWithReact.md)
+- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+
+**Articles**
+- [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
+- [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
+- [React/Redux Links: Architecture - Redux Architecture](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#redux-architecture)
+- [React/Redux Links: Performance - Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
 **Discussions**
-- [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
 - [Twitter: emphasizing “one container” was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
 - [#419: Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
 - [#756: container vs component?](https://github.com/reactjs/redux/issues/756)
