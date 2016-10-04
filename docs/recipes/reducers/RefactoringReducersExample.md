@@ -95,7 +95,7 @@ function updateItemInArray(array, itemId, updateItemCallback) {
 function appReducer(state = initialState, action) {
     switch(action.type) {
         case 'SET_VISIBILITY_FILTER' : { 
-            return updateObject(state, {visibilityFilter : action.filter });
+            return updateObject(state, {visibilityFilter : action.filter});
         }
         case 'ADD_TODO' : {
             const newTodos = state.todos.concat({
