@@ -101,9 +101,12 @@ There's no specific rule for how you should structure your actions. Using an asy
 
 In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of reducers with readability of the action log. For example, an action that includes the whole new state tree would make your reducer a one-liner, but the downside is now you have no history of *why* the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it's a sign that you might want to introduce a new action type that is handled in a different way.
 
-Try to avoid dispatching several times synchronously in a row in the places where you're concerned about performance. If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) (a higher-order reducer that lets you dispatch several actions as if it was one and “unpack” them in the reducer), [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) (a store enhancer that lets you debounce subscriber calls for multiple dispatches), or [redux-batch](https://github.com/manaflair/redux-batch) (a store enhancer that handles dispatching an array of actions with a single subscriber notification).
+Try to avoid dispatching several times synchronously in a row in the places where you're concerned about performance.  There are a number of addons and approaches that can batch up dispatches as well.
 
 #### Further information
+
+**Documentation**
+- [FAQ: Performance - Reducing Update Events](/docs/faq/Performance.md#performance-update-events)
 
 **Discussions**
 - [#597: Valid to dispatch multiple actions from an event handler?](https://github.com/reactjs/redux/issues/597)
