@@ -119,7 +119,7 @@ return state.map((todo, index) => {
 
 Note that experimental language features are subject to change.
 
-Another thing to keep an eye out for is nested State objects that need to be deeply copied in order for Redux to correctly identify the change. This is why you are encouraged to keep the State flattened. Both `_.extend` and [`Object.assign`] mentioned above make a shallow copy of the state and ar not suitable for nested states. Take a look [here](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html) for suggestions about how to keep nested State objects immutable.
+Another thing to keep an eye out for is nested State objects that need to be deeply copied in order for Redux to correctly identify the change. This is why you are encouraged to keep the State flattened. Both `_.extend` and [`Object.assign`] mentioned above make a shallow copy of the state and are not suitable for nested states. Take a look [here](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html) for suggestions about how to keep nested State objects immutable.
 
 #### Don't forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
