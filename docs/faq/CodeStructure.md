@@ -36,6 +36,7 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 - [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [Redux Reducer/Selector Asymmetry](http://randycoulman.com/blog/2016/09/20/redux-reducer-selector-asymmetry/)
 - [Modular Reducers and Selectors](http://randycoulman.com/blog/2016/09/27/modular-reducers-and-selectors/)
+- [My journey towards a maintainable project structure for React/Redux](https://medium.com/@mmazzarolo/my-journey-toward-a-maintainable-project-structure-for-react-redux-b05dfd999b5)
 - [React/Redux Links: Architecture - Project File Structure](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#project-file-structure)
 
 **Discussions**
@@ -43,6 +44,7 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 - [#943: Reducer querying](https://github.com/reactjs/redux/issues/943)
 - [React Boilerplate #27: Application Structure](https://github.com/mxstbr/react-boilerplate/issues/27)
 - [Stack Overflow: How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
+- [Twitter: There is no ultimate file structure for Redux](https://twitter.com/dan_abramov/status/783428282666614784)
 
 
 <a id="structure-business-logic"></a>
