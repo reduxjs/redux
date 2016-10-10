@@ -95,7 +95,8 @@ function counter(state = 0, action) {
 function createNamedWrapperReducer(reducerFunction, reducerName) {
     return (state, action) => {
         const {name} = action;
-        if(name !== reducerName) return state;
+        const isInitializationCall = state === undefined;
+        if(name !== reducerName && !isInitializationCall) return state;
         
         return reducerFunction(state, action);    
     }
@@ -113,8 +114,9 @@ You could even go as far as to make a generic filtering higher-order reducer:
 ```js
 function createFilteredReducer(reducerFunction, reducerPredicate) {
     return (state, action) => {
-        const shouldRunWrappedReducer = reducerPredicate(action);        
-        return shouldRunWrappedReducer ? reducerFunction(state, action) : state;    
+        const isInitializationCall = state === undefined;
+        const shouldRunWrappedReducer = reducerPredicate(action) || isInitializationCall;
+        return shouldRunWrappedReducer ? reducerFunction(state, action) : state;
     }
 }
 
