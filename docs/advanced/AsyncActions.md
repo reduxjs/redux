@@ -350,7 +350,7 @@ export function fetchPosts(subreddit) {
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
 
-    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
+    return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json =>
 
