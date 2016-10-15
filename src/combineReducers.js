@@ -6,7 +6,7 @@ var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : 'developm
 
 function getUndefinedStateErrorMessage(key, action) {
   var actionType = action && action.type
-  var actionName = actionType && `"${actionType.toString()}"` || 'an action'
+  var actionName = (actionType && `"${actionType.toString()}"`) || 'an action'
 
   return (
     `Given action ${actionName}, reducer "${key}" returned undefined. ` +
