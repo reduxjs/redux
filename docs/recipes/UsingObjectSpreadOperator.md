@@ -54,7 +54,7 @@ return getAddedIds(state.cart).map(id => ({
 }))
 ```
 
-Since the object spread syntax is still a Stage 2 proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You can use your existing `es2015` preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
+Since the object spread syntax is still a Stage 3 proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You can use your existing `es2015` preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
 
 ```js
 {
