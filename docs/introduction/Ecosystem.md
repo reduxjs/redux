@@ -56,6 +56,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [backbone-redux](https://github.com/redbooth/backbone-redux) — Backbone
 * [redux-falcor](https://github.com/ekosz/redux-falcor) — Falcor
 * [deku-redux](https://github.com/troch/deku-redux) — Deku
+* [polymer-redux](https://github.com/tur-nr/polymer-redux) - Polymer
 
 ### Middleware
 
