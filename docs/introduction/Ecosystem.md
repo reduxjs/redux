@@ -72,6 +72,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-saga](https://github.com/yelouafi/redux-saga) — An alternative side effect model for Redux apps
 * [redux-action-tree](https://github.com/cerebral/redux-action-tree) — Composable Cerebral-style signals for Redux
 * [apollo-client](https://github.com/apollostack/apollo-client) — A simple caching client for any GraphQL server and UI framework built on top of Redux
+* [meteor-redux-middlewares](https://github.com/samybob1/meteor-redux-middlewares) — Middlewares to sync meteor reactive sources with redux store
 
 ### Routing
 
