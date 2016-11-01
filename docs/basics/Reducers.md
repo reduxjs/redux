@@ -318,7 +318,7 @@ const todoApp = combineReducers({
 export default todoApp
 ```
 
-Note that this is completely equivalent to:
+Note that this is equivalent to:
 
 ```js
 export default function todoApp(state = {}, action) {
@@ -329,7 +329,7 @@ export default function todoApp(state = {}, action) {
 }
 ```
 
-You could also give them different keys, or call functions differently. These two ways to write a combined reducer are completely equivalent:
+You could also give them different keys, or call functions differently. These two ways to write a combined reducer are equivalent:
 
 ```js
 const reducer = combineReducers({
@@ -349,7 +349,7 @@ function reducer(state = {}, action) {
 }
 ```
 
-All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combining their results into a single object again. [It's not magic.](https://github.com/reactjs/redux/issues/428#issuecomment-129223274)
+All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combining their results into a single object again. [It's not magic.](https://github.com/reactjs/redux/issues/428#issuecomment-129223274) And like other reducers, `combineReducers()` does not create a new object if all of the reducers provided to it do not change state.
 
 >##### Note for ES6 Savvy Users
 
