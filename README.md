@@ -15,8 +15,8 @@ It is tiny (2kB, including dependencies).
 [![#rackt on freenode](https://img.shields.io/badge/irc-%23rackt%20%40%20freenode-61DAFB.svg?style=flat-square)](https://webchat.freenode.net/)
 [![Changelog #187](https://img.shields.io/badge/changelog-%23187-lightgrey.svg?style=flat-square)](https://changelog.com/187)
 
->**Learn Redux from its creator:  
->[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)**
+>**Learn Redux from its creator:**
+>**[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)**
 
 ### Testimonials
 
