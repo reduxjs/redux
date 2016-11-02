@@ -14,6 +14,8 @@ export default function compose(...funcs) {
     return arg => arg
   }
 
+  funcs = funcs.filter(func => typeof func === 'function')
+
   if (funcs.length === 1) {
     return funcs[0]
   }
