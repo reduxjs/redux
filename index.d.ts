@@ -18,59 +18,59 @@ export interface Action {
 }
 
 
-/* reducers */
+/* seducers */
 
 /**
- * A *reducer* (also called a *reducing function*) is a function that accepts
+ * A *seducer* (also called a *reducing function*) is a function that accepts
  * an accumulation and a value and returns a new accumulation. They are used
  * to reduce a collection of values down to a single value
  *
- * Reducers are not unique to Redux—they are a fundamental concept in
+ * Seducers are not unique to Redux—they are a fundamental concept in
  * functional programming.  Even most non-functional languages, like
  * JavaScript, have a built-in API for reducing. In JavaScript, it's
  * `Array.prototype.reduce()`.
  *
  * In Redux, the accumulated value is the state object, and the values being
- * accumulated are actions. Reducers calculate a new state given the previous
+ * accumulated are actions. Seducers calculate a new state given the previous
  * state and an action. They must be *pure functions*—functions that return
  * the exact same output for given inputs. They should also be free of
  * side-effects. This is what enables exciting features like hot reloading and
  * time travel.
  *
- * Reducers are the most important concept in Redux.
+ * Seducers are the most important concept in Redux.
  *
- * *Do not put API calls into reducers.*
+ * *Do not put API calls into seducers.*
  *
  * @template S State object type.
  */
-export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
+export type Seducer<S> = <A extends Action>(state: S, action: A) => S;
 
 /**
- * Object whose values correspond to different reducer functions.
+ * Object whose values correspond to different seducer functions.
  */
-export interface ReducersMapObject {
-  [key: string]: Reducer<any>;
+export interface SeducersMapObject {
+  [key: string]: Seducer<any>;
 }
 
 /**
- * Turns an object whose values are different reducer functions, into a single
- * reducer function. It will call every child reducer, and gather their results
+ * Turns an object whose values are different seducer functions, into a single
+ * seducer function. It will call every child seducer, and gather their results
  * into a single state object, whose keys correspond to the keys of the passed
- * reducer functions.
+ * seducer functions.
  *
  * @template S Combined state object type.
  *
- * @param reducers An object whose values correspond to different reducer
+ * @param seducers An object whose values correspond to different seducer
  *   functions that need to be combined into one. One handy way to obtain it
- *   is to use ES6 `import * as reducers` syntax. The reducers may never
+ *   is to use ES6 `import * as seducers` syntax. The seducers may never
  *   return undefined for any action. Instead, they should return their
  *   initial state if the state passed to them was undefined, and the current
  *   state for any unrecognized action.
  *
- * @returns A reducer function that invokes every reducer inside the passed
+ * @returns A seducer function that invokes every seducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
+export function combineSeducers<S>(seducers: SeducersMapObject): Seducer<S>;
 
 
 /* store */
@@ -84,9 +84,9 @@ export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
  * `dispatch` function provided by the store instance without any middleware.
  *
  * The base dispatch function *always* synchronously sends an action to the
- * store's reducer, along with the previous state returned by the store, to
+ * store's seducer, along with the previous state returned by the store, to
  * calculate a new state. It expects actions to be plain objects ready to be
- * consumed by the reducer.
+ * consumed by the seducer.
  *
  * Middleware wraps the base dispatch function. It allows the dispatch
  * function to handle async actions in addition to actions. Middleware may
@@ -107,7 +107,7 @@ export interface Unsubscribe {
 /**
  * A store is an object that holds the application's state tree.
  * There should only be a single store in a Redux app, as the composition
- * happens on the reducer level.
+ * happens on the seducer level.
  *
  * @template S State object type.
  */
@@ -115,7 +115,7 @@ export interface Store<S> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
-   * The `reducer` function, used to create the store, will be called with the
+   * The `seducer` function, used to create the store, will be called with the
    * current state tree and the given `action`. Its return value will be
    * considered the **next** state of the tree, and the change listeners will
    * be notified.
@@ -174,28 +174,28 @@ export interface Store<S> {
   subscribe(listener: () => void): Unsubscribe;
 
   /**
-   * Replaces the reducer currently used by the store to calculate the state.
+   * Replaces the seducer currently used by the store to calculate the state.
    *
    * You might need this if your app implements code splitting and you want to
-   * load some of the reducers dynamically. You might also need this if you
+   * load some of the seducers dynamically. You might also need this if you
    * implement a hot reloading mechanism for Redux.
    *
-   * @param nextReducer The reducer for the store to use instead.
+   * @param nextSeducer The seducer for the store to use instead.
    */
-  replaceReducer(nextReducer: Reducer<S>): void;
+  replaceSeducer(nextSeducer: Seducer<S>): void;
 }
 
 /**
  * A store creator is a function that creates a Redux store. Like with
  * dispatching function, we must distinguish the base store creator,
- * `createStore(reducer, preloadedState)` exported from the Redux package, from
+ * `createStore(seducer, preloadedState)` exported from the Redux package, from
  * store creators that are returned from the store enhancers.
  *
  * @template S State object type.
  */
 export interface StoreCreator {
-  <S>(reducer: Reducer<S>, enhancer?: StoreEnhancer<S>): Store<S>;
-  <S>(reducer: Reducer<S>, preloadedState: S, enhancer?: StoreEnhancer<S>): Store<S>;
+  <S>(seducer: Seducer<S>, enhancer?: StoreEnhancer<S>): Store<S>;
+  <S>(seducer: Seducer<S>, preloadedState: S, enhancer?: StoreEnhancer<S>): Store<S>;
 }
 
 /**
@@ -218,7 +218,7 @@ export interface StoreCreator {
  */
 export type StoreEnhancer<S> = (next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
 export type GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
-export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, preloadedState?: S) => Store<S>;
+export type StoreEnhancerStoreCreator<S> = (seducer: Seducer<S>, preloadedState?: S) => Store<S>;
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -226,19 +226,19 @@ export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, preloadedState?
  *
  * There should only be a single store in your app. To specify how different
  * parts of the state tree respond to actions, you may combine several
- * reducers
- * into a single reducer function by using `combineReducers`.
+ * seducers
+ * into a single seducer function by using `combineSeducers`.
  *
  * @template S State object type.
  *
- * @param reducer A function that returns the next state tree, given the
+ * @param seducer A function that returns the next state tree, given the
  *   current state tree and the action to handle.
  *
  * @param [preloadedState] The initial state. You may optionally specify it to
  *   hydrate the state from the server in universal apps, or to restore a
- *   previously serialized user session. If you use `combineReducers` to
- *   produce the root reducer function, this must be an object with the same
- *   shape as `combineReducers` keys.
+ *   previously serialized user session. If you use `combineSeducers` to
+ *   produce the root seducer function, this must be an object with the same
+ *   shape as `combineSeducers` keys.
  *
  * @param [enhancer] The store enhancer. You may optionally specify it to
  *   enhance the store with third-party capabilities such as middleware, time

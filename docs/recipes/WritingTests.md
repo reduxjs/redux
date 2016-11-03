@@ -150,9 +150,9 @@ describe('async actions', () => {
 })
 ```
 
-### Reducers
+### Seducers
 
-A reducer should return the new state after applying the action to the previous state, and that's the behavior tested below.
+A seducer should return the new state after applying the action to the previous state, and that's the behavior tested below.
 
 #### Example
 
@@ -187,13 +187,13 @@ export default function todos(state = initialState, action) {
 can be tested like:
 
 ```js
-import reducer from '../../reducers/todos'
+import seducer from '../../seducers/todos'
 import * as types from '../../constants/ActionTypes'
 
-describe('todos reducer', () => {
+describe('todos seducer', () => {
   it('should return the initial state', () => {
     expect(
-      reducer(undefined, {})
+      seducer(undefined, {})
     ).toEqual([
       {
         text: 'Use Redux',
@@ -205,7 +205,7 @@ describe('todos reducer', () => {
 
   it('should handle ADD_TODO', () => {
     expect(
-      reducer([], {
+      seducer([], {
         type: types.ADD_TODO,
         text: 'Run the tests'
       })
@@ -220,7 +220,7 @@ describe('todos reducer', () => {
     )
 
     expect(
-      reducer(
+      seducer(
         [
           {
             text: 'Use Redux',

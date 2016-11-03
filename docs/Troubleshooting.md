@@ -7,15 +7,15 @@ The examples use React, but you should still find them useful if you use somethi
 
 Sometimes, you are trying to dispatch an action, but your view does not update. Why does this happen? There may be several reasons for this.
 
-#### Never mutate reducer arguments
+#### Never mutate seducer arguments
 
 It is tempting to modify the `state` or `action` passed to you by Redux. Don't do this!
 
-Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don't use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
+Redux assumes that you never mutate the objects it gives to you in the seducer. **Every single time, you must return the new state object.** Even if you don't use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
 
 Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](http://github.com/gaearon/redux-devtools).
 
-For example, a reducer like this is wrong because it mutates the state:
+For example, a seducer like this is wrong because it mutates the state:
 
 ```js
 function todos(state = [], action) {
@@ -93,7 +93,7 @@ return update(state, {
 
 Finally, to update objects, you'll need something like `_.extend` from Underscore, or better, an [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) polyfill.
 
-Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don't override the previous `state`.
+Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your seducers, return `Object.assign({}, state, newData)`. This way you don't override the previous `state`.
 
 You can also enable the [object spread operator proposal](recipes/UsingObjectSpreadOperator.md) for a more succinct syntax:
 
@@ -119,7 +119,7 @@ return state.map((todo, index) => {
 
 Note that experimental language features are subject to change.
 
-Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](/docs/recipes/reducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
+Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](/docs/recipes/seducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
 
 #### Don't forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
@@ -199,7 +199,7 @@ You can then pass `dispatch` down to other components manually, if you want to.
 
 #### Make sure mapStateToProps is correct
 
-It's possible you're correctly dispatching an action and applying your reducer but the corresponding state is not being correctly translated into props.
+It's possible you're correctly dispatching an action and applying your seducer but the corresponding state is not being correctly translated into props.
 
 ## Something else doesn't work
 

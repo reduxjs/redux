@@ -2,7 +2,7 @@
 
 You've seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
 
-Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
+Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the seducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
 
 This article is divided into an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
 
@@ -305,9 +305,9 @@ const crashReporter = store => next => action => {
 Here's how to apply it to a Redux store:
 
 ```js
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, combineSeducers, applyMiddleware } from 'redux'
 
-let todoApp = combineReducers(reducers)
+let todoApp = combineSeducers(seducers)
 let store = createStore(
   todoApp,
   // applyMiddleware() tells createStore() how to handle middleware
@@ -473,7 +473,7 @@ const thunk = store => next => action =>
 
 
 // You can use all of them! (It doesn't mean you should.)
-let todoApp = combineReducers(reducers)
+let todoApp = combineSeducers(seducers)
 let store = createStore(
   todoApp,
   applyMiddleware(

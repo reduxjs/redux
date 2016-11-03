@@ -1,5 +1,5 @@
 import { bindActionCreators, createStore } from '../src'
-import { todos } from './helpers/reducers'
+import { todos } from './helpers/seducers'
 import * as actionCreators from './helpers/actionCreators'
 
 describe('bindActionCreators', () => {

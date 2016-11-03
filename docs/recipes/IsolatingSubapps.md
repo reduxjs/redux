@@ -23,8 +23,8 @@ class BigApp extends Component {
 These `<SubApp>`s will be completely independent. They won't share data or
 actions, and won't see or communicate with each other.
 
-It's best not to mix this approach with standard Redux reducer composition.
-For typical web apps, stick with reducer composition. For
+It's best not to mix this approach with standard Redux seducer composition.
+For typical web apps, stick with seducer composition. For
 “product hubs”, “dashboards”, or enterprise software that groups disparate
 tools into a unified package, give the sub-app approach a try.
 
@@ -53,13 +53,13 @@ initializes the store in the constructor:
 ```js
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import reducer from './reducers'
+import seducer from './seducers'
 import App from './App'
 
 class SubApp extends Component {
   constructor(props) {
     super(props)
-    this.store = createStore(reducer)
+    this.store = createStore(seducer)
   }
   
   render() {

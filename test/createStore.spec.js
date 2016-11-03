@@ -1,22 +1,22 @@
-import { createStore, combineReducers } from '../src/index'
+import { createStore, combineSeducers } from '../src/index'
 import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
-import * as reducers from './helpers/reducers'
+import * as seducers from './helpers/seducers'
 import * as Rx from 'rxjs'
 import $$observable from 'symbol-observable'
 
 describe('createStore', () => {
   it('exposes the public API', () => {
-    const store = createStore(combineReducers(reducers))
+    const store = createStore(combineSeducers(seducers))
     const methods = Object.keys(store)
 
     expect(methods.length).toBe(4)
     expect(methods).toContain('subscribe')
     expect(methods).toContain('dispatch')
     expect(methods).toContain('getState')
-    expect(methods).toContain('replaceReducer')
+    expect(methods).toContain('replaceSeducer')
   })
 
-  it('throws if reducer is not a function', () => {
+  it('throws if seducer is not a function', () => {
     expect(() =>
       createStore()
     ).toThrow()
@@ -35,7 +35,7 @@ describe('createStore', () => {
   })
 
   it('passes the initial action and the initial state', () => {
-    const store = createStore(reducers.todos, [
+    const store = createStore(seducers.todos, [
       {
         id: 1,
         text: 'Hello'
@@ -49,8 +49,8 @@ describe('createStore', () => {
     ])
   })
 
-  it('applies the reducer to the previous state', () => {
-    const store = createStore(reducers.todos)
+  it('applies the seducer to the previous state', () => {
+    const store = createStore(seducers.todos)
     expect(store.getState()).toEqual([])
 
     store.dispatch(unknownAction())
@@ -76,8 +76,8 @@ describe('createStore', () => {
     ])
   })
 
-  it('applies the reducer to the initial state', () => {
-    const store = createStore(reducers.todos, [
+  it('applies the seducer to the initial state', () => {
+    const store = createStore(seducers.todos, [
       {
         id: 1,
         text: 'Hello'
@@ -110,8 +110,8 @@ describe('createStore', () => {
     ])
   })
 
-  it('preserves the state when replacing a reducer', () => {
-    const store = createStore(reducers.todos)
+  it('preserves the state when replacing a seducer', () => {
+    const store = createStore(seducers.todos)
     store.dispatch(addTodo('Hello'))
     store.dispatch(addTodo('World'))
     expect(store.getState()).toEqual([
@@ -125,7 +125,7 @@ describe('createStore', () => {
       }
     ])
 
-    store.replaceReducer(reducers.todosReverse)
+    store.replaceSeducer(seducers.todosReverse)
     expect(store.getState()).toEqual([
       {
         id: 1,
@@ -152,7 +152,7 @@ describe('createStore', () => {
       }
     ])
 
-    store.replaceReducer(reducers.todos)
+    store.replaceSeducer(seducers.todos)
     expect(store.getState()).toEqual([
       {
         id: 3,
@@ -190,7 +190,7 @@ describe('createStore', () => {
   })
 
   it('supports multiple subscriptions', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     const listenerA = jest.fn()
     const listenerB = jest.fn()
 
@@ -237,7 +237,7 @@ describe('createStore', () => {
   })
 
   it('only removes listener once when unsubscribe is called', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     const listenerA = jest.fn()
     const listenerB = jest.fn()
 
@@ -253,7 +253,7 @@ describe('createStore', () => {
   })
 
   it('only removes relevant listener when unsubscribe is called', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     const listener = jest.fn()
 
     store.subscribe(listener)
@@ -267,7 +267,7 @@ describe('createStore', () => {
   })
 
   it('supports removing a subscription within a subscription', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     const listenerA = jest.fn()
     const listenerB = jest.fn()
     const listenerC = jest.fn()
@@ -288,7 +288,7 @@ describe('createStore', () => {
   })
 
   it('delays unsubscribe until the end of current dispatch', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
 
     const unsubscribeHandles = []
     const doUnsubscribeAll = () => unsubscribeHandles.forEach(
@@ -318,7 +318,7 @@ describe('createStore', () => {
   })
 
   it('delays subscribe until the end of current dispatch', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
 
     const listener1 = jest.fn()
     const listener2 = jest.fn()
@@ -350,7 +350,7 @@ describe('createStore', () => {
   })
 
   it('uses the last snapshot of subscribers during nested dispatch', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
 
     const listener1 = jest.fn()
     const listener2 = jest.fn()
@@ -392,7 +392,7 @@ describe('createStore', () => {
   })
 
   it('provides an up-to-date state when a subscriber is notified', done => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     store.subscribe(() => {
       expect(store.getState()).toEqual([
         {
@@ -406,7 +406,7 @@ describe('createStore', () => {
   })
 
   it('does not leak private listeners array', done => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     store.subscribe(function () {
       expect(this).toBe(undefined)
       done()
@@ -415,7 +415,7 @@ describe('createStore', () => {
   })
 
   it('only accepts plain object actions', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     expect(() =>
       store.dispatch(unknownAction())
     ).not.toThrow()
@@ -437,7 +437,7 @@ describe('createStore', () => {
       return action.type === 'bar' ? 2 : state
     }
 
-    const store = createStore(combineReducers({ foo, bar }))
+    const store = createStore(combineSeducers({ foo, bar }))
 
     store.subscribe(function kindaComponentDidUpdate() {
       const state = store.getState()
@@ -453,16 +453,16 @@ describe('createStore', () => {
     })
   })
 
-  it('does not allow dispatch() from within a reducer', () => {
-    const store = createStore(reducers.dispatchInTheMiddleOfReducer)
+  it('does not allow dispatch() from within a seducer', () => {
+    const store = createStore(seducers.dispatchInTheMiddleOfSeducer)
 
     expect(() =>
       store.dispatch(dispatchInMiddle(store.dispatch.bind(store, unknownAction())))
     ).toThrow(/may not dispatch/)
   })
 
-  it('recovers from an error within a reducer', () => {
-    const store = createStore(reducers.errorThrowingReducer)
+  it('recovers from an error within a seducer', () => {
+    const store = createStore(seducers.errorThrowingSeducer)
     expect(() =>
       store.dispatch(throwError())
     ).toThrow()
@@ -473,21 +473,21 @@ describe('createStore', () => {
   })
 
   it('throws if action type is missing', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     expect(() =>
       store.dispatch({})
     ).toThrow(/Actions may not have an undefined "type" property/)
   })
 
   it('throws if action type is undefined', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     expect(() =>
       store.dispatch({ type: undefined })
     ).toThrow(/Actions may not have an undefined "type" property/)
   })
 
   it('does not throw if action type is falsy', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
     expect(() =>
       store.dispatch({ type: false })
     ).not.toThrow()
@@ -505,7 +505,7 @@ describe('createStore', () => {
   it('accepts enhancer as the third argument', () => {
     const emptyArray = []
     const spyEnhancer = vanillaCreateStore => (...args) => {
-      expect(args[0]).toBe(reducers.todos)
+      expect(args[0]).toBe(seducers.todos)
       expect(args[1]).toBe(emptyArray)
       expect(args.length).toBe(2)
       const vanillaStore = vanillaCreateStore(...args)
@@ -515,7 +515,7 @@ describe('createStore', () => {
       }
     }
 
-    const store = createStore(reducers.todos, emptyArray, spyEnhancer)
+    const store = createStore(seducers.todos, emptyArray, spyEnhancer)
     const action = addTodo('Hello')
     store.dispatch(action)
     expect(store.dispatch).toBeCalledWith(action)
@@ -529,7 +529,7 @@ describe('createStore', () => {
 
   it('accepts enhancer as the second argument if initial state is missing', () => {
     const spyEnhancer = vanillaCreateStore => (...args) => {
-      expect(args[0]).toBe(reducers.todos)
+      expect(args[0]).toBe(seducers.todos)
       expect(args[1]).toBe(undefined)
       expect(args.length).toBe(2)
       const vanillaStore = vanillaCreateStore(...args)
@@ -539,7 +539,7 @@ describe('createStore', () => {
       }
     }
 
-    const store = createStore(reducers.todos, spyEnhancer)
+    const store = createStore(seducers.todos, spyEnhancer)
     const action = addTodo('Hello')
     store.dispatch(action)
     expect(store.dispatch).toBeCalledWith(action)
@@ -553,56 +553,56 @@ describe('createStore', () => {
 
   it('throws if enhancer is neither undefined nor a function', () => {
     expect(() =>
-      createStore(reducers.todos, undefined, {})
+      createStore(seducers.todos, undefined, {})
     ).toThrow()
 
     expect(() =>
-      createStore(reducers.todos, undefined, [])
+      createStore(seducers.todos, undefined, [])
     ).toThrow()
 
     expect(() =>
-      createStore(reducers.todos, undefined, null)
+      createStore(seducers.todos, undefined, null)
     ).toThrow()
 
     expect(() =>
-      createStore(reducers.todos, undefined, false)
+      createStore(seducers.todos, undefined, false)
     ).toThrow()
 
     expect(() =>
-      createStore(reducers.todos, undefined, undefined)
+      createStore(seducers.todos, undefined, undefined)
     ).not.toThrow()
 
     expect(() =>
-      createStore(reducers.todos, undefined, x => x)
+      createStore(seducers.todos, undefined, x => x)
     ).not.toThrow()
 
     expect(() =>
-      createStore(reducers.todos, x => x)
+      createStore(seducers.todos, x => x)
     ).not.toThrow()
 
     expect(() =>
-      createStore(reducers.todos, [])
+      createStore(seducers.todos, [])
     ).not.toThrow()
 
     expect(() =>
-      createStore(reducers.todos, {})
+      createStore(seducers.todos, {})
     ).not.toThrow()
   })
 
-  it('throws if nextReducer is not a function', () => {
-    const store = createStore(reducers.todos)
+  it('throws if nextSeducer is not a function', () => {
+    const store = createStore(seducers.todos)
 
     expect(() =>
-      store.replaceReducer()
-    ).toThrow('Expected the nextReducer to be a function.')
+      store.replaceSeducer()
+    ).toThrow('Expected the nextSeducer to be a function.')
 
     expect(() =>
-      store.replaceReducer(() => {})
+      store.replaceSeducer(() => {})
     ).not.toThrow()
   })
 
   it('throws if listener is not a function', () => {
-    const store = createStore(reducers.todos)
+    const store = createStore(seducers.todos)
 
     expect(() =>
       store.subscribe()
@@ -668,7 +668,7 @@ describe('createStore', () => {
         return action.type === 'bar' ? 2 : state
       }
 
-      const store = createStore(combineReducers({ foo, bar }))
+      const store = createStore(combineSeducers({ foo, bar }))
       const observable = store[$$observable]()
       const results = []
 
@@ -693,7 +693,7 @@ describe('createStore', () => {
         return action.type === 'bar' ? 2 : state
       }
 
-      const store = createStore(combineReducers({ foo, bar }))
+      const store = createStore(combineSeducers({ foo, bar }))
       const observable = store[$$observable]()
       const results = []
 
@@ -719,7 +719,7 @@ describe('createStore', () => {
         return action.type === 'bar' ? 2 : state
       }
 
-      const store = createStore(combineReducers({ foo, bar }))
+      const store = createStore(combineSeducers({ foo, bar }))
       const observable = Rx.Observable.from(store)
       const results = []
 

@@ -11,7 +11,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import todoApp from './reducers'
+import todoApp from './seducers'
 import App from './components/App'
 
 let store = createStore(todoApp)
@@ -53,9 +53,9 @@ export const toggleTodo = (id) => {
 }
 ```
 
-## Reducers
+## Seducers
 
-#### `reducers/todos.js`
+#### `seducers/todos.js`
 
 ```js
 const todo = (state = {}, action) => {
@@ -99,7 +99,7 @@ const todos = (state = [], action) => {
 export default todos
 ```
 
-#### `reducers/visibilityFilter.js`
+#### `seducers/visibilityFilter.js`
 
 ```js
 const visibilityFilter = (state = 'SHOW_ALL', action) => {
@@ -114,14 +114,14 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
 export default visibilityFilter
 ```
 
-#### `reducers/index.js`
+#### `seducers/index.js`
 
 ```js
-import { combineReducers } from 'redux'
+import { combineSeducers } from 'redux'
 import todos from './todos'
 import visibilityFilter from './visibilityFilter'
 
-const todoApp = combineReducers({
+const todoApp = combineSeducers({
   todos,
   visibilityFilter
 })

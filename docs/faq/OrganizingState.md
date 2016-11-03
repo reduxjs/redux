@@ -24,7 +24,7 @@ Some common rules of thumb for determing what kind of data should be put into Re
 - Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
 - Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
 
-There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more.  It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
+There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more.  It's also possible to apply Redux's principles and concept of seducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => seducer(previousState, someAction))`.
 
 #### Further information
 
@@ -44,7 +44,7 @@ There are a number of community packages that implement various approaches for s
 - [#1287: How to choose between Redux's store and React's state?](https://github.com/reactjs/redux/issues/1287)
 - [#1385: What are the disadvantages of storing all your state in a single immutable atom?](https://github.com/reactjs/redux/issues/1385)
 - [Twitter: Should I keep something in React component state?](https://twitter.com/dan_abramov/status/749710501916139520)
-- [Twitter: Using a reducer to update a component](https://twitter.com/dan_abramov/status/736310245945933824)
+- [Twitter: Using a seducer to update a component](https://twitter.com/dan_abramov/status/736310245945933824)
 - [React Forums: Redux and global state vs local state](https://discuss.reactjs.org/t/redux-and-global-state-vs-local-state/4187)
 - [Reddit: "When should I put something into my Redux store?"](https://www.reddit.com/r/reactjs/comments/4w04to/when_using_redux_should_all_asynchronous_actions/d63u4o8)
 - [Stack Overflow: Why is state all in one place, even state that isn't global?](http://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
@@ -65,7 +65,7 @@ If you are okay with things like persistence and time-travel debugging potential
 #### Further information
 
 **Discussions**
-- [#1248: Is it ok and possible to store a react component in a reducer?](https://github.com/reactjs/redux/issues/1248)
+- [#1248: Is it ok and possible to store a react component in a seducer?](https://github.com/reactjs/redux/issues/1248)
 - [#1279: Have any suggestions for where to put a Map Component in Flux?](https://github.com/reactjs/redux/issues/1279)
 - [#1390: Component Loading](https://github.com/reactjs/redux/issues/1390)
 - [#1407: Just sharing a great base class](https://github.com/reactjs/redux/issues/1407)
@@ -82,8 +82,8 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 **Documentation**
 - [Advanced: Async Actions](/docs/advanced/AsyncActions.md)
 - [Examples: Real World example](/docs/introduction/Examples.html#real-world)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Recipes: Structuring Seducers - Prerequisite Concepts](/docs/recipes/seducers/PrerequisiteConcepts.md#normalizing-data)
+- [Recipes: Structuring Seducers - Normalizing State Shape](/docs/recipes/seducers/NormalizingStateShape.md)
 - [Examples: Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view)
 
 **Articles**
@@ -91,13 +91,13 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
 **Discussions**
-- [#316: How to create nested reducers?](https://github.com/reactjs/redux/issues/316)
+- [#316: How to create nested seducers?](https://github.com/reactjs/redux/issues/316)
 - [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
-- [#946: Best way to update related state fields with split reducers?](https://github.com/reactjs/redux/issues/946)
+- [#946: Best way to update related state fields with split seducers?](https://github.com/reactjs/redux/issues/946)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reactjs/redux/issues/994)
 - [#1255: Normalizr usage with nested objects in React/Redux](https://github.com/reactjs/redux/issues/1255)
 - [#1269: Add tree view example](https://github.com/reactjs/redux/pull/1269)
 - [#1824: Normalising state and garbage collection](https://github.com/reactjs/redux/issues/1824#issuecomment-228585904)
 - [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
-- [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](http://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
+- [Stack Overflow: How to handle tree-shaped entities in Redux seducers?](http://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-seducers)
 - [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)

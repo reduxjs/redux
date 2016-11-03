@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { addToCart } from '../actions'
-import { getVisibleProducts } from '../reducers/products'
+import { getVisibleProducts } from '../seducers/products'
 import ProductItem from '../components/ProductItem'
 import ProductsList from '../components/ProductsList'
 

@@ -47,7 +47,7 @@ npm start
 open http://localhost:3000/
 ```
 
-This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how reducers can delegate handling actions to other reducers, and how you can use [React Redux](https://github.com/reactjs/react-redux) to generate container components from your presentational components.
+This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how seducers can delegate handling actions to other seducers, and how you can use [React Redux](https://github.com/reactjs/react-redux) to generate container components from your presentational components.
 
 This example includes tests.
 
@@ -65,7 +65,7 @@ npm start
 open http://localhost:3000/
 ```
 
-This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your reducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
+This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your seducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
 
 ## TodoMVC
 
@@ -99,7 +99,7 @@ npm start
 open http://localhost:3000/
 ```
 
-This example shows important idiomatic Redux patterns that become important as your app grows. In particular, it shows how to store entities in a normalized way by their IDs, how to compose reducers on several levels, and how to define selectors alongside the reducers so the knowledge about the state shape is encapsulated. It also demonstrates logging with [Redux Logger](https://github.com/fcomb/redux-logger) and conditional dispatching of actions with [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware.
+This example shows important idiomatic Redux patterns that become important as your app grows. In particular, it shows how to store entities in a normalized way by their IDs, how to compose seducers on several levels, and how to define selectors alongside the seducers so the knowledge about the state shape is encapsulated. It also demonstrates logging with [Redux Logger](https://github.com/fcomb/redux-logger) and conditional dispatching of actions with [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware.
 
 ## Tree View
 
@@ -115,7 +115,7 @@ npm start
 open http://localhost:3000/
 ```
 
-This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from reducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
+This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from seducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
 
 This example includes tests.
 

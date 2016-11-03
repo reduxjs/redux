@@ -2,12 +2,12 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import api from '../middleware/api'
-import rootReducer from '../reducers'
+import rootSeducer from '../seducers'
 import DevTools from '../containers/DevTools'
 
 const configureStore = preloadedState => {
   const store = createStore(
-    rootReducer,
+    rootSeducer,
     preloadedState,
     compose(
       applyMiddleware(thunk, api, createLogger()),
@@ -16,10 +16,10 @@ const configureStore = preloadedState => {
   )
 
   if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers').default
-      store.replaceReducer(nextRootReducer)
+    // Enable Webpack hot module replacement for seducers
+    module.hot.accept('../seducers', () => {
+      const nextRootSeducer = require('../seducers').default
+      store.replaceSeducer(nextRootSeducer)
     })
   }
 

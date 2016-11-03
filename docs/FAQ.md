@@ -6,9 +6,9 @@
   - [When should I use Redux?](/docs/faq/General.md#general-when-to-use)
   - [Can Redux only be used with React?](/docs/faq/General.md#general-only-react)
   - [Do I need to have a particular build tool to use Redux?](/docs/faq/General.md#general-build-tools)
-- **Reducers**
-  - [How do I share state between two reducers? Do I have to use combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
-  - [Do I have to use the switch statement to handle actions?](/docs/faq/Reducers.md#reducers-use-switch)
+- **Seducers**
+  - [How do I share state between two seducers? Do I have to use combineSeducers?](/docs/faq/Seducers.md#seducers-share-state)
+  - [Do I have to use the switch statement to handle actions?](/docs/faq/Seducers.md#seducers-use-switch)
 - **Organizing State**
   - [Do I have to put all my state into Redux? Should I ever use React's setState()?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
   - [Can I put functions, promises, or other non-serializable items in my store state?](/docs/faq/OrganizingState.md#organizing-state-non-serializable)
@@ -19,16 +19,16 @@
   - [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
 - **Actions**
   - [Why should type be a string, or at least serializable? Why should my action types be constants?](/docs/faq/Actions.md#actions-string-constants)
-  - [Is there always a one-to-one mapping between reducers and actions?](/docs/faq/Actions.md#actions-reducer-mappings)
+  - [Is there always a one-to-one mapping between seducers and actions?](/docs/faq/Actions.md#actions-seducer-mappings)
   - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](/docs/faq/Actions.md#actions-side-effects)
   - [Should I dispatch multiple actions in a row from one action creator?](/docs/faq/Actions.md#actions-multiple-actions)
 - **Code Structure**  
-  - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
-  - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](/docs/faq/CodeStructure.md#structure-business-logic)
+  - [What should my file structure look like? How should I group my action creators and seducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [How should I split my logic between seducers and action creators? Where should my “business logic” go?](/docs/faq/CodeStructure.md#structure-business-logic)
 - **Performance**
   - [How well does Redux “scale” in terms of performance and architecture?](/docs/faq/Performance.md#performance-scaling)
-  - [Won't calling “all my reducers” for each action be slow?](/docs/faq/Performance.md#performance-all-reducers)
-  - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](/docs/faq/Performance.md#performance-clone-state)
+  - [Won't calling “all my seducers” for each action be slow?](/docs/faq/Performance.md#performance-all-seducers)
+  - [Do I have to deep-clone my state in a seducer? Isn't copying my state going to be slow?](/docs/faq/Performance.md#performance-clone-state)
   - [How can I reduce the number of store update events?](/docs/faq/Performance.md#performance-update-events)
   - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](/docs/faq/Performance.md#performance-state-memory)
 - **React Redux**

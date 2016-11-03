@@ -1,19 +1,19 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import rootReducer from '../reducers'
+import rootSeducer from '../seducers'
 
 const configureStore = (preloadedState) => {
   const store = createStore(
-    rootReducer,
+    rootSeducer,
     preloadedState,
     applyMiddleware(thunk)
   )
 
   if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers').default
-      store.replaceReducer(nextRootReducer)
+    // Enable Webpack hot module replacement for seducers
+    module.hot.accept('../seducers', () => {
+      const nextRootSeducer = require('../seducers').default
+      store.replaceSeducer(nextRootSeducer)
     })
   }
 

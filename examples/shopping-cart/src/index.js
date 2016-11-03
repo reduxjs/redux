@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createLogger from 'redux-logger'
 import thunk from 'redux-thunk'
-import reducer from './reducers'
+import seducer from './seducers'
 import { getAllProducts } from './actions'
 import App from './containers/App'
 
@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const store = createStore(
-  reducer,
+  seducer,
   applyMiddleware(...middleware)
 )
 

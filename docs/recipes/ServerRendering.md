@@ -42,7 +42,7 @@ import Express from 'express'
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import counterApp from './reducers'
+import counterApp from './seducers'
 import App from './containers/App'
 
 const app = Express()
@@ -136,7 +136,7 @@ import { render } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './containers/App'
-import counterApp from './reducers'
+import counterApp from './seducers'
 
 // Grab the state from a global injected into server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__
