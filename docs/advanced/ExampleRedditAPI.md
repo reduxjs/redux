@@ -90,12 +90,12 @@ export function fetchPostsIfNeeded(subreddit) {
 }
 ```
 
-## Reducers
+## Seducers
 
-#### `reducers.js`
+#### `seducers.js`
 
 ```js
-import { combineReducers } from 'redux'
+import { combineSeducers } from 'redux'
 import {
   SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
@@ -150,12 +150,12 @@ function postsBySubreddit(state = { }, action) {
   }
 }
 
-const rootReducer = combineReducers({
+const rootSeducer = combineSeducers({
   postsBySubreddit,
   selectedSubreddit
 })
 
-export default rootReducer
+export default rootSeducer
 ```
 
 ## Store
@@ -166,13 +166,13 @@ export default rootReducer
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
-import rootReducer from './reducers'
+import rootSeducer from './seducers'
 
 const loggerMiddleware = createLogger()
 
 export default function configureStore(preloadedState) {
   return createStore(
-    rootReducer,
+    rootSeducer,
     preloadedState,
     applyMiddleware(
       thunkMiddleware,

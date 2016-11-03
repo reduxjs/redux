@@ -8,9 +8,9 @@ With Redux, however, implementing undo history is a breeze. There are three reas
 
 * There are no multiple models—just a state subtree that you want to keep track of.
 * The state is already immutable, and mutations are already described as discrete actions, which is close to the undo stack mental model.
-* The reducer `(state, action) => state` signature makes it natural to implement generic “reducer enhancers” or “higher order reducers”. They are functions that take your reducer and enhance it with some additional functionality while preserving its signature. Undo history is exactly such a case.
+* The seducer `(state, action) => state` signature makes it natural to implement generic “seducer enhancers” or “higher order seducers”. They are functions that take your seducer and enhance it with some additional functionality while preserving its signature. Undo history is exactly such a case.
 
-Before proceeding, make sure you have worked through the [basics tutorial](../basics/README.md) and understand [reducer composition](../basics/Reducers.md) well. This recipe will build on top of the example described in the [basics tutorial](../basics/README.md).
+Before proceeding, make sure you have worked through the [basics tutorial](../basics/README.md) and understand [seducer composition](../basics/Seducers.md) well. This recipe will build on top of the example described in the [basics tutorial](../basics/README.md).
 
 In the first part of this recipe, we will explain the underlying concepts that make Undo and Redo possible to implement in a generic way.
 
@@ -182,7 +182,7 @@ Regardless of the specific data type, the shape of the undo history state is the
 }
 ```
 
-Let's talk through the algorithm to manipulate the state shape described above. We can define two actions to operate on this state: `UNDO` and `REDO`. In our reducer, we will do the following steps to handle these actions:
+Let's talk through the algorithm to manipulate the state shape described above. We can define two actions to operate on this state: `UNDO` and `REDO`. In our seducer, we will do the following steps to handle these actions:
 
 #### Handling Undo
 
@@ -202,7 +202,7 @@ Let's talk through the algorithm to manipulate the state shape described above. 
 * Set the `present` to the new state after handling the action.
 * Clear the `future`.
 
-### First Attempt: Writing a Reducer
+### First Attempt: Writing a Seducer
 
 ```js
 const initialState = {
@@ -242,55 +242,55 @@ This implementation isn't usable because it leaves out three important questions
 
 * Where do we get the initial `present` state from? We don't seem to know it beforehand.
 * Where do we react to the external actions to save the `present` to the `past`?
-* How do we actually delegate the control over the `present` state to a custom reducer?
+* How do we actually delegate the control over the `present` state to a custom seducer?
 
-It seems that reducer isn't the right abstraction, but we're very close.
+It seems that seducer isn't the right abstraction, but we're very close.
 
-### Meet Reducer Enhancers
+### Meet Seducer Enhancers
 
-You might be familiar with [higher order functions](https://en.wikipedia.org/wiki/Higher-order_function). If you use React, you might be familiar with [higher order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750). Here is a variation on the same pattern, applied to reducers.
+You might be familiar with [higher order functions](https://en.wikipedia.org/wiki/Higher-order_function). If you use React, you might be familiar with [higher order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750). Here is a variation on the same pattern, applied to seducers.
 
-A *reducer enhancer* (or a *higher order reducer*) is a function that takes a reducer, and returns a new reducer that is able to handle new actions, or to hold more state, delegating control to the inner reducer for the actions it doesn't understand. This isn't a new pattern—technically, [`combineReducers()`](../api/combineReducers.md) is also a reducer enhancer because it takes reducers and returns a new reducer.
+A *seducer enhancer* (or a *higher order seducer*) is a function that takes a seducer, and returns a new seducer that is able to handle new actions, or to hold more state, delegating control to the inner seducer for the actions it doesn't understand. This isn't a new pattern—technically, [`combineSeducers()`](../api/combineSeducers.md) is also a seducer enhancer because it takes seducers and returns a new seducer.
 
-A reducer enhancer that doesn't do anything looks like this:
+A seducer enhancer that doesn't do anything looks like this:
 
 ```js
-function doNothingWith(reducer) {
+function doNothingWith(seducer) {
   return function (state, action) {
-    // Just call the passed reducer
-    return reducer(state, action)
+    // Just call the passed seducer
+    return seducer(state, action)
   }
 }
 ```
 
-A reducer enhancer that combines other reducers might look like this:
+A seducer enhancer that combines other seducers might look like this:
 
 ```js
-function combineReducers(reducers) {
+function combineSeducers(seducers) {
   return function (state = {}, action) {
-    return Object.keys(reducers).reduce((nextState, key) => {
-      // Call every reducer with the part of the state it manages
-      nextState[key] = reducers[key](state[key], action)
+    return Object.keys(seducers).reduce((nextState, key) => {
+      // Call every seducer with the part of the state it manages
+      nextState[key] = seducers[key](state[key], action)
       return nextState
     }, {})
   }
 }
 ```
 
-### Second Attempt: Writing a Reducer Enhancer
+### Second Attempt: Writing a Seducer Enhancer
 
-Now that we have a better understanding of reducer enhancers, we can see that this is exactly what `undoable` should have been:
+Now that we have a better understanding of seducer enhancers, we can see that this is exactly what `undoable` should have been:
 
 ```js
-function undoable(reducer) {
-  // Call the reducer with empty action to populate the initial state
+function undoable(seducer) {
+  // Call the seducer with empty action to populate the initial state
   const initialState = {
     past: [],
-    present: reducer(undefined, {}),
+    present: seducer(undefined, {}),
     future: []
   }
 
-  // Return a reducer that handles undo and redo
+  // Return a seducer that handles undo and redo
   return function (state = initialState, action) {
     const { past, present, future } = state
 
@@ -312,8 +312,8 @@ function undoable(reducer) {
           future: newFuture
         }
       default:
-        // Delegate handling the action to the passed reducer
-        const newPresent = reducer(present, action)
+        // Delegate handling the action to the passed seducer
+        const newPresent = seducer(present, action)
         if (present === newPresent) {
           return state
         }
@@ -327,15 +327,15 @@ function undoable(reducer) {
 }
 ```
 
-We can now wrap any reducer into `undoable` reducer enhancer to teach it to react to `UNDO` and `REDO` actions.
+We can now wrap any seducer into `undoable` seducer enhancer to teach it to react to `UNDO` and `REDO` actions.
 
 ```js
-// This is a reducer
+// This is a seducer
 function todos(state = [], action) {
   /* ... */
 }
 
-// This is also a reducer!
+// This is also a seducer!
 const undoableTodos = undoable(todos)
 
 import { createStore } from 'redux'
@@ -374,13 +374,13 @@ First of all, you need to run
 npm install --save redux-undo
 ```
 
-This installs the package that provides the `undoable` reducer enhancer.
+This installs the package that provides the `undoable` seducer enhancer.
 
-### Wrapping the Reducer
+### Wrapping the Seducer
 
-You will need to wrap the reducer you wish to enhance with `undoable` function. For example, if you exported a `todos` reducer from a dedicated file, you will want to change it to export the result of calling `undoable()` with the reducer you wrote:
+You will need to wrap the seducer you wish to enhance with `undoable` function. For example, if you exported a `todos` seducer from a dedicated file, you will want to change it to export the result of calling `undoable()` with the seducer you wrote:
 
-#### `reducers/todos.js`
+#### `seducers/todos.js`
 
 ```js
 import undoable, { distinctState } from 'redux-undo'
@@ -398,18 +398,18 @@ const undoableTodos = undoable(todos, {
 export default undoableTodos
 ```
 
-The `distinctState()` filter serves to ignore the actions that didn't result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
+The `distinctState()` filter serves to ignore the actions that didn't result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable seducer, like setting the action type for Undo and Redo actions.
 
-Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
+Note that your `combineSeducers()` call will stay exactly as it was, but the `todos` seducer will now refer to the seducer enhanced with Redux Undo:
 
-#### `reducers/index.js`
+#### `seducers/index.js`
 
 ```js
-import { combineReducers } from 'redux'
+import { combineSeducers } from 'redux'
 import todos from './todos'
 import visibilityFilter from './visibilityFilter'
 
-const todoApp = combineReducers({
+const todoApp = combineSeducers({
   todos,
   visibilityFilter
 })
@@ -417,7 +417,7 @@ const todoApp = combineReducers({
 export default todoApp
 ```
 
-You may wrap one or more reducers in `undoable` at any level of the reducer composition hierarchy. We choose to wrap `todos` instead of the top-level combined reducer so that changes to `visibilityFilter` are not reflected in the undo history.
+You may wrap one or more seducers in `undoable` at any level of the seducer composition hierarchy. We choose to wrap `todos` instead of the top-level combined seducer so that changes to `visibilityFilter` are not reflected in the undo history.
 
 ### Updating the Selectors
 

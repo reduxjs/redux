@@ -3,8 +3,8 @@
 ## Table of Contents
 
 - [How well does Redux “scale” in terms of performance and architecture?](#performance-scaling)
-- [Won't calling “all my reducers” for each action be slow?](#performance-all-reducers)
-- [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#performance-clone-state)
+- [Won't calling “all my seducers” for each action be slow?](#performance-all-seducers)
+- [Do I have to deep-clone my state in a seducer? Isn't copying my state going to be slow?](#performance-clone-state)
 - [How can I reduce the number of store update events?](#performance-update-events)
 - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#performance-state-memory)
 
@@ -17,18 +17,18 @@
 
 While there's no single definitive answer to this, most of the time this should not be a concern in either case.
 
-The work done by Redux generally falls into a few areas: processing actions in middleware and reducers (including object duplication for immutable updates), notifying subscribers after actions are dispatched, and updating UI components based on the state changes. While it's certainly *possible* for each of these to become a performance concern in sufficiently complex situations, there's nothing inherently slow or inefficient about how Redux is implemented. In fact, React Redux in particular is heavily optimized to cut down on unnecessary re-renders, and React-Redux v5 shows noticeable improvements over earlier versions.
+The work done by Redux generally falls into a few areas: processing actions in middleware and seducers (including object duplication for immutable updates), notifying subscribers after actions are dispatched, and updating UI components based on the state changes. While it's certainly *possible* for each of these to become a performance concern in sufficiently complex situations, there's nothing inherently slow or inefficient about how Redux is implemented. In fact, React Redux in particular is heavily optimized to cut down on unnecessary re-renders, and React-Redux v5 shows noticeable improvements over earlier versions.
 
 Redux may not be as efficient out of the box when compared to other libraries.  For maximum rendering performance in a React application, state should be stored in a normalized shape, many individual components should be connected to the store instead of just a few, and connected list components should pass item IDs to their connected child list items (allowing the list items to look up their own data by ID).  This minimizes the overall amount of rendering to be done.  Use of memoized selector functions is also an important performance consideration.
 
 As for architecture, anecdotal evidence is that Redux works well for varying project and team sizes. Redux is currently used by hundreds of companies and thousands of developers, with several hundred thousand monthly installations from NPM. One developer reported:
 
-> for scale, we have ~500 action types, ~400 reducer cases, ~150 components, 5 middlewares, ~200 actions, ~2300 tests
+> for scale, we have ~500 action types, ~400 seducer cases, ~150 components, 5 middlewares, ~200 actions, ~2300 tests
 
 #### Further information
 
 **Documentation**
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Recipes: Structuring Seducers - Normalizing State Shape](/docs/recipes/seducers/NormalizingStateShape.md)
 
 
 **Articles**
@@ -56,28 +56,28 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 - [Chat log: React/Redux perf - single connection vs many connections](https://gist.github.com/markerikson/6056565dd65d1232784bf42b65f8b2ad)
 
 
-<a id="performance-all-reducers"></a>
-### Won't calling “all my reducers” for each action be slow?
+<a id="performance-all-seducers"></a>
+### Won't calling “all my seducers” for each action be slow?
 
-It's important to note that a Redux store really only has a single reducer function. The store passes the current state and dispatched action to that one reducer function, and lets the reducer handle things appropriately.
+It's important to note that a Redux store really only has a single seducer function. The store passes the current state and dispatched action to that one seducer function, and lets the seducer handle things appropriately.
 
-Obviously, trying to handle every possible action in a single function does not scale well, simply in terms of function size and readability, so it makes sense to split the actual work into separate functions that can be called by the top-level reducer. In particular, the common suggested pattern is to have a separate sub-reducer function that is responsible for managing updates to a particular slice of state at a specific key. The `combineReducers()` that comes with Redux is one of the many possible ways to achieve this. It's also highly suggested to keep your store state as flat and as normalized as possible. Ultimately, though, you are in charge of organizing your reducer logic any way you want.
+Obviously, trying to handle every possible action in a single function does not scale well, simply in terms of function size and readability, so it makes sense to split the actual work into separate functions that can be called by the top-level seducer. In particular, the common suggested pattern is to have a separate sub-seducer function that is responsible for managing updates to a particular slice of state at a specific key. The `combineSeducers()` that comes with Redux is one of the many possible ways to achieve this. It's also highly suggested to keep your store state as flat and as normalized as possible. Ultimately, though, you are in charge of organizing your seducer logic any way you want.
 
-However, even if you happen to have many different reducer functions composed together, and even with deeply nested state, reducer speed is unlikely to be a problem. JavaScript engines are capable of running a very large number of function calls per second, and most of your reducers are probably just using a `switch` statement and returning the existing state by default in response to most actions.
+However, even if you happen to have many different seducer functions composed together, and even with deeply nested state, seducer speed is unlikely to be a problem. JavaScript engines are capable of running a very large number of function calls per second, and most of your seducers are probably just using a `switch` statement and returning the existing state by default in response to most actions.
 
-If you actually are concerned about reducer performance, you can use a utility such as [redux-ignore](https://github.com/omnidan/redux-ignore) or [reduxr-scoped-reducer](https://github.com/chrisdavies/reduxr-scoped-reducer) to ensure that only certain reducers listen to specific actions. You can also use [redux-log-slow-reducers](https://github.com/michaelcontento/redux-log-slow-reducers) to do some performance benchmarking.
+If you actually are concerned about seducer performance, you can use a utility such as [redux-ignore](https://github.com/omnidan/redux-ignore) or [reduxr-scoped-seducer](https://github.com/chrisdavies/reduxr-scoped-seducer) to ensure that only certain seducers listen to specific actions. You can also use [redux-log-slow-seducers](https://github.com/michaelcontento/redux-log-slow-seducers) to do some performance benchmarking.
 
 #### Further information
 
 **Discussions**
 - [#912: Proposal: action filter utility](https://github.com/reactjs/redux/issues/912)
 - [#1303: Redux Performance with Large Store and frequent updates](https://github.com/reactjs/redux/issues/1303)
-- [Stack Overflow: State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
+- [Stack Overflow: State in Redux app has the name of the seducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-seducer/35674297)
 - [Stack Overflow: How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
 
 
 <a id="performance-clone-state"></a>
-### Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?
+### Do I have to deep-clone my state in a seducer? Isn't copying my state going to be slow?
 
 Immutably updating state generally means making shallow copies, not deep copies. Shallow copies are much faster than deep copies, because fewer objects and fields have to be copied, and it effectively comes down to moving some pointers around.
 
@@ -88,11 +88,11 @@ However, you *do* need to create a copied and updated object for each level of n
 #### Further information
 
 **Documentation**
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+- [Recipes: Structuring Seducers - Prerequisite Concepts](/docs/recipes/seducers/PrerequisiteConcepts)
+- [Recipes: Structuring Seducers - Immutable Update Patterns](/docs/recipes/seducers/ImmutableUpdatePatterns.md)
 
 **Discussions**
-- [#454: Handling big states in reducer](https://github.com/reactjs/redux/issues/454)
+- [#454: Handling big states in seducer](https://github.com/reactjs/redux/issues/454)
 - [#758: Why can't state be mutated?](https://github.com/reactjs/redux/issues/758)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reactjs/redux/issues/994)
 - [Twitter: common misconception - deep cloning](https://twitter.com/dan_abramov/status/688087202312491008)
@@ -102,9 +102,9 @@ However, you *do* need to create a copied and updated object for each level of n
 <a id="performance-update-events"></a>
 ### How can I reduce the number of store update events?
 
-Redux notifies subscribers after each successfully dispatched action (i.e. an action reached the store and was handled by reducers). In some cases, it may be useful to cut down on the number of times subscribers are called, particularly if an action creator dispatches multiple distinct actions in a row.
+Redux notifies subscribers after each successfully dispatched action (i.e. an action reached the store and was handled by seducers). In some cases, it may be useful to cut down on the number of times subscribers are called, particularly if an action creator dispatches multiple distinct actions in a row.
 
-If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) (a higher-order reducer that lets you dispatch several actions as if it was one and “unpack” them in the reducer), [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) (a store enhancer that lets you debounce subscriber calls for multiple dispatches), or [redux-batch](https://github.com/manaflair/redux-batch) (a store enhancer that handles dispatching an array of actions with a single subscriber notification).
+If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) (a higher-order seducer that lets you dispatch several actions as if it was one and “unpack” them in the seducer), [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) (a store enhancer that lets you debounce subscriber calls for multiple dispatches), or [redux-batch](https://github.com/manaflair/redux-batch) (a store enhancer that handles dispatching an array of actions with a single subscriber notification).
 
 #### Further information
 

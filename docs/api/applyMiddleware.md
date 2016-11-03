@@ -20,7 +20,7 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 
 ```js
 import { createStore, applyMiddleware } from 'redux'
-import todos from './reducers'
+import todos from './seducers'
 
 function logger({ getState }) {
   return (next) => (action) => {
@@ -55,13 +55,13 @@ store.dispatch({
 #### Example: Using Thunk Middleware for Async Actions
 
 ```js
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, combineSeducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import * as reducers from './reducers'
+import * as seducers from './seducers'
 
-let reducer = combineReducers(reducers)
+let seducer = combineSeducers(seducers)
 // applyMiddleware supercharges createStore with middleware:
-let store = createStore(reducer, applyMiddleware(thunk))
+let store = createStore(seducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')
@@ -231,7 +231,7 @@ export default connect(
   }
 
   const store = createStore(
-    reducer,
+    seducer,
     preloadedState,
     applyMiddleware(...middleware)
   )

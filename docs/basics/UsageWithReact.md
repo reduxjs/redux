@@ -65,7 +65,7 @@ Technically you could write the container components by hand using [`store.subsc
 
 ## Designing Component Hierarchy
 
-Remember how we [designed the shape of the root state object](Reducers.md)? It's time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
+Remember how we [designed the shape of the root state object](Seducers.md)? It's time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
 
 Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all, only completed, or only active todos.
 
@@ -416,7 +416,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import todoApp from './reducers'
+import todoApp from './seducers'
 import App from './components/App'
 
 let store = createStore(todoApp)

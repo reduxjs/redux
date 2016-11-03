@@ -16,17 +16,17 @@ export var ActionTypes = {
  * The only way to change the data in the store is to call `dispatch()` on it.
  *
  * There should only be a single store in your app. To specify how different
- * parts of the state tree respond to actions, you may combine several reducers
- * into a single reducer function by using `combineReducers`.
+ * parts of the state tree respond to actions, you may combine several seducers
+ * into a single seducer function by using `combineSeducers`.
  *
- * @param {Function} reducer A function that returns the next state tree, given
+ * @param {Function} seducer A function that returns the next state tree, given
  * the current state tree and the action to handle.
  *
  * @param {any} [preloadedState] The initial state. You may optionally specify it
  * to hydrate the state from the server in universal apps, or to restore a
  * previously serialized user session.
- * If you use `combineReducers` to produce the root reducer function, this must be
- * an object with the same shape as `combineReducers` keys.
+ * If you use `combineSeducers` to produce the root seducer function, this must be
+ * an object with the same shape as `combineSeducers` keys.
  *
  * @param {Function} [enhancer] The store enhancer. You may optionally specify it
  * to enhance the store with third-party capabilities such as middleware,
@@ -36,7 +36,7 @@ export var ActionTypes = {
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, preloadedState, enhancer) {
+export default function createStore(seducer, preloadedState, enhancer) {
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
     enhancer = preloadedState
     preloadedState = undefined
@@ -47,14 +47,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Expected the enhancer to be a function.')
     }
 
-    return enhancer(createStore)(reducer, preloadedState)
+    return enhancer(createStore)(seducer, preloadedState)
   }
 
-  if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function.')
+  if (typeof seducer !== 'function') {
+    throw new Error('Expected the seducer to be a function.')
   }
 
-  var currentReducer = reducer
+  var currentSeducer = seducer
   var currentState = preloadedState
   var currentListeners = []
   var nextListeners = currentListeners
@@ -124,7 +124,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
-   * The `reducer` function, used to create the store, will be called with the
+   * The `seducer` function, used to create the store, will be called with the
    * current state tree and the given `action`. Its return value will
    * be considered the **next** state of the tree, and the change listeners
    * will be notified.
@@ -162,12 +162,12 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
 
     if (isDispatching) {
-      throw new Error('Reducers may not dispatch actions.')
+      throw new Error('Seducers may not dispatch actions.')
     }
 
     try {
       isDispatching = true
-      currentState = currentReducer(currentState, action)
+      currentState = currentSeducer(currentState, action)
     } finally {
       isDispatching = false
     }
@@ -182,21 +182,21 @@ export default function createStore(reducer, preloadedState, enhancer) {
   }
 
   /**
-   * Replaces the reducer currently used by the store to calculate the state.
+   * Replaces the seducer currently used by the store to calculate the state.
    *
    * You might need this if your app implements code splitting and you want to
-   * load some of the reducers dynamically. You might also need this if you
+   * load some of the seducers dynamically. You might also need this if you
    * implement a hot reloading mechanism for Redux.
    *
-   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @param {Function} nextSeducer The seducer for the store to use instead.
    * @returns {void}
    */
-  function replaceReducer(nextReducer) {
-    if (typeof nextReducer !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.')
+  function replaceSeducer(nextSeducer) {
+    if (typeof nextSeducer !== 'function') {
+      throw new Error('Expected the nextSeducer to be a function.')
     }
 
-    currentReducer = nextReducer
+    currentSeducer = nextSeducer
     dispatch({ type: ActionTypes.INIT })
   }
 
@@ -240,7 +240,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   }
 
   // When a store is created, an "INIT" action is dispatched so that every
-  // reducer returns their initial state. This effectively populates
+  // seducer returns their initial state. This effectively populates
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT })
 
@@ -248,7 +248,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     dispatch,
     subscribe,
     getState,
-    replaceReducer,
+    replaceSeducer,
     [$$observable]: observable
   }
 }

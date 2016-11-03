@@ -1,6 +1,6 @@
 import {
   Middleware, MiddlewareAPI,
-  applyMiddleware, createStore, Dispatch, Reducer, Action
+  applyMiddleware, createStore, Dispatch, Seducer, Action
 } from "../../index.d.ts";
 
 declare module "../../index.d.ts" {
@@ -42,12 +42,12 @@ type State = {
   todos: string[];
 }
 
-const reducer: Reducer<State> = (state: State, action: Action): State => {
+const seducer: Seducer<State> = (state: State, action: Action): State => {
   return state;
 }
 
 const storeWithThunkMiddleware = createStore(
-  reducer,
+  seducer,
   applyMiddleware(thunkMiddleware)
 );
 
@@ -60,6 +60,6 @@ storeWithThunkMiddleware.dispatch(
 
 
 const storeWithMultipleMiddleware = createStore(
-  reducer,
+  seducer,
   applyMiddleware(loggerMiddleware, thunkMiddleware)
 )

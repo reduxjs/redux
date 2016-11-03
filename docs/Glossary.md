@@ -26,21 +26,21 @@ Other than `type`, the structure of an action object is really up to you. If you
 
 See also [async action](#async-action) below.
 
-## Reducer
+## Seducer
 
 ```js
-type Reducer<S, A> = (state: S, action: A) => S
+type Seducer<S, A> = (state: S, action: A) => S
 ```
 
-A *reducer* (also called a *reducing function*) is a function that accepts an accumulation and a value and returns a new accumulation. They are used to reduce a collection of values down to a single value.
+A *seducer* (also called a *reducing function*) is a function that accepts an accumulation and a value and returns a new accumulation. They are used to reduce a collection of values down to a single value.
 
-Reducers are not unique to Redux—they are a fundamental concept in functional programming.  Even most non-functional languages, like JavaScript, have a built-in API for reducing. In JavaScript, it's [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce).
+Seducers are not unique to Redux—they are a fundamental concept in functional programming.  Even most non-functional languages, like JavaScript, have a built-in API for reducing. In JavaScript, it's [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce).
 
-In Redux, the accumulated value is the state object, and the values being accumulated are actions. Reducers calculate a new state given the previous state and an action. They must be *pure functions*—functions that return the exact same output for given inputs. They should also be free of side-effects. This is what enables exciting features like hot reloading and time travel.
+In Redux, the accumulated value is the state object, and the values being accumulated are actions. Seducers calculate a new state given the previous state and an action. They must be *pure functions*—functions that return the exact same output for given inputs. They should also be free of side-effects. This is what enables exciting features like hot reloading and time travel.
 
-Reducers are the most important concept in Redux.
+Seducers are the most important concept in Redux.
 
-*Do not put API calls into reducers.*
+*Do not put API calls into seducers.*
 
 ## Dispatching Function
 
@@ -53,7 +53,7 @@ A *dispatching function* (or simply *dispatch function*) is a function that acce
 
 We must distinguish between dispatching functions in general and the base [`dispatch`](api/Store.md#dispatch) function provided by the store instance without any middleware.
 
-The base dispatch function *always* synchronously sends an action to the store's reducer, along with the previous state returned by the store, to calculate a new state. It expects actions to be plain objects ready to be consumed by the reducer.
+The base dispatch function *always* synchronously sends an action to the store's seducer, along with the previous state returned by the store, to calculate a new state. It expects actions to be plain objects ready to be consumed by the seducer.
 
 [Middleware](#middleware) wraps the base dispatch function. It allows the dispatch function to handle [async actions](#async-action) in addition to actions. Middleware may transform, delay, ignore, or otherwise interpret actions or async actions before passing them to the next middleware. See below for more information.
 
@@ -75,7 +75,7 @@ If an action creator needs to read the current state, perform an API call, or ca
 type AsyncAction = any
 ```
 
-An *async action* is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer. It will be transformed by [middleware](#middleware) into an action (or a series of actions) before being sent to the base [`dispatch()`](api/Store.md#dispatch) function. Async actions may have different types, depending on the middleware you use. They are often asynchronous primitives, like a Promise or a thunk, which are not passed to the reducer immediately, but trigger action dispatches once an operation has completed.
+An *async action* is a value that is sent to a dispatching function, but is not yet ready for consumption by the seducer. It will be transformed by [middleware](#middleware) into an action (or a series of actions) before being sent to the base [`dispatch()`](api/Store.md#dispatch) function. Async actions may have different types, depending on the middleware you use. They are often asynchronous primitives, like a Promise or a thunk, which are not passed to the seducer immediately, but trigger action dispatches once an operation has completed.
 
 ## Middleware
 
@@ -97,27 +97,27 @@ type Store = {
   dispatch: Dispatch
   getState: () => State
   subscribe: (listener: () => void) => () => void
-  replaceReducer: (reducer: Reducer) => void
+  replaceSeducer: (seducer: Seducer) => void
 }
 ```
 
 A store is an object that holds the application's state tree.  
-There should only be a single store in a Redux app, as the composition happens on the reducer level.
+There should only be a single store in a Redux app, as the composition happens on the seducer level.
 
 - [`dispatch(action)`](api/Store.md#dispatch) is the base dispatch function described above.
 - [`getState()`](api/Store.md#getState) returns the current state of the store.
 - [`subscribe(listener)`](api/Store.md#subscribe) registers a function to be called on state changes.
-- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) can be used to implement hot reloading and code splitting. Most likely you won't use it.
+- [`replaceSeducer(nextSeducer)`](api/Store.md#replaceSeducer) can be used to implement hot reloading and code splitting. Most likely you won't use it.
 
 See the complete [store API reference](api/Store.md#dispatch) for more details.
 
 ## Store creator
 
 ```js
-type StoreCreator = (reducer: Reducer, preloadedState: ?State) => Store
+type StoreCreator = (seducer: Seducer, preloadedState: ?State) => Store
 ```
 
-A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(reducer, preloadedState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
+A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(seducer, preloadedState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
 
 ## Store enhancer
 

@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Why should type be a string, or at least serializable? Why should my action types be constants?](#actions-string-constants) 
-- [Is there always a one-to-one mapping between reducers and actions?](#actions-reducer-mappings)
+- [Is there always a one-to-one mapping between seducers and actions?](#actions-seducer-mappings)
 - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#actions-side-effects) 
 - [Should I dispatch multiple actions in a row from one action creator?](#actions-multiple-actions) 
 
@@ -13,7 +13,7 @@
 <a id="actions-string-constants"></a>
 ### Why should `type` be a string, or at least serializable? Why should my action types be constants?
 
-As with state, serializable actions enable several of Redux's defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it *is* okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.
+As with state, serializable actions enable several of Redux's defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it *is* okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the seducers.
 
 We can't reliably enforce serializable actions for performance reasons, so Redux only checks that every action is a plain object, and that the `type` is defined. The rest is up to you, but you might find that keeping everything serializable helps debug and reproduce issues.
 
@@ -27,27 +27,27 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 **Discussion**
 - [#384: Recommend that Action constants be named in the past tense](https://github.com/reactjs/redux/issues/384)
 - [#628: Solution for simple action creation with less boilerplate](https://github.com/reactjs/redux/issues/628)
-- [#1024: Proposal: Declarative reducers](https://github.com/reactjs/redux/issues/1024)
-- [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
+- [#1024: Proposal: Declarative seducers](https://github.com/reactjs/redux/issues/1024)
+- [#1167: Seducer without switch](https://github.com/reactjs/redux/issues/1167)
 - [Stack Overflow: Why do you need 'Actions' as data in Redux?](http://stackoverflow.com/q/34759047/62937)
 - [Stack Overflow: What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
 
 
-<a id="actions-reducer-mappings"></a>
-### Is there always a one-to-one mapping between reducers and actions?
+<a id="actions-seducer-mappings"></a>
+### Is there always a one-to-one mapping between seducers and actions?
 
-No. We suggest you write independent small reducer functions that are each responsible for updates to a specific slice of state. We call this pattern “reducer composition”. A given action could be handled by all, some, or none of them. This keeps components decoupled from the actual data changes, as one action may affect different parts of the state tree, and there is no need for the component to be aware of this. Some users do choose to bind them more tightly together, such as the “ducks” file structure, but there is definitely no one-to-one mapping by default, and you should break out of such a paradigm any time you feel you want to handle an action in many reducers.
+No. We suggest you write independent small seducer functions that are each responsible for updates to a specific slice of state. We call this pattern “seducer composition”. A given action could be handled by all, some, or none of them. This keeps components decoupled from the actual data changes, as one action may affect different parts of the state tree, and there is no need for the component to be aware of this. Some users do choose to bind them more tightly together, such as the “ducks” file structure, but there is definitely no one-to-one mapping by default, and you should break out of such a paradigm any time you feel you want to handle an action in many seducers.
 
 #### Further information
 
 **Documentation**
-- [Basics: Reducers](/docs/basics/Reducers.md)
-- [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
+- [Basics: Seducers](/docs/basics/Seducers.md)
+- [Recipes: Structuring Seducers](/docs/recipes/StructuringSeducers.md)
 
 **Discussions**
 - [Twitter: most common Redux misconception](https://twitter.com/dan_abramov/status/682923564006248448)
-- [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
-- [Reduxible #8: Reducers and action creators aren't a one-to-one mapping](https://github.com/reduxible/reduxible/issues/8)
+- [#1167: Seducer without switch](https://github.com/reactjs/redux/issues/1167)
+- [Reduxible #8: Seducers and action creators aren't a one-to-one mapping](https://github.com/reduxible/reduxible/issues/8)
 - [Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
 
 
@@ -58,11 +58,11 @@ This is a long and complex topic, with a wide variety of opinions on how code sh
 
 Any meaningful web app needs to execute complex logic, usually including asynchronous work such as making AJAX requests. That code is no longer purely a function of its inputs, and the interactions with the outside world are known as [“side effects”](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)
 
-Redux is inspired by functional programming, and out of the box, has no place for side effects to be executed. In particular, reducer functions *must* always be pure functions of `(state, action) => newState`. However, Redux's middleware makes it possible to intercept dispatched actions and add additional complex behavior around them, including side effects.
+Redux is inspired by functional programming, and out of the box, has no place for side effects to be executed. In particular, seducer functions *must* always be pure functions of `(state, action) => newState`. However, Redux's middleware makes it possible to intercept dispatched actions and add additional complex behavior around them, including side effects.
 
 In general, Redux suggests that code with side effects should be part of the action creation process. While that logic *can* be performed inside of a UI component, it generally makes sense to extract that logic into a reusable function so that the same logic can be called from multiple places—in other words, an action creator function.
 
-The simplest and most common way to do this is to add the [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware that lets you write action creators with more complex and asynchronous logic. Another widely-used method is [Redux Saga](https://github.com/yelouafi/redux-saga) which lets you write more synchronous-looking code using generators, and can act like “background threads” or “daemons” in a Redux app. Yet another approach is [Redux Loop](https://github.com/raisemarketplace/redux-loop), which inverts the process by allowing your reducers to declare side effects in response to state changes and have them executed separately. Beyond that, there are *many* other community-developed libraries and ideas, each with their own take on how side effects should be managed.
+The simplest and most common way to do this is to add the [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware that lets you write action creators with more complex and asynchronous logic. Another widely-used method is [Redux Saga](https://github.com/yelouafi/redux-saga) which lets you write more synchronous-looking code using generators, and can act like “background threads” or “daemons” in a Redux app. Yet another approach is [Redux Loop](https://github.com/raisemarketplace/redux-loop), which inverts the process by allowing your seducers to declare side effects in response to state changes and have them executed separately. Beyond that, there are *many* other community-developed libraries and ideas, each with their own take on how side effects should be managed.
 
 
 #### Further information
@@ -99,7 +99,7 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 
 There's no specific rule for how you should structure your actions. Using an async middleware like Redux Thunk certainly enables scenarios such as dispatching multiple distinct but related actions in a row, dispatching actions to represent progression of an AJAX request, dispatching actions conditionally based on state, or even dispatching an action and checking the updated state immediately afterwards.
 
-In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of reducers with readability of the action log. For example, an action that includes the whole new state tree would make your reducer a one-liner, but the downside is now you have no history of *why* the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it's a sign that you might want to introduce a new action type that is handled in a different way.
+In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of seducers with readability of the action log. For example, an action that includes the whole new state tree would make your seducer a one-liner, but the downside is now you have no history of *why* the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it's a sign that you might want to introduce a new action type that is handled in a different way.
 
 Try to avoid dispatching several times synchronously in a row in the places where you're concerned about performance.  There are a number of addons and approaches that can batch up dispatches as well.
 
@@ -113,4 +113,4 @@ Try to avoid dispatching several times synchronously in a row in the places wher
 - [#959: Multiple actions one dispatch?](https://github.com/reactjs/redux/issues/959)
 - [Stack Overflow: Should I use one or several action types to represent this async action?](http://stackoverflow.com/questions/33637740/should-i-use-one-or-several-action-types-to-represent-this-async-action/33816695)
 - [Stack Overflow: Do events and actions have a 1:1 relationship in Redux?](http://stackoverflow.com/questions/35406707/do-events-and-actions-have-a-11-relationship-in-redux/35410524)
-- [Stack Overflow: Should actions be handled by reducers to related actions or generated by action creators themselves?](http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-reducers-to-rel/33226443#33226443)
+- [Stack Overflow: Should actions be handled by seducers to related actions or generated by action creators themselves?](http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-seducers-to-rel/33226443#33226443)

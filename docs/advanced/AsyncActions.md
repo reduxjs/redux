@@ -8,19 +8,19 @@ In this guide, we will build a different, asynchronous application. It will use 
 
 When you call an asynchronous API, there are two crucial moments in time: the moment you start the call, and the moment when you receive an answer (or a timeout).
 
-Each of these two moments usually require a change in the application state; to do that, you need to dispatch normal actions that will be processed by reducers synchronously. Usually, for any API request you'll want to dispatch at least three different kinds of actions:
+Each of these two moments usually require a change in the application state; to do that, you need to dispatch normal actions that will be processed by seducers synchronously. Usually, for any API request you'll want to dispatch at least three different kinds of actions:
 
-* **An action informing the reducers that the request began.**
+* **An action informing the seducers that the request began.**
 
-  The reducers may handle this action by toggling an `isFetching` flag in the state. This way the UI knows it's time to show a spinner.
+  The seducers may handle this action by toggling an `isFetching` flag in the state. This way the UI knows it's time to show a spinner.
 
-* **An action informing the reducers that the request finished successfully.**
+* **An action informing the seducers that the request finished successfully.**
 
-  The reducers may handle this action by merging the new data into the state they manage and resetting `isFetching`. The UI would hide the spinner, and display the fetched data.
+  The seducers may handle this action by merging the new data into the state they manage and resetting `isFetching`. The UI would hide the spinner, and display the fetched data.
 
-* **An action informing the reducers that the request failed.**
+* **An action informing the seducers that the request failed.**
 
-  The reducers may handle this action by resetting `isFetching`. Additionally, some reducers may want to store the error message so the UI can display it.
+  The seducers may handle this action by resetting `isFetching`. Additionally, some seducers may want to store the error message so the UI can display it.
 
 You may use a dedicated `status` field in your actions:
 
@@ -38,7 +38,7 @@ Or you can define separate types for them:
 { type: 'FETCH_POSTS_SUCCESS', response: { ... } }
 ```
 
-Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
+Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and seducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
 
 Whatever convention you choose, stick with it throughout the application.  
 We'll use separate types in this tutorial.
@@ -113,7 +113,7 @@ This is all we need to know for now. The particular mechanism to dispatch these 
 
 ## Designing the State Shape
 
-Just like in the basic tutorial, you'll need to [design the shape of your application's state](../basics/Reducers.md#designing-the-state-shape) before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.
+Just like in the basic tutorial, you'll need to [design the shape of your application's state](../basics/Seducers.md#designing-the-state-shape) before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.
 
 This part is often confusing to beginners, because it is not immediately clear what information describes the state of an asynchronous application, and how to organize it in a single tree.
 
@@ -204,16 +204,16 @@ There are a few important bits here:
 
 ## Handling Actions
 
-Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.
+Before going into the details of dispatching actions together with network requests, we will write the seducers for the actions we defined above.
 
->##### Note on Reducer Composition
+>##### Note on Seducer Composition
 
-> Here, we assume that you understand reducer composition with [`combineReducers()`](../api/combineReducers.md), as described in the [Splitting Reducers](../basics/Reducers.md#splitting-reducers) section on the [basics guide](../basics/README.md). If you don't, please [read it first](../basics/Reducers.md#splitting-reducers).
+> Here, we assume that you understand seducer composition with [`combineSeducers()`](../api/combineSeducers.md), as described in the [Splitting Seducers](../basics/Seducers.md#splitting-seducers) section on the [basics guide](../basics/README.md). If you don't, please [read it first](../basics/Seducers.md#splitting-seducers).
 
-#### `reducers.js`
+#### `seducers.js`
 
 ```js
-import { combineReducers } from 'redux'
+import { combineSeducers } from 'redux'
 import {
   SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
@@ -268,12 +268,12 @@ function postsBySubreddit(state = {}, action) {
   }
 }
 
-const rootReducer = combineReducers({
+const rootSeducer = combineSeducers({
   postsBySubreddit,
   selectedSubreddit
 })
 
-export default rootReducer
+export default rootSeducer
 ```
 
 In this code, there are two interesting parts:
@@ -292,9 +292,9 @@ In this code, there are two interesting parts:
   nextState[action.subreddit] = posts(state[action.subreddit], action)
   return Object.assign({}, state, nextState)
   ```
-* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we're delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.md#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
+* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [seducer composition](../basics/Seducers.md#splitting-seducers)! It is our choice how to split the seducer into smaller seducers, and in this case, we're delegating updating items inside an object to a `posts` seducer. The [real world example](../introduction/Examples.md#real-world) goes even further, showing how to create a seducer factory for parameterized pagination seducers.
 
-Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
+Remember that seducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
 
 ## Async Action Creators
 
@@ -393,12 +393,12 @@ import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
 import { selectSubreddit, fetchPosts } from './actions'
-import rootReducer from './reducers'
+import rootSeducer from './seducers'
 
 const loggerMiddleware = createLogger()
 
 const store = createStore(
-  rootReducer,
+  rootSeducer,
   applyMiddleware(
     thunkMiddleware, // lets us dispatch() functions
     loggerMiddleware // neat middleware that logs actions

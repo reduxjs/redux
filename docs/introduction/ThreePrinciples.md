@@ -48,9 +48,9 @@ store.dispatch({
 
 ### Changes are made with pure functions
 
-**To specify how the state tree is transformed by actions, you write pure [reducers](../Glossary.md#reducer).**
+**To specify how the state tree is transformed by actions, you write pure [seducers](../Glossary.md#seducer).**
 
-Reducers are just pure functions that take the previous state and an action, and return the next state. Remember to return new state objects, instead of mutating the previous state. You can start with a single reducer, and as your app grows, split it off into smaller reducers that manage specific parts of the state tree. Because reducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable reducers for common tasks such as pagination.
+Seducers are just pure functions that take the previous state and an action, and return the next state. Remember to return new state objects, instead of mutating the previous state. You can start with a single seducer, and as your app grows, split it off into smaller seducers that manage specific parts of the state tree. Because seducers are just functions, you can control the order in which they are called, pass additional data, or even make reusable seducers for common tasks such as pagination.
 
 ```js
 
@@ -87,9 +87,9 @@ function todos(state = [], action) {
   }
 }
 
-import { combineReducers, createStore } from 'redux'
-let reducer = combineReducers({ visibilityFilter, todos })
-let store = createStore(reducer)
+import { combineSeducers, createStore } from 'redux'
+let seducer = combineSeducers({ visibilityFilter, todos })
+let store = createStore(seducer)
 ```
 
 That's it! Now you know what Redux is all about.

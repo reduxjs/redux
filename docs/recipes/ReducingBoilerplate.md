@@ -16,7 +16,7 @@ Actions look like this:
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-It is a common convention that actions have a constant type that helps reducers (or Stores in Flux) identify them. We recommend that you use strings and not [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) for action types, because strings are serializable, and by using Symbols you make recording and replaying harder than it needs to be.
+It is a common convention that actions have a constant type that helps seducers (or Stores in Flux) identify them. We recommend that you use strings and not [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) for action types, because strings are serializable, and by using Symbols you make recording and replaying harder than it needs to be.
 
 In Flux, it is traditionally thought that you would define every action type as a string constant:
 
@@ -202,11 +202,11 @@ class Posts extends Component {
       return
     }
 
-    // Reducer can react to this action by setting
+    // Seducer can react to this action by setting
     // `isFetching` and thus letting us show a spinner.
     dispatch(loadPostsRequest(userId))
 
-    // Reducer can react to these actions by filling the `users`.
+    // Seducer can react to these actions by filling the `users`.
     fetch(`http://myapi.com/users/${userId}/posts`).then(
       response => dispatch(loadPostsSuccess(userId, response)),
       error => dispatch(loadPostsFailure(userId, error))
@@ -432,7 +432,7 @@ export function addComment(postId, message) {
 }
 ```
 
-## Reducers
+## Seducers
 
 Redux reduces the boilerplate of Flux stores considerably by describing the update logic as a function. A function is simpler than an object, and much simpler than a class.
 
@@ -477,12 +477,12 @@ The `switch` statement is *not* the real boilerplate. The real boilerplate of Fl
 
 It's unfortunate that many still choose Flux framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can solve this with a single function, as we show below.
 
-### Generating Reducers
+### Generating Seducers
 
-Let's write a function that lets us express reducers as an object mapping from action types to handlers. For example, if we want our `todos` reducers to be defined like this:
+Let's write a function that lets us express seducers as an object mapping from action types to handlers. For example, if we want our `todos` seducers to be defined like this:
 
 ```js
-export const todos = createReducer([], {
+export const todos = createSeducer([], {
   [ActionTypes.ADD_TODO](state, action) {
     let text = action.text.trim()
     return [ ...state, text ]
@@ -493,8 +493,8 @@ export const todos = createReducer([], {
 We can write the following helper to accomplish this:
 
 ```js
-function createReducer(initialState, handlers) {
-  return function reducer(state = initialState, action) {
+function createSeducer(initialState, handlers) {
+  return function seducer(state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
       return handlers[action.type](state, action)
     } else {
@@ -506,4 +506,4 @@ function createReducer(initialState, handlers) {
 
 This wasn't difficult, was it? Redux doesn't provide such a helper function by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to a “catch all” handler. All of this depends on the conventions you choose for your team on a specific project.
 
-The Redux reducer API is `(state, action) => state`, but how you create those reducers is up to you.
+The Redux seducer API is `(state, action) => state`, but how you create those seducers is up to you.

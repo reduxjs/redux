@@ -88,24 +88,24 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Customize batching and debouncing calls to the store subscribers
 * [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — History transitions based on arbitrary actions
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later committed or reverted
-* [redux-optimistic-ui](https://github.com/mattkrick/redux-optimistic-ui) — A reducer enhancer to enable type-agnostic optimistic updates
-* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
+* [redux-optimistic-ui](https://github.com/mattkrick/redux-optimistic-ui) — A seducer enhancer to enable type-agnostic optimistic updates
+* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your seducers
 * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
 * [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
 * [redux-search](https://github.com/treasure-data/redux-search) — Automatically index resources in a web worker and search them without blocking
 * [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store enhancers that synchronize Redux stores across Electron processes
-* [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
-* [redux-side-effects](https://github.com/salsita/redux-side-effects) — Utilize Generators for declarative yielding of side effects from your pure reducers
+* [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your seducers
+* [redux-side-effects](https://github.com/salsita/redux-side-effects) — Utilize Generators for declarative yielding of side effects from your pure seducers
 
 ### Utilities
 
 * [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
-* [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the reducers
-* [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
-* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators
+* [normalizr](https://github.com/gaearon/normalizr) — Normalize nested API responses for easier consumption by the seducers
+* [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing seducers and action creators
+* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making seducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
-* [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineReducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
+* [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineSeducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
 * [redux-actions-assertions](https://github.com/dmitry-zaets/redux-actions-assertions) — Assertions for Redux actions testing
@@ -113,7 +113,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 ### DevTools
 
-* [Redux DevTools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
+* [Redux DevTools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the seducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
 * [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) — A Chrome extension wrapping Redux DevTools and providing additional functionality
 
 ### DevTools Monitors
@@ -131,8 +131,8 @@ On this page we will only feature a few of them that the Redux maintainers have 
 ### Community Conventions
 
 * [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — A human-friendly standard for Flux action objects
-* [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — An opinionated standard for nested reducer composition
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling reducers, action types and actions
+* [Canonical Seducer Composition](https://github.com/gajus/canonical-seducer-composition) — An opinionated standard for nested seducer composition
+* [Ducks: Redux Seducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling seducers, action types and actions
 
 ### Translations
 

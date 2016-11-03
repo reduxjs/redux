@@ -76,7 +76,7 @@ Note that unlike Redux itself, many packages in the Redux ecosystem don't provid
 
 The whole state of your app is stored in an object tree inside a single *store*.  
 The only way to change the state tree is to emit an *action*, an object describing what happened.  
-To specify how the actions transform the state tree, you write pure *reducers*.
+To specify how the actions transform the state tree, you write pure *seducers*.
 
 That's it!
 
@@ -84,7 +84,7 @@ That's it!
 import { createStore } from 'redux'
 
 /**
- * This is a reducer, a pure function with (state, action) => state signature.
+ * This is a seducer, a pure function with (state, action) => state signature.
  * It describes how an action transforms the state into the next state.
  *
  * The shape of the state is up to you: it can be a primitive, an array, an object,
@@ -128,9 +128,9 @@ store.dispatch({ type: 'DECREMENT' })
 // 1
 ```
 
-Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. Then you write a special function called a *reducer* to decide how every action transforms the entire application's state.
+Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called *actions*. Then you write a special function called a *seducer* to decide how every action transforms the entire application's state.
 
-If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. Instead, there is just a single store with a single root reducing function. As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. This is exactly like how there is just one root component in a React app, but it is composed out of many small components.
+If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. Instead, there is just a single store with a single root reducing function. As your app grows, instead of adding stores, you split the root seducer into smaller seducers independently operating on the different parts of the state tree. This is exactly like how there is just one root component in a React app, but it is composed out of many small components.
 
 This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
@@ -192,7 +192,7 @@ Join the [#redux](https://discord.gg/0ZcbPKXt5bZ6au5t) channel of the [Reactiflu
 
 ### Thanks
 
-* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
+* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with seducers;
 * [Turning the database inside-out](http://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
 * [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
 * [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) for Hot Module Replacement;

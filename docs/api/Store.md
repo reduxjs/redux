@@ -4,25 +4,25 @@ A store holds the whole [state tree](../Glossary.md#state) of your application.
 The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.  
 
 A store is not a class. It's just an object with a few methods on it.  
-To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
+To create it, pass your root [reducing function](../Glossary.md#seducer) to [`createStore`](createStore.md).
 
 >##### A Note for Flux Users
 
->If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
+>If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../Glossary.md#seducer).** As your app grows, instead of adding stores, you split the root seducer into smaller seducers independently operating on the different parts of the state tree. You can use a helper like [`combineSeducers`](combineSeducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
 
 ### Store Methods
 
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replaceReducer)
+- [`replaceSeducer(nextSeducer)`](#replaceSeducer)
 
 ## Store Methods
 
 ### <a id='getState'></a>[`getState()`](#getState)
 
 Returns the current state tree of your application.  
-It is equal to the last value returned by the store's reducer.
+It is equal to the last value returned by the store's seducer.
 
 #### Returns
 
@@ -37,9 +37,9 @@ Dispatches an action. This is the only way to trigger a state change.
 The store's reducing function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
 
 >##### A Note for Flux Users
->If you attempt to call `dispatch` from inside the [reducer](../Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
+>If you attempt to call `dispatch` from inside the [seducer](../Glossary.md#seducer), it will throw with an error saying “Seducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
 
->In Redux, subscriptions are called after the root reducer has returned the new state, so you *may* dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../Glossary.md#action-creator).
+>In Redux, subscriptions are called after the root seducer has returned the new state, so you *may* dispatch in the subscription listeners. You are only disallowed to dispatch inside the seducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../Glossary.md#action-creator).
 
 #### Arguments
 
@@ -51,7 +51,7 @@ The store's reducing function will be called with the current [`getState()`](#ge
 
 #### Notes
 
-<sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
+<sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the seducer.
 
 However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
 
@@ -96,7 +96,7 @@ To unsubscribe the change listener, invoke the function returned by `subscribe`.
 
 #### Arguments
 
-1. `listener` (*Function*): The callback to be invoked any time an action has been dispatched, and the state tree might have changed. You may call [`getState()`](#getState) inside this callback to read the current state tree. It is reasonable to expect that the store's reducer is a pure function, so you may compare references to some deep path in the state tree to learn whether its value has changed.
+1. `listener` (*Function*): The callback to be invoked any time an action has been dispatched, and the state tree might have changed. You may call [`getState()`](#getState) inside this callback to read the current state tree. It is reasonable to expect that the store's seducer is a pure function, so you may compare references to some deep path in the state tree to learn whether its value has changed.
 
 ##### Returns
 
@@ -125,12 +125,12 @@ unsubscribe()
 
 <hr>
 
-### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
+### <a id='replaceSeducer'></a>[`replaceSeducer(nextSeducer)`](#replaceSeducer)
 
-Replaces the reducer currently used by the store to calculate the state.
+Replaces the seducer currently used by the store to calculate the state.
 
-It is an advanced API. You might need this if your app implements code splitting, and you want to load some of the reducers dynamically. You might also need this if you implement a hot reloading mechanism for Redux.
+It is an advanced API. You might need this if your app implements code splitting, and you want to load some of the seducers dynamically. You might also need this if you implement a hot reloading mechanism for Redux.
 
 #### Arguments
 
-1. `reducer` (*Function*) The next reducer for the store to use.
+1. `seducer` (*Function*) The next seducer for the store to use.

@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from '../src/index'
-import * as reducers from './helpers/reducers'
+import * as seducers from './helpers/seducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
 
@@ -13,7 +13,7 @@ describe('applyMiddleware', () => {
     }
 
     const spy = jest.fn()
-    const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
+    const store = applyMiddleware(test(spy), thunk)(createStore)(seducers.todos)
 
     store.dispatch(addTodo('Use Redux'))
     store.dispatch(addTodo('Flux FTW!'))
@@ -37,7 +37,7 @@ describe('applyMiddleware', () => {
     }
 
     const spy = jest.fn()
-    const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
+    const store = applyMiddleware(test(spy), thunk)(createStore)(seducers.todos)
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {
       expect(spy.mock.calls.length).toEqual(2)
@@ -45,7 +45,7 @@ describe('applyMiddleware', () => {
   })
 
   it('works with thunk middleware', done => {
-    const store = applyMiddleware(thunk)(createStore)(reducers.todos)
+    const store = applyMiddleware(thunk)(createStore)(seducers.todos)
 
     store.dispatch(addTodoIfEmpty('Hello'))
     expect(store.getState()).toEqual([
@@ -103,7 +103,7 @@ describe('applyMiddleware', () => {
       return () => action => action
     }
 
-    const store = createStore(reducers.todos, applyMiddleware(earlyDispatch))
+    const store = createStore(seducers.todos, applyMiddleware(earlyDispatch))
     expect(store.getState()).toEqual([
       {
         id: 1,
