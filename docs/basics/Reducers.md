@@ -1,10 +1,10 @@
 # Reducers
 
-[Actions](./Actions.md) describe the fact that *something happened*, but don't specify how the application's state changes in response. This is the job of a reducer.
+[Actions](./Actions.md) describe the fact that *something happened*, but don't specify how the application's state changes in response. This is the job of reducers.
 
 ## Designing the State Shape
 
-In Redux, all application state is stored as a single object. It's a good idea to think of its shape before writing any code. What's the minimal representation of your app's state as an object?
+In Redux, all the application state is stored as a single object. It's a good idea to think of its shape before writing any code. What's the minimal representation of your app's state as an object?
 
 For our todo app, we want to store two different things:
 
