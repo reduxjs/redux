@@ -439,24 +439,25 @@ Redux reduces the boilerplate of Flux stores considerably by describing the upda
 Consider this Flux store:
 
 ```js
-let _todos = []
+import { ReduceStore } from 'flux/utils'
 
-const TodoStore = Object.assign({}, EventEmitter.prototype, {
-  getAll() {
-    return _todos
+class TodoStore extends ReduceStore {
+  getInitialState() {
+    return []
   }
-})
-
-AppDispatcher.register(function (action) {
-  switch (action.type) {
+  
+  reduce(todos, action) {
+    switch (action.type) {
     case ActionTypes.ADD_TODO:
       let text = action.text.trim()
-      _todos.push(text)
-      TodoStore.emitChange()
+      return [ ...todos, text ]
+    default:
+      return todos
+    }
   }
 })
 
-export default TodoStore
+export default new TodoStore(AppDispatcher)
 ```
 
 With Redux, the same update logic can be described as a reducing function:
@@ -473,7 +474,7 @@ export function todos(state = [], action) {
 }
 ```
 
-The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
+The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
 
 It's unfortunate that many still choose Flux framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can solve this with a single function, as we show below.
 
