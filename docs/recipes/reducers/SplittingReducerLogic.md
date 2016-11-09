@@ -17,7 +17,7 @@ For clarity, these terms will be used to distinguish between different types of 
 - ***root reducer***: the reducer function that is actually passed as the first argument to `createStore`.  This is the only part of the reducer logic that _must_ have the `(state, action) -> newState` signature.
 - ***slice reducer***: a reducer that is being used to handle updates to one specific slice of the state tree, usually done by passing it to `combineReducers`
 - ***case function***: a function that is being used to handle the update logic for a specific action.  This may actually be a reducer function, or it may require other parameters to do its work properly.
-- ***higher-order reducer***: a function that takes a reducer function as an argument, and/or returns a new reducer function as a result (such as `combineReducers`, or `redux-undo`
+- ***higher-order reducer***: a function that takes a reducer function as an argument, and/or returns a new reducer function as a result (such as `combineReducers`, or `redux-undo`)
 
 The term "*sub-reducer*" has also been used in various discussions to mean any function that is not the root reducer, although the term is not very precise.  Some people may also refer to some functions as "*business logic*" (functions that relate to application-specific behavior) or "*utility functions*" (generic functions that are not application-specific).
 
