@@ -40,7 +40,7 @@ export default class MainSection extends Component {
   renderFooter(completedCount) {
     const { todos } = this.props
     const { filter } = this.state
-    const activeCount = todos.length - completedCount
+    let activeCount = todos.length - completedCount
 
     if (todos.length) {
       return (
@@ -58,7 +58,7 @@ export default class MainSection extends Component {
     const { filter } = this.state
 
     const filteredTodos = todos.filter(TODO_FILTERS[filter])
-    const completedCount = todos.reduce((count, todo) =>
+    let completedCount = todos.reduce((count, todo) =>
       todo.completed ? count + 1 : count,
       0
     )
