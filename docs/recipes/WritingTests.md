@@ -118,7 +118,7 @@ can be tested like:
 ```js
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import * as actions from '../../actions/counter'
+import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
 import expect from 'expect' // You can use any testing library
