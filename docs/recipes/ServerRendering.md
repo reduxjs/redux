@@ -138,7 +138,7 @@ import { Provider } from 'react-redux'
 import App from './containers/App'
 import counterApp from './reducers'
 
-// Grab the state from a global injected into server-generated HTML
+// Grab the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__
 
 // Create Redux store with initial state
