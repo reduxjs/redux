@@ -3,7 +3,7 @@
 * [Read Me](/README.md)
 * [Introduction](/docs/introduction/README.md)
   * [Motivation](/docs/introduction/Motivation.md)
-  * [The Redux Way](/docs/introduction/TheReduxWay.md)
+  * [Core Concepts](/docs/introduction/CoreConcepts.md)
   * [Three Principles](/docs/introduction/ThreePrinciples.md)
   * [Prior Art](/docs/introduction/PriorArt.md)
   * [Ecosystem](/docs/introduction/Ecosystem.md)

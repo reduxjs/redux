@@ -1,4 +1,4 @@
-# The Redux Way
+# Core Concepts
 
 Redux itself is very simple.
 

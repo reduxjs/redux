@@ -1,7 +1,7 @@
 ## Introduction
 
 * [Motivation](Motivation.md)
-* [The Redux Way](TheReduxWay.md)
+* [Core Concepts](CoreConcepts.md)
 * [Three Principles](ThreePrinciples.md)
 * [Prior Art](PriorArt.md)
 * [Ecosystem](Ecosystem.md)
