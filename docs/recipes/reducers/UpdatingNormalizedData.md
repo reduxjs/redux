@@ -12,11 +12,13 @@ One approach is to merge the contents of the action in to the existing state.  I
 import merge from "lodash/object/merge";
 
 function commentsById(state = {}, action) {
-    default : {
-       if(action.entities && action.entities.comments) {
-           return merge({}, state, action.entities.comments.byId);
-       }
-       return state;
+    switch(action.type) {
+        default : {
+           if(action.entities && action.entities.comments) {
+               return merge({}, state, action.entities.comments.byId);
+           }
+           return state;
+        }
     }
 }
 ```
@@ -64,8 +66,10 @@ function addComment(state, action) {
 }
 
 function postsById(state = {}, action) {
-    case "ADD_COMMENT" : return addComment(state, action);
-    default : return state;
+    switch(action.type) {
+        case "ADD_COMMENT" : return addComment(state, action);
+        default : return state;
+    }
 }
 
 function allPosts(state = [], action) {
@@ -94,8 +98,10 @@ function addCommentEntry(state, action) {
 }
 
 function commentsById(state = {}, action) {
-    case "ADD_COMMENT" : return addCommentEntry(state, action);
-    default : return state;
+    switch(action.type) {
+        case "ADD_COMMENT" : return addCommentEntry(state, action);
+        default : return state;
+    }
 }
 
 
@@ -107,8 +113,10 @@ function addCommentId(state, action) {
 }
 
 function allComments(state = [], action) {
-    case "ADD_COMMENT" : return addCommentId(state, action);
-    default : return state;
+    switch(action.type) {
+        case "ADD_COMMENT" : return addCommentId(state, action);
+        default : return state;
+    }
 }
 
 const commentsReducer = combineReducers({
@@ -212,8 +220,7 @@ export class Post extends Model {
       }
     }
     
-    // Immutably apply updates to the Post section of state
-    return Post.getNextState();
+    // Redux-ORM will automatically apply queued updates after this returns
   }
 }
 Post.modelName = "Post";
@@ -235,8 +242,7 @@ export class Comment extends Model {
       }   
     }
     
-    // Immutably apply updates to the Comment section of state
-    return Comment.getNextState();
+    // Redux-ORM will automatically apply queued updates after this returns
   }
 }
 Comment.modelName = "Comment";
