@@ -48,6 +48,7 @@
   * [Organizing State](/docs/faq/OrganizingState.md)
   * [Store Setup](/docs/faq/StoreSetup.md)
   * [Actions](/docs/faq/Actions.md)
+  * [Immutable Data](/docs/faq/ImmutableData.md)
   * [Code Structure](/docs/faq/CodeStructure.md)
   * [Performance](/docs/faq/Performance.md)
   * [React Redux](/docs/faq/ReactRedux.md)

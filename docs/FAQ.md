@@ -22,6 +22,17 @@
   - [Is there always a one-to-one mapping between reducers and actions?](/docs/faq/Actions.md#actions-reducer-mappings)
   - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](/docs/faq/Actions.md#actions-side-effects)
   - [Should I dispatch multiple actions in a row from one action creator?](/docs/faq/Actions.md#actions-multiple-actions)
+- **Immutable Data**
+  - [What are the benefits of Immutability?](/docs/faq/ImmutableData.md#benefits-of-immutability)
+  - [Why is immutability required in Redux?](/docs/faq/ImmutableData.md#why-is-immutability-required)
+  - [Do I have to use Immutable.JS?](/docs/faq/ImmutableData.md#do-i-have-to-use-immutable-js)
+  - [What are the issues with using ES6 for immutable operations?](/docs/faq/ImmutableData.md#issues-with-es6-for-immutable-ops)
+  - [Why should I use an immutable-focused library such as Immutable.JS?](/docs/faq/ImmutableData.md#why-use-immutable-library)
+  - [Why should I choose Immutable.JS as an immutable library?](/docs/faq/ImmutableData.md#why-choose-immutable-js)
+  - [What are the issues with using Immutable.JS?](/docs/faq/ImmutableData.md#issues-with-immutable-js)
+  - [Is Immutable.JS worth the effort?](/docs/faq/ImmutableData.md#is-immutable-js-worth-effort)
+  - [What are the Recommended Best Practices for using Immutable.JS with Redux?](/docs/faq/ImmutableData.md#immutable-js-best-practices)
+
 - **Code Structure**  
   - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](/docs/faq/CodeStructure.md#structure-business-logic)
