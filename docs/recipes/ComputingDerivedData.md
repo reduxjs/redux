@@ -132,7 +132,7 @@ export default VisibleTodoList
 
 ### Accessing React Props in Selectors
 
-> This section introduces an hypothetical extension to our app that allows it to support multiple Todo Lists. Please note that a full implementation of this extension requires changes to the reducers, components, actions etc. that aren't directly relevant to the topics discussed and have been omitted for brevity.
+> This section introduces a hypothetical extension to our app that allows it to support multiple Todo Lists. Please note that a full implementation of this extension requires changes to the reducers, components, actions etc. that aren't directly relevant to the topics discussed and have been omitted for brevity.
 
 So far we have only seen selectors receive the Redux store state as an argument, but a selector can receive props too.
 
