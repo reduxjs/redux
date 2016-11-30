@@ -317,6 +317,19 @@ describe('createStore', () => {
     expect(listener3.mock.calls.length).toBe(1)
   })
 
+  it('supports immediate unsubscriptions', () => {
+    const store = createStore(reducers.todos)
+
+    const listener1 = jest.fn(() => unsubscribe(true))
+    const listener2 = jest.fn()
+    store.subscribe(listener1)
+    var unsubscribe = store.subscribe(listener2)
+
+    store.dispatch(unknownAction())
+    expect(listener1.mock.calls.length).toBe(1)
+    expect(listener2.mock.calls.length).toBe(0)
+  })
+
   it('delays subscribe until the end of current dispatch', () => {
     const store = createStore(reducers.todos)
 
