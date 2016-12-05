@@ -235,6 +235,7 @@ class AsyncApp extends Component {
 
   handleChange(nextSubreddit) {
     this.props.dispatch(selectSubreddit(nextSubreddit))
+    this.props.dispatch(fetchPostsIfNeeded(nextSubreddit))
   }
 
   handleRefreshClick(e) {
