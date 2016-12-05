@@ -1,7 +1,7 @@
 # Redux FAQ: Immutable Data
 
 ## Table of Contents
-- [What are the benefits of Immutability?](#benefits-of-immutability)
+- [What are the benefits of immutability?](#benefits-of-immutability)
 - [Why is immutability required in Redux?](#why-is-immutability-required)
 - [Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
 - [What are the issues with using ES6 for immutable operations?](#issues-with-es6-for-immutable-ops)
@@ -17,21 +17,27 @@
 Immutability can bring increased performance to your app, and leads to simpler programming and debugging, as data that never changes is easier to reason about than data that is free to be changed arbitrarily throughout your app.
 
 In particular, immutability in the context of a Web app enables sophisticated change detection techniques to be implemented simply and cheaply, ensuring the computationally expensive process of updating the DOM occurs only when it absolutely has to (a cornerstone of React’s performance improvements over other libraries).
+
+
 <a id="why-is-immutability-required"></a>
 ## Why is immutability required in Redux?
 
 In the context of Redux, if your reducers mutate their arguments and directly modify the state tree, you will cause React Redux’s `connect` function to break, as it will be unable to detect changes made to objects and arrays. You MUST therefore use immutable operations in your reducers when using Redux.
+
+
 <a id="do-i-have-to-use-immutable-js"></a>
 ## Do I have to use Immutable.JS?
 
 You do not need to use Immutable.JS with Redux. ES6, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library. However, guaranteeing immutability with ES6 is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using a library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
+
+
 <a id="issues-with-es6-for-immutable-ops"></a>
 ## What are the issues with using ES6 for immutable operations?
-ES6 was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use ES6 for your Immutable operations in your Redux app.
+ES6 was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use ES6 for your immutable operations in your Redux app.
 #### Accidental Object Mutation
 With ES6, you can accidentally mutate an object (such as the Redux state tree) quite easily without realising it. For example, updating deeply nested properties, creating a new *reference* to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder. 
 
-To avoid these issues, ensure you follow the recommended [Immutable Update Patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html).
+To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html).
 
 #### Verbose Code
 Updating complex nested state trees can lead to verbose code that is tedious to write and difficult to debug.
@@ -42,15 +48,17 @@ Operating on ES6 objects and arrays in an immutable way can be slow, particularl
 **Documentation**
 - [Immutable Update Patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
 
+
 <a id="why-use-immutable-library"></a>
 ## Why should I use an immutable-focused library such as Immutable.JS?
 
-Immutable-focused libraries such as Immutable.js have been designed to overcome the issues with immutability inherent within ES6, providing all the benefits of immutability with the performance your app requires. Whether you choose to use such a library, or stick with ES6, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within ES6’s approach to immutability.
+Immutable-focused libraries such as Immutable.JS have been designed to overcome the issues with immutability inherent within ES6, providing all the benefits of immutability with the performance your app requires. Whether you choose to use such a library, or stick with ES6, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within ES6’s approach to immutability.
 
 Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what ES6 does when updating and copying values in order to guard against accidental mutations that will degrade you app’s performance, or break it altogether.
 
 **Documentation**
 - [immutability, side effects and mutation](http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
+
 
 <a id="why-choose-immutable-js"></a>
 ## Why should I choose Immutable.JS as an immutable library?
@@ -72,6 +80,8 @@ Immutable.JS does a lot work behind the scenes to optimize performance. This is 
 Immutable.JS avoids this by cleverly sharing data structures under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away. 
 
 You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it’s the *intermediate* data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.
+
+
 <a id="issues-with-immutable-js"></a>
 ## What are the issues with using Immutable.JS?
 
@@ -118,6 +128,8 @@ However, such shallow checking of object equality will not work if your data enc
 This, in turn, causes React’s `shouldComponentUpdate` method (and hence Redux’s `connect` function) to return true every time, causing an unchanged component to be re-rendered every time a change elsewhere in the app is detected, and so  severely degrading performance.
 
 Again, though, this can be prevented quite easily with careful coding, as described in the [Best Practices section](#immutable-js-best-practices) below.
+
+
 <a id="is-immutable-js-worth-effort"></a>
 ## Is Using Immutable.JS worth the effort?
 
@@ -126,6 +138,8 @@ Yes. Do not underestimate the difficulty of trying to track down a property of y
 This problem is caused predominantly by bugs in a Redux reducer, which requires immutability. If you mutate your state in a reducer, it can affect a completely different part of your app in seemingly arbitrary ways.
 
 With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app. This, together with its performance and rich API for data manipulation, is why Immutable.JS is worth the effort.
+
+
 <a id="immutable-js-best-practices"></a>
 ## What are the Recommended Best Practices for using Immutable.JS with Redux?
 
