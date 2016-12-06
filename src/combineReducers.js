@@ -42,7 +42,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     !unexpectedKeyCache[key]
   )
 
-  unexpectedKeys.forEach(key => {
+  forEach(unexpectedKeys, key => {
     unexpectedKeyCache[key] = true
   })
 
@@ -57,7 +57,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
 }
 
 function assertReducerSanity(reducers) {
-  Object.keys(reducers).forEach(key => {
+  const walkReducerKeys = (key) => {
     var reducer = reducers[key]
     var initialState = reducer(undefined, { type: ActionTypes.INIT })
 
@@ -81,7 +81,9 @@ function assertReducerSanity(reducers) {
         `action type. The initial state may not be undefined.`
       )
     }
-  })
+  }
+
+  forEach(Object.keys(reducers), walkReducerKeys)
 }
 
 /**
