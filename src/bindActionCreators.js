@@ -1,4 +1,4 @@
-import forEach from 'ramda/src/forEach'
+import forEach from './utils/forEach'
 
 function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))
@@ -46,7 +46,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     }
   }
 
-  forEach(walkKeys, keys)
+  forEach(keys, walkKeys)
 
   return boundActionCreators
 }

@@ -1,6 +1,6 @@
 import isPlainObject from 'lodash/isPlainObject'
 import $$observable from 'symbol-observable'
-import forEach from 'ramda/src/forEach'
+import forEach from './utils/forEach'
 
 /**
  * These are private action types reserved by Redux.
@@ -176,7 +176,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     var listeners = currentListeners = nextListeners
 
     var callListener = (listener) => listener()
-    forEach(callListener, listeners)
+    forEach(listeners, callListener)
 
     return action
   }

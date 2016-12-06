@@ -1,7 +1,7 @@
 import { ActionTypes } from './createStore'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
-import forEach from 'ramda/src/forEach'
+import forEach from './utils/forEach'
 
 var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : 'development'
 
@@ -115,7 +115,7 @@ export default function combineReducers(reducers) {
     }
   }
 
-  forEach(walkReducerKeys, reducerKeys)
+  forEach(reducerKeys, walkReducerKeys)
 
   var finalReducerKeys = Object.keys(finalReducers)
 
@@ -156,7 +156,7 @@ export default function combineReducers(reducers) {
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
 
-    forEach(walkFinalReducerKeys, finalReducerKeys)
+    forEach(finalReducerKeys, walkFinalReducerKeys)
 
     return hasChanged ? nextState : state
   }
