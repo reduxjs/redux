@@ -1,6 +1,7 @@
 import { ActionTypes } from './createStore'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
+import forEach from 'ramda/src/forEach'
 
 var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : 'development'
 
@@ -102,9 +103,7 @@ function assertReducerSanity(reducers) {
 export default function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
-  for (var i = 0; i < reducerKeys.length; i++) {
-    var key = reducerKeys[i]
-
+  var walkReducerKeys = (key) => {
     if (NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
@@ -115,6 +114,9 @@ export default function combineReducers(reducers) {
       finalReducers[key] = reducers[key]
     }
   }
+
+  forEach(walkReducerKeys, reducerKeys)
+
   var finalReducerKeys = Object.keys(finalReducers)
 
   if (NODE_ENV !== 'production') {
@@ -142,8 +144,7 @@ export default function combineReducers(reducers) {
 
     var hasChanged = false
     var nextState = {}
-    for (var i = 0; i < finalReducerKeys.length; i++) {
-      var key = finalReducerKeys[i]
+    var walkFinalReducerKeys = (key) => {
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
       var nextStateForKey = reducer(previousStateForKey, action)
@@ -154,6 +155,9 @@ export default function combineReducers(reducers) {
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
+
+    forEach(walkFinalReducerKeys, finalReducerKeys)
+
     return hasChanged ? nextState : state
   }
 }
