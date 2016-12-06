@@ -63,19 +63,17 @@ function assertReducerSanity(reducers) {
     if (typeof initialState === 'undefined') {
       throw new Error(
         `Reducer "${key}" returned undefined during initialization. ` +
-        `If the state passed to the reducer is undefined, you must ` +
-        `explicitly return the initial state. The initial state may ` +
-        `not be undefined.`
+        `Reducers should never return undefined. Make sure this reducer ` +
+        `has a catch-all clause for unknown action types and that it returns a ` +
+        `default initial state if the state passed to it is undefined.`
       )
     }
 
-    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.')
-    if (typeof reducer(undefined, { type }) === 'undefined') {
+    var randomState = Math.random().toString(36).substring(7).split('').join('.')
+    if (reducer(randomState, { type: ActionTypes.INIT }) !== randomState) {
       throw new Error(
-        `Reducer "${key}" returned undefined when probed with a random type. ` +
-        `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
-        `namespace. They are considered private. Instead, you must return the ` +
-        `current state for any unknown actions, unless it is undefined, ` +
+        `Reducer "${key}" did not return the current state when probed with a random type. ` +
+        `You must return the current state for any unknown actions, unless it is undefined, ` +
         `in which case you must return the initial state, regardless of the ` +
         `action type. The initial state may not be undefined.`
       )

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { combineReducers } from '../src'
-import createStore, { ActionTypes } from '../src/createStore'
+import createStore from '../src/createStore'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -105,6 +105,25 @@ describe('Utils', () => {
       )
     })
 
+    it('throws an error if reducer does not have a catch-all clause for unknown action types', () => {
+      const reducer = combineReducers({
+        counter(state = 0, action) {
+          switch (action.type) {
+            case 'increment':
+              return state + 1
+            case 'decrement':
+              return state - 1
+            case undefined:
+              return state
+          }
+        }
+      })
+
+      expect(() => reducer()).toThrow(
+        /"counter".*initialization/
+      )
+    })
+
     it('catches error thrown in reducer when initializing and re-throw', () => {
       const reducer = combineReducers({
         throwingReducer() {
@@ -172,7 +191,7 @@ describe('Utils', () => {
       expect(reducer(initialState, { type: 'increment' })).not.toBe(initialState)
     })
 
-    it('throws an error on first call if a reducer attempts to handle a private action', () => {
+    it('throws an error if reducer does not return current state for unknown action types', () => {
       const reducer = combineReducers({
         counter(state, action) {
           switch (action.type) {
@@ -180,16 +199,14 @@ describe('Utils', () => {
               return state + 1
             case 'decrement':
               return state - 1
-            // Never do this in your code:
-            case ActionTypes.INIT:
-              return 0
             default:
-              return undefined
+              return 0
           }
         }
       })
+
       expect(() => reducer()).toThrow(
-        /"counter".*private/
+        /"counter".*probed/
       )
     })
 
