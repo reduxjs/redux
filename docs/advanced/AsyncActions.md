@@ -310,7 +310,7 @@ We can still define these special thunk action creators inside our `actions.js` 
 import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
-function requestPosts(subreddit) {
+export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
     subreddit
@@ -318,7 +318,7 @@ function requestPosts(subreddit) {
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(subreddit, json) {
+export function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
@@ -419,7 +419,7 @@ The nice thing about thunks is that they can dispatch results of each other:
 import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
-function requestPosts(subreddit) {
+export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
     subreddit
@@ -427,7 +427,7 @@ function requestPosts(subreddit) {
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(subreddit, json) {
+export function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
@@ -436,7 +436,7 @@ function receivePosts(subreddit, json) {
   }
 }
 
-function fetchPosts(subreddit) {
+export function fetchPosts(subreddit) {
   return dispatch => {
     dispatch(requestPosts(subreddit))
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
