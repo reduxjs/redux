@@ -292,5 +292,36 @@ describe('Utils', () => {
       spy.mockClear()
       console.error = preSpy
     })
+
+    it('returns a composite reducer that can handle HYDRATE actions', () => {
+      const reducer = combineReducers({
+        counter: (state = 0, action) => {
+          switch (action.type) {
+            case 'increment':
+              return state + 1
+            case ActionTypes.HYDRATE:
+              return action.state;
+            default:
+              return state
+          }
+        },
+        stack: (state = [], action) => {
+          switch (action.type) {
+            case 'push':
+              return [ ...state, action.value ]
+            case ActionTypes.HYDRATE:
+              return action.state;
+            default:
+              return state
+          }
+        }
+      })
+
+      const s1 = reducer({}, {type:'increment'})
+      expect(s1).toEqual({counter:1, stack:[]})
+      const savedState = {counter:7, stack:['a', 'b']}
+      const s3 = reducer(s1, { type: ActionTypes.HYDRATE, state: savedState })
+      expect(s3).toEqual(savedState)
+    })
   })
 })
