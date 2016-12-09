@@ -115,7 +115,7 @@ Note that:
 
 ## Handling More Actions
 
-We have two more actions to handle! Let's extend our reducer to handle `ADD_TODO`.
+We have two more actions to handle! Just like we did with `SET_VISIBILITY_FILTER`, we'll import the `ADD_TODO` and `TOGGLE_TODO` actions and then extend our reducer to handle `ADD_TODO`.
 
 ```js
 function todoApp(state = initialState, action) {
@@ -244,8 +244,14 @@ function todoApp(state = initialState, action) {
 
 Note that `todos` also accepts `state`—but it's an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called *reducer composition*, and it's the fundamental pattern of building Redux apps.**
 
-Let's explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can:
+Let's explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can.
 
+Below our imports, let's use [ES6 Object Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to declare `SHOW_ALL`:
+```js
+const { SHOW_ALL } = VisibilityFilters;
+```
+
+Then:
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
