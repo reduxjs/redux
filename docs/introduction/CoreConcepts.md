@@ -45,7 +45,7 @@ function todos(state = [], action) {
   case 'ADD_TODO':
     return state.concat([{ text: action.text, completed: false }]);
   case 'TOGGLE_TODO':
-    returns state.map((todo, index) =>
+    return state.map((todo, index) =>
       action.index === index ?
         { text: todo.text, completed: !todo.completed } :
         todo
