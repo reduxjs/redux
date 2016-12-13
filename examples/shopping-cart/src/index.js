@@ -6,7 +6,7 @@ import createLogger from 'redux-logger'
 import thunk from 'redux-thunk'
 import reducer from './reducers'
 import { getAllProducts } from './actions'
-import App from './containers/App'
+import App from './components/App'
 
 const middleware = [ thunk ];
 if (process.env.NODE_ENV !== 'production') {
