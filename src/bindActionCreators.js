@@ -40,8 +40,9 @@ export default function bindActionCreators(actionCreators, dispatch) {
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i]
     var actionCreator = actionCreators[key]
-    if (typeof actionCreator === 'function') {
-      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+    var nestedBoundActionCreators = bindActionCreators(actionCreator, dispatch)
+    if (typeof actionCreator === 'function' || Object.keys(actionCreator).length > 0) {
+      boundActionCreators[key] = nestedBoundActionCreators
     }
   }
   return boundActionCreators
