@@ -20,7 +20,7 @@ Redux's **_only_** job on the server side is to provide the **initial state** of
 
 ## Setting Up
 
-In the following recipe, we are going to look at how to set up server-side rendering. We'll use the simplistic [Counter app](https://github.com/reactjs/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
+In the following recipe, we are going to look at how to set up server-side rendering. We'll use the simplistic [Counter app v3.0.6](https://github.com/reactjs/redux/tree/v3.0.6/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
 
 ### Install Packages
 
