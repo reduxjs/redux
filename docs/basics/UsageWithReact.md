@@ -69,7 +69,7 @@ Remember how we [designed the shape of the root state object](Reducers.md)? It's
 
 Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all, only completed, or only active todos.
 
-### Presentational Components
+###  Designing Presentational Components
 
 I see the following presentational components and their props emerge from this brief:
 
@@ -87,7 +87,7 @@ I see the following presentational components and their props emerge from this b
 
 They describe the *look* but don't know *where* the data comes from, or *how* to change it. They only render what's given to them. If you migrate from Redux to something else, you'll be able to keep all these components exactly the same. They have no dependency on Redux.
 
-### Container Components
+### Designing Container Components
 
 We will also need some container components to connect the presentational components to Redux. For example, the presentational `TodoList` component needs a container like `VisibleTodoList` that subscribes to the Redux store and knows how to apply the current visibility filter. To change the visibility filter, we will provide a `FilterLink` container component that renders a `Link` that dispatches an appropriate action on click:
 
@@ -95,7 +95,7 @@ We will also need some container components to connect the presentational compon
 * **`FilterLink`** gets the current visibility filter and renders a `Link`.
   - `filter: string` is the visibility filter it represents.
 
-### Other Components
+### Designing Other Components
 
 Sometimes it's hard to tell if some component should be a presentational component or a container. For example, sometimes form and function are really coupled together, such as in case of this tiny component:
 
@@ -107,7 +107,7 @@ Technically we could split it into two components but it might be too early at t
 
 Let's write the components! We begin with the presentational components so we don't need to think about binding to Redux yet.
 
-### Presentational Components
+### Implementing Presentational Components
 
 These are all normal React components, so we won't examine them in detail. We write functional stateless components unless we need to use local state or the lifecycle methods. This doesn't mean that presentational components *have to* be functions—it's just easier to define them this way. If and when you need to add local state, lifecycle methods, or performance optimizations, you can convert them to classes.
 
@@ -243,7 +243,7 @@ const App = () => (
 export default App
 ```
 
-### Container Components
+### Implementing Container Components
 
 Now it's time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand, but we suggest instead generating container components with the React Redux library's [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function, which provides many useful optimizations to prevent unnecessary re-renders. (One result of this is that you shouldn't have to worry about the [React performance suggestion](https://facebook.github.io/react/docs/advanced-performance.html) of implementing `shouldComponentUpdate` yourself.)
 
@@ -366,7 +366,7 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-### Other Components
+### Implementing Other Components
 
 #### `containers/AddTodo.js`
 
