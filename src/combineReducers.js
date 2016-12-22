@@ -2,6 +2,8 @@ import ActionTypes from './utils/actionTypes'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
 
+var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : 'development'
+
 function getUndefinedStateErrorMessage(key, action) {
   var actionType = action && action.type
   var actionName = actionType && `"${actionType.toString()}"` || 'an action'
@@ -12,10 +14,10 @@ function getUndefinedStateErrorMessage(key, action) {
   )
 }
 
-function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
   var reducerKeys = Object.keys(reducers)
   var argumentName = action && action.type === ActionTypes.INIT ?
-    'initialState argument passed to createStore' :
+    'preloadedState argument passed to createStore' :
     'previous state received by the reducer'
 
   if (reducerKeys.length === 0) {
@@ -34,7 +36,14 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
     )
   }
 
-  var unexpectedKeys = Object.keys(inputState).filter(key => !reducers.hasOwnProperty(key))
+  var unexpectedKeys = Object.keys(inputState).filter(key =>
+    !reducers.hasOwnProperty(key) &&
+    !unexpectedKeyCache[key]
+  )
+
+  unexpectedKeys.forEach(key => {
+    unexpectedKeyCache[key] = true
+  })
 
   if (unexpectedKeys.length > 0) {
     return (
@@ -95,11 +104,22 @@ export default function combineReducers(reducers) {
   var finalReducers = {}
   for (var i = 0; i < reducerKeys.length; i++) {
     var key = reducerKeys[i]
+
+    if (NODE_ENV !== 'production') {
+      if (typeof reducers[key] === 'undefined') {
+        warning(`No reducer provided for key "${key}"`)
+      }
+    }
+
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
     }
   }
   var finalReducerKeys = Object.keys(finalReducers)
+
+  if (NODE_ENV !== 'production') {
+    var unexpectedKeyCache = {}
+  }
 
   var sanityError
   try {
@@ -113,8 +133,8 @@ export default function combineReducers(reducers) {
       throw sanityError
     }
 
-    if (process.env.NODE_ENV !== 'production') {
-      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action)
+    if (NODE_ENV !== 'production') {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache)
       if (warningMessage) {
         warning(warningMessage)
       }

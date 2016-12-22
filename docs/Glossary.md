@@ -10,7 +10,7 @@ type State = any
 
 *State* (also called the *state tree*) is a broad term, but in the Redux API it usually refers to the single state value that is managed by the store and returned by [`getState()`](api/Store.md#getState). It represents the entire state of a Redux application, which is often a deeply nested object.
 
-By convention, the top-level state is an object or some other key-value collection like a Map, but technically it can be any type. Still, you should do your best to keep the state serializable. Don’t put anything inside it that you can’t easily turn into JSON.
+By convention, the top-level state is an object or some other key-value collection like a Map, but technically it can be any type. Still, you should do your best to keep the state serializable. Don't put anything inside it that you can't easily turn into JSON.
 
 ## Action
 
@@ -20,9 +20,9 @@ type Action = Object
 
 An *action* is a plain object that represents an intention to change the state. Actions are the only way to get data into the store. Any data, whether from UI events, network callbacks, or other sources such as WebSockets needs to eventually be dispatched as actions.
 
-Actions must have a `type` field that indicates the type of action being performed. Types can be defined as constants and imported from another module. It’s better to use strings for `type` than [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) because strings are serializable.
+Actions must have a `type` field that indicates the type of action being performed. Types can be defined as constants and imported from another module. It's better to use strings for `type` than [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) because strings are serializable.
 
-Other than `type`, the structure of an action object is really up to you. If you’re interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions should be constructed.
+Other than `type`, the structure of an action object is really up to you. If you're interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions should be constructed.
 
 See also [async action](#async-action) below.
 
@@ -53,7 +53,7 @@ A *dispatching function* (or simply *dispatch function*) is a function that acce
 
 We must distinguish between dispatching functions in general and the base [`dispatch`](api/Store.md#dispatch) function provided by the store instance without any middleware.
 
-The base dispatch function *always* synchronously sends an action to the store’s reducer, along with the previous state returned by the store, to calculate a new state. It expects actions to be plain objects ready to be consumed by the reducer.
+The base dispatch function *always* synchronously sends an action to the store's reducer, along with the previous state returned by the store, to calculate a new state. It expects actions to be plain objects ready to be consumed by the reducer.
 
 [Middleware](#middleware) wraps the base dispatch function. It allows the dispatch function to handle [async actions](#async-action) in addition to actions. Middleware may transform, delay, ignore, or otherwise interpret actions or async actions before passing them to the next middleware. See below for more information.
 
@@ -65,7 +65,7 @@ type ActionCreator = (...args: any) => Action | AsyncAction
 
 An *action creator* is, quite simply, a function that creates an action. Do not confuse the two terms—again, an action is a payload of information, and an action creator is a factory that creates an action.
 
-Calling an action creator only produces an action, but does not dispatch it. You need to call the store’s [`dispatch`](api/Store.md#dispatch) function to actually cause the mutation. Sometimes we say *bound action creators* to mean functions that call an action creator and immediately dispatch its result to a specific store instance.
+Calling an action creator only produces an action, but does not dispatch it. You need to call the store's [`dispatch`](api/Store.md#dispatch) function to actually cause the mutation. Sometimes we say *bound action creators* to mean functions that call an action creator and immediately dispatch its result to a specific store instance.
 
 If an action creator needs to read the current state, perform an API call, or cause a side effect, like a routing transition, it should return an [async action](#async-action) instead of an action.
 
@@ -101,23 +101,23 @@ type Store = {
 }
 ```
 
-A store is an object that holds the application’s state tree.  
+A store is an object that holds the application's state tree.  
 There should only be a single store in a Redux app, as the composition happens on the reducer level.
 
 - [`dispatch(action)`](api/Store.md#dispatch) is the base dispatch function described above.
 - [`getState()`](api/Store.md#getState) returns the current state of the store.
 - [`subscribe(listener)`](api/Store.md#subscribe) registers a function to be called on state changes.
-- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) can be used to implement hot reloading and code splitting. Most likely you won’t use it.
+- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) can be used to implement hot reloading and code splitting. Most likely you won't use it.
 
 See the complete [store API reference](api/Store.md#dispatch) for more details.
 
 ## Store creator
 
 ```js
-type StoreCreator = (reducer: Reducer, initialState: ?State) => Store
+type StoreCreator = (reducer: Reducer, preloadedState: ?State) => Store
 ```
 
-A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(reducer, initialState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
+A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(reducer, preloadedState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
 
 ## Store enhancer
 
@@ -131,4 +131,4 @@ Store enhancers are much the same concept as higher-order components in React, w
 
 Because a store is not an instance, but rather a plain-object collection of functions, copies can be easily created and modified without mutating the original store. There is an example in [`compose`](api/compose.md) documentation demonstrating that.
 
-Most likely you’ll never write a store enhancer, but you may use the one provided by the [developer tools](https://github.com/gaearon/redux-devtools). It is what makes time travel possible without the app being aware it is happening. Amusingly, the [Redux middleware implementation](api/applyMiddleware.md) is itself a store enhancer.
+Most likely you'll never write a store enhancer, but you may use the one provided by the [developer tools](https://github.com/gaearon/redux-devtools). It is what makes time travel possible without the app being aware it is happening. Amusingly, the [Redux middleware implementation](api/applyMiddleware.md) is itself a store enhancer.

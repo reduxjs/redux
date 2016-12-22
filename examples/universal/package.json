@@ -31,10 +31,10 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "babel-preset-react-hmre": "^1.0.1",
+    "babel-preset-react-hmre": "^1.1.1",
     "babel-runtime": "^6.3.13",
     "webpack": "^1.11.0",
     "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.6.0"
+    "webpack-hot-middleware": "^2.9.1"
   }
 }

@@ -2,9 +2,6 @@
 
 Redux is distributed with a few examples in its [source code](https://github.com/reactjs/redux/tree/master/examples).
 
->##### Note on Copying
->If you copy Redux examples outside their folders, you can delete some lines at the end of their `webpack.config.js` files. They follow a “You can safely delete these lines in your project.” comment.
-
 ## Counter Vanilla
 
 Run the [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) example:
@@ -84,7 +81,7 @@ npm start
 open http://localhost:3000/
 ```
 
-This is the classical [TodoMVC](http://todomvc.com/) example. It’s here for the sake of comparison, but it covers the same points as the Todos example.
+This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the sake of comparison, but it covers the same points as the Todos example.
 
 This example includes tests.
 

@@ -14,7 +14,7 @@ var config = {
     libraryTarget: 'umd'
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env)
     })
@@ -28,8 +28,14 @@ if (env === 'production') {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
-        screw_ie8: true,
-        warnings: false
+        warnings: false,
+        screw_ie8: false
+      },
+      mangle: {
+        screw_ie8: false
+      },
+      output: {
+        screw_ie8: false
       }
     })
   )

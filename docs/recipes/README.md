@@ -9,4 +9,5 @@ These are some use cases and code snippets to get you started with Redux in a re
 * [Writing Tests](WritingTests.md)
 * [Computing Derived Data](ComputingDerivedData.md)
 * [Implementing Undo History](ImplementingUndoHistory.md)
+* [Isolating Subapps](IsolatingSubapps.md)
 

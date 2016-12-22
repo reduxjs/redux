@@ -17,7 +17,9 @@
     "transform-es2015-parameters",
     ["transform-es2015-destructuring", { "loose": true }],
     "transform-es2015-block-scoping",
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    "transform-es3-member-expression-literals",
+    "transform-es3-property-literals"
   ],
   "env": {
     "commonjs": {

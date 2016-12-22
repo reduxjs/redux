@@ -6,7 +6,7 @@ Redux can be described in three fundamental principles:
 
 **The [state](../Glossary.md#state) of your whole application is stored in an object tree within a single [store](../Glossary.md#store).**
 
-This makes it easy to create universal apps, as the state from your server can be serialized and hydrated into the client with no extra coding effort. A single state tree also makes it easier to debug or introspect an application; it also enables you to persist your app’s state in development, for a faster development cycle. Some functionality which has been traditionally difficult to implement - Undo/Redo, for example - can suddenly become trivial to implement, if all of your state is stored in a single tree.
+This makes it easy to create universal apps, as the state from your server can be serialized and hydrated into the client with no extra coding effort. A single state tree also makes it easier to debug or introspect an application; it also enables you to persist your app's state in development, for a faster development cycle. Some functionality which has been traditionally difficult to implement - Undo/Redo, for example - can suddenly become trivial to implement, if all of your state is stored in a single tree.
 
 ```js
 console.log(store.getState())
@@ -30,9 +30,9 @@ console.log(store.getState())
 
 ### State is read-only
 
-**The only way to mutate the state is to emit an [action](../Glossary.md#action), an object describing what happened.**
+**The only way to change the state is to emit an [action](../Glossary.md#action), an object describing what happened.**
 
-This ensures that neither the views nor the network callbacks will ever write directly to the state. Instead, they express an intent to mutate. Because all mutations are centralized and happen one by one in a strict order, there are no subtle race conditions to watch out for. As actions are just plain objects, they can be logged, serialized, stored, and later replayed for debugging or testing purposes.
+This ensures that neither the views nor the network callbacks will ever write directly to the state. Instead, they express an intent to transform the state. Because all changes are centralized and happen one by one in a strict order, there are no subtle race conditions to watch out for. As actions are just plain objects, they can be logged, serialized, stored, and later replayed for debugging or testing purposes.
 
 ```js
 store.dispatch({
@@ -92,4 +92,4 @@ let reducer = combineReducers({ visibilityFilter, todos })
 let store = createStore(reducer)
 ```
 
-That’s it! Now you know what Redux is all about.
+That's it! Now you know what Redux is all about.

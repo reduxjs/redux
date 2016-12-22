@@ -16,7 +16,24 @@ const t4: (a: string) => number = compose(
 
 
 const t5: number = compose(stringToNumber, numberToString, numberToNumber)(5);
-const t6: string = compose(numberToString, stringToNumber, numberToString, numberToNumber)(5);
+const t6: string = compose(numberToString, stringToNumber, numberToString,
+  numberToNumber)(5);
 
-const t7: string = compose<string>(
-  numberToString, numberToNumber, stringToNumber, numberToString, stringToNumber)("fo");
+const t7: string = compose(
+  numberToString, numberToNumber, stringToNumber, numberToString,
+  stringToNumber)("fo");
+
+
+const multiArgFn = (a: string, b: number, c: boolean): string => 'foo'
+
+const t8: string = compose(multiArgFn)('bar', 42, true);
+const t9: number = compose(stringToNumber, multiArgFn)('bar', 42, true);
+const t10: string = compose(numberToString, stringToNumber,
+  multiArgFn)('bar', 42, true);
+
+const t11: number = compose(stringToNumber, numberToString, stringToNumber,
+  multiArgFn)('bar', 42, true);
+
+
+const funcs = [stringToNumber, numberToString, stringToNumber];
+const t12 = compose(...funcs)('bar', 42, true);

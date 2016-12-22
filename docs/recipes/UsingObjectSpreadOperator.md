@@ -1,6 +1,6 @@
 # Using Object Spread Operator
 
-Since one of the core tenets of Redux is to never mutate state, you’ll often find yourself using [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) to create
+Since one of the core tenets of Redux is to never mutate state, you'll often find yourself using [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) to create
 copies of objects with new or updated values. For example, in the `todoApp` below `Object.assign()` is used to return a new
 `state` object with an updated `visibilityFilter` property:
 
@@ -33,7 +33,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-The advantage of using the object spread syntax becomes more apparent when you’re composing complex objects. Below `getAddedIds` maps an array of `id` values to an array of objects with values returned from `getProduct` and `getQuantity`.
+The advantage of using the object spread syntax becomes more apparent when you're composing complex objects. Below `getAddedIds` maps an array of `id` values to an array of objects with values returned from `getProduct` and `getQuantity`.
 
 ```js
 return getAddedIds(state.cart).map(id => Object.assign(
@@ -54,7 +54,7 @@ return getAddedIds(state.cart).map(id => ({
 }))
 ```
 
-Since the object spread syntax is still a Stage 2 proposal for ECMAScript you’ll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You can use your existing `es2015` preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
+Since the object spread syntax is still a Stage 3 proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You can use your existing `es2015` preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
 
 ```js
 {
