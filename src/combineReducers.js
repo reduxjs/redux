@@ -99,7 +99,7 @@ function assertReducerSanity(reducers) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-export default function combineReducers(reducers) {
+export default function combineReducers(reducers, defaultValue = {}) {
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
   for (var i = 0; i < reducerKeys.length; i++) {
@@ -128,7 +128,7 @@ export default function combineReducers(reducers) {
     sanityError = e
   }
 
-  return function combination(state = {}, action) {
+  return function combination(state = defaultValue, action) {
     if (sanityError) {
       throw sanityError
     }
