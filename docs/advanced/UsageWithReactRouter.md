@@ -141,7 +141,7 @@ const FilterLink = ({ filter, children }) => (
 export default FilterLink;
 ```
 
-#### `containers/Footer.js`
+#### `components/Footer.js`
 ```js
 import React from 'react'
 import FilterLink from '../containers/FilterLink'
