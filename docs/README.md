@@ -42,6 +42,7 @@
     * [Reusing Reducer Logic](/docs/recipes/reducers/ReusingReducerLogic.md)
     * [Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
     * [Initializing State](/docs/recipes/reducers/InitializingState.md)
+  * [Using Immutable.JS with Redux](/docs/recipes/UsingImmutableJS.md)
 * [FAQ](/docs/FAQ.md)
   * [General](/docs/faq/General.md)
   * [Reducers](/docs/faq/Reducers.md)
