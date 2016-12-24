@@ -21,15 +21,15 @@ describe('Utils', () => {
       expect(compose(c, a, b)(final)('')).toBe('cab')
     })
 
-    it('composes only functions', () => {
+    it('throws at runtime if argument is not a function', () => {
       const square = x => x * x
       const add = (x, y) => x + y
-      
-      expect(compose(square, add, false)(1, 2)).toBe(9)
-      expect(compose(square, add, undefined)(1, 2)).toBe(9)
-      expect(compose(square, add, true)(1, 2)).toBe(9)
-      expect(compose(square, add, NaN)(1, 2)).toBe(9)
-      expect(compose(square, add, '42')(1, 2)).toBe(9)
+
+      expect(() => compose(square, add, false)(1, 2)).toThrow()
+      expect(() => compose(square, add, undefined)(1, 2)).toThrow()
+      expect(() => compose(square, add, true)(1, 2)).toThrow()
+      expect(() => compose(square, add, NaN)(1, 2)).toThrow()
+      expect(() => compose(square, add, '42')(1, 2)).toThrow()
     })
 
     it('can be seeded with multiple arguments', () => {
@@ -41,7 +41,6 @@ describe('Utils', () => {
     it('returns the first given argument if given no functions', () => {
       expect(compose()(1, 2)).toBe(1)
       expect(compose()(3)).toBe(3)
-      expect(compose(false,4,'test')(3)).toBe(3)
       expect(compose()()).toBe(undefined)
     })
 

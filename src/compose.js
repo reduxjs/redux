@@ -10,8 +10,6 @@
  */
 
 export default function compose(...funcs) {
-  funcs = funcs.filter(func => typeof func === 'function')
-
   if (funcs.length === 0) {
     return arg => arg
   }
