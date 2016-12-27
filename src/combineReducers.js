@@ -117,8 +117,9 @@ export default function combineReducers(reducers) {
   }
   const finalReducerKeys = Object.keys(finalReducers)
 
+  let unexpectedKeyCache
   if (NODE_ENV !== 'production') {
-    var unexpectedKeyCache = {}
+    unexpectedKeyCache = {}
   }
 
   let sanityError
