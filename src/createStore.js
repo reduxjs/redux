@@ -7,7 +7,7 @@ import $$observable from 'symbol-observable'
  * If the current state is undefined, you must return the initial state.
  * Do not reference these action types directly in your code.
  */
-export var ActionTypes = {
+export const ActionTypes = {
   INIT: '@@redux/INIT'
 }
 
@@ -54,11 +54,11 @@ export default function createStore(reducer, preloadedState, enhancer) {
     throw new Error('Expected the reducer to be a function.')
   }
 
-  var currentReducer = reducer
-  var currentState = preloadedState
-  var currentListeners = []
-  var nextListeners = currentListeners
-  var isDispatching = false
+  let currentReducer = reducer
+  let currentState = preloadedState
+  let currentListeners = []
+  let nextListeners = currentListeners
+  let isDispatching = false
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -103,7 +103,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Expected listener to be a function.')
     }
 
-    var isSubscribed = true
+    let isSubscribed = true
 
     ensureCanMutateNextListeners()
     nextListeners.push(listener)
@@ -116,7 +116,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      var index = nextListeners.indexOf(listener)
+      const index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
     }
   }
@@ -172,9 +172,9 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isDispatching = false
     }
 
-    var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
-      var listener = listeners[i]
+    const listeners = currentListeners = nextListeners
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i]
       listener()
     }
 
@@ -207,7 +207,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * https://github.com/zenparsing/es-observable
    */
   function observable() {
-    var outerSubscribe = subscribe
+    const outerSubscribe = subscribe
     return {
       /**
        * The minimal observable subscription method.
@@ -229,7 +229,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
         }
 
         observeState()
-        var unsubscribe = outerSubscribe(observeState)
+        const unsubscribe = outerSubscribe(observeState)
         return { unsubscribe }
       },
 
