@@ -121,7 +121,7 @@ export default function combineReducers(reducers) {
     var unexpectedKeyCache = {}
   }
 
-  var sanityError
+  let sanityError
   try {
     assertReducerSanity(finalReducers)
   } catch (e) {
