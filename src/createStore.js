@@ -1,5 +1,6 @@
 import isPlainObject from 'lodash/isPlainObject'
 import $$observable from 'symbol-observable'
+import forEach from './utils/forEach'
 
 /**
  * These are private action types reserved by Redux.
@@ -173,10 +174,9 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
 
     var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
-      var listener = listeners[i]
-      listener()
-    }
+
+    var callListener = (listener) => listener()
+    forEach(listeners, callListener)
 
     return action
   }

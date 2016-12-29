@@ -1,6 +1,7 @@
 import { ActionTypes } from './createStore'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
+import forEach from './utils/forEach'
 
 var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : 'development'
 
@@ -41,7 +42,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     !unexpectedKeyCache[key]
   )
 
-  unexpectedKeys.forEach(key => {
+  forEach(unexpectedKeys, key => {
     unexpectedKeyCache[key] = true
   })
 
@@ -56,7 +57,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
 }
 
 function assertReducerSanity(reducers) {
-  Object.keys(reducers).forEach(key => {
+  const walkReducerKeys = (key) => {
     var reducer = reducers[key]
     var initialState = reducer(undefined, { type: ActionTypes.INIT })
 
@@ -80,7 +81,9 @@ function assertReducerSanity(reducers) {
         `action type. The initial state may not be undefined.`
       )
     }
-  })
+  }
+
+  forEach(Object.keys(reducers), walkReducerKeys)
 }
 
 /**
@@ -102,9 +105,7 @@ function assertReducerSanity(reducers) {
 export default function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
-  for (var i = 0; i < reducerKeys.length; i++) {
-    var key = reducerKeys[i]
-
+  var walkReducerKeys = (key) => {
     if (NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
@@ -115,6 +116,9 @@ export default function combineReducers(reducers) {
       finalReducers[key] = reducers[key]
     }
   }
+
+  forEach(reducerKeys, walkReducerKeys)
+
   var finalReducerKeys = Object.keys(finalReducers)
 
   if (NODE_ENV !== 'production') {
@@ -142,8 +146,7 @@ export default function combineReducers(reducers) {
 
     var hasChanged = false
     var nextState = {}
-    for (var i = 0; i < finalReducerKeys.length; i++) {
-      var key = finalReducerKeys[i]
+    var walkFinalReducerKeys = (key) => {
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
       var nextStateForKey = reducer(previousStateForKey, action)
@@ -154,6 +157,9 @@ export default function combineReducers(reducers) {
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
+
+    forEach(finalReducerKeys, walkFinalReducerKeys)
+
     return hasChanged ? nextState : state
   }
 }
