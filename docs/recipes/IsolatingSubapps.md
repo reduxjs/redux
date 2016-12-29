@@ -53,6 +53,7 @@ initializes the store in the constructor:
 ```js
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import reducer from './reducers'
 import App from './App'
 
@@ -61,7 +62,7 @@ class SubApp extends Component {
     super(props)
     this.store = createStore(reducer)
   }
-  
+
   render() {
     return (
       <Provider store={this.store}>
@@ -78,4 +79,3 @@ This pattern is *not* recommended for parts of the same app that share data.
 However, it can be useful when the bigger app has zero access to the smaller apps' internals,
 and we'd like to keep the fact that they are implemented with Redux as an implementation detail.
 Each component instance will have its own store, so they won't “know” about each other.
-
