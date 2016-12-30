@@ -3599,9 +3599,9 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
-normalizr@^3.0.0-beta:
-  version "3.0.0-beta"
-  resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-3.0.0-beta.tgz#9f3cb52efd98504f6d6525dd9d584c56c7cee2de"
+normalizr@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-3.0.0.tgz#43099e099c102762f9b270fad02a7ca69620310e"
 
 npmlog@4.x:
   version "4.0.0"
