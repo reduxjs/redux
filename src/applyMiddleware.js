@@ -18,11 +18,11 @@ import compose from './compose'
  */
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer, preloadedState, enhancer) => {
-    var store = createStore(reducer, preloadedState, enhancer)
-    var dispatch = store.dispatch
-    var chain = []
+    const store = createStore(reducer, preloadedState, enhancer)
+    let dispatch = store.dispatch
+    let chain = []
 
-    var middlewareAPI = {
+    const middlewareAPI = {
       getState: store.getState,
       dispatch: (action) => dispatch(action)
     }
