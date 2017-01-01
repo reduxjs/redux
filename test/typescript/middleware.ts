@@ -1,9 +1,9 @@
 import {
   Middleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
-} from "../../index.d.ts";
+} from "../../";
 
-declare module "../../index.d.ts" {
+declare module "../../" {
     export interface Dispatch<S> {
         <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
     }
