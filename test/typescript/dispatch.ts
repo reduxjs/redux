@@ -1,12 +1,15 @@
-import {Dispatch, Action} from "../../index.d.ts";
+import {Dispatch, Action} from "../../";
 
 
-declare const dispatch: Dispatch;
+declare const dispatch: Dispatch<any>;
 
 
 const dispatchResult: Action = dispatch({type: 'TYPE'});
 
-
-type Thunk<O> = () => O;
+declare module "../../" {
+    export interface Dispatch<S> {
+        <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
+    }
+}
 
 const dispatchThunkResult: number = dispatch(() => 42);

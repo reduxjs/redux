@@ -1,23 +1,28 @@
 import {
   Middleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
-} from "../../index.d.ts";
+} from "../../";
 
+declare module "../../" {
+    export interface Dispatch<S> {
+        <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
+    }
+}
 
-type Thunk<S, O> = (dispatch: Dispatch, getState?: () => S) => O;
+type Thunk<S, O> = (dispatch: Dispatch<S>, getState?: () => S) => O;
 
 const thunkMiddleware: Middleware =
   <S>({dispatch, getState}: MiddlewareAPI<S>) =>
-    (next: Dispatch) =>
-      <A, B>(action: A | Thunk<S, B>): B =>
+    (next: Dispatch<S>) =>
+      <A extends Action, B>(action: A | Thunk<S, B>): B|Action =>
         typeof action === 'function' ?
           (<Thunk<S, B>>action)(dispatch, getState) :
-          <B>next(<A>action)
+          next(<A>action)
 
 
 const loggerMiddleware: Middleware =
   <S>({getState}: MiddlewareAPI<S>) =>
-    (next: Dispatch) =>
+    (next: Dispatch<S>) =>
       (action: any): any => {
         console.log('will dispatch', action)
 
@@ -47,7 +52,7 @@ const storeWithThunkMiddleware = createStore(
 );
 
 storeWithThunkMiddleware.dispatch(
-  (dispatch: Dispatch, getState: () => State) => {
+  (dispatch: Dispatch<State>, getState: () => State) => {
     const todos: string[] = getState().todos;
     dispatch({type: 'ADD_TODO'})
   }
