@@ -111,8 +111,8 @@
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^1.0.1",
     "rxjs": "^5.0.0-beta.6",
-    "typescript": "^1.8.0",
-    "typescript-definition-tester": "0.0.4"
+    "typescript": "^2.1.0",
+    "typescript-definition-tester": "0.0.5"
   },
   "npmName": "redux",
   "npmFileMap": [
