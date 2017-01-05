@@ -1,15 +1,15 @@
 import {
   Middleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
-} from "../../index.d.ts";
+} from "../../";
 
-declare module "../../index.d.ts" {
+declare module "../../" {
     export interface Dispatch<S> {
         <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
     }
 }
 
-type Thunk<S, O> = (dispatch: Dispatch<S>, getState: () => S) => O;
+type Thunk<S, O> = (dispatch: Dispatch<S>, getState?: () => S) => O;
 
 const thunkMiddleware: Middleware =
   <S>({dispatch, getState}: MiddlewareAPI<S>) =>
@@ -52,7 +52,7 @@ const storeWithThunkMiddleware = createStore(
 );
 
 storeWithThunkMiddleware.dispatch(
-  (dispatch, getState) => {
+  (dispatch: Dispatch<State>, getState: () => State) => {
     const todos: string[] = getState().todos;
     dispatch({type: 'ADD_TODO'})
   }
