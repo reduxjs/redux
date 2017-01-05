@@ -1,7 +1,7 @@
 import {
   ActionCreator, Action, Dispatch,
   bindActionCreators, ActionCreatorsMapObject
-} from "../../index";
+} from "../../"
 
 
 interface AddTodoAction extends Action {

@@ -1,7 +1,7 @@
 import {
   Reducer, Action, combineReducers,
   ReducersMapObject
-} from "../../index";
+} from "../../"
 
 
 type TodosState = string[];
@@ -47,8 +47,7 @@ type RootState = {
   counter: CounterState;
 }
 
-
-const rootReducer: Reducer<RootState> = combineReducers<RootState>({
+const rootReducer: Reducer<RootState> = combineReducers({
   todos: todosReducer,
   counter: counterReducer,
 })
