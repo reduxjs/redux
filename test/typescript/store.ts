@@ -1,7 +1,7 @@
 import {
   Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
   StoreCreator, StoreEnhancerStoreCreator, Unsubscribe
-} from "../../index";
+} from "../../"
 
 
 type State = {
@@ -22,10 +22,10 @@ const storeWithPreloadedState: Store<State> = createStore(reducer, {
 });
 
 const genericEnhancer: GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => next;
-const specificEnhencer: StoreEnhancer<State> = next => next;
+const specificEnhancer: StoreEnhancer<State> = next => next;
 
 const storeWithGenericEnhancer: Store<State> = createStore(reducer, genericEnhancer);
-const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhencer);
+const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhancer);
 
 const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(reducer, {
   todos: []
