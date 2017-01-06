@@ -10,7 +10,8 @@ function getUndefinedStateErrorMessage(key, action) {
 
   return (
     `Given action ${actionName}, reducer "${key}" returned undefined. ` +
-    `To ignore an action, you must explicitly return the previous state.`
+    `To ignore an action, you must explicitly return the previous state. ` +
+    `If you want this reducer to hold no value, you can return null instead of undefined.`
   )
 }
 
@@ -65,7 +66,8 @@ function assertReducerSanity(reducers) {
         `Reducer "${key}" returned undefined during initialization. ` +
         `If the state passed to the reducer is undefined, you must ` +
         `explicitly return the initial state. The initial state may ` +
-        `not be undefined.`
+        `not be undefined. If you don't want to set a value for this reducer, ` +
+        `you can use null instead of undefined.`
       )
     }
 
@@ -77,7 +79,7 @@ function assertReducerSanity(reducers) {
         `namespace. They are considered private. Instead, you must return the ` +
         `current state for any unknown actions, unless it is undefined, ` +
         `in which case you must return the initial state, regardless of the ` +
-        `action type. The initial state may not be undefined.`
+        `action type. The initial state may not be undefined, but can be null.`
       )
     }
   })
