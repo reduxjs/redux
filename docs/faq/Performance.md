@@ -88,7 +88,7 @@ However, you *do* need to create a copied and updated object for each level of n
 #### Further information
 
 **Documentation**
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
 - [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
 
 **Discussions**
