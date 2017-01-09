@@ -1,4 +1,6 @@
-import compose from './compose'
+import { adaptEnhancerCreator } from './adaptEnhancer'
+
+export default adaptEnhancerCreator(applyMiddleware)
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -10,33 +12,50 @@ import compose from './compose'
  * Because middleware is potentially asynchronous, this should be the first
  * store enhancer in the composition chain.
  *
- * Note that each middleware will be given the `dispatch` and `getState` functions
- * as named arguments.
+ * Note that each middleware will be given the `dispatch` and `getState`
+ * functions as named arguments.
  *
- * @param {...Function} middlewares The middleware chain to be applied.
+ * @param {...Function} middleware The middleware chain to be applied.
  * @returns {Function} A store enhancer applying the middleware.
  */
-export default function applyMiddleware(...middlewares) {
-  return (createStore) => (reducer, preloadedState, enhancer) => {
-    const store = createStore(reducer, preloadedState, enhancer)
-    let dispatch = () => {
-      throw new Error(
-        `Dispatching while constructing your middleware is not allowed. ` +
-        `Other middleware would not be applied to this dispatch.`
-      )
-    }
-    let chain = []
+function applyMiddleware(...middleware) {
+  return store => {
+    const dispatchProxy = createDispatchProxy()
 
-    const middlewareAPI = {
+    const api = {
       getState: store.getState,
-      dispatch: (action) => dispatch(action)
+      dispatch: dispatchProxy.dispatch,
     }
-    chain = middlewares.map(middleware => middleware(middlewareAPI))
-    dispatch = compose(...chain)(store.dispatch)
 
-    return {
-      ...store,
-      dispatch
-    }
+    const dispatch = middleware
+      .map(mid => mid(api))
+      .reduceRight((next, mid) => mid(next), store.dispatch)
+
+    dispatchProxy.replace(dispatch)
+    return { dispatch }
   }
+}
+
+// Because the `finalDispatch` function isn't known until after the middleware
+// have been composed, but it needs to be accessible to those middleware before
+// then, it needs to be wrapped in a proxy function. To prevent that function
+// from capturing `middleware` for the lifetime of the running application, it
+// is defined outside of the `applyMiddleware` function.
+function createDispatchProxy() {
+  let finalDispatch = throwPrematureDispatch
+  return {
+    dispatch(...args) {
+      return finalDispatch(...args)
+    },
+    replace(newDispatch) {
+      finalDispatch = newDispatch
+    },
+  }
+}
+
+function throwPrematureDispatch() {
+  throw new Error(
+    'Dispatching while constructing your middleware is not allowed. Other'
+    + ' middleware would not be applied to this dispatch.'
+  )
 }

@@ -1,4 +1,9 @@
-import { createStore, combineReducers } from '../src/index'
+import {
+  adaptEnhancerCreator,
+  createStore,
+  combineReducers,
+  compose,
+} from '../src/index'
 import { 
   addTodo, 
   dispatchInMiddle, 
@@ -535,93 +540,6 @@ describe('createStore', () => {
     ).not.toThrow()
   })
 
-  it('accepts enhancer as the third argument', () => {
-    const emptyArray = []
-    const spyEnhancer = vanillaCreateStore => (...args) => {
-      expect(args[0]).toBe(reducers.todos)
-      expect(args[1]).toBe(emptyArray)
-      expect(args.length).toBe(2)
-      const vanillaStore = vanillaCreateStore(...args)
-      return {
-        ...vanillaStore,
-        dispatch: jest.fn(vanillaStore.dispatch)
-      }
-    }
-
-    const store = createStore(reducers.todos, emptyArray, spyEnhancer)
-    const action = addTodo('Hello')
-    store.dispatch(action)
-    expect(store.dispatch).toBeCalledWith(action)
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
-  })
-
-  it('accepts enhancer as the second argument if initial state is missing', () => {
-    const spyEnhancer = vanillaCreateStore => (...args) => {
-      expect(args[0]).toBe(reducers.todos)
-      expect(args[1]).toBe(undefined)
-      expect(args.length).toBe(2)
-      const vanillaStore = vanillaCreateStore(...args)
-      return {
-        ...vanillaStore,
-        dispatch: jest.fn(vanillaStore.dispatch)
-      }
-    }
-
-    const store = createStore(reducers.todos, spyEnhancer)
-    const action = addTodo('Hello')
-    store.dispatch(action)
-    expect(store.dispatch).toBeCalledWith(action)
-    expect(store.getState()).toEqual([
-      {
-        id: 1,
-        text: 'Hello'
-      }
-    ])
-  })
-
-  it('throws if enhancer is neither undefined nor a function', () => {
-    expect(() =>
-      createStore(reducers.todos, undefined, {})
-    ).toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, [])
-    ).toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, null)
-    ).toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, false)
-    ).toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, undefined)
-    ).not.toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, undefined, x => x)
-    ).not.toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, x => x)
-    ).not.toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, [])
-    ).not.toThrow()
-
-    expect(() =>
-      createStore(reducers.todos, {})
-    ).not.toThrow()
-  })
-
   it('throws if nextReducer is not a function', () => {
     const store = createStore(reducers.todos)
 
@@ -765,6 +683,161 @@ describe('createStore', () => {
       store.dispatch({ type: 'bar' })
 
       expect(results).toEqual([ { foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true } ])
+    })
+  })
+
+  describe('Enhancers API', () => {
+    it('accepts enhancer as the third argument', () => {
+      const emptyArray = []
+      const spyEnhancer = vanillaCreateStore => (...args) => {
+        expect(args[0]).toBe(reducers.todos)
+        expect(args[1]).toBe(emptyArray)
+        expect(args.length).toBe(2)
+        const vanillaStore = vanillaCreateStore(...args)
+        return {
+          ...vanillaStore,
+          dispatch: jest.fn(vanillaStore.dispatch)
+        }
+      }
+
+      const store = createStore(reducers.todos, emptyArray, spyEnhancer)
+      const action = addTodo('Hello')
+      store.dispatch(action)
+      expect(store.dispatch).toBeCalledWith(action)
+      expect(store.getState()).toEqual([
+        {
+          id: 1,
+          text: 'Hello'
+        }
+      ])
+    })
+
+    it('accepts enhancer as the second argument if initial state is missing', () => {
+      const spyEnhancer = vanillaCreateStore => (...args) => {
+        expect(args[0]).toBe(reducers.todos)
+        expect(args[1]).toBe(undefined)
+        expect(args.length).toBe(2)
+        const vanillaStore = vanillaCreateStore(...args)
+        return {
+          ...vanillaStore,
+          dispatch: jest.fn(vanillaStore.dispatch)
+        }
+      }
+
+      const store = createStore(reducers.todos, spyEnhancer)
+      const action = addTodo('Hello')
+      store.dispatch(action)
+      expect(store.dispatch).toBeCalledWith(action)
+      expect(store.getState()).toEqual([
+        {
+          id: 1,
+          text: 'Hello'
+        }
+      ])
+    })
+
+    it('throws if enhancer is neither undefined nor a function', () => {
+      expect(() =>
+        createStore(reducers.todos, undefined, {})
+      ).toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, undefined, [])
+      ).toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, undefined, null)
+      ).toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, undefined, false)
+      ).toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, undefined, undefined)
+      ).not.toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, undefined, x => x)
+      ).not.toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, x => x)
+      ).not.toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, [])
+      ).not.toThrow()
+
+      expect(() =>
+        createStore(reducers.todos, {})
+      ).not.toThrow()
+    })
+
+    const reducer = (state = '', action) => action.state || state
+
+    const append = (action, text) => (
+      action.type === 'SET'
+        ? { ...action, state: (action.state || '') + text }
+        : action
+    )
+
+    const modernEnhancer = adaptEnhancerCreator(
+      text => store => ({
+        dispatch(action) {
+          return store.dispatch(append(action, text))
+        }
+      })
+    )
+
+    const classicEnhancer = text => next => (reducer, state) => {
+      const store = next(reducer, state)
+      return {
+        ...store,
+        dispatch(action) {
+          return store.dispatch(append(action, text))
+        }
+      }
+    }
+
+    it('accepts two modern enhancers passed directly as the fourth argument', () => {
+      const a = modernEnhancer('A').modern
+      const b = modernEnhancer('B').modern
+      const store = createStore(reducer, undefined, undefined, [a, b])
+      store.dispatch({ type: 'SET' })
+      expect(store.getState()).toEqual('AB')
+    })
+
+    it('accepts two adapted modern enhancers that have been composed', () => {
+      const a = modernEnhancer('A')
+      const b = modernEnhancer('B')
+      const store = createStore(reducer, compose(a, b))
+      store.dispatch({ type: 'SET' })
+      expect(store.getState()).toEqual('AB')
+    })
+
+    it('accepts two classic enhancers that have been composed', () => {
+      const a = classicEnhancer('A')
+      const b = classicEnhancer('B')
+      const store = createStore(reducer, compose(a, b))
+      store.dispatch({ type: 'SET' })
+      expect(store.getState()).toEqual('AB')
+    })
+
+    it('accepts classic then adapted modern enhancers that have been composed', () => {
+      const a = classicEnhancer('A')
+      const b = modernEnhancer('B')
+      const store = createStore(reducer, compose(a, b))
+      store.dispatch({ type: 'SET' })
+      expect(store.getState()).toEqual('AB')
+    })
+
+    it('rejects adapted modern then classic enhancers that have been composed', () => {
+      const a = modernEnhancer('A')
+      const b = classicEnhancer('B')
+      expect(() => {
+        createStore(reducer, compose(a, b))
+      }).toThrow()
     })
   })
 })

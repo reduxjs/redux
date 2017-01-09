@@ -51,7 +51,7 @@ describe('applyMiddleware', () => {
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {
-      expect(spy.mock.calls.length).toEqual(2)
+      expect(spy.mock.calls.length).toEqual(3)
     })
   })
 

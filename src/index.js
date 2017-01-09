@@ -1,8 +1,10 @@
-import createStore from './createStore'
-import combineReducers from './combineReducers'
-import bindActionCreators from './bindActionCreators'
+import adaptEnhancer, { adaptEnhancerCreator } from './adaptEnhancer'
 import applyMiddleware from './applyMiddleware'
+import bindActionCreators from './bindActionCreators'
+import combineReducers from './combineReducers'
 import compose from './compose'
+import createEvent from './createEvent'
+import createStore  from './createStore'
 import warning from './utils/warning'
 
 /*
@@ -27,9 +29,12 @@ if (
 }
 
 export {
-  createStore,
-  combineReducers,
-  bindActionCreators,
+  adaptEnhancer,
+  adaptEnhancerCreator,
   applyMiddleware,
-  compose
+  bindActionCreators,
+  combineReducers,
+  compose,
+  createEvent,
+  createStore,
 }
