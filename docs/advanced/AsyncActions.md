@@ -494,6 +494,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 - You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions.
 - You can use [redux-observable](https://github.com/redux-observable/redux-observable) to dispatch Observables.
 - You can use the [redux-saga](https://github.com/yelouafi/redux-saga/) middleware to build more complex asynchronous actions.
+- You can use the [redux-pack](https://github.com/lelandrichardson/redux-pack) middleware to dispatch promise-based asynchronous actions.
 - You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.md#real-world) does.
 
 It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
