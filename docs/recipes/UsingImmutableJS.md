@@ -1,4 +1,4 @@
-# Using Immutable.js with Redux
+# # Using Immutable.js with Redux
 ## Table of Contents
 - [Why should I use an immutable-focused library such as Immutable.JS?](#why-use-immutable-library)
 - [Why should I choose Immutable.JS as an immutable library?](#why-choose-immutable-js)
@@ -26,7 +26,7 @@ Immutable.JS was designed to provide immutability in a performant manner in an e
 
 #### Guaranteed immutability
 
-Data encapsulated in an Immutable.JS object is never mutated. A new copy is always returned. This contrasts with JavaScript, in which some operations do not mutate your data (e.g. some Array methods, inlcuding map, filter, forEach, etc.), but some do (Array’s pop, push, concat, splice, etc.).
+Data encapsulated in an Immutable.JS object is never mutated. A new copy is always returned. This contrasts with JavaScript, in which some operations do not mutate your data (e.g. some Array methods, including map, filter, forEach, etc.), but some do (Array’s pop, push, concat, splice, etc.).
 
 #### Rich API
 
@@ -36,7 +36,7 @@ Immutable.JS provides a rich set of immutable objects to encapsulate your data (
 
 Immutable.JS does a lot work behind the scenes to optimize performance. This is the key to its power, as using immutable data structures can involve a lot of expensive copying. In particular, immutably manipulating large, complex data sets, such as a nested Redux state tree, can generate many intermediate copies of objects, which consume memory and slow down performance as the browser’s garbage collector fights to clean things up.
 
-Immutable.JS avoids this by cleverly sharing data structures under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away. 
+Immutable.JS avoids this by [cleverly sharing data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away. 
 
 You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it’s the *intermediate* data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.
 
@@ -60,33 +60,52 @@ Note that Immutable.JS objects do have a `toJS()` method, which returns the data
 
 ### Once used, Immutable.JS will spread throughout your codebase
 
-Once you encapsulate your data with Immutable.JS, you have to use Immutable.JS’s `get()` or `getIn()` property accessors to access it. This has the effect of spreading Immutable.JS across your entire codebase, including potentially your components, where you may prefer not to have such external dependencies. Your entire codebase must know what is, and what is not, an Immutable.JS object. It also makes removing Immutable.JS from your app difficult in the future, should you ever need to.
+Once you encapsulate your data with Immutable.JS, you have to use Immutable.JS’s `get()` or `getIn()` property accessors to access it. 
 
-This issue can be avoided with careful coding techniques, as outlined in the [best practices section](#immutable-js-best-practices) below.
+This has the effect of spreading Immutable.JS across your entire codebase, including potentially your components, where you may prefer not to have such external dependencies. Your entire codebase must know what is, and what is not, an Immutable.JS object. It also makes removing Immutable.JS from your app difficult in the future, should you ever need to.
+
+This issue can be avoided by [uncoupling your application logic from your data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi), as outlined in the [best practices section](#immutable-js-best-practices) below.
 
 ### No Destructuring or Spread Operators
 
-Because you have to access your data via Immutable.JS’s own `get()` and `getIn()` methods, you can no longer use JavaScript’s destructuring operator (or the proposed Object spread operator), making your code more verbose.
+Because you must access your data via Immutable.JS’s own `get()` and `getIn()` methods, you can no longer use JavaScript’s destructuring operator (or the proposed Object spread operator), making your code more verbose.
 
 ### Not suitable for small values that change often
 
-Immutable.JS works best for collections of data, and the larger the better. It can be slow when your data comprises lots of small, simple JavaScript objects, with each comprising a few keys of primitive values. Note, however, that this does not apply to the Redux state tree, which is represented as a large collection of data.
+Immutable.JS works best for collections of data, and the larger the better. It can be slow when your data comprises lots of small, simple JavaScript objects, with each comprising a few keys of primitive values. 
+
+Note, however, that this does not apply to the Redux state tree, which is (usually) represented as a large collection of data.
 
 ### Difficult to Debug
 
 Immutable.JS objects, such as `Map`, `List`, etc., can be difficult to debug, as inspecting such an object will reveal an entire nested hierarchy of Immutable.JS-specific properties that you don’t care about, while your actual data that you do care about is encapsulated several layers deep. 
 
-Fortunately, this can be easily overcome with the use of a browser extension such as the [Immutable.js Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog), which surfaces your data in Chrome Dev Tools, and hides Immutable.JS’s properties when inspecting your data.
+To resolve this issue, use a browser extension such as the [Immutable.js Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog), which surfaces your data in Chrome Dev Tools, and hides Immutable.JS’s properties when inspecting your data.
 
 ### Breaks object references, causing poor performance
 
-One of the key advantages of immutability is that it enables shallow equality checking, which dramatically improves performance. If two different variables reference the same immutable object, then a simple equality check of the two variables is enough to determine that they are equal, and that the object they both reference is unchanged. The equality check never has to check the values of any of the object’s properties, as it is, of course, immutable.
+One of the key advantages of immutability is that it enables shallow equality checking, which dramatically improves performance. 
 
-However, such shallow checking of object equality will not work if your data encapsulated within an Immutable.JS object is itself an object. This is because Immutable.JS’s `toJS()` method, which returns the data contained within an Immutable.js object as a JavaScript value, will create a new object every time it’s called, and so break the reference with the encapsulated data. Accordingly, calling `.toJS()` twice, for example, and assigning the result to two different variables will cause an equality check on those two variables to fail, even though the object values themselves haven’t changed.
+If two different variables reference the same immutable object, then a simple equality check of the two variables is enough to determine that they are equal, and that the object they both reference is unchanged. The equality check never has to check the values of any of the object’s properties, as it is, of course, immutable.
 
-This, in turn, causes React’s `shouldComponentUpdate` method (and hence Redux’s `connect` function) to return true every time, causing an unchanged component to be re-rendered every time a change elsewhere in the app is detected, and so  severely degrading performance.
+However, shallow checking will not work if your data encapsulated within an Immutable.JS object is itself an object. This is because Immutable.JS’s `toJS()` method, which returns the data contained within an Immutable.js object as a JavaScript value, will create a new object every time it’s called, and so break the reference with the encapsulated data.
 
-Again, though, this can be prevented quite easily with careful coding, as described in the [Best Practices section](#immutable-js-best-practices) below.
+Accordingly, calling `toJS()` twice, for example, and assigning the result to two different variables will cause an equality check on those two variables to fail, even though the object values themselves haven’t changed.
+
+This is a particular issue if you use `toJS()` in a wrapped component’s `mapStateToProps` function, as React-Redux shallowly compares each value in the returned props object.  For example, the value referenced by the `todos` prop returned from `mapStateToProps` below will always be a different object, and so will fail a shallow equality check.
+
+```
+// AVOID .toJS() in mapStateToProps
+function mapStateToProps(state) {
+  return { 
+        todos: state.get('todos').toJS() // Always a new object
+    }
+}
+```
+
+When the shallow check fails, React-Redux will cause the component to re-render. Using `toJS()` in `mapStateToProps` in this way, therefore, will always cause the component to re-render, even if the value never changes, impacting heavily on performance.
+
+This can be prevented by using `toJS()` in a Higher Order Component, as discussed in the [Best Practices section](#immutable-js-best-practices) below.
 
 
 <a id="is-immutable-js-worth-effort"></a>
@@ -94,15 +113,15 @@ Again, though, this can be prevented quite easily with careful coding, as descri
 
 Yes. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated. Components will both re-render when they shouldn’t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.
 
-This problem is caused predominantly by bugs in a Redux reducer, which requires immutability. If you mutate your state in a reducer, it can affect a completely different part of your app in seemingly arbitrary ways.
+This problem is caused predominantly by returning a mutated state object from a Redux reducer. With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app. 
 
-With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app. This, together with its performance and rich API for data manipulation, is why Immutable.JS is worth the effort.
+This, together with its performance and rich API for data manipulation, is why Immutable.JS is worth the effort.
 
 
 <a id="immutable-js-best-practices"></a>
 ## What are the Recommended Best Practices for using Immutable.JS with Redux?
 
-Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. Follow these best practices, and you’ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.
+Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. If you choose to use Immutable.js (and remember, you are not required to, and there are other immutable libraries you can use), follow these opinionated best practices, and you’ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.
 
 #### Never mix plain JavaScript objects with Immutable.JS  
 
