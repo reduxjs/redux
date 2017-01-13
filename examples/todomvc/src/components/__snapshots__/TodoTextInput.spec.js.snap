@@ -1,0 +1,59 @@
+exports[`components TodoTextInput should render correctly 1`] = `
+<input
+  autoFocus="true"
+  className=""
+  onBlur={[Function anonymous]}
+  onChange={[Function anonymous]}
+  onKeyDown={[Function anonymous]}
+  placeholder="What needs to be done?"
+  type="text"
+  value="Use Redux" />
+`;
+
+exports[`components TodoTextInput should render correctly when editing=true 1`] = `
+<input
+  autoFocus="true"
+  className="edit"
+  onBlur={[Function anonymous]}
+  onChange={[Function anonymous]}
+  onKeyDown={[Function anonymous]}
+  placeholder="What needs to be done?"
+  type="text"
+  value="Use Redux" />
+`;
+
+exports[`components TodoTextInput should render correctly when newTodo=true 1`] = `
+<input
+  autoFocus="true"
+  className="new-todo"
+  onBlur={[Function anonymous]}
+  onChange={[Function anonymous]}
+  onKeyDown={[Function anonymous]}
+  placeholder="What needs to be done?"
+  type="text"
+  value="Use Redux" />
+`;
+
+exports[`components TodoTextInput should reset state on return key press if newTodo 1`] = `
+<input
+  autoFocus="true"
+  className="new-todo"
+  onBlur={[Function anonymous]}
+  onChange={[Function anonymous]}
+  onKeyDown={[Function anonymous]}
+  placeholder="What needs to be done?"
+  type="text"
+  value="" />
+`;
+
+exports[`components TodoTextInput should update value on change 1`] = `
+<input
+  autoFocus="true"
+  className=""
+  onBlur={[Function anonymous]}
+  onChange={[Function anonymous]}
+  onKeyDown={[Function anonymous]}
+  placeholder="What needs to be done?"
+  type="text"
+  value="Use Radox" />
+`;

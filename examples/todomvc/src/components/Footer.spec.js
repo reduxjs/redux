@@ -35,10 +35,9 @@ const getTextContent = elem => {
 
 describe('components', () => {
   describe('Footer', () => {
-    it('should render container', () => {
+    it('should render container and filters', () => {
       const { output } = setup()
-      expect(output.type).toBe('footer')
-      expect(output.props.className).toBe('footer')
+      expect(output).toMatchSnapshot()
     })
 
     it('should display active count when 0', () => {
@@ -51,24 +50,6 @@ describe('components', () => {
       const { output } = setup({ activeCount: 1 })
       const [ count ] = output.props.children
       expect(getTextContent(count)).toBe('1 item left')
-    })
-
-    it('should render filters', () => {
-      const { output } = setup()
-      const [ , filters ] = output.props.children
-      expect(filters.type).toBe('ul')
-      expect(filters.props.className).toBe('filters')
-      expect(filters.props.children.length).toBe(3)
-      filters.props.children.forEach(function checkFilter(filter, i) {
-        expect(filter.type).toBe('li')
-        const a = filter.props.children
-        expect(a.props.className).toBe(i === 0 ? 'selected' : '')
-        expect(a.props.children).toBe({
-          0: 'All',
-          1: 'Active',
-          2: 'Completed'
-        }[i])
-      })
     })
 
     it('should call onShow when a filter is clicked', () => {
@@ -88,8 +69,7 @@ describe('components', () => {
     it('should render clear button when completed todos', () => {
       const { output } = setup({ completedCount: 1 })
       const [ , , clear ] = output.props.children
-      expect(clear.type).toBe('button')
-      expect(clear.props.children).toBe('Clear completed')
+      expect(clear).toMatchSnapshot()
     })
 
     it('should call onClearCompleted on clear button click', () => {

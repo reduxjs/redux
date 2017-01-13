@@ -1,0 +1,150 @@
+exports[`components MainSection footer onShow should set the filter 1`] = `
+<function Footer() {_classCallCheck(this, Footer);return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));}
+  activeCount={1}
+  completedCount={1}
+  filter="show_completed"
+  onClearCompleted={[Function bound ]}
+  onShow={[Function bound ]} />
+`;
+
+exports[`components MainSection should render container whole MainSection 1`] = `
+<section
+  className="main">
+  <input
+    checked={false}
+    className="toggle-all"
+    onChange={[Function mockConstructor]}
+    type="checkbox" />
+  <ul
+    className="todo-list">
+    <function TodoItem() {var _ref;var _temp, _this, _ret;_classCallCheck(this, TodoItem);for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TodoItem.__proto__ || Object.getPrototypeOf(TodoItem)).call.apply(_ref, [this].concat(args))), _this), _this.
+    
+    
+    
+    
+    
+    
+    
+        state = {
+          editing: false }, _this.
+    
+    
+        handleDoubleClick = function () {
+          /* istanbul ignore next */_this.setState({ editing: true });
+        }, _this.
+    
+        handleSave = function (id, text) {
+          if (text.length === 0) {
+            /* istanbul ignore next */_this.props.deleteTodo(id);
+          } else {
+            /* istanbul ignore next */_this.props.editTodo(id, text);
+          }
+          /* istanbul ignore next */_this.setState({ editing: false });
+        }, _temp), _possibleConstructorReturn(_this, _ret);}
+      clearCompleted={[Function mockConstructor]}
+      completeAll={[Function mockConstructor]}
+      completeTodo={[Function mockConstructor]}
+      deleteTodo={[Function mockConstructor]}
+      editTodo={[Function mockConstructor]}
+      todo={
+        Object {
+          "completed": false,
+          "id": 0,
+          "text": "Use Redux"
+        }
+      } />
+    <function TodoItem() {var _ref;var _temp, _this, _ret;_classCallCheck(this, TodoItem);for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TodoItem.__proto__ || Object.getPrototypeOf(TodoItem)).call.apply(_ref, [this].concat(args))), _this), _this.
+    
+    
+    
+    
+    
+    
+    
+        state = {
+          editing: false }, _this.
+    
+    
+        handleDoubleClick = function () {
+          /* istanbul ignore next */_this.setState({ editing: true });
+        }, _this.
+    
+        handleSave = function (id, text) {
+          if (text.length === 0) {
+            /* istanbul ignore next */_this.props.deleteTodo(id);
+          } else {
+            /* istanbul ignore next */_this.props.editTodo(id, text);
+          }
+          /* istanbul ignore next */_this.setState({ editing: false });
+        }, _temp), _possibleConstructorReturn(_this, _ret);}
+      clearCompleted={[Function mockConstructor]}
+      completeAll={[Function mockConstructor]}
+      completeTodo={[Function mockConstructor]}
+      deleteTodo={[Function mockConstructor]}
+      editTodo={[Function mockConstructor]}
+      todo={
+        Object {
+          "completed": true,
+          "id": 1,
+          "text": "Run the tests"
+        }
+      } />
+  </ul>
+  <function Footer() {_classCallCheck(this, Footer);return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));}
+    activeCount={1}
+    completedCount={1}
+    filter="show_all"
+    onClearCompleted={[Function bound ]}
+    onShow={[Function bound ]} />
+</section>
+`;
+
+exports[`components MainSection todo list should filter items 1`] = `
+<ul
+  className="todo-list">
+  <function TodoItem() {var _ref;var _temp, _this, _ret;_classCallCheck(this, TodoItem);for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TodoItem.__proto__ || Object.getPrototypeOf(TodoItem)).call.apply(_ref, [this].concat(args))), _this), _this.
+  
+  
+  
+  
+  
+  
+  
+      state = {
+        editing: false }, _this.
+  
+  
+      handleDoubleClick = function () {
+        /* istanbul ignore next */_this.setState({ editing: true });
+      }, _this.
+  
+      handleSave = function (id, text) {
+        if (text.length === 0) {
+          /* istanbul ignore next */_this.props.deleteTodo(id);
+        } else {
+          /* istanbul ignore next */_this.props.editTodo(id, text);
+        }
+        /* istanbul ignore next */_this.setState({ editing: false });
+      }, _temp), _possibleConstructorReturn(_this, _ret);}
+    clearCompleted={[Function mockConstructor]}
+    completeAll={[Function mockConstructor]}
+    completeTodo={[Function mockConstructor]}
+    deleteTodo={[Function mockConstructor]}
+    editTodo={[Function mockConstructor]}
+    todo={
+      Object {
+        "completed": true,
+        "id": 1,
+        "text": "Run the tests"
+      }
+    } />
+</ul>
+`;
+
+exports[`components MainSection toggle all input should be checked if all todos completed 1`] = `
+<input
+  checked={true}
+  className="toggle-all"
+  onChange={[Function mockConstructor]}
+  type="checkbox" />
+`;

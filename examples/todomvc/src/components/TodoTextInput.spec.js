@@ -30,26 +30,24 @@ describe('components', () => {
   describe('TodoTextInput', () => {
     it('should render correctly', () => {
       const { output } = setup()
-      expect(output.props.placeholder).toEqual('What needs to be done?')
-      expect(output.props.value).toEqual('Use Redux')
-      expect(output.props.className).toEqual('')
+      expect(output).toMatchSnapshot()
     })
 
     it('should render correctly when editing=true', () => {
       const { output } = setup({ editing: true })
-      expect(output.props.className).toEqual('edit')
+      expect(output).toMatchSnapshot()
     })
 
     it('should render correctly when newTodo=true', () => {
       const { output } = setup({ newTodo: true })
-      expect(output.props.className).toEqual('new-todo')
+      expect(output).toMatchSnapshot()
     })
 
     it('should update value on change', () => {
       const { output, renderer } = setup()
       output.props.onChange({ target: { value: 'Use Radox' } })
       const updated = renderer.getRenderOutput()
-      expect(updated.props.value).toEqual('Use Radox')
+      expect(updated).toMatchSnapshot()
     })
 
     it('should call onSave on return key press', () => {
@@ -62,7 +60,7 @@ describe('components', () => {
       const { output, renderer } = setup({ newTodo: true })
       output.props.onKeyDown({ which: 13, target: { value: 'Use Redux' } })
       const updated = renderer.getRenderOutput()
-      expect(updated.props.value).toEqual('')
+      expect(updated).toMatchSnapshot()
     })
 
     it('should call onSave on blur', () => {
