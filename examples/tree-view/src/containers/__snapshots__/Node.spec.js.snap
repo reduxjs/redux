@@ -1,0 +1,21 @@
+exports[`Node component should display counter 1`] = `
+<div>
+  Counter: 
+  23
+   
+  <button
+    onClick={[Function anonymous]}>
+    +
+  </button>
+   
+  <ul>
+    <li>
+      <a
+        href="#"
+        onClick={[Function anonymous]}>
+        Add child
+      </a>
+    </li>
+  </ul>
+</div>
+`;
