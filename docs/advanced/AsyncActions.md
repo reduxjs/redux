@@ -331,7 +331,7 @@ function receivePosts(subreddit, json) {
 // Though its insides are different, you would use it just like any other action creator:
 // store.dispatch(fetchPosts('reactjs'))
 
-function fetchPosts(subreddit) {
+export function fetchPosts(subreddit) {
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
