@@ -6,7 +6,7 @@ exports[`components Footer should render clear button when completed todos 1`] =
 </button>
 `;
 
-exports[`components Footer should render container and filters 1`] = `
+exports[`components Footer should render container 1`] = `
 <footer
   className="footer">
   <span

@@ -7,7 +7,7 @@ exports[`components MainSection footer onShow should set the filter 1`] = `
   onShow={[Function bound ]} />
 `;
 
-exports[`components MainSection should render container whole MainSection 1`] = `
+exports[`components MainSection should render container 1`] = `
 <section
   className="main">
   <input
