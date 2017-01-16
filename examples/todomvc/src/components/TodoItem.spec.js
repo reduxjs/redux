@@ -1,6 +1,7 @@
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import TodoItem from './TodoItem'
+import TodoTextInput from './TodoTextInput'
 
 const setup = ( editing = false ) => {
   const props = {
@@ -39,6 +40,26 @@ describe('components', () => {
   describe('TodoItem', () => {
     it('initial render', () => {
       const { output } = setup()
+
+      expect(output.type).toBe('li')
+      expect(output.props.className).toBe('')
+
+      const div = output.props.children
+
+      expect(div.type).toBe('div')
+      expect(div.props.className).toBe('view')
+
+      const [ input, label, button ] = div.props.children
+
+      expect(input.type).toBe('input')
+      expect(input.props.checked).toBe(false)
+
+      expect(label.type).toBe('label')
+      expect(label.props.children).toBe('Use Redux')
+
+      expect(button.type).toBe('button')
+      expect(button.props.className).toBe('destroy')
+
       expect(output).toMatchSnapshot()
     })
 
@@ -61,11 +82,22 @@ describe('components', () => {
       const label = output.props.children.props.children[1]
       label.props.onDoubleClick({})
       const updated = renderer.getRenderOutput()
+      expect(updated.type).toBe('li')
+      expect(updated.props.className).toBe('editing')
       expect(updated).toMatchSnapshot()
     })
 
     it('edit state render', () => {
       const { output } = setup(true)
+
+      expect(output.type).toBe('li')
+      expect(output.props.className).toBe('editing')
+
+      const input = output.props.children
+      expect(input.type).toBe(TodoTextInput)
+      expect(input.props.text).toBe('Use Redux')
+      expect(input.props.editing).toBe(true)
+
       expect(output).toMatchSnapshot()
     })
 
@@ -85,6 +117,8 @@ describe('components', () => {
       const { output, renderer } = setup(true)
       output.props.children.props.onSave('Use Redux')
       const updated = renderer.getRenderOutput()
+      expect(updated.type).toBe('li')
+      expect(updated.props.className).toBe('')
       expect(updated).toMatchSnapshot()
     })
   })

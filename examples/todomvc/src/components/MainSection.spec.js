@@ -1,7 +1,9 @@
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import MainSection from './MainSection'
-import { SHOW_COMPLETED } from '../constants/TodoFilters'
+import TodoItem from './TodoItem'
+import Footer from './Footer'
+import { SHOW_ALL, SHOW_COMPLETED } from '../constants/TodoFilters'
 
 const setup = propOverrides => {
   const props = Object.assign({
@@ -38,12 +40,22 @@ const setup = propOverrides => {
 
 describe('components', () => {
   describe('MainSection', () => {
-    it('should render container whole MainSection', () => {
+    it('should render container', () => {
       const { output } = setup()
+      expect(output.type).toBe('section')
+      expect(output.props.className).toBe('main')
       expect(output).toMatchSnapshot()
     })
 
     describe('toggle all input', () => {
+      it('should render', () => {
+        const { output } = setup()
+        const [ toggle ] = output.props.children
+        expect(toggle.type).toBe('input')
+        expect(toggle.props.type).toBe('checkbox')
+        expect(toggle.props.checked).toBe(false)
+      })
+
       it('should be checked if all todos completed', () => {
         const { output } = setup({ todos: [
           {
@@ -54,6 +66,7 @@ describe('components', () => {
         ]
         })
         const [ toggle ] = output.props.children
+        expect(toggle.props.checked).toBe(true)
         expect(toggle).toMatchSnapshot()
       })
 
@@ -66,12 +79,22 @@ describe('components', () => {
     })
 
     describe('footer', () => {
+      it('should render', () => {
+        const { output } = setup()
+        const [ , , footer ] = output.props.children
+        expect(footer.type).toBe(Footer)
+        expect(footer.props.completedCount).toBe(1)
+        expect(footer.props.activeCount).toBe(1)
+        expect(footer.props.filter).toBe(SHOW_ALL)
+      })
+
       it('onShow should set the filter', () => {
         const { output, renderer } = setup()
         const [ , , footer ] = output.props.children
         footer.props.onShow(SHOW_COMPLETED)
         const updated = renderer.getRenderOutput()
         const [ , , updatedFooter ] = updated.props.children
+        expect(updatedFooter.props.filter).toBe(SHOW_COMPLETED)
         expect(updatedFooter).toMatchSnapshot()
       })
 
@@ -84,12 +107,25 @@ describe('components', () => {
     })
 
     describe('todo list', () => {
+      it('should render', () => {
+        const { output, props } = setup()
+        const [ , list ] = output.props.children
+        expect(list.type).toBe('ul')
+        expect(list.props.children.length).toBe(2)
+        list.props.children.forEach((item, i) => {
+          expect(item.type).toBe(TodoItem)
+          expect(item.props.todo).toBe(props.todos[i])
+        })
+      })
+
       it('should filter items', () => {
-        const { output, renderer } = setup()
+        const { output, renderer, props } = setup()
         const [ , , footer ] = output.props.children
         footer.props.onShow(SHOW_COMPLETED)
         const updated = renderer.getRenderOutput()
         const [ , updatedList ] = updated.props.children
+        expect(updatedList.props.children.length).toBe(1)
+        expect(updatedList.props.children[0].props.todo).toBe(props.todos[1])
         expect(updatedList).toMatchSnapshot()
       })
     })
