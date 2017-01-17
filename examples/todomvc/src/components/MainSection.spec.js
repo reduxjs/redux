@@ -34,17 +34,21 @@ const setup = propOverrides => {
   return {
     props: props,
     output: output,
-    renderer: renderer
+    renderer: renderer,
+    nodeMajorVersion: Number(process.versions.node.split('.')[0], 10)
   }
 }
 
 describe('components', () => {
   describe('MainSection', () => {
     it('should render container', () => {
-      const { output } = setup()
+      const { output, nodeMajorVersion } = setup()
       expect(output.type).toBe('section')
       expect(output.props.className).toBe('main')
-      expect(output).toMatchSnapshot()
+
+      if (nodeMajorVersion > 5) {
+        expect(output).toMatchSnapshot()
+      }
     })
 
     describe('toggle all input', () => {
@@ -57,7 +61,7 @@ describe('components', () => {
       })
 
       it('should be checked if all todos completed', () => {
-        const { output } = setup({ todos: [
+        const { output, nodeMajorVersion } = setup({ todos: [
           {
             text: 'Use Redux',
             completed: true,
@@ -67,7 +71,10 @@ describe('components', () => {
         })
         const [ toggle ] = output.props.children
         expect(toggle.props.checked).toBe(true)
-        expect(toggle).toMatchSnapshot()
+
+        if (nodeMajorVersion > 5) {
+          expect(toggle).toMatchSnapshot()
+        }
       })
 
       it('should call completeAll on change', () => {
@@ -89,13 +96,16 @@ describe('components', () => {
       })
 
       it('onShow should set the filter', () => {
-        const { output, renderer } = setup()
+        const { output, renderer, nodeMajorVersion } = setup()
         const [ , , footer ] = output.props.children
         footer.props.onShow(SHOW_COMPLETED)
         const updated = renderer.getRenderOutput()
         const [ , , updatedFooter ] = updated.props.children
         expect(updatedFooter.props.filter).toBe(SHOW_COMPLETED)
-        expect(updatedFooter).toMatchSnapshot()
+        
+        if (nodeMajorVersion > 5) {
+          expect(updatedFooter).toMatchSnapshot()
+        }
       })
 
       it('onClearCompleted should call clearCompleted', () => {
@@ -119,14 +129,17 @@ describe('components', () => {
       })
 
       it('should filter items', () => {
-        const { output, renderer, props } = setup()
+        const { output, renderer, props, nodeMajorVersion } = setup()
         const [ , , footer ] = output.props.children
         footer.props.onShow(SHOW_COMPLETED)
         const updated = renderer.getRenderOutput()
         const [ , updatedList ] = updated.props.children
         expect(updatedList.props.children.length).toBe(1)
         expect(updatedList.props.children[0].props.todo).toBe(props.todos[1])
-        expect(updatedList).toMatchSnapshot()
+
+        if (nodeMajorVersion > 5) {
+          expect(updatedList).toMatchSnapshot()
+        }
       })
     })
   })
