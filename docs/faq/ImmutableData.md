@@ -32,7 +32,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 - Both Redux and React-Redux employ [shallow equality checking](#shallow-and-deep-equality-checking). In particular:
 	- Redux's `combineReducers` utility [shallowly checks for reference changes] (#how-redux-uses-shallow-checking)  caused by the reducers that it calls.
 	- React-Redux's `connect` method generates components that [shallowly check reference changes to the root state](#how-react-redux-uses-shallow-checking), and the return values from the `mapStateToProps` function to see if the wrapped components actually need to re-render.
-Such [shallow checking requires immutability](#￼redux-shallow-checking-requires-immutability) to function correctly.
+Such [shallow checking requires immutability](#redux-shallow-checking-requires-immutability) to function correctly.
 - Immutable data management ultimately makes data handling safer.
 - Time-travel debugging requires that reducers be pure functions with no side effects, so that you can correctly jump between different states.
 
@@ -115,7 +115,7 @@ As such, a shallow equality check of the object returned from repeated calls to 
 React-Redux therefore maintains separate references to each _value_ in the returned object. 
 
 
-<a id=“how-react-redux-determines-need-for-re-rendering"></a>
+<a id="how-react-redux-determines-need-for-re-rendering"></a>
 ### How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?
 Each time  `connect` is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
 
