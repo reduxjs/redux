@@ -111,7 +111,9 @@ This can be prevented by using `toJS()` in a Higher Order Component, as discusse
 <a id="is-immutable-js-worth-effort"></a>
 ## Is Using Immutable.JS worth the effort?
 
-Yes. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated. Components will both re-render when they shouldn’t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.
+Frequently, yes. There are various tradeoffs and opinions to consider, but there are many good reasons to use Immutable.js. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated.
+
+Components will both re-render when they shouldn’t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.
 
 This problem is caused predominantly by returning a mutated state object from a Redux reducer. With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app. 
 
