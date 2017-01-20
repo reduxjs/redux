@@ -12,7 +12,7 @@
 	- [Why will shallow equality checking not work with mutable objects?](#no-shallow-equality-checking-with-mutable-objects)
 	- [Does shallow equality checking with a mutable object cause problems with Redux?](#shallow-checking-problems-with-redux)
 	- [Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-problems-with-react-redux)
-	- [How does shallow equality checking stop a wrapped component from re-rendering when it should?](#shallow-checking-stops-component-re-rendering)
+	- [Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-stops-component-re-rendering)
 	- [How does immutability enable a shallow check to detect object mutations?](#immutability-enables-shallow-checking)
 - [How can immutability in your reducers cause components to render unnecessarily?](#immutability-issues-with-redux)
 - [What issues can immutability cause with React-Redux?](#immutability-issues-with-react-redux)
@@ -30,7 +30,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 <a id="why-is-immutability-required"></a>
 ## Why is immutability required by Redux?
 - Both Redux and React-Redux employ [shallow equality checking](#shallow-and-deep-equality-checking). In particular:
-	- Redux's `combineReducers` utility [shallowly checks for reference changes] (#how-redux-uses-shallow-checking)  caused by the reducers that it calls.
+	- Redux's `combineReducers` utility [shallowly checks for reference changes](#how-redux-uses-shallow-checking)  caused by the reducers that it calls.
 	- React-Redux's `connect` method generates components that [shallowly check reference changes to the root state](#how-react-redux-uses-shallow-checking), and the return values from the `mapStateToProps` function to see if the wrapped components actually need to re-render.
 Such [shallow checking requires immutability](#redux-shallow-checking-requires-immutability) to function correctly.
 - Immutable data management ultimately makes data handling safer.
@@ -89,15 +89,18 @@ This is worth emphasising: *If the reducers all return the same `state` object p
 ### How does React-Redux use shallow equality checking?
 React-Redux uses shallow equality checking to determine whether the component it’s wrapping needs to be re-rendered.
 
-To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
+To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux).
 
 By assuming the wrapped component is pure, it need only check whether the root state object or the values returned from `mapStateToProps` have changed. If they haven’t, the wrapped component does not need re-rendering.
 
-It performs this check by first keeping a reference to the root state object, and a reference to _each value_ in the props object that's returned from the `mapStateToProps` function.
+It detects a change by keeping a reference to the root state object, and a reference to _each value_ in the props object that's returned from the `mapStateToProps` function.
 
-This is an important point worth noting:  *React-Redux performs a shallow equality check on each _value_ within the props object, not on the props object itself.*
+It then runs a shallow equality check on its reference to the root state object and the state object passed to it, and a separate series of shallow checks on each reference to the props object’s values and those that are returned from running the `mapStateToProps` function again.
 
-It checks each value rather than the props object because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:
+### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
+React-Redux performs a shallow equality check on on each _value_ within the props object, not on the props object itself.
+
+It does so because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:
 
 ```
 function mapStateToProps(state) {
@@ -110,20 +113,20 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(TodoApp)
 ```
 
-As such, a shallow equality check of the object returned from repeated calls to `mapStateToProps` would always fail, as a new object would be returned each time.
+As such, a shallow equality check of the props object returned from repeated calls to `mapStateToProps` would always fail, as a new object would be returned each time.
 
-React-Redux therefore maintains separate references to each _value_ in the returned object. 
+React-Redux therefore maintains separate references to each _value_ in the returned props object. 
 
 
 <a id="how-react-redux-determines-need-for-re-rendering"></a>
 ### How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?
-Each time  `connect` is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
+Each time React-Redux’s `connect` function is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
 
 If the check fails, however, the root state object _has_ been updated, and so `connect` will call `mapStateToProps`to see if the props for the wrapped component have been updated. 
 
 It does this by performing a shallow equality check on each value within the object individually, and will only trigger a re-render if one of those checks fails.
 
-In the example below, if `state.todos` and the value returned from `getVisibleTodos()` do not change on successive calls to `connect` , then the component will not re-render .
+In the example below, if `state.todos` and the value returned from `getVisibleTodos()` do not change on successive calls to `connect`, then the component will not re-render .
 
 ```
 function mapStateToProps(state) {
@@ -201,33 +204,42 @@ Because React-Redux performs a shallow check on the root state object to determi
 
 
 <a id="shallow-checking-stops-component-re-rendering"></a>
-### How does a shallow equality check stop a wrapped component from re-rendering when it should?
-If one of the values of the props object returned from `mapStateToProps` is an object that’s directly mutated and returned by a selector function,  React-Redux will not be able to detect the mutation, and so will not trigger a re-render of the wrapped component.
+### Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?
+If one of the values of the props object returned from `mapStateToProps` is an object that persists across calls to `connect` (such as, potentially, the root state object), yet is directly mutated and returned by a selector function,  React-Redux will not be able to detect the mutation, and so will not trigger a re-render of the wrapped component.
 
 As we’ve seen, the values in the mutable object returned by the selector function may have changed, but the object itself has not, and shallow equality checking only compares the objects themselves, not their values.
 
 For example, the following `mapStateToProps` function will  never trigger a re-render:
 
 ```
-let record = { id: 0 };
+// State object held in the Redux store
+const state = {
+	user: {
+		accessCount: 0,
+		name: 'keith'
+	}
+};
 
-const getNewRecord = () => {
-  ++record.id;
-  return record;
+// Selector function
+const getUser = (state) => {
+  ++state.user.accessCount; // mutate the state object
+  return state;
 }
 
+// mapStateToProps
 const mapStateToProps = (state) => ({
-	// The object returned from getNewRecord() is always
+	// The object returned from getUser() is always
 	// the same object, so this wrapped
-	// component will never re-render
-	record: getNewRecord()
+	// component will never re-render, even though it's been
+	// mutated
+	userRecord: getUser(state)
 });
 
 
-const a = mapStateToProps();
-const b = mapStateToProps();
+const a = mapStateToProps(state);
+const b = mapStateToProps(state);
 
-a.record === b.record
+a.userRecord === b.userRecord;
 //> true
 
 ```
