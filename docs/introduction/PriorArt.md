@@ -41,19 +41,19 @@ Most of the functionality Baobab provides is related to updating the data with c
 
 Unlike Immutable, Baobab doesn't yet implement any special efficient data structures under the hood, so you don't really win anything from using it together with Redux. It's easier to just use plain objects in this case.
 
-### Rx
+### RxJS
 
-[Reactive Extensions](https://github.com/Reactive-Extensions/RxJS) (and their undergoing [modern rewrite](https://github.com/ReactiveX/RxJS)) are a superb way to manage the complexity of asynchronous apps. In fact [there is an effort to create a library that models human-computer interaction as interdependent observables](http://cycle.js.org).
+[RxJS](https://github.com/ReactiveX/RxJS) is a superb way to manage the complexity of asynchronous apps. In fact [there is an effort to create a library that models human-computer interaction as interdependent observables](http://cycle.js.org).
 
-Does it make sense to use Redux together with Rx? Sure! They work great together. For example, it is easy to expose a Redux store as an observable:
+Does it make sense to use Redux together with RxJS? Sure! They work great together. For example, it is easy to expose a Redux store as an observable:
 
 ```js
 function toObservable(store) {
   return {
-    subscribe({ onNext }) {
-      let dispose = store.subscribe(() => onNext(store.getState()))
-      onNext(store.getState())
-      return { dispose }
+    subscribe({ next }) {
+      const unsubscribe = store.subscribe(() => next(store.getState()))
+      next(store.getState())
+      return { unsubscribe }
     }
   }
 }
