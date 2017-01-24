@@ -31,8 +31,8 @@ It is tiny (2kB, including dependencies).
 
 ### Before Proceeding Further
 
->**Also read why you might not be needing Redux:**  
->**[“You Might Not Need Redux”](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
+>**Also read:**  
+>**[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
 ### Developer Experience
 
