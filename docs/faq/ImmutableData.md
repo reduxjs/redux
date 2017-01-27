@@ -15,7 +15,7 @@
 	- [Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-stops-component-re-rendering)
 	- [How does immutability enable a shallow check to detect object mutations?](#immutability-enables-shallow-checking)
 - [How can immutability in your reducers cause components to render unnecessarily?](#immutability-issues-with-redux)
-- [What issues can immutability cause with React-Redux?](#immutability-issues-with-react-redux)
+- [How can immutability in mapStateToProps cause components to render unnecessarily?](#immutability-issues-with-react-redux)
 - [Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
 - [What are the issues with using JavaScript for immutable operations?](#issues-with-es6-for-immutable-ops)
 
@@ -416,7 +416,7 @@ a.visibleToDos === b.visibleToDos;
 
 Note that, conversely, if the values in your props object refer to mutable objects, [your component may not render when it should](#shallow-checking-stops-component-re-rendering).
 
-### Further Information
+#### Further Information
 
 **Articles**
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.b8bpx1ncj)
@@ -430,7 +430,7 @@ You do not need to use Immutable.JS with Redux. Plain JavaScript, if written cor
 
 However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
 
-### Further Information
+#### Further Information
 
 **Discussions**
 - [#1185: Question: Should I use immutable data structures?](https://github.com/reactjs/redux/issues/1422)
