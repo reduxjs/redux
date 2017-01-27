@@ -1,4 +1,4 @@
-# # Using Immutable.js with Redux
+# Using Immutable.JS with Redux
 ## Table of Contents
 - [Why should I use an immutable-focused library such as Immutable.JS?](#why-use-immutable-library)
 - [Why should I choose Immutable.JS as an immutable library?](#why-choose-immutable-js)
@@ -103,7 +103,7 @@ One of the key advantages of immutability is that it enables shallow equality ch
 
 If two different variables reference the same immutable object, then a simple equality check of the two variables is enough to determine that they are equal, and that the object they both reference is unchanged. The equality check never has to check the values of any of the object’s properties, as it is, of course, immutable.
 
-However, shallow checking will not work if your data encapsulated within an Immutable.JS object is itself an object. This is because Immutable.JS’s `toJS()` method, which returns the data contained within an Immutable.js object as a JavaScript value, will create a new object every time it’s called, and so break the reference with the encapsulated data.
+However, shallow checking will not work if your data encapsulated within an Immutable.JS object is itself an object. This is because Immutable.JS’s `toJS()` method, which returns the data contained within an Immutable.JS object as a JavaScript value, will create a new object every time it’s called, and so break the reference with the encapsulated data.
 
 Accordingly, calling `toJS()` twice, for example, and assigning the result to two different variables will cause an equality check on those two variables to fail, even though the object values themselves haven’t changed.
 
@@ -137,7 +137,7 @@ This can be prevented by using `toJS()` in a Higher Order Component, as discusse
 <a id="is-immutable-js-worth-effort"></a>
 ## Is Using Immutable.JS worth the effort?
 
-Frequently, yes. There are various tradeoffs and opinions to consider, but there are many good reasons to use Immutable.js. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated.
+Frequently, yes. There are various tradeoffs and opinions to consider, but there are many good reasons to use Immutable.JS. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated.
 
 Components will both re-render when they shouldn’t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.
 
@@ -154,7 +154,7 @@ This, together with its performance and rich API for data manipulation, is why I
 <a id="immutable-js-best-practices"></a>
 ## What are some opinionated Best Practices for using Immutable.JS with Redux?
 
-Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. If you choose to use Immutable.js (and remember, you are not required to, and there are other immutable libraries you can use), follow these opinionated best practices, and you’ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.
+Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. If you choose to use Immutable.JS (and remember, you are not required to, and there are other immutable libraries you can use), follow these opinionated best practices, and you’ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.
 
 ### Never mix plain JavaScript objects with Immutable.JS  
 
@@ -166,13 +166,13 @@ Never let a plain JavaScript object contain Immutable.JS properties. Equally, ne
 - [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
 
-### Make your entire Redux state tree an Immutable.js object
+### Make your entire Redux state tree an Immutable.JS object
 
 For a Redux app, your entire state tree should be an Immutable.JS object, with no plain JavaScript objects used at all. 
 
 * Create the tree using Immutable.JS’s `fromJS()` function. 
 
-* Use an Immutable.js-aware version of the `combineReducers` function, such as the one in [redux-immutable](https://www.npmjs.com/package/redux-immutable), as Redux itself expects the state tree to be a plain JavaScript object.
+* Use an Immutable.JS-aware version of the `combineReducers` function, such as the one in [redux-immutable](https://www.npmjs.com/package/redux-immutable), as Redux itself expects the state tree to be a plain JavaScript object.
 
 * When adding JavaScript objects to an Immutable.JS Map or List using Immutable.JS’s `update`, `merge` or `set` methods, ensure that the object being added is first converted to an Immutable object using `fromJS()`.
 
@@ -252,7 +252,7 @@ Converting an Immutable.JS object to a JavaScript object using `toJS()` will ret
 
 ### Never use Immutable.JS in your Dumb Components
 
-Your dumb components should be pure; that is, they should produce the same output given the same input, and have no external dependencies. If you pass such a component an Immutable.js object as a prop, you make it dependent upon Immutable.js to extract the prop’s value and otherwise manipulate it.
+Your dumb components should be pure; that is, they should produce the same output given the same input, and have no external dependencies. If you pass such a component an Immutable.JS object as a prop, you make it dependent upon Immutable.JS to extract the prop’s value and otherwise manipulate it.
 
 Such a dependency renders the component impure, makes testing the component more difficult, and makes reusing and refactoring the component unnecessarily difficult.
 
@@ -317,7 +317,7 @@ export default connect(mapStateToProps)(toJS(DumbComponent));
 ```
 By converting Immutable.JS objects to plain JavaScript values within a HOC, we achieve Dumb Component portability, but without the performance hits of using `toJS()` in the Smart Component.
 
-_Note: if your app requires high performance, you may need to avoid `toJS()` altogether, and so will have to use Immutable.js in your dumb components. However, for most apps this will not be the case, and the benefits of keeping Immutable.js out of your dumb components (maintainability, portability and easier testing) will far outweigh any perceived performance improvements of keeping it in._
+_Note: if your app requires high performance, you may need to avoid `toJS()` altogether, and so will have to use Immutable.JS in your dumb components. However, for most apps this will not be the case, and the benefits of keeping Immutable.JS out of your dumb components (maintainability, portability and easier testing) will far outweigh any perceived performance improvements of keeping it in._
 
 _In addition, using `toJS` in a Higher Order Component should not cause much, if any, performance degradation, as the component will only be called when the connected component’s props change. As with any performance issue, conduct performance checks first before deciding what to optimise._
 

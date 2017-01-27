@@ -16,7 +16,7 @@
 	- [How does immutability enable a shallow check to detect object mutations?](#immutability-enables-shallow-checking)
 - [How can immutability in your reducers cause components to render unnecessarily?](#immutability-issues-with-redux)
 - [How can immutability in mapStateToProps cause components to render unnecessarily?](#immutability-issues-with-react-redux)
-- [Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
+- [What approaches are there for handling data immutably? Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
 - [What are the issues with using JavaScript for immutable operations?](#issues-with-es6-for-immutable-ops)
 
 
@@ -425,7 +425,7 @@ Note that, conversely, if the values in your props object refer to mutable objec
 
 
 <a id="do-i-have-to-use-immutable-js"></a>
-## What approaches are there for handling data immutably? Do I have to use Immutable.js? 
+## What approaches are there for handling data immutably? Do I have to use Immutable.JS? 
 You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library. 
 
 However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
@@ -454,7 +454,7 @@ Operating on JavaScript objects and arrays in an immutable way can be slow, part
 
 Remember, to change an immutable object, you must mutate a _copy_ of it, and copying large objects can be slow as every property must be copied.
 
-In contrast, immutable libraries such as Immutable.js can employ sophisticated optimization techniques such as [structural sharing](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
+In contrast, immutable libraries such as Immutable.JS can employ sophisticated optimization techniques such as [structural sharing](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
 
 For copying very large objects, [plain JavaScript can be over 100 times slower](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) than an optimized immutable library.
 
