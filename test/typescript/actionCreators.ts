@@ -1,7 +1,7 @@
 import {
   ActionCreator, Action, Dispatch,
   bindActionCreators, ActionCreatorsMapObject
-} from "../../index.d.ts";
+} from "../../index";
 
 
 interface AddTodoAction extends Action {
