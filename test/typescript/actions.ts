@@ -1,4 +1,4 @@
-import {Action as ReduxAction} from "../../index.d.ts";
+import {Action as ReduxAction} from "../../index";
 
 
 namespace FSA {

@@ -1,7 +1,7 @@
 import {
   Reducer, Action, combineReducers,
   ReducersMapObject
-} from "../../index.d.ts";
+} from "../../index";
 
 
 type TodosState = string[];

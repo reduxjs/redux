@@ -1,7 +1,7 @@
 import {
   Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
   StoreCreator, StoreEnhancerStoreCreator, Unsubscribe
-} from "../../index.d.ts";
+} from "../../index";
 
 
 type State = {
