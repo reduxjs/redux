@@ -48,7 +48,7 @@ export default class MainSection extends Component {
                 activeCount={activeCount}
                 filter={filter}
                 onClearCompleted={this.handleClearCompleted}
-                onShow={this.handleShow.bind} />
+                onShow={this.handleShow} />
       )
     }
   }
