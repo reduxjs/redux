@@ -125,7 +125,7 @@ const commentsReducer = combineReducers({
 });
 ```
 
-The example is a bit long, because it's showing how all the different slice reducers and case reducers fit together.  Note that the delegation involved here.  The `postsById` slice reducer delegates the work for this case to `addComment`, which inserts the new Comment's ID into the correct Post item.  Meanwhile, both the `commentsById` and `allComments` slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.
+The example is a bit long, because it's showing how all the different slice reducers and case reducers fit together.  Note  the delegation involved here.  The `postsById` slice reducer delegates the work for this case to `addComment`, which inserts the new Comment's ID into the correct Post item.  Meanwhile, both the `commentsById` and `allComments` slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.
 
 
 ## Other Approaches
