@@ -4,7 +4,10 @@
 As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
 
 - Should have a signature of `(previousState, action) => newState`, similar to the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
-- Should be "pure", which means it does not mutate its arguments, perform side effects like API calls or modify values outside of the function, or call non-pure functions like `Date.now()` or `Math.random()`.  This also means that updates should be done in an ***"immutable"*** fashion, which means **always returning new objects with the updated data**, rather than directly modifying the original state tree in-place.
+- Should be "pure", which means the reducer:
+  - Does not _perform side effects_ (such as calling API's or modifying non-local objects or variables).
+  - Does not _call non-pure functions_ (like `Date.now` or `Math.random`).
+  - Does not _mutate_ its arguments. If the reducer updates state, it should do so in an ***"immutable"*** fashion.  In other words, the reducer should return a **new** object with the updated data rather than _modifying_ the **existing** state object _in-place_.  The same approach should be used for any sub-objects within state that the reducer updates.
 
 >##### Note on immutability, side effects, and mutation
 > Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function:
@@ -38,7 +41,7 @@ Because of these rules, it's important that the following core concepts are full
 
 #### Pure Functions and Side Effects
 
-**Key Concepts**:  
+**Key Concepts**:
 
 - Side effects
 - Pure functions
