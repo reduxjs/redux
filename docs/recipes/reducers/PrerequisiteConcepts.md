@@ -7,7 +7,7 @@ As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
 - Should be "pure", which means the reducer:
   - Does not _perform side effects_ (such as calling API's or modifying non-local objects or variables).
   - Does not _call non-pure functions_ (like `Date.now` or `Math.random`).
-  - Does not _mutate_ its arguments. If the reducer updates state, it should do so in an ***"immutable"*** fashion.  In other words, the reducer should return a **new** object with the updated data rather than _modifying_ the **existing** state object _in-place_.  The same approach should be used for any sub-objects within state that the reducer updates.
+  - Does not _mutate_ its arguments. If the reducer updates state, it should not _modify_ the **existing** state object in-place.  Instead, it should generate a **new** object containing the necessary changes. The same approach should be used for any sub-objects within state that the reducer updates.
 
 >##### Note on immutability, side effects, and mutation
 > Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function:
