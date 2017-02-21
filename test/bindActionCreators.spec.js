@@ -60,6 +60,48 @@ describe('bindActionCreators', () => {
     ])
   })
 
+  it('caches bound action creator', () => {
+    expect(
+      bindActionCreators(actionCreators.addTodo, store.dispatch)
+    ).toBe(
+      bindActionCreators(actionCreators.addTodo, store.dispatch)
+    )
+
+    const store2 = createStore(todos)
+    expect(
+      bindActionCreators(actionCreators.addTodo, store2.dispatch)
+    ).toEqual(
+      bindActionCreators(actionCreators.addTodo, store2.dispatch)
+    )
+
+    expect(
+      bindActionCreators(actionCreators.addTodo, store.dispatch)
+    ).toEqual(
+      bindActionCreators(actionCreators.addTodo, store.dispatch)
+    )
+  })
+
+  it('caches bound action creators', () => {
+    expect(
+      bindActionCreators(actionCreators, store.dispatch)
+    ).toEqual(
+      bindActionCreators(actionCreatorFunctions, store.dispatch)
+    )
+
+    const store2 = createStore(todos)
+    expect(
+      bindActionCreators(actionCreators, store2.dispatch)
+    ).toEqual(
+      bindActionCreators(actionCreatorFunctions, store2.dispatch)
+    )
+
+    expect(
+      bindActionCreators(actionCreators, store.dispatch)
+    ).toEqual(
+      bindActionCreators(actionCreatorFunctions, store.dispatch)
+    )
+  })
+
   it('throws for an undefined actionCreator', () => {
     expect(() => {
       bindActionCreators(undefined, store.dispatch)
