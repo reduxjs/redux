@@ -5,12 +5,12 @@
   "devDependencies": {
     "enzyme": "^2.4.1",
     "react-addons-test-utils": "^15.3.0",
-    "react-scripts": "^0.6.0"
+    "react-scripts": "^0.9.0"
   },
   "dependencies": {
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.2",
     "redux": "^3.5.2"
   },
   "scripts": {
