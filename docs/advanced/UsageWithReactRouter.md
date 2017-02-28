@@ -128,7 +128,7 @@ import { Link } from 'react-router';
 
 const FilterLink = ({ filter, children }) => (
   <Link
-    to={filter === 'all' ? '' : filter}
+    to={filter === 'all' ? '/' : filter}
     activeStyle={{
       textDecoration: 'none',
       color: 'black'
@@ -174,6 +174,19 @@ Now if you click on `<FilterLink />` you will see that your URL will change from
 Currently, the todo list is not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()` is still bound to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
 #### `containers/VisibleTodoList.js`
 ```js
+const getVisibleTodos = (todos, filter) => {
+	switch (filter) {
+		case 'all':
+			return todos
+		case 'completed':
+			return todos.filter(t => t.completed)
+		case 'active':
+			return todos.filter(t => !t.completed)
+		default:
+			return todos
+	}
+}
+
 const mapStateToProps = (state, ownProps) => {
   return {
     todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
@@ -202,6 +215,22 @@ const App = ({ params }) => {
     </div>
   );
 };
+```
+
+#### `index.js`
+```js
+import React from 'react';
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import todoApp from './reducers'
+import Root from './components/Root'
+
+let store = createStore(todoApp)
+
+render(
+	<Root store={store} />,
+	document.getElementById('root')
+)
 ```
 
 ## Next Steps
