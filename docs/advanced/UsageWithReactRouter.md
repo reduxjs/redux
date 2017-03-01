@@ -116,6 +116,24 @@ Root.propTypes = {
 export default Root;
 ```
 
+We will also need to refactor `index.js` to render the `<Root />` component to the DOM.
+
+#### `index.js`
+```js
+import React from 'react';
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import todoApp from './reducers'
+import Root from './components/Root'
+
+let store = createStore(todoApp)
+
+render(
+	<Root store={store} />,
+	document.getElementById('root')
+)
+```
+
 ## Navigating with React Router
 
 React Router comes with a [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that lets you navigate around your application. In our example, we can wrap `<Link />` with a new container component `<FilterLink />` so as to dynamically change the URL. The `activeStyle={}` property lets us apply a style on the active state.
@@ -128,7 +146,7 @@ import { Link } from 'react-router';
 
 const FilterLink = ({ filter, children }) => (
   <Link
-    to={filter === 'all' ? '/' : filter}
+    to={filter === 'SHOW_ALL' ? '/' : filter}
     activeStyle={{
       textDecoration: 'none',
       color: 'black'
@@ -147,46 +165,33 @@ import React from 'react'
 import FilterLink from '../containers/FilterLink'
 
 const Footer = () => (
-  <p>
-    Show:
-    {" "}
-    <FilterLink filter="all">
-      All
-    </FilterLink>
-    {", "}
-    <FilterLink filter="active">
-      Active
-    </FilterLink>
-    {", "}
-    <FilterLink filter="completed">
-      Completed
-    </FilterLink>
-  </p>
+	<p>
+		Show:
+		{" "}
+		<FilterLink filter="SHOW_ALL">
+			All
+		</FilterLink>
+		{", "}
+		<FilterLink filter="SHOW_ACTIVE">
+			Active
+		</FilterLink>
+		{", "}
+		<FilterLink filter="SHOW_COMPLETED">
+			Completed
+		</FilterLink>
+	</p>
 );
 
 export default Footer
 ```
 
-Now if you click on `<FilterLink />` you will see that your URL will change from `'/complete'`, `'/active'`, `'/'`. Even if you are going back with your browser, it will use your browser's history and effectively go to your previous URL.
+Now if you click on `<FilterLink />` you will see that your URL will change between `'/SHOW_COMPLETED'`, `'/SHOW_ACTIVE'`, and `'/'`. Even if you are going back with your browser, it will use your browser's history and effectively go to your previous URL.
 
 ## Reading From the URL
 
 Currently, the todo list is not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()` is still bound to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
 #### `containers/VisibleTodoList.js`
 ```js
-const getVisibleTodos = (todos, filter) => {
-	switch (filter) {
-		case 'all':
-			return todos
-		case 'completed':
-			return todos.filter(t => t.completed)
-		case 'active':
-			return todos.filter(t => !t.completed)
-		default:
-			return todos
-	}
-}
-
 const mapStateToProps = (state, ownProps) => {
   return {
     todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
@@ -198,7 +203,7 @@ Right now we are not passing anything to `<App />` so `ownProps` is an empty obj
 
 When previously we wrote:  `<Route path="/(:filter)" component={App} />`, it made available inside `App` a `params` property.
 
-`params` property is an object with every param specified in the url. *e.g: `params` will be equal to `{ filter: 'completed' }` if we are navigating to `localhost:3000/completed`. We can now read the URL from `<App />`.*
+`params` property is an object with every param specified in the url. *e.g: `params` will be equal to `{ filter: 'SHOW_COMPLETED' }` if we are navigating to `localhost:3000/SHOW_COMPLETED`. We can now read the URL from `<App />`.*
 
 Note that we are using [ES6 destructuring](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) on the properties to pass in `params` to `<VisibleTodoList />`.
 
@@ -215,22 +220,6 @@ const App = ({ params }) => {
     </div>
   );
 };
-```
-
-#### `index.js`
-```js
-import React from 'react';
-import { render } from 'react-dom'
-import { createStore } from 'redux'
-import todoApp from './reducers'
-import Root from './components/Root'
-
-let store = createStore(todoApp)
-
-render(
-	<Root store={store} />,
-	document.getElementById('root')
-)
 ```
 
 ## Next Steps
