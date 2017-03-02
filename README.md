@@ -16,7 +16,8 @@ It is tiny (2kB, including dependencies).
 [![Changelog #187](https://img.shields.io/badge/changelog-%23187-lightgrey.svg?style=flat-square)](https://changelog.com/187)
 
 >**Learn Redux from its creator:**  
->**[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)**
+>**[Part 1: Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)**<br>
+>**[Part 2: Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux) (27 free videos)**
 
 ### Testimonials
 
