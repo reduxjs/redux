@@ -12,6 +12,7 @@ branches:
   only:
     - master
 cache:
+  yarn: true
   directories:
   - $HOME/.npm
   - examples/async/node_modules
