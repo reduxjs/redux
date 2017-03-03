@@ -1,5 +1,5 @@
-function bindActionCreator(actionCreator, dispatch) {
-  return (...args) => dispatch(actionCreator(...args))
+function bindActionCreator(actionCreator, dispatch, context) {
+  return (...args) => dispatch(actionCreator.apply(context, args))
 }
 
 /**
@@ -41,7 +41,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     const key = keys[i]
     const actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
-      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch, actionCreators)
     }
   }
   return boundActionCreators
