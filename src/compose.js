@@ -9,7 +9,5 @@
  * (...args) => f(g(h(...args))).
  */
 export default function compose(...funcs) {
-  return funcs.length === 1
-    ? funcs[0]
-    : funcs.reduce((a, b) => (...args) => a(b(...args)), arg => arg)
+  return funcs.reduce((a, b) => (...args) => a(b(...args)), arg => arg)
 }
