@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "An example of a universally-rendered Redux application",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.4.3",
     "express": "^4.13.3",
+    "jest": "^19.0.2",
     "qs": "^4.0.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
