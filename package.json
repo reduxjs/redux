@@ -5,7 +5,6 @@
   "browser": "dist/redux.js",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "jsnext:main": "es/index.js",
   "typings": "./index.d.ts",
   "files": [
     "dist",
