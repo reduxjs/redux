@@ -9,7 +9,9 @@ var config = {
   format: 'umd',
   moduleName: 'Redux',
   plugins: [
-    nodeResolve(),
+    nodeResolve({
+      jsnext: true
+    }),
     commonjs(),
     babel({
       exclude: 'node_modules/**'
