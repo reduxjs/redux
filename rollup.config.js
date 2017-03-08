@@ -1,5 +1,4 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import uglify from 'rollup-plugin-uglify';
@@ -12,7 +11,6 @@ var config = {
     nodeResolve({
       jsnext: true
     }),
-    commonjs(),
     babel({
       exclude: 'node_modules/**'
     }),
@@ -25,7 +23,7 @@ var config = {
 if (env === 'production') {
   config.plugins.push(
     uglify({
-      compressor: {
+      compress: {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
