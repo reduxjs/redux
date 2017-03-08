@@ -2,8 +2,6 @@ import { ActionTypes } from './createStore'
 import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
 
-const NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : 'development'
-
 function getUndefinedStateErrorMessage(key, action) {
   const actionType = action && action.type
   const actionName = (actionType && `"${actionType.toString()}"`) || 'an action'
@@ -107,7 +105,7 @@ export default function combineReducers(reducers) {
   for (let i = 0; i < reducerKeys.length; i++) {
     const key = reducerKeys[i]
 
-    if (NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
       }
@@ -120,7 +118,7 @@ export default function combineReducers(reducers) {
   const finalReducerKeys = Object.keys(finalReducers)
 
   let unexpectedKeyCache
-  if (NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     unexpectedKeyCache = {}
   }
 
@@ -136,7 +134,7 @@ export default function combineReducers(reducers) {
       throw sanityError
     }
 
-    if (NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       const warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache)
       if (warningMessage) {
         warning(warningMessage)
