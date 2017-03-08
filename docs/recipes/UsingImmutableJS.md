@@ -270,7 +270,7 @@ Something needs to map the Immutable.JS props in your Smart Component to the pur
 Here is an example of such a HOC:
 
 ```
-import { React } from 'react';
+import React from 'react';
 import { Iterable } from 'immutable';
 
 export const toJS = (WrappedComponent) =>
