@@ -166,6 +166,7 @@ If you enjoyed my course, consider supporting Egghead by [buying a subscription]
 * [Basics](http://redux.js.org/docs/basics/index.html)
 * [Advanced](http://redux.js.org/docs/advanced/index.html)
 * [Recipes](http://redux.js.org/docs/recipes/index.html)
+* [FAQ](http://redux.js.org/docs/FAQ.html)
 * [Troubleshooting](http://redux.js.org/docs/Troubleshooting.html)
 * [Glossary](http://redux.js.org/docs/Glossary.html)
 * [API Reference](http://redux.js.org/docs/api/index.html)
@@ -223,7 +224,7 @@ Meet some of the outstanding companies that made it possible:
 * [Webflow](https://github.com/webflow)
 * [Ximedes](https://www.ximedes.com/)
 
-[See the full list of Redux patrons.](PATRONS.md)
+[See the full list of Redux patrons.](PATRONS.md), as well as the always-growing list of [people and companies that use Redux](https://github.com/reactjs/redux/issues/310).
 
 ### License
 
