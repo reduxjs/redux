@@ -27,11 +27,12 @@
   - [Why is immutability required in Redux?](/docs/faq/ImmutableData.md#why-is-immutability-required)
   - [Do I have to use Immutable.JS?](/docs/faq/ImmutableData.md#do-i-have-to-use-immutable-js)
   - [What are the issues with using ES6 for immutable operations?](/docs/faq/ImmutableData.md#issues-with-es6-for-immutable-ops)
-  - [Why should I use an immutable-focused library such as Immutable.JS?](/docs/faq/ImmutableData.md#why-use-immutable-library)
-  - [Why should I choose Immutable.JS as an immutable library?](/docs/faq/ImmutableData.md#why-choose-immutable-js)
-  - [What are the issues with using Immutable.JS?](/docs/faq/ImmutableData.md#issues-with-immutable-js)
-  - [Is Immutable.JS worth the effort?](/docs/faq/ImmutableData.md#is-immutable-js-worth-effort)
-  - [What are the Recommended Best Practices for using Immutable.JS with Redux?](/docs/faq/ImmutableData.md#immutable-js-best-practices)
+- **Using Immutable.JS with Redux**
+  - [Why should I use an immutable-focused library such as Immutable.JS?](/docs/recipes/UsingImmutableJS.md#why-use-immutable-library)
+  - [Why should I choose Immutable.JS as an immutable library?](/docs/recipes/UsingImmutableJS.md#why-choose-immutable-js)
+  - [What are the issues with using Immutable.JS?](/docs/recipes/UsingImmutableJS.md#issues-with-immutable-js)
+  - [Is Immutable.JS worth the effort?](/docs/recipes/UsingImmutableJS.md#is-immutable-js-worth-effort)
+  - [What are some opinionated Best Practices for using Immutable.JS with Redux?](/docs/recipes/UsingImmutableJS.md#immutable-js-best-practices)
 
 - **Code Structure**  
   - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
