@@ -9,7 +9,7 @@ As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Norma
 One approach is to merge the contents of the action in to the existing state.  In this case, we need to do a deep recursive merge, not just a shallow copy.  The Lodash `merge` function can handle this for us:
 
 ```js
-import merge from "lodash/object/merge";
+import merge from "lodash/merge";
 
 function commentsById(state = {}, action) {
     switch(action.type) {
