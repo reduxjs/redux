@@ -47,6 +47,8 @@ export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
+ *
+ * @template S State object type.
  */
 export type ReducersMapObject<S> = {
   [P in keyof S]: Reducer<S[P]>;
