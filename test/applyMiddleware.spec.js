@@ -20,10 +20,8 @@ describe('applyMiddleware', () => {
 
     expect(spy.mock.calls.length).toEqual(1)
 
-    expect(Object.keys(spy.mock.calls[0][0])).toEqual([
-      'getState',
-      'dispatch'
-    ])
+    expect(spy.mock.calls[0][0]).toHaveProperty('getState')
+    expect(spy.mock.calls[0][0]).toHaveProperty('dispatch')
 
     expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' }, { id: 2, text: 'Flux FTW!' } ])
   })
