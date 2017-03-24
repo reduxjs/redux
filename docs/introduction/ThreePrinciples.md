@@ -88,8 +88,8 @@ function todos(state = [], action) {
 }
 
 import { combineReducers, createStore } from 'redux'
-let reducer = combineReducers({ visibilityFilter, todos })
-let store = createStore(reducer)
+const reducer = combineReducers({ visibilityFilter, todos })
+const store = createStore(reducer)
 ```
 
 That's it! Now you know what Redux is all about.
