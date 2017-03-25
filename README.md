@@ -173,6 +173,8 @@ If you enjoyed my course, consider supporting Egghead by [buying a subscription]
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
+For Offline docs, please see: [devdocs](http://devdocs.io/redux/)
+
 ### Examples
 
 * [Counter Vanilla](http://redux.js.org/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla))
