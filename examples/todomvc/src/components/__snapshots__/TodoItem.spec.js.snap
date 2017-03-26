@@ -1,0 +1,123 @@
+exports[`components TodoItem TodoTextInput onSave should exit component from edit state 1`] = `
+<li
+  className="">
+  <div
+    className="view">
+    <input
+      checked={false}
+      className="toggle"
+      onChange={[Function onChange]}
+      type="checkbox" />
+    <label
+      onDoubleClick={[Function anonymous]}>
+      Use Redux
+    </label>
+    <button
+      className="destroy"
+      onClick={[Function onClick]} />
+  </div>
+</li>
+`;
+
+exports[`components TodoItem edit state render 1`] = `
+<li
+  className="editing">
+  <function TodoTextInput() {var _ref;var _temp, _this, _ret;_classCallCheck(this, TodoTextInput);for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TodoTextInput.__proto__ || Object.getPrototypeOf(TodoTextInput)).call.apply(_ref, [this].concat(args))), _this), _this.
+  
+  
+  
+  
+  
+  
+  
+  
+      state = {
+        text: /* istanbul ignore next */_this.props.text || '' }, _this.
+  
+  
+      handleSubmit = function (e) {
+        var text = e.target.value.trim();
+        if (e.which === 13) {
+          /* istanbul ignore next */_this.props.onSave(text);
+          if ( /* istanbul ignore next */_this.props.newTodo) {
+            /* istanbul ignore next */_this.setState({ text: '' });
+          }
+        }
+      }, _this.
+  
+      handleChange = function (e) {
+        /* istanbul ignore next */_this.setState({ text: e.target.value });
+      }, _this.
+  
+      handleBlur = function (e) {
+        if (! /* istanbul ignore next */_this.props.newTodo) {
+          /* istanbul ignore next */_this.props.onSave(e.target.value);
+        }
+      }, _temp), _possibleConstructorReturn(_this, _ret);}
+    editing={true}
+    onSave={[Function onSave]}
+    text="Use Redux" />
+</li>
+`;
+
+exports[`components TodoItem initial render 1`] = `
+<li
+  className="">
+  <div
+    className="view">
+    <input
+      checked={false}
+      className="toggle"
+      onChange={[Function onChange]}
+      type="checkbox" />
+    <label
+      onDoubleClick={[Function anonymous]}>
+      Use Redux
+    </label>
+    <button
+      className="destroy"
+      onClick={[Function onClick]} />
+  </div>
+</li>
+`;
+
+exports[`components TodoItem label onDoubleClick should put component in edit state 1`] = `
+<li
+  className="editing">
+  <function TodoTextInput() {var _ref;var _temp, _this, _ret;_classCallCheck(this, TodoTextInput);for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TodoTextInput.__proto__ || Object.getPrototypeOf(TodoTextInput)).call.apply(_ref, [this].concat(args))), _this), _this.
+  
+  
+  
+  
+  
+  
+  
+  
+      state = {
+        text: /* istanbul ignore next */_this.props.text || '' }, _this.
+  
+  
+      handleSubmit = function (e) {
+        var text = e.target.value.trim();
+        if (e.which === 13) {
+          /* istanbul ignore next */_this.props.onSave(text);
+          if ( /* istanbul ignore next */_this.props.newTodo) {
+            /* istanbul ignore next */_this.setState({ text: '' });
+          }
+        }
+      }, _this.
+  
+      handleChange = function (e) {
+        /* istanbul ignore next */_this.setState({ text: e.target.value });
+      }, _this.
+  
+      handleBlur = function (e) {
+        if (! /* istanbul ignore next */_this.props.newTodo) {
+          /* istanbul ignore next */_this.props.onSave(e.target.value);
+        }
+      }, _temp), _possibleConstructorReturn(_this, _ret);}
+    editing={true}
+    onSave={[Function onSave]}
+    text="Use Redux" />
+</li>
+`;

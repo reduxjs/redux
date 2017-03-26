@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import toJson from 'enzyme-to-json'
 import ConnectedNode, { Node } from './Node'
 
 function setup(id, counter, childIds, parentId) {
@@ -26,14 +27,19 @@ function setup(id, counter, childIds, parentId) {
     button: component.find('button'),
     childNodes: component.find(ConnectedNode),
     actions: actions,
-    eventArgs: eventArgs
+    eventArgs: eventArgs,
+    nodeMajorVersion: Number(process.versions.node.split('.')[0], 10)
   }
 }
 
 describe('Node component', () => {
   it('should display counter', () => {
-    const { component } = setup(1, 23, [])
+    const { component, nodeMajorVersion } = setup(1, 23, [])
     expect(component.text()).toMatch(/^Counter: 23/)
+
+    if (nodeMajorVersion > 5) {
+        expect(toJson(component)).toMatchSnapshot()
+    }
   })
 
   it('should call increment on button click', () => {

@@ -5,6 +5,7 @@
   "devDependencies": {
     "deep-freeze": "0.0.1",
     "enzyme": "^2.4.1",
+    "enzyme-to-json": "^1.4.5",
     "react-addons-test-utils": "^15.3.0",
     "react-scripts": "^0.9.3"
   },

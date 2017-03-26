@@ -1,0 +1,61 @@
+exports[`components Footer should render clear button when completed todos 1`] = `
+<button
+  className="clear-completed"
+  onClick={[Function mockConstructor]}>
+  Clear completed
+</button>
+`;
+
+exports[`components Footer should render container 1`] = `
+<footer
+  className="footer">
+  <span
+    className="todo-count">
+    <strong>
+      No
+    </strong>
+     
+    items
+     left
+  </span>
+  <ul
+    className="filters">
+    <li>
+      <a
+        className="selected"
+        onClick={[Function onClick]}
+        style={
+          Object {
+            "cursor": "pointer"
+          }
+        }>
+        All
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        onClick={[Function onClick]}
+        style={
+          Object {
+            "cursor": "pointer"
+          }
+        }>
+        Active
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        onClick={[Function onClick]}
+        style={
+          Object {
+            "cursor": "pointer"
+          }
+        }>
+        Completed
+      </a>
+    </li>
+  </ul>
+</footer>
+`;

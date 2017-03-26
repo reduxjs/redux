@@ -32,14 +32,15 @@ const setup = ( editing = false ) => {
   return {
     props: props,
     output: output,
-    renderer: renderer
+    renderer: renderer,
+    nodeMajorVersion: Number(process.versions.node.split('.')[0], 10)
   }
 }
 
 describe('components', () => {
   describe('TodoItem', () => {
     it('initial render', () => {
-      const { output } = setup()
+      const { output, nodeMajorVersion } = setup()
 
       expect(output.type).toBe('li')
       expect(output.props.className).toBe('')
@@ -59,6 +60,10 @@ describe('components', () => {
 
       expect(button.type).toBe('button')
       expect(button.props.className).toBe('destroy')
+
+      if (nodeMajorVersion > 5) {
+        expect(output).toMatchSnapshot()
+      }
     })
 
     it('input onChange should call completeTodo', () => {
@@ -76,16 +81,20 @@ describe('components', () => {
     })
 
     it('label onDoubleClick should put component in edit state', () => {
-      const { output, renderer } = setup()
+      const { output, renderer, nodeMajorVersion } = setup()
       const label = output.props.children.props.children[1]
       label.props.onDoubleClick({})
       const updated = renderer.getRenderOutput()
       expect(updated.type).toBe('li')
       expect(updated.props.className).toBe('editing')
+
+      if (nodeMajorVersion > 5) {
+        expect(updated).toMatchSnapshot()
+      }
     })
 
     it('edit state render', () => {
-      const { output } = setup(true)
+      const { output, nodeMajorVersion } = setup(true)
 
       expect(output.type).toBe('li')
       expect(output.props.className).toBe('editing')
@@ -94,6 +103,10 @@ describe('components', () => {
       expect(input.type).toBe(TodoTextInput)
       expect(input.props.text).toBe('Use Redux')
       expect(input.props.editing).toBe(true)
+
+      if (nodeMajorVersion > 5) {
+        expect(output).toMatchSnapshot()
+      }
     })
 
     it('TodoTextInput onSave should call editTodo', () => {
@@ -109,11 +122,15 @@ describe('components', () => {
     })
 
     it('TodoTextInput onSave should exit component from edit state', () => {
-      const { output, renderer } = setup(true)
+      const { output, renderer, nodeMajorVersion } = setup(true)
       output.props.children.props.onSave('Use Redux')
       const updated = renderer.getRenderOutput()
       expect(updated.type).toBe('li')
       expect(updated.props.className).toBe('')
+
+      if (nodeMajorVersion > 5) {
+        expect(updated).toMatchSnapshot()
+      }
     })
   })
 })

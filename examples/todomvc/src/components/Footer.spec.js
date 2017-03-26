@@ -18,7 +18,8 @@ const setup = propOverrides => {
 
   return {
     props: props,
-    output: output
+    output: output,
+    nodeMajorVersion: Number(process.versions.node.split('.')[0], 10)
   }
 }
 
@@ -36,9 +37,13 @@ const getTextContent = elem => {
 describe('components', () => {
   describe('Footer', () => {
     it('should render container', () => {
-      const { output } = setup()
+      const { output, nodeMajorVersion } = setup()
       expect(output.type).toBe('footer')
       expect(output.props.className).toBe('footer')
+
+      if (nodeMajorVersion > 5) {
+        expect(output).toMatchSnapshot()
+      }
     })
 
     it('should display active count when 0', () => {
@@ -86,10 +91,14 @@ describe('components', () => {
     })
 
     it('should render clear button when completed todos', () => {
-      const { output } = setup({ completedCount: 1 })
+      const { output, nodeMajorVersion } = setup({ completedCount: 1 })
       const [ , , clear ] = output.props.children
       expect(clear.type).toBe('button')
       expect(clear.props.children).toBe('Clear completed')
+      
+      if (nodeMajorVersion > 5) {
+        expect(clear).toMatchSnapshot()
+      }
     })
 
     it('should call onClearCompleted on clear button click', () => {

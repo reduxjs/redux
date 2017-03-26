@@ -15,14 +15,15 @@ const setup = () => {
   return {
     props: props,
     output: output,
-    renderer: renderer
+    renderer: renderer,
+    nodeMajorVersion: Number(process.versions.node.split('.')[0], 10)
   }
 }
 
 describe('components', () => {
   describe('Header', () => {
     it('should render correctly', () => {
-      const { output } = setup()
+      const { output, nodeMajorVersion } = setup()
 
       expect(output.type).toBe('header')
       expect(output.props.className).toBe('header')
@@ -35,6 +36,10 @@ describe('components', () => {
       expect(input.type).toBe(TodoTextInput)
       expect(input.props.newTodo).toBe(true)
       expect(input.props.placeholder).toBe('What needs to be done?')
+
+      if (nodeMajorVersion > 5) {
+        expect(output).toMatchSnapshot()
+      }
     })
 
     it('should call addTodo if length of text is greater than 0', () => {
