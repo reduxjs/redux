@@ -136,7 +136,7 @@ render(
 
 ## Navigating with React Router
 
-React Router comes with a [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that lets you navigate around your application. In our example, we can wrap `<Link />` with a new container component `<FilterLink />` so as to dynamically change the URL. The `activeStyle={}` property lets us apply a style on the active state.
+React Router comes with a [`<Link />`](https://github.com/ReactTraining/react-router/blob/v3/docs/API.md#link) component that lets you navigate around your application. In our example, we can wrap `<Link />` with a new container component `<FilterLink />` so as to dynamically change the URL. The `activeStyle={}` property lets us apply a style on the active state.
 
 
 #### `containers/FilterLink.js`
