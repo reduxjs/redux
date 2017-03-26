@@ -19,7 +19,7 @@ Before integrating React Router, we need to configure our development server. In
 If you are serving your `index.html` from Express:
 ``` js
   app.get('/*', (req,res) => {
-    res.sendfile(path.join(__dirname, 'index.html'))
+    res.sendFile(path.join(__dirname, 'index.html'))
   })
 ```
 
