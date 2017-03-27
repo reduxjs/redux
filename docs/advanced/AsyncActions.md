@@ -88,7 +88,7 @@ function requestPosts(subreddit) {
 }
 ```
 
-It is important for it to be separate from `SELECT_SUBREDDIT` or `INVALIDATE_SUBREDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular subreddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it's not wise to couple fetching to some particular UI event early on.
+It is important for it to be separate from `SELECT_SUBREDDIT` or `INVALIDATE_SUBREDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular subreddits, or to refresh state data once in a while). You may also want to fetch in response to a route change, so it's not wise to couple fetching to some particular UI event early on.
 
 Finally, when the network request comes through, we will dispatch `RECEIVE_POSTS`:
 
