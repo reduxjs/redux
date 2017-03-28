@@ -3,17 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "^2.4.1",
+    "enzyme": "^2.8.0",
     "react-addons-test-utils": "^15.3.0",
-    "react-scripts": "^0.9.3"
+    "react-scripts": "^0.9.5"
   },
   "dependencies": {
     "classnames": "^2.2.5",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.3",
     "redux": "^3.5.2",
-    "todomvc-app-css": "^2.0.6"
+    "todomvc-app-css": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "^0.9.3",
+    "react-scripts": "^0.9.5",
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.0.11",
-    "redux-logger": "^2.6.1"
+    "redux-logger": "^3.0.0"
   },
   "dependencies": {
-    "humps": "^1.1.0",
+    "humps": "^2.0.0",
     "lodash": "^4.16.1",
-    "normalizr": "3.0.0",
+    "normalizr": "^3.2.2",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-redux": "^4.4.5",
-    "react-router": "^2.6.1",
+    "react-redux": "^5.0.3",
+    "react-router": "^3.0.2",
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0"
