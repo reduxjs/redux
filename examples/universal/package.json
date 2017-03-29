@@ -4,7 +4,8 @@
   "description": "An example of a universally-rendered Redux application",
   "scripts": {
     "start": "node server/index.js",
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
