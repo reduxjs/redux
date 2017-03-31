@@ -351,7 +351,15 @@ export function fetchPosts(subreddit) {
     // This is not required by thunk middleware, but it is convenient for us.
 
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
+      .then(
+        response => response.json(),
+        
+        // Do not use catch, because that will also catch
+        // any errors in the dispatch and resulting render,
+        // causing an loop of 'Unexpected batch number' errors.
+        // https://github.com/facebook/react/issues/6895
+        error => console.log('An error occured.', error)
+      )
       .then(json =>
 
         // We can dispatch many times!
@@ -359,9 +367,6 @@ export function fetchPosts(subreddit) {
 
         dispatch(receivePosts(subreddit, json))
       )
-
-      // In a real world app, you also want to
-      // catch any error in the network call.
   }
 }
 ```
