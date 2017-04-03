@@ -54,7 +54,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
   }
 }
 
-function assertReducerSanity(reducers) {
+function assertReducerShape(reducers) {
   Object.keys(reducers).forEach(key => {
     const reducer = reducers[key]
     const initialState = reducer(undefined, { type: ActionTypes.INIT })
@@ -122,16 +122,16 @@ export default function combineReducers(reducers) {
     unexpectedKeyCache = {}
   }
 
-  let sanityError
+  let shapeAssertionError
   try {
-    assertReducerSanity(finalReducers)
+    assertReducerShape(finalReducers)
   } catch (e) {
-    sanityError = e
+    shapeAssertionError = e
   }
 
   return function combination(state = {}, action) {
-    if (sanityError) {
-      throw sanityError
+    if (shapeAssertionError) {
+      throw shapeAssertionError
     }
 
     if (process.env.NODE_ENV !== 'production') {
