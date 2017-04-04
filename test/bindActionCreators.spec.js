@@ -118,6 +118,6 @@ describe('bindActionCreators', () => {
     ])
     expect(console.error).toHaveBeenCalled()
     global.console = _console
-  });
+  })
 
 })
