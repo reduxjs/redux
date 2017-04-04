@@ -26,6 +26,11 @@ function bindActionCreator(actionCreator, dispatch) {
  * function.
  */
 export default function bindActionCreators(actionCreators, dispatch) {
+  // return a curried function if only actionCreators are present
+  if(arguments.length === 1) {
+    return (dispatch) => bindActionCreators(actionCreators, dispatch);
+  }
+
   if (typeof actionCreators === 'function') {
     return bindActionCreator(actionCreators, dispatch)
   }
