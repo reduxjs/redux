@@ -278,7 +278,7 @@ export default rootReducer
 
 In this code, there are two interesting parts:
 
-* We use ES6 computed property syntax so we can update `state[action.subreddit]` with `Object.assign()` in a terse way. This:
+* We use ES6 computed property syntax so we can update `state[action.subreddit]` with `Object.assign()` in a concise way. This:
 
   ```js
   return Object.assign({}, state, {
