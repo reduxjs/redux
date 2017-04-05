@@ -1,6 +1,6 @@
 # Initializing State
 
-There are two main ways to initialize state for your application.  The `createStore` method can accept an optional `preloadedState` value as its second argument.  Reducers can also specify an initial value by looking for an incoming state argument that is `undefined`, and returning the value they'd like to use as a default.  This can either be done with an explicit check inside the reducer, or by using the ES6 default argument value syntax: `function myReducer(state = someDefaultValue, action)`.  
+There are two main ways to initialize state for your application.  The `createStore` method can accept an optional `preloadedState` value as its second argument.  Reducers can also specify an initial value by looking for an incoming state argument that is `undefined`, and returning the value they'd like to use as a default.  This can either be done with an explicit check inside the reducer, or by using the ES6 default argument value syntax: `function myReducer(state = someDefaultValue, action)`.
 
 It's not always immediately clear how these two approaches interact.  Fortunately, the process does follow some predictable rules.  Here's how the pieces fit together.
 
@@ -12,6 +12,8 @@ Without `combineReducers()` or similar manual code, `preloadedState` always wins
 With `combineReducers()` the behavior is more nuanced. Those reducers whose state is specified in `preloadedState` will receive that state. Other reducers will receive `undefined` *and because of that* will fall back to the `state = ...` default argument they specify.
 
 **In general, `preloadedState` wins over the state specified by the reducer. This lets reducers specify initial data that makes sense *to them* as default arguments, but also allows loading existing data (fully or partially) when you're hydrating the store from some persistent storage or the server.**
+
+*Note: Reducers whose initial state is populated using `preloadedState` will **still need to provide a default value** to handle when passed a `state` of `undefined`. All reducers are passed `undefined` on initialization, so they should be written such that when given `undefined`, some value should be returned. This can be any non-`undefined` value; there's no need to duplicate the section of `preloadedState` here as the default.*
 
 
 ## In Depth
