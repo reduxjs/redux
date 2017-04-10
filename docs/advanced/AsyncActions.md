@@ -376,7 +376,7 @@ export function fetchPosts(subreddit) {
 >We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don't yet support it natively, we suggest that you use [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) library:
 
 >```js
-// Do this in every file where you use `fetch`
+>// Do this in every file where you use `fetch`
 >import fetch from 'isomorphic-fetch'
 >```
 
