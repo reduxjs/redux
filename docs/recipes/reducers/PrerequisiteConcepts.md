@@ -50,7 +50,7 @@ Because of these rules, it's important that the following core concepts are full
 **Reading List**:
 
 - [The Little Idea of Functional Programming](http://jaysoo.ca/2016/01/13/functional-programming-little-ideas/)
-- [Understanding Programmatic Side Effects](http://web24studios.com/2015/10/understanding-programmatic-side-effects/)
+- [Understanding Programmatic Side-Effects](http://c2fo.io/c2fo/programming/2016/05/11/understanding-programmatic-side-effects/)
 - [Learning Functional Programming in Javascript](https://youtu.be/e-5obm1G_FY)
 - [An Introduction to Reasonably Pure Functional Programming](https://www.sitepoint.com/an-introduction-to-reasonably-pure-functional-programming/)
 
