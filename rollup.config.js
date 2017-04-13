@@ -1,30 +1,29 @@
-'use strict';
-
-var webpack = require('webpack')
+import nodeResolve from 'rollup-plugin-node-resolve';
+import babel from 'rollup-plugin-babel';
+import replace from 'rollup-plugin-replace';
+import uglify from 'rollup-plugin-uglify';
 
 var env = process.env.NODE_ENV
 var config = {
-  module: {
-    loaders: [
-      { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/ }
-    ]
-  },
-  output: {
-    library: 'Redux',
-    libraryTarget: 'umd'
-  },
+  format: 'umd',
+  moduleName: 'Redux',
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.DefinePlugin({
+    nodeResolve({
+      jsnext: true
+    }),
+    babel({
+      exclude: 'node_modules/**'
+    }),
+    replace({
       'process.env.NODE_ENV': JSON.stringify(env)
     })
   ]
-};
+}
 
 if (env === 'production') {
   config.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
+    uglify({
+      compress: {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
@@ -41,4 +40,4 @@ if (env === 'production') {
   )
 }
 
-module.exports = config
+export default config

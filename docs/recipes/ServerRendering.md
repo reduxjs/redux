@@ -34,7 +34,7 @@ npm install --save express react-redux
 
 The following is the outline for what our server side is going to look like. We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server. If you're unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
 
-Additionally, as we are using ES6 and JSX syntax, we will need to compile with [Babel](https://babeljs.io/) (see this example of a [this example of a Node Server with Babel](https://github.com/babel/example-node-server)) and the [React preset](https://babeljs.io/docs/plugins/preset-react/).
+Additionally, as we are using ES6 and JSX syntax, we will need to compile with [Babel](https://babeljs.io/) (see [this example of a Node Server with Babel](https://github.com/babel/example-node-server)) and the [React preset](https://babeljs.io/docs/plugins/preset-react/).
 
 ##### `server.js`
 
@@ -49,6 +49,9 @@ import App from './containers/App'
 
 const app = Express()
 const port = 3000
+
+//Serve static files
+app.use('/static', Express.static('static'));
 
 // This is fired every time the server side receives a request
 app.use(handleRender)
@@ -111,9 +114,9 @@ function renderFullPage(html, preloadedState) {
       <body>
         <div id="root">${html}</div>
         <script>
-          // WARNING: See the following for Security isues with this approach:
+          // WARNING: See the following for security issues around embedding JSON in HTML:
           // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
@@ -141,6 +144,9 @@ import counterApp from './reducers'
 // Grab the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__
 
+// Allow the passed state to be garbage-collected
+delete window.__PRELOADED_STATE__
+ 
 // Create Redux store with initial state
 const store = createStore(counterApp, preloadedState)
 

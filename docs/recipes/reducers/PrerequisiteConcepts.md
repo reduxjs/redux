@@ -4,7 +4,10 @@
 As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
 
 - Should have a signature of `(previousState, action) => newState`, similar to the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
-- Should be "pure", which means it does not mutate its arguments, perform side effects like API calls or modifying values outside of the function, or call non-pure functions like `Date.now()` or `Math.random()`.  This also means that updates should be done in an ***"immutable"*** fashion, which means **always returning new objects with the updated data**, rather than directly modifying the original state tree in-place.
+- Should be "pure", which means the reducer:
+  - Does not _perform side effects_ (such as calling API's or modifying non-local objects or variables).
+  - Does not _call non-pure functions_ (like `Date.now` or `Math.random`).
+  - Does not _mutate_ its arguments. If the reducer updates state, it should not _modify_ the **existing** state object in-place.  Instead, it should generate a **new** object containing the necessary changes. The same approach should be used for any sub-objects within state that the reducer updates.
 
 >##### Note on immutability, side effects, and mutation
 > Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function:
@@ -38,7 +41,7 @@ Because of these rules, it's important that the following core concepts are full
 
 #### Pure Functions and Side Effects
 
-**Key Concepts**:  
+**Key Concepts**:
 
 - Side effects
 - Pure functions
@@ -47,7 +50,7 @@ Because of these rules, it's important that the following core concepts are full
 **Reading List**:
 
 - [The Little Idea of Functional Programming](http://jaysoo.ca/2016/01/13/functional-programming-little-ideas/)
-- [Understanding Programmatic Side Effects](http://web24studios.com/2015/10/understanding-programmatic-side-effects/)
+- [Understanding Programmatic Side-Effects](http://c2fo.io/c2fo/programming/2016/05/11/understanding-programmatic-side-effects/)
 - [Learning Functional Programming in Javascript](https://youtu.be/e-5obm1G_FY)
 - [An Introduction to Reasonably Pure Functional Programming](https://www.sitepoint.com/an-introduction-to-reasonably-pure-functional-programming/)
 

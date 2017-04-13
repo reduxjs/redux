@@ -1,4 +1,4 @@
-import {compose} from "../../";
+import {compose} from "../../index";
 
 // copied from DefinitelyTyped/compose-function
 

@@ -278,7 +278,7 @@ export default rootReducer
 
 In this code, there are two interesting parts:
 
-* We use ES6 computed property syntax so we can update `state[action.subreddit]` with `Object.assign()` in a terse way. This:
+* We use ES6 computed property syntax so we can update `state[action.subreddit]` with `Object.assign()` in a concise way. This:
 
   ```js
   return Object.assign({}, state, {
@@ -331,7 +331,7 @@ function receivePosts(subreddit, json) {
 // Though its insides are different, you would use it just like any other action creator:
 // store.dispatch(fetchPosts('reactjs'))
 
-function fetchPosts(subreddit) {
+export function fetchPosts(subreddit) {
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
@@ -351,7 +351,15 @@ function fetchPosts(subreddit) {
     // This is not required by thunk middleware, but it is convenient for us.
 
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
+      .then(
+        response => response.json(),
+        
+        // Do not use catch, because that will also catch
+        // any errors in the dispatch and resulting render,
+        // causing an loop of 'Unexpected batch number' errors.
+        // https://github.com/facebook/react/issues/6895
+        error => console.log('An error occured.', error)
+      )
       .then(json =>
 
         // We can dispatch many times!
@@ -359,9 +367,6 @@ function fetchPosts(subreddit) {
 
         dispatch(receivePosts(subreddit, json))
       )
-
-      // In a real world app, you also want to
-      // catch any error in the network call.
   }
 }
 ```
@@ -371,7 +376,7 @@ function fetchPosts(subreddit) {
 >We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don't yet support it natively, we suggest that you use [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) library:
 
 >```js
-// Do this in every file where you use `fetch`
+>// Do this in every file where you use `fetch`
 >import fetch from 'isomorphic-fetch'
 >```
 
@@ -390,7 +395,7 @@ How do we include the Redux Thunk middleware in the dispatch mechanism? We use t
 
 ```js
 import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
 import { selectSubreddit, fetchPosts } from './actions'
 import rootReducer from './reducers'
@@ -494,6 +499,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 - You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions.
 - You can use [redux-observable](https://github.com/redux-observable/redux-observable) to dispatch Observables.
 - You can use the [redux-saga](https://github.com/yelouafi/redux-saga/) middleware to build more complex asynchronous actions.
+- You can use the [redux-pack](https://github.com/lelandrichardson/redux-pack) middleware to dispatch promise-based asynchronous actions.
 - You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.md#real-world) does.
 
 It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.

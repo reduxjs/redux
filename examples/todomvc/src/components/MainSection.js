@@ -47,8 +47,8 @@ export default class MainSection extends Component {
         <Footer completedCount={completedCount}
                 activeCount={activeCount}
                 filter={filter}
-                onClearCompleted={this.handleClearCompleted.bind(this)}
-                onShow={this.handleShow.bind(this)} />
+                onClearCompleted={this.handleClearCompleted}
+                onShow={this.handleShow} />
       )
     }
   }

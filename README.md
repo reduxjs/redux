@@ -16,7 +16,8 @@ It is tiny (2kB, including dependencies).
 [![Changelog #187](https://img.shields.io/badge/changelog-%23187-lightgrey.svg?style=flat-square)](https://changelog.com/187)
 
 >**Learn Redux from its creator:**  
->**[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)**
+>**[Part 1: Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)**<br>
+>**[Part 2: Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux) (27 free videos)**
 
 ### Testimonials
 
@@ -31,8 +32,8 @@ It is tiny (2kB, including dependencies).
 
 ### Before Proceeding Further
 
->**Also read why you might not be needing Redux:**  
->**[“You Might Not Need Redux”](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
+>**Also read:**  
+>**[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
 ### Developer Experience
 
@@ -165,11 +166,14 @@ If you enjoyed my course, consider supporting Egghead by [buying a subscription]
 * [Basics](http://redux.js.org/docs/basics/index.html)
 * [Advanced](http://redux.js.org/docs/advanced/index.html)
 * [Recipes](http://redux.js.org/docs/recipes/index.html)
+* [FAQ](http://redux.js.org/docs/FAQ.html)
 * [Troubleshooting](http://redux.js.org/docs/Troubleshooting.html)
 * [Glossary](http://redux.js.org/docs/Glossary.html)
 * [API Reference](http://redux.js.org/docs/api/index.html)
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
+
+For Offline docs, please see: [devdocs](http://devdocs.io/redux/)
 
 ### Examples
 
@@ -222,7 +226,7 @@ Meet some of the outstanding companies that made it possible:
 * [Webflow](https://github.com/webflow)
 * [Ximedes](https://www.ximedes.com/)
 
-[See the full list of Redux patrons.](PATRONS.md)
+[See the full list of Redux patrons.](PATRONS.md), as well as the always-growing list of [people and companies that use Redux](https://github.com/reactjs/redux/issues/310).
 
 ### License
 

@@ -1,9 +1,9 @@
 import {
   Middleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
-} from "../../";
+} from "../../index";
 
-declare module "../../" {
+declare module "../../index" {
     export interface Dispatch<S> {
         <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
     }
@@ -35,7 +35,6 @@ const loggerMiddleware: Middleware =
         // a middleware further in chain changed it.
         return returnValue
       }
-
 
 
 type State = {

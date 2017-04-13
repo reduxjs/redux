@@ -1,7 +1,7 @@
 import {
   Reducer, Action, combineReducers,
   ReducersMapObject
-} from "../../";
+} from "../../index";
 
 
 type TodosState = string[];

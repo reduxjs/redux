@@ -49,7 +49,7 @@ dispatch({
 })
 ```
 
-You might write an action creator in a separate file, and import it from your component:
+You might write an action creator in a separate file, and import it into your component:
 
 #### `actionCreators.js`
 

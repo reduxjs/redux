@@ -9,7 +9,7 @@ As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Norma
 One approach is to merge the contents of the action in to the existing state.  In this case, we need to do a deep recursive merge, not just a shallow copy.  The Lodash `merge` function can handle this for us:
 
 ```js
-import merge from "lodash/object/merge";
+import merge from "lodash/merge";
 
 function commentsById(state = {}, action) {
     switch(action.type) {
@@ -125,7 +125,7 @@ const commentsReducer = combineReducers({
 });
 ```
 
-The example is a bit long, because it's showing how all the different slice reducers and case reducers fit together.  Note that the delegation involved here.  The `postsById` slice reducer delegates the work for this case to `addComment`, which inserts the new Comment's ID into the correct Post item.  Meanwhile, both the `commentsById` and `allComments` slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.
+The example is a bit long, because it's showing how all the different slice reducers and case reducers fit together.  Note  the delegation involved here.  The `postsById` slice reducer delegates the work for this case to `addComment`, which inserts the new Comment's ID into the correct Post item.  Meanwhile, both the `commentsById` and `allComments` slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.
 
 
 ## Other Approaches

@@ -28,3 +28,5 @@ Your process will look like this:
 ## From Backbone
 
 Backbone's model layer is quite different from Redux, so we don't suggest mixing them. If possible, it is best that you rewrite your app's model layer from scratch instead of connecting Backbone to Redux. However, if a rewrite is not feasible, you may use [backbone-redux](https://github.com/redbooth/backbone-redux) to migrate gradually, and keep the Redux store in sync with Backbone models and collections.
+
+If your Backbone codebase is too big for a quick rewrite or you don't want to manage interactions between store and models, use [backbone-redux-migrator](https://github.com/naugtur/backbone-redux-migrator) to help your two codebases coexist while keeping healthy separation. Once your rewrite finishes, Backbone code can be discarded and your Redux application can work on its own once you configure router.
