@@ -266,7 +266,8 @@ To test the components we make a `setup()` helper that passes the stubbed callba
 #### Example
 
 ```js
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import TodoTextInput from './TodoTextInput'
 
 class Header extends Component {
