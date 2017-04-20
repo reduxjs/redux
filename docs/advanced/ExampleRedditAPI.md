@@ -208,7 +208,8 @@ export default class Root extends Component {
 #### `containers/AsyncApp.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
 import Picker from '../components/Picker'
@@ -318,7 +319,8 @@ export default connect(mapStateToProps)(AsyncApp)
 #### `components/Picker.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Picker extends Component {
   render() {
@@ -352,7 +354,8 @@ Picker.propTypes = {
 #### `components/Posts.js`
 
 ```js
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Posts extends Component {
   render() {

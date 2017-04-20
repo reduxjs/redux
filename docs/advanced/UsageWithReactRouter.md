@@ -96,7 +96,8 @@ Unless you are targeting old browsers like IE9, you can always use `browserHisto
 
 #### `components/Root.js`
 ``` js
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
 import App from './App';
