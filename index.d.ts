@@ -93,8 +93,8 @@ export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
  */
-export interface Dispatch<S> {
-    <A extends Action>(action: A): A;
+export interface Dispatch<A> {
+    <Action extends A>(action: A): A;
 }
 
 /**
