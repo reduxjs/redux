@@ -1,58 +1,82 @@
-import products from './products'
+import reducer, * as products from './products'
 
 describe('reducers', () => {
   describe('products', () => {
-    it('should handle RECEIVE_PRODUCTS action', () => {
-      const action = {
-        type: 'RECEIVE_PRODUCTS',
-        products: [
-          {
-            id: 1,
-            title: 'Product 1'
-          },
-          {
-            id: 2,
-            title: 'Product 2'
-          }
-        ]
-      }
+    let state
 
-      expect(products({}, action)).toEqual({
-        byId: {
-          1: {
-            id: 1,
-            title: 'Product 1'
-          },
-          2: {
-            id: 2,
-            title: 'Product 2'
-          }
-        },
-        visibleIds: [ 1, 2 ]
+    describe('when products are received', () => {
+
+      beforeEach(() => {
+        state = reducer({}, {
+          type: 'RECEIVE_PRODUCTS',
+          products: [
+            {
+              id: 1,
+              title: 'Product 1',
+              inventory: 2
+            },
+            {
+              id: 2,
+              title: 'Product 2',
+              inventory: 1
+            }
+          ]
+        })
       })
-    })
 
-    it('should handle ADD_TO_CART action', () => {
-      const state = {
-        byId: {
-          1: {
+      it('contains the products from the action', () => {
+        expect(products.getProduct(state, 1)).toEqual({
+          id: 1,
+          title: 'Product 1',
+            inventory: 2
+        })
+        expect(products.getProduct(state, 2)).toEqual({
+          id: 2,
+          title: 'Product 2',
+            inventory: 1
+        })
+      })
+
+      it ('contains no other products', () => {
+        expect(products.getProduct(state, 3)).toEqual(undefined)
+      })
+
+      it('lists all of the products as visible', () => {
+        expect(products.getVisibleProducts(state)).toEqual([
+          {
             id: 1,
             title: 'Product 1',
+            inventory: 2
+          }, {
+            id: 2,
+            title: 'Product 2',
             inventory: 1
           }
-        }
-      }
-
-      expect(products(state, { type: 'ADD_TO_CART', productId: 1 })).toEqual({
-        byId: {
-          1: {
-            id: 1,
-            title: 'Product 1',
-            inventory: 0
-          }
-        },
-        visibleIds: []
+        ])
       })
+
+      describe('when an item is added to the cart', () => {
+
+        beforeEach(() => {
+          state = reducer(state, { type: 'ADD_TO_CART', productId: 1 })
+        })
+
+        it('the inventory is reduced', () => {
+          expect(products.getVisibleProducts(state)).toEqual([
+            {
+              id: 1,
+              title: 'Product 1',
+              inventory: 1
+            }, {
+              id: 2,
+              title: 'Product 2',
+              inventory: 1
+            }
+          ])
+        })
+
+      })
+
     })
   })
 })
