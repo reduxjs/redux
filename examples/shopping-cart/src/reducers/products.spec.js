@@ -2,7 +2,7 @@ import reducer, * as products from './products'
 
 describe('reducers', () => {
   describe('products', () => {
-    var state
+    let state
 
     describe('when products are received', () => {
 
