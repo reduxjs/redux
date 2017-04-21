@@ -77,24 +77,6 @@ describe('reducers', () => {
 
       })
 
-      describe('when the last item is added to the cart', () => {
-
-        beforeEach(() => {
-          state = reducer(state, { type: 'ADD_TO_CART', productId: 2 })
-        })
-
-        it('the corresponding product is no longer visible', () => {
-          expect(products.getVisibleProducts(state)).toEqual([
-            {
-              id: 1,
-              title: 'Product 1',
-              inventory: 2
-            }
-          ])
-        })
-
-      })
-
     })
   })
 })
