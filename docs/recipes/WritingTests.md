@@ -300,7 +300,7 @@ can be tested like:
 
 ```js
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import Header from '../../components/Header'
 
 function setup() {
@@ -308,7 +308,7 @@ function setup() {
     addTodo: jest.fn()
   }
 
-  const enzymeWrapper = shallow(<Header {...props} />)
+  const enzymeWrapper = mount(<Header {...props} />)
 
   return {
     props,
