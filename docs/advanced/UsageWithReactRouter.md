@@ -3,9 +3,9 @@
 So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that triggers the change URL.
 
 ## Installing React Router
-`react-router` is available on npm . This guides assumes you are using `react-router@^2.7.0`.
+`react-router` is available on npm . This guides assumes you are using `react-router@^4.0.0`.
 
-`npm install --save react-router`
+`npm install --save react-router-dom react-router`
 
 ## Configuring the Fallback URL
 
@@ -39,7 +39,7 @@ Along this chapter, we will be using the [Todos](https://github.com/reactjs/redu
 First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
 
 ```js
-import { Router, Route, browserHistory } from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 ```
 
 In a React app, usually you would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
@@ -81,7 +81,7 @@ Now the `<App />` component will be rendered if the URL matches '/'. Additionall
 You will probably want to remove the hash from the URL (e.g: `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
 
 ```js
-import { Router, Route, browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 ```
 
 and pass it to the `<Router />` in order to remove the hash from the URL:
@@ -99,7 +99,8 @@ Unless you are targeting old browsers like IE9, you can always use `browserHisto
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { browserHistory } from 'react-router';
 import App from './App';
 
 const Root = ({ store }) => (
@@ -143,7 +144,7 @@ React Router comes with a [`<Link />`](https://github.com/ReactTraining/react-ro
 #### `containers/FilterLink.js`
 ```js
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const FilterLink = ({ filter, children }) => (
   <Link
