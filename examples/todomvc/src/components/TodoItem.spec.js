@@ -1,5 +1,5 @@
 import React from 'react'
-import TestUtils from 'react-addons-test-utils'
+import { createRenderer } from 'react-test-renderer/shallow';
 import TodoItem from './TodoItem'
 import TodoTextInput from './TodoTextInput'
 
@@ -15,7 +15,7 @@ const setup = ( editing = false ) => {
     completeTodo: jest.fn()
   }
 
-  const renderer = TestUtils.createRenderer()
+  const renderer = createRenderer()
 
   renderer.render(
     <TodoItem {...props} />

@@ -1,5 +1,5 @@
 import React from 'react'
-import TestUtils from 'react-addons-test-utils'
+import { createRenderer } from 'react-test-renderer/shallow';
 import Footer from './Footer'
 import { SHOW_ALL, SHOW_ACTIVE } from '../constants/TodoFilters'
 
@@ -12,7 +12,7 @@ const setup = propOverrides => {
     onShow: jest.fn()
   }, propOverrides)
 
-  const renderer = TestUtils.createRenderer()
+  const renderer = createRenderer()
   renderer.render(<Footer {...props} />)
   const output = renderer.getRenderOutput()
 
