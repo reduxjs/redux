@@ -13,6 +13,7 @@
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
     "react-redux": "^5.0.3",
+    "react-test-renderer": "^15.5.4",
     "redux": "^3.5.2",
     "todomvc-app-css": "^2.1.0"
   },
