@@ -39,7 +39,7 @@ Along this chapter, we will be using the [Todos](https://github.com/reactjs/redu
 First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
 
 ```js
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route } from 'react-router';
 ```
 
 In a React app, usually you would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
