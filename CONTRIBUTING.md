@@ -10,6 +10,8 @@ Before opening an issue, please search the [issue tracker](https://github.com/re
 
 We use the issue tracker to keep track of bugs and improvements to Redux itself, its examples, and the documentation. We encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc. If a topic has been discussed before, we will ask you to join the previous discussion.
 
+As redux is very stable software, changes to redux itself (including code style changes) are very carefully considered.
+
 ### Getting Help
 
 **For support or usage questions like “how do I do X with Redux” and “my code doesn't work”, please search and ask on [StackOverflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) first.**
