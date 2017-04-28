@@ -10,7 +10,7 @@ Before opening an issue, please search the [issue tracker](https://github.com/re
 
 We use the issue tracker to keep track of bugs and improvements to Redux itself, its examples, and the documentation. We encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc. If a topic has been discussed before, we will ask you to join the previous discussion.
 
-As redux is very stable software, changes to redux itself (including code style changes) are very carefully considered.
+As Redux is stable software, changes to its behavior are very carefully considered. Any pull requests that involve breaking changes should be made against the `next` branch.
 
 ### Getting Help
 
