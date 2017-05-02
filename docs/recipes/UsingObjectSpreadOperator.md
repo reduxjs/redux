@@ -36,13 +36,11 @@ function todoApp(state = initialState, action) {
 The advantage of using the object spread syntax becomes more apparent when you're composing complex objects. Below `getAddedIds` maps an array of `id` values to an array of objects with values returned from `getProduct` and `getQuantity`.
 
 ```js
-return getAddedIds(state.cart).map(id => Object.assign(
-  {},
-  getProduct(state.products, id),
-  {
+return getAddedIds(state.cart).map(id =>
+  Object.assign({}, getProduct(state.products, id), {
     quantity: getQuantity(state.cart, id)
-  }
-))
+  })
+)
 ```
 
 Object spread lets us simplify the above `map` call to:

@@ -55,7 +55,7 @@ While `combineReducers` attempts to check that your reducers conform to some of 
 export default function todos(state = [], action) {
   switch (action.type) {
     case 'ADD_TODO':
-      return state.concat([ action.text ])
+      return state.concat([action.text])
     default:
       return state
   }

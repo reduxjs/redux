@@ -10,57 +10,56 @@ Let's say that our initial reducer looks like this:
 
 ```js
 const initialState = {
-    visibilityFilter : 'SHOW_ALL',
-    todos : []
-};
-
-
-function appReducer(state = initialState, action) {
-    switch(action.type) {
-        case 'SET_VISIBILITY_FILTER' : { 
-            return Object.assign({}, state, {
-                visibilityFilter : action.filter
-            });
-        }
-        case 'ADD_TODO' : {
-            return Object.assign({}, state, {
-                todos : state.todos.concat({
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                })
-            });
-        }
-        case 'TOGGLE_TODO' : {
-            return Object.assign({}, state, {
-                todos : state.todos.map(todo => {
-                    if (todo.id !== action.id) {
-                      return todo;
-                    }
-
-                    return Object.assign({}, todo, {
-                        completed : !todo.completed
-                    })
-                  })
-            });
-        } 
-        case 'EDIT_TODO' : {
-            return Object.assign({}, state, {
-                todos : state.todos.map(todo => {
-                    if (todo.id !== action.id) {
-                      return todo;
-                    }
-
-                    return Object.assign({}, todo, {
-                        text : action.text
-                    })
-                  })
-            });
-        } 
-        default : return state;
-    }
+  visibilityFilter: 'SHOW_ALL',
+  todos: []
 }
 
+function appReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER': {
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    }
+    case 'ADD_TODO': {
+      return Object.assign({}, state, {
+        todos: state.todos.concat({
+          id: action.id,
+          text: action.text,
+          completed: false
+        })
+      })
+    }
+    case 'TOGGLE_TODO': {
+      return Object.assign({}, state, {
+        todos: state.todos.map(todo => {
+          if (todo.id !== action.id) {
+            return todo
+          }
+
+          return Object.assign({}, todo, {
+            completed: !todo.completed
+          })
+        })
+      })
+    }
+    case 'EDIT_TODO': {
+      return Object.assign({}, state, {
+        todos: state.todos.map(todo => {
+          if (todo.id !== action.id) {
+            return todo
+          }
+
+          return Object.assign({}, todo, {
+            text: action.text
+          })
+        })
+      })
+    }
+    default:
+      return state
+  }
+}
 ```
 
 That function is fairly short, but already becoming overly complex.  We're dealing with two different areas of concern (filtering vs managing our list of todos), the nesting is making the update logic harder to read, and it's not exactly clear what's going on everywhere.
@@ -72,56 +71,57 @@ A good first step might be to break out a utility function to return a new objec
 
 ```js
 function updateObject(oldObject, newValues) {
-    // Encapsulate the idea of passing a new object as the first parameter
-    // to Object.assign to ensure we correctly copy data instead of mutating
-    return Object.assign({}, oldObject, newValues);
+  // Encapsulate the idea of passing a new object as the first parameter
+  // to Object.assign to ensure we correctly copy data instead of mutating
+  return Object.assign({}, oldObject, newValues)
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
-    const updatedItems = array.map(item => {
-        if(item.id !== itemId) {
-            // Since we only want to update one item, preserve all others as they are now
-            return item;
-        }
-        
-        // Use the provided callback to create an updated item
-        const updatedItem = updateItemCallback(item);
-        return updatedItem;
-    });
-    
-    return updatedItems;
+  const updatedItems = array.map(item => {
+    if (item.id !== itemId) {
+      // Since we only want to update one item, preserve all others as they are now
+      return item
+    }
+
+    // Use the provided callback to create an updated item
+    const updatedItem = updateItemCallback(item)
+    return updatedItem
+  })
+
+  return updatedItems
 }
 
 function appReducer(state = initialState, action) {
-    switch(action.type) {
-        case 'SET_VISIBILITY_FILTER' : { 
-            return updateObject(state, {visibilityFilter : action.filter});
-        }
-        case 'ADD_TODO' : {
-            const newTodos = state.todos.concat({
-                id: action.id,
-                text: action.text,
-                completed: false
-            });
-            
-            return updateObject(state, {todos : newTodos});
-        }
-        case 'TOGGLE_TODO' : {
-            const newTodos = updateItemInArray(state.todos, action.id, todo => {
-                return updateObject(todo, {completed : !todo.completed});
-            });
-            
-            return updateObject(state, {todos : newTodos});
-        } 
-        case 'EDIT_TODO' : {
-            const newTodos = updateItemInArray(state.todos, action.id, todo => {
-                return updateObject(todo, {text : action.text});
-            });
-            
-            return updateObject(state, {todos : newTodos});
-        } 
-        default : return state;
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER': {
+      return updateObject(state, { visibilityFilter: action.filter })
     }
+    case 'ADD_TODO': {
+      const newTodos = state.todos.concat({
+        id: action.id,
+        text: action.text,
+        completed: false
+      })
+
+      return updateObject(state, { todos: newTodos })
+    }
+    case 'TOGGLE_TODO': {
+      const newTodos = updateItemInArray(state.todos, action.id, todo => {
+        return updateObject(todo, { completed: !todo.completed })
+      })
+
+      return updateObject(state, { todos: newTodos })
+    }
+    case 'EDIT_TODO': {
+      const newTodos = updateItemInArray(state.todos, action.id, todo => {
+        return updateObject(todo, { text: action.text })
+      })
+
+      return updateObject(state, { todos: newTodos })
+    }
+    default:
+      return state
+  }
 }
 ```
 
@@ -136,45 +136,49 @@ Next, we can split each specific case into its own function:
 function updateObject(oldObject, newValues) {}
 function updateItemInArray(array, itemId, updateItemCallback) {}
 
-
 function setVisibilityFilter(state, action) {
-    return updateObject(state, {visibilityFilter : action.filter });
+  return updateObject(state, { visibilityFilter: action.filter })
 }
 
 function addTodo(state, action) {
-    const newTodos = state.todos.concat({
-        id: action.id,
-        text: action.text,
-        completed: false
-    });
-    
-    return updateObject(state, {todos : newTodos});
+  const newTodos = state.todos.concat({
+    id: action.id,
+    text: action.text,
+    completed: false
+  })
+
+  return updateObject(state, { todos: newTodos })
 }
 
 function toggleTodo(state, action) {
-    const newTodos = updateItemInArray(state.todos, action.id, todo => {
-        return updateObject(todo, {completed : !todo.completed});
-    });
-    
-    return updateObject(state, {todos : newTodos});
+  const newTodos = updateItemInArray(state.todos, action.id, todo => {
+    return updateObject(todo, { completed: !todo.completed })
+  })
+
+  return updateObject(state, { todos: newTodos })
 }
 
 function editTodo(state, action) {
-    const newTodos = updateItemInArray(state.todos, action.id, todo => {
-        return updateObject(todo, {text : action.text});
-    });
-    
-    return updateObject(state, {todos : newTodos});
+  const newTodos = updateItemInArray(state.todos, action.id, todo => {
+    return updateObject(todo, { text: action.text })
+  })
+
+  return updateObject(state, { todos: newTodos })
 }
 
 function appReducer(state = initialState, action) {
-    switch(action.type) {
-        case 'SET_VISIBILITY_FILTER' : return setVisibilityFilter(state, action);
-        case 'ADD_TODO' : return addTodo(state, action);
-        case 'TOGGLE_TODO' : return toggleTodo(state, action);
-        case 'EDIT_TODO' : return editTodo(state, action);
-        default : return state;
-    }
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return setVisibilityFilter(state, action)
+    case 'ADD_TODO':
+      return addTodo(state, action)
+    case 'TOGGLE_TODO':
+      return toggleTodo(state, action)
+    case 'EDIT_TODO':
+      return editTodo(state, action)
+    default:
+      return state
+  }
 }
 ```
 
@@ -190,61 +194,64 @@ Our app reducer is still aware of all the different cases for our application.  
 function updateObject(oldObject, newValues) {}
 function updateItemInArray(array, itemId, updateItemCallback) {}
 
-
-
 function setVisibilityFilter(visibilityState, action) {
-    // Technically, we don't even care about the previous state
-    return action.filter;
+  // Technically, we don't even care about the previous state
+  return action.filter
 }
 
 function visibilityReducer(visibilityState = 'SHOW_ALL', action) {
-    switch(action.type) {
-        case 'SET_VISIBILITY_FILTER' : return setVisibilityFilter(visibilityState, action);
-        default : return visibilityState;
-    }
-};
-
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return setVisibilityFilter(visibilityState, action)
+    default:
+      return visibilityState
+  }
+}
 
 function addTodo(todosState, action) {
-    const newTodos = todosState.concat({
-        id: action.id,
-        text: action.text,
-        completed: false
-    });
-    
-    return newTodos;
+  const newTodos = todosState.concat({
+    id: action.id,
+    text: action.text,
+    completed: false
+  })
+
+  return newTodos
 }
 
 function toggleTodo(todosState, action) {
-    const newTodos = updateItemInArray(todosState, action.id, todo => {
-        return updateObject(todo, {completed : !todo.completed});
-    });
-    
-    return newTodos;
+  const newTodos = updateItemInArray(todosState, action.id, todo => {
+    return updateObject(todo, { completed: !todo.completed })
+  })
+
+  return newTodos
 }
 
 function editTodo(todosState, action) {
-    const newTodos = updateItemInArray(todosState, action.id, todo => {
-        return updateObject(todo, {text : action.text});
-    });
-    
-    return newTodos;
+  const newTodos = updateItemInArray(todosState, action.id, todo => {
+    return updateObject(todo, { text: action.text })
+  })
+
+  return newTodos
 }
 
 function todosReducer(todosState = [], action) {
-    switch(action.type) {
-        case 'ADD_TODO' : return addTodo(todosState, action);
-        case 'TOGGLE_TODO' : return toggleTodo(todosState, action);
-        case 'EDIT_TODO' : return editTodo(todosState, action);
-        default : return todosState;
-    }
+  switch (action.type) {
+    case 'ADD_TODO':
+      return addTodo(todosState, action)
+    case 'TOGGLE_TODO':
+      return toggleTodo(todosState, action)
+    case 'EDIT_TODO':
+      return editTodo(todosState, action)
+    default:
+      return todosState
+  }
 }
 
 function appReducer(state = initialState, action) {
-    return {
-        todos : todosReducer(state.todos, action),
-        visibilityFilter : visibilityReducer(state.visibilityFilter, action)
-    };
+  return {
+    todos: todosReducer(state.todos, action),
+    visibilityFilter: visibilityReducer(state.visibilityFilter, action)
+  }
 }
 ```
 
@@ -269,13 +276,12 @@ function createReducer(initialState, handlers) {
   }
 }
 
-
 // Omitted
 function setVisibilityFilter(visibilityState, action) {}
 
 const visibilityReducer = createReducer('SHOW_ALL', {
-    'SET_VISIBILITY_FILTER' : setVisibilityFilter
-});
+  SET_VISIBILITY_FILTER: setVisibilityFilter
+})
 
 // Omitted
 function addTodo(todosState, action) {}
@@ -283,16 +289,16 @@ function toggleTodo(todosState, action) {}
 function editTodo(todosState, action) {}
 
 const todosReducer = createReducer([], {
-    'ADD_TODO' : addTodo,
-    'TOGGLE_TODO' : toggleTodo,
-    'EDIT_TODO' : editTodo
-});
+  ADD_TODO: addTodo,
+  TOGGLE_TODO: toggleTodo,
+  EDIT_TODO: editTodo
+})
 
 function appReducer(state = initialState, action) {
-    return {
-        todos : todosReducer(state.todos, action),
-        visibilityFilter : visibilityReducer(state.visibilityFilter, action)
-    };
+  return {
+    todos: todosReducer(state.todos, action),
+    visibilityFilter: visibilityReducer(state.visibilityFilter, action)
+  }
 }
 ```
 
@@ -304,24 +310,24 @@ As our last step, we can now use Redux's built-in `combineReducers` utility to h
 // Reusable utility functions
 
 function updateObject(oldObject, newValues) {
-    // Encapsulate the idea of passing a new object as the first parameter
-    // to Object.assign to ensure we correctly copy data instead of mutating
-    return Object.assign({}, oldObject, newValues);
+  // Encapsulate the idea of passing a new object as the first parameter
+  // to Object.assign to ensure we correctly copy data instead of mutating
+  return Object.assign({}, oldObject, newValues)
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
-    const updatedItems = array.map(item => {
-        if(item.id !== itemId) {
-            // Since we only want to update one item, preserve all others as they are now
-            return item;
-        }
-        
-        // Use the provided callback to create an updated item
-        const updatedItem = updateItemCallback(item);
-        return updatedItem;
-    });
-    
-    return updatedItems;
+  const updatedItems = array.map(item => {
+    if (item.id !== itemId) {
+      // Since we only want to update one item, preserve all others as they are now
+      return item
+    }
+
+    // Use the provided callback to create an updated item
+    const updatedItem = updateItemCallback(item)
+    return updatedItem
+  })
+
+  return updatedItems
 }
 
 function createReducer(initialState, handlers) {
@@ -334,59 +340,58 @@ function createReducer(initialState, handlers) {
   }
 }
 
-
 // Handler for a specific case ("case reducer")
 function setVisibilityFilter(visibilityState, action) {
-    // Technically, we don't even care about the previous state
-    return action.filter;
+  // Technically, we don't even care about the previous state
+  return action.filter
 }
 
 // Handler for an entire slice of state ("slice reducer")
 const visibilityReducer = createReducer('SHOW_ALL', {
-    'SET_VISIBILITY_FILTER' : setVisibilityFilter
-});
+  SET_VISIBILITY_FILTER: setVisibilityFilter
+})
 
 // Case reducer
 function addTodo(todosState, action) {
-    const newTodos = todosState.concat({
-        id: action.id,
-        text: action.text,
-        completed: false
-    });
-    
-    return newTodos;
+  const newTodos = todosState.concat({
+    id: action.id,
+    text: action.text,
+    completed: false
+  })
+
+  return newTodos
 }
 
 // Case reducer
 function toggleTodo(todosState, action) {
-    const newTodos = updateItemInArray(todosState, action.id, todo => {
-        return updateObject(todo, {completed : !todo.completed});
-    });
-    
-    return newTodos;
+  const newTodos = updateItemInArray(todosState, action.id, todo => {
+    return updateObject(todo, { completed: !todo.completed })
+  })
+
+  return newTodos
 }
 
 // Case reducer
 function editTodo(todosState, action) {
-    const newTodos = updateItemInArray(todosState, action.id, todo => {
-        return updateObject(todo, {text : action.text});
-    });
-    
-    return newTodos;
+  const newTodos = updateItemInArray(todosState, action.id, todo => {
+    return updateObject(todo, { text: action.text })
+  })
+
+  return newTodos
 }
 
 // Slice reducer
 const todosReducer = createReducer([], {
-    'ADD_TODO' : addTodo,
-    'TOGGLE_TODO' : toggleTodo,
-    'EDIT_TODO' : editTodo
-});
+  ADD_TODO: addTodo,
+  TOGGLE_TODO: toggleTodo,
+  EDIT_TODO: editTodo
+})
 
 // "Root reducer"
 const appReducer = combineReducers({
-    visibilityFilter : visibilityReducer,
-    todos : todosReducer
-});
+  visibilityFilter: visibilityReducer,
+  todos: todosReducer
+})
 ```
 
 We now have examples of several kinds of split-up reducer functions:  helper utilities like `updateObject` and `createReducer`, handlers for specific cases like `setVisibilityFilter` and `addTodo`, and slice-of-state handlers like `visibilityReducer` and `todosReducer`.  We also can see that `appReducer` is an example of a "root reducer".

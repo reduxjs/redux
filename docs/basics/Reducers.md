@@ -38,7 +38,7 @@ You'll often find that you need to store some data, as well as some UI state, in
 Now that we've decided what our state object looks like, we're ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
 
 ```js
-(previousState, action) => newState
+;(previousState, action) => newState
 ```
 
 It's called a reducer because it's the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It's very important that the reducer stays pure. Things you should **never** do inside a reducer:
@@ -137,7 +137,7 @@ function todoApp(state = initialState, action) {
             completed: false
           }
         ]
-      })    
+      })
     default:
       return state
   }
@@ -188,7 +188,7 @@ function todoApp(state = initialState, action) {
     case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: state.todos.map((todo, index) => {
-          if(index === action.index) {
+          if (index === action.index) {
             return Object.assign({}, todo, {
               completed: !todo.completed
             })
@@ -252,7 +252,7 @@ Let's explore reducer composition more. Can we also extract a reducer managing j
 
 Below our imports, let's use [ES6 Object Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to declare `SHOW_ALL`:
 ```js
-const { SHOW_ALL } = VisibilityFilters;
+const { SHOW_ALL } = VisibilityFilters
 ```
 
 Then:
@@ -380,7 +380,12 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 
 ```js
 import { combineReducers } from 'redux'
-import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+import {
+  ADD_TODO,
+  TOGGLE_TODO,
+  SET_VISIBILITY_FILTER,
+  VisibilityFilters
+} from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {

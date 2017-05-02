@@ -89,8 +89,8 @@ dispatch(completeTodo(index))
 Alternatively, you can create a **bound action creator** that automatically dispatches:
 
 ```js
-const boundAddTodo = (text) => dispatch(addTodo(text))
-const boundCompleteTodo = (index) => dispatch(completeTodo(index))
+const boundAddTodo = text => dispatch(addTodo(text))
+const boundCompleteTodo = index => dispatch(completeTodo(index))
 ```
 
 Now you'll be able to call them directly:
