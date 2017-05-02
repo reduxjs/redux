@@ -75,7 +75,7 @@ const Root = ({ store }) => (
 Now the `<App />` component will be rendered if the URL matches '/'. Additionally, we will add the optional `(:filter)` parameter to `/`, because we will need it further on when we try to read the parameter `(:filter)` from the URL.
 
 ```js
-;<Route path="/(:filter)" component={App} />
+<Route path="/(:filter)" component={App} />
 ```
 
 You will probably want to remove the hash from the URL (e.g: `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
@@ -87,7 +87,7 @@ import { Router, Route, browserHistory } from 'react-router'
 and pass it to the `<Router />` in order to remove the hash from the URL:
 
 ```js
-;<Router history={browserHistory}>
+<Router history={browserHistory}>
   <Route path="/(:filter)" component={App} />
 </Router>
 ```
