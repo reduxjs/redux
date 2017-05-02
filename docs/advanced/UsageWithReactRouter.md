@@ -39,7 +39,7 @@ Along this chapter, we will be using the [Todos](https://github.com/reactjs/redu
 First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
 
 ```js
-import { Router, Route } from 'react-router';
+import { Router, Route } from 'react-router'
 ```
 
 In a React app, usually you would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
@@ -48,8 +48,8 @@ In a React app, usually you would wrap `<Route />` in `<Router />` so that when 
 const Root = () => (
   <Router>
     <Route path="/" component={App} />
-  </Router>  
-);
+  </Router>
+)
 ```
 
 However, in our Redux App we will still need `<Provider />`. `<Provider />` is the higher-order component provided by React Redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
@@ -57,7 +57,7 @@ However, in our Redux App we will still need `<Provider />`. `<Provider />` is t
 We will then import the `<Provider />` from React Redux:
 
 ```js
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'
 ```
 
 We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](http://redux.js.org/docs/basics/UsageWithReact.html#passing-the-store).
@@ -69,27 +69,27 @@ const Root = ({ store }) => (
       <Route path="/" component={App} />
     </Router>
   </Provider>
-);
+)
 ```
 
 Now the `<App />` component will be rendered if the URL matches '/'. Additionally, we will add the optional `(:filter)` parameter to `/`, because we will need it further on when we try to read the parameter `(:filter)` from the URL.
 
 ```js
-<Route path="/(:filter)" component={App} />
+;<Route path="/(:filter)" component={App} />
 ```
 
 You will probably want to remove the hash from the URL (e.g: `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
 
 ```js
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router'
 ```
 
 and pass it to the `<Router />` in order to remove the hash from the URL:
 
 ```js
-    <Router history={browserHistory}>
-      <Route path="/(:filter)" component={App} />
-    </Router>
+;<Router history={browserHistory}>
+  <Route path="/(:filter)" component={App} />
+</Router>
 ```
 
 Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
@@ -121,7 +121,7 @@ We will also need to refactor `index.js` to render the `<Root />` component to t
 
 #### `index.js`
 ```js
-import React from 'react';
+import React from 'react'
 import { render } from 'react-dom'
 import { createStore } from 'redux'
 import todoApp from './reducers'
@@ -129,10 +129,7 @@ import Root from './components/Root'
 
 let store = createStore(todoApp)
 
-render(
-	<Root store={store} />,
-	document.getElementById('root')
-)
+render(<Root store={store} />, document.getElementById('root'))
 ```
 
 ## Navigating with React Router
@@ -142,8 +139,8 @@ React Router comes with a [`<Link />`](https://github.com/ReactTraining/react-ro
 
 #### `containers/FilterLink.js`
 ```js
-import React from 'react';
-import { Link } from 'react-router';
+import React from 'react'
+import { Link } from 'react-router'
 
 const FilterLink = ({ filter, children }) => (
   <Link
@@ -155,9 +152,9 @@ const FilterLink = ({ filter, children }) => (
   >
     {children}
   </Link>
-);
+)
 
-export default FilterLink;
+export default FilterLink
 ```
 
 #### `components/Footer.js`
@@ -166,22 +163,22 @@ import React from 'react'
 import FilterLink from '../containers/FilterLink'
 
 const Footer = () => (
-	<p>
-		Show:
-		{" "}
-		<FilterLink filter="SHOW_ALL">
-			All
-		</FilterLink>
-		{", "}
-		<FilterLink filter="SHOW_ACTIVE">
-			Active
-		</FilterLink>
-		{", "}
-		<FilterLink filter="SHOW_COMPLETED">
-			Completed
-		</FilterLink>
-	</p>
-);
+  <p>
+    Show:
+    {' '}
+    <FilterLink filter="SHOW_ALL">
+      All
+    </FilterLink>
+    {', '}
+    <FilterLink filter="SHOW_ACTIVE">
+      Active
+    </FilterLink>
+    {', '}
+    <FilterLink filter="SHOW_COMPLETED">
+      Completed
+    </FilterLink>
+  </p>
+)
 
 export default Footer
 ```
@@ -196,8 +193,8 @@ Currently, the todo list is not filtered even after the URL changed. This is bec
 const mapStateToProps = (state, ownProps) => {
   return {
     todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
-  };
-};
+  }
+}
 ```
 
 Right now we are not passing anything to `<App />` so `ownProps` is an empty object. To filter our todos according to the URL, we want to pass the URL params to `<VisibleTodoList />`.
@@ -214,13 +211,11 @@ const App = ({ params }) => {
   return (
     <div>
       <AddTodo />
-      <VisibleTodoList
-        filter={params.filter || 'SHOW_ALL'}
-      />
+      <VisibleTodoList filter={params.filter || 'SHOW_ALL'} />
       <Footer />
     </div>
-  );
-};
+  )
+}
 ```
 
 ## Next Steps

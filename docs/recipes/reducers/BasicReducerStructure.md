@@ -13,17 +13,15 @@ The simplest possible approach to writing reducer logic is to put everything int
 ```js
 function counter(state, action) {
   if (typeof state === 'undefined') {
-    state = 0; // If state is undefined, initialize it with a default value
+    state = 0 // If state is undefined, initialize it with a default value
   }
 
   if (action.type === 'INCREMENT') {
-    return state + 1;
-  } 
-  else if (action.type === 'DECREMENT') {
-    return state - 1;
-  } 
-  else {
-    return state; // In case an action is passed in we don't understand
+    return state + 1
+  } else if (action.type === 'DECREMENT') {
+    return state - 1
+  } else {
+    return state // In case an action is passed in we don't understand
   }
 }
 ```
@@ -36,11 +34,11 @@ There are some simple tweaks that can be made to this reducer.  First, repeated 
 function counter(state = 0, action) {
   switch (action.type) {
     case 'INCREMENT':
-      return state + 1;
+      return state + 1
     case 'DECREMENT':
-      return state - 1;
+      return state - 1
     default:
-      return state;
+      return state
   }
 }
 ```

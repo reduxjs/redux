@@ -221,13 +221,13 @@ function undoable(state = initialState, action) {
       return {
         past: newPast,
         present: previous,
-        future: [ present, ...future ]
+        future: [present, ...future]
       }
     case 'REDO':
       const next = future[0]
       const newFuture = future.slice(1)
       return {
-        past: [ ...past, present ],
+        past: [...past, present],
         present: next,
         future: newFuture
       }
@@ -256,7 +256,7 @@ A reducer enhancer that doesn't do anything looks like this:
 
 ```js
 function doNothingWith(reducer) {
-  return function (state, action) {
+  return function(state, action) {
     // Just call the passed reducer
     return reducer(state, action)
   }
@@ -267,7 +267,7 @@ A reducer enhancer that combines other reducers might look like this:
 
 ```js
 function combineReducers(reducers) {
-  return function (state = {}, action) {
+  return function(state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
       // Call every reducer with the part of the state it manages
       nextState[key] = reducers[key](state[key], action)
@@ -291,7 +291,7 @@ function undoable(reducer) {
   }
 
   // Return a reducer that handles undo and redo
-  return function (state = initialState, action) {
+  return function(state = initialState, action) {
     const { past, present, future } = state
 
     switch (action.type) {
@@ -301,13 +301,13 @@ function undoable(reducer) {
         return {
           past: newPast,
           present: previous,
-          future: [ present, ...future ]
+          future: [present, ...future]
         }
       case 'REDO':
         const next = future[0]
         const newFuture = future.slice(1)
         return {
-          past: [ ...past, present ],
+          past: [...past, present],
           present: next,
           future: newFuture
         }
@@ -318,7 +318,7 @@ function undoable(reducer) {
           return state
         }
         return {
-          past: [ ...past, present ],
+          past: [...past, present],
           present: newPresent,
           future: []
         }
@@ -446,7 +446,7 @@ just `state.todos`:
 #### `containers/VisibleTodoList.js`
 
 ```js
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos.present, state.visibilityFilter)
   }
@@ -490,24 +490,21 @@ import { connect } from 'react-redux'
 
 /* ... */
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     canUndo: state.todos.past.length > 0,
     canRedo: state.todos.future.length > 0
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     onUndo: () => dispatch(UndoActionCreators.undo()),
     onRedo: () => dispatch(UndoActionCreators.redo())
   }
 }
 
-UndoRedo = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UndoRedo)
+UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
 
 export default UndoRedo
 ```
