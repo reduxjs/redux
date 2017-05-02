@@ -137,52 +137,51 @@ The example is a bit long, because it's showing how all the different slice redu
 Since reducers are just functions, there's an infinite number of ways to split up this logic.  While using slice reducers is obviously the most common, it's also possible to organize behavior in a more task-oriented structure.  Because this will often involve more nested updates, you may want to use an immutable update utility library like [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable) or [object-path-immutable](https://github.com/mariocasciaro/object-path-immutable) to simplify the update statements.  Here's an example of what that might look like:
 
 ```js
-import posts from "./postsReducer";
-import comments from "./commentsReducer";
-import dotProp from "dot-prop-immutable";
-import {combineReducers} from "redux";
-import reduceReducers from "reduce-reducers";
+import posts from './postsReducer'
+import comments from './commentsReducer'
+import dotProp from 'dot-prop-immutable'
+import { combineReducers } from 'redux'
+import reduceReducers from 'reduce-reducers'
 
 const combinedReducer = combineReducers({
-    posts,
-    comments
-});
-
+  posts,
+  comments
+})
 
 function addComment(state, action) {
-    const {payload} = action;
-    const {postId, commentId, commentText} = payload;
-    
-    // State here is the entire combined state
-    const updatedWithPostState = dotProp.set(
-        state, 
-        `posts.byId.${postId}.comments`, 
-        comments => comments.concat(commentId)
-    );
-    
-    const updatedWithCommentsTable = dotProp.set(
-        updatedWithPostState, 
-        `comments.byId.${commentId}`,
-        {id : commentId, text : commentText}
-    );
-    
-    const updatedWithCommentsList = dotProp.set(
-        updatedWithCommentsTable,
-        `comments.allIds`,
-        allIds => allIds.concat(commentId);
-    );
-    
-    return updatedWithCommentsList;
+  const { payload } = action
+  const { postId, commentId, commentText } = payload
+
+  // State here is the entire combined state
+  const updatedWithPostState = dotProp.set(
+    state,
+    `posts.byId.${postId}.comments`,
+    comments => comments.concat(commentId)
+  )
+
+  const updatedWithCommentsTable = dotProp.set(
+    updatedWithPostState,
+    `comments.byId.${commentId}`,
+    { id: commentId, text: commentText }
+  )
+
+  const updatedWithCommentsList = dotProp.set(
+    updatedWithCommentsTable,
+    `comments.allIds`,
+    allIds => allIds.concat(commentId)
+  )
+
+  return updatedWithCommentsList
 }
 
-const featureReducers = createReducer({}, {
-    ADD_COMMENT : addComment,
-};
+const featureReducers = createReducer(
+  {},
+  {
+    ADD_COMMENT: addComment
+  }
+)
 
-const rootReducer = reduceReducers(
-    combinedReducer,
-    featureReducers
-);
+const rootReducer = reduceReducers(combinedReducer, featureReducers)
 ```
 
 This approach makes it very clear what's happening for the `"ADD_COMMENTS"` case, but it does require nested updating logic, and some specific knowledge of the state tree shape.  Depending on how you want to compose your reducer logic, this may or may not be desired.

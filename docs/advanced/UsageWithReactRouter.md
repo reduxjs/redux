@@ -17,19 +17,19 @@ Before integrating React Router, we need to configure our development server. In
 
 ### Configuring Express
 If you are serving your `index.html` from Express:
-``` js
-  app.get('/*', (req,res) => {
-    res.sendFile(path.join(__dirname, 'index.html'))
-  })
+```js
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
 ```
 
 ### Configuring WebpackDevServer
 If you are serving your `index.html` from WebpackDevServer:
 You can add to your webpack.config.dev.js:
 ```js
-  devServer: {
-    historyApiFallback: true,
-  }
+devServer: {
+  historyApiFallback: true
+}
 ```
 
 ## Connecting React Router with Redux App

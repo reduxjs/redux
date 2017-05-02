@@ -13,7 +13,7 @@ npm install --save-dev jest
 
 To use it together with [Babel](http://babeljs.io), you will need to install `babel-jest`:
 
-```js
+```
 npm install --save-dev babel-jest
 ```
 

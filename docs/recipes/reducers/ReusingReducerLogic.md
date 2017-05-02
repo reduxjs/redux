@@ -113,21 +113,27 @@ You could even go as far as to make a generic filtering higher-order reducer:
 
 ```js
 function createFilteredReducer(reducerFunction, reducerPredicate) {
-    return (state, action) => {
-        const isInitializationCall = state === undefined;
-        const shouldRunWrappedReducer = reducerPredicate(action) || isInitializationCall;
-        return shouldRunWrappedReducer ? reducerFunction(state, action) : state;
-    }
+  return (state, action) => {
+    const isInitializationCall = state === undefined
+    const shouldRunWrappedReducer =
+      reducerPredicate(action) || isInitializationCall
+    return shouldRunWrappedReducer ? reducerFunction(state, action) : state
+  }
 }
 
 const rootReducer = combineReducers({
-    // check for suffixed strings
-    counterA : createFilteredReducer(counter, action => action.type.endsWith('_A')),
-    // check for extra data in the action
-    counterB : createFilteredReducer(counter, action => action.name === 'B'),
-    // respond to all 'INCREMENT' actions, but never 'DECREMENT'
-    counterC : createFilteredReducer(counter, action => action.type === 'INCREMENT')
-};
+  // check for suffixed strings
+  counterA: createFilteredReducer(counter, action =>
+    action.type.endsWith('_A')
+  ),
+  // check for extra data in the action
+  counterB: createFilteredReducer(counter, action => action.name === 'B'),
+  // respond to all 'INCREMENT' actions, but never 'DECREMENT'
+  counterC: createFilteredReducer(
+    counter,
+    action => action.type === 'INCREMENT'
+  )
+})
 ```
 
 

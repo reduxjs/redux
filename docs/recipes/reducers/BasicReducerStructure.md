@@ -6,7 +6,7 @@ First and foremost, it's important to understand that your entire application re
 - The first time the reducer is called, the `state` value will be `undefined`.  The reducer needs to handle this case by supplying a default state value before handling the incoming action.
 - It needs to look at the previous state and the dispatched action, and determine what kind of work needs to be done
 - Assuming actual changes need to occur, it needs to create new objects and arrays with the updated data and return those
-- If no changes are needed, it should return the existing state as-is. 
+- If no changes are needed, it should return the existing state as-is.
 
 The simplest possible approach to writing reducer logic is to put everything into a single function declaration, like this:
 
@@ -49,7 +49,7 @@ This is the basic structure that a typical Redux reducer function uses.
 
 Redux encourages you to think about your application in terms of the data you need to manage.  The data at any given point in time is the "*state*" of your application, and the structure and organization of that state is typically referred to as its "*shape*".  The shape of your state plays a major role in how you structure your reducer logic.
 
-A Redux state usually has a plain Javascript object as the top of the state tree. (It is certainly possible to have another type of data instead, such as a single number, an array, or a specialized data structure, but most libraries assume that the top-level value is a plain object.)  The most common way to organize data within that top-level object is to further divide data into sub-trees, where each top-level key represents some "domain" or "slice" of related data.  For example, a basic Todo app's state might look like: 
+A Redux state usually has a plain Javascript object as the top of the state tree. (It is certainly possible to have another type of data instead, such as a single number, an array, or a specialized data structure, but most libraries assume that the top-level value is a plain object.)  The most common way to organize data within that top-level object is to further divide data into sub-trees, where each top-level key represents some "domain" or "slice" of related data.  For example, a basic Todo app's state might look like:
 
 ```js
 {
@@ -84,13 +84,13 @@ A typical app's state shape might look roughly like:
 
 ```js
 {
-    domainData1 : {},
-    domainData2 : {},
-    appState1 : {},
-    appState2 : {},
-    ui : {
-        uiState1 : {},
-        uiState2 : {},
-    }
+  domainData1: {},
+  domainData2: {},
+  appState1: {},
+  appState2: {},
+  ui: {
+    uiState1: {},
+    uiState2: {}
+  }
 }
 ```

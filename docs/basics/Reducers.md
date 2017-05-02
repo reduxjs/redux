@@ -137,7 +137,7 @@ function todoApp(state = initialState, action) {
             completed: false
           }
         ]
-      })    
+      })
     default:
       return state
   }
