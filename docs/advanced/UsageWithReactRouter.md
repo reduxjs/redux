@@ -95,12 +95,12 @@ and pass it to the `<Router />` in order to remove the hash from the URL:
 Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
 
 #### `components/Root.js`
-``` js
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
-import App from './App';
+```js
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Provider } from 'react-redux'
+import { Router, Route, browserHistory } from 'react-router'
+import App from './App'
 
 const Root = ({ store }) => (
   <Provider store={store}>
@@ -108,13 +108,13 @@ const Root = ({ store }) => (
       <Route path="/(:filter)" component={App} />
     </Router>
   </Provider>
-);
+)
 
 Root.propTypes = {
-  store: PropTypes.object.isRequired,
-};
+  store: PropTypes.object.isRequired
+}
 
-export default Root;
+export default Root
 ```
 
 We will also need to refactor `index.js` to render the `<Root />` component to the DOM.
