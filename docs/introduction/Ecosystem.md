@@ -99,6 +99,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store enhancers that synchronize Redux stores across Electron processes
 * [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
 * [redux-side-effects](https://github.com/salsita/redux-side-effects) — Utilize Generators for declarative yielding of side effects from your pure reducers
+* [redux-reset-store](https://github.com/abhiaiyer91/redux-reset) - A reducer enhancer to enable resetting parts of your state tree
 
 ### Utilities
 
