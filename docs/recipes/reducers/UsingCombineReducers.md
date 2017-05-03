@@ -26,27 +26,29 @@ Here's an example of how use of ES6 object literal shorthand with `combineReduce
 
 ```js
 // reducers.js
-export default theDefaultReducer = (state = 0, action) => state;
+export default (theDefaultReducer = (state = 0, action) => state)
 
-export const firstNamedReducer = (state = 1, action) => state;
+export const firstNamedReducer = (state = 1, action) => state
 
-export const secondNamedReducer = (state = 2, action) => state;
-
+export const secondNamedReducer = (state = 2, action) => state
 
 // rootReducer.js
-import {combineReducers, createStore} from "redux";
+import { combineReducers, createStore } from 'redux'
 
-import theDefaultReducer, {firstNamedReducer, secondNamedReducer} from "./reducers";
+import theDefaultReducer, {
+  firstNamedReducer,
+  secondNamedReducer
+} from './reducers'
 
 // Use ES6 object literal shorthand syntax to define the object shape
 const rootReducer = combineReducers({
-    theDefaultReducer,
-    firstNamedReducer,
-    secondNamedReducer
-});
+  theDefaultReducer,
+  firstNamedReducer,
+  secondNamedReducer
+})
 
-const store = createStore(rootReducer);
-console.log(store.getState());
+const store = createStore(rootReducer)
+console.log(store.getState())
 // {theDefaultReducer : 0, firstNamedReducer : 1, secondNamedReducer : 2}
 ```
 
@@ -57,19 +59,22 @@ Also, the resulting names are a bit odd.  It's generally not a good practice to 
 A better usage might look like:
 
 ```js
-import {combineReducers, createStore} from "redux";
+import { combineReducers, createStore } from 'redux'
 
 // Rename the default import to whatever name we want. We can also rename a named import.
-import defaultState, {firstNamedReducer, secondNamedReducer as secondState} from "./reducers";
+import defaultState, {
+  firstNamedReducer,
+  secondNamedReducer as secondState
+} from './reducers'
 
 const rootReducer = combineReducers({
-    defaultState,                   // key name same as the carefully renamed default export
-    firstState : firstNamedReducer, // specific key name instead of the variable name
-    secondState,                    // key name same as the carefully renamed named export
-});
+  defaultState, // key name same as the carefully renamed default export
+  firstState: firstNamedReducer, // specific key name instead of the variable name
+  secondState // key name same as the carefully renamed named export
+})
 
-const reducerInitializedStore = createStore(rootReducer);
-console.log(reducerInitializedStore.getState());
+const reducerInitializedStore = createStore(rootReducer)
+console.log(reducerInitializedStore.getState())
 // {defaultState : 0, firstState : 1, secondState : 2}
 ```
 
