@@ -114,6 +114,9 @@
     "typescript": "^1.8.0",
     "typescript-definition-tester": "0.0.4"
   },
+  "engines": {
+    "node" : ">=4"
+  },
   "npmName": "redux",
   "npmFileMap": [
     {
