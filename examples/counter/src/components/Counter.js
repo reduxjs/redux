@@ -19,7 +19,7 @@ class Counter extends Component {
   }
 
   render() {
-    const { value, onIncrement, onDecrement } = this.props
+    const { value, onIncrement, onDecrement, onMultiplyByTwo, onReset } = this.props
     return (
       <p>
         Clicked: {value} times
@@ -32,12 +32,20 @@ class Counter extends Component {
           -
         </button>
         {' '}
+        <button onClick={onMultiplyByTwo}>
+          x2
+        </button>
+        {' '}
         <button onClick={this.incrementIfOdd}>
           Increment if odd
         </button>
         {' '}
         <button onClick={this.incrementAsync}>
           Increment async
+        </button>
+        {' '}
+        <button onClick={onReset}>
+          RESET
         </button>
       </p>
     )
