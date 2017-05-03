@@ -452,10 +452,10 @@ function fetchPosts(subreddit) {
 
 function shouldFetchPosts(state, subreddit) {
   const posts = state.postsBySubreddit[subreddit]
-  if (!posts) {
-    return true
-  } else if (posts.isFetching) {
+  if (posts.isFetching) {
     return false
+  } else if(!posts) {
+    return true;
   } else {
     return posts.didInvalidate
   }
