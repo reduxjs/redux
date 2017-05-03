@@ -1,8 +1,8 @@
 /**
- * An *action* is a plain object that represents an intention to change the
+ * An *action* is a plain object that represents an intention to change
  * state. Actions are the only way to get data into the store. Any data,
  * whether from UI events, network callbacks, or other sources such as
- * WebSockets needs to eventually be dispatched as actions.
+ * WebSockets need to eventually be dispatched as actions.
  *
  * Actions must have a `type` field that indicates the type of action being
  * performed. Types can be defined as constants and imported from another
@@ -26,7 +26,7 @@ export interface Action {
  * to reduce a collection of values down to a single value
  *
  * Reducers are not unique to Redux—they are a fundamental concept in
- * functional programming.  Even most non-functional languages, like
+ * functional programming.  Even many non-functional languages, like
  * JavaScript, have a built-in API for reducing. In JavaScript, it's
  * `Array.prototype.reduce()`.
  *
@@ -37,9 +37,8 @@ export interface Action {
  * side-effects. This is what enables exciting features like hot reloading and
  * time travel.
  *
- * Reducers are the most important concept in Redux.
- *
- * *Do not put API calls into reducers.*
+ * *Do not put calls into reducers that themselves are impure or may have
+ * side-effects.*
  *
  * @template S State object type.
  */
@@ -295,7 +294,7 @@ export function applyMiddleware(...middlewares: Middleware[]): GenericStoreEnhan
 
 /**
  * An *action creator* is, quite simply, a function that creates an action. Do
- * not confuse the two terms—again, an action is a payload of information, and
+ * not confuse the two terms—an action is a payload of information, and
  * an action creator is a factory that creates an action.
  *
  * Calling an action creator only produces an action, but does not dispatch
