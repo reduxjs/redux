@@ -8,8 +8,9 @@
     "react-scripts": "^0.9.5"
   },
   "dependencies": {
-    "react": "^15.3.0",
-    "react-dom": "^15.3.0",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0",
     "react-redux": "^5.0.3",
     "redux": "^3.5.2",
     "redux-logger": "^3.0.0",

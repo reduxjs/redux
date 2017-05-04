@@ -34,24 +34,25 @@ It would be hard to write such a function for a big app, so we write smaller fun
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
   if (action.type === 'SET_VISIBILITY_FILTER') {
-    return action.filter;
+    return action.filter
   } else {
-    return state;
+    return state
   }
 }
 
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    return state.concat([{ text: action.text, completed: false }]);
-  case 'TOGGLE_TODO':
-    return state.map((todo, index) =>
-      action.index === index ?
-        { text: todo.text, completed: !todo.completed } :
-        todo
-   )
-  default:
-    return state;
+    case 'ADD_TODO':
+      return state.concat([{ text: action.text, completed: false }])
+    case 'TOGGLE_TODO':
+      return state.map(
+        (todo, index) =>
+          action.index === index
+            ? { text: todo.text, completed: !todo.completed }
+            : todo
+      )
+    default:
+      return state
   }
 }
 ```
@@ -63,7 +64,7 @@ function todoApp(state = {}, action) {
   return {
     todos: todos(state.todos, action),
     visibilityFilter: visibilityFilter(state.visibilityFilter, action)
-  };
+  }
 }
 ```
 

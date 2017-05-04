@@ -266,7 +266,8 @@ To test the components we make a `setup()` helper that passes the stubbed callba
 #### Example
 
 ```js
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import TodoTextInput from './TodoTextInput'
 
 class Header extends Component {
@@ -299,7 +300,7 @@ can be tested like:
 
 ```js
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import Header from '../../components/Header'
 
 function setup() {
@@ -307,7 +308,7 @@ function setup() {
     addTodo: jest.fn()
   }
 
-  const enzymeWrapper = shallow(<Header {...props} />)
+  const enzymeWrapper = mount(<Header {...props} />)
 
   return {
     props,

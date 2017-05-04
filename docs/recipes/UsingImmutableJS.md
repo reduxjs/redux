@@ -32,7 +32,7 @@ Immutable.JS was designed to provide immutability in a performant manner in an e
 
 #### Guaranteed immutability
 
-Data encapsulated in an Immutable.JS object is never mutated. A new copy is always returned. This contrasts with JavaScript, in which some operations do not mutate your data (e.g. some Array methods, including map, filter, forEach, etc.), but some do (Array’s pop, push, concat, splice, etc.).
+Data encapsulated in an Immutable.JS object is never mutated. A new copy is always returned. This contrasts with JavaScript, in which some operations do not mutate your data (e.g. some Array methods, including map, filter, concat, forEach, etc.), but some do (Array’s pop, push, splice, etc.).
 
 #### Rich API
 

@@ -63,7 +63,7 @@ Redux's use of shallow equality checking requires immutability if any connected 
 ### How do shallow and deep equality checking differ?
 Shallow equality checking (or _reference equality_) simply checks that two different _variables_ reference the same object; in contrast, deep equality checking (or _value equality_) must check every _value_ of two objects' properties.
 
-A shallow equality check is therefore as simple (and as fast) as `a === b`, whereas a deep equality check involves a recursive traversal through the properties of two objects, comparing the value of each property at each step. 
+A shallow equality check is therefore as simple (and as fast) as `a === b`, whereas a deep equality check involves a recursive traversal through the properties of two objects, comparing the value of each property at each step.
 
 It's for this improvement in performance that Redux uses shallow equality checking.
 
@@ -90,8 +90,8 @@ The [suggested structure](http://redux.js.org/docs/faq/Reducers.html#reducers-sh
 `combineReducers` makes working with this style of structure easier by taking a  `reducers` argument that’s defined as a hash table comprising a set of key/value pairs, where each key is the name of a state slice, and the corresponding value is the reducer function that will act on it.
 
 So, for example, if your state shape is `{ todos, counter }`, the call to `combineReducers` would be:
-```
- combineReducers({ todos: myTodosReducer, counter: myCounterReducer })
+```js
+combineReducers({ todos: myTodosReducer, counter: myCounterReducer })
 ```
 
 where:
@@ -105,7 +105,7 @@ where:
 
 As  it continues through the iterations, `combineReducers` will construct a new state object with the state slices returned from each reducer. This new state object may or may not be different from the current state object. It is here that `combineReducers` uses shallow equality checking to determine whether the state has changed.
 
-Specifically, at each stage of the iteration, `combineReducers` performs a shallow equality check on the current state slice and the state slice returned from the reducer. If the reducer returns a new object, the shallow equality check will fail, and `combineReducers` will set a `hasChanged` flag to true. 
+Specifically, at each stage of the iteration, `combineReducers` performs a shallow equality check on the current state slice and the state slice returned from the reducer. If the reducer returns a new object, the shallow equality check will fail, and `combineReducers` will set a `hasChanged` flag to true.
 
 After the iterations have completed, `combineReducers` will check the state of the `hasChanged` flag. If it’s true, the newly-constructed state object will be returned. If it’s false, the _current_ state object is returned.
 
@@ -148,12 +148,12 @@ React-Redux performs a shallow equality check on on each _value_ within the prop
 
 It does so because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:
 
-```
+```js
 function mapStateToProps(state) {
-  return { 
-		todos: state.todos, // prop value
-		visibleTodos: getVisibleTodos(state) // selector
-	}
+  return {
+    todos: state.todos, // prop value
+    visibleTodos: getVisibleTodos(state) // selector
+  }
 }
 
 export default connect(mapStateToProps)(TodoApp)
@@ -161,7 +161,7 @@ export default connect(mapStateToProps)(TodoApp)
 
 As such, a shallow equality check of the props object returned from repeated calls to `mapStateToProps` would always fail, as a new object would be returned each time.
 
-React-Redux therefore maintains separate references to each _value_ in the returned props object. 
+React-Redux therefore maintains separate references to each _value_ in the returned props object.
 
 #### Further Information
 
@@ -173,18 +173,18 @@ React-Redux therefore maintains separate references to each _value_ in the retur
 ### How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?
 Each time React-Redux’s `connect` function is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
 
-If the check fails, however, the root state object _has_ been updated, and so `connect` will call `mapStateToProps`to see if the props for the wrapped component have been updated. 
+If the check fails, however, the root state object _has_ been updated, and so `connect` will call `mapStateToProps`to see if the props for the wrapped component have been updated.
 
 It does this by performing a shallow equality check on each value within the object individually, and will only trigger a re-render if one of those checks fails.
 
 In the example below, if `state.todos` and the value returned from `getVisibleTodos()` do not change on successive calls to `connect`, then the component will not re-render .
 
-```
+```js
 function mapStateToProps(state) {
-  return { 
-		todos: state.todos, // prop value
-		visibleTodos: getVisibleTodos(state) // selector
-	}
+  return {
+    todos: state.todos, // prop value
+    visibleTodos: getVisibleTodos(state) // selector
+  }
 }
 
 export default connect(mapStateToProps)(TodoApp)
@@ -192,16 +192,16 @@ export default connect(mapStateToProps)(TodoApp)
 
 Conversely,  in this next example (below), the component will _always_ re-render, as the value of `todos` is always a new object, regardless of whether or not its values change:
 
-```
+```js
 // AVOID - will always cause a re-render
 function mapStateToProps(state) {
-  return { 
-		// todos always references a newly-created object
-		todos: {
-			all: state.todos,
-			visibleTodos: getVisibleTodos(state)
-		}
-	}
+  return {
+    // todos always references a newly-created object
+    todos: {
+      all: state.todos,
+      visibleTodos: getVisibleTodos(state)
+    }
+  }
 }
 
 export default connect(mapStateToProps)(TodoApp)
@@ -228,16 +228,16 @@ Shallow equality checking cannot be used to detect if a function mutates an obje
 This is because two variables that reference the same object will _always_ be equal, regardless of whether the object’s values changes or not, as they're both referencing the same object. Thus, the following will always return true:
 
 
-```
+```js
 function mutateObj(obj) {
-	obj.key = 'newValue';
-	return obj;
+  obj.key = 'newValue'
+  return obj
 }
 
-const param = { key: 'originalValue' };
-const returnVal = mutateObj(param);
+const param = { key: 'originalValue' }
+const returnVal = mutateObj(param)
 
-param === returnVal;
+param === returnVal
 //> true
 ```
 
@@ -254,7 +254,7 @@ The shallow check of `param` and `returnValue` simply checks whether both variab
 ### Does shallow equality checking with a mutable object cause problems with Redux?
 Shallow equality checking with a mutable object will not cause problems with Redux, but [it will cause problems with libraries that depend on the store, such as React-Redux](#shallow-checking-problems-with-react-redux).
 
-Specifically, if the state slice passed to a reducer by `combineReducers` is a mutable object, the reducer can modify it directly and return it. 
+Specifically, if the state slice passed to a reducer by `combineReducers` is a mutable object, the reducer can modify it directly and return it.
 
 If it does, the shallow equality check that `combineReducers` performs will always pass, as the values of the state slice returned by the reducer may have been mutated, but the object itself has not - it’s still the same object that was passed to the reducer.
 
@@ -289,37 +289,35 @@ As we’ve seen, the values in the mutable object returned by the selector funct
 
 For example, the following `mapStateToProps` function will  never trigger a re-render:
 
-```
+```js
 // State object held in the Redux store
 const state = {
-	user: {
-		accessCount: 0,
-		name: 'keith'
-	}
-};
+  user: {
+    accessCount: 0,
+    name: 'keith'
+  }
+}
 
 // Selector function
-const getUser = (state) => {
-  ++state.user.accessCount; // mutate the state object
-  return state;
+const getUser = state => {
+  ++state.user.accessCount // mutate the state object
+  return state
 }
 
 // mapStateToProps
-const mapStateToProps = (state) => ({
-	// The object returned from getUser() is always
-	// the same object, so this wrapped
-	// component will never re-render, even though it's been
-	// mutated
-	userRecord: getUser(state)
-});
+const mapStateToProps = state => ({
+  // The object returned from getUser() is always
+  // the same object, so this wrapped
+  // component will never re-render, even though it's been
+  // mutated
+  userRecord: getUser(state)
+})
 
+const a = mapStateToProps(state)
+const b = mapStateToProps(state)
 
-const a = mapStateToProps(state);
-const b = mapStateToProps(state);
-
-a.userRecord === b.userRecord;
+a.userRecord === b.userRecord
 //> true
-
 ```
 
 Note that, conversely, if an _immutable_ object is used, the [component may re-render when it should not](#immutability-issues-with-react-redux).
@@ -335,7 +333,7 @@ Note that, conversely, if an _immutable_ object is used, the [component may re-r
 
 <a id="immutability-enables-shallow-checking"></a>
 ### How does immutability enable a shallow check to detect object mutations?
-If an object is immutable, any changes that need to be made to it within a function must be made to a _copy_ of the object. 
+If an object is immutable, any changes that need to be made to it within a function must be made to a _copy_ of the object.
 
 This mutated copy is a _separate_ object from that passed into the function, and so when it is returned, a shallow check will identify it as being a different object from that passed in, and so will fail.
 
@@ -366,17 +364,17 @@ To prevent this from happening, you must *always return the state slice object t
 ###  How can immutability in `mapStateToProps` cause components to render unnecessarily?
 Certain immutable operations, such as an Array filter, will always return a new object, even if the values themselves have not changed.
 
-If such an operation is used as a selector function in `mapStateToProps`, the shallow equality check that React-Redux performs on each value 
+If such an operation is used as a selector function in `mapStateToProps`, the shallow equality check that React-Redux performs on each value
 in the props object that’s returned will always fail, as the selector is returning a new object each time.
 
-As such, even though the values of that new object have not changed, the wrapped component will always be re-rendered, 
+As such, even though the values of that new object have not changed, the wrapped component will always be re-rendered,
 
 For example, the following  will always trigger a re-render:
 
-```
+```js
 // A JavaScript array's 'filter' method treats the array as immutable,
 // and returns a filtered copy of the array.
-const getVisibleTodos = (todos) => todos.filter(t => !t.completed);
+const getVisibleTodos = todos => todos.filter(t => !t.completed)
 
 const state = {
   todos: [
@@ -385,31 +383,31 @@ const state = {
       completed: false
     },
     {
- 	  text: 'do todo 2',
+      text: 'do todo 2',
       completed: true
-    }]
+    }
+  ]
 }
-    
-      
-const mapStateToProps = (state) => ({
-	// getVisibleTodos() always returns a new array, and so the 
-	// 'visibleToDos' prop will always reference a different array, 
-    // causing the wrapped component to re-render, even if the array's
-    // values haven't changed
-	visibleToDos: getVisibleTodos(state.todos)
+
+const mapStateToProps = state => ({
+  // getVisibleTodos() always returns a new array, and so the
+  // 'visibleToDos' prop will always reference a different array,
+  // causing the wrapped component to re-render, even if the array's
+  // values haven't changed
+  visibleToDos: getVisibleTodos(state.todos)
 })
 
-const a = mapStateToProps(state);
+const a = mapStateToProps(state)
 //  Call mapStateToProps(state) again with exactly the same arguments
-const b = mapStateToProps(state);
+const b = mapStateToProps(state)
 
-a.visibleToDos;
+a.visibleToDos
 //> { "completed": false, "text": "do todo 1" }
 
-b.visibleToDos;
+b.visibleToDos
 //> { "completed": false, "text": "do todo 1" }
 
-a.visibleToDos === b.visibleToDos;
+a.visibleToDos === b.visibleToDos
 //> false
 ```
 
@@ -425,8 +423,8 @@ Note that, conversely, if the values in your props object refer to mutable objec
 
 
 <a id="do-i-have-to-use-immutable-js"></a>
-## What approaches are there for handling data immutably? Do I have to use Immutable.JS? 
-You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library. 
+## What approaches are there for handling data immutably? Do I have to use Immutable.JS?
+You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
 
 However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
 
@@ -442,7 +440,7 @@ However, guaranteeing immutability with JavaScript is difficult, and it can be e
 JavaScript was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use it for your immutable operations in your Redux app.
 
 ### Accidental Object Mutation
-With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realising it. For example, updating deeply nested properties, creating a new *reference* to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder. 
+With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realising it. For example, updating deeply nested properties, creating a new *reference* to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
 
 To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html).
 
