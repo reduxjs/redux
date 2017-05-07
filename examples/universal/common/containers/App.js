@@ -7,7 +7,7 @@ const mapStateToProps = (state) => ({
   counter: state.counter
 })
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = () => {
   return bindActionCreators(CounterActions, dispatch)
 }
 
