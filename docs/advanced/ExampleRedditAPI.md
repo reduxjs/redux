@@ -176,7 +176,10 @@ export default function configureStore(preloadedState) {
   return createStore(
     rootReducer,
     preloadedState,
-    applyMiddleware(thunkMiddleware, loggerMiddleware)
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware
+    )
   )
 }
 ```
@@ -291,9 +294,11 @@ AsyncApp.propTypes = {
 
 function mapStateToProps(state) {
   const { selectedSubreddit, postsBySubreddit } = state
-  const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
-    selectedSubreddit
-  ] || {
+  const {
+    isFetching,
+    lastUpdated,
+    items: posts
+  } = postsBySubreddit[selectedSubreddit] || {
     isFetching: true,
     items: []
   }
