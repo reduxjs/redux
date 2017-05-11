@@ -85,7 +85,9 @@ const todos = (state = [], action) => {
     case 'ADD_TODO':
       return [...state, todo(undefined, action)]
     case 'TOGGLE_TODO':
-      return state.map(t => todo(t, action))
+      return state.map(t =>
+        todo(t, action)
+      )
     default:
       return state
   }
@@ -319,7 +321,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link)
+const FilterLink = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Link)
 
 export default FilterLink
 ```
