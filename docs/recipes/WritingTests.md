@@ -347,9 +347,7 @@ Consider the following `App` component:
 ```js
 import { connect } from 'react-redux'
 
-class App extends Component {
-  /* ... */
-}
+class App extends Component { /* ... */ }
 
 export default connect(mapStateToProps)(App)
 ```
@@ -368,9 +366,7 @@ In order to be able to test the App component itself without having to deal with
 import { connect } from 'react-redux'
 
 // Use named export for unconnected component (for tests)
-export class App extends Component {
-  /* ... */
-}
+export class App extends Component { /* ... */ }
 
 // Use default export for the connected component (for app)
 export default connect(mapStateToProps)(App)

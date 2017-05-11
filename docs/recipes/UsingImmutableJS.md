@@ -181,13 +181,13 @@ For a Redux app, your entire state tree should be an Immutable.JS object, with n
 ```js
 // avoid
 const newObj = { key: value }
-const newState = state.setIn(['prop1'], newObj) // <-- newObj has been added as a plain
-// JavaScript object - NOT as an Immutable.JS Map
+const newState = state.setIn(['prop1'], newObj)
+// newObj has been added as a plain JavaScript object, NOT as an Immutable.JS Map
 
-// recommend
+// recommended
 const newObj = { key: value }
-const newState = state.setIn(['prop1'], fromJS(newObj)) // <-- newObj is now an
-// Immutable.JS Map
+const newState = state.setIn(['prop1'], fromJS(newObj))
+// newObj is now an Immutable.JS Map
 ```
 
 #### Further Information

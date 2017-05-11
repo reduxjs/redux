@@ -348,7 +348,12 @@ The middleware that interprets such actions could look like this:
 ```js
 function callAPIMiddleware({ dispatch, getState }) {
   return next => action => {
-    const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
+    const {
+      types,
+      callAPI,
+      shouldCallAPI = () => true,
+      payload = {}
+    } = action
 
     if (!types) {
       // Normal action: pass it on
