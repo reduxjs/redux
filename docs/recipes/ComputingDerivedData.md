@@ -222,7 +222,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -312,9 +315,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(makeMapStateToProps, mapDispatchToProps)(
-  TodoList
-)
+const VisibleTodoList = connect(
+  makeMapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 
 export default VisibleTodoList
 ```
