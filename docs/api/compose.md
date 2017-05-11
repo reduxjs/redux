@@ -25,7 +25,10 @@ import reducer from '../reducers/index'
 
 const store = createStore(
   reducer,
-  compose(applyMiddleware(thunk), DevTools.instrument())
+  compose(
+    applyMiddleware(thunk),
+    DevTools.instrument()
+  )
 )
 ```
 
