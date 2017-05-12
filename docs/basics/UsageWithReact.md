@@ -287,7 +287,10 @@ Finally, we create the `VisibleTodoList` by calling `connect()` and passing thes
 ```js
 import { connect } from 'react-redux'
 
-const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -354,7 +357,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 
 export default VisibleTodoList
 ```
