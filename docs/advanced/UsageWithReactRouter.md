@@ -129,7 +129,10 @@ import Root from './components/Root'
 
 let store = createStore(todoApp)
 
-render(<Root store={store} />, document.getElementById('root'))
+render(
+  <Root store={store} />,
+  document.getElementById('root')
+)
 ```
 
 ## Navigating with React Router
