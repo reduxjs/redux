@@ -86,7 +86,7 @@ function addTodoWithoutCheck(text) {
 export function addTodo(text) {
   // This form is allowed by Redux Thunk middleware
   // described below in “Async Action Creators” section.
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (getState().todos.length === 3) {
       // Exit early
       return
@@ -132,7 +132,7 @@ You can always write a function that generates an action creator:
 
 ```js
 function makeActionCreator(type, ...argNames) {
-  return function(...args) {
+  return function (...args) {
     let action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
@@ -259,7 +259,7 @@ Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/
 ```js
 export function loadPosts(userId) {
   // Interpreted by the thunk middleware:
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     let { posts } = getState()
     if (posts[userId]) {
       // There is cached data! Don't do anything.
@@ -465,7 +465,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
   }
 })
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register(function (action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       let text = action.text.trim()
