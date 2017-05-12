@@ -137,7 +137,7 @@ function todoApp(state = initialState, action) {
             completed: false
           }
         ]
-      })    
+      })
     default:
       return state
   }
@@ -188,7 +188,7 @@ function todoApp(state = initialState, action) {
     case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: state.todos.map((todo, index) => {
-          if(index === action.index) {
+          if (index === action.index) {
             return Object.assign({}, todo, {
               completed: !todo.completed
             })
@@ -252,7 +252,7 @@ Let's explore reducer composition more. Can we also extract a reducer managing j
 
 Below our imports, let's use [ES6 Object Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to declare `SHOW_ALL`:
 ```js
-const { SHOW_ALL } = VisibilityFilters;
+const { SHOW_ALL } = VisibilityFilters
 ```
 
 Then:
@@ -380,7 +380,12 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 
 ```js
 import { combineReducers } from 'redux'
-import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+import {
+  ADD_TODO,
+  TOGGLE_TODO,
+  SET_VISIBILITY_FILTER,
+  VisibilityFilters
+} from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {

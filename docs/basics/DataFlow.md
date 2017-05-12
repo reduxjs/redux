@@ -30,7 +30,7 @@ The data lifecycle in any Redux app follows these 4 steps:
     // The current application state (list of todos and chosen filter)
     let previousState = {
       visibleTodoFilter: 'SHOW_ALL',
-      todos: [ 
+      todos: [
         {
           text: 'Read the docs.',
           complete: false

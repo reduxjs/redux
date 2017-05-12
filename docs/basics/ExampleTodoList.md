@@ -30,7 +30,7 @@ render(
 
 ```js
 let nextTodoId = 0
-export const addTodo = (text) => {
+export const addTodo = text => {
   return {
     type: 'ADD_TODO',
     id: nextTodoId++,
@@ -38,14 +38,14 @@ export const addTodo = (text) => {
   }
 }
 
-export const setVisibilityFilter = (filter) => {
+export const setVisibilityFilter = filter => {
   return {
     type: 'SET_VISIBILITY_FILTER',
     filter
   }
 }
 
-export const toggleTodo = (id) => {
+export const toggleTodo = id => {
   return {
     type: 'TOGGLE_TODO',
     id
@@ -74,7 +74,7 @@ const todo = (state = {}, action) => {
       return Object.assign({}, state, {
         completed: !state.completed
       })
-      
+
     default:
       return state
   }
@@ -84,7 +84,7 @@ const todos = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [
-        ...state,
+        ...state, 
         todo(undefined, action)
       ]
     case 'TOGGLE_TODO':
@@ -134,7 +134,7 @@ export default todoApp
 #### `components/Todo.js`
 
 ```js
-import React, from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const Todo = ({ onClick, completed, text }) => (
@@ -166,22 +166,20 @@ import Todo from './Todo'
 
 const TodoList = ({ todos, onTodoClick }) => (
   <ul>
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => onTodoClick(todo.id)}
-      />
-    )}
+    {todos.map(todo => (
+      <Todo key={todo.id} {...todo} onClick={() => onTodoClick(todo.id)} />
+    ))}
   </ul>
 )
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    text: PropTypes.string.isRequired
-  }).isRequired).isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired
+    }).isRequired
+  ).isRequired,
   onTodoClick: PropTypes.func.isRequired
 }
 
@@ -199,11 +197,12 @@ const Link = ({ active, children, onClick }) => {
   }
 
   return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
+    <a
+      href="#"
+      onClick={e => {
+        e.preventDefault()
+        onClick()
+      }}
     >
       {children}
     </a>
@@ -228,15 +227,15 @@ import FilterLink from '../containers/FilterLink'
 const Footer = () => (
   <p>
     Show:
-    {" "}
+    {' '}
     <FilterLink filter="SHOW_ALL">
       All
     </FilterLink>
-    {", "}
+    {', '}
     <FilterLink filter="SHOW_ACTIVE">
       Active
     </FilterLink>
-    {", "}
+    {', '}
     <FilterLink filter="SHOW_COMPLETED">
       Completed
     </FilterLink>
@@ -285,15 +284,15 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -350,17 +349,21 @@ let AddTodo = ({ dispatch }) => {
 
   return (
     <div>
-      <form onSubmit={e => {
-        e.preventDefault()
-        if (!input.value.trim()) {
-          return
-        }
-        dispatch(addTodo(input.value))
-        input.value = ''
-      }}>
-        <input ref={node => {
-          input = node
-        }} />
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+          if (!input.value.trim()) {
+            return
+          }
+          dispatch(addTodo(input.value))
+          input.value = ''
+        }}
+      >
+        <input
+          ref={node => {
+            input = node
+          }}
+        />
         <button type="submit">
           Add Todo
         </button>

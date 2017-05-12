@@ -31,7 +31,12 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER)
 Now that we have created a store, let's verify our program works! Even without any UI, we can already test the update logic.
 
 ```js
-import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from './actions'
+import {
+  addTodo,
+  toggleTodo,
+  setVisibilityFilter,
+  VisibilityFilters
+} from './actions'
 
 // Log the initial state
 console.log(store.getState())
