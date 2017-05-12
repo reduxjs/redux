@@ -302,14 +302,11 @@ import DumbComponent from './dumb.component'
 
 const mapStateToProps = state => {
   return {
-    /**
-      obj is an Immutable object in Smart Component, but it’s converted to a plain
-      JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript
-      object. Because it’s still an Immutable.JS object here in mapStateToProps, though,
-      there is no issue with errant re-renderings.
-      */ obj: getImmutableObjectFromStateTree(
-      state
-    )
+    // obj is an Immutable object in Smart Component, but it’s converted to a plain
+    // JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript
+    // object. Because it’s still an Immutable.JS object here in mapStateToProps, though,
+    // there is no issue with errant re-renderings.
+    obj: getImmutableObjectFromStateTree(state)
   }
 }
 export default connect(mapStateToProps)(toJS(DumbComponent))

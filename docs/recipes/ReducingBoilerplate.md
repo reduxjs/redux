@@ -231,7 +231,9 @@ class Posts extends Component {
       return <p>Loading...</p>
     }
 
-    let posts = this.props.posts.map(post => <Post post={post} key={post.id} />)
+    let posts = this.props.posts.map(post =>
+      <Post post={post} key={post.id} />
+    )
 
     return <div>{posts}</div>
   }
@@ -313,7 +315,9 @@ class Posts extends Component {
       return <p>Loading...</p>
     }
 
-    let posts = this.props.posts.map(post => <Post post={post} key={post.id} />)
+    let posts = this.props.posts.map(post =>
+      <Post post={post} key={post.id} />
+    )
 
     return <div>{posts}</div>
   }

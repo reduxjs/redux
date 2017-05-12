@@ -516,7 +516,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
+UndoRedo = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UndoRedo)
 
 export default UndoRedo
 ```
