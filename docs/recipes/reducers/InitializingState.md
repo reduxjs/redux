@@ -63,7 +63,7 @@ Why is it `42`, and not `0`, this time? Because `createStore` was called with `4
 Now let's consider a case where you use `combineReducers()`.  
 You have two reducers:
 
- ```js
+```js
 function a(state = 'lol', action) {
   return state
 }
