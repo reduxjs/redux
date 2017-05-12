@@ -23,7 +23,7 @@ import { createStore, applyMiddleware } from 'redux'
 import todos from './reducers'
 
 function logger({ getState }) {
-  return (next) => (action) => {
+  return next => action => {
     console.log('will dispatch', action)
 
     // Call the next dispatch method in the middleware chain.
@@ -39,7 +39,7 @@ function logger({ getState }) {
 
 let store = createStore(
   todos,
-  [ 'Use Redux' ],
+  ['Use Redux'],
   applyMiddleware(logger)
 )
 
@@ -70,7 +70,6 @@ function fetchSecretSauce() {
 // These are the normal action creators you have seen so far.
 // The actions they return can be dispatched without any middleware.
 // However, they only express “facts” and not the “async flow”.
-
 function makeASandwich(forPerson, secretSauce) {
   return {
     type: 'MAKE_SANDWICH',
@@ -104,13 +103,11 @@ store.dispatch(withdrawMoney(100))
 // Meet thunks.
 // A thunk is a function that returns a function.
 // This is a thunk.
-
 function makeASandwichWithSecretSauce(forPerson) {
 
   // Invert control!
   // Return a function that accepts `dispatch` so we can dispatch later.
   // Thunk middleware knows how to turn thunk async actions into actions.
-
   return function (dispatch) {
     return fetchSecretSauce().then(
       sauce => dispatch(makeASandwich(forPerson, sauce)),
@@ -121,52 +118,43 @@ function makeASandwichWithSecretSauce(forPerson) {
 
 // Thunk middleware lets me dispatch thunk async actions
 // as if they were actions!
-
-store.dispatch(
-  makeASandwichWithSecretSauce('Me')
-)
+store.dispatch(makeASandwichWithSecretSauce('Me'))
 
 // It even takes care to return the thunk's return value
 // from the dispatch, so I can chain Promises as long as I return them.
-
-store.dispatch(
-  makeASandwichWithSecretSauce('My wife')
-).then(() => {
+store.dispatch(makeASandwichWithSecretSauce('My wife')).then(() => {
   console.log('Done!')
 })
 
 // In fact I can write action creators that dispatch
 // actions and async actions from other action creators,
 // and I can build my control flow with Promises.
-
 function makeSandwichesForEverybody() {
   return function (dispatch, getState) {
     if (!getState().sandwiches.isShopOpen) {
 
       // You don't have to return Promises, but it's a handy convention
       // so the caller can always call .then() on async dispatch result.
-
       return Promise.resolve()
     }
 
     // We can dispatch both plain object actions and other thunks,
     // which lets us compose the asynchronous actions in a single flow.
-
-    return dispatch(
-      makeASandwichWithSecretSauce('My Grandma')
-    ).then(() =>
-      Promise.all([
-        dispatch(makeASandwichWithSecretSauce('Me')),
-        dispatch(makeASandwichWithSecretSauce('My wife'))
-      ])
-    ).then(() =>
-      dispatch(makeASandwichWithSecretSauce('Our kids'))
-    ).then(() =>
-      dispatch(getState().myMoney > 42 ?
-        withdrawMoney(42) :
-        apologize('Me', 'The Sandwich Shop')
+    return dispatch(makeASandwichWithSecretSauce('My Grandma'))
+      .then(() =>
+        Promise.all([
+          dispatch(makeASandwichWithSecretSauce('Me')),
+          dispatch(makeASandwichWithSecretSauce('My wife'))
+        ])
       )
-    )
+      .then(() => dispatch(makeASandwichWithSecretSauce('Our kids')))
+      .then(() =>
+        dispatch(
+          getState().myMoney > 42
+            ? withdrawMoney(42)
+            : apologize('Me', 'The Sandwich Shop')
+        )
+      )
   }
 }
 
@@ -175,11 +163,9 @@ function makeSandwichesForEverybody() {
 
 import { renderToString } from 'react-dom/server'
 
-store.dispatch(
-  makeSandwichesForEverybody()
-).then(() =>
-  response.send(renderToString(<MyApp store={store} />))
-)
+store
+  .dispatch(makeSandwichesForEverybody())
+  .then(() => response.send(renderToString(<MyApp store={store} />)))
 
 // I can also dispatch a thunk async action from a component
 // any time its props change to load the missing data.
@@ -189,16 +175,12 @@ import { Component } from 'react'
 
 class SandwichShop extends Component {
   componentDidMount() {
-    this.props.dispatch(
-      makeASandwichWithSecretSauce(this.props.forPerson)
-    )
+    this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.forPerson !== this.props.forPerson) {
-      this.props.dispatch(
-        makeASandwichWithSecretSauce(nextProps.forPerson)
-      )
+      this.props.dispatch(makeASandwichWithSecretSauce(nextProps.forPerson))
     }
   }
 
@@ -207,11 +189,9 @@ class SandwichShop extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    sandwiches: state.sandwiches
-  })
-)(SandwichShop)
+export default connect(state => ({
+  sandwiches: state.sandwiches
+}))(SandwichShop)
 ```
 
 #### Tips
@@ -223,11 +203,11 @@ export default connect(
 * If you want to conditionally apply a middleware, make sure to only import it when it's needed:
 
   ```js
-  let middleware = [ a, b ]
+  let middleware = [a, b]
   if (process.env.NODE_ENV !== 'production') {
     let c = require('some-debug-middleware')
     let d = require('another-debug-middleware')
-    middleware = [ ...middleware, c, d ]
+    middleware = [...middleware, c, d]
   }
 
   const store = createStore(

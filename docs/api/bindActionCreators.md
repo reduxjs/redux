@@ -82,10 +82,7 @@ class TodoListContainer extends Component {
     //   removeTodo: Function
     // }
 
-    return (
-      <TodoList todos={todos}
-                {...boundActionCreators} />
-    )
+    return <TodoList todos={todos} {...boundActionCreators} />
 
     // An alternative to bindActionCreators is to pass
     // just the dispatch function down, but then your child component
