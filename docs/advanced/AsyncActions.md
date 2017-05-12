@@ -215,8 +215,10 @@ Before going into the details of dispatching actions together with network reque
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS, RECEIVE_POSTS
+  SELECT_SUBREDDIT,
+  INVALIDATE_SUBREDDIT,
+  REQUEST_POSTS,
+  RECEIVE_POSTS
 } from '../actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
@@ -228,11 +230,14 @@ function selectedSubreddit(state = 'reactjs', action) {
   }
 }
 
-function posts(state = {
-  isFetching: false,
-  didInvalidate: false,
-  items: []
-}, action) {
+function posts(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    items: []
+  },
+  action
+) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
@@ -332,13 +337,11 @@ function receivePosts(subreddit, json) {
 // store.dispatch(fetchPosts('reactjs'))
 
 export function fetchPosts(subreddit) {
-
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
   return function (dispatch) {
-
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
@@ -353,7 +356,6 @@ export function fetchPosts(subreddit) {
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(
         response => response.json(),
-        
         // Do not use catch, because that will also catch
         // any errors in the dispatch and resulting render,
         // causing an loop of 'Unexpected batch number' errors.
@@ -361,7 +363,6 @@ export function fetchPosts(subreddit) {
         error => console.log('An error occured.', error)
       )
       .then(json =>
-
         // We can dispatch many times!
         // Here, we update the app state with the results of the API call.
 
@@ -411,9 +412,9 @@ const store = createStore(
 )
 
 store.dispatch(selectSubreddit('reactjs'))
-store.dispatch(fetchPosts('reactjs')).then(() =>
-  console.log(store.getState())
-)
+store
+  .dispatch(fetchPosts('reactjs'))
+  .then(() => console.log(store.getState()))
 ```
 
 The nice thing about thunks is that they can dispatch results of each other:
@@ -462,7 +463,6 @@ function shouldFetchPosts(state, subreddit) {
 }
 
 export function fetchPostsIfNeeded(subreddit) {
-
   // Note that the function also receives getState()
   // which lets you choose what to dispatch next.
 
@@ -486,9 +486,9 @@ This lets us write more sophisticated async control flow gradually, while the co
 #### `index.js`
 
 ```js
-store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
-  console.log(store.getState())
-)
+store
+  .dispatch(fetchPostsIfNeeded('reactjs'))
+  .then(() => console.log(store.getState()))
 ```
 
 >##### Note about Server Rendering

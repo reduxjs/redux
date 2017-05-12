@@ -170,7 +170,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
 We could use it to apply multiple middleware like this:
 
 ```js
-applyMiddlewareByMonkeypatching(store, [ logger, crashReporter ])
+applyMiddlewareByMonkeypatching(store, [logger, crashReporter])
 ```
 
 However, it is still monkeypatching.  
@@ -250,16 +250,13 @@ Instead of `applyMiddlewareByMonkeypatching()`, we could write `applyMiddleware(
 ```js
 // Warning: Naïve implementation!
 // That's *not* Redux API.
-
 function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
-
   let dispatch = store.dispatch
   middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
   )
-
   return Object.assign({}, store, { dispatch })
 }
 ```
@@ -467,10 +464,9 @@ const readyStatePromise = store => next => action => {
  * `dispatch` will return the return value of the dispatched function.
  */
 const thunk = store => next => action =>
-  typeof action === 'function' ?
-    action(store.dispatch, store.getState) :
-    next(action)
-
+  typeof action === 'function'
+    ? action(store.dispatch, store.getState)
+    : next(action)
 
 // You can use all of them! (It doesn't mean you should.)
 let todoApp = combineReducers(reducers)

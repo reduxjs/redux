@@ -97,24 +97,29 @@ export function fetchPostsIfNeeded(subreddit) {
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS, RECEIVE_POSTS
+  SELECT_SUBREDDIT,
+  INVALIDATE_SUBREDDIT,
+  REQUEST_POSTS,
+  RECEIVE_POSTS
 } from './actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_SUBREDDIT:
-    return action.subreddit
-  default:
-    return state
+    case SELECT_SUBREDDIT:
+      return action.subreddit
+    default:
+      return state
   }
 }
 
-function posts(state = {
-  isFetching: false,
-  didInvalidate: false,
-  items: []
-}, action) {
+function posts(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    items: []
+  },
+  action
+) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
@@ -137,7 +142,7 @@ function posts(state = {
   }
 }
 
-function postsBySubreddit(state = { }, action) {
+function postsBySubreddit(state = {}, action) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
@@ -211,7 +216,11 @@ export default class Root extends Component {
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
+import {
+  selectSubreddit,
+  fetchPostsIfNeeded,
+  invalidateSubreddit
+} from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
@@ -251,34 +260,28 @@ class AsyncApp extends Component {
     const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
-        <Picker value={selectedSubreddit}
-                onChange={this.handleChange}
-                options={[ 'reactjs', 'frontend' ]} />
+        <Picker
+          value={selectedSubreddit}
+          onChange={this.handleChange}
+          options={['reactjs', 'frontend']}
+        />
         <p>
           {lastUpdated &&
             <span>
               Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
               {' '}
-            </span>
-          }
+            </span>}
           {!isFetching &&
-            <a href='#'
-               onClick={this.handleRefreshClick}>
+            <a href="#" onClick={this.handleRefreshClick}>
               Refresh
-            </a>
-          }
+            </a>}
         </p>
-        {isFetching && posts.length === 0 &&
-          <h2>Loading...</h2>
-        }
-        {!isFetching && posts.length === 0 &&
-          <h2>Empty.</h2>
-        }
+        {isFetching && posts.length === 0 && <h2>Loading...</h2>}
+        {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
         {posts.length > 0 &&
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <Posts posts={posts} />
-          </div>
-        }
+          </div>}
       </div>
     )
   }
@@ -329,13 +332,12 @@ export default class Picker extends Component {
     return (
       <span>
         <h1>{value}</h1>
-        <select onChange={e => onChange(e.target.value)}
-                value={value}>
-          {options.map(option =>
+        <select onChange={e => onChange(e.target.value)} value={value}>
+          {options.map(option => (
             <option value={option} key={option}>
               {option}
-            </option>)
-          }
+            </option>
+          ))}
         </select>
       </span>
     )
@@ -343,9 +345,7 @@ export default class Picker extends Component {
 }
 
 Picker.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.string.isRequired
-  ).isRequired,
+  options: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired
 }
@@ -361,9 +361,7 @@ export default class Posts extends Component {
   render() {
     return (
       <ul>
-        {this.props.posts.map((post, i) =>
-          <li key={i}>{post.title}</li>
-        )}
+        {this.props.posts.map((post, i) => <li key={i}>{post.title}</li>)}
       </ul>
     )
   }
