@@ -13,7 +13,7 @@ npm install --save-dev jest
 
 To use it together with [Babel](http://babeljs.io), you will need to install `babel-jest`:
 
-```js
+```
 npm install --save-dev babel-jest
 ```
 
@@ -80,7 +80,7 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 #### Example
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
 function fetchTodosRequest() {
   return {
@@ -123,7 +123,7 @@ import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
 import expect from 'expect' // You can use any testing library
 
-const middlewares = [ thunk ]
+const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('async actions', () => {
@@ -134,18 +134,18 @@ describe('async actions', () => {
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
     nock('http://example.com/')
       .get('/todos')
-      .reply(200, { body: { todos: ['do something'] }})
+      .reply(200, { body: { todos: ['do something'] } })
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
-      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
+      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something'] } }
     ]
     const store = mockStore({ todos: [] })
 
-    return store.dispatch(actions.fetchTodos())
-      .then(() => { // return of async actions
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    return store.dispatch(actions.fetchTodos()).then(() => {
+      // return of async actions
+      expect(store.getActions()).toEqual(expectedActions)
+    })
   })
 })
 ```
@@ -192,9 +192,7 @@ import * as types from '../../constants/ActionTypes'
 
 describe('todos reducer', () => {
   it('should return the initial state', () => {
-    expect(
-      reducer(undefined, {})
-    ).toEqual([
+    expect(reducer(undefined, {})).toEqual([
       {
         text: 'Use Redux',
         completed: false,
@@ -209,15 +207,13 @@ describe('todos reducer', () => {
         type: types.ADD_TODO,
         text: 'Run the tests'
       })
-    ).toEqual(
-      [
-        {
-          text: 'Run the tests',
-          completed: false,
-          id: 0
-        }
-      ]
-    )
+    ).toEqual([
+      {
+        text: 'Run the tests',
+        completed: false,
+        id: 0
+      }
+    ])
 
     expect(
       reducer(
@@ -233,20 +229,18 @@ describe('todos reducer', () => {
           text: 'Run the tests'
         }
       )
-    ).toEqual(
-      [
-        {
-          text: 'Run the tests',
-          completed: false,
-          id: 1
-        },
-        {
-          text: 'Use Redux',
-          completed: false,
-          id: 0
-        }
-      ]
-    )
+    ).toEqual([
+      {
+        text: 'Run the tests',
+        completed: false,
+        id: 1
+      },
+      {
+        text: 'Use Redux',
+        completed: false,
+        id: 0
+      }
+    ])
   })
 })
 ```
@@ -279,11 +273,13 @@ class Header extends Component {
 
   render() {
     return (
-      <header className='header'>
-          <h1>todos</h1>
-          <TodoTextInput newTodo={true}
-                         onSave={this.handleSave.bind(this)}
-                         placeholder='What needs to be done?' />
+      <header className="header">
+        <h1>todos</h1>
+        <TodoTextInput
+          newTodo={true}
+          onSave={this.handleSave.bind(this)}
+          placeholder="What needs to be done?"
+        />
       </header>
     )
   }
@@ -340,7 +336,6 @@ describe('components', () => {
     })
   })
 })
-
 ```
 
 ### Connected Components
@@ -420,7 +415,9 @@ const createFakeStore = fakeData => ({
 
 const dispatchWithStoreOf = (storeData, action) => {
   let dispatched = null
-  const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt)
+  const dispatch = singleDispatch(createFakeStore(storeData))(
+    actionAttempt => (dispatched = actionAttempt)
+  )
   dispatch(action)
   return dispatched
 }
@@ -431,9 +428,7 @@ describe('middleware', () => {
       type: types.ADD_TODO
     }
 
-    expect(
-      dispatchWithStoreOf({}, action)
-    ).toEqual(action)
+    expect(dispatchWithStoreOf({}, action)).toEqual(action)
   })
 
   it('should not dispatch if store already has type', () => {
@@ -442,9 +437,12 @@ describe('middleware', () => {
     }
 
     expect(
-      dispatchWithStoreOf({
-        [types.ADD_TODO]: 'dispatched'
-      }, action)
+      dispatchWithStoreOf(
+        {
+          [types.ADD_TODO]: 'dispatched'
+        },
+        action
+      )
     ).toNotExist()
   })
 })

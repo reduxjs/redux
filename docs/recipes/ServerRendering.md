@@ -51,7 +51,7 @@ const app = Express()
 const port = 3000
 
 //Serve static files
-app.use('/static', Express.static('static'));
+app.use('/static', Express.static('static'))
 
 // This is fired every time the server side receives a request
 app.use(handleRender)
@@ -146,7 +146,7 @@ const preloadedState = window.__PRELOADED_STATE__
 
 // Allow the passed state to be garbage-collected
 delete window.__PRELOADED_STATE__
- 
+
 // Create Redux store with initial state
 const store = createStore(counterApp, preloadedState)
 

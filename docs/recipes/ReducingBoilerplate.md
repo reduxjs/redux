@@ -91,7 +91,6 @@ export function addTodo(text) {
       // Exit early
       return
     }
-
     dispatch(addTodoWithoutCheck(text))
   }
 }
@@ -133,7 +132,7 @@ You can always write a function that generates an action creator:
 
 ```js
 function makeActionCreator(type, ...argNames) {
-  return function(...args) {
+  return function (...args) {
     let action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
@@ -190,7 +189,11 @@ export function loadPostsRequest(userId) {
 ```js
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadPostsRequest, loadPostsSuccess, loadPostsFailure } from './actionCreators'
+import {
+  loadPostsRequest,
+  loadPostsSuccess,
+  loadPostsFailure
+} from './actionCreators'
 
 class Posts extends Component {
   loadData(userId) {
@@ -272,16 +275,18 @@ export function loadPosts(userId) {
 
     // Dispatch vanilla actions asynchronously
     fetch(`http://myapi.com/users/${userId}/posts`).then(
-      response => dispatch({
-        type: 'LOAD_POSTS_SUCCESS',
-        userId,
-        response
-      }),
-      error => dispatch({
-        type: 'LOAD_POSTS_FAILURE',
-        userId,
-        error
-      })
+      response =>
+        dispatch({
+          type: 'LOAD_POSTS_SUCCESS',
+          userId,
+          response
+        }),
+      error =>
+        dispatch({
+          type: 'LOAD_POSTS_FAILURE',
+          userId,
+          error
+        })
     )
   }
 }
@@ -333,7 +338,7 @@ export function loadPosts(userId) {
     // Types of actions to emit before and after
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
     // Check the cache (optional):
-    shouldCallAPI: (state) => !state.posts[userId],
+    shouldCallAPI: state => !state.posts[userId],
     // Perform the fetching:
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     // Arguments to inject in begin/end actions
@@ -375,21 +380,29 @@ function callAPIMiddleware({ dispatch, getState }) {
       return
     }
 
-    const [ requestType, successType, failureType ] = types
+    const [requestType, successType, failureType] = types
 
-    dispatch(Object.assign({}, payload, {
-      type: requestType
-    }))
+    dispatch(
+      Object.assign({}, payload, {
+        type: requestType
+      })
+    )
 
     return callAPI().then(
-      response => dispatch(Object.assign({}, payload, {
-        response,
-        type: successType
-      })),
-      error => dispatch(Object.assign({}, payload, {
-        error,
-        type: failureType
-      }))
+      response =>
+        dispatch(
+          Object.assign({}, payload, {
+            response,
+            type: successType
+          })
+        ),
+      error =>
+        dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
     )
   }
 }
@@ -401,7 +414,7 @@ After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddlew
 export function loadPosts(userId) {
   return {
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    shouldCallAPI: (state) => !state.posts[userId],
+    shouldCallAPI: state => !state.posts[userId],
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     payload: { userId }
   }
@@ -409,8 +422,12 @@ export function loadPosts(userId) {
 
 export function loadComments(postId) {
   return {
-    types: ['LOAD_COMMENTS_REQUEST', 'LOAD_COMMENTS_SUCCESS', 'LOAD_COMMENTS_FAILURE'],
-    shouldCallAPI: (state) => !state.comments[postId],
+    types: [
+      'LOAD_COMMENTS_REQUEST',
+      'LOAD_COMMENTS_SUCCESS',
+      'LOAD_COMMENTS_FAILURE'
+    ],
+    shouldCallAPI: state => !state.comments[postId],
     callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
     payload: { postId }
   }
@@ -418,15 +435,20 @@ export function loadComments(postId) {
 
 export function addComment(postId, message) {
   return {
-    types: ['ADD_COMMENT_REQUEST', 'ADD_COMMENT_SUCCESS', 'ADD_COMMENT_FAILURE'],
-    callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`, {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ message })
-    }),
+    types: [
+      'ADD_COMMENT_REQUEST',
+      'ADD_COMMENT_SUCCESS',
+      'ADD_COMMENT_FAILURE'
+    ],
+    callAPI: () =>
+      fetch(`http://myapi.com/posts/${postId}/comments`, {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message })
+      }),
     payload: { postId, message }
   }
 }
@@ -464,11 +486,11 @@ With Redux, the same update logic can be described as a reducing function:
 ```js
 export function todos(state = [], action) {
   switch (action.type) {
-  case ActionTypes.ADD_TODO:
-    let text = action.text.trim()
-    return [ ...state, text ]
-  default:
-    return state
+    case ActionTypes.ADD_TODO:
+      let text = action.text.trim()
+      return [...state, text]
+    default:
+      return state
   }
 }
 ```
@@ -485,7 +507,7 @@ Let's write a function that lets us express reducers as an object mapping from a
 export const todos = createReducer([], {
   [ActionTypes.ADD_TODO](state, action) {
     let text = action.text.trim()
-    return [ ...state, text ]
+    return [...state, text]
   }
 })
 ```

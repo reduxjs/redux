@@ -9,7 +9,7 @@
 <a id="why-use-immutable-library"></a>
 ## Why should I use an immutable-focused library such as Immutable.JS?
 
-Immutable-focused libraries such as Immutable.JS have been designed to overcome the issues with immutability inherent within JavaScript, providing all the benefits of immutability with the performance your app requires. 
+Immutable-focused libraries such as Immutable.JS have been designed to overcome the issues with immutability inherent within JavaScript, providing all the benefits of immutability with the performance your app requires.
 
 Whether you choose to use such a library, or stick with plain JavaScript, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within JavaScript’s approach to immutability.
 
@@ -42,7 +42,7 @@ Immutable.JS provides a rich set of immutable objects to encapsulate your data (
 
 Immutable.JS does a lot work behind the scenes to optimize performance. This is the key to its power, as using immutable data structures can involve a lot of expensive copying. In particular, immutably manipulating large, complex data sets, such as a nested Redux state tree, can generate many intermediate copies of objects, which consume memory and slow down performance as the browser’s garbage collector fights to clean things up.
 
-Immutable.JS avoids this by [cleverly sharing data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away. 
+Immutable.JS avoids this by [cleverly sharing data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away.
 
 You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it’s the *intermediate* data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.
 
@@ -67,7 +67,7 @@ JavaScript does not provide immutable data structures. As such, for Immutable.JS
 
 For example, you will no longer be able to reference an object’s properties through standard JavaScript dot or bracket notation. Instead, you must reference them via Immutable.JS’s `get()` or `getIn()` methods, which use an awkward syntax that accesses properties via an array of strings, each of which represents a property key.
 
-For example, instead of `myObj.prop1.prop2.prop3`, you would use `myImmutableMap.getIn([‘prop1’, ‘prop2’, ‘prop3’])`. 
+For example, instead of `myObj.prop1.prop2.prop3`, you would use `myImmutableMap.getIn([‘prop1’, ‘prop2’, ‘prop3’])`.
 
 This makes it awkward to interoperate not just with your own code, but also with other libraries, such as lodash or ramda, that expect plain JavaScript objects.
 
@@ -75,7 +75,7 @@ Note that Immutable.JS objects do have a `toJS()` method, which returns the data
 
 ### Once used, Immutable.JS will spread throughout your codebase
 
-Once you encapsulate your data with Immutable.JS, you have to use Immutable.JS’s `get()` or `getIn()` property accessors to access it. 
+Once you encapsulate your data with Immutable.JS, you have to use Immutable.JS’s `get()` or `getIn()` property accessors to access it.
 
 This has the effect of spreading Immutable.JS across your entire codebase, including potentially your components, where you may prefer not to have such external dependencies. Your entire codebase must know what is, and what is not, an Immutable.JS object. It also makes removing Immutable.JS from your app difficult in the future, should you ever need to.
 
@@ -87,19 +87,19 @@ Because you must access your data via Immutable.JS’s own `get()` and `getIn()`
 
 ### Not suitable for small values that change often
 
-Immutable.JS works best for collections of data, and the larger the better. It can be slow when your data comprises lots of small, simple JavaScript objects, with each comprising a few keys of primitive values. 
+Immutable.JS works best for collections of data, and the larger the better. It can be slow when your data comprises lots of small, simple JavaScript objects, with each comprising a few keys of primitive values.
 
 Note, however, that this does not apply to the Redux state tree, which is (usually) represented as a large collection of data.
 
 ### Difficult to Debug
 
-Immutable.JS objects, such as `Map`, `List`, etc., can be difficult to debug, as inspecting such an object will reveal an entire nested hierarchy of Immutable.JS-specific properties that you don’t care about, while your actual data that you do care about is encapsulated several layers deep. 
+Immutable.JS objects, such as `Map`, `List`, etc., can be difficult to debug, as inspecting such an object will reveal an entire nested hierarchy of Immutable.JS-specific properties that you don’t care about, while your actual data that you do care about is encapsulated several layers deep.
 
 To resolve this issue, use a browser extension such as the [Immutable.js Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog), which surfaces your data in Chrome Dev Tools, and hides Immutable.JS’s properties when inspecting your data.
 
 ### Breaks object references, causing poor performance
 
-One of the key advantages of immutability is that it enables shallow equality checking, which dramatically improves performance. 
+One of the key advantages of immutability is that it enables shallow equality checking, which dramatically improves performance.
 
 If two different variables reference the same immutable object, then a simple equality check of the two variables is enough to determine that they are equal, and that the object they both reference is unchanged. The equality check never has to check the values of any of the object’s properties, as it is, of course, immutable.
 
@@ -109,12 +109,12 @@ Accordingly, calling `toJS()` twice, for example, and assigning the result to tw
 
 This is a particular issue if you use `toJS()` in a wrapped component’s `mapStateToProps` function, as React-Redux shallowly compares each value in the returned props object.  For example, the value referenced by the `todos` prop returned from `mapStateToProps` below will always be a different object, and so will fail a shallow equality check.
 
-```
+```js
 // AVOID .toJS() in mapStateToProps
 function mapStateToProps(state) {
-  return { 
-        todos: state.get('todos').toJS() // Always a new object
-    }
+  return {
+    todos: state.get('todos').toJS() // Always a new object
+  }
 }
 ```
 
@@ -141,7 +141,7 @@ Frequently, yes. There are various tradeoffs and opinions to consider, but there
 
 Components will both re-render when they shouldn’t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.
 
-This problem is caused predominantly by returning a mutated state object from a Redux reducer. With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app. 
+This problem is caused predominantly by returning a mutated state object from a Redux reducer. With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app.
 
 This, together with its performance and rich API for data manipulation, is why Immutable.JS is worth the effort.
 
@@ -168,9 +168,9 @@ Never let a plain JavaScript object contain Immutable.JS properties. Equally, ne
 
 ### Make your entire Redux state tree an Immutable.JS object
 
-For a Redux app, your entire state tree should be an Immutable.JS object, with no plain JavaScript objects used at all. 
+For a Redux app, your entire state tree should be an Immutable.JS object, with no plain JavaScript objects used at all.
 
-* Create the tree using Immutable.JS’s `fromJS()` function. 
+* Create the tree using Immutable.JS’s `fromJS()` function.
 
 * Use an Immutable.JS-aware version of the `combineReducers` function, such as the one in [redux-immutable](https://www.npmjs.com/package/redux-immutable), as Redux itself expects the state tree to be a plain JavaScript object.
 
@@ -178,16 +178,16 @@ For a Redux app, your entire state tree should be an Immutable.JS object, with n
 
 **Example**
 
-```
+```js
 // avoid
-const newObj = { key: value};
-const newState = state.setIn(['prop1’], newObj); // <-- newObj has been added as a plain
-    // JavaScript object - NOT as an Immutable.JS Map
+const newObj = { key: value }
+const newState = state.setIn(['prop1'], newObj)
+// newObj has been added as a plain JavaScript object, NOT as an Immutable.JS Map
 
-// recommend
-const newObj = { key: value};
-const newState = state.setIn(['prop1’], fromJS(newObj)); // <-- newObj is now an
-    // Immutable.JS Map
+// recommended
+const newObj = { key: value }
+const newState = state.setIn(['prop1'], fromJS(newObj))
+// newObj is now an Immutable.JS Map
 ```
 
 #### Further Information
@@ -201,7 +201,7 @@ const newState = state.setIn(['prop1’], fromJS(newObj)); // <-- newObj is now 
 
 ### Use Immutable.JS everywhere except your dumb components
 
-Using Immutable.JS everywhere keeps your code performant. Use it in your smart components, your selectors, your sagas or thunks, action creators, and especially your reducers. 
+Using Immutable.JS everywhere keeps your code performant. Use it in your smart components, your selectors, your sagas or thunks, action creators, and especially your reducers.
 
 Do not, however, use Immutable.JS in your dumb components.
 
@@ -269,51 +269,47 @@ Something needs to map the Immutable.JS props in your Smart Component to the pur
 
 Here is an example of such a HOC:
 
-```
-import React from 'react';
-import { Iterable } from 'immutable';
+```js
+import React from 'react'
+import { Iterable } from 'immutable'
 
-export const toJS = (WrappedComponent) =>
-   (wrappedComponentProps) => {
-       const KEY = 0;
-       const VALUE = 1;
+export const toJS = WrappedComponent => wrappedComponentProps => {
+  const KEY = 0
+  const VALUE = 1
 
-       const propsJS = Object.entries(wrappedComponentProps)
-            .reduce((newProps, wrappedComponentProp)  => {
-                newProps[wrappedComponentProp[KEY]] = 
-                    Iterable.isIterable(wrappedComponentProp[VALUE]) 
-                        ? wrappedComponentProp[VALUE].toJS() 
-                        : wrappedComponentProp[VALUE];
-                return newProps;
-            }, {});
+  const propsJS = Object.entries(
+    wrappedComponentProps
+  ).reduce((newProps, wrappedComponentProp) => {
+    newProps[wrappedComponentProp[KEY]] = Iterable.isIterable(
+      wrappedComponentProp[VALUE]
+    )
+      ? wrappedComponentProp[VALUE].toJS()
+      : wrappedComponentProp[VALUE]
+    return newProps
+  }, {})
 
-       return <WrappedComponent {...propsJS} />
-   };
-
+  return <WrappedComponent {...propsJS} />
+}
 ```
 
 And this is how you would use it in your Smart Component:
 
-```
-import { connect } from 'react-redux';
+```js
+import { connect } from 'react-redux'
 
-import { toJS } from `./to-js';
+import { toJS } from './to-js'
+import DumbComponent from './dumb.component'
 
-import DumbComponent from './dumb.component';
-
-const mapStateToProps = (state) => {
-   return {
-      /**
-      obj is an Immutable object in Smart Component, but it’s converted to a plain 
-      JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript 
-      object. Because it’s still an Immutable.JS object here in mapStateToProps, though, 
-      there is no issue with errant re-renderings.
-      */
-       obj: getImmutableObjectFromStateTree(state)
-   }
-};
-
-export default connect(mapStateToProps)(toJS(DumbComponent));
+const mapStateToProps = state => {
+  return {
+    // obj is an Immutable object in Smart Component, but it’s converted to a plain
+    // JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript
+    // object. Because it’s still an Immutable.JS object here in mapStateToProps, though,
+    // there is no issue with errant re-renderings.
+    obj: getImmutableObjectFromStateTree(state)
+  }
+}
+export default connect(mapStateToProps)(toJS(DumbComponent))
 ```
 By converting Immutable.JS objects to plain JavaScript values within a HOC, we achieve Dumb Component portability, but without the performance hits of using `toJS()` in the Smart Component.
 

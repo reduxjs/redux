@@ -44,7 +44,7 @@ It is reasonable to suggest that our state shape should change to answer these q
 ```js
 {
   counter: {
-    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     present: 10,
     future: []
   }
@@ -56,9 +56,9 @@ Now, if user presses “Undo”, we want it to change to move into the past:
 ```js
 {
   counter: {
-    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     present: 9,
-    future: [ 10 ]
+    future: [10]
   }
 }
 ```
@@ -68,9 +68,9 @@ And further yet:
 ```js
 {
   counter: {
-    past: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
+    past: [0, 1, 2, 3, 4, 5, 6, 7],
     present: 8,
-    future: [ 9, 10 ]
+    future: [9, 10]
   }
 }
 ```
@@ -80,9 +80,9 @@ When the user presses “Redo”, we want to move one step back into the future:
 ```js
 {
   counter: {
-    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     present: 9,
-    future: [ 10 ]
+    future: [10]
   }
 }
 ```
@@ -92,7 +92,7 @@ Finally, if the user performs an action (e.g. decrement the counter) while we're
 ```js
 {
   counter: {
-    past: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+    past: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     present: 8,
     future: []
   }
@@ -104,9 +104,9 @@ The interesting part here is that it does not matter whether we want to keep an 
 ```js
 {
   counter: {
-    past: [ 0, 1, 2 ],
+    past: [0, 1, 2],
     present: 3,
-    future: [ 4 ]
+    future: [4]
   }
 }
 ```
@@ -116,12 +116,18 @@ The interesting part here is that it does not matter whether we want to keep an 
   todos: {
     past: [
       [],
-      [ { text: 'Use Redux' } ],
-      [ { text: 'Use Redux', complete: true } ]
+      [{ text: 'Use Redux' }],
+      [{ text: 'Use Redux', complete: true }]
     ],
-    present: [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo' } ],
+    present: [
+      { text: 'Use Redux', complete: true },
+      { text: 'Implement Undo' }
+    ],
     future: [
-      [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true } ]
+      [
+        { text: 'Use Redux', complete: true },
+        { text: 'Implement Undo', complete: true }
+      ]
     ]
   }
 }
@@ -156,12 +162,12 @@ Or many granular histories so user can undo and redo actions in them independent
 ```js
 {
   counterA: {
-    past: [ 1, 0 ],
+    past: [1, 0],
     present: 2,
     future: []
   },
   counterB: {
-    past: [ 0 ],
+    past: [0],
     present: 1,
     future: []
   }
@@ -221,13 +227,13 @@ function undoable(state = initialState, action) {
       return {
         past: newPast,
         present: previous,
-        future: [ present, ...future ]
+        future: [present, ...future]
       }
     case 'REDO':
       const next = future[0]
       const newFuture = future.slice(1)
       return {
-        past: [ ...past, present ],
+        past: [...past, present],
         present: next,
         future: newFuture
       }
@@ -301,13 +307,13 @@ function undoable(reducer) {
         return {
           past: newPast,
           present: previous,
-          future: [ present, ...future ]
+          future: [present, ...future]
         }
       case 'REDO':
         const next = future[0]
         const newFuture = future.slice(1)
         return {
-          past: [ ...past, present ],
+          past: [...past, present],
           present: next,
           future: newFuture
         }
@@ -318,7 +324,7 @@ function undoable(reducer) {
           return state
         }
         return {
-          past: [ ...past, present ],
+          past: [...past, present],
           present: newPresent,
           future: []
         }
@@ -429,12 +435,18 @@ Now the `todos` part of the state looks like this:
   todos: {
     past: [
       [],
-      [ { text: 'Use Redux' } ],
-      [ { text: 'Use Redux', complete: true } ]
+      [{ text: 'Use Redux' }],
+      [{ text: 'Use Redux', complete: true }]
     ],
-    present: [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo' } ],
+    present: [
+      { text: 'Use Redux', complete: true },
+      { text: 'Implement Undo' }
+    ],
     future: [
-      [ { text: 'Use Redux', complete: true }, { text: 'Implement Undo', complete: true } ]
+      [
+        { text: 'Use Redux', complete: true },
+        { text: 'Implement Undo', complete: true }
+      ]
     ]
   }
 }
@@ -446,7 +458,7 @@ just `state.todos`:
 #### `containers/VisibleTodoList.js`
 
 ```js
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos.present, state.visibilityFilter)
   }
@@ -490,14 +502,14 @@ import { connect } from 'react-redux'
 
 /* ... */
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     canUndo: state.todos.past.length > 0,
     canRedo: state.todos.future.length > 0
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     onUndo: () => dispatch(UndoActionCreators.undo()),
     onRedo: () => dispatch(UndoActionCreators.redo())
