@@ -412,7 +412,9 @@ const store = createStore(
 )
 
 store.dispatch(selectSubreddit('reactjs'))
-store.dispatch(fetchPosts('reactjs')).then(() => console.log(store.getState()))
+store
+  .dispatch(fetchPosts('reactjs'))
+  .then(() => console.log(store.getState()))
 ```
 
 The nice thing about thunks is that they can dispatch results of each other:
