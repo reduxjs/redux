@@ -92,7 +92,9 @@ class TodoListContainer extends Component {
   }
 }
 
-export default connect(state => ({ todos: state.todos }))(TodoListContainer)
+export default connect(
+  state => ({ todos: state.todos })
+)(TodoListContainer)
 ```
 
 #### Tips
