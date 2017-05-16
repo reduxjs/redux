@@ -37,20 +37,20 @@ export const ActionTypes = {
  * and subscribe to changes.
  */
 export default function createStore(reducer, preloadedState, enhancer) {
-  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined' && Object.prototype.toString.call(preloadedState) === '[object Function]') {
     enhancer = preloadedState
     preloadedState = undefined
   }
 
   if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
+    if (typeof enhancer !== 'function' || Object.prototype.toString.call(enhancer) !== '[object Function]') {
       throw new Error('Expected the enhancer to be a function.')
     }
 
     return enhancer(createStore)(reducer, preloadedState)
   }
 
-  if (typeof reducer !== 'function') {
+  if (typeof reducer !== 'function' || Object.prototype.toString.call(reducer) !== '[object Function]') {
     throw new Error('Expected the reducer to be a function.')
   }
 
@@ -192,7 +192,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * @returns {void}
    */
   function replaceReducer(nextReducer) {
-    if (typeof nextReducer !== 'function') {
+    if (typeof nextReducer !== 'function' || Object.prototype.toString.call(nextReducer) !== '[object Function]') {
       throw new Error('Expected the nextReducer to be a function.')
     }
 
