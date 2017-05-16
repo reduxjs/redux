@@ -112,6 +112,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
 * [redux-actions-assertions](https://github.com/dmitry-zaets/redux-actions-assertions) — Assertions for Redux actions testing
 * [redux-bootstrap](https://github.com/remojansen/redux-bootstrap) — Bootstrapping function for Redux applications
+* [redux-define](https://github.com/smeijer/redux-define) — Reduces the boilerplate in writing action types.
 
 ### DevTools
 
