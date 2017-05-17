@@ -1,37 +1,26 @@
 // @flow
-import type { Todos, Todo, Id, Text, Action } from '../types'
 
-function createTodo(id: Id, text: Text): Todo {
-  return {
-    id,
-    text,
-    completed: false
-  }
-}
+import type { Todos, Todo, Id, Text } from '../types/todos';
+import type { Action } from '../types';
 
-function toggleTodo(todos: Todos, id: Id): Todos {
-  return todos.map(t => {
-    if (t.id !== id) {
-      return t
-    }
-    return Object.assign({}, t, {
-      completed: !t.completed
-    })
-  })
-}
+const createTodo = (id: Id, text: Text): Todo => ({
+  id,
+  text,
+  completed: false
+});
+
+const toggleTodo = (todos: Todos, id: Id): Todos =>
+  todos.map(t => (t.id !== id ? t : { ...t, completed: !t.completed }));
 
 const todos = (state: Todos = [], action: Action): Todos => {
   switch (action.type) {
     case 'ADD_TODO':
-      return [
-        ...state,
-        createTodo(action.id, action.text)
-      ]
+      return [...state, createTodo(action.id, action.text)];
     case 'TOGGLE_TODO':
-      return toggleTodo(state, action.id)
+      return toggleTodo(state, action.id);
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default todos
+export default todos;
