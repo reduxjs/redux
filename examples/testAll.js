@@ -2,16 +2,16 @@
  * Runs an ordered set of commands within each of the build directories.
  */
 
-var fs = require('fs')
-var path = require('path')
-var { spawnSync } = require('child_process')
+const fs = require('fs')
+const path = require('path')
+const { spawnSync } = require('child_process')
 
-var exampleDirs = fs.readdirSync(__dirname).filter((file) => {
+const exampleDirs = fs.readdirSync(__dirname).filter((file) => {
   return fs.statSync(path.join(__dirname, file)).isDirectory()
 })
 
 // Ordering is important here. `yarn install` must come first.
-var cmdArgs = [
+const cmdArgs = [
   { cmd: 'yarn', args: [ 'install', '--no-progress' ] },
   { cmd: 'yarn', args: [ 'test' ] }
 ]
