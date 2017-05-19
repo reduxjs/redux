@@ -1,8 +1,8 @@
 // @flow
 
 declare module 'redux-mock-store' {
-  declare type Middlwares = ?Array<Function>;
-  declare type Action = { +type: string };
+  declare type Middlewares = ?Array<Function>;
+  declare type Action = { type: string };
   declare type Actions = Array<Action>;
   declare interface Store<State> {
     clearActions(): void,
@@ -14,9 +14,9 @@ declare module 'redux-mock-store' {
   }
   declare function mockStore<S>(state: S): Store<S>;
   declare function configureStore<S>(
-    middlewares: Middlwares
+    middlewares: Middlewares
   ): (state: S) => Store<S>;
   declare module.exports: <S>(
-    middlewares: Middlwares
+    middlewares: Middlewares
   ) => (state: S) => Store<S>;
 }

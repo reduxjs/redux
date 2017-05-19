@@ -3,7 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Link from '../../components/link';
+import Link from '../../components/Link';
 
 const setup = (setupProps = {}) => {
   const defaultProps = {

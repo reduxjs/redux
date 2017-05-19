@@ -1,7 +1,7 @@
 // @flow
 
 import { setVisibilityFilter } from '../../actions/visibilityFilter';
-import visibilityFilter from '../../reducers/visibility-filter';
+import visibilityFilter from '../../reducers/visibilityFilter';
 
 describe('visibilityFilter', () => {
   it('should handle initial state', () => {

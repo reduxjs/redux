@@ -1,6 +1,6 @@
 // @flow
 
-import { visibleTodosSelector } from '../../selectors/todos';
+import { visibleTodosSelector } from '../../selectors';
 
 describe('visibleTodosSelector', () => {
   let state;

@@ -4,7 +4,7 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 
-import VisibleTodoList from '../../containers/visible-todo-list';
+import VisibleTodoList from '../../containers/VisibleTodoList';
 import { toggleTodo } from '../../actions/todos';
 import { setVisibilityFilter } from '../../actions/visibilityFilter';
 

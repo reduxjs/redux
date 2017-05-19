@@ -3,12 +3,13 @@
 import { connect } from 'react-redux';
 
 import { toggleTodo } from '../actions/todos';
-import { visibleTodosSelector } from '../selectors/todos';
-import TodoList from '../components/todo-list';
+import { visibleTodosSelector } from '../selectors';
+import TodoList from '../components/TodoList';
+
+import type { Connector } from 'react-redux';
 
 import type { State, Dispatch } from '../types';
-import type { Connector } from 'react-redux';
-import type { Props } from '../components/todo-list';
+import type { Props } from '../components/TodoList';
 
 const mapStateToProps = (state: State) => {
   return {

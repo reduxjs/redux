@@ -4,7 +4,7 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 
-import AddTodo from '../../containers/add-todo';
+import AddTodo from '../../containers/AddTodo';
 
 const setup = (setupProps = {}) => {
   const store = configureStore()({ todos: [] });

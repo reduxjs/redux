@@ -3,7 +3,7 @@
 import { combineReducers } from 'redux';
 
 import todos from './todos';
-import visibilityFilter from './visibility-filter';
+import visibilityFilter from './visibilityFilter';
 
 export default combineReducers({
   todos,

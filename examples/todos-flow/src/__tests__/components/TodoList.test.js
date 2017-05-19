@@ -3,7 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import TodoList from '../../components/todo-list';
+import TodoList from '../../components/TodoList';
 
 const setup = (setupProps = {}) => {
   const defaultProps = {
