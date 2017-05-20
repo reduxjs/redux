@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "^2.8.0",
-    "react-addons-test-utils": "^15.3.0",
-    "react-scripts": "^0.9.5"
+    "enzyme": "^2.8.2",
+    "react-addons-test-utils": "^15.5.1",
+    "react-scripts": "^1.0.1"
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "prop-types": "^15.5.8",
+    "prop-types": "^15.5.10",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
-    "react-redux": "^5.0.3",
+    "react-redux": "^5.0.5",
     "react-test-renderer": "^15.5.4",
     "redux": "^3.5.2",
     "todomvc-app-css": "^2.1.0"
