@@ -16,7 +16,7 @@ There is no “right” answer for this. Some users prefer to keep every single 
 
 ***Using local component state is fine***.  As a developer, it is _your_ job to determine what kinds of state make up your application, and where each piece of state should live.  Find a balance that works for you, and go with it.
 
-Some common rules of thumb for determing what kind of data should be put into Redux:
+Some common rules of thumb for determining what kind of data should be put into Redux:
 
 - Do other parts of the application care about this data?
 - Do you need to be able to create further derived data based on this original data?
