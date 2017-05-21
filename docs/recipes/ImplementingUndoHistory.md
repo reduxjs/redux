@@ -471,7 +471,7 @@ Now all you need to do is add the buttons for the Undo and Redo actions.
 
 First, create a new container component called `UndoRedo` for these buttons. We won't bother to split the presentational part into a separate file because it is very small:
 
-#### `containers/UndoRedo.js`
+#### `components/UndoRedo.js`
 
 ```js
 import React from 'react'
