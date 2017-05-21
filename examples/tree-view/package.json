@@ -6,7 +6,7 @@
     "deep-freeze": "0.0.1",
     "enzyme": "^2.8.2",
     "react-addons-test-utils": "^15.5.1",
-    "react-scripts": "^1.0.1"
+    "react-scripts": "^1.0.2"
   },
   "dependencies": {
     "react": "^15.5.0",
