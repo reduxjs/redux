@@ -134,8 +134,14 @@ You can always write a function that generates an action creator:
 function makeActionCreator(type, ...argNames) {
   return function (...args) {
     let action = { type }
+    let offset = 0
     argNames.forEach((arg, index) => {
-      action[argNames[index]] = args[index]
+      if (typeof arg === 'object') {
+        action = Object.assign(action, arg)
+        offset++
+      } else {
+        action[arg] = args[index - offset]
+      }
     })
     return action
   }
@@ -148,6 +154,7 @@ const REMOVE_TODO = 'REMOVE_TODO'
 export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
+export const removeTodoWithLoader = makeActionCreator(REMOVE_TODO_WITH_LOADER, { showLoader: true }, 'id')
 ```
 There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help reduce boilerplate code and enforce adherence to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
