@@ -53,9 +53,11 @@ export class Node extends Component {
         <ul>
           {childIds.map(this.renderChild)}
           <li key="add">
-            <button onClick={this.handleAddChildClick}>
+            <a href="#" // eslint-disable-line jsx-a11y/href-no-hash
+              onClick={this.handleAddChildClick}
+            >
               Add child
-            </button>
+            </a>
           </li>
         </ul>
       </div>
