@@ -85,7 +85,7 @@ I see the following presentational components and their props emerge from this b
 * **`Footer`** is where we let the user change currently visible todos.
 * **`App`** is the root component that renders everything else.
 
-They describe the *look* but don't know *where* the data comes from, or *how* to change it. They only render what's given to them. If you migrate from Redux to something else, you'll be able to keep all these components exactly the same. They have no dependency on Redux.
+They describe the *look* but don't know *where* the data come from, or *how* to change it. They only render what's given to them. If you migrate from Redux to something else, you'll be able to keep all these components exactly the same. They have no dependency on Redux.
 
 ### Designing Container Components
 
