@@ -270,7 +270,7 @@ export default App
 
 ```js
 import { connect } from 'react-redux'
-import { toggleTodo } from '../actions'
+import { toggleTodo } from '../actions/'
 import TodoList from '../components/TodoList'
 
 const getVisibleTodos = (todos, filter) => {
@@ -310,7 +310,7 @@ export default VisibleTodoList
 
 ```js
 import { connect } from 'react-redux'
-import { setVisibilityFilter } from '../actions'
+import { setVisibilityFilter } from '../actions/'
 import Link from '../components/Link'
 
 const mapStateToProps = (state, ownProps) => {
@@ -342,7 +342,7 @@ export default FilterLink
 ```js
 import React from 'react'
 import { connect } from 'react-redux'
-import { addTodo } from '../actions'
+import { addTodo } from '../actions/'
 
 let AddTodo = ({ dispatch }) => {
   let input
