@@ -1,34 +1,18 @@
 // @flow
-import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux'
 
-export type Id = number;
+import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 
-export type Text = string;
+import type { TodosState, TodosAction } from './todos';
+import type {
+  VisibilityFilterState,
+  VisibilityFilterAction
+} from './visibilityFilter';
 
-export type Todo = {
-  +id: Id,
-  +text: Text,
-  +completed: boolean
-};
+export type ReduxInitAction = { type: '@@INIT' };
 
-export type VisibilityFilter =
-    'SHOW_ALL'
-  | 'SHOW_ACTIVE'
-  | 'SHOW_COMPLETED'
-  ;
+export type State = TodosState & VisibilityFilterState;
 
-export type Todos = Array<Todo>;
-
-export type State = {
-  +todos: Todos,
-  +visibilityFilter: VisibilityFilter
-};
-
-export type Action =
-    { type: 'ADD_TODO', +id: Id, +text: Text }
-  | { type: 'TOGGLE_TODO', +id: Id }
-  | { type: 'SET_VISIBILITY_FILTER', +filter: VisibilityFilter }
-  ;
+export type Action = ReduxInitAction | TodosAction | VisibilityFilterAction;
 
 export type Store = ReduxStore<State, Action>;
 

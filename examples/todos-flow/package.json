@@ -1,22 +1,27 @@
 {
-  "name": "todos",
-  "version": "0.0.1",
+  "name": "todos-flow",
+  "version": "0.1.0",
   "private": true,
   "devDependencies": {
     "enzyme": "^2.8.2",
+    "flow-bin": "^0.46.0",
     "react-addons-test-utils": "^15.5.1",
-    "react-scripts": "^1.0.2"
+    "react-scripts": "^1.0.2",
+    "react-test-renderer": "^15.5.4",
+    "redux-mock-store": "^1.2.3"
   },
   "dependencies": {
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
     "react-redux": "^5.0.5",
-    "redux": "^3.5.2"
+    "redux": "^3.5.2",
+    "reselect": "^3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "test": "react-scripts test"
+    "flow": "flow",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }
