@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`AddTodo renders without crashing 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -17,7 +19,8 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
   "nodes": Array [
     <AddTodo
       dispatch={[Function]}
@@ -30,7 +33,8 @@ ShallowWrapper {
                   "replaceReducer": [Function],
                   "subscribe": [Function],
                 }
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -48,7 +52,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -127,7 +132,8 @@ ShallowWrapper {
                               "replaceReducer": [Function],
                               "subscribe": [Function],
                             }
-          } />,
+          }
+/>,
         "_debugID": 2,
         "_renderedOutput": <AddTodo
           dispatch={[Function]}
@@ -140,7 +146,8 @@ ShallowWrapper {
                               "replaceReducer": [Function],
                               "subscribe": [Function],
                             }
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -162,6 +169,7 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;

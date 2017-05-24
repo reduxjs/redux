@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`TodoList renders without crashing 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -22,7 +24,8 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <TodoList
         onTodoClick={[Function]}
-        todos={Array []} />,
+        todos={Array []}
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -73,7 +76,8 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <TodoList
     onTodoClick={[Function]}
-    todos={Array []} />,
+    todos={Array []}
+/>,
 }
 `;
 
@@ -90,7 +94,8 @@ ShallowWrapper {
         completed={false}
         id={0}
         onClick={[Function]}
-        text="Test AddTodo" />
+        text="Test AddTodo"
+    />
 </ul>,
   "nodes": Array [
     <ul>
@@ -98,7 +103,8 @@ ShallowWrapper {
             completed={false}
             id={0}
             onClick={[Function]}
-            text="Test AddTodo" />
+            text="Test AddTodo"
+      />
 </ul>,
   ],
   "options": Object {},
@@ -117,7 +123,8 @@ ShallowWrapper {
                           "text": "Test AddTodo",
                         },
                       ]
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -159,7 +166,8 @@ ShallowWrapper {
                     completed={false}
                     id={0}
                     onClick={[Function]}
-                    text="Test AddTodo" />
+                    text="Test AddTodo"
+          />
 </ul>,
         "_debugID": 2,
         "_renderedOutput": <ul>
@@ -167,7 +175,8 @@ ShallowWrapper {
                     completed={false}
                     id={0}
                     onClick={[Function]}
-                    text="Test AddTodo" />
+                    text="Test AddTodo"
+          />
 </ul>,
       },
       "_renderedNodeType": 0,
@@ -190,6 +199,7 @@ ShallowWrapper {
               "text": "Test AddTodo",
             },
           ]
-    } />,
+    }
+/>,
 }
 `;

@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`VisibleTodoList renders without crashing 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -49,7 +51,8 @@ ShallowWrapper {
               "text": "Test AddTodo",
             },
           ]
-    } />,
+    }
+/>,
   "nodes": Array [
     <TodoList
       onTodoClick={[Function]}
@@ -94,7 +97,8 @@ ShallowWrapper {
                     "text": "Test AddTodo",
                   },
                 ]
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -112,7 +116,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -252,7 +257,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
         "_debugID": 2,
         "_renderedOutput": <TodoList
           onTodoClick={[Function]}
@@ -297,7 +303,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -319,7 +326,8 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
 
@@ -374,7 +382,8 @@ ShallowWrapper {
               "text": "Test AddTodo",
             },
           ]
-    } />,
+    }
+/>,
   "nodes": Array [
     <TodoList
       onTodoClick={[Function]}
@@ -419,7 +428,8 @@ ShallowWrapper {
                     "text": "Test AddTodo",
                   },
                 ]
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -437,7 +447,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 5,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -577,7 +588,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
         "_debugID": 6,
         "_renderedOutput": <TodoList
           onTodoClick={[Function]}
@@ -622,7 +634,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -644,7 +657,8 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
 
@@ -699,7 +713,8 @@ ShallowWrapper {
               "text": "Test AddTodo",
             },
           ]
-    } />,
+    }
+/>,
   "nodes": Array [
     <TodoList
       onTodoClick={[Function]}
@@ -744,7 +759,8 @@ ShallowWrapper {
                     "text": "Test AddTodo",
                   },
                 ]
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -762,7 +778,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -902,7 +919,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
         "_debugID": 4,
         "_renderedOutput": <TodoList
           onTodoClick={[Function]}
@@ -947,7 +965,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -969,7 +988,8 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
 
@@ -1024,7 +1044,8 @@ ShallowWrapper {
               "text": "Test AddTodo",
             },
           ]
-    } />,
+    }
+/>,
   "nodes": Array [
     <TodoList
       onTodoClick={[Function]}
@@ -1069,7 +1090,8 @@ ShallowWrapper {
                     "text": "Test AddTodo",
                   },
                 ]
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -1087,7 +1109,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 7,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -1227,7 +1250,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
         "_debugID": 8,
         "_renderedOutput": <TodoList
           onTodoClick={[Function]}
@@ -1272,7 +1296,8 @@ ShallowWrapper {
                                 "text": "Test AddTodo",
                               },
                             ]
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -1294,7 +1319,8 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
 
@@ -1311,12 +1337,14 @@ ShallowWrapper {
         completed={false}
         id={0}
         onClick={[Function]}
-        text="Test AddTodo" />
+        text="Test AddTodo"
+    />
     <Todo
         completed={true}
         id={1}
         onClick={[Function]}
-        text="Test AddTodo" />
+        text="Test AddTodo"
+    />
 </ul>,
   "nodes": Array [
     <ul>
@@ -1324,12 +1352,14 @@ ShallowWrapper {
             completed={false}
             id={0}
             onClick={[Function]}
-            text="Test AddTodo" />
+            text="Test AddTodo"
+      />
       <Todo
             completed={true}
             id={1}
             onClick={[Function]}
-            text="Test AddTodo" />
+            text="Test AddTodo"
+      />
 </ul>,
   ],
   "options": Object {},
@@ -1381,7 +1411,8 @@ ShallowWrapper {
                           "text": "Test AddTodo",
                         },
                       ]
-        } />,
+        }
+/>,
       "_debugID": 11,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -1452,12 +1483,14 @@ ShallowWrapper {
                     completed={false}
                     id={0}
                     onClick={[Function]}
-                    text="Test AddTodo" />
+                    text="Test AddTodo"
+          />
           <Todo
                     completed={true}
                     id={1}
                     onClick={[Function]}
-                    text="Test AddTodo" />
+                    text="Test AddTodo"
+          />
 </ul>,
         "_debugID": 12,
         "_renderedOutput": <ul>
@@ -1465,12 +1498,14 @@ ShallowWrapper {
                     completed={false}
                     id={0}
                     onClick={[Function]}
-                    text="Test AddTodo" />
+                    text="Test AddTodo"
+          />
           <Todo
                     completed={true}
                     id={1}
                     onClick={[Function]}
-                    text="Test AddTodo" />
+                    text="Test AddTodo"
+          />
 </ul>,
       },
       "_renderedNodeType": 0,
@@ -1526,6 +1561,7 @@ ShallowWrapper {
               "text": "Test AddTodo",
             },
           ]
-    } />,
+    }
+/>,
 }
 `;

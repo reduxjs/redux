@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Todo calls onClick when clicked 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -12,7 +14,8 @@ ShallowWrapper {
         Object {
             "textDecoration": "none",
           }
-    }>
+    }
+>
     Test todo
 </li>,
   "nodes": Array [
@@ -22,7 +25,8 @@ ShallowWrapper {
             Object {
                   "textDecoration": "none",
                 }
-      }>
+      }
+>
       Test todo
 </li>,
   ],
@@ -35,7 +39,8 @@ ShallowWrapper {
       "_currentElement": <Todo
         completed={false}
         onClick={[Function]}
-        text="Test todo" />,
+        text="Test todo"
+/>,
       "_debugID": 5,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -73,7 +78,8 @@ ShallowWrapper {
                     Object {
                               "textDecoration": "none",
                             }
-          }>
+          }
+>
           Test todo
 </li>,
         "_debugID": 6,
@@ -83,7 +89,8 @@ ShallowWrapper {
                     Object {
                               "textDecoration": "none",
                             }
-          }>
+          }
+>
           Test todo
 </li>,
       },
@@ -100,7 +107,8 @@ ShallowWrapper {
   "unrendered": <Todo
     completed={false}
     onClick={[Function]}
-    text="Test todo" />,
+    text="Test todo"
+/>,
 }
 `;
 
@@ -118,7 +126,8 @@ ShallowWrapper {
         Object {
             "textDecoration": "line-through",
           }
-    }>
+    }
+>
     Test todo
 </li>,
   "nodes": Array [
@@ -128,7 +137,8 @@ ShallowWrapper {
             Object {
                   "textDecoration": "line-through",
                 }
-      }>
+      }
+>
       Test todo
 </li>,
   ],
@@ -141,7 +151,8 @@ ShallowWrapper {
       "_currentElement": <Todo
         completed={true}
         onClick={[Function]}
-        text="Test todo" />,
+        text="Test todo"
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -179,7 +190,8 @@ ShallowWrapper {
                     Object {
                               "textDecoration": "line-through",
                             }
-          }>
+          }
+>
           Test todo
 </li>,
         "_debugID": 4,
@@ -189,7 +201,8 @@ ShallowWrapper {
                     Object {
                               "textDecoration": "line-through",
                             }
-          }>
+          }
+>
           Test todo
 </li>,
       },
@@ -206,7 +219,8 @@ ShallowWrapper {
   "unrendered": <Todo
     completed={true}
     onClick={[Function]}
-    text="Test todo" />,
+    text="Test todo"
+/>,
 }
 `;
 
@@ -224,7 +238,8 @@ ShallowWrapper {
         Object {
             "textDecoration": "none",
           }
-    }>
+    }
+>
     Test todo
 </li>,
   "nodes": Array [
@@ -234,7 +249,8 @@ ShallowWrapper {
             Object {
                   "textDecoration": "none",
                 }
-      }>
+      }
+>
       Test todo
 </li>,
   ],
@@ -247,7 +263,8 @@ ShallowWrapper {
       "_currentElement": <Todo
         completed={false}
         onClick={[Function]}
-        text="Test todo" />,
+        text="Test todo"
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -285,7 +302,8 @@ ShallowWrapper {
                     Object {
                               "textDecoration": "none",
                             }
-          }>
+          }
+>
           Test todo
 </li>,
         "_debugID": 2,
@@ -295,7 +313,8 @@ ShallowWrapper {
                     Object {
                               "textDecoration": "none",
                             }
-          }>
+          }
+>
           Test todo
 </li>,
       },
@@ -312,6 +331,7 @@ ShallowWrapper {
   "unrendered": <Todo
     completed={false}
     onClick={[Function]}
-    text="Test todo" />,
+    text="Test todo"
+/>,
 }
 `;

@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`App renders without crashing 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -34,7 +36,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -103,6 +106,7 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;

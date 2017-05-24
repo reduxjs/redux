@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`FilterLink renders without crashing 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -37,7 +39,8 @@ ShallowWrapper {
             },
             "unsubscribe": null,
           }
-    } />,
+    }
+/>,
   "nodes": Array [
     <Link
       active={false}
@@ -70,7 +73,8 @@ ShallowWrapper {
                   },
                   "unsubscribe": null,
                 }
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -89,7 +93,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -208,7 +213,8 @@ ShallowWrapper {
                               },
                               "unsubscribe": null,
                             }
-          } />,
+          }
+/>,
         "_debugID": 2,
         "_renderedOutput": <Link
           active={false}
@@ -241,7 +247,8 @@ ShallowWrapper {
                               },
                               "unsubscribe": null,
                             }
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -264,7 +271,8 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
 
@@ -307,7 +315,8 @@ ShallowWrapper {
             },
             "unsubscribe": null,
           }
-    } />,
+    }
+/>,
   "nodes": Array [
     <Link
       active={false}
@@ -340,7 +349,8 @@ ShallowWrapper {
                   },
                   "unsubscribe": null,
                 }
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -359,7 +369,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -478,7 +489,8 @@ ShallowWrapper {
                               },
                               "unsubscribe": null,
                             }
-          } />,
+          }
+/>,
         "_debugID": 4,
         "_renderedOutput": <Link
           active={false}
@@ -511,7 +523,8 @@ ShallowWrapper {
                               },
                               "unsubscribe": null,
                             }
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -534,6 +547,7 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;

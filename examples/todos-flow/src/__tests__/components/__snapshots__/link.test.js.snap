@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Link calls onClick() on click 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -8,13 +10,15 @@ ShallowWrapper {
   "length": 1,
   "node": <a
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+>
     Test link
 </a>,
   "nodes": Array [
     <a
       href="#"
-      onClick={[Function]}>
+      onClick={[Function]}
+>
       Test link
 </a>,
   ],
@@ -26,7 +30,8 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <Link
         active={false}
-        onClick={[Function]}>
+        onClick={[Function]}
+>
         Test link
 </Link>,
       "_debugID": 5,
@@ -62,13 +67,15 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <a
           href="#"
-          onClick={[Function]}>
+          onClick={[Function]}
+>
           Test link
 </a>,
         "_debugID": 6,
         "_renderedOutput": <a
           href="#"
-          onClick={[Function]}>
+          onClick={[Function]}
+>
           Test link
 </a>,
       },
@@ -84,7 +91,8 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <Link
     active={false}
-    onClick={[Function]}>
+    onClick={[Function]}
+>
     Test link
 </Link>,
 }
@@ -114,7 +122,8 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <Link
         active={true}
-        onClick={[Function]}>
+        onClick={[Function]}
+>
         Test link
 </Link>,
       "_debugID": 3,
@@ -168,7 +177,8 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <Link
     active={true}
-    onClick={[Function]}>
+    onClick={[Function]}
+>
     Test link
 </Link>,
 }
@@ -184,13 +194,15 @@ ShallowWrapper {
   "length": 1,
   "node": <a
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+>
     Test link
 </a>,
   "nodes": Array [
     <a
       href="#"
-      onClick={[Function]}>
+      onClick={[Function]}
+>
       Test link
 </a>,
   ],
@@ -202,7 +214,8 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <Link
         active={false}
-        onClick={[Function]}>
+        onClick={[Function]}
+>
         Test link
 </Link>,
       "_debugID": 1,
@@ -238,13 +251,15 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <a
           href="#"
-          onClick={[Function]}>
+          onClick={[Function]}
+>
           Test link
 </a>,
         "_debugID": 2,
         "_renderedOutput": <a
           href="#"
-          onClick={[Function]}>
+          onClick={[Function]}
+>
           Test link
 </a>,
       },
@@ -260,7 +275,8 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <Link
     active={false}
-    onClick={[Function]}>
+    onClick={[Function]}
+>
     Test link
 </Link>,
 }

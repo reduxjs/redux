@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Footer renders without crashing 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -10,17 +12,20 @@ ShallowWrapper {
     Show:
      
     <Connect(Link)
-        filter="SHOW_ALL">
+        filter="SHOW_ALL"
+    >
         All
     </Connect(Link)>
     , 
     <Connect(Link)
-        filter="SHOW_ACTIVE">
+        filter="SHOW_ACTIVE"
+    >
         Active
     </Connect(Link)>
     , 
     <Connect(Link)
-        filter="SHOW_COMPLETED">
+        filter="SHOW_COMPLETED"
+    >
         Completed
     </Connect(Link)>
 </p>,
@@ -29,17 +34,20 @@ ShallowWrapper {
       Show:
        
       <Connect(Link)
-            filter="SHOW_ALL">
+            filter="SHOW_ALL"
+      >
             All
       </Connect(Link)>
       , 
       <Connect(Link)
-            filter="SHOW_ACTIVE">
+            filter="SHOW_ACTIVE"
+      >
             Active
       </Connect(Link)>
       , 
       <Connect(Link)
-            filter="SHOW_COMPLETED">
+            filter="SHOW_COMPLETED"
+      >
             Completed
       </Connect(Link)>
 </p>,
@@ -60,7 +68,8 @@ ShallowWrapper {
                         "replaceReducer": [Function],
                         "subscribe": [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -101,17 +110,20 @@ ShallowWrapper {
           Show:
            
           <Connect(Link)
-                    filter="SHOW_ALL">
+                    filter="SHOW_ALL"
+          >
                     All
           </Connect(Link)>
           , 
           <Connect(Link)
-                    filter="SHOW_ACTIVE">
+                    filter="SHOW_ACTIVE"
+          >
                     Active
           </Connect(Link)>
           , 
           <Connect(Link)
-                    filter="SHOW_COMPLETED">
+                    filter="SHOW_COMPLETED"
+          >
                     Completed
           </Connect(Link)>
 </p>,
@@ -120,17 +132,20 @@ ShallowWrapper {
           Show:
            
           <Connect(Link)
-                    filter="SHOW_ALL">
+                    filter="SHOW_ALL"
+          >
                     All
           </Connect(Link)>
           , 
           <Connect(Link)
-                    filter="SHOW_ACTIVE">
+                    filter="SHOW_ACTIVE"
+          >
                     Active
           </Connect(Link)>
           , 
           <Connect(Link)
-                    filter="SHOW_COMPLETED">
+                    filter="SHOW_COMPLETED"
+          >
                     Completed
           </Connect(Link)>
 </p>,
@@ -155,6 +170,7 @@ ShallowWrapper {
             "replaceReducer": [Function],
             "subscribe": [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
