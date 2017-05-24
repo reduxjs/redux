@@ -34,10 +34,9 @@ class App extends Component {
       <p style={{ backgroundColor: '#e99', padding: 10 }}>
         <b>{errorMessage}</b>
         {' '}
-        (<a href="#"
-            onClick={this.handleDismissClick}>
+        <button onClick={this.handleDismissClick}>
           Dismiss
-        </a>)
+        </button>
       </p>
     )
   }

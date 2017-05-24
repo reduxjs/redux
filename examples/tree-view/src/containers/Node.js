@@ -45,7 +45,7 @@ export class Node extends Component {
         </button>
         {' '}
         {typeof parentId !== 'undefined' &&
-          <a href="#" onClick={this.handleRemoveClick}
+          <a href="#" onClick={this.handleRemoveClick} // eslint-disable-line jsx-a11y/href-no-hash
              style={{ color: 'lightgray', textDecoration: 'none' }}>
             ×
           </a>
@@ -53,7 +53,9 @@ export class Node extends Component {
         <ul>
           {childIds.map(this.renderChild)}
           <li key="add">
-            <a href="#" onClick={this.handleAddChildClick}>
+            <a href="#" // eslint-disable-line jsx-a11y/href-no-hash
+              onClick={this.handleAddChildClick}
+            >
               Add child
             </a>
           </li>
