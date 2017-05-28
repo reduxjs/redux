@@ -248,7 +248,7 @@ Converting an Immutable.JS object to a JavaScript object using `toJS()` will ret
 #### Further Information
 
 **Documentation**
-- [FAQ: Immutable Data](http://localhost:4000/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
+- [FAQ: Immutable Data](http://redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
 
 ### Never use Immutable.JS in your Dumb Components
 
