@@ -11,6 +11,7 @@
     "redux-mock-store": "^1.2.3"
   },
   "dependencies": {
+    "jest": "20.0.3",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
     "react-redux": "^5.0.5",
@@ -18,10 +19,10 @@
     "reselect": "^3.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
+    "eject": "react-scripts eject",
     "flow": "flow",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
   }
 }
