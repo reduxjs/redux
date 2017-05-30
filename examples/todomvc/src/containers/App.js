@@ -18,8 +18,8 @@ App.propTypes = {
   actions: PropTypes.object.isRequired
 }
 
-const mapStateToProps = state => ({
-  todos: state.todos
+const mapStateToProps = ({todos}) => ({
+  todos
 })
 
 const mapDispatchToProps = dispatch => ({
