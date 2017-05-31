@@ -52,4 +52,6 @@ declare module 'redux' {
 
   declare function compose<S, A>(...fns: Array<StoreEnhancer<S, A>>): Function;
 
+  declare function composeReducers<S, A>(initialState: $Shape<S> & {}, ...fns: Array<Reducer<S, A>>): Function;
+
 }
