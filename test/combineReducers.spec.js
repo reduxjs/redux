@@ -292,5 +292,25 @@ describe('Utils', () => {
       spy.mockClear()
       console.error = preSpy
     })
+
+    it('preserves extra keys', () => {
+      const increment = 'INCREMENT'
+
+      const reducer = combineReducers({
+        counter(state = 0, action) {
+          switch (action.type) {
+            case increment:
+              return state + 1
+            default:
+              return state
+          }
+        }
+      })
+
+      const result = reducer({ counter: 0, extra: 42 }, { type: increment })
+
+      expect(result.counter).toEqual(1)
+      expect(result.extra).toEqual(42)
+    })
   })
 })
