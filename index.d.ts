@@ -43,7 +43,7 @@ export interface Action {
  *
  * @template S State object type.
  */
-export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
+export type Reducer<S> = <A extends Action>(state: S | undefined, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
