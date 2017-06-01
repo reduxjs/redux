@@ -286,6 +286,7 @@ Finally, we create the `VisibleTodoList` by calling `connect()` and passing thes
 
 ```js
 import { connect } from 'react-redux'
+import TodoList from '../components/TodoList'
 
 const VisibleTodoList = connect(
   mapStateToProps,
