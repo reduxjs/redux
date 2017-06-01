@@ -39,14 +39,13 @@ export default function bindActionCreators(actionCreators, dispatch) {
 
   const keys = Object.keys(actionCreators)
   const boundActionCreators = {}
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
+  keys.forEach(key => {
     const actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
     } else {
       warning(`bindActionCreators expected a function actionCreator for key '${key}', instead received type '${typeof actionCreator}'.`)
     }
-  }
+  });
   return boundActionCreators
 }
