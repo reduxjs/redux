@@ -9,3 +9,6 @@ build
 # misc
 .DS_Store
 npm-debug.log
+
+# NOTE: don't do this in your apps this is just to reduce noise in PRs for redux
+flow-typed
