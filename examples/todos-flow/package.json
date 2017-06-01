@@ -5,6 +5,7 @@
   "devDependencies": {
     "enzyme": "^2.8.2",
     "flow-bin": "^0.46.0",
+    "flow-typed": "^2.1.2",
     "react-addons-test-utils": "^15.5.1",
     "react-scripts": "^1.0.7",
     "react-test-renderer": "^15.5.4",
@@ -22,6 +23,7 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "flow": "flow",
+    "postinstall": "flow-typed install",
     "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom"
   }
