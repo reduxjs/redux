@@ -1,8 +1,5 @@
 import warning from './utils/warning'
-
-function bindActionCreator(actionCreator, dispatch) {
-  return (...args) => dispatch(actionCreator(...args))
-}
+import compose from './compose'
 
 /**
  * Turns an object whose values are action creators, into an object with the
@@ -27,7 +24,7 @@ function bindActionCreator(actionCreator, dispatch) {
  */
 export default function bindActionCreators(actionCreators, dispatch) {
   if (typeof actionCreators === 'function') {
-    return bindActionCreator(actionCreators, dispatch)
+    return compose(dispatch, actionCreators)
   }
 
   if (typeof actionCreators !== 'object' || actionCreators === null) {
@@ -43,7 +40,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     const key = keys[i]
     const actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
-      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+      boundActionCreators[key] = compose(dispatch, actionCreator)
     } else {
       warning(`bindActionCreators expected a function actionCreator for key '${key}', instead received type '${typeof actionCreator}'.`)
     }
