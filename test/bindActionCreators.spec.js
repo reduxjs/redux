@@ -95,4 +95,29 @@ describe('bindActionCreators', () => {
       'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?'
     )
   })
+
+  it('returns a curried bindActionCreators function', () => {
+    const _console = console
+    global.console = { error: jest.fn() }
+
+    const curriedBindActionCreators = bindActionCreators(actionCreators)
+    const boundActionCreators = curriedBindActionCreators(store.dispatch)
+
+    expect(
+      Object.keys(boundActionCreators)
+    ).toEqual(
+      Object.keys(actionCreatorFunctions)
+    )
+
+    const action = boundActionCreators.addTodo('Hello')
+    expect(action).toEqual(
+      actionCreators.addTodo('Hello')
+    )
+    expect(store.getState()).toEqual([
+      { id: 1, text: 'Hello' }
+    ])
+    expect(console.error).toHaveBeenCalled()
+    global.console = _console
+  })
+
 })
