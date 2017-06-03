@@ -1,4 +1,5 @@
 import compose from './compose'
+import $$observable from 'symbol-observable'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -24,7 +25,8 @@ export default function applyMiddleware(...middlewares) {
 
     const middlewareAPI = {
       getState: store.getState,
-      dispatch: (action) => dispatch(action)
+      dispatch: (action) => dispatch(action),
+      [$$observable]: store[$$observable]
     }
     chain = middlewares.map(middleware => middleware(middlewareAPI))
     dispatch = compose(...chain)(store.dispatch)

@@ -2,6 +2,7 @@ import { createStore, applyMiddleware } from '../src/index'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
+import $$observable from 'symbol-observable'
 
 describe('applyMiddleware', () => {
   it('wraps dispatch method with middleware once', () => {
@@ -108,5 +109,25 @@ describe('applyMiddleware', () => {
         text: 'Hello'
       }
     ])
+  })
+
+  describe('Symbol.observable interop point on mock store', () => {
+    it('should exist as the same interop on the real store', () => {
+      function test(spyOnMethods) {
+        return methods => {
+          spyOnMethods(methods)
+          return next => action => next(action)
+        }
+      }
+
+      const spy = expect.createSpy(() => {})
+      const store = applyMiddleware(test(spy))(createStore)(reducers.todos)
+
+      expect(spy.calls.length).toEqual(1)
+
+      const interop = spy.calls[0].arguments[0][$$observable]
+      expect(typeof interop).toBe('function')
+      expect(interop).toEqual(store[$$observable])
+    })
   })
 })
