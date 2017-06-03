@@ -17,6 +17,13 @@ export interface Action {
   type: any;
 }
 
+/**
+ * This is the action type that combineReducers() sends to initialize
+ * reducers.
+ */
+export interface ReduxInitAction extends Action {
+  type: "@@redux/INIT";
+}
 
 /* reducers */
 
