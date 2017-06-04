@@ -135,6 +135,22 @@ open http://localhost:3000/
 
 This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware to encapsulate asynchronous side effects.
 
+## Async (using sagas)
+
+Run the [Async (using sagas)](https://github.com/reactjs/redux/tree/master/examples/async-saga) example:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/async-saga
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [redux-saga](https://github.com/yelouafi/redux-saga) middleware to encapsulate asynchronous side effects.
+
 ## Universal
 
 Run the [Universal](https://github.com/reactjs/redux/tree/master/examples/universal) example:
