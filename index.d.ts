@@ -15,6 +15,7 @@
  */
 export interface Action {
   type: any;
+  reducerKey?: string;
 }
 
 

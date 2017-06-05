@@ -141,6 +141,12 @@ export default function combineReducers(reducers) {
       }
     }
 
+    if (action.reducerKey && finalReducers[reducerKey]) {
+      var previousStateForKey = state[reducerKey]
+      nextState[reducerKey] = finalReducers[reducerKey](previousStateForKey, action)
+      return nextState !== previousStateForKey ? Object.assign({}, state, nextState) : state
+    }
+
     let hasChanged = false
     const nextState = {}
     for (let i = 0; i < finalReducerKeys.length; i++) {
