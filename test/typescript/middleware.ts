@@ -9,7 +9,7 @@ declare module "../../index" {
     }
 }
 
-type Thunk<S, O> = (dispatch: Dispatch<S>, getState: () => S) => O;
+type Thunk<S, O> = (dispatch: Dispatch<S>, getState?: () => S) => O;
 
 const thunkMiddleware: Middleware =
   <S>({dispatch, getState}: MiddlewareAPI<S>) =>
@@ -51,7 +51,7 @@ const storeWithThunkMiddleware = createStore(
 );
 
 storeWithThunkMiddleware.dispatch(
-  (dispatch, getState) => {
+  (dispatch: Dispatch<State>, getState: () => State) => {
     const todos: string[] = getState().todos;
     dispatch({type: 'ADD_TODO'})
   }

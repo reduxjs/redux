@@ -43,13 +43,13 @@ export interface Action {
  *
  * @template S State object type.
  */
-export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
+export type Reducer<S> = <A extends Action>(state: S | undefined, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
  */
-export interface ReducersMapObject {
-  [key: string]: Reducer<any>;
+export type ReducersMapObject<S> = {
+  [K in keyof S]: Reducer<S[K]>;
 }
 
 /**
@@ -70,7 +70,7 @@ export interface ReducersMapObject {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
+export function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
 
 
 /* store */

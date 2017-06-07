@@ -3,9 +3,8 @@
   "version": "3.6.0",
   "description": "Predictable state container for JavaScript apps",
   "browser": "dist/redux.js",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "jsnext:main": "es/index.js",
+  "main": "lib/redux.js",
+  "module": "es/redux.js",
   "typings": "./index.d.ts",
   "files": [
     "dist",
@@ -20,10 +19,10 @@
     "test": "cross-env BABEL_ENV=commonjs jest",
     "test:watch": "yarn test -- --watch",
     "test:cov": "yarn test -- --coverage",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -i src/index.js -o dist/redux.js",
-    "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -i src/index.js -o dist/redux.min.js",
+    "build:commonjs": "cross-env NODE_ENV=cjs rollup -c -o lib/redux.js",
+    "build:es": "cross-env BABEL_ENV=es NODE_ENV=es rollup -c -o es/redux.js",
+    "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -o dist/redux.js",
+    "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -o dist/redux.min.js",
     "build": "yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
     "prepublish": "yarn run clean && yarn run lint && yarn test && yarn run build && check-es3-syntax lib/ dist/ --kill --print",
     "examples:lint": "eslint examples",
@@ -111,8 +110,8 @@
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^1.0.1",
     "rxjs": "^5.0.0-beta.6",
-    "typescript": "^1.8.0",
-    "typescript-definition-tester": "0.0.4"
+    "typescript": "^2.1.0",
+    "typescript-definition-tester": "0.0.5"
   },
   "npmName": "redux",
   "npmFileMap": [

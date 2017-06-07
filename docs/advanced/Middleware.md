@@ -265,11 +265,15 @@ The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ship
 
 * It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
+* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md). There is one caveat when calling `dispatch` during setup, described below.
 
 * To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
 Because it is cumbersome to apply functions to `createStore()` before using it, `createStore()` accepts an optional last argument to specify such functions.
+
+#### Caveat: Dispatching During Setup
+
+While `applyMiddleware` executes and sets up your middleware, the `store.dispatch` function will point to the vanilla version provided by `createStore`. Dispatching would result in no other middleware being applied. If you are expecting an interaction with another middleware during setup, you will probably be disappointed. Because of this unexpected behavior, `applyMiddleware` will throw an error if you try to dispatch an action before the set up completes. Instead, you should either communicate directly with that other middleware via a common object (for an API-calling middleware, this may be your API client object) or waiting until after the middleware is constructed with a callback. 
 
 ### The Final Approach
 

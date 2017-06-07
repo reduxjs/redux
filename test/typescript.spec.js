@@ -6,6 +6,9 @@ describe('TypeScript definitions', function () {
     tt.compileDirectory(
       __dirname + '/typescript',
       fileName => fileName.match(/\.ts$/),
+      {
+        strictNullChecks: true
+      },
       () => done()
     )
   })
