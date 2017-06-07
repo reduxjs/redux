@@ -91,7 +91,7 @@ const getKeyword = state => state.keyword
 const getVisibleTodosFilteredByKeyword = createSelector(
   [getVisibleTodos, getKeyword],
   (visibleTodos, keyword) =>
-    visibleTodos.filter(todo => todo.text.indexOf(keyword) > -1)
+    visibleTodos.filter(todo => todo.text.includes(keyword))
 )
 ```
 
