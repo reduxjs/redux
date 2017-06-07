@@ -303,7 +303,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
   }
 }
 
-function todoApp(state = {}, action) {
+function todoApp(state = initialState, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
