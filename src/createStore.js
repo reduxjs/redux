@@ -11,6 +11,8 @@ export const ActionTypes = {
   INIT: '@@redux/INIT'
 }
 
+export const defaultNotifyMiddleware = () => true;
+
 /**
  * Creates a Redux store that holds the state tree.
  * The only way to change the data in the store is to call `dispatch()` on it.
@@ -59,6 +61,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let currentListeners = []
   let nextListeners = currentListeners
   let isDispatching = false
+  let notifyMiddleware = defaultNotifyMiddleware;
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -73,6 +76,19 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function getState() {
     return currentState
+  }
+
+  /**
+   * This adds a hook to prevent calling listeners in some condition
+   * @param {Function} [fn] Function that will receive old and new state
+   * and should return a boolean value that control notification
+   * passing null will reset to default redux behavior which is to notify for every dispatch 
+   */
+  function setNotifyMiddleware(fn) {
+    if (typeof fn !== 'function') {
+      throw new Error('Expected first argument to be a function');
+    }
+    notifyMiddleware = fn;
   }
 
   /**
@@ -165,17 +181,24 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Reducers may not dispatch actions.')
     }
 
+    let shouldNotify = true;
     try {
       isDispatching = true
+      let oldState = currentState
       currentState = currentReducer(currentState, action)
+      shouldNotify = notifyMiddleware(oldState, currentState)
     } finally {
       isDispatching = false
     }
 
-    const listeners = currentListeners = nextListeners
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+    if(shouldNotify) {
+
+      const listeners = currentListeners = nextListeners
+      for (let i = 0; i < listeners.length; i++) {
+        const listener = listeners[i]
+        listener()
+      }
+
     }
 
     return action
@@ -249,6 +272,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     subscribe,
     getState,
     replaceReducer,
+    setNotifyMiddleware,
     [$$observable]: observable
   }
 }
