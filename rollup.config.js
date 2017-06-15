@@ -27,14 +27,7 @@ if (env === 'production') {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
-        warnings: false,
-        screw_ie8: false
-      },
-      mangle: {
-        screw_ie8: false
-      },
-      output: {
-        screw_ie8: false
+        warnings: false
       }
     })
   )
