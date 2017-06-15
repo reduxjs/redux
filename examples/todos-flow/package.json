@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "enzyme": "^2.8.2",
-    "flow-bin": "^0.46.0",
+    "flow-bin": "^0.48.0",
     "flow-typed": "^2.1.2",
     "react-addons-test-utils": "^15.5.1",
     "react-scripts": "^1.0.7",
@@ -12,7 +12,7 @@
     "redux-mock-store": "^1.2.3"
   },
   "dependencies": {
-    "jest": "20.0.3",
+    "jest": "^20.0.4",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
     "react-redux": "^5.0.5",
