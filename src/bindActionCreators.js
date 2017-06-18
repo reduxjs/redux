@@ -45,6 +45,29 @@ export default function bindActionCreators(actionCreators, dispatch) {
     if (typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
     } else {
+      // If the key is `default`, and it is not a function <=>
+      // programmer wanted to do something like this:
+      // ```js
+      // import * as actions from 'actions'
+      //
+      // ...
+      //
+      // const actions = bindActionCreators(actions, dispatch)
+      // ```
+      // and the programmer's "actions.js" file exports the `default` object:
+      // ```js
+      // export let const someCrazyAction1 = () => {...}
+      // export let const someCrazyAction2 = () => {...}
+      //
+      // export default {
+      //   someCrazyAction1,
+      //   someCrazyAction2,
+      // }
+      // ```
+      // and so, we shouldn't warn the programmer about that.
+      if (key === 'default') continue;
+
+      // Otherwise print the warning message.
       warning(`bindActionCreators expected a function actionCreator for key '${key}', instead received type '${typeof actionCreator}'.`)
     }
   }
