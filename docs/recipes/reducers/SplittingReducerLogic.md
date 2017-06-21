@@ -13,7 +13,7 @@ These new functions would typically fall into one of three categories:
 
 For clarity, these terms will be used to distinguish between different types of functions and different use cases:
 
-- ***reducer***: any function with the signature `(state, action) -> newState` (ie, any function that *could* be used as an argument to `Array.reduce`)
+- ***reducer***: any function with the signature `(state, action) -> newState` (ie, any function that *could* be used as an argument to `Array.prototype.reduce`)
 - ***root reducer***: the reducer function that is actually passed as the first argument to `createStore`.  This is the only part of the reducer logic that _must_ have the `(state, action) -> newState` signature.
 - ***slice reducer***: a reducer that is being used to handle updates to one specific slice of the state tree, usually done by passing it to `combineReducers`
 - ***case function***: a function that is being used to handle the update logic for a specific action.  This may actually be a reducer function, or it may require other parameters to do its work properly.
