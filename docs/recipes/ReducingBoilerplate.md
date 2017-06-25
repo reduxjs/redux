@@ -145,8 +145,8 @@ const ADD_TODO = 'ADD_TODO'
 const EDIT_TODO = 'EDIT_TODO'
 const REMOVE_TODO = 'REMOVE_TODO'
 
-export const addTodo = makeActionCreator(ADD_TODO, 'todo')
-export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
+export const addTodo = makeActionCreator(ADD_TODO, 'text')
+export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'text')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
 There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help reduce boilerplate code and enforce adherence to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
