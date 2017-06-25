@@ -53,7 +53,7 @@ Unfortunately, the process of correctly applying immutable updates to deeply nes
 ```js
 function updateVeryNestedField(state, action) {
     return {
-        ....state,
+        ...state,
         first : {
             ...state.first,
             second : {
