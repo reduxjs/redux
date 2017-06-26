@@ -24,7 +24,7 @@
     "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -i src/index.js -o dist/redux.js",
     "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -i src/index.js -o dist/redux.min.js",
     "build": "yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
-    "prepublish": "yarn run clean && yarn run lint && yarn test && yarn run build",
+    "prepare": "yarn run clean && yarn run lint && yarn test && yarn run build",
     "examples:lint": "eslint examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js",
     "docs:clean": "rimraf _book",
