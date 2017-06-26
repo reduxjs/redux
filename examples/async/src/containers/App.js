@@ -6,12 +6,10 @@ import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
 class App extends Component {
-  static propTypes = {
-    selectedReddit: PropTypes.string.isRequired,
-    posts: PropTypes.array.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    lastUpdated: PropTypes.number,
-    dispatch: PropTypes.func.isRequired
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleRefreshClick = this.handleRefreshClick.bind(this);
   }
 
   componentDidMount() {
@@ -26,11 +24,11 @@ class App extends Component {
     }
   }
 
-  handleChange = nextReddit => {
+  handleChange(nextReddit) {
     this.props.dispatch(selectReddit(nextReddit))
   }
 
-  handleRefreshClick = e => {
+  handleRefreshClick(e) {
     e.preventDefault()
 
     const { dispatch, selectedReddit } = this.props
@@ -68,6 +66,14 @@ class App extends Component {
       </div>
     )
   }
+}
+
+App.propTypes = {
+  selectedReddit: PropTypes.string.isRequired,
+  posts: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  lastUpdated: PropTypes.number,
+  dispatch: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {
