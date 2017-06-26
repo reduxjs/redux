@@ -17,8 +17,6 @@ describe('bindActionCreators', () => {
   })
 
   it('wraps the action creators with the dispatch function', () => {
-    const _console = console
-    global.console = { error: jest.fn() }
     const boundActionCreators = bindActionCreators(actionCreators, store.dispatch)
     expect(
       Object.keys(boundActionCreators)
@@ -33,13 +31,9 @@ describe('bindActionCreators', () => {
     expect(store.getState()).toEqual([
       { id: 1, text: 'Hello' }
     ])
-    expect(console.error).toHaveBeenCalled()
-    global.console = _console
   })
 
   it('skips non-function values in the passed object', () => {
-    const _console = console
-    global.console = { error: jest.fn() }
     const boundActionCreators = bindActionCreators({
       ...actionCreators,
       foo: 42,
@@ -53,9 +47,6 @@ describe('bindActionCreators', () => {
     ).toEqual(
       Object.keys(actionCreatorFunctions)
     )
-    // 6 instead of 5 because of `__esModule: true` property from importing `actionCreators`
-    expect(console.error.mock.calls.length).toBe(6)
-    global.console = _console
   })
 
   it('supports wrapping a single function only', () => {
