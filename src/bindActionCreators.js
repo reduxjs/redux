@@ -1,5 +1,3 @@
-import warning from './utils/warning'
-
 function bindActionCreator(actionCreator, dispatch) {
   return (...args) => dispatch(actionCreator(...args))
 }
@@ -44,8 +42,6 @@ export default function bindActionCreators(actionCreators, dispatch) {
     const actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
-    } else {
-      warning(`bindActionCreators expected a function actionCreator for key '${key}', instead received type '${typeof actionCreator}'.`)
     }
   }
   return boundActionCreators
