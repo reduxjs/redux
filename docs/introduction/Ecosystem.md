@@ -58,6 +58,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [deku-redux](https://github.com/troch/deku-redux) — Deku
 * [polymer-redux](https://github.com/tur-nr/polymer-redux) - Polymer
 * [ember-redux](https://github.com/toranb/ember-redux) - Ember.js
+* [redux-auto](https://github.com/codemeasandwich/redux-auto) - Webpack
 
 ### Middleware
 
