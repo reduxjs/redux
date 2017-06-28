@@ -17,6 +17,17 @@ export interface Action {
   type: any;
 }
 
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent users who are extending `Action.
+ * @private
+ */
+export interface AnyAction extends Action {
+  // Allows any extra properties to be defined in an action.
+  [extraProps: string]: any;
+}
+
 
 /* reducers */
 
@@ -43,7 +54,7 @@ export interface Action {
  *
  * @template S State object type.
  */
-export type Reducer<S> = <A extends Action>(state: S, action: A) => S;
+export type Reducer<S> = (state: S, action: AnyAction) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
