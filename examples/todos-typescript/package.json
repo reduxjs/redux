@@ -2,7 +2,11 @@
   "name": "todos-typescript",
   "version": "0.0.1",
   "devDependencies": {
+    "@types/enzyme": "^2.8.1",
+    "@types/jest": "^20.0.2",
+    "@types/redux-mock-store": "^0.0.9",
     "enzyme": "^2.9.1",
+    "jest": "^20.0.4",
     "react-addons-test-utils": "^15.6.0",
     "react-test-renderer": "^15.6.1",
     "redux-mock-store": "^1.2.3"
@@ -11,7 +15,6 @@
     "@types/node": "^8.0.6",
     "@types/react-dom": "^15.5.1",
     "@types/react-redux": "^4.4.45",
-    "jest": "^20.0.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",

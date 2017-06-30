@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddTodo renders without crashing 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <AddTodo
+    dispatch={[Function]}
+    store={
+        Object {
+            "clearActions": [Function],
+            "dispatch": [Function],
+            "getActions": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+          }
+    }
+/>,
+  "nodes": Array [
+    <AddTodo
+      dispatch={[Function]}
+      store={
+            Object {
+                  "clearActions": [Function],
+                  "dispatch": [Function],
+                  "getActions": [Function],
+                  "getState": [Function],
+                  "replaceReducer": [Function],
+                  "subscribe": [Function],
+                }
+      }
+/>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 0,
+      "_context": Object {},
+      "_currentElement": <Connect(AddTodo)
+        store={
+                Object {
+                        "clearActions": [Function],
+                        "dispatch": [Function],
+                        "getActions": [Function],
+                        "getState": [Function],
+                        "replaceReducer": [Function],
+                        "subscribe": [Function],
+                      }
+        }
+/>,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": Connect {
+        "_reactInternalInstance": [Circular],
+        "context": Object {
+          "store": undefined,
+          "storeSubscription": undefined,
+        },
+        "props": Object {
+          "store": Object {
+            "clearActions": [Function],
+            "dispatch": [Function],
+            "getActions": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+          },
+        },
+        "propsMode": true,
+        "refs": Object {},
+        "renderCount": 0,
+        "selector": Object {
+          "error": null,
+          "props": Object {
+            "dispatch": [Function],
+            "store": Object {
+              "clearActions": [Function],
+              "dispatch": [Function],
+              "getActions": [Function],
+              "getState": [Function],
+              "replaceReducer": [Function],
+              "subscribe": [Function],
+            },
+          },
+          "run": [Function],
+          "shouldComponentUpdate": false,
+        },
+        "setWrappedInstance": [Function],
+        "state": Object {},
+        "store": Object {
+          "clearActions": [Function],
+          "dispatch": [Function],
+          "getActions": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+        },
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+        "version": 0,
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <AddTodo
+          dispatch={[Function]}
+          store={
+                    Object {
+                              "clearActions": [Function],
+                              "dispatch": [Function],
+                              "getActions": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                            }
+          }
+/>,
+        "_debugID": 2,
+        "_renderedOutput": <AddTodo
+          dispatch={[Function]}
+          store={
+                    Object {
+                              "clearActions": [Function],
+                              "dispatch": [Function],
+                              "getActions": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                            }
+          }
+/>,
+      },
+      "_renderedNodeType": 1,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <Connect(AddTodo)
+    store={
+        Object {
+            "clearActions": [Function],
+            "dispatch": [Function],
+            "getActions": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+          }
+    }
+/>,
+}
+`;

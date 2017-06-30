@@ -9,6 +9,21 @@
     address "^1.0.1"
     debug "^2.6.0"
 
+"@types/cheerio@*":
+  version "0.22.1"
+  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.1.tgz#740c4cd8c4d3f3074f83b9ab62e711eac2c764ce"
+
+"@types/enzyme@^2.8.1":
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-2.8.1.tgz#78b3c6c455b6b437898b54bff6d285d65323578d"
+  dependencies:
+    "@types/cheerio" "*"
+    "@types/react" "*"
+
+"@types/jest@^20.0.2":
+  version "20.0.2"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-20.0.2.tgz#86c751121fb53dbd39bb1a08c45083da13f2dc67"
+
 "@types/node@^8.0.6":
   version "8.0.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.6.tgz#ed2c3e011cb51ccd3cf874989130f1b9ffe06069"
@@ -29,6 +44,13 @@
 "@types/react@*":
   version "15.0.33"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.33.tgz#442b025b3ee7d65f25c5cf495b7bd773855c079b"
+
+"@types/redux-mock-store@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@types/redux-mock-store/-/redux-mock-store-0.0.9.tgz#0081c362a249776e7016c79c8949923c08c5d14d"
+  dependencies:
+    redux "^3.6.0"
+    redux-mock-store "^1.2.3"
 
 abab@^1.0.3:
   version "1.0.3"

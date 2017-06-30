@@ -8,7 +8,7 @@ import {
 
 export type State = ITodosState & IVisibilityFilterState;
 
-export type Action = TodosAction | IVisibilityFilterAction;
+export type Action = { type: '@@INIT' } | TodosAction | IVisibilityFilterAction;
 
 export type Store = ReduxStore<State>;
 
