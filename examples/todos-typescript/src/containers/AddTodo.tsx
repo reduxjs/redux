@@ -32,8 +32,8 @@ class AddTodo extends React.Component<IProps, IState> {
   public render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <input value={this.state.value} onChange={this.handleChange} />
+        <form onSubmit={event => this.handleSubmit(event)}>
+          <input value={this.state.value} onChange={event => this.handleChange(event)} />
           <button type="submit">
             Add Todo
           </button>

@@ -7,8 +7,9 @@ import { createStore } from 'redux';
 import App from './components/App';
 import reducers from './reducers';
 
-import { Store } from './types';
-const store: Store = createStore(
+import { Store, State } from './types';
+
+const store: Store = createStore<State>(
   reducers,
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
