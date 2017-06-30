@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer renders without crashing 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <p>
+    Show:
+     
+    <Connect(Link)
+        filter="SHOW_ALL"
+    >
+        All
+    </Connect(Link)>
+    , 
+    <Connect(Link)
+        filter="SHOW_ACTIVE"
+    >
+        Active
+    </Connect(Link)>
+    , 
+    <Connect(Link)
+        filter="SHOW_COMPLETED"
+    >
+        Completed
+    </Connect(Link)>
+</p>,
+  "nodes": Array [
+    <p>
+      Show:
+       
+      <Connect(Link)
+            filter="SHOW_ALL"
+      >
+            All
+      </Connect(Link)>
+      , 
+      <Connect(Link)
+            filter="SHOW_ACTIVE"
+      >
+            Active
+      </Connect(Link)>
+      , 
+      <Connect(Link)
+            filter="SHOW_COMPLETED"
+      >
+            Completed
+      </Connect(Link)>
+</p>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 2,
+      "_context": Object {},
+      "_currentElement": <Footer
+        store={
+                Object {
+                        "clearActions": [Function],
+                        "dispatch": [Function],
+                        "getActions": [Function],
+                        "getState": [Function],
+                        "replaceReducer": [Function],
+                        "subscribe": [Function],
+                      }
+        }
+/>,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": StatelessComponent {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "props": Object {
+          "store": Object {
+            "clearActions": [Function],
+            "dispatch": [Function],
+            "getActions": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+          },
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <p>
+          Show:
+           
+          <Connect(Link)
+                    filter="SHOW_ALL"
+          >
+                    All
+          </Connect(Link)>
+          , 
+          <Connect(Link)
+                    filter="SHOW_ACTIVE"
+          >
+                    Active
+          </Connect(Link)>
+          , 
+          <Connect(Link)
+                    filter="SHOW_COMPLETED"
+          >
+                    Completed
+          </Connect(Link)>
+</p>,
+        "_debugID": 2,
+        "_renderedOutput": <p>
+          Show:
+           
+          <Connect(Link)
+                    filter="SHOW_ALL"
+          >
+                    All
+          </Connect(Link)>
+          , 
+          <Connect(Link)
+                    filter="SHOW_ACTIVE"
+          >
+                    Active
+          </Connect(Link)>
+          , 
+          <Connect(Link)
+                    filter="SHOW_COMPLETED"
+          >
+                    Completed
+          </Connect(Link)>
+</p>,
+      },
+      "_renderedNodeType": 0,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <Footer
+    store={
+        Object {
+            "clearActions": [Function],
+            "dispatch": [Function],
+            "getActions": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+          }
+    }
+/>,
+}
+`;

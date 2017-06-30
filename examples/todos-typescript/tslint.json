@@ -1,0 +1,10 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+      "quotemark": [true, "single", "jsx-double"],
+      "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+      "ordered-imports": [false],
+      "arrow-parens": false,
+      "object-literal-sort-keys": false
+    }
+}
