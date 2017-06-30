@@ -1,5 +1,6 @@
 import { VisibilityFilter } from '../types/visibilityFilter';
 import { Action } from '../types';
+
 const visibilityFilter = (
   state: VisibilityFilter = 'SHOW_ALL',
   action: Action

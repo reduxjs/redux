@@ -1,7 +1,7 @@
-import { Todos, Todo, Id, Text } from '../types/todos';
+import { Todos, ITodo, Id, Text } from '../types/todos';
 import { Action } from '../types';
 
-const createTodo = (id: Id, text: Text): Todo => ({
+const createTodo = (id: Id, text: Text): ITodo => ({
   id,
   text,
   completed: false

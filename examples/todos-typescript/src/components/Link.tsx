@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-export type Props = {
-  active: boolean,
-  onClick: () => void
-};
+export interface IProps {
+  active: boolean;
+  onClick: () => void;
+}
 
-const Link: React.SFC<Props> = ({ active, children, onClick }) => {
+const Link: React.SFC<IProps> = ({ active, children, onClick }) => {
   if (active) {
     return <span>{children}</span>;
   }

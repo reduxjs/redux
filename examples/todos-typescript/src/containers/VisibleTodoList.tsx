@@ -6,19 +6,15 @@ import TodoList from '../components/TodoList';
 
 import { State, Dispatch } from '../types';
 
-const mapStateToProps = (state: State) => {
-  return {
-    todos: visibleTodosSelector(state)
-  };
-};
+const mapStateToProps = (state: State) => ({
+  todos: visibleTodosSelector(state)
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    onTodoClick: (id: number) => {
-      dispatch(toggleTodo(id));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  onTodoClick(id: number) {
+    dispatch(toggleTodo(id));
+  }
+});
 
 export default connect(
   mapStateToProps,

@@ -2,13 +2,13 @@ import * as React from 'react';
 
 import { Text } from '../types/todos';
 
-export type Props = {
-  onClick: () => void,
-  completed: boolean,
-  text: Text
-};
+export interface IProps {
+  onClick: () => void;
+  completed: boolean;
+  text: Text;
+}
 
-const Todo: React.SFC<Props> = ({ onClick, completed, text }) => (
+const Todo: React.SFC<IProps> = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
     style={{
