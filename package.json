@@ -16,6 +16,7 @@
   "scripts": {
     "clean": "rimraf lib dist es coverage",
     "lint": "eslint src test build",
+    "size": "size-limit 3KB lib/index.js",
     "test": "cross-env BABEL_ENV=commonjs jest",
     "test:watch": "yarn test -- --watch",
     "test:cov": "yarn test -- --coverage",
@@ -24,7 +25,7 @@
     "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -i src/index.js -o dist/redux.js",
     "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -i src/index.js -o dist/redux.min.js",
     "build": "yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
-    "prepare": "yarn run clean && yarn run lint && yarn test && yarn run build",
+    "prepare": "yarn run clean && yarn run lint && yarn test && yarn run build && yarn run size",
     "examples:lint": "eslint examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js",
     "docs:clean": "rimraf _book",
@@ -109,6 +110,7 @@
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^2.0.1",
     "rxjs": "^5.0.0-beta.6",
+    "size-limit": "^0.3.2",
     "typescript": "^1.8.0",
     "typescript-definition-tester": "0.0.4"
   },
