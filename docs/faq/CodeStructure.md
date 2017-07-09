@@ -65,7 +65,7 @@ Find the balance between these two extremes, and you will master Redux.
 **Articles**
 - [Where do I put my business logic in a React/Redux application?](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
 - [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
-- [The Tao of Redux, Part 2 - Practice and Philosophy](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
+- [The Tao of Redux, Part 2 - Practice and Philosophy. Thick and thin reducers.](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
 
 **Discussions**
 - [#384: Recommend that Action constants be named in the past tense](https://github.com/reactjs/redux/issues/384#issuecomment-127393209)
