@@ -433,7 +433,7 @@ const create = () => {
 };
 ```
 
-Finally, we test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
+We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
 
 ```js
 it(`passes through non-function action`, () => {
@@ -459,6 +459,8 @@ it(`passes dispatch and getState`, () => {
   expect(store.getState).toHaveBeenCalled()
 });
 ```
+
+In some cases, you will need to modify the 'create' function to use different mock implementations of `getState` and `next`.
 
 ### Glossary
 
