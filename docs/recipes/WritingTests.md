@@ -461,7 +461,7 @@ it('passes dispatch and getState', () => {
 });
 ```
 
-In some cases, you will need to modify the 'create' function to use different mock implementations of `getState` and `next`.
+In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
 
 ### Glossary
 
