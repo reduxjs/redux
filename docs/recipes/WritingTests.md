@@ -436,20 +436,20 @@ const create = () => {
 We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
 
 ```js
-it(`passes through non-function action`, () => {
+it('passes through non-function action', () => {
   const { next, invoke } = create()
   invoke({})
   expect(next).toHaveBeenCalled()
 })
 
-it(`calls the function`, () => {
+it('calls the function', () => {
   const { invoke } = create()
   const fn = jest.fn()
   invoke(fn)
   expect(fn).toHaveBeenCalled()
 });
 
-it(`passes dispatch and getState`, () => {
+it('passes dispatch and getState', () => {
   const { store, invoke } = create()
   invoke((dispatch, getState) => {
     dispatch('TEST DISPATCH');
