@@ -243,7 +243,7 @@ Smart components that access the store via React Redux’s `connect` function mu
 
 ### Never use `toJS()` in `mapStateToProps`
 
-Converting an Immutable.JS object to a JavaScript object using `toJS()` will return a new object every time. If you do this in `mapSateToProps`, you will cause the component to believe that the object has changed every time the state tree changes, and so trigger an unnecessary re-render.
+Converting an Immutable.JS object to a JavaScript object using `toJS()` will return a new object every time. If you do this in `mapStateToProps`, you will cause the component to believe that the object has changed every time the state tree changes, and so trigger an unnecessary re-render.
 
 #### Further Information
 
