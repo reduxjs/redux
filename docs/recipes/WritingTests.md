@@ -453,7 +453,7 @@ it('calls the function', () => {
 it('passes dispatch and getState', () => {
   const { store, invoke } = create()
   invoke((dispatch, getState) => {
-    dispatch('TEST DISPATCH');
+    dispatch('TEST DISPATCH')
     getState();
   })
   expect(store.dispatch).toHaveBeenCalledWith('TEST DISPATCH')
