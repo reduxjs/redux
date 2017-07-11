@@ -13,7 +13,7 @@
 ## Performance
 
 <a id="performance-scaling"></a>
-### How well does Redux “scale” in terms of performance and architecture? 
+### How well does Redux “scale” in terms of performance and architecture?
 
 While there's no single definitive answer to this, most of the time this should not be a concern in either case.
 
@@ -133,4 +133,7 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 
 **Discussions**
 - [Stack Overflow: Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
+- [Stack Overflow: Can a Redux store lead to a memory leak?](https://stackoverflow.com/questions/39943762/can-a-redux-store-lead-to-a-memory-leak/40549594#40549594)
+- [Stack Overflow: Redux and ALL the application state](https://stackoverflow.com/questions/42489557/redux-and-all-the-application-state/42491766#42491766)
+- [Stack Overflow: Memory Usage Concern with Controlled Components](https://stackoverflow.com/questions/44956071/memory-usage-concern-with-controlled-components?noredirect=1&lq=1)
 - [Reddit: What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
