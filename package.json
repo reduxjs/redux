@@ -10,7 +10,6 @@
     "dist",
     "lib",
     "es",
-    "src",
     "index.d.ts"
   ],
   "scripts": {
