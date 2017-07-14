@@ -1,6 +1,6 @@
 {
   "name": "todos-typescript",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "devDependencies": {
     "@types/enzyme": "^2.8.1",
     "@types/jest": "^20.0.2",

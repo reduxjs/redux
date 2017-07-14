@@ -7,8 +7,8 @@ const createTodo = (id: Id, text: Text): ITodo => ({
   completed: false
 });
 
-const toggleTodo = (todos: Todos, id: Id): Todos =>
-  todos.map(t => (t.id !== id ? t : { ...t, completed: !t.completed }));
+const toggleTodo = (todosList: Todos, id: Id): Todos =>
+  todosList.map(t => (t.id !== id ? t : { ...t, completed: !t.completed }));
 
 const todos = (state: Todos = [], action: Action): Todos => {
   switch (action.type) {
