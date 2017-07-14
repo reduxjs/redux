@@ -135,7 +135,7 @@
   "bundlesize": [
     {
       "path": "./dist/redux.min.js",
-      "size": "2.5kB"
+      "maxSize": "2.5kB"
     }
   ]
 }
