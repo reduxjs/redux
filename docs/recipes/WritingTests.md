@@ -403,50 +403,65 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 
 #### Example
 
+First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/gaearon/redux-thunk/blob/master/src/index.js).
+
 ```js
-import * as types from '../../constants/ActionTypes'
-import singleDispatch from '../../middleware/singleDispatch'
-
-const createFakeStore = fakeData => ({
-  getState() {
-    return fakeData
+const thunk = ({ dispatch, getState }) => next => action => {
+  if (typeof action === 'function') {
+    return action(dispatch, getState)
   }
-})
 
-const dispatchWithStoreOf = (storeData, action) => {
-  let dispatched = null
-  const dispatch = singleDispatch(createFakeStore(storeData))(
-    actionAttempt => (dispatched = actionAttempt)
-  )
-  dispatch(action)
-  return dispatched
+  return next(action)
 }
-
-describe('middleware', () => {
-  it('should dispatch if store is empty', () => {
-    const action = {
-      type: types.ADD_TODO
-    }
-
-    expect(dispatchWithStoreOf({}, action)).toEqual(action)
-  })
-
-  it('should not dispatch if store already has type', () => {
-    const action = {
-      type: types.ADD_TODO
-    }
-
-    expect(
-      dispatchWithStoreOf(
-        {
-          [types.ADD_TODO]: 'dispatched'
-        },
-        action
-      )
-    ).toNotExist()
-  })
-})
 ```
+
+We need to create a fake `getState`, `dispatch`, and `next` functions. We use `jest.fn()` to create stubs, but with other test frameworks you would likely use sinon.
+
+The invoke function runs our middleware in the same way Redux does.
+
+```js
+const create = () => {
+  const store = {
+    getState: jest.fn(() => ({})),
+    dispatch: jest.fn(),
+  };
+  const next = jest.fn()
+
+  const invoke = (action) => thunk(store)(next)(action)
+
+  return {store, next, invoke}
+};
+```
+
+We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
+
+```js
+it(`passes through non-function action`, () => {
+  const { next, invoke } = create()
+  const action = {type: 'TEST'}
+  invoke(action)
+  expect(next).toHaveBeenCalledWith(action)
+})
+
+it('calls the function', () => {
+  const { invoke } = create()
+  const fn = jest.fn()
+  invoke(fn)
+  expect(fn).toHaveBeenCalled()
+});
+
+it('passes dispatch and getState', () => {
+  const { store, invoke } = create()
+  invoke((dispatch, getState) => {
+    dispatch('TEST DISPATCH')
+    getState();
+  })
+  expect(store.dispatch).toHaveBeenCalledWith('TEST DISPATCH')
+  expect(store.getState).toHaveBeenCalled()
+});
+```
+
+In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
 
 ### Glossary
 

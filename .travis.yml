@@ -1,14 +1,15 @@
 language: node_js
 node_js:
   - "node"
+before_install:
+  - npm i -g npm
 script:
-  - yarn run examples:lint
-  - yarn run examples:test
+  - npm run examples:lint
+  - npm run examples:test
 branches:
   only:
     - master
 cache:
-  yarn: true
   directories:
   - examples/async/node_modules
   - examples/counter/node_modules
