@@ -287,7 +287,7 @@ describe('createStore', () => {
     expect(listenerC.mock.calls.length).toBe(2)
   })
 
-  it('delays unsubscribe until the end of current dispatch', () => {
+  it('notifies all subscribers about current dispatch regardless if any of them gets unsubscribed in the process', () => {
     const store = createStore(reducers.todos)
 
     const unsubscribeHandles = []
@@ -317,7 +317,7 @@ describe('createStore', () => {
     expect(listener3.mock.calls.length).toBe(1)
   })
 
-  it('delays subscribe until the end of current dispatch', () => {
+  it('notifies only subscribers active at the moment of current dispatch', () => {
     const store = createStore(reducers.todos)
 
     const listener1 = jest.fn()
