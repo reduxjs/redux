@@ -34,7 +34,7 @@ describe('createStore', () => {
     ).not.toThrow()
   })
 
-  it('passes the initial action and the initial state', () => {
+  it('passes the initial state', () => {
     const store = createStore(reducers.todos, [
       {
         id: 1,
