@@ -21,7 +21,6 @@ export interface Action {
  * An Action type which accepts any other properties.
  * This is mainly for the use of the `Reducer` type.
  * This is not part of `Action` itself to prevent users who are extending `Action.
- * @private
  */
 export interface AnyAction extends Action {
   // Allows any extra properties to be defined in an action.
