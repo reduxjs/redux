@@ -108,7 +108,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     ensureCanMutateNextListeners()
     nextListeners.push(listener)
 
-    return function unsubscribe() {
+    return function unsubscribe(immediate) {
       if (!isSubscribed) {
         return
       }
@@ -118,6 +118,11 @@ export default function createStore(reducer, preloadedState, enhancer) {
       ensureCanMutateNextListeners()
       const index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
+
+      if (immediate) {
+        index = currentListeners.indexOf(listener)
+        currentListeners[index] = function () {}
+      }
     }
   }
 
