@@ -49,5 +49,24 @@ describe('Utils', () => {
 
       expect(compose(fn)).toBe(fn)
     })
+
+    describe('toxic environment', () => {
+      const badReduce = (a) => a
+      const originalReduce = Array.prototype.reduce
+
+      beforeAll(() => {
+        Array.prototype.reduce = badReduce
+      })
+
+      afterAll(() => {
+        Array.prototype.reduce = originalReduce
+      })
+
+      it('throws at runtime if argument is not a function', () => {
+        const square = x => x * x
+        const add = (x, y) => x + y
+        expect(compose(square, add)(1, 2)).toBe(9)
+      })
+    })
   })
 })

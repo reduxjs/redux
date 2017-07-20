@@ -1,3 +1,4 @@
+import reduce from 'lodash/reduce'
 /**
  * Composes single-argument functions from right to left. The rightmost
  * function can take multiple arguments as it provides the signature for
@@ -9,7 +10,7 @@
  * (...args) => f(g(h(...args))).
  */
 
-export default function compose(...funcs) {
+export default function compose (...funcs) {
   if (funcs.length === 0) {
     return arg => arg
   }
@@ -18,5 +19,5 @@ export default function compose(...funcs) {
     return funcs[0]
   }
 
-  return funcs.reduce((a, b) => (...args) => a(b(...args)))
+  return reduce(funcs, (a, b) => (...args) => a(b(...args)))
 }
