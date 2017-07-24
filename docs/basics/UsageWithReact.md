@@ -237,7 +237,7 @@ import VisibleTodoList from '../containers/VisibleTodoList'
 const App = () => (
   <div>
     <AddTodo />
-    <VisibleTodoList />
+    <TodoList />
     <Footer />
   </div>
 )
@@ -372,6 +372,8 @@ export default VisibleTodoList
 
 #### `containers/AddTodo.js`
 
+Recall as [mentioned previously](#designing-other-components), both the presentation and logic for the `AddTodo` component are mixed into a single definition. 
+
 ```js
 import React from 'react'
 import { connect } from 'react-redux'
@@ -408,6 +410,8 @@ AddTodo = connect()(AddTodo)
 
 export default AddTodo
 ```
+
+If you are unfamiliar with the `ref` attribute, please read this [documentation](https://facebook.github.io/react/docs/refs-and-the-dom.html) to familiarize yourself with the recommended use of this attribute. 
 
 ## Passing the Store
 
