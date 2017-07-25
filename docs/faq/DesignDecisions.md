@@ -14,7 +14,7 @@
 
 <a id="does-not-pass-state-action-to-subscribers"></a>
 ### Why doesn't Redux pass the state and action to subscribers?
-Subscribers are intended to respond to the state value itself, not the action. Updates to the state are not always processed synchronously, because Redux sometimes processes actions in batches to optimize performance and repeated re-rendering. The intended guarantee is that Redux eventually calls all subscribers with the most recent state, but not that it always calls each subscriber for each action. The store state is available in the subscriber simply by calling store.getState(). The action cannot be made available in the subsribers without breaking the way that actions are batched. 
+Subscribers are intended to respond to the state value itself, not the action. Updates to the state are not always processed synchronously, because libraries can change Redux to process actions in batches to optimize performance and avoid repeated re-rendering. The intended guarantee is that Redux eventually calls all subscribers with the most recent state, but not that it always calls each subscriber for each action. The store state is available in the subscriber simply by calling store.getState(). The action cannot be made available in the subsribers without breaking the way that actions are batched. 
 
 A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Re-rendering should instead be controlled instead through:
 1.) the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) lifecycle method
