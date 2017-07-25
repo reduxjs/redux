@@ -55,11 +55,11 @@ The default utility combineReducers is only one way to build a complex reducer. 
 
 <a id="no-asynch-in-mapDispatchToProps"></a>
 ### Why doesn't mapDispatchToProps allow use of return values from getState() or mapStateToProps()?
-In general, connect provides some way to generate a props object out of a closure that is injected with both the current state and dispatch. Asynchronous logic does not belong in the mapStateToProps and mapDispatchToProps functions at all. They should be only pure functions which transform the state to props and bind action creators to dispatch. 
+In general, connect generates a props object out of a closure that is injected with both the current state and dispatch. Asynchronous logic does not belong in the mapStateToProps and mapDispatchToProps functions at all. They should be only pure functions which transform the state to props and bind action creators to dispatch. 
 
-You cannot modify the state during the execution of mapStateToProps, because modifying the state from these functions could lead to infinite loops because every update would reinvoke the map functions. Calling getState() inside mapStateToProps would always just return the same state that is passed to the function. 
+You cannot modify the state during the execution of mapStateToProps. Modifying the state from these functions could lead to infinite loops because every update would reinvoke the map functions. Calling getState inside mapStateToProps would always just return the same state that is passed to the function. 
 
-The designed way to handle this use-case (needing to alter props based on the current state and mapDispatchToProps functions) is to work from the third argument to the connect function, mergeProps. If specified, it is passed the result of mapStateToProps(), mapDispatchToProps(), and the container component's props. The plain object you return from it will be passed as props to the wrapped component.
+The preferred way to handle this use-case (needing to alter props based on the current state and mapDispatchToProps functions) is to work from  mergeProps, the third argument to the connect function. If specified, it is passed the result of mapStateToProps(), mapDispatchToProps(), and the container component's props. The plain object returned from mergeProps will be passed as props to the wrapped component.
 
 #### Further information
 **Discussions**
