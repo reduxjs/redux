@@ -226,25 +226,6 @@ const Footer = () => (
 export default Footer
 ```
 
-#### `components/App.js`
-
-```js
-import React from 'react'
-import Footer from './Footer'
-import AddTodo from '../containers/AddTodo'
-import VisibleTodoList from '../containers/VisibleTodoList'
-
-const App = () => (
-  <div>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
-  </div>
-)
-
-export default App
-```
-
 ### Implementing Container Components
 
 Now it's time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand, but we suggest instead generating container components with the React Redux library's [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function, which provides many useful optimizations to prevent unnecessary re-renders. (One result of this is that you shouldn't have to worry about the [React performance suggestion](https://facebook.github.io/react/docs/advanced-performance.html) of implementing `shouldComponentUpdate` yourself.)
@@ -372,6 +353,8 @@ export default VisibleTodoList
 
 #### `containers/AddTodo.js`
 
+Recall as [mentioned previously](#designing-other-components), both the presentation and logic for the `AddTodo` component are mixed into a single definition. 
+
 ```js
 import React from 'react'
 import { connect } from 'react-redux'
@@ -407,6 +390,28 @@ let AddTodo = ({ dispatch }) => {
 AddTodo = connect()(AddTodo)
 
 export default AddTodo
+```
+
+If you are unfamiliar with the `ref` attribute, please read this [documentation](https://facebook.github.io/react/docs/refs-and-the-dom.html) to familiarize yourself with the recommended use of this attribute. 
+
+### Tying the containers together within a component
+#### `components/App.js`
+
+```js
+import React from 'react'
+import Footer from './Footer'
+import AddTodo from '../containers/AddTodo'
+import VisibleTodoList from '../containers/VisibleTodoList'
+
+const App = () => (
+  <div>
+    <AddTodo />
+    <TodoList />
+    <Footer />
+  </div>
+)
+
+export default App
 ```
 
 ## Passing the Store
