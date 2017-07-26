@@ -1,5 +1,5 @@
 import {
-  Middleware, MiddlewareAPI,
+  Middleware, SpecificMiddleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
 } from "../../index";
 
@@ -11,7 +11,15 @@ declare module "../../index" {
 
 type Thunk<S, O> = (dispatch: Dispatch<S>, getState: () => S) => O;
 
-const thunkMiddleware: Middleware =
+const thunkSpecificMiddleware: SpecificMiddleware<State> =
+  ({dispatch, getState}: MiddlewareAPI<State>) =>
+    (next: Dispatch<State>) =>
+      <A extends Action, B>(action: A | Thunk<State, B>): B|Action =>
+        typeof action === 'function' ?
+          (<Thunk<State, B>>action)(dispatch, getState) :
+          next(<A>action)
+
+const thunkGenericMiddleware: Middleware =
   <S>({dispatch, getState}: MiddlewareAPI<S>) =>
     (next: Dispatch<S>) =>
       <A extends Action, B>(action: A | Thunk<S, B>): B|Action =>
@@ -20,7 +28,23 @@ const thunkMiddleware: Middleware =
           next(<A>action)
 
 
-const loggerMiddleware: Middleware =
+const loggerSpecificMiddleware: SpecificMiddleware<State> =
+  ({getState}: MiddlewareAPI<State>) =>
+    (next: Dispatch<State>) =>
+      (action: any): any => {
+        console.log('will dispatch', action)
+
+        // Call the next dispatch method in the middleware chain.
+        const returnValue = next(action)
+
+        console.log('state after dispatch', getState())
+
+        // This will likely be the action itself, unless
+        // a middleware further in chain changed it.
+        return returnValue
+      }
+
+const loggerGenericMiddleware: Middleware =
   <S>({getState}: MiddlewareAPI<S>) =>
     (next: Dispatch<S>) =>
       (action: any): any => {
@@ -47,7 +71,7 @@ const reducer: Reducer<State> = (state: State, action: Action): State => {
 
 const storeWithThunkMiddleware = createStore(
   reducer,
-  applyMiddleware(thunkMiddleware)
+  applyMiddleware(thunkGenericMiddleware)
 );
 
 storeWithThunkMiddleware.dispatch(
@@ -60,5 +84,5 @@ storeWithThunkMiddleware.dispatch(
 
 const storeWithMultipleMiddleware = createStore(
   reducer,
-  applyMiddleware(loggerMiddleware, thunkMiddleware)
+  applyMiddleware(loggerGenericMiddleware, thunkGenericMiddleware)
 )
