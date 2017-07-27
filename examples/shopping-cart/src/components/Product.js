@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Product = ({ price, quantity, title }) => (
+const Product = ({ price, inventory, title }) => (
   <div>
-    {title} - &#36;{price}{quantity ? ` x ${quantity}` : null}
+    {title} - &#36;{price}{inventory ? ` x ${inventory}` : null}
   </div>
 )
 
 Product.propTypes = {
   price: PropTypes.number,
-  quantity: PropTypes.number,
+  inventory: PropTypes.number,
   title: PropTypes.string
 }
 
