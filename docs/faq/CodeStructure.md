@@ -86,7 +86,7 @@ Action creators are testable. The correctness of an inline action must be verifi
 
 Action creators are easier to document. The action creator's parameters enumerate the action's dependencies. And centralization of the action definition provides a convenient place for documentation comments. When actions are written inline, this information is harder to capture and communicate.
 
-Action creators are a more powerful abstraction. Creating an action often involves transforming data or making AJAX requests. Action creators provide a uniform interface to this varied logic. Then a component is free to dispatch an action without being complicated by the details of that object's creation.
+Action creators are a more powerful abstraction. Creating an action often involves transforming data or making AJAX requests. Action creators provide a uniform interface to this varied logic. This abstraction frees a component to dispatch an action without being complicated by the details of that object's creation.
 
 #### Further information
 
