@@ -78,7 +78,7 @@ Find the balance between these two extremes, and you will master Redux.
 <a id="structure-action-creators"></a>
 ### Why should I use action creators?
 
-Action creators are superior to inline actions for several reasons. 
+Redux does not require action creators. You are free to create actions in any way that is best for you, including simply passing an object literal to `dispatch`. Action creators emerged from the [Flux architecture](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators) and have been adopted by the Redux community because they offer several benefits.
 
 Action creators are more maintainable. Updates to an action can be made in one place and applied everywhere. All instances of an action are guaranteed to have the same shape and the same default values.
 
