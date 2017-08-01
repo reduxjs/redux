@@ -406,7 +406,7 @@ import VisibleTodoList from '../containers/VisibleTodoList'
 const App = () => (
   <div>
     <AddTodo />
-    <TodoList />
+    <VisibleTodoList />
     <Footer />
   </div>
 )
