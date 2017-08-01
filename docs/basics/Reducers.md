@@ -118,7 +118,12 @@ Note that:
 We have two more actions to handle! Just like we did with `SET_VISIBILITY_FILTER`, we'll import the `ADD_TODO` and `TOGGLE_TODO` actions and then extend our reducer to handle `ADD_TODO`.
 
 ```js
-import { VisibilityFilters, ADD_TODO, TOGGLE_TODO } from './actions'
+import {
+  ADD_TODO,
+  TOGGLE_TODO,
+  SET_VISIBILITY_FILTER,
+  VisibilityFilters
+} from './actions'
 
 ...
 
