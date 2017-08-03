@@ -228,7 +228,7 @@ Meet some of the outstanding companies that made it possible:
 * [Webflow](https://github.com/webflow)
 * [Ximedes](https://www.ximedes.com/)
 
-[See the full list of Redux patrons.](PATRONS.md), as well as the always-growing list of [people and companies that use Redux](https://github.com/reactjs/redux/issues/310).
+[See the full list of Redux patrons](PATRONS.md), as well as the always-growing list of [people and companies that use Redux](https://github.com/reactjs/redux/issues/310).
 
 ### License
 
