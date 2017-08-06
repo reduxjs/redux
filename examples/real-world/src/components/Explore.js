@@ -18,14 +18,14 @@ export default class Explore extends Component {
   }
 
   getInputValue = () => {
-    return this.refs.input.value
+    return this.input.value
   }
 
   setInputValue = (val) => {
     // Generally mutating DOM is a bad idea in React components,
     // but doing this for a single uncontrolled field is less fuss
     // than making it controlled and maintaining a state for it.
-    this.refs.input.value = val
+    this.input.value = val
   }
 
   handleKeyUp = (e) => {
@@ -43,7 +43,7 @@ export default class Explore extends Component {
       <div>
         <p>Type a username or repo full name and hit 'Go':</p>
         <input size="45"
-               ref="input"
+               ref={(input) => this.input = input}
                defaultValue={this.props.value}
                onKeyUp={this.handleKeyUp} />
         <button onClick={this.handleGoClick}>
