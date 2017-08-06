@@ -133,13 +133,12 @@ Redux comes with [official examples](http://redux.js.org/docs/introduction/Examp
 
 When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
 
-#### Building and Testing the Examples
+#### Testing the Examples
 
-To build and test the official Redux examples, run the following:
+To test the official Redux examples, run the following:
 
 ```
-npm run build:examples
-npm run test:examples
+npm run examples:test
 ```
 
 Not all examples have tests. If you see an example project without tests, you are very welcome to add them in a way consistent with the examples that have tests.
