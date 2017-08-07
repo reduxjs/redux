@@ -72,9 +72,9 @@ The [curried function signature](https://github.com/reactjs/redux/issues/1744) o
 <a id="combineReducers-limitations"></a>
 ### Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?
 
-`combineReducers` is deliberately opinionated to encourage splitting reducer logic by domain. As stated in [Beyond `combineReducers`](../recipes/reducers/BeyondCombineReducers.md),`combineReducers` is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object by delegating the work of updating each slice of state to a specific slice reducer. 
+`combineReducers` is opinionated to encourage splitting reducer logic by domain. As stated in [Beyond `combineReducers`](../recipes/reducers/BeyondCombineReducers.md),`combineReducers` is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object by delegating the work of updating each slice of state to a specific slice reducer. 
 
-It's not immediately obvious what a potential third argument should be: the entire state tree, some callback function, some other part of the state tree, etc. If `combineReducers` doesn't fit your use case, consider using libraries like [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) or [reduceReducers](https://github.com/acdlite/reduce-reducers) for other options with deeply nested reducers and reducers that require access to the global state. 
+It's not immediately obvious what a potential third argument to each reducer should be: the entire state tree, some callback function, some other part of the state tree, etc. If `combineReducers` doesn't fit your use case, consider using libraries like [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) or [reduceReducers](https://github.com/acdlite/reduce-reducers) for other options with deeply nested reducers and reducers that require access to the global state. 
 
 If none of the published utilities solve your use case, you can always write a function yourself that does just exactly what you need.
 
