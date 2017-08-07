@@ -332,6 +332,14 @@ function receivePosts(subreddit, json) {
   }
 }
 
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
+export function invalidateSubreddit(subreddit) {
+  return {
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
+  }
+}
+
 // Meet our first thunk action creator!
 // Though its insides are different, you would use it just like any other action creator:
 // store.dispatch(fetchPosts('reactjs'))
@@ -439,6 +447,14 @@ function receivePosts(subreddit, json) {
     subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
+  }
+}
+
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
+export function invalidateSubreddit(subreddit) {
+  return {
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
   }
 }
 
