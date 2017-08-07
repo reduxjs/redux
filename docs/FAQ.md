@@ -48,8 +48,8 @@
   - [Why doesn't Redux support using classes for actions and reducers?](/docs/faq/DesignDecisions.md#does-not-support-classes) 
   - [Why does the middleware signature use currying?](/docs/faq/DesignDecisions.md#why-currying)
   - [Why does applyMiddleware use a closure for dispatch?](/docs/faq/DesignDecisions.md#closure-dispatch)
-  - [Can you please change combineReducers to support nested state trees?](/docs/faq/DesignDecisions.md#combineReducers-limitations)
-  - [Why doesn't mapDispatchToProps allow use of return values from getState() or mapStateToProps()?](/docs/faq/DesignDecisions.md#no-asynch-in-mapDispatchToProps)
+  - [Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?](/docs/faq/DesignDecisions.md#combineReducers-limitations)
+  - [Why doesn't `mapDispatchToProps` allow use of return values from `getState()` or `mapStateToProps()`?](/docs/faq/DesignDecisions.md#no-asynch-in-mapDispatchToProps)
 - **React Redux**
   - [Why isn't my component re-rendering, or my mapStateToProps running?](/docs/faq/ReactRedux.md#react-not-rerendering)
   - [Why is my component re-rendering too often?](/docs/faq/ReactRedux.md#react-rendering-too-often)
