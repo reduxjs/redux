@@ -53,7 +53,7 @@ You never see this, of course - the data you give to an Immutable.JS object is n
 - [PDF: JavaScript Immutability - Don’t go changing](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
 
 **Libraries**
-- [Immutable.js, persistent data structures and structural sharing](https://facebook.github.io/immutable-js/)
+- [Immutable.js](https://facebook.github.io/immutable-js/)
 
 
 <a id="issues-with-immutable-js"></a>
