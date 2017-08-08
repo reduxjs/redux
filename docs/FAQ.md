@@ -43,6 +43,13 @@
   - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](/docs/faq/Performance.md#performance-clone-state)
   - [How can I reduce the number of store update events?](/docs/faq/Performance.md#performance-update-events)
   - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](/docs/faq/Performance.md#performance-state-memory)
+- **Design Decisions**
+  - [Why doesn't Redux pass the state and action to subscribers?](/docs/faq/DesignDecisions.md#does-not-pass-state-action-to-subscribers) 
+  - [Why doesn't Redux support using classes for actions and reducers?](/docs/faq/DesignDecisions.md#does-not-support-classes) 
+  - [Why does the middleware signature use currying?](/docs/faq/DesignDecisions.md#why-currying)
+  - [Why does applyMiddleware use a closure for dispatch?](/docs/faq/DesignDecisions.md#closure-dispatch)
+  - [Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?](/docs/faq/DesignDecisions.md#combineReducers-limitations)
+  - [Why doesn't `mapDispatchToProps` allow use of return values from `getState()` or `mapStateToProps()`?](/docs/faq/DesignDecisions.md#no-asynch-in-mapDispatchToProps)
 - **React Redux**
   - [Why isn't my component re-rendering, or my mapStateToProps running?](/docs/faq/ReactRedux.md#react-not-rerendering)
   - [Why is my component re-rendering too often?](/docs/faq/ReactRedux.md#react-rendering-too-often)
