@@ -61,3 +61,7 @@ const newReducer: Reducer<State> = (state: State, action: Action): State => {
 }
 
 store.replaceReducer(newReducer);
+
+const nextState: State = store.getState();
+
+store.replaceReducer(newReducer, nextState);

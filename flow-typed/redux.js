@@ -19,7 +19,7 @@ declare module 'redux' {
     dispatch: Dispatch<A>;
     getState(): S;
     subscribe(listener: () => void): () => void;
-    replaceReducer(nextReducer: Reducer<S, A>): void
+    replaceReducer(nextReducer: Reducer<S, A>, nextState?: S): void
   };
 
   declare type Reducer<S, A> = (state: S, action: A) => S;

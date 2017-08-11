@@ -1,12 +1,12 @@
 import { createStore, combineReducers } from '../src/index'
-import { 
-  addTodo, 
-  dispatchInMiddle, 
+import {
+  addTodo,
+  dispatchInMiddle,
   getStateInMiddle,
   subscribeInMiddle,
   unsubscribeInMiddle,
-  throwError, 
-  unknownAction 
+  throwError,
+  unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'
@@ -116,6 +116,27 @@ describe('createStore', () => {
         text: 'World'
       }
     ])
+  })
+
+  it('updates the state when replacing a reducer', () => {
+    const store = createStore(reducers.todos)
+    store.dispatch(addTodo('Hello'))
+    store.dispatch(addTodo('World'))
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      },
+      {
+        id: 2,
+        text: 'World'
+      }
+    ])
+
+    const nextState = []
+
+    store.replaceReducer(reducers.todosReverse, nextState)
+    expect(store.getState()).toEqual(nextState)
   })
 
   it('preserves the state when replacing a reducer', () => {
