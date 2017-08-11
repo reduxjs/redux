@@ -181,8 +181,9 @@ export interface Store<S> {
    * implement a hot reloading mechanism for Redux.
    *
    * @param nextReducer The reducer for the store to use instead.
+   * @param nextState The state that will replace currentState.
    */
-  replaceReducer(nextReducer: Reducer<S>): void;
+  replaceReducer(nextReducer: Reducer<S>, nextState?: S): void;
 }
 
 /**

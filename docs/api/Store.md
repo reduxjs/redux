@@ -15,7 +15,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replaceReducer)
+- [`replaceReducer(nextReducer, [nextState])`](#replaceReducer)
 
 ## Store Methods
 
@@ -125,7 +125,7 @@ unsubscribe()
 
 <hr>
 
-### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
+### <a id='replaceReducer'></a>[`replaceReducer(nextReducer, [nextState])`](#replaceReducer)
 
 Replaces the reducer currently used by the store to calculate the state.
 
@@ -134,3 +134,5 @@ It is an advanced API. You might need this if your app implements code splitting
 #### Arguments
 
 1. `reducer` (*Function*) The next reducer for the store to use.
+
+2. [`nextState`] *(any)*: The next state. You may optionally specify it to hydrate the state from the server in universal apps, or to restore a previously serialized user session. This can be useful when doing code splitting.

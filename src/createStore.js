@@ -205,14 +205,16 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * implement a hot reloading mechanism for Redux.
    *
    * @param {Function} nextReducer The reducer for the store to use instead.
+   * @param {any} nextState The state that will replace currentState.
    * @returns {void}
    */
-  function replaceReducer(nextReducer) {
+  function replaceReducer(nextReducer, nextState) {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
     }
 
     currentReducer = nextReducer
+    currentState = nextState || currentState
     dispatch({ type: ActionTypes.INIT })
   }
 
