@@ -68,4 +68,10 @@ function todoApp(state = {}, action) {
 }
 ```
 
+### Schematic Representation
+
+Below is a simple schematic representation of how Redux works in the React ecosystem.
+
+<img src='http://i.imgur.com/namhVhJ.png' width='100%'>
+
 This is basically the whole idea of Redux. Note that we haven’t used any Redux APIs. It comes with a few utilities to facilitate this pattern, but the main idea is that you describe how your state is updated over time in response to action objects, and 90% of the code you write is just plain JavaScript, with no use of Redux itself, its APIs, or any magic.
