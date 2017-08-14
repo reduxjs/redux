@@ -13,9 +13,6 @@ var config = {
     }),
     babel({
       exclude: 'node_modules/**'
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(env)
     })
   ]
 }
