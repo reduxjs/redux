@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Cart from './Cart'
-import Product from './Product'
+import CartProduct from './CartProduct'
 
 const setup = (total, products = []) => {
   const actions = {
@@ -16,26 +16,31 @@ const setup = (total, products = []) => {
     component: component,
     actions: actions,
     button: component.find('button'),
-    products: component.find(Product),
+    products: component.find(CartProduct),
     em: component.find('em'),
     p: component.find('p')
   }
 }
 
 describe('Cart component', () => {
+
+const product = [
+   {
+      id: 1,
+      title: 'Product 1',
+      price: 9.99,
+      quantity: 1
+    }
+  ]
+
   it('should display total', () => {
-    const { p } = setup('76')
-    expect(p.text()).toMatch(/^Total: \$76/)
+    const { p } = setup('9.99',product)
+    expect(p.text()).toMatch(/^Total: \$9.99/)
   })
 
   it('should display add some products message', () => {
     const { em } = setup()
     expect(em.text()).toMatch(/^Please add some products to cart/)
-  })
-
-  it('should disable button', () => {
-    const { button } = setup()
-    expect(button.prop('disabled')).toEqual('disabled')
   })
 
   describe('when given product', () => {
@@ -49,14 +54,8 @@ describe('Cart component', () => {
     ]
 
     it('should render products', () => {
-      const { products } = setup('9.99', product)
-      const props = {
-        title: product[0].title,
-        price: product[0].price,
-        quantity: product[0].quantity
-      }
-
-      expect(products.at(0).props()).toEqual(props)
+      const { p } = setup('9.99', product)
+      expect(p.text()).toMatch(/^Total: \$9.99/)
     })
 
     it('should not disable button', () => {
