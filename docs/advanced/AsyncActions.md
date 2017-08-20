@@ -47,7 +47,7 @@ We'll use separate types in this tutorial.
 
 Let's start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a subreddit to display:
 
-#### `actions.js`
+#### `actions.js` (Synchronous)
 
 ```js
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
@@ -309,7 +309,7 @@ When an action creator returns a function, that function will get executed by th
 
 We can still define these special thunk action creators inside our `actions.js` file:
 
-#### `actions.js`
+#### `actions.js` (Asynchronous)
 
 ```js
 import fetch from 'isomorphic-fetch'
@@ -427,7 +427,7 @@ store
 
 The nice thing about thunks is that they can dispatch results of each other:
 
-#### `actions.js`
+#### `actions.js` (with `fetch`)
 
 ```js
 import fetch from 'isomorphic-fetch'
