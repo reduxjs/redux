@@ -82,7 +82,7 @@ An example of a normalized state structure for the blog example above might look
 				body : "......",
 				comments : ["comment3", "comment4", "comment5"]    
             }
-        }
+        },
         allIds : ["post1", "post2"]
     },
     comments : {
