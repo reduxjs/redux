@@ -19,7 +19,7 @@
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-scripts-ts": "^2.3.2",
-    "redux": "^3.7.1",
+    "redux": "^3.7.2",
     "reselect": "^3.0.1",
     "tslint": "^5.4.3",
     "typescript": "^2.4.1"
