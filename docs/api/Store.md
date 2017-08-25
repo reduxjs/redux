@@ -138,4 +138,4 @@ It is an advanced API. You might need this if your app implements code splitting
 
 #### Arguments
 
-1. `reducer` (*Function*) The next reducer for the store to use.
+1. `nextReducer` (*Function*) The next reducer for the store to use.
