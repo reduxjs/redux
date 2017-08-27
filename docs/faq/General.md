@@ -5,6 +5,7 @@
 - [When should I use Redux?](#general-when-to-use) 
 - [Can Redux only be used with React?](#general-only-react) 
 - [Do I need to have a particular build tool to use Redux?](#general-build-tools) 
+- [When should I learn Redux?](#general-when-to-learn)
 
 
 ## General
@@ -71,3 +72,21 @@ Redux is originally written in ES6 and transpiled for production into ES5 with W
 > The new Counter Vanilla example is aimed to dispel the myth that Redux requires Webpack, React, hot reloading, sagas, action creators, constants, Babel, npm, CSS modules, decorators, fluent Latin, an Egghead subscription, a PhD, or an Exceeds Expectations O.W.L. level.
 
 >Nope, it's just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!
+
+
+<a id="general-when-to-learn"></a>
+### When should I learn Redux?
+
+What to learn can be an overwhelming question for a JavaScript developer. It helps to narrow the range of options by focusing on problems you find in your work. Redux is a pattern for managing application state. If you do not have problems with state management, you might not need to learn Redux. Especially if you are new to JavaScript application development, we encourage you to start with a library (like React) for creating data-driven user interfaces. Such a library might be all you need to build your application. If your application becomes so complex that you are confused about where state is stored or how state changes, then it might be a good time to learn Redux. 
+
+**Articles**
+
+- [Deciding What Not To Learn](http://gedd.ski/post/what-not-to-learn/)
+- [How to learn web frameworks](https://ux.shopify.com/how-to-learn-web-frameworks-9d447cb71e68)
+- [Redux vs MobX vs Flux vs... Do you even need that?](https://goshakkk.name/redux-vs-mobx-vs-flux-etoomanychoices/)
+
+**Discussions**
+
+- [Ask HN: Overwhelmed with learning front-end, how do I proceed?](https://news.ycombinator.com/item?id=12882816)
+- [Twitter: it was never intended to be learned before...](https://twitter.com/dan_abramov/status/739961787295117312)
+- [Twitter: Learning Redux before React?](https://twitter.com/dan_abramov/status/739962098030137344)
