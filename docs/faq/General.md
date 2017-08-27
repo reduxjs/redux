@@ -88,5 +88,6 @@ What to learn can be an overwhelming question for a JavaScript developer. It hel
 **Discussions**
 
 - [Ask HN: Overwhelmed with learning front-end, how do I proceed?](https://news.ycombinator.com/item?id=12882816)
+- [Twitter: If you want to teach someone to use an abstraction...](https://twitter.com/acemarke/status/901329101088215044)
 - [Twitter: it was never intended to be learned before...](https://twitter.com/dan_abramov/status/739961787295117312)
 - [Twitter: Learning Redux before React?](https://twitter.com/dan_abramov/status/739962098030137344)
