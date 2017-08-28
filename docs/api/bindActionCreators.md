@@ -53,6 +53,24 @@ console.log(TodoActionCreators)
 // }
 
 class TodoListContainer extends Component {
+  constructor(props) { 
+    super(props);
+      
+    const {dispatch} = props;
+    
+    // Here's a good use case for bindActionCreators:
+    // You want a child component to be completely unaware of Redux.
+    // We create bound versions of these functions now so we can
+    // pass them down to our child later.
+
+    this.boundActionCreators = bindActionCreators(TodoActionCreators, dispatch)
+    console.log(this.boundActionCreators)
+    // {
+    //   addTodo: Function,
+    //   removeTodo: Function
+    // }
+  }
+
   componentDidMount() {
     // Injected by react-redux:
     let { dispatch } = this.props
@@ -70,19 +88,9 @@ class TodoListContainer extends Component {
 
   render() {
     // Injected by react-redux:
-    let { todos, dispatch } = this.props
+    let { todos } = this.props
 
-    // Here's a good use case for bindActionCreators:
-    // You want a child component to be completely unaware of Redux.
-
-    let boundActionCreators = bindActionCreators(TodoActionCreators, dispatch)
-    console.log(boundActionCreators)
-    // {
-    //   addTodo: Function,
-    //   removeTodo: Function
-    // }
-
-    return <TodoList todos={todos} {...boundActionCreators} />
+    return <TodoList todos={todos} {...this.boundActionCreators} />
 
     // An alternative to bindActionCreators is to pass
     // just the dispatch function down, but then your child component
