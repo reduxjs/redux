@@ -17,8 +17,7 @@
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
     "react-redux": "^5.0.5",
-    "react-router": "^3.0.2",
-    "react-router-redux": "^4.0.5",
+    "react-router-dom": "^4.1.2",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0"
   },

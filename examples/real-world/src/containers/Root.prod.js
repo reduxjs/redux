@@ -1,17 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
-import routes from '../routes'
-import { Router } from 'react-router'
+import { Route } from 'react-router-dom'
+import App from './App'
+import UserPage from './UserPage'
+import RepoPage from './RepoPage'
 
-const Root = ({ store, history }) => (
+const Root = ({ store }) => (
   <Provider store={store}>
-    <Router history={history} routes={routes} />
+    <Route path="/" component={App} />
+      <Route path="/:login/:name"
+             component={RepoPage} />
+      <Route path="/:login"
+             component={UserPage} />
   </Provider>
 )
 
 Root.propTypes = {
   store: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
 }
 export default Root
