@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Explore from '../components/Explore'
 import { resetErrorMessage } from '../actions'
 
@@ -23,7 +23,7 @@ class App extends Component {
   }
 
   handleChange = nextValue => {
-    browserHistory.push(`/${nextValue}`)
+    this.props.history.push(`/${nextValue}`)
   }
 
   renderErrorMessage() {
@@ -62,6 +62,6 @@ const mapStateToProps = (state, ownProps) => ({
   inputValue: ownProps.location.pathname.substring(1)
 })
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   resetErrorMessage
-})(App)
+})(App))

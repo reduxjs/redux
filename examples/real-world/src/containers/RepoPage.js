@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { loadRepo, loadStargazers } from '../actions'
 import Repo from '../components/Repo'
 import User from '../components/User'
@@ -69,8 +70,8 @@ class RepoPage extends Component {
 const mapStateToProps = (state, ownProps) => {
   // We need to lower case the login/name due to the way GitHub's API behaves.
   // Have a look at ../middleware/api.js for more details.
-  const login = ownProps.params.login.toLowerCase()
-  const name = ownProps.params.name.toLowerCase()
+  const login = ownProps.match.params.login.toLowerCase()
+  const name = ownProps.match.params.name.toLowerCase()
 
   const {
     pagination: { stargazersByRepo },
@@ -91,7 +92,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   loadRepo,
   loadStargazers
-})(RepoPage)
+})(RepoPage))
