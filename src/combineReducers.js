@@ -1,5 +1,4 @@
 import ActionTypes from './utils/actionTypes'
-import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key, action) {
@@ -26,7 +25,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     )
   }
 
-  if (!isPlainObject(inputState)) {
+  if (!inputState || inputState.constructor !== Object) {
     return (
       `The ${argumentName} has unexpected type of "` +
       ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
