@@ -264,8 +264,12 @@ export const createStore: StoreCreator;
 
 /* middleware */
 
+export interface MiddlewareDispatch<S> {
+    <A extends Action>(action: Promise<A> | A): Promise<A | void> | A | void;
+}
+
 export interface MiddlewareAPI<S> {
-  dispatch: Dispatch<S>;
+  dispatch: MiddlewareDispatch<S>;
   getState(): S;
 }
 
@@ -279,7 +283,7 @@ export interface MiddlewareAPI<S> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => Dispatch<S>;
+  <S>(api: MiddlewareAPI<S>): (next: MiddlewareDispatch<S>) => MiddlewareDispatch<S>;
 }
 
 /**
