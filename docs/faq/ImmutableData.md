@@ -144,7 +144,7 @@ It then runs a shallow equality check on its reference to the root state object 
 
 
 ### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
-React-Redux performs a shallow equality check on on each _value_ within the props object, not on the props object itself.
+React-Redux performs a shallow equality check on each _value_ within the props object, not on the props object itself.
 
 It does so because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:
 
