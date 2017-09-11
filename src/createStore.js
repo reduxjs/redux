@@ -11,6 +11,8 @@ export const ActionTypes = {
   INIT: '@@redux/INIT'
 }
 
+let listenerID = 1
+
 /**
  * Creates a Redux store that holds the state tree.
  * The only way to change the data in the store is to call `dispatch()` on it.
@@ -104,9 +106,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
 
     let isSubscribed = true
+    let id = listenerID++
 
     ensureCanMutateNextListeners()
-    nextListeners.push(listener)
+    nextListeners.push({
+      id,
+      func: listener
+    })
 
     return function unsubscribe() {
       if (!isSubscribed) {
@@ -116,7 +122,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      const index = nextListeners.indexOf(listener)
+      const index = nextListeners.findIndex(listener => listener.id === id)
       nextListeners.splice(index, 1)
     }
   }
@@ -175,7 +181,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     const listeners = currentListeners = nextListeners
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i]
-      listener()
+      listener.func.call(undefined)
     }
 
     return action

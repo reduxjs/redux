@@ -236,6 +236,27 @@ describe('createStore', () => {
     expect(listenerB.mock.calls.length).toBe(2)
   })
 
+  it('correctly remove subscription when listener was subscribed repeatedly', () => {
+    let testString = ''
+    const store = createStore(reducers.todos)
+    const listenerA = () => testString += 'A'
+    const listenerB = () => testString += 'B'
+
+    store.subscribe(listenerA)
+    store.subscribe(listenerB)
+    let unsubscribeA2 = store.subscribe(listenerA)
+
+    store.dispatch(unknownAction())
+    expect(testString).toBe('ABA')
+
+    testString = ''
+
+    unsubscribeA2()
+    store.dispatch(unknownAction())
+    expect(testString).toBe('AB')
+
+  })
+
   it('only removes listener once when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
     const listenerA = jest.fn()
