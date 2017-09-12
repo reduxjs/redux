@@ -98,7 +98,6 @@ export function combineReducers<S, A extends Action = Action>(reducers: Reducers
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
  *
- * @template S unused, here only for backwards compatibility.
  * @template D the type of things (actions or otherwise) which may be dispatched.
  */
 export interface Dispatch<D = Action> {
