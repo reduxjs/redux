@@ -59,9 +59,9 @@ export type Reducer<S> = (state: S, action: AnyAction) => S;
 /**
  * Object whose values correspond to different reducer functions.
  */
-export interface ReducersMapObject {
-  [key: string]: Reducer<any>;
-}
+export type ReducersMapObject<S extends { [key: string]: any }> = {
+  [K in keyof S]: Reducer<S[K]>;
+};
 
 /**
  * Turns an object whose values are different reducer functions, into a single
@@ -81,7 +81,7 @@ export interface ReducersMapObject {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S>(reducers: ReducersMapObject): Reducer<S>;
+export function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
 
 
 /* store */
@@ -383,7 +383,6 @@ type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R;
  *   to left. For example, `compose(f, g, h)` is identical to doing
  *   `(...args) => f(g(h(...args)))`.
  */
-export function compose(): <R>(a: R) => R;
 
 export function compose<F extends Function>(f: F): F;
 
