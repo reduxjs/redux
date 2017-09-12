@@ -46,14 +46,14 @@ export interface Action<T = any> {
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = {}, A extends Action = Action> = (state: S | undefined, action: A) => S;
+export type Reducer<S = any, A extends Action = Action> = (state: S | undefined, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
  *
  * @template A The type of actions the reducers can potentially respond to.
  */
-export type ReducersMapObject<S = {}, A extends Action = Action> = {
+export type ReducersMapObject<S = any, A extends Action = Action> = {
   [K in keyof S]: Reducer<S[K], A>;
 }
 
@@ -121,7 +121,7 @@ export interface Unsubscribe {
  * @template A the type of actions which may be dispatched by this store.
  * @template N The type of non-actions which may be dispatched by this store.
  */
-export interface Store<S = {}, A extends Action = Action, N = never> {
+export interface Store<S = any, A extends Action = Action, N = never> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
