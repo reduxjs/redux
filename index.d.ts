@@ -101,7 +101,7 @@ export function combineReducers<S, A extends Action = Action>(reducers: Reducers
  * @template S unused, here only for backwards compatibility.
  * @template D the type of things (actions or otherwise) which may be dispatched.
  */
-export interface Dispatch<S = any, D = Action> {
+export interface Dispatch<D = Action> {
     <A extends D>(action: A): A;
 }
 
@@ -148,7 +148,7 @@ export interface Store<S = any, A extends Action = Action, N = never> {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  dispatch: Dispatch<any, A | N>;
+  dispatch: Dispatch<A | N>;
 
   /**
    * Reads the state tree managed by the store.
@@ -267,7 +267,7 @@ export const createStore: StoreCreator;
 /* middleware */
 
 export interface MiddlewareAPI<S = any, D = Action> {
-  dispatch: Dispatch<any, D>;
+  dispatch: Dispatch<D>;
   getState(): S;
 }
 
@@ -281,7 +281,7 @@ export interface MiddlewareAPI<S = any, D = Action> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S = any, D = Action>(api: MiddlewareAPI<S, D>): (next: Dispatch<any, D>) => Dispatch<any, D>;
+  <S = any, D = Action>(api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => Dispatch<D>;
 }
 
 /**
@@ -353,19 +353,19 @@ export interface ActionCreatorsMapObject<A = any> {
  *   creator wrapped into the `dispatch` call. If you passed a function as
  *   `actionCreator`, the return value will also be a single function.
  */
-export function bindActionCreators<A, C extends ActionCreator<A>>(actionCreator: C, dispatch: Dispatch<any, A>): C;
+export function bindActionCreators<A, C extends ActionCreator<A>>(actionCreator: C, dispatch: Dispatch<A>): C;
 
 export function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
-  >(actionCreator: A, dispatch: Dispatch<any, any>): B;
+  >(actionCreator: A, dispatch: Dispatch<any>): B;
 
-export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(actionCreators: M, dispatch: Dispatch<any, A>): M;
+export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(actionCreators: M, dispatch: Dispatch<A>): M;
 
 export function bindActionCreators<
   M extends ActionCreatorsMapObject<any>,
   N extends ActionCreatorsMapObject<any>
-  >(actionCreators: M, dispatch: Dispatch<any, any>): N;
+  >(actionCreators: M, dispatch: Dispatch<any>): N;
 
 
 /* compose */
