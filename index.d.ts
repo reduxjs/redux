@@ -75,7 +75,7 @@ export type ReducersMapObject<S = {}, A extends Action = Action> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S, A extends Action>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
+export function combineReducers<S, A extends Action = Action>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
 
 
 /* store */
