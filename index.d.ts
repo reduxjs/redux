@@ -383,7 +383,6 @@ type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R;
  *   to left. For example, `compose(f, g, h)` is identical to doing
  *   `(...args) => f(g(h(...args)))`.
  */
-export function compose(): <R>(a: R) => R;
 
 export function compose<F extends Function>(f: F): F;
 
