@@ -1,6 +1,5 @@
 /* eslint-disable no-console, no-use-before-define */
 
-import path from 'path'
 import Express from 'express'
 import qs from 'qs'
 
