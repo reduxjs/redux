@@ -224,6 +224,8 @@ Do not, however, use Immutable.JS in your dumb components.
 
 Always.
 
+Initially, based on the computational expense of calling `toJS`, it may seem like a good idea to memoize the plain JS output to avoid redundant calls slowing down the render loop. When Reselect memoizes a value it returns a reference to a single instance of that value in memory for every subsequent call with matching parameters. If multiple containers both use the same selector with the same parameters then they are both dependent on the same instance of that value in memory. If this value is a plain JS object and one of the containers 'accidentally' mutates it in some way then every subsequent call to that selector with the same parameters will return the mutated object breaking the assurances that Immutable is designed to provide.
+
 ### Use Immutable.JS objects in your Smart Components
 
 Smart components that access the store via React Redux’s `connect` function must use the Immutable.JS values returned by your selectors.  Make sure you avoid the potential issues this can cause with unnecessary component re-rendering. Memoize your selectors using a library such as reselect if necessary.
