@@ -14,13 +14,13 @@
 
 <a id="does-not-pass-state-action-to-subscribers"></a>
 ### Why doesn't Redux pass the state and action to subscribers?
-Subscribers are intended to respond to the state value itself, not the action. Updates to the state processed synchronously, but notifications to subscribers are batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](http://redux.js.org/docs/faq/Performance.html#performance-update-events) to avoid repeated re-rendering.
+Subscribers are intended to respond to the state value itself, not the action. Updates to the state processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](http://redux.js.org/docs/faq/Performance.html#performance-update-events) to avoid repeated re-rendering.
 
 Batching or debouncing is possible by using enhancers to override `store.dispatch` to change the way that subscribers are notified. Also, there are libraries that change Redux to process actions in batches to optimize performance and avoid repeated re-rendering:
 * [redux-batch](https://github.com/manaflair/redux-batch) allows passing an array of actions to `store.dispatch()` with only one notification,
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) allows batching of subscribe notifications that occur as a result of dispatches.
 
-The intended guarantee is that Redux eventually calls all subscribers with the most recent state, but not that it always calls each subscriber for each action. The store state is available in the subscriber simply by calling `store.getState()`. The action cannot be made available in the subscribers without breaking the way that actions are batched.
+The intended guarantee is that Redux eventually calls all subscribers with the most recent state available, but not that it always calls each subscriber for each action. The store state is available in the subscriber simply by calling `store.getState()`. The action cannot be made available in the subscribers without breaking the way that actions might be batched.
 
 A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Re-rendering should instead be controlled instead through:
 1. the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) lifecycle method
