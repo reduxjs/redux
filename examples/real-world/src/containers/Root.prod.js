@@ -12,9 +12,9 @@ const Root = ({ store }) => (
       <div>
         <Route path="/" component={App} />
         <Route path="/:login/:name"
-              component={RepoPage} />
+               component={RepoPage} />
         <Route path="/:login"
-              component={UserPage} />
+               component={UserPage} />
       </div>
     </Router>
   </Provider>
