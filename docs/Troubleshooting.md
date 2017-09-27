@@ -201,6 +201,11 @@ You can then pass `dispatch` down to other components manually, if you want to.
 
 It's possible you're correctly dispatching an action and applying your reducer but the corresponding state is not being correctly translated into props.
 
+
+#### Make sure to add your reducer to root reducer via `combineReducers()`
+
+Everything else within your app can be correct, but if you forget to add your new reducer to the root reducer via `combineReducers({})`, your dispatched actions will still not be handled.
+
 ## Something else doesn't work
 
 Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Discord channel, or [create an issue](https://github.com/reactjs/redux/issues).  
