@@ -6,7 +6,7 @@ As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Norma
 
 ### Simple Merging
 
-One approach is to merge the contents of the action in to the existing state.  In this case, we need to do a deep recursive merge, not just a shallow copy.  The Lodash `merge` function can handle this for us:
+One approach is to merge the contents of the action into the existing state.  In this case, we need to do a deep recursive merge, not just a shallow copy.  The Lodash `merge` function can handle this for us:
 
 ```js
 import merge from "lodash/merge";
