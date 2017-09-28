@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "jest": "^20.0.4",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-redux": "^5.0.5",
     "redux": "^3.5.2",
     "reselect": "^3.0.1"
