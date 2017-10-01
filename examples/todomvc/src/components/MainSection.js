@@ -30,10 +30,13 @@ export default class MainSection extends Component {
     const { todos, actions } = this.props
     if (todos.length > 0) {
       return (
-        <input className="toggle-all"
-               type="checkbox"
-               checked={completedCount === todos.length}
-               onChange={actions.completeAll} />
+        <span>
+          <input className="toggle-all"
+                 type="checkbox"
+                 checked={completedCount === todos.length}
+                 />
+          <label onClick={actions.completeAll}/>
+        </span>
       )
     }
   }
