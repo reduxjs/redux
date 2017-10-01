@@ -49,7 +49,7 @@ describe('components', () => {
     describe('toggle all input', () => {
       it('should render', () => {
         const { output } = setup()
-        const [ toggle ] = output.props.children
+        const [ toggle ] = output.props.children[0].props.children
         expect(toggle.type).toBe('input')
         expect(toggle.props.type).toBe('checkbox')
         expect(toggle.props.checked).toBe(false)
@@ -64,14 +64,14 @@ describe('components', () => {
           }
         ]
         })
-        const [ toggle ] = output.props.children
+        const [ toggle ] = output.props.children[0].props.children
         expect(toggle.props.checked).toBe(true)
       })
 
       it('should call completeAll on change', () => {
         const { output, props } = setup()
-        const [ toggle ] = output.props.children
-        toggle.props.onChange({})
+        const [ toggle, label ] = output.props.children[0].props.children
+        label.props.onClick({})
         expect(props.actions.completeAll).toBeCalled()
       })
     })
