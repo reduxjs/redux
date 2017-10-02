@@ -18,13 +18,29 @@ describe('Utils', () => {
       expect(s2).toEqual({ counter: 1, stack: [ 'a' ] })
     })
 
-    it('ignores all props which are not a function', () => {
+    it('warns on props which are not a function and excludes them', () => {
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
+
       const reducer = combineReducers({
         fake: true,
         broken: 'string',
         another: { nested: 'object' },
         stack: (state = []) => state
       })
+
+      expect(spy.mock.calls[0][0]).toMatch(
+        /Reducer provided for "fake" is not a function/
+      )
+
+      expect(spy.mock.calls[1][0]).toMatch(
+          /Reducer provided for "broken" is not a function/
+      )
+
+      expect(spy.mock.calls[2][0]).toMatch(
+          /Reducer provided for "another" is not a function/
+      )
 
       expect(
         Object.keys(reducer({ }, { type: 'push' }))

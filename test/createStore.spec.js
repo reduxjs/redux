@@ -6,7 +6,7 @@ import $$observable from 'symbol-observable'
 
 describe('createStore', () => {
   it('exposes the public API', () => {
-    const store = createStore(combineReducers(reducers))
+    const store = createStore(reducers.todos)
     const methods = Object.keys(store)
 
     expect(methods.length).toBe(4)
