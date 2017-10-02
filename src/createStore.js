@@ -8,7 +8,8 @@ import $$observable from 'symbol-observable'
  * Do not reference these action types directly in your code.
  */
 export const ActionTypes = {
-  INIT: '@@redux/INIT'
+  INIT: '@@redux/INIT',
+  TRANSACTION: '@@redux/TRANSACTION'
 }
 
 /**
@@ -59,6 +60,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let currentListeners = []
   let nextListeners = currentListeners
   let isDispatching = false
+  let isTransaction = false
+  let dispatchCalledInTransaction = false
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -172,13 +175,48 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isDispatching = false
     }
 
-    const listeners = currentListeners = nextListeners
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+    if (!isTransaction) {
+      const listeners = currentListeners = nextListeners
+      for (let i = 0; i < listeners.length; i++) {
+        const listener = listeners[i]
+        listener()
+      }
+    } else {
+      dispatchCalledInTransaction = true
     }
 
     return action
+  }
+
+  /**
+   * Creates a transaction set of store dispatches.
+   *
+   * Sometimes you want to trigger more than one action with `dispatch`
+   * (inside a middleware for example) but your listeners will be called multiple
+   * times for each action you dispatch. With redux transactions you can avoid
+   * unnecessary triggers of the store listeners.
+   *
+   * @param {Function} body The transaction body with multiple `dispatch` calls.
+   * @returns {void}
+   */
+  function transaction(body) {
+    if (typeof body !== 'function') {
+      throw new Error(
+        'Transaction body type must be a function.'
+      )
+    }
+
+    isTransaction = true
+
+    body()
+
+    isTransaction = false
+
+    if (dispatchCalledInTransaction) {
+      dispatch({ type: ActionTypes.TRANSACTION })
+    }
+
+    dispatchCalledInTransaction = false
   }
 
   /**
@@ -246,6 +284,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
   return {
     dispatch,
+    transaction,
     subscribe,
     getState,
     replaceReducer,
