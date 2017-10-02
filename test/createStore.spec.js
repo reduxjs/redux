@@ -9,8 +9,9 @@ describe('createStore', () => {
     const store = createStore(combineReducers(reducers))
     const methods = Object.keys(store)
 
-    expect(methods.length).toBe(4)
+    expect(methods.length).toBe(5)
     expect(methods).toContain('subscribe')
+    expect(methods).toContain('transaction')
     expect(methods).toContain('dispatch')
     expect(methods).toContain('getState')
     expect(methods).toContain('replaceReducer')
@@ -30,7 +31,7 @@ describe('createStore', () => {
     ).toThrow()
 
     expect(() =>
-      createStore(() => {})
+      createStore(() => { })
     ).not.toThrow()
   })
 
@@ -421,7 +422,7 @@ describe('createStore', () => {
     ).not.toThrow()
 
     function AwesomeMap() { }
-    [ null, undefined, 42, 'hey', new AwesomeMap() ].forEach(nonObject =>
+    [null, undefined, 42, 'hey', new AwesomeMap()].forEach(nonObject =>
       expect(() =>
         store.dispatch(nonObject)
       ).toThrow(/plain/)
@@ -597,7 +598,7 @@ describe('createStore', () => {
     ).toThrow('Expected the nextReducer to be a function.')
 
     expect(() =>
-      store.replaceReducer(() => {})
+      store.replaceReducer(() => { })
     ).not.toThrow()
   })
 
@@ -621,21 +622,74 @@ describe('createStore', () => {
     ).toThrow()
   })
 
+  it('calls store listeners at the end of transaction', () => {
+    const store = createStore(reducers.todos)
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
+
+    let unsubscribeA = store.subscribe(listenerA)
+    let unsubscribeB = store.subscribe(listenerB)
+
+    store.transaction(() => {
+      store.dispatch(addTodo('Hello'))
+      store.dispatch(addTodo('World'))
+
+      expect(listenerA.mock.calls.length).toBe(0);
+      expect(listenerB.mock.calls.length).toBe(0);
+    })
+
+    expect(listenerA.mock.calls.length).toBe(1);
+    expect(listenerB.mock.calls.length).toBe(1);
+
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }, {
+        id: 2,
+        text: 'World'
+      }
+    ])
+
+    unsubscribeA()
+    unsubscribeB()
+  });
+
+  it('throws if transaction is not a function', () => {
+    const store = createStore(reducers.todos)
+
+    expect(() =>
+      store.transaction()
+    ).toThrow()
+
+    expect(() =>
+      store.transaction('')
+    ).toThrow()
+
+    expect(() =>
+      store.transaction(null)
+    ).toThrow()
+
+    expect(() =>
+      store.subscribe(undefined)
+    ).toThrow()
+  })
+
   describe('Symbol.observable interop point', () => {
     it('should exist', () => {
-      const store = createStore(() => {})
+      const store = createStore(() => { })
       expect(typeof store[$$observable]).toBe('function')
     })
 
     describe('returned value', () => {
       it('should be subscribable', () => {
-        const store = createStore(() => {})
+        const store = createStore(() => { })
         const obs = store[$$observable]()
         expect(typeof obs.subscribe).toBe('function')
       })
 
       it('should throw a TypeError if an observer object is not supplied to subscribe', () => {
-        const store = createStore(() => {})
+        const store = createStore(() => { })
         const obs = store[$$observable]()
 
         expect(function () {
@@ -643,7 +697,7 @@ describe('createStore', () => {
         }).toThrow()
 
         expect(function () {
-          obs.subscribe(() => {})
+          obs.subscribe(() => { })
         }).toThrow()
 
         expect(function () {
@@ -652,7 +706,7 @@ describe('createStore', () => {
       })
 
       it('should return a subscription object when subscribed', () => {
-        const store = createStore(() => {})
+        const store = createStore(() => { })
         const obs = store[$$observable]()
         const sub = obs.subscribe({})
         expect(typeof sub.unsubscribe).toBe('function')
@@ -681,7 +735,7 @@ describe('createStore', () => {
       store.dispatch({ type: 'foo' })
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 }, { foo: 1, bar: 2 } ])
+      expect(results).toEqual([{ foo: 0, bar: 0 }, { foo: 1, bar: 0 }, { foo: 1, bar: 2 }])
     })
 
     it('should pass an integration test with an unsubscribe', () => {
@@ -707,7 +761,7 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 } ])
+      expect(results).toEqual([{ foo: 0, bar: 0 }, { foo: 1, bar: 0 }])
     })
 
     it('should pass an integration test with a common library (RxJS)', () => {
@@ -731,7 +785,7 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true } ])
+      expect(results).toEqual([{ foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true }])
     })
   })
 })
