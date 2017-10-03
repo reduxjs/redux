@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { combineReducers } from '../src'
 import createStore, { ActionTypes } from '../src/createStore'
+import * as reducers from './helpers/reducers'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -30,21 +31,27 @@ describe('Utils', () => {
         stack: (state = []) => state
       })
 
-      expect(spy.mock.calls[0][0]).toMatch(
-        /Reducer provided for "fake" is not a function/
-      )
-
-      expect(spy.mock.calls[1][0]).toMatch(
-          /Reducer provided for "broken" is not a function/
-      )
-
-      expect(spy.mock.calls[2][0]).toMatch(
-          /Reducer provided for "another" is not a function/
-      )
+      expect(spy).toHaveBeenLastCalledWith('Reducer provided for "another" is not a function. Received type: string.')
+      expect(spy).toHaveBeenCalledTimes(3)
 
       expect(
         Object.keys(reducer({ }, { type: 'push' }))
       ).toEqual([ 'stack' ])
+
+      spy.mockClear()
+      console.error = preSpy
+    })
+
+    it('warns if a module imported with * syntax is passed', () => {
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
+
+      combineReducers(reducers)
+      expect(spy).toHaveBeenCalledWith(`Passing a whole ES Module to combine reducers is discouraged.`)
+
+      spy.mockClear()
+      console.error = preSpy
     })
 
     it('warns if a reducer prop is undefined', () => {
@@ -54,15 +61,11 @@ describe('Utils', () => {
 
       let isNotDefined
       combineReducers({ isNotDefined })
-      expect(spy.mock.calls[0][0]).toMatch(
-        /No reducer provided for key "isNotDefined"/
-      )
+      expect(spy).toHaveBeenCalledWith('No reducer provided for key "isNotDefined"')
 
       spy.mockClear()
       combineReducers({ thing: undefined })
-      expect(spy.mock.calls[0][0]).toMatch(
-        /No reducer provided for key "thing"/
-      )
+      expect(spy).toHaveBeenCalledWith('No reducer provided for key "thing"')
 
       spy.mockClear()
       console.error = preSpy
