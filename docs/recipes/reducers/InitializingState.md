@@ -36,7 +36,7 @@ function counter(state = 0, action) {
 
 Now let's say you create a store with it.
 
-```
+```js
 import { createStore } from 'redux';
 let store = createStore(counter);
 console.log(store.getState()); // 0
