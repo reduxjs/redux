@@ -26,7 +26,7 @@ The most naïve solution is just to log the action and the next state yourself e
 
 >##### Note
 
->If you're using [react-redux](https://github.com/gaearon/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
+>If you're using [react-redux](https://github.com/reactjs/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
 
 Say, you call this when creating a todo:
 
