@@ -1,6 +1,6 @@
 # Usage with React Router
 
-Warning: This guide assumes you are using `react-router@^2.7.0`. As of May 2017 the current version of React Router is 4+. If you have just run `npm install --save react-router`, you will be using a version that does not match this guide.
+_Warning: This guide assumes you are using React Router 2.x or 3.x. The current version of React Router is 4.x. If you have just run `npm install --save react-router`, you will be using a version that does not match this guide._
 
 So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that triggers the change URL.
 
