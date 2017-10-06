@@ -15,7 +15,7 @@ const reducer: Reducer<State> = (state: State, action: Action): State => {
 
 /* createStore */
 
-const store: Store<State> = createStore<State>(reducer);
+const store: Store<State> = createStore(reducer);
 
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   todos: []
