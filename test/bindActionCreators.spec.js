@@ -60,6 +60,13 @@ describe('bindActionCreators', () => {
     ])
   })
 
+  it('flags the bound function with an __isBoundActionCreator__ property', () => {
+    const actionCreator = actionCreators.addTodo
+    const boundActionCreator = bindActionCreators(actionCreator, store.dispatch)
+
+    expect(boundActionCreator.__isBoundActionCreator__).toBe(true)
+  })
+
   it('throws for an undefined actionCreator', () => {
     expect(() => {
       bindActionCreators(undefined, store.dispatch)
