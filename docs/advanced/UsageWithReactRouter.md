@@ -5,9 +5,9 @@ _Warning: This guide assumes you are using React Router 2.x or 3.x. The current 
 So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that triggers the change URL.
 
 ## Installing React Router
-`react-router` is available on npm . This guides assumes you are using `react-router@^2.7.0`.
+`react-router-dom` is available on npm . This guides assumes you are using `react-router-dom@^4.1.1`.
 
-`npm install --save react-router`
+`npm install --save react-router-dom`
 
 ## Configuring the Fallback URL
 
@@ -41,7 +41,7 @@ Along this chapter, we will be using the [Todos](https://github.com/reactjs/redu
 First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
 
 ```js
-import { Router, Route } from 'react-router'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 ```
 
 In a React app, usually you would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
@@ -74,40 +74,24 @@ const Root = ({ store }) => (
 )
 ```
 
-Now the `<App />` component will be rendered if the URL matches '/'. Additionally, we will add the optional `(:filter)` parameter to `/`, because we will need it further on when we try to read the parameter `(:filter)` from the URL.
+Now the `<App />` component will be rendered if the URL matches '/'. Additionally, we will add the optional `:filter?` parameter to `/`, because we will need it further on when we try to read the parameter `:filter` from the URL.
 
 ```js
-<Route path="/(:filter)" component={App} />
+<Route path="/:filter?" component={App} />
 ```
-
-You will probably want to remove the hash from the URL (e.g: `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
-
-```js
-import { Router, Route, browserHistory } from 'react-router'
-```
-
-and pass it to the `<Router />` in order to remove the hash from the URL:
-
-```js
-<Router history={browserHistory}>
-  <Route path="/(:filter)" component={App} />
-</Router>
-```
-
-Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
 
 #### `components/Root.js`
 ```js
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
-import { Router, Route, browserHistory } from 'react-router'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import App from './App'
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/(:filter)" component={App} />
+    <Router>
+      <Route path="/:filter?" component={App} />
     </Router>
   </Provider>
 )
@@ -145,18 +129,18 @@ React Router comes with a [`<Link />`](https://github.com/ReactTraining/react-ro
 #### `containers/FilterLink.js`
 ```js
 import React from 'react'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router'
 
 const FilterLink = ({ filter, children }) => (
-  <Link
-    to={filter === 'SHOW_ALL' ? '/' : filter}
+  <NavLink
+    to={filter === 'SHOW_ALL' ? '/' : `/${ filter }`}
     activeStyle={{
       textDecoration: 'none',
       color: 'black'
     }}
   >
     {children}
-  </Link>
+  </NavLink>
 )
 
 export default FilterLink
@@ -204,15 +188,15 @@ const mapStateToProps = (state, ownProps) => {
 
 Right now we are not passing anything to `<App />` so `ownProps` is an empty object. To filter our todos according to the URL, we want to pass the URL params to `<VisibleTodoList />`.
 
-When previously we wrote:  `<Route path="/(:filter)" component={App} />`, it made available inside `App` a `params` property.
+When previously we wrote:  `<Route path="/:filter?" component={App} />`, it made available inside `App` a `params` property.
 
-`params` property is an object with every param specified in the url. *e.g: `params` will be equal to `{ filter: 'SHOW_COMPLETED' }` if we are navigating to `localhost:3000/SHOW_COMPLETED`. We can now read the URL from `<App />`.*
+`params` property is an object with every param specified in the url with the `match` object. *e.g: `match.params` will be equal to `{ filter: 'SHOW_COMPLETED' }` if we are navigating to `localhost:3000/SHOW_COMPLETED`. We can now read the URL from `<App />`.*
 
 Note that we are using [ES6 destructuring](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) on the properties to pass in `params` to `<VisibleTodoList />`.
 
 #### `components/App.js`
 ```js
-const App = ({ params }) => {
+const App = ({ match: { params } }) => {
   return (
     <div>
       <AddTodo />
