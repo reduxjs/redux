@@ -7,8 +7,6 @@ So you want to do routing with your Redux app. You can use it with [React Router
 
 `npm install --save react-router-dom`
 
-> react-router-dom provides BrowserRouter, Route and NavLink
-
 ## Configuring the Fallback URL
 
 Before integrating React Router, we need to configure our development server. Indeed, our development server may be unaware of the declared routes in React Router configuration. For example, if you access `/todos` and refresh, your development server needs to be instructed to serve `index.html` because it is a single-page app. Here's how to enable this with popular development servers.
