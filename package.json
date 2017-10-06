@@ -16,15 +16,17 @@
   "scripts": {
     "clean": "rimraf lib dist es coverage",
     "lint": "eslint src test build",
-    "test": "cross-env BABEL_ENV=commonjs jest",
+    "test": "npm run test:unit && npm run test:size",
+    "test:unit": "cross-env BABEL_ENV=commonjs jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
+    "test:size": "bundlesize",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup -c -i src/index.js -o dist/redux.js",
     "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup -c -i src/index.js -o dist/redux.min.js",
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
-    "prepare": "npm run clean && npm run lint && npm test && npm run build",
+    "prepare": "npm run clean && npm run lint && npm run build && npm test",
     "examples:lint": "eslint examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js",
     "docs:clean": "rimraf _book",
@@ -92,6 +94,7 @@
     "babel-plugin-transform-es3-property-literals": "^6.5.0",
     "babel-plugin-transform-object-rest-spread": "^6.3.13",
     "babel-register": "^6.3.13",
+    "bundlesize": "0.11.2",
     "cross-env": "^5.0.1",
     "eslint": "^4.0.0",
     "eslint-config-react-app": "^1.0.4",
@@ -128,5 +131,11 @@
   },
   "jest": {
     "testRegex": "(/test/.*\\.spec.js)$"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/redux.min.js",
+      "maxSize": "2.5kB"
+    }
+  ]
 }
