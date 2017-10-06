@@ -161,7 +161,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares.reverse()
 
   // Transform dispatch function with each middleware.
-  middlewares.forEach(middleware =>
+  middlewares.forEach(middleware => {
     store.dispatch = middleware(store)
   )
 }
