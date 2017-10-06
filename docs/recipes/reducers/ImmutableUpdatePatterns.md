@@ -131,7 +131,10 @@ function updateObjectInArray(array, action) {
         }
         
         // Otherwise, this is the one we want - return an updated value
-        return action.item;
+        return {
+            ...item,
+            ...action.item
+        };    
     });
 }
 ```
