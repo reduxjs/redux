@@ -1,3 +1,4 @@
+
 /**
  * An *action* is a plain object that represents an intention to change the
  * state. Actions are the only way to get data into the store. Any data,
@@ -12,21 +13,12 @@
  * Other than `type`, the structure of an action object is really up to you.
  * If you're interested, check out Flux Standard Action for recommendations on
  * how actions should be constructed.
+ *
+ * @template T the type of the action's `type` tag.
  */
-export interface Action {
-  type: any;
+export interface Action<T = any> {
+  type: T;
 }
-
-/**
- * An Action type which accepts any other properties.
- * This is mainly for the use of the `Reducer` type.
- * This is not part of `Action` itself to prevent users who are extending `Action.
- */
-export interface AnyAction extends Action {
-  // Allows any extra properties to be defined in an action.
-  [extraProps: string]: any;
-}
-
 
 /* reducers */
 
@@ -51,15 +43,18 @@ export interface AnyAction extends Action {
  *
  * *Do not put API calls into reducers.*
  *
- * @template S State object type.
+ * @template S The type of state consumed and produced by this reducer.
+ * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S> = (state: S, action: AnyAction) => S;
+export type Reducer<S = any, A extends Action = Action> = (state: S | undefined, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
+ *
+ * @template A The type of actions the reducers can potentially respond to.
  */
-export type ReducersMapObject<S> = {
-  [K in keyof S]: Reducer<S[K]>;
+export type ReducersMapObject<S = any, A extends Action = Action> = {
+  [K in keyof S]: Reducer<S[K], A>;
 }
 
 /**
@@ -80,7 +75,7 @@ export type ReducersMapObject<S> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
+export function combineReducers<S, A extends Action = Action>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
 
 
 /* store */
@@ -102,9 +97,11 @@ export function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
  * function to handle async actions in addition to actions. Middleware may
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
+ *
+ * @template D the type of things (actions or otherwise) which may be dispatched.
  */
-export interface Dispatch<S> {
-    <A extends Action>(action: A): A;
+export interface Dispatch<D = Action> {
+    <A extends D>(action: A): A;
 }
 
 /**
@@ -119,9 +116,11 @@ export interface Unsubscribe {
  * There should only be a single store in a Redux app, as the composition
  * happens on the reducer level.
  *
- * @template S State object type.
+ * @template S The type of state held by this store.
+ * @template A the type of actions which may be dispatched by this store.
+ * @template N The type of non-actions which may be dispatched by this store.
  */
-export interface Store<S> {
+export interface Store<S = any, A extends Action = Action, N = never> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
@@ -148,7 +147,7 @@ export interface Store<S> {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  dispatch: Dispatch<S>;
+  dispatch: Dispatch<A | N>;
 
   /**
    * Reads the state tree managed by the store.
@@ -192,7 +191,7 @@ export interface Store<S> {
    *
    * @param nextReducer The reducer for the store to use instead.
    */
-  replaceReducer(nextReducer: Reducer<S>): void;
+  replaceReducer(nextReducer: Reducer<S, A>): void;
 }
 
 /**
@@ -201,11 +200,13 @@ export interface Store<S> {
  * `createStore(reducer, preloadedState)` exported from the Redux package, from
  * store creators that are returned from the store enhancers.
  *
- * @template S State object type.
+ * @template S The type of state to be held by the store.
+ * @template A The type of actions which may be dispatched.
+ * @template D The type of all things which may be dispatched.
  */
 export interface StoreCreator {
-  <S>(reducer: Reducer<S>, enhancer?: StoreEnhancer<S>): Store<S>;
-  <S>(reducer: Reducer<S>, preloadedState: S, enhancer?: StoreEnhancer<S>): Store<S>;
+  <S, A extends Action, N>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
+  <S, A extends Action, N>(reducer: Reducer<S, A>, preloadedState: S, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
 }
 
 /**
@@ -225,10 +226,11 @@ export interface StoreCreator {
  * provided by the developer tools. It is what makes time travel possible
  * without the app being aware it is happening. Amusingly, the Redux
  * middleware implementation is itself a store enhancer.
+ *
  */
-export type StoreEnhancer<S> = (next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
-export type GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
-export type StoreEnhancerStoreCreator<S> = (reducer: Reducer<S>, preloadedState?: S) => Store<S>;
+export type StoreEnhancer<N = never> = (next: StoreEnhancerStoreCreator<N>) => StoreEnhancerStoreCreator<N>;
+export type GenericStoreEnhancer<N = never> = StoreEnhancer<N>;
+export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = Action>(reducer: Reducer<S, A>, preloadedState?: S) => Store<S, A, N>;
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -263,8 +265,8 @@ export const createStore: StoreCreator;
 
 /* middleware */
 
-export interface MiddlewareAPI<S> {
-  dispatch: Dispatch<S>;
+export interface MiddlewareAPI<S = any, D = Action> {
+  dispatch: Dispatch<D>;
   getState(): S;
 }
 
@@ -278,7 +280,7 @@ export interface MiddlewareAPI<S> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => Dispatch<S>;
+  <S = any, D = Action>(api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => Dispatch<D>;
 }
 
 /**
@@ -327,8 +329,8 @@ export interface ActionCreator<A> {
 /**
  * Object whose values are action creator functions.
  */
-export interface ActionCreatorsMapObject {
-  [key: string]: ActionCreator<any>;
+export interface ActionCreatorsMapObject<A = any> {
+  [key: string]: ActionCreator<A>;
 }
 
 /**
@@ -350,18 +352,18 @@ export interface ActionCreatorsMapObject {
  *   creator wrapped into the `dispatch` call. If you passed a function as
  *   `actionCreator`, the return value will also be a single function.
  */
-export function bindActionCreators<A extends ActionCreator<any>>(actionCreator: A, dispatch: Dispatch<any>): A;
+export function bindActionCreators<A, C extends ActionCreator<A>>(actionCreator: C, dispatch: Dispatch<A>): C;
 
 export function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
   >(actionCreator: A, dispatch: Dispatch<any>): B;
 
-export function bindActionCreators<M extends ActionCreatorsMapObject>(actionCreators: M, dispatch: Dispatch<any>): M;
+export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(actionCreators: M, dispatch: Dispatch<A>): M;
 
 export function bindActionCreators<
-  M extends ActionCreatorsMapObject,
-  N extends ActionCreatorsMapObject
+  M extends ActionCreatorsMapObject<any>,
+  N extends ActionCreatorsMapObject<any>
   >(actionCreators: M, dispatch: Dispatch<any>): N;
 
 
