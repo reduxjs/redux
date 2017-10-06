@@ -17,10 +17,21 @@ const addToCartUnsafe = productId => ({
   productId
 })
 
+const removeFromCartComplete = (productId,quantityById) => ({
+  type: types.REMOVE_FROM_CART,
+  productId,
+  quantityById
+})
+
 export const addToCart = productId => (dispatch, getState) => {
   if (getState().products.byId[productId].inventory > 0) {
     dispatch(addToCartUnsafe(productId))
   }
+}
+
+export const removeFromCart = productId => (dispatch, getState) => {
+  const quantityById = getState().cart.quantityById[productId]
+  dispatch(removeFromCartComplete(productId,quantityById))
 }
 
 export const checkout = products => (dispatch, getState) => {
