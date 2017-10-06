@@ -75,7 +75,7 @@ describe('actions', () => {
 
 ### Async Action Creators
 
-For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it's best to completely mock the Redux store for tests. You can apply the middleware to a mock store using [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store). You can also use [nock](https://github.com/pgte/nock) to mock the HTTP requests.
+For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it's best to completely mock the Redux store for tests. You can apply the middleware to a mock store using [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store). You can also use [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/) to mock the HTTP requests.
 
 #### Example
 
@@ -120,7 +120,7 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
-import nock from 'nock'
+import fetchMock from 'fetch-mock'
 import expect from 'expect' // You can use any testing library
 
 const middlewares = [thunk]
@@ -128,13 +128,14 @@ const mockStore = configureMockStore(middlewares)
 
 describe('async actions', () => {
   afterEach(() => {
-    nock.cleanAll()
+    fetchMock.reset()
+    fetchMock.restore()
   })
 
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
-    nock('http://example.com/')
-      .get('/todos')
-      .reply(200, { body: { todos: ['do something'] } })
+    fetchMock
+      .getOnce('/todos', { body: { todos: ['do something'] }, headers: { 'content-type': 'application/json' } })
+
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
