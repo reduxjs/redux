@@ -36,4 +36,4 @@ const t11: number = compose(stringToNumber, numberToString, stringToNumber,
 
 
 const funcs = [stringToNumber, numberToString, stringToNumber];
-const t12 = compose(...funcs)('bar', 42, true);
+const t12 = compose(...funcs)('bar');
