@@ -601,6 +601,21 @@ describe('createStore', () => {
     ).not.toThrow()
   })
 
+  it('does not warn if replaceReducer changes reducer shape', () => {
+    const preSpy = console.error
+    const spy = jest.fn()
+    console.error = spy
+
+    const store = createStore(combineReducers({ foo: reducers.todos }))
+    expect(spy.mock.calls.length).toBe(0)
+
+    store.replaceReducer(combineReducers({ bar: reducers.todos }))
+    expect(spy.mock.calls.length).toBe(0)
+
+    spy.mockClear()
+    console.error = preSpy    
+  })
+
   it('throws if listener is not a function', () => {
     const store = createStore(reducers.todos)
 
