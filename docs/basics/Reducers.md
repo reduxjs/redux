@@ -156,8 +156,8 @@ Finally, the implementation of the `TOGGLE_TODO` handler shouldn't come as a com
 ```js
 case TOGGLE_TODO:
   return Object.assign({}, state, {
-    todos: state.todos.map((todo, index) => {
-      if (index === action.index) {
+    todos: state.todos.map((todo, id) => {
+      if (id === action.id) {
         return Object.assign({}, todo, {
           completed: !todo.completed
         })
@@ -192,8 +192,8 @@ function todoApp(state = initialState, action) {
       })
     case TOGGLE_TODO:
       return Object.assign({}, state, {
-        todos: state.todos.map((todo, index) => {
-          if (index === action.index) {
+        todos: state.todos.map((todo, id) => {
+          if (id === action.id) {
             return Object.assign({}, todo, {
               completed: !todo.completed
             })
@@ -221,8 +221,8 @@ function todos(state = [], action) {
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
-        if (index === action.index) {
+      return state.map((todo, id) => {
+        if (index === action.id) {
           return Object.assign({}, todo, {
             completed: !todo.completed
           })
@@ -286,8 +286,8 @@ function todos(state = [], action) {
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
-        if (index === action.index) {
+      return state.map((todo, id) => {
+        if (index === action.id) {
           return Object.assign({}, todo, {
             completed: !todo.completed
           })
@@ -413,8 +413,8 @@ function todos(state = [], action) {
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
-        if (index === action.index) {
+      return state.map((todo, id) => {
+        if (id === action.id) {
           return Object.assign({}, todo, {
             completed: !todo.completed
           })
