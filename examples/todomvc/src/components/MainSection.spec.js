@@ -70,7 +70,7 @@ describe('components', () => {
 
       it('should call completeAll on change', () => {
         const { output, props } = setup()
-        const [ toggle, label ] = output.props.children[0].props.children
+        const [ , label ] = output.props.children[0].props.children
         label.props.onClick({})
         expect(props.actions.completeAll).toBeCalled()
       })

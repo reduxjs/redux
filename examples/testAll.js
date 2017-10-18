@@ -5,6 +5,7 @@
 const fs = require('fs')
 const path = require('path')
 const { spawnSync } = require('child_process')
+const chalk = require('chalk')
 
 const exampleDirs = fs.readdirSync(__dirname).filter((file) => {
   return fs.statSync(path.join(__dirname, file)).isDirectory()
@@ -19,7 +20,7 @@ const cmdArgs = [
 for (const dir of exampleDirs) {
   if (dir === 'counter-vanilla') continue
 
-  console.log('==> Testing %s...', dir)
+  console.log(chalk.bold.yellow('\n\n==> Testing %s...\n\n'), dir)
   for (const cmdArg of cmdArgs) {
     // declare opts in this scope to avoid https://github.com/joyent/node/issues/9158
     const opts = {
