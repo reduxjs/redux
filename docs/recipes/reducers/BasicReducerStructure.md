@@ -96,3 +96,13 @@ A typical app's state shape might look roughly like:
     }
 }
 ```
+
+#### Further Information
+
+- [Redux Docs: Reducers](../../basics/Reducers.md)
+- [Redux Docs: Reducing Boilerplate](../ReducingBoilerplate.md)
+- [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
+- [Using Currying to Compose Reducers](http://www.guyzissman.com/posts/pipe-reducers/)
+- [The Power of Higher-Order Reducers](http://slides.com/omnidan/hor#/)
+- [Higher Order Reducers - It just sounds scary](https://medium.com/@danielkagan/high-order-reducers-it-just-sounds-scary-2b9e5dbfc705)
+- [Redux Architecture Guidelines](http://joeellis.la/redux-architecture/)
