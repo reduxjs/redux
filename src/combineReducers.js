@@ -108,6 +108,10 @@ export default function combineReducers(reducers) {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
+      } else if (key === '__esModule') {
+        warning(`Passing a whole ES Module to combine reducers is discouraged.`)
+      } else if (typeof reducers[key] !== 'function') {
+        warning(`Reducer provided for "${key}" is not a function. Received type: ${typeof key}.`)
       }
     }
 
