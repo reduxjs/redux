@@ -196,6 +196,17 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Expected the nextReducer to be a function.')
     }
 
+    const reducerShape = nextReducer({}, {})
+
+    if (typeof currentState === 'object' && Array.isArray(currentState) === false) {
+      currentState = Object.keys(currentState).reduce((targetShape, key) => {
+        if (key in reducerShape) {
+          targetShape[key] = currentState[key]
+        }
+        return targetShape
+      }, {})
+    }
+
     currentReducer = nextReducer
     dispatch({ type: ActionTypes.INIT })
   }
