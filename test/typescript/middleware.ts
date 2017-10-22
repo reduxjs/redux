@@ -4,16 +4,16 @@ import {
 } from "../../"
 
 declare module "../../" {
-    export interface Dispatch<S> {
-        <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
+    export interface Dispatch<D> {
+        <R,S>(asyncAction: (dispatch: Dispatch<D>, getState: () => S) => R): R;
     }
 }
 
-type Thunk<S, O> = (dispatch: Dispatch<S>, getState?: () => S) => O;
+type Thunk<S, O> = (dispatch: Dispatch<Action>, getState?: () => S) => O;
 
 const thunkMiddleware: Middleware =
   <S>({dispatch, getState}: MiddlewareAPI<S>) =>
-    (next: Dispatch<S>) =>
+    (next: Dispatch<Action>) =>
       <A extends Action, B>(action: A | Thunk<S, B>): B|Action =>
         typeof action === 'function' ?
           (<Thunk<S, B>>action)(dispatch, getState) :
@@ -51,7 +51,7 @@ const storeWithThunkMiddleware = createStore(
 );
 
 storeWithThunkMiddleware.dispatch(
-  (dispatch: Dispatch<State>, getState: () => State) => {
+  (dispatch: Dispatch<Action>, getState: () => State) => {
     const todos: string[] = getState().todos;
     dispatch({type: 'ADD_TODO'})
   }

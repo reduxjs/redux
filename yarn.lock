@@ -4155,9 +4155,9 @@ typescript-definition-tester@0.0.5:
     dts-bundle "^0.2.0"
     lodash "^3.6.0"
 
-typescript@^2.1.0:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.4.tgz#b53b69fb841126acb1dd4b397d21daba87572251"
+typescript@^2.4.2:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.3.tgz#df3dcdc38f3beb800d4bc322646b04a3f6ca7f0d"
 
 uglify-js@^2.6, uglify-js@^2.6.1:
   version "2.7.5"
