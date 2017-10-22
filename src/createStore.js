@@ -66,6 +66,27 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
   }
 
+  function pruneState(state, currentShape, nextShape) {
+    if (![state, currentShape, nextShape].every(isPlainObject)) {
+      return state
+    }
+    let hasChanged = false
+    const stateKeys = Object.keys(state)
+    const nextState = {...state}
+    for (let i = 0; i < stateKeys.length; i++) {
+      const key = stateKeys[i]
+      if (key in currentShape) {
+        if (key in nextShape) {
+          nextState[key] = pruneState(state[key], currentShape[key], nextShape[key])
+        } else {
+          delete nextState[key]
+        }
+      }
+      hasChanged = hasChanged || nextState[key] !== state[key]
+    }
+    return hasChanged ? nextState : state
+  }
+
   /**
    * Reads the state tree managed by the store.
    *
@@ -194,6 +215,12 @@ export default function createStore(reducer, preloadedState, enhancer) {
   function replaceReducer(nextReducer) {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      const currentStateShape = reducer(undefined, { type: ActionTypes.INIT })
+      const nextStateShape = nextReducer(undefined, { type: ActionTypes.INIT })
+      currentState = pruneState(currentState, currentStateShape, nextStateShape)
     }
 
     currentReducer = nextReducer
