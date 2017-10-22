@@ -9,6 +9,7 @@ script:
 branches:
   only:
     - master
+    - next
 cache:
   directories:
   - examples/async/node_modules

@@ -1,12 +1,14 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
-import replace from 'rollup-plugin-replace';
-import uglify from 'rollup-plugin-uglify';
+import nodeResolve from 'rollup-plugin-node-resolve'
+import babel from 'rollup-plugin-babel'
+import replace from 'rollup-plugin-replace'
+import uglify from 'rollup-plugin-uglify'
 
 var env = process.env.NODE_ENV
 var config = {
-  format: 'umd',
-  moduleName: 'Redux',
+  output: {
+    format: 'umd',
+    name: 'Redux'
+  },
   plugins: [
     nodeResolve({
       jsnext: true

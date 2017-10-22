@@ -135,7 +135,7 @@ Let's take a look at our new client file:
 
 ```js
 import React from 'react'
-import { render } from 'react-dom'
+import { hydrate } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './containers/App'
@@ -150,7 +150,7 @@ delete window.__PRELOADED_STATE__
 // Create Redux store with initial state
 const store = createStore(counterApp, preloadedState)
 
-render(
+hydrate(
   <Provider store={store}>
     <App />
   </Provider>,
@@ -160,7 +160,7 @@ render(
 
 You can set up your build tool of choice (Webpack, Browserify, etc.) to compile a bundle file into `static/bundle.js`.
 
-When the page loads, the bundle file will be started up and [`ReactDOM.render()`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.render) will hook into the `data-react-id` attributes from the server-rendered HTML. This will connect our newly-started React instance to the virtual DOM used on the server. Since we have the same initial state for our Redux store and used the same code for all our view components, the result will be the same real DOM.
+When the page loads, the bundle file will be started up and [`ReactDOM.hydrate()`](https://reactjs.org/docs/react-dom.html#hydrate) will hook into the `data-react-id` attributes from the server-rendered HTML. This will connect our newly-started React instance to the virtual DOM used on the server. Since we have the same initial state for our Redux store and used the same code for all our view components, the result will be the same real DOM.
 
 And that's it! That is all we need to do to implement server side rendering.
 
