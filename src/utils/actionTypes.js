@@ -5,7 +5,8 @@
  * Do not reference these action types directly in your code.
  */
 var ActionTypes = {
-  INIT: '@@redux/INIT'
+  INIT: '@@redux/INIT',
+  REPLACE: '@@redux/REPLACE'
 }
 
 export default ActionTypes
