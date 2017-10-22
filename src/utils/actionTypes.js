@@ -4,7 +4,7 @@
  * If the current state is undefined, you must return the initial state.
  * Do not reference these action types directly in your code.
  */
-var ActionTypes = {
+const ActionTypes = {
   INIT: '@@redux/INIT',
   REPLACE: '@@redux/REPLACE'
 }
