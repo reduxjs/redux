@@ -218,7 +218,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      const currentStateShape = reducer(undefined, { type: ActionTypes.INIT })
+      const currentStateShape = currentReducer(undefined, { type: ActionTypes.INIT })
       const nextStateShape = nextReducer(undefined, { type: ActionTypes.INIT })
       currentState = pruneState(currentState, currentStateShape, nextStateShape)
     }
