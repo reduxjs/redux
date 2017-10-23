@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 
@@ -42,7 +42,7 @@ describe('AddTodo', () => {
 
     deeperWrapper
       .find('input')
-      .simulate('change', { target: { value: 'Test todo' } });
+      .simulate('change', { currentTarget: { value: 'Test todo' } });
 
     deeperWrapper.find('form').simulate('submit', { preventDefault });
 

@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "enzyme": "^2.8.2",
-    "flow-bin": "^0.48.0",
+    "flow-bin": "^0.57.3",
     "flow-typed": "^2.1.2",
     "react-addons-test-utils": "^15.5.1",
     "react-scripts": "^1.0.7",

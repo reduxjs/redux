@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { addTodo } from '../actions/todos';
@@ -16,13 +16,13 @@ export type State = {
   value: string
 };
 
-class AddTodo extends Component<void, Props, State> {
+class AddTodo extends React.Component<Props, State> {
   input: HTMLInputElement;
   state = {
     value: ''
   };
-  handleChange = (event: Event & { target: HTMLInputElement }) => {
-    this.setState({ value: event.target.value });
+  handleChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
+    this.setState({ value: event.currentTarget.value });
   };
   handleSubmit = (event: Event) => {
     event.preventDefault();
