@@ -7,8 +7,8 @@ const dispatchResult: Action = dispatch({type: 'TYPE'});
 
 // thunk
 declare module "../../" {
-    export interface Dispatch {
-        <R>(asyncAction: (dispatch: Dispatch, getState: () => any) => R): R;
+    export interface Dispatch<D = Action> {
+        <R>(asyncAction: (dispatch: Dispatch<D>, getState: () => any) => R): R;
     }
 }
 
