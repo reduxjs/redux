@@ -5,20 +5,29 @@ import {
 
 
 type State = {
-  todos: string[];
+  a: 'a';
+  b: {
+    c: 'c',
+    d: 'd',
+  };
 }
 
-const reducer: Reducer<State> = (state: State, action: Action): State => {
+const reducer: Reducer<State> = (state: State | undefined = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd',
+  },
+}, action: Action): State => {
   return state;
-}
-
+};
 
 /* createStore */
 
 const store: Store<State> = createStore(reducer);
 
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
-  todos: []
+  b: {c: 'c'}
 });
 
 const genericEnhancer: GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => next;
@@ -28,7 +37,7 @@ const storeWithGenericEnhancer: Store<State> = createStore(reducer, genericEnhan
 const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhancer);
 
 const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(reducer, {
-  todos: []
+  b: {c: 'c'}
 }, genericEnhancer);
 
 
