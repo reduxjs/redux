@@ -1,10 +1,10 @@
 // @flow
 
-import * as React from 'react';
+import React, { type Node } from 'react';
 
 export type Props = {
   active: boolean,
-  children?: React.Node,
+  children?: Node,
   onClick: () => void
 };
 

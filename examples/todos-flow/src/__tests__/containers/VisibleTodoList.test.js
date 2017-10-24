@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 

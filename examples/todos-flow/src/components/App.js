@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React from 'react';
 
 import Footer from './Footer';
 import AddTodo from '../containers/AddTodo';

@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { addTodo } from '../actions/todos';
@@ -16,7 +16,7 @@ export type State = {
   value: string
 };
 
-class AddTodo extends React.Component<Props, State> {
+class AddTodo extends Component<Props, State> {
   input: HTMLInputElement;
   state = {
     value: ''
