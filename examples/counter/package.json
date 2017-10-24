@@ -8,6 +8,8 @@
     "react-test-renderer": "^15.6.1"
   },
   "dependencies": {
+    "funcadelic": "0.2.3",
+    "microstates": "cowboyd/microstates.js#v0.2.0",
     "prop-types": "^15.5.10",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",

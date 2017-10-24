@@ -1,20 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
-import Counter from './components/Counter'
-import counter from './reducers'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Counter from './components/Counter';
+import { default as Microstates, Number } from 'microstates';
+import { map } from 'funcadelic';
 
-const store = createStore(counter)
-const rootEl = document.getElementById('root')
+const render = value => {
+  let ms = Microstates.from(Number, value);
 
-const render = () => ReactDOM.render(
-  <Counter
-    value={store.getState()}
-    onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
-    onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
-  />,
-  rootEl
-)
+  let transitions = map(transition => (...args) => render(transition(...args)), ms.transitions);
 
-render()
-store.subscribe(render)
+  let { increment, decrement } = transitions;
+
+  ReactDOM.render(
+    <Counter value={ms.states} onIncrement={() => increment()} onDecrement={() => decrement()} />,
+    document.getElementById('root')
+  );
+};
+
+render();
