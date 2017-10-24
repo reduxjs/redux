@@ -7,9 +7,10 @@ import { map } from 'funcadelic';
 const render = value => {
   let ms = Microstates.from(Number, value);
 
-  let transitions = map(transition => (...args) => render(transition(...args)), ms.transitions);
-
-  let { increment, decrement } = transitions;
+  let { increment, decrement } = map(
+    transition => (...args) => render(transition(...args)),
+    ms.transitions
+  );
 
   ReactDOM.render(
     <Counter value={ms.states} onIncrement={() => increment()} onDecrement={() => decrement()} />,
