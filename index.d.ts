@@ -194,6 +194,8 @@ export interface Store<S = any, A extends Action = Action, N = never> {
   replaceReducer(nextReducer: Reducer<S, A>): void;
 }
 
+export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
+
 /**
  * A store creator is a function that creates a Redux store. Like with
  * dispatching function, we must distinguish the base store creator,
@@ -206,7 +208,7 @@ export interface Store<S = any, A extends Action = Action, N = never> {
  */
 export interface StoreCreator {
   <S, A extends Action, N>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
-  <S, A extends Action, N>(reducer: Reducer<S, A>, preloadedState: S, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
+  <S, A extends Action, N>(reducer: Reducer<S, A>, preloadedState: DeepPartial<S>, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
 }
 
 /**
@@ -230,7 +232,7 @@ export interface StoreCreator {
  */
 export type StoreEnhancer<N = never> = (next: StoreEnhancerStoreCreator<N>) => StoreEnhancerStoreCreator<N>;
 export type GenericStoreEnhancer<N = never> = StoreEnhancer<N>;
-export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = Action>(reducer: Reducer<S, A>, preloadedState?: S) => Store<S, A, N>;
+export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = Action>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S, A, N>;
 
 /**
  * Creates a Redux store that holds the state tree.
