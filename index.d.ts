@@ -53,7 +53,7 @@ export interface AnyAction extends Action {
  *
  * @template S State object type.
  */
-export type Reducer<S> = (state: S, action: AnyAction) => S;
+export type Reducer<S> = (state: S | undefined, action: AnyAction) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
