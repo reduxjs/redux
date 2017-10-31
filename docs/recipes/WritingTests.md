@@ -107,7 +107,7 @@ export function fetchTodos() {
     dispatch(fetchTodosRequest())
     return fetch('http://example.com/todos')
       .then(res => res.json())
-      .then(json => dispatch(fetchTodosSuccess(json.body)))
+      .then(body => dispatch(fetchTodosSuccess(body)))
       .catch(ex => dispatch(fetchTodosFailure(ex)))
   }
 }
