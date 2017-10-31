@@ -53,6 +53,7 @@
   * [Immutable Data](/docs/faq/ImmutableData.md)
   * [Code Structure](/docs/faq/CodeStructure.md)
   * [Performance](/docs/faq/Performance.md)
+  * [Design Decisions](/docs/faq/DesignDecisions.md)
   * [React Redux](/docs/faq/ReactRedux.md)
   * [Miscellaneous](/docs/faq/Miscellaneous.md)
 * [Troubleshooting](/docs/Troubleshooting.md)
