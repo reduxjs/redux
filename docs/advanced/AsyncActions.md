@@ -368,7 +368,7 @@ export function fetchPosts(subreddit) {
         // any errors in the dispatch and resulting render,
         // causing a loop of 'Unexpected batch number' errors.
         // https://github.com/facebook/react/issues/6895
-        error => console.log('An error occured.', error)
+        error => console.log('An error occurred.', error)
       )
       .then(json =>
         // We can dispatch many times!
