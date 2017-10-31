@@ -16,13 +16,13 @@ export type State = {
   value: string
 };
 
-class AddTodo extends Component<void, Props, State> {
+class AddTodo extends Component<Props, State> {
   input: HTMLInputElement;
   state = {
     value: ''
   };
-  handleChange = (event: Event & { target: HTMLInputElement }) => {
-    this.setState({ value: event.target.value });
+  handleChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
+    this.setState({ value: event.currentTarget.value });
   };
   handleSubmit = (event: Event) => {
     event.preventDefault();

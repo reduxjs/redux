@@ -42,7 +42,7 @@ describe('AddTodo', () => {
 
     deeperWrapper
       .find('input')
-      .simulate('change', { target: { value: 'Test todo' } });
+      .simulate('change', { currentTarget: { value: 'Test todo' } });
 
     deeperWrapper.find('form').simulate('submit', { preventDefault });
 
