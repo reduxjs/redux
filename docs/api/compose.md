@@ -21,7 +21,7 @@ This example demonstrates how to use `compose` to enhance a [store](Store.md) wi
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import DevTools from './containers/DevTools'
-import reducer from '../reducers/index'
+import reducer from '../reducers'
 
 const store = createStore(
   reducer,
