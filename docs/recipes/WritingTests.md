@@ -80,7 +80,7 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 #### Example
 
 ```js
-import 'isomorphic-fetch'
+import 'cross-fetch/polyfill'
 
 function fetchTodosRequest() {
   return {

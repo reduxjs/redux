@@ -312,7 +312,7 @@ We can still define these special thunk action creators inside our `actions.js` 
 #### `actions.js` (Asynchronous)
 
 ```js
-import fetch from 'isomorphic-fetch'
+import fetch from 'cross-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
@@ -382,11 +382,11 @@ export function fetchPosts(subreddit) {
 
 >##### Note on `fetch`
 
->We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don't yet support it natively, we suggest that you use [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) library:
+>We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don't yet support it natively, we suggest that you use [`cross-fetch`](https://github.com/lquixada/cross-fetch) library:
 
 >```js
 >// Do this in every file where you use `fetch`
->import fetch from 'isomorphic-fetch'
+>import fetch from 'cross-fetch'
 >```
 
 >Internally, it uses [`whatwg-fetch` polyfill](https://github.com/github/fetch) on the client, and [`node-fetch`](https://github.com/bitinn/node-fetch) on the server, so you won't need to change API calls if you change your app to be [universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
@@ -430,7 +430,7 @@ The nice thing about thunks is that they can dispatch results of each other:
 #### `actions.js` (with `fetch`)
 
 ```js
-import fetch from 'isomorphic-fetch'
+import fetch from 'cross-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
