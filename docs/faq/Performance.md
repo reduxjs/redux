@@ -7,6 +7,7 @@
 - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#performance-clone-state)
 - [How can I reduce the number of store update events?](#performance-update-events)
 - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#performance-state-memory)
+- [Will caching remote data cause memory problems?](#performance-cache-memory)
 
 
 
@@ -137,3 +138,24 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 - [Stack Overflow: Redux and ALL the application state](https://stackoverflow.com/questions/42489557/redux-and-all-the-application-state/42491766#42491766)
 - [Stack Overflow: Memory Usage Concern with Controlled Components](https://stackoverflow.com/questions/44956071/memory-usage-concern-with-controlled-components?noredirect=1&lq=1)
 - [Reddit: What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
+
+
+<a id="performance-cache-memory"></a>
+### Will caching remote data cause memory problems?
+
+The amount of memory available to JavaScript applications running in a browser is finite. Caching data will cause performance problems when the size of the cache approaches the amount of available memory. This tends to be a problem when the cached data is exceptionally large or the session is exceptionally long-running. And while it is good to be aware of the potential for these problems, this awareness should not discourage you from efficiently caching reasonable amounts of data.
+
+Here are a few approaches to caching remote data efficiently:
+
+First, only cache as much data as the user needs. If your application displays a paginated list of records, you don't necessarily need to cache the entire collection. Instead, cache what is visible to the user and add to that cache when the user has (or will soon have) an immediate need for more data.
+
+Second, cache an abbreviated form of a record when possible. Sometimes a record includes data that is not relevant to the user. If the application does not depend on this data, it can be omitted from the cache.
+
+Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](/docs/recipes/reducers/NormalizingStateShape.html#designing-a-normalized-state), including efficient memory consumption.
+
+#### Further information
+
+**Discussions**
+- [Stack Overflow: How to choose the Redux state shape for an app with list/detail views and pagination?](https://stackoverflow.com/questions/33940015/how-to-choose-the-redux-state-shape-for-an-app-with-list-detail-views-and-pagina)
+- [Twitter: ...concerns over having "too much data in the state tree"...](https://twitter.com/acemarke/status/804071531844423683)
+- [Advanced Redux entity normalization](https://medium.com/@dcousineau/advanced-redux-entity-normalization-f5f1fe2aefc5)
