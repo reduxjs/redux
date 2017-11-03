@@ -767,4 +767,30 @@ describe('createStore', () => {
       expect(results).toEqual([ { foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true } ])
     })
   })
+
+  it('does not log an error if parts of the current state will be ignored by a nextReducer using combineReducers', () => {
+    const originalConsoleError = console.error
+    console.error = jest.fn()
+
+    const store = createStore(
+      combineReducers({
+        x: (s=0, a) => s,
+        y: combineReducers({
+          z: (s=0, a) => s,
+          w: (s=0, a) => s,
+        }),
+      })
+    )
+
+    store.replaceReducer(
+      combineReducers({
+        y: combineReducers({
+          z: (s=0, a) => s,
+        }),
+      })
+    )
+
+    expect(console.error.mock.calls.length).toBe(0)
+    console.error = originalConsoleError
+  })
 })

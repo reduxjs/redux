@@ -44,6 +44,8 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     unexpectedKeyCache[key] = true
   })
 
+  if (action && action.type === ActionTypes.REPLACE) return
+
   if (unexpectedKeys.length > 0) {
     return (
       `Unexpected ${unexpectedKeys.length > 1 ? 'keys' : 'key'} ` +

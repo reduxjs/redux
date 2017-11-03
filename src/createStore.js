@@ -213,7 +213,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
 
     currentReducer = nextReducer
-    dispatch({ type: ActionTypes.INIT })
+    dispatch({ type: ActionTypes.REPLACE })
   }
 
   /**
