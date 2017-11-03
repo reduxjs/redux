@@ -15,7 +15,7 @@
   "scripts": {
     "clean": "rimraf lib dist es coverage",
     "lint": "eslint src test build",
-    "pretest": "yarn run build:commonjs",
+    "pretest": "npm run build:commonjs",
     "test": "cross-env BABEL_ENV=commonjs jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
