@@ -1,12 +1,12 @@
-import { createStore, combineReducers } from '../src/index'
-import { 
-  addTodo, 
-  dispatchInMiddle, 
+import { createStore, combineReducers } from '../'
+import {
+  addTodo,
+  dispatchInMiddle,
   getStateInMiddle,
   subscribeInMiddle,
   unsubscribeInMiddle,
-  throwError, 
-  unknownAction 
+  throwError,
+  unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'

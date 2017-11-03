@@ -3,13 +3,28 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import uglify from 'rollup-plugin-uglify'
 
-var env = process.env.NODE_ENV
-var config = {
-  output: {
-    format: 'umd',
-    name: 'Redux'
-  },
-  plugins: [
+const env = process.env.NODE_ENV
+const config = {
+  input: 'src/index.js',
+  plugins: []
+}
+
+if (env === 'es' || env === 'cjs') {
+  config.output = { format: env }
+  config.external = [
+    'lodash/isPlainObject',
+    'lodash-es/isPlainObject',
+    'symbol-observable'
+  ];
+  config.plugins.push(
+    babel()
+  )
+}
+
+if (env === 'development' || env === 'production') {
+  config.output = { format: 'umd' }
+  config.name = 'Redux'
+  config.plugins.push(
     nodeResolve({
       jsnext: true
     }),
@@ -19,7 +34,7 @@ var config = {
     replace({
       'process.env.NODE_ENV': JSON.stringify(env)
     })
-  ]
+  )
 }
 
 if (env === 'production') {

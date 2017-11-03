@@ -1,4 +1,4 @@
-import { bindActionCreators, createStore } from '../src'
+import { bindActionCreators, createStore } from '../'
 import { todos } from './helpers/reducers'
 import * as actionCreators from './helpers/actionCreators'
 
