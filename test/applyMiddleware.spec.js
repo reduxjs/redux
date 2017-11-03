@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from '../src/index'
+import { createStore, applyMiddleware } from '../'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
