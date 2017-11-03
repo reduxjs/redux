@@ -5,16 +5,12 @@ import uglify from 'rollup-plugin-uglify'
 
 const env = process.env.NODE_ENV
 const config = {
-  output: {
-    format: 'umd',
-    name: 'Redux'
-  },
-  entry: 'src/index.js',
+  input: 'src/index.js',
   plugins: []
 }
 
 if (env === 'es' || env === 'cjs') {
-  config.format = env
+  config.output = { format: env }
   config.external = [
     'lodash/isPlainObject',
     'lodash-es/isPlainObject',
@@ -26,8 +22,8 @@ if (env === 'es' || env === 'cjs') {
 }
 
 if (env === 'development' || env === 'production') {
-  config.format = 'umd'
-  config.moduleName = 'Redux'
+  config.output = { format: 'umd' }
+  config.name = 'Redux'
   config.plugins.push(
     nodeResolve({
       jsnext: true
