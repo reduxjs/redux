@@ -8,7 +8,9 @@
             "ie >= 11"
           ]
         },
-        "modules": false
+        "exclude": ["transform-async-to-generator", "transform-regenerator"],
+        "modules": false,
+        "loose": true
       }
     ]
   ],

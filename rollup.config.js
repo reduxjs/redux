@@ -1,5 +1,6 @@
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
+import { list as babelHelpersList } from 'babel-helpers'
 import replace from 'rollup-plugin-replace'
 import uglify from 'rollup-plugin-uglify'
 
@@ -18,7 +19,8 @@ if (env === 'es' || env === 'cjs') {
   ];
   config.plugins.push(
     babel({
-      plugins: ['external-helpers']
+      plugins: ['external-helpers'],
+      externalHelpersWhitelist: babelHelpersList.filter(helperName => helperName !== 'asyncGenerator')
     })
   )
 }
@@ -32,7 +34,8 @@ if (env === 'development' || env === 'production') {
     }),
     babel({
       exclude: 'node_modules/**',
-      plugins: ['external-helpers']
+      plugins: ['external-helpers'],
+      externalHelpersWhitelist: babelHelpersList.filter(helperName => helperName !== 'asyncGenerator')
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify(env)
