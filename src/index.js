@@ -4,6 +4,7 @@ import bindActionCreators from './bindActionCreators'
 import applyMiddleware from './applyMiddleware'
 import compose from './compose'
 import warning from './utils/warning'
+import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 /*
  * This is a dummy function to check if the function name has been altered by minification.
@@ -30,5 +31,6 @@ export {
   combineReducers,
   bindActionCreators,
   applyMiddleware,
-  compose
+  compose,
+  __DO_NOT_USE__ActionTypes
 }
