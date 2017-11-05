@@ -30,10 +30,10 @@ describe('todos reducer', () => {
           id: 0
         }
       ], {
-        type: 'ADD_TODO',
-        text: 'Use Redux',
-        id: 1
-      })
+          type: 'ADD_TODO',
+          text: 'Use Redux',
+          id: 1
+        })
     ).toEqual([
       {
         text: 'Run the tests',
@@ -58,10 +58,10 @@ describe('todos reducer', () => {
           id: 1
         }
       ], {
-        type: 'ADD_TODO',
-        text: 'Fix the tests',
-        id: 2
-      })
+          type: 'ADD_TODO',
+          text: 'Fix the tests',
+          id: 2
+        })
     ).toEqual([
       {
         text: 'Run the tests',
@@ -78,7 +78,29 @@ describe('todos reducer', () => {
       }
     ])
   })
-
+  it('should handle DELETE_TODO', () => {
+    expect(
+      todos([
+        {
+          type: 'ADD_TODO',
+          text: 'Run DELETE the test 1',
+          id: 0
+        }, {
+          type: 'ADD_TODO',
+          text: 'Run DELETE the test 2',
+          id: 10
+        }], {
+          type: 'DELETE_TODO',
+          id: 10
+        })
+    ).toEqual([
+      {
+        type: 'ADD_TODO',
+        text: 'Run DELETE the test 1',
+        id: 0
+      }
+    ])
+  })
   it('should handle TOGGLE_TODO', () => {
     expect(
       todos([
@@ -92,9 +114,9 @@ describe('todos reducer', () => {
           id: 0
         }
       ], {
-        type: 'TOGGLE_TODO',
-        id: 1
-      })
+          type: 'TOGGLE_TODO',
+          id: 1
+        })
     ).toEqual([
       {
         text: 'Run the tests',
