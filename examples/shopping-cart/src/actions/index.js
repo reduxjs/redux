@@ -3,7 +3,7 @@ import * as types from '../constants/ActionTypes'
 
 const receiveProducts = products => ({
   type: types.RECEIVE_PRODUCTS,
-  products: products
+  products
 })
 
 export const getAllProducts = () => dispatch => {
