@@ -1,5 +1,6 @@
 import ActionTypes from './utils/actionTypes'
 import warning from './utils/warning'
+import isPlainObject from './utils/isPlainObject'
 
 function getUndefinedStateErrorMessage(key, action) {
   const actionType = action && action.type
@@ -25,7 +26,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, une
     )
   }
 
-  if (!inputState || inputState.constructor !== Object) {
+  if (!isPlainObject(inputState)) {
     return (
       `The ${argumentName} has unexpected type of "` +
       ({}).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +

@@ -1,6 +1,7 @@
 import $$observable from 'symbol-observable'
 
 import ActionTypes from './utils/actionTypes'
+import isPlainObject from './utils/isPlainObject'
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -162,7 +163,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * return something else (for example, a Promise you can await).
    */
   function dispatch(action) {
-    if (!action || action.constructor !== Object) {
+    if (!isPlainObject(action)) {
       throw new Error(
         'Actions must be plain objects. ' +
         'Use custom middleware for async actions.'
