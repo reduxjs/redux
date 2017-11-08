@@ -92,25 +92,25 @@ describe('applyMiddleware', () => {
     })
   })
 
-    it('passes through all arguments of dispatch calls from within middleware', () => {
-        const spy = jest.fn()
-        const testCallArgs = ['test']
-        function multiArgMiddleware() {
-            return next => (action, callArgs) => {
-                if (Array.isArray(callArgs)) {
-                    return action(...callArgs)
-                }
-                return next(action)
-            }
+  it('passes through all arguments of dispatch calls from within middleware', () => {
+      const spy = jest.fn()
+      const testCallArgs = ['test']
+      function multiArgMiddleware() {
+        return next => (action, callArgs) => {
+          if (Array.isArray(callArgs)) {
+            return action(...callArgs)
+          }
+          return next(action)
         }
-        function dummyMiddleware({ dispatch }) {
-            return next => action => dispatch(action, testCallArgs)
-        }
+      }
+      function dummyMiddleware({ dispatch }) {
+        return next => action => dispatch(action, testCallArgs)
+      }
 
-        const store = createStore(reducers.todos, applyMiddleware(multiArgMiddleware, dummyMiddleware))
-        store.dispatch(spy)
-        expect(spy.mock.calls[0]).toEqual(testCallArgs)
-    })
+      const store = createStore(reducers.todos, applyMiddleware(multiArgMiddleware, dummyMiddleware))
+      store.dispatch(spy)
+      expect(spy.mock.calls[0]).toEqual(testCallArgs)
+  })
 
   it('keeps unwrapped dispatch available while middleware is initializing', () => {
     // This is documenting the existing behavior in Redux 3.x.
