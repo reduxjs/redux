@@ -16,7 +16,7 @@
 	- [How does immutability enable a shallow check to detect object mutations?](#immutability-enables-shallow-checking)
 - [How can immutability in your reducers cause components to render unnecessarily?](#immutability-issues-with-redux)
 - [How can immutability in mapStateToProps cause components to render unnecessarily?](#immutability-issues-with-react-redux)
-- [What approaches are there for handling data immutably? Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
+- [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
 - [What are the issues with using JavaScript for immutable operations?](#issues-with-es6-for-immutable-ops)
 
 
@@ -423,7 +423,7 @@ Note that, conversely, if the values in your props object refer to mutable objec
 
 
 <a id="do-i-have-to-use-immutable-js"></a>
-## What approaches are there for handling data immutably? Do I have to use Immutable.JS?
+## What approaches are there for handling data immutability? Do I have to use Immutable.JS?
 You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
 
 However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
