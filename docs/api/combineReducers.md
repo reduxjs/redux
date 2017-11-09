@@ -15,7 +15,7 @@ rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
   potato: {
     // ... potatoes, and other state managed by the potatoReducer ... 
   }
-  reducer2: {
+  tomato: {
     // ... tomatoes, and other state managed by the tomatoReducer, maybe some nice sauce? ...
   }
 }
