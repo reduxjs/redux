@@ -4,14 +4,20 @@ As your app grows more complex, you'll want to split your [reducing function](..
 
 The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
 
-The resulting reducer calls every child reducer, and gathers their results into a single state object. **The shape of the state object matches the keys of the passed `reducers`**.
+The resulting reducer calls every child reducer, and gathers their results into a single state object.
+**The state produced by `combineReducers()` namespaces the states of each reducer under their keys as passed to `combineReducers()`**
 
-Consequently, the state object will look like this: 
-
+Example:
 ```
+rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
+// This would produce the following state object
 {
-  reducer1: ...
-  reducer2: ...
+  potato: {
+    // ... potatoes, and other state managed by the potatoReducer ... 
+  }
+  tomato: {
+    // ... tomatoes, and other state managed by the tomatoReducer, maybe some nice sauce? ...
+  }
 }
 ```
 
