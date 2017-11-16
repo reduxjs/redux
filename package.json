@@ -1,6 +1,6 @@
 {
   "name": "redux",
-  "version": "3.7.2",
+  "version": "4.0.0-beta.1",
   "description": "Predictable state container for JavaScript apps",
   "main": "lib/redux.js",
   "module": "es/redux.js",
