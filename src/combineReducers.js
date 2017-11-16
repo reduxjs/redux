@@ -1,6 +1,6 @@
 import ActionTypes from './utils/actionTypes'
-import isPlainObject from 'lodash/isPlainObject'
 import warning from './utils/warning'
+import isPlainObject from './utils/isPlainObject'
 
 function getUndefinedStateErrorMessage(key, action) {
   const actionType = action && action.type

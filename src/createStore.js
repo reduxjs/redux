@@ -1,7 +1,7 @@
-import isPlainObject from 'lodash/isPlainObject'
 import $$observable from 'symbol-observable'
 
 import ActionTypes from './utils/actionTypes'
+import isPlainObject from './utils/isPlainObject'
 
 /**
  * Creates a Redux store that holds the state tree.

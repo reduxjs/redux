@@ -60,13 +60,6 @@
   },
   "homepage": "http://redux.js.org",
   "dependencies": {
-    "gitbook-plugin-algolia": "^1.0.7",
-    "gitbook-plugin-anchorjs": "^1.1.1",
-    "gitbook-plugin-edit-link": "^2.0.2",
-    "gitbook-plugin-github": "^2.0.0",
-    "gitbook-plugin-prism": "^2.3.0",
-    "lodash": "^4.2.1",
-    "lodash-es": "^4.2.1",
     "loose-envify": "^1.1.0",
     "symbol-observable": "^1.0.3"
   },
