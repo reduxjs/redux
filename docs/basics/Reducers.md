@@ -214,7 +214,7 @@ function todos(state = [], action) {
   switch (action.type) {
     case ADD_TODO:
       return [
-        ...state,
+        ...state.todos,
         {
           text: action.text,
           completed: false
