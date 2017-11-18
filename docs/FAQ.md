@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - **General**
+  - [When should I learn Redux?](/docs/faq/General.md#general-when-to-learn)
   - [When should I use Redux?](/docs/faq/General.md#general-when-to-use)
   - [Can Redux only be used with React?](/docs/faq/General.md#general-only-react)
   - [Do I need to have a particular build tool to use Redux?](/docs/faq/General.md#general-build-tools)
@@ -37,12 +38,14 @@
 - **Code Structure**  
   - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](/docs/faq/CodeStructure.md#structure-business-logic)
+  - [Why should I use action creators?](/docs/faq/CodeStructure.md#structure-action-creators)
 - **Performance**
   - [How well does Redux “scale” in terms of performance and architecture?](/docs/faq/Performance.md#performance-scaling)
   - [Won't calling “all my reducers” for each action be slow?](/docs/faq/Performance.md#performance-all-reducers)
   - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](/docs/faq/Performance.md#performance-clone-state)
   - [How can I reduce the number of store update events?](/docs/faq/Performance.md#performance-update-events)
   - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](/docs/faq/Performance.md#performance-state-memory)
+  - [Will caching remote data cause memory problems?](/docs/faq/Performance.md#performance-cache-memory)
 - **Design Decisions**
   - [Why doesn't Redux pass the state and action to subscribers?](/docs/faq/DesignDecisions.md#does-not-pass-state-action-to-subscribers) 
   - [Why doesn't Redux support using classes for actions and reducers?](/docs/faq/DesignDecisions.md#does-not-support-classes) 
