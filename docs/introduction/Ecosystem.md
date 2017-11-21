@@ -79,6 +79,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [react-router-redux](https://github.com/reactjs/react-router-redux) — Ruthlessly simple bindings to keep React Router and Redux in sync
 * [redial](https://github.com/markdalgleish/redial) — Universal data fetching and route lifecycle management for React that works great with Redux
+* [redux-little-router](https://github.com/FormidableLabs/redux-little-router) — A tiny router for Redux that lets the URL do the talking
 
 ### Components
 
