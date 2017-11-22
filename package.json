@@ -83,7 +83,7 @@
     "glob": "^7.1.1",
     "jest": "^21.2.1",
     "rimraf": "^2.6.2",
-    "rollup": "^0.50.0",
+    "rollup": "^0.51.8",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-replace": "^2.0.0",
