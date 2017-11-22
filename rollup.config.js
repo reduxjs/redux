@@ -12,11 +12,7 @@ const config = {
 
 if (env === 'es' || env === 'cjs') {
   config.output = { format: env }
-  config.external = [
-    'lodash/isPlainObject',
-    'lodash-es/isPlainObject',
-    'symbol-observable'
-  ];
+  config.external = ['symbol-observable']
   config.plugins.push(
     babel({
       plugins: ['external-helpers'],
