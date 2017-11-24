@@ -187,12 +187,26 @@ export default function createStore(reducer, initialState, enhancer) {
    * load some of the reducers dynamically. You might also need this if you
    * implement a hot reloading mechanism for Redux.
    *
+   * Optionally you can pass an new state, enhanced with state for keys
+   * in the nextReducer.
+   * It useful for code splitting when injecting reducers for a page chunk after
+   * server-side rendering the page to recover state in a browser.
+   *
    * @param {Function} nextReducer The reducer for the store to use instead.
+   * @param {Object} nextState New state for the nextReducer.
    * @returns {void}
    */
-  function replaceReducer(nextReducer) {
+  function replaceReducer(nextReducer, nextState) {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
+    }
+
+    if (typeof nextState !== 'undefined') {
+      if (nextState && typeof nextState !== 'object') {
+        throw new Error('Expected the nextState to be an object.')
+      }
+
+      currentState = Object.assign({}, currentState, nextState)
     }
 
     currentReducer = nextReducer

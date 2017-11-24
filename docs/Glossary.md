@@ -97,7 +97,7 @@ type Store = {
   dispatch: Dispatch
   getState: () => State
   subscribe: (listener: () => void) => () => void
-  replaceReducer: (reducer: Reducer) => void
+  replaceReducer: (reducer: Reducer, state: ?State) => void
 }
 ```
 
@@ -107,7 +107,7 @@ There should only be a single store in a Redux app, as the composition happens o
 - [`dispatch(action)`](api/Store.md#dispatch) is the base dispatch function described above.
 - [`getState()`](api/Store.md#getState) returns the current state of the store.
 - [`subscribe(listener)`](api/Store.md#subscribe) registers a function to be called on state changes.
-- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) can be used to implement hot reloading and code splitting. Most likely you won’t use it.
+- [`replaceReducer(nextReducer, nextState)`](api/Store.md#replaceReducer) can be used to implement hot reloading and code splitting. Most likely you won’t use it.
 
 See the complete [store API reference](api/Store.md#dispatch) for more details.
 

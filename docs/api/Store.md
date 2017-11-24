@@ -15,7 +15,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replaceReducer)
+- [`replaceReducer(nextReducer, nextState)`](#replaceReducer)
 
 ## Store Methods
 
@@ -125,12 +125,14 @@ handleChange()
 
 <hr>
 
-### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
+### <a id='replaceReducer'></a>[`replaceReducer(nextReducer, nextState)`](#replaceReducer)
 
 Replaces the reducer currently used by the store to calculate the state.
+An optioanal nexState used to extend current state with keys for the nextReducer.
 
 It is an advanced API. You might need this if your app implements code splitting, and you want to load some of the reducers dynamically. You might also need this if you implement a hot reloading mechanism for Redux.
 
 #### Arguments
 
 1. `reducer` (*Function*) The next reducer for the store to use.
+2. `nextState` (*Object*) The next state for the nextReducer.
