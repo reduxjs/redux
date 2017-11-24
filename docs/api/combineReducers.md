@@ -1,17 +1,23 @@
 # `combineReducers(reducers)`
 
-As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
+As your app grows more complex, you'll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
 
 The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
 
-The resulting reducer calls every child reducer, and gathers their results into a single state object. **The shape of the state object matches the keys of the passed `reducers`**.
+The resulting reducer calls every child reducer, and gathers their results into a single state object.
+**The state produced by `combineReducers()` namespaces the states of each reducer under their keys as passed to `combineReducers()`**
 
-Consequently, the state object will look like this: 
-
+Example:
 ```
+rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
+// This would produce the following state object
 {
-  reducer1: ...
-  reducer2: ...
+  potato: {
+    // ... potatoes, and other state managed by the potatoReducer ... 
+  }
+  tomato: {
+    // ... tomatoes, and other state managed by the tomatoReducer, maybe some nice sauce? ...
+  }
 }
 ```
 
@@ -35,7 +41,7 @@ A popular convention is to name reducers after the state slices they manage, so 
 
 #### Notes
 
-This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don’t have to follow if you write the root reducer manually.
+This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don't have to follow if you write the root reducer manually.
 
 Any reducer passed to `combineReducers` must satisfy these rules:
 
@@ -45,7 +51,7 @@ Any reducer passed to `combineReducers` must satisfy these rules:
 
 * If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
 
-While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them.
+While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them. `combineReducers` will check your reducers by passing `undefined` to them; this is done even if you specify initial state to `Redux.createStore(combineReducers(...), initialState)`. Therefore, you **must** ensure your reducers work properly when receiving `undefined` as state, even if you never intend for them to actually receive `undefined` in your own code.
 
 #### Example
 
@@ -55,7 +61,7 @@ While `combineReducers` attempts to check that your reducers conform to some of 
 export default function todos(state = [], action) {
   switch (action.type) {
     case 'ADD_TODO':
-      return state.concat([ action.text ])
+      return state.concat([action.text])
     default:
       return state
   }
@@ -118,4 +124,4 @@ console.log(store.getState())
 
 * This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
 
-* You may call `combineReducers` at any level of the reducer hierarchy. It doesn’t have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.
+* You may call `combineReducers` at any level of the reducer hierarchy. It doesn't have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.

@@ -1,7 +1,7 @@
 # The Redux Logo
 
 This is the only official Redux logo.  
-Don’t use any other logos to represent Redux.  
+Don't use any other logos to represent Redux.  
 
 It comes in several flavors.
 
@@ -21,7 +21,7 @@ Download as [PNG](https://raw.githubusercontent.com/reactjs/redux/master/logo/lo
 
 <img src='https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-light.png' alt='Redux Logo with Light Title' width='500'>
 
-*(You can’t see the text but it’s there, in white.)*
+*(You can't see the text but it's there, in white.)*
 
 Download as [PNG](https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-light.png).
 
@@ -29,7 +29,7 @@ Download as [PNG](https://raw.githubusercontent.com/reactjs/redux/master/logo/lo
 
 Whenever possible, we ask you to use the originals provided on this page.
 
-If for some reason you must change how the title is rendered and can’t use the prerendered version we provide, we ask that you use the free [Lato Black](http://www.latofonts.com/lato-free-fonts/) font and ensure there is enough space between the logo and the title.
+If for some reason you must change how the title is rendered and can't use the prerendered version we provide, we ask that you use the free [Lato Black](http://www.latofonts.com/lato-free-fonts/) font and ensure there is enough space between the logo and the title.
 
 When in doubt, use the original logos.
 

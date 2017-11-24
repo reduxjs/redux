@@ -1,18 +1,17 @@
 language: node_js
 node_js:
-  - "4"
-  - "5"
-  - "6"
+  - "8"
+before_install:
+  - npm i -g npm
 script:
-  - npm run check:src
-  - npm run build
-  - npm run check:examples
+  - npm run examples:lint
+  - npm run examples:test
 branches:
   only:
     - master
+    - next
 cache:
   directories:
-  - $HOME/.npm
   - examples/async/node_modules
   - examples/counter/node_modules
   - examples/real-world/node_modules

@@ -1,20 +1,20 @@
 import {
   Middleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
-} from "../../index.d.ts";
+} from "../../"
 
-declare module "../../index.d.ts" {
-    export interface Dispatch<S> {
-        <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
+declare module "../../" {
+    export interface Dispatch<D = Action> {
+        <R>(asyncAction: (dispatch: Dispatch<D>, getState: () => any) => R): R;
     }
 }
 
-type Thunk<S, O> = (dispatch: Dispatch<S>, getState: () => S) => O;
+type Thunk<S, O> = (dispatch: Dispatch, getState?: () => S) => O;
 
 const thunkMiddleware: Middleware =
-  <S>({dispatch, getState}: MiddlewareAPI<S>) =>
-    (next: Dispatch<S>) =>
-      <A extends Action, B>(action: A | Thunk<S, B>): B|Action =>
+  <S, A extends Action>({dispatch, getState}: MiddlewareAPI<S>) =>
+    (next: Dispatch<A>) =>
+      <B>(action: A | Thunk<S, B>): B|Action =>
         typeof action === 'function' ?
           (<Thunk<S, B>>action)(dispatch, getState) :
           next(<A>action)
@@ -22,7 +22,7 @@ const thunkMiddleware: Middleware =
 
 const loggerMiddleware: Middleware =
   <S>({getState}: MiddlewareAPI<S>) =>
-    (next: Dispatch<S>) =>
+    (next: Dispatch) =>
       (action: any): any => {
         console.log('will dispatch', action)
 
@@ -35,7 +35,6 @@ const loggerMiddleware: Middleware =
         // a middleware further in chain changed it.
         return returnValue
       }
-
 
 
 type State = {
@@ -52,7 +51,7 @@ const storeWithThunkMiddleware = createStore(
 );
 
 storeWithThunkMiddleware.dispatch(
-  (dispatch, getState) => {
+  (dispatch: Dispatch, getState: () => State) => {
     const todos: string[] = getState().todos;
     dispatch({type: 'ADD_TODO'})
   }

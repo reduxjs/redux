@@ -1,6 +1,13 @@
-import expect from 'expect'
-import { createStore, combineReducers } from '../src/index'
-import { addTodo, dispatchInMiddle, throwError, unknownAction } from './helpers/actionCreators'
+import { createStore, combineReducers } from '../'
+import {
+  addTodo,
+  dispatchInMiddle,
+  getStateInMiddle,
+  subscribeInMiddle,
+  unsubscribeInMiddle,
+  throwError,
+  unknownAction
+} from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
 import * as Rx from 'rxjs'
 import $$observable from 'symbol-observable'
@@ -32,10 +39,10 @@ describe('createStore', () => {
 
     expect(() =>
       createStore(() => {})
-    ).toNotThrow()
+    ).not.toThrow()
   })
 
-  it('passes the initial action and the initial state', () => {
+  it('passes the initial state', () => {
     const store = createStore(reducers.todos, [
       {
         id: 1,
@@ -192,55 +199,55 @@ describe('createStore', () => {
 
   it('supports multiple subscriptions', () => {
     const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
 
     let unsubscribeA = store.subscribe(listenerA)
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(1)
-    expect(listenerB.calls.length).toBe(0)
+    expect(listenerA.mock.calls.length).toBe(1)
+    expect(listenerB.mock.calls.length).toBe(0)
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(0)
+    expect(listenerA.mock.calls.length).toBe(2)
+    expect(listenerB.mock.calls.length).toBe(0)
 
     const unsubscribeB = store.subscribe(listenerB)
-    expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(0)
+    expect(listenerA.mock.calls.length).toBe(2)
+    expect(listenerB.mock.calls.length).toBe(0)
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(1)
+    expect(listenerA.mock.calls.length).toBe(3)
+    expect(listenerB.mock.calls.length).toBe(1)
 
     unsubscribeA()
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(1)
+    expect(listenerA.mock.calls.length).toBe(3)
+    expect(listenerB.mock.calls.length).toBe(1)
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
+    expect(listenerA.mock.calls.length).toBe(3)
+    expect(listenerB.mock.calls.length).toBe(2)
 
     unsubscribeB()
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
+    expect(listenerA.mock.calls.length).toBe(3)
+    expect(listenerB.mock.calls.length).toBe(2)
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
+    expect(listenerA.mock.calls.length).toBe(3)
+    expect(listenerB.mock.calls.length).toBe(2)
 
     unsubscribeA = store.subscribe(listenerA)
-    expect(listenerA.calls.length).toBe(3)
-    expect(listenerB.calls.length).toBe(2)
+    expect(listenerA.mock.calls.length).toBe(3)
+    expect(listenerB.mock.calls.length).toBe(2)
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(4)
-    expect(listenerB.calls.length).toBe(2)
+    expect(listenerA.mock.calls.length).toBe(4)
+    expect(listenerB.mock.calls.length).toBe(2)
   })
 
   it('only removes listener once when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
 
     const unsubscribeA = store.subscribe(listenerA)
     store.subscribe(listenerB)
@@ -249,13 +256,13 @@ describe('createStore', () => {
     unsubscribeA()
 
     store.dispatch(unknownAction())
-    expect(listenerA.calls.length).toBe(0)
-    expect(listenerB.calls.length).toBe(1)
+    expect(listenerA.mock.calls.length).toBe(0)
+    expect(listenerB.mock.calls.length).toBe(1)
   })
 
   it('only removes relevant listener when unsubscribe is called', () => {
     const store = createStore(reducers.todos)
-    const listener = expect.createSpy(() => {})
+    const listener = jest.fn()
 
     store.subscribe(listener)
     const unsubscribeSecond = store.subscribe(listener)
@@ -264,14 +271,14 @@ describe('createStore', () => {
     unsubscribeSecond()
 
     store.dispatch(unknownAction())
-    expect(listener.calls.length).toBe(1)
+    expect(listener.mock.calls.length).toBe(1)
   })
 
   it('supports removing a subscription within a subscription', () => {
     const store = createStore(reducers.todos)
-    const listenerA = expect.createSpy(() => {})
-    const listenerB = expect.createSpy(() => {})
-    const listenerC = expect.createSpy(() => {})
+    const listenerA = jest.fn()
+    const listenerB = jest.fn()
+    const listenerC = jest.fn()
 
     store.subscribe(listenerA)
     const unSubB = store.subscribe(() => {
@@ -283,12 +290,12 @@ describe('createStore', () => {
     store.dispatch(unknownAction())
     store.dispatch(unknownAction())
 
-    expect(listenerA.calls.length).toBe(2)
-    expect(listenerB.calls.length).toBe(1)
-    expect(listenerC.calls.length).toBe(2)
+    expect(listenerA.mock.calls.length).toBe(2)
+    expect(listenerB.mock.calls.length).toBe(1)
+    expect(listenerC.mock.calls.length).toBe(2)
   })
 
-  it('delays unsubscribe until the end of current dispatch', () => {
+  it('notifies all subscribers about current dispatch regardless if any of them gets unsubscribed in the process', () => {
     const store = createStore(reducers.todos)
 
     const unsubscribeHandles = []
@@ -296,9 +303,9 @@ describe('createStore', () => {
       unsubscribe => unsubscribe()
     )
 
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
+    const listener1 = jest.fn()
+    const listener2 = jest.fn()
+    const listener3 = jest.fn()
 
     unsubscribeHandles.push(store.subscribe(() => listener1()))
     unsubscribeHandles.push(store.subscribe(() => {
@@ -308,22 +315,22 @@ describe('createStore', () => {
     unsubscribeHandles.push(store.subscribe(() => listener3()))
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(1)
+    expect(listener1.mock.calls.length).toBe(1)
+    expect(listener2.mock.calls.length).toBe(1)
+    expect(listener3.mock.calls.length).toBe(1)
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(1)
+    expect(listener1.mock.calls.length).toBe(1)
+    expect(listener2.mock.calls.length).toBe(1)
+    expect(listener3.mock.calls.length).toBe(1)
   })
 
-  it('delays subscribe until the end of current dispatch', () => {
+  it('notifies only subscribers active at the moment of current dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
+    const listener1 = jest.fn()
+    const listener2 = jest.fn()
+    const listener3 = jest.fn()
 
     let listener3Added = false
     const maybeAddThirdListener = () => {
@@ -340,56 +347,56 @@ describe('createStore', () => {
     })
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(1)
-    expect(listener3.calls.length).toBe(0)
+    expect(listener1.mock.calls.length).toBe(1)
+    expect(listener2.mock.calls.length).toBe(1)
+    expect(listener3.mock.calls.length).toBe(0)
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(2)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(1)
+    expect(listener1.mock.calls.length).toBe(2)
+    expect(listener2.mock.calls.length).toBe(2)
+    expect(listener3.mock.calls.length).toBe(1)
   })
 
   it('uses the last snapshot of subscribers during nested dispatch', () => {
     const store = createStore(reducers.todos)
 
-    const listener1 = expect.createSpy(() => {})
-    const listener2 = expect.createSpy(() => {})
-    const listener3 = expect.createSpy(() => {})
-    const listener4 = expect.createSpy(() => {})
+    const listener1 = jest.fn()
+    const listener2 = jest.fn()
+    const listener3 = jest.fn()
+    const listener4 = jest.fn()
 
     let unsubscribe4
     const unsubscribe1 = store.subscribe(() => {
       listener1()
-      expect(listener1.calls.length).toBe(1)
-      expect(listener2.calls.length).toBe(0)
-      expect(listener3.calls.length).toBe(0)
-      expect(listener4.calls.length).toBe(0)
+      expect(listener1.mock.calls.length).toBe(1)
+      expect(listener2.mock.calls.length).toBe(0)
+      expect(listener3.mock.calls.length).toBe(0)
+      expect(listener4.mock.calls.length).toBe(0)
 
       unsubscribe1()
       unsubscribe4 = store.subscribe(listener4)
       store.dispatch(unknownAction())
 
-      expect(listener1.calls.length).toBe(1)
-      expect(listener2.calls.length).toBe(1)
-      expect(listener3.calls.length).toBe(1)
-      expect(listener4.calls.length).toBe(1)
+      expect(listener1.mock.calls.length).toBe(1)
+      expect(listener2.mock.calls.length).toBe(1)
+      expect(listener3.mock.calls.length).toBe(1)
+      expect(listener4.mock.calls.length).toBe(1)
     })
     store.subscribe(listener2)
     store.subscribe(listener3)
 
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(2)
-    expect(listener3.calls.length).toBe(2)
-    expect(listener4.calls.length).toBe(1)
+    expect(listener1.mock.calls.length).toBe(1)
+    expect(listener2.mock.calls.length).toBe(2)
+    expect(listener3.mock.calls.length).toBe(2)
+    expect(listener4.mock.calls.length).toBe(1)
 
     unsubscribe4()
     store.dispatch(unknownAction())
-    expect(listener1.calls.length).toBe(1)
-    expect(listener2.calls.length).toBe(3)
-    expect(listener3.calls.length).toBe(3)
-    expect(listener4.calls.length).toBe(1)
+    expect(listener1.mock.calls.length).toBe(1)
+    expect(listener2.mock.calls.length).toBe(3)
+    expect(listener3.mock.calls.length).toBe(3)
+    expect(listener4.mock.calls.length).toBe(1)
   })
 
   it('provides an up-to-date state when a subscriber is notified', done => {
@@ -406,11 +413,20 @@ describe('createStore', () => {
     store.dispatch(addTodo('Hello'))
   })
 
+  it('does not leak private listeners array', done => {
+    const store = createStore(reducers.todos)
+    store.subscribe(function () {
+      expect(this).toBe(undefined)
+      done()
+    })
+    store.dispatch(addTodo('Hello'))
+  })
+
   it('only accepts plain object actions', () => {
     const store = createStore(reducers.todos)
     expect(() =>
       store.dispatch(unknownAction())
-    ).toNotThrow()
+    ).not.toThrow()
 
     function AwesomeMap() { }
     [ null, undefined, 42, 'hey', new AwesomeMap() ].forEach(nonObject =>
@@ -453,6 +469,31 @@ describe('createStore', () => {
     ).toThrow(/may not dispatch/)
   })
 
+  it('does not allow getState() from within a reducer', () => {
+    const store = createStore(reducers.getStateInTheMiddleOfReducer)
+
+    expect(() =>
+      store.dispatch(getStateInMiddle(store.getState.bind(store)))
+    ).toThrow(/You may not call store.getState()/)
+  })
+
+  it('does not allow subscribe() from within a reducer', () => {
+    const store = createStore(reducers.subscribeInTheMiddleOfReducer)
+
+    expect(() =>
+      store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
+    ).toThrow(/You may not call store.subscribe()/)
+  })
+
+  it('does not allow unsubscribe from subscribe() from within a reducer', () => {
+    const store = createStore(reducers.unsubscribeInTheMiddleOfReducer)
+    const unsubscribe = store.subscribe(() => {})
+
+    expect(() =>
+      store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
+    ).toThrow(/You may not unsubscribe from a store/)
+  })
+
   it('recovers from an error within a reducer', () => {
     const store = createStore(reducers.errorThrowingReducer)
     expect(() =>
@@ -461,7 +502,7 @@ describe('createStore', () => {
 
     expect(() =>
       store.dispatch(unknownAction())
-    ).toNotThrow()
+    ).not.toThrow()
   })
 
   it('throws if action type is missing', () => {
@@ -482,16 +523,16 @@ describe('createStore', () => {
     const store = createStore(reducers.todos)
     expect(() =>
       store.dispatch({ type: false })
-    ).toNotThrow()
+    ).not.toThrow()
     expect(() =>
       store.dispatch({ type: 0 })
-    ).toNotThrow()
+    ).not.toThrow()
     expect(() =>
       store.dispatch({ type: null })
-    ).toNotThrow()
+    ).not.toThrow()
     expect(() =>
       store.dispatch({ type: '' })
-    ).toNotThrow()
+    ).not.toThrow()
   })
 
   it('accepts enhancer as the third argument', () => {
@@ -503,14 +544,14 @@ describe('createStore', () => {
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch: jest.fn(vanillaStore.dispatch)
       }
     }
 
     const store = createStore(reducers.todos, emptyArray, spyEnhancer)
     const action = addTodo('Hello')
     store.dispatch(action)
-    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(store.dispatch).toBeCalledWith(action)
     expect(store.getState()).toEqual([
       {
         id: 1,
@@ -527,14 +568,14 @@ describe('createStore', () => {
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
-        dispatch: expect.createSpy(vanillaStore.dispatch).andCallThrough()
+        dispatch: jest.fn(vanillaStore.dispatch)
       }
     }
 
     const store = createStore(reducers.todos, spyEnhancer)
     const action = addTodo('Hello')
     store.dispatch(action)
-    expect(store.dispatch).toHaveBeenCalledWith(action)
+    expect(store.dispatch).toBeCalledWith(action)
     expect(store.getState()).toEqual([
       {
         id: 1,
@@ -562,23 +603,23 @@ describe('createStore', () => {
 
     expect(() =>
       createStore(reducers.todos, undefined, undefined)
-    ).toNotThrow()
+    ).not.toThrow()
 
     expect(() =>
       createStore(reducers.todos, undefined, x => x)
-    ).toNotThrow()
+    ).not.toThrow()
 
     expect(() =>
       createStore(reducers.todos, x => x)
-    ).toNotThrow()
+    ).not.toThrow()
 
     expect(() =>
       createStore(reducers.todos, [])
-    ).toNotThrow()
+    ).not.toThrow()
 
     expect(() =>
       createStore(reducers.todos, {})
-    ).toNotThrow()
+    ).not.toThrow()
   })
 
   it('throws if nextReducer is not a function', () => {
@@ -590,7 +631,7 @@ describe('createStore', () => {
 
     expect(() =>
       store.replaceReducer(() => {})
-    ).toNotThrow()
+    ).not.toThrow()
   })
 
   it('throws if listener is not a function', () => {
@@ -640,7 +681,7 @@ describe('createStore', () => {
 
         expect(function () {
           obs.subscribe({})
-        }).toNotThrow()
+        }).not.toThrow()
       })
 
       it('should return a subscription object when subscribed', () => {
@@ -725,5 +766,31 @@ describe('createStore', () => {
 
       expect(results).toEqual([ { foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true } ])
     })
+  })
+
+  it('does not log an error if parts of the current state will be ignored by a nextReducer using combineReducers', () => {
+    const originalConsoleError = console.error
+    console.error = jest.fn()
+
+    const store = createStore(
+      combineReducers({
+        x: (s=0, a) => s,
+        y: combineReducers({
+          z: (s=0, a) => s,
+          w: (s=0, a) => s,
+        }),
+      })
+    )
+
+    store.replaceReducer(
+      combineReducers({
+        y: combineReducers({
+          z: (s=0, a) => s,
+        }),
+      })
+    )
+
+    expect(console.error.mock.calls.length).toBe(0)
+    console.error = originalConsoleError
   })
 })

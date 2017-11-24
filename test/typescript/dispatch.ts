@@ -1,4 +1,4 @@
-import {Dispatch, Action} from "../../index.d.ts";
+import {Dispatch, Action} from "../../"
 
 
 declare const dispatch: Dispatch<any>;
@@ -6,9 +6,9 @@ declare const dispatch: Dispatch<any>;
 const dispatchResult: Action = dispatch({type: 'TYPE'});
 
 // thunk
-declare module "../../index.d.ts" {
-    export interface Dispatch<S> {
-        <R>(asyncAction: (dispatch: Dispatch<S>, getState: () => S) => R): R;
+declare module "../../" {
+    export interface Dispatch<D = Action> {
+        <R>(asyncAction: (dispatch: Dispatch<D>, getState: () => any) => R): R;
     }
 }
 

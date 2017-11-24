@@ -1,15 +1,18 @@
-import expect from 'expect'
+/* eslint-disable no-console */
 import warning from '../../src/utils/warning'
 
 describe('Utils', () => {
   describe('warning', () => {
     it('calls console.error when available', () => {
-      const spy = expect.spyOn(console, 'error')
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
       try {
         warning('Test')
-        expect(spy.calls[0].arguments[0]).toBe('Test')
+        expect(spy.mock.calls[0][0]).toBe('Test')
       } finally {
-        spy.restore()
+        spy.mockClear()
+        console.error = preSpy
       }
     })
 
@@ -17,7 +20,7 @@ describe('Utils', () => {
       const realConsole = global.console
       Object.defineProperty(global, 'console', { value: {} })
       try {
-        expect(() => warning('Test')).toNotThrow()
+        expect(() => warning('Test')).not.toThrow()
       } finally {
         Object.defineProperty(global, 'console', { value: realConsole })
       }
@@ -27,7 +30,7 @@ describe('Utils', () => {
       const realConsole = global.console
       Object.defineProperty(global, 'console', { value: undefined })
       try {
-        expect(() => warning('Test')).toNotThrow()
+        expect(() => warning('Test')).not.toThrow()
       } finally {
         Object.defineProperty(global, 'console', { value: realConsole })
       }

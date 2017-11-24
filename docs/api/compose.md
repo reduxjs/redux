@@ -18,10 +18,10 @@ You might want to use it to apply several [store enhancers](../Glossary.md#store
 This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a few developer tools from the [redux-devtools](https://github.com/gaearon/redux-devtools) package.
 
 ```js
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import DevTools from './containers/DevTools'
-import reducer from '../reducers/index'
+import reducer from '../reducers'
 
 const store = createStore(
   reducer,
@@ -34,4 +34,4 @@ const store = createStore(
 
 #### Tips
 
-* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don’t give it too much credit!
+* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don't give it too much credit!

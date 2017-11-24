@@ -1,34 +1,43 @@
 import {
   Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
   StoreCreator, StoreEnhancerStoreCreator, Unsubscribe
-} from "../../index.d.ts";
+} from "../../"
 
 
 type State = {
-  todos: string[];
+  a: 'a';
+  b: {
+    c: 'c',
+    d: 'd',
+  };
 }
 
-const reducer: Reducer<State> = (state: State, action: Action): State => {
+const reducer: Reducer<State> = (state: State | undefined = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd',
+  },
+}, action: Action): State => {
   return state;
-}
-
+};
 
 /* createStore */
 
-const store: Store<State> = createStore<State>(reducer);
+const store: Store<State> = createStore(reducer);
 
-const storeWithInitialState: Store<State> = createStore(reducer, {
-  todos: []
+const storeWithPreloadedState: Store<State> = createStore(reducer, {
+  b: {c: 'c'}
 });
 
 const genericEnhancer: GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => next;
-const specificEnhencer: StoreEnhancer<State> = next => next;
+const specificEnhancer: StoreEnhancer<State> = next => next;
 
 const storeWithGenericEnhancer: Store<State> = createStore(reducer, genericEnhancer);
-const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhencer);
+const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhancer);
 
-const storeWithInitialStateAndEnhancer: Store<State> = createStore(reducer, {
-  todos: []
+const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(reducer, {
+  b: {c: 'c'}
 }, genericEnhancer);
 
 

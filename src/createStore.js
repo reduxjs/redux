@@ -1,15 +1,7 @@
-import isPlainObject from 'lodash/isPlainObject'
 import $$observable from 'symbol-observable'
 
-/**
- * These are private action types reserved by Redux.
- * For any unknown actions, you must return the current state.
- * If the current state is undefined, you must return the initial state.
- * Do not reference these action types directly in your code.
- */
-export var ActionTypes = {
-  INIT: '@@redux/INIT'
-}
+import ActionTypes from './utils/actionTypes'
+import isPlainObject from './utils/isPlainObject'
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -22,13 +14,13 @@ export var ActionTypes = {
  * @param {Function} reducer A function that returns the next state tree, given
  * the current state tree and the action to handle.
  *
- * @param {any} [initialState] The initial state. You may optionally specify it
+ * @param {any} [preloadedState] The initial state. You may optionally specify it
  * to hydrate the state from the server in universal apps, or to restore a
  * previously serialized user session.
  * If you use `combineReducers` to produce the root reducer function, this must be
  * an object with the same shape as `combineReducers` keys.
  *
- * @param {Function} enhancer The store enhancer. You may optionally specify it
+ * @param {Function} [enhancer] The store enhancer. You may optionally specify it
  * to enhance the store with third-party capabilities such as middleware,
  * time travel, persistence, etc. The only store enhancer that ships with Redux
  * is `applyMiddleware()`.
@@ -36,10 +28,10 @@ export var ActionTypes = {
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, initialState, enhancer) {
-  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = initialState
-    initialState = undefined
+export default function createStore(reducer, preloadedState, enhancer) {
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState
+    preloadedState = undefined
   }
 
   if (typeof enhancer !== 'undefined') {
@@ -47,18 +39,18 @@ export default function createStore(reducer, initialState, enhancer) {
       throw new Error('Expected the enhancer to be a function.')
     }
 
-    return enhancer(createStore)(reducer, initialState)
+    return enhancer(createStore)(reducer, preloadedState)
   }
 
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.')
   }
 
-  var currentReducer = reducer
-  var currentState = initialState
-  var currentListeners = []
-  var nextListeners = currentListeners
-  var isDispatching = false
+  let currentReducer = reducer
+  let currentState = preloadedState
+  let currentListeners = []
+  let nextListeners = currentListeners
+  let isDispatching = false
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -72,6 +64,14 @@ export default function createStore(reducer, initialState, enhancer) {
    * @returns {any} The current state tree of your application.
    */
   function getState() {
+    if (isDispatching) {
+      throw new Error(
+        'You may not call store.getState() while the reducer is executing. ' +
+        'The reducer has already received the state as an argument. ' +
+        'Pass it down from the top reducer instead of reading it from the store.'
+      )
+    }
+
     return currentState
   }
 
@@ -103,7 +103,16 @@ export default function createStore(reducer, initialState, enhancer) {
       throw new Error('Expected listener to be a function.')
     }
 
-    var isSubscribed = true
+    if (isDispatching) {
+      throw new Error(
+        'You may not call store.subscribe() while the reducer is executing. ' +
+        'If you would like to be notified after the store has been updated, subscribe from a ' +
+        'component and invoke store.getState() in the callback to access the latest state. ' +
+        'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
+      )
+    }
+
+    let isSubscribed = true
 
     ensureCanMutateNextListeners()
     nextListeners.push(listener)
@@ -113,10 +122,17 @@ export default function createStore(reducer, initialState, enhancer) {
         return
       }
 
+      if (isDispatching) {
+        throw new Error(
+          'You may not unsubscribe from a store listener while the reducer is executing. ' +
+          'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
+        )
+      }
+
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      var index = nextListeners.indexOf(listener)
+      const index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
     }
   }
@@ -172,9 +188,10 @@ export default function createStore(reducer, initialState, enhancer) {
       isDispatching = false
     }
 
-    var listeners = currentListeners = nextListeners
-    for (var i = 0; i < listeners.length; i++) {
-      listeners[i]()
+    const listeners = currentListeners = nextListeners
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i]
+      listener()
     }
 
     return action
@@ -210,17 +227,17 @@ export default function createStore(reducer, initialState, enhancer) {
     }
 
     currentReducer = nextReducer
-    dispatch({ type: ActionTypes.INIT })
+    dispatch({ type: ActionTypes.REPLACE })
   }
 
   /**
    * Interoperability point for observable/reactive libraries.
    * @returns {observable} A minimal observable of state changes.
    * For more information, see the observable proposal:
-   * https://github.com/zenparsing/es-observable
+   * https://github.com/tc39/proposal-observable
    */
   function observable() {
-    var outerSubscribe = subscribe
+    const outerSubscribe = subscribe
     return {
       /**
        * The minimal observable subscription method.
@@ -242,7 +259,7 @@ export default function createStore(reducer, initialState, enhancer) {
         }
 
         observeState()
-        var unsubscribe = outerSubscribe(observeState)
+        const unsubscribe = outerSubscribe(observeState)
         return { unsubscribe }
       },
 

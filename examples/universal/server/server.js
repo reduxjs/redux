@@ -1,6 +1,5 @@
 /* eslint-disable no-console, no-use-before-define */
 
-import path from 'path'
 import Express from 'express'
 import qs from 'qs'
 
@@ -25,10 +24,7 @@ const compiler = webpack(webpackConfig)
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }))
 app.use(webpackHotMiddleware(compiler))
 
-// This is fired every time the server side receives a request
-app.use(handleRender)
-
-function handleRender(req, res) {
+const handleRender = (req, res) => {
   // Query our mock API asynchronously
   fetchCounter(apiResult => {
     // Read the counter from the request, if provided
@@ -36,10 +32,10 @@ function handleRender(req, res) {
     const counter = parseInt(params.counter, 10) || apiResult || 0
 
     // Compile an initial state
-    const initialState = { counter }
+    const preloadedState = { counter }
 
     // Create a new Redux store instance
-    const store = configureStore(initialState)
+    const store = configureStore(preloadedState)
 
     // Render the component to a string
     const html = renderToString(
@@ -56,7 +52,10 @@ function handleRender(req, res) {
   })
 }
 
-function renderFullPage(html, initialState) {
+// This is fired every time the server side receives a request
+app.use(handleRender)
+
+const renderFullPage = (html, preloadedState) => {
   return `
     <!doctype html>
     <html>
@@ -66,7 +65,7 @@ function renderFullPage(html, initialState) {
       <body>
         <div id="app">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>
         <script src="/static/bundle.js"></script>
       </body>

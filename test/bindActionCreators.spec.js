@@ -1,5 +1,4 @@
-import expect from 'expect'
-import { bindActionCreators, createStore } from '../src'
+import { bindActionCreators, createStore } from '../'
 import { todos } from './helpers/reducers'
 import * as actionCreators from './helpers/actionCreators'
 
@@ -32,6 +31,21 @@ describe('bindActionCreators', () => {
     expect(store.getState()).toEqual([
       { id: 1, text: 'Hello' }
     ])
+  })
+
+  it('wraps action creators transparently', () => {
+    const uniqueThis = {}
+    const argArray = [1, 2, 3]
+    function actionCreator() {
+      return { type: 'UNKNOWN_ACTION', this: this, args: [...arguments] }
+    }
+    const boundActionCreator = bindActionCreators(actionCreator, store.dispatch)
+
+    const boundAction = boundActionCreator.apply(uniqueThis,argArray)
+    const action = actionCreator.apply(uniqueThis,argArray)
+    expect(boundAction).toEqual(action)
+    expect(boundAction.this).toBe(uniqueThis)
+    expect(action.this).toBe(uniqueThis)
   })
 
   it('skips non-function values in the passed object', () => {

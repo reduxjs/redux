@@ -2,25 +2,25 @@
 
 From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.
 
-That said, Redux works especially well with frameworks like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
+That said, Redux works especially well with libraries like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
 
 We will use React to build our simple todo app.
 
 ## Installing React Redux
 
-[React bindings](https://github.com/gaearon/react-redux) are not included in Redux by default. You need to install them explicitly:
+[React bindings](https://github.com/reactjs/react-redux) are not included in Redux by default. You need to install them explicitly:
 
 ```
 npm install --save react-redux
 ```
 
-If you don’t use npm, you may grab the latest UMD build from npmcdn (either a [development](https://npmcdn.com/react-redux@latest/dist/react-redux.js) or a [production](https://npmcdn.com/react-redux@latest/dist/react-redux.min.js) build). The UMD build exports a global called `window.ReactRedux` if you add it to your page via a `<script>` tag.
+If you don't use npm, you may grab the latest UMD build from unpkg (either a [development](https://unpkg.com/react-redux@latest/dist/react-redux.js) or a [production](https://unpkg.com/react-redux@latest/dist/react-redux.min.js) build). The UMD build exports a global called `window.ReactRedux` if you add it to your page via a `<script>` tag.
 
 ## Presentational and Container Components
 
-React bindings for Redux embrace the idea of **separating presentational and container components**. If you’re not familiar with these terms, [read about them first](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0), and then come back. They are important, so we’ll wait!
+React bindings for Redux embrace the idea of **separating presentational and container components**. If you're not familiar with these terms, [read about them first](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0), and then come back. They are important, so we'll wait!
 
-Finished reading the article? Let’s recount their differences:
+Finished reading the article? Let's recount their differences:
 
 <table>
     <thead>
@@ -59,17 +59,17 @@ Finished reading the article? Let’s recount their differences:
     </tbody>
 </table>
 
-Most of the components we’ll write will be presentational, but we’ll need to generate a few container components to connect them to the Redux store.
+Most of the components we'll write will be presentational, but we'll need to generate a few container components to connect them to the Redux store. This and the design brief below do not imply container components must be near the top of the component tree. If a container component becomes too complex (i.e. it has heavily nested presentional components with countless callbacks being passed down), introduce another container within the component tree as noted in the [FAQ](../faq/ReactRedux.md#react-multiple-components).
 
-Technically you could write the container components by hand using [`store.subscribe()`](../api/Store.md#subscribe). We don’t advise you to do this because React Redux makes many performance optimizations that are hard to do by hand. For this reason, rather than write container components, we will generate them using the [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function provided by React Redux, as you will see below.
+Technically you could write the container components by hand using [`store.subscribe()`](../api/Store.md#subscribe). We don't advise you to do this because React Redux makes many performance optimizations that are hard to do by hand. For this reason, rather than write container components, we will generate them using the [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function provided by React Redux, as you will see below.
 
 ## Designing Component Hierarchy
 
-Remember how we [designed the shape of the root state object](Reducers.md)? It’s time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
+Remember how we [designed the shape of the root state object](Reducers.md)? It's time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
 
 Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all, only completed, or only active todos.
 
-### Presentational Components
+###  Designing Presentational Components
 
 I see the following presentational components and their props emerge from this brief:
 
@@ -85,9 +85,9 @@ I see the following presentational components and their props emerge from this b
 * **`Footer`** is where we let the user change currently visible todos.
 * **`App`** is the root component that renders everything else.
 
-They describe the *look* but don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them. If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
+They describe the *look* but don't know *where* the data comes from, or *how* to change it. They only render what's given to them. If you migrate from Redux to something else, you'll be able to keep all these components exactly the same. They have no dependency on Redux.
 
-### Container Components
+### Designing Container Components
 
 We will also need some container components to connect the presentational components to Redux. For example, the presentational `TodoList` component needs a container like `VisibleTodoList` that subscribes to the Redux store and knows how to apply the current visibility filter. To change the visibility filter, we will provide a `FilterLink` container component that renders a `Link` that dispatches an appropriate action on click:
 
@@ -95,31 +95,32 @@ We will also need some container components to connect the presentational compon
 * **`FilterLink`** gets the current visibility filter and renders a `Link`.
   - `filter: string` is the visibility filter it represents.
 
-### Other Components
+### Designing Other Components
 
-Sometimes it’s hard to tell if some component should be a presentational component or a container. For example, sometimes form and function are really coupled together, such as in case of this tiny component:
+Sometimes it's hard to tell if some component should be a presentational component or a container. For example, sometimes form and function are really coupled together, such as in case of this tiny component:
 
 * **`AddTodo`** is an input field with an “Add” button
 
-Technically we could split it into two components but it might be too early at this stage. It’s fine to mix presentation and logic in a component that is very small. As it grows, it will be more obvious how to split it, so we’ll leave it mixed.
+Technically we could split it into two components but it might be too early at this stage. It's fine to mix presentation and logic in a component that is very small. As it grows, it will be more obvious how to split it, so we'll leave it mixed.
 
 ## Implementing Components
 
-Let’s write the components! We begin with the presentational components so we don’t need to think about binding to Redux yet.
+Let's write the components! We begin with the presentational components so we don't need to think about binding to Redux yet.
 
-### Presentational Components
+### Implementing Presentational Components
 
-These are all normal React components, so we won’t examine them in detail. We write functional stateless components unless we need to use local state or the lifecycle methods. This doesn’t mean that presentational components *have to* be functions—it’s just easier to define them this way. If and when you need to add local state, lifecycle methods, or performance optimizations, you can convert them to classes.
+These are all normal React components, so we won't examine them in detail. We write functional stateless components unless we need to use local state or the lifecycle methods. This doesn't mean that presentational components *have to* be functions—it's just easier to define them this way. If and when you need to add local state, lifecycle methods, or performance optimizations, you can convert them to classes.
 
 #### `components/Todo.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
-    style={{
+    style={ {
       textDecoration: completed ? 'line-through' : 'none'
     }}
   >
@@ -139,27 +140,26 @@ export default Todo
 #### `components/TodoList.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Todo from './Todo'
 
 const TodoList = ({ todos, onTodoClick }) => (
   <ul>
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => onTodoClick(todo.id)}
-      />
-    )}
+    {todos.map((todo, index) => (
+      <Todo key={index} {...todo} onClick={() => onTodoClick(index)} />
+    ))}
   </ul>
 )
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    text: PropTypes.string.isRequired
-  }).isRequired).isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired
+    }).isRequired
+  ).isRequired,
   onTodoClick: PropTypes.func.isRequired
 }
 
@@ -169,7 +169,8 @@ export default TodoList
 #### `components/Link.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Link = ({ active, children, onClick }) => {
   if (active) {
@@ -177,11 +178,12 @@ const Link = ({ active, children, onClick }) => {
   }
 
   return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
+    <a
+      href=""
+      onClick={e => {
+        e.preventDefault()
+        onClick()
+      }}
     >
       {children}
     </a>
@@ -206,15 +208,15 @@ import FilterLink from '../containers/FilterLink'
 const Footer = () => (
   <p>
     Show:
-    {" "}
+    {' '}
     <FilterLink filter="SHOW_ALL">
       All
     </FilterLink>
-    {", "}
+    {', '}
     <FilterLink filter="SHOW_ACTIVE">
       Active
     </FilterLink>
-    {", "}
+    {', '}
     <FilterLink filter="SHOW_COMPLETED">
       Completed
     </FilterLink>
@@ -224,44 +226,26 @@ const Footer = () => (
 export default Footer
 ```
 
-#### `components/App.js`
+### Implementing Container Components
 
-```js
-import React from 'react'
-import Footer from './Footer'
-import AddTodo from '../containers/AddTodo'
-import VisibleTodoList from '../containers/VisibleTodoList'
-
-const App = () => (
-  <div>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
-  </div>
-)
-
-export default App
-```
-
-### Container Components
-
-Now it’s time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand, but we suggest instead generating container components with the React Redux library’s [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function, which provides many useful optimizations to prevent unnecessary re-renders. (One result of this is that you shouldn’t have to worry about the [React performance suggestion](https://facebook.github.io/react/docs/advanced-performance.html) of implementing `shouldComponentUpdate` yourself.)
+Now it's time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand, but we suggest instead generating container components with the React Redux library's [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function, which provides many useful optimizations to prevent unnecessary re-renders. (One result of this is that you shouldn't have to worry about the [React performance suggestion](https://facebook.github.io/react/docs/advanced-performance.html) of implementing `shouldComponentUpdate` yourself.)
 
 To use `connect()`, you need to define a special function called `mapStateToProps` that tells how to transform the current Redux store state into the props you want to pass to a presentational component you are wrapping. For example, `VisibleTodoList` needs to calculate `todos` to pass to the `TodoList`, so we define a function that filters the `state.todos` according to the `state.visibilityFilter`, and use it in its `mapStateToProps`:
 
 ```js
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
-    case 'SHOW_ALL':
-      return todos
     case 'SHOW_COMPLETED':
       return todos.filter(t => t.completed)
     case 'SHOW_ACTIVE':
       return todos.filter(t => !t.completed)
+    case 'SHOW_ALL':
+    default:
+      return todos
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
@@ -271,9 +255,9 @@ const mapStateToProps = (state) => {
 In addition to reading the state, container components can dispatch actions. In a similar fashion, you can define a function called `mapDispatchToProps()` that receives the [`dispatch()`](../api/Store.md#dispatch) method and returns callback props that you want to inject into the presentational component. For example, we want the `VisibleTodoList` to inject a prop called `onTodoClick` into the `TodoList` component, and we want `onTodoClick` to dispatch a `TOGGLE_TODO` action:
 
 ```js
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -293,7 +277,7 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-These are the basics of the React Redux API, but there are a few shortcuts and power options so we encourage you to check out [its documentation](https://github.com/reactjs/react-redux) in detail. In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/rackt/reselect).
+These are the basics of the React Redux API, but there are a few shortcuts and power options so we encourage you to check out [its documentation](https://github.com/reactjs/react-redux) in detail. In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/reactjs/reselect).
 
 Find the rest of the container components defined below:
 
@@ -344,15 +328,15 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -366,9 +350,11 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-### Other Components
+### Implementing Other Components
 
 #### `containers/AddTodo.js`
+
+Recall as [mentioned previously](#designing-other-components), both the presentation and logic for the `AddTodo` component are mixed into a single definition. 
 
 ```js
 import React from 'react'
@@ -380,21 +366,53 @@ let AddTodo = ({ dispatch }) => {
 
   return (
     <div>
-      <input ref={node => {
-        input = node
-      }} />
-      <button onClick={() => {
-        dispatch(addTodo(input.value))
-        input.value = ''
-      }}>
-        Add Todo
-      </button>
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+          if (!input.value.trim()) {
+            return
+          }
+          dispatch(addTodo(input.value))
+          input.value = ''
+        }}
+      >
+        <input
+          ref={node => {
+            input = node
+          }}
+        />
+        <button type="submit">
+          Add Todo
+        </button>
+      </form>
     </div>
   )
 }
 AddTodo = connect()(AddTodo)
 
 export default AddTodo
+```
+
+If you are unfamiliar with the `ref` attribute, please read this [documentation](https://facebook.github.io/react/docs/refs-and-the-dom.html) to familiarize yourself with the recommended use of this attribute. 
+
+### Tying the containers together within a component
+#### `components/App.js`
+
+```js
+import React from 'react'
+import Footer from './Footer'
+import AddTodo from '../containers/AddTodo'
+import VisibleTodoList from '../containers/VisibleTodoList'
+
+const App = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+  </div>
+)
+
+export default App
 ```
 
 ## Passing the Store

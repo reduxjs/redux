@@ -2,3 +2,4 @@
 **/node_modules/**
 **/server.js
 **/webpack.config*.js
+**/flow-typed/**

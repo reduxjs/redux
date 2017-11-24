@@ -1,7 +1,7 @@
 import {
   Reducer, Action, combineReducers,
   ReducersMapObject
-} from "../../index.d.ts";
+} from "../../"
 
 
 type TodosState = string[];
@@ -11,15 +11,15 @@ interface AddTodoAction extends Action {
 }
 
 
-const todosReducer: Reducer<TodosState> = (state: TodosState,
-                                           action: Action): TodosState => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return [...state, (<AddTodoAction>action).text]
-    default:
-      return state
+const todosReducer: Reducer<TodosState, AddTodoAction> =
+  (state = [], action) => {
+    switch (action.type) {
+      case 'ADD_TODO':
+        return [...state, action.text]
+      default:
+        return state
+    }
   }
-}
 
 const todosState: TodosState = todosReducer([], {
   type: 'ADD_TODO',
@@ -48,7 +48,7 @@ type RootState = {
 }
 
 
-const rootReducer: Reducer<RootState> = combineReducers<RootState>({
+const rootReducer = combineReducers<RootState, Action | AddTodoAction>({
   todos: todosReducer,
   counter: counterReducer,
 })
