@@ -190,8 +190,9 @@ export interface Store<S = any, A extends Action = Action, N = never> {
    * implement a hot reloading mechanism for Redux.
    *
    * @param nextReducer The reducer for the store to use instead.
+   * @param nextState New state for the nextReducer.
    */
-  replaceReducer(nextReducer: Reducer<S, A>): void;
+  replaceReducer(nextReducer: Reducer<S>, nextState: S): void;
 }
 
 export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
