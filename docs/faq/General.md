@@ -50,7 +50,7 @@ In general, use Redux when you have reasonable amounts of data changing over tim
 
 However, it's also important to understand that using Redux comes with tradeoffs.  It's not designed to be the shortest or fastest way to write code.  It's intended to help answer the question "When did a certain slice of state change, and where did the data come from?", with predictable behavior.  It does so by asking you to follow specific constraints in your application: store your application's state as plain data, describe changes as plain objects, and handle those changes with pure functions that apply updates immutably.  This is often the source of complaints about "boilerplate".  These constraints require effort on the part of a developer, but also open up a number of additional possibilities (such as store persistence and synchronization).
 
-In the end, Redux is just a tool.  It's a great tool, and there's some great reasons to use it, but there's also reasons you might not want to use it.   Make informed decisions about your tools, and understand the tradeoffs involved in each decision.
+In the end, Redux is just a tool.  It's a great tool, and there are some great reasons to use it, but there are also reasons you might not want to use it.   Make informed decisions about your tools, and understand the tradeoffs involved in each decision.
 
 #### Further information
 
