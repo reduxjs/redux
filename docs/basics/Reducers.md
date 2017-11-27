@@ -210,18 +210,18 @@ function todoApp(state = initialState, action) {
 Is there a way to make it easier to comprehend? It seems like `todos` and `visibilityFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
 
 ```js
-function todos(state = [], action) {
+function todos(stateSlice = [], action) {
   switch (action.type) {
     case ADD_TODO:
       return [
-        ...state,
+        ...stateSlice,
         {
           text: action.text,
           completed: false
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
+      return stateSlice.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
             completed: !todo.completed
@@ -230,7 +230,7 @@ function todos(state = [], action) {
         return todo
       })
     default:
-      return state
+      return stateSlice
   }
 }
 
@@ -265,12 +265,12 @@ const { SHOW_ALL } = VisibilityFilters
 
 Then:
 ```js
-function visibilityFilter(state = SHOW_ALL, action) {
+function visibilityFilter(stateSlice = SHOW_ALL, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
       return action.filter
     default:
-      return state
+      return stateSlice
   }
 }
 ```
@@ -278,18 +278,18 @@ function visibilityFilter(state = SHOW_ALL, action) {
 Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn't need to know the complete initial state anymore. It's enough that the child reducers return their initial state when given `undefined` at first.
 
 ```js
-function todos(state = [], action) {
+function todos(stateSlice = [], action) {
   switch (action.type) {
     case ADD_TODO:
       return [
-        ...state,
+        ...stateSlice,
         {
           text: action.text,
           completed: false
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
+      return stateSlice.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
             completed: !todo.completed
@@ -298,16 +298,16 @@ function todos(state = [], action) {
         return todo
       })
     default:
-      return state
+      return stateSlice
   }
 }
 
-function visibilityFilter(state = SHOW_ALL, action) {
+function visibilityFilter(stateSlice = SHOW_ALL, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
       return action.filter
     default:
-      return state
+      return stateSlice
   }
 }
 
@@ -396,27 +396,27 @@ import {
 } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
-function visibilityFilter(state = SHOW_ALL, action) {
+function visibilityFilter(stateSlice = SHOW_ALL, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
-      return action.filter
+      return stateSlice.filter
     default:
       return state
   }
 }
 
-function todos(state = [], action) {
+function todos(stateSlice = [], action) {
   switch (action.type) {
     case ADD_TODO:
       return [
-        ...state,
+        ...stateSlice,
         {
           text: action.text,
           completed: false
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
+      return stateSlice.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
             completed: !todo.completed
@@ -425,7 +425,7 @@ function todos(state = [], action) {
         return todo
       })
     default:
-      return state
+      return stateSlice
   }
 }
 
