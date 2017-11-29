@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
+import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
 class App extends Component {
   static propTypes = {
-    selectedReddit: PropTypes.string.isRequired,
+    selectedSubreddit: PropTypes.string.isRequired,
     posts: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
@@ -15,35 +15,35 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit } = this.props
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    const { dispatch, selectedSubreddit } = this.props
+    dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedReddit !== this.props.selectedReddit) {
-      const { dispatch, selectedReddit } = nextProps
-      dispatch(fetchPostsIfNeeded(selectedReddit))
+    if (nextProps.selectedSubreddit !== this.props.selectedSubreddit) {
+      const { dispatch, selectedSubreddit } = nextProps
+      dispatch(fetchPostsIfNeeded(selectedSubreddit))
     }
   }
 
-  handleChange = nextReddit => {
-    this.props.dispatch(selectReddit(nextReddit))
+  handleChange = nextSubreddit => {
+    this.props.dispatch(selectSubreddit(nextSubreddit))
   }
 
   handleRefreshClick = e => {
     e.preventDefault()
 
-    const { dispatch, selectedReddit } = this.props
-    dispatch(invalidateReddit(selectedReddit))
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    const { dispatch, selectedSubreddit } = this.props
+    dispatch(invalidateSubreddit(selectedSubreddit))
+    dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
   render() {
-    const { selectedReddit, posts, isFetching, lastUpdated } = this.props
+    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     const isEmpty = posts.length === 0
     return (
       <div>
-        <Picker value={selectedReddit}
+        <Picker value={selectedSubreddit}
                 onChange={this.handleChange}
                 options={[ 'reactjs', 'frontend' ]} />
         <p>
@@ -71,18 +71,18 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { selectedReddit, postsByReddit } = state
+  const { selectedSubreddit, postsBySubreddit } = state
   const {
     isFetching,
     lastUpdated,
     items: posts
-  } = postsByReddit[selectedReddit] || {
+  } = postsBySubreddit[selectedSubreddit] || {
     isFetching: true,
     items: []
   }
 
   return {
-    selectedReddit,
+    selectedSubreddit,
     posts,
     isFetching,
     lastUpdated
