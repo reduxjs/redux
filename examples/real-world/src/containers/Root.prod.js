@@ -8,11 +8,13 @@ import RepoPage from './RepoPage'
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Route path="/" component={App} />
+    <div>
+      <Route path="/" component={App} />
       <Route path="/:login/:name"
              component={RepoPage} />
       <Route path="/:login"
              component={UserPage} />
+    </div>
   </Provider>
 )
 
