@@ -52,11 +52,11 @@ return getAddedIds(state.cart).map(id => ({
 }))
 ```
 
-Since the object spread syntax is still a [Stage 3](https://github.com/sebmarkbage/ecmascript-rest-spread#status-of-this-proposal) proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You can use your existing `es2015` preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
+Since the object spread syntax is still a [Stage 3](https://github.com/sebmarkbage/ecmascript-rest-spread#status-of-this-proposal) proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You should use the [`env`](https://github.com/babel/babel/tree/master/packages/babel-preset-env) preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
 
 ```json
 {
-  "presets": ["es2015"],
+  "presets": ["@babel/preset-env"],
   "plugins": ["transform-object-rest-spread"]
 }
 ```
