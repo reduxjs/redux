@@ -1,20 +1,24 @@
 /* eslint-disable no-console */
-import { createStore, combineReducers, __DO_NOT_USE__ActionTypes as ActionTypes } from '../'
+import {
+  createStore,
+  combineReducers,
+  __DO_NOT_USE__ActionTypes as ActionTypes
+} from '../'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
     it('returns a composite reducer that maps the state keys to given reducers', () => {
       const reducer = combineReducers({
         counter: (state = 0, action) =>
-        action.type === 'increment' ? state + 1 : state,
+          action.type === 'increment' ? state + 1 : state,
         stack: (state = [], action) =>
-        action.type === 'push' ? [ ...state, action.value ] : state
+          action.type === 'push' ? [...state, action.value] : state
       })
 
       const s1 = reducer({}, { type: 'increment' })
       expect(s1).toEqual({ counter: 1, stack: [] })
       const s2 = reducer(s1, { type: 'push', value: 'a' })
-      expect(s2).toEqual({ counter: 1, stack: [ 'a' ] })
+      expect(s2).toEqual({ counter: 1, stack: ['a'] })
     })
 
     it('ignores all props which are not a function', () => {
@@ -25,9 +29,7 @@ describe('Utils', () => {
         stack: (state = []) => state
       })
 
-      expect(
-        Object.keys(reducer({ }, { type: 'push' }))
-      ).toEqual([ 'stack' ])
+      expect(Object.keys(reducer({}, { type: 'push' }))).toEqual(['stack'])
     })
 
     it('warns if a reducer prop is undefined', () => {
@@ -69,21 +71,13 @@ describe('Utils', () => {
         }
       })
 
-      expect(
-        () => reducer({ counter: 0 }, { type: 'whatever' })
-      ).toThrow(
-      /"whatever".*"counter"/
+      expect(() => reducer({ counter: 0 }, { type: 'whatever' })).toThrow(
+        /"whatever".*"counter"/
       )
-      expect(
-        () => reducer({ counter: 0 }, null)
-      ).toThrow(
-      /"counter".*an action/
+      expect(() => reducer({ counter: 0 }, null)).toThrow(
+        /"counter".*an action/
       )
-      expect(
-        () => reducer({ counter: 0 }, { })
-      ).toThrow(
-      /"counter".*an action/
-      )
+      expect(() => reducer({ counter: 0 }, {})).toThrow(/"counter".*an action/)
     })
 
     it('throws an error on first call if a reducer returns undefined initializing', () => {
@@ -99,9 +93,7 @@ describe('Utils', () => {
           }
         }
       })
-      expect(() => reducer({ })).toThrow(
-        /"counter".*initialization/
-      )
+      expect(() => reducer({})).toThrow(/"counter".*initialization/)
     })
 
     it('catches error thrown in reducer when initializing and re-throw', () => {
@@ -110,9 +102,7 @@ describe('Utils', () => {
           throw new Error('Error thrown in reducer')
         }
       })
-      expect(() => reducer({ })).toThrow(
-        /Error thrown in reducer/
-      )
+      expect(() => reducer({})).toThrow(/Error thrown in reducer/)
     })
 
     it('allows a symbol to be used as an action type', () => {
@@ -134,13 +124,13 @@ describe('Utils', () => {
 
     it('maintains referential equality if the reducers it is combining do', () => {
       const reducer = combineReducers({
-        child1(state = { }) {
+        child1(state = {}) {
           return state
         },
-        child2(state = { }) {
+        child2(state = {}) {
           return state
         },
-        child3(state = { }) {
+        child3(state = {}) {
           return state
         }
       })
@@ -151,7 +141,7 @@ describe('Utils', () => {
 
     it('does not have referential equality if one of the reducers changes something', () => {
       const reducer = combineReducers({
-        child1(state = { }) {
+        child1(state = {}) {
           return state
         },
         child2(state = { count: 0 }, action) {
@@ -162,13 +152,15 @@ describe('Utils', () => {
               return state
           }
         },
-        child3(state = { }) {
+        child3(state = {}) {
           return state
         }
       })
 
       const initialState = reducer(undefined, '@@INIT')
-      expect(reducer(initialState, { type: 'increment' })).not.toBe(initialState)
+      expect(reducer(initialState, { type: 'increment' })).not.toBe(
+        initialState
+      )
     })
 
     it('throws an error on first call if a reducer attempts to handle a private action', () => {
@@ -187,9 +179,7 @@ describe('Utils', () => {
           }
         }
       })
-      expect(() => reducer()).toThrow(
-        /"counter".*private/
-      )
+      expect(() => reducer()).toThrow(/"counter".*private/)
     })
 
     it('warns if no reducers are passed to combineReducers', () => {
@@ -197,8 +187,8 @@ describe('Utils', () => {
       const spy = jest.fn()
       console.error = spy
 
-      const reducer = combineReducers({ })
-      reducer({ })
+      const reducer = combineReducers({})
+      reducer({})
       expect(spy.mock.calls[0][0]).toMatch(
         /Store does not have a valid reducer/
       )

@@ -34,7 +34,10 @@ describe('applyMiddleware', () => {
     expect(spy.mock.calls[0][0]).toHaveProperty('getState')
     expect(spy.mock.calls[0][0]).toHaveProperty('dispatch')
 
-    expect(store.getState()).toEqual([ { id: 1, text: 'Use Redux' }, { id: 2, text: 'Flux FTW!' } ])
+    expect(store.getState()).toEqual([
+      { id: 1, text: 'Use Redux' },
+      { id: 2, text: 'Flux FTW!' }
+    ])
   })
 
   it('passes recursive dispatches through the middleware chain', () => {
@@ -120,7 +123,10 @@ describe('applyMiddleware', () => {
       return next => action => dispatch(action, testCallArgs)
     }
 
-    const store = createStore(reducers.todos, applyMiddleware(multiArgMiddleware, dummyMiddleware))
+    const store = createStore(
+      reducers.todos,
+      applyMiddleware(multiArgMiddleware, dummyMiddleware)
+    )
 
     store.dispatch(spy)
     expect(spy.mock.calls[0]).toEqual(testCallArgs)
