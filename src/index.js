@@ -1,10 +1,10 @@
-import createStore from './createStore'
-import combineReducers from './combineReducers'
-import bindActionCreators from './bindActionCreators'
-import applyMiddleware from './applyMiddleware'
-import compose from './compose'
-import warning from './utils/warning'
-import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
+import createStore from './createStore.js'
+import combineReducers from './combineReducers.js'
+import bindActionCreators from './bindActionCreators.js'
+import applyMiddleware from './applyMiddleware.js'
+import compose from './compose.js'
+import warning from './utils/warning.js'
+import __DO_NOT_USE__ActionTypes from './utils/actionTypes.js'
 
 /*
  * This is a dummy function to check if the function name has been altered by minification.

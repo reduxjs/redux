@@ -1,7 +1,7 @@
-import $$observable from 'symbol-observable'
+import $$observable from '../node_modules/symbol-observable/es/index.js'
 
-import ActionTypes from './utils/actionTypes'
-import isPlainObject from './utils/isPlainObject'
+import ActionTypes from './utils/actionTypes.js'
+import isPlainObject from './utils/isPlainObject.js'
 
 /**
  * Creates a Redux store that holds the state tree.
