@@ -1,6 +1,6 @@
-import ActionTypes from './utils/actionTypes'
-import warning from './utils/warning'
-import isPlainObject from './utils/isPlainObject'
+import ActionTypes from './utils/actionTypes.js'
+import warning from './utils/warning.js'
+import isPlainObject from './utils/isPlainObject.js'
 
 function getUndefinedStateErrorMessage(key, action) {
   const actionType = action && action.type
