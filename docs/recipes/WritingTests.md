@@ -437,7 +437,7 @@ const create = () => {
 We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
 
 ```js
-it(`passes through non-function action`, () => {
+it('passes through non-function action', () => {
   const { next, invoke } = create()
   const action = {type: 'TEST'}
   invoke(action)
