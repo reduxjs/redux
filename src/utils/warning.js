@@ -15,7 +15,5 @@ export default function warning(message) {
     // "break on all exceptions" in your console,
     // it would pause the execution at this line.
     throw new Error(message)
-  /* eslint-disable no-empty */
-  } catch (e) { }
-  /* eslint-enable no-empty */
+  } catch (e) {} // eslint-disable-line no-empty
 }

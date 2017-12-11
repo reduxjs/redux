@@ -25,21 +25,13 @@ describe('createStore', () => {
   })
 
   it('throws if reducer is not a function', () => {
-    expect(() =>
-      createStore()
-    ).toThrow()
+    expect(() => createStore()).toThrow()
 
-    expect(() =>
-      createStore('test')
-    ).toThrow()
+    expect(() => createStore('test')).toThrow()
 
-    expect(() =>
-      createStore({})
-    ).toThrow()
+    expect(() => createStore({})).toThrow()
 
-    expect(() =>
-      createStore(() => {})
-    ).not.toThrow()
+    expect(() => createStore(() => {})).not.toThrow()
   })
 
   it('passes the initial state', () => {
@@ -77,7 +69,8 @@ describe('createStore', () => {
       {
         id: 1,
         text: 'Hello'
-      }, {
+      },
+      {
         id: 2,
         text: 'World'
       }
@@ -111,7 +104,8 @@ describe('createStore', () => {
       {
         id: 1,
         text: 'Hello'
-      }, {
+      },
+      {
         id: 2,
         text: 'World'
       }
@@ -138,7 +132,8 @@ describe('createStore', () => {
       {
         id: 1,
         text: 'Hello'
-      }, {
+      },
+      {
         id: 2,
         text: 'World'
       }
@@ -299,19 +294,20 @@ describe('createStore', () => {
     const store = createStore(reducers.todos)
 
     const unsubscribeHandles = []
-    const doUnsubscribeAll = () => unsubscribeHandles.forEach(
-      unsubscribe => unsubscribe()
-    )
+    const doUnsubscribeAll = () =>
+      unsubscribeHandles.forEach(unsubscribe => unsubscribe())
 
     const listener1 = jest.fn()
     const listener2 = jest.fn()
     const listener3 = jest.fn()
 
     unsubscribeHandles.push(store.subscribe(() => listener1()))
-    unsubscribeHandles.push(store.subscribe(() => {
-      listener2()
-      doUnsubscribeAll()
-    }))
+    unsubscribeHandles.push(
+      store.subscribe(() => {
+        listener2()
+        doUnsubscribeAll()
+      })
+    )
     unsubscribeHandles.push(store.subscribe(() => listener3()))
 
     store.dispatch(unknownAction())
@@ -415,7 +411,7 @@ describe('createStore', () => {
 
   it('does not leak private listeners array', done => {
     const store = createStore(reducers.todos)
-    store.subscribe(function () {
+    store.subscribe(function() {
       expect(this).toBe(undefined)
       done()
     })
@@ -424,15 +420,11 @@ describe('createStore', () => {
 
   it('only accepts plain object actions', () => {
     const store = createStore(reducers.todos)
-    expect(() =>
-      store.dispatch(unknownAction())
-    ).not.toThrow()
+    expect(() => store.dispatch(unknownAction())).not.toThrow()
 
-    function AwesomeMap() { }
-    [ null, undefined, 42, 'hey', new AwesomeMap() ].forEach(nonObject =>
-      expect(() =>
-        store.dispatch(nonObject)
-      ).toThrow(/plain/)
+    function AwesomeMap() {}
+    ;[null, undefined, 42, 'hey', new AwesomeMap()].forEach(nonObject =>
+      expect(() => store.dispatch(nonObject)).toThrow(/plain/)
     )
   })
 
@@ -465,7 +457,9 @@ describe('createStore', () => {
     const store = createStore(reducers.dispatchInTheMiddleOfReducer)
 
     expect(() =>
-      store.dispatch(dispatchInMiddle(store.dispatch.bind(store, unknownAction())))
+      store.dispatch(
+        dispatchInMiddle(store.dispatch.bind(store, unknownAction()))
+      )
     ).toThrow(/may not dispatch/)
   })
 
@@ -496,43 +490,31 @@ describe('createStore', () => {
 
   it('recovers from an error within a reducer', () => {
     const store = createStore(reducers.errorThrowingReducer)
-    expect(() =>
-      store.dispatch(throwError())
-    ).toThrow()
+    expect(() => store.dispatch(throwError())).toThrow()
 
-    expect(() =>
-      store.dispatch(unknownAction())
-    ).not.toThrow()
+    expect(() => store.dispatch(unknownAction())).not.toThrow()
   })
 
   it('throws if action type is missing', () => {
     const store = createStore(reducers.todos)
-    expect(() =>
-      store.dispatch({})
-    ).toThrow(/Actions may not have an undefined "type" property/)
+    expect(() => store.dispatch({})).toThrow(
+      /Actions may not have an undefined "type" property/
+    )
   })
 
   it('throws if action type is undefined', () => {
     const store = createStore(reducers.todos)
-    expect(() =>
-      store.dispatch({ type: undefined })
-    ).toThrow(/Actions may not have an undefined "type" property/)
+    expect(() => store.dispatch({ type: undefined })).toThrow(
+      /Actions may not have an undefined "type" property/
+    )
   })
 
   it('does not throw if action type is falsy', () => {
     const store = createStore(reducers.todos)
-    expect(() =>
-      store.dispatch({ type: false })
-    ).not.toThrow()
-    expect(() =>
-      store.dispatch({ type: 0 })
-    ).not.toThrow()
-    expect(() =>
-      store.dispatch({ type: null })
-    ).not.toThrow()
-    expect(() =>
-      store.dispatch({ type: '' })
-    ).not.toThrow()
+    expect(() => store.dispatch({ type: false })).not.toThrow()
+    expect(() => store.dispatch({ type: 0 })).not.toThrow()
+    expect(() => store.dispatch({ type: null })).not.toThrow()
+    expect(() => store.dispatch({ type: '' })).not.toThrow()
   })
 
   it('accepts enhancer as the third argument', () => {
@@ -585,73 +567,47 @@ describe('createStore', () => {
   })
 
   it('throws if enhancer is neither undefined nor a function', () => {
-    expect(() =>
-      createStore(reducers.todos, undefined, {})
-    ).toThrow()
+    expect(() => createStore(reducers.todos, undefined, {})).toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, undefined, [])
-    ).toThrow()
+    expect(() => createStore(reducers.todos, undefined, [])).toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, undefined, null)
-    ).toThrow()
+    expect(() => createStore(reducers.todos, undefined, null)).toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, undefined, false)
-    ).toThrow()
+    expect(() => createStore(reducers.todos, undefined, false)).toThrow()
 
     expect(() =>
       createStore(reducers.todos, undefined, undefined)
     ).not.toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, undefined, x => x)
-    ).not.toThrow()
+    expect(() => createStore(reducers.todos, undefined, x => x)).not.toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, x => x)
-    ).not.toThrow()
+    expect(() => createStore(reducers.todos, x => x)).not.toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, [])
-    ).not.toThrow()
+    expect(() => createStore(reducers.todos, [])).not.toThrow()
 
-    expect(() =>
-      createStore(reducers.todos, {})
-    ).not.toThrow()
+    expect(() => createStore(reducers.todos, {})).not.toThrow()
   })
 
   it('throws if nextReducer is not a function', () => {
     const store = createStore(reducers.todos)
 
-    expect(() =>
-      store.replaceReducer()
-    ).toThrow('Expected the nextReducer to be a function.')
+    expect(() => store.replaceReducer()).toThrow(
+      'Expected the nextReducer to be a function.'
+    )
 
-    expect(() =>
-      store.replaceReducer(() => {})
-    ).not.toThrow()
+    expect(() => store.replaceReducer(() => {})).not.toThrow()
   })
 
   it('throws if listener is not a function', () => {
     const store = createStore(reducers.todos)
 
-    expect(() =>
-      store.subscribe()
-    ).toThrow()
+    expect(() => store.subscribe()).toThrow()
 
-    expect(() =>
-      store.subscribe('')
-    ).toThrow()
+    expect(() => store.subscribe('')).toThrow()
 
-    expect(() =>
-      store.subscribe(null)
-    ).toThrow()
+    expect(() => store.subscribe(null)).toThrow()
 
-    expect(() =>
-      store.subscribe(undefined)
-    ).toThrow()
+    expect(() => store.subscribe(undefined)).toThrow()
   })
 
   describe('Symbol.observable interop point', () => {
@@ -671,15 +627,15 @@ describe('createStore', () => {
         const store = createStore(() => {})
         const obs = store[$$observable]()
 
-        expect(function () {
+        expect(function() {
           obs.subscribe()
         }).toThrow()
 
-        expect(function () {
+        expect(function() {
           obs.subscribe(() => {})
         }).toThrow()
 
-        expect(function () {
+        expect(function() {
           obs.subscribe({})
         }).not.toThrow()
       })
@@ -714,7 +670,11 @@ describe('createStore', () => {
       store.dispatch({ type: 'foo' })
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 }, { foo: 1, bar: 2 } ])
+      expect(results).toEqual([
+        { foo: 0, bar: 0 },
+        { foo: 1, bar: 0 },
+        { foo: 1, bar: 2 }
+      ])
     })
 
     it('should pass an integration test with an unsubscribe', () => {
@@ -740,7 +700,7 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0 }, { foo: 1, bar: 0 } ])
+      expect(results).toEqual([{ foo: 0, bar: 0 }, { foo: 1, bar: 0 }])
     })
 
     it('should pass an integration test with a common library (RxJS)', () => {
@@ -764,7 +724,10 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([ { foo: 0, bar: 0, fromRx: true }, { foo: 1, bar: 0, fromRx: true } ])
+      expect(results).toEqual([
+        { foo: 0, bar: 0, fromRx: true },
+        { foo: 1, bar: 0, fromRx: true }
+      ])
     })
   })
 
@@ -774,19 +737,19 @@ describe('createStore', () => {
 
     const store = createStore(
       combineReducers({
-        x: (s=0, a) => s,
+        x: (s = 0, a) => s,
         y: combineReducers({
-          z: (s=0, a) => s,
-          w: (s=0, a) => s,
-        }),
+          z: (s = 0, a) => s,
+          w: (s = 0, a) => s
+        })
       })
     )
 
     store.replaceReducer(
       combineReducers({
         y: combineReducers({
-          z: (s=0, a) => s,
-        }),
+          z: (s = 0, a) => s
+        })
       })
     )
 

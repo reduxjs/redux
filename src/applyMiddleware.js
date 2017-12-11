@@ -17,12 +17,12 @@ import compose from './compose'
  * @returns {Function} A store enhancer applying the middleware.
  */
 export default function applyMiddleware(...middlewares) {
-  return (createStore) => (...args) => {
+  return createStore => (...args) => {
     const store = createStore(...args)
     let dispatch = () => {
       throw new Error(
         `Dispatching while constructing your middleware is not allowed. ` +
-        `Other middleware would not be applied to this dispatch.`
+          `Other middleware would not be applied to this dispatch.`
       )
     }
     let chain = []

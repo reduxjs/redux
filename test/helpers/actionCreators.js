@@ -1,11 +1,11 @@
-import { 
-  ADD_TODO, 
-  DISPATCH_IN_MIDDLE, 
-  GET_STATE_IN_MIDDLE, 
+import {
+  ADD_TODO,
+  DISPATCH_IN_MIDDLE,
+  GET_STATE_IN_MIDDLE,
   SUBSCRIBE_IN_MIDDLE,
-  UNSUBSCRIBE_IN_MIDDLE, 
-  THROW_ERROR, 
-  UNKNOWN_ACTION 
+  UNSUBSCRIBE_IN_MIDDLE,
+  THROW_ERROR,
+  UNKNOWN_ACTION
 } from './actionTypes'
 
 export function addTodo(text) {
@@ -13,10 +13,13 @@ export function addTodo(text) {
 }
 
 export function addTodoAsync(text) {
-  return dispatch => new Promise(resolve => setImmediate(() => {
-    dispatch(addTodo(text))
-    resolve()
-  }))
+  return dispatch =>
+    new Promise(resolve =>
+      setImmediate(() => {
+        dispatch(addTodo(text))
+        resolve()
+      })
+    )
 }
 
 export function addTodoIfEmpty(text) {
