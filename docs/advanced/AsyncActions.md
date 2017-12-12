@@ -230,14 +230,13 @@ function selectedSubreddit(state = 'reactjs', action) {
   }
 }
 
-function posts(
-  state = {
-    isFetching: false,
-    didInvalidate: false,
-    items: []
-  },
-  action
-) {
+const defaultPostsState = {
+  isFetching: false,
+  didInvalidate: false,
+  items: []
+};
+
+function posts(state = defaultPostsState, action) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
