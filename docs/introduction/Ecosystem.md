@@ -115,6 +115,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [redux-actions-assertions](https://github.com/dmitry-zaets/redux-actions-assertions) — Assertions for Redux actions testing
 * [redux-bootstrap](https://github.com/remojansen/redux-bootstrap) — Bootstrapping function for Redux applications
 * [redux-data-structures](https://redux-data-structures.js.org/) — Reducer factory (higher-order functions) for counters, maps, lists (queues, stacks), sets, etc.
+* [redux-cube](https://github.com/dexteryy/Project-WebCube/tree/master/packages/redux-cube) - A set of wrappers which simplify the use of Redux and its whole ecosystem, reduce boilerplate, and provide many best practices (Sub App, Reducer Bundle, ...)
 
 ### DevTools
 
