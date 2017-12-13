@@ -1,4 +1,4 @@
-import {Dispatch, Action} from "../../"
+import {Dispatch, Action} from "redux"
 
 
 declare const dispatch: Dispatch<any>;
@@ -6,8 +6,8 @@ declare const dispatch: Dispatch<any>;
 const dispatchResult: Action = dispatch({type: 'TYPE'});
 
 // thunk
-declare module "../../" {
-    export interface Dispatch<D = Action> {
+declare module "redux" {
+    export interface Dispatch<D> {
         <R>(asyncAction: (dispatch: Dispatch<D>, getState: () => any) => R): R;
     }
 }

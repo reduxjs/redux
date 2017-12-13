@@ -1,7 +1,7 @@
 import {
   Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
   StoreCreator, StoreEnhancerStoreCreator, Unsubscribe
-} from "../../"
+} from "redux"
 
 
 type State = {
@@ -65,8 +65,6 @@ unsubscribe();
 
 /* replaceReducer */
 
-const newReducer: Reducer<State> = (state: State, action: Action): State => {
-  return state;
-}
+const newReducer: Reducer<State> = reducer;
 
 store.replaceReducer(newReducer);

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "../..",
+    "paths": {
+      "redux": "index.d.ts"
+    }
+  }
+}

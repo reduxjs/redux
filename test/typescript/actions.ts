@@ -1,4 +1,4 @@
-import {Action as ReduxAction} from "../../"
+import {Action as ReduxAction} from "redux"
 
 
 namespace FSA {

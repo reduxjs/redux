@@ -1,7 +1,7 @@
 import {
   Reducer, Action, combineReducers,
   ReducersMapObject
-} from "../../"
+} from "redux"
 
 
 type TodosState = string[];
@@ -31,7 +31,7 @@ type CounterState = number;
 
 
 const counterReducer: Reducer<CounterState> = (
-  state: CounterState, action: Action
+  state: CounterState | undefined = 0, action: Action
 ): CounterState => {
   switch (action.type) {
     case 'INCREMENT':

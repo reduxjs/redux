@@ -1,15 +1,15 @@
 import {
   Middleware, MiddlewareAPI,
   applyMiddleware, createStore, Dispatch, Reducer, Action
-} from "../../"
+} from "redux"
 
-declare module "../../" {
-    export interface Dispatch<D = Action> {
+declare module "redux" {
+    export interface Dispatch<D> {
         <R>(asyncAction: (dispatch: Dispatch<D>, getState: () => any) => R): R;
     }
 }
 
-type Thunk<S, O> = (dispatch: Dispatch, getState?: () => S) => O;
+type Thunk<S, O> = (dispatch: Dispatch, getState: () => S) => O;
 
 const thunkMiddleware: Middleware =
   <S, A extends Action>({dispatch, getState}: MiddlewareAPI<S>) =>
@@ -41,7 +41,8 @@ type State = {
   todos: string[];
 }
 
-const reducer: Reducer<State> = (state: State, action: Action): State => {
+const reducer: Reducer<State> = (state: State | undefined = {todos: []},
+                                 action: Action): State => {
   return state;
 }
 

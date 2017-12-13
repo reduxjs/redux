@@ -1,7 +1,7 @@
 import {
   ActionCreator, Action, Dispatch,
   bindActionCreators, ActionCreatorsMapObject
-} from "../../"
+} from "redux"
 
 
 interface AddTodoAction extends Action {

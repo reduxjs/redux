@@ -20,6 +20,16 @@ export interface Action<T = any> {
   type: T;
 }
 
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent users who are extending `Action.
+ */
+export interface AnyAction extends Action {
+  // Allows any extra properties to be defined in an action.
+  [extraProps: string]: any;
+}
+
 /* reducers */
 
 /**
@@ -46,15 +56,15 @@ export interface Action<T = any> {
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = any, A extends Action = Action> = (state: S | undefined, action: A) => S;
+export type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefined, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
  *
  * @template A The type of actions the reducers can potentially respond to.
  */
-export type ReducersMapObject<S = any, A extends Action = Action> = {
-  [K in keyof S]: Reducer<S[K], A>;
+export type ReducersMapObject<S = any> = {
+  [K in keyof S]: Reducer<S[K], any>;
 }
 
 /**
@@ -75,7 +85,7 @@ export type ReducersMapObject<S = any, A extends Action = Action> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S, A extends Action = Action>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
+export function combineReducers<S, A extends Action = AnyAction>(reducers: ReducersMapObject<S>): Reducer<S, A>;
 
 
 /* store */
@@ -100,7 +110,7 @@ export function combineReducers<S, A extends Action = Action>(reducers: Reducers
  *
  * @template D the type of things (actions or otherwise) which may be dispatched.
  */
-export interface Dispatch<D = Action> {
+export interface Dispatch<D = AnyAction> {
     <A extends D>(action: A): A;
 }
 
@@ -120,7 +130,7 @@ export interface Unsubscribe {
  * @template A the type of actions which may be dispatched by this store.
  * @template N The type of non-actions which may be dispatched by this store.
  */
-export interface Store<S = any, A extends Action = Action, N = never> {
+export interface Store<S = any, A extends Action = AnyAction, N = never> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
@@ -232,7 +242,7 @@ export interface StoreCreator {
  */
 export type StoreEnhancer<N = never> = (next: StoreEnhancerStoreCreator<N>) => StoreEnhancerStoreCreator<N>;
 export type GenericStoreEnhancer<N = never> = StoreEnhancer<N>;
-export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = Action>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S, A, N>;
+export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = AnyAction>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S, A, N>;
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -267,7 +277,7 @@ export const createStore: StoreCreator;
 
 /* middleware */
 
-export interface MiddlewareAPI<S = any, D = Action> {
+export interface MiddlewareAPI<S = any, D = AnyAction> {
   dispatch: Dispatch<D>;
   getState(): S;
 }
@@ -282,7 +292,7 @@ export interface MiddlewareAPI<S = any, D = Action> {
  * asynchronous API call into a series of synchronous actions.
  */
 export interface Middleware {
-  <S = any, D = Action>(api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => Dispatch<D>;
+  <S = any, D = AnyAction>(api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => Dispatch<D>;
 }
 
 /**
