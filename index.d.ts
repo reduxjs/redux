@@ -63,8 +63,8 @@ export type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefin
  *
  * @template A The type of actions the reducers can potentially respond to.
  */
-export type ReducersMapObject<S = any> = {
-  [K in keyof S]: Reducer<S[K], any>;
+export type ReducersMapObject<S = any, A extends Action = Action> = {
+  [K in keyof S]: Reducer<S[K], A>;
 }
 
 /**
@@ -85,7 +85,8 @@ export type ReducersMapObject<S = any> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S, A extends Action = AnyAction>(reducers: ReducersMapObject<S>): Reducer<S, A>;
+export function combineReducers<S>(reducers: ReducersMapObject<S, any>): Reducer<S>;
+export function combineReducers<S, A extends Action = AnyAction>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
 
 
 /* store */
