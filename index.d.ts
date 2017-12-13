@@ -112,7 +112,7 @@ export function combineReducers<S, A extends Action = AnyAction>(reducers: Reduc
  * @template D the type of things (actions or otherwise) which may be dispatched.
  */
 export interface Dispatch<D = AnyAction> {
-    <A extends D>(action: A): A;
+  <A extends D>(action: A): A;
 }
 
 /**
