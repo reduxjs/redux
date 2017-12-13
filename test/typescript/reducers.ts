@@ -182,3 +182,16 @@ function typeGuards() {
   let cs: { sub: State } = combined(undefined, { type: 'init' })
   cs = combined(cs, { type: 'INCREMENT', count: 10 })
 }
+
+/**
+ * Test ReducersMapObject with default type args.
+ */
+function reducersMapObject() {
+  const obj: ReducersMapObject = {};
+
+  for (const key of Object.keys(obj)) {
+    obj[key](undefined, {type: 'SOME_TYPE'});
+    // typings:expect-error
+    obj[key](undefined, 'not-an-action');
+  }
+}
