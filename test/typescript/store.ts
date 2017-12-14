@@ -1,5 +1,5 @@
 import {
-  Store, createStore, Reducer, Action, StoreEnhancer, GenericStoreEnhancer,
+  Store, createStore, Reducer, Action, StoreEnhancer,
   StoreCreator, StoreEnhancerStoreCreator, Unsubscribe
 } from "redux"
 
@@ -30,15 +30,13 @@ const storeWithPreloadedState: Store<State> = createStore(reducer, {
   b: {c: 'c'}
 });
 
-const genericEnhancer: GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => next;
-const specificEnhancer: StoreEnhancer<State> = next => next;
+const enhancer: StoreEnhancer<State> = next => next;
 
-const storeWithGenericEnhancer: Store<State> = createStore(reducer, genericEnhancer);
-const storeWithSpecificEnhancer: Store<State> = createStore(reducer, specificEnhancer);
+const storeWithSpecificEnhancer: Store<State> = createStore(reducer, enhancer);
 
 const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(reducer, {
   b: {c: 'c'}
-}, genericEnhancer);
+}, enhancer);
 
 
 /* dispatch */

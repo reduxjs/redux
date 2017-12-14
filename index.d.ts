@@ -109,7 +109,9 @@ export function combineReducers<S, A extends Action = AnyAction>(reducers: Reduc
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
  *
- * @template D the type of things (actions or otherwise) which may be dispatched.
+ * @template D the type of things (actions or otherwise) which may be
+ *   dispatched. Note that by default Dispatch returns the same type as its
+ *   argument. Use module augmentation to add a custom signature.
  */
 export interface Dispatch<D = AnyAction> {
   <A extends D>(action: A): A;
@@ -215,7 +217,7 @@ export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
  *
  * @template S The type of state to be held by the store.
  * @template A The type of actions which may be dispatched.
- * @template D The type of all things which may be dispatched.
+ * @template N The type of non-actions which may be dispatched.
  */
 export interface StoreCreator {
   <S, A extends Action, N>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
@@ -242,7 +244,6 @@ export interface StoreCreator {
  *
  */
 export type StoreEnhancer<N = never> = (next: StoreEnhancerStoreCreator<N>) => StoreEnhancerStoreCreator<N>;
-export type GenericStoreEnhancer<N = never> = StoreEnhancer<N>;
 export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = AnyAction>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S, A, N>;
 
 /**
@@ -291,9 +292,13 @@ export interface MiddlewareAPI<S = any, D = AnyAction> {
  * Middleware is composable using function composition. It is useful for
  * logging actions, performing side effects like routing, or turning an
  * asynchronous API call into a series of synchronous actions.
+ *
+ * @template S The type of the state supported by this middleware.
+ * @template D The type of actions or non-actions which may be dispatched by
+ *   the store where this middleware is installed.
  */
-export interface Middleware {
-  <S = any, D = AnyAction>(api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => Dispatch<D>;
+export interface Middleware<S = any, D = AnyAction> {
+  (api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => (action: any) => any;
 }
 
 /**
@@ -312,8 +317,11 @@ export interface Middleware {
  *
  * @param middlewares The middleware chain to be applied.
  * @returns A store enhancer applying the middleware.
+ *
+ * @template N The type of non-actions which may be dispatched by a store if
+ *   these middleware are applied.
  */
-export function applyMiddleware(...middlewares: Middleware[]): GenericStoreEnhancer;
+export function applyMiddleware<N = never>(...middlewares: Middleware[]): StoreEnhancer<N>;
 
 
 /* action creators */
