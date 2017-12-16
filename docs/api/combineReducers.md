@@ -2,7 +2,7 @@
 
 As your app grows more complex, you'll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
 
-The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
+The `combineReducers` helper function turns an object whose property values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
 
 The resulting reducer calls every child reducer, and gathers their results into a single state object.
 **The state produced by `combineReducers()` namespaces the states of each reducer under their keys as passed to `combineReducers()`**
@@ -31,7 +31,7 @@ A popular convention is to name reducers after the state slices they manage, so 
 
 #### Arguments
 
-1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
+1. `reducers` (*Object*): An object whose property values are different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
 
 > Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend exporting a single reducer obtained using `combineReducers()` from `reducers/index.js` instead. An example is included below.
 
