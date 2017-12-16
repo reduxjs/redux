@@ -6,45 +6,6 @@ For an extensive list of everything related to Redux, we recommend [Awesome Redu
 
 On this page we will only feature a few of them that the Redux maintainers have vetted personally. Don't let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don't hesitate to submit a PR if you've built something wonderful with Redux.
 
-## Learning Redux
-
-### Screencasts
-
-* **[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)** — Learn the basics of Redux directly from its creator (30 free videos)
-* **[Learn Redux](https://learnredux.com)** — Build a simple photo app that will simplify the core ideas behind Redux, React Router and React.js
-
-### Example Apps
-
-* [Official Examples](Examples.md) — A few official examples covering different Redux techniques
-* [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
-* [grafgiti](https://github.com/mohebifar/grafgiti) — Create graffiti on your GitHub contributions wall
-* [React-lego](https://github.com/peter-mouland/react-lego) — How to plug into React, one block at a time.
-
-### Tutorials and Articles
-
-* [Redux Tutorial](https://github.com/happypoulp/redux-tutorial)
-* [Redux Egghead Course Notes](https://github.com/tayiorbeii/egghead.io_redux_course_notes)
-* [Integrating Data with React Native](http://makeitopen.com/docs/en/1-3-data.html)
-* [What the Flux?! Let's Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux)
-* [Leveling Up with React: Redux](https://css-tricks.com/learning-react-redux/)
-* [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6)
-* [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container)
-* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4)
-* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
-* [Getting Started with React, Redux, and Immutable](http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/)
-* [Secure Your React and Redux App with JWT Authentication](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/)
-* [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
-* [Angular 2 — Introduction to Redux](https://medium.com/google-developer-experts/angular-2-introduction-to-redux-1cf18af27e6e)
-* [Apollo Client: GraphQL with React and Redux](https://medium.com/apollo-stack/apollo-client-graphql-with-react-and-redux-49b35d0f2641)
-* [Using redux-saga To Simplify Your Growing React Native Codebase](https://shift.infinite.red/using-redux-saga-to-simplify-your-growing-react-native-codebase-2b8036f650de)
-* [Build an Image Gallery Using Redux Saga](http://joelhooks.com/blog/2016/03/20/build-an-image-gallery-using-redux-saga)
-* [Working with VK API (in Russian)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details)
-
-### Talks
-
-* [Live React: Hot Reloading and Time Travel](http://youtube.com/watch?v=xsSnOQynTHs) — See how constraints enforced by Redux make hot reloading with time travel easy
-* [Cleaning the Tar: Using React within the Firefox Developer Tools](https://www.youtube.com/watch?v=qUlRpybs7_c) — Learn how to gradually migrate existing MVC applications to Redux
-* [Redux: Simplifying Application State](https://www.youtube.com/watch?v=okdC5gcD-dM) — An intro to Redux architecture
 
 ## Using Redux
 
@@ -138,16 +99,3 @@ On this page we will only feature a few of them that the Redux maintainers have 
 * [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — A human-friendly standard for Flux action objects
 * [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — An opinionated standard for nested reducer composition
 * [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling reducers, action types and actions
-
-### Translations
-
-* [中文文档](http://camsong.github.io/redux-in-chinese/) — Chinese
-* [繁體中文文件](https://github.com/chentsulin/redux) — Traditional Chinese
-* [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
-* [Redux en Español](http://es.redux.js.org/) - Spanish
-
-## More
-
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.  
-[React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES6, and more.  
-[Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) is a categorized collection of Redux-related libraries, addons, and utilities.
