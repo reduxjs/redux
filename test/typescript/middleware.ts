@@ -60,5 +60,5 @@ storeWithThunkMiddleware.dispatch(
 
 const storeWithMultipleMiddleware = createStore(
   reducer,
-  applyMiddleware(loggerMiddleware, thunkMiddleware)
+  applyMiddleware(thunkMiddleware, loggerMiddleware)
 )
