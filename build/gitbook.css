@@ -4,7 +4,7 @@
 }
 
 .book-summary ul.summary li a:hover {
-  color: #008cff;
+  color: #0070CC;
   text-decoration: none;
 }
 
@@ -14,7 +14,7 @@ pre[class*="language-"] {
 }
 
 .color-theme-2 .token.keyword {
-  color: #3ac;
+  color: #24788F;
 }
 
 .token.operator {
