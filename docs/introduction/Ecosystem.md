@@ -24,7 +24,7 @@ On this page we will only feature a few of them that the Redux maintainers have 
 
 * [Redux Tutorial](https://github.com/happypoulp/redux-tutorial)
 * [Redux Egghead Course Notes](https://github.com/tayiorbeii/egghead.io_redux_course_notes)
-* [Integrating Data with React Native](http://makeitopen.com/tutorials/building-the-f8-app/data/)
+* [Integrating Data with React Native](http://makeitopen.com/docs/en/1-3-data.html)
 * [What the Flux?! Let's Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux)
 * [Leveling Up with React: Redux](https://css-tricks.com/learning-react-redux/)
 * [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6)

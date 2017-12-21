@@ -20,7 +20,7 @@ describe('Product component', () => {
 
   describe('when given inventory', () => {
     it('should render title, price, and inventory', () => {
-      const { component } = setup({ title: 'Test Product', price: 9.99, inventory: 6 })
+      const { component } = setup({ title: 'Test Product', price: 9.99, quantity: 6 })
       expect(component.text()).toBe('Test Product - $9.99 x 6')
     })
   })
