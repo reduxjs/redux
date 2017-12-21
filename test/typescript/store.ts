@@ -30,7 +30,7 @@ const storeWithPreloadedState: Store<State> = createStore(reducer, {
   b: {c: 'c'}
 });
 
-const enhancer: StoreEnhancer<State> = next => next;
+const enhancer: StoreEnhancer = next => next;
 
 const storeWithSpecificEnhancer: Store<State> = createStore(reducer, enhancer);
 

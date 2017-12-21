@@ -15,15 +15,15 @@ const addTodo: ActionCreator<AddTodoAction> = (text: string) => ({
 
 const addTodoAction: AddTodoAction = addTodo('test');
 
-type AddTodoThunk = (dispatch: Dispatch<any>) => AddTodoAction;
+type AddTodoThunk = (dispatch: Dispatch) => AddTodoAction;
 
 const addTodoViaThunk: ActionCreator<AddTodoThunk> = (text: string) =>
-  (dispatch: Dispatch<any>) => ({
+  (dispatch: Dispatch) => ({
     type: 'ADD_TODO',
     text
   })
 
-declare const dispatch: Dispatch<any>;
+declare const dispatch: Dispatch;
 
 const boundAddTodo = bindActionCreators(addTodo, dispatch);
 

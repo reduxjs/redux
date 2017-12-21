@@ -13,7 +13,7 @@ function simple() {
   a.wrongProp
 
   // typings:expect-error
-  dispatch('string')
+  dispatch('not-an-action')
 }
 
 /**
@@ -43,24 +43,4 @@ function discriminated() {
   // Unknown actions are rejected.
   // typings:expect-error
   dispatch({ type: 'SOME_OTHER_TYPE' })
-}
-
-/**
- * Dispatch supports non-actions.
- */
-function nonAction() {
-  const dispatch: Dispatch<AnyAction | Promise<AnyAction>> = null as any
-
-  dispatch({ type: 'INCREMENT' })
-  // typings:expect-error
-  dispatch('string')
-
-  // typings:expect-error
-  dispatch(Promise.resolve('string'))
-  dispatch(Promise.resolve({ type: 'INCREMENT', count: 10 })).then(action => {
-    action.count
-
-    // typings:expect-error
-    action.wrongProp
-  })
 }
