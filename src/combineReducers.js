@@ -135,7 +135,7 @@ export default function combineReducers(reducers) {
 
   let unexpectedKeyCache
   if (process.env.NODE_ENV !== 'production') {
-    unexpectedKeyCache = {}
+    unexpectedKeyCache = Object.create(null)
   }
 
   let shapeAssertionError

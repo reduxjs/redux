@@ -277,6 +277,11 @@ describe('Utils', () => {
       reducer({ ...state, baz: 5 }, {})
       reducer({ ...state, baz: 5 }, {})
       expect(spy.mock.calls.length).toBe(2)
+      reducer({ ...state, toString: 6 }, {})
+      reducer({ ...state, toString: 6 }, {})
+      reducer({ ...state, toString: 6 }, {})
+      reducer({ ...state, toString: 6 }, {})
+      expect(spy.mock.calls.length).toBe(3)
 
       spy.mockClear()
       console.error = preSpy
