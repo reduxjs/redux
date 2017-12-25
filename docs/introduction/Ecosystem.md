@@ -422,7 +422,7 @@ function* addTodosIfAllowed(action) {
 Handle async logic using RxJS observable chains called "epics". 
 Compose and cancel async actions to create side effects and more.
 
-Best for: complex async logic, decoupled workflows
+**Best for**: complex async logic, decoupled workflows
 ```js
 const loginRequestEpic = (action$) => 
     action$.ofType(LOGIN_REQUEST)
@@ -447,7 +447,7 @@ const rootEpic = combineEpics(loginRequestEpic, loginSuccessfulEpic);
 
 A port of the Elm Architecture to Redux that allows you to sequence your effects naturally and purely by returning them from your reducers. Reducers now return both a state value and a side effect description.
 
-Best for: trying to be as much like Elm as possible in Redux+JS
+**Best for**: trying to be as much like Elm as possible in Redux+JS
 ```js
 export const reducer = (state = {}, action) => {
     switch(action.type) {
@@ -474,7 +474,7 @@ export const reducer = (state = {}, action) => {
 
 Side effects lib built with observables, but allows use of callbacks, promises, async/await, or observables. Provides declarative processing of actions.
 
-Best for: very decoupled async logic
+**Best for**: very decoupled async logic
 ```js
 const loginLogic = createLogic({
     type : Actions.LOGIN_REQUEST,
