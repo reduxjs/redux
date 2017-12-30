@@ -256,6 +256,12 @@ First, we will install [Enzyme](http://airbnb.io/enzyme/). Enzyme uses the [Reac
 npm install --save-dev enzyme
 ```
 
+We will also need to install Enzyme adapter for our version of React. Enzyme has adapters that provide compatability with `React 16.x`, `React 15.x`, `React 0.14.x` and `React 0.13.x`. If you are using React 16 you can run:
+
+```
+npm install --save-dev enzyme-adapter-react-16
+```
+
 To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [shallow rendering](http://airbnb.io/enzyme/docs/api/shallow.html). This lets individual tests assert on whether the callbacks were called when expected.
 
 #### Example
@@ -297,8 +303,11 @@ can be tested like:
 
 ```js
 import React from 'react'
-import { mount } from 'enzyme'
+import Enzyme, { mount } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16';
 import Header from '../../components/Header'
+
+Enzyme.configure({ adapter: new Adapter() });
 
 function setup() {
   const props = {
