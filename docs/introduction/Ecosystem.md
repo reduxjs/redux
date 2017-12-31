@@ -1,153 +1,807 @@
 # Ecosystem
 
-Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions.
+Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions, and the community has created a wide variety of helpful addons, libraries, and tools.  You don't need to use any of these addons to use Redux, but they can help make it easier to implement features and solve problems in your application.
 
-For an extensive list of everything related to Redux, we recommend [Awesome Redux](https://github.com/xgrommx/awesome-redux). It contains examples, boilerplates, middleware, utility libraries, and more. [React/Redux Links](https://github.com/markerikson/react-redux-links) contains tutorials and other useful resources for anyone learning React or Redux, and [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) lists many Redux-related libraries and addons.
+For an extensive catalog of libraries, addons, and tools related to Redux, check out the [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) list. Also, the [React/Redux Links](https://github.com/markerikson/react-redux-links) list contains tutorials and other useful resources for anyone learning React or Redux.
 
-On this page we will only feature a few of them that the Redux maintainers have vetted personally. Don't let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don't hesitate to submit a PR if you've built something wonderful with Redux.
-
-## Learning Redux
-
-### Screencasts
-
-* **[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)** — Learn the basics of Redux directly from its creator (30 free videos)
-* **[Learn Redux](https://learnredux.com)** — Build a simple photo app that will simplify the core ideas behind Redux, React Router and React.js
-
-### Example Apps
-
-* [Official Examples](Examples.md) — A few official examples covering different Redux techniques
-* [SoundRedux](https://github.com/andrewngu/sound-redux) — A SoundCloud client built with Redux
-* [grafgiti](https://github.com/mohebifar/grafgiti) — Create graffiti on your GitHub contributions wall
-* [React-lego](https://github.com/peter-mouland/react-lego) — How to plug into React, one block at a time.
-
-### Tutorials and Articles
-
-* [Redux Tutorial](https://github.com/happypoulp/redux-tutorial)
-* [Redux Egghead Course Notes](https://github.com/tayiorbeii/egghead.io_redux_course_notes)
-* [Integrating Data with React Native](http://makeitopen.com/docs/en/1-3-data.html)
-* [What the Flux?! Let's Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux)
-* [Leveling Up with React: Redux](https://css-tricks.com/learning-react-redux/)
-* [A cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6)
-* [Understanding Redux](http://www.youhavetolearncomputers.com/blog/2015/9/15/a-conceptual-overview-of-redux-or-how-i-fell-in-love-with-a-javascript-state-container)
-* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4)
-* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html)
-* [Getting Started with React, Redux, and Immutable](http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/)
-* [Secure Your React and Redux App with JWT Authentication](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/)
-* [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
-* [Angular 2 — Introduction to Redux](https://medium.com/google-developer-experts/angular-2-introduction-to-redux-1cf18af27e6e)
-* [Apollo Client: GraphQL with React and Redux](https://medium.com/apollo-stack/apollo-client-graphql-with-react-and-redux-49b35d0f2641)
-* [Using redux-saga To Simplify Your Growing React Native Codebase](https://shift.infinite.red/using-redux-saga-to-simplify-your-growing-react-native-codebase-2b8036f650de)
-* [Build an Image Gallery Using Redux Saga](http://joelhooks.com/blog/2016/03/20/build-an-image-gallery-using-redux-saga)
-* [Working with VK API (in Russian)](https://www.gitbook.com/book/maxfarseer/redux-course-ru/details)
-
-### Talks
-
-* [Live React: Hot Reloading and Time Travel](http://youtube.com/watch?v=xsSnOQynTHs) — See how constraints enforced by Redux make hot reloading with time travel easy
-* [Cleaning the Tar: Using React within the Firefox Developer Tools](https://www.youtube.com/watch?v=qUlRpybs7_c) — Learn how to gradually migrate existing MVC applications to Redux
-* [Redux: Simplifying Application State](https://www.youtube.com/watch?v=okdC5gcD-dM) — An intro to Redux architecture
-
-## Using Redux
-
-### Bindings
-
-* [react-redux](https://github.com/gaearon/react-redux) — React
-* [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
-* [ng2-redux](https://github.com/wbuchwalter/ng2-redux) — Angular 2
-* [backbone-redux](https://github.com/redbooth/backbone-redux) — Backbone
-* [redux-falcor](https://github.com/ekosz/redux-falcor) — Falcor
-* [deku-redux](https://github.com/troch/deku-redux) — Deku
-* [polymer-redux](https://github.com/tur-nr/polymer-redux) - Polymer
-* [ember-redux](https://github.com/toranb/ember-redux) - Ember.js
-
-### Middleware
-
-* [redux-thunk](http://github.com/gaearon/redux-thunk) — The easiest way to write async action creators
-* [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
-* [redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware) — Redux middleware for fetching data with axios HTTP client
-* [redux-observable](https://github.com/redux-observable/redux-observable/) — RxJS middleware for action side effects using "Epics"
-* [redux-cycles](https://github.com/cyclejs-community/redux-cycles) — Handle Redux async actions using Cycle.js
-* [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
-* [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Warns about state mutations in development
-* [redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action) — Warns about actions that produced no state changes in development
-* [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Analytics middleware for Redux
-* [redux-gen](https://github.com/weo-edu/redux-gen) — Generator middleware for Redux
-* [redux-saga](https://github.com/yelouafi/redux-saga) — An alternative side effect model for Redux apps
-* [redux-action-tree](https://github.com/cerebral/redux-action-tree) — Composable Cerebral-style signals for Redux
-* [apollo-client](https://github.com/apollostack/apollo-client) — A simple caching client for any GraphQL server and UI framework built on top of Redux
-
-### Routing
-
-* [react-router-redux](https://github.com/reactjs/react-router-redux) — Ruthlessly simple bindings to keep React Router and Redux in sync
-* [redial](https://github.com/markdalgleish/redial) — Universal data fetching and route lifecycle management for React that works great with Redux
-* [redux-little-router](https://github.com/FormidableLabs/redux-little-router) — A tiny router for Redux that lets the URL do the talking
-
-### Components
-
-* [redux-form](https://github.com/erikras/redux-form) — Keep React form state in Redux
-* [react-redux-form](https://github.com/davidkpiano/react-redux-form) — Create forms easily in React with Redux
-* [redux-resource](https://github.com/jmeas/redux-resource) — Manage remote resources with Redux
-
-### Enhancers
-
-* [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Customize batching and debouncing calls to the store subscribers
-* [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — History transitions based on arbitrary actions
-* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later committed or reverted
-* [redux-optimistic-ui](https://github.com/mattkrick/redux-optimistic-ui) — A reducer enhancer to enable type-agnostic optimistic updates
-* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
-* [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
-* [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
-* [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
-* [redux-search](https://github.com/treasure-data/redux-search) — Automatically index resources in a web worker and search them without blocking
-* [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store enhancers that synchronize Redux stores across Electron processes
-* [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
-* [redux-side-effects](https://github.com/salsita/redux-side-effects) — Utilize Generators for declarative yielding of side effects from your pure reducers
-
-### Utilities
-
-* [reselect](https://github.com/faassen/reselect) — Efficient derived data selectors inspired by NuclearJS
-* [normalizr](https://github.com/paularmstrong/normalizr) — Normalize nested API responses for easier consumption by the reducers
-* [redux-actions](https://github.com/acdlite/redux-actions) — Reduces the boilerplate in writing reducers and action creators
-* [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators
-* [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer utilities for Redux
-* [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineReducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
-* [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
-* [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
-* [redux-actions-assertions](https://github.com/dmitry-zaets/redux-actions-assertions) — Assertions for Redux actions testing
-* [redux-bootstrap](https://github.com/remojansen/redux-bootstrap) — Bootstrapping function for Redux applications
-* [redux-data-structures](https://redux-data-structures.js.org/) — Reducer factory (higher-order functions) for counters, maps, lists (queues, stacks), sets, etc.
-
-### DevTools
-
-* [Redux DevTools](http://github.com/gaearon/redux-devtools) — An action logger with time travel UI, hot reloading and error handling for the reducers, [first demoed at React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
-* [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) — A Chrome extension wrapping Redux DevTools and providing additional functionality
-
-### DevTools Monitors
-
-* [Log Monitor](https://github.com/gaearon/redux-devtools-log-monitor) — The default monitor for Redux DevTools with a tree view
-* [Dock Monitor](https://github.com/gaearon/redux-devtools-dock-monitor) — A resizable and movable dock for Redux DevTools monitors
-* [Slider Monitor](https://github.com/calesce/redux-slider-monitor) — A custom monitor for Redux DevTools to replay recorded Redux actions
-* [Inspector](https://github.com/alexkuz/redux-devtools-inspector) — A custom monitor for Redux DevTools that lets you filter actions, inspect diffs, and pin deep paths in the state to observe their changes
-* [Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor) — A monitor for Redux Devtools that diffs the Redux store mutations between actions
-* [Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/) — Filterable tree view monitor for Redux DevTools
-* [Chart Monitor](https://github.com/romseguy/redux-devtools-chart-monitor) — A chart monitor for Redux DevTools
-* [Filter Actions](https://github.com/zalmoxisus/redux-devtools-filter-actions) — Redux DevTools composable monitor with the ability to filter actions
+This page lists some of the Redux-related addons that the Redux maintainers have vetted personally, or that have shown widespread adoption in the community. Don't let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don't hesitate to submit a PR if you've built something wonderful with Redux.
 
 
-### Community Conventions
+## Table of Contents
 
-* [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — A human-friendly standard for Flux action objects
-* [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — An opinionated standard for nested reducer composition
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling reducers, action types and actions
+- [Library Integration and Bindings](#library-integration-and-bindings)
+- [Reducers](#reducers)
+    - [Reducer Combination](#reducer-combination)
+    - [Reducer Composition](#reducer-composition)
+    - [Higher-Order Reducers](#higher-order-reducers)
+- [Actions](#actions)
+- [Utilities](#utilities)
+- [Store](#store)
+    - [Change Subscriptions](#change-subscriptions)
+    - [Batching](#batching)
+    - [Persistence](#persistence)
+- [Immutable Data](#immutable-data)
+    - [Data Structures](#data-structures)
+    - [Immutable Update Utilities](#immutable-update-utilities)
+    - [Immutable/Redux Interop](#immutable-redux-interop)
+- [Side Effects](#side-effects)
+     - [Widely Used](#widely-used)
+     - [Promises](#promises)
+- [Middleware](#middleware)
+     - [Networks and Sockets](#networks-and-sockets)
+     - [Async Behavior](#async-behavior)
+     - [Analytics](#analytics)
+- [Entities and Collections](#entities-and-collections)
+- [Component State and Encapsulation](#component-state-and-encapsulation)
+- [Dev Tools](#dev-tools)
+     - [Debuggers and Viewers](#debuggers-and-viewers)
+     - [Logging](#logging)
+     - [Mutation Detection](#mutation-detection)
+- [Testing](#testing)
+- [Routing](#routing)
+- [Forms](#forms)
+- [Higher-Level Abstractions](#higher-level-abstractions)
+- [Community Conventions](#community-conventions)
 
-### Translations
 
-* [中文文档](http://camsong.github.io/redux-in-chinese/) — Chinese
-* [繁體中文文件](https://github.com/chentsulin/redux) — Traditional Chinese
-* [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
-* [Redux en Español](http://es.redux.js.org/) - Spanish
 
-## More
+## Library Integration and Bindings
 
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.  
-[React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES6, and more.  
-[Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) is a categorized collection of Redux-related libraries, addons, and utilities.
+**[reactjs/react-redux](https://github.com/reactjs/react-redux)**  
+The official React bindings for Redux, maintained by the Redux team
+
+**[angular-redux/ng-redux](https://github.com/angular-redux/ng-redux)**  
+Angular 1 bindings for Redux
+
+**[angular-redux/store](https://github.com/angular-redux/store)**  
+Angular 2+ bindings for Redux
+
+**[ember-redux/ember-redux](https://github.com/ember-redux/ember-redux)**  
+Ember bindings for Redux
+
+**[glimmer-redux/glimmer-redux](glimmer-redux/glimmer-redux)**  
+Redux bindings for Ember's Glimmer component engine
+
+**[revue/revue](https://github.com/revue/revue)**  
+Redux bindings for Vue
+
+**[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
+Redux bindings for Polymer
+
+
+## Reducers
+
+#### Reducer Combination
+
+**[ryo33/combineSectionReducers](https://github.com/ryo33/combine-section-reducers)**  
+An expanded version of `combineReducers`, which allows passing `state` as a third argument to all slice reducers.
+
+**[KodersLab/topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers)**  
+A `combineReducers` variation that allows defining cross-slice dependencies for ordering and data passing
+```js
+var masterReducer = topologicallyCombineReducers(
+    {auth, users, todos}, 
+    // define the dependency tree
+    { auth: ['users'], todos: ['auth'] }
+);
+```
+
+#### Reducer Composition
+
+**[acdlite/reduce-reducers](https://github.com/acdlite/reduce-reducers)**  
+Provides sequential composition of reducers at the same level
+```js
+const combinedReducer = combineReducers({users, posts, comments});
+const rootReducer = reduceReducers(combinedReducer, otherTopLevelFeatureReducer);
+```
+
+**[mhelmer/redux-xforms](https://github.com/mhelmer/redux-xforms)**  
+A collection of composable reducer transformers
+```js
+const createByFilter = (predicate, mapActionToKey) => compose(
+  withInitialState({}), // inject initial state as {}
+  withFilter(predicate), // let through if action has filterName
+  updateSlice(mapActionToKey), // update a single key in the state
+  isolateSlice(mapActionToKey) // run the reducer on a single state slice
+)
+```
+
+**[adrienjt/redux-data-structures](https://github.com/adrienjt/redux-data-structures)**  
+Reducer factory functions for common data structures: counters, maps, lists (queues, stacks), sets
+```js
+const myCounter = counter({
+  incrementActionTypes: ['INCREMENT'],
+  decrementActionTypes: ['DECREMENT'],
+});
+```
+
+#### Higher-Order Reducers
+
+**[omnidan/redux-undo](https://github.com/omnidan/redux-undo)**  
+Effortless undo/redo and action history for your reducers
+
+**[omnidan/redux-ignore](https://github.com/omnidan/redux-ignore)**  
+Ignore redux actions by array or filter function
+
+**[omnidan/redux-recycle](https://github.com/omnidan/redux-recycle)**  
+Reset the redux state on certain actions
+
+**[ForbesLindesay/redux-optimist](https://github.com/ForbesLindesay/redux-optimist)**  
+A reducer enhancer to enable type-agnostic optimistic updates
+
+
+## Actions
+
+**[reduxactions/redux-actions](https://github.com/reduxactions/redux-actions)**  
+Flux Standard Action utilities for Redux
+```js
+const increment = createAction('INCREMENT');
+const reducer = handleActions({ [increment] : (state, action) => state + 1 }, 0);
+const store = createStore(reducer);
+store.dispatch(increment());
+```
+
+**[BerkeleyTrue/redux-create-types](https://github.com/BerkeleyTrue/redux-create-types)**  
+Creates standard and async action types based on namespaces
+```js
+export const types = createTypes( [ 'openModal', createAsyncTypes('fetch') ], 'app');
+// { openModal : "app.openModal", fetch : { start : "app.fetch.start", complete: 'app.fetch.complete' } }
+```
+
+**[maxhallinan/kreighter](https://github.com/maxhallinan/kreighter)**  
+Generates action creators based on types and expected fields
+```js
+const formatTitle = (id, title) => ({
+  id, title: toTitleCase(title),
+});
+const updateBazTitle = fromType('UPDATE_BAZ_TITLE', formatTitle);
+updateBazTitle(1, 'foo bar baz');
+// -> { type: 'UPDATE_BAZ_TITLE', id: 1, title: 'Foo Bar Baz', }
+```
+
+
+## Utilities
+
+**[reactjs/reselect](https://github.com/reactjs/reselect)**  
+Creates composable memoized selector functions for efficiently deriving data from the store state
+```js
+const taxSelector = createSelector(
+  [subtotalSelector, taxPercentSelector],
+  (subtotal, taxPercent) => subtotal * (taxPercent / 100)
+)
+```
+
+**[paularmstrong/normalizr](https://github.com/paularmstrong/normalizr)**  
+Normalizes nested JSON according to a schema
+```js
+const user = new schema.Entity('users');
+const comment = new schema.Entity('comments', { commenter: user});
+const article = new schema.Entity('articles', { author: user, comments: [ comment ] });
+const normalizedData = normalize(originalData, article);
+```
+
+**[planttheidea/selectorator](https://github.com/planttheidea/selectorator)**  
+Abstractions over Reselect for common selector use cases
+```js
+const getBarBaz = createSelector(['foo.bar', 'baz'], 
+    (bar, baz) => `${bar} ${baz}`
+);
+getBarBaz({foo: {bar: 'a'}, baz: 'b'}); // "a b"
+```
+
+
+## Store
+
+#### Change Subscriptions
+
+**[jprichardson/redux-watch](https://github.com/jprichardson/redux-watch)**  
+Watch for state changes based on key paths or selectors
+```js
+let w = watch(() => mySelector(store.getState()) );
+store.subscribe( w((newVal, oldVal) => {
+  console.log(newval, oldVal)
+}))
+```
+
+
+**[ashaffer/redux-subscribe](https://github.com/ashaffer/redux-subscribe)**  
+Centralized subscriptions to state changes based on paths
+```js
+store.dispatch( subscribe("users.byId.abcd", "subscription1", () => {} );
+```
+
+#### Batching
+
+**[tappleby/redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe)**  
+Store enhancer that can debounce subscription notifications
+```js
+const debounceNotify = _.debounce(notify => notify());
+const store = createStore(reducer, intialState, batchedSubscribe(debounceNotify));
+```
+
+**[manaflair/redux-batch](https://github.com/manaflair/redux-batch)**  
+Store enhancer that allows dispatching arrays of actions
+```js
+const store = createStore(reducer, reduxBatch);
+store.dispatch([ {type : "INCREMENT"}, {type : "INCREMENT"} ]);
+```
+
+**[laysent/redux-batch-actions-enhancer](https://github.com/laysent/redux-batch-actions-enhancer)**  
+Store enhancer that accepts batched actions
+```js
+const store = createStore(reducer, initialState, batch().enhancer);
+store.dispatch(createAction({type : "INCREMENT"}, {type : "INCREMENT"}));
+```
+
+**[tshelburne/redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)**  
+Higher-order reducer that handles batched actions
+```js
+const store = createStore(enableBatching(reducer), initialState)
+store.dispatch(batchActions([ {type : "INCREMENT"}, {type : "INCREMENT"} ]))
+```
+
+#### Persistence
+
+
+**[rt2zz/redux-persist]()**  
+Persist and rehydrate a Redux store, with many extensible options
+```js
+const store = createStore( reducer, autoRehydrate());
+persistStore(store);
+```
+
+**[react-stack/redux-storage]()**  
+Persistence layer for Redux with flexible backends
+```js
+const reducer = storage.reducer(combineReducers(reducers));
+const engine = createEngineLocalStorage('my-save-key');
+const storageMiddleware = storage.createMiddleware(engine);
+const store = createStore(reducer, applyMiddleware(storageMiddleware));
+```
+
+**[redux-offline/redux-offline]()**  
+Persistent store for Offline-First apps, with support for optimistic UIs
+```js
+const store = createStore(reducer, offline(offlineConfig));
+store.dispatch({ 
+  type: 'FOLLOW_USER_REQUEST',
+  meta: { offline: { effect: { }, commit: { }, rollback: { } } }
+});
+```
+
+
+## Immutable Data
+
+#### Data Structures
+
+**[facebook/immutable-js]()**  
+Immutable persistent data collections for Javascript
+```js
+const map1 = Map({ a: 1, b: 2, c: 3 })
+const map2 = map1.set('b', 50)
+map1.get('b') // 2
+map2.get('b') // 50
+```
+
+**[rtfeldman/seamless-immutable]()**  
+Frozen immutable arrays/objects, backwards-compatible with JS
+```js
+const array = Immutable(["totally", "immutable", {a : 42}]);
+array[0] = "edited"; // does nothing
+```
+
+**[planttheidea/crio]()**  
+Immutable JS objects with a natural API
+```js
+const foo = crio(['foo']);
+const fooBar = foo.push('bar'); // new array: ['foo', 'bar']
+```
+
+
+**[aearly/icepick]()**  
+Utilities for treating frozen JS objects as persistent immutable collections.
+```js
+const newObj = icepick.assocIn({c : {d : "bar" } }, ["c", "d"], "baz");
+const obj3 = icepicke.merge(obj1, obj2);
+```
+
+#### Immutable Update Utilities
+
+**[kolodny/immutability-helper]()**  
+A drop-in replacement for react-addons-update
+```js
+const newData = update(myData, {
+  x: {y: {z: {$set: 7}}},
+  a: {b: {$push: [9]}}
+});
+```
+
+**[mariocasciaro/object-path-immutable]()**  
+Simpler alternative to immutability-helpers and Immutable.js
+```js
+const newObj = immutable(obj)
+                   .set('a.b', 'f')
+                   .del(['a', 'c', 0])
+                   .value()
+```
+
+
+
+**[debitoor/dot-prop-immutable]()**  
+Immutable version of the dot-prop lib, with some extensions
+```js
+const newState = dotProp.set(state, `todos.${index}.complete`, true)
+const endOfArray = dotProp.get(obj, 'foo.$end')
+```
+
+**[hex13/transmutable]()**  
+Immutable updates with normal mutative code, using Proxies
+```js
+const copy = transform(foo, stage => {
+    stage.bar.baz = 123; 
+});
+```
+
+#### Immutable/Redux Interop
+
+**[gajus/redux-immutable]()**  
+combineReducers equivalent that works with Immutable.js Maps
+```js
+const initialState = Immutable.Map();
+const rootReducer = combineReducers({});
+const store = createStore(rootReducer, initialState);
+```
+
+**[eadmundo/redux-seamless-immutable]()**  
+combineReducers equivalent that works with seamless-immutable values
+```js
+import { combineReducers } from 'redux-seamless-immutable';
+const rootReducer = combineReducers({ userReducer, posts
+```
+
+
+## Side Effects
+
+#### Widely Used
+
+**[gaearon/redux-thunk](https://github.com/gaearon/redux-thunk)**  
+Dispatch functions, which are called and given `dispatch` and `getState` as parameters. This acts as a loophole for AJAX calls and other async behavior.
+
+**Best for**: getting started, simple async and complex synchronous logic.
+```js
+function fetchData(someValue) {
+    return (dispatch, getState) => {
+        dispatch({type : "REQUEST_STARTED"});
+        
+        myAjaxLib.post("/someEndpoint", {data : someValue})
+            .then(response => dispatch({type : "REQUEST_SUCCEEDED", payload : response})
+            .catch(error => dispatch({type : "REQUEST_FAILED", error : error});    
+    };
+}
+
+function addTodosIfAllowed(todoText) {
+    return (dispatch, getState) => {
+        const state = getState();
+        
+        if(state.todos.length < MAX_TODOS) {
+            dispatch({type : "ADD_TODO", text : todoText});
+        }    
+    }
+}
+```
+
+
+**[redux-saga/redux-saga](https://github.com/redux-saga/redux-saga)**  
+Handle async logic using synchronous-looking generator functions. Sagas return descriptions of effects, which are executed by the saga middleware, and act like "background threads" for JS applications.
+
+**Best for**: complex async logic, decoupled workflows
+```js
+function* fetchData(action) {
+    const {someValue} = action;
+    try {
+        const result = yield call(myAjaxLib.post, "/someEndpoint", {data : someValue});
+        yield put({type : "REQUEST_SUCCEEDED", payload : response});
+    }
+    catch(error) {
+        yield put({type : "REQUEST_FAILED", error : error});
+    }
+}
+
+function* addTodosIfAllowed(action) {
+    const {todoText} = action;
+    const todos = yield select(state => state.todos);
+    
+    if(todos.length < MAX_TODOS) {
+        yield put({type : "ADD_TODO", text : todoText});
+    }
+}
+```
+
+**[redux-observable/redux-observable](https://github.com/redux-observable/redux-observable)**  
+
+Handle async logic using RxJS observable chains called "epics". 
+Compose and cancel async actions to create side effects and more.
+
+**Best for**: complex async logic, decoupled workflows
+```js
+const loginRequestEpic = (action$) => 
+    action$.ofType(LOGIN_REQUEST)
+        .mergeMap(({ payload: { username, password } }) => 
+            Observable.from(postLogin(username, password))
+                .map(loginSuccess)
+                .catch(loginFailure)
+         );
+         
+const loginSuccessfulEpic = (action$) => 
+    action$.ofType(LOGIN_SUCCESS)
+        .delay(2000)
+        .mergeMap(({ payload: { msg } }) =>
+            showMessage(msg)
+        );
+        
+const rootEpic = combineEpics(loginRequestEpic, loginSuccessfulEpic);
+```
+
+
+**[redux-loop/redux-loop](https://github.com/redux-loop/redux-loop)**  
+
+A port of the Elm Architecture to Redux that allows you to sequence your effects naturally and purely by returning them from your reducers. Reducers now return both a state value and a side effect description.
+
+**Best for**: trying to be as much like Elm as possible in Redux+JS
+```js
+export const reducer = (state = {}, action) => {
+    switch(action.type) {
+        case ActionType.LOGIN_REQUEST:
+            const {username, password} = action.payload;
+            return loop(
+                {pending : true},
+                Effect.promise(loginPromise, username, password)
+            );
+        case ActionType.LOGIN_SUCCESS:
+            const {user, msg} = action.payload;
+            return loop(
+                {pending : false, user},
+                Effect.promise(delayMessagePromise, msg, 2000)
+            );
+        case ActionType.LOGIN_FAILURE:
+            return {pending : false, err : action.payload};
+        default : return state;
+    }
+}
+```
+
+**[jeffbski/redux-logic](https://github.com/jeffbski/redux-logic)**  
+
+Side effects lib built with observables, but allows use of callbacks, promises, async/await, or observables. Provides declarative processing of actions.
+
+**Best for**: very decoupled async logic
+```js
+const loginLogic = createLogic({
+    type : Actions.LOGIN_REQUEST,
+    
+    process({getState, action}, dispatch, done) {
+        const {username, password} = action.payload;
+        
+        postLogin(username, password)
+            .then( ({user, msg}) => {
+                dispatch(loginSucceeded(user));
+                
+                setTimeout(() => dispatch(showMessage(msg)), 2000);
+            },
+            (err) => dispatch(loginFailure(err))
+        )
+        .then(done);
+    }
+});
+```
+
+#### Promises
+
+**[acdlite/redux-promise](https://github.com/acdlite/redux-promise)**  
+Dispatch promises as action payloads, and have FSA-compliant actions dispatched as the promise resolves or rejects.
+```js
+dispatch({type : "FETCH_DATA", payload : myAjaxLib.get("/data") });
+// will dispatch either {type : "FETCH_DATA", payload : response} if resolved, 
+// or dispatch {type : "FETCH_DATA", payload : error, error : true} if rejected
+```
+
+
+**[lelandrichardson/redux-pack](https://github.com/lelandrichardson/redux-pack)**  
+Sensible, declarative, convention-based promise handling that guides users in a good direction without exposing the full power of dispatch.
+```js
+dispatch({type : "FETCH_DATA", payload : myAjaxLib.get("/data") });
+
+// in a reducer:
+        case "FETCH_DATA": =
+            return handle(state, action, {
+                start: prevState => ({
+                  ...prevState,
+                  isLoading: true,
+                  fooError: null
+                }),
+                finish: prevState => ({ ...prevState, isLoading: false }),
+                failure: prevState => ({ ...prevState, fooError: payload }),
+                success: prevState => ({ ...prevState, foo: payload }),
+            });
+```
+
+
+
+## Middleware
+
+#### Networks and Sockets
+
+**[svrcekmichal/redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware)**  
+Fetches data with Axios and dispatches start/success/fail actions
+```js
+export const loadCategories() => ({ type: 'LOAD', payload: { request : { url: '/categories'} } });
+```
+
+**[agraboso/redux-api-middleware](https://github.com/agraboso/redux-api-middleware)**  
+Reads API call actions, fetches, and dispatches FSAs
+```js
+const fetchUsers = () => ({
+  [CALL_API]: { endpoint: 'http://www.example.com/api/users', method: 'GET', types: ['REQUEST', 'SUCCESS', 'FAILURE'] }
+});
+```
+
+**[itaylor/redux-socket.io](https://github.com/itaylor/redux-socket.io)**  
+An opinionated connector between socket.io and redux.
+```js
+const store = createStore(reducer, applyMiddleware(socketIoMiddleware));
+store.dispatch({type : "server/hello", data : "Hello!"});
+```
+
+**[tiberiuc/redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase)**  
+Integration between Firebase, React, and Redux
+
+
+#### Async Behavior
+
+**[rt2zz/redux-action-buffer](https://github.com/rt2zz/redux-action-buffer)** 
+Buffers all actions into a queue until a breaker condition is met, at which point the queue is released
+
+**[wyze/redux-debounce](https://github.com/wyze/redux-debounce)** 
+FSA-compliant middleware for Redux to debounce actions.
+
+**[mathieudutour/redux-queue-offline](https://github.com/mathieudutour/redux-queue-offline)** 
+Queue actions when offline and dispatch them when getting back online.
+
+
+#### Analytics
+
+**[rangle/redux-beacon](https://github.com/rangle/redux-beacon)** 
+Integrates with any analytics services, can track while offline, and decouples analytics logic from app logic
+
+**[hyperlab/redux-insights](https://github.com/hyperlab/redux-insights)** 
+Analytics and tracking with an easy API for writing your own adapters
+
+**[markdalgleish/redux-analytics](https://github.com/markdalgleish/redux-analytics)** 
+Watches for Flux Standard Actions with meta analytics values and processes them
+
+
+## Entities and Collections
+
+**[tommikaikkonen/redux-orm](https://github.com/tommikaikkonen/redux-orm)**  
+A simple immutable ORM to manage relational data in your Redux store.
+
+**[Versent/redux-crud](https://github.com/Versent/redux-crud)**  
+Convention-based actions and reducers for CRUD logic
+
+**[kwelch/entities-reducer](https://github.com/kwelch/entities-reducer)**  
+A higher-order reducer that handles data from Normalizr
+
+**[amplitude/redux-query](https://github.com/amplitude/redux-query)**  
+Declare colocated data dependencies with your components, run queries when components mount, perform optimistic updates, and trigger server changes with Redux actions.
+
+**[cantierecreativo/redux-bees](https://github.com/cantierecreativo/redux-bees)**  
+Declarative JSON-API interaction that normalizes data, with a React HOC that can run queries
+
+**[GetAmbassador/redux-clerk](https://github.com/GetAmbassador/redux-clerk)**  
+Async CRUD handling with normalization, optimistic updates, sync/async action creators, selectors, and an extendable reducer.
+
+**[shoutem/redux-io](https://github.com/shoutem/redux-io)**  
+JSON-API abstraction with async CRUD, normalization, optimistic updates, caching, data status, and error handling.
+
+**[jmeas/redux-resource](https://github.com/jmeas/redux-resource)**  
+A tiny but powerful system for managing 'resources': data that is persisted to remote servers.
+
+
+## Component State and Encapsulation
+
+**[tonyhb/redux-ui](https://github.com/tonyhb/redux-ui)**  
+"Block-level scoping" for UI state. Decorated components declare data fields, which become props and can be updated by nested children.
+```js
+@ui({ 
+    key: 'some-name', state: {  uiVar1: '', uiVar2: (props, state) => state.someValue }, reducer : (state, action) => { } 
+})
+class YourComponent extends React.Component {}
+```
+
+**[threepointone/redux-react-local](https://github.com/threepointone/redux-react-local)**  
+Local component state in Redux, with handling for component actions
+```js
+@local({
+  ident: 'counter', initial: 0, reducer : (state, action) => action.me ? state + 1 : state }
+})
+class Counter extends React.Component {
+```
+
+
+**[epeli/lean-redux](https://github.com/epeli/lean-redux)**  
+Makes component state in Redux as easy as setState
+```js
+const DynamicCounters = connectLean(
+    scope: "dynamicCounters",
+    getInitialState() => ({counterCount : 1}),
+    addCounter, removeCOunter
+)(CounterList);
+```
+
+**[ioof-holdings/redux-subspace](https://github.com/ioof-holdings/redux-subspace)**  
+Creates isolated "sub-stores" for decoupled micro front-ends, with integration for React, sagas, and observables
+```js
+const reducer = combineReducers({
+    subApp1: namespaced('subApp1')(counter),
+    subApp2: namespaced('subApp2')(counter)
+});
+
+const subApp1Store = subspace((state) => state.subApp1, 'subApp1')(store)
+const subApp2Store = subspace((state) => state.subApp2, 'subApp2')(store)
+
+subApp1Store.dispatch({ type: 'INCREMENT' })
+console.log('store state:', store.getState()) // { "subApp1": { value: 2 }, "subApp2": { value: 1 } }
+```
+
+
+**[DataDog/redux-doghouse](https://github.com/DataDog/redux-doghouse)**  
+Aims to make reusable components easier to build with Redux by scoping actions and reducers to a particular instance of a component.
+```js
+const scopeableActions = new ScopedActionFactory(actionCreators);
+const actionCreatorsScopedToA = scopeableActions.scope('a');
+actionCreatorsScopedToA.foo('bar'); //{ type: SET_FOO, value: 'bar', scopeID: 'a' }
+
+const boundScopeableActions = bindScopedActionFactories(scopeableActions, store.dispatch);
+const scopedReducers = scopeReducers(reducers);
+```
+
+
+## Dev Tools
+
+#### Debuggers and Viewers
+
+**[gaearon/redux-devtools](https://github.com/gaearon/redux-devtools)**  
+
+Dan Abramov's original Redux DevTools implementation, built for in-app display of state and time-travel debugging
+
+**[zalmoxisus/redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension)**  
+
+Mihail Diordiev's browser extension, which bundles multiple state monitor views and adds integration with the browser's own dev tools
+
+**[infinitered/reactotron](https://github.com/infinitered/reactotron)**  
+
+A cross-platform Electron app for inspecting React and React Native apps, including app state, API requests, perf, errors, sagas, and action dispatching.
+
+#### DevTools Monitors
+
+**[Log Monitor](https://github.com/gaearon/redux-devtools-log-monitor)**  
+The default monitor for Redux DevTools with a tree view
+
+**[Dock Monitor](https://github.com/gaearon/redux-devtools-dock-monitor)**  
+A resizable and movable dock for Redux DevTools monitors
+
+**[Slider Monitor](https://github.com/calesce/redux-slider-monitor)**  
+A custom monitor for Redux DevTools to replay recorded Redux actions
+
+**[Inspector](https://github.com/alexkuz/redux-devtools-inspector)**  
+A custom monitor for Redux DevTools that lets you filter actions, inspect diffs, and pin deep paths in the state to observe their changes
+
+**[Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor)**  
+A monitor for Redux Devtools that diffs the Redux store mutations between actions
+
+**[Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/)**  
+Filterable tree view monitor for Redux DevTools
+
+**[Chart Monitor](https://github.com/romseguy/redux-devtools-chart-monitor)**  
+A chart monitor for Redux DevTools
+
+**[Filter Actions](https://github.com/zalmoxisus/redux-devtools-filter-actions)**  
+Redux DevTools composable monitor with the ability to filter actions
+
+
+#### Logging
+
+**[evgenyrodionov/redux-logger](https://github.com/evgenyrodionov/redux-logger)**  
+Logging middleware that shows actions, states, and diffs
+
+**[inakianduaga/redux-state-history](https://github.com/inakianduaga/redux-state-history)**  
+Enhancer that provides time-travel and efficient action recording capabilities, including import/export of action logs and action playback.
+
+**[joshwcomeau/redux-vcr](https://github.com/joshwcomeau/redux-vcr)**  
+Record and replay user sessions in real-time
+
+**[socialtables/redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action)**  
+Warns about actions that produced no state changes in development
+
+
+#### Mutation Detection
+
+**[leoasis/redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant)**  
+Middleware that throws an error when you try to mutate your state either inside a dispatch or between dispatches.
+
+**[flexport/mutation-sentinel](https://github.com/flexport/mutation-sentinel)**  
+Helps you deeply detect mutations at runtime and enforce immutability in your codebase.
+
+**[mmahalwy/redux-pure-connect](https://github.com/mmahalwy/redux-pure-connect)**  
+Check and log whether react-redux's connect method is passed `mapState` functions that create impure props.
+
+
+
+## Testing
+
+**[arnaudbenard/redux-mock-store](https://github.com/arnaudbenard/redux-mock-store)**  
+A mock store that saves dispatched actions in an array for assertions
+
+**[Workable/redux-test-belt](https://github.com/Workable/redux-test-belt)**  
+Extends the store API to make it easier assert, isolate, and manipulate the store
+
+**[conorhastings/redux-test-recorder](https://github.com/conorhastings/redux-test-recorder)**  
+Middleware to automatically generate reducers tests based on actions in the app
+
+**[wix/redux-testkit](https://github.com/wix/redux-testkit)**  
+Complete and opinionated testkit for testing Redux projects (reducers, selectors, actions, thunks)
+
+**[jfairbank/redux-saga-test-plan](https://github.com/jfairbank/redux-saga-test-plan)**  
+Makes integration and unit testing of sagas a breeze
+
+
+## Routing
+
+**[ReactTraining/react-router-redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)**  
+Keep your state in sync with your router
+
+**[FormidableLabs/redux-little-router](https://github.com/FormidableLabs/redux-little-router)**  
+A tiny router for Redux applications that lets the URL do the talking
+
+**[faceyspacey/redux-first-router](https://github.com/faceyspacey/redux-first-router)**  
+Seamless Redux-first routing. Think of your app in states, not routes, not components, while keeping the address bar in sync. Everything is state. Connect your components and just dispatch flux standard actions.
+
+
+## Forms
+
+**[erikras/redux-form](https://github.com/erikras/redux-form)**  
+A full-featured library to enable a React HTML form to store its state in Redux. 
+
+**[davidkpiano/react-redux-form](https://github.com/davidkpiano/react-redux-form)**  
+React Redux Form is a collection of reducer creators and action creators that make implementing even the most complex and custom forms with React and Redux simple and performant.
+
+
+## Higher-Level Abstractions
+
+**[keajs/kea](https://github.com/keajs/kea)**  
+An abstraction over Redux, Redux-Saga and Reselect. Provides a framework for your app’s actions, reducers, selectors and sagas. It empowers Redux, making it as simple to use as setState. It reduces boilerplate and redundancy, while retaining composability.
+
+**[jumpsuit/jumpstate](https://github.com/jumpsuit/jumpstate)**  
+A simplified layer over Redux. No action creators or explicit dispatching, with a built-in simple side effects system.
+
+**[TheComfyChair/redux-scc](https://github.com/TheComfyChair/redux-scc)**  
+Takes a defined structure and uses 'behaviors' to create a set of actions, reducer responses and selectors.
+
+**[Bloomca/redux-tiles](https://github.com/Bloomca/redux-tiles)**  
+Provides minimal abstraction on top of Redux, to allow easy composability, easy async requests, and sane testability.
+
+
+## Community Conventions
+
+**[Flux Standard Action](https://github.com/acdlite/flux-standard-action)**  
+A human-friendly standard for Flux action objects
+
+**[Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition)**  
+An opinionated standard for nested reducer composition
+
+**[Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)**  
+A proposal for bundling reducers, action types and actions
+
+
+
+
