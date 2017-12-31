@@ -109,7 +109,7 @@ Specifically, at each stage of the iteration, `combineReducers` performs a shall
 
 After the iterations have completed, `combineReducers` will check the state of the `hasChanged` flag. If it’s true, the newly-constructed state object will be returned. If it’s false, the _current_ state object is returned.
 
-This is worth emphasising: *If the reducers all return the same `state` object passed to them, then `combineReducers` will return the _current_ root state object, not the newly updated one.*
+This is worth emphasizing: *If the reducers all return the same `state` object passed to them, then `combineReducers` will return the _current_ root state object, not the newly updated one.*
 
 #### Further Information
 
@@ -440,7 +440,7 @@ However, guaranteeing immutability with JavaScript is difficult, and it can be e
 JavaScript was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use it for your immutable operations in your Redux app.
 
 ### Accidental Object Mutation
-With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realising it. For example, updating deeply nested properties, creating a new *reference* to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
+With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new *reference* to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
 
 To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html).
 
