@@ -697,7 +697,7 @@ A custom monitor for Redux DevTools to replay recorded Redux actions
 A custom monitor for Redux DevTools that lets you filter actions, inspect diffs, and pin deep paths in the state to observe their changes
 
 **[Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor)**  
-A monitor for Redux Devtools that diffs the Redux store mutations between actions
+A monitor for Redux DevTools that diffs the Redux store mutations between actions
 
 **[Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/)**  
 Filterable tree view monitor for Redux DevTools
@@ -801,7 +801,3 @@ An opinionated standard for nested reducer composition
 
 **[Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)**  
 A proposal for bundling reducers, action types and actions
-
-
-
-
