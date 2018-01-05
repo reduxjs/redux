@@ -6,6 +6,7 @@
   * [Core Concepts](/docs/introduction/CoreConcepts.md)
   * [Three Principles](/docs/introduction/ThreePrinciples.md)
   * [Prior Art](/docs/introduction/PriorArt.md)
+  * [Learning Resources](/docs/introduction/LearningResources.md)
   * [Ecosystem](/docs/introduction/Ecosystem.md)
   * [Examples](/docs/introduction/Examples.md)
 * [Basics](/docs/basics/README.md)
