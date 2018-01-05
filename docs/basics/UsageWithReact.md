@@ -78,7 +78,7 @@ I see the following presentational components and their props emerge from this b
   - `onTodoClick(id: number)` is a callback to invoke when a todo is clicked.
 * **`Todo`** is a single todo item.
   - `text: string` is the text to show.
-  - `completed: boolean` is whether todo should appear crossed out.
+  - `completed: boolean` is whether a todo should appear or be crossed out.
   - `onClick()` is a callback to invoke when a todo is clicked.
 * **`Link`** is a link with a callback.
   - `onClick()` is a callback to invoke when link is clicked.
