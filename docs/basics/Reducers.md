@@ -8,7 +8,7 @@ In Redux, all the application state is stored as a single object. It's a good id
 
 For our todo app, we want to store two different things:
 
-* The currently selected visibility filter;
+* The currently selected visibility filter.
 * The actual list of todos.
 
 You'll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separate from the UI state.
