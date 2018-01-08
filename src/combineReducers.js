@@ -1,6 +1,7 @@
 import ActionTypes from './utils/actionTypes'
 import warning from './utils/warning'
 import isPlainObject from './utils/isPlainObject'
+import { generateActionType } from "./utils/generateActionType";
 
 function getUndefinedStateErrorMessage(key, action) {
   const actionType = action && action.type
@@ -77,13 +78,7 @@ function assertReducerShape(reducers) {
       )
     }
 
-    const type =
-      '@@redux/PROBE_UNKNOWN_ACTION_' +
-      Math.random()
-        .toString(36)
-        .substring(7)
-        .split('')
-        .join('.')
+    const type = generateActionType('@@redux/PROBE_UNKNOWN_ACTION_')
     if (typeof reducer(undefined, { type }) === 'undefined') {
       throw new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +
