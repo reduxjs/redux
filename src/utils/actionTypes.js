@@ -4,21 +4,11 @@
  * If the current state is undefined, you must return the initial state.
  * Do not reference these action types directly in your code.
  */
+import { generateActionType } from "./generateActionType";
+
 const ActionTypes = {
-  INIT:
-    '@@redux/INIT' +
-    Math.random()
-      .toString(36)
-      .substring(7)
-      .split('')
-      .join('.'),
-  REPLACE:
-    '@@redux/REPLACE' +
-    Math.random()
-      .toString(36)
-      .substring(7)
-      .split('')
-      .join('.')
+  INIT: generateActionType('@@redux/INIT'),
+  REPLACE: generateActionType('@@redux/REPLACE')
 }
 
 export default ActionTypes
