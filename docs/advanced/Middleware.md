@@ -257,7 +257,7 @@ function applyMiddleware(store, middlewares) {
   middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
   )
-  return Object.assign({}, store, { dispatch })
+  return Object.assign(store, { dispatch })
 }
 ```
 
