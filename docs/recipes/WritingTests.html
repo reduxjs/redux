@@ -1,0 +1,1584 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Writing Tests · Redux</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-algolia/plugin-algolia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../../build/gitbook.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="ComputingDerivedData.html" />
+    
+    
+    <link rel="prev" href="ServerRendering.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction/">
+            
+                <a href="../introduction/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../introduction/Motivation.html">
+            
+                <a href="../introduction/Motivation.html">
+            
+                    
+                    Motivation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../introduction/CoreConcepts.html">
+            
+                <a href="../introduction/CoreConcepts.html">
+            
+                    
+                    Core Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../introduction/ThreePrinciples.html">
+            
+                <a href="../introduction/ThreePrinciples.html">
+            
+                    
+                    Three Principles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../introduction/PriorArt.html">
+            
+                <a href="../introduction/PriorArt.html">
+            
+                    
+                    Prior Art
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../introduction/LearningResources.html">
+            
+                <a href="../introduction/LearningResources.html">
+            
+                    
+                    Learning Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../introduction/Ecosystem.html">
+            
+                <a href="../introduction/Ecosystem.html">
+            
+                    
+                    Ecosystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../introduction/Examples.html">
+            
+                <a href="../introduction/Examples.html">
+            
+                    
+                    Examples
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../basics/">
+            
+                <a href="../basics/">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../basics/Actions.html">
+            
+                <a href="../basics/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../basics/Reducers.html">
+            
+                <a href="../basics/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../basics/Store.html">
+            
+                <a href="../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../basics/DataFlow.html">
+            
+                <a href="../basics/DataFlow.html">
+            
+                    
+                    Data Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../basics/UsageWithReact.html">
+            
+                <a href="../basics/UsageWithReact.html">
+            
+                    
+                    Usage with React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../basics/ExampleTodoList.html">
+            
+                <a href="../basics/ExampleTodoList.html">
+            
+                    
+                    Example: Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../advanced/">
+            
+                <a href="../advanced/">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../advanced/AsyncActions.html">
+            
+                <a href="../advanced/AsyncActions.html">
+            
+                    
+                    Async Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../advanced/AsyncFlow.html">
+            
+                <a href="../advanced/AsyncFlow.html">
+            
+                    
+                    Async Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../advanced/Middleware.html">
+            
+                <a href="../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../advanced/UsageWithReactRouter.html">
+            
+                <a href="../advanced/UsageWithReactRouter.html">
+            
+                    
+                    Usage with React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../advanced/ExampleRedditAPI.html">
+            
+                <a href="../advanced/ExampleRedditAPI.html">
+            
+                    
+                    Example: Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" >
+            
+                <span>
+            
+                    
+                    Next Steps
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Recipes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="MigratingToRedux.html">
+            
+                <a href="MigratingToRedux.html">
+            
+                    
+                    Migrating to Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="UsingObjectSpreadOperator.html">
+            
+                <a href="UsingObjectSpreadOperator.html">
+            
+                    
+                    Using Object Spread Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="ReducingBoilerplate.html">
+            
+                <a href="ReducingBoilerplate.html">
+            
+                    
+                    Reducing Boilerplate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="ServerRendering.html">
+            
+                <a href="ServerRendering.html">
+            
+                    
+                    Server Rendering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.5" data-path="WritingTests.html">
+            
+                <a href="WritingTests.html">
+            
+                    
+                    Writing Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="ComputingDerivedData.html">
+            
+                <a href="ComputingDerivedData.html">
+            
+                    
+                    Computing Derived Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="ImplementingUndoHistory.html">
+            
+                <a href="ImplementingUndoHistory.html">
+            
+                    
+                    Implementing Undo History
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="IsolatingSubapps.html">
+            
+                <a href="IsolatingSubapps.html">
+            
+                    
+                    Isolating Subapps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="StructuringReducers.html">
+            
+                <a href="StructuringReducers.html">
+            
+                    
+                    Structuring Reducers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="reducers/PrerequisiteConcepts.html">
+            
+                <a href="reducers/PrerequisiteConcepts.html">
+            
+                    
+                    Prerequisite Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.2" data-path="reducers/BasicReducerStructure.html">
+            
+                <a href="reducers/BasicReducerStructure.html">
+            
+                    
+                    Basic Reducer Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.3" data-path="reducers/SplittingReducerLogic.html">
+            
+                <a href="reducers/SplittingReducerLogic.html">
+            
+                    
+                    Splitting Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.4" data-path="reducers/RefactoringReducersExample.html">
+            
+                <a href="reducers/RefactoringReducersExample.html">
+            
+                    
+                    Refactoring Reducers Example
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.5" data-path="reducers/UsingCombineReducers.html">
+            
+                <a href="reducers/UsingCombineReducers.html">
+            
+                    
+                    Using combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.6" data-path="reducers/BeyondCombineReducers.html">
+            
+                <a href="reducers/BeyondCombineReducers.html">
+            
+                    
+                    Beyond combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.7" data-path="reducers/NormalizingStateShape.html">
+            
+                <a href="reducers/NormalizingStateShape.html">
+            
+                    
+                    Normalizing State Shape
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.8" data-path="reducers/UpdatingNormalizedData.html">
+            
+                <a href="reducers/UpdatingNormalizedData.html">
+            
+                    
+                    Updating Normalized Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.9" data-path="reducers/ReusingReducerLogic.html">
+            
+                <a href="reducers/ReusingReducerLogic.html">
+            
+                    
+                    Reusing Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.10" data-path="reducers/ImmutableUpdatePatterns.html">
+            
+                <a href="reducers/ImmutableUpdatePatterns.html">
+            
+                    
+                    Immutable Update Patterns
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.11" data-path="reducers/InitializingState.html">
+            
+                <a href="reducers/InitializingState.html">
+            
+                    
+                    Initializing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="UsingImmutableJS.html">
+            
+                <a href="UsingImmutableJS.html">
+            
+                    
+                    Using Immutable.JS with Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../FAQ.html">
+            
+                <a href="../FAQ.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../faq/General.html">
+            
+                <a href="../faq/General.html">
+            
+                    
+                    General
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../faq/Reducers.html">
+            
+                <a href="../faq/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../faq/OrganizingState.html">
+            
+                <a href="../faq/OrganizingState.html">
+            
+                    
+                    Organizing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../faq/StoreSetup.html">
+            
+                <a href="../faq/StoreSetup.html">
+            
+                    
+                    Store Setup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../faq/Actions.html">
+            
+                <a href="../faq/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../faq/ImmutableData.html">
+            
+                <a href="../faq/ImmutableData.html">
+            
+                    
+                    Immutable Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="../faq/CodeStructure.html">
+            
+                <a href="../faq/CodeStructure.html">
+            
+                    
+                    Code Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="../faq/Performance.html">
+            
+                <a href="../faq/Performance.html">
+            
+                    
+                    Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="../faq/DesignDecisions.html">
+            
+                <a href="../faq/DesignDecisions.html">
+            
+                    
+                    Design Decisions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="../faq/ReactRedux.html">
+            
+                <a href="../faq/ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="../faq/Miscellaneous.html">
+            
+                <a href="../faq/Miscellaneous.html">
+            
+                    
+                    Miscellaneous
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../Troubleshooting.html">
+            
+                <a href="../Troubleshooting.html">
+            
+                    
+                    Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../Glossary.html">
+            
+                <a href="../Glossary.html">
+            
+                    
+                    Glossary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../api/">
+            
+                <a href="../api/">
+            
+                    
+                    API Reference
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../api/createStore.html">
+            
+                <a href="../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../api/Store.html">
+            
+                <a href="../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../api/combineReducers.html">
+            
+                <a href="../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../api/applyMiddleware.html">
+            
+                <a href="../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../api/bindActionCreators.html">
+            
+                <a href="../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../api/compose.html">
+            
+                <a href="../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../CHANGELOG.html">
+            
+                <a href="../../CHANGELOG.html">
+            
+                    
+                    Change Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../../PATRONS.html">
+            
+                <a href="../../PATRONS.html">
+            
+                    
+                    Patrons
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../Feedback.html">
+            
+                <a href="../Feedback.html">
+            
+                    
+                    Feedback
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Writing Tests</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="writing-tests">Writing Tests</h1>
+<p>Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.</p>
+<h3 id="setting-up">Setting Up</h3>
+<p>We recommend <a href="http://facebook.github.io/jest/" target="_blank">Jest</a> as the testing engine.
+Note that it runs in a Node environment, so you won&apos;t have access to the DOM.</p>
+<pre class="language-"><code>npm install --save-dev jest
+</code></pre><p>To use it together with <a href="http://babeljs.io" target="_blank">Babel</a>, you will need to install <code>babel-jest</code>:</p>
+<pre class="language-"><code>npm install --save-dev babel-jest
+</code></pre><p>and configure it to use <a href="https://github.com/babel/babel/tree/master/packages/babel-preset-env" target="_blank">babel-preset-env</a> features in <code>.babelrc</code>:</p>
+<pre class="language-"><code class="lang-js"><span class="token punctuation">{</span>
+   <span class="token string">&quot;presets&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;@babel/preset-env&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Then, add this to <code>scripts</code> in your <code>package.json</code>:</p>
+<pre class="language-"><code class="lang-js"><span class="token punctuation">{</span>
+  <span class="token operator">...</span>
+  <span class="token string">&quot;scripts&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+    <span class="token string">&quot;test&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;jest&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;test:watch&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;npm test -- --watch&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token operator">...</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>and run <code>npm test</code> to run it once, or <code>npm run test:watch</code> to test on every file change.</p>
+<h3 id="action-creators">Action Creators</h3>
+<p>In Redux, action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.</p>
+<h4 id="example">Example</h4>
+<pre class="language-"><code class="lang-js"><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">addTodo</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">&apos;ADD_TODO&apos;</span><span class="token punctuation">,</span>
+    text
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>can be tested like:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> actions <span class="token keyword">from</span> <span class="token string">&apos;../../actions/TodoActions&apos;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> types <span class="token keyword">from</span> <span class="token string">&apos;../../constants/ActionTypes&apos;</span>
+
+<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">&apos;actions&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;should create an action to add a todo&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> text <span class="token operator">=</span> <span class="token string">&apos;Finish docs&apos;</span>
+    <span class="token keyword">const</span> expectedAction <span class="token operator">=</span> <span class="token punctuation">{</span>
+      type<span class="token punctuation">:</span> types<span class="token punctuation">.</span>ADD_TODO<span class="token punctuation">,</span>
+      text
+    <span class="token punctuation">}</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span>actions<span class="token punctuation">.</span><span class="token function">addTodo</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span>expectedAction<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="async-action-creators">Async Action Creators</h3>
+<p>For async action creators using <a href="https://github.com/gaearon/redux-thunk" target="_blank">Redux Thunk</a> or other middleware, it&apos;s best to completely mock the Redux store for tests. You can apply the middleware to a mock store using <a href="https://github.com/arnaudbenard/redux-mock-store" target="_blank">redux-mock-store</a>. You can also use <a href="http://www.wheresrhys.co.uk/fetch-mock/" target="_blank">fetch-mock</a> to mock the HTTP requests.</p>
+<h4 id="example">Example</h4>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token string">&apos;cross-fetch/polyfill&apos;</span>
+
+<span class="token keyword">function</span> <span class="token function">fetchTodosRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> FETCH_TODOS_REQUEST
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">fetchTodosSuccess</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> FETCH_TODOS_SUCCESS<span class="token punctuation">,</span>
+    body
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">fetchTodosFailure</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> FETCH_TODOS_FAILURE<span class="token punctuation">,</span>
+    ex
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">fetchTodos</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> dispatch <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token function">fetchTodosRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">&apos;http://example.com/todos&apos;</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>res <span class="token operator">=</span><span class="token operator">&gt;</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>body <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token function">fetchTodosSuccess</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>ex <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token function">fetchTodosFailure</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>can be tested like:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> configureMockStore <span class="token keyword">from</span> <span class="token string">&apos;redux-mock-store&apos;</span>
+<span class="token keyword">import</span> thunk <span class="token keyword">from</span> <span class="token string">&apos;redux-thunk&apos;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> actions <span class="token keyword">from</span> <span class="token string">&apos;../../actions/TodoActions&apos;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> types <span class="token keyword">from</span> <span class="token string">&apos;../../constants/ActionTypes&apos;</span>
+<span class="token keyword">import</span> fetchMock <span class="token keyword">from</span> <span class="token string">&apos;fetch-mock&apos;</span>
+<span class="token keyword">import</span> expect <span class="token keyword">from</span> <span class="token string">&apos;expect&apos;</span> <span class="token comment" spellcheck="true">// You can use any testing library</span>
+
+<span class="token keyword">const</span> middlewares <span class="token operator">=</span> <span class="token punctuation">[</span>thunk<span class="token punctuation">]</span>
+<span class="token keyword">const</span> mockStore <span class="token operator">=</span> <span class="token function">configureMockStore</span><span class="token punctuation">(</span>middlewares<span class="token punctuation">)</span>
+
+<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">&apos;async actions&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">afterEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    fetchMock<span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    fetchMock<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;creates FETCH_TODOS_SUCCESS when fetching todos has been done&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    fetchMock
+      <span class="token punctuation">.</span><span class="token function">getOnce</span><span class="token punctuation">(</span><span class="token string">&apos;/todos&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> body<span class="token punctuation">:</span> <span class="token punctuation">{</span> todos<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&apos;do something&apos;</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> headers<span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token string">&apos;content-type&apos;</span><span class="token punctuation">:</span> <span class="token string">&apos;application/json&apos;</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+
+    <span class="token keyword">const</span> expectedActions <span class="token operator">=</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span> type<span class="token punctuation">:</span> types<span class="token punctuation">.</span>FETCH_TODOS_REQUEST <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span> type<span class="token punctuation">:</span> types<span class="token punctuation">.</span>FETCH_TODOS_SUCCESS<span class="token punctuation">,</span> body<span class="token punctuation">:</span> <span class="token punctuation">{</span> todos<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&apos;do something&apos;</span><span class="token punctuation">]</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+    <span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token function">mockStore</span><span class="token punctuation">(</span><span class="token punctuation">{</span> todos<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span>actions<span class="token punctuation">.</span><span class="token function">fetchTodos</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// return of async actions</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span><span class="token function">getActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span>expectedActions<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="reducers">Reducers</h3>
+<p>A reducer should return the new state after applying the action to the previous state, and that&apos;s the behavior tested below.</p>
+<h4 id="example">Example</h4>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> ADD_TODO <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;../constants/ActionTypes&apos;</span>
+
+<span class="token keyword">const</span> initialState <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span>
+    completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    id<span class="token punctuation">:</span> <span class="token number">0</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">todos</span><span class="token punctuation">(</span>state <span class="token operator">=</span> initialState<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">switch</span> <span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">case</span> ADD_TODO<span class="token punctuation">:</span>
+      <span class="token keyword">return</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+          id<span class="token punctuation">:</span> state<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span>maxId<span class="token punctuation">,</span> todo<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>todo<span class="token punctuation">.</span>id<span class="token punctuation">,</span> maxId<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span>
+          completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+          text<span class="token punctuation">:</span> action<span class="token punctuation">.</span>text
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token operator">...</span>state
+      <span class="token punctuation">]</span>
+
+    <span class="token keyword">default</span><span class="token punctuation">:</span>
+      <span class="token keyword">return</span> state
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>can be tested like:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> reducer <span class="token keyword">from</span> <span class="token string">&apos;../../reducers/todos&apos;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> types <span class="token keyword">from</span> <span class="token string">&apos;../../constants/ActionTypes&apos;</span>
+
+<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">&apos;todos reducer&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;should return the initial state&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">reducer</span><span class="token punctuation">(</span>undefined<span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span>
+        completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        id<span class="token punctuation">:</span> <span class="token number">0</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;should handle ADD_TODO&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span>
+      <span class="token function">reducer</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> types<span class="token punctuation">.</span>ADD_TODO<span class="token punctuation">,</span>
+        text<span class="token punctuation">:</span> <span class="token string">&apos;Run the tests&apos;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        text<span class="token punctuation">:</span> <span class="token string">&apos;Run the tests&apos;</span><span class="token punctuation">,</span>
+        completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        id<span class="token punctuation">:</span> <span class="token number">0</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token function">expect</span><span class="token punctuation">(</span>
+      <span class="token function">reducer</span><span class="token punctuation">(</span>
+        <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span>
+            completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            id<span class="token punctuation">:</span> <span class="token number">0</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+          type<span class="token punctuation">:</span> types<span class="token punctuation">.</span>ADD_TODO<span class="token punctuation">,</span>
+          text<span class="token punctuation">:</span> <span class="token string">&apos;Run the tests&apos;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        text<span class="token punctuation">:</span> <span class="token string">&apos;Run the tests&apos;</span><span class="token punctuation">,</span>
+        completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        id<span class="token punctuation">:</span> <span class="token number">1</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        text<span class="token punctuation">:</span> <span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">,</span>
+        completed<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        id<span class="token punctuation">:</span> <span class="token number">0</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="components">Components</h3>
+<p>A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.</p>
+<p>First, we will install <a href="http://airbnb.io/enzyme/" target="_blank">Enzyme</a>. Enzyme uses the <a href="https://facebook.github.io/react/docs/test-utils.html" target="_blank">React Test Utilities</a> underneath, but is more convenient, readable, and powerful.</p>
+<pre class="language-"><code>npm install --save-dev enzyme
+</code></pre><p>We will also need to install Enzyme adapter for our version of React. Enzyme has adapters that provide compatability with <code>React 16.x</code>, <code>React 15.x</code>, <code>React 0.14.x</code> and <code>React 0.13.x</code>. If you are using React 16 you can run:</p>
+<pre class="language-"><code>npm install --save-dev enzyme-adapter-react-16
+</code></pre><p>To test the components we make a <code>setup()</code> helper that passes the stubbed callbacks as props and renders the component with <a href="http://airbnb.io/enzyme/docs/api/shallow.html" target="_blank">shallow rendering</a>. This lets individual tests assert on whether the callbacks were called when expected.</p>
+<h4 id="example">Example</h4>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> Component <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;react&apos;</span>
+<span class="token keyword">import</span> PropTypes <span class="token keyword">from</span> <span class="token string">&apos;prop-types&apos;</span>
+<span class="token keyword">import</span> TodoTextInput <span class="token keyword">from</span> <span class="token string">&apos;./TodoTextInput&apos;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Header</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">{</span>
+  <span class="token function">handleSave</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>text<span class="token punctuation">.</span>length <span class="token operator">!==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span><span class="token function">addTodo</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>header className<span class="token operator">=</span><span class="token string">&quot;header&quot;</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>h1<span class="token operator">&gt;</span>todos<span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>TodoTextInput
+          newTodo<span class="token operator">=</span><span class="token punctuation">{</span><span class="token boolean">true</span><span class="token punctuation">}</span>
+          onSave<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>handleSave<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+          placeholder<span class="token operator">=</span><span class="token string">&quot;What needs to be done?&quot;</span>
+        <span class="token operator">/</span><span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>header<span class="token operator">&gt;</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Header<span class="token punctuation">.</span>propTypes <span class="token operator">=</span> <span class="token punctuation">{</span>
+  addTodo<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>func<span class="token punctuation">.</span>isRequired
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> Header
+</code></pre>
+<p>can be tested like:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">&apos;react&apos;</span>
+<span class="token keyword">import</span> Enzyme<span class="token punctuation">,</span> <span class="token punctuation">{</span> mount <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;enzyme&apos;</span>
+<span class="token keyword">import</span> Adapter <span class="token keyword">from</span> <span class="token string">&apos;enzyme-adapter-react-16&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Header <span class="token keyword">from</span> <span class="token string">&apos;../../components/Header&apos;</span>
+
+Enzyme<span class="token punctuation">.</span><span class="token function">configure</span><span class="token punctuation">(</span><span class="token punctuation">{</span> adapter<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Adapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token punctuation">{</span>
+    addTodo<span class="token punctuation">:</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> enzymeWrapper <span class="token operator">=</span> <span class="token function">mount</span><span class="token punctuation">(</span><span class="token operator">&lt;</span>Header <span class="token punctuation">{</span><span class="token operator">...</span>props<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    props<span class="token punctuation">,</span>
+    enzymeWrapper
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">&apos;components&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">&apos;Header&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;should render self and subcomponents&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> <span class="token punctuation">{</span> enzymeWrapper <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+      <span class="token function">expect</span><span class="token punctuation">(</span>enzymeWrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">&apos;header&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">hasClass</span><span class="token punctuation">(</span><span class="token string">&apos;header&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+
+      <span class="token function">expect</span><span class="token punctuation">(</span>enzymeWrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">&apos;h1&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">&apos;todos&apos;</span><span class="token punctuation">)</span>
+
+      <span class="token keyword">const</span> todoInputProps <span class="token operator">=</span> enzymeWrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">&apos;TodoTextInput&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">props</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>todoInputProps<span class="token punctuation">.</span>newTodo<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>todoInputProps<span class="token punctuation">.</span>placeholder<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token string">&apos;What needs to be done?&apos;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;should call addTodo if length of text is greater than 0&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> <span class="token punctuation">{</span> enzymeWrapper<span class="token punctuation">,</span> props <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">const</span> input <span class="token operator">=</span> enzymeWrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">&apos;TodoTextInput&apos;</span><span class="token punctuation">)</span>
+      input<span class="token punctuation">.</span><span class="token function">props</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">onSave</span><span class="token punctuation">(</span><span class="token string">&apos;&apos;</span><span class="token punctuation">)</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>props<span class="token punctuation">.</span>addTodo<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+      input<span class="token punctuation">.</span><span class="token function">props</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">onSave</span><span class="token punctuation">(</span><span class="token string">&apos;Use Redux&apos;</span><span class="token punctuation">)</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>props<span class="token punctuation">.</span>addTodo<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="connected-components">Connected Components</h3>
+<p>If you use a library like <a href="https://github.com/reactjs/react-redux" target="_blank">React Redux</a>, you might be using <a href="https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750" target="_blank">higher-order components</a> like <a href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options" target="_blank"><code>connect()</code></a>. This lets you inject Redux state into a regular React component.</p>
+<p>Consider the following <code>App</code> component:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> connect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;react-redux&apos;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">App</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">connect</span><span class="token punctuation">(</span>mapStateToProps<span class="token punctuation">)</span><span class="token punctuation">(</span>App<span class="token punctuation">)</span>
+</code></pre>
+<p>In a unit test, you would normally import the <code>App</code> component like this:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> App <span class="token keyword">from</span> <span class="token string">&apos;./App&apos;</span>
+</code></pre>
+<p>However, when you import it, you&apos;re actually holding the wrapper component returned by <code>connect()</code>, and not the <code>App</code> component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a <a href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store" target="_blank"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Provider</span><span class="token punctuation">&gt;</span></span></code></a> with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.</p>
+<p>In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> connect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;react-redux&apos;</span>
+
+<span class="token comment" spellcheck="true">// Use named export for unconnected component (for tests)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">App</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// Use default export for the connected component (for app)</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">connect</span><span class="token punctuation">(</span>mapStateToProps<span class="token punctuation">)</span><span class="token punctuation">(</span>App<span class="token punctuation">)</span>
+</code></pre>
+<p>Since the default export is still the decorated component, the import statement pictured above will work as before so you won&apos;t have to change your application code. However, you can now import the undecorated <code>App</code> components in your test file like this:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// Note the curly braces: grab the named export instead of default export</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> App <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;./App&apos;</span>
+</code></pre>
+<p>And if you need both:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> ConnectedApp<span class="token punctuation">,</span> <span class="token punctuation">{</span> App <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;./App&apos;</span>
+</code></pre>
+<p>In the app itself, you would still import it normally:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> App <span class="token keyword">from</span> <span class="token string">&apos;./App&apos;</span>
+</code></pre>
+<p>You would only use the named export for tests.</p>
+<blockquote>
+<h5 id="a-note-on-mixing-es6-modules-and-commonjs">A Note on Mixing ES6 Modules and CommonJS</h5>
+<p>If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 <code>import</code> and CommonJS <code>require</code> through its <a href="http://babeljs.io/docs/usage/modules/#interop" target="_blank">interop</a> capability to run two module formats side-by-side, but the behavior is <a href="https://github.com/babel/babel/issues/2047" target="_blank">slightly different</a>. If you add a second export beside your default export, you can no longer import the default using <code>require(&apos;./App&apos;)</code>. Instead you have to use <code>require(&apos;./App&apos;).default</code>.</p>
+</blockquote>
+<h3 id="middleware">Middleware</h3>
+<p>Middleware functions wrap behavior of <code>dispatch</code> calls in Redux, so to test this modified behavior we need to mock the behavior of the <code>dispatch</code> call.</p>
+<h4 id="example">Example</h4>
+<p>First, we&apos;ll need a middleware function. This is similar to the real <a href="https://github.com/gaearon/redux-thunk/blob/master/src/index.js" target="_blank">redux-thunk</a>.</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">const</span> thunk <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> dispatch<span class="token punctuation">,</span> getState <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> next <span class="token operator">=</span><span class="token operator">&gt;</span> action <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> action <span class="token operator">===</span> <span class="token string">&apos;function&apos;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">action</span><span class="token punctuation">(</span>dispatch<span class="token punctuation">,</span> getState<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>We need to create a fake <code>getState</code>, <code>dispatch</code>, and <code>next</code> functions. We use <code>jest.fn()</code> to create stubs, but with other test frameworks you would likely use sinon.</p>
+<p>The invoke function runs our middleware in the same way Redux does.</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">const</span> create <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token punctuation">{</span>
+    getState<span class="token punctuation">:</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    dispatch<span class="token punctuation">:</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> next <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> invoke <span class="token operator">=</span> <span class="token punctuation">(</span>action<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">thunk</span><span class="token punctuation">(</span>store<span class="token punctuation">)</span><span class="token punctuation">(</span>next<span class="token punctuation">)</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>store<span class="token punctuation">,</span> next<span class="token punctuation">,</span> invoke<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<p>We test that our middleware is calling the <code>getState</code>, <code>dispatch</code>, and <code>next</code> functions at the right time.</p>
+<pre class="language-"><code class="lang-js"><span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;passes through non-function action&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> next<span class="token punctuation">,</span> invoke <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> action <span class="token operator">=</span> <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;TEST&apos;</span><span class="token punctuation">}</span>
+  <span class="token function">invoke</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span>next<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenCalledWith</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;calls the function&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> invoke <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> fn <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token function">invoke</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenCalled</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">it</span><span class="token punctuation">(</span><span class="token string">&apos;passes dispatch and getState&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> store<span class="token punctuation">,</span> invoke <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token punctuation">(</span>dispatch<span class="token punctuation">,</span> getState<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">&apos;TEST DISPATCH&apos;</span><span class="token punctuation">)</span>
+    <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span>dispatch<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenCalledWith</span><span class="token punctuation">(</span><span class="token string">&apos;TEST DISPATCH&apos;</span><span class="token punctuation">)</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span>getState<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenCalled</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>In some cases, you will need to modify the <code>create</code> function to use different mock implementations of <code>getState</code> and <code>next</code>.</p>
+<h3 id="glossary">Glossary</h3>
+<ul>
+<li><p><a href="http://airbnb.io/enzyme/" target="_blank">Enzyme</a>: Enzyme is a JavaScript Testing utility for React that makes it easier to assert, manipulate, and traverse your React Components&apos; output.</p>
+</li>
+<li><p><a href="http://facebook.github.io/react/docs/test-utils.html" target="_blank">React Test Utils</a>: Test Utilities for React. Used by Enzyme.</p>
+</li>
+<li><p><a href="http://airbnb.io/enzyme/docs/api/shallow.html" target="_blank">Shallow rendering</a>: Shallow rendering lets you instantiate a component and effectively get the result of its <code>render</code> method just a single level deep instead of rendering components recursively to a DOM. Shallow rendering is useful for unit tests, where you test a particular component only, and importantly not its children. This also means that changing a child component won&apos;t affect the tests for the parent component. Testing a component and all its children can be accomplished with <a href="http://airbnb.io/enzyme/docs/api/mount.html" target="_blank">Enzyme&apos;s <code>mount()</code> method</a>, aka full DOM rendering.</p>
+</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+    
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+
+    
+    <div class="powered-by-algolia">
+        powered by <a href="https://algolia.com" target="_blank"><img src="../../gitbook/gitbook-plugin-algolia/algolia-logo.jpg" /></a>
+    </div>
+    
+
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="ServerRendering.html" class="navigation navigation-prev " aria-label="Previous page: Server Rendering">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="ComputingDerivedData.html" class="navigation navigation-next " aria-label="Next page: Computing Derived Data">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Writing Tests","level":"1.5.5","depth":2,"next":{"title":"Computing Derived Data","level":"1.5.6","depth":2,"path":"docs/recipes/ComputingDerivedData.md","ref":"docs/recipes/ComputingDerivedData.md","articles":[]},"previous":{"title":"Server Rendering","level":"1.5.4","depth":2,"path":"docs/recipes/ServerRendering.md","ref":"docs/recipes/ServerRendering.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs","algolia"],"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/reactjs/redux/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"algolia":{"freeAccount":"false","index":"redux-docs","applicationID":"BC2QB3G2G4","publicKey":"75eb88bb56d8cf8d17b6366a2c8e5fcd"},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/reactjs/redux/tree/master"},"theme-default":{"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Redux","gitbook":"3.2.2"},"file":{"path":"docs/recipes/WritingTests.md","mtime":"2018-01-10T02:09:33.018Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-01-10T03:53:56.298Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-algolia/search-algolia.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

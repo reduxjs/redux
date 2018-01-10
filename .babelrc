@@ -1,0 +1,32 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "ie >= 11"
+          ]
+        },
+        "exclude": ["transform-async-to-generator", "transform-regenerator"],
+        "modules": false,
+        "loose": true
+      }
+    ]
+  ],
+  "plugins": [
+    "transform-object-rest-spread"
+  ],
+  "env": {
+    "commonjs": {
+      "presets": [
+        [
+          "env",
+          {
+            "loose": true
+          }
+        ]
+      ]
+    }
+  }
+}

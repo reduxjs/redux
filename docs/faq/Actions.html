@@ -1,0 +1,1298 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Actions · Redux</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-algolia/plugin-algolia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../../build/gitbook.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="ImmutableData.html" />
+    
+    
+    <link rel="prev" href="StoreSetup.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction/">
+            
+                <a href="../introduction/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../introduction/Motivation.html">
+            
+                <a href="../introduction/Motivation.html">
+            
+                    
+                    Motivation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../introduction/CoreConcepts.html">
+            
+                <a href="../introduction/CoreConcepts.html">
+            
+                    
+                    Core Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../introduction/ThreePrinciples.html">
+            
+                <a href="../introduction/ThreePrinciples.html">
+            
+                    
+                    Three Principles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../introduction/PriorArt.html">
+            
+                <a href="../introduction/PriorArt.html">
+            
+                    
+                    Prior Art
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../introduction/LearningResources.html">
+            
+                <a href="../introduction/LearningResources.html">
+            
+                    
+                    Learning Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../introduction/Ecosystem.html">
+            
+                <a href="../introduction/Ecosystem.html">
+            
+                    
+                    Ecosystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../introduction/Examples.html">
+            
+                <a href="../introduction/Examples.html">
+            
+                    
+                    Examples
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../basics/">
+            
+                <a href="../basics/">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../basics/Actions.html">
+            
+                <a href="../basics/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../basics/Reducers.html">
+            
+                <a href="../basics/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../basics/Store.html">
+            
+                <a href="../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../basics/DataFlow.html">
+            
+                <a href="../basics/DataFlow.html">
+            
+                    
+                    Data Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../basics/UsageWithReact.html">
+            
+                <a href="../basics/UsageWithReact.html">
+            
+                    
+                    Usage with React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../basics/ExampleTodoList.html">
+            
+                <a href="../basics/ExampleTodoList.html">
+            
+                    
+                    Example: Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../advanced/">
+            
+                <a href="../advanced/">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../advanced/AsyncActions.html">
+            
+                <a href="../advanced/AsyncActions.html">
+            
+                    
+                    Async Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../advanced/AsyncFlow.html">
+            
+                <a href="../advanced/AsyncFlow.html">
+            
+                    
+                    Async Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../advanced/Middleware.html">
+            
+                <a href="../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../advanced/UsageWithReactRouter.html">
+            
+                <a href="../advanced/UsageWithReactRouter.html">
+            
+                    
+                    Usage with React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../advanced/ExampleRedditAPI.html">
+            
+                <a href="../advanced/ExampleRedditAPI.html">
+            
+                    
+                    Example: Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" >
+            
+                <span>
+            
+                    
+                    Next Steps
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../recipes/">
+            
+                <a href="../recipes/">
+            
+                    
+                    Recipes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../recipes/MigratingToRedux.html">
+            
+                <a href="../recipes/MigratingToRedux.html">
+            
+                    
+                    Migrating to Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../recipes/UsingObjectSpreadOperator.html">
+            
+                <a href="../recipes/UsingObjectSpreadOperator.html">
+            
+                    
+                    Using Object Spread Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../recipes/ReducingBoilerplate.html">
+            
+                <a href="../recipes/ReducingBoilerplate.html">
+            
+                    
+                    Reducing Boilerplate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../recipes/ServerRendering.html">
+            
+                <a href="../recipes/ServerRendering.html">
+            
+                    
+                    Server Rendering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../recipes/WritingTests.html">
+            
+                <a href="../recipes/WritingTests.html">
+            
+                    
+                    Writing Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../recipes/ComputingDerivedData.html">
+            
+                <a href="../recipes/ComputingDerivedData.html">
+            
+                    
+                    Computing Derived Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../recipes/ImplementingUndoHistory.html">
+            
+                <a href="../recipes/ImplementingUndoHistory.html">
+            
+                    
+                    Implementing Undo History
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../recipes/IsolatingSubapps.html">
+            
+                <a href="../recipes/IsolatingSubapps.html">
+            
+                    
+                    Isolating Subapps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="../recipes/StructuringReducers.html">
+            
+                <a href="../recipes/StructuringReducers.html">
+            
+                    
+                    Structuring Reducers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                <a href="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                    
+                    Prerequisite Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.2" data-path="../recipes/reducers/BasicReducerStructure.html">
+            
+                <a href="../recipes/reducers/BasicReducerStructure.html">
+            
+                    
+                    Basic Reducer Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.3" data-path="../recipes/reducers/SplittingReducerLogic.html">
+            
+                <a href="../recipes/reducers/SplittingReducerLogic.html">
+            
+                    
+                    Splitting Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.4" data-path="../recipes/reducers/RefactoringReducersExample.html">
+            
+                <a href="../recipes/reducers/RefactoringReducersExample.html">
+            
+                    
+                    Refactoring Reducers Example
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.5" data-path="../recipes/reducers/UsingCombineReducers.html">
+            
+                <a href="../recipes/reducers/UsingCombineReducers.html">
+            
+                    
+                    Using combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.6" data-path="../recipes/reducers/BeyondCombineReducers.html">
+            
+                <a href="../recipes/reducers/BeyondCombineReducers.html">
+            
+                    
+                    Beyond combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.7" data-path="../recipes/reducers/NormalizingStateShape.html">
+            
+                <a href="../recipes/reducers/NormalizingStateShape.html">
+            
+                    
+                    Normalizing State Shape
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.8" data-path="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                <a href="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                    
+                    Updating Normalized Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.9" data-path="../recipes/reducers/ReusingReducerLogic.html">
+            
+                <a href="../recipes/reducers/ReusingReducerLogic.html">
+            
+                    
+                    Reusing Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.10" data-path="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                <a href="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                    
+                    Immutable Update Patterns
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.11" data-path="../recipes/reducers/InitializingState.html">
+            
+                <a href="../recipes/reducers/InitializingState.html">
+            
+                    
+                    Initializing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="../recipes/UsingImmutableJS.html">
+            
+                <a href="../recipes/UsingImmutableJS.html">
+            
+                    
+                    Using Immutable.JS with Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../FAQ.html">
+            
+                <a href="../FAQ.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="General.html">
+            
+                <a href="General.html">
+            
+                    
+                    General
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="Reducers.html">
+            
+                <a href="Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="OrganizingState.html">
+            
+                <a href="OrganizingState.html">
+            
+                    
+                    Organizing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="StoreSetup.html">
+            
+                <a href="StoreSetup.html">
+            
+                    
+                    Store Setup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.5" data-path="Actions.html">
+            
+                <a href="Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="ImmutableData.html">
+            
+                <a href="ImmutableData.html">
+            
+                    
+                    Immutable Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="CodeStructure.html">
+            
+                <a href="CodeStructure.html">
+            
+                    
+                    Code Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="Performance.html">
+            
+                <a href="Performance.html">
+            
+                    
+                    Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="DesignDecisions.html">
+            
+                <a href="DesignDecisions.html">
+            
+                    
+                    Design Decisions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="ReactRedux.html">
+            
+                <a href="ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="Miscellaneous.html">
+            
+                <a href="Miscellaneous.html">
+            
+                    
+                    Miscellaneous
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../Troubleshooting.html">
+            
+                <a href="../Troubleshooting.html">
+            
+                    
+                    Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../Glossary.html">
+            
+                <a href="../Glossary.html">
+            
+                    
+                    Glossary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../api/">
+            
+                <a href="../api/">
+            
+                    
+                    API Reference
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../api/createStore.html">
+            
+                <a href="../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../api/Store.html">
+            
+                <a href="../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../api/combineReducers.html">
+            
+                <a href="../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../api/applyMiddleware.html">
+            
+                <a href="../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../api/bindActionCreators.html">
+            
+                <a href="../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../api/compose.html">
+            
+                <a href="../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../CHANGELOG.html">
+            
+                <a href="../../CHANGELOG.html">
+            
+                    
+                    Change Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../../PATRONS.html">
+            
+                <a href="../../PATRONS.html">
+            
+                    
+                    Patrons
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../Feedback.html">
+            
+                <a href="../Feedback.html">
+            
+                    
+                    Feedback
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Actions</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="redux-faq-actions">Redux FAQ: Actions</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#actions-string-constants">Why should type be a string, or at least serializable? Why should my action types be constants?</a> </li>
+<li><a href="#actions-reducer-mappings">Is there always a one-to-one mapping between reducers and actions?</a></li>
+<li><a href="#actions-side-effects">How can I represent &#x201C;side effects&#x201D; such as AJAX calls? Why do we need things like &#x201C;action creators&#x201D;, &#x201C;thunks&#x201D;, and &#x201C;middleware&#x201D; to do async behavior?</a> </li>
+<li><a href="#actions-multiple-actions">Should I dispatch multiple actions in a row from one action creator?</a> </li>
+</ul>
+<h2 id="actions">Actions</h2>
+<p><a id="actions-string-constants"></a></p>
+<h3 id="why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants">Why should <code>type</code> be a string, or at least serializable? Why should my action types be constants?</h3>
+<p>As with state, serializable actions enable several of Redux&apos;s defining features, such as time travel debugging, and recording and replaying actions. Using something like a <code>Symbol</code> for the <code>type</code> value or using <code>instanceof</code> checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it <em>is</em> okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.</p>
+<p>We can&apos;t reliably enforce serializable actions for performance reasons, so Redux only checks that every action is a plain object, and that the <code>type</code> is defined. The rest is up to you, but you might find that keeping everything serializable helps debug and reproduce issues.</p>
+<p>Encapsulating and centralizing commonly used pieces of code is a key concept in programming. While it is certainly possible to manually create action objects everywhere, and write each <code>type</code> value by hand, defining reusable constants makes maintaining code easier. If you put constants in a separate file, you can <a href="https://www.npmjs.com/package/eslint-plugin-import" target="_blank">check your <code>import</code> statements against typos</a> so you can&apos;t accidentally use the wrong string.</p>
+<h4 id="further-information">Further information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="../recipes/ReducingBoilerplate.html#actions">Reducing Boilerplate</a></li>
+</ul>
+<p><strong>Discussion</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/384" target="_blank">#384: Recommend that Action constants be named in the past tense</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/628" target="_blank">#628: Solution for simple action creation with less boilerplate</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1024" target="_blank">#1024: Proposal: Declarative reducers</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1167" target="_blank">#1167: Reducer without switch</a></li>
+<li><a href="http://stackoverflow.com/q/34759047/62937" target="_blank">Stack Overflow: Why do you need &apos;Actions&apos; as data in Redux?</a></li>
+<li><a href="http://stackoverflow.com/q/34965856/62937" target="_blank">Stack Overflow: What is the point of the constants in Redux?</a></li>
+</ul>
+<p><a id="actions-reducer-mappings"></a></p>
+<h3 id="is-there-always-a-one-to-one-mapping-between-reducers-and-actions">Is there always a one-to-one mapping between reducers and actions?</h3>
+<p>No. We suggest you write independent small reducer functions that are each responsible for updates to a specific slice of state. We call this pattern &#x201C;reducer composition&#x201D;. A given action could be handled by all, some, or none of them. This keeps components decoupled from the actual data changes, as one action may affect different parts of the state tree, and there is no need for the component to be aware of this. Some users do choose to bind them more tightly together, such as the &#x201C;ducks&#x201D; file structure, but there is definitely no one-to-one mapping by default, and you should break out of such a paradigm any time you feel you want to handle an action in many reducers.</p>
+<h4 id="further-information">Further information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="../basics/Reducers.html">Basics: Reducers</a></li>
+<li><a href="../recipes/StructuringReducers.html">Recipes: Structuring Reducers</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://twitter.com/dan_abramov/status/682923564006248448" target="_blank">Twitter: most common Redux misconception</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1167" target="_blank">#1167: Reducer without switch</a></li>
+<li><a href="https://github.com/reduxible/reduxible/issues/8" target="_blank">Reduxible #8: Reducers and action creators aren&apos;t a one-to-one mapping</a></li>
+<li><a href="http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783" target="_blank">Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware?</a></li>
+</ul>
+<p><a id="actions-side-effects"></a></p>
+<h3 id="how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior">How can I represent &#x201C;side effects&#x201D; such as AJAX calls? Why do we need things like &#x201C;action creators&#x201D;, &#x201C;thunks&#x201D;, and &#x201C;middleware&#x201D; to do async behavior?</h3>
+<p>This is a long and complex topic, with a wide variety of opinions on how code should be organized and what approaches should be used.</p>
+<p>Any meaningful web app needs to execute complex logic, usually including asynchronous work such as making AJAX requests. That code is no longer purely a function of its inputs, and the interactions with the outside world are known as <a href="https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29" target="_blank">&#x201C;side effects&#x201D;</a></p>
+<p>Redux is inspired by functional programming, and out of the box, has no place for side effects to be executed. In particular, reducer functions <em>must</em> always be pure functions of <code>(state, action) =&gt; newState</code>. However, Redux&apos;s middleware makes it possible to intercept dispatched actions and add additional complex behavior around them, including side effects.</p>
+<p>In general, Redux suggests that code with side effects should be part of the action creation process. While that logic <em>can</em> be performed inside of a UI component, it generally makes sense to extract that logic into a reusable function so that the same logic can be called from multiple places&#x2014;in other words, an action creator function.</p>
+<p>The simplest and most common way to do this is to add the <a href="https://github.com/gaearon/redux-thunk" target="_blank">Redux Thunk</a> middleware that lets you write action creators with more complex and asynchronous logic. Another widely-used method is <a href="https://github.com/yelouafi/redux-saga" target="_blank">Redux Saga</a> which lets you write more synchronous-looking code using generators, and can act like &#x201C;background threads&#x201D; or &#x201C;daemons&#x201D; in a Redux app. Yet another approach is <a href="https://github.com/raisemarketplace/redux-loop" target="_blank">Redux Loop</a>, which inverts the process by allowing your reducers to declare side effects in response to state changes and have them executed separately. Beyond that, there are <em>many</em> other community-developed libraries and ideas, each with their own take on how side effects should be managed.</p>
+<h4 id="further-information">Further information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="../advanced/AsyncActions.html">Advanced: Async Actions</a></li>
+<li><a href="../advanced/AsyncFlow.html">Advanced: Async Flow</a></li>
+<li><a href="../advanced/Middleware.html">Advanced: Middleware</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3" target="_blank">Redux Side-Effects and You</a></li>
+<li><a href="http://blog.hivejs.org/building-the-ui-2/" target="_blank">Pure functionality and side effects in Redux</a></li>
+<li><a href="http://danmaz74.me/2015/08/19/from-flux-to-redux-async-actions-the-easy-way/" target="_blank">From Flux to Redux: Async Actions the easy way</a></li>
+<li><a href="https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md" target="_blank">React/Redux Links: &quot;Redux Side Effects&quot; category</a></li>
+<li><a href="https://gist.github.com/markerikson/ea4d0a6ce56ee479fe8b356e099f857e" target="_blank">Gist: Redux-Thunk examples</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/291" target="_blank">#291: Trying to put API calls in the right place</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/455" target="_blank">#455: Modeling side effects</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/533" target="_blank">#533: Simpler introduction to async action creators</a></li>
+<li><a href="https://github.com/reactjs/redux/pull/569" target="_blank">#569: Proposal: API for explicit side effects</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1139" target="_blank">#1139: An alternative side effect model based on generators and sagas</a></li>
+<li><a href="http://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux" target="_blank">Stack Overflow: Why do we need middleware for async flow in Redux?</a></li>
+<li><a href="http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559" target="_blank">Stack Overflow: How to dispatch a Redux action with a timeout?</a></li>
+<li><a href="http://stackoverflow.com/questions/32982237/where-should-i-put-synchronous-side-effects-linked-to-actions-in-redux/33036344" target="_blank">Stack Overflow: Where should I put synchronous side effects linked to actions in redux?</a></li>
+<li><a href="http://stackoverflow.com/questions/32925837/how-to-handle-complex-side-effects-in-redux/33036594" target="_blank">Stack Overflow: How to handle complex side-effects in Redux?</a></li>
+<li><a href="http://stackoverflow.com/questions/33011729/how-to-unit-test-async-redux-actions-to-mock-ajax-response/33053465" target="_blank">Stack Overflow: How to unit test async Redux actions to mock ajax response</a></li>
+<li><a href="http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447" target="_blank">Stack Overflow: How to fire AJAX calls in response to the state changes with Redux?</a></li>
+<li><a href="https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/" target="_blank">Reddit: Help performing Async API calls with Redux-Promise Middleware.</a></li>
+<li><a href="https://twitter.com/dan_abramov/status/689639582120415232" target="_blank">Twitter: possible comparison between sagas, loops, and other approaches</a></li>
+</ul>
+<p><a id="actions-multiple-actions"></a></p>
+<h3 id="should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator">Should I dispatch multiple actions in a row from one action creator?</h3>
+<p>There&apos;s no specific rule for how you should structure your actions. Using an async middleware like Redux Thunk certainly enables scenarios such as dispatching multiple distinct but related actions in a row, dispatching actions to represent progression of an AJAX request, dispatching actions conditionally based on state, or even dispatching an action and checking the updated state immediately afterwards.</p>
+<p>In general, ask if these actions are related but independent, or should actually be represented as one action. Do what makes sense for your own situation but try to balance the readability of reducers with readability of the action log. For example, an action that includes the whole new state tree would make your reducer a one-liner, but the downside is now you have no history of <em>why</em> the changes are happening, so debugging gets really difficult. On the other hand, if you emit actions in a loop to keep them granular, it&apos;s a sign that you might want to introduce a new action type that is handled in a different way.</p>
+<p>Try to avoid dispatching several times synchronously in a row in the places where you&apos;re concerned about performance.  There are a number of addons and approaches that can batch up dispatches as well.</p>
+<h4 id="further-information">Further information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="Performance.html#performance-update-events">FAQ: Performance - Reducing Update Events</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/#multiple-dispatching" target="_blank">Idiomatic Redux: Thoughts on Thunks, Sagas, Abstraction, and Reusability</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/597" target="_blank">#597: Valid to dispatch multiple actions from an event handler?</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/959" target="_blank">#959: Multiple actions one dispatch?</a></li>
+<li><a href="http://stackoverflow.com/questions/33637740/should-i-use-one-or-several-action-types-to-represent-this-async-action/33816695" target="_blank">Stack Overflow: Should I use one or several action types to represent this async action?</a></li>
+<li><a href="http://stackoverflow.com/questions/35406707/do-events-and-actions-have-a-11-relationship-in-redux/35410524" target="_blank">Stack Overflow: Do events and actions have a 1:1 relationship in Redux?</a></li>
+<li><a href="http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-reducers-to-rel/33226443#33226443" target="_blank">Stack Overflow: Should actions be handled by reducers to related actions or generated by action creators themselves?</a></li>
+<li><a href="https://twitter.com/dan_abramov/status/800310164792414208" target="_blank">Twitter: &quot;Good thread on the problems with Redux Thunk...&quot;</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+    
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+
+    
+    <div class="powered-by-algolia">
+        powered by <a href="https://algolia.com" target="_blank"><img src="../../gitbook/gitbook-plugin-algolia/algolia-logo.jpg" /></a>
+    </div>
+    
+
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="StoreSetup.html" class="navigation navigation-prev " aria-label="Previous page: Store Setup">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="ImmutableData.html" class="navigation navigation-next " aria-label="Next page: Immutable Data">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Actions","level":"1.6.5","depth":2,"next":{"title":"Immutable Data","level":"1.6.6","depth":2,"path":"docs/faq/ImmutableData.md","ref":"docs/faq/ImmutableData.md","articles":[]},"previous":{"title":"Store Setup","level":"1.6.4","depth":2,"path":"docs/faq/StoreSetup.md","ref":"docs/faq/StoreSetup.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs","algolia"],"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/reactjs/redux/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"algolia":{"freeAccount":"false","index":"redux-docs","applicationID":"BC2QB3G2G4","publicKey":"75eb88bb56d8cf8d17b6366a2c8e5fcd"},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/reactjs/redux/tree/master"},"theme-default":{"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Redux","gitbook":"3.2.2"},"file":{"path":"docs/faq/Actions.md","mtime":"2018-01-10T02:09:32.763Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-01-10T03:53:56.298Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-algolia/search-algolia.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,1267 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Initializing State · Redux</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-algolia/plugin-algolia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../../../build/gitbook.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../UsingImmutableJS.html" />
+    
+    
+    <link rel="prev" href="ImmutableUpdatePatterns.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../../">
+            
+                <a href="../../../">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../introduction/">
+            
+                <a href="../../introduction/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../../introduction/Motivation.html">
+            
+                <a href="../../introduction/Motivation.html">
+            
+                    
+                    Motivation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../../introduction/CoreConcepts.html">
+            
+                <a href="../../introduction/CoreConcepts.html">
+            
+                    
+                    Core Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../../introduction/ThreePrinciples.html">
+            
+                <a href="../../introduction/ThreePrinciples.html">
+            
+                    
+                    Three Principles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../../introduction/PriorArt.html">
+            
+                <a href="../../introduction/PriorArt.html">
+            
+                    
+                    Prior Art
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../../introduction/LearningResources.html">
+            
+                <a href="../../introduction/LearningResources.html">
+            
+                    
+                    Learning Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../../introduction/Ecosystem.html">
+            
+                <a href="../../introduction/Ecosystem.html">
+            
+                    
+                    Ecosystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../../introduction/Examples.html">
+            
+                <a href="../../introduction/Examples.html">
+            
+                    
+                    Examples
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../../basics/">
+            
+                <a href="../../basics/">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../../basics/Actions.html">
+            
+                <a href="../../basics/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../../basics/Reducers.html">
+            
+                <a href="../../basics/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../../basics/Store.html">
+            
+                <a href="../../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../../basics/DataFlow.html">
+            
+                <a href="../../basics/DataFlow.html">
+            
+                    
+                    Data Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../../basics/UsageWithReact.html">
+            
+                <a href="../../basics/UsageWithReact.html">
+            
+                    
+                    Usage with React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../../basics/ExampleTodoList.html">
+            
+                <a href="../../basics/ExampleTodoList.html">
+            
+                    
+                    Example: Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../../advanced/">
+            
+                <a href="../../advanced/">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../../advanced/AsyncActions.html">
+            
+                <a href="../../advanced/AsyncActions.html">
+            
+                    
+                    Async Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../../advanced/AsyncFlow.html">
+            
+                <a href="../../advanced/AsyncFlow.html">
+            
+                    
+                    Async Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../../advanced/Middleware.html">
+            
+                <a href="../../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../../advanced/UsageWithReactRouter.html">
+            
+                <a href="../../advanced/UsageWithReactRouter.html">
+            
+                    
+                    Usage with React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../../advanced/ExampleRedditAPI.html">
+            
+                <a href="../../advanced/ExampleRedditAPI.html">
+            
+                    
+                    Example: Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" >
+            
+                <span>
+            
+                    
+                    Next Steps
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Recipes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../MigratingToRedux.html">
+            
+                <a href="../MigratingToRedux.html">
+            
+                    
+                    Migrating to Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../UsingObjectSpreadOperator.html">
+            
+                <a href="../UsingObjectSpreadOperator.html">
+            
+                    
+                    Using Object Spread Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../ReducingBoilerplate.html">
+            
+                <a href="../ReducingBoilerplate.html">
+            
+                    
+                    Reducing Boilerplate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../ServerRendering.html">
+            
+                <a href="../ServerRendering.html">
+            
+                    
+                    Server Rendering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../WritingTests.html">
+            
+                <a href="../WritingTests.html">
+            
+                    
+                    Writing Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../ComputingDerivedData.html">
+            
+                <a href="../ComputingDerivedData.html">
+            
+                    
+                    Computing Derived Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../ImplementingUndoHistory.html">
+            
+                <a href="../ImplementingUndoHistory.html">
+            
+                    
+                    Implementing Undo History
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../IsolatingSubapps.html">
+            
+                <a href="../IsolatingSubapps.html">
+            
+                    
+                    Isolating Subapps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="../StructuringReducers.html">
+            
+                <a href="../StructuringReducers.html">
+            
+                    
+                    Structuring Reducers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="PrerequisiteConcepts.html">
+            
+                <a href="PrerequisiteConcepts.html">
+            
+                    
+                    Prerequisite Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.2" data-path="BasicReducerStructure.html">
+            
+                <a href="BasicReducerStructure.html">
+            
+                    
+                    Basic Reducer Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.3" data-path="SplittingReducerLogic.html">
+            
+                <a href="SplittingReducerLogic.html">
+            
+                    
+                    Splitting Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.4" data-path="RefactoringReducersExample.html">
+            
+                <a href="RefactoringReducersExample.html">
+            
+                    
+                    Refactoring Reducers Example
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.5" data-path="UsingCombineReducers.html">
+            
+                <a href="UsingCombineReducers.html">
+            
+                    
+                    Using combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.6" data-path="BeyondCombineReducers.html">
+            
+                <a href="BeyondCombineReducers.html">
+            
+                    
+                    Beyond combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.7" data-path="NormalizingStateShape.html">
+            
+                <a href="NormalizingStateShape.html">
+            
+                    
+                    Normalizing State Shape
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.8" data-path="UpdatingNormalizedData.html">
+            
+                <a href="UpdatingNormalizedData.html">
+            
+                    
+                    Updating Normalized Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.9" data-path="ReusingReducerLogic.html">
+            
+                <a href="ReusingReducerLogic.html">
+            
+                    
+                    Reusing Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.10" data-path="ImmutableUpdatePatterns.html">
+            
+                <a href="ImmutableUpdatePatterns.html">
+            
+                    
+                    Immutable Update Patterns
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.9.11" data-path="InitializingState.html">
+            
+                <a href="InitializingState.html">
+            
+                    
+                    Initializing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="../UsingImmutableJS.html">
+            
+                <a href="../UsingImmutableJS.html">
+            
+                    
+                    Using Immutable.JS with Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../../FAQ.html">
+            
+                <a href="../../FAQ.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../../faq/General.html">
+            
+                <a href="../../faq/General.html">
+            
+                    
+                    General
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../../faq/Reducers.html">
+            
+                <a href="../../faq/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../../faq/OrganizingState.html">
+            
+                <a href="../../faq/OrganizingState.html">
+            
+                    
+                    Organizing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../../faq/StoreSetup.html">
+            
+                <a href="../../faq/StoreSetup.html">
+            
+                    
+                    Store Setup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../../faq/Actions.html">
+            
+                <a href="../../faq/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../../faq/ImmutableData.html">
+            
+                <a href="../../faq/ImmutableData.html">
+            
+                    
+                    Immutable Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="../../faq/CodeStructure.html">
+            
+                <a href="../../faq/CodeStructure.html">
+            
+                    
+                    Code Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="../../faq/Performance.html">
+            
+                <a href="../../faq/Performance.html">
+            
+                    
+                    Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="../../faq/DesignDecisions.html">
+            
+                <a href="../../faq/DesignDecisions.html">
+            
+                    
+                    Design Decisions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="../../faq/ReactRedux.html">
+            
+                <a href="../../faq/ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="../../faq/Miscellaneous.html">
+            
+                <a href="../../faq/Miscellaneous.html">
+            
+                    
+                    Miscellaneous
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../../Troubleshooting.html">
+            
+                <a href="../../Troubleshooting.html">
+            
+                    
+                    Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../../Glossary.html">
+            
+                <a href="../../Glossary.html">
+            
+                    
+                    Glossary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../../api/">
+            
+                <a href="../../api/">
+            
+                    
+                    API Reference
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../../api/createStore.html">
+            
+                <a href="../../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../../api/Store.html">
+            
+                <a href="../../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../../api/combineReducers.html">
+            
+                <a href="../../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../../api/applyMiddleware.html">
+            
+                <a href="../../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../../api/bindActionCreators.html">
+            
+                <a href="../../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../../api/compose.html">
+            
+                <a href="../../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../../CHANGELOG.html">
+            
+                <a href="../../../CHANGELOG.html">
+            
+                    
+                    Change Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../../../PATRONS.html">
+            
+                <a href="../../../PATRONS.html">
+            
+                    
+                    Patrons
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../../Feedback.html">
+            
+                <a href="../../Feedback.html">
+            
+                    
+                    Feedback
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../.." >Initializing State</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="initializing-state">Initializing State</h1>
+<p>There are two main ways to initialize state for your application.  The <code>createStore</code> method can accept an optional <code>preloadedState</code> value as its second argument.  Reducers can also specify an initial value by looking for an incoming state argument that is <code>undefined</code>, and returning the value they&apos;d like to use as a default.  This can either be done with an explicit check inside the reducer, or by using the ES6 default argument value syntax: <code>function myReducer(state = someDefaultValue, action)</code>.</p>
+<p>It&apos;s not always immediately clear how these two approaches interact.  Fortunately, the process does follow some predictable rules.  Here&apos;s how the pieces fit together.</p>
+<h2 id="summary">Summary</h2>
+<p>Without <code>combineReducers()</code> or similar manual code, <code>preloadedState</code> always wins over <code>state = ...</code> in the reducer because the <code>state</code> passed to the reducer <em>is</em> <code>preloadedState</code> and <em>is not</em> <code>undefined</code>, so the ES6 argument syntax doesn&apos;t apply.</p>
+<p>With <code>combineReducers()</code> the behavior is more nuanced. Those reducers whose state is specified in <code>preloadedState</code> will receive that state. Other reducers will receive <code>undefined</code> <em>and because of that</em> will fall back to the <code>state = ...</code> default argument they specify.</p>
+<p><strong>In general, <code>preloadedState</code> wins over the state specified by the reducer. This lets reducers specify initial data that makes sense <em>to them</em> as default arguments, but also allows loading existing data (fully or partially) when you&apos;re hydrating the store from some persistent storage or the server.</strong></p>
+<p><em>Note: Reducers whose initial state is populated using <code>preloadedState</code> will <strong>still need to provide a default value</strong> to handle when passed a <code>state</code> of <code>undefined</code>. All reducers are passed <code>undefined</code> on initialization, so they should be written such that when given <code>undefined</code>, some value should be returned. This can be any non-<code>undefined</code> value; there&apos;s no need to duplicate the section of <code>preloadedState</code> here as the default.</em></p>
+<h2 id="in-depth">In Depth</h2>
+<h3 id="single-simple-reducer">Single Simple Reducer</h3>
+<p>First let&apos;s consider a case where you have a single reducer.  Say you don&apos;t use <code>combineReducers()</code>.</p>
+<p>Then your reducer might look like this:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">counter</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">switch</span> <span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> <span class="token string">&apos;INCREMENT&apos;</span><span class="token punctuation">:</span> <span class="token keyword">return</span> state <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">case</span> <span class="token string">&apos;DECREMENT&apos;</span><span class="token punctuation">:</span> <span class="token keyword">return</span> state <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">default</span><span class="token punctuation">:</span> <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Now let&apos;s say you create a store with it.</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> createStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;redux&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> store <span class="token operator">=</span> <span class="token function">createStore</span><span class="token punctuation">(</span>counter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 0</span>
+</code></pre>
+<p>The initial state is zero. Why?   Because the second argument to <code>createStore</code> was <code>undefined</code>. This is the <code>state</code> passed to your reducer the first time. When Redux initializes it dispatches a &quot;dummy&quot; action to fill the state. So your <code>counter</code> reducer was called with <code>state</code> equal to <code>undefined</code>. <strong>This is exactly the case that &quot;activates&quot; the default argument.</strong> Therefore, <code>state</code> is now <code>0</code> as per the default <code>state</code> value (<code>state = 0</code>). This state (<code>0</code>) will be returned.</p>
+<p>Let&apos;s consider a different scenario:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> createStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;redux&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> store <span class="token operator">=</span> <span class="token function">createStore</span><span class="token punctuation">(</span>counter<span class="token punctuation">,</span> <span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 42</span>
+</code></pre>
+<p>Why is it <code>42</code>, and not <code>0</code>, this time? Because <code>createStore</code> was called with <code>42</code> as the second argument. This argument becomes the <code>state</code> passed to your reducer along with the dummy action. <strong>This time, <code>state</code> is not undefined (it&apos;s <code>42</code>!), so ES6 default argument syntax has no effect.</strong> The <code>state</code> is <code>42</code>, and <code>42</code> is returned from the reducer.</p>
+<h3 id="combined-reducers">Combined Reducers</h3>
+<p>Now let&apos;s consider a case where you use <code>combineReducers()</code>.<br>You have two reducers:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">a</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token string">&apos;lol&apos;</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">b</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token string">&apos;wat&apos;</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The reducer generated by <code>combineReducers({ a, b })</code> looks like this:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// const combined = combineReducers({ a, b })</span>
+<span class="token keyword">function</span> <span class="token function">combined</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    a<span class="token punctuation">:</span> <span class="token function">a</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>a<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    b<span class="token punctuation">:</span> <span class="token function">b</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>b<span class="token punctuation">,</span> action<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>If we call <code>createStore</code> without the <code>preloadedState</code>, it&apos;s going to initialize the <code>state</code> to <code>{}</code>. Therefore, <code>state.a</code> and <code>state.b</code> will be <code>undefined</code> by the time it calls <code>a</code> and <code>b</code> reducers. <strong>Both <code>a</code> and <code>b</code> reducers will receive <code>undefined</code> as <em>their</em> <code>state</code> arguments, and if they specify default <code>state</code> values, those will be returned.</strong> This is how the combined reducer returns a <code>{ a: &apos;lol&apos;, b: &apos;wat&apos; }</code> state object on the first invocation.</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> createStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;redux&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> store <span class="token operator">=</span> <span class="token function">createStore</span><span class="token punctuation">(</span>combined<span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// { a: &apos;lol&apos;, b: &apos;wat&apos; }</span>
+</code></pre>
+<p>Let&apos;s consider a different scenario:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> createStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;redux&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> store <span class="token operator">=</span> <span class="token function">createStore</span><span class="token punctuation">(</span>combined<span class="token punctuation">,</span> <span class="token punctuation">{</span> a<span class="token punctuation">:</span> <span class="token string">&apos;horse&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>store<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// { a: &apos;horse&apos;, b: &apos;wat&apos; }</span>
+</code></pre>
+<p>Now I specified the <code>preloadedState</code> as the argument to <code>createStore()</code>. The state returned from the combined reducer <em>combines</em> the initial state I specified for the <code>a</code> reducer with the <code>&apos;wat&apos;</code> default argument specified that <code>b</code> reducer chose itself.</p>
+<p>Let&apos;s recall what the combined reducer does:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// const combined = combineReducers({ a, b })</span>
+<span class="token keyword">function</span> <span class="token function">combined</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    a<span class="token punctuation">:</span> <span class="token function">a</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>a<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    b<span class="token punctuation">:</span> <span class="token function">b</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>b<span class="token punctuation">,</span> action<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>In this case, <code>state</code> was specified so it didn&apos;t fall back to <code>{}</code>. It was an object with <code>a</code> field equal to <code>&apos;horse&apos;</code>, but without the <code>b</code> field. This is why the <code>a</code> reducer received <code>&apos;horse&apos;</code> as its <code>state</code> and gladly returned it, but the <code>b</code> reducer received <code>undefined</code> as its <code>state</code> and thus returned <em>its idea</em> of the default <code>state</code> (in our example, <code>&apos;wat&apos;</code>). This is how we get <code>{ a: &apos;horse&apos;, b: &apos;wat&apos; }</code> in return.</p>
+<h2 id="recap">Recap</h2>
+<p>To sum this up, if you stick to Redux conventions and return the initial state from reducers when they&apos;re called with <code>undefined</code> as the <code>state</code> argument (the easiest way to implement this is to specify the <code>state</code> ES6 default argument value), you&apos;re going to have a nice useful behavior for combined reducers. <strong>They will prefer the corresponding value in the <code>preloadedState</code> object you pass to the <code>createStore()</code> function, but if you didn&apos;t pass any, or if the corresponding field is not set, the default <code>state</code> argument specified by the reducer is chosen instead.</strong> This approach works well because it provides both initialization and hydration of existing data, but lets individual reducers reset their state if their data was not preserved. Of course you can apply this pattern recursively, as you can use <code>combineReducers()</code> on many levels, or even compose reducers manually by calling reducers and giving them the relevant part of the state tree.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+    
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+
+    
+    <div class="powered-by-algolia">
+        powered by <a href="https://algolia.com" target="_blank"><img src="../../../gitbook/gitbook-plugin-algolia/algolia-logo.jpg" /></a>
+    </div>
+    
+
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="ImmutableUpdatePatterns.html" class="navigation navigation-prev " aria-label="Previous page: Immutable Update Patterns">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../UsingImmutableJS.html" class="navigation navigation-next " aria-label="Next page: Using Immutable.JS with Redux">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Initializing State","level":"1.5.9.11","depth":3,"next":{"title":"Using Immutable.JS with Redux","level":"1.5.10","depth":2,"path":"docs/recipes/UsingImmutableJS.md","ref":"docs/recipes/UsingImmutableJS.md","articles":[]},"previous":{"title":"Immutable Update Patterns","level":"1.5.9.10","depth":3,"path":"docs/recipes/reducers/ImmutableUpdatePatterns.md","ref":"docs/recipes/reducers/ImmutableUpdatePatterns.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs","algolia"],"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/reactjs/redux/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"algolia":{"freeAccount":"false","index":"redux-docs","applicationID":"BC2QB3G2G4","publicKey":"75eb88bb56d8cf8d17b6366a2c8e5fcd"},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/reactjs/redux/tree/master"},"theme-default":{"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Redux","gitbook":"3.2.2"},"file":{"path":"docs/recipes/reducers/InitializingState.md","mtime":"2018-01-10T02:09:33.070Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-01-10T03:53:56.298Z"},"basePath":"../../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../../gitbook/gitbook.js"></script>
+    <script src="../../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-algolia/search-algolia.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

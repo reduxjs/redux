@@ -1,0 +1,1457 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Using Immutable.JS with Redux · Redux</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-algolia/plugin-algolia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../../build/gitbook.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../FAQ.html" />
+    
+    
+    <link rel="prev" href="reducers/InitializingState.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction/">
+            
+                <a href="../introduction/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../introduction/Motivation.html">
+            
+                <a href="../introduction/Motivation.html">
+            
+                    
+                    Motivation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../introduction/CoreConcepts.html">
+            
+                <a href="../introduction/CoreConcepts.html">
+            
+                    
+                    Core Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../introduction/ThreePrinciples.html">
+            
+                <a href="../introduction/ThreePrinciples.html">
+            
+                    
+                    Three Principles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../introduction/PriorArt.html">
+            
+                <a href="../introduction/PriorArt.html">
+            
+                    
+                    Prior Art
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../introduction/LearningResources.html">
+            
+                <a href="../introduction/LearningResources.html">
+            
+                    
+                    Learning Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../introduction/Ecosystem.html">
+            
+                <a href="../introduction/Ecosystem.html">
+            
+                    
+                    Ecosystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../introduction/Examples.html">
+            
+                <a href="../introduction/Examples.html">
+            
+                    
+                    Examples
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../basics/">
+            
+                <a href="../basics/">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../basics/Actions.html">
+            
+                <a href="../basics/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../basics/Reducers.html">
+            
+                <a href="../basics/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../basics/Store.html">
+            
+                <a href="../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../basics/DataFlow.html">
+            
+                <a href="../basics/DataFlow.html">
+            
+                    
+                    Data Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../basics/UsageWithReact.html">
+            
+                <a href="../basics/UsageWithReact.html">
+            
+                    
+                    Usage with React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../basics/ExampleTodoList.html">
+            
+                <a href="../basics/ExampleTodoList.html">
+            
+                    
+                    Example: Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../advanced/">
+            
+                <a href="../advanced/">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../advanced/AsyncActions.html">
+            
+                <a href="../advanced/AsyncActions.html">
+            
+                    
+                    Async Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../advanced/AsyncFlow.html">
+            
+                <a href="../advanced/AsyncFlow.html">
+            
+                    
+                    Async Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../advanced/Middleware.html">
+            
+                <a href="../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../advanced/UsageWithReactRouter.html">
+            
+                <a href="../advanced/UsageWithReactRouter.html">
+            
+                    
+                    Usage with React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../advanced/ExampleRedditAPI.html">
+            
+                <a href="../advanced/ExampleRedditAPI.html">
+            
+                    
+                    Example: Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" >
+            
+                <span>
+            
+                    
+                    Next Steps
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Recipes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="MigratingToRedux.html">
+            
+                <a href="MigratingToRedux.html">
+            
+                    
+                    Migrating to Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="UsingObjectSpreadOperator.html">
+            
+                <a href="UsingObjectSpreadOperator.html">
+            
+                    
+                    Using Object Spread Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="ReducingBoilerplate.html">
+            
+                <a href="ReducingBoilerplate.html">
+            
+                    
+                    Reducing Boilerplate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="ServerRendering.html">
+            
+                <a href="ServerRendering.html">
+            
+                    
+                    Server Rendering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="WritingTests.html">
+            
+                <a href="WritingTests.html">
+            
+                    
+                    Writing Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="ComputingDerivedData.html">
+            
+                <a href="ComputingDerivedData.html">
+            
+                    
+                    Computing Derived Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="ImplementingUndoHistory.html">
+            
+                <a href="ImplementingUndoHistory.html">
+            
+                    
+                    Implementing Undo History
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="IsolatingSubapps.html">
+            
+                <a href="IsolatingSubapps.html">
+            
+                    
+                    Isolating Subapps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="StructuringReducers.html">
+            
+                <a href="StructuringReducers.html">
+            
+                    
+                    Structuring Reducers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="reducers/PrerequisiteConcepts.html">
+            
+                <a href="reducers/PrerequisiteConcepts.html">
+            
+                    
+                    Prerequisite Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.2" data-path="reducers/BasicReducerStructure.html">
+            
+                <a href="reducers/BasicReducerStructure.html">
+            
+                    
+                    Basic Reducer Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.3" data-path="reducers/SplittingReducerLogic.html">
+            
+                <a href="reducers/SplittingReducerLogic.html">
+            
+                    
+                    Splitting Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.4" data-path="reducers/RefactoringReducersExample.html">
+            
+                <a href="reducers/RefactoringReducersExample.html">
+            
+                    
+                    Refactoring Reducers Example
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.5" data-path="reducers/UsingCombineReducers.html">
+            
+                <a href="reducers/UsingCombineReducers.html">
+            
+                    
+                    Using combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.6" data-path="reducers/BeyondCombineReducers.html">
+            
+                <a href="reducers/BeyondCombineReducers.html">
+            
+                    
+                    Beyond combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.7" data-path="reducers/NormalizingStateShape.html">
+            
+                <a href="reducers/NormalizingStateShape.html">
+            
+                    
+                    Normalizing State Shape
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.8" data-path="reducers/UpdatingNormalizedData.html">
+            
+                <a href="reducers/UpdatingNormalizedData.html">
+            
+                    
+                    Updating Normalized Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.9" data-path="reducers/ReusingReducerLogic.html">
+            
+                <a href="reducers/ReusingReducerLogic.html">
+            
+                    
+                    Reusing Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.10" data-path="reducers/ImmutableUpdatePatterns.html">
+            
+                <a href="reducers/ImmutableUpdatePatterns.html">
+            
+                    
+                    Immutable Update Patterns
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.11" data-path="reducers/InitializingState.html">
+            
+                <a href="reducers/InitializingState.html">
+            
+                    
+                    Initializing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.10" data-path="UsingImmutableJS.html">
+            
+                <a href="UsingImmutableJS.html">
+            
+                    
+                    Using Immutable.JS with Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../FAQ.html">
+            
+                <a href="../FAQ.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../faq/General.html">
+            
+                <a href="../faq/General.html">
+            
+                    
+                    General
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../faq/Reducers.html">
+            
+                <a href="../faq/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../faq/OrganizingState.html">
+            
+                <a href="../faq/OrganizingState.html">
+            
+                    
+                    Organizing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../faq/StoreSetup.html">
+            
+                <a href="../faq/StoreSetup.html">
+            
+                    
+                    Store Setup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../faq/Actions.html">
+            
+                <a href="../faq/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../faq/ImmutableData.html">
+            
+                <a href="../faq/ImmutableData.html">
+            
+                    
+                    Immutable Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="../faq/CodeStructure.html">
+            
+                <a href="../faq/CodeStructure.html">
+            
+                    
+                    Code Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="../faq/Performance.html">
+            
+                <a href="../faq/Performance.html">
+            
+                    
+                    Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="../faq/DesignDecisions.html">
+            
+                <a href="../faq/DesignDecisions.html">
+            
+                    
+                    Design Decisions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="../faq/ReactRedux.html">
+            
+                <a href="../faq/ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="../faq/Miscellaneous.html">
+            
+                <a href="../faq/Miscellaneous.html">
+            
+                    
+                    Miscellaneous
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../Troubleshooting.html">
+            
+                <a href="../Troubleshooting.html">
+            
+                    
+                    Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../Glossary.html">
+            
+                <a href="../Glossary.html">
+            
+                    
+                    Glossary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../api/">
+            
+                <a href="../api/">
+            
+                    
+                    API Reference
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../api/createStore.html">
+            
+                <a href="../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../api/Store.html">
+            
+                <a href="../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../api/combineReducers.html">
+            
+                <a href="../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../api/applyMiddleware.html">
+            
+                <a href="../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../api/bindActionCreators.html">
+            
+                <a href="../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../api/compose.html">
+            
+                <a href="../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../CHANGELOG.html">
+            
+                <a href="../../CHANGELOG.html">
+            
+                    
+                    Change Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../../PATRONS.html">
+            
+                <a href="../../PATRONS.html">
+            
+                    
+                    Patrons
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../Feedback.html">
+            
+                <a href="../Feedback.html">
+            
+                    
+                    Feedback
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Using Immutable.JS with Redux</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="using-immutablejs-with-redux">Using Immutable.JS with Redux</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#why-use-immutable-library">Why should I use an immutable-focused library such as Immutable.JS?</a></li>
+<li><a href="#why-choose-immutable-js">Why should I choose Immutable.JS as an immutable library?</a></li>
+<li><a href="#issues-with-immutable-js">What are the issues with using Immutable.JS?</a></li>
+<li><a href="#is-immutable-js-worth-effort">Is Immutable.JS worth the effort?</a></li>
+<li><a href="#immutable-js-best-practices">What are some opinionated Best Practices for using Immutable.JS with Redux?</a></li>
+</ul>
+<p><a id="why-use-immutable-library"></a></p>
+<h2 id="why-should-i-use-an-immutable-focused-library-such-as-immutablejs">Why should I use an immutable-focused library such as Immutable.JS?</h2>
+<p>Immutable-focused libraries such as Immutable.JS have been designed to overcome the issues with immutability inherent within JavaScript, providing all the benefits of immutability with the performance your app requires.</p>
+<p>Whether you choose to use such a library, or stick with plain JavaScript, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within JavaScript&#x2019;s approach to immutability.</p>
+<p>Whichever option you choose, make sure you&#x2019;re familiar with the concepts of <a href="http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation" target="_blank">immutability, side effects and mutation</a>. In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app&#x2019;s performance, or break it altogether.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation" target="_blank">Recipes: immutability, side effects and mutation</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://auth0.com/blog/intro-to-immutable-js/" target="_blank">Introduction to Immutable.js and Functional Programming Concepts</a></li>
+<li><a href="http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/" target="_blank">Pros and Cons of using immutability with React.js</a></li>
+</ul>
+<p><a id="why-choose-immutable-js"></a></p>
+<h2 id="why-should-i-choose-immutablejs-as-an-immutable-library">Why should I choose Immutable.JS as an immutable library?</h2>
+<p>Immutable.JS was designed to provide immutability in a performant manner in an effort to overcome the limitations of immutability with JavaScript. Its principle advantages include:</p>
+<h4 id="guaranteed-immutability">Guaranteed immutability</h4>
+<p>Data encapsulated in an Immutable.JS object is never mutated. A new copy is always returned. This contrasts with JavaScript, in which some operations do not mutate your data (e.g. some Array methods, including map, filter, concat, forEach, etc.), but some do (Array&#x2019;s pop, push, splice, etc.).</p>
+<h4 id="rich-api">Rich API</h4>
+<p>Immutable.JS provides a rich set of immutable objects to encapsulate your data (e.g. Maps, Lists, Sets, Records, etc.), and an extensive set of methods to manipulate it, including methods to sort, filter, and group the data, reverse it, flatten it, and create subsets.</p>
+<h4 id="performance">Performance</h4>
+<p>Immutable.JS does a lot of work behind the scenes to optimize performance. This is the key to its power, as using immutable data structures can involve a lot of expensive copying. In particular, immutably manipulating large, complex data sets, such as a nested Redux state tree, can generate many intermediate copies of objects, which consume memory and slow down performance as the browser&#x2019;s garbage collector fights to clean things up.</p>
+<p>Immutable.JS avoids this by <a href="https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi" target="_blank">cleverly sharing data structures</a> under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away.</p>
+<p>You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it&#x2019;s the <em>intermediate</em> data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.6nwctunlc" target="_blank">Immutable.js, persistent data structures and structural sharing</a></li>
+<li><a href="https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf" target="_blank">PDF: JavaScript Immutability - Don&#x2019;t go changing</a></li>
+</ul>
+<p><strong>Libraries</strong></p>
+<ul>
+<li><a href="https://facebook.github.io/immutable-js/" target="_blank">Immutable.js</a></li>
+</ul>
+<p><a id="issues-with-immutable-js"></a></p>
+<h2 id="what-are-the-issues-with-using-immutablejs">What are the issues with using Immutable.JS?</h2>
+<p>Although powerful, Immutable.JS needs to be used carefully, as it comes with issues of its own. Note, however, that all of these issues can be overcome quite easily with careful coding.</p>
+<h4 id="difficult-to-interoperate-with">Difficult to interoperate with</h4>
+<p>JavaScript does not provide immutable data structures. As such, for Immutable.JS to provide its immutable guarantees, your data must be encapsulated within an Immutable.JS object (such as a <code>Map</code> or a <code>List</code>, etc.). Once it&#x2019;s contained in this way, it&#x2019;s hard for that data to then interoperate with other, plain JavaScript objects.</p>
+<p>For example, you will no longer be able to reference an object&#x2019;s properties through standard JavaScript dot or bracket notation. Instead, you must reference them via Immutable.JS&#x2019;s <code>get()</code> or <code>getIn()</code> methods, which use an awkward syntax that accesses properties via an array of strings, each of which represents a property key.</p>
+<p>For example, instead of <code>myObj.prop1.prop2.prop3</code>, you would use <code>myImmutableMap.getIn([&#x2018;prop1&#x2019;, &#x2018;prop2&#x2019;, &#x2018;prop3&#x2019;])</code>.</p>
+<p>This makes it awkward to interoperate not just with your own code, but also with other libraries, such as lodash or ramda, that expect plain JavaScript objects.</p>
+<p>Note that Immutable.JS objects do have a <code>toJS()</code> method, which returns the data as a plain JavaScript data structure, but this method is extremely slow, and using it extensively will negate the performance benefits that Immutable.JS provides</p>
+<h3 id="once-used-immutablejs-will-spread-throughout-your-codebase">Once used, Immutable.JS will spread throughout your codebase</h3>
+<p>Once you encapsulate your data with Immutable.JS, you have to use Immutable.JS&#x2019;s <code>get()</code> or <code>getIn()</code> property accessors to access it.</p>
+<p>This has the effect of spreading Immutable.JS across your entire codebase, including potentially your components, where you may prefer not to have such external dependencies. Your entire codebase must know what is, and what is not, an Immutable.JS object. It also makes removing Immutable.JS from your app difficult in the future, should you ever need to.</p>
+<p>This issue can be avoided by <a href="https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi" target="_blank">uncoupling your application logic from your data structures</a>, as outlined in the <a href="#immutable-js-best-practices">best practices section</a> below.</p>
+<h3 id="no-destructuring-or-spread-operators">No Destructuring or Spread Operators</h3>
+<p>Because you must access your data via Immutable.JS&#x2019;s own <code>get()</code> and <code>getIn()</code> methods, you can no longer use JavaScript&#x2019;s destructuring operator (or the proposed Object spread operator), making your code more verbose.</p>
+<h3 id="not-suitable-for-small-values-that-change-often">Not suitable for small values that change often</h3>
+<p>Immutable.JS works best for collections of data, and the larger the better. It can be slow when your data comprises lots of small, simple JavaScript objects, with each comprising a few keys of primitive values.</p>
+<p>Note, however, that this does not apply to the Redux state tree, which is (usually) represented as a large collection of data.</p>
+<h3 id="difficult-to-debug">Difficult to Debug</h3>
+<p>Immutable.JS objects, such as <code>Map</code>, <code>List</code>, etc., can be difficult to debug, as inspecting such an object will reveal an entire nested hierarchy of Immutable.JS-specific properties that you don&#x2019;t care about, while your actual data that you do care about is encapsulated several layers deep.</p>
+<p>To resolve this issue, use a browser extension such as the <a href="https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog" target="_blank">Immutable.js Object Formatter</a>, which surfaces your data in Chrome Dev Tools, and hides Immutable.JS&#x2019;s properties when inspecting your data.</p>
+<h3 id="breaks-object-references-causing-poor-performance">Breaks object references, causing poor performance</h3>
+<p>One of the key advantages of immutability is that it enables shallow equality checking, which dramatically improves performance.</p>
+<p>If two different variables reference the same immutable object, then a simple equality check of the two variables is enough to determine that they are equal, and that the object they both reference is unchanged. The equality check never has to check the values of any of the object&#x2019;s properties, as it is, of course, immutable.</p>
+<p>However, shallow checking will not work if your data encapsulated within an Immutable.JS object is itself an object. This is because Immutable.JS&#x2019;s <code>toJS()</code> method, which returns the data contained within an Immutable.JS object as a JavaScript value, will create a new object every time it&#x2019;s called, and so break the reference with the encapsulated data.</p>
+<p>Accordingly, calling <code>toJS()</code> twice, for example, and assigning the result to two different variables will cause an equality check on those two variables to fail, even though the object values themselves haven&#x2019;t changed.</p>
+<p>This is a particular issue if you use <code>toJS()</code> in a wrapped component&#x2019;s <code>mapStateToProps</code> function, as React-Redux shallowly compares each value in the returned props object.  For example, the value referenced by the <code>todos</code> prop returned from <code>mapStateToProps</code> below will always be a different object, and so will fail a shallow equality check.</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// AVOID .toJS() in mapStateToProps</span>
+<span class="token keyword">function</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    todos<span class="token punctuation">:</span> state<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;todos&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toJS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Always a new object</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>When the shallow check fails, React-Redux will cause the component to re-render. Using <code>toJS()</code> in <code>mapStateToProps</code> in this way, therefore, will always cause the component to re-render, even if the value never changes, impacting heavily on performance.</p>
+<p>This can be prevented by using <code>toJS()</code> in a Higher Order Component, as discussed in the <a href="#immutable-js-best-practices">Best Practices section</a> below.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.hzgz7ghbe" target="_blank">Immutable.js, persistent data structures and structural sharing</a></li>
+<li><a href="http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript" target="_blank">Immutable Data Structures and JavaScript</a></li>
+<li><a href="https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.9ucv6hwk4" target="_blank">React.js pure render performance anti-pattern</a></li>
+<li><a href="https://www.toptal.com/react/react-redux-and-immutablejs" target="_blank">Building Efficient UI with React and Redux</a></li>
+</ul>
+<p><strong>Chrome Extension</strong></p>
+<ul>
+<li><a href="https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog" target="_blank">Immutable Object Formatter</a></li>
+</ul>
+<p><a id="is-immutable-js-worth-effort"></a></p>
+<h2 id="is-using-immutablejs-worth-the-effort">Is Using Immutable.JS worth the effort?</h2>
+<p>Frequently, yes. There are various tradeoffs and opinions to consider, but there are many good reasons to use Immutable.JS. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated.</p>
+<p>Components will both re-render when they shouldn&#x2019;t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.</p>
+<p>This problem is caused predominantly by returning a mutated state object from a Redux reducer. With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app.</p>
+<p>This, together with its performance and rich API for data manipulation, is why Immutable.JS is worth the effort.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action" target="_blank">Troubleshooting: Nothing happens when I dispatch an action</a></li>
+</ul>
+<p><a id="immutable-js-best-practices"></a></p>
+<h2 id="what-are-some-opinionated-best-practices-for-using-immutablejs-with-redux">What are some opinionated Best Practices for using Immutable.JS with Redux?</h2>
+<p>Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. If you choose to use Immutable.JS (and remember, you are not required to, and there are other immutable libraries you can use), follow these opinionated best practices, and you&#x2019;ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.</p>
+<h3 id="never-mix-plain-javascript-objects-with-immutablejs">Never mix plain JavaScript objects with Immutable.JS</h3>
+<p>Never let a plain JavaScript object contain Immutable.JS properties. Equally, never let an Immutable.JS object contain a plain JavaScript object.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript" target="_blank">Immutable Data Structures and JavaScript</a></li>
+</ul>
+<h3 id="make-your-entire-redux-state-tree-an-immutablejs-object">Make your entire Redux state tree an Immutable.JS object</h3>
+<p>For a Redux app, your entire state tree should be an Immutable.JS object, with no plain JavaScript objects used at all.</p>
+<ul>
+<li><p>Create the tree using Immutable.JS&#x2019;s <code>fromJS()</code> function.</p>
+</li>
+<li><p>Use an Immutable.JS-aware version of the <code>combineReducers</code> function, such as the one in <a href="https://www.npmjs.com/package/redux-immutable" target="_blank">redux-immutable</a>, as Redux itself expects the state tree to be a plain JavaScript object.</p>
+</li>
+<li><p>When adding JavaScript objects to an Immutable.JS Map or List using Immutable.JS&#x2019;s <code>update</code>, <code>merge</code> or <code>set</code> methods, ensure that the object being added is first converted to an Immutable object using <code>fromJS()</code>.</p>
+</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// avoid</span>
+<span class="token keyword">const</span> newObj <span class="token operator">=</span> <span class="token punctuation">{</span> key<span class="token punctuation">:</span> value <span class="token punctuation">}</span>
+<span class="token keyword">const</span> newState <span class="token operator">=</span> state<span class="token punctuation">.</span><span class="token function">setIn</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">&apos;prop1&apos;</span><span class="token punctuation">]</span><span class="token punctuation">,</span> newObj<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// newObj has been added as a plain JavaScript object, NOT as an Immutable.JS Map</span>
+
+<span class="token comment" spellcheck="true">// recommended</span>
+<span class="token keyword">const</span> newObj <span class="token operator">=</span> <span class="token punctuation">{</span> key<span class="token punctuation">:</span> value <span class="token punctuation">}</span>
+<span class="token keyword">const</span> newState <span class="token operator">=</span> state<span class="token punctuation">.</span><span class="token function">setIn</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">&apos;prop1&apos;</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token function">fromJS</span><span class="token punctuation">(</span>newObj<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// newObj is now an Immutable.JS Map</span>
+</code></pre>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript" target="_blank">Immutable Data Structures and JavaScript</a></li>
+</ul>
+<p><strong>Libraries</strong></p>
+<ul>
+<li><a href="https://www.npmjs.com/package/redux-immutable" target="_blank">redux-immutable</a></li>
+</ul>
+<h3 id="use-immutablejs-everywhere-except-your-dumb-components">Use Immutable.JS everywhere except your dumb components</h3>
+<p>Using Immutable.JS everywhere keeps your code performant. Use it in your smart components, your selectors, your sagas or thunks, action creators, and especially your reducers.</p>
+<p>Do not, however, use Immutable.JS in your dumb components.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript" target="_blank">Immutable Data Structures and JavaScript</a></li>
+<li><a href="http://jaketrent.com/post/smart-dumb-components-react/" target="_blank">Smart and Dumb Components in React</a></li>
+</ul>
+<h3 id="limit-your-use-of-tojs">Limit your use of <code>toJS()</code></h3>
+<p><code>toJS()</code> is an expensive function and negates the purpose of using Immutable.JS. Avoid its use.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong> Discussions</strong></p>
+<ul>
+<li><a href="https://twitter.com/leeb/status/746733697093668864" target="_blank">Lee Byron on Twitter: &#x201C;Perf tip for #immutablejs&#x2026;&#x201D;</a></li>
+</ul>
+<h3 id="your-selectors-should-return-immutablejs-objects">Your selectors should return Immutable.JS objects</h3>
+<p>Always.</p>
+<h3 id="use-immutablejs-objects-in-your-smart-components">Use Immutable.JS objects in your Smart Components</h3>
+<p>Smart components that access the store via React Redux&#x2019;s <code>connect</code> function must use the Immutable.JS values returned by your selectors.  Make sure you avoid the potential issues this can cause with unnecessary component re-rendering. Memoize your selectors using a library such as reselect if necessary.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/recipes/ComputingDerivedData.html" target="_blank">Recipes: Computing Derived Data</a></li>
+<li><a href="../faq/ImmutableData.html#immutability-issues-with-react-redux">FAQ: Immutable Data</a></li>
+<li><a href="https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs" target="_blank">Reselect Documentation: How do I use Reselect with Immutable.js?</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc#.451p9ycfy" target="_blank">Redux Patterns and Anti-Patterns</a></li>
+</ul>
+<p><strong>Libraries</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/reselect" target="_blank">Reselect: Selector library for Redux</a></li>
+</ul>
+<h3 id="never-use-tojs-in-mapstatetoprops">Never use <code>toJS()</code> in <code>mapStateToProps</code></h3>
+<p>Converting an Immutable.JS object to a JavaScript object using <code>toJS()</code> will return a new object every time. If you do this in <code>mapStateToProps</code>, you will cause the component to believe that the object has changed every time the state tree changes, and so trigger an unnecessary re-render.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily" target="_blank">FAQ: Immutable Data</a></li>
+</ul>
+<h3 id="never-use-immutablejs-in-your-dumb-components">Never use Immutable.JS in your Dumb Components</h3>
+<p>Your dumb components should be pure; that is, they should produce the same output given the same input, and have no external dependencies. If you pass such a component an Immutable.JS object as a prop, you make it dependent upon Immutable.JS to extract the prop&#x2019;s value and otherwise manipulate it.</p>
+<p>Such a dependency renders the component impure, makes testing the component more difficult, and makes reusing and refactoring the component unnecessarily difficult.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript" target="_blank">Immutable Data Structures and JavaScript</a></li>
+<li><a href="http://jaketrent.com/post/smart-dumb-components-react/" target="_blank">Smart and Dumb Components in React</a></li>
+<li><a href="https://hashnode.com/post/tips-for-a-better-redux-architecture-lessons-for-enterprise-scale-civrlqhuy0keqc6539boivk2f" target="_blank">Tips For a Better Redux Architecture: Lessons for Enterprise Scale</a></li>
+</ul>
+<h3 id="use-a-higher-order-component-to-convert-your-smart-components-immutablejs-props-to-your-dumb-components-javascript-props">Use a Higher Order Component to convert your Smart Component&#x2019;s Immutable.JS props to your Dumb Component&#x2019;s JavaScript props</h3>
+<p>Something needs to map the Immutable.JS props in your Smart Component to the pure JavaScript props used in your Dumb Component. That something is a Higher Order Component (HOC) that simply takes the Immutable.JS props from your Smart Component, and converts them using <code>toJS()</code> to plain JavaScript props, which are then passed to  your Dumb Component.</p>
+<p>Here is an example of such a HOC:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">&apos;react&apos;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Iterable <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;immutable&apos;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">const</span> toJS <span class="token operator">=</span> WrappedComponent <span class="token operator">=</span><span class="token operator">&gt;</span> wrappedComponentProps <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> KEY <span class="token operator">=</span> <span class="token number">0</span>
+  <span class="token keyword">const</span> VALUE <span class="token operator">=</span> <span class="token number">1</span>
+
+  <span class="token keyword">const</span> propsJS <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span>
+    wrappedComponentProps
+  <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span>newProps<span class="token punctuation">,</span> wrappedComponentProp<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    newProps<span class="token punctuation">[</span>wrappedComponentProp<span class="token punctuation">[</span>KEY<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> Iterable<span class="token punctuation">.</span><span class="token function">isIterable</span><span class="token punctuation">(</span>
+      wrappedComponentProp<span class="token punctuation">[</span>VALUE<span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+      <span class="token operator">?</span> wrappedComponentProp<span class="token punctuation">[</span>VALUE<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">toJS</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">:</span> wrappedComponentProp<span class="token punctuation">[</span>VALUE<span class="token punctuation">]</span>
+    <span class="token keyword">return</span> newProps
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token operator">&lt;</span>WrappedComponent <span class="token punctuation">{</span><span class="token operator">...</span>propsJS<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>And this is how you would use it in your Smart Component:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> connect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;react-redux&apos;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> toJS <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;./to-js&apos;</span>
+<span class="token keyword">import</span> DumbComponent <span class="token keyword">from</span> <span class="token string">&apos;./dumb.component&apos;</span>
+
+<span class="token keyword">const</span> mapStateToProps <span class="token operator">=</span> state <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// obj is an Immutable object in Smart Component, but it&#x2019;s converted to a plain</span>
+    <span class="token comment" spellcheck="true">// JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript</span>
+    <span class="token comment" spellcheck="true">// object. Because it&#x2019;s still an Immutable.JS object here in mapStateToProps, though,</span>
+    <span class="token comment" spellcheck="true">// there is no issue with errant re-renderings.</span>
+    obj<span class="token punctuation">:</span> <span class="token function">getImmutableObjectFromStateTree</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">connect</span><span class="token punctuation">(</span>mapStateToProps<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token function">toJS</span><span class="token punctuation">(</span>DumbComponent<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>By converting Immutable.JS objects to plain JavaScript values within a HOC, we achieve Dumb Component portability, but without the performance hits of using <code>toJS()</code> in the Smart Component.</p>
+<p><em>Note: if your app requires high performance, you may need to avoid <code>toJS()</code> altogether, and so will have to use Immutable.JS in your dumb components. However, for most apps this will not be the case, and the benefits of keeping Immutable.JS out of your dumb components (maintainability, portability and easier testing) will far outweigh any perceived performance improvements of keeping it in.</em></p>
+<p><em>In addition, using <code>toJS</code> in a Higher Order Component should not cause much, if any, performance degradation, as the component will only be called when the connected component&#x2019;s props change. As with any performance issue, conduct performance checks first before deciding what to optimize.</em></p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="https://facebook.github.io/react/docs/higher-order-components.html" target="_blank">React: Higher-Order Components</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e#.dw2qd1o1g" target="_blank">React Higher Order Components in depth</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://www.reddit.com/r/javascript/comments/4rcqpx/dan_abramov_redux_is_not_an_architecture_or/d5rw0p9/?context=3" target="_blank">Reddit: acemarke and cpsubrian comments on Dan Abramov: Redux is not an architecture or design pattern, it is just a library.</a></li>
+</ul>
+<p><strong>Gists</strong></p>
+<ul>
+<li><a href="https://gist.github.com/cpsubrian/79e97b6116ab68bd189eb4917203242c#file-tojs-js" target="_blank">cpsubrian: React decorators for redux/react-router/immutable &#x2018;smart&#x2019; components</a></li>
+</ul>
+<h3 id="use-the-immutable-object-formatter-chrome-extension-to-aid-debugging">Use the Immutable Object Formatter Chrome Extension to Aid Debugging</h3>
+<p>Install the <a href="https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog" target="_blank">Immutable Object Formatter</a> , and inspect your Immutable.JS data without seeing the noise of Immutable.JS&apos;s own object properties.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Chrome Extension</strong></p>
+<ul>
+<li><a href="https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog" target="_blank">Immutable Object Formatter</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+    
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+
+    
+    <div class="powered-by-algolia">
+        powered by <a href="https://algolia.com" target="_blank"><img src="../../gitbook/gitbook-plugin-algolia/algolia-logo.jpg" /></a>
+    </div>
+    
+
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="reducers/InitializingState.html" class="navigation navigation-prev " aria-label="Previous page: Initializing State">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../FAQ.html" class="navigation navigation-next " aria-label="Next page: FAQ">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Using Immutable.JS with Redux","level":"1.5.10","depth":2,"next":{"title":"FAQ","level":"1.6","depth":1,"path":"docs/FAQ.md","ref":"docs/FAQ.md","articles":[{"title":"General","level":"1.6.1","depth":2,"path":"docs/faq/General.md","ref":"docs/faq/General.md","articles":[]},{"title":"Reducers","level":"1.6.2","depth":2,"path":"docs/faq/Reducers.md","ref":"docs/faq/Reducers.md","articles":[]},{"title":"Organizing State","level":"1.6.3","depth":2,"path":"docs/faq/OrganizingState.md","ref":"docs/faq/OrganizingState.md","articles":[]},{"title":"Store Setup","level":"1.6.4","depth":2,"path":"docs/faq/StoreSetup.md","ref":"docs/faq/StoreSetup.md","articles":[]},{"title":"Actions","level":"1.6.5","depth":2,"path":"docs/faq/Actions.md","ref":"docs/faq/Actions.md","articles":[]},{"title":"Immutable Data","level":"1.6.6","depth":2,"path":"docs/faq/ImmutableData.md","ref":"docs/faq/ImmutableData.md","articles":[]},{"title":"Code Structure","level":"1.6.7","depth":2,"path":"docs/faq/CodeStructure.md","ref":"docs/faq/CodeStructure.md","articles":[]},{"title":"Performance","level":"1.6.8","depth":2,"path":"docs/faq/Performance.md","ref":"docs/faq/Performance.md","articles":[]},{"title":"Design Decisions","level":"1.6.9","depth":2,"path":"docs/faq/DesignDecisions.md","ref":"docs/faq/DesignDecisions.md","articles":[]},{"title":"React Redux","level":"1.6.10","depth":2,"path":"docs/faq/ReactRedux.md","ref":"docs/faq/ReactRedux.md","articles":[]},{"title":"Miscellaneous","level":"1.6.11","depth":2,"path":"docs/faq/Miscellaneous.md","ref":"docs/faq/Miscellaneous.md","articles":[]}]},"previous":{"title":"Initializing State","level":"1.5.9.11","depth":3,"path":"docs/recipes/reducers/InitializingState.md","ref":"docs/recipes/reducers/InitializingState.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs","algolia"],"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/reactjs/redux/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"algolia":{"freeAccount":"false","index":"redux-docs","applicationID":"BC2QB3G2G4","publicKey":"75eb88bb56d8cf8d17b6366a2c8e5fcd"},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/reactjs/redux/tree/master"},"theme-default":{"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Redux","gitbook":"3.2.2"},"file":{"path":"docs/recipes/UsingImmutableJS.md","mtime":"2018-01-10T02:09:32.992Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-01-10T03:53:56.298Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-algolia/search-algolia.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

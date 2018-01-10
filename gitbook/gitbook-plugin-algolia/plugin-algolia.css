@@ -1,0 +1,12 @@
+.powered-by-algolia {
+    margin-top: 30px;
+    text-align: right;
+    opacity: 0.75;
+
+    color: #555;
+    font-size: 13px;
+}
+
+.powered-by-algolia img {
+    vertical-align: bottom;
+}

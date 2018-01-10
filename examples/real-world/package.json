@@ -1,0 +1,31 @@
+{
+  "name": "real-world",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "^1.0.2",
+    "redux-devtools": "^3.4.0",
+    "redux-devtools-dock-monitor": "^1.1.2",
+    "redux-devtools-log-monitor": "^1.3.0",
+    "redux-logger": "^3.0.6"
+  },
+  "dependencies": {
+    "humps": "^2.0.0",
+    "jest-cli": "^20.0.4",
+    "lodash": "^4.16.1",
+    "normalizr": "^3.2.3",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "^4.1.2",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "test": "react-scripts test"
+  }
+}

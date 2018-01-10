@@ -1,0 +1,1474 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Updating Normalized Data · Redux</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-algolia/plugin-algolia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../../../build/gitbook.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="ReusingReducerLogic.html" />
+    
+    
+    <link rel="prev" href="NormalizingStateShape.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../../">
+            
+                <a href="../../../">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../introduction/">
+            
+                <a href="../../introduction/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../../introduction/Motivation.html">
+            
+                <a href="../../introduction/Motivation.html">
+            
+                    
+                    Motivation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../../introduction/CoreConcepts.html">
+            
+                <a href="../../introduction/CoreConcepts.html">
+            
+                    
+                    Core Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../../introduction/ThreePrinciples.html">
+            
+                <a href="../../introduction/ThreePrinciples.html">
+            
+                    
+                    Three Principles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../../introduction/PriorArt.html">
+            
+                <a href="../../introduction/PriorArt.html">
+            
+                    
+                    Prior Art
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../../introduction/LearningResources.html">
+            
+                <a href="../../introduction/LearningResources.html">
+            
+                    
+                    Learning Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../../introduction/Ecosystem.html">
+            
+                <a href="../../introduction/Ecosystem.html">
+            
+                    
+                    Ecosystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../../introduction/Examples.html">
+            
+                <a href="../../introduction/Examples.html">
+            
+                    
+                    Examples
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../../basics/">
+            
+                <a href="../../basics/">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../../basics/Actions.html">
+            
+                <a href="../../basics/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../../basics/Reducers.html">
+            
+                <a href="../../basics/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../../basics/Store.html">
+            
+                <a href="../../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../../basics/DataFlow.html">
+            
+                <a href="../../basics/DataFlow.html">
+            
+                    
+                    Data Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../../basics/UsageWithReact.html">
+            
+                <a href="../../basics/UsageWithReact.html">
+            
+                    
+                    Usage with React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../../basics/ExampleTodoList.html">
+            
+                <a href="../../basics/ExampleTodoList.html">
+            
+                    
+                    Example: Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../../advanced/">
+            
+                <a href="../../advanced/">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../../advanced/AsyncActions.html">
+            
+                <a href="../../advanced/AsyncActions.html">
+            
+                    
+                    Async Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../../advanced/AsyncFlow.html">
+            
+                <a href="../../advanced/AsyncFlow.html">
+            
+                    
+                    Async Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../../advanced/Middleware.html">
+            
+                <a href="../../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../../advanced/UsageWithReactRouter.html">
+            
+                <a href="../../advanced/UsageWithReactRouter.html">
+            
+                    
+                    Usage with React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../../advanced/ExampleRedditAPI.html">
+            
+                <a href="../../advanced/ExampleRedditAPI.html">
+            
+                    
+                    Example: Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" >
+            
+                <span>
+            
+                    
+                    Next Steps
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Recipes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../MigratingToRedux.html">
+            
+                <a href="../MigratingToRedux.html">
+            
+                    
+                    Migrating to Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../UsingObjectSpreadOperator.html">
+            
+                <a href="../UsingObjectSpreadOperator.html">
+            
+                    
+                    Using Object Spread Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../ReducingBoilerplate.html">
+            
+                <a href="../ReducingBoilerplate.html">
+            
+                    
+                    Reducing Boilerplate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../ServerRendering.html">
+            
+                <a href="../ServerRendering.html">
+            
+                    
+                    Server Rendering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../WritingTests.html">
+            
+                <a href="../WritingTests.html">
+            
+                    
+                    Writing Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../ComputingDerivedData.html">
+            
+                <a href="../ComputingDerivedData.html">
+            
+                    
+                    Computing Derived Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../ImplementingUndoHistory.html">
+            
+                <a href="../ImplementingUndoHistory.html">
+            
+                    
+                    Implementing Undo History
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../IsolatingSubapps.html">
+            
+                <a href="../IsolatingSubapps.html">
+            
+                    
+                    Isolating Subapps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="../StructuringReducers.html">
+            
+                <a href="../StructuringReducers.html">
+            
+                    
+                    Structuring Reducers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="PrerequisiteConcepts.html">
+            
+                <a href="PrerequisiteConcepts.html">
+            
+                    
+                    Prerequisite Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.2" data-path="BasicReducerStructure.html">
+            
+                <a href="BasicReducerStructure.html">
+            
+                    
+                    Basic Reducer Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.3" data-path="SplittingReducerLogic.html">
+            
+                <a href="SplittingReducerLogic.html">
+            
+                    
+                    Splitting Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.4" data-path="RefactoringReducersExample.html">
+            
+                <a href="RefactoringReducersExample.html">
+            
+                    
+                    Refactoring Reducers Example
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.5" data-path="UsingCombineReducers.html">
+            
+                <a href="UsingCombineReducers.html">
+            
+                    
+                    Using combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.6" data-path="BeyondCombineReducers.html">
+            
+                <a href="BeyondCombineReducers.html">
+            
+                    
+                    Beyond combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.7" data-path="NormalizingStateShape.html">
+            
+                <a href="NormalizingStateShape.html">
+            
+                    
+                    Normalizing State Shape
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.9.8" data-path="UpdatingNormalizedData.html">
+            
+                <a href="UpdatingNormalizedData.html">
+            
+                    
+                    Updating Normalized Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.9" data-path="ReusingReducerLogic.html">
+            
+                <a href="ReusingReducerLogic.html">
+            
+                    
+                    Reusing Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.10" data-path="ImmutableUpdatePatterns.html">
+            
+                <a href="ImmutableUpdatePatterns.html">
+            
+                    
+                    Immutable Update Patterns
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.11" data-path="InitializingState.html">
+            
+                <a href="InitializingState.html">
+            
+                    
+                    Initializing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="../UsingImmutableJS.html">
+            
+                <a href="../UsingImmutableJS.html">
+            
+                    
+                    Using Immutable.JS with Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../../FAQ.html">
+            
+                <a href="../../FAQ.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../../faq/General.html">
+            
+                <a href="../../faq/General.html">
+            
+                    
+                    General
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../../faq/Reducers.html">
+            
+                <a href="../../faq/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../../faq/OrganizingState.html">
+            
+                <a href="../../faq/OrganizingState.html">
+            
+                    
+                    Organizing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../../faq/StoreSetup.html">
+            
+                <a href="../../faq/StoreSetup.html">
+            
+                    
+                    Store Setup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../../faq/Actions.html">
+            
+                <a href="../../faq/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../../faq/ImmutableData.html">
+            
+                <a href="../../faq/ImmutableData.html">
+            
+                    
+                    Immutable Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="../../faq/CodeStructure.html">
+            
+                <a href="../../faq/CodeStructure.html">
+            
+                    
+                    Code Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="../../faq/Performance.html">
+            
+                <a href="../../faq/Performance.html">
+            
+                    
+                    Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="../../faq/DesignDecisions.html">
+            
+                <a href="../../faq/DesignDecisions.html">
+            
+                    
+                    Design Decisions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="../../faq/ReactRedux.html">
+            
+                <a href="../../faq/ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="../../faq/Miscellaneous.html">
+            
+                <a href="../../faq/Miscellaneous.html">
+            
+                    
+                    Miscellaneous
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../../Troubleshooting.html">
+            
+                <a href="../../Troubleshooting.html">
+            
+                    
+                    Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../../Glossary.html">
+            
+                <a href="../../Glossary.html">
+            
+                    
+                    Glossary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../../api/">
+            
+                <a href="../../api/">
+            
+                    
+                    API Reference
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../../api/createStore.html">
+            
+                <a href="../../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../../api/Store.html">
+            
+                <a href="../../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../../api/combineReducers.html">
+            
+                <a href="../../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../../api/applyMiddleware.html">
+            
+                <a href="../../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../../api/bindActionCreators.html">
+            
+                <a href="../../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../../api/compose.html">
+            
+                <a href="../../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../../CHANGELOG.html">
+            
+                <a href="../../../CHANGELOG.html">
+            
+                    
+                    Change Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../../../PATRONS.html">
+            
+                <a href="../../../PATRONS.html">
+            
+                    
+                    Patrons
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../../Feedback.html">
+            
+                <a href="../../Feedback.html">
+            
+                    
+                    Feedback
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../.." >Updating Normalized Data</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="managing-normalized-data">Managing Normalized Data</h1>
+<p>As mentioned in <a href="NormalizingStateShape.html">Normalizing State Shape</a>, the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store.  However, that doesn&apos;t address the issue of executing further updates to that normalized data as it&apos;s being used elsewhere in the application.  There are a variety of different approaches that you can use, based on your own preference.  We&apos;ll use the example of adding a new Comment to a Post.</p>
+<h2 id="standard-approaches">Standard Approaches</h2>
+<h3 id="simple-merging">Simple Merging</h3>
+<p>One approach is to merge the contents of the action into the existing state.  In this case, we need to do a deep recursive merge, not just a shallow copy.  The Lodash <code>merge</code> function can handle this for us:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> merge <span class="token keyword">from</span> <span class="token string">&quot;lodash/merge&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">commentsById</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">default</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+           <span class="token keyword">if</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>entities <span class="token operator">&amp;&amp;</span> action<span class="token punctuation">.</span>entities<span class="token punctuation">.</span>comments<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token keyword">return</span> <span class="token function">merge</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> state<span class="token punctuation">,</span> action<span class="token punctuation">.</span>entities<span class="token punctuation">.</span>comments<span class="token punctuation">.</span>byId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This requires the least amount of work on the reducer side, but does require that the action creator potentially do a fair amount of work to organize the data into the correct shape before the action is dispatched.  It also doesn&apos;t handle trying to delete an item.</p>
+<h3 id="slice-reducer-composition">Slice Reducer Composition</h3>
+<p>If we have a nested tree of slice reducers, each slice reducer will need to know how to respond to this action appropriately.  We will need to include all the relevant data in the action.  We need to update the correct Post object with the comment&apos;s ID, create a new Comment object using that ID as a key, and include the Comment&apos;s ID in the list of all Comment IDs.  Here&apos;s how the pieces for this might fit together:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// actions.js</span>
+<span class="token keyword">function</span> <span class="token function">addComment</span><span class="token punctuation">(</span>postId<span class="token punctuation">,</span> commentText<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Generate a unique ID for this comment</span>
+    <span class="token keyword">const</span> commentId <span class="token operator">=</span> <span class="token function">generateId</span><span class="token punctuation">(</span><span class="token string">&quot;comment&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        type <span class="token punctuation">:</span> <span class="token string">&quot;ADD_COMMENT&quot;</span><span class="token punctuation">,</span>
+        payload <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+            postId<span class="token punctuation">,</span>
+            commentId<span class="token punctuation">,</span>
+            commentText
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token comment" spellcheck="true">// reducers/posts.js</span>
+<span class="token keyword">function</span> <span class="token function">addComment</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>postId<span class="token punctuation">,</span> commentId<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Look up the correct post, to simplify the rest of the code</span>
+    <span class="token keyword">const</span> post <span class="token operator">=</span> state<span class="token punctuation">[</span>postId<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        <span class="token operator">...</span>state<span class="token punctuation">,</span>
+        <span class="token comment" spellcheck="true">// Update our Post object with a new &quot;comments&quot; array</span>
+        <span class="token punctuation">[</span>postId<span class="token punctuation">]</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+             <span class="token operator">...</span>post<span class="token punctuation">,</span>
+             comments <span class="token punctuation">:</span> post<span class="token punctuation">.</span>comments<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>commentId<span class="token punctuation">)</span>             
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">postsById</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">&quot;ADD_COMMENT&quot;</span> <span class="token punctuation">:</span> <span class="token keyword">return</span> <span class="token function">addComment</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span> <span class="token punctuation">:</span> <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">allPosts</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// omitted - no work to be done for this example</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> postsReducer <span class="token operator">=</span> <span class="token function">combineReducers</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    byId <span class="token punctuation">:</span> postsById<span class="token punctuation">,</span>
+    allIds <span class="token punctuation">:</span> allPosts
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment" spellcheck="true">// reducers/comments.js</span>
+<span class="token keyword">function</span> <span class="token function">addCommentEntry</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>commentId<span class="token punctuation">,</span> commentText<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Create our new Comment object</span>
+    <span class="token keyword">const</span> comment <span class="token operator">=</span> <span class="token punctuation">{</span>id <span class="token punctuation">:</span> commentId<span class="token punctuation">,</span> text <span class="token punctuation">:</span> commentText<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Insert the new Comment object into the updated lookup table</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        <span class="token operator">...</span>state<span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>commentId<span class="token punctuation">]</span> <span class="token punctuation">:</span> comment
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">commentsById</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">&quot;ADD_COMMENT&quot;</span> <span class="token punctuation">:</span> <span class="token keyword">return</span> <span class="token function">addCommentEntry</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span> <span class="token punctuation">:</span> <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">function</span> <span class="token function">addCommentId</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>commentId<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// Just append the new Comment&apos;s ID to the list of all IDs</span>
+    <span class="token keyword">return</span> state<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>commentId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">allComments</span><span class="token punctuation">(</span>state <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">&quot;ADD_COMMENT&quot;</span> <span class="token punctuation">:</span> <span class="token keyword">return</span> <span class="token function">addCommentId</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span> <span class="token punctuation">:</span> <span class="token keyword">return</span> state<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> commentsReducer <span class="token operator">=</span> <span class="token function">combineReducers</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    byId <span class="token punctuation">:</span> commentsById<span class="token punctuation">,</span>
+    allIds <span class="token punctuation">:</span> allComments
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>The example is a bit long, because it&apos;s showing how all the different slice reducers and case reducers fit together.  Note  the delegation involved here.  The <code>postsById</code> slice reducer delegates the work for this case to <code>addComment</code>, which inserts the new Comment&apos;s ID into the correct Post item.  Meanwhile, both the <code>commentsById</code> and <code>allComments</code> slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.</p>
+<h2 id="other-approaches">Other Approaches</h2>
+<h3 id="task-based-updates">Task-Based Updates</h3>
+<p>Since reducers are just functions, there&apos;s an infinite number of ways to split up this logic.  While using slice reducers is obviously the most common, it&apos;s also possible to organize behavior in a more task-oriented structure.  Because this will often involve more nested updates, you may want to use an immutable update utility library like <a href="https://github.com/debitoor/dot-prop-immutable" target="_blank">dot-prop-immutable</a> or <a href="https://github.com/mariocasciaro/object-path-immutable" target="_blank">object-path-immutable</a> to simplify the update statements.  Here&apos;s an example of what that might look like:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> posts <span class="token keyword">from</span> <span class="token string">&quot;./postsReducer&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> comments <span class="token keyword">from</span> <span class="token string">&quot;./commentsReducer&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> dotProp <span class="token keyword">from</span> <span class="token string">&quot;dot-prop-immutable&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>combineReducers<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;redux&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> reduceReducers <span class="token keyword">from</span> <span class="token string">&quot;reduce-reducers&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> combinedReducer <span class="token operator">=</span> <span class="token function">combineReducers</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    posts<span class="token punctuation">,</span>
+    comments
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token keyword">function</span> <span class="token function">addComment</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>postId<span class="token punctuation">,</span> commentId<span class="token punctuation">,</span> commentText<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// State here is the entire combined state</span>
+    <span class="token keyword">const</span> updatedWithPostState <span class="token operator">=</span> dotProp<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>
+        state<span class="token punctuation">,</span> 
+        <span class="token template-string"><span class="token string">`posts.byId.</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>postId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">.comments`</span></span><span class="token punctuation">,</span> 
+        comments <span class="token operator">=</span><span class="token operator">&gt;</span> comments<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>commentId<span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> updatedWithCommentsTable <span class="token operator">=</span> dotProp<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>
+        updatedWithPostState<span class="token punctuation">,</span> 
+        <span class="token template-string"><span class="token string">`comments.byId.</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>commentId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>id <span class="token punctuation">:</span> commentId<span class="token punctuation">,</span> text <span class="token punctuation">:</span> commentText<span class="token punctuation">}</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> updatedWithCommentsList <span class="token operator">=</span> dotProp<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>
+        updatedWithCommentsTable<span class="token punctuation">,</span>
+        <span class="token template-string"><span class="token string">`comments.allIds`</span></span><span class="token punctuation">,</span>
+        allIds <span class="token operator">=</span><span class="token operator">&gt;</span> allIds<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>commentId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> updatedWithCommentsList<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> featureReducers <span class="token operator">=</span> <span class="token function">createReducer</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    ADD_COMMENT <span class="token punctuation">:</span> addComment<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> rootReducer <span class="token operator">=</span> <span class="token function">reduceReducers</span><span class="token punctuation">(</span>
+    combinedReducer<span class="token punctuation">,</span>
+    featureReducers
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>This approach makes it very clear what&apos;s happening for the <code>&quot;ADD_COMMENTS&quot;</code> case, but it does require nested updating logic, and some specific knowledge of the state tree shape.  Depending on how you want to compose your reducer logic, this may or may not be desired.</p>
+<h3 id="redux-orm">Redux-ORM</h3>
+<p>The <a href="https://github.com/tommikaikkonen/redux-orm" target="_blank">Redux-ORM</a> library provides a very useful abstraction layer for managing normalized data in a Redux store.  It allows you to declare Model classes and define relations between them.  It can then generate the empty &quot;tables&quot; for your data types, act as a specialized selector tool for looking up the data, and perform immutable updates on that data.</p>
+<p>There&apos;s a couple ways Redux-ORM can be used to perform updates.  First, the Redux-ORM docs suggest defining reducer functions on each Model subclass, then including the auto-generated combined reducer function into your store:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// models.js</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>Model<span class="token punctuation">,</span> many<span class="token punctuation">,</span> Schema<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;redux-orm&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Post</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">fields</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// Define a many-sided relation - one Post can have many Comments, </span>
+      <span class="token comment" spellcheck="true">// at a field named &quot;comments&quot;</span>
+      comments <span class="token punctuation">:</span> <span class="token function">many</span><span class="token punctuation">(</span><span class="token string">&quot;Comment&quot;</span><span class="token punctuation">)</span> 
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">static</span> <span class="token function">reducer</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">,</span> Post<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token string">&quot;CREATE_POST&quot;</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Queue up the creation of a Post instance</span>
+        Post<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>payload<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">case</span> <span class="token string">&quot;ADD_COMMENT&quot;</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> <span class="token punctuation">{</span>postId<span class="token punctuation">,</span> commentId<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// Queue up the addition of a relation between this Comment ID </span>
+        <span class="token comment" spellcheck="true">// and this Post instance</span>
+        Post<span class="token punctuation">.</span><span class="token function">withId</span><span class="token punctuation">(</span>postId<span class="token punctuation">)</span><span class="token punctuation">.</span>comments<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>commentId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// Redux-ORM will automatically apply queued updates after this returns</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+Post<span class="token punctuation">.</span>modelName <span class="token operator">=</span> <span class="token string">&quot;Post&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Comment</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">fields</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">static</span> <span class="token function">reducer</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">,</span> Comment<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>action<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token string">&quot;ADD_COMMENT&quot;</span> <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> <span class="token punctuation">{</span>commentId<span class="token punctuation">,</span> commentText<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// Queue up the creation of a Comment instance</span>
+        Comment<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id <span class="token punctuation">:</span> commentId<span class="token punctuation">,</span> text <span class="token punctuation">:</span> commentText<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>   
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// Redux-ORM will automatically apply queued updates after this returns</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+Comment<span class="token punctuation">.</span>modelName <span class="token operator">=</span> <span class="token string">&quot;Comment&quot;</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Create a Schema instance, and hook up the Post and Comment models</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> schema <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Schema</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+schema<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>Post<span class="token punctuation">,</span> Comment<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment" spellcheck="true">// main.js</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> createStore<span class="token punctuation">,</span> combineReducers <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;redux&apos;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>schema<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;./models&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> rootReducer <span class="token operator">=</span> <span class="token function">combineReducers</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Insert the auto-generated Redux-ORM reducer.  This will</span>
+  <span class="token comment" spellcheck="true">// initialize our model &quot;tables&quot;, and hook up the reducer</span>
+  <span class="token comment" spellcheck="true">// logic we defined on each Model subclass</span>
+  entities <span class="token punctuation">:</span> schema<span class="token punctuation">.</span><span class="token function">reducer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Dispatch an action to create a Post instance</span>
+store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  type <span class="token punctuation">:</span> <span class="token string">&quot;CREATE_POST&quot;</span><span class="token punctuation">,</span>
+  payload <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    id <span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    name <span class="token punctuation">:</span> <span class="token string">&quot;Test Post Please Ignore&quot;</span> 
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Dispatch an action to create a Comment instance as a child of that Post</span>
+store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  type <span class="token punctuation">:</span> <span class="token string">&quot;ADD_COMMENT&quot;</span><span class="token punctuation">,</span>
+  payload <span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    postId <span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    commentId <span class="token punctuation">:</span> <span class="token number">123</span><span class="token punctuation">,</span>
+    commentText <span class="token punctuation">:</span> <span class="token string">&quot;This is a comment&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>The Redux-ORM library maintains an internal queue of updates to be applied.  Those updates are then applied immutably, simplifying the update process.</p>
+<p>Another variation on this is to use Redux-ORM as an abstraction layer within a single case reducer:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>schema<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;./models&quot;</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Assume this case reducer is being used in our &quot;entities&quot; slice reducer, </span>
+<span class="token comment" spellcheck="true">// and we do not have reducers defined on our Redux-ORM Model subclasses</span>
+<span class="token keyword">function</span> <span class="token function">addComment</span><span class="token punctuation">(</span>entitiesState<span class="token punctuation">,</span> action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> session <span class="token operator">=</span> schema<span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span>entitiesState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>Post<span class="token punctuation">,</span> Comment<span class="token punctuation">}</span> <span class="token operator">=</span> session<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>payload<span class="token punctuation">}</span> <span class="token operator">=</span> action<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>postId<span class="token punctuation">,</span> commentId<span class="token punctuation">,</span> commentText<span class="token punctuation">}</span> <span class="token operator">=</span> payload<span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> post <span class="token operator">=</span> Post<span class="token punctuation">.</span><span class="token function">withId</span><span class="token punctuation">(</span>postId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    post<span class="token punctuation">.</span>comments<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>commentId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    Comment<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>id <span class="token punctuation">:</span> commentId<span class="token punctuation">,</span> text <span class="token punctuation">:</span> commentText<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> session<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the &quot;tables&quot; in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+    
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+
+    
+    <div class="powered-by-algolia">
+        powered by <a href="https://algolia.com" target="_blank"><img src="../../../gitbook/gitbook-plugin-algolia/algolia-logo.jpg" /></a>
+    </div>
+    
+
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="NormalizingStateShape.html" class="navigation navigation-prev " aria-label="Previous page: Normalizing State Shape">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="ReusingReducerLogic.html" class="navigation navigation-next " aria-label="Next page: Reusing Reducer Logic">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Updating Normalized Data","level":"1.5.9.8","depth":3,"next":{"title":"Reusing Reducer Logic","level":"1.5.9.9","depth":3,"path":"docs/recipes/reducers/ReusingReducerLogic.md","ref":"docs/recipes/reducers/ReusingReducerLogic.md","articles":[]},"previous":{"title":"Normalizing State Shape","level":"1.5.9.7","depth":3,"path":"docs/recipes/reducers/NormalizingStateShape.md","ref":"docs/recipes/reducers/NormalizingStateShape.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs","algolia"],"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/reactjs/redux/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"algolia":{"freeAccount":"false","index":"redux-docs","applicationID":"BC2QB3G2G4","publicKey":"75eb88bb56d8cf8d17b6366a2c8e5fcd"},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/reactjs/redux/tree/master"},"theme-default":{"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Redux","gitbook":"3.2.2"},"file":{"path":"docs/recipes/reducers/UpdatingNormalizedData.md","mtime":"2018-01-10T02:09:33.128Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-01-10T03:53:56.298Z"},"basePath":"../../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../../gitbook/gitbook.js"></script>
+    <script src="../../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-algolia/search-algolia.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

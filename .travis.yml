@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "8"
+before_install:
+  - npm i -g npm
+script:
+  - npm run examples:lint
+  - npm run examples:test
+branches:
+  only:
+    - master
+    - next
+cache:
+  directories:
+  - examples/async/node_modules
+  - examples/counter/node_modules
+  - examples/real-world/node_modules
+  - examples/shopping-cart/node_modules
+  - examples/todomvc/node_modules
+  - examples/todos/node_modules
+  - examples/todos-with-undo/node_modules
+  - examples/tree-view/node_modules
+  - examples/universal/node_modules

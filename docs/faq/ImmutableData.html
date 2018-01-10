@@ -1,0 +1,1579 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Immutable Data · Redux</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-algolia/plugin-algolia.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../../build/gitbook.css">
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="CodeStructure.html" />
+    
+    
+    <link rel="prev" href="Actions.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Read Me
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction/">
+            
+                <a href="../introduction/">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../introduction/Motivation.html">
+            
+                <a href="../introduction/Motivation.html">
+            
+                    
+                    Motivation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../introduction/CoreConcepts.html">
+            
+                <a href="../introduction/CoreConcepts.html">
+            
+                    
+                    Core Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../introduction/ThreePrinciples.html">
+            
+                <a href="../introduction/ThreePrinciples.html">
+            
+                    
+                    Three Principles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../introduction/PriorArt.html">
+            
+                <a href="../introduction/PriorArt.html">
+            
+                    
+                    Prior Art
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../introduction/LearningResources.html">
+            
+                <a href="../introduction/LearningResources.html">
+            
+                    
+                    Learning Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../introduction/Ecosystem.html">
+            
+                <a href="../introduction/Ecosystem.html">
+            
+                    
+                    Ecosystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../introduction/Examples.html">
+            
+                <a href="../introduction/Examples.html">
+            
+                    
+                    Examples
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../basics/">
+            
+                <a href="../basics/">
+            
+                    
+                    Basics
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../basics/Actions.html">
+            
+                <a href="../basics/Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../basics/Reducers.html">
+            
+                <a href="../basics/Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../basics/Store.html">
+            
+                <a href="../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../basics/DataFlow.html">
+            
+                <a href="../basics/DataFlow.html">
+            
+                    
+                    Data Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../basics/UsageWithReact.html">
+            
+                <a href="../basics/UsageWithReact.html">
+            
+                    
+                    Usage with React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../basics/ExampleTodoList.html">
+            
+                <a href="../basics/ExampleTodoList.html">
+            
+                    
+                    Example: Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../advanced/">
+            
+                <a href="../advanced/">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../advanced/AsyncActions.html">
+            
+                <a href="../advanced/AsyncActions.html">
+            
+                    
+                    Async Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../advanced/AsyncFlow.html">
+            
+                <a href="../advanced/AsyncFlow.html">
+            
+                    
+                    Async Flow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../advanced/Middleware.html">
+            
+                <a href="../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../advanced/UsageWithReactRouter.html">
+            
+                <a href="../advanced/UsageWithReactRouter.html">
+            
+                    
+                    Usage with React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../advanced/ExampleRedditAPI.html">
+            
+                <a href="../advanced/ExampleRedditAPI.html">
+            
+                    
+                    Example: Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" >
+            
+                <span>
+            
+                    
+                    Next Steps
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../recipes/">
+            
+                <a href="../recipes/">
+            
+                    
+                    Recipes
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../recipes/MigratingToRedux.html">
+            
+                <a href="../recipes/MigratingToRedux.html">
+            
+                    
+                    Migrating to Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../recipes/UsingObjectSpreadOperator.html">
+            
+                <a href="../recipes/UsingObjectSpreadOperator.html">
+            
+                    
+                    Using Object Spread Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../recipes/ReducingBoilerplate.html">
+            
+                <a href="../recipes/ReducingBoilerplate.html">
+            
+                    
+                    Reducing Boilerplate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../recipes/ServerRendering.html">
+            
+                <a href="../recipes/ServerRendering.html">
+            
+                    
+                    Server Rendering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../recipes/WritingTests.html">
+            
+                <a href="../recipes/WritingTests.html">
+            
+                    
+                    Writing Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../recipes/ComputingDerivedData.html">
+            
+                <a href="../recipes/ComputingDerivedData.html">
+            
+                    
+                    Computing Derived Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../recipes/ImplementingUndoHistory.html">
+            
+                <a href="../recipes/ImplementingUndoHistory.html">
+            
+                    
+                    Implementing Undo History
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../recipes/IsolatingSubapps.html">
+            
+                <a href="../recipes/IsolatingSubapps.html">
+            
+                    
+                    Isolating Subapps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="../recipes/StructuringReducers.html">
+            
+                <a href="../recipes/StructuringReducers.html">
+            
+                    
+                    Structuring Reducers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                <a href="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                    
+                    Prerequisite Concepts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.2" data-path="../recipes/reducers/BasicReducerStructure.html">
+            
+                <a href="../recipes/reducers/BasicReducerStructure.html">
+            
+                    
+                    Basic Reducer Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.3" data-path="../recipes/reducers/SplittingReducerLogic.html">
+            
+                <a href="../recipes/reducers/SplittingReducerLogic.html">
+            
+                    
+                    Splitting Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.4" data-path="../recipes/reducers/RefactoringReducersExample.html">
+            
+                <a href="../recipes/reducers/RefactoringReducersExample.html">
+            
+                    
+                    Refactoring Reducers Example
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.5" data-path="../recipes/reducers/UsingCombineReducers.html">
+            
+                <a href="../recipes/reducers/UsingCombineReducers.html">
+            
+                    
+                    Using combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.6" data-path="../recipes/reducers/BeyondCombineReducers.html">
+            
+                <a href="../recipes/reducers/BeyondCombineReducers.html">
+            
+                    
+                    Beyond combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.7" data-path="../recipes/reducers/NormalizingStateShape.html">
+            
+                <a href="../recipes/reducers/NormalizingStateShape.html">
+            
+                    
+                    Normalizing State Shape
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.8" data-path="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                <a href="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                    
+                    Updating Normalized Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.9" data-path="../recipes/reducers/ReusingReducerLogic.html">
+            
+                <a href="../recipes/reducers/ReusingReducerLogic.html">
+            
+                    
+                    Reusing Reducer Logic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.10" data-path="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                <a href="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                    
+                    Immutable Update Patterns
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9.11" data-path="../recipes/reducers/InitializingState.html">
+            
+                <a href="../recipes/reducers/InitializingState.html">
+            
+                    
+                    Initializing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="../recipes/UsingImmutableJS.html">
+            
+                <a href="../recipes/UsingImmutableJS.html">
+            
+                    
+                    Using Immutable.JS with Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../FAQ.html">
+            
+                <a href="../FAQ.html">
+            
+                    
+                    FAQ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="General.html">
+            
+                <a href="General.html">
+            
+                    
+                    General
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="Reducers.html">
+            
+                <a href="Reducers.html">
+            
+                    
+                    Reducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="OrganizingState.html">
+            
+                <a href="OrganizingState.html">
+            
+                    
+                    Organizing State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="StoreSetup.html">
+            
+                <a href="StoreSetup.html">
+            
+                    
+                    Store Setup
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="Actions.html">
+            
+                <a href="Actions.html">
+            
+                    
+                    Actions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.6" data-path="ImmutableData.html">
+            
+                <a href="ImmutableData.html">
+            
+                    
+                    Immutable Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="CodeStructure.html">
+            
+                <a href="CodeStructure.html">
+            
+                    
+                    Code Structure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="Performance.html">
+            
+                <a href="Performance.html">
+            
+                    
+                    Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="DesignDecisions.html">
+            
+                <a href="DesignDecisions.html">
+            
+                    
+                    Design Decisions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="ReactRedux.html">
+            
+                <a href="ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="Miscellaneous.html">
+            
+                <a href="Miscellaneous.html">
+            
+                    
+                    Miscellaneous
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../Troubleshooting.html">
+            
+                <a href="../Troubleshooting.html">
+            
+                    
+                    Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../Glossary.html">
+            
+                <a href="../Glossary.html">
+            
+                    
+                    Glossary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../api/">
+            
+                <a href="../api/">
+            
+                    
+                    API Reference
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../api/createStore.html">
+            
+                <a href="../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../api/Store.html">
+            
+                <a href="../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../api/combineReducers.html">
+            
+                <a href="../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../api/applyMiddleware.html">
+            
+                <a href="../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../api/bindActionCreators.html">
+            
+                <a href="../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../api/compose.html">
+            
+                <a href="../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../CHANGELOG.html">
+            
+                <a href="../../CHANGELOG.html">
+            
+                    
+                    Change Log
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../../PATRONS.html">
+            
+                <a href="../../PATRONS.html">
+            
+                    
+                    Patrons
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../Feedback.html">
+            
+                <a href="../Feedback.html">
+            
+                    
+                    Feedback
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Immutable Data</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="redux-faq-immutable-data">Redux FAQ: Immutable Data</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#benefits-of-immutability">What are the benefits of immutability?</a></li>
+<li><a href="#why-is-immutability-required">Why is immutability required by Redux?</a></li>
+<li><a href="#redux-shallow-checking-requires-immutability">Why does Redux&#x2019;s use of shallow equality checking require immutability?</a><ul>
+<li><a href="#shallow-and-deep-equality-checking">How do Shallow and Deep Equality Checking differ?</a></li>
+<li><a href="#how-redux-uses-shallow-checking">How does Redux use shallow equality checking?</a></li>
+<li><a href="#how-combine-reducers-uses-shallow-checking">How does <code>combineReducers</code> use shallow equality checking?</a></li>
+<li><a href="#how-react-redux-uses-shallow-checking">How does React-Redux use shallow equality checking?</a></li>
+<li><a href="#how-react-redux-determines-need-for-re-rendering">How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?</a></li>
+<li><a href="#no-shallow-equality-checking-with-mutable-objects">Why will shallow equality checking not work with mutable objects?</a></li>
+<li><a href="#shallow-checking-problems-with-redux">Does shallow equality checking with a mutable object cause problems with Redux?</a></li>
+<li><a href="#shallow-checking-problems-with-react-redux">Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?</a></li>
+<li><a href="#shallow-checking-stops-component-re-rendering">Why does a selector mutating and returning a persistent object  to <code>mapStateToProps</code> prevent React-Redux from re-rendering a wrapped component?</a></li>
+<li><a href="#immutability-enables-shallow-checking">How does immutability enable a shallow check to detect object mutations?</a></li>
+</ul>
+</li>
+<li><a href="#immutability-issues-with-redux">How can immutability in your reducers cause components to render unnecessarily?</a></li>
+<li><a href="#immutability-issues-with-react-redux">How can immutability in mapStateToProps cause components to render unnecessarily?</a></li>
+<li><a href="#do-i-have-to-use-immutable-js">What approaches are there for handling data immutability? Do I have to use Immutable.JS?</a></li>
+<li><a href="#issues-with-es6-for-immutable-ops">What are the issues with using JavaScript for immutable operations?</a></li>
+</ul>
+<p><a id="benefits-of-immutability"></a></p>
+<h2 id="what-are-the-benefits-of-immutability">What are the benefits of immutability?</h2>
+<p>Immutability can bring increased performance to your app, and leads to simpler programming and debugging, as data that never changes is easier to reason about than data that is free to be changed arbitrarily throughout your app.</p>
+<p>In particular, immutability in the context of a Web app enables sophisticated change detection techniques to be implemented simply and cheaply, ensuring the computationally expensive process of updating the DOM occurs only when it absolutely has to (a cornerstone of React&#x2019;s performance improvements over other libraries).</p>
+<h4 id="further-information">Further information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://auth0.com/blog/intro-to-immutable-js/" target="_blank">Introduction to Immutable.js and Functional Programming Concepts</a></li>
+<li><a href="https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf" target="_blank">JavaScript Immutability presentation (PDF - see slide 12 for benefits)</a></li>
+<li><a href="https://facebook.github.io/immutable-js/#the-case-for-immutability" target="_blank">Immutable.js - Immutable Collections for JavaScript</a></li>
+<li><a href="https://facebook.github.io/react/docs/optimizing-performance.html" target="_blank">React: Optimizing Performance</a></li>
+<li><a href="https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b#.djje0rfys" target="_blank">JavaScript Application Architecture On The Road To 2015</a></li>
+</ul>
+<p><a id="why-is-immutability-required"></a></p>
+<h2 id="why-is-immutability-required-by-redux">Why is immutability required by Redux?</h2>
+<ul>
+<li>Both Redux and React-Redux employ <a href="#shallow-and-deep-equality-checking">shallow equality checking</a>. In particular:<ul>
+<li>Redux&apos;s <code>combineReducers</code> utility <a href="#how-redux-uses-shallow-checking">shallowly checks for reference changes</a>  caused by the reducers that it calls.</li>
+<li>React-Redux&apos;s <code>connect</code> method generates components that <a href="#how-react-redux-uses-shallow-checking">shallowly check reference changes to the root state</a>, and the return values from the <code>mapStateToProps</code> function to see if the wrapped components actually need to re-render.
+Such <a href="#redux-shallow-checking-requires-immutability">shallow checking requires immutability</a> to function correctly.</li>
+</ul>
+</li>
+<li>Immutable data management ultimately makes data handling safer.</li>
+<li>Time-travel debugging requires that reducers be pure functions with no side effects, so that you can correctly jump between different states.</li>
+</ul>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html" target="_blank">Recipes: Prerequisite Reducer Concepts</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://www.reddit.com/r/reactjs/comments/5ecqqv/why_redux_need_reducers_to_be_pure_functions/dacmmjh/?context=3" target="_blank">Reddit: Why Redux Needs Reducers To Be Pure Functions</a></li>
+</ul>
+<p><a id="redux-shallow-checking-requires-immutability"></a></p>
+<h2 id="why-does-reduxs-use-of-shallow-equality-checking-require-immutability">Why does Redux&#x2019;s use of shallow equality checking require immutability?</h2>
+<p>Redux&apos;s use of shallow equality checking requires immutability if any connected components are to be updated correctly. To see why, we need to understand the difference between shallow and deep equality checking in JavaScript.</p>
+<p><a id="shallow-and-deep-equality-checking"></a></p>
+<h3 id="how-do-shallow-and-deep-equality-checking-differ">How do shallow and deep equality checking differ?</h3>
+<p>Shallow equality checking (or <em>reference equality</em>) simply checks that two different <em>variables</em> reference the same object; in contrast, deep equality checking (or <em>value equality</em>) must check every <em>value</em> of two objects&apos; properties.</p>
+<p>A shallow equality check is therefore as simple (and as fast) as <code>a === b</code>, whereas a deep equality check involves a recursive traversal through the properties of two objects, comparing the value of each property at each step.</p>
+<p>It&apos;s for this improvement in performance that Redux uses shallow equality checking.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/" target="_blank">Pros and Cons of using immutability with React.js</a></li>
+</ul>
+<p><a id="how-redux-uses-shallow-checking"></a></p>
+<h3 id="how-does-redux-use-shallow-equality-checking">How does Redux use shallow equality checking?</h3>
+<p>Redux uses shallow equality checking in its <code>combineReducers</code> function to return either a new mutated copy of the root state object, or, if no mutations have been made, the current root state object.  </p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/api/combineReducers.html" target="_blank">API: combineReducers</a></li>
+</ul>
+<p><a id="how-combine-reducers-uses-shallow-checking"></a></p>
+<h4 id="how-does-combinereducers-use-shallow-equality-checking">How does <code>combineReducers</code> use shallow equality checking?</h4>
+<p>The <a href="http://redux.js.org/docs/faq/Reducers.html#reducers-share-state" target="_blank">suggested structure</a> for a Redux store is to split the state object into multiple &quot;slices&quot; or &quot;domains&quot; by key, and provide a separate reducer function to manage each individual data slice.</p>
+<p><code>combineReducers</code> makes working with this style of structure easier by taking a  <code>reducers</code> argument that&#x2019;s defined as a hash table comprising a set of key/value pairs, where each key is the name of a state slice, and the corresponding value is the reducer function that will act on it.</p>
+<p>So, for example, if your state shape is <code>{ todos, counter }</code>, the call to <code>combineReducers</code> would be:</p>
+<pre class="language-"><code class="lang-js"><span class="token function">combineReducers</span><span class="token punctuation">(</span><span class="token punctuation">{</span> todos<span class="token punctuation">:</span> myTodosReducer<span class="token punctuation">,</span> counter<span class="token punctuation">:</span> myCounterReducer <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>where:</p>
+<ul>
+<li>the keys  <code>todos</code> and <code>counter</code> each refer to a separate state slice;</li>
+<li>the values <code>myTodosReducer</code> and <code>myCounterReducer</code> are reducer functions, with each acting on the state slice identified by the respective key.</li>
+</ul>
+<p><code>combineReducers</code> iterates through each of these key/value pairs. For each iteration, it:</p>
+<ul>
+<li>creates a reference to the current state slice referred to by each key;</li>
+<li>calls the  appropriate reducer and passes it the slice;</li>
+<li>creates a reference to the possibly-mutated state slice that&apos;s returned by the reducer.</li>
+</ul>
+<p>As  it continues through the iterations, <code>combineReducers</code> will construct a new state object with the state slices returned from each reducer. This new state object may or may not be different from the current state object. It is here that <code>combineReducers</code> uses shallow equality checking to determine whether the state has changed.</p>
+<p>Specifically, at each stage of the iteration, <code>combineReducers</code> performs a shallow equality check on the current state slice and the state slice returned from the reducer. If the reducer returns a new object, the shallow equality check will fail, and <code>combineReducers</code> will set a <code>hasChanged</code> flag to true.</p>
+<p>After the iterations have completed, <code>combineReducers</code> will check the state of the <code>hasChanged</code> flag. If it&#x2019;s true, the newly-constructed state object will be returned. If it&#x2019;s false, the <em>current</em> state object is returned.</p>
+<p>This is worth emphasizing: <em>If the reducers all return the same <code>state</code> object passed to them, then <code>combineReducers</code> will return the <em>current</em> root state object, not the newly updated one.</em></p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/api/combineReducers.html" target="_blank">API: combineReducers</a></li>
+<li><a href="http://redux.js.org/docs/faq/Reducers.html#reducers-share-state" target="_blank">Redux FAQ - How do I share state between two reducers? do I have to use <code>combineReducers</code>?</a></li>
+</ul>
+<p><strong>Video</strong></p>
+<ul>
+<li><a href="https://egghead.io/lessons/javascript-redux-implementing-combinereducers-from-scratch" target="_blank">Egghead.io: Redux: Implementing combineReducers() from Scratch</a></li>
+</ul>
+<p><a id="how-react-redux-uses-shallow-checking"></a></p>
+<h3 id="how-does-react-redux-use-shallow-equality-checking">How does React-Redux use shallow equality checking?</h3>
+<p>React-Redux uses shallow equality checking to determine whether the component it&#x2019;s wrapping needs to be re-rendered.</p>
+<p>To do this, it assumes that the wrapped component is pure; that is, that the component will produce the <a href="https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux" target="_blank">same results given the same props and state</a>.</p>
+<p>By assuming the wrapped component is pure, it need only check whether the root state object or the values returned from <code>mapStateToProps</code> have changed. If they haven&#x2019;t, the wrapped component does not need re-rendering.</p>
+<p>It detects a change by keeping a reference to the root state object, and a reference to <em>each value</em> in the props object that&apos;s returned from the <code>mapStateToProps</code> function.</p>
+<p>It then runs a shallow equality check on its reference to the root state object and the state object passed to it, and a separate series of shallow checks on each reference to the props object&#x2019;s values and those that are returned from running the <code>mapStateToProps</code> function again.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/basics/UsageWithReact.html" target="_blank">React-Redux Bindings</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options" target="_blank">API: React-Redux&#x2019;s connect function and <code>mapStateToProps</code></a></li>
+<li><a href="https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux" target="_blank">Troubleshooting: My views aren&#x2019;t updating when something changes outside of Redux</a></li>
+</ul>
+<h3 id="why-does-react-redux-shallowly-check-each-value-within-the-props-object-returned-from-mapstatetoprop">Why does React-Redux shallowly check each value within the props object returned from <code>mapStateToProp</code>?</h3>
+<p>React-Redux performs a shallow equality check on each <em>value</em> within the props object, not on the props object itself.</p>
+<p>It does so because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    todos<span class="token punctuation">:</span> state<span class="token punctuation">.</span>todos<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// prop value</span>
+    visibleTodos<span class="token punctuation">:</span> <span class="token function">getVisibleTodos</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// selector</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">connect</span><span class="token punctuation">(</span>mapStateToProps<span class="token punctuation">)</span><span class="token punctuation">(</span>TodoApp<span class="token punctuation">)</span>
+</code></pre>
+<p>As such, a shallow equality check of the props object returned from repeated calls to <code>mapStateToProps</code> would always fail, as a new object would be returned each time.</p>
+<p>React-Redux therefore maintains separate references to each <em>value</em> in the returned props object.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.gh07cm24f" target="_blank">React.js pure render performance anti-pattern</a></li>
+</ul>
+<p><a id="how-react-redux-determines-need-for-re-rendering"></a></p>
+<h3 id="how-does-react-redux-use-shallow-equality-checking-to-determine-whether-a-component-needs-re-rendering">How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?</h3>
+<p>Each time React-Redux&#x2019;s <code>connect</code> function is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call <code>mapStateToProps</code>.</p>
+<p>If the check fails, however, the root state object <em>has</em> been updated, and so <code>connect</code> will call <code>mapStateToProps</code>to see if the props for the wrapped component have been updated.</p>
+<p>It does this by performing a shallow equality check on each value within the object individually, and will only trigger a re-render if one of those checks fails.</p>
+<p>In the example below, if <code>state.todos</code> and the value returned from <code>getVisibleTodos()</code> do not change on successive calls to <code>connect</code>, then the component will not re-render .</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    todos<span class="token punctuation">:</span> state<span class="token punctuation">.</span>todos<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// prop value</span>
+    visibleTodos<span class="token punctuation">:</span> <span class="token function">getVisibleTodos</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// selector</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">connect</span><span class="token punctuation">(</span>mapStateToProps<span class="token punctuation">)</span><span class="token punctuation">(</span>TodoApp<span class="token punctuation">)</span>
+</code></pre>
+<p>Conversely,  in this next example (below), the component will <em>always</em> re-render, as the value of <code>todos</code> is always a new object, regardless of whether or not its values change:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// AVOID - will always cause a re-render</span>
+<span class="token keyword">function</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// todos always references a newly-created object</span>
+    todos<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      all<span class="token punctuation">:</span> state<span class="token punctuation">.</span>todos<span class="token punctuation">,</span>
+      visibleTodos<span class="token punctuation">:</span> <span class="token function">getVisibleTodos</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">connect</span><span class="token punctuation">(</span>mapStateToProps<span class="token punctuation">)</span><span class="token punctuation">(</span>TodoApp<span class="token punctuation">)</span>
+</code></pre>
+<p>If the shallow equality check fails between the new values returned from  <code>mapStateToProps</code> and the previous values that React-Redux kept a reference to, then a re-rendering of the component will be triggered.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/" target="_blank">Practical Redux, Part 6: Connected Lists, Forms, and Performance</a></li>
+<li><a href="https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.sb708slq6" target="_blank">React.js Pure Render Performance Anti-Pattern</a></li>
+<li><a href="http://somebody32.github.io/high-performance-redux/" target="_blank">High Performance Redux Apps</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/1816" target="_blank">#1816: Component connected to state with <code>mapStateToProps</code></a></li>
+<li><a href="https://github.com/reactjs/react-redux/issues/300" target="_blank">#300: Potential connect() optimization</a></li>
+</ul>
+<p><a id="no-shallow-equality-checking-with-mutable-objects"></a></p>
+<h3 id="why-will-shallow-equality-checking-not-work-with-mutable-objects">Why will shallow equality checking not work with mutable objects?</h3>
+<p>Shallow equality checking cannot be used to detect if a function mutates an object passed into it if that object is mutable.</p>
+<p>This is because two variables that reference the same object will <em>always</em> be equal, regardless of whether the object&#x2019;s values changes or not, as they&apos;re both referencing the same object. Thus, the following will always return true:</p>
+<pre class="language-"><code class="lang-js"><span class="token keyword">function</span> <span class="token function">mutateObj</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  obj<span class="token punctuation">.</span>key <span class="token operator">=</span> <span class="token string">&apos;newValue&apos;</span>
+  <span class="token keyword">return</span> obj
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> param <span class="token operator">=</span> <span class="token punctuation">{</span> key<span class="token punctuation">:</span> <span class="token string">&apos;originalValue&apos;</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> returnVal <span class="token operator">=</span> <span class="token function">mutateObj</span><span class="token punctuation">(</span>param<span class="token punctuation">)</span>
+
+param <span class="token operator">===</span> returnVal
+<span class="token comment" spellcheck="true">//&gt; true</span>
+</code></pre>
+<p>The shallow check of <code>param</code> and <code>returnValue</code> simply checks whether both variables reference the same object, which they do.<code>mutateObj()</code> may return a mutated version of <code>obj</code>, but it&apos;s still the same object as that passed in. The fact that its values have been changed within <code>mutateObj</code> matters not at all to a shallow check.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/" target="_blank">Pros and Cons of using immutability with React.js</a></li>
+</ul>
+<p><a id="shallow-checking-problems-with-redux"></a></p>
+<h3 id="does-shallow-equality-checking-with-a-mutable-object-cause-problems-with-redux">Does shallow equality checking with a mutable object cause problems with Redux?</h3>
+<p>Shallow equality checking with a mutable object will not cause problems with Redux, but <a href="#shallow-checking-problems-with-react-redux">it will cause problems with libraries that depend on the store, such as React-Redux</a>.</p>
+<p>Specifically, if the state slice passed to a reducer by <code>combineReducers</code> is a mutable object, the reducer can modify it directly and return it.</p>
+<p>If it does, the shallow equality check that <code>combineReducers</code> performs will always pass, as the values of the state slice returned by the reducer may have been mutated, but the object itself has not - it&#x2019;s still the same object that was passed to the reducer.</p>
+<p>Accordingly, <code>combineReducers</code> will not set its <code>hasChanged</code> flag, even though the state has changed. If none of the other reducers return a new, updated state slice, the <code>hasChanged</code> flag will remain set to false, causing <code>combineReducers</code> to return the <em>existing</em> root state object.</p>
+<p>The store will still be updated with the new values for the root state, but because the root state object itself is still the same object, libraries that bind to Redux, such as React-Redux, will not be aware of the state&#x2019;s mutation, and so will not trigger a wrapped component&#x2019;s re-rendering.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html" target="_blank">Recipes: Immutable Update Patterns</a></li>
+<li><a href="http://redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments" target="_blank">Troubleshooting: Never mutate reducer arguments</a></li>
+</ul>
+<p><a id="shallow-checking-problems-with-react-redux"></a></p>
+<h3 id="why-does-a-reducer-mutating-the-state-prevent-react-redux-from-re-rendering-a-wrapped-component">Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?</h3>
+<p>If a Redux reducer directly mutates, and returns, the state object passed into it, the values of the root state object will change, but the object itself will not.</p>
+<p>Because React-Redux performs a shallow check on the root state object to determine if its wrapped components need re-rendering or not, it will not be able to detect the state mutation, and so will not trigger a re-rendering.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux" target="_blank">Troubleshooting: My views aren&#x2019;t updating when something changes outside of Redux</a></li>
+</ul>
+<p><a id="shallow-checking-stops-component-re-rendering"></a></p>
+<h3 id="why-does-a-selector-mutating-and-returning-a-persistent-object--to-mapstatetoprops-prevent-react-redux-from-re-rendering-a-wrapped-component">Why does a selector mutating and returning a persistent object  to <code>mapStateToProps</code> prevent React-Redux from re-rendering a wrapped component?</h3>
+<p>If one of the values of the props object returned from <code>mapStateToProps</code> is an object that persists across calls to <code>connect</code> (such as, potentially, the root state object), yet is directly mutated and returned by a selector function,  React-Redux will not be able to detect the mutation, and so will not trigger a re-render of the wrapped component.</p>
+<p>As we&#x2019;ve seen, the values in the mutable object returned by the selector function may have changed, but the object itself has not, and shallow equality checking only compares the objects themselves, not their values.</p>
+<p>For example, the following <code>mapStateToProps</code> function will  never trigger a re-render:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// State object held in the Redux store</span>
+<span class="token keyword">const</span> state <span class="token operator">=</span> <span class="token punctuation">{</span>
+  user<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    accessCount<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    name<span class="token punctuation">:</span> <span class="token string">&apos;keith&apos;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// Selector function</span>
+<span class="token keyword">const</span> getUser <span class="token operator">=</span> state <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token operator">++</span>state<span class="token punctuation">.</span>user<span class="token punctuation">.</span>accessCount <span class="token comment" spellcheck="true">// mutate the state object</span>
+  <span class="token keyword">return</span> state
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// mapStateToProps</span>
+<span class="token keyword">const</span> mapStateToProps <span class="token operator">=</span> state <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// The object returned from getUser() is always</span>
+  <span class="token comment" spellcheck="true">// the same object, so this wrapped</span>
+  <span class="token comment" spellcheck="true">// component will never re-render, even though it&apos;s been</span>
+  <span class="token comment" spellcheck="true">// mutated</span>
+  userRecord<span class="token punctuation">:</span> <span class="token function">getUser</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+<span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+
+a<span class="token punctuation">.</span>userRecord <span class="token operator">===</span> b<span class="token punctuation">.</span>userRecord
+<span class="token comment" spellcheck="true">//&gt; true</span>
+</code></pre>
+<p>Note that, conversely, if an <em>immutable</em> object is used, the <a href="#immutability-issues-with-react-redux">component may re-render when it should not</a>.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/" target="_blank">Practical Redux, Part 6: Connected Lists, Forms, and Performance</a></li>
+</ul>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/1948" target="_blank">#1948: Is getMappedItems an anti-pattern in mapStateToProps?</a></li>
+</ul>
+<p><a id="immutability-enables-shallow-checking"></a></p>
+<h3 id="how-does-immutability-enable-a-shallow-check-to-detect-object-mutations">How does immutability enable a shallow check to detect object mutations?</h3>
+<p>If an object is immutable, any changes that need to be made to it within a function must be made to a <em>copy</em> of the object.</p>
+<p>This mutated copy is a <em>separate</em> object from that passed into the function, and so when it is returned, a shallow check will identify it as being a different object from that passed in, and so will fail.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/" target="_blank">Pros and Cons of using immutability with React.js</a></li>
+</ul>
+<p><a id="immutability-issues-with-redux"></a></p>
+<h3 id="how-can-immutability-in-your-reducers-cause-components-to-render-unnecessarily">How can immutability in your reducers cause components to render unnecessarily?</h3>
+<p>You cannot mutate an immutable object; instead, you must mutate a copy of it, leaving the original intact.</p>
+<p>That&#x2019;s perfectly OK when you mutate the copy, but in the context of a reducer, if you return a copy that <em>hasn&#x2019;t</em> been mutated, Redux&#x2019;s <code>combineReducers</code> function will still think that the state needs to be updated, as you&apos;re returning an entirely different object from the state slice object that was passed in.</p>
+<p><code>combineReducers</code> will then return this new root state object to the store. The new object will have the same values as the current root state object, but because it&apos;s a different object, it will cause the store to be updated, which will ultimately cause all connected components to be re-rendered unnecessarily.</p>
+<p>To prevent this from happening, you must <em>always return the state slice object that&#x2019;s passed into a reducer if the reducer does not mutate the state.</em></p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.5hmnwygsy" target="_blank">React.js pure render performance anti-pattern</a></li>
+<li><a href="https://www.toptal.com/react/react-redux-and-immutablejs" target="_blank">Building Efficient UI with React and Redux</a></li>
+</ul>
+<p><a id="immutability-issues-with-react-redux"></a></p>
+<h3 id="how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily">How can immutability in <code>mapStateToProps</code> cause components to render unnecessarily?</h3>
+<p>Certain immutable operations, such as an Array filter, will always return a new object, even if the values themselves have not changed.</p>
+<p>If such an operation is used as a selector function in <code>mapStateToProps</code>, the shallow equality check that React-Redux performs on each value
+in the props object that&#x2019;s returned will always fail, as the selector is returning a new object each time.</p>
+<p>As such, even though the values of that new object have not changed, the wrapped component will always be re-rendered,</p>
+<p>For example, the following  will always trigger a re-render:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// A JavaScript array&apos;s &apos;filter&apos; method treats the array as immutable,</span>
+<span class="token comment" spellcheck="true">// and returns a filtered copy of the array.</span>
+<span class="token keyword">const</span> getVisibleTodos <span class="token operator">=</span> todos <span class="token operator">=</span><span class="token operator">&gt;</span> todos<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>t <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token operator">!</span>t<span class="token punctuation">.</span>completed<span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> state <span class="token operator">=</span> <span class="token punctuation">{</span>
+  todos<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      text<span class="token punctuation">:</span> <span class="token string">&apos;do todo 1&apos;</span><span class="token punctuation">,</span>
+      completed<span class="token punctuation">:</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      text<span class="token punctuation">:</span> <span class="token string">&apos;do todo 2&apos;</span><span class="token punctuation">,</span>
+      completed<span class="token punctuation">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> mapStateToProps <span class="token operator">=</span> state <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// getVisibleTodos() always returns a new array, and so the</span>
+  <span class="token comment" spellcheck="true">// &apos;visibleToDos&apos; prop will always reference a different array,</span>
+  <span class="token comment" spellcheck="true">// causing the wrapped component to re-render, even if the array&apos;s</span>
+  <span class="token comment" spellcheck="true">// values haven&apos;t changed</span>
+  visibleToDos<span class="token punctuation">:</span> <span class="token function">getVisibleTodos</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>todos<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//  Call mapStateToProps(state) again with exactly the same arguments</span>
+<span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token function">mapStateToProps</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+
+a<span class="token punctuation">.</span>visibleToDos
+<span class="token comment" spellcheck="true">//&gt; { &quot;completed&quot;: false, &quot;text&quot;: &quot;do todo 1&quot; }</span>
+
+b<span class="token punctuation">.</span>visibleToDos
+<span class="token comment" spellcheck="true">//&gt; { &quot;completed&quot;: false, &quot;text&quot;: &quot;do todo 1&quot; }</span>
+
+a<span class="token punctuation">.</span>visibleToDos <span class="token operator">===</span> b<span class="token punctuation">.</span>visibleToDos
+<span class="token comment" spellcheck="true">//&gt; false</span>
+</code></pre>
+<p>Note that, conversely, if the values in your props object refer to mutable objects, <a href="#shallow-checking-stops-component-re-rendering">your component may not render when it should</a>.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.b8bpx1ncj" target="_blank">React.js pure render performance anti-pattern</a></li>
+<li><a href="https://www.toptal.com/react/react-redux-and-immutablejs" target="_blank">Building Efficient UI with React and Redux</a></li>
+<li><a href="https://medium.com/@AlexFaunt/immutablejs-worth-the-price-66391b8742d4#.a3alci2g8" target="_blank">ImmutableJS: worth the price?</a></li>
+</ul>
+<p><a id="do-i-have-to-use-immutable-js"></a></p>
+<h2 id="what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutablejs">What approaches are there for handling data immutability? Do I have to use Immutable.JS?</h2>
+<p>You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.</p>
+<p>However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app&#x2019;s development much easier.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Discussions</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/1422" target="_blank">#1185: Question: Should I use immutable data structures?</a></li>
+<li><a href="https://auth0.com/blog/intro-to-immutable-js/" target="_blank">Introduction to Immutable.js and Functional Programming Concepts</a></li>
+</ul>
+<p><a id="issues-with-es6-for-immutable-ops"></a></p>
+<h2 id="what-are-the-issues-with-using-plain-javascript-for-immutable-operations">What are the issues with using plain JavaScript for immutable operations?</h2>
+<p>JavaScript was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use it for your immutable operations in your Redux app.</p>
+<h3 id="accidental-object-mutation">Accidental Object Mutation</h3>
+<p>With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new <em>reference</em> to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.</p>
+<p>To avoid these issues, ensure you follow the recommended <a href="http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html" target="_blank">immutable update patterns for ES6</a>.</p>
+<h3 id="verbose-code">Verbose Code</h3>
+<p>Updating complex nested state trees can lead to verbose code that is tedious to write and difficult to debug.</p>
+<h3 id="poor-performance">Poor Performance</h3>
+<p>Operating on JavaScript objects and arrays in an immutable way can be slow, particularly as your state tree grows larger.</p>
+<p>Remember, to change an immutable object, you must mutate a <em>copy</em> of it, and copying large objects can be slow as every property must be copied.</p>
+<p>In contrast, immutable libraries such as Immutable.JS can employ sophisticated optimization techniques such as <a href="http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015" target="_blank">structural sharing</a> , which effectively returns a new object that reuses much of the existing object being copied from.</p>
+<p>For copying very large objects, <a href="https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi" target="_blank">plain JavaScript can be over 100 times slower</a> than an optimized immutable library.</p>
+<h4 id="further-information">Further Information</h4>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html" target="_blank">Immutable Update Patterns for ES6</a></li>
+</ul>
+<p><strong>Articles</strong></p>
+<ul>
+<li><a href="https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.a2jimoiaf" target="_blank">Immutable.js, persistent data structures and structural sharing</a></li>
+<li><a href="http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015" target="_blank">A deep dive into Clojure&#x2019;s data structures</a></li>
+<li><a href="https://auth0.com/blog/intro-to-immutable-js/" target="_blank">Introduction to Immutable.js and Functional Programming Concepts</a></li>
+<li><a href="http://t4d.io/javascript-and-immutability/" target="_blank">JavaScript and Immutability</a></li>
+<li><a href="http://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/" target="_blank">Immutable Javascript using ES6 and beyond</a></li>
+<li><a href="http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/" target="_blank">Pros and Cons of using immutability with React.js - React Kung Fu</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+    
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+
+    
+    <div class="powered-by-algolia">
+        powered by <a href="https://algolia.com" target="_blank"><img src="../../gitbook/gitbook-plugin-algolia/algolia-logo.jpg" /></a>
+    </div>
+    
+
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Actions.html" class="navigation navigation-prev " aria-label="Previous page: Actions">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="CodeStructure.html" class="navigation navigation-next " aria-label="Next page: Code Structure">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Immutable Data","level":"1.6.6","depth":2,"next":{"title":"Code Structure","level":"1.6.7","depth":2,"path":"docs/faq/CodeStructure.md","ref":"docs/faq/CodeStructure.md","articles":[]},"previous":{"title":"Actions","level":"1.6.5","depth":2,"path":"docs/faq/Actions.md","ref":"docs/faq/Actions.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","-highlight","github","anchorjs","algolia"],"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/reactjs/redux/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"algolia":{"freeAccount":"false","index":"redux-docs","applicationID":"BC2QB3G2G4","publicKey":"75eb88bb56d8cf8d17b6366a2c8e5fcd"},"fontsettings":{"theme":"white","family":"sans","size":2},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/reactjs/redux/tree/master"},"theme-default":{"styles":{"website":"build/gitbook.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Redux","gitbook":"3.2.2"},"file":{"path":"docs/faq/ImmutableData.md","mtime":"2018-01-10T02:09:32.795Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2018-01-10T03:53:56.298Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.1/anchor.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-algolia/search-algolia.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
