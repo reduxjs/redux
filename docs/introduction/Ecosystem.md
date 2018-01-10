@@ -557,25 +557,25 @@ Integration between Firebase, React, and Redux
 
 #### Async Behavior
 
-**[rt2zz/redux-action-buffer](https://github.com/rt2zz/redux-action-buffer)** 
+**[rt2zz/redux-action-buffer](https://github.com/rt2zz/redux-action-buffer)**  
 Buffers all actions into a queue until a breaker condition is met, at which point the queue is released
 
-**[wyze/redux-debounce](https://github.com/wyze/redux-debounce)** 
+**[wyze/redux-debounce](https://github.com/wyze/redux-debounce)**  
 FSA-compliant middleware for Redux to debounce actions.
 
-**[mathieudutour/redux-queue-offline](https://github.com/mathieudutour/redux-queue-offline)** 
+**[mathieudutour/redux-queue-offline](https://github.com/mathieudutour/redux-queue-offline)**  
 Queue actions when offline and dispatch them when getting back online.
 
 
 #### Analytics
 
-**[rangle/redux-beacon](https://github.com/rangle/redux-beacon)** 
+**[rangle/redux-beacon](https://github.com/rangle/redux-beacon)**  
 Integrates with any analytics services, can track while offline, and decouples analytics logic from app logic
 
-**[hyperlab/redux-insights](https://github.com/hyperlab/redux-insights)** 
+**[hyperlab/redux-insights](https://github.com/hyperlab/redux-insights)**  
 Analytics and tracking with an easy API for writing your own adapters
 
-**[markdalgleish/redux-analytics](https://github.com/markdalgleish/redux-analytics)** 
+**[markdalgleish/redux-analytics](https://github.com/markdalgleish/redux-analytics)**  
 Watches for Flux Standard Actions with meta analytics values and processes them
 
 
