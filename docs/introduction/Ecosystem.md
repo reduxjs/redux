@@ -307,6 +307,16 @@ const obj3 = icepicke.merge(obj1, obj2);
 
 #### Immutable Update Utilities
 
+
+**[mweststrate/immer](https://github.com/mweststrate/immer)**  
+Immutable updates with normal mutative code, using Proxies
+```js
+const nextState = produce(baseState, draftState => {
+    draftState.push({ todo: "Tweet about it" })
+    draftState[1].done = true
+})
+```
+
 **[kolodny/immutability-helper]()**  
 A drop-in replacement for react-addons-update
 ```js
@@ -319,12 +329,8 @@ const newData = update(myData, {
 **[mariocasciaro/object-path-immutable]()**  
 Simpler alternative to immutability-helpers and Immutable.js
 ```js
-const newObj = immutable(obj)
-                   .set('a.b', 'f')
-                   .del(['a', 'c', 0])
-                   .value()
+const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
 ```
-
 
 
 **[debitoor/dot-prop-immutable]()**  
@@ -334,13 +340,6 @@ const newState = dotProp.set(state, `todos.${index}.complete`, true)
 const endOfArray = dotProp.get(obj, 'foo.$end')
 ```
 
-**[hex13/transmutable]()**  
-Immutable updates with normal mutative code, using Proxies
-```js
-const copy = transform(foo, stage => {
-    stage.bar.baz = 123; 
-});
-```
 
 #### Immutable/Redux Interop
 
