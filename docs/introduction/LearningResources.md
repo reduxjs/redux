@@ -20,7 +20,7 @@ This page includes our recommendations for some of the best external resources a
   Dan Abramov's second video tutorial series, continuing directly after the first.  Includes lessons on store initial state, using Redux with React Router, using "selector" functions, normalizing state, use of Redux middleware, async action creators, and more.  The linked Github repo contains notes and transcriptions of the videos.
   
 - **Live React: Hot Reloading and Time Travel**  
-  http://youtube.com/watch?v=xsSnOQynTHs
+  http://youtube.com/watch?v=xsSnOQynTHs  
   Dan Abramov's original conference talk that introduced Redux.  See how constraints enforced by Redux make hot reloading with time travel easy
   
 - **A Cartoon Guide to Redux**  
