@@ -243,14 +243,14 @@ store.dispatch(batchActions([ {type : "INCREMENT"}, {type : "INCREMENT"} ]))
 #### Persistence
 
 
-**[rt2zz/redux-persist]()**  
+**[rt2zz/redux-persist](https://github.com/rt2zz/redux-persist)**  
 Persist and rehydrate a Redux store, with many extensible options
 ```js
 const store = createStore( reducer, autoRehydrate());
 persistStore(store);
 ```
 
-**[react-stack/redux-storage]()**  
+**[react-stack/redux-storage](https://github.com/react-stack/redux-storage)**  
 Persistence layer for Redux with flexible backends
 ```js
 const reducer = storage.reducer(combineReducers(reducers));
@@ -259,7 +259,7 @@ const storageMiddleware = storage.createMiddleware(engine);
 const store = createStore(reducer, applyMiddleware(storageMiddleware));
 ```
 
-**[redux-offline/redux-offline]()**  
+**[redux-offline/redux-offline](https://github.com/redux-offline/redux-offline)**  
 Persistent store for Offline-First apps, with support for optimistic UIs
 ```js
 const store = createStore(reducer, offline(offlineConfig));
@@ -274,7 +274,7 @@ store.dispatch({
 
 #### Data Structures
 
-**[facebook/immutable-js]()**  
+**[facebook/immutable-js](https://github.com/facebook/immutable-js)**  
 Immutable persistent data collections for Javascript
 ```js
 const map1 = Map({ a: 1, b: 2, c: 3 })
@@ -283,14 +283,14 @@ map1.get('b') // 2
 map2.get('b') // 50
 ```
 
-**[rtfeldman/seamless-immutable]()**  
+**[rtfeldman/seamless-immutable](https://github.com/rtfeldman/seamless-immutable)**  
 Frozen immutable arrays/objects, backwards-compatible with JS
 ```js
 const array = Immutable(["totally", "immutable", {a : 42}]);
 array[0] = "edited"; // does nothing
 ```
 
-**[planttheidea/crio]()**  
+**[planttheidea/crio](https://github.com/planttheidea/crio)**  
 Immutable JS objects with a natural API
 ```js
 const foo = crio(['foo']);
@@ -298,7 +298,7 @@ const fooBar = foo.push('bar'); // new array: ['foo', 'bar']
 ```
 
 
-**[aearly/icepick]()**  
+**[aearly/icepick](https://github.com/aearly/icepick)**  
 Utilities for treating frozen JS objects as persistent immutable collections.
 ```js
 const newObj = icepick.assocIn({c : {d : "bar" } }, ["c", "d"], "baz");
@@ -317,7 +317,7 @@ const nextState = produce(baseState, draftState => {
 })
 ```
 
-**[kolodny/immutability-helper]()**  
+**[kolodny/immutability-helper](https://github.com/kolodny/immutability-helper)**  
 A drop-in replacement for react-addons-update
 ```js
 const newData = update(myData, {
@@ -326,14 +326,14 @@ const newData = update(myData, {
 });
 ```
 
-**[mariocasciaro/object-path-immutable]()**  
+**[mariocasciaro/object-path-immutable](https://github.com/mariocasciaro/object-path-immutable)**  
 Simpler alternative to immutability-helpers and Immutable.js
 ```js
 const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
 ```
 
 
-**[debitoor/dot-prop-immutable]()**  
+**[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)**  
 Immutable version of the dot-prop lib, with some extensions
 ```js
 const newState = dotProp.set(state, `todos.${index}.complete`, true)
@@ -343,7 +343,7 @@ const endOfArray = dotProp.get(obj, 'foo.$end')
 
 #### Immutable/Redux Interop
 
-**[gajus/redux-immutable]()**  
+**[gajus/redux-immutable](https://github.com/gajus/redux-immutable)**  
 combineReducers equivalent that works with Immutable.js Maps
 ```js
 const initialState = Immutable.Map();
@@ -351,7 +351,7 @@ const rootReducer = combineReducers({});
 const store = createStore(rootReducer, initialState);
 ```
 
-**[eadmundo/redux-seamless-immutable]()**  
+**[eadmundo/redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable)**  
 combineReducers equivalent that works with seamless-immutable values
 ```js
 import { combineReducers } from 'redux-seamless-immutable';
