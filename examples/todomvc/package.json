@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "enzyme": "^2.8.2",
+    "json-server": "0.12.1",
     "react-addons-test-utils": "^15.5.1",
     "react-scripts": "^1.0.2"
   },
@@ -18,9 +19,11 @@
     "todomvc-app-css": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "(nohup npm run server &) && react-scripts start",
+    "server": "json-server db.js --port 3004",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "test": "react-scripts test"
-  }
+  },
+  "proxy": "http://localhost:3004/"
 }
