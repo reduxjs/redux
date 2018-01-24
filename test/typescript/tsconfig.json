@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "lib": ["es2015", "dom"],
+    "strict": true,
+    "baseUrl": "../..",
+    "paths": {
+      "redux": "index.d.ts"
+    }
+  }
+}
