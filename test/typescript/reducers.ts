@@ -39,11 +39,14 @@ function simple() {
   // typings:expect-error
   reducer('string', { type: 'INCREMENT' })
 
-  // Combined reducer also accepts any action.
-  const combined = combineReducers({ sub: reducer })
+  type RootState = { sub: State; sub2: State };
 
-  let cs: { sub: State } = combined(undefined, { type: 'init' })
+  // Combined reducer also accepts any action.
+  const combined = combineReducers({ sub: reducer, sub2: reducer })
+
+  let cs: RootState = combined(undefined, { type: 'init' })
   cs = combined(cs, { type: 'INCREMENT', count: 10 })
+  cs = combined({ sub: 1 }, { type: 'INCREMENT', count: 10 })
 
   // Combined reducer's state is strictly checked.
   // typings:expect-error
