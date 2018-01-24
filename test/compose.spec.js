@@ -36,6 +36,8 @@ describe('Utils', () => {
       const square = x => x * x
       const add = (x, y) => x + y
       expect(compose(square, add)(1, 2)).toBe(9)
+      expect(compose(square, add)(1, 3)).toBe(16)
+      expect(compose(square, add)(2, 3)).toBe(25)
     })
 
     it('returns the first given argument if given no functions', () => {
