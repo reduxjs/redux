@@ -68,7 +68,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error(
         'You may not call store.getState() while the reducer is executing. ' +
           'The reducer has already received the state as an argument. ' +
-          'Pass it down from the top reducer instead of reading it from the store.',
+          'Pass it down from the top reducer instead of reading it from the store.'
       )
     }
 
@@ -108,7 +108,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
         'You may not call store.subscribe() while the reducer is executing. ' +
           'If you would like to be notified after the store has been updated, subscribe from a ' +
           'component and invoke store.getState() in the callback to access the latest state. ' +
-          'See http://redux.js.org/docs/api/Store.html#subscribe for more details.',
+          'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
       )
     }
 
@@ -125,7 +125,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       if (isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
-            'See http://redux.js.org/docs/api/Store.html#subscribe for more details.',
+            'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
         )
       }
 
@@ -166,14 +166,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
     if (!isPlainObject(action)) {
       throw new Error(
         'Actions must be plain objects. ' +
-          'Use custom middleware for async actions.',
+          'Use custom middleware for async actions.'
       )
     }
 
     if (typeof action.type === 'undefined') {
       throw new Error(
         'Actions may not have an undefined "type" property. ' +
-          'Have you misspelled a constant?',
+          'Have you misspelled a constant?'
       )
     }
 
@@ -251,7 +251,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
       [$$observable]() {
         return this
-      },
+      }
     }
   }
 
@@ -265,6 +265,6 @@ export default function createStore(reducer, preloadedState, enhancer) {
     subscribe,
     getState,
     replaceReducer,
-    [$$observable]: observable,
+    [$$observable]: observable
   }
 }
