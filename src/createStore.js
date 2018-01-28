@@ -107,7 +107,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       filter = filter === true ? pure_filter : false
     }
 
-    const nextListener = {listener, filter}
+    const nextListener = { listener, filter }
 
     if (isDispatching) {
       throw new Error(
@@ -202,9 +202,9 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
     const listeners = (currentListeners = nextListeners)
     for (let i = 0; i < listeners.length; i++) {
-      const {listener, filter} = listeners[i]
+      const { listener, filter } = listeners[i]
       const apply_filter = filter && filter(oldState, currentState)
-      if (! apply_filter) {
+      if (!apply_filter) {
         listener()
       }
     }
