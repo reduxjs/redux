@@ -104,7 +104,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
 
     if (typeof filter !== 'function') {
-      filter = (filter === true) ? pure_filter : false
+      filter = filter === true ? pure_filter : false
     }
 
     const nextListener = {listener, filter}
