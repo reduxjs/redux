@@ -98,10 +98,16 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * @param {Function} listener A callback to be invoked on every dispatch.
    * @returns {Function} A function to remove this change listener.
    */
-  function subscribe(listener) {
+  function subscribe(listener, filter) {
     if (typeof listener !== 'function') {
       throw new Error('Expected the listener to be a function.')
     }
+
+    if (typeof filter !== 'function') {
+      filter = (filter === true) ? pure_filter : false
+    }
+
+    const nextListener = {listener, filter}
 
     if (isDispatching) {
       throw new Error(
@@ -115,7 +121,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     let isSubscribed = true
 
     ensureCanMutateNextListeners()
-    nextListeners.push(listener)
+    nextListeners.push(nextListener)
 
     return function unsubscribe() {
       if (!isSubscribed) {
@@ -132,9 +138,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      const index = nextListeners.indexOf(listener)
+      const index = nextListeners.indexOf(nextListener)
       nextListeners.splice(index, 1)
     }
+  }
+
+  function pure_filter(oldState, newState) {
+    return oldState === newState
   }
 
   /**
@@ -181,6 +191,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Reducers may not dispatch actions.')
     }
 
+    const oldState = currentState
+
     try {
       isDispatching = true
       currentState = currentReducer(currentState, action)
@@ -190,8 +202,11 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
     const listeners = (currentListeners = nextListeners)
     for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+      const {listener, filter} = listeners[i]
+      const apply_filter = filter && filter(oldState, currentState)
+      if (! apply_filter) {
+        listener()
+      }
     }
 
     return action
