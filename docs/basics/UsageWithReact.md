@@ -97,7 +97,7 @@ We will also need some container components to connect the presentational compon
 
 ### Designing Other Components
 
-Sometimes it's hard to tell if some component should be a presentational component or a container. For example, sometimes form and function are really coupled together, such as in case of this tiny component:
+Sometimes it's hard to tell if some component should be a presentational component or a container. For example, sometimes form and function are really coupled together, such as in the case of this tiny component:
 
 * **`AddTodo`** is an input field with an “Add” button
 
