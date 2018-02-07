@@ -40,6 +40,25 @@ describe('applyMiddleware', () => {
     ])
   })
 
+  it('should pass store.replaceReducer to middleware', () => {
+    function test(spyOnMethods) {
+      return methods => {
+        spyOnMethods(methods)
+        return next => action => next(action)
+      }
+    }
+
+    const spy = jest.fn();
+    const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos);
+
+    store.dispatch(addTodo('Use Redux'));
+    store.dispatch(addTodo('Flux FTW!'));
+
+    expect(spy).toHaveBeenCalledWith(expect.objectContaining({
+      replaceReducer: expect.any(Function)
+    }));
+  });
+
   it('passes recursive dispatches through the middleware chain', () => {
     function test(spyOnMethods) {
       return () => next => action => {
