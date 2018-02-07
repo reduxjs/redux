@@ -209,7 +209,7 @@ const App = ({ match: { params } }) => {
 
 ## Next Steps
 
-Now that you know how to do basic routing, you can learn more about [React Router API](https://github.com/reactjs/react-router/tree/v3/docs/)
+Now that you know how to do basic routing, you can learn more about [React Router API](https://reacttraining.com/react-router/)
 
 >##### Note About Other Routing Libraries
 
