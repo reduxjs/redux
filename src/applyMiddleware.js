@@ -29,6 +29,7 @@ export default function applyMiddleware(...middlewares) {
 
     const middlewareAPI = {
       getState: store.getState,
+      replaceReducer: store.replaceReducer,
       dispatch: (...args) => dispatch(...args)
     }
     chain = middlewares.map(middleware => middleware(middlewareAPI))
