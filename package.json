@@ -14,8 +14,8 @@
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage",
-    "format": "prettier --write '{src,test}/**/*.js'",
-    "format:check": "prettier --list-different '{src,test}/**/*.js'",
+    "format": "prettier --write \"{src,test}/**/*.js\"",
+    "format:check": "prettier --list-different \"{src,test}/**/*.js\"",
     "lint": "eslint src test build",
     "pretest": "npm run build:commonjs",
     "test": "cross-env BABEL_ENV=commonjs jest",
