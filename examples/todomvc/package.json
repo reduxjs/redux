@@ -10,8 +10,8 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "prop-types": "^15.5.10",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-redux": "^5.0.5",
     "react-test-renderer": "^15.5.4",
     "redux": "^3.5.2",
