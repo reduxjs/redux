@@ -3,11 +3,24 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
     "enzyme": "^2.8.2",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-prettier": "2.6.0",
+    "express-jwt": "^5.1.0",
+    "express-validation": "^1.0.1",
+    "faker": "^3.1.0",
+    "joi": "^9.1.1",
+    "json-server": "^0.12.1",
+    "jsonwebtoken": "^7.1.9",
+    "prettier": "1.10.2",
     "react-addons-test-utils": "^15.5.1",
-    "react-scripts": "^1.0.2"
+    "react-scripts": "^1.0.2",
+    "redux-devtools-extension": "2.13.2"
   },
   "dependencies": {
+    "axios": "0.17.1",
     "classnames": "^2.2.5",
     "prop-types": "^15.5.10",
     "react": "^15.5.0",
@@ -15,12 +28,15 @@
     "react-redux": "^5.0.5",
     "react-test-renderer": "^15.5.4",
     "redux": "^3.5.2",
+    "redux-thunk": "2.2.0",
     "todomvc-app-css": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "(cd server && nohup node index.js &) && react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject",
+    "lint": "./node_modules/eslint/bin/eslint.js src",
+    "prepush": "yarn lint",
     "test": "react-scripts test"
-  }
+  },
+  "proxy": "http://localhost:3004/"
 }
