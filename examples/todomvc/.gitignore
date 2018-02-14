@@ -9,3 +9,4 @@ build
 # misc
 .DS_Store
 npm-debug.log
+nohup.out

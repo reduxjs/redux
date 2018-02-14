@@ -1,4 +1,4 @@
-module.exports = () => ({
+module.exports = {
   todos: [
     {
       completed: true,
@@ -16,4 +16,4 @@ module.exports = () => ({
       text: 'Redux'
     }
   ]
-})
+};
