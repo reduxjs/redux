@@ -66,6 +66,6 @@
   * [applyMiddleware](api/applyMiddleware.md)
   * [bindActionCreators](api/bindActionCreators.md)
   * [compose](api/compose.md)
-* [Change Log](/CHANGELOG.md)
+* [Change Log](../CHANGELOG.md)
 * [Patrons](../PATRONS.md)
 * [Feedback](Feedback.md)
