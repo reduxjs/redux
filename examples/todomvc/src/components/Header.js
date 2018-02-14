@@ -9,7 +9,7 @@ export default class Header extends Component {
 
   handleSave = text => {
     if (text.length !== 0) {
-      this.props.addTodo(text)
+      this.props.addTodo({text})
     }
   }
 
