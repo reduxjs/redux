@@ -96,3 +96,11 @@ A typical app's state shape might look roughly like:
     }
 }
 ```
+
+#### Further Information
+
+- [Redux Docs: Reducers](../../basics/Reducers.md)
+- [Redux Docs: Reducing Boilerplate](../ReducingBoilerplate.md)
+- [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
+- [The 5 Types of React Application State](http://jamesknelson.com/5-types-react-application-state/)
+- [Redux Architecture Guidelines](http://joeellis.la/redux-architecture/)
