@@ -28,12 +28,7 @@
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "prepare": "npm run clean && npm run format:check && npm run lint && npm test && npm run build",
     "examples:lint": "eslint examples",
-    "examples:test": "cross-env CI=true babel-node examples/testAll.js",
-    "docs:clean": "rimraf _book",
-    "docs:prepare": "gitbook install",
-    "docs:build": "npm run docs:prepare && gitbook build -g reactjs/redux && cp logo/apple-touch-icon.png _book/gitbook/images/apple-touch-icon-precomposed-152.png && cp logo/favicon.ico _book/gitbook/images",
-    "docs:watch": "npm run docs:prepare && gitbook serve",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:reactjs/redux gh-pages --force"
+    "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "repository": {
     "type": "git",
@@ -81,7 +76,6 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.1",
-    "gitbook-cli": "^2.3.2",
     "glob": "^7.1.1",
     "jest": "^22.3.0",
     "prettier": "^1.10.2",
