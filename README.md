@@ -162,14 +162,14 @@ If you enjoyed my course, consider supporting Egghead by [buying a subscription]
 
 ## Documentation
 
-* [Introduction](http://redux.js.org/docs/introduction/index.html)
-* [Basics](http://redux.js.org/docs/basics/index.html)
-* [Advanced](http://redux.js.org/docs/advanced/index.html)
-* [Recipes](http://redux.js.org/docs/recipes/index.html)
-* [FAQ](http://redux.js.org/docs/FAQ.html)
-* [Troubleshooting](http://redux.js.org/docs/Troubleshooting.html)
-* [Glossary](http://redux.js.org/docs/Glossary.html)
-* [API Reference](http://redux.js.org/docs/api/index.html)
+* [Introduction](http://redux.js.org/introduction)
+* [Basics](http://redux.js.org/basics)
+* [Advanced](http://redux.js.org/advanced)
+* [Recipes](http://redux.js.org/recipes)
+* [FAQ](http://redux.js.org/faq)
+* [Troubleshooting](http://redux.js.org/troubleshooting)
+* [Glossary](http://redux.js.org/glossary)
+* [API Reference](http://redux.js.org/api-reference)
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
@@ -187,7 +187,7 @@ Almost all examples have a corresponding CodeSandbox sandbox. This is an interac
 * [Shopping Cart](http://redux.js.org/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart))
 * [Tree View](http://redux.js.org/docs/introduction/Examples.html#tree-view) ([source](https://github.com/reactjs/redux/tree/master/examples/tree-view), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view))
 * [Async](http://redux.js.org/docs/introduction/Examples.html#async) ([source](https://github.com/reactjs/redux/tree/master/examples/async), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async))
-* [Universal](http://redux.js.org/docs/introduction/Examples.html#universal) ([source](https://github.com/reactjs/redux/tree/master/examples/universal))
+* [Universal](http://redux.js.org/docs/introduction/Examples.html#universa.l) ([source](https://github.com/reactjs/redux/tree/master/examples/universal))
 * [Real World](http://redux.js.org/docs/introduction/Examples.html#real-world) ([source](https://github.com/reactjs/redux/tree/master/examples/real-world), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world))
 
 If you're new to the NPM ecosystem and have troubles getting a project up and running, or aren't sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
