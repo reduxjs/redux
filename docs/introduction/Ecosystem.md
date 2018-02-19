@@ -132,6 +132,17 @@ A reducer enhancer to enable type-agnostic optimistic updates
 
 ## Actions
 
+**[alnorris/redux-actiontyper](https://github.com/alnorris/redux-actiontyper)**  
+Helper to create slightly less verbose redux action types using ES6 proxies.
+```js
+const { GET_CLIENTS,
+	GET_CLIENTS_SUCCESS,
+	GET_CLIENTS_FAIL, 
+	SET_CLIENTS_FILTER } = actionTyper('HomeState/')
+    
+   console.log(GET_CLIENTS)  // HomeState/GET_CLIENTS
+```
+
 **[reduxactions/redux-actions](https://github.com/reduxactions/redux-actions)**  
 Flux Standard Action utilities for Redux
 ```js
