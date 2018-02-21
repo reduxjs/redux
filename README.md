@@ -32,17 +32,18 @@ It is tiny (2kB, including dependencies).
 
 ## Before Proceeding Further
 
-When to use Redux:
+Redux is a valuable tool for organizing your state, but you should also consider whether it's appropriate for your situation.  Here's some suggestions on when it makes sense to use Redux:
 * You have reasonable amounts of data changing over time
 * You need a single source of truth for your state
 * You find that keeping all your state in a top-level component is no longer sufficient
 
 Yes, these guidelines are subjective and vague, but this is for good reason. The point at which you should integrate Redux into your application is different for every user and different for every application.
 
->**Also read:**<br>
->**[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**<br>
->**[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**<br>
->**[The Tao of Redux, Part 2 - Practice and Philosophy](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
+>**For more thoughts on how Redux is meant to be used, see:**<br>
+>- **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**<br>
+>- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**<br>
+>- **[The Tao of Redux, Part 2 - Practice and Philosophy](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
+>- **[Redux FAQ](https://redux.js.org/faq)**
 
 ## Developer Experience
 
