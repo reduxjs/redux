@@ -8,7 +8,7 @@ const visibilityFilter = (
 ): VisibilityFilter => {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER':
-      return action.filter;
+      return action.filter || state;
     default:
       return state;
   }
