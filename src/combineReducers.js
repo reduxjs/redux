@@ -116,11 +116,8 @@ function assertReducerShape(reducers) {
  * passed object, and builds a state object with the same shape.
  */
 export default function combineReducers(reducers) {
-  const reducerKeys = Object.keys(reducers)
   const finalReducers = {}
-  for (let i = 0; i < reducerKeys.length; i++) {
-    const key = reducerKeys[i]
-
+  Object.keys(reducers).forEach((key) => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
@@ -130,8 +127,7 @@ export default function combineReducers(reducers) {
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
     }
-  }
-  const finalReducerKeys = Object.keys(finalReducers)
+  })
 
   let unexpectedKeyCache
   if (process.env.NODE_ENV !== 'production') {
@@ -164,8 +160,7 @@ export default function combineReducers(reducers) {
 
     let hasChanged = false
     const nextState = {}
-    for (let i = 0; i < finalReducerKeys.length; i++) {
-      const key = finalReducerKeys[i]
+    Object.keys(finalReducers).forEach((key) => {
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]
       const nextStateForKey = reducer(previousStateForKey, action)
@@ -175,7 +170,7 @@ export default function combineReducers(reducers) {
       }
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
-    }
+    })
     return hasChanged ? nextState : state
   }
 }
