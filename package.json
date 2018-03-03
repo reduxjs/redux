@@ -105,5 +105,6 @@
   },
   "jest": {
     "testRegex": "(/test/.*\\.spec.js)$"
-  }
+  },
+  "sideEffects": false
 }
