@@ -44,6 +44,20 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 - [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist: state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
 
+### Why Use React-Redux
+While the Redux Store provide us with 3 very important methods: `store.getState()`, `store.dispatch()`, `store.subscribe()` that solves the basic operations of the store as getting access to it, Update it and watch if the state change. These methods don't perform any type of optimization behind scenes.
+
+React-Redux in other hand does. `mapStateToProps` let you define the piece of state that your component needs, `mapDispatchToProps` let you define the behavior that your component is gonna have over this piece of state. These two are arguments of `connect()` that would `subscribe` your component to the piece of state that you specify inside of `mapStateToProps` and wrap your actions specified on `mapDispatchToProps` with `dispatch` then each time the state change `connect()` will perform several optimizations and equality checks that includes: `areStatesEqual`, `areOwnPropsEqual`, `areStatePropsEqual`, and `areMergedPropsEqual`. To avoid your component be re-rendered unnecessarily if the state that it care haven't change.
+
+It's important to remember that `store.subscribe()` will connect every component to the whole state of the application and when an action is dispatched it will re-rendered each one of the components, even if just one component cares about the change on the state.
+
+#### Further information
+
+**Articles**
+- [Why use React-Redux](https://medium.com/@sdandersonz97/why-react-redux-59c797ff46be)
+
+**Discussions**
+- [Reddit: I use react and redux but never react-redux](https://www.reddit.com/r/javascript/comments/6hperk/i_use_react_and_redux_but_never_reactredux_what/dj0fywb/)
 
 <a id="react-rendering-too-often"></a>
 ### Why is my component re-rendering too often?
