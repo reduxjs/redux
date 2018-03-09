@@ -44,17 +44,229 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 - [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist: state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
 
+
+<a id="why-use-react-redux"></a>
 ### Why Use React-Redux
-While the Redux Store provide us with 3 very important methods: `store.getState()`, `store.dispatch()`, `store.subscribe()` that solves the basic operations of the store as getting access to it, Update it and watch if the state change. These methods don't perform any type of optimization behind scenes.
+To understand the benefit, you have to understand the problems it is intended to solve and how it goes about solving those problems relative to other options.
 
-React-Redux in other hand does. `mapStateToProps` let you define the piece of state that your component needs, `mapDispatchToProps` let you define the behavior that your component is gonna have over this piece of state. These two are arguments of `connect()` that would `subscribe` your component to the piece of state that you specify inside of `mapStateToProps` and wrap your actions specified on `mapDispatchToProps` with `dispatch` then each time the state change `connect()` will perform several optimizations and equality checks that includes: `areStatesEqual`, `areOwnPropsEqual`, `areStatePropsEqual`, and `areMergedPropsEqual`. To avoid your component be re-rendered unnecessarily if the state that it care haven't change.
+Redux store provides us with three functions that make possible the interaction of React Components with the state of the application that is held by the store.
 
-It's important to remember that `store.subscribe()` will connect every component to the whole state of the application and when an action is dispatched it will re-rendered each one of the components, even if just one component cares about the change on the state.
+These functions are:
+* `store.getState()`  Let us access to current state of the store.
+* `store.dispatch(action)`  Let us updated the state of the store.
+* `store.subscribe(listener)`  Let us register a listener.
+
+On the example below, we see how we can implement a React and Redux Application by just using this three functions:
+
+### Entry Point
+
+`index.js`
+
+```javascript
+import React, { Component } from "react"
+import { render } from "react-dom"
+import { createStore } from 'redux'
+import reducers from './reducers'
+import App from './components/App'
+
+const store = createStore(reducers)
+
+renderDOM = () => {
+    render(
+        <App store={store} />,
+        document.getElementById('root')
+    );
+}
+
+store.subscribe(renderDOM);
+
+renderDOM();
+```
+
+### Reducers
+
+`heroes.js`
+
+```javascript
+const heroes = (state = [], action) => {
+  switch (action.type) {
+    case "NEW_HERO":
+      return [...state, action.payload]
+    default:
+      return state
+  }
+}
+export default heroes
+```
+
+`villains.js`
+
+```javascript
+const villains = (state = [], action) => {
+  switch (action.type) {
+    case "NEW_VILLAIN":
+      return [...state, action.payload]
+    default:
+      return state
+  }
+}
+
+export default villains
+```
+
+`index.js`
+
+```javascript
+import heroes from './heroes'
+import villains from './villians'
+
+const reducers = combineReducers({
+  heroes,
+  villains
+});
+export default reducers
+```
+
+### Actions
+
+`index.js`
+
+```javascript
+
+const newHero = hero => {
+    return {
+        type: 'NEW_HERO'
+        payload: hero
+    }
+}
+
+const newVillain = villain => {
+    return {
+        type: 'NEW_VILLAIN'
+        payload: villain
+    }
+}
+
+```
+
+### Components
+
+`Hero.js`
+```javascript
+import React, { Component } from 'react';
+import { newHero } from './actions'
+
+class Heroes extends Component {
+  state = { hero: "" };
+  componentDidUpdate() {
+    if(PreviousState.hero === this.state.hero){
+        console.log("Heroes component updated")
+    }
+  }
+  onNewHero = () => {
+    const { dispatch } = this.props.store
+    dispatch(newFriend());
+  };
+  render() {
+    const { getState } = this.props.store
+    return (
+      <div>
+        <h1>{getState().heroes.join(", ")}</h1>
+        <input
+          value={this.state.hero}
+          onChange={event => this.setState({ hero: event.target.value })}
+        />
+        <button onClick={this.onNewHero}>Add new Hero</button>
+      </div>
+    )
+  }
+}
+```
+
+`Villains.js`
+```javascript
+import React, { Component } from 'react'
+import { newVillains } from './actions'
+
+class Villains extends Component {
+  state = { villain: "" }
+  componentDidUpdate(previousProps, PreviousState) {
+      if(PreviousState.villain === this.state.villain){
+          console.log("Villains component updated")
+      }
+  }
+  onNewVillain = () => {
+    const { dispatch } = this.props.store;
+    dispatch(newVillain())
+  };
+  render() {
+    const { getState } = this.props.store
+    return (
+      <div>
+        <h1>{getState().villains.join(", ")}</h1>
+        <input
+          value={this.state.villain}
+          onChange={event => this.setState({ villain: event.target.value })}
+        />
+        <button onClick={this.onNewVillain}>Add new villain</button>
+      </div>
+    )
+  }
+}
+```
+
+`App.js`
+
+```javascript 
+import Heroes from './components/Friends'
+import Villains from './components/Villains'
+const App = ({ store }) => {
+  return (
+    <div>
+      <Heroes store={store} />
+      <hr />
+      <Villains store={store} />
+    </div>
+  )
+}
+
+```
+
+In fact, we can build React and Redux Application without React-Redux, but if we take a look at our App we can see some issues:
+
+*  We need to pass down the store as a prop to every component that we want to access the store.
+
+*  To get access to the piece of state that the component needs, we have to type `this.props.props.state[pieceOfState]`
+
+* To dispatch an action we need to pass it as an argument of `this.props.store.dispatch()`.
+
+*  Let's take a look at this code <code> the If statement here evaluates to true if the Component was re-rendered by an action that we dispatched. If we dispatch an action, `subscribe.store()` will re-rendered the entire Application even if just one component cares about the piece of state that was updated (We can confirm this by looking at the console).
+
+React-Redux uses several features to solves every one of this points:
+
+* `<Provider/>`  This Component from the React-Redux library requires that we pass the store as a prop and what it does is to make the store accessible to every component that we pass through it by using the Context API of React.
+
+* The first argument that we pass into `connect()` is `mapStateToProps` a function that receives as argument the current state of the store and allows us to specify the piece of state that our component wants to have access. It merges the result into the component props.
+
+* The second argument that we specify is `mapDispatchToProps` It can be a function or an object. It wraps our actions with store.dispatch and merge the result into the component props
+
+* `connect()` Performs several equalities checks every time we dispatch an action, to determine if a component should be re-render with new props. 
+
+The equalities checks that `connect()` performs are:
+* `areStatesEqual` compares the incoming store state to its previous value. By default it use strictEqual (===).
+* `areOwnPropsEqual` compares incoming props to its previous value. By default it uses shallowEqual.
+* `areStatePropsEqual` compares the result of mapStateToProps to its previous value. By default it uses shallowEqual.
+* `areMergedPropsEqual` compares the result of mergeProps to its previous value. By default it uses shallowEqual.
+
+It is because of these checks that `connect()` can determine if a component should be re-render with new props or not.
+
+`connect` returns a HOC (High Order Component) function which returns a new component and merges into the props the results of `mapStateToProps`, `mapDispatchToProps`, `mergeProps`.
+
+In other words, using `connect()` we can inject the piece of the state that the component cares about and the behavior that it can have over this data, and more importantly avoid unnecessaries calls to mapStateToProps, mapDispatchToProps, mergeProps.
+
+More critical please always use `connect()` to bind your component to the store if you do not; you are wasting much performance in your App. `connect()` is a must use library with Redux.
 
 #### Further information
-
-**Articles**
-- [Why use React-Redux](https://medium.com/@sdandersonz97/why-react-redux-59c797ff46be)
 
 **Discussions**
 - [Reddit: I use react and redux but never react-redux](https://www.reddit.com/r/javascript/comments/6hperk/i_use_react_and_redux_but_never_reactredux_what/dj0fywb/)

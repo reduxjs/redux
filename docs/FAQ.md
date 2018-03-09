@@ -55,6 +55,7 @@
   - [Why doesn't `mapDispatchToProps` allow use of return values from `getState()` or `mapStateToProps()`?](/docs/faq/DesignDecisions.md#no-asynch-in-mapDispatchToProps)
 - **React Redux**
   - [Why isn't my component re-rendering, or my mapStateToProps running?](/docs/faq/ReactRedux.md#react-not-rerendering)
+  - [Why use React-Redux?](/docs/faq/ReactRedux.md#why-use-react-redux)
   - [Why is my component re-rendering too often?](/docs/faq/ReactRedux.md#react-rendering-too-often)
   - [How can I speed up my mapStateToProps?](/docs/faq/ReactRedux.md#react-mapstate-speed)
   - [Why don't I have this.props.dispatch available in my connected component?](/docs/faq/ReactRedux.md#react-props-dispatch)
