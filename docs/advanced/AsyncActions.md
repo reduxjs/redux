@@ -414,7 +414,7 @@ const loggerMiddleware = createLogger()
 const store = createStore(
   rootReducer,
   applyMiddleware(
-    thunkMiddleware, // lets us dispatch() functions
+    thunkMiddleware, // lets use dispatch() functions
     loggerMiddleware // neat middleware that logs actions
   )
 )
