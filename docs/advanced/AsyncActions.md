@@ -363,18 +363,19 @@ export function fetchPosts(subreddit) {
 
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(
-        response => response.json(),
-        // Do not use catch, because that will also catch
-        // any errors in the dispatch and resulting render,
-        // causing a loop of 'Unexpected batch number' errors.
-        // https://github.com/facebook/react/issues/6895
-        error => console.log('An error occurred.', error)
-      )
-      .then(json =>
-        // We can dispatch many times!
-        // Here, we update the app state with the results of the API call.
-
-        dispatch(receivePosts(subreddit, json))
+        response => {
+          // We can dispatch many times!
+          // Here, we update the app state with the results of the API call.
+          return dispatch(receivePosts(subreddit, response.json())
+        },
+        error => {
+          // Do not use catch, because that will also catch
+          // any errors in the dispatch and resulting render,
+          // causing a loop of 'Unexpected batch number' errors.
+          // https://github.com/facebook/react/issues/6895
+          console.log('An error occurred.', error)
+          return error
+        }
       )
   }
 }
