@@ -189,16 +189,16 @@ For Offline docs, please see: [devdocs](http://devdocs.io/redux/)
 
 Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online.
 
-* Counter Vanilla: [Source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla)
-* Counter: [Source](https://github.com/reactjs/redux/tree/master/examples/counter) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter)
-* Todos: [Source](https://github.com/reactjs/redux/tree/master/examples/todos) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos)
-* Todos with Undo: [Source](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo)
-* TodoMVC: [Source](https://github.com/reactjs/redux/tree/master/examples/todomvc) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc)
-* Shopping Cart: [Source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart)
-* Tree View: [Source](https://github.com/reactjs/redux/tree/master/examples/tree-view) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view)
-* Async: [Source](https://github.com/reactjs/redux/tree/master/examples/async) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async)
-* Universal: [Source](https://github.com/reactjs/redux/tree/master/examples/universal)
-* Real World: [Source](https://github.com/reactjs/redux/tree/master/examples/real-world) / [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world)
+* [**Counter Vanilla**](https://redux.js.org/introduction/examples#counter-vanilla): [Source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla)
+* [**Counter**](https://redux.js.org/introduction/examples#counter): [Source](https://github.com/reactjs/redux/tree/master/examples/counter) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter)
+* [**Todos**](https://redux.js.org/introduction/examples#todos): [Source](https://github.com/reactjs/redux/tree/master/examples/todos) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos)
+* [**Todos with Undo**](https://redux.js.org/introduction/examples#todos-with-undo): [Source](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo)
+* [**TodoMVC**](https://redux.js.org/introduction/examples#todomvc): [Source](https://github.com/reactjs/redux/tree/master/examples/todomvc) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc)
+* [**Shopping Cart**](https://redux.js.org/introduction/examples#shopping-cart): [Source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart)
+* [**Tree View**](https://redux.js.org/introduction/examples#tree-view): [Source](https://github.com/reactjs/redux/tree/master/examples/tree-view) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view)
+* [**Async**](https://redux.js.org/introduction/examples#async): [Source](https://github.com/reactjs/redux/tree/master/examples/async) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async)
+* [**Universal**](https://redux.js.org/introduction/examples#universal): [Source](https://github.com/reactjs/redux/tree/master/examples/universal)
+* [**Real World**](https://redux.js.org/introduction/examples#real-world): [Source](https://github.com/reactjs/redux/tree/master/examples/real-world) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world)
 
 If you're new to the NPM ecosystem and have troubles getting a project up and running, or aren't sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
