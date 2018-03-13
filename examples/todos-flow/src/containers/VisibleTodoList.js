@@ -6,10 +6,7 @@ import { toggleTodo } from '../actions/todos';
 import { visibleTodosSelector } from '../selectors';
 import TodoList from '../components/TodoList';
 
-import type { Connector } from 'react-redux';
-
 import type { State, Dispatch } from '../types';
-import type { Props } from '../components/TodoList';
 
 const mapStateToProps = (state: State) => {
   return {
@@ -25,7 +22,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const connector: Connector<{}, Props> = connect(
+const connector = connect(
   mapStateToProps,
   mapDispatchToProps
 );
