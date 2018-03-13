@@ -1,23 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Link = ({ active, children, onClick }) => {
-  if (active) {
-    return <span>{children}</span>
-  }
-
-  return (
-    // eslint-disable-next-line
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
+const Link = ({ active, children, onClick }) => (
+    <button
+       onClick={onClick}
+       disabled={active}
+       style={{
+           marginLeft: '4px',
        }}
     >
       {children}
-    </a>
-  )
-}
+    </button>
+)
 
 Link.propTypes = {
   active: PropTypes.bool.isRequired,
