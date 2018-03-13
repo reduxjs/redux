@@ -51,7 +51,7 @@ Finally, we'll add one more action type for changing the currently visible todos
 
 ## Action Creators
 
-**Action creators** are exactly that—functions that create actions. It's easy to conflate the terms “action” and “action creator,” so do your best to use the proper term.
+**Action creators** are exactly that—functions that create actions. It's easy to conflate the terms “action” and “action creator”, so do your best to use the proper term.
 
 In Redux, action creators simply return an action:
 

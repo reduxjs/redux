@@ -150,20 +150,21 @@ export default FilterLink
 ```js
 import React from 'react'
 import FilterLink from '../containers/FilterLink'
+import { VisibilityFilters } from '../actions'
 
 const Footer = () => (
   <p>
     Show:
     {' '}
-    <FilterLink filter="SHOW_ALL">
+    <FilterLink filter={VisibilityFilters.SHOW_ALL}>
       All
     </FilterLink>
     {', '}
-    <FilterLink filter="SHOW_ACTIVE">
+    <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>
       Active
     </FilterLink>
     {', '}
-    <FilterLink filter="SHOW_COMPLETED">
+    <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>
       Completed
     </FilterLink>
   </p>
@@ -176,7 +177,7 @@ Now if you click on `<FilterLink />` you will see that your URL will change betw
 
 ## Reading From the URL
 
-Currently, the todo list is not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()` is still bound to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
+Currently, the todo list is not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()`, which is still bound to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
 #### `containers/VisibleTodoList.js`
 ```js
 const mapStateToProps = (state, ownProps) => {
@@ -209,7 +210,7 @@ const App = ({ match: { params } }) => {
 
 ## Next Steps
 
-Now that you know how to do basic routing, you can learn more about [React Router API](https://github.com/reactjs/react-router/tree/v3/docs/)
+Now that you know how to do basic routing, you can learn more about [React Router API](https://reacttraining.com/react-router/)
 
 >##### Note About Other Routing Libraries
 

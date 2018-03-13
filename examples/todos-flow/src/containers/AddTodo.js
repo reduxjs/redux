@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { addTodo } from '../actions/todos';
 
 import type { Dispatch } from '../types';
-import type { Connector } from 'react-redux';
 
 export type Props = {
   dispatch: Dispatch
@@ -46,6 +45,4 @@ class AddTodo extends Component<Props, State> {
   }
 }
 
-const connector: Connector<{}, Props> = connect();
-
-export default connector(AddTodo);
+export default connect()(AddTodo);

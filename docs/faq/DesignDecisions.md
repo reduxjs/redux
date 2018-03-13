@@ -14,7 +14,7 @@
 
 <a id="does-not-pass-state-action-to-subscribers"></a>
 ### Why doesn't Redux pass the state and action to subscribers?
-Subscribers are intended to respond to the state value itself, not the action. Updates to the state processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](http://redux.js.org/docs/faq/Performance.html#performance-update-events) to avoid repeated re-rendering.
+Subscribers are intended to respond to the state value itself, not the action. Updates to the state are processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](http://redux.js.org/docs/faq/Performance.html#performance-update-events) to avoid repeated re-rendering.
 
 Batching or debouncing is possible by using enhancers to override `store.dispatch` to change the way that subscribers are notified. Also, there are libraries that change Redux to process actions in batches to optimize performance and avoid repeated re-rendering:
 * [redux-batch](https://github.com/manaflair/redux-batch) allows passing an array of actions to `store.dispatch()` with only one notification,

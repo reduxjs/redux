@@ -20,6 +20,16 @@ export interface Action<T = any> {
   type: T;
 }
 
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent users who are extending `Action.
+ */
+export interface AnyAction extends Action {
+  // Allows any extra properties to be defined in an action.
+  [extraProps: string]: any;
+}
+
 /* reducers */
 
 /**
@@ -46,7 +56,7 @@ export interface Action<T = any> {
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = any, A extends Action = Action> = (state: S | undefined, action: A) => S;
+export type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefined, action: A) => S;
 
 /**
  * Object whose values correspond to different reducer functions.
@@ -75,7 +85,8 @@ export type ReducersMapObject<S = any, A extends Action = Action> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S, A extends Action = Action>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
+export function combineReducers<S>(reducers: ReducersMapObject<S, any>): Reducer<S>;
+export function combineReducers<S, A extends Action = AnyAction>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
 
 
 /* store */
@@ -98,10 +109,11 @@ export function combineReducers<S, A extends Action = Action>(reducers: Reducers
  * transform, delay, ignore, or otherwise interpret actions or async actions
  * before passing them to the next middleware.
  *
- * @template D the type of things (actions or otherwise) which may be dispatched.
+ * @template A The type of things (actions or otherwise) which may be
+ *   dispatched.
  */
-export interface Dispatch<D = Action> {
-    <A extends D>(action: A): A;
+export interface Dispatch<A extends Action = AnyAction> {
+  <T extends A>(action: T): T;
 }
 
 /**
@@ -118,9 +130,8 @@ export interface Unsubscribe {
  *
  * @template S The type of state held by this store.
  * @template A the type of actions which may be dispatched by this store.
- * @template N The type of non-actions which may be dispatched by this store.
  */
-export interface Store<S = any, A extends Action = Action, N = never> {
+export interface Store<S = any, A extends Action = AnyAction> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
@@ -147,7 +158,7 @@ export interface Store<S = any, A extends Action = Action, N = never> {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  dispatch: Dispatch<A | N>;
+  dispatch: Dispatch<A>;
 
   /**
    * Reads the state tree managed by the store.
@@ -204,35 +215,13 @@ export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
  *
  * @template S The type of state to be held by the store.
  * @template A The type of actions which may be dispatched.
- * @template D The type of all things which may be dispatched.
+ * @template Ext Store extension that is mixed in to the Store type.
+ * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, N>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
-  <S, A extends Action, N>(reducer: Reducer<S, A>, preloadedState: DeepPartial<S>, enhancer?: StoreEnhancer<N>): Store<S, A, N>;
+  <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<Ext, StateExt>): Store<S & StateExt, A> & Ext;
+  <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, preloadedState: DeepPartial<S>, enhancer?: StoreEnhancer<Ext>): Store<S & StateExt> & Ext;
 }
-
-/**
- * A store enhancer is a higher-order function that composes a store creator
- * to return a new, enhanced store creator. This is similar to middleware in
- * that it allows you to alter the store interface in a composable way.
- *
- * Store enhancers are much the same concept as higher-order components in
- * React, which are also occasionally called “component enhancers”.
- *
- * Because a store is not an instance, but rather a plain-object collection of
- * functions, copies can be easily created and modified without mutating the
- * original store. There is an example in `compose` documentation
- * demonstrating that.
- *
- * Most likely you'll never write a store enhancer, but you may use the one
- * provided by the developer tools. It is what makes time travel possible
- * without the app being aware it is happening. Amusingly, the Redux
- * middleware implementation is itself a store enhancer.
- *
- */
-export type StoreEnhancer<N = never> = (next: StoreEnhancerStoreCreator<N>) => StoreEnhancerStoreCreator<N>;
-export type GenericStoreEnhancer<N = never> = StoreEnhancer<N>;
-export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = Action>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S, A, N>;
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -264,11 +253,35 @@ export type StoreEnhancerStoreCreator<N = never> = <S = any, A extends Action = 
  */
 export const createStore: StoreCreator;
 
+/**
+ * A store enhancer is a higher-order function that composes a store creator
+ * to return a new, enhanced store creator. This is similar to middleware in
+ * that it allows you to alter the store interface in a composable way.
+ *
+ * Store enhancers are much the same concept as higher-order components in
+ * React, which are also occasionally called “component enhancers”.
+ *
+ * Because a store is not an instance, but rather a plain-object collection of
+ * functions, copies can be easily created and modified without mutating the
+ * original store. There is an example in `compose` documentation
+ * demonstrating that.
+ *
+ * Most likely you'll never write a store enhancer, but you may use the one
+ * provided by the developer tools. It is what makes time travel possible
+ * without the app being aware it is happening. Amusingly, the Redux
+ * middleware implementation is itself a store enhancer.
+ *
+ * @template Ext Store extension that is mixed into the Store type.
+ * @template StateExt State extension that is mixed into the state type.
+ */
+export type StoreEnhancer<Ext = {}, StateExt = {}> = (next: StoreEnhancerStoreCreator) => StoreEnhancerStoreCreator<Ext, StateExt>;
+export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <S = any, A extends Action = AnyAction>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S & StateExt, A> & Ext;
+
 
 /* middleware */
 
-export interface MiddlewareAPI<S = any, D = Action> {
-  dispatch: Dispatch<D>;
+export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
+  dispatch: D;
   getState(): S;
 }
 
@@ -280,9 +293,14 @@ export interface MiddlewareAPI<S = any, D = Action> {
  * Middleware is composable using function composition. It is useful for
  * logging actions, performing side effects like routing, or turning an
  * asynchronous API call into a series of synchronous actions.
+ *
+ * @template DispatchExt Extra Dispatch signature added by this middleware.
+ * @template S The type of the state supported by this middleware.
+ * @template D The type of Dispatch of the store where this middleware is
+ *   installed.
  */
-export interface Middleware {
-  <S = any, D = Action>(api: MiddlewareAPI<S, D>): (next: Dispatch<D>) => Dispatch<D>;
+export interface Middleware<DispatchExt = {}, S = any, D extends Dispatch = Dispatch> {
+  (api: MiddlewareAPI<D, S>): (next: Dispatch<AnyAction>) => (action: any) => any;
 }
 
 /**
@@ -301,8 +319,17 @@ export interface Middleware {
  *
  * @param middlewares The middleware chain to be applied.
  * @returns A store enhancer applying the middleware.
+ *
+ * @template Ext Dispatch signature added by a middleware.
+ * @template S The type of the state supported by a middleware.
  */
-export function applyMiddleware(...middlewares: Middleware[]): GenericStoreEnhancer;
+export function applyMiddleware(): StoreEnhancer;
+export function applyMiddleware<Ext1, S>(middleware1: Middleware<Ext1, S, any>): StoreEnhancer<{dispatch: Ext1}>;
+export function applyMiddleware<Ext1, Ext2, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2}>;
+export function applyMiddleware<Ext1, Ext2, Ext3, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>, middleware3: Middleware<Ext3, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2 & Ext3}>;
+export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>, middleware3: Middleware<Ext3, S, any>, middleware4: Middleware<Ext4, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2 & Ext3 & Ext4}>;
+export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>, middleware3: Middleware<Ext3, S, any>, middleware4: Middleware<Ext4, S, any>, middleware5: Middleware<Ext5, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5}>;
+export function applyMiddleware<Ext, S = any>(...middlewares: Middleware<any, S, any>[]): StoreEnhancer<{dispatch: Ext}>;
 
 
 /* action creators */
@@ -354,19 +381,19 @@ export interface ActionCreatorsMapObject<A = any> {
  *   creator wrapped into the `dispatch` call. If you passed a function as
  *   `actionCreator`, the return value will also be a single function.
  */
-export function bindActionCreators<A, C extends ActionCreator<A>>(actionCreator: C, dispatch: Dispatch<A>): C;
+export function bindActionCreators<A, C extends ActionCreator<A>>(actionCreator: C, dispatch: Dispatch): C;
 
 export function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
-  >(actionCreator: A, dispatch: Dispatch<any>): B;
+  >(actionCreator: A, dispatch: Dispatch): B;
 
-export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(actionCreators: M, dispatch: Dispatch<A>): M;
+export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(actionCreators: M, dispatch: Dispatch): M;
 
 export function bindActionCreators<
   M extends ActionCreatorsMapObject<any>,
   N extends ActionCreatorsMapObject<any>
-  >(actionCreators: M, dispatch: Dispatch<any>): N;
+  >(actionCreators: M, dispatch: Dispatch): N;
 
 
 /* compose */

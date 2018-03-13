@@ -1,14 +1,7 @@
-import * as tt from 'typescript-definition-tester'
+import { checkDirectory } from 'typings-tester'
 
 describe('TypeScript definitions', function() {
-  it('should compile against index.d.ts', done => {
-    tt.compileDirectory(
-      __dirname + '/typescript',
-      fileName => fileName.match(/\.ts$/),
-      {
-        strictNullChecks: true
-      },
-      () => done()
-    )
+  it('should compile against index.d.ts', () => {
+    checkDirectory(__dirname + '/typescript')
   })
 })

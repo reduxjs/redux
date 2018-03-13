@@ -87,45 +87,7 @@ npm run test:watch
 
 Improvements to the documentation are always welcome. In the docs we abide by typographic rules, so instead of ' you should use '. Same goes for “ ” and dashes (—) where appropriate. These rules only apply to the text, not to code blocks.
 
-#### Installing Gitbook
-
-To install the latest version of `gitbook` and prepare to build the documentation, run the following:
-
-```
-npm run docs:prepare
-```
-
-#### Building the Docs
-
-To build the documentation, run the following:
-
-```
-npm run docs:build
-```
-
-To watch and rebuild documentation when changes occur, run the following:
-
-```
-npm run docs:watch
-```
-
-The docs will be served at http://localhost:4000.
-
-#### Publishing the Docs
-
-To publish the documentation, run the following:
-
-```
-npm run docs:publish
-```
-
-#### Cleaning the Docs
-
-To remove previously built documentation, run the following:
-
-```
-npm run docs:clean
-```
+The docs are published automatically when the `master` branch is updated.
 
 ### Examples
 

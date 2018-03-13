@@ -256,7 +256,7 @@ First, we will install [Enzyme](http://airbnb.io/enzyme/). Enzyme uses the [Reac
 npm install --save-dev enzyme
 ```
 
-We will also need to install Enzyme adapter for our version of React. Enzyme has adapters that provide compatability with `React 16.x`, `React 15.x`, `React 0.14.x` and `React 0.13.x`. If you are using React 16 you can run:
+We will also need to install Enzyme adapter for our version of React. Enzyme has adapters that provide compatibility with `React 16.x`, `React 15.x`, `React 0.14.x` and `React 0.13.x`. If you are using React 16 you can run:
 
 ```
 npm install --save-dev enzyme-adapter-react-16
