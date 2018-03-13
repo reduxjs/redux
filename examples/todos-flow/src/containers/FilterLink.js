@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { setVisibilityFilter } from '../actions/visibilityFilter';
 import Link from '../components/Link';
 
-import type { Connector } from 'react-redux';
-
-import type { Props } from '../components/Link';
 import type { State, Dispatch } from '../types';
 import type { VisibilityFilter } from '../types/visibilityFilter';
 
@@ -29,7 +26,7 @@ const mapDispatchToProps = (dispatch: Dispatch, ownProps: OwnProps) => {
   };
 };
 
-const connector: Connector<OwnProps, Props> = connect(
+const connector = connect(
   mapStateToProps,
   mapDispatchToProps
 );
