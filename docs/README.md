@@ -22,7 +22,7 @@
   * [Middleware](advanced/Middleware.md)
   * [Usage with React Router](advanced/UsageWithReactRouter.md)
   * [Example: Reddit API](advanced/ExampleRedditAPI.md)
-  * Next Steps
+  * [Next Steps](advanced/NextSteps.md)
 * [Recipes](recipes/README.md)
   * [Migrating to Redux](recipes/MigratingToRedux.md)
   * [Using Object Spread Operator](recipes/UsingObjectSpreadOperator.md)
