@@ -156,4 +156,21 @@ var newCollection = update(collection, {2: {a: {$splice: [[1, 1, 13, 14]]}}});
 
 They can provide a useful alternative to writing manual immutable update logic.
 
+[power-assign](https://github.com/phenyl-js/phenyl/tree/master/modules/power-assign) is also a immutable updater of nested values. It follows the [MongoDB way]().
+
+```js
+var obj = {
+  count: 11,
+  arr: ['value1'],
+  bar: { baz: 'abc' }
+};
+var newObj = assign(obj, {
+  $inc: { count: 1 },
+  $push: { arr: 'value2' },
+  $unset: { 'bar.baz': '' }
+});
+```
+
+
 A list of many immutable update utilities can be found in the [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities) section of the [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links).
+
