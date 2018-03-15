@@ -77,13 +77,7 @@ function assertReducerShape(reducers) {
       )
     }
 
-    const type =
-      '@@redux/PROBE_UNKNOWN_ACTION_' +
-      Math.random()
-        .toString(36)
-        .substring(7)
-        .split('')
-        .join('.')
+    const type =ActionTypes.PROBE_UNKNOWN_ACTION
     if (typeof reducer(undefined, { type }) === 'undefined') {
       throw new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +
