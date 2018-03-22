@@ -505,7 +505,7 @@ Let's write a function that lets us express reducers as an object mapping from a
 
 ```js
 export const todos = createReducer([], {
-  [ActionTypes.ADD_TODO](state, action) {
+  [ActionTypes.ADD_TODO]: (state, action) => {
     let text = action.text.trim()
     return [...state, text]
   }
