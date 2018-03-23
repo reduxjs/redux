@@ -32,12 +32,22 @@ It is tiny (2kB, including dependencies).
 
 ## Before Proceeding Further
 
->**Also read:**  
->**[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
+Redux is a valuable tool for organizing your state, but you should also consider whether it's appropriate for your situation.  Here's some suggestions on when it makes sense to use Redux:
+* You have reasonable amounts of data changing over time
+* You need a single source of truth for your state
+* You find that keeping all your state in a top-level component is no longer sufficient
+
+Yes, these guidelines are subjective and vague, but this is for good reason. The point at which you should integrate Redux into your application is different for every user and different for every application.
+
+>**For more thoughts on how Redux is meant to be used, see:**<br>
+>- **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**<br>
+>- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**<br>
+>- **[The Tao of Redux, Part 2 - Practice and Philosophy](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
+>- **[Redux FAQ](https://redux.js.org/faq)**
 
 ## Developer Experience
 
-I wrote Redux while working on my React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). My goal was to create a state management library with minimal API but completely predictable behavior, so it is possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
+Dan Abramov (author of Redux) wrote Redux while working on his React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). His goal was to create a state management library with minimal API but completely predictable behavior, so it is possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
 
 ## Influences
 
@@ -162,14 +172,14 @@ If you enjoyed my course, consider supporting Egghead by [buying a subscription]
 
 ## Documentation
 
-* [Introduction](http://redux.js.org/docs/introduction/index.html)
-* [Basics](http://redux.js.org/docs/basics/index.html)
-* [Advanced](http://redux.js.org/docs/advanced/index.html)
-* [Recipes](http://redux.js.org/docs/recipes/index.html)
-* [FAQ](http://redux.js.org/docs/FAQ.html)
-* [Troubleshooting](http://redux.js.org/docs/Troubleshooting.html)
-* [Glossary](http://redux.js.org/docs/Glossary.html)
-* [API Reference](http://redux.js.org/docs/api/index.html)
+* [Introduction](http://redux.js.org/introduction/index.html)
+* [Basics](http://redux.js.org/basics/index.html)
+* [Advanced](http://redux.js.org/advanced/index.html)
+* [Recipes](http://redux.js.org/recipes/index.html)
+* [FAQ](http://redux.js.org/FAQ.html)
+* [Troubleshooting](http://redux.js.org/Troubleshooting.html)
+* [Glossary](http://redux.js.org/Glossary.html)
+* [API Reference](http://redux.js.org/api/index.html)
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
@@ -179,16 +189,16 @@ For Offline docs, please see: [devdocs](http://devdocs.io/redux/)
 
 Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online.
 
-* [Counter Vanilla](http://redux.js.org/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla))
-* [Counter](http://redux.js.org/docs/introduction/Examples.html#counter) ([source](https://github.com/reactjs/redux/tree/master/examples/counter), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter))
-* [Todos](http://redux.js.org/docs/introduction/Examples.html#todos) ([source](https://github.com/reactjs/redux/tree/master/examples/todos), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos))
-* [Todos with Undo](http://redux.js.org/docs/introduction/Examples.html#todos-with-undo) ([source](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo))
-* [TodoMVC](http://redux.js.org/docs/introduction/Examples.html#todomvc) ([source](https://github.com/reactjs/redux/tree/master/examples/todomvc), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc))
-* [Shopping Cart](http://redux.js.org/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart))
-* [Tree View](http://redux.js.org/docs/introduction/Examples.html#tree-view) ([source](https://github.com/reactjs/redux/tree/master/examples/tree-view), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view))
-* [Async](http://redux.js.org/docs/introduction/Examples.html#async) ([source](https://github.com/reactjs/redux/tree/master/examples/async), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async))
-* [Universal](http://redux.js.org/docs/introduction/Examples.html#universal) ([source](https://github.com/reactjs/redux/tree/master/examples/universal))
-* [Real World](http://redux.js.org/docs/introduction/Examples.html#real-world) ([source](https://github.com/reactjs/redux/tree/master/examples/real-world), [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world))
+* [**Counter Vanilla**](https://redux.js.org/introduction/examples#counter-vanilla): [Source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla)
+* [**Counter**](https://redux.js.org/introduction/examples#counter): [Source](https://github.com/reactjs/redux/tree/master/examples/counter) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter)
+* [**Todos**](https://redux.js.org/introduction/examples#todos): [Source](https://github.com/reactjs/redux/tree/master/examples/todos) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos)
+* [**Todos with Undo**](https://redux.js.org/introduction/examples#todos-with-undo): [Source](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo)
+* [**TodoMVC**](https://redux.js.org/introduction/examples#todomvc): [Source](https://github.com/reactjs/redux/tree/master/examples/todomvc) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc)
+* [**Shopping Cart**](https://redux.js.org/introduction/examples#shopping-cart): [Source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart)
+* [**Tree View**](https://redux.js.org/introduction/examples#tree-view): [Source](https://github.com/reactjs/redux/tree/master/examples/tree-view) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view)
+* [**Async**](https://redux.js.org/introduction/examples#async): [Source](https://github.com/reactjs/redux/tree/master/examples/async) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async)
+* [**Universal**](https://redux.js.org/introduction/examples#universal): [Source](https://github.com/reactjs/redux/tree/master/examples/universal)
+* [**Real World**](https://redux.js.org/introduction/examples#real-world): [Source](https://github.com/reactjs/redux/tree/master/examples/real-world) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world)
 
 If you're new to the NPM ecosystem and have troubles getting a project up and running, or aren't sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 

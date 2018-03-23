@@ -370,7 +370,7 @@ You might have heard that Redux was influenced by [Elm Architecture](https://git
 
 This was all very informative, but can't we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
 
-In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/docs/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo).
+In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo).
 
 ### Installation
 

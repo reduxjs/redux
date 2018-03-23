@@ -20,7 +20,6 @@
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.24.0",
     "express": "^4.15.2",
-    "jest": "^20.0.4",
     "prop-types": "^15.5.8",
     "qs": "^6.4.0",
     "react": "^15.5.0",
@@ -37,6 +36,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-runtime": "^6.3.13",
+    "jest": "^20.0.4",
     "webpack": "^2.6.1",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.9.1"
