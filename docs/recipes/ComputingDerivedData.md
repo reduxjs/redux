@@ -131,9 +131,167 @@ export default VisibleTodoList
 
 ### Accessing React Props in Selectors
 
-> This section introduces a hypothetical extension to our app that allows it to support multiple Todo Lists. Please note that a full implementation of this extension requires changes to the reducers, components, actions etc. that aren't directly relevant to the topics discussed and have been omitted for brevity.
-
 So far we have only seen selectors receive the Redux store state as an argument, but a selector can receive props too.
+
+For this example, we're going to extend our app to handle multiple Todo lists.  Our state needs to be refactored so that it holds multiple todo lists, which each have their own `todos` and `visibilityFilter` state.
+
+We also need to refactor our reducers.  Now that `todos` and `visibilityFilter` live within every list's state, we only need one `todoLists` reducer to manage our state.
+
+#### `reducers/index.js`
+
+```js
+import { combineReducers } from 'redux'
+import todoLists from './todoLists'
+
+export default combineReducers({
+  todoLists
+});
+```
+
+#### `reducers/todoLists.js`
+
+```js
+// Note that we're hard coding three lists here just as an example.
+// In the real world, we'd have a feature to add/remove lists,
+// and this would be empty initially.
+const initialState = {
+  1: {
+    todos: [],
+    visibilityFilter: 'SHOW_ALL'
+  },
+  2: {
+    todos: [],
+    visibilityFilter: 'SHOW_ALL'
+  },
+  3: {
+    todos: [],
+    visibilityFilter: 'SHOW_ALL'
+  }
+}
+
+const addTodo = (state, action) => {
+  const todoList = state[action.listId]
+  const { todos } = todoList
+
+  return {
+    ...state,
+    [action.listId]: {
+      ...todoList,
+      todos: [
+        ...todos,
+        {
+          id: action.id,
+          text: action.text,
+          completed: false
+        }
+      ]
+    }
+  }
+}
+
+const toggleTodo = (state, action) => {
+  const todoList = state[action.listId]
+  const { todos } = todoList
+
+  return {
+    ...state,
+    [action.listId]: {
+      ...todoList,
+      todos: todos.map(todo =>
+        (todo.id === action.id)
+          ? {...todo, completed: !todo.completed}
+          : todo
+      )
+    }
+  }
+}
+
+const setVisibilityFilter = (state, action) => {
+  const todoList = state[action.listId]
+  return {
+    ...state,
+    [action.listId]: {
+      ...todoList,
+      visibilityFilter: action.filter
+    }
+  }
+}
+
+export default const todoLists = (state = initialState, action) => {
+  // make sure a list with the given id exists
+  if (!state[action.listId]) {
+    return state;
+  }
+
+  switch (action.type) {
+    case 'ADD_TODO':
+      return addTodo(state, action)
+
+    case 'TOGGLE_TODO':
+      return toggleTodo(state, action)
+
+    case 'SET_VISIBILITY_FILTER':
+      return setVisibilityFilter(state, action)
+
+    default:
+      return state
+  }
+}
+```
+
+The `todoLists` reducer now handles all three actions.  The action creators will now need to be passed a `listId`:
+
+#### `actions/index.js`
+
+```js
+let nextTodoId = 0
+export const addTodo = (text, listId) => ({
+  type: 'ADD_TODO',
+  id: nextTodoId++,
+  text,
+  listId
+})
+ 
+export const setVisibilityFilter = (filter, listId) => ({
+  type: 'SET_VISIBILITY_FILTER',
+  filter,
+  listId
+})
+ 
+export const toggleTodo = (id, listId) => ({
+  type: 'TOGGLE_TODO',
+  id,
+  listId
+})
+ 
+export const VisibilityFilters = {
+  SHOW_ALL: 'SHOW_ALL',
+  SHOW_COMPLETED: 'SHOW_COMPLETED',
+  SHOW_ACTIVE: 'SHOW_ACTIVE'
+}
+```
+
+#### `components/TodoList.js`
+
+```js
+import React from 'react'
+import PropTypes from 'prop-types'
+import Todo from './Todo'
+ 
+const TodoList = ({ todos, toggleTodo, listId }) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => toggleTodo(todo.id, listId)}
+      />
+    )}
+  </ul>
+)
+
+export default TodoList
+```
 
 Here is an `App` component that renders three `VisibleTodoList` components, each of which has a `listId` prop:
 
@@ -141,8 +299,6 @@ Here is an `App` component that renders three `VisibleTodoList` components, each
 
 ```js
 import React from 'react'
-import Footer from './Footer'
-import AddTodo from '../containers/AddTodo'
 import VisibleTodoList from '../containers/VisibleTodoList'
 
 const App = () => (
@@ -154,7 +310,7 @@ const App = () => (
 )
 ```
 
-Each `VisibleTodoList` container should select a different slice of the state depending on the value of the `listId` prop, so let's modify `getVisibilityFilter` and `getTodos` to accept a props argument:
+Each `VisibleTodoList` container should select a different slice of the state depending on the value of the `listId` prop, so we'll modify `getVisibilityFilter` and `getTodos` to accept a props argument.
 
 #### `selectors/todoSelectors.js`
 
