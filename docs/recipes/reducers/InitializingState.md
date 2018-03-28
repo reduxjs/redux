@@ -38,7 +38,7 @@ Now let's say you create a store with it.
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(counter);
+const store = createStore(counter);
 console.log(store.getState()); // 0
 ```
 
@@ -48,7 +48,7 @@ Let's consider a different scenario:
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(counter, 42);
+const store = createStore(counter, 42);
 console.log(store.getState()); // 42
 ```
 
@@ -86,7 +86,7 @@ If we call `createStore` without the `preloadedState`, it's going to initialize 
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(combined);
+const store = createStore(combined);
 console.log(store.getState()); // { a: 'lol', b: 'wat' }
 ```
 
@@ -94,7 +94,7 @@ Let's consider a different scenario:
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(combined, { a: 'horse' });
+const store = createStore(combined, { a: 'horse' });
 console.log(store.getState()); // { a: 'horse', b: 'wat' }
 ```
 

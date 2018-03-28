@@ -63,7 +63,7 @@ To learn how to describe asynchronous API calls, read the current state inside a
 
 ```js
 import { createStore } from 'redux'
-let store = createStore(todos, ['Use Redux'])
+const store = createStore(todos, ['Use Redux'])
 
 function addTodo(text) {
   return {

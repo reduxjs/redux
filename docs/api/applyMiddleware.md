@@ -37,7 +37,7 @@ function logger({ getState }) {
   }
 }
 
-let store = createStore(
+const store = createStore(
   todos,
   ['Use Redux'],
   applyMiddleware(logger)
@@ -61,7 +61,7 @@ import * as reducers from './reducers'
 
 let reducer = combineReducers(reducers)
 // applyMiddleware supercharges createStore with middleware:
-let store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')

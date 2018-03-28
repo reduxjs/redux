@@ -309,7 +309,7 @@ Here's how to apply it to a Redux store:
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
 let todoApp = combineReducers(reducers)
-let store = createStore(
+const store = createStore(
   todoApp,
   // applyMiddleware() tells createStore() how to handle middleware
   applyMiddleware(logger, crashReporter)
@@ -474,7 +474,7 @@ const thunk = store => next => action =>
 
 // You can use all of them! (It doesn't mean you should.)
 let todoApp = combineReducers(reducers)
-let store = createStore(
+const store = createStore(
   todoApp,
   applyMiddleware(
     rafScheduler,

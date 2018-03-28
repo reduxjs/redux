@@ -111,7 +111,7 @@ import { createStore } from 'redux'
 import todoApp from './reducers'
 import Root from './components/Root'
 
-let store = createStore(todoApp)
+const store = createStore(todoApp)
 
 render(
   <Root store={store} />,
