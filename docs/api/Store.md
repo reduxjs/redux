@@ -124,7 +124,7 @@ function handleChange() {
   }
 }
 
-let unsubscribe = store.subscribe(handleChange)
+const unsubscribe = store.subscribe(handleChange)
 unsubscribe()
 ```
 
