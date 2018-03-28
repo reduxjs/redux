@@ -29,7 +29,7 @@ function todos(state = [], action) {
   }
 }
 
-let store = createStore(todos, ['Use Redux'])
+const store = createStore(todos, ['Use Redux'])
 
 store.dispatch({
   type: 'ADD_TODO',

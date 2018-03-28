@@ -37,7 +37,7 @@ store.dispatch(addTodo('Use Redux'))
 To log the action and state, you can change it to something like this:
 
 ```js
-let action = addTodo('Use Redux')
+const action = addTodo('Use Redux')
 
 console.log('dispatching', action)
 store.dispatch(action)
@@ -71,7 +71,7 @@ We could end this here, but it's not very convenient to import a special functio
 What if we just replace the `dispatch` function on the store instance? The Redux store is just a plain object with [a few methods](../api/Store.md), and we're writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
 
 ```js
-let next = store.dispatch
+const next = store.dispatch
 store.dispatch = function dispatchAndLog(action) {
   console.log('dispatching', action)
   let result = next(action)
@@ -96,7 +96,7 @@ If logging and crash reporting are separate utilities, they might look like this
 
 ```js
 function patchStoreToAddLogging(store) {
-  let next = store.dispatch
+  const next = store.dispatch
   store.dispatch = function dispatchAndLog(action) {
     console.log('dispatching', action)
     let result = next(action)
@@ -106,7 +106,7 @@ function patchStoreToAddLogging(store) {
 }
 
 function patchStoreToAddCrashReporting(store) {
-  let next = store.dispatch
+  const next = store.dispatch
   store.dispatch = function dispatchAndReportErrors(action) {
     try {
       return next(action)
@@ -139,7 +139,7 @@ Monkeypatching is a hack. “Replace any method you like”, what kind of API is
 
 ```js
 function logger(store) {
-  let next = store.dispatch
+  const next = store.dispatch
 
   // Previously:
   // store.dispatch = function dispatchAndLog(action) {
@@ -183,7 +183,7 @@ Why do we even overwrite `dispatch`? Of course, to be able to call it later, but
 ```js
 function logger(store) {
   // Must point to the function returned by the previous middleware:
-  let next = store.dispatch
+  const next = store.dispatch
 
   return function dispatchAndLog(action) {
     console.log('dispatching', action)
@@ -253,7 +253,7 @@ Instead of `applyMiddlewareByMonkeypatching()`, we could write `applyMiddleware(
 function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
-  let dispatch = store.dispatch
+  const dispatch = store.dispatch
   middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
   )
@@ -308,8 +308,8 @@ Here's how to apply it to a Redux store:
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
-let todoApp = combineReducers(reducers)
-let store = createStore(
+const todoApp = combineReducers(reducers)
+const store = createStore(
   todoApp,
   // applyMiddleware() tells createStore() how to handle middleware
   applyMiddleware(logger, crashReporter)
@@ -369,7 +369,7 @@ const timeoutScheduler = store => next => action => {
     return next(action)
   }
 
-  let timeoutId = setTimeout(
+  const timeoutId = setTimeout(
     () => next(action),
     action.meta.delay
   )
@@ -385,7 +385,7 @@ const timeoutScheduler = store => next => action => {
  * this case.
  */
 const rafScheduler = store => next => {
-  let queuedActions = []
+  const queuedActions = []
   let frame = null
 
   function loop() {
@@ -446,7 +446,7 @@ const readyStatePromise = store => next => action => {
   }
 
   function makeAction(ready, data) {
-    let newAction = Object.assign({}, action, { ready }, data)
+    const newAction = Object.assign({}, action, { ready }, data)
     delete newAction.promise
     return newAction
   }
@@ -473,8 +473,8 @@ const thunk = store => next => action =>
     : next(action)
 
 // You can use all of them! (It doesn't mean you should.)
-let todoApp = combineReducers(reducers)
-let store = createStore(
+const todoApp = combineReducers(reducers)
+const store = createStore(
   todoApp,
   applyMiddleware(
     rafScheduler,

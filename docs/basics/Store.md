@@ -17,13 +17,13 @@ It's easy to create a store if you have a reducer. In the [previous section](Red
 ```js
 import { createStore } from 'redux'
 import todoApp from './reducers'
-let store = createStore(todoApp)
+const store = createStore(todoApp)
 ```
 
 You may optionally specify the initial state as the second argument to [`createStore()`](../api/createStore.md). This is useful for hydrating the state of the client to match the state of a Redux application running on the server.
 
 ```js
-let store = createStore(todoApp, window.STATE_FROM_SERVER)
+const store = createStore(todoApp, window.STATE_FROM_SERVER)
 ```
 
 ## Dispatching Actions
@@ -73,7 +73,7 @@ We specified the behavior of our app before we even started writing the UI. We w
 import { createStore } from 'redux'
 import todoApp from './reducers'
 
-let store = createStore(todoApp)
+const store = createStore(todoApp)
 ```
 
 ## Next Steps

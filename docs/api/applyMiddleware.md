@@ -27,7 +27,7 @@ function logger({ getState }) {
     console.log('will dispatch', action)
 
     // Call the next dispatch method in the middleware chain.
-    let returnValue = next(action)
+    const returnValue = next(action)
 
     console.log('state after dispatch', getState())
 
@@ -37,7 +37,7 @@ function logger({ getState }) {
   }
 }
 
-let store = createStore(
+const store = createStore(
   todos,
   ['Use Redux'],
   applyMiddleware(logger)
@@ -59,9 +59,9 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 
-let reducer = combineReducers(reducers)
+const reducer = combineReducers(reducers)
 // applyMiddleware supercharges createStore with middleware:
-let store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')
@@ -203,10 +203,10 @@ export default connect(state => ({
 * If you want to conditionally apply a middleware, make sure to only import it when it's needed:
 
   ```js
-  let middleware = [a, b]
+  const middleware = [a, b]
   if (process.env.NODE_ENV !== 'production') {
-    let c = require('some-debug-middleware')
-    let d = require('another-debug-middleware')
+    const c = require('some-debug-middleware')
+    const d = require('another-debug-middleware')
     middleware = [...middleware, c, d]
   }
 
