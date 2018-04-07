@@ -104,6 +104,7 @@
     ]
   },
   "jest": {
+    "testEnvironment": "node",
     "testRegex": "(/test/.*\\.spec.js)$"
   },
   "sideEffects": false
