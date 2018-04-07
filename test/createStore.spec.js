@@ -632,6 +632,10 @@ describe('createStore', () => {
         }).toThrowError(new TypeError('Expected the observer to be an object.'))
 
         expect(function() {
+          obs.subscribe(null)
+        }).toThrowError(new TypeError('Expected the observer to be an object.'))
+
+        expect(function() {
           obs.subscribe(() => {})
         }).toThrowError(new TypeError('Expected the observer to be an object.'))
 
