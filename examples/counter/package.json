@@ -3,15 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "^2.8.2",
-    "react-scripts": "^1.0.2",
-    "react-test-renderer": "^15.6.1"
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "react-scripts": "^1.1.4"
   },
   "dependencies": {
-    "prop-types": "^15.5.10",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
-    "react-redux": "^5.0.5",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-redux": "^5.0.7",
     "redux": "^3.5.2"
   },
   "scripts": {

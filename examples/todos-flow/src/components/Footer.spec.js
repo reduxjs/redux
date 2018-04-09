@@ -4,7 +4,7 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 
-import Footer from '../../components/Footer';
+import Footer from './Footer';
 
 const setup = (setupProps = {}) => {
   const store = configureStore()();

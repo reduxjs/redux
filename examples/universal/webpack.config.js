@@ -2,6 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
+  mode: process.env.NODE_ENV || 'development',
   devtool: 'inline-source-map',
   entry: [
     'webpack-hot-middleware/client',

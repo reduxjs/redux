@@ -1,7 +1,7 @@
 // @flow
 
-import { addTodo, toggleTodo } from '../../actions/todos';
-import todos from '../../reducers/todos';
+import { addTodo, toggleTodo } from '../actions/todos';
+import todos from './todos';
 
 describe('todos reducer', () => {
   it('should handle initial state', () => {

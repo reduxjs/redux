@@ -1,6 +1,6 @@
 // @flow
 
-import reducer from '../../reducers';
+import reducer from './index';
 
 describe('root reducer', () => {
   it('should combine all reducers', () => {

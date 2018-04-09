@@ -3,20 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "^2.8.2",
-    "react-addons-test-utils": "^15.5.1",
-    "react-scripts": "^1.0.2"
+    "react-scripts": "^1.1.4",
+    "react-test-renderer": "^16.3.1"
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "prop-types": "^15.5.10",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
-    "react-redux": "^5.0.5",
-    "react-test-renderer": "^15.5.4",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-redux": "^5.0.7",
     "redux": "^3.5.2",
     "reselect": "^3.0.1",
-    "todomvc-app-css": "^2.1.0"
+    "todomvc-app-css": "^2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

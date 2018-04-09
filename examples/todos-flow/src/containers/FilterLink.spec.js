@@ -4,8 +4,8 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 
-import FilterLink from '../../containers/FilterLink';
-import { setVisibilityFilter } from '../../actions/visibilityFilter';
+import FilterLink from './FilterLink';
+import { setVisibilityFilter } from '../actions/visibilityFilter';
 
 const setup = (setupProps = {}) => {
   const store = configureStore()({});

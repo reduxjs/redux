@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Todo calls onClick when clicked 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Todo
+    completed={false}
+    onClick={[Function]}
+    text="Test todo"
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": "Test todo",
+      "onClick": [Function],
+      "style": Object {
+        "textDecoration": "none",
+      },
+    },
+    "ref": null,
+    "rendered": "Test todo",
+    "type": "li",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": "Test todo",
+        "onClick": [Function],
+        "style": Object {
+          "textDecoration": "none",
+        },
+      },
+      "ref": null,
+      "rendered": "Test todo",
+      "type": "li",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`Todo puts a line through text when completed 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Todo
+    completed={true}
+    onClick={[Function]}
+    text="Test todo"
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": "Test todo",
+      "onClick": [Function],
+      "style": Object {
+        "textDecoration": "line-through",
+      },
+    },
+    "ref": null,
+    "rendered": "Test todo",
+    "type": "li",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": "Test todo",
+        "onClick": [Function],
+        "style": Object {
+          "textDecoration": "line-through",
+        },
+      },
+      "ref": null,
+      "rendered": "Test todo",
+      "type": "li",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`Todo renders without crashing 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Todo
+    completed={false}
+    onClick={[Function]}
+    text="Test todo"
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": "Test todo",
+      "onClick": [Function],
+      "style": Object {
+        "textDecoration": "none",
+      },
+    },
+    "ref": null,
+    "rendered": "Test todo",
+    "type": "li",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": "Test todo",
+        "onClick": [Function],
+        "style": Object {
+          "textDecoration": "none",
+        },
+      },
+      "ref": null,
+      "rendered": "Test todo",
+      "type": "li",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
