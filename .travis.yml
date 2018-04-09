@@ -1,8 +1,9 @@
 language: node_js
 node_js:
-  - "8"
-before_install:
-  - npm i -g npm
+  - "node"
+install:
+  - npm i -g npm@5.8.0
+  - npm ci
 script:
   - npm run examples:lint
   - npm run examples:test
