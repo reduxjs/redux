@@ -15,6 +15,7 @@
     "react-redux": "^5.0.5",
     "react-test-renderer": "^15.5.4",
     "redux": "^3.5.2",
+    "reselect": "^3.0.1",
     "todomvc-app-css": "^2.1.0"
   },
   "scripts": {
