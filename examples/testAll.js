@@ -13,7 +13,7 @@ const exampleDirs = fs.readdirSync(__dirname).filter((file) => {
 
 // Ordering is important here. `npm install` must come first.
 const cmdArgs = [
-  { cmd: 'npm', args: [ 'install', '--progress=false' ] },
+  { cmd: 'npm', args: [ 'ci' ] },
   { cmd: 'npm', args: [ 'test' ] }
 ]
 
