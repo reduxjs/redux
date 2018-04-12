@@ -68,6 +68,9 @@ Redux bindings for Vue
 **[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
 Redux bindings for Polymer
 
+**[lastmjs/redux-store-element](https://github.com/lastmjs/redux-store-element)**
+Redux bindings for custom elements
+
 
 ## Reducers
 

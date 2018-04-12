@@ -10,5 +10,6 @@ These are some use cases and code snippets to get you started with Redux in a re
 * [Computing Derived Data](ComputingDerivedData.md)
 * [Implementing Undo History](ImplementingUndoHistory.md)
 * [Isolating Subapps](IsolatingSubapps.md)
+* [Structuring Reducers](StructuringReducers.md)
 * [Using Immutable.JS with Redux](UsingImmutableJS.md)
 

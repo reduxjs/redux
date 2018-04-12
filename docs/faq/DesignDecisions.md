@@ -22,7 +22,7 @@ Batching or debouncing is possible by using enhancers to override `store.dispatc
 
 The intended guarantee is that Redux eventually calls all subscribers with the most recent state available, but not that it always calls each subscriber for each action. The store state is available in the subscriber simply by calling `store.getState()`. The action cannot be made available in the subscribers without breaking the way that actions might be batched.
 
-A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Re-rendering should instead be controlled instead through:
+A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Instead, re-rendering should be controlled through:
 1. the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) lifecycle method
 2. the [virtual DOM equality check (vDOMEq)](https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconciliation)
 3. [React.PureComponent](https://facebook.github.io/react/docs/optimizing-performance.html#examples)
@@ -40,7 +40,7 @@ A potential use-case for using the action inside a subscriber -- which is an uns
 ### Why doesn't Redux support using classes for actions and reducers?
 The pattern of using functions, called action creators, to return action objects may seem counterintuitive to programmers with a lot of Object Oriented Programming experience, who would see this is a strong use-case for Classes and instances. Class instances for action objects and reducers are not supported because class instances make serialization and deserialization tricky. Deserialization methods like `JSON.parse(string)` will return a plain old Javascript object rather than class instances. 
 
-As described in the [Store FAQ](./OrganizingState.md#organizing-state-non-serializable), if you are okay with things like persistence and time-travel debugging not working as intended, you are  welcome to put non-serializable items into your Redux store.
+As described in the [Store FAQ](./OrganizingState.md#organizing-state-non-serializable), if you are okay with things like persistence and time-travel debugging not working as intended, you are welcome to put non-serializable items into your Redux store.
 
 Serialization enables the browser to store all actions that have been dispatched, as well as the previous store states, with much less memory. Rewinding and 'hot reloading' the store is central to the Redux developer experience and the function of Redux DevTools. This also enables deserialized actions to be stored on the server and re-serialized in the browser in the case of server-side rendering with Redux.
 

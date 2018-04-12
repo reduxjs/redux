@@ -3,15 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "^1.0.2",
-    "redux-logger": "^3.0.6"
+    "react-scripts": "^1.1.4"
   },
   "dependencies": {
-    "prop-types": "^15.5.10",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
-    "react-redux": "^5.0.5",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-redux": "^5.0.7",
     "redux": "^3.5.2",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.1.0"
   },
   "scripts": {

@@ -13,12 +13,12 @@ const exampleDirs = fs.readdirSync(__dirname).filter((file) => {
 
 // Ordering is important here. `npm install` must come first.
 const cmdArgs = [
-  { cmd: 'npm', args: [ 'install', '--progress=false' ] },
+  { cmd: 'npm', args: [ 'ci' ] },
   { cmd: 'npm', args: [ 'test' ] }
 ]
 
 for (const dir of exampleDirs) {
-  if (dir === 'counter-vanilla') continue
+  if (dir === 'counter-vanilla' || dir === 'universal') continue
 
   console.log(chalk.bold.yellow('\n\n==> Testing %s...\n\n'), dir)
   for (const cmdArg of cmdArgs) {

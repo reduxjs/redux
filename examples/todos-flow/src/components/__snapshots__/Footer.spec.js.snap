@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer renders without crashing 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Footer
+    store={
+        Object {
+            "clearActions": [Function],
+            "dispatch": [Function],
+            "getActions": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+          }
+    }
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        "Show:",
+        " ",
+        <Connect(Link)
+          filter="SHOW_ALL"
+>
+          All
+</Connect(Link)>,
+        ", ",
+        <Connect(Link)
+          filter="SHOW_ACTIVE"
+>
+          Active
+</Connect(Link)>,
+        ", ",
+        <Connect(Link)
+          filter="SHOW_COMPLETED"
+>
+          Completed
+</Connect(Link)>,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      "Show:",
+      " ",
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": "All",
+          "filter": "SHOW_ALL",
+        },
+        "ref": null,
+        "rendered": "All",
+        "type": [Function],
+      },
+      ", ",
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": "Active",
+          "filter": "SHOW_ACTIVE",
+        },
+        "ref": null,
+        "rendered": "Active",
+        "type": [Function],
+      },
+      ", ",
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": "Completed",
+          "filter": "SHOW_COMPLETED",
+        },
+        "ref": null,
+        "rendered": "Completed",
+        "type": [Function],
+      },
+    ],
+    "type": "p",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          "Show:",
+          " ",
+          <Connect(Link)
+            filter="SHOW_ALL"
+>
+            All
+</Connect(Link)>,
+          ", ",
+          <Connect(Link)
+            filter="SHOW_ACTIVE"
+>
+            Active
+</Connect(Link)>,
+          ", ",
+          <Connect(Link)
+            filter="SHOW_COMPLETED"
+>
+            Completed
+</Connect(Link)>,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        "Show:",
+        " ",
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "All",
+            "filter": "SHOW_ALL",
+          },
+          "ref": null,
+          "rendered": "All",
+          "type": [Function],
+        },
+        ", ",
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "Active",
+            "filter": "SHOW_ACTIVE",
+          },
+          "ref": null,
+          "rendered": "Active",
+          "type": [Function],
+        },
+        ", ",
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "Completed",
+            "filter": "SHOW_COMPLETED",
+          },
+          "ref": null,
+          "rendered": "Completed",
+          "type": [Function],
+        },
+      ],
+      "type": "p",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
