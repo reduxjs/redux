@@ -25,13 +25,12 @@ export default function applyMiddleware(...middlewares) {
           `Other middleware would not be applied to this dispatch.`
       )
     }
-    let chain = []
 
     const middlewareAPI = {
       getState: store.getState,
       dispatch: (...args) => dispatch(...args)
     }
-    chain = middlewares.map(middleware => middleware(middlewareAPI))
+    const chain = middlewares.map(middleware => middleware(middlewareAPI))
     dispatch = compose(...chain)(store.dispatch)
 
     return {
