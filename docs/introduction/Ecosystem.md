@@ -219,7 +219,7 @@ store.dispatch( subscribe("users.byId.abcd", "subscription1", () => {} );
 Store enhancer that can debounce subscription notifications
 ```js
 const debounceNotify = _.debounce(notify => notify());
-const store = createStore(reducer, intialState, batchedSubscribe(debounceNotify));
+const store = createStore(reducer, initialState, batchedSubscribe(debounceNotify));
 ```
 
 **[manaflair/redux-batch](https://github.com/manaflair/redux-batch)**  
