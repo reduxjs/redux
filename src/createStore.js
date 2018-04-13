@@ -125,7 +125,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       if (isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
-            'See http://redux.js.org/docs/api/Store.html#subscribe for more details.'
+            'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
         )
       }
 
