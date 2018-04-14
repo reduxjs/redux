@@ -342,9 +342,9 @@ This page includes our recommendations for some of the best external resources a
   https://github.com/andrewngu/sound-redux  
   A Soundcloud client built with React / Redux
   
-- **Winamp2-js**  
-  https://jordaneldredge.com/projects/winamp2-js/  
-  https://github.com/captbaritone/winamp2-js  
+- **Webamp**  
+  https://webamp.org  
+  https://github.com/captbaritone/webamp  
   An in-browser recreation of Winamp2, built with React and Redux. Actually plays MP3s, and lets you load in local MP3 files.
   
 - **Tello**  
