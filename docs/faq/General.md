@@ -31,7 +31,7 @@ What to learn can be an overwhelming question for a JavaScript developer. It hel
 - [Twitter: Learning Redux before React?](https://twitter.com/dan_abramov/status/739962098030137344)
 - [Twitter: The first time I used React, people told me I needed Redux...](https://twitter.com/raquelxmoss/status/901576285020856320)
 - [Twitter: This was my experience with Redux...](https://twitter.com/garetmckinley/status/901500556568645634)
-
+- [Dev.to: When is it time to use Redux?](https://dev.to/dan_abramov/comment/1n2k)
 
 <a id="general-when-to-use"></a>
 ### When should I use Redux?

@@ -76,6 +76,8 @@ Find the balance between these two extremes, and you will master Redux.
 - [#1165: Where to put business logic / validation?](https://github.com/reactjs/redux/issues/1165)
 - [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reactjs/redux/issues/1171)
 - [Stack Overflow: Accessing Redux state in an action creator?](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
+- [#2796: Gaining clarity on "business logic"](https://github.com/reactjs/redux/issues/2796#issue-289298280)
+- [Twitter: Moving away from unclear terminology...](https://twitter.com/FwardPhoenix/status/952971237004926977)
 
 
 <a id="structure-action-creators"></a>
