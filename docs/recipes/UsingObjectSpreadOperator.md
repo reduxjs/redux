@@ -1,8 +1,6 @@
 # Using Object Spread Operator
 
-Since one of the core tenets of Redux is to never mutate state, you'll often find yourself using [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) to create
-copies of objects with new or updated values. For example, in the `todoApp` below `Object.assign()` is used to return a new
-`state` object with an updated `visibilityFilter` property:
+Since one of the core tenets of Redux is to never mutate state, you'll often find yourself using [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) to create copies of objects with new or updated values. For example, in the `todoApp` below `Object.assign()` is used to return a new `state` object with an updated `visibilityFilter` property:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -19,8 +17,7 @@ function todoApp(state = initialState, action) {
 
 While effective, using `Object.assign()` can quickly make simple reducers difficult to read given its rather verbose syntax.
 
-An alternative approach is to use the [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for the next versions of JavaScript which lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We
-can simplify the `todoApp` example above by using the object spread syntax:
+An alternative approach is to use the [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for the next versions of JavaScript which lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We can simplify the `todoApp` example above by using the object spread syntax:
 
 ```js
 function todoApp(state = initialState, action) {
