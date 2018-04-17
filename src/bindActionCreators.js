@@ -1,4 +1,4 @@
-bindActionCreator = (actionCreator, dispatch) => dispatch(actionCreator.apply(this, arguments))
+const bindActionCreator = (actionCreator, dispatch) => dispatch(actionCreator.apply(this, arguments))
 
 /**
  * Turns an object whose values are action creators, into an object with the
