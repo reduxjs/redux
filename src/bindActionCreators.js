@@ -1,5 +1,7 @@
 function bindActionCreator(actionCreator, dispatch) {
-  return () => dispatch(actionCreator.apply(this, arguments))
+  return function () {
+    return dispatch(actionCreator.apply(this, arguments))
+  }
 }
 
 /**
@@ -31,9 +33,9 @@ export default function bindActionCreators(actionCreators, dispatch) {
   if (typeof actionCreators !== 'object' || actionCreators === null) {
     throw new Error(
       `bindActionCreators expected an object or a function, instead received ${
-      actionCreators === null ? 'null' : typeof actionCreators
+        actionCreators === null ? 'null' : typeof actionCreators
       }. ` +
-      `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
+        `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
     )
   }
 
