@@ -10,7 +10,7 @@ const config = {
 }
 
 if (env === 'es' || env === 'cjs') {
-  config.output = { format: env }
+  config.output = { format: env, indent: false }
   config.external = ['symbol-observable']
   config.plugins.push(
     babel({
@@ -20,7 +20,7 @@ if (env === 'es' || env === 'cjs') {
 }
 
 if (env === 'development' || env === 'production') {
-  config.output = { format: 'umd', name: 'Redux' }
+  config.output = { format: 'umd', name: 'Redux', indent: false }
   config.plugins.push(
     nodeResolve({
       jsnext: true
