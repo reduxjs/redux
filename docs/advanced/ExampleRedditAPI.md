@@ -272,9 +272,9 @@ class AsyncApp extends Component {
               {' '}
             </span>}
           {!isFetching &&
-            <a href="#" onClick={this.handleRefreshClick}>
+            <button onClick={this.handleRefreshClick}>
               Refresh
-            </a>}
+            </button>}
         </p>
         {isFetching && posts.length === 0 && <h2>Loading...</h2>}
         {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
