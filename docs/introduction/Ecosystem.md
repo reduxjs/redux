@@ -557,6 +557,9 @@ store.dispatch({type : "server/hello", data : "Hello!"});
 **[tiberiuc/redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase)**  
 Integration between Firebase, React, and Redux
 
+**[klis87/redux-saga-requests](https://github.com/klis87/redux-saga-requests)**
+Redux-Saga addon which simplifies handling of AJAX requests. It supports Axios and Fetch API.
+
 
 #### Async Behavior
 
