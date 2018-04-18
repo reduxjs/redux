@@ -102,3 +102,11 @@ Action creators are a more powerful abstraction. Creating an action often involv
 **Discussions**
 
 - [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
+
+<a id="structure-persistent-connections"></a>
+### Where should websockets and other persistent connections live?
+
+It is highly recommended to put any kind of persistent connection into middleware. Which should intercept needed actions and also handle any complex logic or [side effects](/faq/actions#actions-side-effects) it may produce. It is also possible to put persistent connections into the store state, but you should be aware that it may cause some [issues](/faq/organizing-state#organizing-state-non-serializable).
+
+**Libraries**
+- [Middleware: Socket and Adapters](https://github.com/markerikson/redux-ecosystem-links/blob/master/middleware-sockets-adapters.md)
