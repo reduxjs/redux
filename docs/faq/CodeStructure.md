@@ -5,7 +5,7 @@
 - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](#structure-file-structure)
 - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](#structure-business-logic)
 - [Why should I use action creators?](#structure-action-creators)
-
+- [Where should websockets and other persistent connections live?](#structure-persistent-connections)
 
 ## Code Structure
 
@@ -102,6 +102,7 @@ Action creators are a more powerful abstraction. Creating an action often involv
 **Discussions**
 
 - [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
+
 
 <a id="structure-persistent-connections"></a>
 ### Where should websockets and other persistent connections live?
