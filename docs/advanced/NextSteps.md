@@ -16,7 +16,7 @@ _Nicolas Hery_ describes it really well in _"[Describing UI state with data](htt
 
 ### Configure a Store
 
-To configure a `store` we have to make major considerations on which middleware to use, there are several libraries out there, but the most popular ones are:
+To configure a `store` we have to make major considerations on which middleware to use. There are several libraries out there, but the most popular ones are:
 
 #### Perform Asynchronous dispatch
 
@@ -40,7 +40,7 @@ To be able to choose one of these libraries we must take into account whether we
 
 ### Naming Convention
 
-A big source of confusion when it comes to a large project is what to name things. This is often just as important as the code itself. Defining a naming convention for you actions at the very beginning of a project and sticking to that convention helps you to scale up as the scope of the project grows.
+A big source of confusion when it comes to a large project is what to name things. This is often just as important as the code itself. Defining a naming convention for your actions at the very beginning of a project and sticking to that convention helps you to scale up as the scope of the project grows.
 
 Great source:
 [A Simple Naming Convention for Action Creators in Redux](https://decembersoft.com/posts/a-simple-naming-convention-for-action-creators-in-redux-js/)
