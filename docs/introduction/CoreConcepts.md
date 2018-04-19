@@ -1,7 +1,5 @@
 # Core Concepts
 
-Redux itself is very simple.
-
 Imagine your app’s state is described as a plain object. For example, the state of a todo app might look like this:
 
 ```js
