@@ -70,11 +70,7 @@ This page includes our recommendations for some of the best external resources a
 - **Redux and React: An Introduction**  
   http://jakesidsmith.com/blog/post/2017-11-18-redux-and-react-an-introduction/  
   A great introduction to Redux's core concepts, with explanations of how to use the React-Redux package to use Redux with React.
-
-- **React Redux Tutorial**  
-   https://www.pshrmn.com/tutorials/react/react-redux  
-   A clear, easy-to-read explanation of how to use the React-Redux `connect` API. 
-
+ 
 
 ## Project-Based Tutorials
 
