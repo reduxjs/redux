@@ -2,6 +2,15 @@
   "name": "redux",
   "version": "4.0.0",
   "description": "Predictable state container for JavaScript apps",
+  "license": "MIT",
+  "homepage": "http://redux.js.org",
+  "repository": "github:reduxjs/redux",
+  "bugs": "https://github.com/reduxjs/redux/issues",
+  "keywords": ["redux","reducer","state","predictable","functional","immutable","hot","live","replay","flux","elm"],
+  "authors": [
+    "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
+    "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
+  ],
   "main": "lib/redux.js",
   "module": "es/redux.js",
   "typings": "./index.d.ts",
@@ -30,32 +39,6 @@
     "examples:lint": "eslint examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/reactjs/redux.git"
-  },
-  "keywords": [
-    "redux",
-    "reducer",
-    "state",
-    "predictable",
-    "functional",
-    "immutable",
-    "hot",
-    "live",
-    "replay",
-    "flux",
-    "elm"
-  ],
-  "authors": [
-    "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
-    "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/reactjs/redux/issues"
-  },
-  "homepage": "http://redux.js.org",
   "dependencies": {
     "loose-envify": "^1.1.0",
     "symbol-observable": "^1.2.0"
