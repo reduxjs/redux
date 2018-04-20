@@ -233,13 +233,13 @@ Smart components that access the store via React Redux’s `connect` function mu
 **Documentation**
 - [Recipes: Computing Derived Data](http://redux.js.org/recipes/ComputingDerivedData.html)
 - [FAQ: Immutable Data](/faq/ImmutableData.html#immutability-issues-with-react-redux)
-- [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
+- [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reduxjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
 **Articles**
 - [Redux Patterns and Anti-Patterns](https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc#.451p9ycfy)
 
 **Libraries**
-- [Reselect: Selector library for Redux](https://github.com/reactjs/reselect)
+- [Reselect: Selector library for Redux](https://github.com/reduxjs/reselect)
 
 ### Never use `toJS()` in `mapStateToProps`
 

@@ -29,8 +29,8 @@ In general, remember that reducers are just functions—you can organize them an
 - [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
 
 **Discussions**
-- [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reactjs/redux/issues/601)
-- [#1400: Is passing top-level state object to branch reducer an anti-pattern?](https://github.com/reactjs/redux/issues/1400)
+- [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reduxjs/redux/issues/601)
+- [#1400: Is passing top-level state object to branch reducer an anti-pattern?](https://github.com/reduxjs/redux/issues/1400)
 - [Stack Overflow: Accessing other parts of the state when using combined reducers?](http://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
 - [Stack Overflow: Reducing an entire subtree with redux combineReducers](http://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
 - [Sharing State Between Redux Reducers](https://invalidpatent.wordpress.com/2016/02/18/sharing-state-between-redux-reducers/)
@@ -48,5 +48,5 @@ No. You are welcome to use any approach you'd like to respond to an action in a 
 - [Recipes: Structuring Reducers - Splitting Reducer Logic](/docs/recipes/reducers/SplittingReducerLogic.md)
 
 **Discussions**
-- [#883: take away the huge switch block](https://github.com/reactjs/redux/issues/883)
-- [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
+- [#883: take away the huge switch block](https://github.com/reduxjs/redux/issues/883)
+- [#1167: Reducer without switch](https://github.com/reduxjs/redux/issues/1167)

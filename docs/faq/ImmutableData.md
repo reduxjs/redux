@@ -125,7 +125,7 @@ This is worth emphasizing: *If the reducers all return the same `state` object p
 ### How does React-Redux use shallow equality checking?
 React-Redux uses shallow equality checking to determine whether the component it’s wrapping needs to be re-rendered.
 
-To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux).
+To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux).
 
 By assuming the wrapped component is pure, it need only check whether the root state object or the values returned from `mapStateToProps` have changed. If they haven’t, the wrapped component does not need re-rendering.
 
@@ -139,8 +139,8 @@ It then runs a shallow equality check on its reference to the root state object 
 - [React-Redux Bindings](http://redux.js.org/docs/basics/UsageWithReact.html)
 
 **Articles**
-- [API: React-Redux’s connect function and `mapStateToProps`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
-- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
+- [API: React-Redux’s connect function and `mapStateToProps`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
 
 
 ### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
@@ -217,8 +217,8 @@ If the shallow equality check fails between the new values returned from  `mapSt
 - [High Performance Redux Apps](http://somebody32.github.io/high-performance-redux/)
 
 **Discussions**
-- [#1816: Component connected to state with `mapStateToProps`](https://github.com/reactjs/redux/issues/1816)
-- [#300: Potential connect() optimization](https://github.com/reactjs/react-redux/issues/300)
+- [#1816: Component connected to state with `mapStateToProps`](https://github.com/reduxjs/redux/issues/1816)
+- [#300: Potential connect() optimization](https://github.com/reduxjs/react-redux/issues/300)
 
 
 <a id="no-shallow-equality-checking-with-mutable-objects"></a>
@@ -278,7 +278,7 @@ Because React-Redux performs a shallow check on the root state object to determi
 #### Further Information
 
 **Documentation**
-- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
+- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
 
 
 <a id="shallow-checking-stops-component-re-rendering"></a>
@@ -328,7 +328,7 @@ Note that, conversely, if an _immutable_ object is used, the [component may re-r
 - [Practical Redux, Part 6: Connected Lists, Forms, and Performance](http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
 
 **Discussions**
-- [#1948: Is getMappedItems an anti-pattern in mapStateToProps?](https://github.com/reactjs/redux/issues/1948)
+- [#1948: Is getMappedItems an anti-pattern in mapStateToProps?](https://github.com/reduxjs/redux/issues/1948)
 
 
 <a id="immutability-enables-shallow-checking"></a>
@@ -431,7 +431,7 @@ However, guaranteeing immutability with JavaScript is difficult, and it can be e
 #### Further Information
 
 **Discussions**
-- [#1185: Question: Should I use immutable data structures?](https://github.com/reactjs/redux/issues/1422)
+- [#1185: Question: Should I use immutable data structures?](https://github.com/reduxjs/redux/issues/1422)
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
 
 

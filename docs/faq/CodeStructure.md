@@ -41,8 +41,8 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 - [React/Redux Links: Architecture - Project File Structure](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#project-file-structure)
 
 **Discussions**
-- [#839: Emphasize defining selectors alongside reducers](https://github.com/reactjs/redux/issues/839)
-- [#943: Reducer querying](https://github.com/reactjs/redux/issues/943)
+- [#839: Emphasize defining selectors alongside reducers](https://github.com/reduxjs/redux/issues/839)
+- [#943: Reducer querying](https://github.com/reduxjs/redux/issues/943)
 - [React Boilerplate #27: Application Structure](https://github.com/mxstbr/react-boilerplate/issues/27)
 - [Stack Overflow: How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
 - [Twitter: There is no ultimate file structure for Redux](https://twitter.com/dan_abramov/status/783428282666614784)
@@ -71,12 +71,12 @@ Find the balance between these two extremes, and you will master Redux.
 - [The Tao of Redux, Part 2 - Practice and Philosophy. Thick and thin reducers.](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
 
 **Discussions**
-- [How putting too much logic in action creators could affect debugging](https://github.com/reactjs/redux/issues/384#issuecomment-127393209)
-- [#384: The more that's in a reducer, the more you can replay via time travel](https://github.com/reactjs/redux/issues/384#issuecomment-127393209)
-- [#1165: Where to put business logic / validation?](https://github.com/reactjs/redux/issues/1165)
-- [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reactjs/redux/issues/1171)
+- [How putting too much logic in action creators could affect debugging](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
+- [#384: The more that's in a reducer, the more you can replay via time travel](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
+- [#1165: Where to put business logic / validation?](https://github.com/reduxjs/redux/issues/1165)
+- [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reduxjs/redux/issues/1171)
 - [Stack Overflow: Accessing Redux state in an action creator?](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
-- [#2796: Gaining clarity on "business logic"](https://github.com/reactjs/redux/issues/2796#issue-289298280)
+- [#2796: Gaining clarity on "business logic"](https://github.com/reduxjs/redux/issues/2796#issue-289298280)
 - [Twitter: Moving away from unclear terminology...](https://twitter.com/FwardPhoenix/status/952971237004926977)
 
 

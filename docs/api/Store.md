@@ -90,7 +90,7 @@ You may call [`dispatch()`](#dispatch) from a change listener, with the followin
 
 3. The listener should not expect to see all state changes, as the state might have been updated multiple times during a nested [`dispatch()`](#dispatch) before the listener is called. It is, however, guaranteed that all subscribers registered before the [`dispatch()`](#dispatch) started will be called with the latest state by the time it exits.
 
-It is a low-level API. Most likely, instead of using it directly, you'll use React (or other) bindings. If you commonly use the callback as a hook to react to state changes, you might want to [write a custom `observeStore` utility](https://github.com/reactjs/redux/issues/303#issuecomment-125184409). The `Store` is also an [`Observable`](https://github.com/zenparsing/es-observable), so you can `subscribe` to changes with libraries like [RxJS](https://github.com/ReactiveX/RxJS). 
+It is a low-level API. Most likely, instead of using it directly, you'll use React (or other) bindings. If you commonly use the callback as a hook to react to state changes, you might want to [write a custom `observeStore` utility](https://github.com/reduxjs/redux/issues/303#issuecomment-125184409). The `Store` is also an [`Observable`](https://github.com/zenparsing/es-observable), so you can `subscribe` to changes with libraries like [RxJS](https://github.com/ReactiveX/RxJS). 
 
 To unsubscribe the change listener, invoke the function returned by `subscribe`.
 

@@ -47,7 +47,7 @@ This page lists some of the Redux-related addons that the Redux maintainers have
 
 ## Library Integration and Bindings
 
-**[reactjs/react-redux](https://github.com/reactjs/react-redux)**  
+**[reduxjs/react-redux](https://github.com/reduxjs/react-redux)**  
 The official React bindings for Redux, maintained by the Redux team
 
 **[angular-redux/ng-redux](https://github.com/angular-redux/ng-redux)**  
@@ -165,7 +165,7 @@ updateBazTitle(1, 'foo bar baz');
 
 ## Utilities
 
-**[reactjs/reselect](https://github.com/reactjs/reselect)**  
+**[reduxjs/reselect](https://github.com/reduxjs/reselect)**  
 Creates composable memoized selector functions for efficiently deriving data from the store state
 ```js
 const taxSelector = createSelector(
@@ -672,7 +672,7 @@ const scopedReducers = scopeReducers(reducers);
 
 #### Debuggers and Viewers
 
-**[gaearon/redux-devtools](https://github.com/gaearon/redux-devtools)**  
+**[reduxjs/redux-devtools](https://github.com/reduxjs/redux-devtools)**  
 
 Dan Abramov's original Redux DevTools implementation, built for in-app display of state and time-travel debugging
 
@@ -686,10 +686,10 @@ A cross-platform Electron app for inspecting React and React Native apps, includ
 
 #### DevTools Monitors
 
-**[Log Monitor](https://github.com/gaearon/redux-devtools-log-monitor)**  
+**[Log Monitor](https://github.com/reduxjs/redux-devtools-log-monitor)**  
 The default monitor for Redux DevTools with a tree view
 
-**[Dock Monitor](https://github.com/gaearon/redux-devtools-dock-monitor)**  
+**[Dock Monitor](https://github.com/reduxjs/redux-devtools-dock-monitor)**  
 A resizable and movable dock for Redux DevTools monitors
 
 **[Slider Monitor](https://github.com/calesce/redux-slider-monitor)**  

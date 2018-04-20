@@ -1,6 +1,6 @@
 # Computing Derived Data
 
-[Reselect](https://github.com/reactjs/reselect) is a simple library for creating memoized, composable **selector** functions. Reselect selectors can be used to efficiently compute derived data from the Redux store.
+[Reselect](https://github.com/reduxjs/reselect) is a simple library for creating memoized, composable **selector** functions. Reselect selectors can be used to efficiently compute derived data from the Redux store.
 
 ### Motivation for Memoized Selectors
 
@@ -97,7 +97,7 @@ const getVisibleTodosFilteredByKeyword = createSelector(
 
 ### Connecting a Selector to the Redux Store
 
-If you are using [React Redux](https://github.com/reactjs/react-redux), you can call selectors as regular functions inside `mapStateToProps()`:
+If you are using [React Redux](https://github.com/reduxjs/react-redux), you can call selectors as regular functions inside `mapStateToProps()`:
 
 #### `containers/VisibleTodoList.js`
 
@@ -481,4 +481,4 @@ export default VisibleTodoList
 
 ## Next Steps
 
-Check out the [official documentation](https://github.com/reactjs/reselect) of Reselect as well as its [FAQ](https://github.com/reactjs/reselect#faq). Most Redux projects start using Reselect when they have performance problems because of too many derived computations and wasted re-renders, so make sure you are familiar with it before you build something big. It can also be useful to study [its source code](https://github.com/reactjs/reselect/blob/master/src/index.js) so you don't think it's magic.
+Check out the [official documentation](https://github.com/reduxjs/reselect) of Reselect as well as its [FAQ](https://github.com/reduxjs/reselect#faq). Most Redux projects start using Reselect when they have performance problems because of too many derived computations and wasted re-renders, so make sure you are familiar with it before you build something big. It can also be useful to study [its source code](https://github.com/reduxjs/reselect/blob/master/src/index.js) so you don't think it's magic.

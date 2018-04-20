@@ -29,7 +29,7 @@ To configure a `store` we have to make major considerations on which middleware 
 
 #### Development Purposes / debug
 
-* [redux-devtools](https://github.com/gaearon/redux-devtools)
+* [redux-devtools](https://github.com/reduxjs/redux-devtools)
   * Redux DevTools is a set of tools for your Redux development workflow.
 * [redux-logger](https://github.com/evgenyrodionov/redux-logger)
   * redux-logger logs all actions that are being dispatched to the store.
@@ -60,6 +60,6 @@ There is no magic to analyze and predict how much your application is going to g
 
 **Tip**: It's great to plan things beforehand, but don't get caught up in ["analysis paralysis"](https://en.wikipedia.org/wiki/Analysis_paralysis). Done is always better than perfect, after all. And [Redux makes refactoring easy](https://blog.boldlisting.com/so-youve-screwed-up-your-redux-store-or-why-redux-makes-refactoring-easy-400e19606c71) if you need to.
 
-With all that being said, the best practice is to keep coding and learning. Participate in [issues](https://github.com/reactjs/redux/issues) and [StackOverFlow questions](https://stackoverflow.com/questions/tagged/redux). Helping others is a great way of mastering Redux.
+With all that being said, the best practice is to keep coding and learning. Participate in [issues](https://github.com/reduxjs/redux/issues) and [StackOverFlow questions](https://stackoverflow.com/questions/tagged/redux). Helping others is a great way of mastering Redux.
 
 **Tip**: A respository with an extensive amount of content about best practices and Redux architecture shared by @markerikson at [react-redux-links](https://github.com/markerikson/react-redux-links).
