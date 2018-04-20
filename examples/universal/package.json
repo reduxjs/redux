@@ -6,15 +6,6 @@
     "start": "node server/index.js",
     "build": "webpack"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reactjs/redux.git"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/reactjs/redux/issues"
-  },
-  "homepage": "http://redux.js.org",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
