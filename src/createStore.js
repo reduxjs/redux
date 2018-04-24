@@ -72,7 +72,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       )
     }
 
-    return currentState
+    return {...currentState}
   }
 
   /**
