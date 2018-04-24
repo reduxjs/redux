@@ -203,7 +203,7 @@ export default connect(state => ({
 * If you want to conditionally apply a middleware, make sure to only import it when it's needed:
 
   ```js
-  const middleware = [a, b]
+  let middleware = [a, b]
   if (process.env.NODE_ENV !== 'production') {
     const c = require('some-debug-middleware')
     const d = require('another-debug-middleware')
