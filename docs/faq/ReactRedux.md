@@ -124,7 +124,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 <a id="react-multiple-components"></a>
 ### Should I only connect my top component, or can I connect multiple components in my tree?
 
-Early Redux documentation advised that you should only have a few connected components near the top of your component tree.  However, time and experience has shown that that generally requires a few components to know too much about the data requirements of all their descendants, and forces them to pass down a confusing number of props.
+Early Redux documentation advised that you should only have a few connected components near the top of your component tree.  However, time and experience has shown that such a component architecture generally requires a few components to know too much about the data requirements of all their descendants, and forces them to pass down a confusing number of props.
 
 The current suggested best practice is to categorize your components as “presentational” or “container” components, and extract a connected container component wherever it makes sense:
 
