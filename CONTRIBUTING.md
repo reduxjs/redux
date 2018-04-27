@@ -42,7 +42,7 @@ git clone https://github.com/your-username/redux.git
 
 #### Building Redux
 
-Running the `build` task will create both a CommonJS module-per-module build and a UMD build.
+Running the `build` task will create a CommonJS module-per-module build, a ES Modules build and a UMD build.
 ```
 npm run build
 ```
@@ -50,10 +50,18 @@ npm run build
 To create just a CommonJS module-per-module build:
 
 ```
-npm run build:lib
+npm run build:commonjs
 ```
 
 The result will be in the `lib` folder.
+
+To create just a ES Modules build:
+
+```
+npm run build:es
+```
+
+The result will be in the `es` folder.
 
 To create just a UMD build:
 ```
