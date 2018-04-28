@@ -1,6 +1,6 @@
 # Reducers
 
-**Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe the fact that *something happened*, but don't describe how the application's state changes.
+**Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe *what happened*, but don't describe how the application's state changes.
 
 ## Designing the State Shape
 
