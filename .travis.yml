@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "node"
 install:
-  - npm i -g npm@5.8.0
+  - npm i -g npm@6.0.0
   - npm ci
 script:
   - npm run examples:lint
