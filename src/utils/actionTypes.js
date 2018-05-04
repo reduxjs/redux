@@ -5,11 +5,12 @@
  * Do not reference these action types directly in your code.
  */
 
-const randomString = () => Math.random()
-                               .toString(36)
-                               .substring(7)
-                               .split('')
-                               .join('.')
+const randomString = () =>
+  Math.random()
+    .toString(36)
+    .substring(7)
+    .split('')
+    .join('.')
 
 const ActionTypes = {
   INIT: `@@redux/INIT${randomString()}`,
