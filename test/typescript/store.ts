@@ -12,6 +12,11 @@ type State = {
   };
 }
 
+interface DerivedAction extends Action {
+  type: 'a',
+  b: 'b',
+}
+
 const reducer: Reducer<State> = (state: State | undefined = {
   a: 'a',
   b: {
@@ -22,6 +27,18 @@ const reducer: Reducer<State> = (state: State | undefined = {
   return state;
 };
 
+const reducerWithAction: Reducer<State, DerivedAction> = (state: State | undefined = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd',
+  },
+}, action: DerivedAction): State => {
+  return state;
+};
+
+const funcWithStore = (store: Store<State, DerivedAction>) => {};
+
 /* createStore */
 
 const store: Store<State> = createStore(reducer);
@@ -29,6 +46,13 @@ const store: Store<State> = createStore(reducer);
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   b: {c: 'c'}
 });
+
+const storeWithActionReducer = createStore(reducerWithAction);
+const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
+  b: {c: 'c'},
+});
+funcWithStore(storeWithActionReducer);
+funcWithStore(storeWithActionReducerAndPreloadedState);
 
 const enhancer: StoreEnhancer = next => next;
 
