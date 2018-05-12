@@ -7,23 +7,23 @@ It comes in several flavors.
 
 ## Just the Logo
 
-<img src='https://raw.githubusercontent.com/reactjs/redux/master/logo/logo.png' alt='Redux Logo' width='300'>
+<img src='https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo.png' alt='Redux Logo' width='300'>
 
-Download as [PNG](https://raw.githubusercontent.com/reactjs/redux/master/logo/logo.png) or [SVG](https://raw.githubusercontent.com/reactjs/redux/master/logo/logo.svg).
+Download as [PNG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo.png) or [SVG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo.svg).
 
 ## Logo with a Dark Title
 
-<img src='https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-dark.png' alt='Redux Logo with Dark Title' width='500'>
+<img src='https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo-title-dark.png' alt='Redux Logo with Dark Title' width='500'>
 
-Download as [PNG](https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-dark.png).
+Download as [PNG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo-title-dark.png).
 
 ## Logo with a Light Title
 
-<img src='https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-light.png' alt='Redux Logo with Light Title' width='500'>
+<img src='https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo-title-light.png' alt='Redux Logo with Light Title' width='500'>
 
 *(You can't see the text but it's there, in white.)*
 
-Download as [PNG](https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-light.png).
+Download as [PNG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo-title-light.png).
 
 ## Modifications
 
@@ -36,7 +36,7 @@ When in doubt, use the original logos.
 ## Credits
 
 The Redux logo was designed by [Matthew Johnston](http://thedeskofmatthew.com/).  
-Thanks to [Jay Phelps](https://github.com/jayphelps) and [the community](https://github.com/reactjs/redux/issues/151) for contributing earlier proposals.
+Thanks to [Jay Phelps](https://github.com/jayphelps) and [the community](https://github.com/reduxjs/redux/issues/151) for contributing earlier proposals.
 
 ## License
 

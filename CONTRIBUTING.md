@@ -1,10 +1,10 @@
 # Contributing
 
-We are open to, and grateful for, any contributions made by the community. By contributing to Redux, you agree to abide by the [code of conduct](https://github.com/reactjs/redux/blob/master/CODE_OF_CONDUCT.md).
+We are open to, and grateful for, any contributions made by the community. By contributing to Redux, you agree to abide by the [code of conduct](https://github.com/reduxjs/redux/blob/master/CODE_OF_CONDUCT.md).
 
 ## Reporting Issues and Asking Questions
 
-Before opening an issue, please search the [issue tracker](https://github.com/reactjs/redux/issues) to make sure your issue hasn't already been reported.
+Before opening an issue, please search the [issue tracker](https://github.com/reduxjs/redux/issues) to make sure your issue hasn't already been reported.
 
 ### Bugs and Improvements
 
@@ -30,7 +30,7 @@ Please keep in mind that people spend their free time trying to help you. You ca
 
 ## Development
 
-Visit the [issue tracker](https://github.com/reactjs/redux/issues) to find a list of open issues that need attention.
+Visit the [issue tracker](https://github.com/reduxjs/redux/issues) to find a list of open issues that need attention.
 
 Fork, then clone the repo:
 
@@ -123,7 +123,7 @@ On the other hand, sometimes the best way to start a conversation *is* to send a
 
 In general, the contribution workflow looks like this:
 
-* Open a new issue in the [Issue tracker](https://github.com/reactjs/redux/issues).
+* Open a new issue in the [Issue tracker](https://github.com/reduxjs/redux/issues).
 * Fork the repo.
 * Create a new feature branch based off the `master` branch.
 * Make sure all tests pass and there are no linting errors.

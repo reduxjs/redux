@@ -370,7 +370,7 @@ You might have heard that Redux was influenced by [Elm Architecture](https://git
 
 This was all very informative, but can't we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
 
-In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo).
+In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
 
 ### Installation
 
@@ -490,7 +490,7 @@ let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
 )
 ```
 
-You will use `connect()` from [React Redux](https://github.com/reactjs/react-redux) to generate a container component. To determine whether to enable Undo and Redo buttons, you can check `state.todos.past.length` and `state.todos.future.length`. You won't need to write action creators for performing undo and redo because Redux Undo already provides them:
+You will use `connect()` from [React Redux](https://github.com/reduxjs/react-redux) to generate a container component. To determine whether to enable Undo and Redo buttons, you can check `state.todos.past.length` and `state.todos.future.length`. You won't need to write action creators for performing undo and redo because Redux Undo already provides them:
 
 #### `containers/UndoRedo.js`
 
@@ -547,4 +547,4 @@ const App = () => (
 export default App
 ```
 
-This is it! Run `npm install` and `npm start` in the [example folder](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) and try it out!
+This is it! Run `npm install` and `npm start` in the [example folder](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) and try it out!

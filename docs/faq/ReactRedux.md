@@ -28,7 +28,7 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 
 **Documentation**
 - [Troubleshooting](/docs/Troubleshooting.md)
-- [React Redux: Troubleshooting](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md)
+- [React Redux: Troubleshooting](https://github.com/reduxjs/react-redux/blob/master/docs/troubleshooting.md)
 - [Recipes: Using the Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
 - [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
 - [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
@@ -38,9 +38,9 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 - [React/Redux Links: Immutable Data](https://github.com/markerikson/react-redux-links/blob/master/immutable-data.md)
 
 **Discussions**
-- [#1262: Immutable data + bad performance](https://github.com/reactjs/redux/issues/1262)
-- [React Redux #235: Predicate function for updating component](https://github.com/reactjs/react-redux/issues/235)
-- [React Redux #291: Should mapStateToProps be called every time an action is dispatched?](https://github.com/reactjs/react-redux/issues/291)
+- [#1262: Immutable data + bad performance](https://github.com/reduxjs/redux/issues/1262)
+- [React Redux #235: Predicate function for updating component](https://github.com/reduxjs/react-redux/issues/235)
+- [React Redux #291: Should mapStateToProps be called every time an action is dispatched?](https://github.com/reduxjs/react-redux/issues/291)
 - [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist: state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
 
@@ -60,7 +60,7 @@ const mapStateToProps = state => {
 
 Even though the array might contain the exact same object references each time, the array itself is a different reference, so the shallow equality check fails and React Redux would re-render the wrapped component.
 
-The extra re-renders could be resolved by saving the array of objects into the state using a reducer, caching the mapped array using [Reselect](https://github.com/reactjs/reselect), or implementing `shouldComponentUpdate` in the component by hand and doing a more in-depth props comparison using a function such as `_.isEqual`. Be careful to not make your custom `shouldComponentUpdate()` more expensive than the rendering itself! Always use a profiler to check your assumptions about performance.
+The extra re-renders could be resolved by saving the array of objects into the state using a reducer, caching the mapped array using [Reselect](https://github.com/reduxjs/reselect), or implementing `shouldComponentUpdate` in the component by hand and doing a more in-depth props comparison using a function such as `_.isEqual`. Be careful to not make your custom `shouldComponentUpdate()` more expensive than the rendering itself! Always use a profiler to check your assumptions about performance.
 
 For non-connected components, you may want to check what props are being passed in. A common issue is having a parent component re-bind a callback inside its render function, like `<Child onClick={this.handleClick.bind(this)} />`. That creates a new function reference every time the parent re-renders. It's generally good practice to only bind callbacks once in the parent component's constructor.
 
@@ -87,7 +87,7 @@ For non-connected components, you may want to check what props are being passed 
 <a id="react-mapstate-speed"></a>
 ### How can I speed up my `mapStateToProps`?
 
-While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it's still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reactjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
+While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it's still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reduxjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
 
 #### Further information
 
@@ -98,8 +98,8 @@ While React Redux does work to minimize the number of times that your `mapStateT
 - [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
 
 **Discussions**
-- [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
-- [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
+- [#815: Working with Data Structures](https://github.com/reduxjs/redux/issues/815)
+- [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reduxjs/reselect/issues/47)
 
 
 <a id="react-props-dispatch"></a>
@@ -112,12 +112,12 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 #### Further information
 
 **Documentation**
-- [React Redux API: connect()](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+- [React Redux API: connect()](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 
 **Discussions**
-- [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reactjs/react-redux/issues/89)
-- [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
-- [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
+- [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reduxjs/react-redux/issues/89)
+- [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reduxjs/react-redux/issues/145)
+- [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reduxjs/react-redux/issues/255)
 - [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
 
@@ -148,7 +148,7 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Discussions**
 - [Twitter: emphasizing “one container” was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
-- [#419: Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
-- [#756: container vs component?](https://github.com/reactjs/redux/issues/756)
-- [#1176: Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
+- [#419: Recommended usage of connect](https://github.com/reduxjs/redux/issues/419)
+- [#756: container vs component?](https://github.com/reduxjs/redux/issues/756)
+- [#1176: Redux+React with only stateless components](https://github.com/reduxjs/redux/issues/1176)
 - [Stack Overflow: can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)

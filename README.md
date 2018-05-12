@@ -3,12 +3,12 @@
 Redux is a predictable state container for JavaScript apps.  
 (Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).)
 
-It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/gaearon/redux-devtools).
+It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
 You can use Redux together with [React](https://reactjs.org), or with any other view library.  
 It is tiny (2kB, including dependencies).
 
-[![build status](https://img.shields.io/travis/reactjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reactjs/redux)
+[![build status](https://img.shields.io/travis/reduxjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reduxjs/redux)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![npm downloads](https://img.shields.io/npm/dm/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on discord](https://img.shields.io/badge/discord-%23redux%20%40%20reactiflux-61dafb.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZ6au5t)
@@ -104,13 +104,13 @@ If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), 
 
 Most commonly, people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](http://rollupjs.org), we support that as well.
 
-If you don't use a module bundler, it's also fine. The `redux` npm package includes precompiled production and development [UMD](https://github.com/umdjs/umd) builds in the [`dist` folder](https://unpkg.com/redux/dist/). They can be used directly without a bundler and are thus compatible with many popular JavaScript module loaders and environments. For example, you can drop a UMD build as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) on the page, or [tell Bower to install it](https://github.com/reactjs/redux/pull/1181#issuecomment-167361975). The UMD builds make Redux available as a `window.Redux` global variable.
+If you don't use a module bundler, it's also fine. The `redux` npm package includes precompiled production and development [UMD](https://github.com/umdjs/umd) builds in the [`dist` folder](https://unpkg.com/redux/dist/). They can be used directly without a bundler and are thus compatible with many popular JavaScript module loaders and environments. For example, you can drop a UMD build as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) on the page, or [tell Bower to install it](https://github.com/reduxjs/redux/pull/1181#issuecomment-167361975). The UMD builds make Redux available as a `window.Redux` global variable.
 
-The Redux source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in [any modern browser](http://caniuse.com/#feat=es5). You don't need to use Babel or a module bundler to [get started with Redux](https://github.com/reactjs/redux/blob/master/examples/counter-vanilla/index.html).
+The Redux source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in [any modern browser](http://caniuse.com/#feat=es5). You don't need to use Babel or a module bundler to [get started with Redux](https://github.com/reduxjs/redux/blob/master/examples/counter-vanilla/index.html).
 
 ### Complementary Packages
 
-Most likely, you'll also need [the React bindings](https://github.com/reactjs/react-redux) and [the developer tools](https://github.com/gaearon/redux-devtools).
+Most likely, you'll also need [the React bindings](https://github.com/reduxjs/react-redux) and [the developer tools](https://github.com/reduxjs/redux-devtools).
 
 ```
 npm install --save react-redux
@@ -272,16 +272,16 @@ For Offline docs, please see: [devdocs](http://devdocs.io/redux/)
 
 Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online.
 
-* [**Counter Vanilla**](https://redux.js.org/introduction/examples#counter-vanilla): [Source](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla)
-* [**Counter**](https://redux.js.org/introduction/examples#counter): [Source](https://github.com/reactjs/redux/tree/master/examples/counter) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter)
-* [**Todos**](https://redux.js.org/introduction/examples#todos): [Source](https://github.com/reactjs/redux/tree/master/examples/todos) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos)
-* [**Todos with Undo**](https://redux.js.org/introduction/examples#todos-with-undo): [Source](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo)
-* [**TodoMVC**](https://redux.js.org/introduction/examples#todomvc): [Source](https://github.com/reactjs/redux/tree/master/examples/todomvc) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc)
-* [**Shopping Cart**](https://redux.js.org/introduction/examples#shopping-cart): [Source](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart)
-* [**Tree View**](https://redux.js.org/introduction/examples#tree-view): [Source](https://github.com/reactjs/redux/tree/master/examples/tree-view) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view)
-* [**Async**](https://redux.js.org/introduction/examples#async): [Source](https://github.com/reactjs/redux/tree/master/examples/async) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async)
-* [**Universal**](https://redux.js.org/introduction/examples#universal): [Source](https://github.com/reactjs/redux/tree/master/examples/universal)
-* [**Real World**](https://redux.js.org/introduction/examples#real-world): [Source](https://github.com/reactjs/redux/tree/master/examples/real-world) | [Sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world)
+* [**Counter Vanilla**](https://redux.js.org/introduction/examples#counter-vanilla): [Source](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla)
+* [**Counter**](https://redux.js.org/introduction/examples#counter): [Source](https://github.com/reduxjs/redux/tree/master/examples/counter) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter)
+* [**Todos**](https://redux.js.org/introduction/examples#todos): [Source](https://github.com/reduxjs/redux/tree/master/examples/todos) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos)
+* [**Todos with Undo**](https://redux.js.org/introduction/examples#todos-with-undo): [Source](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-with-undo)
+* [**TodoMVC**](https://redux.js.org/introduction/examples#todomvc): [Source](https://github.com/reduxjs/redux/tree/master/examples/todomvc) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todomvc)
+* [**Shopping Cart**](https://redux.js.org/introduction/examples#shopping-cart): [Source](https://github.com/reduxjs/redux/tree/master/examples/shopping-cart) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/shopping-cart)
+* [**Tree View**](https://redux.js.org/introduction/examples#tree-view): [Source](https://github.com/reduxjs/redux/tree/master/examples/tree-view) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/tree-view)
+* [**Async**](https://redux.js.org/introduction/examples#async): [Source](https://github.com/reduxjs/redux/tree/master/examples/async) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/async)
+* [**Universal**](https://redux.js.org/introduction/examples#universal): [Source](https://github.com/reduxjs/redux/tree/master/examples/universal)
+* [**Real World**](https://redux.js.org/introduction/examples#real-world): [Source](https://github.com/reduxjs/redux/tree/master/examples/real-world) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/real-world)
 
 If you're new to the NPM ecosystem and have troubles getting a project up and running, or aren't sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
@@ -313,12 +313,12 @@ Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `
 
 ## Logo
 
-You can find the official logo [on GitHub](https://github.com/reactjs/redux/tree/master/logo).
+You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree/master/logo).
 
 ## Change Log
 
 This project adheres to [Semantic Versioning](http://semver.org/).  
-Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/reactjs/redux/releases) page.
+Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/reduxjs/redux/releases) page.
 
 ## Patrons
 
@@ -328,7 +328,7 @@ Meet some of the outstanding companies that made it possible:
 * [Webflow](https://github.com/webflow)
 * [Ximedes](https://www.ximedes.com/)
 
-[See the full list of Redux patrons](PATRONS.md), as well as the always-growing list of [people and companies that use Redux](https://github.com/reactjs/redux/issues/310).
+[See the full list of Redux patrons](PATRONS.md), as well as the always-growing list of [people and companies that use Redux](https://github.com/reduxjs/redux/issues/310).
 
 ## License
 

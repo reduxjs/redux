@@ -1,6 +1,6 @@
 # Usage with React Router
 
-So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that trigger a URL change.
+So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/ReactTraining/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that trigger a URL change.
 
 ## Installing React Router
 `react-router-dom` is available on npm . This guides assumes you are using `react-router-dom@^4.1.1`.
@@ -34,7 +34,7 @@ devServer: {
 
 ## Connecting React Router with Redux App
 
-Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
+Along this chapter, we will be using the [Todos](https://github.com/reduxjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
 
 First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
 
