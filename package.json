@@ -12,6 +12,7 @@
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
   "main": "lib/redux.js",
+  "unpkg": "dist/redux.js",
   "module": "es/redux.js",
   "typings": "./index.d.ts",
   "files": [
