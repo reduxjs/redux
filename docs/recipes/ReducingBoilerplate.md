@@ -528,4 +528,4 @@ function createReducer(initialState, handlers) {
 
 This wasn't difficult, was it? Redux doesn't provide such a helper function by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to a “catch all” handler. All of this depends on the conventions you choose for your team on a specific project.
 
-The Redux reducer API is `(state, action) => state`, but how you create those reducers is up to you.
+The Redux reducer API is `(state, action) => newState`, but how you create those reducers is up to you.
