@@ -10,7 +10,7 @@ The above are some of the main considerations we have to think about beforehand.
 
 ### UI vs State
 
-One of the biggest challenges developers face when using Redux is to _describe UI state with data_. The majority of software programs out there are just data transformation, and having the clear understanding that UIs are simply data beautifully presented facilitates the process of building it.
+One of the biggest challenges developers face when using Redux is to _describe UI state with data_. The majority of software programs out there are just data transformation, and having the clear understanding that UIs are simply data beautifully presented facilitates the process of building them.
 
 _Nicolas Hery_ describes it really well in _"[Describing UI state with data](http://nicolashery.com/describing-ui-state-with-data/)"_. Also, it's always good to know _[When to use Redux](https://medium.com/@fastphrase/when-to-use-redux-f0aa70b5b1e2)_, because a lot of times _[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)_
 
@@ -62,4 +62,4 @@ There is no magic to analyze and predict how much your application is going to g
 
 With all that being said, the best practice is to keep coding and learning. Participate in [issues](https://github.com/reduxjs/redux/issues) and [StackOverFlow questions](https://stackoverflow.com/questions/tagged/redux). Helping others is a great way of mastering Redux.
 
-**Tip**: A repository with an extensive amount of content about best practices and Redux architecture shared by @markerikson at [react-redux-links](https://github.com/markerikson/react-redux-links).
+**Tip**: A repository with an extensive amount of content about best practices and Redux architecture is shared by @markerikson at [react-redux-links](https://github.com/markerikson/react-redux-links).
