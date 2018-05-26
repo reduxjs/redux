@@ -4,13 +4,13 @@ If you landed in this section, you might be wondering at this point, "what shoul
 
 ## Tips & Considerations For The Real World
 
-Whenever we decide to create a new project, we tend to bypass several aspects that in the future may slow us down. In a real world project we have to consider several things before we start coding, such as: how to configure a `store`, `store` size, data structure, state model, middlewares, environment, async transactions, immutability and etc..
+Whenever we decide to create a new project, we tend to bypass several aspects that in the future may slow us down. In a real world project we have to consider several things before we start coding, such as: how to configure a `store`, `store` size, data structure, state model, middlewares, environment, async transactions, immutability, etc..
 
-Those above are some of the main considerations we have to think beforehand. It's not an easy task but there are some strategies on how to go through it smoothly.
+The above are some of the main considerations we have to think about beforehand. It's not an easy task, but there are some strategies for making it go smoothly.
 
 ### UI vs State
 
-One of the biggest challenges developers face when using Redux is to _describe UI state with data_. The majority software programs out there are just data transformation and having the clear understanding that UI's are simply data beautifully presented facilitates the process of building it.
+One of the biggest challenges developers face when using Redux is to _describe UI state with data_. The majority of software programs out there are just data transformation, and having the clear understanding that UIs are simply data beautifully presented facilitates the process of building them.
 
 _Nicolas Hery_ describes it really well in _"[Describing UI state with data](http://nicolashery.com/describing-ui-state-with-data/)"_. Also, it's always good to know _[When to use Redux](https://medium.com/@fastphrase/when-to-use-redux-f0aa70b5b1e2)_, because a lot of times _[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)_
 
@@ -23,7 +23,7 @@ To configure a `store` we have to make major considerations on which middleware 
 * [redux-thunk](https://github.com/gaearon/redux-thunk)
   * Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. It incorporates the methods `dispatch` and `getState` as parameters.
 * [redux-saga](https://github.com/redux-saga/redux-saga)
-  * redux-saga is a library that aims to make application side effects (i.e. asynchronous like data fetching and impure procedures such as accessing the browser cache) in a manageable and efficient way to execute. It's simple to test as it uses the ES6 feature called `generators`, making the flow easy to read as synchronous code.
+  * redux-saga is a library that aims to make the execution of application side effects (e.g., asynchronous tasks like data fetching and impure procedures such as accessing the browser cache) manageable and efficient. It's simple to test, as it uses the ES6 feature called `generators`, making the flow as easy to read as synchronous code.
 * [redux-observable](https://github.com/redux-observable/redux-observable)
   * redux-observable is a middleware for redux that is inspired by redux-thunk. It allows developers to dispatch a function that returns an `Observable`, `Promise` or `iterable` of action(s). When the observable emits an action, or the promise resolves an action, or the iterable gives an action out, that action is then dispatched as usual.
 
@@ -62,4 +62,4 @@ There is no magic to analyze and predict how much your application is going to g
 
 With all that being said, the best practice is to keep coding and learning. Participate in [issues](https://github.com/reduxjs/redux/issues) and [StackOverFlow questions](https://stackoverflow.com/questions/tagged/redux). Helping others is a great way of mastering Redux.
 
-**Tip**: A respository with an extensive amount of content about best practices and Redux architecture shared by @markerikson at [react-redux-links](https://github.com/markerikson/react-redux-links).
+**Tip**: A repository with an extensive amount of content about best practices and Redux architecture is shared by @markerikson at [react-redux-links](https://github.com/markerikson/react-redux-links).
