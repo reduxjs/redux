@@ -311,14 +311,14 @@ const FilterLink = connect(
 export default FilterLink
 ```
 
-#### `containers/VisibleTodoList.js`
+#### `containers/FilteredTodoList.js`
 
 ```js
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
 
-const getVisibleTodos = (todos, filter) => {
+const getFilteredTodos = (todos, filter) => {
   switch (filter) {
     case 'SHOW_ALL':
       return todos
@@ -331,7 +331,7 @@ const getVisibleTodos = (todos, filter) => {
 
 const mapStateToProps = state => {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getFilteredTodos(state.todos, state.visibilityFilter)
   }
 }
 
@@ -343,12 +343,12 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(
+const FilteredTodoList = connect(
   mapStateToProps,
   mapDispatchToProps
 )(TodoList)
 
-export default VisibleTodoList
+export default FilteredTodoList
 ```
 
 ### Implementing Other Components
