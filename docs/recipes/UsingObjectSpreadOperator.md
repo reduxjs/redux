@@ -17,7 +17,7 @@ function todoApp(state = initialState, action) {
 
 While effective, using `Object.assign()` can quickly make simple reducers difficult to read given its rather verbose syntax.
 
-An alternative approach is to use the [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for the next versions of JavaScript which lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We can simplify the `todoApp` example above by using the object spread syntax:
+An alternative approach is to use the [object spread syntax](https://github.com/tc39/proposal-object-rest-spread) recent added to the JavaScript specification. It lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We can simplify the `todoApp` example above by using the object spread syntax:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -49,7 +49,7 @@ return getAddedIds(state.cart).map(id => ({
 }))
 ```
 
-Since the object spread syntax is still a [Stage 3](https://github.com/sebmarkbage/ecmascript-rest-spread#status-of-this-proposal) proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You should use the [`env`](https://github.com/babel/babel/tree/master/packages/babel-preset-env) preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
+While the object spread syntax is a [Stage 4](https://github.com/tc39/proposal-object-rest-spread#status-of-this-proposal) proposal for ECMAScript and accepted for the 2018 specification release, you will still need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production systems. You should use the [`env`](https://github.com/babel/babel/tree/master/packages/babel-preset-env) preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
 
 ```json
 {
@@ -57,5 +57,3 @@ Since the object spread syntax is still a [Stage 3](https://github.com/sebmarkba
   "plugins": ["transform-object-rest-spread"]
 }
 ```
-
-Note that this is still an experimental language feature proposal so it may change in the future. Nevertheless some large projects such as [React Native](https://github.com/facebook/react-native) already use it extensively so it is safe to say that there will be a good automated migration path if it changes.
