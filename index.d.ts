@@ -131,7 +131,7 @@ export interface Unsubscribe {
  * @template S The type of state held by this store.
  * @template A the type of actions which may be dispatched by this store.
  */
-export interface Store<S = any, A extends Action = AnyAction> {
+export interface Store<S = any, A = AnyAction> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
