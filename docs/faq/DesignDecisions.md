@@ -53,12 +53,18 @@ Serialization enables the browser to store all actions that have been dispatched
 
 <a id="why-currying"></a>
 ### Why does the middleware signature use currying?
-The [curried function signature](https://github.com/reactjs/redux/issues/1744) of declaring middleware is [deemed unnecessary](https://github.com/reactjs/redux/pull/784) by some, because both store and next are available when the applyMiddleware function is executed. This issue has been determined to not be [worth introducing breaking changes](https://github.com/reactjs/redux/issues/1744).
+
+Redux middleware are written using a triply-nested function structure that looks like `const middleware = storeAPI => next => action => {}`, rather than a single function that looks like `const middleware = (storeAPI, next, action) => {}`.  There's a few reasons for this.
+
+One is that "currying" functions is a standard functional programming technique, and Redux was explicitly intended to use functional programming principles in its design.  Another is that currying functions creates closures where you can declare variables that exist for the lifetime of the middleware (which could be considered a functional equivalent to instance variables that exist for the lifetime of a class instance).  Finally, it's simply the approach that was chosen when Redux was initially designed.
+
+The [curried function signature](https://github.com/reactjs/redux/issues/1744) of declaring middleware is [deemed unnecessary](https://github.com/reactjs/redux/pull/784) by some, because both store and next are available when the applyMiddleware function is executed. This issue has been determined to not be [worth introducing breaking changes](https://github.com/reactjs/redux/issues/1744), as there are now hundreds of middleware in the Redux ecosystem that rely on the existing middleware definition.
 
 #### Further Information
 **Discussions**
 * Why does the middleware signature use currying?
-    * See - [#55](https://github.com/reactjs/redux/pull/55), [#534](https://github.com/reactjs/redux/issues/534), [#784](https://github.com/reactjs/redux/pull/784), [#922](https://github.com/reactjs/redux/issues/922), [#1744](https://github.com/reactjs/redux/issues/1744)
+    * Prior discussions: [#55](https://github.com/reactjs/redux/pull/55), [#534](https://github.com/reactjs/redux/issues/534), [#784](https://github.com/reactjs/redux/pull/784), [#922](https://github.com/reactjs/redux/issues/922), [#1744](https://github.com/reactjs/redux/issues/1744)
+    * [React Boston 2017: You Might Need Redux (And Its Ecosystem)](http://blog.isquaredsoftware.com/2017/09/presentation-might-need-redux-ecosystem/)
 
 <a id="closure-dispatch"></a>
 ### Why does `applyMiddleware` use a closure for `dispatch`?
