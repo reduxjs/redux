@@ -107,7 +107,14 @@ Action creators are a more powerful abstraction. Creating an action often involv
 <a id="structure-persistent-connections"></a>
 ### Where should websockets and other persistent connections live?
 
-It is highly recommended to put any kind of persistent connection into middleware. Which should intercept needed actions and also handle any complex logic or [side effects](/faq/actions#actions-side-effects) it may produce. It is also possible to put persistent connections into the store state, but you should be aware that it may cause some [issues](/faq/organizing-state#organizing-state-non-serializable).
+Middleware are the right place for persistent connections like websockets in a Redux app, for several reasons:
+
+- Middleware exist for the lifetime of the application
+- Like with the store itself, you probably only need a single instance of a given connection that the whole app can use
+- Middleware can see all dispatched actions and dispatch actions themselves.  This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
+- A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](/faq/organizing-state#organizing-state-non-serializable)
+
+There's many existing middleware for websockets and other similar connections - see the link below.
 
 **Libraries**
 - [Middleware: Socket and Adapters](https://github.com/markerikson/redux-ecosystem-links/blob/master/middleware-sockets-adapters.md)
