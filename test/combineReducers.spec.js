@@ -196,6 +196,31 @@ describe('Utils', () => {
       console.error = preSpy
     })
 
+    it('warns if a reducer is not a function', () => {
+      const preSpy = console.error
+      const spy = jest.fn()
+      console.error = spy
+
+      let isFunction = state => null
+      let isNotFunction = 'isNotFunction'
+      let reducer = combineReducers({ isFunction, isNotFunction })
+      reducer({})
+      expect(spy.mock.calls[0][0]).toMatch(
+        /The reducer for "isNotFunction" is not a function/
+      )
+
+      spy.mockClear()
+      isNotFunction = []
+      reducer = combineReducers({ isFunction, isNotFunction })
+      reducer({})
+      expect(spy.mock.calls[0][0]).toMatch(
+        /The reducer for "isNotFunction" is not a function/
+      )
+
+      spy.mockClear()
+      console.error = preSpy
+    })
+
     it('warns if input state does not match reducer shape', () => {
       const preSpy = console.error
       const spy = jest.fn()
