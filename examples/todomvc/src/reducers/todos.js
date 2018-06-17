@@ -15,7 +15,7 @@ const initialState = [
   }
 ]
 
-export default function todos(state = initialState, action) {
+const todos = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TODO:
       return [
@@ -60,3 +60,5 @@ export default function todos(state = initialState, action) {
       return state
   }
 }
+
+export default todos
