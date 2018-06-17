@@ -18,10 +18,10 @@ const byId = (state = {}, action) => {
     case RECEIVE_PRODUCTS:
       return {
         ...state,
-        ...action.products.reduce((obj, product) => {
-          obj[product.id] = product
-          return obj
-        }, {})
+        ...action.products.reduce((obj, product) => ({
+          ...obj,
+          [product.id] : product
+        }), {})
       }
     default:
       const { productId } = action
