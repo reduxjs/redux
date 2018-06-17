@@ -3,20 +3,20 @@ import warning from '../../src/utils/warning'
 
 describe('Utils', () => {
   describe('warning', () => {
-    it('calls console.error when available', () => {
-      const preSpy = console.error
+    it('calls console.warn when available', () => {
+      const preSpy = console.warn
       const spy = jest.fn()
-      console.error = spy
+      console.warn = spy
       try {
         warning('Test')
         expect(spy.mock.calls[0][0]).toBe('Test')
       } finally {
         spy.mockClear()
-        console.error = preSpy
+        console.warn = preSpy
       }
     })
 
-    it('does not throw when console.error is not available', () => {
+    it('does not throw when console.warn is not available', () => {
       const realConsole = global.console
       Object.defineProperty(global, 'console', { value: {} })
       try {

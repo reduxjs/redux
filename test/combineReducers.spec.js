@@ -33,9 +33,9 @@ describe('Utils', () => {
     })
 
     it('warns if a reducer prop is undefined', () => {
-      const preSpy = console.error
+      const preSpy = console.warn
       const spy = jest.fn()
-      console.error = spy
+      console.warn = spy
 
       let isNotDefined
       combineReducers({ isNotDefined })
@@ -50,7 +50,7 @@ describe('Utils', () => {
       )
 
       spy.mockClear()
-      console.error = preSpy
+      console.warn = preSpy
     })
 
     it('throws an error if a reducer returns undefined handling an action', () => {
@@ -183,9 +183,9 @@ describe('Utils', () => {
     })
 
     it('warns if no reducers are passed to combineReducers', () => {
-      const preSpy = console.error
+      const preSpy = console.warn
       const spy = jest.fn()
-      console.error = spy
+      console.warn = spy
 
       const reducer = combineReducers({})
       reducer({})
@@ -193,13 +193,13 @@ describe('Utils', () => {
         /Store does not have a valid reducer/
       )
       spy.mockClear()
-      console.error = preSpy
+      console.warn = preSpy
     })
 
     it('warns if input state does not match reducer shape', () => {
-      const preSpy = console.error
+      const preSpy = console.warn
       const spy = jest.fn()
-      console.error = spy
+      console.warn = spy
 
       const reducer = combineReducers({
         foo(state = { bar: 1 }) {
@@ -253,13 +253,13 @@ describe('Utils', () => {
       )
 
       spy.mockClear()
-      console.error = preSpy
+      console.warn = preSpy
     })
 
     it('only warns for unexpected keys once', () => {
-      const preSpy = console.error
+      const preSpy = console.warn
       const spy = jest.fn()
-      console.error = spy
+      console.warn = spy
 
       const foo = (state = { foo: 1 }) => state
       const bar = (state = { bar: 2 }) => state
@@ -279,7 +279,7 @@ describe('Utils', () => {
       expect(spy.mock.calls.length).toBe(2)
 
       spy.mockClear()
-      console.error = preSpy
+      console.warn = preSpy
     })
   })
 })
