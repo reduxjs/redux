@@ -120,11 +120,11 @@ An example of a normalized state structure for the blog example above might look
             "user1" : {
                 username : "user1",
                 name : "User 1",
-            }
+            },
             "user2" : {
                 username : "user2",
                 name : "User 2",
-            }
+            },
             "user3" : {
                 username : "user3",
                 name : "User 3",
@@ -152,11 +152,11 @@ A typical application will likely have a mixture of relational data and non-rela
 ```js
 {
     simpleDomainData1: {....},
-    simpleDomainData2: {....}
+    simpleDomainData2: {....},
     entities : {
         entityType1 : {....},
         entityType2 : {....}
-    }
+    },
     ui : {
         uiSection1 : {....},
         uiSection2 : {....}
@@ -187,7 +187,7 @@ Because we're treating a portion of our Redux store as a "database", many of the
                     id : 2,
                     authorId : 5,
                     bookId : 15,
-                }
+                },
                 3 : {
                     id : 3,
                     authorId : 42,
