@@ -178,3 +178,46 @@ This function follows the same steps outlined above, with some of the logic spli
 - A `preloadedState` variable is passed through to `createStore` in case we want to add this later.
 
 This also makes our `createStore` function easier to reason about -  each step is clearly separated, which makes it more obvious what exactly is happening.
+
+## Integrating the devtools extension
+
+Another common feature which you may wish to add to your app is the `redux-devtools-extension` integration.
+
+The extension is a suite of tools which give you absolute control over your redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/zalmoxisus/redux-devtools-extension)
+
+There are several ways to integrate the extension, but we will use the most convenient option.
+
+First, we install the package via npm:
+
+```
+npm install --save-dev redux-devtools-extension
+```
+
+Next, we remove the `compose` function which we imported from `redux`, and replace it with a new `composeWithDevtools` function imported from `redux-devtools-extension`.
+
+The final code looks like this:
+
+```js
+import { applyMiddleware, createStore } from 'redux'
+import { composeWithDevtools } from 'redux-devtools-extension'
+
+import monitorReducersEnhancer from './enhancers/monitorReducers'
+import loggerMiddleware from './middleware/logger'
+import rootReducer from './reducers'
+
+export default function configureStore(preloadedState) {
+  const middlewares = [loggerMiddleware]
+  const middlewareEnhancer = applyMiddleware(...middlewares)
+
+  const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
+  const composedEnhancers = composeWithDevtools(...enhancers)
+
+  const store = createStore(rootReducer, preloadedState, composedEnhancers)
+
+  return store
+}
+```
+
+And that's it!
+
+If we now visit our app via a browser with the devtools extension installed, we can explore and debug using a powerful new tool.
