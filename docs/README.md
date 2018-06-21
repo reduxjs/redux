@@ -24,6 +24,7 @@
   * [Example: Reddit API](advanced/ExampleRedditAPI.md)
   * [Next Steps](advanced/NextSteps.md)
 * [Recipes](recipes/README.md)
+  * [Configuring Your Store](recipes/ConfiguringYourStore.md)
   * [Migrating to Redux](recipes/MigratingToRedux.md)
   * [Using Object Spread Operator](recipes/UsingObjectSpreadOperator.md)
   * [Reducing Boilerplate](recipes/ReducingBoilerplate.md)
