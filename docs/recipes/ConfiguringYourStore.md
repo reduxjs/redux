@@ -34,10 +34,17 @@ This ensures that any time we connect to redux in our app via react-redux `conne
 
 Most apps extend the functionality of their Redux store by adding middleware or store enhancers _(note: middleware is common, enhancers are less common)_. Middleware adds extra functionality to the Redux `dispatch` function; enhancers add extra functionality to the Redux store.
 
-We will add one of each:
+We will add two middlewares and one enhancer:
 
+- The [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk), which allows simple asynchronous use of dispatch.
 - A middleware which logs dispatched actions and the resulting new state.
 - An enhancer which logs the time taken for the reducers to process each action.
+
+#### Install `redux-thunk`
+
+```
+npm install --save redux-thunk
+```
 
 #### middleware/logger.js
 ```js
@@ -81,8 +88,8 @@ export default monitorReducerEnhancer
 
 Let's add these to our  existing `index.js`.
 
-- First, we need to import our `monitorReducerEnhancer` and `loggerMiddleware`, plus two extra functions provided by Redux: `applyMiddleware` and `compose`.
-- We then use `applyMiddleware` to creates a store enhancer which will apply our `loggerMiddleware` to the store's dispatch function.
+- First, we need to import `redux-thunk` plus our `loggerMiddleware` and `monitorReducerEnhancer`, plus two extra functions provided by Redux: `applyMiddleware` and `compose`.
+- We then use `applyMiddleware` to create a store enhancer which will apply our `loggerMiddleware` and the `thunkMiddleware` to the store's dispatch function.
 - Next, we use `compose` to compose our new `middlewareEnhancer` and our `monitorReducerEnhancer` into one function.
 - Finally, we pass this new `composedEnhancers` function into `createStore` as its third argument. _Note: the second argument, which we will ignore, lets you preloaded state into the store._
 
@@ -91,12 +98,13 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import rootReducer from './reducers'
 import loggerMiddleware from './middleware/logger'
 import monitorReducerEnhancer from './enhancers/monitorReducer'
 import App from './components/App'
 
-const middlewareEnhancer = applyMiddleware(loggerMiddleware)
+const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
 const composedEnhancers = compose(middlewareEnhancer, monitorReducerEnhancer)
 
 const store = createStore(rootReducer, undefined, composedEnhancers)
@@ -144,13 +152,14 @@ To achieve this, `configureStore` function looks like this:
 
 ```js
 import { applyMiddleware, compose, createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
 
 export default function configureStore(preloadedState) {
-  const middlewares = [loggerMiddleware]
+  const middlewares = [loggerMiddleware, thunkMiddleware]
   const middlewareEnhancer = applyMiddleware(...middlewares)
 
   const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
@@ -199,6 +208,7 @@ The final code looks like this:
 
 ```js
 import { applyMiddleware, createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import { composeWithDevtools } from 'redux-devtools-extension'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
@@ -206,7 +216,7 @@ import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
 
 export default function configureStore(preloadedState) {
-  const middlewares = [loggerMiddleware]
+  const middlewares = [loggerMiddleware, thunkMiddleware]
   const middlewareEnhancer = applyMiddleware(...middlewares)
 
   const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
