@@ -43,7 +43,7 @@ and run `npm test` to run it once, or `npm run test:watch` to test on every file
 
 ### Action Creators
 
-In Redux, action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.
+In Redux, action creators are functions which return plain objects. When testing action creators, we want to test whether the correct action creator was called and also whether the right action was returned.
 
 #### Example
 
