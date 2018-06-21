@@ -17,4 +17,14 @@ const render = () => ReactDOM.render(
 )
 
 render()
+
+//observable使用方法
+const state$ = store[Symbol.observable]();
+const subscription = state$.subscribe({
+  next: function(x) {
+    console.log(x);
+  }
+});
+subscription.unsubscribe();
+
 store.subscribe(render)
