@@ -26,9 +26,9 @@ render(
 )
 ```
 
-In this code, we pass our reducers to the Redux `createStore` function, which returns a `store` object. We then pass this object to the react-redux `Provider` component, which is rendered at the top of our component tree.
+In this code, we pass our reducers to the Redux `createStore` function, which returns a `store` object. We then pass this object to the `react-redux` `Provider` component, which is rendered at the top of our component tree.
 
-This ensures that any time we connect to redux in our app via react-redux `connect`, the store is available to our components.
+This ensures that any time we connect to Redux in our app via `react-redux` `connect`, the store is available to our components.
 
 ## Extending Redux functionality
 
@@ -194,7 +194,7 @@ This also makes our `createStore` function easier to reason about -  each step i
 
 Another common feature which you may wish to add to your app is the `redux-devtools-extension` integration.
 
-The extension is a suite of tools which give you absolute control over your redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/zalmoxisus/redux-devtools-extension)
+The extension is a suite of tools which give you absolute control over your Redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/zalmoxisus/redux-devtools-extension)
 
 There are several ways to integrate the extension, but we will use the most convenient option.
 
@@ -233,3 +233,79 @@ export default function configureStore(preloadedState) {
 And that's it!
 
 If we now visit our app via a browser with the devtools extension installed, we can explore and debug using a powerful new tool.
+
+## Hot reloading
+
+Another powerful tool which can make the development process a lot more intuitive is hot reloading, which means replacing pieces of code without restarting your whole app.
+
+For example, consider what happens when you run your app, interact with it for a while, and then decide to make changes to one of your reducers. Normally, when you make those changes your app will restart, reverting your Redux state to its initial value.
+
+With hot module reloading enabled, only the reducer you changed would be reloaded, allowing you to change your code _without_ resetting the state every time. This makes for a much faster development process.
+
+We'll add hot reloading both to our Redux reducers and to our React components.
+
+First, let's add it to our `configureStore` function:
+
+```js
+import { applyMiddleware, compose, createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+
+import monitorReducersEnhancer from './enhancers/monitorReducers'
+import loggerMiddleware from './middleware/logger'
+import rootReducer from './reducers'
+
+export default function configureStore(preloadedState) {
+  const middlewares = [loggerMiddleware, thunkMiddleware]
+  const middlewareEnhancer = applyMiddleware(...middlewares)
+
+  const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
+  const composedEnhancers = compose(...enhancers)
+
+  const store = createStore(rootReducer, preloadedState, composedEnhancers)
+
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('./reducers', () =>
+      store.replaceReducer(rootReducer)
+    )
+  }
+
+  return store
+}
+```
+
+The new code is wrapped in an `if` statement, so it only runs when our app is not in production mode, and only if the `module.hot` feature is available.
+
+We use Webpack's `module.hot.accept` method to specify which module should be hot reloaded, and what should happen when the module changes. In this case, we're watching the `./reducers` module, and passing the updated `rootReducer` to the `store.replaceReducer` method when it changes.
+
+We'll also use the same pattern in our `index.js` to hot reload any changes to our React components:
+
+```js
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import App from './components/App'
+import configureStore from './configureStore'
+
+const store = configureStore()
+
+const renderApp = () => render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+	module.hot.accept('./components/App', () => {
+    renderApp()
+	})
+}
+
+renderApp()
+```
+
+The only extra change here is that we have encapsulated our app's rendering into a new `renderApp` function, which we now call to re-render the app.
+
+## Next Steps
+
+Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [learn more about the advanced features Redux provides](../basics/README.md), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/ecosystem).
