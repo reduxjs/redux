@@ -48,7 +48,7 @@ All these libraries allow you to have :
 
 ### Location
 
-This is where your store live. Does it live outside of the DOM tree or inside a specific component ?
+This is where your store live. Does it live outside of the DOM tree or inside a specific component ? This changes whether you control your state locally or globally.
 
 ### Observable
 
@@ -86,7 +86,7 @@ From [ImmutableJS doc](https://facebook.github.io/immutable-js/) :
 
 > Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presents a mutative API which does not update the data in-place, but instead always yields new updated data.
 
-Use plain Javascript or [ImmutableJS](https://facebook.github.io/immutable-js/) to update your store.
+To update your store you have to use immutable function. You can also use [ImmutableJS](https://facebook.github.io/immutable-js/) to help you.
 
 Note : If you find it hard to update an immutable store you can leverages [ES6 Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) to update your immutable store in a mutable way.
 
