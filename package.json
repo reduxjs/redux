@@ -38,7 +38,8 @@
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "prepare": "npm run clean && npm run format:check && npm run lint && npm test && npm run build",
     "examples:lint": "eslint examples",
-    "examples:test": "cross-env CI=true babel-node examples/testAll.js"
+    "examples:test": "cross-env CI=true babel-node examples/testAll.js",
+    "publishPackages": "npm run build && node packages/publish.js"
   },
   "dependencies": {
     "loose-envify": "^1.1.0",
