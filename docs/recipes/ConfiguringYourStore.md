@@ -99,7 +99,7 @@ Let's add these to our  existing `index.js`.
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import rootReducer from './reducers'
 import loggerMiddleware from './middleware/logger'
