@@ -114,6 +114,8 @@ Middleware are the right place for persistent connections like websockets in a R
 - Middleware can see all dispatched actions and dispatch actions themselves.  This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
 - A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](/faq/organizing-state#organizing-state-non-serializable)
 
+See [this example that shows how a socket middleware might dispatch and respond to Redux actions](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58).
+
 There's many existing middleware for websockets and other similar connections - see the link below.
 
 **Libraries**
