@@ -401,7 +401,7 @@ Handle async logic using synchronous-looking generator functions. Sagas return d
 function* fetchData(action) {
     const {someValue} = action;
     try {
-        const result = yield call(myAjaxLib.post, "/someEndpoint", {data : someValue});
+        const response = yield call(myAjaxLib.post, "/someEndpoint", {data : someValue});
         yield put({type : "REQUEST_SUCCEEDED", payload : response});
     }
     catch(error) {
