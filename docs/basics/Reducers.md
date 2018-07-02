@@ -19,7 +19,7 @@ You'll often find that you need to store some data, as well as some UI state, in
   todos: [
     {
       text: 'Consider using Redux',
-      completed: true,
+      completed: true
     },
     {
       text: 'Keep all state in a single tree',
