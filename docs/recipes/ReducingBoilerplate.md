@@ -240,7 +240,8 @@ class Posts extends Component {
 }
 
 export default connect(state => ({
-  posts: state.posts
+  posts: state.posts,
+  isFetching: state.isFetching
 }))(Posts)
 ```
 
@@ -324,7 +325,8 @@ class Posts extends Component {
 }
 
 export default connect(state => ({
-  posts: state.posts
+  posts: state.posts,
+  isFetching: state.isFetching
 }))(Posts)
 ```
 
