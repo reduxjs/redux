@@ -14,8 +14,9 @@
 
 Yes, lots of them!  To name just a few:
 
+- [Twitter's mobile site](https://mobile.twitter.com/)
 - [Wordpress's new admin page](https://github.com/Automattic/wp-calypso)
-- [Firefox's new debugger](https://github.com/jlongster/debugger.html)
+- [Firefox's new debugger](https://github.com/devtools-html/debugger.html)
 - [The HyperTerm terminal application](https://github.com/zeit/hyperterm)
 
 And many, many more!  The Redux Addons Catalog has **[a list of Redux-based applications and examples](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)** that points to a variety of actual applications, large and small.
