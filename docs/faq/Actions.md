@@ -5,6 +5,7 @@
 - [Why should type be a string, or at least serializable? Why should my action types be constants?](#actions-string-constants) 
 - [Is there always a one-to-one mapping between reducers and actions?](#actions-reducer-mappings)
 - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#actions-side-effects) 
+- [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](#actions-async-middlewares)
 - [Should I dispatch multiple actions in a row from one action creator?](#actions-multiple-actions) 
 
 
@@ -92,6 +93,43 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 - [Stack Overflow: How to fire AJAX calls in response to the state changes with Redux?](http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447)
 - [Reddit: Help performing Async API calls with Redux-Promise Middleware.](https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/)
 - [Twitter: possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
+
+<a id="actions-async-middlewares"></a>
+### What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?
+
+This question arose many times throughout the web and while there is no direct opinion to give you on which model you should use to handle side effects in your Redux apps, we feel that there are situations in which Redux-Thunk just fits in perfectly and others where Redux-Saga is best suited for the job.
+
+As a rule of thumb we can say that:
+
+- Thunks are best for complex synchronous logic and simple async logic. With the use of `async/await` the resulting code of some slightly advanced async task should be sufficiently manageable too.
+- Sagas give their very best for complex async logic and decoupled "background thread"-type behavior, especially if you need to listen to dispatched actions. In fact one of the main reason why Sagas are best used for complex async, is that they don't only let you dispatch actions (of course), but they allow you to respond and execute some logic against an actions that has been dispatched.
+
+But if you feel that in a specific project Sagas would be an overkill in the development of some features but not in others, **it's absolutely fine for you to use both** to handle your side effects and switch them based on the complexity of the code you're writing. You could even start to write some logic through thunk and at a certain point "convert it" introducing the use of a Saga. Remember that this approach is always preferred to using "one tool for every job"... as the old saying says:
+
+> If your only tool is a hammer, every problem looks like a nail.
+
+For instance, if you're using Redux-Saga for everything, you're probably doing more damage than anything else because Sagas require understanding generator functions, understanding the "effects" that it provides and since Redux-Saga has these own personal "effects", it introduces an unnecessary layer of complexity that decrease the code readability.
+
+Until now we've spoken only about the most common two middlewares used to handle side effects in Redux but for any other libraries (e.g. Redux-Observables) you can generally apply the same above rules since, compared to Redux-Saga, they just introduce different APIs.
+So it's safe to say that the use cases are the same and all we have said for Redux-Saga applies to the others.
+
+So the other "big" two are, in order of use, Redux-Observables and Redux-Loop. 
+
+Redux-Observables, as the name states already, is a middleware based on RxJS 6: a well known library built around the concept of the Observable and based on the reactive programming paradigm.
+RxJS itself is used in lots of different projects, across many frameworks and it may be convenient to learn it instead of Redux-Saga considering that it's a generic async library and the knowledge you acquire while learning it, is transferable to things other than Redux.
+
+Redux-Loop, instead, is a slightly different, and less used, approach than the other two. It is a port of the Elm language architecture that allows you to sequence your effects naturally and purely by returning them from your reducers.
+
+**Articles**
+
+- [Redux-Thunk vs Redux-Saga](https://decembersoft.com/posts/redux-thunk-vs-redux-saga/)
+- [Redux-Saga V.S. Redux-Observable](https://hackmd.io/s/H1xLHUQ8e#side-by-side-comparison)
+
+**Discussions**
+
+- [React Developer Map by adam-golab ](https://www.reddit.com/r/reactjs/comments/8vglo0/react_developer_map_by_adamgolab/e1nr597/)
+- [Stack Overflow: Pros/cons of using redux-saga with ES6 generators vs redux-thunk with ES2017 async/await](https://stackoverflow.com/questions/34930735/pros-cons-of-using-redux-saga-with-es6-generators-vs-redux-thunk-with-es2017-asy)
+- [Stack Overflow: Why use Redux-Observable over Redux-Saga?](https://stackoverflow.com/questions/40021344/why-use-redux-observable-over-redux-saga/40027778#40027778)
 
 
 <a id="actions-multiple-actions"></a>
