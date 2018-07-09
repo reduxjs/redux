@@ -260,7 +260,7 @@ This page includes our recommendations for some of the best external resources a
   
 - **Reactive Redux State with RxJS**  
   https://ivanjov.com/reactive-redux-state-with-rxjs/  
-  Describes the concept of "Reactive PRogramming" and the RxJS library, and shows how to use redux-observable to fetch data, along with examples of testing.
+  Describes the concept of "Reactive Programming" and the RxJS library, and shows how to use redux-observable to fetch data, along with examples of testing.
   
 - **Using redux-observable to handle asynchronous logic in Redux**  
   https://medium.com/dailyjs/using-redux-observable-to-handle-asynchronous-logic-in-redux-d49194742522  
@@ -381,7 +381,7 @@ This page includes our recommendations for some of the best external resources a
   
 - **Redux, by Tyler McGinnis (paid)**  
   https://tylermcginnis.com/courses/redux/  
-  When learning Redux, you need to learn it in the context of an app big enough to see the benefits. That's why this course is huge. A better name might be 'Real World Redux. If you're sick of "todo list" Redux tutorials, you've come to the right place. In this course we'll talk all about what makes Redux special for managing state in your application. We'll build an actual "real world" application so you can see how Redux handles edge cases like optimistic updates and error handling. We'll also cover many other technologies that work well with Redux, Firebase, and CSS Modules.
+  When learning Redux, you need to learn it in the context of an app big enough to see the benefits. That's why this course is huge. A better name might be _"Real World Redux"_. If you're sick of "todo list" Redux tutorials, you've come to the right place. In this course we'll talk all about what makes Redux special for managing state in your application. We'll build an actual "real world" application so you can see how Redux handles edge cases like optimistic updates and error handling. We'll also cover many other technologies that work well with Redux, Firebase, and CSS Modules.
   
 - **Learn Redux, by Wes Bos (free)**  
   https://learnredux.com/  
