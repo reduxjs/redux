@@ -17,7 +17,7 @@ function todoApp(state = initialState, action) {
 
 While effective, using `Object.assign()` can quickly make simple reducers difficult to read given its rather verbose syntax.
 
-An alternative approach is to use the [object spread syntax](https://github.com/tc39/proposal-object-rest-spread) recent added to the JavaScript specification. It lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We can simplify the `todoApp` example above by using the object spread syntax:
+An alternative approach is to use the [object spread syntax](https://github.com/tc39/proposal-object-rest-spread) recently added to the JavaScript specification. It lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We can simplify the `todoApp` example above by using the object spread syntax:
 
 ```js
 function todoApp(state = initialState, action) {
