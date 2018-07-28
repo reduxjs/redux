@@ -62,9 +62,6 @@ Ember bindings for Redux
 **[glimmer-redux/glimmer-redux](glimmer-redux/glimmer-redux)**  
 Redux bindings for Ember's Glimmer component engine
 
-**[revue/revue](https://github.com/revue/revue)**  
-Redux bindings for Vue
-
 **[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
 Redux bindings for Polymer
 
