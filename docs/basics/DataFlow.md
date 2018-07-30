@@ -68,8 +68,8 @@ The data lifecycle in any Redux app follows these 4 steps:
     }
 
     let todoApp = combineReducers({
-      todos,
-      visibleTodoFilter
+      todos: todos,
+      visibleTodoFilter: visibleTodoFilter
     })
    ```
 
