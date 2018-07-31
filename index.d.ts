@@ -220,7 +220,7 @@ export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
  */
 export interface StoreCreator {
   <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<Ext, StateExt>): Store<S & StateExt, A> & Ext;
-  <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, preloadedState: DeepPartial<S>, enhancer?: StoreEnhancer<Ext>): Store<S & StateExt, A> & Ext;
+  <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>, enhancer?: StoreEnhancer<Ext>): Store<S & StateExt, A> & Ext;
 }
 
 /**
