@@ -16,7 +16,7 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export interface Action<T = any> {
+export interface Action<T = string> {
   type: T;
 }
 
