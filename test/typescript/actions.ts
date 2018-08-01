@@ -49,7 +49,7 @@ namespace EnumTypeAction {
     A, B, C
   }
 
-  interface Action extends ReduxAction {
+  interface Action extends ReduxAction<ActionType> {
     type: ActionType;
   }
 
