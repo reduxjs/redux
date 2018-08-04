@@ -129,6 +129,7 @@ export default function combineReducers(reducers) {
     }
   }
   const finalReducerKeys = Object.keys(finalReducers)
+  const finalReducerKeysLength = finalReducerKeys.length
 
   let unexpectedKeyCache
   if (process.env.NODE_ENV !== 'production') {
@@ -161,7 +162,7 @@ export default function combineReducers(reducers) {
 
     let hasChanged = false
     const nextState = {}
-    for (let i = 0; i < finalReducerKeys.length; i++) {
+    for (let i = 0; i < finalReducerKeysLength; i++) {
       const key = finalReducerKeys[i]
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]
