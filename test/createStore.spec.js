@@ -760,4 +760,24 @@ describe('createStore', () => {
     expect(console.error.mock.calls.length).toBe(0)
     console.error = originalConsoleError
   })
+
+  it('should not notify subscribers while frozen', () => {
+    const store = createStore(() => { })
+    const listener = jest.fn()
+    store.subscribe(listener)
+    expect(listener.mock.calls.length).toEqual(0)
+
+    store.dispatch({ type: 'foo' })
+    expect(listener.mock.calls.length).toEqual(1)
+
+    store.dispatch({ type: `@@redux/FREEZE` })
+    expect(listener.mock.calls.length).toEqual(1)
+
+    store.dispatch({ type: 'foo' })
+    store.dispatch({ type: 'foo2' })
+    expect(listener.mock.calls.length).toEqual(1)
+
+    store.dispatch({ type: `@@redux/UNFREEZE` })
+    expect(listener.mock.calls.length).toEqual(2)
+  })
 })

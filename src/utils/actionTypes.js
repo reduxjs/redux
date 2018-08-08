@@ -14,6 +14,8 @@ const randomString = () =>
 
 const ActionTypes = {
   INIT: `@@redux/INIT${randomString()}`,
+  FREEZE: `@@redux/FREEZE`,
+  UNFREEZE: `@@redux/UNFREEZE`,
   REPLACE: `@@redux/REPLACE${randomString()}`,
   PROBE_UNKNOWN_ACTION: () => `@@redux/PROBE_UNKNOWN_ACTION${randomString()}`
 }

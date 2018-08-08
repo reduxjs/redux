@@ -51,6 +51,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let currentListeners = []
   let nextListeners = currentListeners
   let isDispatching = false
+  let isFrozen = false
 
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
@@ -180,6 +181,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
     if (isDispatching) {
       throw new Error('Reducers may not dispatch actions.')
     }
+    
+    if (action.type === ActionTypes.FREEZE) {
+      isFrozen = true
+    }
+
+    if (action.type === ActionTypes.UNFREEZE) {
+      isFrozen = false
+    }
 
     try {
       isDispatching = true
@@ -188,10 +197,12 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isDispatching = false
     }
 
-    const listeners = (currentListeners = nextListeners)
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+    if (!isFrozen) {
+      const listeners = (currentListeners = nextListeners)
+      for (let i = 0; i < listeners.length; i++) {
+        const listener = listeners[i]
+        listener()
+      }
     }
 
     return action
