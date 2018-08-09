@@ -82,12 +82,12 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Now let's handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibilityFilter` on the state. Easy:
+Now let's handle `VISIBILITY_FILTER_CLICKED`. All it needs to do is to change `visibilityFilter` on the state. Easy:
 
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return Object.assign({}, state, {
         visibilityFilter: action.filter
       })
@@ -115,13 +115,13 @@ Note that:
 
 ## Handling More Actions
 
-We have two more actions to handle! Just like we did with `SET_VISIBILITY_FILTER`, we'll import the `ADD_TODO` and `TOGGLE_TODO` actions and then extend our reducer to handle `ADD_TODO`.
+We have two more actions to handle! Just like we did with `VISIBILITY_FILTER_CLICKED`, we'll import the `TODO_SUBMITTED` and `TODO_CLICKED` actions and then extend our reducer to handle `TODO_SUBMITTED`.
 
 ```js
 import {
-  ADD_TODO,
-  TOGGLE_TODO,
-  SET_VISIBILITY_FILTER,
+  TODO_SUBMITTED,
+  TODO_CLICKED,
+  VISIBILITY_FILTER_CLICKED,
   VisibilityFilters
 } from './actions'
 
@@ -129,11 +129,11 @@ import {
 
 function todoApp(state = initialState, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return Object.assign({}, state, {
         visibilityFilter: action.filter
       })
-    case ADD_TODO:
+    case TODO_SUBMITTED:
       return Object.assign({}, state, {
         todos: [
           ...state.todos,
@@ -151,10 +151,10 @@ function todoApp(state = initialState, action) {
 
 Just like before, we never write directly to `state` or its fields, and instead we return new objects. The new `todos` is equal to the old `todos` concatenated with a single new item at the end. The fresh todo was constructed using the data from the action.
 
-Finally, the implementation of the `TOGGLE_TODO` handler shouldn't come as a complete surprise:
+Finally, the implementation of the `TODO_CLICKED` handler shouldn't come as a complete surprise:
 
 ```js
-case TOGGLE_TODO:
+case TODO_CLICKED:
   return Object.assign({}, state, {
     todos: state.todos.map((todo, index) => {
       if (index === action.index) {
@@ -176,11 +176,11 @@ Here is our code so far. It is rather verbose:
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return Object.assign({}, state, {
         visibilityFilter: action.filter
       })
-    case ADD_TODO:
+    case TODO_SUBMITTED:
       return Object.assign({}, state, {
         todos: [
           ...state.todos,
@@ -190,7 +190,7 @@ function todoApp(state = initialState, action) {
           }
         ]
       })
-    case TOGGLE_TODO:
+    case TODO_CLICKED:
       return Object.assign({}, state, {
         todos: state.todos.map((todo, index) => {
           if (index === action.index) {
@@ -212,7 +212,7 @@ Is there a way to make it easier to comprehend? It seems like `todos` and `visib
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-    case ADD_TODO:
+    case TODO_SUBMITTED:
       return [
         ...state,
         {
@@ -220,7 +220,7 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case TOGGLE_TODO:
+    case TODO_CLICKED:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
@@ -236,15 +236,15 @@ function todos(state = [], action) {
 
 function todoApp(state = initialState, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return Object.assign({}, state, {
         visibilityFilter: action.filter
       })
-    case ADD_TODO:
+    case TODO_SUBMITTED:
       return Object.assign({}, state, {
         todos: todos(state.todos, action)
       })
-    case TOGGLE_TODO:
+    case TODO_CLICKED:
       return Object.assign({}, state, {
         todos: todos(state.todos, action)
       })
@@ -267,7 +267,7 @@ Then:
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return action.filter
     default:
       return state
@@ -280,7 +280,7 @@ Now we can rewrite the main reducer as a function that calls the reducers managi
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-    case ADD_TODO:
+    case TODO_SUBMITTED:
       return [
         ...state,
         {
@@ -288,7 +288,7 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case TOGGLE_TODO:
+    case TODO_CLICKED:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
@@ -304,7 +304,7 @@ function todos(state = [], action) {
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return action.filter
     default:
       return state
@@ -389,16 +389,16 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 ```js
 import { combineReducers } from 'redux'
 import {
-  ADD_TODO,
-  TOGGLE_TODO,
-  SET_VISIBILITY_FILTER,
+  TODO_SUBMITTED,
+  TODO_CLICKED,
+  VISIBILITY_FILTER_CLICKED,
   VisibilityFilters
 } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
+    case VISIBILITY_FILTER_CLICKED:
       return action.filter
     default:
       return state
@@ -407,7 +407,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
 
 function todos(state = [], action) {
   switch (action.type) {
-    case ADD_TODO:
+    case TODO_SUBMITTED:
       return [
         ...state,
         {
@@ -415,7 +415,7 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case TOGGLE_TODO:
+    case TODO_CLICKED:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
