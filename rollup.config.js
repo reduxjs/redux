@@ -13,9 +13,7 @@ const config = {
 if (env === 'es' || env === 'cjs') {
   config.output = { format: env, indent: false }
   config.external = ['symbol-observable']
-  config.paths = env === 'es' ? {
-    'symbol-observable': 'https://unpkg.com/symbol-observable?module'
-  } : config.paths
+  if (env === 'es') config.paths = { 'symbol-observable': 'https://unpkg.com/symbol-observable?module' }
   config.plugins.push(
     nodeGlobals(),
     babel({
