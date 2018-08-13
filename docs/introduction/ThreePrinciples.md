@@ -28,6 +28,8 @@ console.log(store.getState())
 */
 ```
 
+There are [some exceptions](https://github.com/reduxjs/redux/issues/1287#issuecomment-175351978). If state within a component does not have any importance to other parts of the application, it does not have to go in redux state. [Form state](https://codeburst.io/final-form-the-road-to-the-checkered-flag-cd9b75c25fe) is a good example of this.
+
 ### State is read-only
 
 **The only way to change the state is to emit an [action](../Glossary.md#action), an object describing what happened.**
