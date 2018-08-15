@@ -304,10 +304,10 @@ can be tested like:
 ```js
 import React from 'react'
 import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 import Header from '../../components/Header'
 
-Enzyme.configure({ adapter: new Adapter() });
+Enzyme.configure({ adapter: new Adapter() })
 
 function setup() {
   const props = {
@@ -434,13 +434,13 @@ const create = () => {
   const store = {
     getState: jest.fn(() => ({})),
     dispatch: jest.fn(),
-  };
+  }
   const next = jest.fn()
 
   const invoke = (action) => thunk(store)(next)(action)
 
   return {store, next, invoke}
-};
+}
 ```
 
 We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
@@ -458,17 +458,17 @@ it('calls the function', () => {
   const fn = jest.fn()
   invoke(fn)
   expect(fn).toHaveBeenCalled()
-});
+})
 
 it('passes dispatch and getState', () => {
   const { store, invoke } = create()
   invoke((dispatch, getState) => {
     dispatch('TEST DISPATCH')
-    getState();
+    getState()
   })
   expect(store.dispatch).toHaveBeenCalledWith('TEST DISPATCH')
   expect(store.getState).toHaveBeenCalled()
-});
+})
 ```
 
 In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
