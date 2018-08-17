@@ -237,11 +237,9 @@ And much more!
 The course is based on Mark's original free **["Practical Redux" blog tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)**, but with updated and improved content.
 
 
-### Redux Workshops
+### Redux Fundamentals Workshop
 
-Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has partnered with [Workshop.me](https://workshop.me/) to teach a series of Redux workshops.
-
-The first [**Redux Fundamentals** workshop will be held in New York City, April 19-20](https://workshop.me/2018-04-react-redux?a=mark), and will cover:
+Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put together a [**Redux Fundamentals workshop**, and slides are available here](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/).  They cover:
 
 - The history and purpose of Redux
 - Reducers, actions, and working with a Redux store
@@ -250,8 +248,6 @@ The first [**Redux Fundamentals** workshop will be held in New York City, April 
 - Working with AJAX calls and other side effects
 - Unit testing Redux apps
 - Real-world Redux app structure and development
-
-Tickets are still available, and [can be purchased through Workshop.me](https://workshop.me/2018-04-react-redux?a=mark).
 
 
 ## Documentation
