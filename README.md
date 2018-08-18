@@ -1,11 +1,11 @@
 # <a href='http://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60' alt='Redux Logo' aria-label='redux.js.org' /></a>
 
-Redux is a predictable state container for JavaScript apps.  
-(Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).)
+Redux is a predictable state container for JavaScript apps. In essence Redux stores your state as an object tree,
+and provides tooling for updating that object and ensuring that all consumers are informed of updates.
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
-You can use Redux together with [React](https://reactjs.org), or with any other view library.  
+Redux is often used with [React](https://reactjs.org), however it can be used with any view library.
 It is tiny (2kB, including dependencies).
 
 [![build status](https://img.shields.io/travis/reduxjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reduxjs/redux)
@@ -14,10 +14,9 @@ It is tiny (2kB, including dependencies).
 [![redux channel on discord](https://img.shields.io/badge/discord-%23redux%20%40%20reactiflux-61dafb.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZ6au5t)
 [![Changelog #187](https://img.shields.io/badge/changelog-%23187-lightgrey.svg?style=flat-square)](https://changelog.com/187)
 
-
 ## Learn Redux
 
-We have a variety of resources available to help you learn Redux, no matter what your background or learning style is.
+We have a variety of resources available to help you learn Redux, no matter what your background or learning style is. If you're looking to dive right in check out our [tutorial](introduction/Tutorial.md)
 
 ### Just the Basics
 
@@ -49,7 +48,7 @@ Going from a TodoMVC app to a real production application can be a big jump, but
 
 - Redux creator Dan Abramov's **[free "Building React Applications with Idiomatic Redux" video series](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** builds on his first video series and covers topics like middleware, routing, and persistence.
 - The **[Redux FAQ](https://redux.js.org/faq)** answers many common questions about how to use Redux, and the **["Recipes" docs section](https://redux.js.org/recipes)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
-- Redux co-maintainer Mark Erikson's **["Practical Redux" tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)** demonstrates real-world intermediate and advanced techniques for working with React and Redux (also available as **[an interactive course on Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).  
+- Redux co-maintainer Mark Erikson's **["Practical Redux" tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)** demonstrates real-world intermediate and advanced techniques for working with React and Redux (also available as **[an interactive course on Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).
 - The **[React/Redux links list](https://github.com/markerikson/react-redux-links)** has categorized articles on working with [reducers and selectors](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md), [managing side effects](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md), [Redux architecture and best practices](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md), and more.
 - Our community has created thousands of Redux-related libraries, addons, and tools.  The **["Ecosystem" docs page](https://redux.js.org/introduction/ecosystem)** lists our recommendations, and there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.
 - If you're looking to learn from actual application codebases, the addons catalog also has a list of **[purpose-built examples and real-world applications](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)**.
@@ -87,7 +86,7 @@ Dan Abramov (author of Redux) wrote Redux while working on his React Europe talk
 
 ## Influences
 
-Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
+Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
 Even if you haven't used Flux or Elm, Redux only takes a few minutes to get started with.
 
 ## Installation
@@ -98,7 +97,7 @@ To install the stable version:
 npm install --save redux
 ```
 
-This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
+This assumes you are using [npm](https://www.npmjs.com/) as your package manager.
 
 If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 
@@ -121,8 +120,8 @@ Note that unlike Redux itself, many packages in the Redux ecosystem don't provid
 
 ## The Gist
 
-The whole state of your app is stored in an object tree inside a single *store*.  
-The only way to change the state tree is to emit an *action*, an object describing what happened.  
+The whole state of your app is stored in an object tree inside a single *store*.
+The only way to change the state tree is to emit an *action*, an object describing what happened.
 To specify how the actions transform the state tree, you write pure *reducers*.
 
 That's it!
@@ -188,19 +187,19 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 #### Getting Started with Redux
 **[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)** is a video course consisting of 30 videos narrated by [Dan Abramov](https://twitter.com/dan_abramov), author of Redux. It is designed to complement the “Basics” part of the docs while bringing additional insights about immutability, testing, Redux best practices, and using Redux with React. **This course is free and will always be.**
 
->[“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
+>[“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)
 >Sandrino Di Mattia
 
->[“Plowing through @dan_abramov 'Getting Started with Redux' - its amazing how much simpler concepts get with video.”](https://twitter.com/chrisdhanaraj/status/670328025553219584)  
+>[“Plowing through @dan_abramov 'Getting Started with Redux' - its amazing how much simpler concepts get with video.”](https://twitter.com/chrisdhanaraj/status/670328025553219584)
 >Chris Dhanaraj
 
->[“This video series on Redux by @dan_abramov on @eggheadio is spectacular!”](https://twitter.com/eddiezane/status/670333133242408960)  
+>[“This video series on Redux by @dan_abramov on @eggheadio is spectacular!”](https://twitter.com/eddiezane/status/670333133242408960)
 >Eddie Zaneski
 
->[“Come for the name hype. Stay for the rock solid fundamentals. (Thanks, and great job @dan_abramov and @eggheadio!)”](https://twitter.com/danott/status/669909126554607617)  
+>[“Come for the name hype. Stay for the rock solid fundamentals. (Thanks, and great job @dan_abramov and @eggheadio!)”](https://twitter.com/danott/status/669909126554607617)
 >Dan
 
->[“This series of videos on Redux by @dan_abramov is repeatedly blowing my mind - gunna do some serious refactoring”](https://twitter.com/gelatindesign/status/669658358643892224)  
+>[“This series of videos on Redux by @dan_abramov is repeatedly blowing my mind - gunna do some serious refactoring”](https://twitter.com/gelatindesign/status/669658358643892224)
 >Laurence Roberts
 
 So, what are you waiting for?
@@ -224,14 +223,14 @@ The **[Building React Applications with Idiomatic Redux](https://egghead.io/cour
 **[Practical Redux](https://www.educative.io/collection/5687753853370368/5707702298738688/)** is a paid interactive course by Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke).  The course is designed to show how to apply the basic concepts of Redux to building something larger than a TodoMVC application.  It includes real-world topics like:
 
 
-- Adding Redux to a new Create-React-App project and configuring Hot Module Replacement for faster development 
-- Controling your UI behavior with Redux 
-- Using the Redux-ORM library to manage relational data in your Redux store 
-- Building a master/detail view to display and edit data 
-- Writing custom advanced Redux reducer logic to solve specific problems 
-- Optimizing performance of Redux-connected form inputs 
+- Adding Redux to a new Create-React-App project and configuring Hot Module Replacement for faster development
+- Controling your UI behavior with Redux
+- Using the Redux-ORM library to manage relational data in your Redux store
+- Building a master/detail view to display and edit data
+- Writing custom advanced Redux reducer logic to solve specific problems
+- Optimizing performance of Redux-connected form inputs
 
-And much more!  
+And much more!
 
 The course is based on Mark's original free **["Practical Redux" blog tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)**, but with updated and improved content.
 
@@ -287,13 +286,13 @@ If you're new to the NPM ecosystem and have troubles getting a project up and ru
 
 ## Testimonials
 
->[“Love what you're doing with Redux”](https://twitter.com/jingc/status/616608251463909376)  
+>[“Love what you're doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
 >Jing Chen, creator of Flux
 
->[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
+>[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
 >Bill Fisher, author of Flux documentation
 
->[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
+>[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
 >André Staltz, creator of Cycle
 
 ## Thanks
@@ -317,12 +316,12 @@ You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree
 
 ## Change Log
 
-This project adheres to [Semantic Versioning](http://semver.org/).  
+This project adheres to [Semantic Versioning](http://semver.org/).
 Every release, along with the migration instructions, is documented on the GitHub [Releases](https://github.com/reduxjs/redux/releases) page.
 
 ## Patrons
 
-The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
+The work on Redux was [funded by the community](https://www.patreon.com/reactdx).
 Meet some of the outstanding companies that made it possible:
 
 * [Webflow](https://github.com/webflow)
