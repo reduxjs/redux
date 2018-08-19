@@ -3,10 +3,9 @@
 Redux is a predictable state container for JavaScript apps. In essence Redux stores your state as an object tree,
 and provides tooling for updating that object and ensuring that all consumers are informed of updates.
 
-It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, and makes it possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer. See [redux-devtools]((https://github.com/reduxjs/redux-devtools).
+It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, and makes it possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer. See [redux-devtools](https://github.com/reduxjs/redux-devtools).
 
-Redux is often used with [React](https://reactjs.org), however it can be used with any view library.
-It is tiny (2kB, including dependencies).
+Redux is often used with [React](https://reactjs.org), however it can be used with any view library. It is tiny (2kB, including dependencies). First time with Redux? Take a look at our comprehensive [tutorial](introduction/Tutorial.md) to hit the ground running.
 
 Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).
 

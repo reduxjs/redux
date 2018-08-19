@@ -1,7 +1,16 @@
 # Table of Contents
 
 * [Read Me](../README.md)
+* [Tutorial](Tutorial.md)
+* [Concepts](concepts/README.md)
+  * [Actions](concepts/Actions.md)
+  * [Reducers](concepts/Reducers.md)
+  * [Store](concepts/Store.md)
+  * [Data Flow](concepts/DataFlow.md)
+  * [Usage with React](concepts/UsageWithReact.md)
+  * [Example: Todo List](concepts/ExampleTodoList.md)
 * [Introduction](introduction/README.md)
+
   * [Motivation](introduction/Motivation.md)
   * [Core Concepts](introduction/CoreConcepts.md)
   * [Three Principles](introduction/ThreePrinciples.md)
@@ -9,13 +18,7 @@
   * [Learning Resources](introduction/LearningResources.md)
   * [Ecosystem](introduction/Ecosystem.md)
   * [Examples](introduction/Examples.md)
-* [Basics](basics/README.md)
-  * [Actions](basics/Actions.md)
-  * [Reducers](basics/Reducers.md)
-  * [Store](basics/Store.md)
-  * [Data Flow](basics/DataFlow.md)
-  * [Usage with React](basics/UsageWithReact.md)
-  * [Example: Todo List](basics/ExampleTodoList.md)
+
 * [Advanced](advanced/README.md)
   * [Async Actions](advanced/AsyncActions.md)
   * [Async Flow](advanced/AsyncFlow.md)

@@ -6,7 +6,19 @@
   "homepage": "http://redux.js.org",
   "repository": "github:reduxjs/redux",
   "bugs": "https://github.com/reduxjs/redux/issues",
-  "keywords": ["redux","reducer","state","predictable","functional","immutable","hot","live","replay","flux","elm"],
+  "keywords": [
+    "redux",
+    "reducer",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
+    "hot",
+    "live",
+    "replay",
+    "flux",
+    "elm"
+  ],
   "authors": [
     "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
@@ -41,6 +53,7 @@
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
+    "gitbook": "^3.2.3",
     "loose-envify": "^1.1.0",
     "symbol-observable": "^1.2.0"
   },
