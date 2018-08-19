@@ -79,6 +79,15 @@ Almost all examples have a corresponding CodeSandbox sandbox. This is an interac
 
 If you're new to the NPM ecosystem and have troubles getting a project up and running, or aren't sure where to paste the gist above, check out [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) that uses Redux together with React and Browserify.
 
+## Change Log
+
+This project adheres to [Semantic Versioning](http://semver.org/).
+Every release, along with the migration instructions, is documented on the GitHub [Releases](https://github.com/reduxjs/redux/releases) page.
+
+## Logo
+
+You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree/master/logo).
+
 ## Thanks
 
 * [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
@@ -94,14 +103,6 @@ If you're new to the NPM ecosystem and have troubles getting a project up and ru
 
 Special thanks to [Jamie Paton](http://jdpaton.github.io) for handing over the `redux` NPM package name.
 
-## Logo
-
-You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree/master/logo).
-
-## Change Log
-
-This project adheres to [Semantic Versioning](http://semver.org/).
-Every release, along with the migration instructions, is documented on the GitHub [Releases](https://github.com/reduxjs/redux/releases) page.
 
 ## Patrons
 
