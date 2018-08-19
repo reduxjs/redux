@@ -3,7 +3,7 @@
 Redux is a predictable state container for JavaScript apps. In essence Redux stores your state as an object tree,
 and provides tooling for updating that object and ensuring that all consumers are informed of updates.
 
-It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
+It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, and makes it possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer. See [redux-devtools]((https://github.com/reduxjs/redux-devtools).
 
 Redux is often used with [React](https://reactjs.org), however it can be used with any view library.
 It is tiny (2kB, including dependencies).
@@ -23,10 +23,6 @@ We have a variety of resources available to help you learn Redux, no matter what
 ## Help and Discussion
 
 The **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** of the **[Reactiflux Discord community](http://www.reactiflux.com)** is our official resource for all questions related to learning and using Redux.  Reactiflux is a great place to hang out, ask questions, and learn - come join us!
-
-## Developer Experience
-
-Dan Abramov (author of Redux) wrote Redux while working on his React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). His goal was to create a state management library with a minimal API but completely predictable behavior. Redux makes it possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
 
 ## Installation
 
@@ -90,6 +86,7 @@ You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree
 
 ## Thanks
 
+* [Dan Abramov](https://twitter.com/dan_abramov) (author of Redux) wrote Redux while working on his React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). His goal was to create a state management library with a minimal API but completely predictable behavior.
 * [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
 * [Turning the database inside-out](https://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
 * [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
