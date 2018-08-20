@@ -1,4 +1,5 @@
 import nodeResolve from 'rollup-plugin-node-resolve'
+import nodeGlobals from 'rollup-plugin-node-globals'
 import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import uglify from 'rollup-plugin-uglify'
@@ -13,6 +14,7 @@ if (env === 'es' || env === 'cjs') {
   config.output = { format: env, indent: false }
   config.external = ['symbol-observable']
   config.plugins.push(
+    nodeGlobals(),
     babel({
       plugins: ['external-helpers'],
     })

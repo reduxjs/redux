@@ -66,6 +66,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.58.0",
     "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-node-globals": "^1.2.1",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^3.0.0",
