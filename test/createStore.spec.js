@@ -9,7 +9,8 @@ import {
   unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
-import * as Rx from 'rxjs'
+import { from } from 'rxjs'
+import { map } from 'rxjs/operators';
 import $$observable from 'symbol-observable'
 
 describe('createStore', () => {
@@ -717,11 +718,12 @@ describe('createStore', () => {
       }
 
       const store = createStore(combineReducers({ foo, bar }))
-      const observable = Rx.Observable.from(store)
+      const observable = from(store)
       const results = []
 
-      const sub = observable
-        .map(state => ({ fromRx: true, ...state }))
+      const sub = observable.pipe(
+          map(state => ({ fromRx: true, ...state }))
+        )
         .subscribe(state => results.push(state))
 
       store.dispatch({ type: 'foo' })
