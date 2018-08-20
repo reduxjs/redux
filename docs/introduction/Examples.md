@@ -85,6 +85,24 @@ This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the 
 
 This example includes tests.
 
+## Todos TypeSript
+
+Run the [Todos TypeSript](https://github.com/reactjs/redux/tree/master/examples/todos-typescript) example:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/todos-typescript
+npm install
+npm start
+```
+
+Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-typescript).
+
+This is identical to the Todos example above, but written with TypeScript.
+
+This example includes tests.
+
 ## Shopping Cart
 
 Run the [Shopping Cart](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) example:
