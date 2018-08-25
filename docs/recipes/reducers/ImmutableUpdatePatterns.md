@@ -56,13 +56,13 @@ function updateVeryNestedField(state, action) {
         ...state,
         first : {
             ...state.first,
-            second : {
+            second : [
                 ...state.first.second,
                 [action.someId] : {
                     ...state.first.second[action.someId],
                     fourth : action.someValue
                 }
-            }
+            ]
         }
     }
 }
