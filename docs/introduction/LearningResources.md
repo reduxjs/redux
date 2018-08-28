@@ -145,6 +145,10 @@ This page includes our recommendations for some of the best external resources a
 
 *Explanations of how and why to use selector functions to read values from state*
   
+- **Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance**  
+  https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/  
+  A complete guide to why you should use selector functions with Redux, how to use the Reselect library to write optimized selectors, and advanced tips for improving performance.
+  
 - **ReactCasts #8: Selectors in Redux**  
   https://www.youtube.com/watch?v=frT3to2ACCw  
   A great overview of why and how to use selector functions to retrieve data from the store, and derive additional data from store values
