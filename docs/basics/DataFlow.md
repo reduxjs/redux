@@ -18,7 +18,7 @@ The data lifecycle in any Redux app follows these 4 steps:
     { type: 'ADD_TODO', text: 'Read the Redux docs.' }
    ```
 
-  Think of an action as a very brief snippet of news. “Mary liked article 42.” or “‘Read the Redux docs.' was added to the list of todos.”
+  Think of an action as a very brief snippet of news. “Mary liked article 42.” or “'Read the Redux docs.' was added to the list of todos.”
 
   You can call [`store.dispatch(action)`](../api/Store.md#dispatch) from anywhere in your app, including components and XHR callbacks, or even at scheduled intervals.
 
