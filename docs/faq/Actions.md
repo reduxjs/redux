@@ -97,28 +97,19 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 <a id="actions-async-middlewares"></a>
 ### What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?
 
-This question arose many times throughout the web and while there is no direct opinion to give you on which model you should use to handle side effects in your Redux apps, we feel that there are situations in which Redux-Thunk just fits in perfectly and others where Redux-Saga is best suited for the job.
+There are [many async/side effect middlewares available](https://github.com/markerikson/redux-ecosystem-links/blob/master/side-effects.md), but the most commonly used ones are [`redux-thunk`](https://github.com/reduxjs/redux-thunk), [`redux-saga`](https://github.com/redux-saga/redux-saga), and [`redux-observable`](https://github.com/redux-observable/redux-observable).  These are different tools, with different strengths, weaknesses, and use cases.
 
-As a rule of thumb we can say that:
+As a general rule of thumb:
 
-- Thunks are best for complex synchronous logic and simple async logic. With the use of `async/await` the resulting code of some slightly advanced async task should be sufficiently manageable too.
-- Sagas give their very best for complex async logic and decoupled "background thread"-type behavior, especially if you need to listen to dispatched actions. In fact one of the main reason why Sagas are best used for complex async, is that they don't only let you dispatch actions (of course), but they allow you to respond and execute some logic against an actions that has been dispatched.
+- Thunks are best for complex synchronous logic (especially code that needs access to the entire Redux store state), and simple async logic (like basic AJAX calls). With the use of `async/await`, it can be reasonable to use thunks for some more complex promise-based logic as well.
+- Sagas are best for complex async logic and decoupled "background thread"-type behavior, especially if you need to listen to dispatched actions (which is something that can't be done with thunks).  They require familiarity with ES6 generator functions and `redux-saga`'s "effects" operators.
+- Observables solve the same problems as sagas, but rely on RxJS to implement async behavior.  They require familiarity with the RxJS API.
 
-But if you feel that in a specific project Sagas would be an overkill in the development of some features but not in others, **it's absolutely fine for you to use both** to handle your side effects and switch them based on the complexity of the code you're writing. You could even start to write some logic through thunk and at a certain point "convert it" introducing the use of a Saga. Remember that this approach is always preferred to using "one tool for every job"... as the old saying says:
+We recommend that most Redux users should start with thunks, and then add an additional side effect library like sagas or observables later if their app really requires handling for more complex async logic.
 
-> If your only tool is a hammer, every problem looks like a nail.
+Since sagas and observables have the same use case, an application would normally use one or the other, but not both.  However, note that **it's absolutely fine to use both thunks and either sagas or observables together**, because they solve different problems.
 
-For instance, if you're using Redux-Saga for everything, you're probably doing more damage than anything else because Sagas require understanding generator functions, understanding the "effects" that it provides and since Redux-Saga has these own personal "effects", it introduces an unnecessary layer of complexity that decrease the code readability.
 
-Until now we've spoken only about the most common two middlewares used to handle side effects in Redux but for any other libraries (e.g. Redux-Observables) you can generally apply the same above rules since, compared to Redux-Saga, they just introduce different APIs.
-So it's safe to say that the use cases are the same and all we have said for Redux-Saga applies to the others.
-
-So the other "big" two are, in order of use, Redux-Observables and Redux-Loop. 
-
-Redux-Observables, as the name states already, is a middleware based on RxJS 6: a well known library built around the concept of the Observable and based on the reactive programming paradigm.
-RxJS itself is used in lots of different projects, across many frameworks and it may be convenient to learn it instead of Redux-Saga considering that it's a generic async library and the knowledge you acquire while learning it, is transferable to things other than Redux.
-
-Redux-Loop, instead, is a slightly different, and less used, approach than the other two. It is a port of the Elm language architecture that allows you to sequence your effects naturally and purely by returning them from your reducers.
 
 **Articles**
 
@@ -127,7 +118,7 @@ Redux-Loop, instead, is a slightly different, and less used, approach than the o
 
 **Discussions**
 
-- [React Developer Map by adam-golab ](https://www.reddit.com/r/reactjs/comments/8vglo0/react_developer_map_by_adamgolab/e1nr597/)
+- [Reddit: discussion of using thunks and sagas together, and pros and cons of sagas](https://www.reddit.com/r/reactjs/comments/8vglo0/react_developer_map_by_adamgolab/e1nr597/)
 - [Stack Overflow: Pros/cons of using redux-saga with ES6 generators vs redux-thunk with ES2017 async/await](https://stackoverflow.com/questions/34930735/pros-cons-of-using-redux-saga-with-es6-generators-vs-redux-thunk-with-es2017-asy)
 - [Stack Overflow: Why use Redux-Observable over Redux-Saga?](https://stackoverflow.com/questions/40021344/why-use-redux-observable-over-redux-saga/40027778#40027778)
 
