@@ -273,22 +273,24 @@ Here is an example of such a HOC:
 import React from 'react'
 import { Iterable } from 'immutable'
 
-export const toJS = WrappedComponent => wrappedComponentProps => {
-  const KEY = 0
-  const VALUE = 1
+const prepareValue = (value) => {
+  return Iterable.isIterable(value) ? value.toJS() : value
+}
 
-  const propsJS = Object.entries(
-    wrappedComponentProps
-  ).reduce((newProps, wrappedComponentProp) => {
-    newProps[wrappedComponentProp[KEY]] = Iterable.isIterable(
-      wrappedComponentProp[VALUE]
-    )
-      ? wrappedComponentProp[VALUE].toJS()
-      : wrappedComponentProp[VALUE]
-    return newProps
+const convertToJsProps = (object) => {
+  return Object.keys(object).reduce((props, key) => {
+    const value = prepareValue(object[key])
+    return { ...props, [key]: value }
   }, {})
+}
 
-  return <WrappedComponent {...propsJS} />
+export default (WrappedComponent) => {
+  const HOC = (wrappedComponentProps, ref) => {
+    const propsJS = convertToJsProps(wrappedComponentProps)
+    return <WrappedComponent {...propsJS} ref={ref} />
+  }
+
+  return React.forwardRef(HOC)
 }
 ```
 
