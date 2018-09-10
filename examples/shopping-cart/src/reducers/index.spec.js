@@ -69,12 +69,12 @@ describe('selectors', () => {
           quantity: 4
         },
         {
-          id: 1,
+          id: 2,
           price: 4.99,
           quantity: 2
         },
         {
-          id: 1,
+          id: 3,
           price: 9.99,
           quantity: 1
         }
