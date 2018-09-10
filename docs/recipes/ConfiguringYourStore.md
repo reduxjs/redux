@@ -308,4 +308,4 @@ The only extra change here is that we have encapsulated our app's rendering into
 
 ## Next Steps
 
-Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [learn more about the advanced features Redux provides](../advanced/README.md), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/ecosystem).
+Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [learn more about the advanced features Redux provides](../advanced/README.md), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/Ecosystem.md#debuggers-and-viewers).
