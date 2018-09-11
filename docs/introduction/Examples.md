@@ -29,7 +29,7 @@ npm start
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter):
 
-<iframe src="https://codesandbox.io/embed/github/reactjs/redux/tree/master/examples/counter" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+https://codesandbox.io/embed/github/reactjs/redux/tree/master/examples/counter
 
 This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/reactjs/react-redux) bindings instead.
 
