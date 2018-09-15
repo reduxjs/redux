@@ -1,15 +1,18 @@
 import React from 'react'
+import Immutable from 'immutable'
 import { createRenderer } from 'react-test-renderer/shallow';
 import TodoItem from './TodoItem'
 import TodoTextInput from './TodoTextInput'
 
 const setup = ( editing = false ) => {
-  const props = {
-    todo: {
-      id: 0,
-      text: 'Use Redux',
-      completed: false
-    },
+
+  const todo = Immutable.fromJS({
+    id: 0,
+    text: 'Use Redux',
+    completed: false
+  })
+
+  const actions = {
     editTodo: jest.fn(),
     deleteTodo: jest.fn(),
     completeTodo: jest.fn()
@@ -18,7 +21,7 @@ const setup = ( editing = false ) => {
   const renderer = createRenderer()
 
   renderer.render(
-    <TodoItem {...props} />
+    <TodoItem todo={todo} {...actions} />
   )
 
   let output = renderer.getRenderOutput()
@@ -30,7 +33,10 @@ const setup = ( editing = false ) => {
   }
 
   return {
-    props: props,
+    props: {
+      todo,
+      ...actions
+    },
     output: output,
     renderer: renderer
   }
