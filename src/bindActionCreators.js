@@ -41,9 +41,9 @@ export default function bindActionCreators(actionCreators, dispatch) {
 
   const keys = Object.keys(actionCreators)
   const boundActionCreators = {}
-  keys.forEach(function(key){
+  keys.forEach(function(key) {
     const actionCreator = actionCreators[key]
-    if (typeof actionCreator === 'function'){
+    if (typeof actionCreator === 'function') {
       boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
     }
   })
