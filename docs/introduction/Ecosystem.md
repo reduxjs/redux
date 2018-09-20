@@ -633,7 +633,7 @@ Makes component state in Redux as easy as setState
 const DynamicCounters = connectLean(
     scope: "dynamicCounters",
     getInitialState() => ({counterCount : 1}),
-    addCounter, removeCOunter
+    addCounter, removeCounter
 )(CounterList);
 ```
 
