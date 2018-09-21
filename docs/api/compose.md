@@ -25,6 +25,7 @@ import reducer from '../reducers'
 
 const store = createStore(
   reducer,
+  undefined,
   compose(
     applyMiddleware(thunk),
     DevTools.instrument()
