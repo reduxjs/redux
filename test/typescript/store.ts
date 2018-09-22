@@ -48,8 +48,7 @@ const reducerWithAction: Reducer<State, DerivedAction> = (
   return state
 }
 
-const funcWithStore = (store: Store<State, DerivedAction>) => {
-}
+const funcWithStore = (store: Store<State, DerivedAction>) => {}
 
 /* createStore */
 
