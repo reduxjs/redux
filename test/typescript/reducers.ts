@@ -187,11 +187,11 @@ function typeGuards() {
  * Test ReducersMapObject with default type args.
  */
 function reducersMapObject() {
-  const obj: ReducersMapObject = {};
+  const obj: ReducersMapObject = {}
 
   for (const key of Object.keys(obj)) {
-    obj[key](undefined, {type: 'SOME_TYPE'});
+    obj[key](undefined, { type: 'SOME_TYPE' })
     // typings:expect-error
-    obj[key](undefined, 'not-an-action');
+    obj[key](undefined, 'not-an-action')
   }
 }
