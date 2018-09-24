@@ -62,9 +62,6 @@ Ember bindings for Redux
 **[glimmer-redux/glimmer-redux](glimmer-redux/glimmer-redux)**  
 Redux bindings for Ember's Glimmer component engine
 
-**[revue/revue](https://github.com/revue/revue)**  
-Redux bindings for Vue
-
 **[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
 Redux bindings for Polymer
 
@@ -401,7 +398,7 @@ Handle async logic using synchronous-looking generator functions. Sagas return d
 function* fetchData(action) {
     const {someValue} = action;
     try {
-        const result = yield call(myAjaxLib.post, "/someEndpoint", {data : someValue});
+        const response = yield call(myAjaxLib.post, "/someEndpoint", {data : someValue});
         yield put({type : "REQUEST_SUCCEEDED", payload : response});
     }
     catch(error) {
@@ -636,7 +633,7 @@ Makes component state in Redux as easy as setState
 const DynamicCounters = connectLean(
     scope: "dynamicCounters",
     getInitialState() => ({counterCount : 1}),
-    addCounter, removeCOunter
+    addCounter, removeCounter
 )(CounterList);
 ```
 

@@ -23,6 +23,7 @@ We have a variety of resources available to help you learn Redux, no matter what
 
 If you're brand new to Redux and want to understand the basic concepts, see:
 
+- The **[Motivation](https://redux.js.org/introduction/motivation)** behind building Redux, the **[Core Concepts](https://redux.js.org/introduction/coreconcepts)**, and the **[Three Principles](https://redux.js.org/introduction/threeprinciples)**.
 - The **[basic tutorial in the Redux docs](https://redux.js.org/basics)**
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** on Egghead.io
 - Redux co-maintainer Mark Erikson's **["Redux Fundamentals" slideshow](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and **[list of suggested resources for learning Redux](http://blog.isquaredsoftware.com/2017/12/blogged-answers-learn-redux/)**
@@ -102,7 +103,7 @@ This assumes you are using [npm](https://www.npmjs.com/) as your package manager
 
 If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 
-Most commonly, people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](http://rollupjs.org), we support that as well.
+Most commonly, people consume Redux as a collection of [CommonJS](http://webpack.github.io/docs/commonjs.html) modules. These modules are what you get when you import `redux` in a [Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](https://rollupjs.org), we support that as well.
 
 If you don't use a module bundler, it's also fine. The `redux` npm package includes precompiled production and development [UMD](https://github.com/umdjs/umd) builds in the [`dist` folder](https://unpkg.com/redux/dist/). They can be used directly without a bundler and are thus compatible with many popular JavaScript module loaders and environments. For example, you can drop a UMD build as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) on the page, or [tell Bower to install it](https://github.com/reduxjs/redux/pull/1181#issuecomment-167361975). The UMD builds make Redux available as a `window.Redux` global variable.
 
@@ -236,11 +237,9 @@ And much more!
 The course is based on Mark's original free **["Practical Redux" blog tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)**, but with updated and improved content.
 
 
-### Redux Workshops
+### Redux Fundamentals Workshop
 
-Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has partnered with [Workshop.me](https://workshop.me/) to teach a series of Redux workshops.
-
-The first [**Redux Fundamentals** workshop will be held in New York City, April 19-20](https://workshop.me/2018-04-react-redux?a=mark), and will cover:
+Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put together a [**Redux Fundamentals workshop**, and slides are available here](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/).  They cover:
 
 - The history and purpose of Redux
 - Reducers, actions, and working with a Redux store
@@ -249,8 +248,6 @@ The first [**Redux Fundamentals** workshop will be held in New York City, April 
 - Working with AJAX calls and other side effects
 - Unit testing Redux apps
 - Real-world Redux app structure and development
-
-Tickets are still available, and [can be purchased through Workshop.me](https://workshop.me/2018-04-react-redux?a=mark).
 
 
 ## Documentation
@@ -299,7 +296,7 @@ If you're new to the NPM ecosystem and have troubles getting a project up and ru
 ## Thanks
 
 * [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
-* [Turning the database inside-out](http://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
+* [Turning the database inside-out](https://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
 * [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
 * [Webpack](https://webpack.js.org/concepts/hot-module-replacement/) for Hot Module Replacement;
 * [Flummox](https://github.com/acdlite/flummox) for teaching me to approach Flux without boilerplate or singletons;
@@ -318,7 +315,7 @@ You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree
 ## Change Log
 
 This project adheres to [Semantic Versioning](http://semver.org/).  
-Every release, along with the migration instructions, is documented on the Github [Releases](https://github.com/reduxjs/redux/releases) page.
+Every release, along with the migration instructions, is documented on the GitHub [Releases](https://github.com/reduxjs/redux/releases) page.
 
 ## Patrons
 

@@ -99,7 +99,7 @@ Let's add these to our  existing `index.js`.
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore, compose } from 'redux'
+import { applyMiddleware, createStore, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import rootReducer from './reducers'
 import loggerMiddleware from './middleware/logger'
@@ -204,14 +204,14 @@ First, we install the package via npm:
 npm install --save-dev redux-devtools-extension
 ```
 
-Next, we remove the `compose` function which we imported from `redux`, and replace it with a new `composeWithDevtools` function imported from `redux-devtools-extension`.
+Next, we remove the `compose` function which we imported from `redux`, and replace it with a new `composeWithDevTools` function imported from `redux-devtools-extension`.
 
 The final code looks like this:
 
 ```js
 import { applyMiddleware, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import { composeWithDevtools } from 'redux-devtools-extension'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'
@@ -222,7 +222,7 @@ export default function configureStore(preloadedState) {
   const middlewareEnhancer = applyMiddleware(...middlewares)
 
   const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
-  const composedEnhancers = composeWithDevtools(...enhancers)
+  const composedEnhancers = composeWithDevTools(...enhancers)
 
   const store = createStore(rootReducer, preloadedState, composedEnhancers)
 
@@ -308,4 +308,4 @@ The only extra change here is that we have encapsulated our app's rendering into
 
 ## Next Steps
 
-Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [learn more about the advanced features Redux provides](../basics/README.md), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/ecosystem).
+Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [learn more about the advanced features Redux provides](../advanced/README.md), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/Ecosystem.md#debuggers-and-viewers).

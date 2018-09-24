@@ -1,4 +1,3 @@
-
 /**
  * An *action* is a plain object that represents an intention to change the
  * state. Actions are the only way to get data into the store. Any data,
@@ -17,7 +16,7 @@
  * @template T the type of the action's `type` tag.
  */
 export interface Action<T = any> {
-  type: T;
+  type: T
 }
 
 /**
@@ -27,7 +26,7 @@ export interface Action<T = any> {
  */
 export interface AnyAction extends Action {
   // Allows any extra properties to be defined in an action.
-  [extraProps: string]: any;
+  [extraProps: string]: any
 }
 
 /* reducers */
@@ -56,7 +55,10 @@ export interface AnyAction extends Action {
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefined, action: A) => S;
+export type Reducer<S = any, A extends Action = AnyAction> = (
+  state: S | undefined,
+  action: A
+) => S
 
 /**
  * Object whose values correspond to different reducer functions.
@@ -64,7 +66,7 @@ export type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefin
  * @template A The type of actions the reducers can potentially respond to.
  */
 export type ReducersMapObject<S = any, A extends Action = Action> = {
-  [K in keyof S]: Reducer<S[K], A>;
+  [K in keyof S]: Reducer<S[K], A>
 }
 
 /**
@@ -85,9 +87,12 @@ export type ReducersMapObject<S = any, A extends Action = Action> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S>(reducers: ReducersMapObject<S, any>): Reducer<S>;
-export function combineReducers<S, A extends Action = AnyAction>(reducers: ReducersMapObject<S, A>): Reducer<S, A>;
-
+export function combineReducers<S>(
+  reducers: ReducersMapObject<S, any>
+): Reducer<S>
+export function combineReducers<S, A extends Action = AnyAction>(
+  reducers: ReducersMapObject<S, A>
+): Reducer<S, A>
 
 /* store */
 
@@ -113,14 +118,14 @@ export function combineReducers<S, A extends Action = AnyAction>(reducers: Reduc
  *   dispatched.
  */
 export interface Dispatch<A extends Action = AnyAction> {
-  <T extends A>(action: T): T;
+  <T extends A>(action: T): T
 }
 
 /**
  * Function to remove listener added by `Store.subscribe()`.
  */
 export interface Unsubscribe {
-  (): void;
+  (): void
 }
 
 /**
@@ -158,14 +163,14 @@ export interface Store<S = any, A extends Action = AnyAction> {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  dispatch: Dispatch<A>;
+  dispatch: Dispatch<A>
 
   /**
    * Reads the state tree managed by the store.
    *
    * @returns The current state tree of your application.
    */
-  getState(): S;
+  getState(): S
 
   /**
    * Adds a change listener. It will be called any time an action is
@@ -191,7 +196,7 @@ export interface Store<S = any, A extends Action = AnyAction> {
    * @param listener A callback to be invoked on every dispatch.
    * @returns A function to remove this change listener.
    */
-  subscribe(listener: () => void): Unsubscribe;
+  subscribe(listener: () => void): Unsubscribe
 
   /**
    * Replaces the reducer currently used by the store to calculate the state.
@@ -202,10 +207,10 @@ export interface Store<S = any, A extends Action = AnyAction> {
    *
    * @param nextReducer The reducer for the store to use instead.
    */
-  replaceReducer(nextReducer: Reducer<S, A>): void;
+  replaceReducer(nextReducer: Reducer<S, A>): void
 }
 
-export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
+export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> }
 
 /**
  * A store creator is a function that creates a Redux store. Like with
@@ -219,8 +224,15 @@ export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<Ext, StateExt>): Store<S & StateExt, A> & Ext;
-  <S, A extends Action, Ext, StateExt>(reducer: Reducer<S, A>, preloadedState: DeepPartial<S>, enhancer?: StoreEnhancer<Ext>): Store<S & StateExt, A> & Ext;
+  <S, A extends Action, Ext, StateExt>(
+    reducer: Reducer<S, A>,
+    enhancer?: StoreEnhancer<Ext, StateExt>
+  ): Store<S & StateExt, A> & Ext
+  <S, A extends Action, Ext, StateExt>(
+    reducer: Reducer<S, A>,
+    preloadedState?: DeepPartial<S>,
+    enhancer?: StoreEnhancer<Ext>
+  ): Store<S & StateExt, A> & Ext
 }
 
 /**
@@ -251,7 +263,7 @@ export interface StoreCreator {
  * @returns A Redux store that lets you read the state, dispatch actions and
  *   subscribe to changes.
  */
-export const createStore: StoreCreator;
+export const createStore: StoreCreator
 
 /**
  * A store enhancer is a higher-order function that composes a store creator
@@ -274,15 +286,22 @@ export const createStore: StoreCreator;
  * @template Ext Store extension that is mixed into the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
-export type StoreEnhancer<Ext = {}, StateExt = {}> = (next: StoreEnhancerStoreCreator) => StoreEnhancerStoreCreator<Ext, StateExt>;
-export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <S = any, A extends Action = AnyAction>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>) => Store<S & StateExt, A> & Ext;
-
+export type StoreEnhancer<Ext = {}, StateExt = {}> = (
+  next: StoreEnhancerStoreCreator
+) => StoreEnhancerStoreCreator<Ext, StateExt>
+export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
+  S = any,
+  A extends Action = AnyAction
+>(
+  reducer: Reducer<S, A>,
+  preloadedState?: DeepPartial<S>
+) => Store<S & StateExt, A> & Ext
 
 /* middleware */
 
 export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
-  dispatch: D;
-  getState(): S;
+  dispatch: D
+  getState(): S
 }
 
 /**
@@ -299,8 +318,14 @@ export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
  * @template D The type of Dispatch of the store where this middleware is
  *   installed.
  */
-export interface Middleware<DispatchExt = {}, S = any, D extends Dispatch = Dispatch> {
-  (api: MiddlewareAPI<D, S>): (next: Dispatch<AnyAction>) => (action: any) => any;
+export interface Middleware<
+  DispatchExt = {},
+  S = any,
+  D extends Dispatch = Dispatch
+> {
+  (api: MiddlewareAPI<D, S>): (
+    next: Dispatch<AnyAction>
+  ) => (action: any) => any
 }
 
 /**
@@ -323,14 +348,35 @@ export interface Middleware<DispatchExt = {}, S = any, D extends Dispatch = Disp
  * @template Ext Dispatch signature added by a middleware.
  * @template S The type of the state supported by a middleware.
  */
-export function applyMiddleware(): StoreEnhancer;
-export function applyMiddleware<Ext1, S>(middleware1: Middleware<Ext1, S, any>): StoreEnhancer<{dispatch: Ext1}>;
-export function applyMiddleware<Ext1, Ext2, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2}>;
-export function applyMiddleware<Ext1, Ext2, Ext3, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>, middleware3: Middleware<Ext3, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2 & Ext3}>;
-export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>, middleware3: Middleware<Ext3, S, any>, middleware4: Middleware<Ext4, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2 & Ext3 & Ext4}>;
-export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(middleware1: Middleware<Ext1, S, any>, middleware2: Middleware<Ext2, S, any>, middleware3: Middleware<Ext3, S, any>, middleware4: Middleware<Ext4, S, any>, middleware5: Middleware<Ext5, S, any>): StoreEnhancer<{dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5}>;
-export function applyMiddleware<Ext, S = any>(...middlewares: Middleware<any, S, any>[]): StoreEnhancer<{dispatch: Ext}>;
-
+export function applyMiddleware(): StoreEnhancer
+export function applyMiddleware<Ext1, S>(
+  middleware1: Middleware<Ext1, S, any>
+): StoreEnhancer<{ dispatch: Ext1 }>
+export function applyMiddleware<Ext1, Ext2, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 }>
+export function applyMiddleware<Ext1, Ext2, Ext3, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 }>
+export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>,
+  middleware4: Middleware<Ext4, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 }>
+export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>,
+  middleware4: Middleware<Ext4, S, any>,
+  middleware5: Middleware<Ext5, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5 }>
+export function applyMiddleware<Ext, S = any>(
+  ...middlewares: Middleware<any, S, any>[]
+): StoreEnhancer<{ dispatch: Ext }>
 
 /* action creators */
 
@@ -352,14 +398,14 @@ export function applyMiddleware<Ext, S = any>(...middlewares: Middleware<any, S,
  * @template A Returned action type.
  */
 export interface ActionCreator<A> {
-  (...args: any[]): A;
+  (...args: any[]): A
 }
 
 /**
  * Object whose values are action creator functions.
  */
 export interface ActionCreatorsMapObject<A = any> {
-  [key: string]: ActionCreator<A>;
+  [key: string]: ActionCreator<A>
 }
 
 /**
@@ -381,27 +427,32 @@ export interface ActionCreatorsMapObject<A = any> {
  *   creator wrapped into the `dispatch` call. If you passed a function as
  *   `actionCreator`, the return value will also be a single function.
  */
-export function bindActionCreators<A, C extends ActionCreator<A>>(actionCreator: C, dispatch: Dispatch): C;
+export function bindActionCreators<A, C extends ActionCreator<A>>(
+  actionCreator: C,
+  dispatch: Dispatch
+): C
 
 export function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
-  >(actionCreator: A, dispatch: Dispatch): B;
+>(actionCreator: A, dispatch: Dispatch): B
 
-export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(actionCreators: M, dispatch: Dispatch): M;
+export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(
+  actionCreators: M,
+  dispatch: Dispatch
+): M
 
 export function bindActionCreators<
   M extends ActionCreatorsMapObject<any>,
   N extends ActionCreatorsMapObject<any>
-  >(actionCreators: M, dispatch: Dispatch): N;
-
+>(actionCreators: M, dispatch: Dispatch): N
 
 /* compose */
 
-type Func0<R> = () => R;
-type Func1<T1, R> = (a1: T1) => R;
-type Func2<T1, T2, R> = (a1: T1, a2: T2) => R;
-type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R;
+type Func0<R> = () => R
+type Func1<T1, R> = (a1: T1) => R
+type Func2<T1, T2, R> = (a1: T1, a2: T2) => R
+type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -413,55 +464,77 @@ type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R;
  *   to left. For example, `compose(f, g, h)` is identical to doing
  *   `(...args) => f(g(h(...args)))`.
  */
-export function compose(): <R>(a: R) => R;
+export function compose(): <R>(a: R) => R
 
-export function compose<F extends Function>(f: F): F;
+export function compose<F extends Function>(f: F): F
 
 /* two functions */
-export function compose<A, R>(
-  f1: (b: A) => R, f2: Func0<A>
-): Func0<R>;
+export function compose<A, R>(f1: (b: A) => R, f2: Func0<A>): Func0<R>
 export function compose<A, T1, R>(
-  f1: (b: A) => R, f2: Func1<T1, A>
-): Func1<T1, R>;
+  f1: (b: A) => R,
+  f2: Func1<T1, A>
+): Func1<T1, R>
 export function compose<A, T1, T2, R>(
-  f1: (b: A) => R, f2: Func2<T1, T2, A>
-): Func2<T1, T2, R>;
+  f1: (b: A) => R,
+  f2: Func2<T1, T2, A>
+): Func2<T1, T2, R>
 export function compose<A, T1, T2, T3, R>(
-  f1: (b: A) => R, f2: Func3<T1, T2, T3, A>
-): Func3<T1, T2, T3, R>;
+  f1: (b: A) => R,
+  f2: Func3<T1, T2, T3, A>
+): Func3<T1, T2, T3, R>
 
 /* three functions */
 export function compose<A, B, R>(
-  f1: (b: B) => R, f2: (a: A) => B, f3: Func0<A>
-): Func0<R>;
+  f1: (b: B) => R,
+  f2: (a: A) => B,
+  f3: Func0<A>
+): Func0<R>
 export function compose<A, B, T1, R>(
-  f1: (b: B) => R, f2: (a: A) => B, f3: Func1<T1, A>
-): Func1<T1, R>;
+  f1: (b: B) => R,
+  f2: (a: A) => B,
+  f3: Func1<T1, A>
+): Func1<T1, R>
 export function compose<A, B, T1, T2, R>(
-  f1: (b: B) => R, f2: (a: A) => B, f3: Func2<T1, T2, A>
-): Func2<T1, T2, R>;
+  f1: (b: B) => R,
+  f2: (a: A) => B,
+  f3: Func2<T1, T2, A>
+): Func2<T1, T2, R>
 export function compose<A, B, T1, T2, T3, R>(
-  f1: (b: B) => R, f2: (a: A) => B, f3: Func3<T1, T2, T3, A>
-): Func3<T1, T2, T3, R>;
+  f1: (b: B) => R,
+  f2: (a: A) => B,
+  f3: Func3<T1, T2, T3, A>
+): Func3<T1, T2, T3, R>
 
 /* four functions */
 export function compose<A, B, C, R>(
-  f1: (b: C) => R, f2: (a: B) => C, f3: (a: A) => B, f4: Func0<A>
-): Func0<R>;
+  f1: (b: C) => R,
+  f2: (a: B) => C,
+  f3: (a: A) => B,
+  f4: Func0<A>
+): Func0<R>
 export function compose<A, B, C, T1, R>(
-  f1: (b: C) => R, f2: (a: B) => C, f3: (a: A) => B, f4: Func1<T1, A>
-): Func1<T1, R>;
+  f1: (b: C) => R,
+  f2: (a: B) => C,
+  f3: (a: A) => B,
+  f4: Func1<T1, A>
+): Func1<T1, R>
 export function compose<A, B, C, T1, T2, R>(
-  f1: (b: C) => R, f2: (a: B) => C, f3: (a: A) => B, f4: Func2<T1, T2, A>
-): Func2<T1, T2, R>;
+  f1: (b: C) => R,
+  f2: (a: B) => C,
+  f3: (a: A) => B,
+  f4: Func2<T1, T2, A>
+): Func2<T1, T2, R>
 export function compose<A, B, C, T1, T2, T3, R>(
-  f1: (b: C) => R, f2: (a: B) => C, f3: (a: A) => B, f4: Func3<T1, T2, T3, A>
-): Func3<T1, T2, T3, R>;
+  f1: (b: C) => R,
+  f2: (a: B) => C,
+  f3: (a: A) => B,
+  f4: Func3<T1, T2, T3, A>
+): Func3<T1, T2, T3, R>
 
 /* rest */
 export function compose<R>(
-  f1: (b: any) => R, ...funcs: Function[]
-): (...args: any[]) => R;
+  f1: (b: any) => R,
+  ...funcs: Function[]
+): (...args: any[]) => R
 
-export function compose<R>(...funcs: Function[]): (...args: any[]) => R;
+export function compose<R>(...funcs: Function[]): (...args: any[]) => R

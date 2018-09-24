@@ -19,7 +19,7 @@ You'll often find that you need to store some data, as well as some UI state, in
   todos: [
     {
       text: 'Consider using Redux',
-      completed: true,
+      completed: true
     },
     {
       text: 'Keep all state in a single tree',
@@ -367,7 +367,7 @@ function reducer(state = {}, action) {
 }
 ```
 
-All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combining their results into a single object again. [It's not magic.](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274) And like other reducers, `combineReducers()` does not create a new object if all of the reducers provided to it do not change state.
+All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combines their results into a single object again. [It's not magic.](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274) And like other reducers, `combineReducers()` does not create a new object if all of the reducers provided to it do not change state.
 
 >##### Note for ES6 Savvy Users
 

@@ -36,6 +36,7 @@ There are a number of community packages that implement various approaches for s
 - [How to handle state in React: the missing FAQ](https://medium.com/react-ecosystem/how-to-handle-state-in-react-6f2d3cd73a0c)
 - [Where to Hold React Component Data: state, store, static, and this](https://medium.freecodecamp.com/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00)
 - [The 5 Types of React Application State](http://jamesknelson.com/5-types-react-application-state/)
+- [Shape Your Redux Store Like Your Database](https://hackernoon.com/shape-your-redux-store-like-your-database-98faa4754fd5)
 
 **Discussions**
 
