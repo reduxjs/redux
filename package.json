@@ -40,11 +40,11 @@
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" index.d.ts",
     "lint": "eslint src test",
     "pretest": "npm run build",
-    "test": "cross-env BABEL_ENV=commonjs jest",
+    "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "build": "rollup -c",
-    "prepare": "npm run clean && npm run format:check && npm run lint && npm test && npm run build",
+    "prepare": "npm run clean && npm run format:check && npm run lint && npm test",
     "examples:lint": "eslint examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
