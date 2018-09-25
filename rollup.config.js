@@ -30,7 +30,7 @@ export default [
   },
   {
     input: 'src/index.js',
-    output: { file: 'es/redux.browser.mjs', format: 'es', indent: false },
+    output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
       nodeResolve({
         jsnext: true
