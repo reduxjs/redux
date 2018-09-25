@@ -6,28 +6,29 @@ import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
 export default [
+  // CommonJS
   {
     input: 'src/index.js',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
     external: [
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
     ],
-    plugins: [
-      babel()
-    ]
+    plugins: [babel()]
   },
+
+  // ES
   {
     input: 'src/index.js',
     output: { file: 'es/redux.js', format: 'es', indent: false },
     external: [
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
     ],
-    plugins: [
-      babel()
-    ]
+    plugins: [babel()]
   },
+
+  // ES for Browsers
   {
     input: 'src/index.js',
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
@@ -48,6 +49,8 @@ export default [
       })
     ]
   },
+
+  // UMD Development
   {
     input: 'src/index.js',
     output: {
@@ -61,13 +64,15 @@ export default [
         jsnext: true
       }),
       babel({
-        exclude: 'node_modules/**',
+        exclude: 'node_modules/**'
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development')
       })
     ]
   },
+
+  // UMD Production
   {
     input: 'src/index.js',
     output: {
@@ -81,7 +86,7 @@ export default [
         jsnext: true
       }),
       babel({
-        exclude: 'node_modules/**',
+        exclude: 'node_modules/**'
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
