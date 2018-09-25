@@ -47,30 +47,6 @@ Running the `build` task will create a CommonJS module-per-module build, a ES Mo
 npm run build
 ```
 
-To create just a CommonJS module-per-module build:
-
-```
-npm run build:commonjs
-```
-
-The result will be in the `lib` folder.
-
-To create just a ES Modules build:
-
-```
-npm run build:es
-```
-
-The result will be in the `es` folder.
-
-To create just a UMD build:
-```
-npm run build:umd
-npm run build:umd:min
-```
-
-The result will be in the `dist` folder.
-
 ### Testing and Linting
 
 To only run linting:
