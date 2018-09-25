@@ -30,6 +30,26 @@ export default [
   },
   {
     input: 'src/index.js',
+    output: { file: 'es/redux.mjs', format: 'es', indent: false },
+    plugins: [
+      nodeResolve({
+        jsnext: true
+      }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      terser({
+        compress: {
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true,
+          warnings: false
+        }
+      })
+    ]
+  },
+  {
+    input: 'src/index.js',
     output: {
       file: 'dist/redux.js',
       format: 'umd',
