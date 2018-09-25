@@ -3,26 +3,29 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 
+import pkg from './package.json'
+
 export default [
   {
     input: 'src/index.js',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
-    external: ['symbol-observable'],
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+    ],
     plugins: [
-      babel({
-        plugins: ['external-helpers']
-      })
+      babel()
     ]
   },
   {
     input: 'src/index.js',
     output: { file: 'es/redux.js', format: 'es', indent: false },
-    external: ['symbol-observable'],
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {}),
+    ],
     plugins: [
-      babel({
-        env: 'es',
-        plugins: ['external-helpers']
-      })
+      babel()
     ]
   },
   {
@@ -38,9 +41,7 @@ export default [
         jsnext: true
       }),
       babel({
-        env: 'es',
         exclude: 'node_modules/**',
-        plugins: ['external-helpers']
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development')
@@ -60,9 +61,7 @@ export default [
         jsnext: true
       }),
       babel({
-        env: 'es',
         exclude: 'node_modules/**',
-        plugins: ['external-helpers']
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
