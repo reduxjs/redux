@@ -11,7 +11,6 @@ const config = {
 
 if (env === 'es' || env === 'cjs') {
   config.output = { format: env, indent: false }
-
   config.external = ['symbol-observable']
   config.plugins.push(
     babel({
