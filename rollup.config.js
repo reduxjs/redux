@@ -3,8 +3,7 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 
-const nodeEnv = process.env.NODE_ENV
-const env = nodeEnv === 'es-browser' ? 'es' : nodeEnv;
+const env = process.env.NODE_ENV
 const config = {
   input: 'src/index.js',
   plugins: []
@@ -13,23 +12,24 @@ const config = {
 if (env === 'es' || env === 'cjs') {
   config.output = { format: env, indent: false }
 
-  if (nodeEnv === 'es-browser') {
-    config.plugins.push(
-      replace({
-        'process.env.NODE_ENV': '"production"'
-      }),
-      nodeResolve({
-        jsnext: true
-      })
-    )
-  } else {
-    config.external = ['symbol-observable']
-    config.plugins.push(
-      babel({
-        plugins: ['external-helpers'],
-      })
-    )
-  }
+  config.external = ['symbol-observable']
+  config.plugins.push(
+    babel({
+      plugins: ['external-helpers'],
+    })
+  )
+}
+
+if (env === 'es-browser') {
+  config.output = { format: 'es', indent: false }
+  config.plugins.push(
+    replace({
+      'process.env.NODE_ENV': '"production"'
+    }),
+    nodeResolve({
+      jsnext: true
+    })
+  )
 }
 
 if (env === 'development' || env === 'production') {

@@ -4,5 +4,4 @@ node_modules
 dist
 lib
 es
-es-browser
 coverage
