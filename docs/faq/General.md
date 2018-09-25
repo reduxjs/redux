@@ -2,15 +2,14 @@
 
 ## Table of Contents
 
-- [When should I learn Redux?](#general-when-to-learn)
-- [When should I use Redux?](#general-when-to-use)
-- [Can Redux only be used with React?](#general-only-react)
-- [Do I need to have a particular build tool to use Redux?](#general-build-tools)
+- [When should I learn Redux?](#when-should-i-learn-redux)
+- [When should I use Redux?](#when-should-i-use-redux)
+- [Can Redux only be used with React?](#can-redux-only-be-used-with-react)
+- [Do I need to have a particular build tool to use Redux?](#do-i-need-to-have-a-particular-build-tool-to-use-redux)
 
 
 ## General
 
-<a id="general-when-to-learn"></a>
 ### When should I learn Redux?
 
 What to learn can be an overwhelming question for a JavaScript developer. It helps to narrow the range of options by learning one thing at a time and focusing on problems you find in your work. Redux is a pattern for managing application state. If you do not have problems with state management, you might find the benefits of Redux harder to understand. Some UI libraries (like React) have their own state management system. If you are using one of these libraries, especially if you are just learning to use them, we encourage you to learn the capabilities of that built-in system first. It might be all you need to build your application. If your application becomes so complex that you are confused about where state is stored or how state changes, then it is a good time to learn Redux. Experiencing the complexity that Redux seeks to abstract is the best preparation for effectively applying that abstraction to your work.
@@ -33,7 +32,6 @@ What to learn can be an overwhelming question for a JavaScript developer. It hel
 - [Twitter: This was my experience with Redux...](https://twitter.com/garetmckinley/status/901500556568645634)
 - [Dev.to: When is it time to use Redux?](https://dev.to/dan_abramov/comment/1n2k)
 
-<a id="general-when-to-use"></a>
 ### When should I use Redux?
 
 The need to use Redux should not be taken for granted.
@@ -81,13 +79,11 @@ In the end, Redux is just a tool.  It's a great tool, and there are some great r
 - [Twitter: Redux is a platform for developers to build customized state management with reusable things](https://twitter.com/acemarke/status/793862722253447168)
 
 
-<a id="general-only-react"></a>
 ### Can Redux only be used with React?
 
 Redux can be used as a data store for any UI layer. The most common usage is with React and React Native, but there are bindings available for Angular, Angular 2, Vue, Mithril, and more. Redux simply provides a subscription mechanism which can be used by any other code. That said, it is most useful when combined with a declarative view implementation that can infer the UI updates from the state changes, such as React or one of the similar libraries available.
 
 
-<a id="general-build-tools"></a>
 ### Do I need to have a particular build tool to use Redux?
 
 Redux is originally written in ES6 and transpiled for production into ES5 with Webpack and Babel. You should be able to use it regardless of your JavaScript build process. Redux also offers a UMD build that can be used directly without any build process at all. The [counter-vanilla](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla) example demonstrates basic ES5 usage with Redux included as a `<script>` tag. As the relevant pull request says:
