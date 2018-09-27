@@ -761,4 +761,20 @@ describe('createStore', () => {
     expect(console.error.mock.calls.length).toBe(0)
     console.error = originalConsoleError
   })
+
+  it('throws if passing several enhancer functions without preloaded state', () => {
+    const rootReducer = combineReducers(reducers)
+    const dummyEnhancer = f => f
+    expect(() =>
+      createStore(rootReducer, dummyEnhancer, dummyEnhancer)
+    ).toThrow()
+  })
+
+  it('throws if passing several enhancer functions with preloaded state', () => {
+    const rootReducer = combineReducers(reducers)
+    const dummyEnhancer = f => f
+    expect(() =>
+      createStore(rootReducer, { todos: [] }, dummyEnhancer, dummyEnhancer)
+    ).toThrow()
+  })
 })
