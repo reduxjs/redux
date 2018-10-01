@@ -5,9 +5,9 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Todo
     completed={false}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     text="Test todo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -21,7 +21,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": "Test todo",
-      "onClick": [Function],
+      "onClick": [MockFunction],
       "style": Object {
         "textDecoration": "none",
       },
@@ -37,7 +37,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": "Test todo",
-        "onClick": [Function],
+        "onClick": [MockFunction],
         "style": Object {
           "textDecoration": "none",
         },
@@ -70,9 +70,9 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Todo
     completed={true}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     text="Test todo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -86,7 +86,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": "Test todo",
-      "onClick": [Function],
+      "onClick": [MockFunction],
       "style": Object {
         "textDecoration": "line-through",
       },
@@ -102,7 +102,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": "Test todo",
-        "onClick": [Function],
+        "onClick": [MockFunction],
         "style": Object {
           "textDecoration": "line-through",
         },
@@ -135,9 +135,9 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Todo
     completed={false}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     text="Test todo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -151,7 +151,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": "Test todo",
-      "onClick": [Function],
+      "onClick": [MockFunction],
       "style": Object {
         "textDecoration": "none",
       },
@@ -167,7 +167,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": "Test todo",
-        "onClick": [Function],
+        "onClick": [MockFunction],
         "style": Object {
           "textDecoration": "none",
         },

@@ -5,16 +5,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Footer
     store={
-        Object {
-            "clearActions": [Function],
-            "dispatch": [Function],
-            "getActions": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-          }
+      Object {
+        "clearActions": [Function],
+        "dispatch": [Function],
+        "getActions": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -32,21 +32,21 @@ ShallowWrapper {
         " ",
         <Connect(Link)
           filter="SHOW_ALL"
->
+        >
           All
-</Connect(Link)>,
+        </Connect(Link)>,
         ", ",
         <Connect(Link)
           filter="SHOW_ACTIVE"
->
+        >
           Active
-</Connect(Link)>,
+        </Connect(Link)>,
         ", ",
         <Connect(Link)
           filter="SHOW_COMPLETED"
->
+        >
           Completed
-</Connect(Link)>,
+        </Connect(Link)>,
       ],
     },
     "ref": null,
@@ -105,21 +105,21 @@ ShallowWrapper {
           " ",
           <Connect(Link)
             filter="SHOW_ALL"
->
+          >
             All
-</Connect(Link)>,
+          </Connect(Link)>,
           ", ",
           <Connect(Link)
             filter="SHOW_ACTIVE"
->
+          >
             Active
-</Connect(Link)>,
+          </Connect(Link)>,
           ", ",
           <Connect(Link)
             filter="SHOW_COMPLETED"
->
+          >
             Completed
-</Connect(Link)>,
+          </Connect(Link)>,
         ],
       },
       "ref": null,
