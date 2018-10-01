@@ -23,7 +23,7 @@
     "flow": "flow",
     "postinstall": "flow-typed install",
     "start": "react-scripts start",
-    "test": "react-scripts test"
+    "test": "react-scripts test --env=node"
   },
   "browserslist": [
     ">0.2%",
