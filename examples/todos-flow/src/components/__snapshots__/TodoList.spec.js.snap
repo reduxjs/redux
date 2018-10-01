@@ -4,9 +4,9 @@ exports[`TodoList renders without crashing 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TodoList
-    onTodoClick={[Function]}
+    onTodoClick={[MockFunction]}
     todos={Array []}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -60,17 +60,17 @@ exports[`TodoList with todos renders a list of todos 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TodoList
-    onTodoClick={[Function]}
+    onTodoClick={[MockFunction]}
     todos={
-        Array [
-            Object {
-              "completed": false,
-              "id": 0,
-              "text": "Test AddTodo",
-            },
-          ]
+      Array [
+        Object {
+          "completed": false,
+          "id": 0,
+          "text": "Test AddTodo",
+        },
+      ]
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -89,7 +89,7 @@ ShallowWrapper {
           id={0}
           onClick={[Function]}
           text="Test AddTodo"
-/>,
+        />,
       ],
     },
     "ref": null,
@@ -123,7 +123,7 @@ ShallowWrapper {
             id={0}
             onClick={[Function]}
             text="Test AddTodo"
-/>,
+          />,
         ],
       },
       "ref": null,
