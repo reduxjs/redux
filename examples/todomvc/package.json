@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "^1.1.4",
+    "react-scripts": "^2.0.2",
     "react-test-renderer": "^16.3.1"
   },
   "dependencies": {
@@ -21,5 +21,11 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "test": "react-scripts test"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
