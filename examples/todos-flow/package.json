@@ -7,7 +7,7 @@
     "enzyme-adapter-react-16": "1.2.0",
     "flow-bin": "0.78.0",
     "flow-typed": "2.5.1",
-    "react-scripts": "^1.1.4",
+    "react-scripts": "^2.0.2",
     "redux-mock-store": "1.5.3"
   },
   "dependencies": {
@@ -24,5 +24,11 @@
     "postinstall": "flow-typed install",
     "start": "react-scripts start",
     "test": "react-scripts test"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
