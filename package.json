@@ -40,7 +40,7 @@
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" index.d.ts",
     "lint": "eslint src test",
     "pretest": "npm run build",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "build": "rollup -c",
