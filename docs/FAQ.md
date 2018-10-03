@@ -3,10 +3,10 @@
 ## Table of Contents
 
 - **General**
-  - [When should I learn Redux?](/docs/faq/General.md#general-when-to-learn)
-  - [When should I use Redux?](/docs/faq/General.md#general-when-to-use)
-  - [Can Redux only be used with React?](/docs/faq/General.md#general-only-react)
-  - [Do I need to have a particular build tool to use Redux?](/docs/faq/General.md#general-build-tools)
+  - [When should I learn Redux?](/docs/faq/General.md#when-should-i-learn-redux)
+  - [When should I use Redux?](/docs/faq/General.md#when-should-i-use-redux)
+  - [Can Redux only be used with React?](/docs/faq/General.md#can-redux-only-be-used-with-react)
+  - [Do I need to have a particular build tool to use Redux?](/docs/faq/General.md#do-i-need-to-have-a-particular-build-tool-to-use-redux)
 - **Reducers**
   - [How do I share state between two reducers? Do I have to use combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
   - [Do I have to use the switch statement to handle actions?](/docs/faq/Reducers.md#reducers-use-switch)
@@ -35,7 +35,7 @@
   - [Is Immutable.JS worth the effort?](/docs/recipes/UsingImmutableJS.md#is-immutable-js-worth-effort)
   - [What are some opinionated Best Practices for using Immutable.JS with Redux?](/docs/recipes/UsingImmutableJS.md#immutable-js-best-practices)
 
-- **Code Structure**  
+- **Code Structure**
   - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](/docs/faq/CodeStructure.md#structure-business-logic)
   - [Why should I use action creators?](/docs/faq/CodeStructure.md#structure-action-creators)
@@ -47,8 +47,8 @@
   - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](/docs/faq/Performance.md#performance-state-memory)
   - [Will caching remote data cause memory problems?](/docs/faq/Performance.md#performance-cache-memory)
 - **Design Decisions**
-  - [Why doesn't Redux pass the state and action to subscribers?](/docs/faq/DesignDecisions.md#does-not-pass-state-action-to-subscribers) 
-  - [Why doesn't Redux support using classes for actions and reducers?](/docs/faq/DesignDecisions.md#does-not-support-classes) 
+  - [Why doesn't Redux pass the state and action to subscribers?](/docs/faq/DesignDecisions.md#does-not-pass-state-action-to-subscribers)
+  - [Why doesn't Redux support using classes for actions and reducers?](/docs/faq/DesignDecisions.md#does-not-support-classes)
   - [Why does the middleware signature use currying?](/docs/faq/DesignDecisions.md#why-currying)
   - [Why does applyMiddleware use a closure for dispatch?](/docs/faq/DesignDecisions.md#closure-dispatch)
   - [Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?](/docs/faq/DesignDecisions.md#combineReducers-limitations)
