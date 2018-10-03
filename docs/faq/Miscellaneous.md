@@ -2,14 +2,13 @@
 
 ## Table of Contents
 
-- [Are there any larger, “real” Redux projects?](#miscellaneous-real-projects)
-- [How can I implement authentication in Redux?](#miscellaneous-authentication)
+- [Are there any larger, “real” Redux projects?](#are-there-any-larger-real-redux-projects)
+- [How can I implement authentication in Redux?](#how-can-i-implement-authentication-in-redux)
 
 
 
 ## Miscellaneous
 
-<a id="miscellaneous-real-projects"></a>
 ### Are there any larger, “real” Redux projects?
 
 Yes, lots of them!  To name just a few:
@@ -31,7 +30,6 @@ And many, many more!  The Redux Addons Catalog has **[a list of Redux-based appl
 - [HN: Is there any huge web application built using Redux?](https://news.ycombinator.com/item?id=10710240)
 
 
-<a id="miscellaneous-authentication"></a>
 ### How can I implement authentication in Redux?
 
 Authentication is essential to any real application. When going about authentication you must keep in mind that nothing changes with how you should organize your application and you should implement authentication in the same way you would any other feature. It is relatively straightforward:

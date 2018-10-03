@@ -2,14 +2,13 @@
 
 ## Table of Contents
 
-- [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](#structure-file-structure)
-- [How should I split my logic between reducers and action creators? Where should my “business logic” go?](#structure-business-logic)
-- [Why should I use action creators?](#structure-action-creators)
-- [Where should websockets and other persistent connections live?](#structure-persistent-connections)
+- [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
+- [How should I split my logic between reducers and action creators? Where should my “business logic” go?](#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
+- [Why should I use action creators?](#why-should-i-use-action-creators)
+- [Where should websockets and other persistent connections live?](#where-should-websockets-and-other-persistent-connections-live)
 
 ## Code Structure
 
-<a id="structure-file-structure"></a>
 ### What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?
 
 Since Redux is just a data store library, it has no direct opinion on how your project should be structured. However, there are a few common patterns that most Redux developers tend to use:
@@ -48,7 +47,6 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 - [Twitter: There is no ultimate file structure for Redux](https://twitter.com/dan_abramov/status/783428282666614784)
 
 
-<a id="structure-business-logic"></a>
 ### How should I split my logic between reducers and action creators? Where should my “business logic” go?
 
 There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator.  (For purposes of this question, other async approaches such as sagas and observables fall in the "action creator" category.)
@@ -80,14 +78,13 @@ Find the balance between these two extremes, and you will master Redux.
 - [Twitter: Moving away from unclear terminology...](https://twitter.com/FwardPhoenix/status/952971237004926977)
 
 
-<a id="structure-action-creators"></a>
 ### Why should I use action creators?
 
 Redux does not require action creators. You are free to create actions in any way that is best for you, including simply passing an object literal to `dispatch`. Action creators emerged from the [Flux architecture](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators) and have been adopted by the Redux community because they offer several benefits.
 
 Action creators are more maintainable. Updates to an action can be made in one place and applied everywhere. All instances of an action are guaranteed to have the same shape and the same default values.
 
-Action creators are testable. The correctness of an inline action must be verified manually. Like any function, tests for an action creator can be written once and run automatically.  
+Action creators are testable. The correctness of an inline action must be verified manually. Like any function, tests for an action creator can be written once and run automatically.
 
 Action creators are easier to document. The action creator's parameters enumerate the action's dependencies. And centralization of the action definition provides a convenient place for documentation comments. When actions are written inline, this information is harder to capture and communicate.
 
@@ -104,7 +101,6 @@ Action creators are a more powerful abstraction. Creating an action often involv
 - [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
 
 
-<a id="structure-persistent-connections"></a>
 ### Where should websockets and other persistent connections live?
 
 Middleware are the right place for persistent connections like websockets in a Redux app, for several reasons:

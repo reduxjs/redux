@@ -2,16 +2,15 @@
 
 ## Table of Contents
 
-- [Why should type be a string, or at least serializable? Why should my action types be constants?](#actions-string-constants) 
-- [Is there always a one-to-one mapping between reducers and actions?](#actions-reducer-mappings)
-- [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#actions-side-effects) 
-- [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](#actions-async-middlewares)
-- [Should I dispatch multiple actions in a row from one action creator?](#actions-multiple-actions) 
+- [Why should type be a string, or at least serializable? Why should my action types be constants?](#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants)
+- [Is there always a one-to-one mapping between reducers and actions?](#is-there-always-a-one-to-one-mapping-between-reducers-and-actions)
+- [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)
+- [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
+- [Should I dispatch multiple actions in a row from one action creator?](#should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator)
 
 
 ## Actions
 
-<a id="actions-string-constants"></a>
 ### Why should `type` be a string, or at least serializable? Why should my action types be constants?
 
 As with state, serializable actions enable several of Redux's defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it *is* okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.
@@ -34,7 +33,6 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 - [Stack Overflow: What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
 
 
-<a id="actions-reducer-mappings"></a>
 ### Is there always a one-to-one mapping between reducers and actions?
 
 No. We suggest you write independent small reducer functions that are each responsible for updates to a specific slice of state. We call this pattern “reducer composition”. A given action could be handled by all, some, or none of them. This keeps components decoupled from the actual data changes, as one action may affect different parts of the state tree, and there is no need for the component to be aware of this. Some users do choose to bind them more tightly together, such as the “ducks” file structure, but there is definitely no one-to-one mapping by default, and you should break out of such a paradigm any time you feel you want to handle an action in many reducers.
@@ -52,7 +50,6 @@ No. We suggest you write independent small reducer functions that are each respo
 - [Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
 
 
-<a id="actions-side-effects"></a>
 ### How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?
 
 This is a long and complex topic, with a wide variety of opinions on how code should be organized and what approaches should be used.
@@ -94,7 +91,6 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 - [Reddit: Help performing Async API calls with Redux-Promise Middleware.](https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/)
 - [Twitter: possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
 
-<a id="actions-async-middlewares"></a>
 ### What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?
 
 There are [many async/side effect middlewares available](https://github.com/markerikson/redux-ecosystem-links/blob/master/side-effects.md), but the most commonly used ones are [`redux-thunk`](https://github.com/reduxjs/redux-thunk), [`redux-saga`](https://github.com/redux-saga/redux-saga), and [`redux-observable`](https://github.com/redux-observable/redux-observable).  These are different tools, with different strengths, weaknesses, and use cases.
@@ -125,7 +121,6 @@ Since sagas and observables have the same use case, an application would normall
 - [Stack Overflow: Why use Redux-Observable over Redux-Saga?](https://stackoverflow.com/questions/40021344/why-use-redux-observable-over-redux-saga/40027778#40027778)
 
 
-<a id="actions-multiple-actions"></a>
 ### Should I dispatch multiple actions in a row from one action creator?
 
 There's no specific rule for how you should structure your actions. Using an async middleware like Redux Thunk certainly enables scenarios such as dispatching multiple distinct but related actions in a row, dispatching actions to represent progression of an AJAX request, dispatching actions conditionally based on state, or even dispatching an action and checking the updated state immediately afterwards.
