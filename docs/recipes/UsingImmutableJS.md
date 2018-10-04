@@ -1,12 +1,11 @@
 # Using Immutable.JS with Redux
 ## Table of Contents
-- [Why should I use an immutable-focused library such as Immutable.JS?](#why-use-immutable-library)
-- [Why should I choose Immutable.JS as an immutable library?](#why-choose-immutable-js)
-- [What are the issues with using Immutable.JS?](#issues-with-immutable-js)
-- [Is Immutable.JS worth the effort?](#is-immutable-js-worth-effort)
-- [What are some opinionated Best Practices for using Immutable.JS with Redux?](#immutable-js-best-practices)
+- [Why should I use an immutable-focused library such as Immutable.JS?](#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
+- [Why should I choose Immutable.JS as an immutable library?](#why-should-i-choose-immutable-js-as-an-immutable-library)
+- [What are the issues with using Immutable.JS?](#what-are-the-issues-with-using-immutable-js)
+- [Is Immutable.JS worth the effort?](#is-using-immutable-js-worth-the-effort)
+- [What are some opinionated Best Practices for using Immutable.JS with Redux?](#what-are-some-opinionated-best-practices-for-using-immutable-js-with-redux)
 
-<a id="why-use-immutable-library"></a>
 ## Why should I use an immutable-focused library such as Immutable.JS?
 
 Immutable-focused libraries such as Immutable.JS have been designed to overcome the issues with immutability inherent within JavaScript, providing all the benefits of immutability with the performance your app requires.
@@ -25,7 +24,6 @@ Whichever option you choose, make sure you’re familiar with the concepts of [i
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
-<a id="why-choose-immutable-js"></a>
 ## Why should I choose Immutable.JS as an immutable library?
 
 Immutable.JS was designed to provide immutability in a performant manner in an effort to overcome the limitations of immutability with JavaScript. Its principle advantages include:
@@ -56,7 +54,6 @@ You never see this, of course - the data you give to an Immutable.JS object is n
 - [Immutable.js](https://facebook.github.io/immutable-js/)
 
 
-<a id="issues-with-immutable-js"></a>
 ## What are the issues with using Immutable.JS?
 
 Although powerful, Immutable.JS needs to be used carefully, as it comes with issues of its own. Note, however, that all of these issues can be overcome quite easily with careful coding.
@@ -134,7 +131,6 @@ This can be prevented by using `toJS()` in a Higher Order Component, as discusse
 - [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
 
 
-<a id="is-immutable-js-worth-effort"></a>
 ## Is Using Immutable.JS worth the effort?
 
 Frequently, yes. There are various tradeoffs and opinions to consider, but there are many good reasons to use Immutable.JS. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated.
@@ -151,12 +147,11 @@ This, together with its performance and rich API for data manipulation, is why I
 - [Troubleshooting: Nothing happens when I dispatch an action](http://redux.js.org/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
 
 
-<a id="immutable-js-best-practices"></a>
 ## What are some opinionated Best Practices for using Immutable.JS with Redux?
 
 Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. If you choose to use Immutable.JS (and remember, you are not required to, and there are other immutable libraries you can use), follow these opinionated best practices, and you’ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.
 
-### Never mix plain JavaScript objects with Immutable.JS  
+### Never mix plain JavaScript objects with Immutable.JS
 
 Never let a plain JavaScript object contain Immutable.JS properties. Equally, never let an Immutable.JS object contain a plain JavaScript object.
 

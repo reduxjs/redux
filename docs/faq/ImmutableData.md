@@ -1,26 +1,25 @@
 # Redux FAQ: Immutable Data
 
 ## Table of Contents
-- [What are the benefits of immutability?](#benefits-of-immutability)
-- [Why is immutability required by Redux?](#why-is-immutability-required)
-- [Why does Redux’s use of shallow equality checking require immutability?](#redux-shallow-checking-requires-immutability)
-	- [How do Shallow and Deep Equality Checking differ?](#shallow-and-deep-equality-checking)
-	- [How does Redux use shallow equality checking?](#how-redux-uses-shallow-checking)
-	- [How does `combineReducers` use shallow equality checking?](#how-combine-reducers-uses-shallow-checking)
-	- [How does React-Redux use shallow equality checking?](#how-react-redux-uses-shallow-checking)
-	- [How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?](#how-react-redux-determines-need-for-re-rendering)
-	- [Why will shallow equality checking not work with mutable objects?](#no-shallow-equality-checking-with-mutable-objects)
-	- [Does shallow equality checking with a mutable object cause problems with Redux?](#shallow-checking-problems-with-redux)
-	- [Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-problems-with-react-redux)
-	- [Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-stops-component-re-rendering)
-	- [How does immutability enable a shallow check to detect object mutations?](#immutability-enables-shallow-checking)
-- [How can immutability in your reducers cause components to render unnecessarily?](#immutability-issues-with-redux)
-- [How can immutability in mapStateToProps cause components to render unnecessarily?](#immutability-issues-with-react-redux)
-- [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
-- [What are the issues with using JavaScript for immutable operations?](#issues-with-es6-for-immutable-ops)
+- [What are the benefits of immutability?](#what-are-the-benefits-of-immutability)
+- [Why is immutability required by Redux?](#why-is-immutability-required-by-redux)
+- [Why does Redux’s use of shallow equality checking require immutability?](#why-does-reduxs-use-of-shallow-equality-checking-require-immutability)
+	- [How do Shallow and Deep Equality Checking differ?](#how-do-shallow-and-deep-equality-checking-differ)
+	- [How does Redux use shallow equality checking?](#how-does-redux-use-shallow-equality-checking)
+	- [How does `combineReducers` use shallow equality checking?](#how-does-combinereducers-use-shallow-equality-checking)
+	- [How does React-Redux use shallow equality checking?](#how-does-react-redux-use-shallow-equality-checking)
+	- [How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?](#how-does-react-redux-use-shallow-equality-checking-to-determine-whether-a-component-needs-re-rendering)
+	- [Why will shallow equality checking not work with mutable objects?](#why-will-shallow-equality-checking-not-work-with-mutable-objects)
+	- [Does shallow equality checking with a mutable object cause problems with Redux?](#does-shallow-equality-checking-with-a-mutable-object-cause-problems-with-redux)
+	- [Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?](#why-does-a-reducer-mutating-the-state-prevent-react-redux-from-re-rendering-a-wrapped-component)
+	- [Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#why-does-a-selector-mutating-and-returning-a-persistent-object-to-mapstatetoprops-prevent-react-redux-from-re-rendering-a-wrapped-component)
+	- [How does immutability enable a shallow check to detect object mutations?](#how-does-immutability-enable-a-shallow-check-to-detect-object-mutations)
+- [How can immutability in your reducers cause components to render unnecessarily?](#how-can-immutability-in-your-reducers-cause-components-to-render-unnecessarily)
+- [How can immutability in mapStateToProps cause components to render unnecessarily?](#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
+- [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
+- [What are the issues with using JavaScript for immutable operations?](#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 
 
-<a id="benefits-of-immutability"></a>
 ## What are the benefits of immutability?
 Immutability can bring increased performance to your app, and leads to simpler programming and debugging, as data that never changes is easier to reason about than data that is free to be changed arbitrarily throughout your app.
 
@@ -36,7 +35,6 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 - [JavaScript Application Architecture On The Road To 2015](https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b#.djje0rfys)
 
 
-<a id="why-is-immutability-required"></a>
 ## Why is immutability required by Redux?
 - Both Redux and React-Redux employ [shallow equality checking](#shallow-and-deep-equality-checking). In particular:
 	- Redux's `combineReducers` utility [shallowly checks for reference changes](#how-redux-uses-shallow-checking)  caused by the reducers that it calls.
@@ -54,12 +52,10 @@ Such [shallow checking requires immutability](#redux-shallow-checking-requires-i
 - [Reddit: Why Redux Needs Reducers To Be Pure Functions](https://www.reddit.com/r/reactjs/comments/5ecqqv/why_redux_need_reducers_to_be_pure_functions/dacmmjh/?context=3)
 
 
-<a id="redux-shallow-checking-requires-immutability"></a>
 ## Why does Redux’s use of shallow equality checking require immutability?
 Redux's use of shallow equality checking requires immutability if any connected components are to be updated correctly. To see why, we need to understand the difference between shallow and deep equality checking in JavaScript.
 
 
-<a id="shallow-and-deep-equality-checking"></a>
 ### How do shallow and deep equality checking differ?
 Shallow equality checking (or _reference equality_) simply checks that two different _variables_ reference the same object; in contrast, deep equality checking (or _value equality_) must check every _value_ of two objects' properties.
 
@@ -73,9 +69,8 @@ It's for this improvement in performance that Redux uses shallow equality checki
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
-<a id="how-redux-uses-shallow-checking"></a>
 ### How does Redux use shallow equality checking?
-Redux uses shallow equality checking in its `combineReducers` function to return either a new mutated copy of the root state object, or, if no mutations have been made, the current root state object.  
+Redux uses shallow equality checking in its `combineReducers` function to return either a new mutated copy of the root state object, or, if no mutations have been made, the current root state object.
 
 #### Further Information
 
@@ -83,7 +78,6 @@ Redux uses shallow equality checking in its `combineReducers` function to return
 - [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
 
 
-<a id="how-combine-reducers-uses-shallow-checking"></a>
 #### How does `combineReducers` use shallow equality checking?
 The [suggested structure](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state) for a Redux store is to split the state object into multiple "slices" or "domains" by key, and provide a separate reducer function to manage each individual data slice.
 
@@ -121,7 +115,6 @@ This is worth emphasizing: *If the reducers all return the same `state` object p
 - [Egghead.io: Redux: Implementing combineReducers() from Scratch](https://egghead.io/lessons/javascript-redux-implementing-combinereducers-from-scratch)
 
 
-<a id="how-react-redux-uses-shallow-checking"></a>
 ### How does React-Redux use shallow equality checking?
 React-Redux uses shallow equality checking to determine whether the component it’s wrapping needs to be re-rendered.
 
@@ -169,7 +162,6 @@ React-Redux therefore maintains separate references to each _value_ in the retur
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.gh07cm24f)
 
 
-<a id="how-react-redux-determines-need-for-re-rendering"></a>
 ### How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?
 Each time React-Redux’s `connect` function is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
 
@@ -221,7 +213,6 @@ If the shallow equality check fails between the new values returned from  `mapSt
 - [#300: Potential connect() optimization](https://github.com/reduxjs/react-redux/issues/300)
 
 
-<a id="no-shallow-equality-checking-with-mutable-objects"></a>
 ### Why will shallow equality checking not work with mutable objects?
 Shallow equality checking cannot be used to detect if a function mutates an object passed into it if that object is mutable.
 
@@ -250,7 +241,6 @@ The shallow check of `param` and `returnValue` simply checks whether both variab
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
-<a id="shallow-checking-problems-with-redux"></a>
 ### Does shallow equality checking with a mutable object cause problems with Redux?
 Shallow equality checking with a mutable object will not cause problems with Redux, but [it will cause problems with libraries that depend on the store, such as React-Redux](#shallow-checking-problems-with-react-redux).
 
@@ -269,7 +259,6 @@ The store will still be updated with the new values for the root state, but beca
 - [Troubleshooting: Never mutate reducer arguments](http://redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments)
 
 
-<a id="shallow-checking-problems-with-react-redux"></a>
 ### Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?
 If a Redux reducer directly mutates, and returns, the state object passed into it, the values of the root state object will change, but the object itself will not.
 
@@ -281,7 +270,6 @@ Because React-Redux performs a shallow check on the root state object to determi
 - [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
 
 
-<a id="shallow-checking-stops-component-re-rendering"></a>
 ### Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?
 If one of the values of the props object returned from `mapStateToProps` is an object that persists across calls to `connect` (such as, potentially, the root state object), yet is directly mutated and returned by a selector function,  React-Redux will not be able to detect the mutation, and so will not trigger a re-render of the wrapped component.
 
@@ -331,7 +319,6 @@ Note that, conversely, if an _immutable_ object is used, the [component may re-r
 - [#1948: Is getMappedItems an anti-pattern in mapStateToProps?](https://github.com/reduxjs/redux/issues/1948)
 
 
-<a id="immutability-enables-shallow-checking"></a>
 ### How does immutability enable a shallow check to detect object mutations?
 If an object is immutable, any changes that need to be made to it within a function must be made to a _copy_ of the object.
 
@@ -343,7 +330,6 @@ This mutated copy is a _separate_ object from that passed into the function, and
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
-<a id="immutability-issues-with-redux"></a>
 ### How can immutability in your reducers cause components to render unnecessarily?
 You cannot mutate an immutable object; instead, you must mutate a copy of it, leaving the original intact.
 
@@ -360,7 +346,6 @@ To prevent this from happening, you must *always return the state slice object t
 - [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
 
 
-<a id="immutability-issues-with-react-redux"></a>
 ###  How can immutability in `mapStateToProps` cause components to render unnecessarily?
 Certain immutable operations, such as an Array filter, will always return a new object, even if the values themselves have not changed.
 
@@ -422,7 +407,6 @@ Note that, conversely, if the values in your props object refer to mutable objec
 - [ImmutableJS: worth the price?](https://medium.com/@AlexFaunt/immutablejs-worth-the-price-66391b8742d4#.a3alci2g8)
 
 
-<a id="do-i-have-to-use-immutable-js"></a>
 ## What approaches are there for handling data immutability? Do I have to use Immutable.JS?
 You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
 
@@ -435,7 +419,6 @@ However, guaranteeing immutability with JavaScript is difficult, and it can be e
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
 
 
-<a id="issues-with-es6-for-immutable-ops"></a>
 ## What are the issues with using plain JavaScript for immutable operations?
 JavaScript was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use it for your immutable operations in your Redux app.
 

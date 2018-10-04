@@ -2,13 +2,12 @@
 
 ## Table of Contents
 
-- [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](#store-setup-multiple-stores) 
-- [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between next and dispatch in a middleware function?](#store-setup-middleware-chains) 
-- [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](#store-setup-subscriptions) 
+- [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself)
+- [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between next and dispatch in a middleware function?](#is-it-ok-to-have-more-than-one-middleware-chain-in-my-store-enhancer-what-is-the-difference-between-next-and-dispatch-in-a-middleware-function)
+- [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](#how-do-i-subscribe-to-only-a-portion-of-the-state-can-i-get-the-dispatched-action-as-part-of-the-subscription)
 
 ## Store Setup
 
-<a id="store-setup-multiple-stores"></a>
 ### Can or should I create multiple stores? Can I import my store directly, and use it in components myself?
 
 The original Flux pattern describes having multiple “stores” in an app, each one holding a different area of domain data. This can introduce issues such as needing to have one store “`waitFor`” another store to update. This is not necessary in Redux because the separation between data domains is already achieved by splitting a single reducer into smaller reducers.
@@ -38,7 +37,6 @@ With [React Redux](https://github.com/reduxjs/react-redux), the wrapper classes 
 - [Gist: Breaking out of Redux paradigm to isolate apps](https://gist.github.com/gaearon/eeee2f619620ab7b55673a4ee2bf8400)
 
 
-<a id="store-setup-middleware-chains"></a>
 ### Is it OK to have more than one middleware chain in my store enhancer? What is the difference between `next` and `dispatch` in a middleware function?
 
 Redux middleware act like a linked list. Each middleware function can either call `next(action)` to pass an action along to the next middleware in line, call `dispatch(action)` to restart the processing at the beginning of the list, or do nothing at all to stop the action from being processed further.
@@ -57,7 +55,6 @@ This chain of middleware is defined by the arguments passed to the `applyMiddlew
 - [Exploring Redux Middleware](http://blog.krawaller.se/posts/exploring-redux-middleware/)
 
 
-<a id="store-setup-subscriptions"></a>
 ### How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?
 
 Redux provides a single `store.subscribe` method for notifying listeners that the store has updated. Listener callbacks do not receive the current state as an argument—it is simply an indication that *something* has changed. The subscriber logic can then call `getState()` to get the current state value.

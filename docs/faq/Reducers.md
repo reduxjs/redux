@@ -2,14 +2,13 @@
 
 ## Table of Contents
 
-- [How do I share state between two reducers? Do I have to use combineReducers?](#reducers-share-state)
-- [Do I have to use the switch statement to handle actions?](#reducers-use-switch)
+- [How do I share state between two reducers? Do I have to use combineReducers?](#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
+- [Do I have to use the switch statement to handle actions?](#do-i-have-to-use-the-switch-statement-to-handle-actions)
 
 
 
 ## Reducers
 
-<a id="reducers-share-state"></a>
 ### How do I share state between two reducers? Do I have to use `combineReducers`?
 
 The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](/docs/api/combineReducers.md) utility function to make this pattern easier. However, it's important to note that `combineReducers` is *not* required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
@@ -36,7 +35,6 @@ In general, remember that reducers are just functions—you can organize them an
 - [Sharing State Between Redux Reducers](https://invalidpatent.wordpress.com/2016/02/18/sharing-state-between-redux-reducers/)
 
 
-<a id="reducers-use-switch"></a>
 ### Do I have to use the `switch` statement to handle actions?
 
 No. You are welcome to use any approach you'd like to respond to an action in a reducer. The `switch` statement is the most common approach, but it's fine to use `if` statements, a lookup table of functions, or to create a function that abstracts this away.  In fact, while Redux does require that action objects contain a `type` field, your reducer logic doesn't even have to rely on that to handle the action.  That said, the standard approach is definitely using a switch statement or a lookup table based on `type`.

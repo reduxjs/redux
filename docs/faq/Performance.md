@@ -2,18 +2,17 @@
 
 ## Table of Contents
 
-- [How well does Redux “scale” in terms of performance and architecture?](#performance-scaling)
-- [Won't calling “all my reducers” for each action be slow?](#performance-all-reducers)
-- [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#performance-clone-state)
-- [How can I reduce the number of store update events?](#performance-update-events)
-- [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#performance-state-memory)
-- [Will caching remote data cause memory problems?](#performance-cache-memory)
+- [How well does Redux “scale” in terms of performance and architecture?](#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
+- [Won't calling “all my reducers” for each action be slow?](#wont-calling-all-my-reducers-for-each-action-be-slow)
+- [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
+- [How can I reduce the number of store update events?](#how-can-i-reduce-the-number-of-store-update-events)
+- [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
+- [Will caching remote data cause memory problems?](#will-caching-remote-data-cause-memory-problems)
 
 
 
 ## Performance
 
-<a id="performance-scaling"></a>
 ### How well does Redux “scale” in terms of performance and architecture?
 
 While there's no single definitive answer to this, most of the time this should not be a concern in either case.
@@ -57,7 +56,6 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 - [Chat log: React/Redux perf - single connection vs many connections](https://gist.github.com/markerikson/6056565dd65d1232784bf42b65f8b2ad)
 
 
-<a id="performance-all-reducers"></a>
 ### Won't calling “all my reducers” for each action be slow?
 
 It's important to note that a Redux store really only has a single reducer function. The store passes the current state and dispatched action to that one reducer function, and lets the reducer handle things appropriately.
@@ -77,7 +75,6 @@ If you actually are concerned about reducer performance, you can use a utility s
 - [Stack Overflow: How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
 
 
-<a id="performance-clone-state"></a>
 ### Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?
 
 Immutably updating state generally means making shallow copies, not deep copies. Shallow copies are much faster than deep copies, because fewer objects and fields have to be copied, and it effectively comes down to moving some pointers around.
@@ -102,7 +99,6 @@ However, you *do* need to create a copied and updated object for each level of n
 - [Cloning Objects in JavaScript](http://www.zsoltnagy.eu/cloning-objects-in-javascript/)
 
 
-<a id="performance-update-events"></a>
 ### How can I reduce the number of store update events?
 
 Redux notifies subscribers after each successfully dispatched action (i.e. an action reached the store and was handled by reducers). In some cases, it may be useful to cut down on the number of times subscribers are called, particularly if an action creator dispatches multiple distinct actions in a row.
@@ -122,7 +118,6 @@ If you use React, note that you can improve performance of multiple synchronous 
 - [Redux Addons Catalog: Store - Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
 
 
-<a id="performance-state-memory"></a>
 ### Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?
 
 First, in terms of raw memory usage, Redux is no different than any other JavaScript library. The only difference is that all the various object references are nested together into one tree, instead of maybe saved in various independent model instances such as in Backbone. Second, a typical Redux app would probably have somewhat *less* memory usage than an equivalent Backbone app because Redux encourages use of plain JavaScript objects and arrays rather than creating instances of Models and Collections. Finally, Redux only holds onto a single state tree reference at a time. Objects that are no longer referenced in that tree will be garbage collected, as usual.
@@ -142,7 +137,6 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 - [Reddit: What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
 
 
-<a id="performance-cache-memory"></a>
 ### Will caching remote data cause memory problems?
 
 The amount of memory available to JavaScript applications running in a browser is finite. Caching data will cause performance problems when the size of the cache approaches the amount of available memory. This tends to be a problem when the cached data is exceptionally large or the session is exceptionally long-running. And while it is good to be aware of the potential for these problems, this awareness should not discourage you from efficiently caching reasonable amounts of data.

@@ -2,17 +2,16 @@
 
 ## Table of Contents
 
-- [Do I have to put all my state into Redux? Should I ever use React's setState()?](#organizing-state-only-redux-state) 
-- [Can I put functions, promises, or other non-serializable items in my store state?](#organizing-state-non-serializable) 
-- [How do I organize nested or duplicate data in my state?](#organizing-state-nested-data) 
+- [Do I have to put all my state into Redux? Should I ever use React's setState()?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+- [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
+- [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
 
 
 ## Organizing State
 
-<a id="organizing-state-only-redux-state"></a>
 ### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
 
-There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state. 
+There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state.
 
 ***Using local component state is fine***.  As a developer, it is _your_ job to determine what kinds of state make up your application, and where each piece of state should live.  Find a balance that works for you, and go with it.
 
@@ -56,7 +55,6 @@ There are a number of community packages that implement various approaches for s
 - [Redux Addons Catalog: Component State](https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md)
 
 
-<a id="organizing-state-non-serializable"></a>
 ### Can I put functions, promises, or other non-serializable items in my store state?
 
 It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It's *technically* possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store, as well as interfere with time-travel debugging.
@@ -73,7 +71,6 @@ If you are okay with things like persistence and time-travel debugging potential
 - [#1793: React Elements in Redux State](https://github.com/reduxjs/redux/issues/1793)
 
 
-<a id="organizing-state-nested-data"></a>
 ### How do I organize nested or duplicate data in my state?
 
 Data with IDs, nesting, or relationships should generally be stored in a “normalized” fashion: each object should be stored once, keyed by ID, and other objects that reference it should only store the ID rather than a copy of the entire object. It may help to think of parts of your store as a database, with individual “tables” per item type. Libraries such as [normalizr](https://github.com/paularmstrong/normalizr) and [redux-orm](https://github.com/tommikaikkonen/redux-orm) can provide help and abstractions in managing normalized data.
