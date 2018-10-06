@@ -21,7 +21,7 @@ and configure it to use [babel-preset-env](https://github.com/babel/babel/tree/m
 
 ```js
 {
-   "presets": ["@babel/preset-env"]
+  "presets": ["@babel/preset-env"]
 }
 ```
 
