@@ -1,3 +1,10 @@
+---
+id: refactoring-reducer-example
+title: Refactoring Reducers Example
+sidebar_label: Refactoring Reducers Example
+hide_title: true
+---
+
 # Refactoring Reducer Logic Using Functional Decomposition and Reducer Composition
 
 It may be helpful to see examples of what the different types of sub-reducer functions look like and how they fit together.  Let's look at a demonstration of how a large single reducer function can be refactored into a composition of several smaller functions.
@@ -17,7 +24,7 @@ const initialState = {
 
 function appReducer(state = initialState, action) {
     switch(action.type) {
-        case 'SET_VISIBILITY_FILTER' : { 
+        case 'SET_VISIBILITY_FILTER' : {
             return Object.assign({}, state, {
                 visibilityFilter : action.filter
             });
@@ -43,7 +50,7 @@ function appReducer(state = initialState, action) {
                     })
                   })
             });
-        } 
+        }
         case 'EDIT_TODO' : {
             return Object.assign({}, state, {
                 todos : state.todos.map(todo => {
@@ -56,7 +63,7 @@ function appReducer(state = initialState, action) {
                     })
                   })
             });
-        } 
+        }
         default : return state;
     }
 }
@@ -68,7 +75,7 @@ That function is fairly short, but already becoming overly complex.  We're deali
 
 #### Extracting Utility Functions
 
-A good first step might be to break out a utility function to return a new object with updated fields.  There's also a repeated pattern with trying to update a specific item in an array that we could extract to a function: 
+A good first step might be to break out a utility function to return a new object with updated fields.  There's also a repeated pattern with trying to update a specific item in an array that we could extract to a function:
 
 ```js
 function updateObject(oldObject, newValues) {
@@ -83,18 +90,18 @@ function updateItemInArray(array, itemId, updateItemCallback) {
             // Since we only want to update one item, preserve all others as they are now
             return item;
         }
-        
+
         // Use the provided callback to create an updated item
         const updatedItem = updateItemCallback(item);
         return updatedItem;
     });
-    
+
     return updatedItems;
 }
 
 function appReducer(state = initialState, action) {
     switch(action.type) {
-        case 'SET_VISIBILITY_FILTER' : { 
+        case 'SET_VISIBILITY_FILTER' : {
             return updateObject(state, {visibilityFilter : action.filter});
         }
         case 'ADD_TODO' : {
@@ -103,23 +110,23 @@ function appReducer(state = initialState, action) {
                 text: action.text,
                 completed: false
             });
-            
+
             return updateObject(state, {todos : newTodos});
         }
         case 'TOGGLE_TODO' : {
             const newTodos = updateItemInArray(state.todos, action.id, todo => {
                 return updateObject(todo, {completed : !todo.completed});
             });
-            
+
             return updateObject(state, {todos : newTodos});
-        } 
+        }
         case 'EDIT_TODO' : {
             const newTodos = updateItemInArray(state.todos, action.id, todo => {
                 return updateObject(todo, {text : action.text});
             });
-            
+
             return updateObject(state, {todos : newTodos});
-        } 
+        }
         default : return state;
     }
 }
@@ -147,7 +154,7 @@ function addTodo(state, action) {
         text: action.text,
         completed: false
     });
-    
+
     return updateObject(state, {todos : newTodos});
 }
 
@@ -155,7 +162,7 @@ function toggleTodo(state, action) {
     const newTodos = updateItemInArray(state.todos, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
     });
-    
+
     return updateObject(state, {todos : newTodos});
 }
 
@@ -163,7 +170,7 @@ function editTodo(state, action) {
     const newTodos = updateItemInArray(state.todos, action.id, todo => {
         return updateObject(todo, {text : action.text});
     });
-    
+
     return updateObject(state, {todos : newTodos});
 }
 
@@ -211,7 +218,7 @@ function addTodo(todosState, action) {
         text: action.text,
         completed: false
     });
-    
+
     return newTodos;
 }
 
@@ -219,7 +226,7 @@ function toggleTodo(todosState, action) {
     const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
     });
-    
+
     return newTodos;
 }
 
@@ -227,7 +234,7 @@ function editTodo(todosState, action) {
     const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {text : action.text});
     });
-    
+
     return newTodos;
 }
 
@@ -315,12 +322,12 @@ function updateItemInArray(array, itemId, updateItemCallback) {
             // Since we only want to update one item, preserve all others as they are now
             return item;
         }
-        
+
         // Use the provided callback to create an updated item
         const updatedItem = updateItemCallback(item);
         return updatedItem;
     });
-    
+
     return updatedItems;
 }
 
@@ -353,7 +360,7 @@ function addTodo(todosState, action) {
         text: action.text,
         completed: false
     });
-    
+
     return newTodos;
 }
 
@@ -362,7 +369,7 @@ function toggleTodo(todosState, action) {
     const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {completed : !todo.completed});
     });
-    
+
     return newTodos;
 }
 
@@ -371,7 +378,7 @@ function editTodo(todosState, action) {
     const newTodos = updateItemInArray(todosState, action.id, todo => {
         return updateObject(todo, {text : action.text});
     });
-    
+
     return newTodos;
 }
 

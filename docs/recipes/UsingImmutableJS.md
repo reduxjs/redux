@@ -1,4 +1,12 @@
+---
+id: using-immutablejs-with-redux
+title: Using Immutable.JS with Redux
+sidebar_label: Using Immutable.JS with Redux
+hide_title: true
+---
+
 # Using Immutable.JS with Redux
+
 ## Table of Contents
 - [Why should I use an immutable-focused library such as Immutable.JS?](#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
 - [Why should I choose Immutable.JS as an immutable library?](#why-should-i-choose-immutable-js-as-an-immutable-library)

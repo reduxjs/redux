@@ -1,3 +1,10 @@
+---
+id: actions
+title: Actions
+sidebar_label: Actions
+hide_title: true
+---
+
 # Actions
 
 First, let's define some actions.
@@ -147,4 +154,3 @@ export function setVisibilityFilter(filter) {
 ## Next Steps
 
 Now let's [define some reducers](Reducers.md) to specify how the state updates when you dispatch these actions!
-

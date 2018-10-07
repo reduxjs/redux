@@ -1,3 +1,11 @@
+---
+id: configuring-your-store
+title: Configuring Your Store
+sidebar_label: Configuring Your Store
+hide_title: true
+---
+
+
 # Configuring Your Store
 
 In the [basics section](../basics/README.md), we introduced the fundamental Redux concepts by building an example Todo list app.
@@ -178,7 +186,7 @@ This function follows the same steps outlined above, with some of the logic spli
 - Both `middlewares` and `enhancers` are defined as arrays, separate from the functions which consume them.
 
     This allows us to easily add more middleware or enhancers based on different conditions.
-  
+
   For example, it is common to add some middleware only when in development mode, which is easily achieved by pushing to the middlewares array inside an if statement:
 
   ```js

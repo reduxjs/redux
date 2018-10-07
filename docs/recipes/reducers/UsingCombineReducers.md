@@ -1,3 +1,10 @@
+---
+id: using-combinereducers
+title: Using combineReducers
+sidebar_label: Using combineReducers
+hide_title: true
+---
+
 # Using `combineReducers`
 
 ## Core Concepts

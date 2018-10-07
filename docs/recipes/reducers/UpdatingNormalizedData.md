@@ -1,3 +1,10 @@
+---
+id: updating-normalized-data
+title: Updating Normalized Data
+sidebar_label: Updating Normalized Data
+hide_title: true
+---
+
 # Managing Normalized Data
 
 As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store.  However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application.  There are a variety of different approaches that you can use, based on your own preference.  We'll use the example of adding a new Comment to a Post.
@@ -35,7 +42,7 @@ If we have a nested tree of slice reducers, each slice reducer will need to know
 function addComment(postId, commentText) {
     // Generate a unique ID for this comment
     const commentId = generateId("comment");
-    
+
     return {
         type : "ADD_COMMENT",
         payload : {
@@ -51,10 +58,10 @@ function addComment(postId, commentText) {
 function addComment(state, action) {
     const {payload} = action;
     const {postId, commentId} = payload;
-    
+
     // Look up the correct post, to simplify the rest of the code
     const post = state[postId];
-    
+
     return {
         ...state,
         // Update our Post object with a new "comments" array
@@ -86,10 +93,10 @@ const postsReducer = combineReducers({
 function addCommentEntry(state, action) {
     const {payload} = action;
     const {commentId, commentText} = payload;
-    
+
     // Create our new Comment object
     const comment = {id : commentId, text : commentText};
-    
+
     // Insert the new Comment object into the updated lookup table
     return {
         ...state,
@@ -149,26 +156,26 @@ const combinedReducer = combineReducers({
 function addComment(state, action) {
     const {payload} = action;
     const {postId, commentId, commentText} = payload;
-    
+
     // State here is the entire combined state
     const updatedWithPostState = dotProp.set(
-        state, 
-        `posts.byId.${postId}.comments`, 
+        state,
+        `posts.byId.${postId}.comments`,
         comments => comments.concat(commentId)
     );
-    
+
     const updatedWithCommentsTable = dotProp.set(
-        updatedWithPostState, 
+        updatedWithPostState,
         `comments.byId.${commentId}`,
         {id : commentId, text : commentText}
     );
-    
+
     const updatedWithCommentsList = dotProp.set(
         updatedWithCommentsTable,
         `comments.allIds`,
         allIds => allIds.concat(commentId);
     );
-    
+
     return updatedWithCommentsList;
 }
 
@@ -197,12 +204,12 @@ import {Model, many, Schema} from "redux-orm";
 export class Post extends Model {
   static get fields() {
     return {
-      // Define a many-sided relation - one Post can have many Comments, 
+      // Define a many-sided relation - one Post can have many Comments,
       // at a field named "comments"
-      comments : many("Comment") 
+      comments : many("Comment")
     };
   }
-  
+
   static reducer(state, action, Post) {
     switch(action.type) {
       case "CREATE_POST" : {
@@ -213,13 +220,13 @@ export class Post extends Model {
       case "ADD_COMMENT" : {
         const {payload} = action;
         const {postId, commentId} = payload;
-        // Queue up the addition of a relation between this Comment ID 
+        // Queue up the addition of a relation between this Comment ID
         // and this Post instance
         Post.withId(postId).comments.add(commentId);
         break;
       }
     }
-    
+
     // Redux-ORM will automatically apply queued updates after this returns
   }
 }
@@ -229,19 +236,19 @@ export class Comment extends Model {
   static get fields() {
     return {};
   }
-  
+
   static reducer(state, action, Comment) {
     switch(action.type) {
       case "ADD_COMMENT" : {
         const {payload} = action;
         const {commentId, commentText} = payload;
-        
+
         // Queue up the creation of a Comment instance
         Comment.create({id : commentId, text : commentText});
         break;
       }   
     }
-    
+
     // Redux-ORM will automatically apply queued updates after this returns
   }
 }
@@ -268,7 +275,7 @@ store.dispatch({
   type : "CREATE_POST",
   payload : {
     id : 1,
-    name : "Test Post Please Ignore" 
+    name : "Test Post Please Ignore"
   }
 });
 
@@ -290,17 +297,17 @@ Another variation on this is to use Redux-ORM as an abstraction layer within a s
 ```js
 import {schema} from "./models";
 
-// Assume this case reducer is being used in our "entities" slice reducer, 
+// Assume this case reducer is being used in our "entities" slice reducer,
 // and we do not have reducers defined on our Redux-ORM Model subclasses
 function addComment(entitiesState, action) {
     const session = schema.from(entitiesState);
     const {Post, Comment} = session;
     const {payload} = action;
     const {postId, commentId, commentText} = payload;
-    
+
     const post = Post.withId(postId);
     post.comments.add(commentId);
-    
+
     Comment.create({id : commentId, text : commentText});
 
     return session.reduce();

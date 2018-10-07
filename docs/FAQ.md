@@ -1,3 +1,10 @@
+---
+id: faq
+title: FAQ
+sidebar_label: FAQ
+hide_title: true
+---
+
 # Redux FAQ
 
 ## Table of Contents

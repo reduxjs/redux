@@ -1,3 +1,10 @@
+---
+id: structuring-reducers
+title: Structuring Reducers
+sidebar_label: Structuring Reducers
+hide_title: true
+---
+
 # Structuring Reducers
 
 At its core, Redux is really a fairly simple design pattern: all your "write" logic goes into a single function, and the only way to run that logic is to give Redux a plain object that describes something that has happened.  The Redux store calls that write logic function and passes in the current state tree and the descriptive object, the write logic function returns some new state tree, and the Redux store notifies any subscribers that the state tree has changed.  
@@ -14,11 +21,11 @@ Some of these concepts are already described elsewhere in the Redux documentatio
 It is vital that these Prerequisite Concepts are **thoroughly understood** before moving on to more advanced and Redux-specific techniques. A recommended reading list is available at:
 
 #### [Prerequisite Concepts](./reducers/PrerequisiteConcepts.md)  
-  
+
 It's also important to note that some of these suggestions may or may not be directly applicable based on architectural decisions in a specific application.  For example, an application using Immutable.js Maps to store data would likely have its reducer logic structured at least somewhat differently than an application using plain Javascript objects.  This documentation primarily assumes use of plain Javascript objects, but many of the principles would still apply if using other tools.
-  
-  
-  
+
+
+
 ### Reducer Concepts and Techniques
 
 - [Basic Reducer Structure](./reducers/BasicReducerStructure.md)

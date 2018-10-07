@@ -1,3 +1,10 @@
+---
+id: next-steps
+title: Next Steps
+sidebar_label: Next Steps
+hide_title: true
+---
+
 # Next Steps
 
 If you landed in this section, you might be wondering at this point, "what should I do now?". Here is where we provide some essential tips/suggestions on how to diverge from creating trivial TodoMVC apps to a real world application.

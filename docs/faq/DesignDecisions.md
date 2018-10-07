@@ -1,3 +1,10 @@
+---
+id: design-decisions
+title: Design decisions
+sidebar_label: Design decisions
+hide_title: true
+---
+
 # Redux FAQ: Design Decisions
 
 ## Table of Contents
