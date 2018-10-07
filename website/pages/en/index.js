@@ -88,9 +88,6 @@ const Installation = () => (
   >
     <h2>Installation</h2>
     <MarkdownBlock>
-      Redu requires **React 0.14 or later.**
-    </MarkdownBlock>
-    <MarkdownBlock>
       ``` npm install --save
       redux ```
     </MarkdownBlock>
