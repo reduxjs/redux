@@ -23,7 +23,7 @@ One of the benefits of Redux is that it makes state changes predictable and tran
 
 Wouldn't it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
 
-<img src='http://i.imgur.com/BjGBlES.png' width='70%'>
+<img src='https://i.imgur.com/BjGBlES.png' width='70%'>
 
 How do we approach this with Redux?
 

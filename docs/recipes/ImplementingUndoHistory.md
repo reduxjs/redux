@@ -24,7 +24,7 @@ In the first part of this recipe, we will explain the underlying concepts that m
 
 In the second part of this recipe, we will show how to use [Redux Undo](https://github.com/omnidan/redux-undo) package that provides this functionality out of the box.
 
-[![demo of todos-with-undo](http://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
+[![demo of todos-with-undo](https://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
 
 
 ## Understanding Undo History
