@@ -68,8 +68,8 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href={docUrl("introduction/core-consepts", language)}>
-              Core consepts
+            <Button href={docUrl("introduction/core-concepts", language)}>
+              Core concepts
             </Button>
             <Button href="https://github.com/reduxjs/redux">
               Github

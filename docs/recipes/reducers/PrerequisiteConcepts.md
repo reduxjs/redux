@@ -1,7 +1,7 @@
 ---
-id: prerequisite-consepts
-title: Prerequisite Consepts
-sidebar_label: Prerequisite Consepts
+id: prerequisite-concepts
+title: Prerequisite Concepts
+sidebar_label: Prerequisite Concepts
 hide_title: true
 ---
 

@@ -2,7 +2,7 @@
   "docs": {
     "Introduction": [
       "introduction/motivation",
-      "introduction/core-consepts",
+      "introduction/core-concepts",
       "introduction/three-principles",
       "introduction/prior-art",
       "introduction/ecosystem",
@@ -39,7 +39,7 @@
     ],
     "Structuring Reducers": [
       "recipes/structuring-reducers",
-      "recipes/reducers/prerequisite-consepts",
+      "recipes/reducers/prerequisite-concepts",
       "recipes/reducers/basic-reducer-structure",
       "recipes/reducers/splitting-reducer-logic",
       "recipes/reducers/refactoring-reducer-example",
