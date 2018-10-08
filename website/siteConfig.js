@@ -32,8 +32,8 @@ const siteConfig = {
   ],
 
   /* path to images for header/footer */
-  headerIcon: "img/redux.svg",
-  footerIcon: "img/redux.svg",
+  headerIcon: "img/redux_white.svg",
+  footerIcon: "img/redux_white.svg",
   favicon: "img/favicon/favicon.ico",
 
   /* Colors for website */
