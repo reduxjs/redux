@@ -6,7 +6,7 @@ The only way to change the state inside it is to dispatch an [action](../Glossar
 A store is not a class. It's just an object with a few methods on it.  
 To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
 
->##### A Note for Flux Users
+>######## A Note for Flux Users
 
 >If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
 
