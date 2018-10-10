@@ -49,12 +49,16 @@
     "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.7.4"
+  },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-typescript": "^7.6.0",
