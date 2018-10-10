@@ -29,7 +29,7 @@ npm start
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter):
 
-{% embed data="{\"url\":\"https://codesandbox.io/embed/github/reactjs/redux/tree/master/examples/counter\",\"type\":\"link\",\"title\":\"CodeSandbox\",\"description\":\"CodeSandbox is an online editor       tailored for web applications.\",\"icon\":{\"type\":\"icon\",\"url\":\"https://codesandbox.io/favicon.ico\",\"aspectRatio\":0},\"thumbnail\":{\"type\":\"thumbnail\",\"url\":\"https://codesandbox.io/static/img/banner.png\",\"width\":1200,\"height\":630,\"aspectRatio\":0.525}}" %}
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter" %}
 
 This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/reactjs/react-redux) bindings instead.
 
@@ -49,6 +49,8 @@ npm start
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos).
 
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos" %}
+
 This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how reducers can delegate handling actions to other reducers, and how you can use [React Redux](https://github.com/reactjs/react-redux) to generate container components from your presentational components.
 
 This example includes tests.
@@ -67,6 +69,8 @@ npm start
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo).
 
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo" %}
+
 This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your reducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
 
 ## TodoMVC
@@ -82,6 +86,8 @@ npm start
 ```
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc).
+
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc" %}
 
 This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the sake of comparison, but it covers the same points as the Todos example.
 
@@ -101,6 +107,8 @@ npm start
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart).
 
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/shopping-cart" %}
+
 This example shows important idiomatic Redux patterns that become important as your app grows. In particular, it shows how to store entities in a normalized way by their IDs, how to compose reducers on several levels, and how to define selectors alongside the reducers so the knowledge about the state shape is encapsulated. It also demonstrates logging with [Redux Logger](https://github.com/fcomb/redux-logger) and conditional dispatching of actions with [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware.
 
 ## Tree View
@@ -116,6 +124,8 @@ npm start
 ```
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view).
+
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/tree-view" %}
 
 This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from reducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
 
@@ -134,6 +144,8 @@ npm start
 ```
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async).
+
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async" %}
 
 This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware to encapsulate asynchronous side effects.
 
@@ -164,6 +176,8 @@ npm start
 ```
 
 Or check out the [sandbox](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world).
+
+{% embed url="https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/real-world" %}
 
 This is the most advanced example. It is dense by design. It covers keeping fetched entities in a normalized cache, implementing a custom middleware for API calls, rendering partially loaded data, pagination, caching responses, displaying error messages, and routing. Additionally, it includes Redux DevTools.
 
