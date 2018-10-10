@@ -5,7 +5,7 @@ const todos = (state = [], action) => {
         ...state,
         {
           id: action.id,
-          text: action.text,
+          text: action.text + ' - ' + new Date().toLocaleString(),
           completed: false
         }
       ]
