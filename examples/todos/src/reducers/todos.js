@@ -1,4 +1,30 @@
-const todos = (state = [], action) => {
+// @flow
+
+type ActionType = {
+  type: string,
+  id: number,
+  text: string,
+  completed: boolean
+}
+
+type Todo = {
+  id: number,
+  text: string,
+  completed: boolean,
+  createdTime: string
+}
+
+export type Todos = Array<Todo>;
+
+const toggleTodo = (todos: Todos, id: number): Todos => {
+  return todos.map(todo =>
+    (todo.id === id)
+      ? {...todo, completed: !todo.completed}
+      : todo
+  )
+}
+
+const todos = (state: Todos = [], action: ActionType) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [
@@ -11,11 +37,7 @@ const todos = (state = [], action) => {
         }
       ]
     case 'TOGGLE_TODO':
-      return state.map(todo =>
-        (todo.id === action.id)
-          ? {...todo, completed: !todo.completed}
-          : todo
-      )
+      return toggleTodo(state, action.id)
     default:
       return state
   }

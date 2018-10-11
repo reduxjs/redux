@@ -1,9 +1,23 @@
+// @flow
+
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
 import { VisibilityFilters } from '../actions'
+import type {Dispatch} from 'redux'
+import type {Todos} from '../reducers/todos'
 
-const getVisibleTodos = (todos, filter) => {
+type VisibilityFilterState = {
+  visibilityFilter: string
+}
+
+type TodosState = {
+  todos: Todos
+}
+
+type State = TodosState & VisibilityFilterState;
+
+const getVisibleTodos = (todos: Todos, filter: string) => {
   let completedTasks = todos.filter(t => t.completed);
   let activeTasks = todos.filter(t => !t.completed);
   switch (filter) {
@@ -18,11 +32,14 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-const mapStateToProps = state => ({
-  todos: getVisibleTodos(state.todos, state.visibilityFilter)
-})
+const mapStateToProps = (state: State) => {
+  return {
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+  }
+}
 
-const mapDispatchToProps = dispatch => ({
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleTodo: id => dispatch(toggleTodo(id))
 })
 
