@@ -1,0 +1,11 @@
+[ignore]
+.*/node_module/.*
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
