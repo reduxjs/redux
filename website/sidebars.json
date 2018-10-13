@@ -41,21 +41,25 @@
       "recipes/writing-tests",
       "recipes/computing-derived-data",
       "recipes/implementing-undo-history",
-      "recipes/using-immutablejs-with-redux"
-    ],
-    "Structuring Reducers": [
-      "recipes/structuring-reducers",
-      "recipes/reducers/prerequisite-concepts",
-      "recipes/reducers/basic-reducer-structure",
-      "recipes/reducers/splitting-reducer-logic",
-      "recipes/reducers/refactoring-reducer-example",
-      "recipes/reducers/using-combinereducers",
-      "recipes/reducers/beyond-combinereducers",
-      "recipes/reducers/normalizing-state-shape",
-      "recipes/reducers/updating-normalized-data",
-      "recipes/reducers/reusing-reducer-logic",
-      "recipes/reducers/immutable-update-patterns",
-      "recipes/reducers/initializing-state"
+      "recipes/using-immutablejs-with-redux",
+      {
+        "type": "subcategory",
+        "label": "Structuring Reducers",
+        "ids": [
+          "recipes/structuring-reducers",
+          "recipes/reducers/prerequisite-concepts",
+          "recipes/reducers/basic-reducer-structure",
+          "recipes/reducers/splitting-reducer-logic",
+          "recipes/reducers/refactoring-reducer-example",
+          "recipes/reducers/using-combinereducers",
+          "recipes/reducers/beyond-combinereducers",
+          "recipes/reducers/normalizing-state-shape",
+          "recipes/reducers/updating-normalized-data",
+          "recipes/reducers/reusing-reducer-logic",
+          "recipes/reducers/immutable-update-patterns",
+          "recipes/reducers/initializing-state"
+        ]
+      }
     ],
     "FAQ": [
       "faq",
