@@ -107,6 +107,24 @@ export default connect(
 
 #### Tips
 
+* bindActionCreators can optionally take a list of action objects. Basically, it takes an object whose values are action creators as its first parameter, so you can use a JavaScript method to combine multiple action objects into one object. See the examples below:
+
+  You can do this with ES7 object spread proposal: 
+  
+  bindActionCreators({ ...SomeActions, ...OtherActions }, dispatch)
+  
+  Or (vanilla ES6, needs Object.assign polyfill or Babel plugin): 
+  
+  bindActionCreators(Object.assign({}, SomeActions, OtherActions), dispatch)
+ 
+  Or (ES5, assumes lodash): 
+  
+  var assign = require('lodash/object/assign'); 
+  
+  // ...
+  
+  bindActionCreators(assign({}, SomeActions, OtherActions), dispatch)
+
 * You might ask: why don't we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won't work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you're stuck with a single store instance for all requests.
 
 * If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` arguments are functions. The module system doesn't matter.
