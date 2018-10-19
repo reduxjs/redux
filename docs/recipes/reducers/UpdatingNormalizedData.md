@@ -1,5 +1,5 @@
 ---
-id: updating-normalized-data
+id: UpdatingNormalizedData.md
 title: Updating Normalized Data
 sidebar_label: Updating Normalized Data
 hide_title: true

@@ -1,5 +1,5 @@
 ---
-id: general
+id: General.md
 title: General
 sidebar_label: General
 hide_title: true

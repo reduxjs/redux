@@ -1,5 +1,5 @@
 ---
-id: ecosystem
+id: Ecosystem.md
 title: Ecosystem
 sidebar_label: Ecosystem
 hide_title: true

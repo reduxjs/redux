@@ -1,5 +1,5 @@
 ---
-id: learning-resources
+id: LearningResources.md
 title: Learning resources
 sidebar_label: Learning resources
 hide_title: true

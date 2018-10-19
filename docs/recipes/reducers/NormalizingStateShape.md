@@ -1,5 +1,5 @@
 ---
-id: normalizing-state-shape
+id: NormalizingStateShape.md
 title: Normalizing State Shape
 sidebar_label: Normalizing State Shape
 hide_title: true

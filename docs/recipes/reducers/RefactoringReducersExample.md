@@ -1,5 +1,5 @@
 ---
-id: refactoring-reducer-example
+id: RefactoringReducersExample.md
 title: Refactoring Reducers Example
 sidebar_label: Refactoring Reducers Example
 hide_title: true

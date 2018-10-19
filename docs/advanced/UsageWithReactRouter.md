@@ -1,5 +1,5 @@
 ---
-id: usage-with-react-router
+id: UsageWithReactRouter.md
 title: Usage with React Router
 sidebar_label: Usage with React Router
 hide_title: true

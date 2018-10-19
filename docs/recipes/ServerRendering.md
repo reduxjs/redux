@@ -1,5 +1,5 @@
 ---
-id: server-rendering
+id: ServerRendering.md
 title: Server Rendering
 sidebar_label: Server Rendering
 hide_title: true

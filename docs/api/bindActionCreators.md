@@ -1,5 +1,5 @@
 ---
-id: bind-action-creators
+id: bindActionCreators.md
 title: bindActionCreators
 sidebar_label: bindActionCreators
 hide_title: true

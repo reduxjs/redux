@@ -1,5 +1,5 @@
 ---
-id: basic-example
+id: BasicExample.md
 title: Basic Example
 sidebar_label: Basic Example
 hide_title: true

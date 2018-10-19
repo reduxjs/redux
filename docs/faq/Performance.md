@@ -1,5 +1,5 @@
 ---
-id: performance
+id: Performance.md
 title: Performance
 sidebar_label: Performance
 hide_title: true

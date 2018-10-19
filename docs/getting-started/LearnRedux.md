@@ -1,5 +1,5 @@
 ---
-id: learn-redux
+id: LearnRedux.md
 title: Learn Redux
 sidebar_label: Learn Redux
 hide_title: true

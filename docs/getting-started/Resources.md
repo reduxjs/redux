@@ -1,5 +1,5 @@
 ---
-id: resources
+id: Resources.md
 title: Resources
 sidebar_label: Resources
 hide_title: true

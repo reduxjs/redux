@@ -1,5 +1,5 @@
 ---
-id: migrating-to-redux
+id: MigratingToRedux.md
 title: Migrating to Redux
 sidebar_label: Migrating to Redux
 hide_title: true

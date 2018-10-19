@@ -1,5 +1,5 @@
 ---
-id: troubleshooting
+id: Troubleshooting.md
 title: Troubleshooting
 sidebar_label: Troubleshooting
 hide_title: true

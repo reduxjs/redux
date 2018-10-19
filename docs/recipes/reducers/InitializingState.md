@@ -1,5 +1,5 @@
 ---
-id: initializing-state
+id: InitializingState.md
 title: Initializing State
 sidebar_label: Initializing State
 hide_title: true

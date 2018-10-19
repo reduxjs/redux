@@ -1,5 +1,5 @@
 ---
-id: usage-with-react
+id: UsageWithReact.md
 title: Usage with React
 sidebar_label: Usage with React
 hide_title: true

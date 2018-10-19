@@ -1,5 +1,5 @@
 ---
-id: next-steps
+id: NextSteps.md
 title: Next Steps
 sidebar_label: Next Steps
 hide_title: true

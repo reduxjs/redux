@@ -1,5 +1,5 @@
 ---
-id: data-flow
+id: DataFlow.md
 title: Data flow
 sidebar_label: Data flow
 hide_title: true

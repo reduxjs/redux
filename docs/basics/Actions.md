@@ -1,5 +1,5 @@
 ---
-id: actions
+id: Actions.md
 title: Actions
 sidebar_label: Actions
 hide_title: true

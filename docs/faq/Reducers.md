@@ -1,5 +1,5 @@
 ---
-id: reducers
+id: Reducers.md
 title: Reducers
 sidebar_label: Reducers
 hide_title: true

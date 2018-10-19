@@ -1,5 +1,5 @@
 ---
-id: compose
+id: compose.md
 title: compose
 sidebar_label: compose
 hide_title: true

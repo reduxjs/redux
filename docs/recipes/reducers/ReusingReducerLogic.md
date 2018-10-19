@@ -1,5 +1,5 @@
 ---
-id: reusing-reducer-logic
+id: ReusingReducerLogic.md
 title: Reusing Reducer Logic
 sidebar_label: Reusing Reducer Logic
 hide_title: true

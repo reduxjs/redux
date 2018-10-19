@@ -1,5 +1,5 @@
 ---
-id: structuring-reducers
+id: StructuringReducers.md
 title: Structuring Reducers
 sidebar_label: Structuring Reducers
 hide_title: true

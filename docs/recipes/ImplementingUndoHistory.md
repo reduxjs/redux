@@ -1,5 +1,5 @@
 ---
-id: implementing-undo-history
+id: ImplementingUndoHistory.md
 title: Implementing Undo History
 sidebar_label: Implementing Undo History
 hide_title: true

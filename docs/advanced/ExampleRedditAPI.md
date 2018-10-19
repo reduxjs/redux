@@ -1,5 +1,5 @@
 ---
-id: example-reddit-api
+id: ExampleRedditAPI.md
 title: Example: Reddit API
 sidebar_label: Example: Reddit API
 hide_title: true

@@ -1,5 +1,5 @@
 ---
-id: miscellaneous
+id: Miscellaneous.md
 title: Miscellaneous
 sidebar_label: Miscellaneous
 hide_title: true

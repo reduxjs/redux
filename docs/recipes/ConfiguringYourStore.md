@@ -1,5 +1,5 @@
 ---
-id: configuring-your-store
+id: ConfiguringYourStore.md
 title: Configuring Your Store
 sidebar_label: Configuring Your Store
 hide_title: true
