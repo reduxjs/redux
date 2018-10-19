@@ -28,7 +28,7 @@
       "advanced/AsyncActions.md",
       "advanced/AsyncFlow.md",
       "advanced/Middleware.md",
-      "advanced/UsageWithReactRouter.md.md",
+      "advanced/UsageWithReactRouter.md",
       "advanced/ExampleRedditAPI.md",
       "advanced/NextSteps.md"
     ],
@@ -61,7 +61,7 @@
           "recipes/reducers/InitializingState.md"
         ]
       },
-      "recipes/UsingImmutablejs.md"
+      "recipes/UsingImmutableJS.md"
     ],
     "FAQ": [
       "FAQ.md",
