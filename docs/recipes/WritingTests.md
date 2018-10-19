@@ -128,7 +128,6 @@ const mockStore = configureMockStore(middlewares)
 
 describe('async actions', () => {
   afterEach(() => {
-    fetchMock.reset()
     fetchMock.restore()
   })
 
