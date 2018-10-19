@@ -1,3 +1,10 @@
+---
+id: writing-tests
+title: Writing Tests
+sidebar_label: Writing Tests
+hide_title: true
+---
+
 # Writing Tests
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.

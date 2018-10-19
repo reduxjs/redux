@@ -1,3 +1,10 @@
+---
+id: apply-middleware
+title: applyMiddleware
+sidebar_label: applyMiddleware
+hide_title: true
+---
+
 # `applyMiddleware(...middleware)`
 
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store's [`dispatch`](Store.md#dispatch) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.

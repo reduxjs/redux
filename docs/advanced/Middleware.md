@@ -1,3 +1,10 @@
+---
+id: middleware
+title: Middleware
+sidebar_label: Middleware
+hide_title: true
+---
+
 # Middleware
 
 You've seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of _middleware_. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
@@ -16,7 +23,7 @@ One of the benefits of Redux is that it makes state changes predictable and tran
 
 Wouldn't it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
 
-<img src='http://i.imgur.com/BjGBlES.png' width='70%'>
+<img src='https://i.imgur.com/BjGBlES.png' width='70%'>
 
 How do we approach this with Redux?
 

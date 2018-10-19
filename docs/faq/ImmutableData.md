@@ -1,3 +1,10 @@
+---
+id: immutable-data
+title: Immutable data
+sidebar_label: Immutable data
+hide_title: true
+---
+
 # Redux FAQ: Immutable Data
 
 ## Table of Contents

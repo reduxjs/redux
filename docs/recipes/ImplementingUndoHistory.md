@@ -1,3 +1,11 @@
+---
+id: implementing-undo-history
+title: Implementing Undo History
+sidebar_label: Implementing Undo History
+hide_title: true
+---
+
+
 # Implementing Undo History
 
 Building an Undo and Redo functionality into an app has traditionally required conscious effort from the developer. It is not an easy problem with classical MVC frameworks because you need to keep track of every past state by cloning all relevant models. In addition, you need to be mindful of the undo stack because the user-initiated changes should be undoable.
@@ -16,7 +24,7 @@ In the first part of this recipe, we will explain the underlying concepts that m
 
 In the second part of this recipe, we will show how to use [Redux Undo](https://github.com/omnidan/redux-undo) package that provides this functionality out of the box.
 
-[![demo of todos-with-undo](http://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
+[![demo of todos-with-undo](https://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
 
 ## Understanding Undo History
 

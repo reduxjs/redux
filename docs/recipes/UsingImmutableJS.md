@@ -1,3 +1,10 @@
+---
+id: using-immutablejs-with-redux
+title: Using Immutable.JS with Redux
+sidebar_label: Using Immutable.JS with Redux
+hide_title: true
+---
+
 # Using Immutable.JS with Redux
 
 ## Table of Contents

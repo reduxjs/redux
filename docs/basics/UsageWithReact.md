@@ -1,3 +1,10 @@
+---
+id: usage-with-react
+title: Usage with React
+sidebar_label: Usage with React
+hide_title: true
+---
+
 # Usage with React
 
 From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.

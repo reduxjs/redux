@@ -1,3 +1,10 @@
+---
+id: code-structure
+title: Code structure
+sidebar_label: Code structure
+hide_title: true
+---
+
 # Redux FAQ: Code Structure
 
 ## Table of Contents

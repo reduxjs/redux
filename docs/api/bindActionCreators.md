@@ -1,3 +1,10 @@
+---
+id: bind-action-creators
+title: bindActionCreators
+sidebar_label: bindActionCreators
+hide_title: true
+---
+
 # `bindActionCreators(actionCreators, dispatch)`
 
 Turns an object whose values are [action creators](../Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatch) call so they may be invoked directly.

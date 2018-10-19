@@ -1,3 +1,10 @@
+---
+id: immutable-update-patterns
+title: Immutable Update Patterns
+sidebar_label: Immutable Update Patterns
+hide_title: true
+---
+
 # Immutable Update Patterns
 
 The articles listed in [Prerequisite Concepts#Immutable Data Management](PrerequisiteConcepts.md#immutable-data-management) give a number of good examples for how to perform basic update operations immutably, such as updating a field in an object or adding an item to the end of an array. However, reducers will often need to use those basic operations in combination to perform more complicated tasks. Here are some examples for some of the more common tasks you might have to implement.

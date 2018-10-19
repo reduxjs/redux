@@ -1,3 +1,10 @@
+---
+id: combine-reducers
+title: combineReducers
+sidebar_label: combineReducers
+hide_title: true
+---
+
 # `combineReducers(reducers)`
 
 As your app grows more complex, you'll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
