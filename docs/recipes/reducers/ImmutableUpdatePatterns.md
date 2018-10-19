@@ -1,3 +1,10 @@
+---
+id: immutable-update-patterns
+title: Immutable Update Patterns
+sidebar_label: Immutable Update Patterns
+hide_title: true
+---
+
 # Immutable Update Patterns
 
 The articles listed in [Prerequisite Concepts#Immutable Data Management](PrerequisiteConcepts.md#immutable-data-management) give a number of good examples for how to perform basic update operations immutably, such as updating a field in an object or adding an item to the end of an array.  However, reducers will often need to use those basic operations in combination to perform more complicated tasks.  Here are some examples for some of the more common tasks you might have to implement.
@@ -16,7 +23,7 @@ function updateNestedState(state, action) {
     let nestedState = state.nestedState;
     // ERROR: this directly modifies the existing object reference - don't do this!
     nestedState.nestedField = action.data;
-    
+
     return {
         ...state,
         nestedState
@@ -35,10 +42,10 @@ Another common version of this error looks like this:
 function updateNestedState(state, action) {
     // Problem: this only does a shallow copy!
     let newState = {...state};
-    
+
     // ERROR: nestedState is still the same object!
     newState.nestedState.nestedField = action.data;
-    
+
     return newState;
 }
 ```
@@ -129,7 +136,7 @@ function updateObjectInArray(array, action) {
             // This isn't the item we care about - keep it as-is
             return item;
         }
-        
+
         // Otherwise, this is the one we want - return an updated value
         return {
             ...item,

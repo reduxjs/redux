@@ -1,3 +1,10 @@
+---
+id: ecosystem
+title: Ecosystem
+sidebar_label: Ecosystem
+hide_title: true
+---
+
 # Ecosystem
 
 Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions, and the community has created a wide variety of helpful addons, libraries, and tools.  You don't need to use any of these addons to use Redux, but they can help make it easier to implement features and solve problems in your application.
@@ -80,7 +87,7 @@ An expanded version of `combineReducers`, which allows passing `state` as a thir
 A `combineReducers` variation that allows defining cross-slice dependencies for ordering and data passing
 ```js
 var masterReducer = topologicallyCombineReducers(
-    {auth, users, todos}, 
+    {auth, users, todos},
     // define the dependency tree
     { auth: ['users'], todos: ['auth'] }
 );
@@ -183,7 +190,7 @@ const normalizedData = normalize(originalData, article);
 **[planttheidea/selectorator](https://github.com/planttheidea/selectorator)**  
 Abstractions over Reselect for common selector use cases
 ```js
-const getBarBaz = createSelector(['foo.bar', 'baz'], 
+const getBarBaz = createSelector(['foo.bar', 'baz'],
     (bar, baz) => `${bar} ${baz}`
 );
 getBarBaz({foo: {bar: 'a'}, baz: 'b'}); // "a b"
@@ -263,7 +270,7 @@ const store = createStore(reducer, applyMiddleware(storageMiddleware));
 Persistent store for Offline-First apps, with support for optimistic UIs
 ```js
 const store = createStore(reducer, offline(offlineConfig));
-store.dispatch({ 
+store.dispatch({
   type: 'FOLLOW_USER_REQUEST',
   meta: { offline: { effect: { }, commit: { }, rollback: { } } }
 });
@@ -371,7 +378,7 @@ Dispatch functions, which are called and given `dispatch` and `getState` as para
 function fetchData(someValue) {
     return (dispatch, getState) => {
         dispatch({type : "REQUEST_STARTED"});
-        
+
         myAjaxLib.post("/someEndpoint", {data : someValue})
             .then(response => dispatch({type : "REQUEST_SUCCEEDED", payload : response})
             .catch(error => dispatch({type : "REQUEST_FAILED", error : error});    
@@ -381,7 +388,7 @@ function fetchData(someValue) {
 function addTodosIfAllowed(todoText) {
     return (dispatch, getState) => {
         const state = getState();
-        
+
         if(state.todos.length < MAX_TODOS) {
             dispatch({type : "ADD_TODO", text : todoText});
         }    
@@ -409,7 +416,7 @@ function* fetchData(action) {
 function* addTodosIfAllowed(action) {
     const {todoText} = action;
     const todos = yield select(state => state.todos);
-    
+
     if(todos.length < MAX_TODOS) {
         yield put({type : "ADD_TODO", text : todoText});
     }
@@ -418,26 +425,26 @@ function* addTodosIfAllowed(action) {
 
 **[redux-observable/redux-observable](https://github.com/redux-observable/redux-observable)**  
 
-Handle async logic using RxJS observable chains called "epics". 
+Handle async logic using RxJS observable chains called "epics".
 Compose and cancel async actions to create side effects and more.
 
 **Best for**: complex async logic, decoupled workflows
 ```js
-const loginRequestEpic = (action$) => 
+const loginRequestEpic = (action$) =>
     action$.ofType(LOGIN_REQUEST)
-        .mergeMap(({ payload: { username, password } }) => 
+        .mergeMap(({ payload: { username, password } }) =>
             Observable.from(postLogin(username, password))
                 .map(loginSuccess)
                 .catch(loginFailure)
          );
-         
-const loginSuccessfulEpic = (action$) => 
+
+const loginSuccessfulEpic = (action$) =>
     action$.ofType(LOGIN_SUCCESS)
         .delay(2000)
         .mergeMap(({ payload: { msg } }) =>
             showMessage(msg)
         );
-        
+
 const rootEpic = combineEpics(loginRequestEpic, loginSuccessfulEpic);
 ```
 
@@ -477,14 +484,14 @@ Side effects lib built with observables, but allows use of callbacks, promises, 
 ```js
 const loginLogic = createLogic({
     type : Actions.LOGIN_REQUEST,
-    
+
     process({getState, action}, dispatch, done) {
         const {username, password} = action.payload;
-        
+
         postLogin(username, password)
             .then( ({user, msg}) => {
                 dispatch(loginSucceeded(user));
-                
+
                 setTimeout(() => dispatch(showMessage(msg)), 2000);
             },
             (err) => dispatch(loginFailure(err))
@@ -500,7 +507,7 @@ const loginLogic = createLogic({
 Dispatch promises as action payloads, and have FSA-compliant actions dispatched as the promise resolves or rejects.
 ```js
 dispatch({type : "FETCH_DATA", payload : myAjaxLib.get("/data") });
-// will dispatch either {type : "FETCH_DATA", payload : response} if resolved, 
+// will dispatch either {type : "FETCH_DATA", payload : response} if resolved,
 // or dispatch {type : "FETCH_DATA", payload : error, error : true} if rejected
 ```
 
@@ -611,8 +618,8 @@ A tiny but powerful system for managing 'resources': data that is persisted to r
 **[tonyhb/redux-ui](https://github.com/tonyhb/redux-ui)**  
 "Block-level scoping" for UI state. Decorated components declare data fields, which become props and can be updated by nested children.
 ```js
-@ui({ 
-    key: 'some-name', state: {  uiVar1: '', uiVar2: (props, state) => state.someValue }, reducer : (state, action) => { } 
+@ui({
+    key: 'some-name', state: {  uiVar1: '', uiVar2: (props, state) => state.someValue }, reducer : (state, action) => { }
 })
 class YourComponent extends React.Component {}
 ```
@@ -769,7 +776,7 @@ Seamless Redux-first routing. Think of your app in states, not routes, not compo
 ## Forms
 
 **[erikras/redux-form](https://github.com/erikras/redux-form)**  
-A full-featured library to enable a React HTML form to store its state in Redux. 
+A full-featured library to enable a React HTML form to store its state in Redux.
 
 **[davidkpiano/react-redux-form](https://github.com/davidkpiano/react-redux-form)**  
 React Redux Form is a collection of reducer creators and action creators that make implementing even the most complex and custom forms with React and Redux simple and performant.

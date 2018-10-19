@@ -1,3 +1,10 @@
+---
+id: normalizing-state-shape
+title: Normalizing State Shape
+sidebar_label: Normalizing State Shape
+hide_title: true
+---
+
 # Normalizing State Shape
 
 Many applications deal with data that is nested or relational in nature.  For example, a blog editor could have many Posts, each Post could have many Comments, and both Posts and Comments would be written by a User.  Data for this kind of application might look like:
@@ -195,7 +202,7 @@ Because we're treating a portion of our Redux store as a "database", many of the
                 }
             },
             allIds : [1, 2, 3]
-        
+
         }
     }
 }

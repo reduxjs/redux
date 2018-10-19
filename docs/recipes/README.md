@@ -1,3 +1,10 @@
+---
+id: recipes
+title: Recipes
+sidebar_label: Recipes
+hide_title: true
+---
+
 # Recipes
 
 These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [basic](../basics/README.md) and [advanced](../advanced/README.md) tutorials.
@@ -13,4 +20,3 @@ These are some use cases and code snippets to get you started with Redux in a re
 * [Isolating Subapps](IsolatingSubapps.md)
 * [Structuring Reducers](StructuringReducers.md)
 * [Using Immutable.JS with Redux](UsingImmutableJS.md)
-

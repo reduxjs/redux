@@ -1,3 +1,10 @@
+---
+id: bind-action-creators
+title: bindActionCreators
+sidebar_label: bindActionCreators
+hide_title: true
+---
+
 # `bindActionCreators(actionCreators, dispatch)`
 
 Turns an object whose values are [action creators](../Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatch) call so they may be invoked directly.
@@ -53,11 +60,11 @@ console.log(TodoActionCreators)
 // }
 
 class TodoListContainer extends Component {
-  constructor(props) { 
+  constructor(props) {
     super(props);
-      
+
     const {dispatch} = props;
-    
+
     // Here's a good use case for bindActionCreators:
     // You want a child component to be completely unaware of Redux.
     // We create bound versions of these functions now so we can

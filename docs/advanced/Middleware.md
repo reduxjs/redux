@@ -1,3 +1,10 @@
+---
+id: middleware
+title: Middleware
+sidebar_label: Middleware
+hide_title: true
+---
+
 # Middleware
 
 You've seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
@@ -16,7 +23,7 @@ One of the benefits of Redux is that it makes state changes predictable and tran
 
 Wouldn't it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
 
-<img src='http://i.imgur.com/BjGBlES.png' width='70%'>
+<img src='https://i.imgur.com/BjGBlES.png' width='70%'>
 
 How do we approach this with Redux?
 
@@ -273,7 +280,7 @@ Because it is cumbersome to apply functions to `createStore()` before using it, 
 
 #### Caveat: Dispatching During Setup
 
-While `applyMiddleware` executes and sets up your middleware, the `store.dispatch` function will point to the vanilla version provided by `createStore`. Dispatching would result in no other middleware being applied. If you are expecting an interaction with another middleware during setup, you will probably be disappointed. Because of this unexpected behavior, `applyMiddleware` will throw an error if you try to dispatch an action before the set up completes. Instead, you should either communicate directly with that other middleware via a common object (for an API-calling middleware, this may be your API client object) or waiting until after the middleware is constructed with a callback. 
+While `applyMiddleware` executes and sets up your middleware, the `store.dispatch` function will point to the vanilla version provided by `createStore`. Dispatching would result in no other middleware being applied. If you are expecting an interaction with another middleware during setup, you will probably be disappointed. Because of this unexpected behavior, `applyMiddleware` will throw an error if you try to dispatch an action before the set up completes. Instead, you should either communicate directly with that other middleware via a common object (for an API-calling middleware, this may be your API client object) or waiting until after the middleware is constructed with a callback.
 
 ### The Final Approach
 

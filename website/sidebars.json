@@ -1,0 +1,91 @@
+{
+  "docs": {
+    "Getting started": [
+      "getting-started/learn-redux",
+      "getting-started/installation",
+      "getting-started/basic-example",
+      "getting-started/resources"
+    ],
+    "Introduction": [
+      "introduction/motivation",
+      "introduction/core-concepts",
+      "introduction/three-principles",
+      "introduction/prior-art",
+      "introduction/ecosystem",
+      "introduction/examples"
+    ],
+    "Basics": [
+      "basics/basics",
+      "basics/actions",
+      "basics/reducers",
+      "basics/store",
+      "basics/data-flow",
+      "basics/usage-with-react",
+      "basics/example"
+    ],
+    "Advanced": [
+      "advanced/advanced",
+      "advanced/async-actions",
+      "advanced/async-flow",
+      "advanced/middleware",
+      "advanced/usage-with-react-router",
+      "advanced/example-reddit-api",
+      "advanced/next-steps"
+    ],
+    "Recipes": [
+      "recipes/configuring-your-store",
+      "recipes/migrating-to-redux",
+      "recipes/using-object-spread-operator",
+      "recipes/reducing-boilerplate",
+      "recipes/server-rendering",
+      "recipes/writing-tests",
+      "recipes/computing-derived-data",
+      "recipes/implementing-undo-history",
+      "recipes/using-immutablejs-with-redux",
+      {
+        "type": "subcategory",
+        "label": "Structuring Reducers",
+        "ids": [
+          "recipes/structuring-reducers",
+          "recipes/reducers/prerequisite-concepts",
+          "recipes/reducers/basic-reducer-structure",
+          "recipes/reducers/splitting-reducer-logic",
+          "recipes/reducers/refactoring-reducer-example",
+          "recipes/reducers/using-combinereducers",
+          "recipes/reducers/beyond-combinereducers",
+          "recipes/reducers/normalizing-state-shape",
+          "recipes/reducers/updating-normalized-data",
+          "recipes/reducers/reusing-reducer-logic",
+          "recipes/reducers/immutable-update-patterns",
+          "recipes/reducers/initializing-state"
+        ]
+      }
+    ],
+    "FAQ": [
+      "faq",
+      "faq/general",
+      "faq/reducers",
+      "faq/organizing-state",
+      "faq/store-setup",
+      "faq/actions",
+      "faq/immutable-data",
+      "faq/code-structure",
+      "faq/performance",
+      "faq/design-decisions",
+      "faq/react-redux",
+      "faq/miscellaneous"
+    ],
+    "Troubleshooting": ["troubleshooting"],
+    "Glossary": ["glossary"],
+    "API Reference": [
+      "api/api-reference",
+      "api/create-store",
+      "api/store",
+      "api/combine-reducers",
+      "api/apply-middleware",
+      "api/bind-action-creators",
+      "api/compose"
+    ],
+    "Feedback": ["feedback"]
+  }
+}

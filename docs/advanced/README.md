@@ -1,3 +1,10 @@
+---
+id: advanced
+title: Advanced
+sidebar_label: Advanced
+hide_title: true
+---
+
 # Advanced
 
 In the [basics walkthrough](../basics/README.md), we explored how to structure a simple Redux application. In this walkthrough, we will explore how AJAX and routing fit into the picture.

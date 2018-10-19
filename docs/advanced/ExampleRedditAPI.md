@@ -1,3 +1,10 @@
+---
+id: example-reddit-api
+title: Example: Reddit API
+sidebar_label: Example: Reddit API
+hide_title: true
+---
+
 # Example: Reddit API
 
 This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).

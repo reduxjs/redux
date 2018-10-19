@@ -1,0 +1,24 @@
+/* your custom css */
+
+header.postHeader:empty {
+  display: none;
+}
+
+header.postHeader:empty + article h1 {
+  margin-top: 0;
+}
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+}
+
+@media only screen and (min-width: 1024px) {
+}
+
+@media only screen and (max-width: 1023px) {
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
+@media only screen and (min-width: 1500px) {
+}

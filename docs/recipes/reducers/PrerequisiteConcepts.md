@@ -1,3 +1,10 @@
+---
+id: prerequisite-concepts
+title: Prerequisite Concepts
+sidebar_label: Prerequisite Concepts
+hide_title: true
+---
+
 # Prerequisite Reducer Concepts
 
 
