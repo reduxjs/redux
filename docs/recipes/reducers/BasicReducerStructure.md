@@ -1,5 +1,5 @@
 ---
-id: basic-reducer-structure
+id: BasicReducerStructure.md
 title: Basic Reducer Structure
 sidebar_label: Basic Reducer Structure
 hide_title: true

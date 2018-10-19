@@ -1,5 +1,5 @@
 ---
-id: feedback
+id: Feedback.md
 title: Feedback
 sidebar_label: Feedback
 hide_title: true

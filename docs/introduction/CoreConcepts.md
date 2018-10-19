@@ -1,5 +1,5 @@
 ---
-id: core-concepts
+id: CoreConcepts.md
 title: Core concepts
 sidebar_label: Core concepts
 hide_title: true

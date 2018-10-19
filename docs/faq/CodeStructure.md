@@ -1,5 +1,5 @@
 ---
-id: code-structure
+id: CodeStructure.md
 title: Code structure
 sidebar_label: Code structure
 hide_title: true

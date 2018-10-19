@@ -1,5 +1,5 @@
 ---
-id: faq
+id: FAQ.md
 title: FAQ
 sidebar_label: FAQ
 hide_title: true

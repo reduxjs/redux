@@ -1,5 +1,5 @@
 ---
-id: using-combinereducers
+id: UsingCombineReducers.md
 title: Using combineReducers
 sidebar_label: Using combineReducers
 hide_title: true

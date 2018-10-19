@@ -1,5 +1,5 @@
 ---
-id: beyond-combinereducers
+id: BeyondCombineReducers.md
 title: Beyond combineReducers
 sidebar_label: Beyond combineReducers
 hide_title: true

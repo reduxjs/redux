@@ -1,5 +1,5 @@
 ---
-id: store-setup
+id: StoreSetup.md
 title: Store Setup
 sidebar_label: Store Setup
 hide_title: true

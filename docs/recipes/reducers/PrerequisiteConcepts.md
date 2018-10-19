@@ -1,5 +1,5 @@
 ---
-id: prerequisite-concepts
+id: PrerequisiteConcepts.md
 title: Prerequisite Concepts
 sidebar_label: Prerequisite Concepts
 hide_title: true

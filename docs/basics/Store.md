@@ -1,5 +1,5 @@
 ---
-id: store
+id: Store.md
 title: Store
 sidebar_label: Store
 hide_title: true

@@ -1,5 +1,5 @@
 ---
-id: basics
+id: README.md
 title: Basics
 sidebar_label: Basics
 hide_title: true

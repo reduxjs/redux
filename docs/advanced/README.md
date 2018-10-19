@@ -1,5 +1,5 @@
 ---
-id: advanced
+id: README.md
 title: Advanced
 sidebar_label: Advanced
 hide_title: true

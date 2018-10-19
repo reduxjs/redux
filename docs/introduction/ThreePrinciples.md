@@ -1,5 +1,5 @@
 ---
-id: three-principles
+id: ThreePrinciples.md
 title: Three Principles
 sidebar_label: Three Principles
 hide_title: true

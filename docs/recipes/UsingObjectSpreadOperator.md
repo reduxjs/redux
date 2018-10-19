@@ -1,5 +1,5 @@
 ---
-id: using-object-spread-operator
+id: UsingObjectSpreadOperator.md
 title: Using Object Spread Operator
 sidebar_label: Using Object Spread Operator
 hide_title: true

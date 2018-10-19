@@ -1,5 +1,5 @@
 ---
-id: prior-art
+id: PriorArt.md
 title: Prior art
 sidebar_label: Prior art
 hide_title: true

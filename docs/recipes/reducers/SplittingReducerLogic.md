@@ -1,5 +1,5 @@
 ---
-id: splitting-reducer-logic
+id: SplittingReducerLogic.md
 title: Splitting Reducer Logic
 sidebar_label: Splitting Reducer Logic
 hide_title: true

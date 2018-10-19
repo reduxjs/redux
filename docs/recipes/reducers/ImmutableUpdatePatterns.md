@@ -1,5 +1,5 @@
 ---
-id: immutable-update-patterns
+id: ImmutableUpdatePatterns.md
 title: Immutable Update Patterns
 sidebar_label: Immutable Update Patterns
 hide_title: true

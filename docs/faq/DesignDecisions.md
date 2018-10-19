@@ -1,5 +1,5 @@
 ---
-id: design-decisions
+id: DesignDecisions.md
 title: Design decisions
 sidebar_label: Design decisions
 hide_title: true

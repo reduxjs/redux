@@ -1,5 +1,5 @@
 ---
-id: glossary
+id: Glossary.md
 title: Glossary
 sidebar_label: Glossary
 hide_title: true

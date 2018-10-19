@@ -1,5 +1,5 @@
 ---
-id: installation
+id: Installation.md
 title: Installation
 sidebar_label: Installation
 hide_title: true

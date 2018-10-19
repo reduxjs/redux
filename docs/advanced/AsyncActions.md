@@ -1,5 +1,5 @@
 ---
-id: async-actions
+id: AsyncActions.md
 title: Async Actions
 sidebar_label: Async Actions
 hide_title: true

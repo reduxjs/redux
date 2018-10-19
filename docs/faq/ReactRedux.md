@@ -1,5 +1,5 @@
 ---
-id: react-redux
+id: ReactRedux.md
 title: React Redux
 sidebar_label: React Redux
 hide_title: true

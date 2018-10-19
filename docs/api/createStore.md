@@ -1,5 +1,5 @@
 ---
-id: create-store
+id: createStore.md
 title: createStore
 sidebar_label: createStore
 hide_title: true

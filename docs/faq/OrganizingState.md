@@ -1,5 +1,5 @@
 ---
-id: organizing-state
+id: OrganizingState.md
 title: Organizing State
 sidebar_label: Organizing State
 hide_title: true

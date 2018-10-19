@@ -1,5 +1,5 @@
 ---
-id: isolating-redux-sub-apps
+id: IsolatingSubapps.md
 title: Isolating Redux Sub-Apps
 sidebar_label: Isolating Redux Sub-Apps
 hide_title: true

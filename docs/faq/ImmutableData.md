@@ -1,5 +1,5 @@
 ---
-id: immutable-data
+id: ImmutableData.md
 title: Immutable data
 sidebar_label: Immutable data
 hide_title: true

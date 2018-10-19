@@ -1,5 +1,5 @@
 ---
-id: motivation
+id: Motivation.md
 title: Motivation
 sidebar_label: Motivation
 hide_title: true

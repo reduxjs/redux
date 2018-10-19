@@ -1,5 +1,5 @@
 ---
-id: examples
+id: Examples.md
 title: Examples
 sidebar_label: Examples
 hide_title: true

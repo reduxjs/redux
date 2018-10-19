@@ -1,5 +1,5 @@
 ---
-id: writing-tests
+id: WritingTests.md
 title: Writing Tests
 sidebar_label: Writing Tests
 hide_title: true

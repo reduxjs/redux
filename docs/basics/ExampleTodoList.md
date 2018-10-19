@@ -1,5 +1,5 @@
 ---
-id: example
+id: ExampleTodoList.md
 title: Example: Todo List
 sidebar_label: Example: Todo List
 hide_title: true

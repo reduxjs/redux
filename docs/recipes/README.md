@@ -1,5 +1,5 @@
 ---
-id: recipes
+id: README.md
 title: Recipes
 sidebar_label: Recipes
 hide_title: true

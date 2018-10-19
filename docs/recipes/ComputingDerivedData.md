@@ -1,5 +1,5 @@
 ---
-id: computing-derived-data
+id: ComputingDerivedData.md
 title: Computing Derived Data
 sidebar_label: Computing Derived Data
 hide_title: true

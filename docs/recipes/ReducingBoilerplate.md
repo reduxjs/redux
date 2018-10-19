@@ -1,5 +1,5 @@
 ---
-id: reducing-boilerplate
+id: ReducingBoilerplate.md
 title: Reducing Boilerplate
 sidebar_label: Reducing Boilerplate
 hide_title: true
