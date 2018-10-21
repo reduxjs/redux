@@ -1,5 +1,7 @@
 # Code Splitting
-Introduction
+In large web applications, it is often desirable to split up the app code into multiple JS bundles that can be loaded on-demand. This strategy, called 'code splitting', helps to increase performance of your application by reducing the size of the initial JS payload that must be fetched.
+
+To code split with Redux, we want to be able to dynamically add reducers to the store. The default usage of Redux mandates that a single root reducer should to be passed to the `configureStore` call, which makes dynamically adding new reducers more difficult. Below, we discuss some approaches to solving this problem and reference two libraries that provide this functionality.
 
 ## Basic Principle
 To dynamically add Reducers to a Redux store, there are two approaches that can be taken
@@ -119,6 +121,7 @@ export function configureStore(initialState) {
     // Create a store with the root reducer function being the one exposed by the manager.
     const store = createStore(reducerManager.reduce, initialState);
 
+    // Optional: Put the reducer manager on the store so it is easily accessible
     store.reducerManager = reducerManager;
 }
 ```
@@ -130,8 +133,6 @@ To remove a reducer, one can now call `store.reducerManager.remove("asyncState")
 ## Libraries and Frameworks
 There are a few good libraries out there that can help you add the above functionality automatically:
  * [`redux-dynamic-reducer`](https://github.com/ioof-holdings/redux-dynamic-reducer)
-    * explanation
+    * This library exposes the `addReducer` function on the Redux store to accomplish the behavior we described above. It also has React bindings which make it easier to add reducers within the React component lifecycle.
 * [`redux-dynamic-modules`](https://github.com/Microsoft/redux-dynamic-modules)
-    * explanation
-* [`redux-dynamic-middleware`]
-    * explanation
+    * This library introduces the concept of a 'Redux Module', which is a bundle of Redux artifacts (reducers, middleware) that should be dynamically loaded. It also exposes a React higher-order component to load 'modules' when areas of the application come online. Additionally, it has integrations with libraries like `redux-thunk` and `redux-saga` which also help dynamically load their artifacts (thunks, sagas). 
