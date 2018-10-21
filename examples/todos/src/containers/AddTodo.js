@@ -10,10 +10,10 @@ const AddTodo = ({ dispatch }) => {
       <form onSubmit={e => {
         e.preventDefault()
         if (!input.value.trim()) {
-          return
+          return;
         }
         dispatch(addTodo(input.value))
-        input.value = ''
+        input.value = '';
       }}>
         <input ref={node => input = node} />
         <button type="submit">
