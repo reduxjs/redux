@@ -133,9 +133,9 @@ export default VisibleTodoList
 
 So far we have only seen selectors receive the Redux store state as an argument, but a selector can receive props too.
 
-For this example, we're going to extend our app to handle multiple Todo lists.  Our state needs to be refactored so that it holds multiple todo lists, which each have their own `todos` and `visibilityFilter` state.
+For this example, we're going to extend our app to handle multiple Todo lists. Our state needs to be refactored so that it holds multiple todo lists, which each have their own `todos` and `visibilityFilter` state.
 
-We also need to refactor our reducers.  Now that `todos` and `visibilityFilter` live within every list's state, we only need one `todoLists` reducer to manage our state.
+We also need to refactor our reducers. Now that `todos` and `visibilityFilter` live within every list's state, we only need one `todoLists` reducer to manage our state.
 
 #### `reducers/index.js`
 
@@ -145,7 +145,7 @@ import todoLists from './todoLists'
 
 export default combineReducers({
   todoLists
-});
+})
 ```
 
 #### `reducers/todoLists.js`
@@ -239,7 +239,7 @@ export default const todoLists = (state = initialState, action) => {
 }
 ```
 
-The `todoLists` reducer now handles all three actions.  The action creators will now need to be passed a `listId`:
+The `todoLists` reducer now handles all three actions. The action creators will now need to be passed a `listId`:
 
 #### `actions/index.js`
 
@@ -251,19 +251,16 @@ export const addTodo = (text, listId) => ({
   text,
   listId
 })
- 
 export const setVisibilityFilter = (filter, listId) => ({
   type: 'SET_VISIBILITY_FILTER',
   filter,
   listId
 })
- 
 export const toggleTodo = (id, listId) => ({
   type: 'TOGGLE_TODO',
   id,
   listId
 })
- 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
@@ -277,16 +274,15 @@ export const VisibilityFilters = {
 import React from 'react'
 import PropTypes from 'prop-types'
 import Todo from './Todo'
- 
 const TodoList = ({ todos, toggleTodo, listId }) => (
   <ul>
-    {todos.map(todo =>
+    {todos.map(todo => (
       <Todo
         key={todo.id}
         {...todo}
         onClick={() => toggleTodo(todo.id, listId)}
       />
-    )}
+    ))}
   </ul>
 )
 

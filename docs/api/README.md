@@ -6,19 +6,19 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
 
 ### Top-Level Exports
 
-* [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
-* [combineReducers(reducers)](combineReducers.md)
-* [applyMiddleware(...middlewares)](applyMiddleware.md)
-* [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
-* [compose(...functions)](compose.md)
+- [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
+- [combineReducers(reducers)](combineReducers.md)
+- [applyMiddleware(...middlewares)](applyMiddleware.md)
+- [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
+- [compose(...functions)](compose.md)
 
 ### Store API
 
-* [Store](Store.md)
-  * [getState()](Store.md#getState)
-  * [dispatch(action)](Store.md#dispatch)
-  * [subscribe(listener)](Store.md#subscribe)
-  * [replaceReducer(nextReducer)](Store.md#replaceReducer)
+- [Store](Store.md)
+  - [getState()](Store.md#getState)
+  - [dispatch(action)](Store.md#dispatch)
+  - [subscribe(listener)](Store.md#subscribe)
+  - [replaceReducer(nextReducer)](Store.md#replaceReducer)
 
 ### Importing
 

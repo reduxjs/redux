@@ -7,7 +7,6 @@
 - [Can Redux only be used with React?](#can-redux-only-be-used-with-react)
 - [Do I need to have a particular build tool to use Redux?](#do-i-need-to-have-a-particular-build-tool-to-use-redux)
 
-
 ## General
 
 ### When should I learn Redux?
@@ -46,13 +45,14 @@ Similarly, Dan Abramov, one of the creators of Redux, says:
 
 In general, use Redux when you have reasonable amounts of data changing over time, you need a single source of truth, and you find that approaches like keeping everything in a top-level React component's state are no longer sufficient.
 
-However, it's also important to understand that using Redux comes with tradeoffs.  It's not designed to be the shortest or fastest way to write code.  It's intended to help answer the question "When did a certain slice of state change, and where did the data come from?", with predictable behavior.  It does so by asking you to follow specific constraints in your application: store your application's state as plain data, describe changes as plain objects, and handle those changes with pure functions that apply updates immutably.  This is often the source of complaints about "boilerplate".  These constraints require effort on the part of a developer, but also open up a number of additional possibilities (such as store persistence and synchronization).
+However, it's also important to understand that using Redux comes with tradeoffs. It's not designed to be the shortest or fastest way to write code. It's intended to help answer the question "When did a certain slice of state change, and where did the data come from?", with predictable behavior. It does so by asking you to follow specific constraints in your application: store your application's state as plain data, describe changes as plain objects, and handle those changes with pure functions that apply updates immutably. This is often the source of complaints about "boilerplate". These constraints require effort on the part of a developer, but also open up a number of additional possibilities (such as store persistence and synchronization).
 
-In the end, Redux is just a tool.  It's a great tool, and there are some great reasons to use it, but there are also reasons you might not want to use it.   Make informed decisions about your tools, and understand the tradeoffs involved in each decision.
+In the end, Redux is just a tool. It's a great tool, and there are some great reasons to use it, but there are also reasons you might not want to use it. Make informed decisions about your tools, and understand the tradeoffs involved in each decision.
 
 #### Further information
 
 **Documentation**
+
 - [Introduction: Motivation](/docs/introduction/Motivation.md)
 
 **Articles**
@@ -78,11 +78,9 @@ In the end, Redux is just a tool.  It's a great tool, and there are some great r
 - [Stack Overflow: Redux vs plain React?](http://stackoverflow.com/questions/39260769/redux-vs-plain-react/39261546#39261546)
 - [Twitter: Redux is a platform for developers to build customized state management with reusable things](https://twitter.com/acemarke/status/793862722253447168)
 
-
 ### Can Redux only be used with React?
 
 Redux can be used as a data store for any UI layer. The most common usage is with React and React Native, but there are bindings available for Angular, Angular 2, Vue, Mithril, and more. Redux simply provides a subscription mechanism which can be used by any other code. That said, it is most useful when combined with a declarative view implementation that can infer the UI updates from the state changes, such as React or one of the similar libraries available.
-
 
 ### Do I need to have a particular build tool to use Redux?
 
@@ -90,4 +88,4 @@ Redux is originally written in ES6 and transpiled for production into ES5 with W
 
 > The new Counter Vanilla example is aimed to dispel the myth that Redux requires Webpack, React, hot reloading, sagas, action creators, constants, Babel, npm, CSS modules, decorators, fluent Latin, an Egghead subscription, a PhD, or an Exceeds Expectations O.W.L. level.
 
->Nope, it's just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!
+> Nope, it's just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!

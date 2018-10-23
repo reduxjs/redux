@@ -75,7 +75,7 @@ class SubApp extends Component {
 
 This way every instance will be independent.
 
-This pattern is *not* recommended for parts of the same app that share data.
+This pattern is _not_ recommended for parts of the same app that share data.
 However, it can be useful when the bigger app has zero access to the smaller apps' internals,
 and we'd like to keep the fact that they are implemented with Redux as an implementation detail.
 Each component instance will have its own store, so they won't “know” about each other.

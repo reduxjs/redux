@@ -47,6 +47,7 @@ npm install --save redux-thunk
 ```
 
 #### middleware/logger.js
+
 ```js
 const logger = store => next => action => {
   console.group(action.type)
@@ -61,6 +62,7 @@ export default logger
 ```
 
 #### enhancers/monitorReducer.js
+
 ```js
 const round = number => Math.round(number * 100) / 100
 
@@ -86,13 +88,14 @@ const monitorReducerEnhancer = createStore => (
 export default monitorReducerEnhancer
 ```
 
-Let's add these to our  existing `index.js`.
+Let's add these to our existing `index.js`.
 
 - First, we need to import `redux-thunk` plus our `loggerMiddleware` and `monitorReducerEnhancer`, plus two extra functions provided by Redux: `applyMiddleware` and `compose`.
 - We then use `applyMiddleware` to create a store enhancer which will apply our `loggerMiddleware` and the `thunkMiddleware` to the store's dispatch function.
 - Next, we use `compose` to compose our new `middlewareEnhancer` and our `monitorReducerEnhancer` into one function.
 
-    This is needed because you can only pass one enhancer into `createStore`. To use multiple enhancers, you must first compose them into a single larger enhancer, as shown in this example.
+  This is needed because you can only pass one enhancer into `createStore`. To use multiple enhancers, you must first compose them into a single larger enhancer, as shown in this example.
+
 - Finally, we pass this new `composedEnhancers` function into `createStore` as its third argument. _Note: the second argument, which we will ignore, lets you preloaded state into the store._
 
 ```js
@@ -107,7 +110,10 @@ import monitorReducerEnhancer from './enhancers/monitorReducer'
 import App from './components/App'
 
 const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
-const composedEnhancers = compose(middlewareEnhancer, monitorReducerEnhancer)
+const composedEnhancers = compose(
+  middlewareEnhancer,
+  monitorReducerEnhancer
+)
 
 const store = createStore(rootReducer, undefined, composedEnhancers)
 
@@ -177,8 +183,8 @@ This function follows the same steps outlined above, with some of the logic spli
 
 - Both `middlewares` and `enhancers` are defined as arrays, separate from the functions which consume them.
 
-    This allows us to easily add more middleware or enhancers based on different conditions.
-  
+  This allows us to easily add more middleware or enhancers based on different conditions.
+
   For example, it is common to add some middleware only when in development mode, which is easily achieved by pushing to the middlewares array inside an if statement:
 
   ```js
@@ -186,9 +192,10 @@ This function follows the same steps outlined above, with some of the logic spli
     middlewares.push(secretMiddleware)
   }
   ```
+
 - A `preloadedState` variable is passed through to `createStore` in case we want to add this later.
 
-This also makes our `createStore` function easier to reason about -  each step is clearly separated, which makes it more obvious what exactly is happening.
+This also makes our `createStore` function easier to reason about - each step is clearly separated, which makes it more obvious what exactly is happening.
 
 ## Integrating the devtools extension
 
@@ -264,9 +271,7 @@ export default function configureStore(preloadedState) {
   const store = createStore(rootReducer, preloadedState, composedEnhancers)
 
   if (process.env.NODE_ENV !== 'production' && module.hot) {
-    module.hot.accept('./reducers', () =>
-      store.replaceReducer(rootReducer)
-    )
+    module.hot.accept('./reducers', () => store.replaceReducer(rootReducer))
   }
 
   return store
@@ -288,12 +293,13 @@ import configureStore from './configureStore'
 
 const store = configureStore()
 
-const renderApp = () => render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-)
+const renderApp = () =>
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root')
+  )
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept('./components/App', renderApp)
