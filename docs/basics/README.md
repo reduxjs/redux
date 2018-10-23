@@ -4,9 +4,9 @@ Don't be fooled by all the fancy talk about reducers, middleware, store enhancer
 
 In this guide, we'll walk through the process of creating a simple Todo app.
 
-* [Actions](Actions.md)
-* [Reducers](Reducers.md)
-* [Store](Store.md)
-* [Data Flow](DataFlow.md)
-* [Usage with React](UsageWithReact.md)
-* [Example: Todo List](ExampleTodoList.md)
+- [Actions](Actions.md)
+- [Reducers](Reducers.md)
+- [Store](Store.md)
+- [Data Flow](DataFlow.md)
+- [Usage with React](UsageWithReact.md)
+- [Example: Todo List](ExampleTodoList.md)

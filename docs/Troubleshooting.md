@@ -123,8 +123,7 @@ Also keep an eye out for nested state objects that need to be deeply copied. Bot
 
 #### Don't forget to call [`dispatch(action)`](api/Store.md#dispatch)
 
-If you define an action creator, calling it will *not* automatically dispatch the action. For example, this code will do nothing:
-
+If you define an action creator, calling it will _not_ automatically dispatch the action. For example, this code will do nothing:
 
 #### `TodoActions.js`
 
@@ -147,16 +146,12 @@ class AddTodo extends Component {
   }
 
   render() {
-    return (
-      <button onClick={() => this.handleClick()}>
-        Add
-      </button>
-    )
+    return <button onClick={() => this.handleClick()}>Add</button>
   }
 }
 ```
 
-It doesn't work because your action creator is just a function that *returns* an action. It is up to you to actually dispatch it. We can't bind your action creators to a particular Store instance during the definition because apps that render on the server need a separate Redux store for every request.
+It doesn't work because your action creator is just a function that _returns_ an action. It is up to you to actually dispatch it. We can't bind your action creators to a particular Store instance during the definition because apps that render on the server need a separate Redux store for every request.
 
 The fix is to call [`dispatch()`](api/Store.md#dispatch) method on the [store](api/Store.md) instance:
 
@@ -170,7 +165,9 @@ handleClick() {
 If you're somewhere deep in the component hierarchy, it is cumbersome to pass the store down manually. This is why [react-redux](https://github.com/gaearon/react-redux) lets you use a `connect` [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that will, apart from subscribing you to a Redux store, inject `dispatch` into your component's props.
 
 The fixed code looks like this:
+
 #### `AddTodo.js`
+
 ```js
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -183,11 +180,7 @@ class AddTodo extends Component {
   }
 
   render() {
-    return (
-      <button onClick={() => this.handleClick()}>
-        Add
-      </button>
-    )
+    return <button onClick={() => this.handleClick()}>Add</button>
   }
 }
 

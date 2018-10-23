@@ -1,6 +1,6 @@
 # Reducers
 
-**Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe *what happened*, but don't describe how the application's state changes.
+**Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe _what happened_, but don't describe how the application's state changes.
 
 ## Designing the State Shape
 
@@ -8,8 +8,8 @@ In Redux, all the application state is stored as a single object. It's a good id
 
 For our todo app, we want to store two different things:
 
-* The currently selected visibility filter.
-* The actual list of todos.
+- The currently selected visibility filter.
+- The actual list of todos.
 
 You'll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separate from the UI state.
 
@@ -29,23 +29,23 @@ You'll often find that you need to store some data, as well as some UI state, in
 }
 ```
 
->##### Note on Relationships
+> ##### Note on Relationships
 
->In a more complex app, you're going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app's state as a database. This approach is described in [normalizr's](https://github.com/paularmstrong/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we're keeping the example simple.
+> In a more complex app, you're going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app's state as a database. This approach is described in [normalizr's](https://github.com/paularmstrong/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we're keeping the example simple.
 
 ## Handling Actions
 
 Now that we've decided what our state object looks like, we're ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
 
 ```js
-(previousState, action) => newState
+;(previousState, action) => newState
 ```
 
 It's called a reducer because it's the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It's very important that the reducer stays pure. Things you should **never** do inside a reducer:
 
-* Mutate its arguments;
-* Perform side effects like API calls and routing transitions;
-* Call non-pure functions, e.g. `Date.now()` or `Math.random()`.
+- Mutate its arguments;
+- Perform side effects like API calls and routing transitions;
+- Call non-pure functions, e.g. `Date.now()` or `Math.random()`.
 
 We'll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
 
@@ -103,15 +103,15 @@ Note that:
 
 2. **We return the previous `state` in the `default` case.** It's important to return the previous `state` for any unknown action.
 
->##### Note on `Object.assign`
+> ##### Note on `Object.assign`
 
->[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, and is not supported by older browsers. To support them, you will need to either use a polyfill, a [Babel plugin](https://www.npmjs.com/package/babel-plugin-transform-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
+> [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, and is not supported by older browsers. To support them, you will need to either use a polyfill, a [Babel plugin](https://www.npmjs.com/package/babel-plugin-transform-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
 
->##### Note on `switch` and Boilerplate
+> ##### Note on `switch` and Boilerplate
 
->The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
+> The `switch` statement is _not_ the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
 
->It's unfortunate that many still choose a framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can use a custom `createReducer` function that accepts a handler map, as shown in [“reducing boilerplate”](../recipes/ReducingBoilerplate.md#reducers).
+> It's unfortunate that many still choose a framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can use a custom `createReducer` function that accepts a handler map, as shown in [“reducing boilerplate”](../recipes/ReducingBoilerplate.md#reducers).
 
 ## Handling More Actions
 
@@ -254,16 +254,18 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that `todos` also accepts `state`—but it's an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called *reducer composition*, and it's the fundamental pattern of building Redux apps.**
+Note that `todos` also accepts `state`—but it's an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called _reducer composition_, and it's the fundamental pattern of building Redux apps.**
 
 Let's explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can.
 
 Below our imports, let's use [ES6 Object Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to declare `SHOW_ALL`:
+
 ```js
 const { SHOW_ALL } = VisibilityFilters
 ```
 
 Then:
+
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
@@ -369,18 +371,18 @@ function reducer(state = {}, action) {
 
 All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combines their results into a single object again. [It's not magic.](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274) And like other reducers, `combineReducers()` does not create a new object if all of the reducers provided to it do not change state.
 
->##### Note for ES6 Savvy Users
+> ##### Note for ES6 Savvy Users
 
->Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
+> Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
 
->```js
->import { combineReducers } from 'redux'
->import * as reducers from './reducers'
+> ```js
+> import { combineReducers } from 'redux'
+> import * as reducers from './reducers'
 >
->const todoApp = combineReducers(reducers)
->```
+> const todoApp = combineReducers(reducers)
+> ```
 >
->Because `import *` is still new syntax, we don't use it anymore in the documentation to avoid [confusion](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
+> Because `import *` is still new syntax, we don't use it anymore in the documentation to avoid [confusion](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
 
 ## Source Code
 

@@ -6,14 +6,13 @@
 - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
 - [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
 
-
 ## Organizing State
 
 ### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
 
 There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state.
 
-***Using local component state is fine***.  As a developer, it is _your_ job to determine what kinds of state make up your application, and where each piece of state should live.  Find a balance that works for you, and go with it.
+**_Using local component state is fine_**. As a developer, it is _your_ job to determine what kinds of state make up your application, and where each piece of state should live. Find a balance that works for you, and go with it.
 
 Some common rules of thumb for determining what kind of data should be put into Redux:
 
@@ -23,7 +22,7 @@ Some common rules of thumb for determining what kind of data should be put into 
 - Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
 - Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
 
-There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more.  It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
+There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more. It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
 
 #### Further information
 
@@ -54,22 +53,21 @@ There are a number of community packages that implement various approaches for s
 
 - [Redux Addons Catalog: Component State](https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md)
 
-
 ### Can I put functions, promises, or other non-serializable items in my store state?
 
-It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It's *technically* possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store, as well as interfere with time-travel debugging.
+It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It's _technically_ possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store, as well as interfere with time-travel debugging.
 
-If you are okay with things like persistence and time-travel debugging potentially not working as intended, then you are totally welcome to put non-serializable items into your Redux store.  Ultimately, it's _your_ application, and how you implement it is up to you.  As with many other things about Redux, just be sure you understand what tradeoffs are involved.
+If you are okay with things like persistence and time-travel debugging potentially not working as intended, then you are totally welcome to put non-serializable items into your Redux store. Ultimately, it's _your_ application, and how you implement it is up to you. As with many other things about Redux, just be sure you understand what tradeoffs are involved.
 
 #### Further information
 
 **Discussions**
+
 - [#1248: Is it ok and possible to store a react component in a reducer?](https://github.com/reduxjs/redux/issues/1248)
 - [#1279: Have any suggestions for where to put a Map Component in Flux?](https://github.com/reduxjs/redux/issues/1279)
 - [#1390: Component Loading](https://github.com/reduxjs/redux/issues/1390)
 - [#1407: Just sharing a great base class](https://github.com/reduxjs/redux/issues/1407)
 - [#1793: React Elements in Redux State](https://github.com/reduxjs/redux/issues/1793)
-
 
 ### How do I organize nested or duplicate data in my state?
 
@@ -78,6 +76,7 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 #### Further information
 
 **Documentation**
+
 - [Advanced: Async Actions](/docs/advanced/AsyncActions.md)
 - [Examples: Real World example](/docs/introduction/Examples.md#real-world)
 - [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
@@ -85,10 +84,12 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [Examples: Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
 
 **Articles**
+
 - [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
 **Discussions**
+
 - [#316: How to create nested reducers?](https://github.com/reduxjs/redux/issues/316)
 - [#815: Working with Data Structures](https://github.com/reduxjs/redux/issues/815)
 - [#946: Best way to update related state fields with split reducers?](https://github.com/reduxjs/redux/issues/946)

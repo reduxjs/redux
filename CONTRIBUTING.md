@@ -43,6 +43,7 @@ git clone https://github.com/your-username/redux.git
 #### Building Redux
 
 Running the `build` task will create a CommonJS module-per-module build, a ES Modules build and a UMD build.
+
 ```
 npm run build
 ```
@@ -77,7 +78,7 @@ The docs are published automatically when the `master` branch is updated.
 
 Redux comes with [official examples](http://redux.js.org/docs/introduction/Examples.html) to demonstrate various concepts and best practices.
 
-When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.  For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
+When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible. For example, `index.html`, `server.js`, and `webpack.config.js` can typically be reused.
 
 #### Testing the Examples
 
@@ -95,15 +96,15 @@ Please visit the [Examples page](http://redux.js.org/docs/introduction/Examples.
 
 For non-trivial changes, please open an issue with a proposal for a new feature or refactoring before starting on the work. We don't want you to waste your efforts on a pull request that we won't want to accept.
 
-On the other hand, sometimes the best way to start a conversation *is* to send a pull request. Use your best judgement!
+On the other hand, sometimes the best way to start a conversation _is_ to send a pull request. Use your best judgement!
 
 In general, the contribution workflow looks like this:
 
-* Open a new issue in the [Issue tracker](https://github.com/reduxjs/redux/issues).
-* Fork the repo.
-* Create a new feature branch based off the `master` branch.
-* Make sure all tests pass and there are no linting errors.
-* Submit a pull request, referencing any issues it addresses.
+- Open a new issue in the [Issue tracker](https://github.com/reduxjs/redux/issues).
+- Fork the repo.
+- Create a new feature branch based off the `master` branch.
+- Make sure all tests pass and there are no linting errors.
+- Submit a pull request, referencing any issues it addresses.
 
 Please try to keep your pull request focused in scope and avoid including unrelated commits.
 
