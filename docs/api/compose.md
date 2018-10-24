@@ -34,6 +34,6 @@ const store = createStore(
 
 #### Tips
 
-* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don't give it too much credit!
-* [Understanding how the compose function works in Redux](https://joecortopassi.com/articles/functional-composition-in-javascript/)
+- All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don't give it too much credit!
+- [Understanding how the compose function works in Redux](https://joecortopassi.com/articles/functional-composition-in-javascript/)
 
