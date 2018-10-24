@@ -8,12 +8,13 @@ The resulting reducer calls every child reducer, and gathers their results into 
 **The state produced by `combineReducers()` namespaces the states of each reducer under their keys as passed to `combineReducers()`**
 
 Example:
+
 ```
 rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 // This would produce the following state object
 {
   potato: {
-    // ... potatoes, and other state managed by the potatoReducer ... 
+    // ... potatoes, and other state managed by the potatoReducer ...
   },
   tomato: {
     // ... tomatoes, and other state managed by the tomatoReducer, maybe some nice sauce? ...
@@ -31,13 +32,13 @@ A popular convention is to name reducers after the state slices they manage, so 
 
 #### Arguments
 
-1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
+1. `reducers` (_Object_): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
 
 > Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend exporting a single reducer obtained using `combineReducers()` from `reducers/index.js` instead. An example is included below.
 
 #### Returns
 
-(*Function*): A reducer that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
+(_Function_): A reducer that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
 
 #### Notes
 
@@ -45,11 +46,11 @@ This function is mildly opinionated and is skewed towards helping beginners avoi
 
 Any reducer passed to `combineReducers` must satisfy these rules:
 
-* For any action that is not recognized, it must return the `state` given to it as the first argument.
+- For any action that is not recognized, it must return the `state` given to it as the first argument.
 
-* It must never return `undefined`. It is too easy to do this by mistake via an early `return` statement, so `combineReducers` throws if you do that instead of letting the error manifest itself somewhere else.
+- It must never return `undefined`. It is too easy to do this by mistake via an early `return` statement, so `combineReducers` throws if you do that instead of letting the error manifest itself somewhere else.
 
-* If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
+- If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
 
 While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them. `combineReducers` will check your reducers by passing `undefined` to them; this is done even if you specify initial state to `Redux.createStore(combineReducers(...), initialState)`. Therefore, you **must** ensure your reducers work properly when receiving `undefined` as state, even if you never intend for them to actually receive `undefined` in your own code.
 
@@ -122,6 +123,6 @@ console.log(store.getState())
 
 #### Tips
 
-* This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
+- This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
 
-* You may call `combineReducers` at any level of the reducer hierarchy. It doesn't have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.
+- You may call `combineReducers` at any level of the reducer hierarchy. It doesn't have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.

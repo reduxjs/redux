@@ -28,10 +28,10 @@ const LOAD_ARTICLE = 'LOAD_ARTICLE'
 
 Why is this beneficial? **It is often claimed that constants are unnecessary, and for small projects, this might be correct.** For larger projects, there are some benefits to defining action types as constants:
 
-* It helps keep the naming consistent because all action types are gathered in a single place.
-* Sometimes you want to see all existing actions before working on a new feature. It may be that the action you need was already added by somebody on the team, but you didn't know.
-* The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
-* If you make a typo when importing an action constant, you will get `undefined`. Redux will immediately throw when dispatching such an action, and you'll find the mistake sooner.
+- It helps keep the naming consistent because all action types are gathered in a single place.
+- Sometimes you want to see all existing actions before working on a new feature. It may be that the action you need was already added by somebody on the team, but you didn't know.
+- The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
+- If you make a typo when importing an action constant, you will get `undefined`. Redux will immediately throw when dispatching such an action, and you'll find the mistake sooner.
 
 It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgment.
 
@@ -86,7 +86,7 @@ function addTodoWithoutCheck(text) {
 export function addTodo(text) {
   // This form is allowed by Redux Thunk middleware
   // described below in “Async Action Creators” section.
-  return function (dispatch, getState) {
+  return function(dispatch, getState) {
     if (getState().todos.length === 3) {
       // Exit early
       return
@@ -132,7 +132,7 @@ You can always write a function that generates an action creator:
 
 ```js
 function makeActionCreator(type, ...argNames) {
-  return function (...args) {
+  return function(...args) {
     const action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
@@ -149,6 +149,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'text')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'text')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
+
 There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help reduce boilerplate code and enforce adherence to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
 ## Async Action Creators
@@ -231,9 +232,9 @@ class Posts extends Component {
       return <p>Loading...</p>
     }
 
-    const posts = this.props.posts.map(post =>
+    const posts = this.props.posts.map(post => (
       <Post post={post} key={post.id} />
-    )
+    ))
 
     return <div>{posts}</div>
   }
@@ -251,9 +252,9 @@ However, this quickly gets repetitive because different components request data 
 
 The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
 
->##### Note
+> ##### Note
 
->Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It's about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
+> Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It's about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
 
 Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
 
@@ -262,7 +263,7 @@ Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/
 ```js
 export function loadPosts(userId) {
   // Interpreted by the thunk middleware:
-  return function (dispatch, getState) {
+  return function(dispatch, getState) {
     const { posts } = getState()
     if (posts[userId]) {
       // There is cached data! Don't do anything.
@@ -316,9 +317,9 @@ class Posts extends Component {
       return <p>Loading...</p>
     }
 
-    const posts = this.props.posts.map(post =>
+    const posts = this.props.posts.map(post => (
       <Post post={post} key={post.id} />
-    )
+    ))
 
     return <div>{posts}</div>
   }
@@ -354,12 +355,7 @@ The middleware that interprets such actions could look like this:
 ```js
 function callAPIMiddleware({ dispatch, getState }) {
   return next => action => {
-    const {
-      types,
-      callAPI,
-      shouldCallAPI = () => true,
-      payload = {}
-    } = action
+    const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
 
     if (!types) {
       // Normal action: pass it on
@@ -471,7 +467,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
   }
 })
 
-AppDispatcher.register(function (action) {
+AppDispatcher.register(function(action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       const text = action.text.trim()
@@ -497,7 +493,7 @@ export function todos(state = [], action) {
 }
 ```
 
-The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
+The `switch` statement is _not_ the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
 
 It's unfortunate that many still choose Flux framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can solve this with a single function, as we show below.
 

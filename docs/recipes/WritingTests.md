@@ -55,6 +55,7 @@ export function addTodo(text) {
   }
 }
 ```
+
 can be tested like:
 
 ```js
@@ -128,14 +129,14 @@ const mockStore = configureMockStore(middlewares)
 
 describe('async actions', () => {
   afterEach(() => {
-    fetchMock.reset()
     fetchMock.restore()
   })
 
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
-    fetchMock
-      .getOnce('/todos', { body: { todos: ['do something'] }, headers: { 'content-type': 'application/json' } })
-
+    fetchMock.getOnce('/todos', {
+      body: { todos: ['do something'] },
+      headers: { 'content-type': 'application/json' }
+    })
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
@@ -185,6 +186,7 @@ export default function todos(state = initialState, action) {
   }
 }
 ```
+
 can be tested like:
 
 ```js
@@ -357,7 +359,9 @@ Consider the following `App` component:
 ```js
 import { connect } from 'react-redux'
 
-class App extends Component { /* ... */ }
+class App extends Component {
+  /* ... */
+}
 
 export default connect(mapStateToProps)(App)
 ```
@@ -376,7 +380,9 @@ In order to be able to test the App component itself without having to deal with
 import { connect } from 'react-redux'
 
 // Use named export for unconnected component (for tests)
-export class App extends Component { /* ... */ }
+export class App extends Component {
+  /* ... */
+}
 
 // Use default export for the connected component (for app)
 export default connect(mapStateToProps)(App)
@@ -403,9 +409,9 @@ import App from './App'
 
 You would only use the named export for tests.
 
->##### A Note on Mixing ES6 Modules and CommonJS
+> ##### A Note on Mixing ES6 Modules and CommonJS
 
->If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
+> If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
 
 ### Middleware
 
@@ -433,13 +439,13 @@ The invoke function runs our middleware in the same way Redux does.
 const create = () => {
   const store = {
     getState: jest.fn(() => ({})),
-    dispatch: jest.fn(),
+    dispatch: jest.fn()
   }
   const next = jest.fn()
 
-  const invoke = (action) => thunk(store)(next)(action)
+  const invoke = action => thunk(store)(next)(action)
 
-  return {store, next, invoke}
+  return { store, next, invoke }
 }
 ```
 
@@ -448,7 +454,7 @@ We test that our middleware is calling the `getState`, `dispatch`, and `next` fu
 ```js
 it('passes through non-function action', () => {
   const { next, invoke } = create()
-  const action = {type: 'TEST'}
+  const action = { type: 'TEST' }
   invoke(action)
   expect(next).toHaveBeenCalledWith(action)
 })

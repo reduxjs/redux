@@ -19,14 +19,16 @@ Since Redux is just a data store library, it has no direct opinion on how your p
 
 It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
 
-While it ultimately doesn't matter how you lay out your code on disk, it's important to remember that actions and reducers shouldn't be considered in isolation.  It's entirely possible (and encouraged) for a reducer defined in one folder to respond to an action defined in another folder.
+While it ultimately doesn't matter how you lay out your code on disk, it's important to remember that actions and reducers shouldn't be considered in isolation. It's entirely possible (and encouraged) for a reducer defined in one folder to respond to an action defined in another folder.
 
 #### Further information
 
 **Documentation**
+
 - [FAQ: Actions - "1:1 mapping between reducers and actions?"](/docs/faq/Actions.md#actions-reducer-mappings)
 
 **Articles**
+
 - [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
 - [Redux Best Practices](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
 - [Rules For Structuring (Redux) Applications ](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
@@ -40,18 +42,18 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 - [React/Redux Links: Architecture - Project File Structure](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#project-file-structure)
 
 **Discussions**
+
 - [#839: Emphasize defining selectors alongside reducers](https://github.com/reduxjs/redux/issues/839)
 - [#943: Reducer querying](https://github.com/reduxjs/redux/issues/943)
 - [React Boilerplate #27: Application Structure](https://github.com/mxstbr/react-boilerplate/issues/27)
 - [Stack Overflow: How to structure Redux components/containers](http://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
 - [Twitter: There is no ultimate file structure for Redux](https://twitter.com/dan_abramov/status/783428282666614784)
 
-
 ### How should I split my logic between reducers and action creators? Where should my “business logic” go?
 
-There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator.  (For purposes of this question, other async approaches such as sagas and observables fall in the "action creator" category.)
+There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator. (For purposes of this question, other async approaches such as sagas and observables fall in the "action creator" category.)
 
-There are some potential benefits from putting more logic into your reducers.  It's likely that the action types would be more semantic and more meaningful (such as `"USER_UPDATED"` instead of `"SET_STATE"`).  In addition, having more logic in reducers means that more functionality will be affected by time travel debugging.
+There are some potential benefits from putting more logic into your reducers. It's likely that the action types would be more semantic and more meaningful (such as `"USER_UPDATED"` instead of `"SET_STATE"`). In addition, having more logic in reducers means that more functionality will be affected by time travel debugging.
 
 This comment sums up the dichotomy nicely:
 
@@ -60,15 +62,16 @@ This comment sums up the dichotomy nicely:
 
 Find the balance between these two extremes, and you will master Redux.
 
-
 #### Further information
 
 **Articles**
+
 - [Where do I put my business logic in a React/Redux application?](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
 - [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
 - [The Tao of Redux, Part 2 - Practice and Philosophy. Thick and thin reducers.](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
 
 **Discussions**
+
 - [How putting too much logic in action creators could affect debugging](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
 - [#384: The more that's in a reducer, the more you can replay via time travel](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
 - [#1165: Where to put business logic / validation?](https://github.com/reduxjs/redux/issues/1165)
@@ -76,7 +79,6 @@ Find the balance between these two extremes, and you will master Redux.
 - [Stack Overflow: Accessing Redux state in an action creator?](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
 - [#2796: Gaining clarity on "business logic"](https://github.com/reduxjs/redux/issues/2796#issue-289298280)
 - [Twitter: Moving away from unclear terminology...](https://twitter.com/FwardPhoenix/status/952971237004926977)
-
 
 ### Why should I use action creators?
 
@@ -100,14 +102,13 @@ Action creators are a more powerful abstraction. Creating an action often involv
 
 - [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
 
-
 ### Where should websockets and other persistent connections live?
 
 Middleware are the right place for persistent connections like websockets in a Redux app, for several reasons:
 
 - Middleware exist for the lifetime of the application
 - Like with the store itself, you probably only need a single instance of a given connection that the whole app can use
-- Middleware can see all dispatched actions and dispatch actions themselves.  This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
+- Middleware can see all dispatched actions and dispatch actions themselves. This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
 - A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](/faq/organizing-state#organizing-state-non-serializable)
 
 See [this example that shows how a socket middleware might dispatch and respond to Redux actions](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58).
@@ -115,4 +116,5 @@ See [this example that shows how a socket middleware might dispatch and respond 
 There's many existing middleware for websockets and other similar connections - see the link below.
 
 **Libraries**
+
 - [Middleware: Socket and Adapters](https://github.com/markerikson/redux-ecosystem-links/blob/master/middleware-sockets-adapters.md)

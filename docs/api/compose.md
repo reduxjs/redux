@@ -7,11 +7,11 @@ You might want to use it to apply several [store enhancers](../Glossary.md#store
 
 #### Arguments
 
-1. (*arguments*): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on. The exception is the right-most argument which can accept multiple parameters, as it will provide the signature for the resulting composed function.
+1. (_arguments_): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on. The exception is the right-most argument which can accept multiple parameters, as it will provide the signature for the resulting composed function.
 
 #### Returns
 
-(*Function*): The final function obtained by composing the given functions from right to left.
+(_Function_): The final function obtained by composing the given functions from right to left.
 
 #### Example
 
@@ -36,3 +36,4 @@ const store = createStore(
 
 * All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don't give it too much credit!
 * [Understanding how the compose function works in Redux](https://joecortopassi.com/articles/functional-composition-in-javascript/)
+

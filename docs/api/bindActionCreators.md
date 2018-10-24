@@ -10,13 +10,13 @@ For convenience, you can also pass a single function as the first argument, and 
 
 #### Parameters
 
-1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values are action creators.
+1. `actionCreators` (_Function_ or _Object_): An [action creator](../Glossary.md#action-creator), or an object whose values are action creators.
 
-2. `dispatch` (*Function*): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
+2. `dispatch` (_Function_): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
 
 #### Returns
 
-(*Function* or *Object*): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
+(_Function_ or _Object_): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
 
 #### Example
 
@@ -53,11 +53,11 @@ console.log(TodoActionCreators)
 // }
 
 class TodoListContainer extends Component {
-  constructor(props) { 
-    super(props);
-      
-    const {dispatch} = props;
-    
+  constructor(props) {
+    super(props)
+
+    const { dispatch } = props
+
     // Here's a good use case for bindActionCreators:
     // You want a child component to be completely unaware of Redux.
     // We create bound versions of these functions now so we can
@@ -100,13 +100,11 @@ class TodoListContainer extends Component {
   }
 }
 
-export default connect(
-  state => ({ todos: state.todos })
-)(TodoListContainer)
+export default connect(state => ({ todos: state.todos }))(TodoListContainer)
 ```
 
 #### Tips
 
-* You might ask: why don't we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won't work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you're stuck with a single store instance for all requests.
+- You might ask: why don't we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won't work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you're stuck with a single store instance for all requests.
 
-* If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` arguments are functions. The module system doesn't matter.
+- If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` arguments are functions. The module system doesn't matter.

@@ -20,19 +20,19 @@ To configure a `store` we have to make major considerations on which middleware 
 
 #### Perform Asynchronous dispatch
 
-* [redux-thunk](https://github.com/gaearon/redux-thunk)
-  * Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. It incorporates the methods `dispatch` and `getState` as parameters.
-* [redux-saga](https://github.com/redux-saga/redux-saga)
-  * redux-saga is a library that aims to make the execution of application side effects (e.g., asynchronous tasks like data fetching and impure procedures such as accessing the browser cache) manageable and efficient. It's simple to test, as it uses the ES6 feature called `generators`, making the flow as easy to read as synchronous code.
-* [redux-observable](https://github.com/redux-observable/redux-observable)
-  * redux-observable is a middleware for redux that is inspired by redux-thunk. It allows developers to dispatch a function that returns an `Observable`, `Promise` or `iterable` of action(s). When the observable emits an action, or the promise resolves an action, or the iterable gives an action out, that action is then dispatched as usual.
+- [redux-thunk](https://github.com/gaearon/redux-thunk)
+  - Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. It incorporates the methods `dispatch` and `getState` as parameters.
+- [redux-saga](https://github.com/redux-saga/redux-saga)
+  - redux-saga is a library that aims to make the execution of application side effects (e.g., asynchronous tasks like data fetching and impure procedures such as accessing the browser cache) manageable and efficient. It's simple to test, as it uses the ES6 feature called `generators`, making the flow as easy to read as synchronous code.
+- [redux-observable](https://github.com/redux-observable/redux-observable)
+  - redux-observable is a middleware for redux that is inspired by redux-thunk. It allows developers to dispatch a function that returns an `Observable`, `Promise` or `iterable` of action(s). When the observable emits an action, or the promise resolves an action, or the iterable gives an action out, that action is then dispatched as usual.
 
 #### Development Purposes / debug
 
-* [redux-devtools](https://github.com/reduxjs/redux-devtools)
-  * Redux DevTools is a set of tools for your Redux development workflow.
-* [redux-logger](https://github.com/evgenyrodionov/redux-logger)
-  * redux-logger logs all actions that are being dispatched to the store.
+- [redux-devtools](https://github.com/reduxjs/redux-devtools)
+  - Redux DevTools is a set of tools for your Redux development workflow.
+- [redux-logger](https://github.com/evgenyrodionov/redux-logger)
+  - redux-logger logs all actions that are being dispatched to the store.
 
 To be able to choose one of these libraries we must take into account whether we are building a small or large application. Usability, code standards, and JavaScript knowledge may also be considered. All of them are similar.
 
@@ -53,10 +53,10 @@ and
 
 There is no magic to analyze and predict how much your application is going to grow. But it's okay! Redux's simplistic foundation means it will adapt to many kinds of applications as they grow. Here are some resources on how to build up your application in a sensible manner:
 
-* [Taming Large React Applications with Redux](http://slides.com/joelkanzelmeyer/taming-large-redux-apps#/)
-* [Real-World React and Redux - part l](https://dzone.com/articles/real-world-reactjs-and-redux-part-1)
-* [Real-World React and Redux - part ll](https://dzone.com/articles/real-world-reactjs-and-redux-part-2)
-* [Redux: Architecting and scaling a new web app at the NY Times](https://www.youtube.com/watch?v=lI3IcjFg9Wk)
+- [Taming Large React Applications with Redux](http://slides.com/joelkanzelmeyer/taming-large-redux-apps#/)
+- [Real-World React and Redux - part l](https://dzone.com/articles/real-world-reactjs-and-redux-part-1)
+- [Real-World React and Redux - part ll](https://dzone.com/articles/real-world-reactjs-and-redux-part-2)
+- [Redux: Architecting and scaling a new web app at the NY Times](https://www.youtube.com/watch?v=lI3IcjFg9Wk)
 
 **Tip**: It's great to plan things beforehand, but don't get caught up in ["analysis paralysis"](https://en.wikipedia.org/wiki/Analysis_paralysis). Done is always better than perfect, after all. And [Redux makes refactoring easy](https://blog.boldlisting.com/so-youve-screwed-up-your-redux-store-or-why-redux-makes-refactoring-easy-400e19606c71) if you need to.
 

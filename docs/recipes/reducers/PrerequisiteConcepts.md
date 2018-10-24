@@ -1,21 +1,21 @@
 # Prerequisite Reducer Concepts
 
-
 As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
 
 - Should have a signature of `(previousState, action) => newState`, similar to the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 - Should be "pure", which means the reducer:
   - Does not _perform side effects_ (such as calling API's or modifying non-local objects or variables).
   - Does not _call non-pure functions_ (like `Date.now` or `Math.random`).
-  - Does not _mutate_ its arguments. If the reducer updates state, it should not _modify_ the **existing** state object in-place.  Instead, it should generate a **new** object containing the necessary changes. The same approach should be used for any sub-objects within state that the reducer updates.
+  - Does not _mutate_ its arguments. If the reducer updates state, it should not _modify_ the **existing** state object in-place. Instead, it should generate a **new** object containing the necessary changes. The same approach should be used for any sub-objects within state that the reducer updates.
 
->##### Note on immutability, side effects, and mutation
+> ##### Note on immutability, side effects, and mutation
+>
 > Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function:
+>
 > - For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else. **Side effects like mutation or asynchronous behavior will cause time travel to alter behavior between steps, breaking the application**.
-> - For React Redux, `connect` checks to see if the props returned from a `mapStateToProps` function have changed in order to determine if a component needs to update.  To improve performance, `connect` takes some shortcuts that rely on the state being immutable, and uses shallow reference equality checks to detect changes. This means that **changes made to objects and arrays by direct mutation will not be detected, and components will not re-render**.
+> - For React Redux, `connect` checks to see if the props returned from a `mapStateToProps` function have changed in order to determine if a component needs to update. To improve performance, `connect` takes some shortcuts that rely on the state being immutable, and uses shallow reference equality checks to detect changes. This means that **changes made to objects and arrays by direct mutation will not be detected, and components will not re-render**.
 >
 > Other side effects like generating unique IDs or timestamps in a reducer also make the code unpredictable and harder to debug and test.
-
 
 Because of these rules, it's important that the following core concepts are fully understood before moving on to other specific techniques for organizing Redux reducers:
 
@@ -24,7 +24,7 @@ Because of these rules, it's important that the following core concepts are full
 **Key concepts**:
 
 - Thinking in terms of state and state shape
-- Delegating update responsibility by slice of state (*reducer composition*)
+- Delegating update responsibility by slice of state (_reducer composition_)
 - Higher order reducers
 - Defining reducer initial state
 
@@ -37,7 +37,6 @@ Because of these rules, it's important that the following core concepts are full
 - [The Power of Higher-Order Reducers](http://slides.com/omnidan/hor#/)
 - [Stack Overflow: Store initial state and `combineReducers`](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
 - [Stack Overflow: State key names and `combineReducers`](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer)
-
 
 #### Pure Functions and Side Effects
 
@@ -54,8 +53,6 @@ Because of these rules, it's important that the following core concepts are full
 - [Learning Functional Programming in Javascript](https://youtu.be/e-5obm1G_FY)
 - [An Introduction to Reasonably Pure Functional Programming](https://www.sitepoint.com/an-introduction-to-reasonably-pure-functional-programming/)
 
-
-
 #### Immutable Data Management
 
 **Key Concepts**:
@@ -71,7 +68,6 @@ Because of these rules, it's important that the following core concepts are full
 - [Immutable Data from Scratch](https://ryanfunduk.com/articles/immutable-data-from-scratch/)
 - [Redux Docs: Using the Object Spread Operator](../UsingObjectSpreadOperator.md)
 
-
 #### Normalizing Data
 
 **Key Concepts**:
@@ -82,7 +78,6 @@ Because of these rules, it's important that the following core concepts are full
 - Referring to items by IDs
 - Using objects keyed by item IDs as lookup tables, and arrays of IDs to track ordering
 - Associating items in relationships
-
 
 **Reading List**:
 

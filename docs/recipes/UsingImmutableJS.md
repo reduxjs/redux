@@ -1,5 +1,7 @@
 # Using Immutable.JS with Redux
+
 ## Table of Contents
+
 - [Why should I use an immutable-focused library such as Immutable.JS?](#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
 - [Why should I choose Immutable.JS as an immutable library?](#why-should-i-choose-immutable-js-as-an-immutable-library)
 - [What are the issues with using Immutable.JS?](#what-are-the-issues-with-using-immutable-js)
@@ -17,12 +19,13 @@ Whichever option you choose, make sure you’re familiar with the concepts of [i
 #### Further Information
 
 **Documentation**
+
 - [Recipes: immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
 
 **Articles**
+
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
-
 
 ## Why should I choose Immutable.JS as an immutable library?
 
@@ -42,17 +45,18 @@ Immutable.JS does a lot of work behind the scenes to optimize performance. This 
 
 Immutable.JS avoids this by [cleverly sharing data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away.
 
-You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it’s the *intermediate* data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.
+You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it’s the _intermediate_ data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.
 
 #### Further Information
 
 **Articles**
+
 - [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.6nwctunlc)
 - [PDF: JavaScript Immutability - Don’t go changing](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
 
 **Libraries**
-- [Immutable.js](https://facebook.github.io/immutable-js/)
 
+- [Immutable.js](https://facebook.github.io/immutable-js/)
 
 ## What are the issues with using Immutable.JS?
 
@@ -104,7 +108,7 @@ However, shallow checking will not work if your data encapsulated within an Immu
 
 Accordingly, calling `toJS()` twice, for example, and assigning the result to two different variables will cause an equality check on those two variables to fail, even though the object values themselves haven’t changed.
 
-This is a particular issue if you use `toJS()` in a wrapped component’s `mapStateToProps` function, as React-Redux shallowly compares each value in the returned props object.  For example, the value referenced by the `todos` prop returned from `mapStateToProps` below will always be a different object, and so will fail a shallow equality check.
+This is a particular issue if you use `toJS()` in a wrapped component’s `mapStateToProps` function, as React-Redux shallowly compares each value in the returned props object. For example, the value referenced by the `todos` prop returned from `mapStateToProps` below will always be a different object, and so will fail a shallow equality check.
 
 ```js
 // AVOID .toJS() in mapStateToProps
@@ -122,14 +126,15 @@ This can be prevented by using `toJS()` in a Higher Order Component, as discusse
 #### Further Information
 
 **Articles**
+
 - [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.hzgz7ghbe)
 - [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.9ucv6hwk4)
 - [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
 
 **Chrome Extension**
-- [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
 
+- [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
 
 ## Is Using Immutable.JS worth the effort?
 
@@ -144,8 +149,8 @@ This, together with its performance and rich API for data manipulation, is why I
 #### Further Information
 
 **Documentation**
-- [Troubleshooting: Nothing happens when I dispatch an action](http://redux.js.org/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
 
+- [Troubleshooting: Nothing happens when I dispatch an action](http://redux.js.org/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
 
 ## What are some opinionated Best Practices for using Immutable.JS with Redux?
 
@@ -158,18 +163,18 @@ Never let a plain JavaScript object contain Immutable.JS properties. Equally, ne
 #### Further Information
 
 **Articles**
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
+- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
 ### Make your entire Redux state tree an Immutable.JS object
 
 For a Redux app, your entire state tree should be an Immutable.JS object, with no plain JavaScript objects used at all.
 
-* Create the tree using Immutable.JS’s `fromJS()` function.
+- Create the tree using Immutable.JS’s `fromJS()` function.
 
-* Use an Immutable.JS-aware version of the `combineReducers` function, such as the one in [redux-immutable](https://www.npmjs.com/package/redux-immutable), as Redux itself expects the state tree to be a plain JavaScript object.
+- Use an Immutable.JS-aware version of the `combineReducers` function, such as the one in [redux-immutable](https://www.npmjs.com/package/redux-immutable), as Redux itself expects the state tree to be a plain JavaScript object.
 
-* When adding JavaScript objects to an Immutable.JS Map or List using Immutable.JS’s `update`, `merge` or `set` methods, ensure that the object being added is first converted to an Immutable object using `fromJS()`.
+- When adding JavaScript objects to an Immutable.JS Map or List using Immutable.JS’s `update`, `merge` or `set` methods, ensure that the object being added is first converted to an Immutable object using `fromJS()`.
 
 **Example**
 
@@ -188,11 +193,12 @@ const newState = state.setIn(['prop1'], fromJS(newObj))
 #### Further Information
 
 **Articles**
+
 - [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
 **Libraries**
-- [redux-immutable](https://www.npmjs.com/package/redux-immutable)
 
+- [redux-immutable](https://www.npmjs.com/package/redux-immutable)
 
 ### Use Immutable.JS everywhere except your dumb components
 
@@ -203,6 +209,7 @@ Do not, however, use Immutable.JS in your dumb components.
 #### Further Information
 
 **Articles**
+
 - [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 - [Smart and Dumb Components in React](http://jaketrent.com/post/smart-dumb-components-react/)
 
@@ -213,6 +220,7 @@ Do not, however, use Immutable.JS in your dumb components.
 #### Further Information
 
 ** Discussions**
+
 - [Lee Byron on Twitter: “Perf tip for #immutablejs…”](https://twitter.com/leeb/status/746733697093668864)
 
 ### Your selectors should return Immutable.JS objects
@@ -221,19 +229,22 @@ Always.
 
 ### Use Immutable.JS objects in your Smart Components
 
-Smart components that access the store via React Redux’s `connect` function must use the Immutable.JS values returned by your selectors.  Make sure you avoid the potential issues this can cause with unnecessary component re-rendering. Memoize your selectors using a library such as reselect if necessary.
+Smart components that access the store via React Redux’s `connect` function must use the Immutable.JS values returned by your selectors. Make sure you avoid the potential issues this can cause with unnecessary component re-rendering. Memoize your selectors using a library such as reselect if necessary.
 
 #### Further Information
 
 **Documentation**
+
 - [Recipes: Computing Derived Data](http://redux.js.org/recipes/ComputingDerivedData.html)
 - [FAQ: Immutable Data](/faq/ImmutableData.html#immutability-issues-with-react-redux)
 - [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reduxjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
 **Articles**
+
 - [Redux Patterns and Anti-Patterns](https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc#.451p9ycfy)
 
 **Libraries**
+
 - [Reselect: Selector library for Redux](https://github.com/reduxjs/reselect)
 
 ### Never use `toJS()` in `mapStateToProps`
@@ -243,6 +254,7 @@ Converting an Immutable.JS object to a JavaScript object using `toJS()` will ret
 #### Further Information
 
 **Documentation**
+
 - [FAQ: Immutable Data](http://redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
 
 ### Never use Immutable.JS in your Dumb Components
@@ -254,13 +266,14 @@ Such a dependency renders the component impure, makes testing the component more
 #### Further Information
 
 **Articles**
+
 - [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 - [Smart and Dumb Components in React](http://jaketrent.com/post/smart-dumb-components-react/)
 - [Tips For a Better Redux Architecture: Lessons for Enterprise Scale](https://hashnode.com/post/tips-for-a-better-redux-architecture-lessons-for-enterprise-scale-civrlqhuy0keqc6539boivk2f)
 
 ### Use a Higher Order Component to convert your Smart Component’s Immutable.JS props to your Dumb Component’s JavaScript props
 
-Something needs to map the Immutable.JS props in your Smart Component to the pure JavaScript props used in your Dumb Component. That something is a Higher Order Component (HOC) that simply takes the Immutable.JS props from your Smart Component, and converts them using `toJS()` to plain JavaScript props, which are then passed to  your Dumb Component.
+Something needs to map the Immutable.JS props in your Smart Component to the pure JavaScript props used in your Dumb Component. That something is a Higher Order Component (HOC) that simply takes the Immutable.JS props from your Smart Component, and converts them using `toJS()` to plain JavaScript props, which are then passed to your Dumb Component.
 
 Here is an example of such a HOC:
 
@@ -272,16 +285,17 @@ export const toJS = WrappedComponent => wrappedComponentProps => {
   const KEY = 0
   const VALUE = 1
 
-  const propsJS = Object.entries(
-    wrappedComponentProps
-  ).reduce((newProps, wrappedComponentProp) => {
-    newProps[wrappedComponentProp[KEY]] = Iterable.isIterable(
-      wrappedComponentProp[VALUE]
-    )
-      ? wrappedComponentProp[VALUE].toJS()
-      : wrappedComponentProp[VALUE]
-    return newProps
-  }, {})
+  const propsJS = Object.entries(wrappedComponentProps).reduce(
+    (newProps, wrappedComponentProp) => {
+      newProps[wrappedComponentProp[KEY]] = Iterable.isIterable(
+        wrappedComponentProp[VALUE]
+      )
+        ? wrappedComponentProp[VALUE].toJS()
+        : wrappedComponentProp[VALUE]
+      return newProps
+    },
+    {}
+  )
 
   return <WrappedComponent {...propsJS} />
 }
@@ -306,6 +320,7 @@ const mapStateToProps = state => {
 }
 export default connect(mapStateToProps)(toJS(DumbComponent))
 ```
+
 By converting Immutable.JS objects to plain JavaScript values within a HOC, we achieve Dumb Component portability, but without the performance hits of using `toJS()` in the Smart Component.
 
 _Note: if your app requires high performance, you may need to avoid `toJS()` altogether, and so will have to use Immutable.JS in your dumb components. However, for most apps this will not be the case, and the benefits of keeping Immutable.JS out of your dumb components (maintainability, portability and easier testing) will far outweigh any perceived performance improvements of keeping it in._
@@ -315,15 +330,19 @@ _In addition, using `toJS` in a Higher Order Component should not cause much, if
 #### Further Information
 
 **Documentation**
+
 - [React: Higher-Order Components](https://facebook.github.io/react/docs/higher-order-components.html)
 
 **Articles**
+
 - [React Higher Order Components in depth](https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e#.dw2qd1o1g)
 
 **Discussions**
+
 - [Reddit: acemarke and cpsubrian comments on Dan Abramov: Redux is not an architecture or design pattern, it is just a library.](https://www.reddit.com/r/javascript/comments/4rcqpx/dan_abramov_redux_is_not_an_architecture_or/d5rw0p9/?context=3)
 
 **Gists**
+
 - [cpsubrian: React decorators for redux/react-router/immutable ‘smart’ components](https://gist.github.com/cpsubrian/79e97b6116ab68bd189eb4917203242c#file-tojs-js)
 
 ### Use the Immutable Object Formatter Chrome Extension to Aid Debugging
@@ -333,4 +352,5 @@ Install the [Immutable Object Formatter](https://chrome.google.com/webstore/deta
 #### Further Information
 
 **Chrome Extension**
+
 - [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)

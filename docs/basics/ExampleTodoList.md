@@ -70,10 +70,9 @@ const todos = (state = [], action) => {
         }
       ]
     case 'TOGGLE_TODO':
-      return state.map(todo =>
-        (todo.id === action.id)
-          ? {...todo, completed: !todo.completed}
-          : todo
+      return state.map(
+        todo =>
+          todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
       )
     default:
       return state
@@ -124,7 +123,7 @@ import PropTypes from 'prop-types'
 const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
-    style={ {
+    style={{
       textDecoration: completed ? 'line-through' : 'none'
     }}
   >
@@ -150,13 +149,9 @@ import Todo from './Todo'
 
 const TodoList = ({ todos, toggleTodo }) => (
   <ul>
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => toggleTodo(todo.id)}
-      />
-    )}
+    {todos.map(todo => (
+      <Todo key={todo.id} {...todo} onClick={() => toggleTodo(todo.id)} />
+    ))}
   </ul>
 )
 
@@ -175,17 +170,18 @@ export default TodoList
 ```
 
 #### `components/Link.js`
+
 ```js
 import React from 'react'
 import PropTypes from 'prop-types'
 
 const Link = ({ active, children, onClick }) => (
   <button
-     onClick={onClick}
-     disabled={active}
-     style={{
-         marginLeft: '4px',
-     }}
+    onClick={onClick}
+    disabled={active}
+    style={{
+      marginLeft: '4px'
+    }}
   >
     {children}
   </button>
@@ -210,15 +206,9 @@ import { VisibilityFilters } from '../actions'
 const Footer = () => (
   <div>
     <span>Show: </span>
-    <FilterLink filter={VisibilityFilters.SHOW_ALL}>
-      All
-    </FilterLink>
-    <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>
-      Active
-    </FilterLink>
-    <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>
-      Completed
-    </FilterLink>
+    <FilterLink filter={VisibilityFilters.SHOW_ALL}>All</FilterLink>
+    <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>Active</FilterLink>
+    <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>Completed</FilterLink>
   </div>
 )
 
@@ -326,10 +316,8 @@ const AddTodo = ({ dispatch }) => {
           input.value = ''
         }}
       >
-        <input ref={node => input = node} />
-        <button type="submit">
-          Add Todo
-        </button>
+        <input ref={node => (input = node)} />
+        <button type="submit">Add Todo</button>
       </form>
     </div>
   )

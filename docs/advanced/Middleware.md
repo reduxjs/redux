@@ -1,6 +1,6 @@
 # Middleware
 
-You've seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
+You've seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of _middleware_. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
 
 Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
 
@@ -24,9 +24,9 @@ How do we approach this with Redux?
 
 The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../api/Store.md#dispatch). It's not really a solution, but just a first step towards understanding the problem.
 
->##### Note
+> ##### Note
 
->If you're using [react-redux](https://github.com/reduxjs/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
+> If you're using [react-redux](https://github.com/reduxjs/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
 
 Say, you call this when creating a todo:
 
@@ -80,7 +80,7 @@ store.dispatch = function dispatchAndLog(action) {
 }
 ```
 
-This is already closer to what we want!  No matter where we dispatch an action, it is guaranteed to be logged. Monkeypatching never feels right, but we can live with this for now.
+This is already closer to what we want! No matter where we dispatch an action, it is guaranteed to be logged. Monkeypatching never feels right, but we can live with this for now.
 
 ### Problem: Crash Reporting
 
@@ -135,7 +135,7 @@ Still, this isn't nice.
 
 ### Attempt #4: Hiding Monkeypatching
 
-Monkeypatching is a hack. “Replace any method you like”, what kind of API is that? Let's figure out the essence of it instead. Previously, our functions replaced `store.dispatch`. What if they *returned* the new `dispatch` function instead?
+Monkeypatching is a hack. “Replace any method you like”, what kind of API is that? Let's figure out the essence of it instead. Previously, our functions replaced `store.dispatch`. What if they _returned_ the new `dispatch` function instead?
 
 ```js
 function logger(store) {
@@ -161,9 +161,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares.reverse()
 
   // Transform dispatch function with each middleware.
-  middlewares.forEach(middleware =>
-    store.dispatch = middleware(store)
-  )
+  middlewares.forEach(middleware => (store.dispatch = middleware(store)))
 }
 ```
 
@@ -254,26 +252,24 @@ function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
   let dispatch = store.dispatch
-  middlewares.forEach(middleware =>
-    dispatch = middleware(store)(dispatch)
-  )
+  middlewares.forEach(middleware => (dispatch = middleware(store)(dispatch)))
   return Object.assign({}, store, { dispatch })
 }
 ```
 
 The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
 
-* It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.md#getState).
+- It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md). There is one caveat when calling `dispatch` during setup, described below.
+- It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md). There is one caveat when calling `dispatch` during setup, described below.
 
-* To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
+- To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
 Because it is cumbersome to apply functions to `createStore()` before using it, `createStore()` accepts an optional last argument to specify such functions.
 
 #### Caveat: Dispatching During Setup
 
-While `applyMiddleware` executes and sets up your middleware, the `store.dispatch` function will point to the vanilla version provided by `createStore`. Dispatching would result in no other middleware being applied. If you are expecting an interaction with another middleware during setup, you will probably be disappointed. Because of this unexpected behavior, `applyMiddleware` will throw an error if you try to dispatch an action before the set up completes. Instead, you should either communicate directly with that other middleware via a common object (for an API-calling middleware, this may be your API client object) or waiting until after the middleware is constructed with a callback. 
+While `applyMiddleware` executes and sets up your middleware, the `store.dispatch` function will point to the vanilla version provided by `createStore`. Dispatching would result in no other middleware being applied. If you are expecting an interaction with another middleware during setup, you will probably be disappointed. Because of this unexpected behavior, `applyMiddleware` will throw an error if you try to dispatch an action before the set up completes. Instead, you should either communicate directly with that other middleware via a common object (for an API-calling middleware, this may be your API client object) or waiting until after the middleware is constructed with a callback.
 
 ### The Final Approach
 
@@ -369,10 +365,7 @@ const timeoutScheduler = store => next => action => {
     return next(action)
   }
 
-  const timeoutId = setTimeout(
-    () => next(action),
-    action.meta.delay
-  )
+  const timeoutId = setTimeout(() => next(action), action.meta.delay)
 
   return function cancel() {
     clearTimeout(timeoutId)
