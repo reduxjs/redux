@@ -198,7 +198,7 @@ _Explanations and examples of how middleware work and how to write them_
   
 - **Functional Composition in Javascript**  
   https://joecortopassi.com/articles/functional-composition-in-javascript/  
-  Breaking down how the `compose` function works to apply multiple middleware together
+  Breaking down how the `compose` function works
 
 ## Side Effects - Basics
 
