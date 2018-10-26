@@ -134,7 +134,7 @@ function updateObjectInArray(array, action) {
 
 ## Immutable Update Utility Libraries
 
-Because writing immutable update code can become tedious, there are a number of utility libraries that try to abstract out the process. These libraries vary in APIs and usage, but all try to provide a shorter and more succinct way of writing these updates. [Immer](https://github.com/mweststrate/immer) is one popular lightweight alternative which makes immutable updates breeze with javascript syntax and typescript support.
+Because writing immutable update code can become tedious, there are a number of utility libraries that try to abstract out the process. These libraries vary in APIs and usage, but all try to provide a shorter and more succinct way of writing these updates. For example, [Immer](https://github.com/mweststrate/immer) makes immutable updates a simple function and plain JavaScript objects:
 
 ```js
 var usersState = [{ name: 'John Doe', address: { city: 'London' } }]
