@@ -305,7 +305,7 @@ can be tested like:
 
 ```js
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Header from '../../components/Header'
 
@@ -316,7 +316,7 @@ function setup() {
     addTodo: jest.fn()
   }
 
-  const enzymeWrapper = mount(<Header {...props} />)
+  const enzymeWrapper = shallow(<Header {...props} />)
 
   return {
     props,
@@ -431,7 +431,7 @@ const thunk = ({ dispatch, getState }) => next => action => {
 }
 ```
 
-We need to create a fake `getState`, `dispatch`, and `next` functions. We use `jest.fn()` to create stubs, but with other test frameworks you would likely use sinon.
+We need to create a fake `getState`, `dispatch`, and `next` functions. We use `jest.fn()` to create stubs, but with other test frameworks you would likely use [Sinon](https://sinonjs.org/).
 
 The invoke function runs our middleware in the same way Redux does.
 
