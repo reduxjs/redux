@@ -139,8 +139,8 @@ Because writing immutable update code can become tedious, there are a number of 
 ```js
 var usersState = [{ name: 'John Doe', address: { city: 'London' } }]
 var newState = immer.produce(usersState, draftState => {
-  draftState[0].name = 'Jon Doe';
-  draftState[0].address.city = 'Paris';
+  draftState[0].name = 'Jon Doe'
+  draftState[0].address.city = 'Paris'
   //nested update similar to mutable way
 })
 ```
