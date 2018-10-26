@@ -134,7 +134,18 @@ function updateObjectInArray(array, action) {
 
 ## Immutable Update Utility Libraries
 
-Because writing immutable update code can become tedious, there are a number of utility libraries that try to abstract out the process. These libraries vary in APIs and usage, but all try to provide a shorter and more succinct way of writing these updates. Some, like [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable), take string paths for commands:
+Because writing immutable update code can become tedious, there are a number of utility libraries that try to abstract out the process. These libraries vary in APIs and usage, but all try to provide a shorter and more succinct way of writing these updates. [Immer](https://github.com/mweststrate/immer) is one popular lightweight alternative which makes immutable updates breeze with javascript syntax and typescript support.
+
+```js
+var usersState = [{ name: 'John Doe', address: { city: 'London' } }]
+var newState = immer.produce(usersState, draftState => {
+  draftState[0].name = 'Jon Doe';
+  draftState[0].address.city = 'Paris';
+  //nested update similar to mutable way
+})
+```
+
+Some, like [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable), take string paths for commands:
 
 ```js
 state = dotProp.set(state, `todos.${index}.complete`, true)
