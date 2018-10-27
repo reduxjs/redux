@@ -196,6 +196,10 @@ _Explanations and examples of how middleware work and how to write them_
   https://www.codementor.io/reactjs/tutorial/beginner-s-guide-to-redux-middleware  
   A useful explanation of middleware use cases, with numerous examples
 
+- **Functional Composition in Javascript**  
+  https://joecortopassi.com/articles/functional-composition-in-javascript/  
+  Breaking down how the `compose` function works
+
 ## Side Effects - Basics
 
 _Introductions to handling async behavior in Redux_
