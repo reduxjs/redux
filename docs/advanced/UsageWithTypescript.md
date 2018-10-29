@@ -13,3 +13,48 @@ TypeScript has the potential to bring the following benefits to a Redux applicat
 We will be going through a simplistic chat application to demonstrate a possible approach to include static typing. This chat application will have two reducers. The _chat reducer_ will focus on storing the chat history and the _system reducer_ will focus on storing session information.
 
 The full source code is available on [codesandbox here](https://codesandbox.io/s/w02m7jm3q7).
+
+## Type Checking State
+
+Type checking each slice of state is simple when you understand that each slice of state is just an object.
+
+Describing the state shape of the chat reducer's slice of state:
+
+```ts
+// src/store/chat/types.ts
+
+export interface IMessage {
+  user: string
+  message: string
+  timestamp: number
+}
+
+export interface IChatState {
+  messages: IMessage[]
+}
+```
+
+Describing the state shape of the system reducer's slice of state:
+
+```ts
+// src/store/system/types.ts
+
+export interface ISystemState {
+  loggedIn: boolean
+  session: string
+  userName: string
+}
+```
+
+Note that we are exporting these interfaces to reuse them later in application state and action creators.
+
+We can now create an interface which describes the global store:
+
+```ts
+// src/store/index.ts
+
+export interface IAppState {
+  system: ISystemState
+  chat: IChatState
+}
+```
