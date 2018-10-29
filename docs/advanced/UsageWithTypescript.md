@@ -124,3 +124,89 @@ export const updateSession: updateSessionType = newSession => ({
   payload: newSession
 })
 ```
+
+## Type Checking Reducers
+
+Reducers are just pure functions that take the previous state, an action and then return the next state. Redux provides a `Reducer` type which can be imported to assist with type checking.
+
+Type checked chat reducer:
+
+```ts
+// src/store/chat/reducers.ts
+
+import { Reducer } from 'redux'
+import { IChatState, ChatActions } from './types'
+
+const initialState: IChatState = {
+  messages: []
+}
+
+export const chatReducer: Reducer<IChatState> = (
+  state = initialState,
+  action
+) => {
+  switch (action.type) {
+    case ChatActions.SendMessage: {
+      return {
+        messages: [...state.messages, action.payload]
+      }
+    }
+    default:
+      return state
+  }
+}
+```
+
+Type checked system reducer:
+
+```ts
+// src/store/system/reducers.ts
+
+import { Reducer } from 'redux'
+import { SystemActions, ISystemState } from './types'
+
+const initialState: ISystemState = {
+  loggedIn: false,
+  session: '',
+  userName: ''
+}
+
+export const systemReducer: Reducer<ISystemState> = (
+  state = initialState,
+  action
+) => {
+  switch (action.type) {
+    case SystemActions.UpdateSession: {
+      return {
+        ...state,
+        ...action.payload
+      }
+    }
+    default: {
+      return state
+    }
+  }
+}
+```
+
+Putting it all together in combine reducers:
+
+```ts
+// src/store/index.ts
+
+import { systemReducer } from './system/reducers'
+import { ISystemState } from './system/types'
+
+import { chatReducer } from './chat/reducers'
+import { IChatState } from './chat/types'
+
+export interface IAppState {
+  system: ISystemState
+  chat: IChatState
+}
+
+const rootReducer: Reducer<IAppState> = combineReducers({
+  system: systemReducer,
+  chat: chatReducer
+})
+```
