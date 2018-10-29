@@ -58,3 +58,69 @@ export interface IAppState {
   chat: IChatState
 }
 ```
+
+## Type Checking Actions & Action Creators
+
+We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants.
+
+Chat Action Constants and Actions:
+
+```ts
+// src/store/chat/types.ts
+
+export enum ChatActions {
+  SendMessage = '@CHAT:SEND/MESSAGE'
+}
+
+export interface ISendMessageAction {
+  type: ChatActions.SendMessage
+  payload: IMessage
+}
+```
+
+With these types we can now also type check chat's action creators:
+
+```ts
+// src/store/chat/actions.ts
+
+import { IMessage, ISendMessageAction, ChatActions } from './types'
+
+export type sendMessageType = (newMessage: IMessage) => ISendMessageAction
+
+export const sendMessage: sendMessageType = newMessage => ({
+  type: ChatActions.SendMessage,
+  payload: newMessage
+})
+```
+
+System Action Constants and Actions:
+
+```ts
+// src/store/system/types.ts
+
+export enum SystemActions {
+  UpdateSession = '@SYSTEM:UPDATE/SESSION'
+}
+
+export interface IUpdateSessionAction {
+  type: SystemActions.UpdateSession
+  payload: ISystemState
+}
+```
+
+With these types we can now also type check system's action creators:
+
+```ts
+// src/store/system/actions.ts
+
+import { SystemActions, IUpdateSessionAction, ISystemState } from './types'
+
+export type updateSessionType = (
+  newSession: ISystemState
+) => IUpdateSessionAction
+
+export const updateSession: updateSessionType = newSession => ({
+  type: SystemActions.UpdateSession,
+  payload: newSession
+})
+```
