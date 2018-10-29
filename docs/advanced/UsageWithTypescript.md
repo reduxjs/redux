@@ -210,3 +210,9 @@ const rootReducer: Reducer<IAppState> = combineReducers({
   chat: chatReducer
 })
 ```
+
+## Notes & Considerations
+
+- There are multiple approaches to type checking redux, this is one practical approach.
+- This example only serves the purpose of showing this approach, meaning other advanced concepts have been stripped out to keep things simple. If you are code splitting your redux take a look at [this post](https://medium.com/@matthewgerstman/redux-with-code-splitting-and-type-checking-205195aded46).
+- Understand that TypeScript does have its trade-offs. It is a good idea to understand when these trade-offs are worth it in your application.
