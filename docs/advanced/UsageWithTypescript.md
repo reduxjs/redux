@@ -12,7 +12,7 @@ TypeScript has the potential to bring the following benefits to a Redux applicat
 
 We will be going through a simplistic chat application to demonstrate a possible approach to include static typing. This chat application will have two reducers. The _chat reducer_ will focus on storing the chat history and the _system reducer_ will focus on storing session information.
 
-The full source code is available on [codesandbox here](https://codesandbox.io/s/w02m7jm3q7).
+The full source code is available on [codesandbox here](https://codesandbox.io/s/w02m7jm3q7). Note that by going through this example yourself you will experience some of the benefits of using TypeScript.
 
 ## Type Checking State
 
