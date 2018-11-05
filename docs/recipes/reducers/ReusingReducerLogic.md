@@ -107,6 +107,32 @@ const rootReducer = combineReducers({
 })
 ```
 
+And why not more and more generic conditional higher-order reducer that accepts a given reducer function and return a function to activate the reducer according to the action it receive:
+
+```js
+function counter(state = 0, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    default:
+      return state
+  }
+}
+
+const reducer = (reducer) => ({
+    onlyIf: (f) => (state, action) =>
+        f(action) ? reducer(state, action) : state
+});
+
+const rootReducer = combineReducers({
+  counterA: reducer(counter).onlyIf(({ name }) => name === 'A'),
+  counterB: reducer(counter).onlyIf(({ name }) => name === 'B'),
+  counterC: reducer(counter).onlyIf(({ name }) => name === 'C')
+})
+```
+
 You could even go as far as to make a generic filtering higher-order reducer:
 
 ```js
