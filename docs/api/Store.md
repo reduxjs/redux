@@ -12,7 +12,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 
 ### Store Methods
 
-- [`getState()`](#getstate)
+- [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch-action)
 - [`subscribe(listener)`](#subscribe-listener)
 - [`replaceReducer(nextReducer)`](#replacereducer-nextreducer)
