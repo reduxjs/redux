@@ -63,18 +63,13 @@ export interface AppState {
 
 We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants.
 
-Chat Action Constants and Actions:
+Chat Action Constants:
 
 ```ts
 // src/store/chat/types.ts
 
 export enum ChatActions {
   SendMessage = 'SEND_MESSAGE'
-}
-
-export interface SendMessageAction {
-  type: ChatActions.SendMessage
-  payload: Message
 }
 ```
 
@@ -83,17 +78,18 @@ With these types we can now also type check chat's action creators:
 ```ts
 // src/store/chat/actions.ts
 
-import { Message, SendMessageAction, ChatActions } from './types'
+import { Message, ChatActions } from './types'
 
-export type sendMessageType = (newMessage: Message) => SendMessageAction
+export function sendMessage(newMessage: Message) {
+  return {
+    type: ChatActions.SendMessage,
+    payload: newMessage
+  };
+}
 
-export const sendMessage: sendMessageType = newMessage => ({
-  type: ChatActions.SendMessage,
-  payload: newMessage
-})
 ```
 
-System Action Constants and Actions:
+System Action Constants:
 
 ```ts
 // src/store/system/types.ts
@@ -102,10 +98,6 @@ export enum SystemActions {
   UpdateSession = 'UPDATE_SESSION'
 }
 
-export interface UpdateSessionAction {
-  type: SystemActions.UpdateSession
-  payload: SystemState
-}
 ```
 
 With these types we can now also type check system's action creators:
@@ -113,16 +105,15 @@ With these types we can now also type check system's action creators:
 ```ts
 // src/store/system/actions.ts
 
-import { SystemActions, UpdateSessionAction, SystemState } from './types'
+import { SystemActions, SystemState } from './types'
 
-export type updateSessionType = (
-  newSession: SystemState
-) => UpdateSessionAction
+export function updateSession(newSession: SystemState) {
+  return {
+    type: SystemActions.UpdateSession,
+    payload: newSession
+  };
+}
 
-export const updateSession: updateSessionType = newSession => ({
-  type: SystemActions.UpdateSession,
-  payload: newSession
-})
 ```
 
 ## Type Checking Reducers
