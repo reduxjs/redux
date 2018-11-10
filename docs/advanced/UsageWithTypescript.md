@@ -23,14 +23,14 @@ Describing the state shape of the chat reducer's slice of state:
 ```ts
 // src/store/chat/types.ts
 
-export interface IMessage {
+export interface Message {
   user: string
   message: string
   timestamp: number
 }
 
-export interface IChatState {
-  messages: IMessage[]
+export interface ChatState {
+  messages: Message[]
 }
 ```
 
@@ -39,7 +39,7 @@ Describing the state shape of the system reducer's slice of state:
 ```ts
 // src/store/system/types.ts
 
-export interface ISystemState {
+export interface SystemState {
   loggedIn: boolean
   session: string
   userName: string
@@ -53,9 +53,9 @@ We can now create an interface which describes the global store:
 ```ts
 // src/store/index.ts
 
-export interface IAppState {
-  system: ISystemState
-  chat: IChatState
+export interface AppState {
+  system: SystemState
+  chat: ChatState
 }
 ```
 
@@ -72,9 +72,9 @@ export enum ChatActions {
   SendMessage = '@CHAT:SEND/MESSAGE'
 }
 
-export interface ISendMessageAction {
+export interface SendMessageAction {
   type: ChatActions.SendMessage
-  payload: IMessage
+  payload: Message
 }
 ```
 
@@ -83,9 +83,9 @@ With these types we can now also type check chat's action creators:
 ```ts
 // src/store/chat/actions.ts
 
-import { IMessage, ISendMessageAction, ChatActions } from './types'
+import { Message, SendMessageAction, ChatActions } from './types'
 
-export type sendMessageType = (newMessage: IMessage) => ISendMessageAction
+export type sendMessageType = (newMessage: Message) => SendMessageAction
 
 export const sendMessage: sendMessageType = newMessage => ({
   type: ChatActions.SendMessage,
@@ -102,9 +102,9 @@ export enum SystemActions {
   UpdateSession = '@SYSTEM:UPDATE/SESSION'
 }
 
-export interface IUpdateSessionAction {
+export interface UpdateSessionAction {
   type: SystemActions.UpdateSession
-  payload: ISystemState
+  payload: SystemState
 }
 ```
 
@@ -113,11 +113,11 @@ With these types we can now also type check system's action creators:
 ```ts
 // src/store/system/actions.ts
 
-import { SystemActions, IUpdateSessionAction, ISystemState } from './types'
+import { SystemActions, UpdateSessionAction, SystemState } from './types'
 
 export type updateSessionType = (
-  newSession: ISystemState
-) => IUpdateSessionAction
+  newSession: SystemState
+) => UpdateSessionAction
 
 export const updateSession: updateSessionType = newSession => ({
   type: SystemActions.UpdateSession,
@@ -135,13 +135,13 @@ Type checked chat reducer:
 // src/store/chat/reducers.ts
 
 import { Reducer } from 'redux'
-import { IChatState, ChatActions } from './types'
+import { ChatState, ChatActions } from './types'
 
-const initialState: IChatState = {
+const initialState: ChatState = {
   messages: []
 }
 
-export const chatReducer: Reducer<IChatState> = (
+export const chatReducer: Reducer<ChatState> = (
   state = initialState,
   action
 ) => {
@@ -163,15 +163,15 @@ Type checked system reducer:
 // src/store/system/reducers.ts
 
 import { Reducer } from 'redux'
-import { SystemActions, ISystemState } from './types'
+import { SystemActions, SystemState } from './types'
 
-const initialState: ISystemState = {
+const initialState: SystemState = {
   loggedIn: false,
   session: '',
   userName: ''
 }
 
-export const systemReducer: Reducer<ISystemState> = (
+export const systemReducer: Reducer<SystemState> = (
   state = initialState,
   action
 ) => {
@@ -195,17 +195,17 @@ Putting it all together in combine reducers:
 // src/store/index.ts
 
 import { systemReducer } from './system/reducers'
-import { ISystemState } from './system/types'
+import { SystemState } from './system/types'
 
 import { chatReducer } from './chat/reducers'
-import { IChatState } from './chat/types'
+import { ChatState } from './chat/types'
 
-export interface IAppState {
-  system: ISystemState
-  chat: IChatState
+export interface AppState {
+  system: SystemState
+  chat: ChatState
 }
 
-const rootReducer: Reducer<IAppState> = combineReducers({
+const rootReducer: Reducer<AppState> = combineReducers({
   system: systemReducer,
   chat: chatReducer
 })
