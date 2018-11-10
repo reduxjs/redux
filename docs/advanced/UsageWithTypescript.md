@@ -192,21 +192,15 @@ Putting it all together in combine reducers:
 ```ts
 // src/store/index.ts
 
-import { systemReducer } from './system/reducers'
-import { SystemState } from './system/types'
+import { systemReducer } from './system/reducers';
+import { chatReducer } from './chat/reducers';
 
-import { chatReducer } from './chat/reducers'
-import { ChatState } from './chat/types'
-
-export interface AppState {
-  system: SystemState
-  chat: ChatState
-}
-
-const rootReducer: Reducer<AppState> = combineReducers({
+const rootReducer = combineReducers({
   system: systemReducer,
   chat: chatReducer
-})
+});
+
+export type AppState = ReturnType<typeof rootReducer>;
 ```
 
 ## Notes & Considerations
