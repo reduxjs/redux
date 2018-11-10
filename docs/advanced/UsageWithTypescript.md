@@ -48,7 +48,6 @@ export interface SystemState {
 
 Note that we are exporting these interfaces to reuse them later in reducers and action creators.
 
-
 ## Type Checking Actions & Action Creators
 
 We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants.
@@ -63,18 +62,18 @@ export enum ChatActions {
 }
 
 interface SendMessageAction {
-  type: ChatActions.SendMessage;
-  payload: Message;
+  type: ChatActions.SendMessage
+  payload: Message
 }
 
-export type ChatActionTypes = SendMessageAction;
+export type ChatActionTypes = SendMessageAction
 ```
 
 Note that you can use TypeScript's Union Type to express multiple actions like so:
 
 ```ts
-  export type ChatActionTypes = SendMessageAction | DeleteMessageAction;
- ```
+export type ChatActionTypes = SendMessageAction | DeleteMessageAction
+```
 
 With these types declared we can now also type check chat's action creators. In this case we are taking advantage of TypeScript's inference to avoid verbosity:
 
@@ -87,9 +86,8 @@ export function sendMessage(newMessage: Message) {
   return {
     type: ChatActions.SendMessage,
     payload: newMessage
-  };
+  }
 }
-
 ```
 
 System Action Constants & Shape:
@@ -102,13 +100,11 @@ export enum SystemActions {
 }
 
 interface UpdateSessionAction {
-  type: SystemActions.UpdateSession;
-  payload: SystemState;
+  type: SystemActions.UpdateSession
+  payload: SystemState
 }
 
-export type SystemActionTypes = UpdateSessionAction;
-
-
+export type SystemActionTypes = UpdateSessionAction
 ```
 
 With these types we can now also type check system's action creators:
@@ -122,9 +118,8 @@ export function updateSession(newSession: SystemState) {
   return {
     type: SystemActions.UpdateSession,
     payload: newSession
-  };
+  }
 }
-
 ```
 
 ## Type Checking Reducers
@@ -136,7 +131,7 @@ Type checked chat reducer:
 ```ts
 // src/store/chat/reducers.ts
 
-import { ChatState, ChatActions, ChatActionTypes } from "./types";
+import { ChatState, ChatActions, ChatActionTypes } from './types'
 
 const initialState: ChatState = {
   messages: []
@@ -147,12 +142,11 @@ export function chatReducer(state = initialState, action: ChatActionTypes) {
     case ChatActions.SendMessage:
       return {
         messages: [...state.messages, action.payload]
-      };
+      }
     default:
-      return state;
+      return state
   }
 }
-
 ```
 
 Type checked system reducer:
@@ -160,7 +154,7 @@ Type checked system reducer:
 ```ts
 // src/store/system/reducers.ts
 
-import { SystemActions, SystemState, SystemActionTypes } from "./types";
+import { SystemActions, SystemState, SystemActionTypes } from './types'
 
 const initialState: SystemState = {
   loggedIn: false,
@@ -174,29 +168,28 @@ export function systemReducer(state = initialState, action: SystemActionTypes) {
       return {
         ...state,
         ...action.payload
-      };
+      }
     }
     default:
-      return state;
+      return state
   }
 }
-
 ```
 
-Putting it all together in combine reducers, note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`. 
+Putting it all together in combine reducers, note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`.
 
 ```ts
 // src/store/index.ts
 
-import { systemReducer } from './system/reducers';
-import { chatReducer } from './chat/reducers';
+import { systemReducer } from './system/reducers'
+import { chatReducer } from './chat/reducers'
 
 const rootReducer = combineReducers({
   system: systemReducer,
   chat: chatReducer
-});
+})
 
-export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = ReturnType<typeof rootReducer>
 ```
 
 ## Notes & Considerations
