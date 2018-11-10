@@ -46,18 +46,8 @@ export interface SystemState {
 }
 ```
 
-Note that we are exporting these interfaces to reuse them later in application state and action creators.
+Note that we are exporting these interfaces to reuse them later in reducers and action creators.
 
-We can now create an interface which describes the global store:
-
-```ts
-// src/store/index.ts
-
-export interface AppState {
-  system: SystemState
-  chat: ChatState
-}
-```
 
 ## Type Checking Actions & Action Creators
 
