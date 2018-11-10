@@ -1,9 +1,9 @@
 # Store
 
-A store holds the whole [state tree](../Glossary.md#state) of your application.  
+A store holds the whole [state tree](../Glossary.md#state) of your application.
 The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.
 
-A store is not a class. It's just an object with a few methods on it.  
+A store is not a class. It's just an object with a few methods on it.
 To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
 
 > ##### A Note for Flux Users
@@ -13,15 +13,15 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 ### Store Methods
 
 - [`getState()`](#getState)
-- [`dispatch(action)`](#dispatch-action)
-- [`subscribe(listener)`](#subscribe-listener)
-- [`replaceReducer(nextReducer)`](#replacereducer-nextreducer)
+- [`dispatch(action)`](#dispatch)
+- [`subscribe(listener)`](#subscribe)
+- [`replaceReducer(nextReducer)`](#replacereducer)
 
 ## Store Methods
 
 ### <a id='getState'></a>[`getState()`](#getState)
 
-Returns the current state tree of your application.  
+Returns the current state tree of your application.
 It is equal to the last value returned by the store's reducer.
 
 #### Returns
