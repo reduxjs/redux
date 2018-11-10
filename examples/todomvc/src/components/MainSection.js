@@ -13,6 +13,7 @@ const MainSection = ({ todosCount, completedCount, actions }) =>
             className="toggle-all"
             type="checkbox"
             checked={completedCount === todosCount}
+            readOnly
           />
           <label onClick={actions.completeAllTodos}/>
         </span>
