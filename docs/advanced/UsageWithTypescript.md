@@ -76,7 +76,7 @@ Note that you can use TypeScript's Union Type to express multiple actions like s
   export type ChatActionTypes = SendMessageAction | DeleteMessageAction;
  ```
 
-With these types declared we can now also type check chat's action creators. In this case we are taking advantage of TypeScript's inference to reduce verbosity:
+With these types declared we can now also type check chat's action creators. In this case we are taking advantage of TypeScript's inference to avoid verbosity:
 
 ```ts
 // src/store/chat/actions.ts
@@ -183,7 +183,7 @@ export function systemReducer(state = initialState, action: SystemActionTypes) {
 
 ```
 
-Putting it all together in combine reducers, note that we do not have to explicitly declrare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`. 
+Putting it all together in combine reducers, note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`. 
 
 ```ts
 // src/store/index.ts
