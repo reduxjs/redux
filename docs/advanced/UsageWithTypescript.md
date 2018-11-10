@@ -69,7 +69,7 @@ Chat Action Constants and Actions:
 // src/store/chat/types.ts
 
 export enum ChatActions {
-  SendMessage = '@CHAT:SEND/MESSAGE'
+  SendMessage = 'SEND_MESSAGE'
 }
 
 export interface SendMessageAction {
@@ -99,7 +99,7 @@ System Action Constants and Actions:
 // src/store/system/types.ts
 
 export enum SystemActions {
-  UpdateSession = '@SYSTEM:UPDATE/SESSION'
+  UpdateSession = 'UPDATE_SESSION'
 }
 
 export interface UpdateSessionAction {
