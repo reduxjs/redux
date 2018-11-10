@@ -70,7 +70,13 @@ interface SendMessageAction {
 export type ChatActionTypes = SendMessageAction;
 ```
 
-With these types we can now also type check chat's action creators:
+Note that you can use TypeScript's Union Type to express multiple actions like so:
+
+```ts
+  export type ChatActionTypes = SendMessageAction | DeleteMessageAction;
+ ```
+
+With these types declared we can now also type check chat's action creators:
 
 ```ts
 // src/store/chat/actions.ts
