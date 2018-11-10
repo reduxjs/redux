@@ -63,7 +63,7 @@ export interface AppState {
 
 We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants.
 
-Chat Action Constants:
+Chat Action Constants & Shape:
 
 ```ts
 // src/store/chat/types.ts
@@ -71,6 +71,13 @@ Chat Action Constants:
 export enum ChatActions {
   SendMessage = 'SEND_MESSAGE'
 }
+
+interface SendMessageAction {
+  type: ChatActions.SendMessage;
+  payload: Message;
+}
+
+export type ChatActionTypes = SendMessageAction;
 ```
 
 With these types we can now also type check chat's action creators:
@@ -89,7 +96,7 @@ export function sendMessage(newMessage: Message) {
 
 ```
 
-System Action Constants:
+System Action Constants & Shape:
 
 ```ts
 // src/store/system/types.ts
@@ -97,6 +104,14 @@ System Action Constants:
 export enum SystemActions {
   UpdateSession = 'UPDATE_SESSION'
 }
+
+interface UpdateSessionAction {
+  type: SystemActions.UpdateSession;
+  payload: SystemState;
+}
+
+export type SystemActionTypes = UpdateSessionAction;
+
 
 ```
 
@@ -118,34 +133,30 @@ export function updateSession(newSession: SystemState) {
 
 ## Type Checking Reducers
 
-Reducers are just pure functions that take the previous state, an action and then return the next state. Redux provides a `Reducer` type which can be imported to assist with type checking.
+Reducers are just pure functions that take the previous state, an action and then return the next state.
 
 Type checked chat reducer:
 
 ```ts
 // src/store/chat/reducers.ts
 
-import { Reducer } from 'redux'
-import { ChatState, ChatActions } from './types'
+import { ChatState, ChatActions, ChatActionTypes } from "./types";
 
 const initialState: ChatState = {
   messages: []
 }
 
-export const chatReducer: Reducer<ChatState> = (
-  state = initialState,
-  action
-) => {
+export function chatReducer(state = initialState, action: ChatActionTypes) {
   switch (action.type) {
-    case ChatActions.SendMessage: {
+    case ChatActions.SendMessage:
       return {
         messages: [...state.messages, action.payload]
-      }
-    }
+      };
     default:
-      return state
+      return state;
   }
 }
+
 ```
 
 Type checked system reducer:
@@ -153,8 +164,7 @@ Type checked system reducer:
 ```ts
 // src/store/system/reducers.ts
 
-import { Reducer } from 'redux'
-import { SystemActions, SystemState } from './types'
+import { SystemActions, SystemState, SystemActionTypes } from "./types";
 
 const initialState: SystemState = {
   loggedIn: false,
@@ -162,22 +172,19 @@ const initialState: SystemState = {
   userName: ''
 }
 
-export const systemReducer: Reducer<SystemState> = (
-  state = initialState,
-  action
-) => {
+export function systemReducer(state = initialState, action: SystemActionTypes) {
   switch (action.type) {
     case SystemActions.UpdateSession: {
       return {
         ...state,
         ...action.payload
-      }
+      };
     }
-    default: {
-      return state
-    }
+    default:
+      return state;
   }
 }
+
 ```
 
 Putting it all together in combine reducers:
