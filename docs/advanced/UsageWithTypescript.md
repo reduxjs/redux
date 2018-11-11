@@ -137,7 +137,10 @@ const initialState: ChatState = {
   messages: []
 }
 
-export function chatReducer(state = initialState, action: ChatActionTypes) {
+export function chatReducer(
+  state = initialState,
+  action: ChatActionTypes
+): ChatState {
   switch (action.type) {
     case ChatActions.SendMessage:
       return {
@@ -162,7 +165,10 @@ const initialState: SystemState = {
   userName: ''
 }
 
-export function systemReducer(state = initialState, action: SystemActionTypes) {
+export function systemReducer(
+  state = initialState,
+  action: SystemActionTypes
+): SystemState {
   switch (action.type) {
     case SystemActions.UpdateSession: {
       return {
