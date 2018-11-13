@@ -88,6 +88,19 @@ export function sendMessage(newMessage: Message) {
 }
 ```
 
+Side note: to appreciate TypeScript's inference, here is what a more verbose version would look like:
+
+```ts
+import { Message, ChatActions, SendMessageAction } from './types'
+
+export function sendMessage(newMessage: Message): SendMessageAction {
+  return {
+    type: ChatActions.SendMessage,
+    payload: newMessage
+  }
+}
+```
+
 System Action Constants & Shape:
 
 ```ts
