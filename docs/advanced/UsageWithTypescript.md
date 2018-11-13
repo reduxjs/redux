@@ -16,7 +16,7 @@ The full source code is available on [codesandbox here](https://codesandbox.io/s
 
 ## Type Checking State
 
-Adding types to each slice of state is a good place to start since it does not rely on other types. In this example each slice of state is an object which means we will be using TypeScript's interface feature. We will start by describing the chat reducer's slice of state:
+Adding types to each slice of state is a good place to start since it does not rely on other types. In this example we start by describing the chat reducer's slice of state:
 
 ```ts
 // src/store/chat/types.ts
@@ -48,7 +48,7 @@ Note that we are exporting these interfaces to reuse them later in reducers and 
 
 ## Type Checking Actions & Action Creators
 
-We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants. Note that we are making a tradeoff here when we declare our types in a sperate file. In exchange for seperating our types into a seperate file we get to keep our other files more focussed on their purpose. This can lead to a more maintainable codebase but it is not necessary. It is perfectly fine to organize your project however you see fit.
+We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants. Note that we are making a tradeoff here when we declare our types in a sperate file. In exchange for seperating our types into a seperate file, we get to keep our other files more focussed on their purpose. While this tradeoff can improve the maintainability of the codebase, it is perfectly fine to organize your project however you see fit.
 
 Chat Action Constants & Shape:
 
