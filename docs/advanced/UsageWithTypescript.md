@@ -34,7 +34,7 @@ export interface ChatState {
 }
 ```
 
-Describing the state shape of the system reducer's slice of state:
+And then do the same for the system reducer's slice of state:
 
 ```ts
 // src/store/system/types.ts
