@@ -135,7 +135,7 @@ export function updateSession(newSession: SystemState) {
 
 ## Type Checking Reducers
 
-Reducers are just pure functions that take the previous state, an action and then return the next state.
+Reducers are just pure functions that take the previous state, an action and then return the next state. In this example, we explicitly declare the type of actions this reducer will receive along with what it should return (the appropriate slice of state). With these additions TypeScript will give rich intellisense on the properties of our actions and state. In addition, we will also get errors when a certain case does not return the `ChatState`.
 
 Type checked chat reducer:
 
