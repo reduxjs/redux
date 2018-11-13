@@ -16,9 +16,7 @@ The full source code is available on [codesandbox here](https://codesandbox.io/s
 
 ## Type Checking State
 
-Type checking each slice of state is simple when you understand that each slice of state is just an object.
-
-Describing the state shape of the chat reducer's slice of state:
+Adding types to each slice of state is a good place to start since it does not rely on other types. In this example each slice of state is an object which means we will be using TypeScript's interface feature. We will start by describing the chat reducer's slice of state:
 
 ```ts
 // src/store/chat/types.ts
@@ -182,7 +180,7 @@ export function systemReducer(
 }
 ```
 
-We now need to generate the root reducer function, which is normally done using `combineReducers`.  Note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`.
+We now need to generate the root reducer function, which is normally done using `combineReducers`. Note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`.
 
 ```ts
 // src/store/index.ts
