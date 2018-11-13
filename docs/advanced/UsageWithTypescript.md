@@ -182,7 +182,7 @@ export function systemReducer(
 }
 ```
 
-Putting it all together in combine reducers, note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`.
+We now need to generate the root reducer function, which is normally done using `combineReducers`.  Note that we do not have to explicitly declare a new interface for AppState. We can use `ReturnType` to infer state shape from the `rootReducer`.
 
 ```ts
 // src/store/index.ts
