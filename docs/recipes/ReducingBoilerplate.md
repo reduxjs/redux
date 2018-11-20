@@ -221,9 +221,9 @@ class Posts extends Component {
     this.loadData(this.props.userId)
   }
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
-      this.loadData(nextProps.userId)
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.loadData(prevProps.userId)
     }
   }
 
@@ -306,9 +306,9 @@ class Posts extends Component {
     this.props.dispatch(loadPosts(this.props.userId))
   }
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
-      this.props.dispatch(loadPosts(nextProps.userId))
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.props.dispatch(loadPosts(prevProps.userId))
     }
   }
 
