@@ -223,7 +223,7 @@ class Posts extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      this.loadData(prevProps.userId)
+      this.loadData(this.props.userId)
     }
   }
 
@@ -308,7 +308,7 @@ class Posts extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.userId !== this.props.userId) {
-      this.props.dispatch(loadPosts(prevProps.userId))
+      this.props.dispatch(loadPosts(this.props.userId))
     }
   }
 

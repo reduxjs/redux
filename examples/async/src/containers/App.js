@@ -21,7 +21,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.selectedSubreddit !== this.props.selectedSubreddit) {
-      const { dispatch, selectedSubreddit } = prevProps
+      const { dispatch, selectedSubreddit } = this.props
       dispatch(fetchPostsIfNeeded(selectedSubreddit))
     }
   }

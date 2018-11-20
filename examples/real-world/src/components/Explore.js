@@ -13,7 +13,7 @@ export default class Explore extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.value !== this.props.value) {
-      this.setInputValue(prevProps.value)
+      this.setInputValue(this.props.value)
     }
   }
 
