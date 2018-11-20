@@ -30,7 +30,7 @@ class UserPage extends Component {
     loadData(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     if (nextProps.login !== this.props.login) {
       loadData(nextProps)
     }
