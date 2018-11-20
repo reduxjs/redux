@@ -26,7 +26,7 @@ class UserPage extends Component {
     loadStarred: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     loadData(this.props)
   }
 

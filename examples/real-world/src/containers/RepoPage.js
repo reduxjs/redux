@@ -27,7 +27,7 @@ class RepoPage extends Component {
     loadStargazers: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     loadData(this.props)
   }
 
