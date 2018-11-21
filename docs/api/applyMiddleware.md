@@ -172,9 +172,9 @@ class SandwichShop extends Component {
     this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.forPerson !== this.props.forPerson) {
-      this.props.dispatch(makeASandwichWithSecretSauce(nextProps.forPerson))
+  componentDidUpdate(prevProps) {
+    if (prevProps.forPerson !== this.props.forPerson) {
+      this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
     }
   }
 
