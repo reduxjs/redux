@@ -213,11 +213,11 @@ const rootReducer = combineReducers({
 export type AppState = ReturnType<typeof rootReducer>
 ```
 
-## Usage with React-Redux
+## Usage with React Redux
 
-While react-redux is a separate library from redux itself, it is commonly used with react. For this reason, we will go through how react-redux works with TypeScript using the same example used previously in this section.
+While React Redux is a separate library from redux itself, it is commonly used with react. For this reason, we will go through how React Redux works with TypeScript using the same example used previously in this section.
 
-Note: react-redux does not have type checking by itself, you will have to install `@types/react-redux` by running `npm i @types/react-redux -D`.
+Note: React Redux does not have type checking by itself, you will have to install `@types/react-redux` by running `npm i @types/react-redux -D`.
 
 We will now add type checking to the parameter that `mapStateToProps` receives. Luckily, we have already declared what the store should look like from defining a type that infers from the `rootReducer`:
 
@@ -278,7 +278,7 @@ With these additions made props that come from redux's side are now being type c
 
 ## Notes & Considerations
 
-- This documentation covers primarily the redux side of type checking. For demonstration purposes, the codesandbox example also uses react with react-redux to demonstrate an integration.
+- This documentation covers primarily the redux side of type checking. For demonstration purposes, the codesandbox example also uses react with React Redux to demonstrate an integration.
 - There are multiple approaches to type checking redux, this is just one of many approaches.
 - This example only serves the purpose of showing this approach, meaning other advanced concepts have been stripped out to keep things simple. If you are code splitting your redux take a look at [this post](https://medium.com/@matthewgerstman/redux-with-code-splitting-and-type-checking-205195aded46).
 - Understand that TypeScript does have its trade-offs. It is a good idea to understand when these trade-offs are worth it in your application.
