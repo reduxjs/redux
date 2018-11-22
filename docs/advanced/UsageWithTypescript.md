@@ -48,7 +48,7 @@ Note that we are exporting these interfaces to reuse them later in reducers and 
 
 ## Type Checking Actions & Action Creators
 
-We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants. Note that we are making a tradeoff here when we declare our types in a sperate file. In exchange for seperating our types into a seperate file, we get to keep our other files more focussed on their purpose. While this tradeoff can improve the maintainability of the codebase, it is perfectly fine to organize your project however you see fit.
+We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants. Note that we are making a tradeoff here when we declare our types in a separate file. In exchange for separating our types into a separate file, we get to keep our other files more focused on their purpose. While this tradeoff can improve the maintainability of the codebase, it is perfectly fine to organize your project however you see fit.
 
 Chat Action Constants & Shape:
 
