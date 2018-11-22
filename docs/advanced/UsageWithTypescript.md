@@ -56,7 +56,8 @@ Chat Action Constants & Shape:
 // src/store/chat/types.ts
 
 export enum ChatActions {
-  SendMessage = 'SEND_MESSAGE'
+  SendMessage = 'SEND_MESSAGE',
+  DeleteMessage = 'DELETE_MESSAGE'
 }
 
 interface SendMessageAction {
@@ -64,14 +65,15 @@ interface SendMessageAction {
   payload: Message
 }
 
-export type ChatActionTypes = SendMessageAction
-```
+interface DeleteMessageAction {
+  type: ChatActions.DeleteMessage
+  timestamp: number
+}
 
-Note that you can use TypeScript's Union Type to express multiple actions like so:
-
-```ts
 export type ChatActionTypes = SendMessageAction | DeleteMessageAction
 ```
+
+Note that we are using TypeScript's Union Type here to express all possible actions.
 
 With these types declared we can now also type check chat's action creators. In this case we are taking advantage of TypeScript's inference to avoid verbosity:
 
@@ -84,6 +86,13 @@ export function sendMessage(newMessage: Message) {
   return {
     type: ChatActions.SendMessage,
     payload: newMessage
+  }
+}
+
+export function deleteMessage(timestamp: number) {
+  return {
+    type: ChatActions.DeleteMessage,
+    timestamp
   }
 }
 ```
@@ -156,6 +165,12 @@ export function chatReducer(
     case ChatActions.SendMessage:
       return {
         messages: [...state.messages, action.payload]
+      }
+    case ChatActions.DeleteMessage:
+      return {
+        messages: state.messages.filter(
+          message => message.timestamp !== action.timestamp
+        )
       }
     default:
       return state
