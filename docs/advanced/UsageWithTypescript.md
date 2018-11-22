@@ -75,13 +75,14 @@ export type ChatActionTypes = SendMessageAction | DeleteMessageAction
 
 Note that we are using TypeScript's Union Type here to express all possible actions.
 
-With these types declared we can now also type check chat's action creators. In this case we are taking advantage of TypeScript's inference to avoid verbosity:
+With these types declared we can now also type check chat's action creators. In this case we are taking advantage of TypeScript's inference:
 
 ```ts
 // src/store/chat/actions.ts
 
 import { Message, ChatActions } from './types'
 
+// TypeScript infers that this function is returning SendMessageAction
 export function sendMessage(newMessage: Message) {
   return {
     type: ChatActions.SendMessage,
@@ -89,23 +90,11 @@ export function sendMessage(newMessage: Message) {
   }
 }
 
+// TypeScript infers that this function is returning DeleteMessageAction
 export function deleteMessage(timestamp: number) {
   return {
     type: ChatActions.DeleteMessage,
     timestamp
-  }
-}
-```
-
-Side note: to appreciate TypeScript's inference, here is what a more verbose version would look like:
-
-```ts
-import { Message, ChatActions, SendMessageAction } from './types'
-
-export function sendMessage(newMessage: Message): SendMessageAction {
-  return {
-    type: ChatActions.SendMessage,
-    payload: newMessage
   }
 }
 ```
