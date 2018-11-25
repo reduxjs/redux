@@ -34,6 +34,7 @@ This page lists some of the Redux-related addons that the Redux maintainers have
 - [Component State and Encapsulation](#component-state-and-encapsulation)
 - [Dev Tools](#dev-tools)
   - [Debuggers and Viewers](#debuggers-and-viewers)
+  - [DevTools Monitors](#devtools-monitors)
   - [Logging](#logging)
   - [Mutation Detection](#mutation-detection)
 - [Testing](#testing)
