@@ -4,7 +4,9 @@ From the very beginning, we need to stress that Redux has no relation to React. 
 
 That said, Redux works especially well with libraries like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
 
-We will use React to build our simple todo app.
+We will use React to build our simple todo app, and cover the basics of how to use React with Redux.
+
+> **Note**: see **the official React-Redux docs at https://react-redux.js.org** for a complete guide on how to use Redux and React together.
 
 ## Installing React Redux
 
