@@ -215,7 +215,7 @@ The **[Building React Applications with Idiomatic Redux](https://egghead.io/cour
 **[Practical Redux](https://www.educative.io/collection/5687753853370368/5707702298738688/)** is a paid interactive course by Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke). The course is designed to show how to apply the basic concepts of Redux to building something larger than a TodoMVC application. It includes real-world topics like:
 
 - Adding Redux to a new Create-React-App project and configuring Hot Module Replacement for faster development
-- Controling your UI behavior with Redux
+- Controlling your UI behavior with Redux
 - Using the Redux-ORM library to manage relational data in your Redux store
 - Building a master/detail view to display and edit data
 - Writing custom advanced Redux reducer logic to solve specific problems
@@ -230,7 +230,7 @@ The course is based on Mark's original free **["Practical Redux" blog tutorial s
 Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put together a [**Redux Fundamentals workshop**, and slides are available here](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/). They cover:
 
 - The history and purpose of Redux
-- Reducers, actions, and working with a Redux store
+- Reducers and actions, and working with a Redux store
 - Using Redux with React
 - Using and writing Redux middleware
 - Working with AJAX calls and other side effects
