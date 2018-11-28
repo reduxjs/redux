@@ -26,7 +26,7 @@ In the following recipe, we are going to look at how to set up server-side rende
 
 For this example, we'll be using [Express](http://expressjs.com/) as a simple web server. We also need to install the React bindings for Redux, since they are not included in Redux by default.
 
-```
+```sh
 npm install --save express react-redux
 ```
 

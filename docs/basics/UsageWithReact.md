@@ -12,7 +12,7 @@ We will use React to build our simple todo app, and cover the basics of how to u
 
 [React bindings](https://github.com/reduxjs/react-redux) are not included in Redux by default. You need to install them explicitly:
 
-```
+```sh
 npm install --save react-redux
 ```
 

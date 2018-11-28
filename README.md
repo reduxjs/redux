@@ -90,7 +90,7 @@ Even if you haven't used Flux or Elm, Redux only takes a few minutes to get star
 
 To install the stable version:
 
-```
+```sh
 npm install --save redux
 ```
 
@@ -108,7 +108,7 @@ The Redux source code is written in ES2015 but we precompile both CommonJS and U
 
 Most likely, you'll also need [the React bindings](https://github.com/reduxjs/react-redux) and [the developer tools](https://github.com/reduxjs/redux-devtools).
 
-```
+```sh
 npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
