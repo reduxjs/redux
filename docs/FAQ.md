@@ -14,6 +14,7 @@
   - [Do I have to put all my state into Redux? Should I ever use React's setState()?](/docs/faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
   - [Can I put functions, promises, or other non-serializable items in my store state?](/docs/faq/OrganizingState.md#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
   - [How do I organize nested or duplicate data in my state?](/docs/faq/OrganizingState.md#how-do-i-organize-nested-or-duplicate-data-in-my-state)
+  - [Should I put form state or other UI state in my store?](/docs/faq/OrganizingState.md#should-i-put-form-state-or-other-ui-state-in-my-store)
 - **Store Setup**
   - [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](/docs/faq/StoreSetup.md#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself)
   - [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between next and dispatch in a middleware function?](/docs/faq/StoreSetup.md#is-it-ok-to-have-more-than-one-middleware-chain-in-my-store-enhancer-what-is-the-difference-between-next-and-dispatch-in-a-middleware-function)
@@ -28,9 +29,8 @@
   - [What are the benefits of immutability?](/docs/faq/ImmutableData.md#what-are-the-benefits-of-immutability)
   - [Why is immutability required by Redux?](/docs/faq/ImmutableData.md#why-is-immutability-required-by-redux)
   - [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](/docs/faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
-  - [What are the issues with using JavaScript for immutable operations?](/docs/faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
+  - [What are the issues with using JavaScript for immutable operations?](/docs/faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)  
 - **Using Immutable.JS with Redux**
-
   - [Why should I use an immutable-focused library such as Immutable.JS?](/docs/recipes/UsingImmutableJS.md#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
   - [Why should I choose Immutable.JS as an immutable library?](/docs/recipes/UsingImmutableJS.md#why-should-i-choose-immutable-js-as-an-immutable-library)
   - [What are the issues with using Immutable.JS?](/docs/recipes/UsingImmutableJS.md#what-are-the-issues-with-using-immutable-js)
