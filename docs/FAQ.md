@@ -29,8 +29,9 @@
   - [What are the benefits of immutability?](/docs/faq/ImmutableData.md#what-are-the-benefits-of-immutability)
   - [Why is immutability required by Redux?](/docs/faq/ImmutableData.md#why-is-immutability-required-by-redux)
   - [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](/docs/faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
-  - [What are the issues with using JavaScript for immutable operations?](/docs/faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)  
+  - [What are the issues with using JavaScript for immutable operations?](/docs/faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 - **Using Immutable.JS with Redux**
+
   - [Why should I use an immutable-focused library such as Immutable.JS?](/docs/recipes/UsingImmutableJS.md#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
   - [Why should I choose Immutable.JS as an immutable library?](/docs/recipes/UsingImmutableJS.md#why-should-i-choose-immutable-js-as-an-immutable-library)
   - [What are the issues with using Immutable.JS?](/docs/recipes/UsingImmutableJS.md#what-are-the-issues-with-using-immutable-js)
