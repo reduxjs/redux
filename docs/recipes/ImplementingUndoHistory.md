@@ -375,7 +375,7 @@ In this part of the recipe, you will learn how to make the [Todo List example](h
 
 First of all, you need to run
 
-```
+```sh
 npm install --save redux-undo
 ```
 

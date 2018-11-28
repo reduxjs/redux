@@ -95,7 +95,7 @@ const boundCompleteTodo = index => dispatch(completeTodo(index))
 
 Now you'll be able to call them directly:
 
-```
+```js
 boundAddTodo(text)
 boundCompleteTodo(index)
 ```

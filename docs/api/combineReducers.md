@@ -9,7 +9,7 @@ The resulting reducer calls every child reducer, and gathers their results into 
 
 Example:
 
-```
+```js
 rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 // This would produce the following state object
 {

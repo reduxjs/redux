@@ -6,7 +6,7 @@ Redux is distributed with a few examples in its [source code](https://github.com
 
 Run the [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/counter-vanilla
@@ -19,7 +19,7 @@ It does not require a build system or a view framework and exists to show the ra
 
 Run the [Counter](https://github.com/reactjs/redux/tree/master/examples/counter) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/counter
@@ -39,7 +39,7 @@ This example includes tests.
 
 Run the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todos
@@ -57,7 +57,7 @@ This example includes tests.
 
 Run the [Todos with Undo](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todos-with-undo
@@ -73,7 +73,7 @@ This is a variation on the previous example. It is almost identical, but additio
 
 Run the [TodoMVC](https://github.com/reactjs/redux/tree/master/examples/todomvc) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/todomvc
@@ -91,7 +91,7 @@ This example includes tests.
 
 Run the [Shopping Cart](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/shopping-cart
@@ -107,7 +107,7 @@ This example shows important idiomatic Redux patterns that become important as y
 
 Run the [Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/tree-view
@@ -125,7 +125,7 @@ This example includes tests.
 
 Run the [Async](https://github.com/reactjs/redux/tree/master/examples/async) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/async
@@ -141,7 +141,7 @@ This example includes reading from an asynchronous API, fetching data in respons
 
 Run the [Universal](https://github.com/reactjs/redux/tree/master/examples/universal) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/universal
@@ -155,7 +155,7 @@ This is a basic demonstration of [server rendering](../recipes/ServerRendering.m
 
 Run the [Real World](https://github.com/reactjs/redux/tree/master/examples/real-world) example:
 
-```
+```sh
 git clone https://github.com/reactjs/redux.git
 
 cd redux/examples/real-world
