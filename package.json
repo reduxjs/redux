@@ -99,7 +99,7 @@
     ]
   },
   "jest": {
-    "testRegex": "(/test/.*\\.spec.js)$"
+    "testRegex": "(/test/.*\\.spec\\.js)$"
   },
   "sideEffects": false
 }
