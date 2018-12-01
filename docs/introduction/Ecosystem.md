@@ -70,7 +70,7 @@ Redux bindings for custom elements
 
 #### Reducer Combination
 
-**[ryo33/combineSectionReducers](https://github.com/ryo33/combine-section-reducers)**  
+**[ryo33/combineSectionReducers](https://gitlab.com/ryo33/combine-section-reducers)**  
 An expanded version of `combineReducers`, which allows passing `state` as a third argument to all slice reducers.
 
 **[KodersLab/topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers)**  
