@@ -5,7 +5,6 @@ sidebar_label: Configuring Your Store
 hide_title: true
 ---
 
-
 # Configuring Your Store
 
 In the [basics section](../basics/README.md), we introduced the fundamental Redux concepts by building an example Todo list app.

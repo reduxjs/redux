@@ -5,7 +5,6 @@ sidebar_label: Implementing Undo History
 hide_title: true
 ---
 
-
 # Implementing Undo History
 
 Building an Undo and Redo functionality into an app has traditionally required conscious effort from the developer. It is not an easy problem with classical MVC frameworks because you need to keep track of every past state by cloning all relevant models. In addition, you need to be mindful of the undo stack because the user-initiated changes should be undoable.

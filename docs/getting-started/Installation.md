@@ -13,7 +13,7 @@ To install the stable version:
 npm install --save redux
 ```
 
-This assumes you are using [npm](https://www.npmjs.com/) as your package manager.  
+This assumes you are using [npm](https://www.npmjs.com/) as your package manager.
 
 If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 
