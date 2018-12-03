@@ -27,7 +27,10 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    { doc: "getting-started/learn-redux", label: "Docs" },
+    { doc: "introduction/getting-started", label: "Getting Started" },
+    { doc : "basics/basics", label : "Tutorial"},
+    { doc : "api/api-reference", label : "API"},
+    { doc : "faq", label : "FAQ"},
     { href: "https://discord.gg/0ZcbPKXt5bZ6au5t", label: "Discord" },
     { href: "https://stackoverflow.com/questions/tagged/redux", label: "Need help?" },
   ],
