@@ -14,7 +14,7 @@ const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
 function docUrl(doc, language) {
-  return `${siteConfig.baseUrl}docs/${language ? `${language}/` : ""}${doc}`;
+  return `${siteConfig.baseUrl}${language ? `${language}/` : ""}${doc}`;
 }
 
 class Button extends React.Component {

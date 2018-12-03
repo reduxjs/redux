@@ -13,6 +13,7 @@ const siteConfig = {
   tagline: "Redux Documentation",
   url: "https://redux.js.org", // Your website URL
   baseUrl: "/", // Base URL for your project */
+  docsUrl : "", // don't prefix docs URLs with /docs/
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
