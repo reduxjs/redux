@@ -14,7 +14,7 @@ const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
 function docUrl(doc, language) {
-  return `${siteConfig.baseUrl}docs/${language ? `${language}/` : ""}${doc}`;
+  return `${siteConfig.baseUrl}${language ? `${language}/` : ""}${doc}`;
 }
 
 class Button extends React.Component {
@@ -68,7 +68,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href={docUrl("getting-started/learn-redux", language)}>
+            <Button href={docUrl("introduction/getting-started", language)}>
               Getting Started
             </Button>
             <Button href="https://github.com/reduxjs/redux">

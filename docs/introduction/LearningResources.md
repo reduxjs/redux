@@ -1,7 +1,7 @@
 ---
 id: learning-resources
-title: Learning resources
-sidebar_label: Learning resources
+title: Learning Resources
+sidebar_label: Learning Resources
 hide_title: true
 ---
 

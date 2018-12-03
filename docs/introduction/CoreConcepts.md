@@ -1,7 +1,7 @@
 ---
 id: core-concepts
-title: Core concepts
-sidebar_label: Core concepts
+title: Core Concepts
+sidebar_label: Core Concepts
 hide_title: true
 ---
 
