@@ -8,6 +8,31 @@ header.postHeader:empty + article h1 {
   margin-top: 0;
 }
 
+a, a:hover {
+  /* add underlines for a11y */
+  text-decoration: underline;
+  /* blue links - kickin' it old-school! */
+  color: blue;
+}
+
+a:visited {
+  color: $primaryColor;
+}
+
+.fixedHeaderContainer header .headerTitleWithLogo {
+  color : white;
+}
+
+.navigationSlider .slidingNav ul a {
+  color : white !important;
+}
+
+.nav-footer .copyright,
+.nav-footer .sitemap a {
+  /* increase link contrast */
+  color: #dfe2e5;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 

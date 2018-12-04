@@ -60,7 +60,7 @@ In the end, Redux is just a tool. It's a great tool, and there are some great re
 
 **Documentation**
 
-- [Introduction: Motivation](/docs/introduction/Motivation.md)
+- [Introduction: Motivation](../introduction/Motivation.md)
 
 **Articles**
 

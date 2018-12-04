@@ -34,7 +34,7 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 
 **Documentation**
 
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/reducers/NormalizingStateShape.md)
 
 **Articles**
 
@@ -95,8 +95,8 @@ However, you _do_ need to create a copied and updated object for each level of n
 
 **Documentation**
 
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/reducers/PrerequisiteConcepts.md)
+- [Recipes: Structuring Reducers - Immutable Update Patterns](../recipes/reducers/ImmutableUpdatePatterns.md)
 
 **Discussions**
 
@@ -136,7 +136,7 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 
 **Documentation**
 
-- [Docs: Async Actions](/docs/advanced/AsyncActions.md)
+- [Docs: Async Actions](../advanced/AsyncActions.md)
 
 **Discussions**
 
@@ -156,7 +156,7 @@ First, only cache as much data as the user needs. If your application displays a
 
 Second, cache an abbreviated form of a record when possible. Sometimes a record includes data that is not relevant to the user. If the application does not depend on this data, it can be omitted from the cache.
 
-Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](/docs/recipes/reducers/NormalizingStateShape.html#designing-a-normalized-state), including efficient memory consumption.
+Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](../recipes/reducers/NormalizingStateShape.html#designing-a-normalized-state), including efficient memory consumption.
 
 #### Further information
 
