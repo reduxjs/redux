@@ -8,6 +8,9 @@ header.postHeader:empty + article h1 {
   margin-top: 0;
 }
 
+a, a:hover {
+  text-decoration: underline;
+}
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
