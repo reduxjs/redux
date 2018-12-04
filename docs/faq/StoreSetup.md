@@ -36,7 +36,7 @@ With [React Redux](https://github.com/reduxjs/react-redux), the wrapper classes 
 
 **Documentation**
 
-- [API: Store](/docs/api/Store.md)
+- [API: Store](../api/Store.md)
 
 **Discussions**
 
@@ -55,8 +55,8 @@ This chain of middleware is defined by the arguments passed to the `applyMiddlew
 
 **Documentation**
 
-- [Advanced: Middleware](/docs/advanced/Middleware.md)
-- [API: applyMiddleware](/docs/api/applyMiddleware.md)
+- [Advanced: Middleware](../advanced/Middleware.md)
+- [API: applyMiddleware](../api/applyMiddleware.md)
 
 **Discussions**
 
@@ -76,8 +76,8 @@ The new state is not passed to the listeners in order to simplify implementing s
 
 **Documentation**
 
-- [Basics: Store](/docs/basics/Store.md)
-- [API: Store](/docs/api/Store.md)
+- [Basics: Store](../basics/Store.md)
+- [API: Store](../api/Store.md)
 
 **Discussions**
 
