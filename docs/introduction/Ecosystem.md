@@ -800,7 +800,7 @@ Makes integration and unit testing of sagas a breeze
 ## Routing
 
 **[supasate/connected-react-router](https://github.com/supasate/connected-react-router)**
-made for React Router v4, Synchronize router state with redux store through uni-directional flow (i.e. history -> store -> router -> components), functional component hot reloading while preserving state (with react-hot-reload), Dispatching of history methods (push, replace, go, goBack, goForward) works for both redux-thunk and redux-saga, Nested children can access routing state such as the current location directly with react-redux's connect, time traveling in Redux DevTools.Support Immutable.js, TypeScript
+Synchronize React Router 4 state with your Redux store.
 
 **[FormidableLabs/redux-little-router](https://github.com/FormidableLabs/redux-little-router)**  
 A tiny router for Redux applications that lets the URL do the talking
