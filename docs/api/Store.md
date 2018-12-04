@@ -15,7 +15,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replacereducer)
+- [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store Methods
 
