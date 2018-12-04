@@ -10,7 +10,13 @@ header.postHeader:empty + article h1 {
 
 a, a:hover {
   text-decoration: underline;
+  color: blue;
 }
+
+a:visited {
+  color: $primaryColor;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
