@@ -8,7 +8,7 @@
   "dependencies": {
     "prop-types": "^15.6.1",
     "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "react-dom": "^16.3.3",
     "react-redux": "^5.0.7",
     "redux": "^3.5.2",
     "redux-logger": "^3.0.6",
