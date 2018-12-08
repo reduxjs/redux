@@ -8,11 +8,14 @@ header.postHeader:empty + article h1 {
   margin-top: 0;
 }
 
-a, a:hover {
-  /* add underlines for a11y */
-  text-decoration: underline;
+a {
   /* blue links - kickin' it old-school! */
   color: blue;
+}
+
+a:hover {
+  /* add underlines for a11y */
+  text-decoration: underline;
 }
 
 a:visited {
@@ -25,12 +28,20 @@ a:visited {
 
 .navigationSlider .slidingNav ul a {
   color : white !important;
+  font-weight: 400 !important;
 }
 
 .nav-footer .copyright,
 .nav-footer .sitemap a {
   /* increase link contrast */
-  color: #dfe2e5;
+  color: white;
+}
+
+.productShowcaseSection .featureBlock img {
+  width: 60px;
+  height: 60px;
+  max-width: 60px;
+  max-height: 60px;
 }
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {

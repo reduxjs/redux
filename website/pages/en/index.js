@@ -9,12 +9,16 @@ const React = require("react");
 
 const CompLibrary = require("../../core/CompLibrary.js");
 
-const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
+const {MarkdownBlock, GridBlock, Container} = CompLibrary; /* Used to read markdown */
 
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
 function docUrl(doc, language) {
   return `${siteConfig.baseUrl}${language ? `${language}/` : ""}${doc}`;
+}
+
+function imgUrl(img) {
+  return `${siteConfig.baseUrl}img/${img}`;
 }
 
 class Button extends React.Component {
@@ -43,13 +47,16 @@ const SplashContainer = props => (
 
 
 const ProjectTitle = () => (
-  <h2 className="projectTitle">
-    {siteConfig.title}
-    <small>
-    <MarkdownBlock>
+  <React.Fragment>
+    <div style={{display : "flex", justifyContent : "center", alignItems : "center"}}>
+      <img src={"img/redux.svg"} alt="Redux logo" width={100} height={100}/>
+      <h1 className="projectTitle">{siteConfig.title}</h1>
+    </div>
+
+    <h2 style={{marginTop : "0.5em"}}>
       A predictable state container for JavaScript apps.
-    </MarkdownBlock></small>
-  </h2>
+    </h2>
+  </React.Fragment>
 );
 
 const PromoSection = props => (
@@ -83,15 +90,58 @@ class HomeSplash extends React.Component {
 
 const Installation = () => (
   <div
-    className="productShowcaseSection paddingBottom"
+    className="productShowcaseSection"
     style={{ textAlign: "center" }}
   >
-    <h2>Installation</h2>
+    <h2 style={{marginTop : 10, marginBottom : 5}}>Installation</h2>
     <MarkdownBlock>
       ``` npm install --save
       redux ```
     </MarkdownBlock>
   </div>
+);
+
+const Block = props => (
+  <Container
+    padding={['bottom']}
+    id={props.id}
+    background={props.background}
+    className={props.className}
+  >
+    <GridBlock align="center" contents={props.children} layout={props.layout}/>
+  </Container>
+);
+
+const FeaturesTop = props => (
+  <Block layout="fourColumn" className="featureBlock">
+    {[
+      {
+        content: "Redux helps you write applications that **behave consistently**, run in different environments (client, server, and native), and are **easy to test**.",
+        //image: imgUrl('icon/time.png'),
+        image : imgUrl("noun_Check_1870817.svg"),
+        imageAlign: 'top',
+        title: "Predictable"
+      },
+      {
+        content: "Centralizing your application's state and logic enables powerful capabilities like **undo/redo**, **state persistence**, and much more.",
+        image: imgUrl('cubes-solid.svg'),
+        imageAlign: 'top',
+        title: "Centralized"
+      },
+      {
+        content: `The Redux DevTools make it easy to trace **when, where, why, and how your application's state changed**. Redux's architecture lets you log changes, use **"time-travel debugging"**, and even send complete error reports to a server.`,
+        image: imgUrl('noun_debugging_1978252.svg'),
+        imageAlign: 'top',
+        title: "Debuggable"
+      },
+      {
+        content: "Redux **works with any UI layer**, and has **a large ecosystem of addons** to fit your needs.",
+        image: imgUrl('cogs-solid.svg'),
+        imageAlign: 'top',
+        title: "Flexible"
+      },
+    ]}
+  </Block>
 );
 
 class Index extends React.Component {
@@ -102,7 +152,12 @@ class Index extends React.Component {
       <div>
         <HomeSplash language={language} />
         <div className="mainContainer">
-          <Installation />
+
+          <div className="productShowcaseSection">
+            <Container background="light">
+              <FeaturesTop />
+            </Container>
+          </div>
         </div>
       </div>
     );

@@ -806,8 +806,8 @@ Makes integration and unit testing of sagas a breeze
 
 ## Routing
 
-**[ReactTraining/react-router-redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)**  
-Keep your state in sync with your router
+**[supasate/connected-react-router](https://github.com/supasate/connected-react-router)**
+Synchronize React Router 4 state with your Redux store.
 
 **[FormidableLabs/redux-little-router](https://github.com/FormidableLabs/redux-little-router)**  
 A tiny router for Redux applications that lets the URL do the talking
