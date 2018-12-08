@@ -69,7 +69,17 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ["/scripts/sidebarScroll.js"],
+  scripts: [
+    "/scripts/sidebarScroll.js",
+    "/scripts/codeblock.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js",
+  ],
+
+  // Add custom stylesheets here
+  stylesheets: ['/css/codeblock.css'],
+
+  // Last update time
+  enableUpdateTime: true,
 
   // On page navigation for the current documentation page.
   onPageNav: "separate",
@@ -77,8 +87,8 @@ const siteConfig = {
   cleanUrl: true,
 
   // Open Graph and Twitter card images.
-  ogImage: "img/docusaurus.png",
-  twitterImage: "img/docusaurus.png",
+  ogImage: "img/redux.svg",
+  twitterImage: "img/redux.svg",
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
