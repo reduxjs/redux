@@ -156,7 +156,7 @@ First, only cache as much data as the user needs. If your application displays a
 
 Second, cache an abbreviated form of a record when possible. Sometimes a record includes data that is not relevant to the user. If the application does not depend on this data, it can be omitted from the cache.
 
-Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](../recipes/reducers/NormalizingStateShape.html#designing-a-normalized-state), including efficient memory consumption.
+Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](../recipes/reducers/NormalizingStateShape.md#designing-a-normalized-state), including efficient memory consumption.
 
 #### Further information
 
