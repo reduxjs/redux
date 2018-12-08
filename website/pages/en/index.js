@@ -118,7 +118,7 @@ const FeaturesTop = props => (
       {
         content: "Redux helps you write applications that **behave consistently**, run in different environments (client, server, and native), and are **easy to test**.",
         //image: imgUrl('icon/time.png'),
-        image : imgUrl("clipboard-check-solid.svg"),
+        image : imgUrl("noun_Check_1870817.svg"),
         imageAlign: 'top',
         title: "Predictable"
       },
@@ -130,7 +130,7 @@ const FeaturesTop = props => (
       },
       {
         content: `The Redux DevTools make it easy to trace **when, where, why, and how your application's state changed**. Redux's architecture lets you log changes, use **"time-travel debugging"**, and even send complete error reports to a server.`,
-        image: imgUrl('bug-solid.svg'),
+        image: imgUrl('noun_debugging_1978252.svg'),
         imageAlign: 'top',
         title: "Debuggable"
       },
