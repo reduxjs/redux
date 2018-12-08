@@ -76,7 +76,15 @@ class Footer extends React.Component {
             </a>
           </div>
         </section>
-        <section className="copyright">{this.props.config.copyright}</section>
+        <section className="copyright">
+          {this.props.config.copyright}<br />
+          Some icons  <a
+            href="https://fontawesome.com/license/free"
+            style={{color : "white"}}
+          >
+            copyright Font Awesome
+          </a>
+          </section>
       </footer>
     );
   }
