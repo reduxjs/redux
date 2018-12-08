@@ -10,7 +10,7 @@
 
 const siteConfig = {
   title: "Redux", // Title for your website.
-  tagline: "Redux Documentation",
+  tagline: "A Predictable State Container for JS Apps",
   url: "https://redux.js.org", // Your website URL
   baseUrl: "/", // Base URL for your project */
   docsUrl : "", // don't prefix docs URLs with /docs/
@@ -86,8 +86,8 @@ const siteConfig = {
   cleanUrl: true,
 
   // Open Graph and Twitter card images.
-  ogImage: "img/redux.svg",
-  twitterImage: "img/redux.svg",
+  ogImage: "img/redux-logo-landscape.png",
+  twitterImage: "img/redux-logo-landscape.png",
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
