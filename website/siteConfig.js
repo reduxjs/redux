@@ -11,7 +11,7 @@
 const siteConfig = {
   title: "Redux", // Title for your website.
   tagline: "A Predictable State Container for JS Apps",
-  url: "https://redux.js.org", // Your website URL
+  url: "https://redux-docs.netlify.com", // Your website URL
   baseUrl: "/", // Base URL for your project */
   docsUrl : "", // don't prefix docs URLs with /docs/
   // For github.io type URLs, you would set the url and baseUrl like:
