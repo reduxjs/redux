@@ -48,7 +48,7 @@ No. We suggest you write independent small reducer functions that are each respo
 
 **Documentation**
 
-- [Basics: Reducers](/docs/basics/Reducers.md)
+- [Basics: Reducers](../basics/Reducers.md)
 - [Recipes: Structuring Reducers](../recipes/StructuringReducers.md)
 
 **Discussions**

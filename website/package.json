@@ -12,6 +12,6 @@
     "@babel/preset-react": "^7.0.0"
   },
   "dependencies": {
-    "docusaurus": "^1.6.0"
+    "docusaurus": "^1.6.2"
   }
 }
