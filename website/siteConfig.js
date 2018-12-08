@@ -31,8 +31,7 @@ const siteConfig = {
     { doc : "basics/basics", label : "Tutorial"},
     { doc : "api/api-reference", label : "API"},
     { doc : "faq", label : "FAQ"},
-    { href: "https://discord.gg/0ZcbPKXt5bZ6au5t", label: "Discord" },
-    { href: "https://stackoverflow.com/questions/tagged/redux", label: "Need help?" },
+    { href : "/introduction/getting-started#help-and-discussion", label : "Need help?"},
   ],
 
   /* path to images for header/footer */
@@ -76,7 +75,7 @@ const siteConfig = {
   ],
 
   // Add custom stylesheets here
-  stylesheets: ['/css/codeblock.css'],
+  //stylesheets: ['/css/codeblock.css'],
 
   // Last update time
   enableUpdateTime: true,
