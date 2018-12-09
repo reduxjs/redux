@@ -28,10 +28,10 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     { doc: "introduction/getting-started", label: "Getting Started" },
-    { doc : "basics/basics", label : "Tutorial"},
     { doc : "api/api-reference", label : "API"},
     { doc : "faq", label : "FAQ"},
-    { href : "/introduction/getting-started#help-and-discussion", label : "Need help?"},
+    { href : "https://www.github.com/reduxjs/redux", label : "Github"},
+    { href: "/introduction/getting-started#help-and-discussion", label: "Need help?" },
   ],
 
   /* path to images for header/footer */
