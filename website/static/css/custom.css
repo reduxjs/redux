@@ -60,7 +60,7 @@ a:visited {
 }
 
 .productShowcaseSection .featureBlock .blockImage {
-  width: auto;
+  max-width: inherit;
   text-align: center;
 }
 
