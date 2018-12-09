@@ -32,7 +32,7 @@ const siteConfig = {
   headerLinks: [
     { doc: "introduction/getting-started", label: "Getting Started" },
     { doc : "api/api-reference", label : "API"},
-    { doc : "faq/index", label : "FAQ"},
+    { doc : "faq-index", label : "FAQ"},
     { href : "https://www.github.com/reduxjs/redux", label : "Github"},
     { href: "/introduction/getting-started#help-and-discussion", label: "Need help?" },
   ],

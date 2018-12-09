@@ -27,7 +27,6 @@
 /faq/organizingstate*         /faq/organizing-state:splat
 /faq/reactredux*         /faq/react-redux:splat
 /faq/storesetup*         /faq/store-setup:splat
-/faq         /faq/index
 
 
 /introduction/coreconcepts         /introduction/core-concepts:splat

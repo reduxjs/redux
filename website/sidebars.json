@@ -61,7 +61,7 @@
       }
     ],
     "FAQ": [
-      "faq/index",
+      "faq-index",
       "faq/general",
       "faq/reducers",
       "faq/organizing-state",
