@@ -6,59 +6,59 @@
 
 
 /advanced/asyncactions*         /advanced/async-actions:splat
-/advanced/asyncflow         /advanced/async-flow
-/advanced/exampleredditapi         /advanced/example-reddit-api
-/advanced/nextsteps         /advanced/next-steps
-/advanced/usagewithreactrouter         /advanced/usage-with-react-router
+/advanced/asyncflow*        /advanced/async-flow:splat
+/advanced/exampleredditapi*         /advanced/example-reddit-api:splat
+/advanced/nextsteps*         /advanced/next-steps:splat
+/advanced/usagewithreactrouter*         /advanced/usage-with-react-router:splat
 /advanced         /advanced/advanced-tutorial
 
 /api         /api/api-reference
 
 
-/basics/dataflow         /basics/data-flow
-/basics/exampletodolist         /basics/example
-/basics/usagewithreact         /basics/usage-with-react
+/basics/dataflow*        /basics/data-flow:splat
+/basics/exampletodolist*         /basics/example:splat
+/basics/usagewithreact*         /basics/usage-with-react:splat
 /basics         /basics/basic-tutorial
 
 
-/faq/codestructure         /faq/code-structure
-/faq/designdecisions         /faq/design-decisions
-/faq/immutabledata         /faq/immutable-data
+/faq/codestructure*         /faq/code-structure:splat
+/faq/designdecisions*         /faq/design-decisions:splat
+/faq/immutabledata*         /faq/immutable-data:splat
 /faq/organizingstate*         /faq/organizing-state:splat
-/faq/reactredux         /faq/react-redux
-/faq/storesetup         /faq/store-setup
+/faq/reactredux*         /faq/react-redux:splat
+/faq/storesetup*         /faq/store-setup:splat
 /faq         /faq/index
 
 
-/introduction/coreconcepts         /introduction/core-concepts
-/introduction/learningresources         /introduction/learning-resources
-/introduction/priorart         /introduction/prior-art
-/introduction/threeprinciples         /introduction/three-principles
+/introduction/coreconcepts         /introduction/core-concepts:splat
+/introduction/learningresources*         /introduction/learning-resources:splat
+/introduction/priorart*         /introduction/prior-art:splat
+/introduction/threeprinciples*         /introduction/three-principles:splat
 /introduction         /introduction/getting-started
 
 
-/recipes/computingderiveddata         /recipes/computing-derived-data
-/recipes/configuringyourstore         /recipes/configuring-your-store
-/recipes/implementingundohistory         /recipes/implementing-undo-history
-/recipes/isolatingsubapps         /recipes/isolating-redux-sub-apps
-/recipes/migratingtoredux         /recipes/migrating-to-redux
-/recipes/reducingboilerplate         /recipes/reducing-boilerplate
-/recipes/serverrendering         /recipes/server-rendering
-/recipes/usingimmutablejs         /recipes/using-immutablejs-with-redux
-/recipes/usingobjectspreadoperator         /recipes/using-object-spread-operator
-/recipes/writingtests         /recipes/writing-tests
+/recipes/computingderiveddata*         /recipes/computing-derived-data:splat
+/recipes/configuringyourstore*         /recipes/configuring-your-store:splat
+/recipes/implementingundohistory*         /recipes/implementing-undo-history:splat
+/recipes/isolatingsubapps*         /recipes/isolating-redux-sub-apps:splat
+/recipes/migratingtoredux*         /recipes/migrating-to-redux:splat
+/recipes/reducingboilerplate*         /recipes/reducing-boilerplate:splat
+/recipes/serverrendering*         /recipes/server-rendering:splat
+/recipes/usingimmutablejs*         /recipes/using-immutablejs-with-redux:splat
+/recipes/usingobjectspreadoperator*         /recipes/using-object-spread-operator:splat
+/recipes/writingtests*         /recipes/writing-tests:splat
 
-/recipes/structuringreducers/basicreducerstructure         /recipes/structuring-reducers/basic-reducer-structure
-/recipes/structuringreducers/beyondcombinereducers         /recipes/structuring-reducers/beyond-combinereducers
-/recipes/structuringreducers/immutableupdatepatterns         /recipes/structuring-reducers/immutable-update-patterns
-/recipes/structuringreducers/initializingstate         /recipes/structuring-reducers/initializing-state
-/recipes/structuringreducers/normalizingstateshape         /recipes/structuring-reducers/normalizing-state-shape
-/recipes/structuringreducers/prerequisiteconcepts         /recipes/structuring-reducers/prerequisite-concepts
-/recipes/structuringreducers/refactoringreducersexample         /recipes/structuring-reducers/refactoring-reducer-example
-/recipes/structuringreducers/reusingreducerlogic         /recipes/structuring-reducers/reusing-reducer-logic
-/recipes/structuringreducers/splittingreducerlogic         /recipes/structuring-reducers/splitting-reducer-logic
-/recipes/structuringreducers/updatingnormalizeddata         /recipes/structuring-reducers/updating-normalized-data
-/recipes/structuringreducers/usingcombinereducers         /recipes/structuring-reducers/using-combinereducers
+/recipes/structuringreducers/basicreducerstructure*         /recipes/structuring-reducers/basic-reducer-structure:splat
+/recipes/structuringreducers/beyondcombinereducers*         /recipes/structuring-reducers/beyond-combinereducers:splat
+/recipes/structuringreducers/immutableupdatepatterns*         /recipes/structuring-reducers/immutable-update-patterns:splat
+/recipes/structuringreducers/initializingstate*         /recipes/structuring-reducers/initializing-state:splat
+/recipes/structuringreducers/normalizingstateshape *        /recipes/structuring-reducers/normalizing-state-shape:splat
+/recipes/structuringreducers/prerequisiteconcepts*         /recipes/structuring-reducers/prerequisite-concepts:splat
+/recipes/structuringreducers/refactoringreducersexample*         /recipes/structuring-reducers/refactoring-reducer-example:splat
+/recipes/structuringreducers/reusingreducerlogic*         /recipes/structuring-reducers/reusing-reducer-logic:splat
+/recipes/structuringreducers/splittingreducerlogic*         /recipes/structuring-reducers/splitting-reducer-logic:splat
+/recipes/structuringreducers/updatingnormalizeddata*         /recipes/structuring-reducers/updating-normalized-data:splat
+/recipes/structuringreducers/usingcombinereducers*         /recipes/structuring-reducers/using-combinereducers:splat
 
 /recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
 /recipes         /recipes/index
