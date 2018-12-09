@@ -72,7 +72,7 @@ We will then import the `<Provider />` from React Redux:
 import { Provider } from 'react-redux'
 ```
 
-We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](http://redux.js.org/docs/basics/UsageWithReact.html#passing-the-store).
+We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](../basics/UsageWithReact.md#passing-the-store).
 
 ```js
 const Root = ({ store }) => (
