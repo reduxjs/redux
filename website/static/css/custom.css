@@ -71,6 +71,10 @@ a:visited {
   max-height: 60px;
 }
 
+.blockContent > div p {
+  text-align: justify;
+}
+
 .container .wrapper .alignLeft h2 {
   margin-top: 10px;
   margin-bottom: 5px;
