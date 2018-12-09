@@ -1,7 +1,7 @@
 ---
 id: design-decisions
-title: Design decisions
-sidebar_label: Design decisions
+title: Design Decisions
+sidebar_label: Design Decisions
 hide_title: true
 ---
 
@@ -20,7 +20,7 @@ hide_title: true
 
 ### Why doesn't Redux pass the state and action to subscribers?
 
-Subscribers are intended to respond to the state value itself, not the action. Updates to the state are processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](http://redux.js.org/docs/faq/Performance.html#performance-update-events) to avoid repeated re-rendering.
+Subscribers are intended to respond to the state value itself, not the action. Updates to the state are processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](./Performance.md#performance-update-events) to avoid repeated re-rendering.
 
 Batching or debouncing is possible by using enhancers to override `store.dispatch` to change the way that subscribers are notified. Also, there are libraries that change Redux to process actions in batches to optimize performance and avoid repeated re-rendering:
 
@@ -94,7 +94,7 @@ The [curried function signature](https://github.com/reactjs/redux/issues/1744) o
 
 ### Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?
 
-`combineReducers` is opinionated to encourage splitting reducer logic by domain. As stated in [Beyond `combineReducers`](../recipes/reducers/BeyondCombineReducers.md),`combineReducers` is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object by delegating the work of updating each slice of state to a specific slice reducer.
+`combineReducers` is opinionated to encourage splitting reducer logic by domain. As stated in [Beyond `combineReducers`](../recipes/structuring-reducers/BeyondCombineReducers.md),`combineReducers` is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object by delegating the work of updating each slice of state to a specific slice reducer.
 
 It's not immediately obvious what a potential third argument to each reducer should be: the entire state tree, some callback function, some other part of the state tree, etc. If `combineReducers` doesn't fit your use case, consider using libraries like [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) or [reduceReducers](https://github.com/acdlite/reduce-reducers) for other options with deeply nested reducers and reducers that require access to the global state.
 
@@ -104,7 +104,7 @@ If none of the published utilities solve your use case, you can always write a f
 
 **Articles**
 
-- [Beyond `combineReducers`](../recipes/reducers/BeyondCombineReducers.md)
+- [Beyond `combineReducers`](../recipes/structuring-reducers/BeyondCombineReducers.md)
 
 **Discussions**
 

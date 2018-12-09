@@ -11,8 +11,8 @@
       "introduction/ecosystem",
       "introduction/examples"
     ],
-    "Basics": [
-      "basics/basics",
+    "Basic Tutorial": [
+      "basics/basic-tutorial",
       "basics/actions",
       "basics/reducers",
       "basics/store",
@@ -20,8 +20,8 @@
       "basics/usage-with-react",
       "basics/example"
     ],
-    "Advanced": [
-      "advanced/advanced",
+    "Advanced Tutorial": [
+      "advanced/advanced-tutorial",
       "advanced/async-actions",
       "advanced/async-flow",
       "advanced/middleware",
@@ -44,18 +44,18 @@
         "type": "subcategory",
         "label": "Structuring Reducers",
         "ids": [
-          "recipes/structuring-reducers",
-          "recipes/reducers/prerequisite-concepts",
-          "recipes/reducers/basic-reducer-structure",
-          "recipes/reducers/splitting-reducer-logic",
-          "recipes/reducers/refactoring-reducer-example",
-          "recipes/reducers/using-combinereducers",
-          "recipes/reducers/beyond-combinereducers",
-          "recipes/reducers/normalizing-state-shape",
-          "recipes/reducers/updating-normalized-data",
-          "recipes/reducers/reusing-reducer-logic",
-          "recipes/reducers/immutable-update-patterns",
-          "recipes/reducers/initializing-state"
+          "recipes/structuring-reducers/structuring-reducers",
+          "recipes/structuring-reducers/prerequisite-concepts",
+          "recipes/structuring-reducers/basic-reducer-structure",
+          "recipes/structuring-reducers/splitting-reducer-logic",
+          "recipes/structuring-reducers/refactoring-reducer-example",
+          "recipes/structuring-reducers/using-combinereducers",
+          "recipes/structuring-reducers/beyond-combinereducers",
+          "recipes/structuring-reducers/normalizing-state-shape",
+          "recipes/structuring-reducers/updating-normalized-data",
+          "recipes/structuring-reducers/reusing-reducer-logic",
+          "recipes/structuring-reducers/immutable-update-patterns",
+          "recipes/structuring-reducers/initializing-state"
         ]
       }
     ],
@@ -73,17 +73,19 @@
       "faq/react-redux",
       "faq/miscellaneous"
     ],
-    "Troubleshooting": ["troubleshooting"],
-    "Glossary": ["glossary"],
+    "Other": [
+      "glossary",
+      "troubleshooting",
+      "feedback"
+    ],
     "API Reference": [
       "api/api-reference",
-      "api/create-store",
+      "api/createStore",
       "api/store",
-      "api/combine-reducers",
-      "api/apply-middleware",
-      "api/bind-action-creators",
+      "api/combineReducers",
+      "api/applyMiddleware",
+      "api/bindActionCreators",
       "api/compose"
-    ],
-    "Feedback": ["feedback"]
+    ]
   }
 }

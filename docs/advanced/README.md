@@ -1,7 +1,7 @@
 ---
-id: advanced
-title: Advanced
-sidebar_label: Advanced
+id: advanced-tutorial
+title: Advanced Tutorial: Intro
+sidebar_label: Advanced Tutorial: Intro
 hide_title: true
 ---
 

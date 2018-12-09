@@ -1,5 +1,5 @@
 ---
-id: apply-middleware
+id: applyMiddleware
 title: applyMiddleware
 sidebar_label: applyMiddleware
 hide_title: true

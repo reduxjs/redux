@@ -197,7 +197,7 @@ export default function todos(state = initialState, action) {
 can be tested like:
 
 ```js
-import reducer from '../../reducers/todos'
+import reducer from '../../structuring-reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
 describe('todos reducer', () => {

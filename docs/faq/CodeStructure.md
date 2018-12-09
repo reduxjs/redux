@@ -1,7 +1,7 @@
 ---
 id: code-structure
-title: Code structure
-sidebar_label: Code structure
+title: Code Structure
+sidebar_label: Code Structure
 hide_title: true
 ---
 

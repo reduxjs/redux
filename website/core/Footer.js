@@ -10,7 +10,7 @@ const React = require("react");
 class Footer extends React.Component {
   docUrl(doc, language) {
     const baseUrl = this.props.config.baseUrl;
-    return `${baseUrl}docs/${language ? `${language}/` : ""}${doc}`;
+    return `${baseUrl}${language ? `${language}/` : ""}${doc}`;
   }
 
   pageUrl(doc, language) {
@@ -35,15 +35,15 @@ class Footer extends React.Component {
           <div>
             <h5>Docs</h5>
             <a href={this.docUrl("introduction/getting-started")}>
-              Getting started
+              Getting Started
             </a>
             <a href={this.docUrl("introduction/core-concepts")}>
-              Core concepts
+              Core Concepts
             </a>
-            <a href={this.docUrl("basics/basics")}>
+            <a href={this.docUrl("basics/basic-tutorial")}>
               Basics
             </a>
-            <a href={this.docUrl("advanced/advanced")}>
+            <a href={this.docUrl("advanced/advanced-tutorial")}>
               Advanced
             </a>
           </div>

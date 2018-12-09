@@ -21,13 +21,13 @@ Immutable-focused libraries such as Immutable.JS have been designed to overcome 
 
 Whether you choose to use such a library, or stick with plain JavaScript, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within JavaScript’s approach to immutability.
 
-Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
+Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](./structuring-reducers/PrerequisiteConcepts.md#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
 
 #### Further Information
 
 **Documentation**
 
-- [Recipes: immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
+- [Recipes: immutability, side effects and mutation](./structuring-reducers/PrerequisiteConcepts.md#note-on-immutability-side-effects-and-mutation)
 
 **Articles**
 
@@ -157,7 +157,7 @@ This, together with its performance and rich API for data manipulation, is why I
 
 **Documentation**
 
-- [Troubleshooting: Nothing happens when I dispatch an action](http://redux.js.org/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
+- [Troubleshooting: Nothing happens when I dispatch an action](../Troubleshooting.md#nothing-happens-when-i-dispatch-an-action)
 
 ## What are some opinionated Best Practices for using Immutable.JS with Redux?
 
@@ -242,7 +242,7 @@ Smart components that access the store via React Redux’s `connect` function mu
 
 **Documentation**
 
-- [Recipes: Computing Derived Data](http://redux.js.org/recipes/ComputingDerivedData.html)
+- [Recipes: Computing Derived Data](./ComputingDerivedData.md)
 - [FAQ: Immutable Data](/faq/ImmutableData.html#immutability-issues-with-react-redux)
 - [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reduxjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
@@ -262,7 +262,7 @@ Converting an Immutable.JS object to a JavaScript object using `toJS()` will ret
 
 **Documentation**
 
-- [FAQ: Immutable Data](http://redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
+- [FAQ: Immutable Data](../faq/ImmutableData.md#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
 
 ### Never use Immutable.JS in your Dumb Components
 
