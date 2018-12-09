@@ -46,7 +46,7 @@
     - [Immutable Update Patterns](recipes/structuring-reducers/ImmutableUpdatePatterns.md)
     - [Initializing State](recipes/structuring-reducers/InitializingState.md)
   - [Using Immutable.JS with Redux](recipes/UsingImmutableJS.md)
-- [FAQ](FAQ.md)
+- [FAQ](faq/FAQ.md)
   - [General](faq/General.md)
   - [Reducers](faq/Reducers.md)
   - [Organizing State](faq/OrganizingState.md)
