@@ -1,43 +1,53 @@
 # Redirect all of our current Gitbook-generated URLs to the corresponding Docusaurus URLs
 # We will omit any URLs that directly match already, like /api/store
 
+# Note that more general URLs need to go later, so we'll put them at the end of each section
 
-/advanced         /advanced/advanced-tutorial
+
+
 /advanced/asyncactions         /advanced/async-actions
 /advanced/asyncflow         /advanced/async-flow
 /advanced/exampleredditapi         /advanced/example-reddit-api
 /advanced/nextsteps         /advanced/next-steps
 /advanced/usagewithreactrouter         /advanced/usage-with-react-router
+/advanced         /advanced/advanced-tutorial
 
 /api         /api/api-reference
 
-/basics         /basics/basic-tutorial
+
 /basics/dataflow         /basics/data-flow
 /basics/exampletodolist         /basics/example
 /basics/usagewithreact         /basics/usage-with-react
+/basics         /basics/basic-tutorial
 
-/faq         /faq/index
+
 /faq/codestructure         /faq/code-structure
 /faq/designdecisions         /faq/design-decisions
 /faq/immutabledata         /faq/immutable-data
 /faq/organizingstate         /faq/organizing-state
 /faq/reactredux         /faq/react-redux
 /faq/storesetup         /faq/store-setup
+/faq         /faq/index
 
-/introduction         /introduction/getting-started
+
 /introduction/coreconcepts         /introduction/core-concepts
 /introduction/learningresources         /introduction/learning-resources
 /introduction/priorart         /introduction/prior-art
 /introduction/threeprinciples         /introduction/three-principles
+/introduction         /introduction/getting-started
 
-/recipes         /recipes/index
+
 /recipes/computingderiveddata         /recipes/computing-derived-data
 /recipes/configuringyourstore         /recipes/configuring-your-store
 /recipes/implementingundohistory         /recipes/implementing-undo-history
 /recipes/isolatingsubapps         /recipes/isolating-redux-sub-apps
 /recipes/migratingtoredux         /recipes/migrating-to-redux
+/recipes/reducingboilerplate         /recipes/reducing-boilerplate
+/recipes/serverrendering         /recipes/server-rendering
+/recipes/usingimmutablejs         /recipes/using-immutablejs-with-redux
+/recipes/usingobjectspreadoperator         /recipes/using-object-spread-operator
+/recipes/writingtests         /recipes/writing-tests
 
-/recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
 /recipes/structuringreducers/basicreducerstructure         /recipes/structuring-reducers/basic-reducer-structure
 /recipes/structuringreducers/beyondcombinereducers         /recipes/structuring-reducers/beyond-combinereducers
 /recipes/structuringreducers/immutableupdatepatterns         /recipes/structuring-reducers/immutable-update-patterns
@@ -50,8 +60,5 @@
 /recipes/structuringreducers/updatingnormalizeddata         /recipes/structuring-reducers/updating-normalized-data
 /recipes/structuringreducers/usingcombinereducers         /recipes/structuring-reducers/using-combinereducers
 
-/recipes/reducingboilerplate         /recipes/reducing-boilerplate
-/recipes/serverrendering         /recipes/server-rendering
-/recipes/usingimmutablejs         /recipes/using-immutablejs-with-redux
-/recipes/usingobjectspreadoperator         /recipes/using-object-spread-operator
-/recipes/writingtests         /recipes/writing-tests
+/recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
+/recipes         /recipes/index
