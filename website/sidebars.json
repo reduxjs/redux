@@ -30,6 +30,7 @@
       "advanced/next-steps"
     ],
     "Recipes": [
+      "recipes/index",
       "recipes/configuring-your-store",
       "recipes/migrating-to-redux",
       "recipes/using-object-spread-operator",
@@ -80,11 +81,11 @@
     ],
     "API Reference": [
       "api/api-reference",
-      "api/createStore",
+      "api/createstore",
       "api/store",
-      "api/combineReducers",
-      "api/applyMiddleware",
-      "api/bindActionCreators",
+      "api/combinerReducers",
+      "api/applymiddleware",
+      "api/bindactioncreators",
       "api/compose"
     ]
   }

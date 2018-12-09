@@ -14,9 +14,12 @@ const siteConfig = {
   url: "https://redux-docs.netlify.com", // Your website URL
   baseUrl: "/", // Base URL for your project */
   docsUrl : "", // don't prefix docs URLs with /docs/
-  // For github.io type URLs, you would set the url and baseUrl like:
-  //   url: 'https://facebook.github.io',
-  //   baseUrl: '/test-site/',
+  algolia: {
+    apiKey: '2d058d216b7fd5d68d481fd48ee72c06',
+    indexName: 'redux',
+    algoliaOptions: {}
+  },
+
 
   // Used for publishing and more
   projectName: "redux",
@@ -64,7 +67,7 @@ const siteConfig = {
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
-    theme: "atom-one-dark"
+    theme: "monokai"
   },
 
   // Add custom scripts here that would be placed in <script> tags.
@@ -72,6 +75,7 @@ const siteConfig = {
     "/scripts/sidebarScroll.js",
     "/scripts/codeblock.js",
     "https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js",
+    "https://buttons.github.io/buttons.js",
   ],
 
   // Add custom stylesheets here

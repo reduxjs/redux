@@ -1,0 +1,63 @@
+# Redirect all of our current Gitbook-generated URLs to the corresponding Docusaurus URLs
+# We will omit any URLs that directly match already, like /api/store
+
+# Note that more general URLs need to go later, so we'll put them at the end of each section
+
+
+
+/advanced/asyncactions*         /advanced/async-actions:splat
+/advanced/asyncflow*        /advanced/async-flow:splat
+/advanced/exampleredditapi*         /advanced/example-reddit-api:splat
+/advanced/nextsteps*         /advanced/next-steps:splat
+/advanced/usagewithreactrouter*         /advanced/usage-with-react-router:splat
+/advanced         /advanced/advanced-tutorial
+
+/api         /api/api-reference
+
+
+/basics/dataflow*        /basics/data-flow:splat
+/basics/exampletodolist*         /basics/example:splat
+/basics/usagewithreact*         /basics/usage-with-react:splat
+/basics         /basics/basic-tutorial
+
+
+/faq/codestructure*         /faq/code-structure:splat
+/faq/designdecisions*         /faq/design-decisions:splat
+/faq/immutabledata*         /faq/immutable-data:splat
+/faq/organizingstate*         /faq/organizing-state:splat
+/faq/reactredux*         /faq/react-redux:splat
+/faq/storesetup*         /faq/store-setup:splat
+
+
+/introduction/coreconcepts         /introduction/core-concepts:splat
+/introduction/learningresources*         /introduction/learning-resources:splat
+/introduction/priorart*         /introduction/prior-art:splat
+/introduction/threeprinciples*         /introduction/three-principles:splat
+/introduction         /introduction/getting-started
+
+
+/recipes/computingderiveddata*         /recipes/computing-derived-data:splat
+/recipes/configuringyourstore*         /recipes/configuring-your-store:splat
+/recipes/implementingundohistory*         /recipes/implementing-undo-history:splat
+/recipes/isolatingsubapps*         /recipes/isolating-redux-sub-apps:splat
+/recipes/migratingtoredux*         /recipes/migrating-to-redux:splat
+/recipes/reducingboilerplate*         /recipes/reducing-boilerplate:splat
+/recipes/serverrendering*         /recipes/server-rendering:splat
+/recipes/usingimmutablejs*         /recipes/using-immutablejs-with-redux:splat
+/recipes/usingobjectspreadoperator*         /recipes/using-object-spread-operator:splat
+/recipes/writingtests*         /recipes/writing-tests:splat
+
+/recipes/structuringreducers/basicreducerstructure*         /recipes/structuring-reducers/basic-reducer-structure:splat
+/recipes/structuringreducers/beyondcombinereducers*         /recipes/structuring-reducers/beyond-combinereducers:splat
+/recipes/structuringreducers/immutableupdatepatterns*         /recipes/structuring-reducers/immutable-update-patterns:splat
+/recipes/structuringreducers/initializingstate*         /recipes/structuring-reducers/initializing-state:splat
+/recipes/structuringreducers/normalizingstateshape *        /recipes/structuring-reducers/normalizing-state-shape:splat
+/recipes/structuringreducers/prerequisiteconcepts*         /recipes/structuring-reducers/prerequisite-concepts:splat
+/recipes/structuringreducers/refactoringreducersexample*         /recipes/structuring-reducers/refactoring-reducer-example:splat
+/recipes/structuringreducers/reusingreducerlogic*         /recipes/structuring-reducers/reusing-reducer-logic:splat
+/recipes/structuringreducers/splittingreducerlogic*         /recipes/structuring-reducers/splitting-reducer-logic:splat
+/recipes/structuringreducers/updatingnormalizeddata*         /recipes/structuring-reducers/updating-normalized-data:splat
+/recipes/structuringreducers/usingcombinereducers*         /recipes/structuring-reducers/using-combinereducers:splat
+
+/recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
+/recipes         /recipes/index

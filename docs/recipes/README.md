@@ -1,7 +1,7 @@
 ---
-id: recipes
-title: Recipes
-sidebar_label: Recipes
+id: index
+title: Recipes: Index
+sidebar_label: Recipes: Index
 hide_title: true
 ---
 
