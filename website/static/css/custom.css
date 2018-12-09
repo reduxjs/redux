@@ -24,6 +24,7 @@ a:visited {
 
 .fixedHeaderContainer header .headerTitleWithLogo {
   color : white;
+  display: block !important;
 }
 
 .navigationSlider .slidingNav ul a {
