@@ -1,0 +1,57 @@
+# Redirect all of our current Gitbook-generated URLs to the corresponding Docusaurus URLs
+# We will omit any URLs that directly match already, like /api/store
+
+
+/advanced         /advanced/advanced-tutorial
+/advanced/asyncactions         /advanced/async-actions
+/advanced/asyncflow         /advanced/async-flow
+/advanced/exampleredditapi         /advanced/example-reddit-api
+/advanced/nextsteps         /advanced/next-steps
+/advanced/usagewithreactrouter         /advanced/usage-with-react-router
+
+/api         /api/api-reference
+
+/basics         /basics/basic-tutorial
+/basics/dataflow         /basics/data-flow
+/basics/exampletodolist         /basics/example
+/basics/usagewithreact         /basics/usage-with-react
+
+/faq         /faq/index
+/faq/codestructure         /faq/code-structure
+/faq/designdecisions         /faq/design-decisions
+/faq/immutabledata         /faq/immutable-data
+/faq/organizingstate         /faq/organizing-state
+/faq/reactredux         /faq/react-redux
+/faq/storesetup         /faq/store-setup
+
+/introduction         /introduction/getting-started
+/introduction/coreconcepts         /introduction/core-concepts
+/introduction/learningresources         /introduction/learning-resources
+/introduction/priorart         /introduction/prior-art
+/introduction/threeprinciples         /introduction/three-principles
+
+/recipes         /recipes/index
+/recipes/computingderiveddata         /recipes/computing-derived-data
+/recipes/configuringyourstore         /recipes/configuring-your-store
+/recipes/implementingundohistory         /recipes/implementing-undo-history
+/recipes/isolatingsubapps         /recipes/isolating-redux-sub-apps
+/recipes/migratingtoredux         /recipes/migrating-to-redux
+
+/recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
+/recipes/structuringreducers/basicreducerstructure         /recipes/structuring-reducers/basic-reducer-structure
+/recipes/structuringreducers/beyondcombinereducers         /recipes/structuring-reducers/beyond-combinereducers
+/recipes/structuringreducers/immutableupdatepatterns         /recipes/structuring-reducers/immutable-update-patterns
+/recipes/structuringreducers/initializingstate         /recipes/structuring-reducers/initializing-state
+/recipes/structuringreducers/normalizingstateshape         /recipes/structuring-reducers/normalizing-state-shape
+/recipes/structuringreducers/prerequisiteconcepts         /recipes/structuring-reducers/prerequisite-concepts
+/recipes/structuringreducers/refactoringreducersexample         /recipes/structuring-reducers/refactoring-reducer-example
+/recipes/structuringreducers/reusingreducerlogic         /recipes/structuring-reducers/reusing-reducer-logic
+/recipes/structuringreducers/splittingreducerlogic         /recipes/structuring-reducers/splitting-reducer-logic
+/recipes/structuringreducers/updatingnormalizeddata         /recipes/structuring-reducers/updating-normalized-data
+/recipes/structuringreducers/usingcombinereducers         /recipes/structuring-reducers/using-combinereducers
+
+/recipes/reducingboilerplate         /recipes/reducing-boilerplate
+/recipes/serverrendering         /recipes/server-rendering
+/recipes/usingimmutablejs         /recipes/using-immutablejs-with-redux
+/recipes/usingobjectspreadoperator         /recipes/using-object-spread-operator
+/recipes/writingtests         /recipes/writing-tests
