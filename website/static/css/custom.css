@@ -59,6 +59,11 @@ a:visited {
   padding: 40px 0;
 }
 
+.productShowcaseSection .featureBlock .blockImage {
+  width: auto;
+  text-align: center;
+}
+
 .productShowcaseSection .featureBlock img {
   width: 60px;
   height: 60px;
