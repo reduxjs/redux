@@ -104,7 +104,7 @@ const Block = props => (
     background={props.background}
     className={props.className}
   >
-    <GridBlock align="left" contents={props.children} layout={props.layout}/>
+    <GridBlock align="center" contents={props.children} layout={props.layout}/>
   </Container>
 );
 

@@ -59,11 +59,6 @@ a:visited {
   padding: 40px 0;
 }
 
-.productShowcaseSection .featureBlock .blockImage {
-  max-width: inherit;
-  text-align: center;
-}
-
 .productShowcaseSection .featureBlock img {
   width: 60px;
   height: 60px;
@@ -78,10 +73,6 @@ a:visited {
 .container .wrapper .alignLeft h2 {
   margin-top: 10px;
   margin-bottom: 5px;
-}
-
-.container .wrapper .alignLeft h2 p {
-  text-align: center;
 }
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
