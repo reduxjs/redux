@@ -1,7 +1,7 @@
 ---
 id: prior-art
-title: Prior art
-sidebar_label: Prior art
+title: Prior Art
+sidebar_label: Prior Art
 hide_title: true
 ---
 

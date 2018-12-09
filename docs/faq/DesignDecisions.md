@@ -1,7 +1,7 @@
 ---
 id: design-decisions
-title: Design decisions
-sidebar_label: Design decisions
+title: Design Decisions
+sidebar_label: Design Decisions
 hide_title: true
 ---
 

@@ -12,7 +12,7 @@
       "introduction/examples"
     ],
     "Basic Tutorial": [
-      "basics/basics",
+      "basics/basic-tutorial",
       "basics/actions",
       "basics/reducers",
       "basics/store",
@@ -21,7 +21,7 @@
       "basics/example"
     ],
     "Advanced Tutorial": [
-      "advanced/advanced",
+      "advanced/advanced-tutorial",
       "advanced/async-actions",
       "advanced/async-flow",
       "advanced/middleware",
@@ -73,17 +73,19 @@
       "faq/react-redux",
       "faq/miscellaneous"
     ],
-    "Troubleshooting": ["troubleshooting"],
-    "Glossary": ["glossary"],
+    "Other": [
+      "glossary",
+      "troubleshooting",
+      "feedback"
+    ],
     "API Reference": [
       "api/api-reference",
-      "api/create-store",
+      "api/createStore",
       "api/store",
-      "api/combine-reducers",
-      "api/apply-middleware",
-      "api/bind-action-creators",
+      "api/combineReducers",
+      "api/applyMiddleware",
+      "api/bindActionCreators",
       "api/compose"
-    ],
-    "Feedback": ["feedback"]
+    ]
   }
 }
