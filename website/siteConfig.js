@@ -10,8 +10,8 @@
 
 const siteConfig = {
   title: "Redux", // Title for your website.
-  tagline: "Redux Documentation",
-  url: "https://redux.js.org", // Your website URL
+  tagline: "A Predictable State Container for JS Apps",
+  url: "https://redux-docs.netlify.com", // Your website URL
   baseUrl: "/", // Base URL for your project */
   docsUrl : "", // don't prefix docs URLs with /docs/
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -86,8 +86,8 @@ const siteConfig = {
   cleanUrl: true,
 
   // Open Graph and Twitter card images.
-  ogImage: "img/redux.svg",
-  twitterImage: "img/redux.svg",
+  ogImage: "img/redux-logo-landscape.png",
+  twitterImage: "img/redux-logo-landscape.png",
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
