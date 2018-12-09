@@ -80,11 +80,11 @@
     ],
     "API Reference": [
       "api/api-reference",
-      "api/createStore",
+      "api/createstore",
       "api/store",
-      "api/combineReducers",
-      "api/applyMiddleware",
-      "api/bindActionCreators",
+      "api/combinerReducers",
+      "api/applymiddleware",
+      "api/bindactioncreators",
       "api/compose"
     ]
   }
