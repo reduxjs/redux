@@ -31,7 +31,7 @@ In general, remember that reducers are just functions—you can organize them an
 **Documentation**
 
 - [API: combineReducers](../api/combineReducers.md)
-- [Recipes: Structuring Reducers](../recipes/StructuringReducers.md)
+- [Recipes: Structuring Reducers](../recipes/structuring-reducers/StructuringReducers.md)
 
 **Discussions**
 
@@ -50,7 +50,7 @@ No. You are welcome to use any approach you'd like to respond to an action in a 
 **Documentation**
 
 - [Recipes: Reducing Boilerplate](../recipes/ReducingBoilerplate.md)
-- [Recipes: Structuring Reducers - Splitting Reducer Logic](../recipes/reducers/SplittingReducerLogic.md)
+- [Recipes: Structuring Reducers - Splitting Reducer Logic](../recipes/structuring-reducers/SplittingReducerLogic.md)
 
 **Discussions**
 

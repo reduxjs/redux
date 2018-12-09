@@ -21,13 +21,13 @@ Immutable-focused libraries such as Immutable.JS have been designed to overcome 
 
 Whether you choose to use such a library, or stick with plain JavaScript, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within JavaScript’s approach to immutability.
 
-Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
+Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](http://redux.js.org/recipes/structuring-reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
 
 #### Further Information
 
 **Documentation**
 
-- [Recipes: immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
+- [Recipes: immutability, side effects and mutation](http://redux.js.org/recipes/structuring-reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
 
 **Articles**
 

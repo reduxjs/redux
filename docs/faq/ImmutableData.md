@@ -44,7 +44,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 **Documentation**
 
-- [Recipes: Prerequisite Reducer Concepts](http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html)
+- [Recipes: Prerequisite Reducer Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
 
 **Discussions**
 
@@ -76,11 +76,11 @@ Redux uses shallow equality checking in its `combineReducers` function to return
 
 **Documentation**
 
-- [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
+- [API: combineReducers](../api/combineReducers.md)
 
 #### How does `combineReducers` use shallow equality checking?
 
-The [suggested structure](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state) for a Redux store is to split the state object into multiple "slices" or "domains" by key, and provide a separate reducer function to manage each individual data slice.
+The [suggested structure](./Reducers.md#reducers-share-state) for a Redux store is to split the state object into multiple "slices" or "domains" by key, and provide a separate reducer function to manage each individual data slice.
 
 `combineReducers` makes working with this style of structure easier by taking a `reducers` argument that’s defined as a hash table comprising a set of key/value pairs, where each key is the name of a state slice, and the corresponding value is the reducer function that will act on it.
 
@@ -113,8 +113,8 @@ This is worth emphasizing: _If the reducers all return the same `state` object p
 
 **Documentation**
 
-- [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
-- [Redux FAQ - How do I share state between two reducers? do I have to use `combineReducers`?](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state)
+- [API: combineReducers](../api/combineReducers.md)
+- [Redux FAQ - How do I share state between two reducers? do I have to use `combineReducers`?](./Reducers.md#reducers-share-state)
 
 **Video**
 
@@ -136,12 +136,12 @@ It then runs a shallow equality check on its reference to the root state object 
 
 **Documentation**
 
-- [React-Redux Bindings](http://redux.js.org/docs/basics/UsageWithReact.html)
+- [React-Redux Bindings](https://react-redux.js.org)
 
 **Articles**
 
-- [API: React-Redux’s connect function and `mapStateToProps`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
-- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
+- [API: React-Redux’s connect function and `mapStateToProps`](https://react-redux.js.org/using-react-redux/connect-mapstate)
+- [Redux FAQ: Why isn't my component re-rendering, or my `mapStateToProps` running?](./ReactRedux.md#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
 
 ### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
 
@@ -266,8 +266,8 @@ The store will still be updated with the new values for the root state, but beca
 
 **Documentation**
 
-- [Recipes: Immutable Update Patterns](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
-- [Troubleshooting: Never mutate reducer arguments](http://redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments)
+- [Recipes: Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
+- [Troubleshooting: Never mutate reducer arguments](../Troubleshooting.md#never-mutate-reducer-arguments)
 
 ### Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?
 
@@ -443,7 +443,7 @@ JavaScript was never designed to provide guaranteed immutable operations. Accord
 
 With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new _reference_ to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
 
-To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html).
+To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](../recipes/structuring-reducers/ImmutableUpdatePatterns.md).
 
 ### Verbose Code
 
@@ -463,7 +463,7 @@ For copying very large objects, [plain JavaScript can be over 100 times slower](
 
 **Documentation**
 
-- [Immutable Update Patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
+- [Immutable Update Patterns for ES6](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
 
 **Articles**
 

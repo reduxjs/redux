@@ -11,7 +11,7 @@
       "introduction/ecosystem",
       "introduction/examples"
     ],
-    "Basics": [
+    "Basic Tutorial": [
       "basics/basics",
       "basics/actions",
       "basics/reducers",
@@ -20,7 +20,7 @@
       "basics/usage-with-react",
       "basics/example"
     ],
-    "Advanced": [
+    "Advanced Tutorial": [
       "advanced/advanced",
       "advanced/async-actions",
       "advanced/async-flow",
@@ -44,18 +44,18 @@
         "type": "subcategory",
         "label": "Structuring Reducers",
         "ids": [
-          "recipes/structuring-reducers",
-          "recipes/reducers/prerequisite-concepts",
-          "recipes/reducers/basic-reducer-structure",
-          "recipes/reducers/splitting-reducer-logic",
-          "recipes/reducers/refactoring-reducer-example",
-          "recipes/reducers/using-combinereducers",
-          "recipes/reducers/beyond-combinereducers",
-          "recipes/reducers/normalizing-state-shape",
-          "recipes/reducers/updating-normalized-data",
-          "recipes/reducers/reusing-reducer-logic",
-          "recipes/reducers/immutable-update-patterns",
-          "recipes/reducers/initializing-state"
+          "recipes/structuring-reducers/structuring-reducers",
+          "recipes/structuring-reducers/prerequisite-concepts",
+          "recipes/structuring-reducers/basic-reducer-structure",
+          "recipes/structuring-reducers/splitting-reducer-logic",
+          "recipes/structuring-reducers/refactoring-reducer-example",
+          "recipes/structuring-reducers/using-combinereducers",
+          "recipes/structuring-reducers/beyond-combinereducers",
+          "recipes/structuring-reducers/normalizing-state-shape",
+          "recipes/structuring-reducers/updating-normalized-data",
+          "recipes/structuring-reducers/reusing-reducer-logic",
+          "recipes/structuring-reducers/immutable-update-patterns",
+          "recipes/structuring-reducers/initializing-state"
         ]
       }
     ],
