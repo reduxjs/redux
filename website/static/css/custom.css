@@ -31,6 +31,17 @@ a:visited {
   font-weight: 400 !important;
 }
 
+.navigationSlider .slidingNav ul a[href*="github"] {
+  font-size: 0;
+}
+
+.navigationSlider .slidingNav ul a[href*="github"]::before {
+  content : "";
+  width : 32px;
+  height : 32px;
+  background: url("/img/github-brands.svg");
+}
+
 .nav-footer .copyright,
 .nav-footer .sitemap a {
   /* increase link contrast */
