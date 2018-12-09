@@ -25,7 +25,7 @@ class Button extends React.Component {
   render() {
     return (
       <div className="pluginWrapper buttonWrapper">
-        <a className="button" href={this.props.href} target={this.props.target}>
+        <a className="button hero" href={this.props.href} target={this.props.target}>
           {this.props.children}
         </a>
       </div>
@@ -76,10 +76,7 @@ class HomeSplash extends React.Component {
           <ProjectTitle />
           <PromoSection>
             <Button href={docUrl("introduction/getting-started", language)}>
-              Getting Started
-            </Button>
-            <Button href="https://github.com/reduxjs/redux">
-              Github
+              Get Started
             </Button>
           </PromoSection>
         </div>
@@ -103,7 +100,6 @@ const Installation = () => (
 
 const Block = props => (
   <Container
-    padding={['bottom']}
     id={props.id}
     background={props.background}
     className={props.className}
