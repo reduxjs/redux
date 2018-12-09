@@ -5,7 +5,7 @@
 
 
 
-/advanced/asyncactions         /advanced/async-actions
+/advanced/asyncactions*         /advanced/async-actions:splat
 /advanced/asyncflow         /advanced/async-flow
 /advanced/exampleredditapi         /advanced/example-reddit-api
 /advanced/nextsteps         /advanced/next-steps
@@ -24,7 +24,7 @@
 /faq/codestructure         /faq/code-structure
 /faq/designdecisions         /faq/design-decisions
 /faq/immutabledata         /faq/immutable-data
-/faq/organizingstate         /faq/organizing-state
+/faq/organizingstate*         /faq/organizing-state:splat
 /faq/reactredux         /faq/react-redux
 /faq/storesetup         /faq/store-setup
 /faq         /faq/index
