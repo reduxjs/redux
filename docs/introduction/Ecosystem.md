@@ -64,7 +64,7 @@ Angular 2+ bindings for Redux
 **[ember-redux/ember-redux](https://github.com/ember-redux/ember-redux)**  
 Ember bindings for Redux
 
-**[glimmer-redux/glimmer-redux](glimmer-redux/glimmer-redux)**  
+**[glimmer-redux/glimmer-redux](https://github.com/glimmer-redux/glimmer-redux)**  
 Redux bindings for Ember's Glimmer component engine
 
 **[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
