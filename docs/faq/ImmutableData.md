@@ -1,7 +1,7 @@
 ---
 id: immutable-data
-title: Immutable data
-sidebar_label: Immutable data
+title: Immutable Data
+sidebar_label: Immutable Data
 hide_title: true
 ---
 
@@ -11,9 +11,19 @@ hide_title: true
 
 - [What are the benefits of immutability?](#what-are-the-benefits-of-immutability)
 - [Why is immutability required by Redux?](#why-is-immutability-required-by-redux)
-- [Why does Redux’s use of shallow equality checking require immutability?](#why-does-reduxs-use-of-shallow-equality-checking-require-immutability) - [How do Shallow and Deep Equality Checking differ?](#how-do-shallow-and-deep-equality-checking-differ) - [How does Redux use shallow equality checking?](#how-does-redux-use-shallow-equality-checking) - [How does `combineReducers` use shallow equality checking?](#how-does-combinereducers-use-shallow-equality-checking) - [How does React-Redux use shallow equality checking?](#how-does-react-redux-use-shallow-equality-checking) - [How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?](#how-does-react-redux-use-shallow-equality-checking-to-determine-whether-a-component-needs-re-rendering) - [Why will shallow equality checking not work with mutable objects?](#why-will-shallow-equality-checking-not-work-with-mutable-objects) - [Does shallow equality checking with a mutable object cause problems with Redux?](#does-shallow-equality-checking-with-a-mutable-object-cause-problems-with-redux) - [Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?](#why-does-a-reducer-mutating-the-state-prevent-react-redux-from-re-rendering-a-wrapped-component) - [Why does a selector mutating and returning a persistent object to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#why-does-a-selector-mutating-and-returning-a-persistent-object-to-mapstatetoprops-prevent-react-redux-from-re-rendering-a-wrapped-component) - [How does immutability enable a shallow check to detect object mutations?](#how-does-immutability-enable-a-shallow-check-to-detect-object-mutations)
-- [How can immutability in your reducers cause components to render unnecessarily?](#how-can-immutability-in-your-reducers-cause-components-to-render-unnecessarily)
-- [How can immutability in mapStateToProps cause components to render unnecessarily?](#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
+- [Why does Redux’s use of shallow equality checking require immutability?](#why-does-reduxs-use-of-shallow-equality-checking-require-immutability) 
+    - [How do Shallow and Deep Equality Checking differ?](#how-do-shallow-and-deep-equality-checking-differ) 
+    - [How does Redux use shallow equality checking?](#how-does-redux-use-shallow-equality-checking) 
+    - [How does `combineReducers` use shallow equality checking?](#how-does-combinereducers-use-shallow-equality-checking) 
+    - [How does React-Redux use shallow equality checking?](#how-does-react-redux-use-shallow-equality-checking) 
+    - [How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?](#how-does-react-redux-use-shallow-equality-checking-to-determine-whether-a-component-needs-re-rendering) 
+    - [Why will shallow equality checking not work with mutable objects?](#why-will-shallow-equality-checking-not-work-with-mutable-objects) 
+    - [Does shallow equality checking with a mutable object cause problems with Redux?](#does-shallow-equality-checking-with-a-mutable-object-cause-problems-with-redux) 
+    - [Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?](#why-does-a-reducer-mutating-the-state-prevent-react-redux-from-re-rendering-a-wrapped-component) 
+    - [Why does a selector mutating and returning a persistent object to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#why-does-a-selector-mutating-and-returning-a-persistent-object-to-mapstatetoprops-prevent-react-redux-from-re-rendering-a-wrapped-component) 
+    - [How does immutability enable a shallow check to detect object mutations?](#how-does-immutability-enable-a-shallow-check-to-detect-object-mutations)
+    - [How can immutability in your reducers cause components to render unnecessarily?](#how-can-immutability-in-your-reducers-cause-components-to-render-unnecessarily)
+    - [How can immutability in mapStateToProps cause components to render unnecessarily?](#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
 - [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
 - [What are the issues with using JavaScript for immutable operations?](#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 
