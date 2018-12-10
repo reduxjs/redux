@@ -9,17 +9,23 @@ header.postHeader:empty + article h1 {
 }
 
 a {
+  /* add underlines to links in blocks of text for a11y */
   /* blue links - kickin' it old-school! */
-  color: blue;
-}
-
-a:hover {
-  /* add underlines for a11y */
-  text-decoration: underline;
-}
-
-a:visited {
   color: $primaryColor;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+a:hover,
+a:focus,
+a:active {
+  background-color: $secondaryColor;
+  color: white;
+  box-shadow: 0 0 0 2px $secondaryColor;
+  outline: none;
+  text-decoration: underline;
 }
 
 .fixedHeaderContainer header .headerTitleWithLogo {
