@@ -14,6 +14,7 @@ describe('isPlainObject', () => {
     expect(isPlainObject(sandbox.fromAnotherRealm)).toBe(true)
     expect(isPlainObject(new Test())).toBe(false)
     expect(isPlainObject(new Date())).toBe(false)
+    expect(isPlainObject(Math)).toBe(false)
     expect(isPlainObject([1, 2, 3])).toBe(false)
     expect(isPlainObject(null)).toBe(false)
     expect(isPlainObject()).toBe(false)
