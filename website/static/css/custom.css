@@ -26,6 +26,9 @@ header.postHeader:empty + article h1 {
   box-shadow: 0 0 0 2px $secondaryColor;
   outline: none;
   text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
 }
 
 .post article blockquote {
