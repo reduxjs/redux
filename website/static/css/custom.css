@@ -8,9 +8,8 @@ header.postHeader:empty + article h1 {
   margin-top: 0;
 }
 
-a {
+.post article a {
   /* add underlines to links in blocks of text for a11y */
-  /* blue links - kickin' it old-school! */
   color: $primaryColor;
   text-decoration: underline;
   overflow: hidden;
@@ -18,9 +17,10 @@ a {
   transition: outline-offset 0.2s ease-in-out;
 }
 
-a:hover,
-a:focus,
-a:active {
+.post article a:hover,
+.post article a:focus,
+.post article a:active {
+  /* change color and bg to display state change in more than one way for a11y */
   background-color: $secondaryColor;
   color: white;
   box-shadow: 0 0 0 2px $secondaryColor;
@@ -28,14 +28,16 @@ a:active {
   text-decoration: underline;
 }
 
+
 .fixedHeaderContainer header .headerTitleWithLogo {
-  color : white;
-  display: block !important;
+  /* color : white;
+  display: block !important; */
 }
 
 .navigationSlider .slidingNav ul a {
-  color : white !important;
+  /* color : white !important;
   font-weight: 400 !important;
+  text-decoration: none; */
 }
 
 .navigationSlider .slidingNav ul a[href*="github"] {
@@ -47,6 +49,18 @@ a:active {
   width : 32px;
   height : 32px;
   background: url("/img/github-brands.svg");
+}
+
+.navigationSlider .slidingNav ul li.siteNavGroupActive {
+  /* margin: 0 1px; */
+}
+.navigationSlider .slidingNav ul li.siteNavGroupActive a:hover,
+.navigationSlider .slidingNav ul li.siteNavGroupActive a:focus,
+.navigationSlider .slidingNav ul li.siteNavGroupActive a:active{
+  background-color: $secondaryColor;
+  color: white;
+  box-shadow: 0 0 0 0 $secondaryColor;
+  outline: none;
 }
 
 .nav-footer .copyright,
