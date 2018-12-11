@@ -85,14 +85,14 @@ header.postHeader:empty + article h1 {
 
 
 .fixedHeaderContainer header .headerTitleWithLogo {
-  /* color : white;
-  display: block !important; */
+  color : white;
+  display: block !important;
 }
 
 .navigationSlider .slidingNav ul a {
-  /* color : white !important;
+  color : white !important;
   font-weight: 400 !important;
-  text-decoration: none; */
+  text-decoration: none;
 }
 
 .navigationSlider .slidingNav ul a[href*="github"] {
@@ -104,18 +104,6 @@ header.postHeader:empty + article h1 {
   width : 32px;
   height : 32px;
   background: url("/img/github-brands.svg");
-}
-
-.navigationSlider .slidingNav ul li.siteNavGroupActive {
-  /* margin: 0 1px; */
-}
-.navigationSlider .slidingNav ul li.siteNavGroupActive a:hover,
-.navigationSlider .slidingNav ul li.siteNavGroupActive a:focus,
-.navigationSlider .slidingNav ul li.siteNavGroupActive a:active{
-  background-color: $secondaryColor;
-  color: white;
-  box-shadow: 0 0 0 0 $secondaryColor;
-  outline: none;
 }
 
 .nav-footer .copyright,
