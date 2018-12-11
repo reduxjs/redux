@@ -78,8 +78,26 @@ a:visited {
   max-height: 60px;
 }
 
-.blockContent > div p {
+.featureBlock .blockContent > div p {
   text-align: justify;
+}
+
+.libBlock > div p {
+  text-align: center;
+}
+
+.libBlock h2 a,
+.libBlock h2 a:visited {
+  color : black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.libBlock img {
+  margin-left: 5px;
+  max-width: 16px !important;
+  max-height: 16px !important;
 }
 
 .container .wrapper .alignLeft h2 {
