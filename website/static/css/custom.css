@@ -8,19 +8,52 @@ header.postHeader:empty + article h1 {
   margin-top: 0;
 }
 
-a {
-  /* blue links - kickin' it old-school! */
-  color: blue;
+.post article a {
+  /* add underlines to links in blocks of text for a11y */
+  color: $primaryColor;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
 }
 
-a:hover {
-  /* add underlines for a11y */
+.post article a:hover,
+.post article a:focus,
+.post article a:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  background-color: $secondaryColor;
+  color: white;
+  box-shadow: 0 0 0 2px $secondaryColor;
+  outline: none;
   text-decoration: underline;
 }
 
-a:visited {
-  color: $primaryColor;
+.post article blockquote {
+  color: black;
+  background-color: $accentColor4;
+  border-left: 8px solid $accentColor5;
 }
+
+.post article blockquote a {
+  /* add underlines to links in blocks of text for a11y */
+  color: black;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.post article blockquote a:hover,
+.post article blockquote a:focus,
+.post article blockquote a:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  background-color: $accentColor6;
+  color: white;
+  box-shadow: 0 0 0 2px $accentColor6;
+  outline: none;
+  text-decoration: underline;
+}
+
 
 .fixedHeaderContainer header .headerTitleWithLogo {
   color : white;
