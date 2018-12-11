@@ -67,7 +67,9 @@ interface SendMessageAction {
 
 interface DeleteMessageAction {
   type: ChatActions.DeleteMessage
-  timestamp: number
+  meta: {
+    timestamp: number
+  }
 }
 
 export type ChatActionTypes = SendMessageAction | DeleteMessageAction
@@ -94,7 +96,7 @@ export function sendMessage(newMessage: Message) {
 export function deleteMessage(timestamp: number) {
   return {
     type: ChatActions.DeleteMessage,
-    timestamp
+    meta: { timestamp }
   }
 }
 ```
@@ -158,7 +160,7 @@ export function chatReducer(
     case ChatActions.DeleteMessage:
       return {
         messages: state.messages.filter(
-          message => message.timestamp !== action.timestamp
+          message => message.timestamp !== action.meta.timestamp
         )
       }
     default:
