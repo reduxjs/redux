@@ -1,5 +1,5 @@
 ---
-id: index
+id: recipe-index
 title: Recipes: Index
 sidebar_label: Recipes: Index
 hide_title: true

@@ -30,7 +30,7 @@
       "advanced/next-steps"
     ],
     "Recipes": [
-      "recipes/index",
+      "recipes/recipe-index",
       "recipes/configuring-your-store",
       "recipes/migrating-to-redux",
       "recipes/using-object-spread-operator",
