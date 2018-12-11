@@ -63,7 +63,6 @@ header.postHeader:empty + article h1 {
 .navigationSlider .slidingNav ul a {
   color : white !important;
   font-weight: 400 !important;
-  text-decoration: none;
 }
 
 .navigationSlider .slidingNav ul a[href*="github"] {
