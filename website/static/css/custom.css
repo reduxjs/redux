@@ -26,6 +26,9 @@ header.postHeader:empty + article h1 {
   box-shadow: 0 0 0 2px $secondaryColor;
   outline: none;
   text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
 }
 
 .post article blockquote {
@@ -54,15 +57,70 @@ header.postHeader:empty + article h1 {
   text-decoration: underline;
 }
 
+.post article blockquote {
+  color: black;
+  background-color: $accentColor4;
+  border-left: 8px solid $accentColor5;
+}
+
+.post article blockquote a {
+  /* add underlines to links in blocks of text for a11y */
+  color: black;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.post article blockquote a:hover,
+.post article blockquote a:focus,
+.post article blockquote a:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  background-color: $accentColor6;
+  color: white;
+  box-shadow: 0 0 0 2px $accentColor6;
+  outline: none;
+  text-decoration: underline;
+}
+
+.post article .hash-link {
+  /* add underlines to links in blocks of text for a11y */
+  color: $accentColor1;
+  transition: outline-offset 0.2s ease-in-out;
+  opacity: 1;
+}
+
+.post article .hash-link:hover,
+.post article .hash-link:focus,
+.post article .hash-link:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  color: $secondaryColor;
+  background-color: white;
+  box-shadow: 0 0 0 0 $accentColor6;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.hash-link .hash-link-icon {
+  fill: currentColor;
+}
+
 
 .fixedHeaderContainer header .headerTitleWithLogo {
   color : white;
   display: block !important;
 }
 
-.navigationSlider .slidingNav ul a {
-  color : white !important;
-  font-weight: 400 !important;
+.navigationSlider .slidingNav ul.nav-site a {
+  color : white;
+  font-weight: 400;
+}
+
+.navigationSlider .slidingNav ul.nav-site a:hover,
+.navigationSlider .slidingNav ul.nav-site a:focus,
+.navigationSlider .slidingNav ul.nav-site a:active {
+  color : white;
+  font-weight: 400;
+  text-decoration: underline;
 }
 
 .navigationSlider .slidingNav ul a[href*="github"] {
