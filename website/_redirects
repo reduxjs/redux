@@ -29,7 +29,7 @@
 /faq/storesetup*         /faq/store-setup:splat
 
 
-/introduction/coreconcepts         /introduction/core-concepts:splat
+/introduction/coreconcepts*         /introduction/core-concepts:splat
 /introduction/learningresources*         /introduction/learning-resources:splat
 /introduction/priorart*         /introduction/prior-art:splat
 /introduction/threeprinciples*         /introduction/three-principles:splat
@@ -51,7 +51,7 @@
 /recipes/structuringreducers/beyondcombinereducers*         /recipes/structuring-reducers/beyond-combinereducers:splat
 /recipes/structuringreducers/immutableupdatepatterns*         /recipes/structuring-reducers/immutable-update-patterns:splat
 /recipes/structuringreducers/initializingstate*         /recipes/structuring-reducers/initializing-state:splat
-/recipes/structuringreducers/normalizingstateshape *        /recipes/structuring-reducers/normalizing-state-shape:splat
+/recipes/structuringreducers/normalizingstateshape*        /recipes/structuring-reducers/normalizing-state-shape:splat
 /recipes/structuringreducers/prerequisiteconcepts*         /recipes/structuring-reducers/prerequisite-concepts:splat
 /recipes/structuringreducers/refactoringreducersexample*         /recipes/structuring-reducers/refactoring-reducer-example:splat
 /recipes/structuringreducers/reusingreducerlogic*         /recipes/structuring-reducers/reusing-reducer-logic:splat
@@ -61,3 +61,27 @@
 
 /recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
 /recipes         /recipes/recipe-index
+
+
+# Old old Gitbook links?
+/docs/introduction/CoreConcepts.html        /introduction/core-concepts
+/docs/introduction/Motivation.html        /introduction/motivation
+
+/docs/basics/Reducers.html*        /basics/reducers:splat
+/docs/basics/Actions.html        /basics/actions
+/docs/basics/UsageWithReact.html*    /basics/usage-with-react:splat
+
+
+/docs/advanced/AsyncActions.html*        /advanced/async-actions:splat
+/docs/advanced/Middleware.html*        /advanced/middleware:splat
+/docs/advanced/ExampleRedditAPI.html        /advanced/example-reddit-api
+
+
+/docs/api/bindActionCreators.html*        /api/bindactioncreators:splat
+/docs/api/combineReducers.html*        /api/combinereducers:splat
+/docs/api/createStore.html*        /api/createstore:splat
+/docs/api/Store.html*        /api/store:splat
+
+/docs/recipes/WritingTests.html*        /recipes/writing-tests:splat
+/docs/recipes/StructuringReducers.html        /recipes/structuring-reducers/structuring-reducers
+/docs/recipes/reducers/NormalizingStateShape.html*        /recipes/structuring-reducers/normalizing-state-shape:splat
