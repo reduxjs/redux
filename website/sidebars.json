@@ -83,7 +83,7 @@
       "api/api-reference",
       "api/createstore",
       "api/store",
-      "api/combinerReducers",
+      "api/combineReducers",
       "api/applymiddleware",
       "api/bindactioncreators",
       "api/compose"
