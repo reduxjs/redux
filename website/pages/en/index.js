@@ -141,7 +141,7 @@ const FeaturesTop = props => (
 );
 
 const OtherLibraries = props => (
-  <Block layout="fourColumn" className="libBlock">
+  <Block layout="twoColumn" className="libBlock">
     {[
       {
         content: "Official React bindings for Redux",
