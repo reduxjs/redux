@@ -170,7 +170,7 @@ header.postHeader:empty + article h1 {
 }
 
 .featureBlock .blockContent > div p {
-  text-align: justify;
+  text-align: left;
 }
 
 .libBlock > div p {
