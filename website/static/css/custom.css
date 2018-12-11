@@ -110,9 +110,17 @@ header.postHeader:empty + article h1 {
   display: block !important;
 }
 
-.navigationSlider .slidingNav ul a {
-  color : white !important;
-  font-weight: 400 !important;
+.navigationSlider .slidingNav ul.nav-site a {
+  color : white;
+  font-weight: 400;
+}
+
+.navigationSlider .slidingNav ul.nav-site a:hover,
+.navigationSlider .slidingNav ul.nav-site a:focus,
+.navigationSlider .slidingNav ul.nav-site a:active {
+  color : white;
+  font-weight: 400;
+  text-decoration: underline;
 }
 
 .navigationSlider .slidingNav ul a[href*="github"] {
