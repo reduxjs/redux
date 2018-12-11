@@ -100,7 +100,7 @@ const siteConfig = {
 
   // Open Graph and Twitter card images.
   ogImage: "img/redux-logo-landscape.png",
-  twitterImage: "img/redux-logo-landscape.png",
+  twitterImage: "img/redux-logo-twitter.png",
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
