@@ -442,7 +442,7 @@ render(
 
 ## Next Steps
 
-Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained. 
+Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained.
 Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
 
 You should also take some time to **[read through the React-Redux docs](https://react-redux.js.org)** to get
