@@ -84,10 +84,15 @@
 
 /docs/advanced/AsyncActions.html*        /advanced/async-actions:splat
 /docs/advanced/Middleware.html*        /advanced/middleware:splat
+/docs/advanced/AsyncFlow.html*         /advanced/async-flow:splat
 /docs/advanced/ExampleRedditAPI.html        /advanced/example-reddit-api
 /docs/advanced/UsageWithReactRouter.html*        /advanced/usage-with-react-router
+/docs/advanced/index.html        /advanced/advanced-tutorial
+/docs/advanced/        /advanced/advanced-tutorial
+
 
 /docs/faq/General.html*        /faq/general:splat
+/docs/faq/Actions.html*        /faq/general/actions:splat
 /docs/faq/Reducers.html*        /faq/reducers:splat
 /docs/faq/OrganizingState.html*        /faq/organizing-state:splat
 /docs/faq/CodeStructure.html*        /faq/code-structure:splat
@@ -108,14 +113,17 @@
 /docs/recipes/ReducingBoilerplate.html*        /recipes/reducing-boilerplate:splat
 /docs/recipes/ImplementingUndoHistory.html*        /recipes/implementing-undo-history:splat
 /docs/recipes/ServerRendering.html*        /recipes/server-rendering:splat
+/docs/recipes/MigratingToRedux.html        /recipes/migrating-to-redux
 /docs/recipes/UsingObjectSpreadOperator.html*        /recipes/using-object-spread-operator
 /docs/recipes/UsingImmutableJS.html*        /recipes/using-immutablejs-with-redux:splat
+/docs/recipes/IsolatingSubApps.html        /recipes/isolating-redux-sub-apps
 /docs/recipes/WritingTests.html*        /recipes/writing-tests:splat
 /docs/recipes/StructuringReducers.html        /recipes/structuring-reducers/structuring-reducers
 /docs/recipes/reducers/UsingCombineReducers.html*        /recipes/structuring-reducers/using-combinereducers:splat
 /docs/recipes/reducers/BeyondCombineReducers.html*        /recipes/structuring-reducers/beyond-combinereducers:splat
 /docs/recipes/reducers/NormalizingStateShape.html*        /recipes/structuring-reducers/normalizing-state-shape:splat
 /docs/recipes/reducers/SplittingReducerLogic.html*        /recipes/structuring-reducers/splitting-reducer-logic:splat
+/docs/recipes/reducers/UpdatingNormalizedData.html*        /recipes/structuring-reducers/updating-normalized-data:splat
 /docs/recipes/reducers/ImmutableUpdatePatterns.html*        /recipes/structuring-reducers/immutable-update-patterns:splat
 /docs/recipes/reducers/InitializingState.html*        /recipes/structuring-reducers/initializing-state:splat
 
@@ -123,8 +131,11 @@
 /docs/Troubleshooting.html*        /troubleshooting:splat
 
 # Unknown?
+/introduction/index.html        /introduction/getting-started
 /api-reference/*        /api/:splat
+
 /basics/example-todo-list /basics/example
 /basics/index.html        /basics/basic-tutorial
+/recipes/isolating-subapps        /recipes/isolating-redux-sub-apps
 /api/index.html        /api/api-reference
 /recipes/ServerRendering.html*        /recipes/server-rendering:splat
