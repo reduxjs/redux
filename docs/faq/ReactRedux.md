@@ -1,3 +1,10 @@
+---
+id: react-redux
+title: React Redux
+sidebar_label: React Redux
+hide_title: true
+---
+
 # Redux FAQ: React Redux
 
 ## Table of Contents
@@ -26,11 +33,11 @@ Note that “updating data immutably” does _not_ mean that you must use [Immut
 
 **Documentation**
 
-- [Troubleshooting](/docs/Troubleshooting.md)
-- [React Redux: Troubleshooting](https://github.com/reduxjs/react-redux/blob/master/docs/troubleshooting.md)
-- [Recipes: Using the Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+- [Troubleshooting](../Troubleshooting.md)
+- [React Redux: Troubleshooting](https://github.com/reduxjs/react-redux/blob/master../troubleshooting.md)
+- [Recipes: Using the Object Spread Operator](../recipes/UsingObjectSpreadOperator.md)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
+- [Recipes: Structuring Reducers - Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
 
 **Articles**
 
@@ -67,7 +74,7 @@ For non-connected components, you may want to check what props are being passed 
 
 **Documentation**
 
-- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+- [FAQ: Performance - Scaling](./Performance.md#performance-scaling)
 
 **Articles**
 
@@ -93,7 +100,7 @@ While React Redux does work to minimize the number of times that your `mapStateT
 
 **Documentation**
 
-- [Recipes: Computed Derived Data](/docs/recipes/ComputingDerivedData.md)
+- [Recipes: Computed Derived Data](../recipes/ComputingDerivedData.md)
 
 **Articles**
 
@@ -114,7 +121,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 
 **Documentation**
 
-- [React Redux API: connect()](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+- [React Redux API: connect()](https://github.com/reduxjs/react-redux/blob/master../api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 
 **Discussions**
 
@@ -139,8 +146,8 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Documentation**
 
-- [Basics: Usage with React](/docs/basics/UsageWithReact.md)
-- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+- [Basics: Usage with React](../basics/UsageWithReact.md)
+- [FAQ: Performance - Scaling](../faq/Performance.md#performance-scaling)
 
 **Articles**
 

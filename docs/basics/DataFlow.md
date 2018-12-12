@@ -1,3 +1,10 @@
+---
+id: data-flow
+title: Data flow
+sidebar_label: Data flow
+hide_title: true
+---
+
 # Data Flow
 
 Redux architecture revolves around a **strict unidirectional data flow**.

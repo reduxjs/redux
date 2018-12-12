@@ -1,3 +1,10 @@
+---
+id: basic-reducer-structure
+title: Basic Reducer Structure
+sidebar_label: Basic Reducer Structure
+hide_title: true
+---
+
 # Basic Reducer Structure and State Shape
 
 ## Basic Reducer Structure

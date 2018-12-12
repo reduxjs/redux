@@ -1,3 +1,10 @@
+---
+id: organizing-state
+title: Organizing State
+sidebar_label: Organizing State
+hide_title: true
+---
+
 # Redux FAQ: Organizing State
 
 ## Table of Contents
@@ -79,10 +86,10 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Documentation**
 
-- [Advanced: Async Actions](/docs/advanced/AsyncActions.md)
-- [Examples: Real World example](/docs/introduction/Examples.md#real-world)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Advanced: Async Actions](../advanced/AsyncActions.md)
+- [Examples: Real World example](../introduction/Examples.md#real-world)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
+- [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/structuring-reducers/NormalizingStateShape.md)
 - [Examples: Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
 
 **Articles**

@@ -1,3 +1,10 @@
+---
+id: writing-tests
+title: Writing Tests
+sidebar_label: Writing Tests
+hide_title: true
+---
+
 # Writing Tests
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.
@@ -190,7 +197,7 @@ export default function todos(state = initialState, action) {
 can be tested like:
 
 ```js
-import reducer from '../../reducers/todos'
+import reducer from '../../structuring-reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
 describe('todos reducer', () => {

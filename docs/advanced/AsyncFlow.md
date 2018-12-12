@@ -1,3 +1,10 @@
+---
+id: async-flow
+title: Async Flow
+sidebar_label: Async Flow
+hide_title: true
+---
+
 # Async Flow
 
 Without [middleware](Middleware.md), Redux store only supports [synchronous data flow](../basics/DataFlow.md). This is what you get by default with [`createStore()`](../api/createStore.md).

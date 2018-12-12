@@ -1,0 +1,34 @@
+.error-page .error-message-container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 40px;
+    max-width: 1400px;
+    width: 87%;
+}
+ .error-page .error-message {
+    min-height: 90vh;
+    background: white;
+}
+ .error-page .error-message span {
+    color: #764ABC;
+    font-size: 8.8em;
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 10vh;
+    text-align: center;
+    display: block;
+}
+ .error-page .error-message p {
+    color: black;
+    margin-top: 50px;
+    font-size: 1.6em;
+    text-align: center;
+}
+
+.error-page .error-message a {
+   margin-bottom: 50px;
+   font-size: 1.6em;
+   text-align: center;
+   display: block;
+   text-decoration: underline;
+}

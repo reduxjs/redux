@@ -1,3 +1,10 @@
+---
+id: learning-resources
+title: Learning Resources
+sidebar_label: Learning Resources
+hide_title: true
+---
+
 # Learning Resources
 
 The Redux docs are intended to teach the basic concepts of Redux, as well as explain key concepts for use in real-world applications. However, the docs can't cover everything. Happily, there are many other great resources available for learning Redux. We encourage you to check them out. Many of them cover topics that are beyond the scope of the docs, or describe the same topics in other ways that may work better for your learning style.

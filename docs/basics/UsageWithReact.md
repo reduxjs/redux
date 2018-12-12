@@ -1,3 +1,10 @@
+---
+id: usage-with-react
+title: Usage with React
+sidebar_label: Usage with React
+hide_title: true
+---
+
 # Usage with React
 
 From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.
@@ -435,4 +442,8 @@ render(
 
 ## Next Steps
 
-Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
+Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained.
+Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
+
+You should also take some time to **[read through the React-Redux docs](https://react-redux.js.org)** to get
+a better understanding of how to use React and Redux together.

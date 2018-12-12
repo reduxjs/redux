@@ -1,3 +1,10 @@
+---
+id: troubleshooting
+title: Troubleshooting
+sidebar_label: Troubleshooting
+hide_title: true
+---
+
 # Troubleshooting
 
 This is a place to share common problems and solutions to them.  
@@ -119,7 +126,7 @@ return state.map((todo, index) => {
 
 Note that experimental language features are subject to change.
 
-Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](/docs/recipes/reducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
+Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](./recipes/structuring-reducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
 
 #### Don't forget to call [`dispatch(action)`](api/Store.md#dispatch)
 

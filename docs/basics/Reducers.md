@@ -1,3 +1,10 @@
+---
+id: reducers
+title: Reducers
+sidebar_label: Reducers
+hide_title: true
+---
+
 # Reducers
 
 **Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe _what happened_, but don't describe how the application's state changes.

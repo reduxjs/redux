@@ -1,3 +1,10 @@
+---
+id: actions
+title: Actions
+sidebar_label: Actions
+hide_title: true
+---
+
 # Actions
 
 First, let's define some actions.

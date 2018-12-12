@@ -1,3 +1,10 @@
+---
+id: general
+title: General
+sidebar_label: General
+hide_title: true
+---
+
 # Redux FAQ: General
 
 ## Table of Contents
@@ -53,7 +60,7 @@ In the end, Redux is just a tool. It's a great tool, and there are some great re
 
 **Documentation**
 
-- [Introduction: Motivation](/docs/introduction/Motivation.md)
+- [Introduction: Motivation](../introduction/Motivation.md)
 
 **Articles**
 
