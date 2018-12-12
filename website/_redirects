@@ -66,22 +66,65 @@
 # Old old Gitbook links?
 /docs/introduction/CoreConcepts.html        /introduction/core-concepts
 /docs/introduction/Motivation.html        /introduction/motivation
+/docs/introduction/Ecosystem.html*        /introduction/ecosystem:splat
+/docs/introduction/CoreConcepts.html        /introduction/core-concepts
+/docs/introduction/PriorArt.html        /introduction/prior-art
+/docs/introduction/ThreePrinciples.html        /introduction/three-principles
+/docs/introduction/Examples.html*         /introduction/examples:splat
+/docs/introduction/        /introduction/getting-started
 
+/docs/basics/index.html        /basics/basic-tutorial
+/docs/basics/        /basics/basic-tutorial
 /docs/basics/Reducers.html*        /basics/reducers:splat
-/docs/basics/Actions.html        /basics/actions
+/docs/basics/Actions.html*        /basics/actions:splat
+/docs/basics/DataFlow.html*        /basics/data-flow:splat
+/docs/basics/Store.html*        /basics/store:splat
+/docs/basics/ExampleTodoList.html*        /basics/example:splat
 /docs/basics/UsageWithReact.html*    /basics/usage-with-react:splat
-
 
 /docs/advanced/AsyncActions.html*        /advanced/async-actions:splat
 /docs/advanced/Middleware.html*        /advanced/middleware:splat
 /docs/advanced/ExampleRedditAPI.html        /advanced/example-reddit-api
+/docs/advanced/UsageWithReactRouter.html*        /advanced/usage-with-react-router
 
+/docs/faq/General.html*        /faq/general:splat
+/docs/faq/Reducers.html*        /faq/reducers:splat
+/docs/faq/OrganizingState.html*        /faq/organizing-state:splat
+/docs/faq/CodeStructure.html*        /faq/code-structure:splat
+/docs/faq/StoreSetup.html*        /faq/store-setup:splat
+/docs/faq/Performance.html*        /faq/performance:splat
+/docs/faq/ImmutableData.html*        /faq/immutable-data:splat
+/docs/faq/ReactRedux.html*        /faq/react-redux:splat
+/docs/FAQ.html*        /faq:splat
 
 /docs/api/bindActionCreators.html*        /api/bindactioncreators:splat
 /docs/api/combineReducers.html*        /api/combinereducers:splat
 /docs/api/createStore.html*        /api/createstore:splat
+/docs/api/applyMiddleware.html*        /api/applymiddleware:splat
+/docs/api/compose.html*        /api/compose:splat
 /docs/api/Store.html*        /api/store:splat
 
+/docs/recipes/ComputingDerivedData.html*        /recipes/computing-derived-data:splat
+/docs/recipes/ReducingBoilerplate.html*        /recipes/reducing-boilerplate:splat
+/docs/recipes/ImplementingUndoHistory.html*        /recipes/implementing-undo-history:splat
+/docs/recipes/ServerRendering.html*        /recipes/server-rendering:splat
+/docs/recipes/UsingObjectSpreadOperator.html*        /recipes/using-object-spread-operator
+/docs/recipes/UsingImmutableJS.html*        /recipes/using-immutablejs-with-redux:splat
 /docs/recipes/WritingTests.html*        /recipes/writing-tests:splat
 /docs/recipes/StructuringReducers.html        /recipes/structuring-reducers/structuring-reducers
+/docs/recipes/reducers/UsingCombineReducers.html*        /recipes/structuring-reducers/using-combinereducers:splat
+/docs/recipes/reducers/BeyondCombineReducers.html*        /recipes/structuring-reducers/beyond-combinereducers:splat
 /docs/recipes/reducers/NormalizingStateShape.html*        /recipes/structuring-reducers/normalizing-state-shape:splat
+/docs/recipes/reducers/SplittingReducerLogic.html*        /recipes/structuring-reducers/splitting-reducer-logic:splat
+/docs/recipes/reducers/ImmutableUpdatePatterns.html*        /recipes/structuring-reducers/immutable-update-patterns:splat
+/docs/recipes/reducers/InitializingState.html*        /recipes/structuring-reducers/initializing-state:splat
+
+/docs/Glossary.html*        /glossary:splat
+/docs/Troubleshooting.html*        /troubleshooting:splat
+
+# Unknown?
+/api-reference/*        /api/:splat
+/basics/example-todo-list /basics/example
+/basics/index.html        /basics/basic-tutorial
+/api/index.html        /api/api-reference
+/recipes/ServerRendering.html*        /recipes/server-rendering:splat
