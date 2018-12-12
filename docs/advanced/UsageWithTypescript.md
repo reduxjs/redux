@@ -280,37 +280,27 @@ With these additions made props that come from redux's side are now being type c
 
 ## Usage with Redux Thunk
 
-Redux Thunk is a commonly used middleware for asynchronous orchestration. Feel free to check out its documentation [here](https://github.com/reduxjs/redux-thunk). A thunk is a function that returns another function that takes parameters `dispatch` and `getState`. We will define a type which describes this in a new file:
-
-```ts
-// src/types.ts
-
-import { Dispatch } from 'redux'
-import { AppState } from './store'
-
-export type ThunkType<T> = (dispatch: Dispatch, getState?: AppState) => T
-```
-
-Note that we are using a TypeScript generic here in order to allow reuse while keeping thunks type safe. Whenever we define a thunk we can use this type like so:
+Redux Thunk is a commonly used middleware for asynchronous orchestration. Feel free to check out its documentation [here](https://github.com/reduxjs/redux-thunk). A thunk is a function that returns another function that takes parameters `dispatch` and `getState`. Redux Thunk has a built in type `ThunkAction` which we can utilize like so:
 
 ```ts
 // src/thunks.ts
 
-import { ThunkType } from './types'
+import { Action } from 'redux'
 import { sendMessage } from './store/chat/actions'
+import { AppState } from './store'
+import { ThunkAction } from 'redux-thunk'
 
-export function thunkSendMessage(message: string): ThunkType<void> {
-  return async function(dispatch) {
-    const asyncResp = await exampleAPI()
-
-    dispatch(
-      sendMessage({
-        message,
-        user: asyncResp,
-        timestamp: new Date().getTime()
-      })
-    )
-  }
+export const thunkSendMessage = (
+  message: string
+): ThunkAction<void, AppState, null, Action<string>> => async dispatch => {
+  const asyncResp = await exampleAPI()
+  dispatch(
+    sendMessage({
+      message,
+      user: asyncResp,
+      timestamp: new Date().getTime()
+    })
+  )
 }
 
 function exampleAPI() {
@@ -318,7 +308,7 @@ function exampleAPI() {
 }
 ```
 
-Thunks can optionally return a value, for this example this thunk does not return any value so we pass `void` for `ThunkType<T>`. It is also highly recommended to use action creators in your dispatch. This is because we have already done work on type checking our actions creators and this work can be reused in our thunks.
+It is highly recommended to use action creators in your dispatch since we can reuse the work that has been to type check these functions.
 
 ## Notes & Considerations
 
