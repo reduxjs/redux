@@ -147,6 +147,8 @@ header.postHeader:empty + article h1 {
 .nav-footer .sitemap a {
   /* increase link contrast */
   color: white;
+  margin: 0;
+  padding: 9px 5px;
 }
 
 .button.hero {
@@ -257,6 +259,17 @@ header.postHeader:empty + article h1 {
 }
 
 @media only screen and (max-width: 1023px) {
+	.nav-footer {
+		text-align: center;
+	}
+
+	.nav-footer .copyright {
+		padding: 20px;
+	}
+
+	.nav-footer .sitemap .nav-home {
+		margin: 0 auto;
+	}
 
   .libsContainer {
     flex-direction: column;
