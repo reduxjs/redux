@@ -254,9 +254,34 @@ header.postHeader:empty + article h1 {
 }
 
 @media only screen and (min-width: 1024px) {
+  .reactNavSearchWrapper input#search_input_react {
+    height: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 38px;
+  }
+
+  .navSearchWrapper:before {
+    left: 24px;
+  }
+
+  .navSearchWrapper:after {
+    left: 35px;
+  }
 }
 
 @media only screen and (max-width: 1023px) {
+  .reactNavSearchWrapper input#search_input_react {
+    padding-left: 38px;
+  }
+
+  .navSearchWrapper:before {
+    left: 24px;
+  }
+
+  .navSearchWrapper:after {
+    left: 35px;
+  }
 
   .libsContainer {
     flex-direction: column;
