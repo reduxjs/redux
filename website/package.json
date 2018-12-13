@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "start": "docusaurus-start",
+    "build": "docusaurus-build",
+    "publish-gh-pages": "docusaurus-publish",
+    "write-translations": "docusaurus-write-translations",
+    "version": "docusaurus-version",
+    "rename-version": "docusaurus-rename-version"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-react": "^7.0.0"
+  },
+  "dependencies": {
+    "docusaurus": "^1.6.2"
+  }
+}

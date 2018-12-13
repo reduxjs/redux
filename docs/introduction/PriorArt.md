@@ -1,21 +1,25 @@
+---
+id: prior-art
+title: Prior Art
+sidebar_label: Prior Art
+hide_title: true
+---
+
 # Prior Art
 
 Redux has a mixed heritage. It is similar to some patterns and technologies, but is also different from them in important ways. We'll explore some of the similarities and the differences below.
 
 ### Flux
 
-Can Redux be considered a [Flux](https://facebook.github.io/flux/) implementation?  
-[Yes](https://twitter.com/fisherwebdev/status/616278911886884864), and [no](https://twitter.com/andrestaltz/status/616270755605708800).
-
-(Don't worry, [Flux creators](https://twitter.com/jingc/status/616608251463909376) [approve of it](https://twitter.com/fisherwebdev/status/616286955693682688), if that's all you wanted to know.)
-
-Redux was inspired by several important qualities of Flux. Like Flux, Redux prescribes that you concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called an “action”.
+Redux was inspired by several important qualities of [Flux](https://facebook.github.io/flux/). Like Flux, Redux prescribes that you concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called an “action”.
 
 Unlike Flux, **Redux does not have the concept of a Dispatcher**. This is because it relies on pure functions instead of event emitters, and pure functions are easy to compose and don't need an additional entity managing them. Depending on how you view Flux, you may see this as either a deviation or an implementation detail. Flux has often been [described as `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot-1). In this sense, Redux is true to the Flux architecture, but makes it simpler thanks to pure functions.
 
 Another important difference from Flux is that **Redux assumes you never mutate your data**. You can use plain objects and arrays for your state just fine, but mutating them inside the reducers is strongly discouraged. You should always return a new object, which is easy with the [object spread operator proposal](../recipes/UsingObjectSpreadOperator.md), or with a library like [Immutable](https://facebook.github.io/immutable-js).
 
-While it is technically *possible* to [write impure reducers](https://github.com/reduxjs/redux/issues/328#issuecomment-125035516) that mutate the data for performance corner cases, we actively discourage you from doing this. Development features like time travel, record/replay, or hot reloading will break. Moreover it doesn't seem like immutability poses performance problems in most real apps, because, as [Om](https://github.com/omcljs/om) demonstrates, even if you lose out on object allocation, you still win by avoiding expensive re-renders and re-calculations, as you know exactly what changed thanks to reducer purity.
+While it is technically _possible_ to [write impure reducers](https://github.com/reduxjs/redux/issues/328#issuecomment-125035516) that mutate the data for performance corner cases, we actively discourage you from doing this. Development features like time travel, record/replay, or hot reloading will break. Moreover it doesn't seem like immutability poses performance problems in most real apps, because, as [Om](https://github.com/omcljs/om) demonstrates, even if you lose out on object allocation, you still win by avoiding expensive re-renders and re-calculations, as you know exactly what changed thanks to reducer purity.
+
+For what it's worth, Flux's creators [approve](https://twitter.com/jingc/status/616608251463909376) of [Redux](https://twitter.com/fisherwebdev/status/616286955693682688).
 
 ### Elm
 
@@ -29,7 +33,7 @@ Unlike Redux, Elm is a language, so it is able to benefit from many things like 
 
 Immutable and most similar libraries are orthogonal to Redux. Feel free to use them together!
 
-**Redux doesn't care *how* you store the state—it can be a plain object, an Immutable object, or anything else.** You'll probably want a (de)serialization mechanism for writing universal apps and hydrating their state from the server, but other than that, you can use any data storage library *as long as it supports immutability*. For example, it doesn't make sense to use Backbone for Redux state, because Backbone models are mutable.
+**Redux doesn't care _how_ you store the state—it can be a plain object, an Immutable object, or anything else.** You'll probably want a (de)serialization mechanism for writing universal apps and hydrating their state from the server, but other than that, you can use any data storage library _as long as it supports immutability_. For example, it doesn't make sense to use Backbone for Redux state, because Backbone models are mutable.
 
 Note that, even if your immutable library supports cursors, you shouldn't use them in a Redux app. The whole state tree should be considered read-only, and you should use Redux for updating the state, and subscribing to the updates. Therefore writing via cursor doesn't make sense for Redux. **If your only use case for cursors is decoupling the state tree from the UI tree and gradually refining the cursors, you should look at selectors instead.** Selectors are composable getter functions. See [reselect](http://github.com/faassen/reselect) for a really great and concise implementation of composable selectors.
 

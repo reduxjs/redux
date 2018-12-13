@@ -3,18 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "flow-bin": "^0.69.0",
-    "flow-typed": "^2.4.0",
-    "react-scripts": "^1.1.4",
-    "redux-mock-store": "^1.5.1"
+    "enzyme": "3.4.1",
+    "enzyme-adapter-react-16": "1.2.0",
+    "flow-bin": "0.78.0",
+    "flow-typed": "2.5.1",
+    "react-scripts": "^2.0.2",
+    "redux-mock-store": "1.5.3"
   },
   "dependencies": {
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "react": "16.4.2",
+    "react-dom": "16.4.2",
     "react-redux": "^5.0.7",
-    "redux": "^3.5.2",
+    "redux": "4.0.0",
     "reselect": "^3.0.1"
   },
   "scripts": {
@@ -23,6 +23,12 @@
     "flow": "flow",
     "postinstall": "flow-typed install",
     "start": "react-scripts start",
-    "test": "react-scripts test"
-  }
+    "test": "react-scripts test --env=node"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

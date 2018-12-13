@@ -14,7 +14,7 @@ const Link = ({ active, children, onClick }: Props) => {
   }
 
   return (
-    <a // eslint-disable-line jsx-a11y/href-no-hash
+    <a // eslint-disable-line jsx-a11y/anchor-is-valid
       href="#"
       onClick={(event: Event) => {
         event.preventDefault();

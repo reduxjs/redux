@@ -2,13 +2,12 @@
 
 exports[`Todo calls onClick when clicked 1`] = `
 ShallowWrapper {
-  "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Todo
     completed={false}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     text="Test todo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -22,7 +21,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": "Test todo",
-      "onClick": [Function],
+      "onClick": [MockFunction],
       "style": Object {
         "textDecoration": "none",
       },
@@ -38,7 +37,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": "Test todo",
-        "onClick": [Function],
+        "onClick": [MockFunction],
         "style": Object {
           "textDecoration": "none",
         },
@@ -52,21 +51,28 @@ ShallowWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getSnapshotBeforeUpdate": true,
+        },
       },
     },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
   },
 }
 `;
 
 exports[`Todo puts a line through text when completed 1`] = `
 ShallowWrapper {
-  "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Todo
     completed={true}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     text="Test todo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -80,7 +86,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": "Test todo",
-      "onClick": [Function],
+      "onClick": [MockFunction],
       "style": Object {
         "textDecoration": "line-through",
       },
@@ -96,7 +102,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": "Test todo",
-        "onClick": [Function],
+        "onClick": [MockFunction],
         "style": Object {
           "textDecoration": "line-through",
         },
@@ -110,21 +116,28 @@ ShallowWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getSnapshotBeforeUpdate": true,
+        },
       },
     },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
   },
 }
 `;
 
 exports[`Todo renders without crashing 1`] = `
 ShallowWrapper {
-  "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Todo
     completed={false}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     text="Test todo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -138,7 +151,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": "Test todo",
-      "onClick": [Function],
+      "onClick": [MockFunction],
       "style": Object {
         "textDecoration": "none",
       },
@@ -154,7 +167,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": "Test todo",
-        "onClick": [Function],
+        "onClick": [MockFunction],
         "style": Object {
           "textDecoration": "none",
         },
@@ -168,8 +181,16 @@ ShallowWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getSnapshotBeforeUpdate": true,
+        },
       },
     },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
   },
 }
 `;

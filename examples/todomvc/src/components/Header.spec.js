@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRenderer } from 'react-test-renderer/shallow';
-import { Header } from './Header'
+import Header from './Header'
 import TodoTextInput from '../components/TodoTextInput'
 
 const setup = () => {
