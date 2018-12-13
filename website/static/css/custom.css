@@ -8,6 +8,15 @@ header.postHeader:empty + article h1 {
   margin-top: 0;
 }
 
+.homeContainer .homeWrapper {
+  padding-bottom: 1em;
+}
+
+.mainContainer {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
 .post article a {
   /* add underlines to links in blocks of text for a11y */
   color: $primaryColor;
@@ -158,8 +167,10 @@ header.postHeader:empty + article h1 {
   color: $primaryColor;
 }
 
-.productShowcaseSection .featureBlock {
-  padding: 40px 0;
+
+.productShowcaseSection .rowContainer {
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .productShowcaseSection .featureBlock img {
@@ -169,7 +180,8 @@ header.postHeader:empty + article h1 {
   max-height: 60px;
 }
 
-.featureBlock .blockContent > div p {
+.featureBlock .blockContent > div p,
+.docsSurvey .blockContent > div p {
   text-align: left;
 }
 
@@ -196,6 +208,15 @@ header.postHeader:empty + article h1 {
   margin-bottom: 5px;
 }
 
+.libsContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.libsContainer .docsSurvey h2 {
+  margin-top : 0;
+  margin-bottom: 30px;
+}
 
 @media only screen and (max-device-width: 480px) {
   .productShowcaseSection .featureBlock {
@@ -225,6 +246,7 @@ header.postHeader:empty + article h1 {
     margin-top: 0;
     margin-bottom: 0;
   }
+
 }
 
 
@@ -235,6 +257,10 @@ header.postHeader:empty + article h1 {
 }
 
 @media only screen and (max-width: 1023px) {
+
+  .libsContainer {
+    flex-direction: column;
+  }
 }
 
 @media only screen and (min-width: 1400px) {

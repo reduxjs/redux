@@ -109,7 +109,7 @@ const Block = props => (
 );
 
 const FeaturesTop = props => (
-  <Block layout="fourColumn" className="featureBlock">
+  <Block layout="fourColumn" className="rowContainer featureBlock">
     {[
       {
         content: "Redux helps you write applications that **behave consistently**, run in different environments (client, server, and native), and are **easy to test**.",
@@ -141,7 +141,11 @@ const FeaturesTop = props => (
 );
 
 const OtherLibraries = props => (
-  <Block layout="twoColumn" className="libBlock">
+  <Container className="rowContainer">
+    <h2 style={{margin : 0}}>
+      Other Libraries from the Redux Team
+    </h2>
+  <Block layout="fourColumn" className="libBlock">
     {[
       {
         content: "Official React bindings for Redux",
@@ -153,7 +157,19 @@ const OtherLibraries = props => (
       },
     ]}
   </Block>
+  </Container>
 );
+
+const DocsSurvey = () => (
+  <Block layout="twoColumn" className="docsSurvey rowContainer">
+    {[
+      {
+        content: "We're planning a revamp of the Redux docs content.  Please help us make the docs better by **[filling out this survey](https://docs.google.com/forms/d/e/1FAIpQLSfzIkY3fXZ8PrQKScYMK0YoEgALfAK2qQ0mOj1_ibKv2qDTuQ/viewform)**, so we can determine what changes would help the most.  Thanks!",
+        title: "Help Us Improve the Redux Docs!"
+      },
+    ]}
+  </Block>
+)
 
 class Index extends React.Component {
   render() {
@@ -168,11 +184,13 @@ class Index extends React.Component {
             <Container background="light">
               <FeaturesTop />
             </Container>
-            <Container>
-              <h2 style={{marginTop : "0.5em"}}>
-                Other Libraries from the Redux Team
-              </h2>
+            <Container className="libsContainer" wrapper={false}>
+
               <OtherLibraries/>
+              <DocsSurvey />
+            </Container>
+            <Container background="light">
+
             </Container>
           </div>
         </div>
