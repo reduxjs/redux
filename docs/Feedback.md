@@ -1,3 +1,10 @@
+---
+id: feedback
+title: Feedback
+sidebar_label: Feedback
+hide_title: true
+---
+
 # Feedback
 
 We appreciate feedback from the community. You can post feature requests and bug reports on [Product Pains](https://productpains.com/product/redux).

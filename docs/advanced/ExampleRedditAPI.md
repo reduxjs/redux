@@ -1,3 +1,10 @@
+---
+id: example-reddit-api
+title: Example: Reddit API
+sidebar_label: Example: Reddit API
+hide_title: true
+---
+
 # Example: Reddit API
 
 This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).
@@ -13,10 +20,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import Root from './containers/Root'
 
-render(
-  <Root />,
-  document.getElementById('root')
-)
+render(<Root />, document.getElementById('root'))
 ```
 
 ## Action Creators and Constants
@@ -179,10 +183,7 @@ export default function configureStore(preloadedState) {
   return createStore(
     rootReducer,
     preloadedState,
-    applyMiddleware(
-      thunkMiddleware,
-      loggerMiddleware
-    )
+    applyMiddleware(thunkMiddleware, loggerMiddleware)
   )
 }
 ```
@@ -266,22 +267,22 @@ class AsyncApp extends Component {
           options={['reactjs', 'frontend']}
         />
         <p>
-          {lastUpdated &&
+          {lastUpdated && (
             <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
-            </span>}
-          {!isFetching &&
-            <button onClick={this.handleRefreshClick}>
-              Refresh
-            </button>}
+              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}
+            </span>
+          )}
+          {!isFetching && (
+            <button onClick={this.handleRefreshClick}>Refresh</button>
+          )}
         </p>
         {isFetching && posts.length === 0 && <h2>Loading...</h2>}
         {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
-        {posts.length > 0 &&
+        {posts.length > 0 && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <Posts posts={posts} />
-          </div>}
+          </div>
+        )}
       </div>
     )
   }
@@ -297,11 +298,9 @@ AsyncApp.propTypes = {
 
 function mapStateToProps(state) {
   const { selectedSubreddit, postsBySubreddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsBySubreddit[selectedSubreddit] || {
+  const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
+    selectedSubreddit
+  ] || {
     isFetching: true,
     items: []
   }
@@ -361,7 +360,9 @@ export default class Posts extends Component {
   render() {
     return (
       <ul>
-        {this.props.posts.map((post, i) => <li key={i}>{post.title}</li>)}
+        {this.props.posts.map((post, i) => (
+          <li key={i}>{post.title}</li>
+        ))}
       </ul>
     )
   }

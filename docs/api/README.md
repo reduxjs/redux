@@ -1,3 +1,10 @@
+---
+id: api-reference
+title: API Reference
+sidebar_label: API Reference
+hide_title: true
+---
+
 # API Reference
 
 The Redux API surface is tiny. Redux defines a set of contracts for you to implement (such as [reducers](../Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
@@ -6,19 +13,19 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
 
 ### Top-Level Exports
 
-* [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
-* [combineReducers(reducers)](combineReducers.md)
-* [applyMiddleware(...middlewares)](applyMiddleware.md)
-* [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
-* [compose(...functions)](compose.md)
+- [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
+- [combineReducers(reducers)](combineReducers.md)
+- [applyMiddleware(...middlewares)](applyMiddleware.md)
+- [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
+- [compose(...functions)](compose.md)
 
 ### Store API
 
-* [Store](Store.md)
-  * [getState()](Store.md#getState)
-  * [dispatch(action)](Store.md#dispatch)
-  * [subscribe(listener)](Store.md#subscribe)
-  * [replaceReducer(nextReducer)](Store.md#replaceReducer)
+- [Store](Store.md)
+  - [getState()](Store.md#getState)
+  - [dispatch(action)](Store.md#dispatch)
+  - [subscribe(listener)](Store.md#subscribe)
+  - [replaceReducer(nextReducer)](Store.md#replaceReducer)
 
 ### Importing
 

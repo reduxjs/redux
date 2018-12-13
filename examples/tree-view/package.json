@@ -4,9 +4,9 @@
   "private": true,
   "devDependencies": {
     "deep-freeze": "0.0.1",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "react-scripts": "^1.1.4"
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "react-scripts": "^2.0.2"
   },
   "dependencies": {
     "react": "^16.3.1",
@@ -18,6 +18,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test": "react-scripts test"
-  }
+    "test": "react-scripts test --env=node"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

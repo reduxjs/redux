@@ -1,7 +1,7 @@
 # The Redux Logo
 
 This is the only official Redux logo.  
-Don't use any other logos to represent Redux.  
+Don't use any other logos to represent Redux.
 
 It comes in several flavors.
 
@@ -21,7 +21,7 @@ Download as [PNG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/lo
 
 <img src='https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo-title-light.png' alt='Redux Logo with Light Title' width='500'>
 
-*(You can't see the text but it's there, in white.)*
+_(You can't see the text but it's there, in white.)_
 
 Download as [PNG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/logo-title-light.png).
 
