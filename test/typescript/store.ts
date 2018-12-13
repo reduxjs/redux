@@ -104,7 +104,6 @@ const newReducer: Reducer<State> = reducer
 
 store.replaceReducer(newReducer)
 
-
 /* observable */
 
 let observable = store[Symbol.observable]()
