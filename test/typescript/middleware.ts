@@ -110,7 +110,7 @@ function customDispatch() {
   type MyDispatch = Dispatch<MyAction>
 
   const customDispatch: Middleware = (
-    api: MiddlewareAPI<MyDispatch>
+    api: MiddlewareAPI<MyDispatch, any, MyAction>
   ) => next => action => {
     api.dispatch({ type: 'INCREMENT' })
     api.dispatch({ type: 'DECREMENT' })

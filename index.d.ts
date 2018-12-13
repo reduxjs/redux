@@ -299,7 +299,11 @@ export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
 
 /* middleware */
 
-export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
+export interface MiddlewareAPI<
+  D extends Dispatch<A> = Dispatch,
+  S = any,
+  A extends Action = AnyAction
+> {
   dispatch: D
   getState(): S
 }
