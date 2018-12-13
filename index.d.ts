@@ -144,7 +144,7 @@ export type Observable<T> = {
    * be used to unsubscribe the observable from the store, and prevent further
    * emission of values from the observable.
    */
-  subscribe: (observer: Observer<T>)=> { unsubscribe: Unsubscribe }
+  subscribe: (observer: Observer<T>) => { unsubscribe: Unsubscribe }
   [Symbol.observable](): Observable<T>
 }
 
@@ -155,7 +155,6 @@ export type Observable<T> = {
 export type Observer<T> = {
   next?(value: T): void
 }
-
 
 /**
  * A store is an object that holds the application's state tree.
