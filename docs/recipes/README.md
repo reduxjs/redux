@@ -13,6 +13,7 @@ These are some use cases and code snippets to get you started with Redux in a re
 - [Migrating to Redux](MigratingToRedux.md)
 - [Using Object Spread Operator](UsingObjectSpreadOperator.md)
 - [Reducing Boilerplate](ReducingBoilerplate.md)
+- [Code Splitting](CodeSplitting.md)
 - [Server Rendering](ServerRendering.md)
 - [Writing Tests](WritingTests.md)
 - [Computing Derived Data](ComputingDerivedData.md)
