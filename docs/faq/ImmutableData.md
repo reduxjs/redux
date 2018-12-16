@@ -134,7 +134,7 @@ This is worth emphasizing: _If the reducers all return the same `state` object p
 
 React-Redux uses shallow equality checking to determine whether the component it’s wrapping needs to be re-rendered.
 
-To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux).
+To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://react-redux.js.org/troubleshooting#my-views-aren-t-updating-when-something-changes-outside-of-redux).
 
 By assuming the wrapped component is pure, it need only check whether the root state object or the values returned from `mapStateToProps` have changed. If they haven’t, the wrapped component does not need re-rendering.
 
@@ -289,7 +289,7 @@ Because React-Redux performs a shallow check on the root state object to determi
 
 **Documentation**
 
-- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reduxjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
+- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://react-redux.js.org/troubleshooting#my-views-aren-t-updating-when-something-changes-outside-of-redux)
 
 ### Why does a selector mutating and returning a persistent object to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?
 
