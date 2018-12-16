@@ -9,6 +9,7 @@ hide_title: true
 
 ## Table of Contents
 
+- [Why should I use React-Redux?](#why-should-i-use-react-redux)
 - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
 - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
 - [How can I speed up my mapStateToProps?](#how-can-i-speed-up-my-mapstatetoprops)
@@ -16,6 +17,26 @@ hide_title: true
 - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
 
 ## React Redux
+
+### Why should I use React-Redux?
+
+Redux itself is a standalone library that can be used with any UI layer or framework, including React, Angular, Vue, Ember, and vanilla JS. Although Redux and React are commonly used together, they are independent of each other.
+
+If you are using Redux with any kind of UI framework, you will normally use a "UI binding" library to tie Redux together with your UI framework, rather than directly interacting with the store from your UI code.
+
+**React-Redux is the official Redux UI binding library for React**. If you are using Redux and React together, you should also use React-Redux to bind these two libraries.
+
+While it is possible to write Redux store subscription logic by hand, doing so would become very repetitive. In addition, optimizing UI performance would require complicated logic.
+
+The process of subscribing to the store, checking for updated data, and triggering a re-render can be made more generic and reusable. **A UI binding library like React-Redux handles the store interaction logic, so you don't have to write that code yourself.**
+
+Overall, React-Redux encourages good React architecture, and implements complex performance optimizations for you. It is also kept up-to-date with the latest API changes from Redux and React.
+
+#### Further Information
+
+**Documentation**
+
+- **[React-Redux docs: Why Use React-Redux?](https://react-redux.js.org/introduction/why-use-react-redux)**
 
 ### Why isn't my component re-rendering, or my mapStateToProps running?
 

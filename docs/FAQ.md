@@ -38,13 +38,11 @@ hide_title: true
   - [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
   - [What are the issues with using JavaScript for immutable operations?](faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 - **Using Immutable.JS with Redux**
-
   - [Why should I use an immutable-focused library such as Immutable.JS?](recipes/UsingImmutableJS.md#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
   - [Why should I choose Immutable.JS as an immutable library?](recipes/UsingImmutableJS.md#why-should-i-choose-immutable-js-as-an-immutable-library)
   - [What are the issues with using Immutable.JS?](recipes/UsingImmutableJS.md#what-are-the-issues-with-using-immutable-js)
   - [Is Immutable.JS worth the effort?](recipes/UsingImmutableJS.md#is-using-immutable-js-worth-the-effort)
   - [What are some opinionated Best Practices for using Immutable.JS with Redux?](recipes/UsingImmutableJS.md#what-are-some-opinionated-best-practices-for-using-immutable-js-with-redux)
-
 - **Code Structure**
   - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](faq/CodeStructure.md#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](faq/CodeStructure.md#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
@@ -65,6 +63,7 @@ hide_title: true
   - [Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?](faq/DesignDecisions.md#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
   - [Why doesn't mapDispatchToProps allow use of return values from `getState()` or `mapStateToProps()`?](faq/DesignDecisions.md#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
 - **React Redux**
+  - [Why should I use React-Redux?](faq/ReactRedux.md#why-should-i-use-react-redux)
   - [Why isn't my component re-rendering, or my mapStateToProps running?](faq/ReactRedux.md#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
   - [Why is my component re-rendering too often?](faq/ReactRedux.md#why-is-my-component-re-rendering-too-often)
   - [How can I speed up my mapStateToProps?](faq/ReactRedux.md#how-can-i-speed-up-my-mapstatetoprops)
