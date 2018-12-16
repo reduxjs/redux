@@ -26,13 +26,13 @@ class UserPage extends Component {
     loadStarred: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     loadData(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.login !== this.props.login) {
-      loadData(nextProps)
+  componentDidUpdate(prevProps) {
+    if (prevProps.login !== this.props.login) {
+      loadData(this.props)
     }
   }
 
