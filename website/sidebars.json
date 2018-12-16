@@ -41,6 +41,7 @@
       "recipes/implementing-undo-history",
       "recipes/isolating-redux-sub-apps",
       "recipes/using-immutablejs-with-redux",
+      "recipes/code-splitting",
       {
         "type": "subcategory",
         "label": "Structuring Reducers",
