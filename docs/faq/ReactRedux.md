@@ -34,7 +34,7 @@ Note that “updating data immutably” does _not_ mean that you must use [Immut
 **Documentation**
 
 - [Troubleshooting](../Troubleshooting.md)
-- [React Redux: Troubleshooting](https://github.com/reduxjs/react-redux/blob/master../troubleshooting.md)
+- [React Redux: Troubleshooting](https://react-redux.js.org/troubleshooting)
 - [Recipes: Using the Object Spread Operator](../recipes/UsingObjectSpreadOperator.md)
 - [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
 - [Recipes: Structuring Reducers - Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
@@ -121,7 +121,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 
 **Documentation**
 
-- [React Redux API: connect()](https://github.com/reduxjs/react-redux/blob/master../api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+- [React Redux API: connect()](https://react-redux.js.org/api#connect)
 
 **Discussions**
 

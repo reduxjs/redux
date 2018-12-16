@@ -34,7 +34,7 @@ A potential use-case for using the action inside a subscriber -- which is an uns
 1. the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) lifecycle method
 2. the [virtual DOM equality check (vDOMEq)](https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconciliation)
 3. [React.PureComponent](https://facebook.github.io/react/docs/optimizing-performance.html#examples)
-4. Using React-Redux: use [mapStateToProps](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) to subscribe components to only the parts of the store that they need.
+4. Using React-Redux: use [mapStateToProps](https://react-redux.js.org/api#connect) to subscribe components to only the parts of the store that they need.
 
 #### Further Information
 
