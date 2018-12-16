@@ -126,7 +126,7 @@ This part is often confusing to beginners, because it is not immediately clear w
 
 We'll start with the most common use case: lists. Web applications often show lists of things. For example, a list of posts, or a list of friends. You'll need to figure out what sorts of lists your app can show. You want to store them separately in the state, because this way you can cache them and only fetch again if necessary.
 
-Here's what the state shape for our “Reddit headlines” app might look like:
+Here's what part of the state shape for our “Reddit headlines” app might look like:
 
 ```js
 {
