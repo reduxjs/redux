@@ -53,8 +53,8 @@ export default function configureStore(initialState) {
   // Create an inject reducer function
   // This function adds the async reducer, and creates a new combined reducer
   store.injectReducer = (key, asyncReducer) => {
-    this.asyncReducers[key] = asyncReducer
-    this.replaceReducer(createReducer(this.asyncReducers))
+    store.asyncReducers[key] = asyncReducer
+    store.replaceReducer(createReducer(this.asyncReducers))
   }
 
   // Return the modified store
