@@ -75,7 +75,7 @@ Now, one just needs to call `store.injectReducer` to add a new reducer to the st
 
 Another approach is to create a 'Reducer Manager' object, which keeps track of all the registered reducers and exposes a `reduce()` function. Consider the following example:
 
-```javascript
+```js
 export function createReducerManager(initialReducers) {
     // Create an object which maps keys to reducers
     const reducers = { ...initialReducers };
@@ -94,7 +94,7 @@ export function createReducerManager(initialReducers) {
         reduce: (state, action) => {
             // If any reducers have been removed, clean up their state first
             if (keysToRemove.length > 0) {
-                state = { ...state as any };
+                state = {...state};
                 for (let key of keysToRemove) {
                     delete state[key];
                 }
