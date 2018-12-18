@@ -119,7 +119,7 @@ export function createReducerManager(initialReducers) {
         },
 
         // Removes a reducer with the specified key
-        remove: (key: string) => {
+        remove: (key) => {
             if (!key || !reducers[key]) {
                 return;
             }
@@ -131,7 +131,7 @@ export function createReducerManager(initialReducers) {
             keysToRemove.push(key);
 
             // Generate a new combined reducer
-            combinedReducer = combineReducers(rm);
+            combinedReducer = combineReducers(reducers);
         }
     };
 }
