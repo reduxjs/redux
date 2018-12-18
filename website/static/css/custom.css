@@ -220,8 +220,8 @@ header.postHeader:empty + article h1 {
 
 @media only screen and (max-device-width: 480px) {
   .productShowcaseSection .featureBlock {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 30px;
+    padding-bottom: 5px;
   }
 
   .featureBlock .imageAlignTop .blockImage {
