@@ -1,6 +1,6 @@
 ---
 name: "\U0001F41BBug report"
-about: Something isn't working correctly.
+about: Something is wrong with Redux.
 ---
 
 **Do you want to request a _feature_ or report a _bug_?**
