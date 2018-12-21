@@ -235,7 +235,7 @@ Do not, however, use Immutable.JS in your dumb components.
 Always. This practice has several advantages:
 
 - It avoids unnecessary rerenders caused by calling `.toJS()` in selectors (since `.toJS()` will always return a new object).
-    - It is possible to memoize selectors where you call `.toJS()`, but it’s redundant when just returning Immutable.js objects without memoizing will suffice.
+  - It is possible to memoize selectors where you call `.toJS()`, but it’s redundant when just returning Immutable.js objects without memoizing will suffice.
 - It establishes a consistent interface for selectors; you won’t have to keep track of whether an Immutable.js object or plain JavaScript object will be returned.
 
 ### Use Immutable.JS objects in your Smart Components
