@@ -232,7 +232,11 @@ Do not, however, use Immutable.JS in your dumb components.
 
 ### Your selectors should return Immutable.JS objects
 
-Always.
+Always. This practice has several advantages:
+
+- It avoids unnecessary rerenders caused by calling `.toJS()` in selectors (since `.toJS()` will always return a new object).
+  - It is possible to memoize selectors where you call `.toJS()`, but it’s redundant when just returning Immutable.js objects without memoizing will suffice.
+- It establishes a consistent interface for selectors; you won’t have to keep track of whether an Immutable.js object or plain JavaScript object will be returned.
 
 ### Use Immutable.JS objects in your Smart Components
 
@@ -282,7 +286,7 @@ Such a dependency renders the component impure, makes testing the component more
 
 Something needs to map the Immutable.JS props in your Smart Component to the pure JavaScript props used in your Dumb Component. That something is a Higher Order Component (HOC) that simply takes the Immutable.JS props from your Smart Component, and converts them using `toJS()` to plain JavaScript props, which are then passed to your Dumb Component.
 
-Here is an example of such a HOC:
+An example of such a HOC follows. A similar HOC is available as an NPM package for your convenience: [with-immutable-props-to-js](https://www.npmjs.com/package/with-immutable-props-to-js).
 
 ```js
 import React from 'react'
