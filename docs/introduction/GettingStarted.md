@@ -47,6 +47,8 @@ To specify how the actions transform the state tree, you write pure _reducers_.
 That's it!
 
 ```js
+// This assumes you are running in a Node environment. If you are running in a browser environment,
+// import from 'redux/es/redux.mjs' instead.
 import { createStore } from 'redux'
 
 /**
