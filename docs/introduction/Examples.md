@@ -96,6 +96,10 @@ npm install
 npm start
 ```
 
+Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-flow):
+
+<iframe src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-flow" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
 This is like the previous Todos examples, but shows how to use Redux in conjunction with [Flow](https://flow.org/).
 
 ## TodoMVC
