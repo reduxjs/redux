@@ -20,6 +20,11 @@ cd redux/examples/counter-vanilla
 open index.html
 ```
 
+Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/docs/embed-test/examples/counter-vanilla):
+
+<iframe src="https://codesandbox.io/embed/github/reduxjs/redux/tree/docs/embed-test/examples/counter-vanilla" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+
 It does not require a build system or a view framework and exists to show the raw Redux API used with ES5.
 
 ## Counter
