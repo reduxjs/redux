@@ -1,0 +1,5 @@
+{
+  "name": "counter-vanilla",
+  "version": "1.0.0",
+  "description": "A simple counter implemented using Redux"
+}
