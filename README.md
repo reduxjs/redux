@@ -241,14 +241,14 @@ Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put togethe
 
 ## Documentation
 
-- [Introduction](http://redux.js.org/introduction/index.html)
-- [Basics](http://redux.js.org/basics/index.html)
-- [Advanced](http://redux.js.org/advanced/index.html)
-- [Recipes](http://redux.js.org/recipes/index.html)
-- [FAQ](http://redux.js.org/FAQ.html)
-- [Troubleshooting](http://redux.js.org/Troubleshooting.html)
-- [Glossary](http://redux.js.org/Glossary.html)
-- [API Reference](http://redux.js.org/api/index.html)
+- [Introduction](http://redux.js.org/introduction)
+- [Basics](http://redux.js.org/basics)
+- [Advanced](http://redux.js.org/advanced)
+- [Recipes](http://redux.js.org/recipes)
+- [FAQ](http://redux.js.org/faq)
+- [Troubleshooting](http://redux.js.org/troubleshooting)
+- [Glossary](http://redux.js.org/glossary)
+- [API Reference](http://redux.js.org/api)
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
