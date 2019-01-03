@@ -169,7 +169,7 @@ To achieve this, `configureStore` function looks like this:
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
-import monitorReducersEnhancer from './enhancers/monitorReducers'
+import monitorReducersEnhancer from './enhancers/monitorReducer'
 import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
 
@@ -227,7 +227,7 @@ import { applyMiddleware, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import monitorReducersEnhancer from './enhancers/monitorReducers'
+import monitorReducersEnhancer from './enhancers/monitorReducer'
 import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
 
@@ -264,7 +264,7 @@ First, let's add it to our `configureStore` function:
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
-import monitorReducersEnhancer from './enhancers/monitorReducers'
+import monitorReducersEnhancer from './enhancers/monitorReducer'
 import loggerMiddleware from './middleware/logger'
 import rootReducer from './reducers'
 
