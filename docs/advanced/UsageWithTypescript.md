@@ -48,25 +48,22 @@ Note that we are exporting these interfaces to reuse them later in reducers and 
 
 ## Type Checking Actions & Action Creators
 
-We will be using TypeScript's enums to declare our action constants. [Enums](https://www.typescriptlang.org/docs/handbook/enums.html) allow us to define a set of named constants. Note that we are making a tradeoff here when we declare our types in a separate file. In exchange for separating our types into a separate file, we get to keep our other files more focused on their purpose. While this tradeoff can improve the maintainability of the codebase, it is perfectly fine to organize your project however you see fit.
+We will be using string literals and using `typeof` to declare our action constants and infer types. Note that we are making a tradeoff here when we declare our types in a separate file. In exchange for separating our types into a separate file, we get to keep our other files more focused on their purpose. While this tradeoff can improve the maintainability of the codebase, it is perfectly fine to organize your project however you see fit.
 
 Chat Action Constants & Shape:
 
 ```ts
 // src/store/chat/types.ts
-
-export enum ChatActions {
-  SendMessage = 'SEND_MESSAGE',
-  DeleteMessage = 'DELETE_MESSAGE'
-}
+export const SEND_MESSAGE = 'SEND_MESSAGE'
+export const DELETE_MESSAGE = 'DELETE_MESSAGE'
 
 interface SendMessageAction {
-  type: ChatActions.SendMessage
+  type: typeof SEND_MESSAGE
   payload: Message
 }
 
 interface DeleteMessageAction {
-  type: ChatActions.DeleteMessage
+  type: typeof DELETE_MESSAGE
   meta: {
     timestamp: number
   }
@@ -82,12 +79,12 @@ With these types declared we can now also type check chat's action creators. In 
 ```ts
 // src/store/chat/actions.ts
 
-import { Message, ChatActions } from './types'
+import { Message, SEND_MESSAGE, DELETE_MESSAGE } from './types'
 
 // TypeScript infers that this function is returning SendMessageAction
 export function sendMessage(newMessage: Message) {
   return {
-    type: ChatActions.SendMessage,
+    type: SEND_MESSAGE,
     payload: newMessage
   }
 }
@@ -95,8 +92,10 @@ export function sendMessage(newMessage: Message) {
 // TypeScript infers that this function is returning DeleteMessageAction
 export function deleteMessage(timestamp: number) {
   return {
-    type: ChatActions.DeleteMessage,
-    meta: { timestamp }
+    type: DELETE_MESSAGE,
+    meta: {
+      timestamp
+    }
   }
 }
 ```
@@ -105,13 +104,10 @@ System Action Constants & Shape:
 
 ```ts
 // src/store/system/types.ts
-
-export enum SystemActions {
-  UpdateSession = 'UPDATE_SESSION'
-}
+export const UPDATE_SESSION = 'UPDATE_SESSION'
 
 interface UpdateSessionAction {
-  type: SystemActions.UpdateSession
+  type: typeof UPDATE_SESSION
   payload: SystemState
 }
 
@@ -123,11 +119,11 @@ With these types we can now also type check system's action creators:
 ```ts
 // src/store/system/actions.ts
 
-import { SystemActions, SystemState } from './types'
+import { SystemState, UPDATE_SESSION } from './types'
 
 export function updateSession(newSession: SystemState) {
   return {
-    type: SystemActions.UpdateSession,
+    type: UPDATE_SESSION,
     payload: newSession
   }
 }
@@ -142,7 +138,13 @@ Type checked chat reducer:
 ```ts
 // src/store/chat/reducers.ts
 
-import { ChatState, ChatActions, ChatActionTypes } from './types'
+import {
+  ChatState,
+  ChatActions,
+  ChatActionTypes,
+  SEND_MESSAGE,
+  DELETE_MESSAGE
+} from './types'
 
 const initialState: ChatState = {
   messages: []
@@ -153,11 +155,11 @@ export function chatReducer(
   action: ChatActionTypes
 ): ChatState {
   switch (action.type) {
-    case ChatActions.SendMessage:
+    case SEND_MESSAGE:
       return {
         messages: [...state.messages, action.payload]
       }
-    case ChatActions.DeleteMessage:
+    case DELETE_MESSAGE:
       return {
         messages: state.messages.filter(
           message => message.timestamp !== action.meta.timestamp
@@ -174,7 +176,12 @@ Type checked system reducer:
 ```ts
 // src/store/system/reducers.ts
 
-import { SystemActions, SystemState, SystemActionTypes } from './types'
+import {
+  SystemActions,
+  SystemState,
+  SystemActionTypes,
+  UPDATE_SESSION
+} from './types'
 
 const initialState: SystemState = {
   loggedIn: false,
@@ -187,7 +194,7 @@ export function systemReducer(
   action: SystemActionTypes
 ): SystemState {
   switch (action.type) {
-    case SystemActions.UpdateSession: {
+    case UPDATE_SESSION: {
       return {
         ...state,
         ...action.payload
