@@ -1,3 +1,10 @@
+---
+id: configuring-your-store
+title: Configuring Your Store
+sidebar_label: Configuring Your Store
+hide_title: true
+---
+
 # Configuring Your Store
 
 In the [basics section](../basics/README.md), we introduced the fundamental Redux concepts by building an example Todo list app.
@@ -42,7 +49,7 @@ We will add two middlewares and one enhancer:
 
 #### Install `redux-thunk`
 
-```
+```sh
 npm install --save redux-thunk
 ```
 
@@ -207,7 +214,7 @@ There are several ways to integrate the extension, but we will use the most conv
 
 First, we install the package via npm:
 
-```
+```sh
 npm install --save-dev redux-devtools-extension
 ```
 

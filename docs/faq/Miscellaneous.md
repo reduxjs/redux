@@ -1,3 +1,10 @@
+---
+id: miscellaneous
+title: Miscellaneous
+sidebar_label: Miscellaneous
+hide_title: true
+---
+
 # Redux FAQ: Miscellaneous
 
 ## Table of Contents
@@ -22,7 +29,7 @@ And many, many more! The Redux Addons Catalog has **[a list of Redux-based appli
 
 **Documentation**
 
-- [Introduction: Examples](/docs/introduction/Examples.md)
+- [Introduction: Examples](../introduction/Examples.md)
 
 **Discussions**
 

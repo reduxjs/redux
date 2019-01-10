@@ -34,7 +34,7 @@ Visit the [issue tracker](https://github.com/reduxjs/redux/issues) to find a lis
 
 Fork, then clone the repo:
 
-```
+```sh
 git clone https://github.com/your-username/redux.git
 ```
 
@@ -44,7 +44,7 @@ git clone https://github.com/your-username/redux.git
 
 Running the `build` task will create a CommonJS module-per-module build, a ES Modules build and a UMD build.
 
-```
+```sh
 npm run build
 ```
 
@@ -52,19 +52,19 @@ npm run build
 
 To only run linting:
 
-```
+```sh
 npm run lint
 ```
 
 To only run tests:
 
-```
+```sh
 npm run test
 ```
 
 To continuously watch and run tests, run the following:
 
-```
+```sh
 npm run test:watch
 ```
 
@@ -84,7 +84,7 @@ When adding a new example, please adhere to the style and format of the existing
 
 To test the official Redux examples, run the following:
 
-```
+```sh
 npm run examples:test
 ```
 

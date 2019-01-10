@@ -1,3 +1,10 @@
+---
+id: server-rendering
+title: Server Rendering
+sidebar_label: Server Rendering
+hide_title: true
+---
+
 # Server Rendering
 
 The most common use case for server-side rendering is to handle the _initial render_ when a user (or search engine crawler) first requests our app. When the server receives the request, it renders the required component(s) into an HTML string, and then sends it as a response to the client. From that point on, the client takes over rendering duties.
@@ -26,7 +33,7 @@ In the following recipe, we are going to look at how to set up server-side rende
 
 For this example, we'll be using [Express](http://expressjs.com/) as a simple web server. We also need to install the React bindings for Redux, since they are not included in Redux by default.
 
-```
+```sh
 npm install --save express react-redux
 ```
 
@@ -167,7 +174,7 @@ hydrate(
 
 You can set up your build tool of choice (Webpack, Browserify, etc.) to compile a bundle file into `static/bundle.js`.
 
-When the page loads, the bundle file will be started up and [`ReactDOM.hydrate()`](https://reactjs.org/docs/react-dom.html#hydrate) will hook into the `data-react-id` attributes from the server-rendered HTML. This will connect our newly-started React instance to the virtual DOM used on the server. Since we have the same initial state for our Redux store and used the same code for all our view components, the result will be the same real DOM.
+When the page loads, the bundle file will be started up and [`ReactDOM.hydrate()`](https://reactjs.org/docs/react-dom.html#hydrate) will reuse the server-rendered HTML. This will connect our newly-started React instance to the virtual DOM used on the server. Since we have the same initial state for our Redux store and used the same code for all our view components, the result will be the same real DOM.
 
 And that's it! That is all we need to do to implement server side rendering.
 

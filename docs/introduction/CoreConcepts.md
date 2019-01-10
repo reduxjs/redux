@@ -1,3 +1,10 @@
+---
+id: core-concepts
+title: Core Concepts
+sidebar_label: Core Concepts
+hide_title: true
+---
+
 # Core Concepts
 
 Imagine your app’s state is described as a plain object. For example, the state of a todo app might look like this:

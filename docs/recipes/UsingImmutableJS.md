@@ -1,3 +1,10 @@
+---
+id: using-immutablejs-with-redux
+title: Using Immutable.JS with Redux
+sidebar_label: Using Immutable.JS with Redux
+hide_title: true
+---
+
 # Using Immutable.JS with Redux
 
 ## Table of Contents
@@ -14,13 +21,13 @@ Immutable-focused libraries such as Immutable.JS have been designed to overcome 
 
 Whether you choose to use such a library, or stick with plain JavaScript, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within JavaScript’s approach to immutability.
 
-Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
+Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](./structuring-reducers/PrerequisiteConcepts.md#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
 
 #### Further Information
 
 **Documentation**
 
-- [Recipes: immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
+- [Recipes: immutability, side effects and mutation](./structuring-reducers/PrerequisiteConcepts.md#note-on-immutability-side-effects-and-mutation)
 
 **Articles**
 
@@ -150,7 +157,7 @@ This, together with its performance and rich API for data manipulation, is why I
 
 **Documentation**
 
-- [Troubleshooting: Nothing happens when I dispatch an action](http://redux.js.org/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
+- [Troubleshooting: Nothing happens when I dispatch an action](../Troubleshooting.md#nothing-happens-when-i-dispatch-an-action)
 
 ## What are some opinionated Best Practices for using Immutable.JS with Redux?
 
@@ -225,7 +232,11 @@ Do not, however, use Immutable.JS in your dumb components.
 
 ### Your selectors should return Immutable.JS objects
 
-Always.
+Always. This practice has several advantages:
+
+- It avoids unnecessary rerenders caused by calling `.toJS()` in selectors (since `.toJS()` will always return a new object).
+  - It is possible to memoize selectors where you call `.toJS()`, but it’s redundant when just returning Immutable.js objects without memoizing will suffice.
+- It establishes a consistent interface for selectors; you won’t have to keep track of whether an Immutable.js object or plain JavaScript object will be returned.
 
 ### Use Immutable.JS objects in your Smart Components
 
@@ -235,7 +246,7 @@ Smart components that access the store via React Redux’s `connect` function mu
 
 **Documentation**
 
-- [Recipes: Computing Derived Data](http://redux.js.org/recipes/ComputingDerivedData.html)
+- [Recipes: Computing Derived Data](./ComputingDerivedData.md)
 - [FAQ: Immutable Data](/faq/ImmutableData.html#immutability-issues-with-react-redux)
 - [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reduxjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
@@ -255,7 +266,7 @@ Converting an Immutable.JS object to a JavaScript object using `toJS()` will ret
 
 **Documentation**
 
-- [FAQ: Immutable Data](http://redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
+- [FAQ: Immutable Data](../faq/ImmutableData.md#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
 
 ### Never use Immutable.JS in your Dumb Components
 
@@ -275,7 +286,7 @@ Such a dependency renders the component impure, makes testing the component more
 
 Something needs to map the Immutable.JS props in your Smart Component to the pure JavaScript props used in your Dumb Component. That something is a Higher Order Component (HOC) that simply takes the Immutable.JS props from your Smart Component, and converts them using `toJS()` to plain JavaScript props, which are then passed to your Dumb Component.
 
-Here is an example of such a HOC:
+An example of such a HOC follows. A similar HOC is available as an NPM package for your convenience: [with-immutable-props-to-js](https://www.npmjs.com/package/with-immutable-props-to-js).
 
 ```js
 import React from 'react'

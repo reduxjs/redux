@@ -1,3 +1,10 @@
+---
+id: organizing-state
+title: Organizing State
+sidebar_label: Organizing State
+hide_title: true
+---
+
 # Redux FAQ: Organizing State
 
 ## Table of Contents
@@ -5,6 +12,7 @@
 - [Do I have to put all my state into Redux? Should I ever use React's setState()?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
 - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
 - [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
+- [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
 
 ## Organizing State
 
@@ -21,6 +29,7 @@ Some common rules of thumb for determining what kind of data should be put into 
 - Is the same data being used to drive multiple components?
 - Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
 - Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
+- Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
 
 There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more. It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
 
@@ -77,10 +86,10 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Documentation**
 
-- [Advanced: Async Actions](/docs/advanced/AsyncActions.md)
-- [Examples: Real World example](/docs/introduction/Examples.md#real-world)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Advanced: Async Actions](../advanced/AsyncActions.md)
+- [Examples: Real World example](../introduction/Examples.md#real-world)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
+- [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/structuring-reducers/NormalizingStateShape.md)
 - [Examples: Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
 
 **Articles**
@@ -100,3 +109,29 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
 - [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](http://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
 - [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
+
+### Should I put form state or other UI state in my store?
+
+The [same rules of thumb for deciding what should go in the Redux store](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate) apply for this question as well.
+
+**Based on those rules of thumb, most form state doesn't need to go into Redux**, as it's probably not being shared between components. However, that decision is always going to be specific to you and your application. You might choose to keep some form state in Redux because you are editing data that came from the store originally, or because you do need to see the work-in-progress values reflected in other components elsewhere in the application. On the other hand, it may be a lot simpler to keep the form state local to the component, and only dispatch an action to put the data in the store once the user is done with the form.
+
+Based on this, in most cases you probably don't need a Redux-based form management library either. We suggest trying these approaches, in this order:
+
+- Even if the data is coming from the Redux store, start by writing your form logic by hand. It's likely this is all you'll need. (See [**Gosha Arinich's posts on working with forms in React**](https://goshakkk.name/on-forms-react/) for some excellent guidance on this.)
+- If you decide that writing forms "manually" is too difficult, try a React-based form library like [Formik](https://github.com/jaredpalmer/formik) or [React-Final-Form](https://github.com/final-form/react-final-form).
+- If you are absolutely sure you _must_ use a Redux-based form library because the other approaches aren't sufficient, then you may finally want to look at [Redux-Form](https://github.com/erikras/redux-form) and [React-Redux-Form](https://github.com/davidkpiano/react-redux-form).
+
+If you are keeping form state in Redux, you should take some time to consider performance characteristics. Dispatching an action on every keystroke of a text input probably isn't worthwhile, and you may want to look into [ways to buffer keystrokes to keep changes local before dispatching](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/). As always, take some time to analyze the overall performance needs of your own application.
+
+Other kinds of UI state follow these rules of thumb as well. The classic example is tracking an `isDropdownOpen` flag. In most situations, the rest of the app doesn't care about this, so in most cases it should stay in component state. However, depending on your application, it may make sense to use Redux to [manage dialogs and other popups](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/), tabs, expanding panels, and so on.
+
+#### Further Information
+
+**Articles**
+
+- [Gosha Arinich: Writings on Forms in React](https://goshakkk.name/on-forms-react/)
+- [Practical Redux, Part 6: Connected Lists and Forms](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
+- [Practical Redux, Part 7: Form Change Handling](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/)
+- [Practical Redux, Part 10: Managing Modals and Context Menus](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/)
+- [React/Redux Links: Redux UI Management](https://github.com/markerikson/react-redux-links/blob/master/redux-ui-management.md)

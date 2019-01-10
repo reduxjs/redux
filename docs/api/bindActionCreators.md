@@ -1,3 +1,10 @@
+---
+id: bindactioncreators
+title: bindActionCreators
+sidebar_label: bindActionCreators
+hide_title: true
+---
+
 # `bindActionCreators(actionCreators, dispatch)`
 
 Turns an object whose values are [action creators](../Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatch) call so they may be invoked directly.
@@ -6,7 +13,7 @@ Normally you should just call [`dispatch`](Store.md#dispatch) directly on your [
 
 The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn't aware of Redux, and you don't want to pass [`dispatch`](Store.md#dispatch) or the Redux store to it.
 
-For convenience, you can also pass a single function as the first argument, and get a function in return.
+For convenience, you can also pass an action creator as the first argument, and get a dispatch wrapped function in return.
 
 #### Parameters
 
@@ -107,4 +114,4 @@ export default connect(state => ({ todos: state.todos }))(TodoListContainer)
 
 - You might ask: why don't we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won't work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you're stuck with a single store instance for all requests.
 
-- If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` arguments are functions. The module system doesn't matter.
+- If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` properties are functions. The module system doesn't matter.

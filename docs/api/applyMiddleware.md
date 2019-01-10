@@ -1,3 +1,10 @@
+---
+id: applymiddleware
+title: applyMiddleware
+sidebar_label: applyMiddleware
+hide_title: true
+---
+
 # `applyMiddleware(...middleware)`
 
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store's [`dispatch`](Store.md#dispatch) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
@@ -14,7 +21,7 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 
 #### Returns
 
-(_Function_) A store enhancer that applies the given middleware. The store enhancer signature is `createStore => createStore'` but the easiest way to apply it is to pass it to [`createStore()`](./createStore.md) as the last `enhancer` argument.
+(_Function_) A store enhancer that applies the given middleware. The store enhancer signature is `createStore => createStore` but the easiest way to apply it is to pass it to [`createStore()`](./createStore.md) as the last `enhancer` argument.
 
 #### Example: Custom Logger Middleware
 
@@ -172,9 +179,9 @@ class SandwichShop extends Component {
     this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.forPerson !== this.props.forPerson) {
-      this.props.dispatch(makeASandwichWithSecretSauce(nextProps.forPerson))
+  componentDidUpdate(prevProps) {
+    if (prevProps.forPerson !== this.props.forPerson) {
+      this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
     }
   }
 

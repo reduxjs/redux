@@ -1,16 +1,25 @@
+---
+id: usage-with-react
+title: Usage with React
+sidebar_label: Usage with React
+hide_title: true
+---
+
 # Usage with React
 
 From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.
 
 That said, Redux works especially well with libraries like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
 
-We will use React to build our simple todo app.
+We will use React to build our simple todo app, and cover the basics of how to use React with Redux.
+
+> **Note**: see **the official React-Redux docs at https://react-redux.js.org** for a complete guide on how to use Redux and React together.
 
 ## Installing React Redux
 
 [React bindings](https://github.com/reduxjs/react-redux) are not included in Redux by default. You need to install them explicitly:
 
-```
+```sh
 npm install --save react-redux
 ```
 
@@ -59,7 +68,7 @@ React bindings for Redux separate _presentational_ components from _container_ c
 
 Most of the components we'll write will be presentational, but we'll need to generate a few container components to connect them to the Redux store. This and the design brief below do not imply container components must be near the top of the component tree. If a container component becomes too complex (i.e. it has heavily nested presentational components with countless callbacks being passed down), introduce another container within the component tree as noted in the [FAQ](../faq/ReactRedux.md#react-multiple-components).
 
-Technically you could write the container components by hand using [`store.subscribe()`](../api/Store.md#subscribe). We don't advise you to do this because React Redux makes many performance optimizations that are hard to do by hand. For this reason, rather than write container components, we will generate them using the [`connect()`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connect) function provided by React Redux, as you will see below.
+Technically you could write the container components by hand using [`store.subscribe()`](../api/Store.md#subscribe). We don't advise you to do this because React Redux makes many performance optimizations that are hard to do by hand. For this reason, rather than write container components, we will generate them using the [`connect()`](https://react-redux.js.org/api#connect) function provided by React Redux, as you will see below.
 
 ## Designing Component Hierarchy
 
@@ -219,7 +228,7 @@ export default Footer
 
 ### Implementing Container Components
 
-Now it's time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand, but we suggest instead generating container components with the React Redux library's [`connect()`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function, which provides many useful optimizations to prevent unnecessary re-renders. (One result of this is that you shouldn't have to worry about the [React performance suggestion](https://facebook.github.io/react/docs/advanced-performance.html) of implementing `shouldComponentUpdate` yourself.)
+Now it's time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand, but we suggest instead generating container components with the React Redux library's [`connect()`](https://react-redux.js.org/using-react-redux/connect-mapstate) function, which provides many useful optimizations to prevent unnecessary re-renders. (One result of this is that you shouldn't have to worry about the [React performance suggestion](https://facebook.github.io/react/docs/advanced-performance.html) of implementing `shouldComponentUpdate` yourself.)
 
 To use `connect()`, you need to define a special function called `mapStateToProps` that describes how to transform the current Redux store state into the props you want to pass to a presentational component you are wrapping. For example, `VisibleTodoList` needs to calculate `todos` to pass to the `TodoList`, so we define a function that filters the `state.todos` according to the `state.visibilityFilter`, and use it in its `mapStateToProps`:
 
@@ -409,7 +418,7 @@ export default App
 
 All container components need access to the Redux store so they can subscribe to it. One option would be to pass it as a prop to every container component. However it gets tedious, as you have to wire `store` even through presentational components just because they happen to render a container deep in the component tree.
 
-The option we recommend is to use a special React Redux component called [`<Provider>`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#provider-store) to [magically](https://facebook.github.io/react/docs/context.html) make the store available to all container components in the application without passing it explicitly. You only need to use it once when you render the root component:
+The option we recommend is to use a special React Redux component called [`<Provider>`](https://react-redux.js.org/api/provider) to [magically](https://facebook.github.io/react/docs/context.html) make the store available to all container components in the application without passing it explicitly. You only need to use it once when you render the root component:
 
 #### `index.js`
 
@@ -433,4 +442,8 @@ render(
 
 ## Next Steps
 
-Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
+Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained.
+Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
+
+You should also take some time to **[read through the React-Redux docs](https://react-redux.js.org)** to get
+a better understanding of how to use React and Redux together.

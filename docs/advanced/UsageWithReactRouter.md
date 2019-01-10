@@ -1,3 +1,10 @@
+---
+id: usage-with-react-router
+title: Usage with React Router
+sidebar_label: Usage with React Router
+hide_title: true
+---
+
 # Usage with React Router
 
 So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/ReactTraining/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that trigger a URL change.
@@ -65,7 +72,7 @@ We will then import the `<Provider />` from React Redux:
 import { Provider } from 'react-redux'
 ```
 
-We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](http://redux.js.org/docs/basics/UsageWithReact.html#passing-the-store).
+We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](../basics/UsageWithReact.md#passing-the-store).
 
 ```js
 const Root = ({ store }) => (
@@ -125,7 +132,7 @@ render(<Root store={store} />, document.getElementById('root'))
 
 ## Navigating with React Router
 
-React Router comes with a [`<Link />`](https://github.com/ReactTraining/react-router/blob/v3/docs/API.md#link) component that lets you navigate around your application. If you want to add some styles, `react-router-dom` has another special `<Link />` called [`<NavLink />`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md), which accepts styling props. For instance, the `activeStyle` property lets us apply a style on the active state.
+React Router comes with a [`<Link />`](https://reacttraining.com/react-router/web/api/Link) component that lets you navigate around your application. If you want to add some styles, `react-router-dom` has another special `<Link />` called [`<NavLink />`](https://reacttraining.com/react-router/web/api/NavLink), which accepts styling props. For instance, the `activeStyle` property lets us apply a style on the active state.
 
 In our example, we can wrap `<NavLink />` with a new container component `<FilterLink />` so as to dynamically change the URL.
 

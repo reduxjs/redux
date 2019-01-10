@@ -1,3 +1,10 @@
+---
+id: code-structure
+title: Code Structure
+sidebar_label: Code Structure
+hide_title: true
+---
+
 # Redux FAQ: Code Structure
 
 ## Table of Contents
@@ -25,7 +32,7 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 
 **Documentation**
 
-- [FAQ: Actions - "1:1 mapping between reducers and actions?"](/docs/faq/Actions.md#actions-reducer-mappings)
+- [FAQ: Actions - "1:1 mapping between reducers and actions?"](./Actions.md#actions-reducer-mappings)
 
 **Articles**
 

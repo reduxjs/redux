@@ -1,0 +1,295 @@
+/* your custom css */
+
+header.postHeader:empty {
+  display: none;
+}
+
+header.postHeader:empty + article h1 {
+  margin-top: 0;
+}
+
+.homeContainer .homeWrapper {
+  padding-bottom: 1em;
+}
+
+.mainContainer {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.post article a {
+  /* add underlines to links in blocks of text for a11y */
+  color: $primaryColor;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.post article a:hover,
+.post article a:focus,
+.post article a:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  background-color: $secondaryColor;
+  color: white;
+  box-shadow: 0 0 0 2px $secondaryColor;
+  outline: none;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.post article blockquote {
+  color: black;
+  background-color: $accentColor4;
+  border-left: 8px solid $accentColor5;
+}
+
+.post article blockquote a {
+  /* add underlines to links in blocks of text for a11y */
+  color: black;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.post article blockquote a:hover,
+.post article blockquote a:focus,
+.post article blockquote a:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  background-color: $accentColor6;
+  color: white;
+  box-shadow: 0 0 0 2px $accentColor6;
+  outline: none;
+  text-decoration: underline;
+}
+
+.post article blockquote {
+  color: black;
+  background-color: $accentColor4;
+  border-left: 8px solid $accentColor5;
+}
+
+.post article blockquote a {
+  /* add underlines to links in blocks of text for a11y */
+  color: black;
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.post article blockquote a:hover,
+.post article blockquote a:focus,
+.post article blockquote a:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  background-color: $accentColor6;
+  color: white;
+  box-shadow: 0 0 0 2px $accentColor6;
+  outline: none;
+  text-decoration: underline;
+}
+
+.post article .hash-link {
+  /* add underlines to links in blocks of text for a11y */
+  color: $accentColor1;
+  transition: outline-offset 0.2s ease-in-out;
+  opacity: 1;
+}
+
+.post article .hash-link:hover,
+.post article .hash-link:focus,
+.post article .hash-link:active {
+  /* change color and bg to display state change in more than one way for a11y */
+  color: $secondaryColor;
+  background-color: white;
+  box-shadow: 0 0 0 0 $accentColor6;
+  transition: outline-offset 0.2s ease-in-out;
+}
+
+.hash-link .hash-link-icon {
+  fill: currentColor;
+}
+
+
+.fixedHeaderContainer header .headerTitleWithLogo {
+  color : white;
+  display: block !important;
+}
+
+.navigationSlider .slidingNav ul.nav-site a {
+  color : white;
+  font-weight: 400;
+}
+
+.navigationSlider .slidingNav ul.nav-site a:hover,
+.navigationSlider .slidingNav ul.nav-site a:focus,
+.navigationSlider .slidingNav ul.nav-site a:active {
+  color : white;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.navigationSlider .slidingNav ul a[href*="github"] {
+  font-size: 0;
+}
+
+.navigationSlider .slidingNav ul a[href*="github"]::before {
+  content : "";
+  width : 32px;
+  height : 32px;
+  background: url("/img/github-brands.svg");
+}
+
+.nav-footer .copyright,
+.nav-footer .sitemap a {
+  /* increase link contrast */
+  color: white;
+}
+
+.button.hero {
+  background: $primaryColor;
+  color: #fff;
+  font-size: 30px;
+  padding: .5em 1.25em;
+  font-weight: bold;
+}
+
+.button.hero:visited {
+  background: $primaryColor;
+  color: #fff;
+}
+
+.button.hero:hover {
+  background: #fff;
+  color: $primaryColor;
+}
+
+
+.productShowcaseSection .rowContainer {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.productShowcaseSection .featureBlock img {
+  width: 60px;
+  height: 60px;
+  max-width: 60px;
+  max-height: 60px;
+}
+
+.featureBlock .blockContent > div p,
+.docsSurvey .blockContent > div p {
+  text-align: left;
+}
+
+.libBlock > div p {
+  text-align: center;
+}
+
+.libBlock h2 a,
+.libBlock h2 a:visited {
+  color : black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.libBlock img {
+  margin-left: 5px;
+  max-width: 16px !important;
+  max-height: 16px !important;
+}
+
+.container .wrapper .alignLeft h2 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.libsContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.libsContainer .docsSurvey h2 {
+  margin-top : 0;
+  margin-bottom: 30px;
+}
+
+@media only screen and (max-device-width: 480px) {
+  .productShowcaseSection .featureBlock {
+    padding-top: 30px;
+    padding-bottom: 5px;
+  }
+
+  .featureBlock .imageAlignTop .blockImage {
+    margin-bottom: 0;
+  }
+
+  .featureBlock .blockContent h2 {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  .featureBlock .blockContent {
+    margin-bottom: 25px;
+  }
+
+  .homeSplashFade img {
+    width : 60px;
+    height : 60px;
+  }
+
+  .homeSplashFade h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+}
+
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+}
+
+@media only screen and (min-width: 1024px) {
+  .reactNavSearchWrapper input#search_input_react {
+    height: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 38px;
+  }
+
+  .navSearchWrapper:before {
+    left: 24px;
+  }
+
+  .navSearchWrapper:after {
+    left: 35px;
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+  .reactNavSearchWrapper input#search_input_react {
+    padding-left: 38px;
+  }
+
+  .navSearchWrapper:before {
+    left: 24px;
+  }
+
+  .navSearchWrapper:after {
+    left: 35px;
+  }
+
+  .libsContainer {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
+@media only screen and (min-width: 1500px) {
+}

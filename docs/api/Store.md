@@ -1,3 +1,10 @@
+---
+id: store
+title: Store
+sidebar_label: Store
+hide_title: true
+---
+
 # Store
 
 A store holds the whole [state tree](../Glossary.md#state) of your application.
@@ -15,7 +22,7 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replacereducer)
+- [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store Methods
 

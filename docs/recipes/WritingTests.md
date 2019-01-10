@@ -1,3 +1,10 @@
+---
+id: writing-tests
+title: Writing Tests
+sidebar_label: Writing Tests
+hide_title: true
+---
+
 # Writing Tests
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.
@@ -7,13 +14,13 @@ Because most of the Redux code you write are functions, and many of them are pur
 We recommend [Jest](http://facebook.github.io/jest/) as the testing engine.
 Note that it runs in a Node environment, so you won't have access to the DOM.
 
-```
+```sh
 npm install --save-dev jest
 ```
 
 To use it together with [Babel](http://babeljs.io), you will need to install `babel-jest`:
 
-```
+```sh
 npm install --save-dev babel-jest
 ```
 
@@ -190,7 +197,7 @@ export default function todos(state = initialState, action) {
 can be tested like:
 
 ```js
-import reducer from '../../reducers/todos'
+import reducer from '../../structuring-reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
 describe('todos reducer', () => {
@@ -254,13 +261,13 @@ A nice thing about React components is that they are usually small and only rely
 
 First, we will install [Enzyme](http://airbnb.io/enzyme/). Enzyme uses the [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html) underneath, but is more convenient, readable, and powerful.
 
-```
+```sh
 npm install --save-dev enzyme
 ```
 
 We will also need to install Enzyme adapter for our version of React. Enzyme has adapters that provide compatibility with `React 16.x`, `React 15.x`, `React 0.14.x` and `React 0.13.x`. If you are using React 16 you can run:
 
-```
+```sh
 npm install --save-dev enzyme-adapter-react-16
 ```
 
@@ -352,7 +359,7 @@ describe('components', () => {
 
 ### Connected Components
 
-If you use a library like [React Redux](https://github.com/reduxjs/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options). This lets you inject Redux state into a regular React component.
+If you use a library like [React Redux](https://github.com/reduxjs/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://react-redux.js.org/api#connect). This lets you inject Redux state into a regular React component.
 
 Consider the following `App` component:
 
@@ -372,7 +379,7 @@ In a unit test, you would normally import the `App` component like this:
 import App from './App'
 ```
 
-However, when you import it, you're actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
+However, when you import it, you're actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://react-redux.js.org/api/provider) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
 
 In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 

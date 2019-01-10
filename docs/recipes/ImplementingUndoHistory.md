@@ -1,3 +1,10 @@
+---
+id: implementing-undo-history
+title: Implementing Undo History
+sidebar_label: Implementing Undo History
+hide_title: true
+---
+
 # Implementing Undo History
 
 Building an Undo and Redo functionality into an app has traditionally required conscious effort from the developer. It is not an easy problem with classical MVC frameworks because you need to keep track of every past state by cloning all relevant models. In addition, you need to be mindful of the undo stack because the user-initiated changes should be undoable.
@@ -16,7 +23,7 @@ In the first part of this recipe, we will explain the underlying concepts that m
 
 In the second part of this recipe, we will show how to use [Redux Undo](https://github.com/omnidan/redux-undo) package that provides this functionality out of the box.
 
-[![demo of todos-with-undo](http://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
+[![demo of todos-with-undo](https://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
 
 ## Understanding Undo History
 
@@ -369,13 +376,13 @@ You might have heard that Redux was influenced by [Elm Architecture](https://git
 
 This was all very informative, but can't we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
 
-In this part of the recipe, you will learn how to make the [Todo List example](http://redux.js.org/basics/ExampleTodoList.html) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
+In this part of the recipe, you will learn how to make the [Todo List example](../basics/ExampleTodoList.md) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
 
 ### Installation
 
 First of all, you need to run
 
-```
+```sh
 npm install --save redux-undo
 ```
 

@@ -11,9 +11,9 @@ export default class Explore extends Component {
     onChange: PropTypes.func.isRequired
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      this.setInputValue(nextProps.value)
+  componentDidUpdate(prevProps) {
+    if (prevProps.value !== this.props.value) {
+      this.setInputValue(this.props.value)
     }
   }
 

@@ -1,9 +1,16 @@
+---
+id: performance
+title: Performance
+sidebar_label: Performance
+hide_title: true
+---
+
 # Redux FAQ: Performance
 
 ## Table of Contents
 
 - [How well does Redux “scale” in terms of performance and architecture?](#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
-- [Won't calling “all my reducers” for each action be slow?](#wont-calling-all-my-reducers-for-each-action-be-slow)
+- [Won't calling “all my reducers” for each action be slow?](#won-t-calling-all-my-reducers-for-each-action-be-slow)
 - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
 - [How can I reduce the number of store update events?](#how-can-i-reduce-the-number-of-store-update-events)
 - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
@@ -27,7 +34,7 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 
 **Documentation**
 
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/structuring-reducers/NormalizingStateShape.md)
 
 **Articles**
 
@@ -88,8 +95,8 @@ However, you _do_ need to create a copied and updated object for each level of n
 
 **Documentation**
 
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
+- [Recipes: Structuring Reducers - Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
 
 **Discussions**
 
@@ -129,7 +136,7 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 
 **Documentation**
 
-- [Docs: Async Actions](/docs/advanced/AsyncActions.md)
+- [Docs: Async Actions](../advanced/AsyncActions.md)
 
 **Discussions**
 
@@ -149,7 +156,7 @@ First, only cache as much data as the user needs. If your application displays a
 
 Second, cache an abbreviated form of a record when possible. Sometimes a record includes data that is not relevant to the user. If the application does not depend on this data, it can be omitted from the cache.
 
-Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](/docs/recipes/reducers/NormalizingStateShape.html#designing-a-normalized-state), including efficient memory consumption.
+Third, only cache a single copy of a record. This is especially important when records contain copies of other records. Cache a unique copy for each record and replace each nested copy with a reference. This is called normalization. Normalization is the preferred approach to storing relational data for [several reasons](../recipes/reducers/NormalizingStateShape.md#designing-a-normalized-state), including efficient memory consumption.
 
 #### Further information
 

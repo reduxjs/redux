@@ -1,7 +1,15 @@
+---
+id: react-redux
+title: React Redux
+sidebar_label: React Redux
+hide_title: true
+---
+
 # Redux FAQ: React Redux
 
 ## Table of Contents
 
+- [Why should I use React-Redux?](#why-should-i-use-react-redux)
 - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
 - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
 - [How can I speed up my mapStateToProps?](#how-can-i-speed-up-my-mapstatetoprops)
@@ -9,6 +17,26 @@
 - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
 
 ## React Redux
+
+### Why should I use React-Redux?
+
+Redux itself is a standalone library that can be used with any UI layer or framework, including React, Angular, Vue, Ember, and vanilla JS. Although Redux and React are commonly used together, they are independent of each other.
+
+If you are using Redux with any kind of UI framework, you will normally use a "UI binding" library to tie Redux together with your UI framework, rather than directly interacting with the store from your UI code.
+
+**React-Redux is the official Redux UI binding library for React**. If you are using Redux and React together, you should also use React-Redux to bind these two libraries.
+
+While it is possible to write Redux store subscription logic by hand, doing so would become very repetitive. In addition, optimizing UI performance would require complicated logic.
+
+The process of subscribing to the store, checking for updated data, and triggering a re-render can be made more generic and reusable. **A UI binding library like React-Redux handles the store interaction logic, so you don't have to write that code yourself.**
+
+Overall, React-Redux encourages good React architecture, and implements complex performance optimizations for you. It is also kept up-to-date with the latest API changes from Redux and React.
+
+#### Further Information
+
+**Documentation**
+
+- **[React-Redux docs: Why Use React-Redux?](https://react-redux.js.org/introduction/why-use-react-redux)**
 
 ### Why isn't my component re-rendering, or my mapStateToProps running?
 
@@ -26,11 +54,11 @@ Note that “updating data immutably” does _not_ mean that you must use [Immut
 
 **Documentation**
 
-- [Troubleshooting](/docs/Troubleshooting.md)
-- [React Redux: Troubleshooting](https://github.com/reduxjs/react-redux/blob/master/docs/troubleshooting.md)
-- [Recipes: Using the Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+- [Troubleshooting](../Troubleshooting.md)
+- [React Redux: Troubleshooting](https://react-redux.js.org/troubleshooting)
+- [Recipes: Using the Object Spread Operator](../recipes/UsingObjectSpreadOperator.md)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
+- [Recipes: Structuring Reducers - Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
 
 **Articles**
 
@@ -67,7 +95,7 @@ For non-connected components, you may want to check what props are being passed 
 
 **Documentation**
 
-- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+- [FAQ: Performance - Scaling](./Performance.md#performance-scaling)
 
 **Articles**
 
@@ -93,7 +121,7 @@ While React Redux does work to minimize the number of times that your `mapStateT
 
 **Documentation**
 
-- [Recipes: Computed Derived Data](/docs/recipes/ComputingDerivedData.md)
+- [Recipes: Computed Derived Data](../recipes/ComputingDerivedData.md)
 
 **Articles**
 
@@ -114,7 +142,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 
 **Documentation**
 
-- [React Redux API: connect()](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+- [React Redux API: connect()](https://react-redux.js.org/api#connect)
 
 **Discussions**
 
@@ -139,8 +167,8 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Documentation**
 
-- [Basics: Usage with React](/docs/basics/UsageWithReact.md)
-- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+- [Basics: Usage with React](../basics/UsageWithReact.md)
+- [FAQ: Performance - Scaling](../faq/Performance.md#performance-scaling)
 
 **Articles**
 

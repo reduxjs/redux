@@ -5,3 +5,8 @@ dist
 lib
 es
 coverage
+
+website/translated_docs
+website/build/
+website/node_modules
+website/i18n/*

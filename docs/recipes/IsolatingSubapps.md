@@ -1,3 +1,10 @@
+---
+id: isolating-redux-sub-apps
+title: Isolating Redux Sub-Apps
+sidebar_label: Isolating Redux Sub-Apps
+hide_title: true
+---
+
 # Isolating Redux Sub-Apps
 
 Consider the case of a “big” app (contained in a `<BigApp>` component)

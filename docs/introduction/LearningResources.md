@@ -1,3 +1,10 @@
+---
+id: learning-resources
+title: Learning Resources
+sidebar_label: Learning Resources
+hide_title: true
+---
+
 # Learning Resources
 
 The Redux docs are intended to teach the basic concepts of Redux, as well as explain key concepts for use in real-world applications. However, the docs can't cover everything. Happily, there are many other great resources available for learning Redux. We encourage you to check them out. Many of them cover topics that are beyond the scope of the docs, or describe the same topics in other ways that may work better for your learning style.
@@ -167,10 +174,6 @@ _How to structure the Redux store like a database for best performance_
 - **Normalizing Redux Stores for Maximum Code Reuse**  
   https://medium.com/@adamrackis/normalizing-redux-stores-for-maximum-code-reuse-ae6e3844ae95  
   Thoughts on how normalized Redux stores enable some useful data handling approaches, with examples of using selector functions to denormalize hierarchical data.
-
-- **Redux Normalizr: Improve your State Management**  
-  http://www.robinwieruch.de/the-soundcloud-client-in-react-redux-normalizr/  
-  A tutorial describing how to use Normalizr for improved data management of nested data in Redux
 
 - **Advanced Redux Entity Normalization**  
   https://medium.com/@dcousineau/advanced-redux-entity-normalization-f5f1fe2aefc5  
@@ -356,6 +359,10 @@ _Patterns and practices for structuring larger Redux applications_
 - **The Complete Redux Book**  
   https://leanpub.com/redux-book  
   How do I manage a large state in production? Why do I need store enhancers? What is the best way to handle form validations? Get the answers to all these questions and many more using simple terms and sample code. Learn everything you need to use Redux to build complex and production-ready web applications. (Note: now permanently free!)
+
+- **Taming the State in React**  
+  https://www.robinwieruch.de/learn-react-redux-mobx-state-management/  
+  If you have learned React with the previous book of the author called The Road to learn React, Taming the State in React will be the perfect blend to learn about basic and advanced state management in React. You will start out with learning only Redux without React. Afterward, the book shows you how to connect Redux to your React application. The advanced chapters will teach you about normalization, naming, selectors and asynchronous actions. In the end, you will set up and build a real world application with React and Redux.
 
 ## Courses
 

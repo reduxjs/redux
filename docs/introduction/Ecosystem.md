@@ -1,3 +1,10 @@
+---
+id: ecosystem
+title: Ecosystem
+sidebar_label: Ecosystem
+hide_title: true
+---
+
 # Ecosystem
 
 Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions, and the community has created a wide variety of helpful addons, libraries, and tools. You don't need to use any of these addons to use Redux, but they can help make it easier to implement features and solve problems in your application.
@@ -34,6 +41,7 @@ This page lists some of the Redux-related addons that the Redux maintainers have
 - [Component State and Encapsulation](#component-state-and-encapsulation)
 - [Dev Tools](#dev-tools)
   - [Debuggers and Viewers](#debuggers-and-viewers)
+  - [DevTools Monitors](#devtools-monitors)
   - [Logging](#logging)
   - [Mutation Detection](#mutation-detection)
 - [Testing](#testing)
@@ -56,7 +64,7 @@ Angular 2+ bindings for Redux
 **[ember-redux/ember-redux](https://github.com/ember-redux/ember-redux)**  
 Ember bindings for Redux
 
-**[glimmer-redux/glimmer-redux](glimmer-redux/glimmer-redux)**  
+**[glimmer-redux/glimmer-redux](https://github.com/glimmer-redux/glimmer-redux)**  
 Redux bindings for Ember's Glimmer component engine
 
 **[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
@@ -69,7 +77,7 @@ Redux bindings for custom elements
 
 #### Reducer Combination
 
-**[ryo33/combineSectionReducers](https://github.com/ryo33/combine-section-reducers)**  
+**[ryo33/combineSectionReducers](https://gitlab.com/ryo33/combine-section-reducers)**  
 An expanded version of `combineReducers`, which allows passing `state` as a third argument to all slice reducers.
 
 **[KodersLab/topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers)**  
@@ -798,8 +806,8 @@ Makes integration and unit testing of sagas a breeze
 
 ## Routing
 
-**[ReactTraining/react-router-redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)**  
-Keep your state in sync with your router
+**[supasate/connected-react-router](https://github.com/supasate/connected-react-router)**
+Synchronize React Router 4 state with your Redux store.
 
 **[FormidableLabs/redux-little-router](https://github.com/FormidableLabs/redux-little-router)**  
 A tiny router for Redux applications that lets the URL do the talking

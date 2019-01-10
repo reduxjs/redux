@@ -1,3 +1,10 @@
+---
+id: reducing-boilerplate
+title: Reducing Boilerplate
+sidebar_label: Reducing Boilerplate
+hide_title: true
+---
+
 # Reducing Boilerplate
 
 Redux is in part [inspired by Flux](../introduction/PriorArt.md), and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider how Redux lets us choose how verbose we'd like our code to be, depending on personal style, team preferences, longer term maintainability, and so on.
@@ -221,9 +228,9 @@ class Posts extends Component {
     this.loadData(this.props.userId)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
-      this.loadData(nextProps.userId)
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.loadData(this.props.userId)
     }
   }
 
@@ -306,9 +313,9 @@ class Posts extends Component {
     this.props.dispatch(loadPosts(this.props.userId))
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
-      this.props.dispatch(loadPosts(nextProps.userId))
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.props.dispatch(loadPosts(this.props.userId))
     }
   }
 

@@ -1,3 +1,10 @@
+---
+id: actions
+title: Actions
+sidebar_label: Actions
+hide_title: true
+---
+
 # Redux FAQ: Actions
 
 ## Table of Contents
@@ -22,7 +29,7 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 
 **Documentation**
 
-- [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md#actions)
+- [Reducing Boilerplate](../recipes/ReducingBoilerplate.md#actions)
 
 **Discussion**
 
@@ -41,8 +48,8 @@ No. We suggest you write independent small reducer functions that are each respo
 
 **Documentation**
 
-- [Basics: Reducers](/docs/basics/Reducers.md)
-- [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
+- [Basics: Reducers](../basics/Reducers.md)
+- [Recipes: Structuring Reducers](../recipes/structuring-reducers/StructuringReducers.md)
 
 **Discussions**
 
@@ -67,9 +74,9 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 
 **Documentation**
 
-- [Advanced: Async Actions](/docs/advanced/AsyncActions.md)
-- [Advanced: Async Flow](/docs/advanced/AsyncFlow.md)
-- [Advanced: Middleware](/docs/advanced/Middleware.md)
+- [Advanced: Async Actions](../advanced/AsyncActions.md)
+- [Advanced: Async Flow](../advanced/AsyncFlow.md)
+- [Advanced: Middleware](../advanced/Middleware.md)
 
 **Articles**
 
@@ -134,7 +141,7 @@ Try to avoid dispatching several times synchronously in a row in the places wher
 
 **Documentation**
 
-- [FAQ: Performance - Reducing Update Events](/docs/faq/Performance.md#performance-update-events)
+- [FAQ: Performance - Reducing Update Events](./Performance.md#performance-update-events)
 
 **Articles**
 

@@ -1,3 +1,10 @@
+---
+id: actions
+title: Actions
+sidebar_label: Actions
+hide_title: true
+---
+
 # Actions
 
 First, let's define some actions.
@@ -95,7 +102,7 @@ const boundCompleteTodo = index => dispatch(completeTodo(index))
 
 Now you'll be able to call them directly:
 
-```
+```js
 boundAddTodo(text)
 boundCompleteTodo(index)
 ```

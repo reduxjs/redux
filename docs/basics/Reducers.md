@@ -1,3 +1,10 @@
+---
+id: reducers
+title: Reducers
+sidebar_label: Reducers
+hide_title: true
+---
+
 # Reducers
 
 **Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe _what happened_, but don't describe how the application's state changes.
@@ -37,8 +44,8 @@ You'll often find that you need to store some data, as well as some UI state, in
 
 Now that we've decided what our state object looks like, we're ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
 
-```js
-;(previousState, action) => newState
+```
+(previousState, action) => newState
 ```
 
 It's called a reducer because it's the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It's very important that the reducer stays pure. Things you should **never** do inside a reducer:
@@ -254,7 +261,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that `todos` also accepts `state`—but it's an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called _reducer composition_, and it's the fundamental pattern of building Redux apps.**
+Note that `todos` also accepts `state`—but `state` is an array! Now `todoApp` gives `todos` just a slice of the state to manage, and `todos` knows how to update just that slice. **This is called _reducer composition_, and it's the fundamental pattern of building Redux apps.**
 
 Let's explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can.
 

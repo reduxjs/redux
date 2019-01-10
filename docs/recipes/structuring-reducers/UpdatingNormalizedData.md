@@ -1,3 +1,10 @@
+---
+id: updating-normalized-data
+title: Updating Normalized Data
+sidebar_label: Updating Normalized Data
+hide_title: true
+---
+
 # Managing Normalized Data
 
 As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store. However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application. There are a variety of different approaches that you can use, based on your own preference. We'll use the example of adding a new Comment to a Post.

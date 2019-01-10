@@ -1,3 +1,10 @@
+---
+id: async-actions
+title: Async Actions
+sidebar_label: Async Actions
+hide_title: true
+---
+
 # Async Actions
 
 In the [basics guide](../basics/README.md), we built a simple todo application. It was fully synchronous. Every time an action was dispatched, the state was updated immediately.
@@ -38,7 +45,7 @@ Or you can define separate types for them:
 { type: 'FETCH_POSTS_SUCCESS', response: { ... } }
 ```
 
-Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
+Choosing whether to use a single action type with flags, or multiple action types, is up to you. It's a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://redux-actions.js.org/).
 
 Whatever convention you choose, stick with it throughout the application.  
 We'll use separate types in this tutorial.

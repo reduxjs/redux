@@ -1,3 +1,10 @@
+---
+id: combinereducers
+title: combineReducers
+sidebar_label: combineReducers
+hide_title: true
+---
+
 # `combineReducers(reducers)`
 
 As your app grows more complex, you'll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
@@ -9,7 +16,7 @@ The resulting reducer calls every child reducer, and gathers their results into 
 
 Example:
 
-```
+```js
 rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 // This would produce the following state object
 {

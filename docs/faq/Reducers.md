@@ -1,3 +1,10 @@
+---
+id: reducers
+title: Reducers
+sidebar_label: Reducers
+hide_title: true
+---
+
 # Redux FAQ: Reducers
 
 ## Table of Contents
@@ -9,13 +16,13 @@
 
 ### How do I share state between two reducers? Do I have to use `combineReducers`?
 
-The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](/docs/api/combineReducers.md) utility function to make this pattern easier. However, it's important to note that `combineReducers` is _not_ required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
+The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](../api/combineReducers.md) utility function to make this pattern easier. However, it's important to note that `combineReducers` is _not_ required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
 
 Many users later want to try to share data between two reducers, but find that `combineReducers` does not allow them to do so. There are several approaches that can be used:
 
 - If a reducer needs to know data from another slice of state, the state tree shape may need to be reorganized so that a single reducer is handling more of the data.
 - You may need to write some custom functions for handling some of these actions. This may require replacing `combineReducers` with your own top-level reducer function. You can also use a utility such as [reduce-reducers](https://github.com/acdlite/reduce-reducers) to run `combineReducers` to handle most actions, but also run a more specialized reducer for specific actions that cross state slices.
-- [Async action creators](/docs/advanced/AsyncActions.md#async-action-creators) such as [redux-thunk](https://github.com/gaearon/redux-thunk) have access to the entire state through `getState()`. An action creator can retrieve additional data from the state and put it in an action, so that each reducer has enough information to update its own state slice.
+- [Async action creators](../advanced/AsyncActions.md#async-action-creators) such as [redux-thunk](https://github.com/gaearon/redux-thunk) have access to the entire state through `getState()`. An action creator can retrieve additional data from the state and put it in an action, so that each reducer has enough information to update its own state slice.
 
 In general, remember that reducers are just functions—you can organize them and subdivide them any way you want, and you are encouraged to break them down into smaller, reusable functions (“reducer composition”). While you do so, you may pass a custom third argument from a parent reducer if a child reducer needs additional data to calculate its next state. You just need to make sure that together they follow the basic rules of reducers: `(state, action) => newState`, and update state immutably rather than mutating it directly.
 
@@ -23,8 +30,8 @@ In general, remember that reducers are just functions—you can organize them an
 
 **Documentation**
 
-- [API: combineReducers](/docs/api/combineReducers.md)
-- [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
+- [API: combineReducers](../api/combineReducers.md)
+- [Recipes: Structuring Reducers](../recipes/structuring-reducers/StructuringReducers.md)
 
 **Discussions**
 
@@ -42,8 +49,8 @@ No. You are welcome to use any approach you'd like to respond to an action in a 
 
 **Documentation**
 
-- [Recipes: Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
-- [Recipes: Structuring Reducers - Splitting Reducer Logic](/docs/recipes/reducers/SplittingReducerLogic.md)
+- [Recipes: Reducing Boilerplate](../recipes/ReducingBoilerplate.md)
+- [Recipes: Structuring Reducers - Splitting Reducer Logic](../recipes/structuring-reducers/SplittingReducerLogic.md)
 
 **Discussions**
 
