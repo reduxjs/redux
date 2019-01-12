@@ -68,7 +68,7 @@ React bindings for Redux separate _presentational_ components from _container_ c
 
 Most of the components we'll write will be presentational, but we'll need to generate a few container components to connect them to the Redux store. This and the design brief below do not imply container components must be near the top of the component tree. If a container component becomes too complex (i.e. it has heavily nested presentational components with countless callbacks being passed down), introduce another container within the component tree as noted in the [FAQ](../faq/ReactRedux.md#react-multiple-components).
 
-Technically you could write the container components by hand using [`store.subscribe()`](../api/Store.md#subscribe). We don't advise you to do this because React Redux makes many performance optimizations that are hard to do by hand. For this reason, rather than write container components, we will generate them using the [`connect()`](https://react-redux.js.org/api#connect) function provided by React Redux, as you will see below.
+Technically you could write the container components by hand using [`store.subscribe()`](../api/Store.md#subscribe). We don't advise you to do this because React Redux makes many performance optimizations that are hard to do by hand. For this reason, rather than write container components, we will generate them using the [`connect()`](https://react-redux.js.org/api/connect#connect) function provided by React Redux, as you will see below.
 
 ## Designing Component Hierarchy
 
