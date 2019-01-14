@@ -33,7 +33,7 @@ class RepoPage extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.fullName !== this.props.fullName) {
-      loadData(this.props.fullName)
+      loadData(this.props)
     }
   }
 
