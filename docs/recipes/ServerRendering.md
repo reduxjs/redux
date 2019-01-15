@@ -76,7 +76,7 @@ app.listen(port)
 
 ### Handling the Request
 
-The first thing that we need to do on every request is create a new Redux store instance. The only purpose of this store instance is to provide the initial state of our application.
+The first thing that we need to do on every request is to create a new Redux store instance. The only purpose of this store instance is to provide the initial state of our application.
 
 When rendering, we will wrap `<App />`, our root component, inside a `<Provider>` to make the store available to all components in the component tree, as we saw in [Usage with React](../basics/UsageWithReact.md).
 
