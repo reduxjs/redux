@@ -142,7 +142,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 
 **Documentation**
 
-- [React Redux API: connect()](https://react-redux.js.org/api#connect)
+- [React Redux API: connect()](https://react-redux.js.org/api/connect)
 
 **Discussions**
 
