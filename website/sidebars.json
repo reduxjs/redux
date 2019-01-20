@@ -32,6 +32,7 @@
     "Recipes": [
       "recipes/recipe-index",
       "recipes/configuring-your-store",
+      "recipes/usage-with-typescript",
       "recipes/migrating-to-redux",
       "recipes/using-object-spread-operator",
       "recipes/reducing-boilerplate",

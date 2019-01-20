@@ -10,6 +10,7 @@ hide_title: true
 These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [basic](../basics/README.md) and [advanced](../advanced/README.md) tutorials.
 
 - [Configuring Your Store](ConfiguringYourStore.md)
+- [Usage with TypeScript](./UsageWithTypescript.md)
 - [Migrating to Redux](MigratingToRedux.md)
 - [Using Object Spread Operator](UsingObjectSpreadOperator.md)
 - [Reducing Boilerplate](ReducingBoilerplate.md)

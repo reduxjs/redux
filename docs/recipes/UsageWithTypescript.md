@@ -1,3 +1,10 @@
+---
+id: usage-with-typescript
+title: Usage With TypeScript
+sidebar_label: Usage With TypeScript
+hide_title: true
+---
+
 # Usage with TypeScript
 
 **TypeScript** is a typed superset of JavaScript. It has become popular recently in applications due to the benefits it can bring. If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding. You can check out its documentation [here.](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
