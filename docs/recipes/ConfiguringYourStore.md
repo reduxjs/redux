@@ -317,6 +317,67 @@ renderApp()
 
 The only extra change here is that we have encapsulated our app's rendering into a new `renderApp` function, which we now call to re-render the app.
 
+## Simplifying Setup with Redux Starter Kit
+
+The Redux core library is deliberately unopinionated. It lets you decide how you want to handle everything, like store
+setup, what your state contains, and how you want to build your reducers.
+
+This is good in some cases, because it gives you flexibility, but that flexibility isn't always needed. Sometimes we
+just want the simplest possible way to get started, with some good default behavior out of the box.
+
+The [Redux Starter Kit](https://redux-starter-kit.js.org/) package is designed to help simplify several common Redux use cases, including store setup.
+Let's see how it can help improve the store setup process.
+
+Redux Starter Kit includes a prebuilt [`configureStore` function](https://redux-starter-kit.js.org/api/configureStore) like
+the one shown in the earlier examples.
+
+The fastest way to use is it is to just pass the root reducer function:
+
+```js
+import { configureStore } from 'redux-starter-kit'
+import rootReducer from './reducers'
+
+const store = configureStore({
+  reducer: rootReducer
+})
+
+export default store
+```
+
+Note that it accepts an object with named parameters, to make it clearer what you're passing in.
+
+By default, `configureStore` from Redux Starter Kit will:
+
+- Call `applyMiddleware` with [a default list of middleware, including `redux-thunk`](https://redux-starter-kit.js.org/api/getDefaultMiddleware), and some development-only middleware that catch common mistakes like mutating state
+- Call `composeWithDevTools` to set up the Redux DevTools Extension
+
+Here's what the hot reloading example might look like using Redux Starter Kit:
+
+```js
+import { configureStore, getDefaultMiddleware } from 'redux-starter-kit'
+
+import monitorReducersEnhancer from './enhancers/monitorReducers'
+import loggerMiddleware from './middleware/logger'
+import rootReducer from './reducers'
+
+export default function configureAppStore(preloadedState) {
+  const store = configureStore({
+    reducer: rootReducer,
+    middleware: [loggerMiddleware, ...getDefaultMiddleware()],
+    preloadedState,
+    enhancers: [monitorReducersEnhancer]
+  })
+
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('./reducers', () => store.replaceReducer(rootReducer))
+  }
+
+  return store
+}
+```
+
+That definitely simplifies some of the setup process.
+
 ## Next Steps
 
 Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [learn more about the advanced features Redux provides](../advanced/README.md), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/Ecosystem.md#debuggers-and-viewers).
