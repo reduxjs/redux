@@ -63,6 +63,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let nextListeners = currentListeners
   let isDispatching = false
 
+  /**
+   * This makes a shallow copy of currentListeners so we can use
+   * nextListeners as a temporary list while dispatching.
+   *
+   * This prevents any bugs around consumers calling
+   * subscribe/unsubscribe in the middle of a dispatch.
+   */
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
       nextListeners = currentListeners.slice()
