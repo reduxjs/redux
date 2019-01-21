@@ -139,3 +139,4 @@
 /recipes/isolating-subapps        /recipes/isolating-redux-sub-apps
 /api/index.html        /api/api-reference
 /recipes/ServerRendering.html*        /recipes/server-rendering:splat
+/advanced/usagewithtypescript*    /recipes/usage-with-typescript:splat
