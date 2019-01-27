@@ -12,10 +12,6 @@ header.postHeader:empty + article h1 {
   padding-bottom: 1em;
 }
 
-.mainContainer {
-  padding-bottom: 24px;
-}
-
 .post article a {
   /* add underlines to links in blocks of text for a11y */
   color: $primaryColor;
