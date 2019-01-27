@@ -9,12 +9,7 @@ header.postHeader:empty + article h1 {
 }
 
 .homeContainer .homeWrapper {
-  padding-bottom: 1em;
-}
-
-.mainContainer {
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding: 4em 10px 1em;
 }
 
 .post article a {
