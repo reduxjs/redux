@@ -94,6 +94,8 @@ const siteConfig = {
   onPageNav: "separate",
   // No .html extensions for paths.
   cleanUrl: true,
+  // Collapsible categories in the side navigation.
+  docsSideNavCollapsible: true,
 
   // Open Graph and Twitter card images.
   ogImage: "img/redux-logo-landscape.png",
