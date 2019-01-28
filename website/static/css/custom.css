@@ -92,6 +92,7 @@ header.postHeader:empty + article h1 {
   color: $accentColor1;
   transition: outline-offset 0.2s ease-in-out;
   opacity: 1;
+  position: absolute;
 }
 
 .post article .hash-link:hover,
