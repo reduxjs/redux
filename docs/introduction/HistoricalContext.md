@@ -46,7 +46,7 @@ Other references to functional programming:
 
 ## Minimal API
 
-Founders placed a lot of trust in the community, rather than taking a stance on what everyone should do. This increases the flexibility of Redux, in the way it's used and in what way it grows. In order to stay lightweight and flexible enough for industry use, small applications and other community needs, nothing is built in.
+Founders placed a lot of trust in the community, rather than taking a stance on what everyone should do. This increases the flexibility of Redux, in the way it's used and in what way it grows. In order to stay lightweight and flexible enough for a variety of needs, nothing is built in.
 
 > [the] reason the middleware API exists in the first place is because we explicitly did not want to prescribe a particular solution for async." My previous Flux library, Flummox, had what was essentially a promise middleware built in. It was convenient for some, but because it was built in, you couldn't change or opt-out of its behavior. With Redux, we knew that the community would come up with a multitude of better async solutions that whatever we could have built in ourselves.
 > Redux Thunk is promoted in the docs because it's the absolute bare minimum solution. We were confident that the community would come up with something different and/or better. We were right!”
