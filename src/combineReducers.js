@@ -130,6 +130,8 @@ export default function combineReducers(reducers) {
   }
   const finalReducerKeys = Object.keys(finalReducers)
 
+  // This is used to make sure we don't warn about the same
+  // keys multiple times.
   let unexpectedKeyCache
   if (process.env.NODE_ENV !== 'production') {
     unexpectedKeyCache = {}
