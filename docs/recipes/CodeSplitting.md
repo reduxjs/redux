@@ -37,7 +37,7 @@ that to the store instance.
 ```js
 import { createStore } from 'redux'
 
-// Define the Reducers that will always be present in the appication
+// Define the Reducers that will always be present in the application
 const staticReducers = {
   users: usersReducer,
   posts: postsReducer
