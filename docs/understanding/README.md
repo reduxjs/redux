@@ -1,0 +1,3 @@
+- [Prerequisites](understanding/Prerequisites.md)
+- [How Does Redux Work Internally](understanding/How.md)
+- [Why Does Redux Work This Why](understanding/Why.md)
