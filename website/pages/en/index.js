@@ -178,21 +178,18 @@ class Index extends React.Component {
     return (
       <div>
         <HomeSplash language={language} />
-        <div className="mainContainer">
+        <div className="productShowcaseSection">
+          <Container background="light">
+            <FeaturesTop />
+          </Container>
+          <Container className="libsContainer" wrapper={false}>
 
-          <div className="productShowcaseSection">
-            <Container background="light">
-              <FeaturesTop />
-            </Container>
-            <Container className="libsContainer" wrapper={false}>
+            <OtherLibraries/>
+            <DocsSurvey />
+          </Container>
+          <Container background="light">
 
-              <OtherLibraries/>
-              <DocsSurvey />
-            </Container>
-            <Container background="light">
-
-            </Container>
-          </div>
+          </Container>
         </div>
       </div>
     );
