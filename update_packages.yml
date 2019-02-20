@@ -1,2 +1,2 @@
 #To update npm:
-npm update
+npm update -g
