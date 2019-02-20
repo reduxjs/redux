@@ -1,2 +1,0 @@
-To upgrade outdated dependcies that support npm:
-npm i -g npm-upgrade 
