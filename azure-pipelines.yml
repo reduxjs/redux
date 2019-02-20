@@ -1,8 +1,0 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-npm i -g @5.7.0
-npm ci
-npm run examples:lint
-npm run examples:test
