@@ -1,0 +1,3 @@
+To re-install the stable version of redux:
+npm remove redux 
+npm install redux
