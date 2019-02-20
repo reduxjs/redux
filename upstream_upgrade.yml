@@ -1,0 +1,2 @@
+To upgrade npm to a upstream version:
+npm install npm@latest
