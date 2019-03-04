@@ -16,7 +16,6 @@ export type State = {
 };
 
 class AddTodo extends Component<Props, State> {
-  input: HTMLInputElement;
   state = {
     value: ''
   };
