@@ -5,10 +5,8 @@
 export default function isPlainObject(obj) {
   if (typeof obj !== 'object' || obj === null) return false
 
-  let proto = obj
-  while (Object.getPrototypeOf(proto) !== null) {
-    proto = Object.getPrototypeOf(proto)
-  }
+  const proto = Object.getPrototypeOf(obj)
+  if (!proto) return false
 
-  return Object.getPrototypeOf(obj) === proto
+  return Object.getPrototypeOf(proto) === null
 }
