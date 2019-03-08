@@ -36,7 +36,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
-        'together to a single function'
+        'together to a single function.'
     )
   }
 
