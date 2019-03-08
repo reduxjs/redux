@@ -21,8 +21,8 @@ export default function applyMiddleware(...middlewares) {
     const store = createStore(...args)
     let dispatch = () => {
       throw new Error(
-        `Dispatching while constructing your middleware is not allowed. ` +
-          `Other middleware would not be applied to this dispatch.`
+        'Dispatching while constructing your middleware is not allowed. ' +
+          'Other middleware would not be applied to this dispatch.'
       )
     }
 
