@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "node"
+  - "11.10.1"
 install:
   - npm i -g npm@5.8.0
   - npm ci
