@@ -11,7 +11,7 @@
         <button id="increment">+</button>
         <button id="decrement">-</button>
         <button id="incrementIfOdd">Increment if odd</button>
-        <button id="incrementAsync">Increment async</button>
+        <button id="incrementAsync">Increment asynchronously after 3 seconds</button>
       </p>
     </div>
     <script>
@@ -59,9 +59,10 @@
 
       document.getElementById('incrementAsync')
         .addEventListener('click', function () {
+          // Increment asynchronously after 3 seconds
           setTimeout(function () {
             store.dispatch({ type: 'INCREMENT' })
-          }, 1000)
+          }, 3000)
         })
     </script>
   </body>
