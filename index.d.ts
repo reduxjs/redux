@@ -1,3 +1,5 @@
+/// <reference types="symbol-observable" />
+
 /**
  * An *action* is a plain object that represents an intention to change the
  * state. Actions are the only way to get data into the store. Any data,
@@ -130,6 +132,32 @@ export interface Unsubscribe {
 }
 
 /**
+ * A minimal observable of state changes.
+ * For more information, see the observable proposal:
+ * https://github.com/tc39/proposal-observable
+ */
+export type Observable<T> = {
+  /**
+   * The minimal observable subscription method.
+   * @param {Object} observer Any object that can be used as an observer.
+   * The observer object should have a `next` method.
+   * @returns {subscription} An object with an `unsubscribe` method that can
+   * be used to unsubscribe the observable from the store, and prevent further
+   * emission of values from the observable.
+   */
+  subscribe: (observer: Observer<T>) => { unsubscribe: Unsubscribe }
+  [Symbol.observable](): Observable<T>
+}
+
+/**
+ * An Observer is used to receive data from an Observable, and is supplied as
+ * an argument to subscribe.
+ */
+export type Observer<T> = {
+  next?(value: T): void
+}
+
+/**
  * A store is an object that holds the application's state tree.
  * There should only be a single store in a Redux app, as the composition
  * happens on the reducer level.
@@ -209,6 +237,14 @@ export interface Store<S = any, A extends Action = AnyAction> {
    * @param nextReducer The reducer for the store to use instead.
    */
   replaceReducer(nextReducer: Reducer<S, A>): void
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+  [Symbol.observable](): Observable<S>
 }
 
 export type DeepPartial<T> = {

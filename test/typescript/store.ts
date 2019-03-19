@@ -6,8 +6,10 @@ import {
   StoreEnhancer,
   StoreCreator,
   StoreEnhancerStoreCreator,
-  Unsubscribe
+  Unsubscribe,
+  Observer
 } from 'redux'
+import 'symbol-observable'
 
 type State = {
   a: 'a'
@@ -101,3 +103,15 @@ unsubscribe()
 const newReducer: Reducer<State> = reducer
 
 store.replaceReducer(newReducer)
+
+/* observable */
+
+let observable = store[Symbol.observable]()
+observable = observable[Symbol.observable]()
+const observer: Observer<State> = {
+  next(state: State) {
+    console.log('current state:', state)
+  }
+}
+const unsubscribeFromObservable = observable.subscribe(observer).unsubscribe
+unsubscribeFromObservable()
