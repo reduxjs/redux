@@ -211,7 +211,9 @@ export interface Store<S = any, A extends Action = AnyAction> {
   replaceReducer(nextReducer: Reducer<S, A>): void
 }
 
-export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K]
+}
 
 /**
  * A store creator is a function that creates a Redux store. Like with
