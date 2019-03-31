@@ -11,7 +11,8 @@ import {
 import * as reducers from './helpers/reducers'
 import { from } from 'rxjs'
 import { map } from 'rxjs/operators'
-import $$observable from 'symbol-observable'
+
+const $$observable = Symbol.observable || require('symbol-observable')
 
 describe('createStore', () => {
   it('exposes the public API', () => {
