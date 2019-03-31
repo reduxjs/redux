@@ -13,6 +13,7 @@ import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 function isCrushed() {}
 
 if (
+  typeof process !== 'undefined' &&
   process.env.NODE_ENV !== 'production' &&
   typeof isCrushed.name === 'string' &&
   isCrushed.name !== 'isCrushed'

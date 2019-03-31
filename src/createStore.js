@@ -1,7 +1,7 @@
-import $$observable from 'symbol-observable'
-
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
+
+const $$observable = Symbol.observable || require('symbol-observable')
 
 /**
  * Creates a Redux store that holds the state tree.
