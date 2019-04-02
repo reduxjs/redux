@@ -1,7 +1,7 @@
-import $$observable from 'symbol-observable'
+import $$observable from 'symbol-observable';
 
-import ActionTypes from './utils/actionTypes'
-import isPlainObject from './utils/isPlainObject'
+import ActionTypes from './utils/actionTypes';
+import isPlainObject from './utils/isPlainObject';
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -29,10 +29,10 @@ import isPlainObject from './utils/isPlainObject'
  * and subscribe to changes.
  */
 export default function createStore(reducer, preloadedState, enhancer) {
-  const enhancerIsFunction = () => typeof enhancer === 'function'
-  const preloadedStateIsFunction = () => typeof preloadedState === 'function'
-  const enhancerIsUndefined = () => typeof enhancer === 'undefined'
-  
+  const enhancerIsFunction = () => typeof enhancer === 'function';
+  const preloadedStateIsFunction = () => typeof preloadedState === 'function';
+  const enhancerIsUndefined = () => typeof enhancer === 'undefined';
+
   if (
     (preloadedStateIsFunction() && enhancerIsFunction()) ||
     (enhancerIsFunction() && typeof arguments[3] === 'function')
@@ -41,31 +41,31 @@ export default function createStore(reducer, preloadedState, enhancer) {
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
         'together to a single function.'
-    )
+    );
   }
 
   if (preloadedStateIsFunction() && enhancerIsUndefined()) {
-    enhancer = preloadedState
-    preloadedState = undefined
+    enhancer = preloadedState;
+    preloadedState = undefined;
   }
 
   if (enhancerIsUndefined()) {
     if (!enhancerIsFunction()) {
-      throw new Error('Expected the enhancer to be a function.')
+      throw new Error('Expected the enhancer to be a function.');
     }
 
-    return enhancer(createStore)(reducer, preloadedState)
+    return enhancer(createStore)(reducer, preloadedState);
   }
 
   if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function.')
+    throw new Error('Expected the reducer to be a function.');
   }
 
-  let currentReducer = reducer
-  let currentState = preloadedState
-  let currentListeners = []
-  let nextListeners = currentListeners
-  let isDispatching = false
+  let currentReducer = reducer;
+  let currentState = preloadedState;
+  let currentListeners = [];
+  let nextListeners = currentListeners;
+  let isDispatching = false;
 
   /**
    * This makes a shallow copy of currentListeners so we can use
@@ -76,7 +76,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
-      nextListeners = currentListeners.slice()
+      nextListeners = currentListeners.slice();
     }
   }
 
@@ -91,10 +91,10 @@ export default function createStore(reducer, preloadedState, enhancer) {
         'You may not call store.getState() while the reducer is executing. ' +
           'The reducer has already received the state as an argument. ' +
           'Pass it down from the top reducer instead of reading it from the store.'
-      )
+      );
     }
 
-    return currentState
+    return currentState;
   }
 
   /**
@@ -122,7 +122,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function subscribe(listener) {
     if (typeof listener !== 'function') {
-      throw new Error('Expected the listener to be a function.')
+      throw new Error('Expected the listener to be a function.');
     }
 
     if (isDispatching) {
@@ -131,32 +131,32 @@ export default function createStore(reducer, preloadedState, enhancer) {
           'If you would like to be notified after the store has been updated, subscribe from a ' +
           'component and invoke store.getState() in the callback to access the latest state. ' +
           'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
-      )
+      );
     }
 
-    let isSubscribed = true
+    let isSubscribed = true;
 
-    ensureCanMutateNextListeners()
-    nextListeners.push(listener)
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
 
     return function unsubscribe() {
       if (!isSubscribed) {
-        return
+        return;
       }
 
       if (isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
             'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
-        )
+        );
       }
 
-      isSubscribed = false
+      isSubscribed = false;
 
-      ensureCanMutateNextListeners()
-      const index = nextListeners.indexOf(listener)
-      nextListeners.splice(index, 1)
-    }
+      ensureCanMutateNextListeners();
+      const index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
   }
 
   /**
@@ -189,34 +189,34 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error(
         'Actions must be plain objects. ' +
           'Use custom middleware for async actions.'
-      )
+      );
     }
 
     if (typeof action.type === 'undefined') {
       throw new Error(
         'Actions may not have an undefined "type" property. ' +
           'Have you misspelled a constant?'
-      )
+      );
     }
 
     if (isDispatching) {
-      throw new Error('Reducers may not dispatch actions.')
+      throw new Error('Reducers may not dispatch actions.');
     }
 
     try {
-      isDispatching = true
-      currentState = currentReducer(currentState, action)
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
     } finally {
-      isDispatching = false
+      isDispatching = false;
     }
 
-    const listeners = (currentListeners = nextListeners)
+    const listeners = (currentListeners = nextListeners);
     for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+      const listener = listeners[i];
+      listener();
     }
 
-    return action
+    return action;
   }
 
   /**
@@ -231,16 +231,16 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function replaceReducer(nextReducer) {
     if (typeof nextReducer !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.')
+      throw new Error('Expected the nextReducer to be a function.');
     }
 
-    currentReducer = nextReducer
+    currentReducer = nextReducer;
 
     // This action has a similiar effect to ActionTypes.INIT.
     // Any reducers that existed in both the new and old rootReducer
     // will receive the previous state. This effectively populates
     // the new state tree with any relevant data from the old one.
-    dispatch({ type: ActionTypes.REPLACE })
+    dispatch({ type: ActionTypes.REPLACE });
   }
 
   /**
@@ -250,7 +250,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * https://github.com/tc39/proposal-observable
    */
   function observable() {
-    const outerSubscribe = subscribe
+    const outerSubscribe = subscribe;
     return {
       /**
        * The minimal observable subscription method.
@@ -262,30 +262,30 @@ export default function createStore(reducer, preloadedState, enhancer) {
        */
       subscribe(observer) {
         if (typeof observer !== 'object' || observer === null) {
-          throw new TypeError('Expected the observer to be an object.')
+          throw new TypeError('Expected the observer to be an object.');
         }
 
         function observeState() {
           if (observer.next) {
-            observer.next(getState())
+            observer.next(getState());
           }
         }
 
-        observeState()
-        const unsubscribe = outerSubscribe(observeState)
-        return { unsubscribe }
+        observeState();
+        const unsubscribe = outerSubscribe(observeState);
+        return { unsubscribe };
       },
 
       [$$observable]() {
-        return this
+        return this;
       }
-    }
+    };
   }
 
   // When a store is created, an "INIT" action is dispatched so that every
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
-  dispatch({ type: ActionTypes.INIT })
+  dispatch({ type: ActionTypes.INIT });
 
   return {
     dispatch,
@@ -293,5 +293,5 @@ export default function createStore(reducer, preloadedState, enhancer) {
     getState,
     replaceReducer,
     [$$observable]: observable
-  }
+  };
 }
