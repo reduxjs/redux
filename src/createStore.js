@@ -29,9 +29,13 @@ import isPlainObject from './utils/isPlainObject'
  * and subscribe to changes.
  */
 export default function createStore(reducer, preloadedState, enhancer) {
+  const enhancerIsFunction = () => typeof enhancer === 'function'
+  const preloadedStateIsFunction = () => typeof preloadedState === 'function'
+  const enhancerIsUndefined = () => typeof enhancer === 'undefined'
+  
   if (
-    (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
-    (typeof enhancer === 'function' && typeof arguments[3] === 'function')
+    (preloadedStateIsFunction() && enhancerIsFunction()) ||
+    (enhancerIsFunction() && typeof arguments[3] === 'function')
   ) {
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
@@ -40,13 +44,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
     )
   }
 
-  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+  if (preloadedStateIsFunction() && enhancerIsUndefined()) {
     enhancer = preloadedState
     preloadedState = undefined
   }
 
-  if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
+  if (enhancerIsUndefined()) {
+    if (!enhancerIsFunction()) {
       throw new Error('Expected the enhancer to be a function.')
     }
 
