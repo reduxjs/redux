@@ -195,80 +195,73 @@ This approach makes it very clear what's happening for the `"ADD_COMMENTS"` case
 
 ### Redux-ORM
 
-The [Redux-ORM](https://github.com/tommikaikkonen/redux-orm) library provides a very useful abstraction layer for managing normalized data in a Redux store. It allows you to declare Model classes and define relations between them. It can then generate the empty "tables" for your data types, act as a specialized selector tool for looking up the data, and perform immutable updates on that data.
+The [Redux-ORM](https://github.com/redux-orm/redux-orm) library provides a very useful abstraction layer for managing normalized data in a Redux store. It allows you to declare Model classes and define relations between them. It can then generate the empty "tables" for your data types, act as a specialized selector tool for looking up the data, and perform immutable updates on that data.
 
 There's a couple ways Redux-ORM can be used to perform updates. First, the Redux-ORM docs suggest defining reducer functions on each Model subclass, then including the auto-generated combined reducer function into your store:
 
 ```js
 // models.js
-import { Model, many, Schema } from 'redux-orm'
+import { Model, fk, attr, ORM } from 'redux-orm'
 
 export class Post extends Model {
   static get fields() {
     return {
-      // Define a many-sided relation - one Post can have many Comments,
-      // at a field named "comments"
-      comments: many('Comment')
+      id: attr(),
+      name: attr()
     }
   }
 
-  static reducer(state, action, Post) {
+  static reducer(action, Post, session) {
     switch (action.type) {
       case 'CREATE_POST': {
-        // Queue up the creation of a Post instance
         Post.create(action.payload)
         break
       }
-      case 'ADD_COMMENT': {
-        const { payload } = action
-        const { postId, commentId } = payload
-        // Queue up the addition of a relation between this Comment ID
-        // and this Post instance
-        Post.withId(postId).comments.add(commentId)
-        break
-      }
     }
-
-    // Redux-ORM will automatically apply queued updates after this returns
   }
 }
 Post.modelName = 'Post'
 
 export class Comment extends Model {
   static get fields() {
-    return {}
+    return {
+      id: attr(),
+      text: attr(),
+      // Define a foreign key relation - one Post can have many Comments,
+      // at a field named "comments"
+      postId: fk({
+        to: 'Comment',
+        as: 'post',
+        relatedName: 'comments'
+      })
+    }
   }
 
-  static reducer(state, action, Comment) {
+  static reducer(action, Comment, session) {
     switch (action.type) {
       case 'ADD_COMMENT': {
-        const { payload } = action
-        const { commentId, commentText } = payload
-
-        // Queue up the creation of a Comment instance
-        Comment.create({ id: commentId, text: commentText })
+        Comment.create(action.payload)
         break
       }
     }
-
-    // Redux-ORM will automatically apply queued updates after this returns
   }
 }
 Comment.modelName = 'Comment'
 
-// Create a Schema instance, and hook up the Post and Comment models
-export const schema = new Schema()
-schema.register(Post, Comment)
+// Create an ORM instance and hook up the Post and Comment models
+export const orm = new ORM()
+orm.register(Post, Comment)
 
 // main.js
 import { createStore, combineReducers } from 'redux'
-import { schema } from './models'
+import { createReducer } from 'redux-orm'
+import { orm } from './models'
 
 const rootReducer = combineReducers({
   // Insert the auto-generated Redux-ORM reducer.  This will
   // initialize our model "tables", and hook up the reducer
   // logic we defined on each Model subclass
-  entities: schema.reducer()
+  entities: createReducer(orm)
 })
 
 // Dispatch an action to create a Post instance
@@ -284,35 +277,42 @@ store.dispatch({
 store.dispatch({
   type: 'ADD_COMMENT',
   payload: {
-    postId: 1,
-    commentId: 123,
-    commentText: 'This is a comment'
+    id: 123,
+    text: 'This is a comment',
+    postId: 1
   }
 })
 ```
 
-The Redux-ORM library maintains an internal queue of updates to be applied. Those updates are then applied immutably, simplifying the update process.
+The Redux-ORM library maintains relationships between models for you. Updates are by default applied immutably, simplifying the update process.
 
 Another variation on this is to use Redux-ORM as an abstraction layer within a single case reducer:
 
 ```js
-import { schema } from './models'
+import { orm } from './models'
 
 // Assume this case reducer is being used in our "entities" slice reducer,
 // and we do not have reducers defined on our Redux-ORM Model subclasses
 function addComment(entitiesState, action) {
-  const session = schema.from(entitiesState)
-  const { Post, Comment } = session
-  const { payload } = action
-  const { postId, commentId, commentText } = payload
+  // Start an immutable session
+  const session = orm.session(entitiesState)
 
-  const post = Post.withId(postId)
-  post.comments.add(commentId)
+  session.Comment.create(action.payload)
 
-  Comment.create({ id: commentId, text: commentText })
-
-  return session.reduce()
+  // The internal state reference has now changed
+  return session.state
 }
+```
+
+By using the session interface you can now use relationship accessors to directly access referenced models:
+
+```js
+const session = orm.session(store.getState().entities)
+const comment = session.Comment.first() // Comment instance
+const { post } = comment // Post instance
+post.comments
+  .filter(c => c.text === 'This is a comment')
+  .count() // 1
 ```
 
 Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the "tables" in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.
