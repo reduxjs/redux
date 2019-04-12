@@ -310,9 +310,7 @@ By using the session interface you can now use relationship accessors to directl
 const session = orm.session(store.getState().entities)
 const comment = session.Comment.first() // Comment instance
 const { post } = comment // Post instance
-post.comments
-  .filter(c => c.text === 'This is a comment')
-  .count() // 1
+post.comments.filter(c => c.text === 'This is a comment').count() // 1
 ```
 
 Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the "tables" in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.
