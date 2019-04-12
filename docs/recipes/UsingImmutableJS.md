@@ -9,11 +9,11 @@ hide_title: true
 
 ## Table of Contents
 
-- [Why should I use an immutable-focused library such as Immutable.JS?](#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
-- [Why should I choose Immutable.JS as an immutable library?](#why-should-i-choose-immutable-js-as-an-immutable-library)
-- [What are the issues with using Immutable.JS?](#what-are-the-issues-with-using-immutable-js)
-- [Is Immutable.JS worth the effort?](#is-using-immutable-js-worth-the-effort)
-- [What are some opinionated Best Practices for using Immutable.JS with Redux?](#what-are-some-opinionated-best-practices-for-using-immutable-js-with-redux)
+- [Why should I use an immutable-focused library such as Immutable.JS?](#why-should-i-use-an-immutable-focused-library-such-as-immutablejs)
+- [Why should I choose Immutable.JS as an immutable library?](#why-should-i-choose-immutablejs-as-an-immutable-library)
+- [What are the issues with using Immutable.JS?](#what-are-the-issues-with-using-immutablejs)
+- [Is Immutable.JS worth the effort?](#is-using-immutablejs-worth-the-effort)
+- [What are some opinionated Best Practices for using Immutable.JS with Redux?](#what-are-some-opinionated-best-practices-for-using-immutablejs-with-redux)
 
 ## Why should I use an immutable-focused library such as Immutable.JS?
 
@@ -87,7 +87,7 @@ Once you encapsulate your data with Immutable.JS, you have to use Immutable.JSâ€
 
 This has the effect of spreading Immutable.JS across your entire codebase, including potentially your components, where you may prefer not to have such external dependencies. Your entire codebase must know what is, and what is not, an Immutable.JS object. It also makes removing Immutable.JS from your app difficult in the future, should you ever need to.
 
-This issue can be avoided by [uncoupling your application logic from your data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi), as outlined in the [best practices section](#immutable-js-best-practices) below.
+This issue can be avoided by [uncoupling your application logic from your data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi), as outlined in the [best practices section](#what-are-some-opinionated-best-practices-for-using-immutablejs-with-redux) below.
 
 ### No Destructuring or Spread Operators
 
@@ -128,7 +128,7 @@ function mapStateToProps(state) {
 
 When the shallow check fails, React-Redux will cause the component to re-render. Using `toJS()` in `mapStateToProps` in this way, therefore, will always cause the component to re-render, even if the value never changes, impacting heavily on performance.
 
-This can be prevented by using `toJS()` in a Higher Order Component, as discussed in the [Best Practices section](#immutable-js-best-practices) below.
+This can be prevented by using `toJS()` in a Higher Order Component, as discussed in the [Best Practices section](#what-are-some-opinionated-best-practices-for-using-immutablejs-with-redux) below.
 
 #### Further Information
 
