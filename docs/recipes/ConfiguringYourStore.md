@@ -56,7 +56,7 @@ npm install --save redux-thunk
 #### middleware/logger.js
 
 ```js
-const logger = store => next => action => {
+const loggerMiddleware = store => next => action => {
   console.group(action.type)
   console.info('dispatching', action)
   let result = next(action)
@@ -65,7 +65,7 @@ const logger = store => next => action => {
   return result
 }
 
-export default logger
+export default loggerMiddleware
 ```
 
 #### enhancers/monitorReducer.js
