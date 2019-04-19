@@ -195,7 +195,7 @@ This function follows the same steps outlined above, with some of the logic spli
   For example, it is common to add some middleware only when in development mode, which is easily achieved by pushing to the middlewares array inside an if statement:
 
   ```js
-  if (process.env === 'development') {
+  if (process.env.NODE_ENV === 'development') {
     middlewares.push(secretMiddleware)
   }
   ```
