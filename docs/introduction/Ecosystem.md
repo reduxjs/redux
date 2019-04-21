@@ -140,6 +140,29 @@ A reducer enhancer to enable type-agnostic optimistic updates
 
 ## Actions
 
+**[thebrodmann/deox](https://github.com/thebrodmann/deox)**  
+Functional Type-safe Flux Standard Utilities
+
+```ts
+const increment = createAction('INCREMENT')
+const decrement = createAction('DECREMENT')
+const reset = createAction('RESET', resolve => (count = 0) => resolve(count))
+
+const defaultState = 0
+
+const reducer = createReducer(defaultState, handle => [
+  handle(increment, state => state + 1),
+  handle(decrement, state => state - 1),
+  handle(reset, (_, { payload }) => payload),
+])
+
+const store = createStore(reducer)
+
+store.dispatch(increment())
+store.dispatch(decrement())
+store.dispatch(reset())
+```
+
 **[reduxactions/redux-actions](https://github.com/reduxactions/redux-actions)**  
 Flux Standard Action utilities for Redux
 
