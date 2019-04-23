@@ -119,6 +119,11 @@ _Explanations of how Redux works internally, by writing miniature reimplementati
   http://www.jamasoftware.com/blog/lets-write-redux/  
   Walks through writing a miniature version of Redux step-by-step, to help explain the concepts and implementation.
 
+- **Learn Redux by coding a Mini-Redux**  
+  https://blog.jakoblind.no/learn-redux-by-coding-a-mini-redux/  
+  A short and sweet tutorial on how to code your own mini Redux. Realize how simple the core concepts are!
+
+
 ## Reducers
 
 _Articles discussing ways to write reducer functions_
