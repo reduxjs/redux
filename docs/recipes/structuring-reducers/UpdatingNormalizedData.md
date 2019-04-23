@@ -227,12 +227,11 @@ export class Comment extends Model {
     return {
       id: attr(),
       text: attr(),
-      // Define a foreign key relation - one Post can have many Comments,
-      // at a field named "comments"
+      // Define a foreign key relation - one Post can have many Comments
       postId: fk({
-        to: 'Comment',
-        as: 'post',
-        relatedName: 'comments'
+        to: 'Post', // must be the same as Post.modelName
+        as: 'post', // name for accessor (comment.post)
+        relatedName: 'comments' // name for backward accessor (post.comments)
       })
     }
   }
