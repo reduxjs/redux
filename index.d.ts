@@ -94,9 +94,9 @@ export function combineReducers<T extends ReducersMapObject<any, any>>(
   reducers: T
 ): Reducer<InferStateType<T>, InferActionTypes<InferReducerTypes<T>>>
 
-type InferActionTypes<R> = R extends Reducer<any, infer A> ? A : AnyAction;
-type InferReducerTypes<T> = T extends Record<any, infer R> ? R : Reducer;
-type InferStateType<T> = T extends ReducersMapObject<infer S, any> ? S : never;
+type InferActionTypes<R> = R extends Reducer<any, infer A> ? A : AnyAction
+type InferReducerTypes<T> = T extends Record<any, infer R> ? R : Reducer
+type InferStateType<T> = T extends ReducersMapObject<infer S, any> ? S : never
 
 /* store */
 
