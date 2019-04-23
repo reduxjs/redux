@@ -3,19 +3,19 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "3.4.1",
-    "enzyme-adapter-react-16": "1.2.0",
-    "flow-bin": "0.78.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
+    "flow-bin": "^0.78.0",
     "flow-typed": "2.5.1",
-    "react-scripts": "^2.0.2",
+    "react-scripts": "^3.0.0",
     "redux-mock-store": "1.5.3"
   },
   "dependencies": {
-    "react": "16.4.2",
-    "react-dom": "16.4.2",
-    "react-redux": "^5.0.7",
-    "redux": "4.0.0",
-    "reselect": "^3.0.1"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
+    "reselect": "^4.0.0"
   },
   "scripts": {
     "build": "react-scripts build",

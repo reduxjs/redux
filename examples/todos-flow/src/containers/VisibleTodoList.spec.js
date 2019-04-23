@@ -5,7 +5,6 @@ import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 
 import VisibleTodoList from './VisibleTodoList';
-import { toggleTodo } from '../actions/todos';
 import { setVisibilityFilter } from '../actions/visibilityFilter';
 
 const setup = (setupProps = {}) => {
@@ -63,13 +62,5 @@ describe('VisibleTodoList', () => {
     expect(store.getActions()).toEqual([setVisibilityFilter('SHOW_COMPLETED')]);
 
     expect(wrapper).toMatchSnapshot();
-  });
-
-  test('toggles todos when a todo is clicked', () => {
-    const { store, wrapper } = setup();
-
-    expect(wrapper.shallow()).toMatchSnapshot();
-    wrapper.shallow().find('Todo').first().simulate('click');
-    expect(store.getActions()).toEqual([toggleTodo(0)]);
   });
 });

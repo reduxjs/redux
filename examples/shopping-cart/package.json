@@ -3,18 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.5.0",
-    "react-scripts": "^2.0.2"
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
+    "react-scripts": "^3.0.0"
   },
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-redux": "^5.0.7",
-    "redux": "^3.5.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

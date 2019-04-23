@@ -3,18 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "^2.0.2",
-    "react-test-renderer": "^16.3.1"
+    "react-scripts": "^3.0.0",
+    "react-test-renderer": "^16.8.6"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
-    "prop-types": "^15.6.1",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-redux": "^5.0.7",
-    "redux": "^3.5.2",
-    "reselect": "^3.0.1",
-    "todomvc-app-css": "^2.1.1"
+    "classnames": "^2.2.6",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
+    "reselect": "^4.0.0",
+    "todomvc-app-css": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
