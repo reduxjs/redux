@@ -1,16 +1,6 @@
 language: node_js
-node_js:
-  - "11.10.1"
-install:
-  - npm i -g npm@5.8.0
-  - npm ci
+node_js: node
+cache: npm
 script:
   - npm run examples:lint
   - npm run examples:test
-branches:
-  only:
-    - master
-    - next
-cache:
-  directories:
-    - "$HOME/.npm"
