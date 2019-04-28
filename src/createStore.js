@@ -181,29 +181,60 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * return something else (for example, a Promise you can await).
    */
   function dispatch(action) {
-    if (!isPlainObject(action)) {
-      throw new Error(
-        'Actions must be plain objects. ' +
-          'Use custom middleware for async actions.'
-      )
-    }
+    if (Array.isArray(action)) {
+      let actions = action;
+      if (actions.length <= 1) {
+        throw new Error('Actions list must not empty.')
+      }
+      for (let _action of actions) {
+        if (!isPlainObject(_action)) {
+          throw new Error(
+            'Action in actions list must be plain objects. ' +
+              'Use custom middleware for async actions.'
+          )
+        }
+  
+        if (typeof _action.type === 'undefined') {
+          throw new Error(
+            'Action in actions list may not have an undefined "type" property. ' +
+              'Have you misspelled a constant?'
+          )
+        }
+      }
 
-    if (typeof action.type === 'undefined') {
-      throw new Error(
-        'Actions may not have an undefined "type" property. ' +
-          'Have you misspelled a constant?'
-      )
-    }
+      try {
+        isDispatching = true
+        for (let _action of actions) {
+          currentState = currentReducer(currentState, _action)
+        }
+      } finally {
+        isDispatching = false
+      }
+    } else {
+      if (!isPlainObject(action)) {
+        throw new Error(
+          'Actions must be plain objects. ' +
+            'Use custom middleware for async actions.'
+        )
+      }
 
-    if (isDispatching) {
-      throw new Error('Reducers may not dispatch actions.')
-    }
+      if (typeof action.type === 'undefined') {
+        throw new Error(
+          'Actions may not have an undefined "type" property. ' +
+            'Have you misspelled a constant?'
+        )
+      }
 
-    try {
-      isDispatching = true
-      currentState = currentReducer(currentState, action)
-    } finally {
-      isDispatching = false
+      if (isDispatching) {
+        throw new Error('Reducers may not dispatch actions.')
+      }
+
+      try {
+        isDispatching = true
+        currentState = currentReducer(currentState, action)
+      } finally {
+        isDispatching = false
+      }
     }
 
     const listeners = (currentListeners = nextListeners)
