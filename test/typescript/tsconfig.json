@@ -4,7 +4,7 @@
     "strict": true,
     "baseUrl": "../..",
     "paths": {
-      "redux": "index.d.ts"
+      "redux": ["index.d.ts"]
     }
   }
 }
