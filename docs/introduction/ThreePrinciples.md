@@ -39,7 +39,7 @@ console.log(store.getState())
 
 **The only way to change the state is to emit an [action](../Glossary.md#action), an object describing what happened.**
 
-This ensures that neither the views nor the network callbacks will ever write directly to the state. Instead, they express an intent to transform the state. Because all changes are centralized and happen one by one in a strict order, there are no subtle race conditions to watch out for. As actions are just plain objects, they can be logged, serialized, stored, and later replayed for debugging or testing purposes.
+This ensures that neither the views nor the network callbacks will ever write directly to the state. Instead, they express an intent to transform the state. Because all changes are centralized and happen one by one in a strict order, there are no subtle race conditions to watch out for. As actions are just plain objects, they can be logged, serialized, stored, and later replayed for debugging or testing purposes. The read-only state emphises to be able to accessed but not modified.
 
 ```js
 store.dispatch({
