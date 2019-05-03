@@ -11,7 +11,7 @@ import isPlainObject from './utils/isPlainObject'
  * parts of the state tree respond to actions, you may combine several reducers
  * into a single reducer function by using `combineReducers`.
  *
- * @param {Function} [reducer] A function that returns the next state tree, given
+ * @param {Function} reducer A function that returns the next state tree, given
  * the current state tree and the action to handle.
  *
  * @param {any} [preloadedState] The initial state. You may optionally specify it
