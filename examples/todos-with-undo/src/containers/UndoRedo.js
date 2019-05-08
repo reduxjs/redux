@@ -12,16 +12,21 @@ let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
     </button>
   </p>
 )
-const mapStateToProps = (state) => ({
+
+const mapStateToProps = state => {
+  return {
     canUndo: state.todos.present.length > 0,
     canRedo: state.todos.history.length > 0
-})
+  }
+}
 
+const mapDispatchToProps = dispatch => {
+  return {
+    onUndo: () => dispatch(UndoActionCreators.undo()),
+    onRedo: () => dispatch(UndoActionCreators.redo())
+  }
+}
 
-const mapDispatchToProps = ({
-  onUndo: UndoActionCreators.undo,
-  onRedo: UndoActionCreators.redo
-})
 UndoRedo = connect(
   mapStateToProps,
   mapDispatchToProps
