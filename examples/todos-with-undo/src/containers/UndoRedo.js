@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import { ActionCreators } from 'redux-undo';
 import { connect } from 'react-redux'
 
 let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
@@ -12,17 +12,16 @@ let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
     </button>
   </p>
 )
-
 const mapStateToProps = (state) => ({
-  canUndo: state.todos.past.length > 0,
-  canRedo: state.todos.future.length > 0
+    canUndo: state.todos.present.length > 0,
+    canRedo: state.todos.history.length > 0
 })
+
 
 const mapDispatchToProps = ({
-  onUndo: UndoActionCreators.undo,
-  onRedo: UndoActionCreators.redo
+  onUndo: ActionCreators.undo,
+  onRedo: ActionCreators.redo
 })
-
 UndoRedo = connect(
   mapStateToProps,
   mapDispatchToProps

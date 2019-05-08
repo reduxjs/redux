@@ -38,6 +38,6 @@ const todos = (state = [], action) => {
   }
 }
 
-const undoableTodos = undoable(todos, { filter: includeAction(['ADD_TODO', 'TOGGLE_TODO']) })
+const undoableTodos = undoable(todos )
 
 export default undoableTodos
