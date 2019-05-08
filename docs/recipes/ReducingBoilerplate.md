@@ -512,7 +512,7 @@ Let's write a function that lets us express reducers as an object mapping from a
 export const todos = createReducer([], {
   [ActionTypes.ADD_TODO]: (state, action) => {
     const text = action.text.trim()
-    return [...state, text]
+    return {...state, text}
   }
 })
 ```
