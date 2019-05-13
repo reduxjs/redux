@@ -1,4 +1,14 @@
-function bindActionCreator(actionCreator, dispatch) {
+/**
+ * Creates a dispatch wrapped function.
+ * 
+ * @param {Function} actionCreator action creator function.
+ * 
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ * 
+ * @returns {Function} binded actionCreator function.
+ */
+export function bindActionCreator(actionCreator, dispatch) {
   return function() {
     return dispatch(actionCreator.apply(this, arguments))
   }
