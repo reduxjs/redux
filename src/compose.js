@@ -10,11 +10,12 @@
  */
 
 export default function compose(...funcs) {
-  if (funcs.length === 0) {
+  const len = funcs.length
+  if (len === 0) {
     return arg => arg
   }
 
-  if (funcs.length === 1) {
+  if (len === 1) {
     return funcs[0]
   }
 

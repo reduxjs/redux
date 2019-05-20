@@ -115,7 +115,8 @@ function assertReducerShape(reducers) {
 export default function combineReducers(reducers) {
   const reducerKeys = Object.keys(reducers)
   const finalReducers = {}
-  for (let i = 0; i < reducerKeys.length; i++) {
+  const lenReducerKey = reducerKeys.length
+  for (let i = 0; i < lenReducerKey; i++) {
     const key = reducerKeys[i]
 
     if (process.env.NODE_ENV !== 'production') {
@@ -163,7 +164,8 @@ export default function combineReducers(reducers) {
 
     let hasChanged = false
     const nextState = {}
-    for (let i = 0; i < finalReducerKeys.length; i++) {
+    const lenFinalReducerKey = finalReducerKeys.length
+    for (let i = 0; i < lenFinalReducerKey; i++) {
       const key = finalReducerKeys[i]
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]
@@ -173,7 +175,9 @@ export default function combineReducers(reducers) {
         throw new Error(errorMessage)
       }
       nextState[key] = nextStateForKey
-      hasChanged = hasChanged || nextStateForKey !== previousStateForKey
+      if(!hasChanged){
+        hasChanged = nextStateForKey !== previousStateForKey
+      }
     }
     return hasChanged ? nextState : state
   }
