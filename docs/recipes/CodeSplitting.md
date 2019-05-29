@@ -84,7 +84,7 @@ export function createReducerManager(initialReducers) {
   let combinedReducer = combineReducers(reducers)
 
   // An array which is used to delete state keys when reducers are removed
-  const keysToRemove = []
+  let keysToRemove = []
 
   return {
     getReducerMap: () => reducers,
