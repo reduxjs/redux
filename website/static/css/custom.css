@@ -31,7 +31,6 @@ header.postHeader:empty + article h1 {
   outline: none;
   text-decoration: underline;
   overflow: hidden;
-  position: relative;
   transition: outline-offset 0.2s ease-in-out;
 }
 
