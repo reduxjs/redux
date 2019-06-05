@@ -322,7 +322,7 @@ function exampleAPI() {
 }
 ```
 
-It is highly recommended to use action creators in your dispatch since we can reuse the work that has been to type check these functions.
+It is highly recommended to use action creators in your dispatch since we can reuse the work that has already been done to type check these functions.
 
 ## Notes & Considerations
 
