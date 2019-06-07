@@ -67,7 +67,7 @@ export default function createStore(reducer, preloadedState, enhancer, options) 
     throw new Error('Expected the reducer to be a function.')
   }
 
-  options = { ...defaultOptions, ...options } // @todo find good supported option
+  options = { ...defaultOptions, ...options }
   
   let banDispatch = !options.rules.allowDispatch
   let banGetState = !options.rules.allowGetState

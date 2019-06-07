@@ -466,7 +466,6 @@ describe('createStore', () => {
   })
 
   it('does allow dispatch() from within a reducer if configured accordingly', () => {
-    console.log('-------------------NOW---------------------');
     const store = createStore(reducers.dispatchInTheMiddleOfReducer, identity, {rules: { allowDispatch: true } })
 
     expect(() =>
@@ -485,7 +484,6 @@ describe('createStore', () => {
   })
 
   it('does allow getState() from within a reducer if configured accordingly', () => {
-    console.log('-------------------NOW---------------------');
     const store = createStore(reducers.getStateInTheMiddleOfReducer, identity, {rules: { allowGetState: true } })
 
     expect(() =>
@@ -502,7 +500,6 @@ describe('createStore', () => {
   })
 
   it('does allow subscribe() from within a reducer if configured accordingly', () => {
-    console.log('-------------------NOW---------------------');
     const store = createStore(reducers.subscribeInTheMiddleOfReducer, identity, {rules: { allowSubscriptionHandling: true } })
 
     expect(() =>
