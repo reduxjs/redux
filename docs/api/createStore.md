@@ -18,6 +18,8 @@ There should only be a single store in your app.
 
 3. [`enhancer`] _(Function)_: The store enhancer. You may optionally specify it to enhance the store with third-party capabilities such as middleware, time travel, persistence, etc. The only store enhancer that ships with Redux is [`applyMiddleware()`](./applyMiddleware.md).
 
+4. ['options'] _(object)_: Optional object with further configuration of redux. Currently allows for opt out of the ban on getState, dispatch and subscriptionhandling in the reducer via the boolean parameters `rules.allowDispatch`, `rules.allowGetState` and `rules.allowSubscriptionHandling`. Keep in mind though that this ban is there for a reason, and this opt-out is meant for compatibility with legacy-code. Using these functions in the reducer is an antipattern that makes the reducer impure, and support for this might be removed in the future.
+
 #### Returns
 
 ([_`Store`_](Store.md)): An object that holds the complete state of your app. The only way to change its state is by [dispatching actions](Store.md#dispatch). You may also [subscribe](Store.md#subscribe) to the changes to its state to update the UI.

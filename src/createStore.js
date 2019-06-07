@@ -32,7 +32,7 @@ let defaultOptions = { rules: {} }
  * subscriptionhandling in the reducer via the boolean parameters 
  * `rules.allowDispatch`, `rules.allowGetState` and `rules.allowSubscriptionHandling`.
  * Keep in mind though that this ban is there for a reason, 
- * and this opt-out is meant for legacy-reasons. Using these functions in the reducer
+ * and this opt-out is meant for compatibility with legacy-code. Using these functions in the reducer
  * is an antipattern that makes the reducer impure, and support for this
  * might be removed in the future.
  *
@@ -68,10 +68,14 @@ export default function createStore(reducer, preloadedState, enhancer, options) 
   }
 
   options = { ...defaultOptions, ...options }
-  
+
   let banDispatch = !options.rules.allowDispatch
   let banGetState = !options.rules.allowGetState
   let banSubscriptionHandling = !options.rules.allowSubscriptionHandling
+
+  if (!(banDispatch && banGetState && banSubscriptionHandling)) {
+    console.warn('The usage of dispatch, getState or subscriber-logic in the reducer is an antipattern and support might be removed in the future.')
+  }
 
   let currentReducer = reducer
   let currentState = preloadedState
