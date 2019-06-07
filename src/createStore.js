@@ -3,6 +3,8 @@ import $$observable from 'symbol-observable'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 
+let defaultOptions = {rules: {}}
+
 /**
  * Creates a Redux store that holds the state tree.
  * The only way to change the data in the store is to call `dispatch()` on it.
@@ -25,13 +27,22 @@ import isPlainObject from './utils/isPlainObject'
  * time travel, persistence, etc. The only store enhancer that ships with Redux
  * is `applyMiddleware()`.
  *
+ * @param {Object} [options] Optional object with further configuration of redux. 
+ * Currently allows for opt out of the ban on getState, dispatch and 
+ * subscriptionhandling in the reducer via the boolean parameters 
+ * `rules.allowDispatch`, `rules.allowGetState` and `rules.allowSubscriptionHandling`.
+ * Keep in mind though that this ban is there for a reason, 
+ * and this opt-out is meant for legacy-reasons. Using these functions in the reducer
+ * is an antipattern that makes the reducer impure, and support for this
+ * might be removed in the future.
+ *
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, preloadedState, enhancer) {
+export default function createStore(reducer, preloadedState, enhancer, options) {
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
-    (typeof enhancer === 'function' && typeof arguments[3] === 'function')
+    (typeof enhancer === 'function' && typeof options === 'function')
   ) {
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
@@ -40,9 +51,15 @@ export default function createStore(reducer, preloadedState, enhancer) {
     )
   }
 
-  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState
-    preloadedState = undefined
+  if (typeof preloadedState === 'function') {
+    if (
+      (typeof enhancer === 'object') ||
+      (typeof enhancer === 'undefined')
+    ) {
+      options = enhancer
+      enhancer = preloadedState
+      preloadedState = undefined
+    }
   }
 
   if (typeof enhancer !== 'undefined') {
@@ -56,6 +73,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
   if (typeof reducer !== 'function') {
     throw new Error('Expected the reducer to be a function.')
   }
+  
+  options = options || {};
+  
+  options = {...defaultOptions, ...options} // @todo find good supported option
+  
+  let banDispatch = !options.rules.allowDispatch
+  let banGetState = !options.rules.allowGetState
+  let banSubscriptionHandling = !options.rules.allowSubscriptionHandling
 
   let currentReducer = reducer
   let currentState = preloadedState
@@ -82,7 +107,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * @returns {any} The current state tree of your application.
    */
   function getState() {
-    if (isDispatching) {
+    if (banGetState && isDispatching) {
       throw new Error(
         'You may not call store.getState() while the reducer is executing. ' +
           'The reducer has already received the state as an argument. ' +
@@ -121,7 +146,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Expected the listener to be a function.')
     }
 
-    if (isDispatching) {
+    if (banSubscriptionHandling && isDispatching) {
       throw new Error(
         'You may not call store.subscribe() while the reducer is executing. ' +
           'If you would like to be notified after the store has been updated, subscribe from a ' +
@@ -140,7 +165,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
         return
       }
 
-      if (isDispatching) {
+      if (banSubscriptionHandling && isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
             'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
@@ -195,7 +220,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       )
     }
 
-    if (isDispatching) {
+    if (banDispatch && isDispatching) {
       throw new Error('Reducers may not dispatch actions.')
     }
 
