@@ -283,7 +283,7 @@ export interface StoreCreator {
   <S, A extends Action, Ext, StateExt>(
     reducer: Reducer<S, A>,
     preloadedState?: DeepPartial<S>,
-    enhancer?: StoreEnhancer<Ext>
+    enhancer?: StoreEnhancer<Ext>,
     options?: ReduxOptions,
   ): Store<S & StateExt, A> & Ext
 }

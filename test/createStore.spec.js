@@ -466,13 +466,14 @@ describe('createStore', () => {
   })
 
   it('does allow dispatch() from within a reducer if configured accordingly', () => {
+    console.log('-------------------NOW---------------------');
     const store = createStore(reducers.dispatchInTheMiddleOfReducer, identity, {rules: { allowDispatch: true } })
 
     expect(() =>
       store.dispatch(
         dispatchInMiddle(store.dispatch.bind(store, unknownAction()))
       )
-    ).not.toThrow(/may not dispatch/)
+    ).not.toThrow()
   })
 
   it('does not allow getState() from within a reducer', () => {
@@ -484,11 +485,12 @@ describe('createStore', () => {
   })
 
   it('does allow getState() from within a reducer if configured accordingly', () => {
+    console.log('-------------------NOW---------------------');
     const store = createStore(reducers.getStateInTheMiddleOfReducer, identity, {rules: { allowGetState: true } })
 
     expect(() =>
       store.dispatch(getStateInMiddle(store.getState.bind(store)))
-    ).not.toThrow(/You may not call store.getState()/)
+    ).not.toThrow()
   })
 
   it('does not allow subscribe() from within a reducer', () => {
@@ -500,11 +502,12 @@ describe('createStore', () => {
   })
 
   it('does allow subscribe() from within a reducer if configured accordingly', () => {
+    console.log('-------------------NOW---------------------');
     const store = createStore(reducers.subscribeInTheMiddleOfReducer, identity, {rules: { allowSubscriptionHandling: true } })
 
     expect(() =>
       store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
-    ).not.toThrow(/You may not call store.subscribe()/)
+    ).not.toThrow()
   })
 
   it('does not allow unsubscribe from subscribe() from within a reducer', () => {
@@ -522,7 +525,7 @@ describe('createStore', () => {
 
     expect(() =>
       store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
-    ).not.toThrow(/You may not unsubscribe from a store/)
+    ).not.toThrow()
   })
 
   it('recovers from an error within a reducer', () => {
@@ -559,7 +562,7 @@ describe('createStore', () => {
     const spyEnhancer = vanillaCreateStore => (...args) => {
       expect(args[0]).toBe(reducers.todos)
       expect(args[1]).toBe(emptyArray)
-      expect(args.length).toBe(2)
+      expect(args[2]).toBe(undefined)
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
@@ -583,7 +586,7 @@ describe('createStore', () => {
     const spyEnhancer = vanillaCreateStore => (...args) => {
       expect(args[0]).toBe(reducers.todos)
       expect(args[1]).toBe(undefined)
-      expect(args.length).toBe(2)
+      expect(args[2]).toBe(undefined)
       const vanillaStore = vanillaCreateStore(...args)
       return {
         ...vanillaStore,
