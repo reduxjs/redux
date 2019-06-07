@@ -251,6 +251,17 @@ export interface Store<S = any, A extends Action = AnyAction> {
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K]
 }
+                    
+type ReduxOptions = {
+  rules?: {
+    /** @deprecated Allow the dispatch of actions in the reducer. Antipattern, this opt-out is for legacy-reasons */
+    allowDispatch?: boolean | undefined;
+    /** @deprecated Allow the usage of getState in the reducer. Antipattern, this opt-out is for legacy-reasons */
+    allowGetState?: boolean | undefined;
+    /** @deprecated Allow the usage of subscribe and unsibscribe in the reducer. Antipattern, this opt-out is for legacy-reasons */
+    allowSubscriptionHandling?: boolean | undefined;
+  } | undefined
+}
 
 /**
  * A store creator is a function that creates a Redux store. Like with
@@ -266,12 +277,14 @@ export type DeepPartial<T> = {
 export interface StoreCreator {
   <S, A extends Action, Ext, StateExt>(
     reducer: Reducer<S, A>,
-    enhancer?: StoreEnhancer<Ext, StateExt>
+    enhancer?: StoreEnhancer<Ext, StateExt>,
+    options?: ReduxOptions,
   ): Store<S & StateExt, A> & Ext
   <S, A extends Action, Ext, StateExt>(
     reducer: Reducer<S, A>,
     preloadedState?: DeepPartial<S>,
     enhancer?: StoreEnhancer<Ext>
+    options?: ReduxOptions,
   ): Store<S & StateExt, A> & Ext
 }
 
@@ -299,6 +312,15 @@ export interface StoreCreator {
  *   enhance the store with third-party capabilities such as middleware, time
  *   travel, persistence, etc. The only store enhancer that ships with Redux
  *   is `applyMiddleware()`.
+ *
+ * @param {Object} [options] Optional object with further configuration of redux. 
+ * Currently allows for opt out of the ban on getState, dispatch and 
+ * subscriptionhandling in the reducer via the boolean parameters 
+ * `rules.allowDispatch`, `rules.allowGetState` and `rules.allowSubscriptionHandling`.
+ * Keep in mind though that this ban is there for a reason, 
+ * and this opt-out is meant for legacy-reasons. Using these functions in the reducer
+ * is an antipattern that makes the reducer impure, and support for this
+ * might be removed in the future.
  *
  * @returns A Redux store that lets you read the state, dispatch actions and
  *   subscribe to changes.
