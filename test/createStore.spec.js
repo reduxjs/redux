@@ -9,6 +9,7 @@ import {
   unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
+import { identity } from './utils/others'
 import { from } from 'rxjs'
 import { map } from 'rxjs/operators'
 import $$observable from 'symbol-observable'
@@ -464,12 +465,30 @@ describe('createStore', () => {
     ).toThrow(/may not dispatch/)
   })
 
+  it('does allow dispatch() from within a reducer if configured accordingly', () => {
+    const store = createStore(reducers.dispatchInTheMiddleOfReducer, identity, {rules: { allowDispatch: true } })
+
+    expect(() =>
+      store.dispatch(
+        dispatchInMiddle(store.dispatch.bind(store, unknownAction()))
+      )
+    ).not.toThrow(/may not dispatch/)
+  })
+
   it('does not allow getState() from within a reducer', () => {
     const store = createStore(reducers.getStateInTheMiddleOfReducer)
 
     expect(() =>
       store.dispatch(getStateInMiddle(store.getState.bind(store)))
     ).toThrow(/You may not call store.getState()/)
+  })
+
+  it('does allow getState() from within a reducer if configured accordingly', () => {
+    const store = createStore(reducers.getStateInTheMiddleOfReducer, identity, {rules: { allowGetState: true } })
+
+    expect(() =>
+      store.dispatch(getStateInMiddle(store.getState.bind(store)))
+    ).not.toThrow(/You may not call store.getState()/)
   })
 
   it('does not allow subscribe() from within a reducer', () => {
@@ -480,6 +499,14 @@ describe('createStore', () => {
     ).toThrow(/You may not call store.subscribe()/)
   })
 
+  it('does allow subscribe() from within a reducer if configured accordingly', () => {
+    const store = createStore(reducers.subscribeInTheMiddleOfReducer, identity, {rules: { allowSubscriptionHandling: true } })
+
+    expect(() =>
+      store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
+    ).not.toThrow(/You may not call store.subscribe()/)
+  })
+
   it('does not allow unsubscribe from subscribe() from within a reducer', () => {
     const store = createStore(reducers.unsubscribeInTheMiddleOfReducer)
     const unsubscribe = store.subscribe(() => {})
@@ -487,6 +514,15 @@ describe('createStore', () => {
     expect(() =>
       store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
     ).toThrow(/You may not unsubscribe from a store/)
+  })
+  
+  it('does allow unsubscribe from subscribe() from within a reducer if configured accordingly', () => {
+    const store = createStore(reducers.unsubscribeInTheMiddleOfReducer, identity, {rules: { allowSubscriptionHandling: true } })
+    const unsubscribe = store.subscribe(() => {})
+
+    expect(() =>
+      store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
+    ).not.toThrow(/You may not unsubscribe from a store/)
   })
 
   it('recovers from an error within a reducer', () => {
