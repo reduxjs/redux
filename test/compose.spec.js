@@ -108,10 +108,11 @@ describe('Utils', () => {
       expect(compose()()).toBe(undefined)
     })
 
-    it('returns the first function if given only one', () => {
-      const fn = () => {}
+    it('returns an identical function if given only one', () => {
+      const randomNumber = Math.random()
+      const square = x => x * x
 
-      expect(compose(fn)).toBe(fn)
+      expect(compose(square)(randomNumber)).toBe(square(randomNumber))
     })
   })
 })
