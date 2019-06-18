@@ -31,11 +31,9 @@ export default function applyMiddleware(...middlewares) {
       dispatch: (...args) => dispatch(...args)
     }
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
-    dispatch = compose(...chain)(store.dispatch)
+    store.dispatch = compose(...chain)(store.dispatch)
+    dispatch = (...args) => store.dispatch(...args)
 
-    return {
-      ...store,
-      dispatch
-    }
+    return store
   }
 }

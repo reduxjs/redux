@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from '../'
+import { createStore, applyMiddleware, compose } from '../'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
@@ -50,6 +50,26 @@ describe('applyMiddleware', () => {
 
     const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
+
+    return store.dispatch(addTodoAsync('Use Redux')).then(() => {
+      expect(spy.mock.calls.length).toEqual(2)
+    })
+  })
+
+  it('can be applied more than once as additional enhancers', () => {
+    function test(spyOnMethods) {
+      return () => next => action => {
+        spyOnMethods(action)
+        return next(action)
+      }
+    }
+
+    const spy = jest.fn()
+    const enhancer = compose(
+      applyMiddleware(test(spy)),
+      applyMiddleware(thunk)
+    )
+    const store = enhancer(createStore)(reducers.todos)
 
     return store.dispatch(addTodoAsync('Use Redux')).then(() => {
       expect(spy.mock.calls.length).toEqual(2)
