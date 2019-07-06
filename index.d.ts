@@ -58,11 +58,11 @@ export interface AnyAction extends Action {
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = any, A extends Action = AnyAction, R extends unknown[] = []> = (
-  state: S | undefined,
-  action: A,
-  ...rest: R
-) => S
+export type Reducer<
+  S = any,
+  A extends Action = AnyAction,
+  R extends unknown[] = []
+> = (state: S | undefined, action: A, ...rest: R) => S
 
 /**
  * Object whose values correspond to different reducer functions.
