@@ -33,9 +33,7 @@ export default [
     input: 'src/index.js',
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
-      nodeResolve({
-        jsnext: true
-      }),
+      nodeResolve(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
@@ -60,9 +58,7 @@ export default [
       indent: false
     },
     plugins: [
-      nodeResolve({
-        jsnext: true
-      }),
+      nodeResolve(),
       babel({
         exclude: 'node_modules/**'
       }),
@@ -82,9 +78,7 @@ export default [
       indent: false
     },
     plugins: [
-      nodeResolve({
-        jsnext: true
-      }),
+      nodeResolve(),
       babel({
         exclude: 'node_modules/**'
       }),
