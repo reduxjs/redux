@@ -42,7 +42,7 @@ function simple() {
   // Combined reducer also accepts any action.
   const combined = combineReducers({ sub: reducer })
 
-  let cs = combined(undefined, { type: 'init' })
+  let cs: { sub: State } = combined(undefined, { type: 'init' })
   cs = combined(cs, { type: 'INCREMENT', count: 10 })
 
   // Combined reducer's state is strictly checked.
@@ -110,18 +110,17 @@ function discriminated() {
   // typings:expect-error
   s = reducer(s, { type: 'SOME_OTHER_TYPE', someField: 'value' })
 
-  // Combined reducer accepts a union actions types accepted each reducer,
-  // which can be very permissive for unknown third-party reducers.
-  const combined = combineReducers({
-    sub: reducer,
-    unknown: (state => state) as Reducer
-  })
+  // Combined reducer accepts any action by default which allows to include
+  // third-party reducers without the need to add their actions to the union.
+  const combined = combineReducers({ sub: reducer })
 
-  let cs = combined(undefined, { type: 'init' })
-  cs = combined(cs, { type: 'SOME_OTHER_TYPE', someField: 'value' })
+  let cs: { sub: State } = combined(undefined, { type: 'init' })
+  cs = combined(cs, { type: 'SOME_OTHER_TYPE' })
 
   // Combined reducer can be made to only accept known actions.
-  const strictCombined = combineReducers({ sub: reducer })
+  const strictCombined = combineReducers<{ sub: State }, MyAction>({
+    sub: reducer
+  })
 
   strictCombined(cs, { type: 'INCREMENT' })
   // typings:expect-error
@@ -180,7 +179,7 @@ function typeGuards() {
 
   const combined = combineReducers({ sub: reducer })
 
-  let cs = combined(undefined, { type: 'init' })
+  let cs: { sub: State } = combined(undefined, { type: 'init' })
   cs = combined(cs, { type: 'INCREMENT', count: 10 })
 }
 

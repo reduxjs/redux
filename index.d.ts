@@ -90,13 +90,12 @@ export type ReducersMapObject<S = any, A extends Action = Action> = {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<T extends ReducersMapObject<any, any>>(
-  reducers: T
-): Reducer<InferStateType<T>, InferActionTypes<InferReducerTypes<T>>>
-
-type InferActionTypes<R> = R extends Reducer<any, infer A> ? A : AnyAction
-type InferReducerTypes<T> = T extends Record<any, infer R> ? R : Reducer
-type InferStateType<T> = T extends ReducersMapObject<infer S, any> ? S : never
+export function combineReducers<S>(
+  reducers: ReducersMapObject<S, any>
+): Reducer<S>
+export function combineReducers<S, A extends Action = AnyAction>(
+  reducers: ReducersMapObject<S, A>
+): Reducer<S, A>
 
 /* store */
 
