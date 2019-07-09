@@ -30,7 +30,7 @@ Here's an example of how use of ES6 object literal shorthand with `combineReduce
 
 ```js
 // reducers.js
-export default (theDefaultReducer = (state = 0, action) => state)
+export default theDefaultReducer = (state = 0, action) => state
 
 export const firstNamedReducer = (state = 1, action) => state
 

@@ -84,9 +84,7 @@ function assertReducerShape(reducers) {
     ) {
       throw new Error(
         `Reducer "${key}" returned undefined when probed with a random type. ` +
-          `Don't try to handle ${
-            ActionTypes.INIT
-          } or other actions in "redux/*" ` +
+          `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
           `namespace. They are considered private. Instead, you must return the ` +
           `current state for any unknown actions, unless it is undefined, ` +
           `in which case you must return the initial state, regardless of the ` +
