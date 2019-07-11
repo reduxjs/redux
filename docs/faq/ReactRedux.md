@@ -190,7 +190,7 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Similarities**
 
-Both Redux and React's context API deal with "prop drilling". That said, they both allow you to pass data without having to pass the props through multiple layers of components. Internally, Redux _uses_ the React context API that allows it to pass the store along your component tree.
+Both Redux and React's Context API deal with "prop drilling". That said, they both allow you to pass data without having to pass the props through multiple layers of components. Internally, Redux _uses_ the React context API that allows it to pass the store along your component tree.
 
 **Differences**
 
