@@ -15,6 +15,7 @@ hide_title: true
 - [How can I speed up my mapStateToProps?](#how-can-i-speed-up-my-mapstatetoprops)
 - [Why don't I have this.props.dispatch available in my connected component?](#why-dont-i-have-this-props-dispatch-available-in-my-connected-component)
 - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
+- [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
 
 ## React Redux
 
@@ -184,3 +185,22 @@ In general, try to find a balance between understandable data flow and areas of 
 - [#756: container vs component?](https://github.com/reduxjs/redux/issues/756)
 - [#1176: Redux+React with only stateless components](https://github.com/reduxjs/redux/issues/1176)
 - [Stack Overflow: can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
+
+### How does Redux compare to the React Context API?
+
+**Similarities**
+
+Both Redux and React's Context API deal with "prop drilling". That said, they both allow you to pass data without having to pass the props through multiple layers of components. Internally, Redux _uses_ the React context API that allows it to pass the store along your component tree.
+
+**Differences**
+
+With Redux, you get the the power of [Redux Dev Tools Extension](https://github.com/zalmoxisus/redux-devtools-extension). It automatically logs every action your app performs, and it allows time traveling – you can click on any past action and jump to that point in time. Redux also supports the concept of middleware, where you may bind customized function calls on every action dispatch. Such examples include an automatic event logger, interception of certain actions, etc.
+
+With React's Context API, you deal with a pair of components speaking only to each other. This gives you nice isolation between irrelevant data. You also have the flexibility of how you may use the data with your components, i.e., you can provide the state of a parent component, and you may pass context data as props to wrapped components.
+
+There is a key difference in how Redux and React's Context treat data. Redux maintains the data of your whole app in a giant, stateful object. It deduces the changes of your data by running the reducer function you provide, and returns the next state that corresponds to every action dispatched. React Redux then optimizes component rendering and makes sure that each component re-renders only when the data it needs change. Context, on the other hand, does not hold any state. It is only a conduit for the data. To express changes in data you need to rely on the state of a parent component.
+
+#### Further information
+
+- [Redux vs. The React Context API](https://daveceddia.com/context-api-vs-redux/)
+- [You Might Not Need Redux (But You Can’t Replace It With Hooks)](https://www.simplethread.com/cant-replace-redux-with-hooks/)
