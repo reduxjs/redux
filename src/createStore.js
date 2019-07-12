@@ -152,6 +152,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       ensureCanMutateNextListeners()
       const index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
+      currentListeners = null
     }
   }
 
