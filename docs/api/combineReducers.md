@@ -34,7 +34,7 @@ You can control state key names by using different keys for the reducers in the 
 A popular convention is to name reducers after the state slices they manage, so you can use ES6 property shorthand notation: `combineReducers({ counter, todos })`. This is equivalent to writing `combineReducers({ counter: counter, todos: todos })`.
 
 > ##### A Note for Flux Users
-
+>
 > This function helps you organize your reducers to manage their own slices of state, similar to how you would have different Flux Stores to manage different state. With Redux, there is just one store, but `combineReducers` helps you keep the same logical division between reducers.
 
 #### Arguments

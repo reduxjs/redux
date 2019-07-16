@@ -20,7 +20,7 @@ So you want to do routing with your Redux app. You can use it with [React Router
 Before integrating React Router, we need to configure our development server. Indeed, our development server may be unaware of the declared routes in React Router configuration. For example, if you access `/todos` and refresh, your development server needs to be instructed to serve `index.html` because it is a single-page app. Here's how to enable this with popular development servers.
 
 > ### Note on Create React App
-
+>
 > If you are using Create React App, you won't need to configure a fallback URL, it is automatically done.
 
 ### Configuring Express
@@ -221,7 +221,7 @@ const App = ({ match: { params } }) => {
 Now that you know how to do basic routing, you can learn more about [React Router API](https://reacttraining.com/react-router/)
 
 > ##### Note About Other Routing Libraries
-
+>
 > _Redux Router_ is an experimental library, it lets you keep entirely the state of your URL inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
-
+>
 > _React Router Redux_ creates a binding between your redux app and react-router and it keeps them in sync. Without this binding, you will not be able to rewind the actions with Time Travel. Unless you need this, React Router and Redux can operate completely apart.

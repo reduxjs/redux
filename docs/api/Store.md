@@ -14,7 +14,7 @@ A store is not a class. It's just an object with a few methods on it.
 To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
 
 > ##### A Note for Flux Users
-
+>
 > If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
 
 ### Store Methods
@@ -46,7 +46,7 @@ The store's reducing function will be called with the current [`getState()`](#ge
 > ##### A Note for Flux Users
 >
 > If you attempt to call `dispatch` from inside the [reducer](../Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
-
+>
 > In Redux, subscriptions are called after the root reducer has returned the new state, so you _may_ dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../Glossary.md#action-creator).
 
 #### Arguments
