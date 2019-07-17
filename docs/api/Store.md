@@ -19,14 +19,14 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 
 ### Store Methods
 
-- [`getState()`](#getState)
-- [`dispatch(action)`](#dispatch)
-- [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replaceReducer)
+- [`getState()`](#getstate)
+- [`dispatch(action)`](#dispatchaction)
+- [`subscribe(listener)`](#subscribelistener)
+- [`replaceReducer(nextReducer)`](#replacereducernextreducer)
 
 ## Store Methods
 
-### <a id='getState' class='anchor'></a>[`getState()`](#getState)
+### getState()
 
 Returns the current state tree of your application.
 It is equal to the last value returned by the store's reducer.
@@ -37,7 +37,7 @@ _(any)_: The current state tree of your application.
 
 <hr>
 
-### <a id='dispatch' class='anchor'></a>[`dispatch(action)`](#dispatch)
+### dispatch(action)
 
 Dispatches an action. This is the only way to trigger a state change.
 
@@ -86,7 +86,7 @@ store.dispatch(addTodo('Read about the middleware'))
 
 <hr>
 
-### <a id='subscribe' class='anchor'></a>[`subscribe(listener)`](#subscribe)
+### subscribe(listener)
 
 Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
 
@@ -138,7 +138,7 @@ unsubscribe()
 
 <hr>
 
-### <a id='replaceReducer' class='anchor'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
+### replaceReducer(nextReducer)
 
 Replaces the reducer currently used by the store to calculate the state.
 
