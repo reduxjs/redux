@@ -94,5 +94,5 @@ Because of these rules, it's important that the following core concepts are full
 - [Redux Without Profanity: Normalizr](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 - [Wikipedia: Associative Entity](https://en.wikipedia.org/wiki/Associative_entity)
-- [Database Design: Many-to-Many](http://www.tomjewett.com/dbdesign/dbdesign.php?page=manymany.php)
+- [Database Design: Many-to-Many](http://web.csulb.edu/colleges/coe/cecs/dbdesign/dbdesign.php?page=manymany.php)
 - [Avoiding Accidental Complexity When Structuring Your App State](https://medium.com/@talkol/avoiding-accidental-complexity-when-structuring-your-app-state-6e6d22ad5e2a)
