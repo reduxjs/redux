@@ -115,7 +115,7 @@ function receivePosts(subreddit, json) {
 This is all we need to know for now. The particular mechanism to dispatch these actions together with network requests will be discussed later.
 
 > ##### Note on Error Handling
-
+>
 > In a real app, you'd also want to dispatch an action on request failure. We won't implement error handling in this tutorial, but the [real world example](../introduction/Examples.md#real-world) shows one of the possible approaches.
 
 ## Designing the State Shape
@@ -163,11 +163,11 @@ There are a few important bits here:
 - For every list of items, you'll want to store `isFetching` to show a spinner, `didInvalidate` so you can later toggle it when the data is stale, `lastUpdated` so you know when it was fetched the last time, and the `items` themselves. In a real app, you'll also want to store pagination state like `fetchedPageCount` and `nextPageUrl`.
 
 > ##### Note on Nested Entities
-
+>
 > In this example, we store the received items together with the pagination information. However, this approach won't work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
-
+>
 > If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.md#real-world) shows this approach, together with [normalizr](https://github.com/paularmstrong/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
-
+>
 > ```js
 > {
 >   selectedSubreddit: 'frontend',
@@ -206,7 +206,7 @@ There are a few important bits here:
 >   }
 > }
 > ```
-
+>
 > In this guide, we won't normalize entities, but it's something you should consider for a more dynamic application.
 
 ## Handling Actions
@@ -214,7 +214,7 @@ There are a few important bits here:
 Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.
 
 > ##### Note on Reducer Composition
-
+>
 > Here, we assume that you understand reducer composition with [`combineReducers()`](../api/combineReducers.md), as described in the [Splitting Reducers](../basics/Reducers.md#splitting-reducers) section on the [basics guide](../basics/README.md). If you don't, please [read it first](../basics/Reducers.md#splitting-reducers).
 
 #### `reducers.js`
@@ -390,18 +390,18 @@ export function fetchPosts(subreddit) {
 ```
 
 > ##### Note on `fetch`
-
+>
 > We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don't yet support it natively, we suggest that you use [`cross-fetch`](https://github.com/lquixada/cross-fetch) library:
-
+>
 > ```js
 > // Do this in every file where you use `fetch`
 > import fetch from 'cross-fetch'
 > ```
-
+>
 > Internally, it uses [`whatwg-fetch` polyfill](https://github.com/github/fetch) on the client, and [`node-fetch`](https://github.com/bitinn/node-fetch) on the server, so you won't need to change API calls if you change your app to be [universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
-
+>
 > Be aware that any `fetch` polyfill assumes a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill is already present. The easiest way to ensure you have a Promise polyfill is to enable Babel's ES6 polyfill in your entry point before any other code runs:
-
+>
 > ```js
 > // Do this once before any other code in your app
 > import 'babel-polyfill'
@@ -515,7 +515,7 @@ store
 ```
 
 > ##### Note about Server Rendering
-
+>
 > Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.
 
 [Thunk middleware](https://github.com/gaearon/redux-thunk) isn't the only way to orchestrate asynchronous actions in Redux:

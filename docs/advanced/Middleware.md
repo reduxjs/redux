@@ -32,7 +32,7 @@ How do we approach this with Redux?
 The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../api/Store.md#dispatch). It's not really a solution, but just a first step towards understanding the problem.
 
 > ##### Note
-
+>
 > If you're using [react-redux](https://github.com/reduxjs/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
 
 Say, you call this when creating a todo:
