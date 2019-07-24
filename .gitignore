@@ -5,6 +5,7 @@ dist
 lib
 es
 coverage
+.idea
 
 website/translated_docs
 website/build/
