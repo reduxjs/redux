@@ -73,6 +73,44 @@ export type ReducersMapObject<S = any, A extends Action = Action> = {
 }
 
 /**
+ * Infer a combined state shape from a `ReducersMapObject`.
+ *
+ * @template M Object map of reducers as provided to `combineReducers(map: M)`.
+ */
+export type StateFromReducersMapObject<M> = M extends ReducersMapObject
+  ? { [P in keyof M]: M[P] extends Reducer<infer S, any> ? S : never }
+  : never
+
+/**
+ * Infer reducer union type from a `ReducersMapObject`.
+ *
+ * @template M Object map of reducers as provided to `combineReducers(map: M)`.
+ */
+export type ReducerFromReducersMapObject<M> = M extends {
+  [P in keyof M]: infer R
+}
+  ? R extends Reducer<any, any>
+    ? R
+    : never
+  : never
+
+/**
+ * Infer action type from a reducer function.
+ *
+ * @template R Type of reducer.
+ */
+export type ActionFromReducer<R> = R extends Reducer<any, infer A> ? A : never
+
+/**
+ * Infer action union type from a `ReducersMapObject`.
+ *
+ * @template M Object map of reducers as provided to `combineReducers(map: M)`.
+ */
+export type ActionFromReducersMapObject<M> = M extends ReducersMapObject
+  ? ActionFromReducer<ReducerFromReducersMapObject<M>>
+  : never
+
+/**
  * Turns an object whose values are different reducer functions, into a single
  * reducer function. It will call every child reducer, and gather their results
  * into a single state object, whose keys correspond to the keys of the passed
@@ -96,6 +134,9 @@ export function combineReducers<S>(
 export function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
 ): Reducer<S, A>
+export function combineReducers<O extends ReducersMapObject<any, any>>(
+  reducers: O
+): Reducer<StateFromReducersMapObject<O>, ActionFromReducersMapObject<O>>
 
 /* store */
 
