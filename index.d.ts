@@ -134,9 +134,9 @@ export function combineReducers<S>(
 export function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
 ): Reducer<S, A>
-export function combineReducers<O extends ReducersMapObject<any, any>>(
-  reducers: O
-): Reducer<StateFromReducersMapObject<O>, ActionFromReducersMapObject<O>>
+export function combineReducers<M extends ReducersMapObject<any, any>>(
+  reducers: M
+): Reducer<StateFromReducersMapObject<M>, ActionFromReducersMapObject<M>>
 
 /* store */
 

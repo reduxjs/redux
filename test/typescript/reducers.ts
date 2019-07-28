@@ -80,7 +80,7 @@ function discriminated() {
 
   // Union of all actions in the app.
   type MyAction0 = IncrementAction | DecrementAction
-  type MyOther1 = MultiplyAction | DivideAction
+  type MyAction1 = MultiplyAction | DivideAction
 
   const reducer0: Reducer<State, MyAction0> = (state = 0, action) => {
     if (action.type === 'INCREMENT') {
@@ -105,7 +105,7 @@ function discriminated() {
     return state
   }
 
-  const reducer1: Reducer<State, MyOther1> = (state = 0, action) => {
+  const reducer1: Reducer<State, MyAction1> = (state = 0, action) => {
     if (action.type === 'MULTIPLY') {
       // typings:expect-error
       action.wrongField
