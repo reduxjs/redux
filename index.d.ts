@@ -32,6 +32,47 @@ export interface AnyAction extends Action {
   [extraProps: string]: any
 }
 
+/**
+ * Internal "virtual" symbol used to make the `CombinedState` type unique.
+ */
+declare const $CombinedState: unique symbol
+
+/**
+ * State base type for reducers created with `combineReducers()`.
+ *
+ * This type allows the `createStore()` method to infer which levels of the
+ * preloaded state can be partial.
+ *
+ * Because Typescript is really duck-typed, a type needs to have some
+ * identifying property to differentiate it from other types with matching
+ * prototypes for type checking purposes. That's why this type has the
+ * `$CombinedState` symbol property. Without the property, this type would
+ * match any object. The symbol doesn't really exist because it's an internal
+ * (i.e. not exported), and internally we never check its value. Since it's a
+ * symbol property, it's not expected to be unumerable, and the value is
+ * typed as always undefined, so its never expected to have a meaningful
+ * value anyway. It just makes this type "sticky" when we cast to it.
+ */
+export type CombinedState<S> = { readonly [$CombinedState]: undefined } & S
+
+/**
+ * Helper to extract the raw state from a `CombinedState` type.
+ */
+export type UnCombinedState<S> = S extends CombinedState<infer S1> ? S1 : S
+
+/**
+ * Recursively makes combined state objects partial. Only combined state _root
+ * objects_ (i.e. the generated higher level object with keys mapping to
+ * individual reducers) are partial.
+ */
+export type PreloadedState<S> = S extends CombinedState<infer S1>
+  ? {
+      [K in keyof S1]?: S[K] extends object ? PreloadedState<S[K]> : S[K]
+    }
+  : {
+      [K in keyof S]: S[K] extends object ? PreloadedState<S[K]> : S[K]
+    }
+
 /* reducers */
 
 /**
@@ -59,9 +100,9 @@ export interface AnyAction extends Action {
  * @template A The type of actions the reducer can potentially respond to.
  */
 export type Reducer<S = any, A extends Action = AnyAction> = (
-  state: S | undefined,
+  state: UnCombinedState<S> | undefined,
   action: A
-) => S
+) => UnCombinedState<S>
 
 /**
  * Object whose values correspond to different reducer functions.
@@ -92,10 +133,10 @@ export type ReducersMapObject<S = any, A extends Action = Action> = {
  */
 export function combineReducers<S>(
   reducers: ReducersMapObject<S, any>
-): Reducer<S>
+): Reducer<CombinedState<S>>
 export function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
-): Reducer<S, A>
+): Reducer<CombinedState<S>, A>
 
 /* store */
 
@@ -269,7 +310,7 @@ export interface StoreCreator {
   ): Store<S & StateExt, A> & Ext
   <S, A extends Action, Ext, StateExt>(
     reducer: Reducer<S, A>,
-    preloadedState?: DeepPartial<S>,
+    preloadedState?: PreloadedState<S>,
     enhancer?: StoreEnhancer<Ext>
   ): Store<S & StateExt, A> & Ext
 }
@@ -333,7 +374,7 @@ export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
   A extends Action = AnyAction
 >(
   reducer: Reducer<S, A>,
-  preloadedState?: DeepPartial<S>
+  preloadedState?: PreloadedState<S>
 ) => Store<S & StateExt, A> & Ext
 
 /* middleware */

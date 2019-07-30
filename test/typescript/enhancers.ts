@@ -1,3 +1,4 @@
+import { PreloadedState } from '../../index'
 import {
   StoreEnhancer,
   Action,
@@ -43,10 +44,10 @@ function stateExtension() {
     A extends Action = AnyAction
   >(
     reducer: Reducer<S, A>,
-    preloadedState?: DeepPartial<S>
+    preloadedState?: PreloadedState<S>
   ) => {
     const wrappedReducer: Reducer<S & ExtraState, A> = null as any
-    const wrappedPreloadedState: S & ExtraState = null as any
+    const wrappedPreloadedState: PreloadedState<S & ExtraState> = null as any
     return createStore(wrappedReducer, wrappedPreloadedState)
   }
 
