@@ -51,7 +51,7 @@ declare const $CombinedState: unique symbol
  * (i.e. not exported), and internally we never check its value. Since it's a
  * symbol property, it's not expected to be unumerable, and the value is
  * typed as always undefined, so its never expected to have a meaningful
- * value anyway. It just makes this type "sticky" when we cast to it.
+ * value anyway. It just makes this type distinquishable from plain `{}`.
  */
 export type CombinedState<S> = { readonly [$CombinedState]?: undefined } & S
 
