@@ -4,8 +4,7 @@ import {
   Action,
   AnyAction,
   Reducer,
-  createStore,
-  DeepPartial
+  createStore
 } from 'redux'
 
 interface State {
