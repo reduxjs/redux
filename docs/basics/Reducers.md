@@ -92,6 +92,13 @@ function todoApp(state = initialState, action) {
 Now let's handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibilityFilter` on the state. Easy:
 
 ```js
+import {
+  SET_VISIBILITY_FILTER,
+  VisibilityFilters
+} from './actions'
+
+...
+
 function todoApp(state = initialState, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:

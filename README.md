@@ -319,4 +319,4 @@ Meet some of the outstanding companies that made it possible:
 
 ## License
 
-MIT
+[MIT](LICENSE.md)
