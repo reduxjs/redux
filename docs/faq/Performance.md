@@ -10,7 +10,7 @@ hide_title: true
 ## Table of Contents
 
 - [How well does Redux “scale” in terms of performance and architecture?](#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
-- [Won't calling “all my reducers” for each action be slow?](#won-t-calling-all-my-reducers-for-each-action-be-slow)
+- [Won't calling “all my reducers” for each action be slow?](#wont-calling-all-my-reducers-for-each-action-be-slow)
 - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
 - [How can I reduce the number of store update events?](#how-can-i-reduce-the-number-of-store-update-events)
 - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
