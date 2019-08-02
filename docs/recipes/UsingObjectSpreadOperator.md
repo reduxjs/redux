@@ -64,3 +64,6 @@ While the object spread syntax is a [Stage 4](https://github.com/tc39/proposal-o
   "plugins": ["@babel/plugin-proposal-object-rest-spread"]
 }
 ```
+> ##### Note on Object Spread Operator
+
+> Like the Array Spread Operator, the Object Spread Operator creates a [shallow clone](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals) of the original object. In other words, for multidimensional source objects, elements in the copied object at a depth greater than one are mere references to the source object (with the exception of [primitives](https://developer.mozilla.org/en-US/docs/Glossary/Primitive), which are copied). Thus, you cannot reliably use the  Object Spread Operator (`...`) for deep cloning objects.

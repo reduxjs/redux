@@ -13,7 +13,7 @@ hide_title: true
 - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
 - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
 - [How can I speed up my mapStateToProps?](#how-can-i-speed-up-my-mapstatetoprops)
-- [Why don't I have this.props.dispatch available in my connected component?](#why-dont-i-have-this-props-dispatch-available-in-my-connected-component)
+- [Why don't I have this.props.dispatch available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
 - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
 - [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
 
