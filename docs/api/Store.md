@@ -90,13 +90,13 @@ store.dispatch(addTodo('Read about the middleware'))
 
 Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
 
-You may call [`dispatch()`](#dispatch) from a change listener, with the following caveats:
+You may call [`dispatch()`](#dispatchaction) from a change listener, with the following caveats:
 
-1. The listener should only call [`dispatch()`](#dispatch) either in response to user actions or under specific conditions (e. g. dispatching an action when the store has a specific field). Calling [`dispatch()`](#dispatch) without any conditions is technically possible, however it leads to an infinite loop as every [`dispatch()`](#dispatch) call usually triggers the listener again.
+1. The listener should only call [`dispatch()`](#dispatchaction) either in response to user actions or under specific conditions (e. g. dispatching an action when the store has a specific field). Calling [`dispatch()`](#dispatchaction) without any conditions is technically possible, however it leads to an infinite loop as every [`dispatch()`](#dispatchaction) call usually triggers the listener again.
 
-2. The subscriptions are snapshotted just before every [`dispatch()`](#dispatch) call. If you subscribe or unsubscribe while the listeners are being invoked, this will not have any effect on the [`dispatch()`](#dispatch) that is currently in progress. However, the next [`dispatch()`](#dispatch) call, whether nested or not, will use a more recent snapshot of the subscription list.
+2. The subscriptions are snapshotted just before every [`dispatch()`](#dispatchaction) call. If you subscribe or unsubscribe while the listeners are being invoked, this will not have any effect on the [`dispatch()`](#dispatchaction) that is currently in progress. However, the next [`dispatch()`](#dispatchaction) call, whether nested or not, will use a more recent snapshot of the subscription list.
 
-3. The listener should not expect to see all state changes, as the state might have been updated multiple times during a nested [`dispatch()`](#dispatch) before the listener is called. It is, however, guaranteed that all subscribers registered before the [`dispatch()`](#dispatch) started will be called with the latest state by the time it exits.
+3. The listener should not expect to see all state changes, as the state might have been updated multiple times during a nested [`dispatch()`](#dispatchaction) before the listener is called. It is, however, guaranteed that all subscribers registered before the [`dispatch()`](#dispatchaction) started will be called with the latest state by the time it exits.
 
 It is a low-level API. Most likely, instead of using it directly, you'll use React (or other) bindings. If you commonly use the callback as a hook to react to state changes, you might want to [write a custom `observeStore` utility](https://github.com/reduxjs/redux/issues/303#issuecomment-125184409). The `Store` is also an [`Observable`](https://github.com/zenparsing/es-observable), so you can `subscribe` to changes with libraries like [RxJS](https://github.com/ReactiveX/RxJS).
 
