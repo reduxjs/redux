@@ -291,7 +291,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
 }
 ```
 
-Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn't need to know the complete initial state anymore. It's enough that the child reducers return their initial state when given `undefined` at first.
+Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn't need to know the complete initial state any more. It's enough that the child reducers return their initial state when given `undefined` at first.
 
 ```js
 function todos(state = [], action) {
@@ -396,7 +396,7 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 > const todoApp = combineReducers(reducers)
 > ```
 >
-> Because `import *` is still new syntax, we don't use it anymore in the documentation to avoid [confusion](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
+> Because `import *` is still new syntax, we no longer use it in the documentation to avoid [confusion](https://github.com/reduxjs/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
 
 ## Source Code
 
