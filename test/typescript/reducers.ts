@@ -68,10 +68,21 @@ function discriminated() {
     count?: number
   }
 
-  // Union of all actions in the app.
-  type MyAction = IncrementAction | DecrementAction
+  interface MultiplyAction {
+    type: 'MULTIPLY'
+    count?: number
+  }
 
-  const reducer: Reducer<State, MyAction> = (state = 0, action) => {
+  interface DivideAction {
+    type: 'DIVIDE'
+    count?: number
+  }
+
+  // Union of all actions in the app.
+  type MyAction0 = IncrementAction | DecrementAction
+  type MyAction1 = MultiplyAction | DivideAction
+
+  const reducer0: Reducer<State, MyAction0> = (state = 0, action) => {
     if (action.type === 'INCREMENT') {
       // Action shape is determined by `type` discriminator.
       // typings:expect-error
@@ -94,37 +105,65 @@ function discriminated() {
     return state
   }
 
+  const reducer1: Reducer<State, MyAction1> = (state = 0, action) => {
+    if (action.type === 'MULTIPLY') {
+      // typings:expect-error
+      action.wrongField
+
+      const { count = 1 } = action
+
+      return state * count
+    }
+
+    if (action.type === 'DIVIDE') {
+      // typings:expect-error
+      action.wrongField
+
+      const { count = 1 } = action
+
+      return state / count
+    }
+
+    return state
+  }
+
   // Reducer state is initialized by Redux using Init action which is private.
   // To initialize manually (e.g. in tests) we have to type cast init action
   // or add a custom init action to MyAction union.
-  let s: State = reducer(undefined, { type: 'init' } as any)
-  s = reducer(s, { type: 'INCREMENT' })
-  s = reducer(s, { type: 'INCREMENT', count: 10 })
+  let s: State = reducer0(undefined, { type: 'init' } as any)
+  s = reducer0(s, { type: 'INCREMENT' })
+  s = reducer0(s, { type: 'INCREMENT', count: 10 })
   // Known actions are strictly checked.
   // typings:expect-error
-  s = reducer(s, { type: 'DECREMENT', coun: 10 })
-  s = reducer(s, { type: 'DECREMENT', count: 10 })
+  s = reducer0(s, { type: 'DECREMENT', coun: 10 })
+  s = reducer0(s, { type: 'DECREMENT', count: 10 })
   // Unknown actions are rejected.
   // typings:expect-error
-  s = reducer(s, { type: 'SOME_OTHER_TYPE' })
+  s = reducer0(s, { type: 'SOME_OTHER_TYPE' })
   // typings:expect-error
-  s = reducer(s, { type: 'SOME_OTHER_TYPE', someField: 'value' })
+  s = reducer0(s, { type: 'SOME_OTHER_TYPE', someField: 'value' })
 
-  // Combined reducer accepts any action by default which allows to include
-  // third-party reducers without the need to add their actions to the union.
-  const combined = combineReducers({ sub: reducer })
+  // Combined reducer infers state and actions by default which maintains type
+  // safety and still allows inclusion of third-party reducers without the need
+  // to explicitly add their state and actions to the union.
+  const combined = combineReducers({ sub0: reducer0, sub1: reducer1 })
 
-  let cs: { sub: State } = combined(undefined, { type: 'init' })
-  cs = combined(cs, { type: 'SOME_OTHER_TYPE' })
+  const cs = combined(undefined, { type: 'INCREMENT' })
+  combined(cs, { type: 'MULTIPLY' })
+  // typings:expect-error
+  combined(cs, { type: 'init' })
+  // typings:expect-error
+  combined(cs, { type: 'SOME_OTHER_TYPE' })
 
   // Combined reducer can be made to only accept known actions.
-  const strictCombined = combineReducers<{ sub: State }, MyAction>({
-    sub: reducer
+  const strictCombined = combineReducers<{ sub: State }, MyAction0>({
+    sub: reducer0
   })
 
-  strictCombined(cs, { type: 'INCREMENT' })
+  const scs = strictCombined(undefined, { type: 'INCREMENT' })
+  strictCombined(scs, { type: 'DECREMENT' })
   // typings:expect-error
-  strictCombined(cs, { type: 'SOME_OTHER_TYPE' })
+  strictCombined(scs, { type: 'SOME_OTHER_TYPE' })
 }
 
 /**

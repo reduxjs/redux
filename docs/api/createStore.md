@@ -20,7 +20,7 @@ There should only be a single store in your app.
 
 #### Returns
 
-([_`Store`_](Store.md)): An object that holds the complete state of your app. The only way to change its state is by [dispatching actions](Store.md#dispatch). You may also [subscribe](Store.md#subscribe) to the changes to its state to update the UI.
+([_`Store`_](Store.md)): An object that holds the complete state of your app. The only way to change its state is by [dispatching actions](Store.md#dispatchaction). You may also [subscribe](Store.md#subscribelistener) to the changes to its state to update the UI.
 
 #### Example
 

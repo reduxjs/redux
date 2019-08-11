@@ -126,7 +126,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
         'You may not call store.subscribe() while the reducer is executing. ' +
           'If you would like to be notified after the store has been updated, subscribe from a ' +
           'component and invoke store.getState() in the callback to access the latest state. ' +
-          'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
+          'See https://redux.js.org/api-reference/store#subscribelistener for more details.'
       )
     }
 
@@ -143,7 +143,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       if (isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
-            'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.'
+            'See https://redux.js.org/api-reference/store#subscribelistener for more details.'
         )
       }
 
