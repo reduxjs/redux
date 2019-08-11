@@ -128,7 +128,7 @@ Note that experimental language features are subject to change.
 
 Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](./recipes/structuring-reducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
 
-#### Don't forget to call [`dispatch(action)`](api/Store.md#dispatch)
+#### Don't forget to call [`dispatch(action)`](api/Store.md#dispatchaction)
 
 If you define an action creator, calling it will _not_ automatically dispatch the action. For example, this code will do nothing:
 
@@ -160,7 +160,7 @@ class AddTodo extends Component {
 
 It doesn't work because your action creator is just a function that _returns_ an action. It is up to you to actually dispatch it. We can't bind your action creators to a particular Store instance during the definition because apps that render on the server need a separate Redux store for every request.
 
-The fix is to call [`dispatch()`](api/Store.md#dispatch) method on the [store](api/Store.md) instance:
+The fix is to call [`dispatch()`](api/Store.md#dispatchaction) method on the [store](api/Store.md) instance:
 
 ```js
 handleClick() {
