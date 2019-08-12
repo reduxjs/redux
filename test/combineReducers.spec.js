@@ -192,6 +192,7 @@ describe('Utils', () => {
       expect(spy.mock.calls[0][0]).toMatch(
         /Store does not have a valid reducer/
       )
+
       spy.mockClear()
       console.error = preSpy
     })
@@ -265,13 +266,16 @@ describe('Utils', () => {
       const bar = (state = { bar: 2 }) => state
 
       expect(spy.mock.calls.length).toBe(0)
+
       const reducer = combineReducers({ foo, bar })
       const state = { foo: 1, bar: 2, qux: 3 }
+
       reducer(state, {})
       reducer(state, {})
       reducer(state, {})
       reducer(state, {})
       expect(spy.mock.calls.length).toBe(1)
+
       reducer({ ...state, baz: 5 }, {})
       reducer({ ...state, baz: 5 }, {})
       reducer({ ...state, baz: 5 }, {})
@@ -280,6 +284,73 @@ describe('Utils', () => {
 
       spy.mockClear()
       console.error = preSpy
+    })
+
+    describe('With Replace Reducers', function() {
+      const foo = (state = {}) => state
+      const bar = (state = {}) => state
+      const ACTION = { type: 'ACTION' }
+
+      it('should return an updated state when additional reducers are passed to combineReducers', function() {
+        const originalCompositeReducer = combineReducers({ foo })
+        const store = createStore(originalCompositeReducer)
+
+        store.dispatch(ACTION)
+
+        const initialState = store.getState()
+
+        store.replaceReducer(combineReducers({ foo, bar }))
+        store.dispatch(ACTION)
+
+        const nextState = store.getState()
+        expect(nextState).not.toBe(initialState)
+      })
+
+      it('should return an updated state when reducers passed to combineReducers are changed', function() {
+        const baz = (state = {}) => state
+
+        const originalCompositeReducer = combineReducers({ foo, bar })
+        const store = createStore(originalCompositeReducer)
+
+        store.dispatch(ACTION)
+
+        const initialState = store.getState()
+
+        store.replaceReducer(combineReducers({ baz, bar }))
+        store.dispatch(ACTION)
+
+        const nextState = store.getState()
+        expect(nextState).not.toBe(initialState)
+      })
+
+      it('should return the same state when reducers passed to combineReducers not changed', function() {
+        const originalCompositeReducer = combineReducers({ foo, bar })
+        const store = createStore(originalCompositeReducer)
+
+        store.dispatch(ACTION)
+
+        const initialState = store.getState()
+
+        store.replaceReducer(combineReducers({ foo, bar }))
+        store.dispatch(ACTION)
+
+        const nextState = store.getState()
+        expect(nextState).toBe(initialState)
+      })
+
+      it('should return an updated state when one of more reducers passed to the combineReducers are removed', function() {
+        const originalCompositeReducer = combineReducers({ foo, bar })
+        const store = createStore(originalCompositeReducer)
+
+        store.dispatch(ACTION)
+
+        const initialState = store.getState()
+
+        store.replaceReducer(combineReducers({ bar }))
+
+        const nextState = store.getState()
+        expect(nextState).not.toBe(initialState)
+      })
     })
   })
 })
