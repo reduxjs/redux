@@ -1,3 +1,4 @@
+import { DEFAULT_EXTENSIONS } from '@babel/core'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
@@ -14,7 +15,11 @@ export default [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
     ],
-    plugins: [babel()]
+    plugins: [
+      babel({
+        extensions: [...DEFAULT_EXTENSIONS, '.ts']
+      })
+    ]
   },
 
   // ES
@@ -25,7 +30,11 @@ export default [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
     ],
-    plugins: [babel()]
+    plugins: [
+      babel({
+        extensions: [...DEFAULT_EXTENSIONS, '.ts']
+      })
+    ]
   },
 
   // ES for Browsers
@@ -36,6 +45,10 @@ export default [
       nodeResolve(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      babel({
+        extensions: [...DEFAULT_EXTENSIONS, '.ts'],
+        exclude: 'node_modules/**'
       }),
       terser({
         compress: {
@@ -60,6 +73,7 @@ export default [
     plugins: [
       nodeResolve(),
       babel({
+        extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
       }),
       replace({
@@ -80,6 +94,7 @@ export default [
     plugins: [
       nodeResolve(),
       babel({
+        extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
       }),
       replace({
