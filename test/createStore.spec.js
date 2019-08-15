@@ -742,10 +742,10 @@ describe('createStore', () => {
 
     const store = createStore(
       combineReducers({
-        x: (s = 0, a) => s,
+        x: (s = 0, _) => s,
         y: combineReducers({
-          z: (s = 0, a) => s,
-          w: (s = 0, a) => s
+          z: (s = 0, _) => s,
+          w: (s = 0, _) => s
         })
       })
     )
@@ -753,7 +753,7 @@ describe('createStore', () => {
     store.replaceReducer(
       combineReducers({
         y: combineReducers({
-          z: (s = 0, a) => s
+          z: (s = 0, _) => s
         })
       })
     )

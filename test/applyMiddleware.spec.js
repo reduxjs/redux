@@ -120,7 +120,7 @@ describe('applyMiddleware', () => {
     }
 
     function dummyMiddleware({ dispatch }) {
-      return next => action => dispatch(action, testCallArgs)
+      return _next => action => dispatch(action, testCallArgs)
     }
 
     const store = createStore(
