@@ -1,10 +1,10 @@
-import { compose } from '../'
+import { compose } from '..'
 
 describe('Utils', () => {
   describe('compose', () => {
     it('composes from right to left', () => {
-      const double = x => x * 2
-      const square = x => x * x
+      const double = (x: number) => x * 2
+      const square = (x: number) => x * x
       expect(compose(square)(5)).toBe(25)
       expect(
         compose(
@@ -22,10 +22,10 @@ describe('Utils', () => {
     })
 
     it('composes functions from right to left', () => {
-      const a = next => x => next(x + 'a')
-      const b = next => x => next(x + 'b')
-      const c = next => x => next(x + 'c')
-      const final = x => x
+      const a = (next: (x: string) => string) => (x: string) => next(x + 'a')
+      const b = (next: (x: string) => string) => (x: string) => next(x + 'b')
+      const c = (next: (x: string) => string) => (x: string) => next(x + 'c')
+      const final = (x: string) => x
 
       expect(
         compose(
@@ -51,14 +51,15 @@ describe('Utils', () => {
     })
 
     it('throws at runtime if argument is not a function', () => {
-      const square = x => x * x
-      const add = (x, y) => x + y
+      type sFunc = (x: number, y: number) => number
+      const square = (x: number, _: number) => x * x
+      const add = (x: number, y: number) => x + y
 
       expect(() =>
         compose(
           square,
           add,
-          false
+          (false as unknown) as sFunc
         )(1, 2)
       ).toThrow()
       expect(() =>
@@ -72,28 +73,28 @@ describe('Utils', () => {
         compose(
           square,
           add,
-          true
+          (true as unknown) as sFunc
         )(1, 2)
       ).toThrow()
       expect(() =>
         compose(
           square,
           add,
-          NaN
+          (NaN as unknown) as sFunc
         )(1, 2)
       ).toThrow()
       expect(() =>
         compose(
           square,
           add,
-          '42'
+          ('42' as unknown) as sFunc
         )(1, 2)
       ).toThrow()
     })
 
     it('can be seeded with multiple arguments', () => {
-      const square = x => x * x
-      const add = (x, y) => x + y
+      const square = (x: number, _: number) => x * x
+      const add = (x: number, y: number) => x + y
       expect(
         compose(
           square,
@@ -103,9 +104,9 @@ describe('Utils', () => {
     })
 
     it('returns the first given argument if given no functions', () => {
-      expect(compose()(1, 2)).toBe(1)
+      expect(compose<number>()(1, 2)).toBe(1)
       expect(compose()(3)).toBe(3)
-      expect(compose()()).toBe(undefined)
+      expect(compose()(undefined)).toBe(undefined)
     })
 
     it('returns the first function if given only one', () => {
