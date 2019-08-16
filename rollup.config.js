@@ -2,6 +2,7 @@ import { DEFAULT_EXTENSIONS } from '@babel/core'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
+import typescript from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
@@ -16,6 +17,7 @@ export default [
       ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [
+      typescript(),
       babel({
         extensions: [...DEFAULT_EXTENSIONS, '.ts']
       })
@@ -31,6 +33,7 @@ export default [
       ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [
+      typescript(),
       babel({
         extensions: [...DEFAULT_EXTENSIONS, '.ts']
       })
@@ -46,6 +49,7 @@ export default [
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
+      typescript(),
       babel({
         extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
@@ -72,6 +76,7 @@ export default [
     },
     plugins: [
       nodeResolve(),
+      typescript(),
       babel({
         extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
@@ -93,6 +98,7 @@ export default [
     },
     plugins: [
       nodeResolve(),
+      typescript(),
       babel({
         extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
