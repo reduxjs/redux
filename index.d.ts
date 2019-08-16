@@ -669,3 +669,9 @@ export function compose<R>(
 ): (...args: any[]) => R
 
 export function compose<R>(...funcs: Function[]): (...args: any[]) => R
+
+export const __DO_NOT_USE__ActionTypes: {
+  INIT: string
+  REPLACE: string
+  PROBE_UNKNOWN_ACTION: () => string
+}
