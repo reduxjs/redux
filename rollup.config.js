@@ -1,6 +1,7 @@
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
+import typescript from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
@@ -18,6 +19,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
+      typescript(),
       babel()
     ]
   },
@@ -34,6 +36,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
+      typescript(),
       babel()
     ]
   },
@@ -49,6 +52,7 @@ export default [
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
+      typescript(),
       babel({
         exclude: 'node_modules/**'
       }),
@@ -76,6 +80,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
+      typescript(),
       babel({
         exclude: 'node_modules/**'
       }),
@@ -98,6 +103,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
+      typescript(),
       babel({
         exclude: 'node_modules/**'
       }),
