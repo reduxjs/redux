@@ -224,7 +224,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * implement a hot reloading mechanism for Redux.
    *
    * @param {Function} nextReducer The reducer for the store to use instead.
-   * @returns {void}
+   * @returns {Store} The same store instance with a new reducer in place.
    */
   function replaceReducer(nextReducer) {
     if (typeof nextReducer !== 'function') {
@@ -238,6 +238,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     // will receive the previous state. This effectively populates
     // the new state tree with any relevant data from the old one.
     dispatch({ type: ActionTypes.REPLACE })
+    return store
   }
 
   /**
@@ -284,11 +285,12 @@ export default function createStore(reducer, preloadedState, enhancer) {
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT })
 
-  return {
+  const store = {
     dispatch,
     subscribe,
     getState,
     replaceReducer,
     [$$observable]: observable
   }
+  return store
 }

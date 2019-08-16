@@ -326,7 +326,9 @@ export interface Store<S = any, A extends Action = AnyAction> {
    *
    * @param nextReducer The reducer for the store to use instead.
    */
-  replaceReducer(nextReducer: Reducer<S, A>): void
+  replaceReducer<NewState = S, NewActions extends A = A>(
+    nextReducer: Reducer<NewState, NewActions>
+  ): Store<NewState, NewActions>
 
   /**
    * Interoperability point for observable/reactive libraries.
