@@ -34,9 +34,11 @@ module.exports = {
 
   overrides: [
     {
-      files: 'test/**/*.js',
-      env: {
-        jest: true
+      files: 'test/typescript/*.ts',
+      rules: {
+        'no-unused-expressions': 'off',
+        '@typescript-eslint/no-namespace': 'off',
+        '@typescript-eslint/no-unused-vars': 'off'
       }
     }
   ]
