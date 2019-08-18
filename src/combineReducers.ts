@@ -1,8 +1,9 @@
+import { AnyAction, Action, ReducersMapObject } from '..'
 import ActionTypes from './utils/actionTypes'
 import warning from './utils/warning'
 import isPlainObject from './utils/isPlainObject'
 
-function getUndefinedStateErrorMessage(key, action) {
+function getUndefinedStateErrorMessage(key: string, action: Action) {
   const actionType = action && action.type
   const actionDescription =
     (actionType && `action "${String(actionType)}"`) || 'an action'
@@ -15,10 +16,10 @@ function getUndefinedStateErrorMessage(key, action) {
 }
 
 function getUnexpectedStateShapeWarningMessage(
-  inputState,
-  reducers,
-  action,
-  unexpectedKeyCache
+  inputState: object,
+  reducers: ReducersMapObject,
+  action: Action,
+  unexpectedKeyCache: { [key: string]: true }
 ) {
   const reducerKeys = Object.keys(reducers)
   const argumentName =
@@ -36,7 +37,7 @@ function getUnexpectedStateShapeWarningMessage(
   if (!isPlainObject(inputState)) {
     return (
       `The ${argumentName} has unexpected type of "` +
-      {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
+      ({} as any).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
       `". Expected argument to be an object with the following ` +
       `keys: "${reducerKeys.join('", "')}"`
     )
@@ -62,7 +63,7 @@ function getUnexpectedStateShapeWarningMessage(
   }
 }
 
-function assertReducerShape(reducers) {
+function assertReducerShape(reducers: ReducersMapObject) {
   Object.keys(reducers).forEach(key => {
     const reducer = reducers[key]
     const initialState = reducer(undefined, { type: ActionTypes.INIT })
@@ -110,9 +111,9 @@ function assertReducerShape(reducers) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
-export default function combineReducers(reducers) {
+export default function combineReducers(reducers: ReducersMapObject) {
   const reducerKeys = Object.keys(reducers)
-  const finalReducers = {}
+  const finalReducers: ReducersMapObject = {}
   for (let i = 0; i < reducerKeys.length; i++) {
     const key = reducerKeys[i]
 
@@ -130,19 +131,19 @@ export default function combineReducers(reducers) {
 
   // This is used to make sure we don't warn about the same
   // keys multiple times.
-  let unexpectedKeyCache
+  let unexpectedKeyCache: { [key: string]: true }
   if (process.env.NODE_ENV !== 'production') {
     unexpectedKeyCache = {}
   }
 
-  let shapeAssertionError
+  let shapeAssertionError: Error
   try {
     assertReducerShape(finalReducers)
   } catch (e) {
     shapeAssertionError = e
   }
 
-  return function combination(state = {}, action) {
+  return function combination(state: any = {}, action: AnyAction) {
     if (shapeAssertionError) {
       throw shapeAssertionError
     }
@@ -160,7 +161,7 @@ export default function combineReducers(reducers) {
     }
 
     let hasChanged = false
-    const nextState = {}
+    const nextState: any = {}
     for (let i = 0; i < finalReducerKeys.length; i++) {
       const key = finalReducerKeys[i]
       const reducer = finalReducers[key]

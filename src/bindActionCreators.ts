@@ -1,6 +1,11 @@
-function bindActionCreator(actionCreator, dispatch) {
-  return function() {
-    return dispatch(actionCreator.apply(this, arguments))
+import { AnyAction, ActionCreator, Dispatch, ActionCreatorsMapObject } from '..'
+
+function bindActionCreator<A extends AnyAction = AnyAction>(
+  actionCreator: ActionCreator<A>,
+  dispatch: Dispatch
+) {
+  return function(this: any, ...args: any[]) {
+    return dispatch(actionCreator.apply(this, args))
   }
 }
 
@@ -25,7 +30,10 @@ function bindActionCreator(actionCreator, dispatch) {
  * function as `actionCreators`, the return value will also be a single
  * function.
  */
-export default function bindActionCreators(actionCreators, dispatch) {
+export default function bindActionCreators(
+  actionCreators: ActionCreator<any> | ActionCreatorsMapObject,
+  dispatch: Dispatch
+) {
   if (typeof actionCreators === 'function') {
     return bindActionCreator(actionCreators, dispatch)
   }
@@ -39,7 +47,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     )
   }
 
-  const boundActionCreators = {}
+  const boundActionCreators: ActionCreatorsMapObject = {}
   for (const key in actionCreators) {
     const actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
