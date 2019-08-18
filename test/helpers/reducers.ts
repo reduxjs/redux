@@ -6,14 +6,21 @@ import {
   UNSUBSCRIBE_IN_MIDDLE,
   THROW_ERROR
 } from './actionTypes'
+import { AnyAction } from '../..'
 
-function id(state = []) {
+function id(state: { id: number }[] = []) {
   return (
     state.reduce((result, item) => (item.id > result ? item.id : result), 0) + 1
   )
 }
 
-export function todos(state = [], action) {
+export interface Todo {
+  id: number
+  text: string
+}
+export type TodoAction = { type: 'ADD_TODO'; text: string } | AnyAction
+
+export function todos(state: Todo[] = [], action: TodoAction) {
   switch (action.type) {
     case ADD_TODO:
       return [
@@ -28,7 +35,7 @@ export function todos(state = [], action) {
   }
 }
 
-export function todosReverse(state = [], action) {
+export function todosReverse(state: Todo[] = [], action: TodoAction) {
   switch (action.type) {
     case ADD_TODO:
       return [
@@ -43,7 +50,12 @@ export function todosReverse(state = [], action) {
   }
 }
 
-export function dispatchInTheMiddleOfReducer(state = [], action) {
+export function dispatchInTheMiddleOfReducer(
+  state = [],
+  action:
+    | { type: 'DISPATCH_IN_MIDDLE'; boundDispatchFn: () => void }
+    | AnyAction
+) {
   switch (action.type) {
     case DISPATCH_IN_MIDDLE:
       action.boundDispatchFn()
@@ -53,7 +65,12 @@ export function dispatchInTheMiddleOfReducer(state = [], action) {
   }
 }
 
-export function getStateInTheMiddleOfReducer(state = [], action) {
+export function getStateInTheMiddleOfReducer(
+  state = [],
+  action:
+    | { type: 'DISPATCH_IN_MIDDLE'; boundGetStateFn: () => void }
+    | AnyAction
+) {
   switch (action.type) {
     case GET_STATE_IN_MIDDLE:
       action.boundGetStateFn()
@@ -63,7 +80,12 @@ export function getStateInTheMiddleOfReducer(state = [], action) {
   }
 }
 
-export function subscribeInTheMiddleOfReducer(state = [], action) {
+export function subscribeInTheMiddleOfReducer(
+  state = [],
+  action:
+    | { type: 'DISPATCH_IN_MIDDLE'; boundSubscribeFn: () => void }
+    | AnyAction
+) {
   switch (action.type) {
     case SUBSCRIBE_IN_MIDDLE:
       action.boundSubscribeFn()
@@ -73,7 +95,12 @@ export function subscribeInTheMiddleOfReducer(state = [], action) {
   }
 }
 
-export function unsubscribeInTheMiddleOfReducer(state = [], action) {
+export function unsubscribeInTheMiddleOfReducer(
+  state = [],
+  action:
+    | { type: 'DISPATCH_IN_MIDDLE'; boundUnsubscribeFn: () => void }
+    | AnyAction
+) {
   switch (action.type) {
     case UNSUBSCRIBE_IN_MIDDLE:
       action.boundUnsubscribeFn()
@@ -83,7 +110,7 @@ export function unsubscribeInTheMiddleOfReducer(state = [], action) {
   }
 }
 
-export function errorThrowingReducer(state = [], action) {
+export function errorThrowingReducer(state = [], action: AnyAction) {
   switch (action.type) {
     case THROW_ERROR:
       throw new Error()
