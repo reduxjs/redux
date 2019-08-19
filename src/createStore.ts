@@ -317,12 +317,12 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT } as A)
 
-  const store: Store<S, A> = {
+  const store: Store<S, A> = ({
     dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
     replaceReducer,
     [$$observable]: observable
-  }
+  } as unknown) as Store<S, A>
   return store
 }
