@@ -1,4 +1,3 @@
-import { DEFAULT_EXTENSIONS } from '@babel/core'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
@@ -16,9 +15,10 @@ export default [
       ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [
-      babel({
-        extensions: [...DEFAULT_EXTENSIONS, '.ts']
-      })
+      nodeResolve({
+        extensions: ['.ts']
+      }),
+      babel()
     ]
   },
 
@@ -31,9 +31,10 @@ export default [
       ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [
-      babel({
-        extensions: [...DEFAULT_EXTENSIONS, '.ts']
-      })
+      nodeResolve({
+        extensions: ['.ts']
+      }),
+      babel()
     ]
   },
 
@@ -42,12 +43,13 @@ export default [
     input: 'src/index.ts',
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        extensions: ['.ts']
+      }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
       babel({
-        extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
       }),
       terser({
@@ -71,9 +73,10 @@ export default [
       indent: false
     },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        extensions: ['.ts']
+      }),
       babel({
-        extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
       }),
       replace({
@@ -92,9 +95,10 @@ export default [
       indent: false
     },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        extensions: ['.ts']
+      }),
       babel({
-        extensions: [...DEFAULT_EXTENSIONS, '.ts'],
         exclude: 'node_modules/**'
       }),
       replace({
