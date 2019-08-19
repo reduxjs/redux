@@ -1,9 +1,31 @@
+import {
+  Dispatch,
+  Unsubscribe,
+  Observable,
+  Observer,
+  Store,
+  DeepPartial,
+  StoreCreator,
+  StoreEnhancer
+} from '..'
 import createStore from './createStore'
+import {
+  CombinedState,
+  PreloadedState,
+  Reducer,
+  ReducerFromReducersMapObject,
+  StateFromReducersMapObject,
+  ActionFromReducer,
+  ActionFromReducersMapObject
+} from '..'
 import combineReducers from './combineReducers'
+import { ActionCreator, ActionCreatorsMapObject } from '..'
 import bindActionCreators from './bindActionCreators'
+import { MiddlewareAPI, Middleware } from '..'
 import applyMiddleware from './applyMiddleware'
 import compose from './compose'
 import warning from './utils/warning'
+import { Action, AnyAction } from '..'
 import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 /*
@@ -27,6 +49,34 @@ if (
 }
 
 export {
+  // types
+  // actions
+  Action,
+  AnyAction,
+  // action creators
+  ActionCreator,
+  ActionCreatorsMapObject,
+  // reducers
+  CombinedState,
+  PreloadedState,
+  Reducer,
+  ReducerFromReducersMapObject,
+  StateFromReducersMapObject,
+  ActionFromReducer,
+  ActionFromReducersMapObject,
+  // middleware
+  MiddlewareAPI,
+  Middleware,
+  // store
+  Dispatch,
+  Unsubscribe,
+  Observable,
+  Observer,
+  Store,
+  DeepPartial,
+  StoreCreator,
+  StoreEnhancer,
+  // things
   createStore,
   combineReducers,
   bindActionCreators,
