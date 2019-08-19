@@ -30,14 +30,5 @@ module.exports = {
         argsIgnorePattern: '^_' // ignore unused variables whose name is '_'
       }
     ]
-  },
-
-  overrides: [
-    {
-      files: 'test/**/*.js',
-      env: {
-        jest: true
-      }
-    }
-  ]
+  }
 }

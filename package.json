@@ -38,7 +38,7 @@
     "clean": "rimraf lib dist es coverage",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
-    "lint": "eslint src test",
+    "lint": "eslint --ext js,ts src test",
     "pretest": "npm run build",
     "test": "jest",
     "test:watch": "npm test -- --watch",
@@ -46,7 +46,7 @@
     "build": "rollup -c",
     "prepare": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
     "check-types": "tsc",
-    "examples:lint": "eslint examples",
+    "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
