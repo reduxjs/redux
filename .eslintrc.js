@@ -30,16 +30,5 @@ module.exports = {
         argsIgnorePattern: '^_' // ignore unused variables whose name is '_'
       }
     ]
-  },
-
-  overrides: [
-    {
-      files: 'test/typescript/*.ts',
-      rules: {
-        'no-unused-expressions': 'off',
-        '@typescript-eslint/no-namespace': 'off',
-        '@typescript-eslint/no-unused-vars': 'off'
-      }
-    }
-  ]
+  }
 }
