@@ -5,8 +5,6 @@ dist
 lib
 es
 coverage
-# used by rollup-plugin-typescript2
-.rpt2_cache/
 
 website/translated_docs
 website/build/
