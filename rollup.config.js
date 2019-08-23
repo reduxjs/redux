@@ -4,7 +4,6 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import typescript from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
-import typescript from 'rollup-plugin-typescript2'
 
 import pkg from './package.json'
 
@@ -55,7 +54,6 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
-      typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
