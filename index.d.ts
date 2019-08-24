@@ -248,6 +248,15 @@ export type Observer<T> = {
 }
 
 /**
+ * returns the most basic type that will not interfere with the existing type
+ *
+ * Note that for non-object stuff, this will mess with replaceReducer. The
+ * assumption is that root reducers that only return a basic type (string, number, null, symbol) probably won't
+ * be using replaceReducer anyways.
+ */
+export type BaseType<S> = S extends {} ? {} : S
+
+/**
  * A store is an object that holds the application's state tree.
  * There should only be a single store in a Redux app, as the composition
  * happens on the reducer level.
@@ -260,7 +269,7 @@ export type Observer<T> = {
 export interface Store<
   S = any,
   A extends Action = AnyAction,
-  StateExt = S extends {} ? {} : S extends [] ? [] : S,
+  StateExt = BaseType<S>,
   Ext = {}
 > {
   /**
@@ -362,21 +371,11 @@ export type DeepPartial<T> = {
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <
-    S,
-    A extends Action,
-    Ext = {},
-    StateExt = S extends {} ? {} : S extends [] ? [] : S
-  >(
+  <S, A extends Action, Ext = {}, StateExt = BaseType<S>>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
   ): Store<S & StateExt, A, StateExt, Ext> & Ext
-  <
-    S,
-    A extends Action,
-    Ext = {},
-    StateExt = S extends {} ? {} : S extends [] ? [] : S
-  >(
+  <S, A extends Action, Ext = {}, StateExt = BaseType<S>>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>,
     enhancer?: StoreEnhancer<Ext>
