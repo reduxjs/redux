@@ -362,11 +362,11 @@ export type DeepPartial<T> = {
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext extends {}, StateExt extends {}>(
+  <S, A extends Action, Ext extends {}, StateExt>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
   ): Store<S & StateExt, A, StateExt, Ext> & Ext
-  <S, A extends Action, Ext extends {}, StateExt extends {}>(
+  <S, A extends Action, Ext extends {}, StateExt>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>,
     enhancer?: StoreEnhancer<Ext>
