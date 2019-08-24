@@ -80,10 +80,10 @@ function replaceReducerExtender() {
     extraField: 'extra'
   }
 
-  const enhancer: StoreEnhancer<{}, ExtraState> = createStore => <
-    S,
-    A extends Action = AnyAction
-  >(
+  const enhancer: StoreEnhancer<
+    { method(): string },
+    ExtraState
+  > = createStore => <S, A extends Action = AnyAction>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>
   ) => {
@@ -104,4 +104,8 @@ function replaceReducerExtender() {
   store.getState().extraField
   // typings:expect-error
   store.getState().wrongField
+
+  const res: string = store.method()
+  // typings:expect-error
+  store.wrongMethod()
 }
