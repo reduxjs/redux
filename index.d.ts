@@ -254,8 +254,15 @@ export type Observer<T> = {
  *
  * @template S The type of state held by this store.
  * @template A the type of actions which may be dispatched by this store.
+ * @template StateExt any extension to state from store enhancers
+ * @template Ext any extensions to the store from store enhancers
  */
-export interface Store<S = any, A extends Action = AnyAction> {
+export interface Store<
+  S = any,
+  A extends Action = AnyAction,
+  StateExt = {},
+  Ext = {}
+> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
@@ -328,7 +335,7 @@ export interface Store<S = any, A extends Action = AnyAction> {
    */
   replaceReducer<NewState = S, NewActions extends A = A>(
     nextReducer: Reducer<NewState, NewActions>
-  ): Store<NewState, NewActions>
+  ): Store<NewState & StateExt, NewActions, StateExt, Ext> & Ext
 
   /**
    * Interoperability point for observable/reactive libraries.
@@ -355,15 +362,15 @@ export type DeepPartial<T> = {
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext, StateExt>(
+  <S, A extends Action, Ext extends {}, StateExt extends {}>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
-  ): Store<S & StateExt, A> & Ext
-  <S, A extends Action, Ext, StateExt>(
+  ): Store<S & StateExt, A, StateExt, Ext> & Ext
+  <S, A extends Action, Ext extends {}, StateExt extends {}>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>,
     enhancer?: StoreEnhancer<Ext>
-  ): Store<S & StateExt, A> & Ext
+  ): Store<S & StateExt, A, StateExt, Ext> & Ext
 }
 
 /**
@@ -418,15 +425,16 @@ export const createStore: StoreCreator
  * @template StateExt State extension that is mixed into the state type.
  */
 export type StoreEnhancer<Ext = {}, StateExt = {}> = (
-  next: StoreEnhancerStoreCreator
+  next: StoreEnhancerStoreCreator<Ext, StateExt>
 ) => StoreEnhancerStoreCreator<Ext, StateExt>
+
 export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
   S = any,
   A extends Action = AnyAction
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>
-) => Store<S & StateExt, A> & Ext
+) => Store<S & StateExt, A, StateExt, Ext> & Ext
 
 /* middleware */
 

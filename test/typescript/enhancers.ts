@@ -71,3 +71,37 @@ function extraMethods() {
   // typings:expect-error
   store.wrongMethod()
 }
+
+/**
+ * replaceReducer with a store enhancer
+ */
+function replaceReducerExtender() {
+  interface ExtraState {
+    extraField: 'extra'
+  }
+
+  const enhancer: StoreEnhancer<{}, ExtraState> = createStore => <
+    S,
+    A extends Action = AnyAction
+  >(
+    reducer: Reducer<S, A>,
+    preloadedState?: PreloadedState<S>
+  ) => {
+    const wrappedReducer: Reducer<S & ExtraState, A> = null as any
+    const wrappedPreloadedState: PreloadedState<S & ExtraState> = null as any
+    return createStore(wrappedReducer, wrappedPreloadedState)
+  }
+
+  const store = createStore(reducer, enhancer)
+
+  const newReducer = (
+    state: { test: boolean } = { test: true },
+    _: AnyAction
+  ) => state
+
+  const newStore = store.replaceReducer(newReducer)
+  newStore.getState().test
+  store.getState().extraField
+  // typings:expect-error
+  store.getState().wrongField
+}
