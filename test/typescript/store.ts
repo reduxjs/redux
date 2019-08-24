@@ -57,8 +57,8 @@ const funcWithStore = (store: Store<State, DerivedAction>) => {}
 const store: Store<State> = createStore(reducer)
 
 // ensure that an array-based state works
-const arrayReducer = (state = []) => state
-const storeWithArrayState: Store<[]> = createStore(arrayReducer)
+const arrayReducer = (state: any[] = []) => state || []
+const storeWithArrayState: Store<any[]> = createStore(arrayReducer)
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   a: 'a',
   b: { c: 'c', d: 'd' }
