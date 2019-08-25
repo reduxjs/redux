@@ -531,10 +531,9 @@ export function applyMiddleware<Ext, S = any>(
  */
 export type ActionCreator<A, Types extends any[] = never> = [Types] extends [
   never
-] // no type checking
-  ? (...args: any[]) => A
-  : // strict type checking
-    (...args: Types) => A
+]
+  ? (...args: any[]) => A // no type checking
+  : (...args: Types) => A // strict type checking
 
 /**
  * Object whose values are action creator functions.
