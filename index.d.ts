@@ -527,10 +527,44 @@ export function applyMiddleware<Ext, S = any>(
  * async action instead of an action.
  *
  * @template A Returned action type.
+ * @template TypeCheckArgs if set to true, then the arguments to the action creator will be strictly typed
+ * @template T1 if set to any value other than never, the action creator will expect 1 argument
+ * @template T2 if set to any value other than never, the action creator will expect 2 arguments
+ * @template T3 if set to any value other than never, the action creator will expect 3 arguments
+ * @template T4 if set to any value other than never, the action creator will expect 4 arguments
+ * @template T5 if set to any value other than never, the action creator will expect 5 arguments
  */
-export interface ActionCreator<A> {
-  (...args: any[]): A
-}
+export type ActionCreator<
+  A,
+  TypeCheckArgs extends true | false = false,
+  T1 = never,
+  T2 = never,
+  T3 = never,
+  T4 = never,
+  T5 = never
+> = TypeCheckArgs extends false
+  ? {
+      (...args: any[]): A
+    }
+  : // the syntax below is needed when checking whether a type is never
+    // see https://stackoverflow.com/a/57642208/577218
+    ([T1] extends [never]
+      ? () => A
+      : ([T2] extends [never]
+          ? (arg1: T1) => A
+          : ([T3] extends [never]
+              ? (arg1: T1, arg2: T2) => A
+              : ([T4] extends [never]
+                  ? (arg1: T1, arg2: T2, arg3: T3) => A
+                  : ([T5] extends [never]
+                      ? (arg1: T1, arg2: T2, arg3: T3, arg4: T4) => A
+                      : (
+                          arg1: T1,
+                          arg2: T2,
+                          arg3: T3,
+                          arg4: T4,
+                          arg5: T5
+                        ) => A)))))
 
 /**
  * Object whose values are action creator functions.
