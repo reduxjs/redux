@@ -109,3 +109,43 @@ function replaceReducerExtender() {
   // typings:expect-error
   store.wrongMethod()
 }
+
+function mhelmersonExample() {
+  interface State {
+    someField: 'string'
+  }
+
+  interface ExtraState {
+    extraField: 'extra'
+  }
+
+  const reducer: Reducer<State> = null as any
+
+  function stateExtensionExpectedToWork() {
+    interface ExtraState {
+      extraField: 'extra'
+    }
+
+    const enhancer: StoreEnhancer<{}, ExtraState> = createStore => <
+      S,
+      A extends Action = AnyAction
+    >(
+      reducer: Reducer<S, A>,
+      preloadedState?: PreloadedState<S>
+    ) => {
+      const wrappedReducer: Reducer<S & ExtraState, A> = null as any
+      const wrappedPreloadedState: PreloadedState<S & ExtraState> = null as any
+      const store = createStore(wrappedReducer, wrappedPreloadedState)
+      return {
+        ...store,
+        replaceReducer: (nextReducer: Reducer<S, A>) => {
+          const nextWrappedReducer: Reducer<S & ExtraState, A> = null as any
+          return store.replaceReducer(nextWrappedReducer)
+        }
+      } as Store<S & ExtraState, A, ExtraState>
+    }
+
+    const store = createStore(reducer, enhancer)
+    store.replaceReducer(reducer)
+  }
+}
