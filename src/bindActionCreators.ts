@@ -1,6 +1,11 @@
-function bindActionCreator(actionCreator, dispatch) {
-  return function() {
-    return dispatch(actionCreator.apply(this, arguments))
+import { AnyAction, ActionCreator, Dispatch, ActionCreatorsMapObject } from '..'
+
+function bindActionCreator<A extends AnyAction = AnyAction>(
+  actionCreator: ActionCreator<A>,
+  dispatch: Dispatch
+) {
+  return function(this: any, ...args: any[]) {
+    return dispatch(actionCreator.apply(this, args))
   }
 }
 
@@ -13,19 +18,22 @@ function bindActionCreator(actionCreator, dispatch) {
  * For convenience, you can also pass an action creator as the first argument,
  * and get a dispatch wrapped function in return.
  *
- * @param {Function|Object} actionCreators An object whose values are action
+ * @param actionCreators An object whose values are action
  * creator functions. One handy way to obtain it is to use ES6 `import * as`
  * syntax. You may also pass a single function.
  *
- * @param {Function} dispatch The `dispatch` function available on your Redux
+ * @param dispatch The `dispatch` function available on your Redux
  * store.
  *
- * @returns {Function|Object} The object mimicking the original object, but with
+ * @returns The object mimicking the original object, but with
  * every action creator wrapped into the `dispatch` call. If you passed a
  * function as `actionCreators`, the return value will also be a single
  * function.
  */
-export default function bindActionCreators(actionCreators, dispatch) {
+export default function bindActionCreators(
+  actionCreators: ActionCreator<any> | ActionCreatorsMapObject,
+  dispatch: Dispatch
+) {
   if (typeof actionCreators === 'function') {
     return bindActionCreator(actionCreators, dispatch)
   }
@@ -39,7 +47,7 @@ export default function bindActionCreators(actionCreators, dispatch) {
     )
   }
 
-  const boundActionCreators = {}
+  const boundActionCreators: ActionCreatorsMapObject = {}
   for (const key in actionCreators) {
     const actionCreator = actionCreators[key]
     if (typeof actionCreator === 'function') {
