@@ -7,7 +7,7 @@ describe('replaceReducers test', () => {
       bar: (state = 2, _action) => state
     })
     const store = createStore((state, action) => {
-      if (state === undefined) return 5
+      if (state === undefined) return { type: 5 }
       return action
     })
 
