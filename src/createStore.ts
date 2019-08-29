@@ -1,5 +1,14 @@
 import $$observable from 'symbol-observable'
 
+import {
+  Store,
+  Action,
+  Reducer,
+  PreloadedState,
+  StoreEnhancer,
+  Dispatch,
+  Observer
+} from '..'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 
@@ -28,7 +37,20 @@ import isPlainObject from './utils/isPlainObject'
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore(reducer, preloadedState, enhancer) {
+export default function createStore<S, A extends Action, Ext, StateExt>(
+  reducer: Reducer<S, A>,
+  enhancer?: StoreEnhancer<Ext, StateExt>
+): Store<S & StateExt, A> & Ext
+export default function createStore<S, A extends Action, Ext, StateExt>(
+  reducer: Reducer<S, A>,
+  preloadedState?: PreloadedState<S>,
+  enhancer?: StoreEnhancer<Ext>
+): Store<S & StateExt, A> & Ext
+export default function createStore<S, A extends Action, Ext, StateExt>(
+  reducer: Reducer<S, A>,
+  preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
+  enhancer?: StoreEnhancer<Ext>
+) {
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
@@ -41,7 +63,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   }
 
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState
+    enhancer = preloadedState as StoreEnhancer<Ext, StateExt>
     preloadedState = undefined
   }
 
@@ -50,7 +72,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       throw new Error('Expected the enhancer to be a function.')
     }
 
-    return enhancer(createStore)(reducer, preloadedState)
+    return enhancer(createStore)(reducer, preloadedState as PreloadedState<S>)
   }
 
   if (typeof reducer !== 'function') {
@@ -58,8 +80,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
   }
 
   let currentReducer = reducer
-  let currentState = preloadedState
-  let currentListeners = []
+  let currentState = preloadedState as S
+  let currentListeners: (() => void)[] | null = []
   let nextListeners = currentListeners
   let isDispatching = false
 
@@ -81,7 +103,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    *
    * @returns {any} The current state tree of your application.
    */
-  function getState() {
+  function getState(): S {
     if (isDispatching) {
       throw new Error(
         'You may not call store.getState() while the reducer is executing. ' +
@@ -90,7 +112,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       )
     }
 
-    return currentState
+    return currentState as S
   }
 
   /**
@@ -116,7 +138,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * @param {Function} listener A callback to be invoked on every dispatch.
    * @returns {Function} A function to remove this change listener.
    */
-  function subscribe(listener) {
+  function subscribe(listener: () => void) {
     if (typeof listener !== 'function') {
       throw new Error('Expected the listener to be a function.')
     }
@@ -181,7 +203,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  function dispatch(action) {
+  function dispatch(action: A) {
     if (!isPlainObject(action)) {
       throw new Error(
         'Actions must be plain objects. ' +
@@ -226,19 +248,26 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * @param {Function} nextReducer The reducer for the store to use instead.
    * @returns {Store} The same store instance with a new reducer in place.
    */
-  function replaceReducer(nextReducer) {
+  function replaceReducer<NewState, NewActions extends A>(
+    nextReducer: Reducer<NewState, NewActions>
+  ): Store<NewState, NewActions> {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
     }
 
-    currentReducer = nextReducer
+    // TODO: do this more elegantly
+    ;((currentReducer as unknown) as Reducer<
+      NewState,
+      NewActions
+    >) = nextReducer
 
     // This action has a similiar effect to ActionTypes.INIT.
     // Any reducers that existed in both the new and old rootReducer
     // will receive the previous state. This effectively populates
     // the new state tree with any relevant data from the old one.
-    dispatch({ type: ActionTypes.REPLACE })
-    return store
+    dispatch({ type: ActionTypes.REPLACE } as A)
+    // change the type of the store by casting it to the new store
+    return (store as unknown) as Store<NewState, NewActions>
   }
 
   /**
@@ -258,14 +287,15 @@ export default function createStore(reducer, preloadedState, enhancer) {
        * be used to unsubscribe the observable from the store, and prevent further
        * emission of values from the observable.
        */
-      subscribe(observer) {
+      subscribe(observer: unknown) {
         if (typeof observer !== 'object' || observer === null) {
           throw new TypeError('Expected the observer to be an object.')
         }
 
         function observeState() {
-          if (observer.next) {
-            observer.next(getState())
+          const observerAsObserver = observer as Observer<S>
+          if (observerAsObserver.next) {
+            observerAsObserver.next(getState())
           }
         }
 
@@ -283,14 +313,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
   // When a store is created, an "INIT" action is dispatched so that every
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
-  dispatch({ type: ActionTypes.INIT })
+  dispatch({ type: ActionTypes.INIT } as A)
 
-  const store = {
-    dispatch,
+  const store: Store<S, A> = ({
+    dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
     replaceReducer,
     [$$observable]: observable
-  }
+  } as unknown) as Store<S, A>
   return store
 }
