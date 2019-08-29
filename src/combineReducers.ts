@@ -40,9 +40,13 @@ function getUnexpectedStateShapeWarningMessage(
   }
 
   if (!isPlainObject(inputState)) {
+    const match = Object.prototype.toString
+      .call(inputState)
+      .match(/\s([a-z|A-Z]+)/)
+    const matchType = match ? match[1] : ''
     return (
       `The ${argumentName} has unexpected type of "` +
-      ({} as any).toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] +
+      matchType +
       `". Expected argument to be an object with the following ` +
       `keys: "${reducerKeys.join('", "')}"`
     )
