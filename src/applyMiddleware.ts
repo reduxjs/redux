@@ -3,8 +3,10 @@ import {
   Middleware,
   StoreEnhancer,
   StoreCreator,
+  AnyAction,
+  Reducer,
   Dispatch,
-  AnyAction
+  MiddlewareAPI
 } from '..'
 
 /**
@@ -26,7 +28,10 @@ import {
 export default function applyMiddleware(
   ...middlewares: Middleware[]
 ): StoreEnhancer {
-  return (createStore: StoreCreator) => (reducer: any, ...args) => {
+  return (createStore: StoreCreator) => <S, A extends AnyAction>(
+    reducer: Reducer<S, A>,
+    ...args: any[]
+  ) => {
     const store = createStore(reducer, ...args)
     let dispatch: Dispatch = () => {
       throw new Error(
@@ -35,10 +40,9 @@ export default function applyMiddleware(
       )
     }
 
-    const middlewareAPI = {
+    const middlewareAPI: MiddlewareAPI = {
       getState: store.getState,
-      dispatch: (action: AnyAction, ...args: any[]) =>
-        (dispatch as any)(action, ...args)
+      dispatch: (action, ...args) => dispatch(action, ...args)
     }
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
     dispatch = compose(...chain)(store.dispatch)
