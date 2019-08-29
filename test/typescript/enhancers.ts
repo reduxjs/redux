@@ -131,18 +131,43 @@ function mhelmersonExample() {
       A extends Action = AnyAction
     >(
       reducer: Reducer<S, A>,
-      preloadedState?: PreloadedState<S>
+      preloadedState?: any
     ) => {
-      const wrappedReducer: Reducer<S & ExtraState, A> = null as any
-      const wrappedPreloadedState: PreloadedState<S & ExtraState> = null as any
+      const wrappedReducer = (state: S & ExtraState | undefined, action: A) => {
+        const newState = reducer(state, action)
+        return {
+          ...newState,
+          extraField: 'extra'
+        } as S & ExtraState
+      }
+      const wrappedPreloadedState = preloadedState
+        ? {
+            ...preloadedState,
+            extraField: 'extra'
+          }
+        : undefined
       const store = createStore(wrappedReducer, wrappedPreloadedState)
       return {
         ...store,
-        replaceReducer: (nextReducer: Reducer<S, A>) => {
-          const nextWrappedReducer: Reducer<S & ExtraState, A> = null as any
+        replaceReducer<NS, NA extends Action = AnyAction>(
+          nextReducer: (
+            state: NS & ExtraState | undefined,
+            action: NA
+          ) => NS & ExtraState
+        ) {
+          const nextWrappedReducer: Reducer<NS & ExtraState, NA> = (
+            state,
+            action
+          ) => {
+            const newState = nextReducer(state, action)
+            return {
+              ...newState,
+              extraField: 'extra'
+            }
+          }
           return store.replaceReducer(nextWrappedReducer)
         }
-      } as Store<S & ExtraState, A, ExtraState>
+      }
     }
 
     const store = createStore(reducer, enhancer)

@@ -342,7 +342,7 @@ export interface Store<
    *
    * @param nextReducer The reducer for the store to use instead.
    */
-  replaceReducer<NewState = S, NewActions extends A = A>(
+  replaceReducer<NewState, NewActions extends Action>(
     nextReducer: Reducer<NewState, NewActions>
   ): Store<NewState & StateExt, NewActions, StateExt, Ext> & Ext
 
