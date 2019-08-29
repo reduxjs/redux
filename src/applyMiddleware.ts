@@ -1,4 +1,13 @@
 import compose from './compose'
+import {
+  Middleware,
+  StoreEnhancer,
+  StoreCreator,
+  AnyAction,
+  Reducer,
+  Dispatch,
+  MiddlewareAPI
+} from '..'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -16,19 +25,24 @@ import compose from './compose'
  * @param {...Function} middlewares The middleware chain to be applied.
  * @returns {Function} A store enhancer applying the middleware.
  */
-export default function applyMiddleware(...middlewares) {
-  return createStore => (...args) => {
-    const store = createStore(...args)
-    let dispatch = () => {
+export default function applyMiddleware(
+  ...middlewares: Middleware[]
+): StoreEnhancer {
+  return (createStore: StoreCreator) => <S, A extends AnyAction>(
+    reducer: Reducer<S, A>,
+    ...args: any[]
+  ) => {
+    const store = createStore(reducer, ...args)
+    let dispatch: Dispatch = () => {
       throw new Error(
         'Dispatching while constructing your middleware is not allowed. ' +
           'Other middleware would not be applied to this dispatch.'
       )
     }
 
-    const middlewareAPI = {
+    const middlewareAPI: MiddlewareAPI = {
       getState: store.getState,
-      dispatch: (...args) => dispatch(...args)
+      dispatch: (action, ...args) => dispatch(action, ...args)
     }
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
     dispatch = compose(...chain)(store.dispatch)

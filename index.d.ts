@@ -211,7 +211,7 @@ export function combineReducers<M extends ReducersMapObject<any, any>>(
  *   dispatched.
  */
 export interface Dispatch<A extends Action = AnyAction> {
-  <T extends A>(action: T): T
+  <T extends A>(action: T, ...extraArgs: any[]): T
 }
 
 /**
