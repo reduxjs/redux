@@ -5,7 +5,8 @@ import {
   PreloadedState,
   StoreEnhancer,
   Dispatch,
-  Observer
+  Observer,
+  BaseType
 } from './types/store'
 import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
@@ -37,20 +38,35 @@ import isPlainObject from './utils/isPlainObject'
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore<S, A extends Action, Ext, StateExt>(
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = BaseType<S>
+>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S & StateExt, A> & Ext
-export default function createStore<S, A extends Action, Ext, StateExt>(
+): Store<S & StateExt, A, StateExt, Ext> & Ext
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = BaseType<S>
+>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
   enhancer?: StoreEnhancer<Ext>
-): Store<S & StateExt, A> & Ext
-export default function createStore<S, A extends Action, Ext, StateExt>(
+): Store<S & StateExt, A, StateExt, Ext> & Ext
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = BaseType<S>
+>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
-  enhancer?: StoreEnhancer<Ext>
-): Store<S & StateExt, A> & Ext {
+  enhancer?: StoreEnhancer<Ext, StateExt>
+): Store<S & StateExt, A, StateExt, Ext> & Ext {
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
