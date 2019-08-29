@@ -87,7 +87,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^5.1.1",
-    "rollup-plugin-typescript2": "^0.22.1",
+    "rollup-plugin-typescript2": "^0.24.0",
     "rxjs": "^6.5.2",
     "typescript": "^3.5.3",
     "typings-tester": "^0.3.2"
