@@ -214,3 +214,34 @@ function mhelmersonExample() {
     store.replaceReducer(reducer)
   }
 }
+
+function finalHelmersonExample() {
+  function persistReducer<S>(config: any, reducer: S): S {
+    return reducer
+  }
+
+  function persistStore<S>(store: S) {
+    return store
+  }
+
+  function createPersistEnhancer(persistConfig: any): StoreEnhancer {
+    return createStore => <S, A extends Action = AnyAction>(
+      reducer: Reducer<S, A>,
+      preloadedState?: any
+    ) => {
+      const persistedReducer = persistReducer(persistConfig, reducer)
+      const store = createStore(persistedReducer, preloadedState)
+      const persistor = persistStore(store)
+
+      return {
+        ...store,
+        replaceReducer: nextReducer => {
+          return store.replaceReducer(
+            persistReducer(persistConfig, nextReducer)
+          )
+        },
+        persistor
+      }
+    }
+  }
+}
