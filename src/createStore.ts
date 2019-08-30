@@ -1,6 +1,5 @@
 import $$observable from 'symbol-observable'
 
-import { Reducer } from '..'
 import {
   Store,
   PreloadedState,
@@ -9,6 +8,7 @@ import {
   Observer
 } from './types/store'
 import { Action } from './types/actions'
+import { Reducer } from './types/reducers'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 
