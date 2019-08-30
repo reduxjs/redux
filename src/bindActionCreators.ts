@@ -1,4 +1,4 @@
-import { Dispatch } from '..'
+import { Dispatch } from './types/store'
 import {
   AnyAction,
   ActionCreator,
