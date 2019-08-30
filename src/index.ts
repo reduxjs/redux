@@ -1,3 +1,12 @@
+// functions
+import createStore from './createStore'
+import combineReducers from './combineReducers'
+import bindActionCreators from './bindActionCreators'
+import applyMiddleware from './applyMiddleware'
+import compose from './compose'
+import warning from './utils/warning'
+import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
+
 // types
 // store
 export {
@@ -26,14 +35,6 @@ export { ActionCreator, ActionCreatorsMapObject } from '..'
 export { MiddlewareAPI, Middleware } from '..'
 // actions
 export { Action, AnyAction } from '..'
-// functions
-import createStore from './createStore'
-import combineReducers from './combineReducers'
-import bindActionCreators from './bindActionCreators'
-import applyMiddleware from './applyMiddleware'
-import compose from './compose'
-import warning from './utils/warning'
-import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 /*
  * This is a dummy function to check if the function name has been altered by minification.
