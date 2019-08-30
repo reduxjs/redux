@@ -2,82 +2,12 @@ import { AnyAction, Action, Reducer } from '..'
 import ActionTypes from './utils/actionTypes'
 import warning from './utils/warning'
 import isPlainObject from './utils/isPlainObject'
-
-/**
- * Internal "virtual" symbol used to make the `CombinedState` type unique.
- */
-declare const $CombinedState: unique symbol
-
-/**
- * State base type for reducers created with `combineReducers()`.
- *
- * This type allows the `createStore()` method to infer which levels of the
- * preloaded state can be partial.
- *
- * Because Typescript is really duck-typed, a type needs to have some
- * identifying property to differentiate it from other types with matching
- * prototypes for type checking purposes. That's why this type has the
- * `$CombinedState` symbol property. Without the property, this type would
- * match any object. The symbol doesn't really exist because it's an internal
- * (i.e. not exported), and internally we never check its value. Since it's a
- * symbol property, it's not expected to be unumerable, and the value is
- * typed as always undefined, so its never expected to have a meaningful
- * value anyway. It just makes this type distinquishable from plain `{}`.
- */
-export type CombinedState<S> = { readonly [$CombinedState]?: undefined } & S
-
-/**
- * Object whose values correspond to different reducer functions.
- *
- * @template A The type of actions the reducers can potentially respond to.
- */
-export type ReducersMapObject<S = any, A extends Action = Action> = {
-  [K in keyof S]: Reducer<S[K], A>
-}
-
-/**
- * Infer a combined state shape from a `ReducersMapObject`.
- *
- * @template M Object map of reducers as provided to `combineReducers(map: M)`.
- */
-export type StateFromReducersMapObject<M> = M extends ReducersMapObject<
-  any,
-  any
->
-  ? { [P in keyof M]: M[P] extends Reducer<infer S, any> ? S : never }
-  : never
-
-/**
- * Infer action type from a reducer function.
- *
- * @template R Type of reducer.
- */
-export type ActionFromReducer<R> = R extends Reducer<any, infer A> ? A : never
-
-/**
- * Infer action union type from a `ReducersMapObject`.
- *
- * @template M Object map of reducers as provided to `combineReducers(map: M)`.
- */
-export type ActionFromReducersMapObject<M> = M extends ReducersMapObject<
-  any,
-  any
->
-  ? ActionFromReducer<ReducerFromReducersMapObject<M>>
-  : never
-
-/**
- * Infer reducer union type from a `ReducersMapObject`.
- *
- * @template M Object map of reducers as provided to `combineReducers(map: M)`.
- */
-export type ReducerFromReducersMapObject<M> = M extends {
-  [P in keyof M]: infer R
-}
-  ? R extends Reducer<any, any>
-    ? R
-    : never
-  : never
+import {
+  ReducersMapObject,
+  CombinedState,
+  StateFromReducersMapObject,
+  ActionFromReducersMapObject
+} from './types/reducers'
 
 function getUndefinedStateErrorMessage(key: string, action: Action) {
   const actionType = action && action.type
