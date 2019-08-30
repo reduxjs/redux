@@ -3,11 +3,11 @@ import {
   Middleware,
   StoreEnhancer,
   StoreCreator,
-  AnyAction,
   Reducer,
   Dispatch,
   MiddlewareAPI
 } from '..'
+import { AnyAction } from './types/actions'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method

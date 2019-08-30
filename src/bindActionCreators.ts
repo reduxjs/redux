@@ -1,4 +1,9 @@
-import { AnyAction, ActionCreator, Dispatch, ActionCreatorsMapObject } from '..'
+import { Dispatch } from '..'
+import {
+  AnyAction,
+  ActionCreator,
+  ActionCreatorsMapObject
+} from './types/actions'
 
 function bindActionCreator<A extends AnyAction = AnyAction>(
   actionCreator: ActionCreator<A>,

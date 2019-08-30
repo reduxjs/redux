@@ -30,11 +30,11 @@ export {
   ActionFromReducersMapObject
 } from '..'
 // action creators
-export { ActionCreator, ActionCreatorsMapObject } from '..'
+export { ActionCreator, ActionCreatorsMapObject } from './types/actions'
 // middleware
 export { MiddlewareAPI, Middleware } from '..'
 // actions
-export { Action, AnyAction } from '..'
+export { Action, AnyAction } from './types/actions'
 
 /*
  * This is a dummy function to check if the function name has been altered by minification.
