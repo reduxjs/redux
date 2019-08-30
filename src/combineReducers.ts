@@ -9,6 +9,7 @@ import {
   ActionFromReducersMapObject
 } from './types/reducers'
 import { CombinedState } from './types/store'
+
 function getUndefinedStateErrorMessage(key: string, action: Action) {
   const actionType = action && action.type
   const actionDescription =
