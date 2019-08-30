@@ -1,10 +1,10 @@
-import { bindActionCreators, createStore, ActionCreator } from '..'
+import { bindActionCreators, createStore, ActionCreator, Store } from '..'
 import { todos } from './helpers/reducers'
 import * as actionCreators from './helpers/actionCreators'
 
 describe('bindActionCreators', () => {
-  let store
-  let actionCreatorFunctions
+  let store: Store<typeof todos>
+  let actionCreatorFunctions: Partial<typeof actionCreators>
 
   beforeEach(() => {
     store = createStore(todos)

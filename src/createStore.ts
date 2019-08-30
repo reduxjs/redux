@@ -97,7 +97,7 @@ export default function createStore<
     throw new Error('Expected the reducer to be a function.')
   }
 
-  let currentReducer = reducer
+  let currentReducer: Reducer<any, any> = reducer
   let currentState = preloadedState as S
   let currentListeners: (() => void)[] | null = []
   let nextListeners = currentListeners
@@ -273,11 +273,7 @@ export default function createStore<
       throw new Error('Expected the nextReducer to be a function.')
     }
 
-    // TODO: do this more elegantly
-    ;((currentReducer as unknown) as Reducer<
-      NewState,
-      NewActions
-    >) = nextReducer
+    currentReducer = nextReducer
 
     // This action has a similiar effect to ActionTypes.INIT.
     // Any reducers that existed in both the new and old rootReducer

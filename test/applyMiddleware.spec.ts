@@ -1,11 +1,19 @@
-import { createStore, applyMiddleware, Middleware, AnyAction, Action } from '..'
+import {
+  createStore,
+  applyMiddleware,
+  Middleware,
+  AnyAction,
+  Action,
+  Store
+} from '../src'
+import { rootActions } from './helpers/actionTypes'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
 
 describe('applyMiddleware', () => {
   it('warns when dispatching during middleware setup', () => {
-    function dispatchingMiddleware(store) {
+    function dispatchingMiddleware(store: Store<any, rootActions>) {
       store.dispatch(addTodo('Dont dispatch in middleware setup'))
       return next => action => next(action)
     }
@@ -40,8 +48,8 @@ describe('applyMiddleware', () => {
     ])
   })
 
-  it('passes recursive dispatches through the middleware chain', () => {
-    function test(spyOnMethods) {
+  it('passes recursive dispatches through the middleware chain', async () => {
+    function test(spyOnMethods: jest.Mock) {
       return () => next => action => {
         spyOnMethods(action)
         return next(action)
@@ -51,16 +59,11 @@ describe('applyMiddleware', () => {
     const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
-    // the typing for redux-thunk is super complex, so we will use an as unknown hack
-    const dispatchedValue = (store.dispatch(
-      addTodoAsync('Use Redux')
-    ) as unknown) as Promise<void>
-    return dispatchedValue.then(() => {
-      expect(spy.mock.calls.length).toEqual(2)
-    })
+    await store.dispatch(addTodoAsync('Use Redux'))
+    expect(spy.mock.calls.length).toEqual(2)
   })
 
-  it('works with thunk middleware', done => {
+  it('works with thunk middleware', async () => {
     const store = applyMiddleware(thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodoIfEmpty('Hello'))
@@ -91,27 +94,21 @@ describe('applyMiddleware', () => {
       }
     ])
 
-    // the typing for redux-thunk is super complex, so we will use an "as unknown" hack
-    const dispatchedValue = (store.dispatch(
-      addTodoAsync('Maybe')
-    ) as unknown) as Promise<void>
-    dispatchedValue.then(() => {
-      expect(store.getState()).toEqual([
-        {
-          id: 1,
-          text: 'Hello'
-        },
-        {
-          id: 2,
-          text: 'World'
-        },
-        {
-          id: 3,
-          text: 'Maybe'
-        }
-      ])
-      done()
-    })
+    await store.dispatch(addTodoAsync('Maybe'))
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      },
+      {
+        id: 2,
+        text: 'World'
+      },
+      {
+        id: 3,
+        text: 'Maybe'
+      }
+    ])
   })
 
   it('passes through all arguments of dispatch calls from within middleware', () => {
@@ -144,7 +141,7 @@ describe('applyMiddleware', () => {
       applyMiddleware(multiArgMiddleware, dummyMiddleware)
     )
 
-    store.dispatch(spy)
+    store.dispatch(spy as any)
     expect(spy.mock.calls[0]).toEqual(testCallArgs)
   })
 })

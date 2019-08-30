@@ -505,6 +505,7 @@ describe('createStore', () => {
 
   it('throws if action type is missing', () => {
     const store = createStore(reducers.todos)
+    // @ts-ignore
     expect(() => store.dispatch({})).toThrow(
       /Actions may not have an undefined "type" property/
     )
@@ -519,10 +520,10 @@ describe('createStore', () => {
 
   it('does not throw if action type is falsy', () => {
     const store = createStore(reducers.todos)
-    expect(() => store.dispatch({ type: false })).not.toThrow()
-    expect(() => store.dispatch({ type: 0 })).not.toThrow()
+    expect(() => store.dispatch({ type: false } as any)).not.toThrow()
+    expect(() => store.dispatch({ type: 0 } as any)).not.toThrow()
     expect(() => store.dispatch({ type: null })).not.toThrow()
-    expect(() => store.dispatch({ type: '' })).not.toThrow()
+    expect(() => store.dispatch({ type: '' } as any)).not.toThrow()
   })
 
   it('accepts enhancer as the third argument', () => {

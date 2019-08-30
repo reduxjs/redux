@@ -1,12 +1,13 @@
-import { MiddlewareAPI, Dispatch, AnyAction } from '../..'
+import { ThunkDispatch } from 'redux-thunk'
 
-type ThunkAction<T extends any = any> = T extends AnyAction
-  ? AnyAction
-  : T extends Function
-  ? T
-  : never
+import { rootActions } from './actionTypes'
+import { Middleware } from '../..'
 
-export function thunk({ dispatch, getState }: MiddlewareAPI) {
-  return (next: Dispatch) => <T>(action: ThunkAction) =>
+export const thunk: Middleware<
+  ThunkDispatch<any, {}, rootActions>,
+  any,
+  ThunkDispatch<any, {}, rootActions>
+> = ({ dispatch, getState }) => {
+  return next => action =>
     typeof action === 'function' ? action(dispatch, getState) : next(action)
 }
