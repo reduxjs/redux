@@ -10,29 +10,28 @@ import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 // types
 // store
 export {
+  CombinedState,
+  PreloadedState,
   Dispatch,
   Unsubscribe,
   Observable,
   Observer,
   Store,
-  DeepPartial,
   StoreCreator,
   StoreEnhancer
-} from '..'
+} from './types/store'
 // reducers
 export {
-  CombinedState,
-  PreloadedState,
   Reducer,
   ReducerFromReducersMapObject,
   StateFromReducersMapObject,
   ActionFromReducer,
   ActionFromReducersMapObject
-} from '..'
+} from './types/reducers'
 // action creators
 export { ActionCreator, ActionCreatorsMapObject } from './types/actions'
 // middleware
-export { MiddlewareAPI, Middleware } from '..'
+export { MiddlewareAPI, Middleware } from './types/middleware'
 // actions
 export { Action, AnyAction } from './types/actions'
 
