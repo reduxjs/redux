@@ -1,4 +1,4 @@
-import { Action, Reducer, AnyAction, Dispatch, PreloadedState } from '..'
+import { Action, Reducer, AnyAction, Dispatch, PreloadedState } from '../..'
 
 /**
  * Function to remove listener added by `Store.subscribe()`.
