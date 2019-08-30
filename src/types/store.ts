@@ -1,4 +1,6 @@
-import { Action, Reducer, AnyAction, Dispatch, PreloadedState } from '../..'
+/// <reference types="symbol-observable" />
+import { Reducer, Dispatch, PreloadedState } from '../..'
+import { Action, AnyAction } from './actions'
 
 /**
  * Function to remove listener added by `Store.subscribe()`.
