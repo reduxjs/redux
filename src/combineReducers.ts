@@ -1,4 +1,5 @@
-import { AnyAction, Action, Reducer } from '..'
+import { Reducer } from '..'
+import { AnyAction, Action } from './types/actions'
 import ActionTypes from './utils/actionTypes'
 import warning from './utils/warning'
 import isPlainObject from './utils/isPlainObject'
