@@ -1,3 +1,4 @@
+/// <reference types="symbol-observable" />
 import { Dispatch, PreloadedState } from '../..'
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
