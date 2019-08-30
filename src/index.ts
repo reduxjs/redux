@@ -1,3 +1,4 @@
+// functions
 import createStore from './createStore'
 import combineReducers from './combineReducers'
 import bindActionCreators from './bindActionCreators'
@@ -5,6 +6,35 @@ import applyMiddleware from './applyMiddleware'
 import compose from './compose'
 import warning from './utils/warning'
 import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
+
+// types
+// store
+export {
+  Dispatch,
+  Unsubscribe,
+  Observable,
+  Observer,
+  Store,
+  DeepPartial,
+  StoreCreator,
+  StoreEnhancer
+} from '..'
+// reducers
+export {
+  CombinedState,
+  PreloadedState,
+  Reducer,
+  ReducerFromReducersMapObject,
+  StateFromReducersMapObject,
+  ActionFromReducer,
+  ActionFromReducersMapObject
+} from '..'
+// action creators
+export { ActionCreator, ActionCreatorsMapObject } from '..'
+// middleware
+export { MiddlewareAPI, Middleware } from '..'
+// actions
+export { Action, AnyAction } from '..'
 
 /*
  * This is a dummy function to check if the function name has been altered by minification.
