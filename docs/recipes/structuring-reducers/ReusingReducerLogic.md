@@ -168,7 +168,7 @@ function countersMapReducer(state, action) {
         case "DECREMENT":
             return {
                 ...state,
-                state[name] : counterReducer(state[name], action
+                state[action.name] : counterReducer(state[action.name], action)
             };
         default:
             return state;
