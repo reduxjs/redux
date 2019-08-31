@@ -138,3 +138,40 @@ const rootReducer = combineReducers({
 These basic patterns allow you to do things like having multiple instances of a smart connected component within the UI, or reuse common logic for generic capabilities such as pagination or sorting.
 
 In addition to generating reducers this way, you might also want to generate action creators using the same approach, and could generate them both at the same time with helper functions. See [Action/Reducer Generators](https://github.com/markerikson/redux-ecosystem-links/blob/master/action-reducer-generators.md) and [Reducers](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md) libraries for action/reducer utilities.
+
+## Collection / Item Reducer Pattern
+
+```js
+function counterReducer(state, action) {
+    switch(action.type) {
+        case "INCREMENT" : return state + 1;
+        case "DECREMENT" : return state - 1;
+    }
+}
+
+function countersArrayReducer(state, action) {
+    switch(action.type) {
+        case "INCREMENT":
+        case "DECREMENT":
+            return state.map( (counter, index) => {
+                if(index !== action.index) return counter;
+                return counterReducer(counter, action);
+            });
+        default:
+            return state;
+    }
+}
+
+function countersMapReducer(state, action) {
+    switch(action.type) {
+        case "INCREMENT":
+        case "DECREMENT":
+            return {
+                ...state,
+                state[name] : counterReducer(state[name], action
+            };
+        default:
+            return state;
+    }
+}
+```
