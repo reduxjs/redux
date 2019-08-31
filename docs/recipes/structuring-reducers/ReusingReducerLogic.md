@@ -141,6 +141,8 @@ In addition to generating reducers this way, you might also want to generate act
 
 ## Collection / Item Reducer Pattern
 
+This pattern allows you to have multiple states and use a common reducer to update each state based on an additional parameter inside the action object.
+
 ```js
 function counterReducer(state, action) {
     switch(action.type) {
