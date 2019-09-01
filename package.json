@@ -26,13 +26,12 @@
   "main": "lib/redux.js",
   "unpkg": "dist/redux.js",
   "module": "es/redux.js",
-  "typings": "./index.d.ts",
+  "typings": "./es/index.d.ts",
   "files": [
     "dist",
     "lib",
     "es",
-    "src",
-    "index.d.ts"
+    "src"
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage",
