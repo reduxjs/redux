@@ -18,12 +18,14 @@ export {
   Observer,
   Store,
   StoreCreator,
-  StoreEnhancer
+  StoreEnhancer,
+  StoreEnhancerStoreCreator
 } from './types/store'
 // reducers
 export {
   Reducer,
   ReducerFromReducersMapObject,
+  ReducersMapObject,
   StateFromReducersMapObject,
   ActionFromReducer,
   ActionFromReducersMapObject
