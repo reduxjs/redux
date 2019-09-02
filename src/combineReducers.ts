@@ -1,4 +1,4 @@
-import { Reducer } from '..'
+import { Reducer } from './types/reducers'
 import { AnyAction, Action } from './types/actions'
 import ActionTypes from './utils/actionTypes'
 import warning from './utils/warning'
@@ -124,13 +124,13 @@ function assertReducerShape(reducers: ReducersMapObject) {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export function combineReducers<S>(
+export default function combineReducers<S>(
   reducers: ReducersMapObject<S, any>
 ): Reducer<CombinedState<S>>
-export function combineReducers<S, A extends Action = AnyAction>(
+export default function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
 ): Reducer<CombinedState<S>, A>
-export function combineReducers<M extends ReducersMapObject<any, any>>(
+export default function combineReducers<M extends ReducersMapObject<any, any>>(
   reducers: M
 ): Reducer<
   CombinedState<StateFromReducersMapObject<M>>,
