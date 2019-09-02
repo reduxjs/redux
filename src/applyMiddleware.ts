@@ -20,6 +20,35 @@ import { Reducer } from './types/reducers'
  * @param {...Function} middlewares The middleware chain to be applied.
  * @returns {Function} A store enhancer applying the middleware.
  */
+export default function applyMiddleware(): StoreEnhancer
+export default function applyMiddleware<Ext1, S>(
+  middleware1: Middleware<Ext1, S, any>
+): StoreEnhancer<{ dispatch: Ext1 }>
+export default function applyMiddleware<Ext1, Ext2, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 }>
+export default function applyMiddleware<Ext1, Ext2, Ext3, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 }>
+export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>,
+  middleware4: Middleware<Ext4, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 }>
+export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>,
+  middleware4: Middleware<Ext4, S, any>,
+  middleware5: Middleware<Ext5, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5 }>
+export default function applyMiddleware<Ext, S = any>(
+  ...middlewares: Middleware<any, S, any>[]
+): StoreEnhancer<{ dispatch: Ext }>
 export default function applyMiddleware(
   ...middlewares: Middleware[]
 ): StoreEnhancer {
@@ -40,7 +69,7 @@ export default function applyMiddleware(
       dispatch: (action, ...args) => dispatch(action, ...args)
     }
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
-    dispatch = compose(...chain)(store.dispatch)
+    dispatch = compose<typeof dispatch>(...chain)(store.dispatch)
 
     return {
       ...store,
