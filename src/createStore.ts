@@ -2,13 +2,13 @@ import $$observable from 'symbol-observable'
 
 import {
   Store,
-  Reducer,
   PreloadedState,
   StoreEnhancer,
   Dispatch,
   Observer
-} from '..'
+} from './types/store'
 import { Action } from './types/actions'
+import { Reducer } from './types/reducers'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 
