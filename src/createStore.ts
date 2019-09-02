@@ -50,7 +50,7 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext>
-) {
+): Store<S & StateExt, A> & Ext {
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
@@ -72,7 +72,9 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
       throw new Error('Expected the enhancer to be a function.')
     }
 
-    return enhancer(createStore)(reducer, preloadedState as PreloadedState<S>)
+    return enhancer(createStore)(reducer, preloadedState as PreloadedState<
+      S
+    >) as Store<S & StateExt, A> & Ext
   }
 
   if (typeof reducer !== 'function') {
@@ -315,12 +317,12 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT } as A)
 
-  const store: Store<S, A> = ({
+  const store: Store<S & StateExt, A> & Ext = ({
     dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
     replaceReducer,
     [$$observable]: observable
-  } as unknown) as Store<S, A>
+  } as unknown) as Store<S & StateExt, A> & Ext
   return store
 }
