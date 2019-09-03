@@ -26,7 +26,7 @@
   "main": "lib/redux.js",
   "unpkg": "dist/redux.js",
   "module": "es/redux.js",
-  "typings": "types/index.d.ts",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
     "lib",
