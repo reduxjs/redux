@@ -3,13 +3,15 @@ import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
 
 /**
- * returns the most basic type that will not interfere with the existing type
+ * Extend the state
  *
- * Note that for non-object stuff, this will mess with replaceReducer. The
- * assumption is that root reducers that only return a basic type (string, number, null, symbol) probably won't
- * be using replaceReducer anyways.
+ * This is used by store enhancers and store creators to extend state.
+ * If there is no state extension, it just returns the state, as is, otherwise
+ * it returns the state joined with its extension.
  */
-export type BaseType<S> = S extends {} ? {} : S
+export type ExtendState<State, Extension> = [Extension] extends [never]
+  ? State
+  : State & Extension
 
 /**
  * Internal "virtual" symbol used to make the `CombinedState` type unique.
@@ -122,7 +124,7 @@ export type Observer<T> = {
 export interface Store<
   S = any,
   A extends Action = AnyAction,
-  StateExt = BaseType<S>,
+  StateExt = never,
   Ext = {}
 > {
   /**
@@ -197,7 +199,7 @@ export interface Store<
    */
   replaceReducer<NewState, NewActions extends Action>(
     nextReducer: Reducer<NewState, NewActions>
-  ): Store<NewState & StateExt, NewActions, StateExt, Ext> & Ext
+  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext
 
   /**
    * Interoperability point for observable/reactive libraries.
@@ -220,15 +222,15 @@ export interface Store<
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext = {}, StateExt = BaseType<S>>(
+  <S, A extends Action, Ext = {}, StateExt = never>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
-  ): Store<S & StateExt, A, StateExt, Ext> & Ext
-  <S, A extends Action, Ext = {}, StateExt = BaseType<S>>(
+  ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  <S, A extends Action, Ext = {}, StateExt = never>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>,
     enhancer?: StoreEnhancer<Ext>
-  ): Store<S & StateExt, A, StateExt, Ext> & Ext
+  ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 }
 
 /**
@@ -261,4 +263,4 @@ export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>
-) => Store<S & StateExt, A, StateExt, Ext> & Ext
+) => Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
