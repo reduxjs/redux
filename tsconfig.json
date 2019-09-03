@@ -13,13 +13,14 @@
     "declaration": true /* Generates corresponding '.d.ts' file. */,
     "declarationMap": true /* Generates a sourcemap for each corresponding '.d.ts' file. */,
     "declarationDir": "./types" /* Output directory for generated declaration files. */,
+    // "emitDeclarationOnly": true /* Only emit ‘.d.ts’ declaration files. */,
     "sourceMap": true /* Generates corresponding '.map' file. */,
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     // "outDir": "./types" /* Redirect output structure to the directory. */,
     // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     // "composite": true,                     /* Enable project compilation */
     "removeComments": false /* Do not emit comments to output. */,
-    "noEmit": true /* Do not emit outputs. */,
+    // "noEmit": true /* Do not emit outputs. */,
     // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
     // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
     // "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
