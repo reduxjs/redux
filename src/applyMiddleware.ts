@@ -51,7 +51,7 @@ export default function applyMiddleware<Ext, S = any>(
 ): StoreEnhancer<{ dispatch: Ext }>
 export default function applyMiddleware(
   ...middlewares: Middleware[]
-): StoreEnhancer {
+): StoreEnhancer<any> {
   return (createStore: StoreCreator) => <S, A extends AnyAction>(
     reducer: Reducer<S, A>,
     ...args: any[]

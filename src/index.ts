@@ -19,7 +19,8 @@ export {
   Store,
   StoreCreator,
   StoreEnhancer,
-  StoreEnhancerStoreCreator
+  StoreEnhancerStoreCreator,
+  ExtendState
 } from './types/store'
 // reducers
 export {

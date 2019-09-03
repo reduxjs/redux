@@ -7,7 +7,8 @@ import {
   StoreCreator,
   StoreEnhancerStoreCreator,
   Unsubscribe,
-  Observer
+  Observer,
+  ExtendState
 } from 'redux'
 import 'symbol-observable'
 
@@ -15,6 +16,41 @@ type State = {
   a: 'a'
   b: {
     c: 'c'
+    d: 'd'
+  }
+}
+
+/* extended state */
+const noExtend: ExtendState<State, never> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  }
+}
+// typings:expect-error
+const noExtendError: ExtendState<State, never> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  e: 'oops'
+}
+
+const yesExtend: ExtendState<State, { yes: 'we can' }> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  yes: 'we can'
+}
+// typings:expect-error
+const yesExtendError: ExtendState<State, { yes: 'we can' }> = {
+  a: 'a',
+  b: {
+    c: 'c',
     d: 'd'
   }
 }
@@ -56,6 +92,9 @@ const funcWithStore = (store: Store<State, DerivedAction>) => {}
 
 const store: Store<State> = createStore(reducer)
 
+// ensure that an array-based state works
+const arrayReducer = (state: any[] = []) => state || []
+const storeWithArrayState: Store<any[]> = createStore(arrayReducer)
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   a: 'a',
   b: { c: 'c', d: 'd' }

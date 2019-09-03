@@ -5,7 +5,8 @@ import {
   PreloadedState,
   StoreEnhancer,
   Dispatch,
-  Observer
+  Observer,
+  ExtendState
 } from './types/store'
 import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
@@ -37,20 +38,35 @@ import isPlainObject from './utils/isPlainObject'
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore<S, A extends Action, Ext, StateExt>(
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = never
+>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S & StateExt, A> & Ext
-export default function createStore<S, A extends Action, Ext, StateExt>(
+): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = never
+>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
-  enhancer?: StoreEnhancer<Ext>
-): Store<S & StateExt, A> & Ext
-export default function createStore<S, A extends Action, Ext, StateExt>(
+  enhancer?: StoreEnhancer<Ext, StateExt>
+): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = never
+>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
-  enhancer?: StoreEnhancer<Ext>
-): Store<S & StateExt, A> & Ext {
+  enhancer?: StoreEnhancer<Ext, StateExt>
+): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
@@ -74,7 +90,7 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
 
     return enhancer(createStore)(reducer, preloadedState as PreloadedState<
       S
-    >) as Store<S & StateExt, A> & Ext
+    >) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   }
 
   if (typeof reducer !== 'function') {
@@ -252,7 +268,7 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
    */
   function replaceReducer<NewState, NewActions extends A>(
     nextReducer: Reducer<NewState, NewActions>
-  ): Store<NewState, NewActions> {
+  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
     }
@@ -269,7 +285,13 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
     // the new state tree with any relevant data from the old one.
     dispatch({ type: ActionTypes.REPLACE } as A)
     // change the type of the store by casting it to the new store
-    return (store as unknown) as Store<NewState, NewActions>
+    return (store as unknown) as Store<
+      ExtendState<NewState, StateExt>,
+      NewActions,
+      StateExt,
+      Ext
+    > &
+      Ext
   }
 
   /**
@@ -317,12 +339,12 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT } as A)
 
-  const store: Store<S & StateExt, A> & Ext = ({
+  const store = ({
     dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
     replaceReducer,
     [$$observable]: observable
-  } as unknown) as Store<S & StateExt, A> & Ext
+  } as unknown) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   return store
 }
