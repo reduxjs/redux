@@ -254,10 +254,10 @@ export interface StoreCreator {
  * @template Ext Store extension that is mixed into the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
-export type StoreEnhancer<Ext = {}, StateExt = {}> = (
+export type StoreEnhancer<Ext = {}, StateExt = never> = (
   next: StoreEnhancerStoreCreator<Ext, StateExt>
 ) => StoreEnhancerStoreCreator<Ext, StateExt>
-export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
+export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never> = <
   S = any,
   A extends Action = AnyAction
 >(

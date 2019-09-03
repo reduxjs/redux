@@ -55,7 +55,7 @@ export default function createStore<
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
-  enhancer?: StoreEnhancer<Ext>
+  enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 export default function createStore<
   S,
