@@ -26,12 +26,13 @@
   "main": "lib/redux.js",
   "unpkg": "dist/redux.js",
   "module": "es/redux.js",
-  "typings": "./es/index.d.ts",
+  "typings": "types/index.d.ts",
   "files": [
     "dist",
     "lib",
     "es",
-    "src"
+    "src",
+    "types"
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage",
@@ -42,9 +43,9 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
-    "build": "rollup -c",
-    "prepare": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
-    "check-types": "tsc",
+    "build": "npm run build-types && rollup -c",
+    "prepare": "npm run clean && npm run format:check && npm run lint && npm test",
+    "build-types": "tsc",
     "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
