@@ -90,7 +90,7 @@ export default function createStore<
 
     return enhancer(createStore)(reducer, preloadedState as PreloadedState<
       S
-    >) as Store<S & StateExt, A> & Ext
+    >) as Store<S & StateExt, A, StateExt, Ext> & Ext
   }
 
   if (typeof reducer !== 'function') {
