@@ -8,6 +8,9 @@ import { Reducer } from './reducers'
  * This is used by store enhancers and store creators to extend state.
  * If there is no state extension, it just returns the state, as is, otherwise
  * it returns the state joined with its extension.
+ *
+ * Reference for future devs:
+ * https://github.com/microsoft/TypeScript/issues/31751#issuecomment-498526919
  */
 export type ExtendState<State, Extension> = [Extension] extends [never]
   ? State
