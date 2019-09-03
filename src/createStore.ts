@@ -21,21 +21,21 @@ import isPlainObject from './utils/isPlainObject'
  * parts of the state tree respond to actions, you may combine several reducers
  * into a single reducer function by using `combineReducers`.
  *
- * @param {Function} reducer A function that returns the next state tree, given
+ * @param reducer A function that returns the next state tree, given
  * the current state tree and the action to handle.
  *
- * @param {any} [preloadedState] The initial state. You may optionally specify it
+ * @param preloadedState The initial state. You may optionally specify it
  * to hydrate the state from the server in universal apps, or to restore a
  * previously serialized user session.
  * If you use `combineReducers` to produce the root reducer function, this must be
  * an object with the same shape as `combineReducers` keys.
  *
- * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+ * @param enhancer The store enhancer. You may optionally specify it
  * to enhance the store with third-party capabilities such as middleware,
  * time travel, persistence, etc. The only store enhancer that ships with Redux
  * is `applyMiddleware()`.
  *
- * @returns {Store} A Redux store that lets you read the state, dispatch actions
+ * @returns A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
 export default function createStore<
@@ -119,7 +119,7 @@ export default function createStore<
   /**
    * Reads the state tree managed by the store.
    *
-   * @returns {any} The current state tree of your application.
+   * @returns The current state tree of your application.
    */
   function getState(): S {
     if (isDispatching) {
@@ -153,8 +153,8 @@ export default function createStore<
    * registered before the `dispatch()` started will be called with the latest
    * state by the time it exits.
    *
-   * @param {Function} listener A callback to be invoked on every dispatch.
-   * @returns {Function} A function to remove this change listener.
+   * @param listener A callback to be invoked on every dispatch.
+   * @returns A function to remove this change listener.
    */
   function subscribe(listener: () => void) {
     if (typeof listener !== 'function') {
@@ -210,13 +210,13 @@ export default function createStore<
    * example, see the documentation for the `redux-thunk` package. Even the
    * middleware will eventually dispatch plain object actions using this method.
    *
-   * @param {Object} action A plain object representing “what changed”. It is
+   * @param action A plain object representing “what changed”. It is
    * a good idea to keep actions serializable so you can record and replay user
    * sessions, or use the time travelling `redux-devtools`. An action must have
    * a `type` property which may not be `undefined`. It is a good idea to use
    * string constants for action types.
    *
-   * @returns {Object} For convenience, the same action object you dispatched.
+   * @returns For convenience, the same action object you dispatched.
    *
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
@@ -263,8 +263,8 @@ export default function createStore<
    * load some of the reducers dynamically. You might also need this if you
    * implement a hot reloading mechanism for Redux.
    *
-   * @param {Function} nextReducer The reducer for the store to use instead.
-   * @returns {Store} The same store instance with a new reducer in place.
+   * @param nextReducer The reducer for the store to use instead.
+   * @returns The same store instance with a new reducer in place.
    */
   function replaceReducer<NewState, NewActions extends A>(
     nextReducer: Reducer<NewState, NewActions>
@@ -296,7 +296,7 @@ export default function createStore<
 
   /**
    * Interoperability point for observable/reactive libraries.
-   * @returns {observable} A minimal observable of state changes.
+   * @returns A minimal observable of state changes.
    * For more information, see the observable proposal:
    * https://github.com/tc39/proposal-observable
    */
@@ -305,9 +305,9 @@ export default function createStore<
     return {
       /**
        * The minimal observable subscription method.
-       * @param {Object} observer Any object that can be used as an observer.
+       * @param observer Any object that can be used as an observer.
        * The observer object should have a `next` method.
-       * @returns {subscription} An object with an `unsubscribe` method that can
+       * @returns An object with an `unsubscribe` method that can
        * be used to unsubscribe the observable from the store, and prevent further
        * emission of values from the observable.
        */

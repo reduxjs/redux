@@ -21,7 +21,7 @@ export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
  *   installed.
  */
 export interface Middleware<
-  _DispatchExt = {}, // TODO: remove unused component
+  _DispatchExt = {}, // TODO: remove unused component (breaking change)
   S = any,
   D extends Dispatch = Dispatch
 > {
