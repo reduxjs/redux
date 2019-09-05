@@ -26,16 +26,16 @@
   "main": "lib/redux.js",
   "unpkg": "dist/redux.js",
   "module": "es/redux.js",
-  "typings": "./index.d.ts",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
     "lib",
     "es",
     "src",
-    "index.d.ts"
+    "types"
   ],
   "scripts": {
-    "clean": "rimraf lib dist es coverage",
+    "clean": "rimraf lib dist es coverage types",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
     "lint": "eslint --ext js,ts src test",
@@ -43,9 +43,10 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
-    "build": "rollup -c",
+    "build": "npm run build-types && rollup -c",
     "prepare": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
-    "check-types": "tsc",
+    "build-types": "tsc --emitDeclarationOnly",
+    "check-types": "tsc --noEmit",
     "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
