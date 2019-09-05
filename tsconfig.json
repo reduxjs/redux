@@ -11,7 +11,7 @@
     // "checkJs": true,                       /* Report errors in .js files. */
     "jsx": "react" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
     "declaration": true /* Generates corresponding '.d.ts' file. */,
-    "declarationMap": true /* Generates a sourcemap for each corresponding '.d.ts' file. */,
+    // "declarationMap": true /* Generates a sourcemap for each corresponding '.d.ts' file. */,
     "declarationDir": "./types" /* Output directory for generated declaration files. */,
     // "emitDeclarationOnly": true /* Only emit ‘.d.ts’ declaration files. */,
     "sourceMap": true /* Generates corresponding '.map' file. */,
