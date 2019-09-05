@@ -9,7 +9,7 @@ type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R
  * resulting composite function.
  *
  * @param funcs The functions to compose.
- * @returns R function obtained by composing the argument functions from right
+ * @returns A function obtained by composing the argument functions from right
  *   to left. For example, `compose(f, g, h)` is identical to doing
  *   `(...args) => f(g(h(...args)))`.
  */
