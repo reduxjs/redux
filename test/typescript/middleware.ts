@@ -2,13 +2,12 @@ import {
   Middleware,
   MiddlewareAPI,
   applyMiddleware,
-  StoreEnhancer,
   createStore,
   Dispatch,
   Reducer,
   Action,
   AnyAction
-} from 'redux'
+} from '../..'
 
 /**
  * Logger middleware doesn't add any extra types to dispatch, just logs actions

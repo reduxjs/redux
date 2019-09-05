@@ -9,7 +9,7 @@ import pkg from './package.json'
 export default [
   // CommonJS
   {
-    input: 'src/redux.ts',
+    input: 'src/index.ts',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
     external: [
       ...Object.keys(pkg.dependencies || {}),
@@ -26,7 +26,7 @@ export default [
 
   // ES
   {
-    input: 'src/redux.ts',
+    input: 'src/index.ts',
     output: { file: 'es/redux.js', format: 'es', indent: false },
     external: [
       ...Object.keys(pkg.dependencies || {}),
@@ -43,7 +43,7 @@ export default [
 
   // ES for Browsers
   {
-    input: 'src/redux.ts',
+    input: 'src/index.ts',
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
       nodeResolve({
@@ -69,7 +69,7 @@ export default [
 
   // UMD Development
   {
-    input: 'src/redux.ts',
+    input: 'src/index.ts',
     output: {
       file: 'dist/redux.js',
       format: 'umd',
@@ -92,7 +92,7 @@ export default [
 
   // UMD Production
   {
-    input: 'src/redux.ts',
+    input: 'src/index.ts',
     output: {
       file: 'dist/redux.min.js',
       format: 'umd',

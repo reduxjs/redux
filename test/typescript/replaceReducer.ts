@@ -1,4 +1,4 @@
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, createStore } from '../..'
 
 /**
  * verify that replaceReducer maintains strict typing if the new types change

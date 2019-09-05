@@ -1,4 +1,4 @@
-import { Action as ReduxAction } from 'redux'
+import { Action as ReduxAction } from '../..'
 
 namespace FSA {
   interface Action<P> extends ReduxAction {
