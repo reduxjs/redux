@@ -1,4 +1,4 @@
-import { Dispatch, AnyAction } from 'redux'
+import { Dispatch } from '../..'
 
 /**
  * Default Dispatch type accepts any object with `type` property.

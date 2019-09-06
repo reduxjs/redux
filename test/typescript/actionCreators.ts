@@ -4,7 +4,7 @@ import {
   Dispatch,
   bindActionCreators,
   ActionCreatorsMapObject
-} from 'redux'
+} from '../..'
 
 interface AddTodoAction extends Action {
   text: string

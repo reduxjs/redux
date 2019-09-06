@@ -4,12 +4,10 @@ import {
   Reducer,
   Action,
   StoreEnhancer,
-  StoreCreator,
-  StoreEnhancerStoreCreator,
   Unsubscribe,
   Observer,
   ExtendState
-} from 'redux'
+} from '../..'
 import 'symbol-observable'
 
 type State = {

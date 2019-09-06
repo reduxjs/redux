@@ -2,9 +2,6 @@
   "compilerOptions": {
     "lib": ["es2017", "dom"],
     "strict": true,
-    "baseUrl": "../..",
-    "paths": {
-      "redux": ["types/index.d.ts"]
-    }
+    "baseUrl": "../.."
   }
 }
