@@ -1,10 +1,9 @@
 /**
  * Prints a warning in the console if it exists.
  *
- * @param {String} message The warning message.
- * @returns {void}
+ * @param message The warning message.
  */
-export default function warning(message) {
+export default function warning(message: string): void {
   /* eslint-disable no-console */
   if (typeof console !== 'undefined' && typeof console.error === 'function') {
     console.error(message)

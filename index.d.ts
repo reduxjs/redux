@@ -211,7 +211,7 @@ export function combineReducers<M extends ReducersMapObject<any, any>>(
  *   dispatched.
  */
 export interface Dispatch<A extends Action = AnyAction> {
-  <T extends A>(action: T): T
+  <T extends A>(action: T, ...extraArgs: any[]): T
 }
 
 /**
@@ -248,14 +248,32 @@ export type Observer<T> = {
 }
 
 /**
+ * Extend the state
+ *
+ * This is used by store enhancers and store creators to extend state.
+ * If there is no state extension, it just returns the state, as is, otherwise
+ * it returns the state joined with its extension.
+ */
+export type ExtendState<State, Extension> = [Extension] extends [never]
+  ? State
+  : State & Extension
+
+/**
  * A store is an object that holds the application's state tree.
  * There should only be a single store in a Redux app, as the composition
  * happens on the reducer level.
  *
  * @template S The type of state held by this store.
  * @template A the type of actions which may be dispatched by this store.
+ * @template StateExt any extension to state from store enhancers
+ * @template Ext any extensions to the store from store enhancers
  */
-export interface Store<S = any, A extends Action = AnyAction> {
+export interface Store<
+  S = any,
+  A extends Action = AnyAction,
+  StateExt = never,
+  Ext = {}
+> {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
@@ -326,7 +344,9 @@ export interface Store<S = any, A extends Action = AnyAction> {
    *
    * @param nextReducer The reducer for the store to use instead.
    */
-  replaceReducer(nextReducer: Reducer<S, A>): void
+  replaceReducer<NewState, NewActions extends Action>(
+    nextReducer: Reducer<NewState, NewActions>
+  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext
 
   /**
    * Interoperability point for observable/reactive libraries.
@@ -353,15 +373,15 @@ export type DeepPartial<T> = {
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext, StateExt>(
+  <S, A extends Action, Ext = {}, StateExt = never>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
-  ): Store<S & StateExt, A> & Ext
-  <S, A extends Action, Ext, StateExt>(
+  ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  <S, A extends Action, Ext = {}, StateExt = never>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>,
     enhancer?: StoreEnhancer<Ext>
-  ): Store<S & StateExt, A> & Ext
+  ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 }
 
 /**
@@ -415,16 +435,17 @@ export const createStore: StoreCreator
  * @template Ext Store extension that is mixed into the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
-export type StoreEnhancer<Ext = {}, StateExt = {}> = (
-  next: StoreEnhancerStoreCreator
+export type StoreEnhancer<Ext = {}, StateExt = never> = (
+  next: StoreEnhancerStoreCreator<Ext, StateExt>
 ) => StoreEnhancerStoreCreator<Ext, StateExt>
-export type StoreEnhancerStoreCreator<Ext = {}, StateExt = {}> = <
+
+export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never> = <
   S = any,
   A extends Action = AnyAction
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>
-) => Store<S & StateExt, A> & Ext
+) => Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 
 /* middleware */
 
@@ -667,3 +688,9 @@ export function compose<R>(
 ): (...args: any[]) => R
 
 export function compose<R>(...funcs: Function[]): (...args: any[]) => R
+
+export const __DO_NOT_USE__ActionTypes: {
+  INIT: string
+  REPLACE: string
+  PROBE_UNKNOWN_ACTION: () => string
+}

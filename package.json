@@ -26,26 +26,27 @@
   "main": "lib/redux.js",
   "unpkg": "dist/redux.js",
   "module": "es/redux.js",
-  "typings": "./index.d.ts",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
     "lib",
     "es",
     "src",
-    "index.d.ts"
+    "types"
   ],
   "scripts": {
-    "clean": "rimraf lib dist es coverage",
+    "clean": "rimraf lib dist es coverage types",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" index.d.ts \"**/*.md\"",
-    "lint": "eslint src test",
+    "lint": "eslint --ext js,ts src test",
+    "check-types": "tsc --noEmit",
     "pretest": "npm run build",
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "build": "rollup -c",
-    "prepare": "npm run clean && npm run format:check && npm run lint && npm test",
-    "examples:lint": "eslint examples",
+    "prepare": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
+    "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
@@ -60,15 +61,18 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.4",
-    "@typescript-eslint/eslint-plugin": "^1.11.0",
-    "@typescript-eslint/parser": "^1.11.0",
+    "@types/jest": "^24.0.17",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-react-app": "^4.0.1",
+    "eslint-import-resolver-typescript": "^1.1.1",
     "eslint-plugin-flowtype": "^2.50.3",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
@@ -83,6 +87,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript2": "^0.24.0",
     "rxjs": "^6.5.2",
     "typescript": "^3.5.3",
     "typings-tester": "^0.3.2"
@@ -102,7 +107,7 @@
     ]
   },
   "jest": {
-    "testRegex": "(/test/.*\\.spec\\.js)$"
+    "testRegex": "(/test/.*\\.spec\\.[tj]s)$"
   },
   "sideEffects": false
 }

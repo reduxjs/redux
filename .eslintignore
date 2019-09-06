@@ -3,3 +3,5 @@
 **/server.js
 **/webpack.config*.js
 **/flow-typed/**
+# TODO: figure out a way to lint this using flow instead of typescript
+examples/todos-flow
