@@ -6,6 +6,8 @@ import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
+const noDeclarationFiles = { compilerOptions: { declaration: false } };
+
 export default [
   // CommonJS
   {
@@ -19,7 +21,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
-      typescript(),
+      typescript({ useTsconfigDeclarationDir: true }),
       babel()
     ]
   },
@@ -36,7 +38,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
-      typescript(),
+      typescript({ tsconfigOverride: noDeclarationFiles }),
       babel()
     ]
   },
@@ -52,7 +54,7 @@ export default [
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
-      typescript(),
+      typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
         exclude: 'node_modules/**'
       }),
@@ -80,7 +82,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
-      typescript(),
+      typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
         exclude: 'node_modules/**'
       }),
@@ -103,7 +105,7 @@ export default [
       nodeResolve({
         extensions: ['.ts']
       }),
-      typescript(),
+      typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
         exclude: 'node_modules/**'
       }),
