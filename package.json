@@ -45,9 +45,7 @@
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "build": "rollup -c",
-    "prepare": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
-    "examples:lint": "eslint --ext js,ts examples",
-    "examples:test": "cross-env CI=true babel-node examples/testAll.js"
+    "prepare": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test"
   },
   "dependencies": {
     "loose-envify": "^1.4.0",
@@ -56,7 +54,6 @@
   "devDependencies": {
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
-    "@babel/node": "^7.6.1",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@babel/preset-env": "^7.6.0",
@@ -68,7 +65,6 @@
     "@typescript-eslint/parser": "^1.13.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "cross-env": "^5.2.1",
     "eslint": "^5.16.0",
     "eslint-config-react-app": "^4.0.1",
     "eslint-import-resolver-typescript": "^1.1.1",

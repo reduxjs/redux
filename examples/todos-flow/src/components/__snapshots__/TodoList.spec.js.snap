@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`TodoList renders without crashing 1`] = `ShallowWrapper {}`;
-
-exports[`TodoList with todos renders a list of todos 1`] = `ShallowWrapper {}`;
