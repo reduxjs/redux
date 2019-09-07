@@ -1,4 +1,4 @@
-import { bindActionCreators, createStore } from '../'
+import { bindActionCreators, createStore, ActionCreator } from '..'
 import { todos } from './helpers/reducers'
 import * as actionCreators from './helpers/actionCreators'
 
@@ -46,15 +46,17 @@ describe('bindActionCreators', () => {
   })
 
   it('skips non-function values in the passed object', () => {
+    // as this is testing against invalid values, we will cast to unknown and then back to ActionCreator<any>
+    // in a typescript environment this test is unnecessary, but required in javascript
     const boundActionCreators = bindActionCreators(
-      {
+      ({
         ...actionCreators,
         foo: 42,
         bar: 'baz',
         wow: undefined,
         much: {},
         test: null
-      },
+      } as unknown) as ActionCreator<any>,
       store.dispatch
     )
     expect(Object.keys(boundActionCreators)).toEqual(
@@ -91,7 +93,10 @@ describe('bindActionCreators', () => {
 
   it('throws for a primitive actionCreator', () => {
     expect(() => {
-      bindActionCreators('string', store.dispatch)
+      bindActionCreators(
+        ('string' as unknown) as ActionCreator<any>,
+        store.dispatch
+      )
     }).toThrow(
       'bindActionCreators expected an object or a function, instead received string. ' +
         'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?'

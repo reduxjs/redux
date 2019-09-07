@@ -15,7 +15,7 @@ If you're still not convinced, read [Motivation](../introduction/Motivation.md) 
 
 The data lifecycle in any Redux app follows these 4 steps:
 
-1. **You call** [`store.dispatch(action)`](../api/Store.md#dispatch).
+1. **You call** [`store.dispatch(action)`](../api/Store.md#dispatchaction).
 
 An [action](Actions.md) is a plain object describing _what happened_. For example:
 
@@ -27,7 +27,7 @@ An [action](Actions.md) is a plain object describing _what happened_. For exampl
 
 Think of an action as a very brief snippet of news. “Mary liked article 42.” or “'Read the Redux docs.' was added to the list of todos.”
 
-You can call [`store.dispatch(action)`](../api/Store.md#dispatch) from anywhere in your app, including components and XHR callbacks, or even at scheduled intervals.
+You can call [`store.dispatch(action)`](../api/Store.md#dispatchaction) from anywhere in your app, including components and XHR callbacks, or even at scheduled intervals.
 
 2. **The Redux store calls the reducer function you gave it.**
 
@@ -100,7 +100,7 @@ While [`combineReducers()`](../api/combineReducers.md) is a handy helper utility
 
 4. **The Redux store saves the complete state tree returned by the root reducer.**
 
-This new tree is now the next state of your app! Every listener registered with [`store.subscribe(listener)`](../api/Store.md#subscribe) will now be invoked; listeners may call [`store.getState()`](../api/Store.md#getState) to get the current state.
+This new tree is now the next state of your app! Every listener registered with [`store.subscribe(listener)`](../api/Store.md#subscribelistener) will now be invoked; listeners may call [`store.getState()`](../api/Store.md#getState) to get the current state.
 
 Now, the UI can be updated to reflect the new state. If you use bindings like [React Redux](https://github.com/gaearon/react-redux), this is the point at which `component.setState(newState)` is called.
 

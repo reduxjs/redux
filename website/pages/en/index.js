@@ -108,7 +108,7 @@ const Block = props => (
   </Container>
 );
 
-const FeaturesTop = props => (
+const FeaturesTop = () => (
   <Block layout="fourColumn" className="rowContainer featureBlock">
     {[
       {
@@ -140,7 +140,7 @@ const FeaturesTop = props => (
   </Block>
 );
 
-const OtherLibraries = props => (
+const OtherLibraries = () => (
   <Container className="rowContainer">
     <h2 style={{margin : 0}}>
       Other Libraries from the Redux Team

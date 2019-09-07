@@ -70,9 +70,7 @@ npm run test:watch
 
 ### Docs
 
-Improvements to the documentation are always welcome. In the docs we abide by typographic rules, so instead of ' you should use '. Same goes for “ ” and dashes (—) where appropriate. These rules only apply to the text, not to code blocks.
-
-The docs are published automatically when the `master` branch is updated.
+Improvements to the documentation are always welcome. You can find them in the [`docs`](/docs) path. We use [Docusaurus](https://docusaurus.io/) to build our documentation website. The website is published automatically whenever the `master` branch is updated.
 
 ### Examples
 

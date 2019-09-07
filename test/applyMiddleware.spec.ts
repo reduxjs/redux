@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from '../'
+import { createStore, applyMiddleware, Middleware, AnyAction, Action } from '..'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
@@ -51,7 +51,11 @@ describe('applyMiddleware', () => {
     const spy = jest.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
-    return store.dispatch(addTodoAsync('Use Redux')).then(() => {
+    // the typing for redux-thunk is super complex, so we will use an as unknown hack
+    const dispatchedValue = (store.dispatch(
+      addTodoAsync('Use Redux')
+    ) as unknown) as Promise<void>
+    return dispatchedValue.then(() => {
       expect(spy.mock.calls.length).toEqual(2)
     })
   })
@@ -87,7 +91,11 @@ describe('applyMiddleware', () => {
       }
     ])
 
-    store.dispatch(addTodoAsync('Maybe')).then(() => {
+    // the typing for redux-thunk is super complex, so we will use an "as unknown" hack
+    const dispatchedValue = (store.dispatch(
+      addTodoAsync('Maybe')
+    ) as unknown) as Promise<void>
+    dispatchedValue.then(() => {
       expect(store.getState()).toEqual([
         {
           id: 1,
@@ -110,8 +118,16 @@ describe('applyMiddleware', () => {
     const spy = jest.fn()
     const testCallArgs = ['test']
 
-    function multiArgMiddleware() {
-      return next => (action, callArgs) => {
+    interface MultiDispatch<A extends Action = AnyAction> {
+      <T extends A>(action: T, extraArg?: string[]): T
+    }
+
+    const multiArgMiddleware: Middleware<
+      MultiDispatch,
+      any,
+      MultiDispatch
+    > = _store => {
+      return next => (action, callArgs?: any) => {
         if (Array.isArray(callArgs)) {
           return action(...callArgs)
         }
@@ -120,7 +136,7 @@ describe('applyMiddleware', () => {
     }
 
     function dummyMiddleware({ dispatch }) {
-      return next => action => dispatch(action, testCallArgs)
+      return _next => action => dispatch(action, testCallArgs)
     }
 
     const store = createStore(
