@@ -8,19 +8,27 @@ interface Fn extends Function {
 }
 
 /**
- * A type-level utility function to
+ * A type-level utility to get the type of the tail of a tuple of functions
  */
-type Tail<Fns extends Fn[]> = Fns extends <A>(
-  a: A,
-  ...rest: infer Rest
-) => unknown
-  ? Rest
-  : never
+type Tail<Fns extends Fn[]> = (
+  ...fns: Fns
+) => unknown extends <A>(a: A, ...rest: infer Rest) => unknown ? Rest : never
 
 /**
- * A type-level utility function to
+ * A type-level utility to get the type of the last function from a tuple of
+ * functions
  */
-type Last<Fns extends Fn[]> = Fns[Tail<Fns>['length']]
+type Last<Fns extends Fn[]> = Fns['length'] extends 0
+  ? never
+  : Fns[Tail<Fns>['length']]
+
+/**
+ * A type-level utility to get the return type of the composition of a tuple of
+ * functions
+ */
+type Composed<Fns extends Fn[]> = (
+  ...args: Parameters<Last<Fns>>
+) => ReturnType<Fns[0]>
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -113,9 +121,7 @@ export default function compose<
   fab: (...args: A) => B[0]
 ): (...args: A) => F
 // generic type signature for any number of functions
-export default function compose<Fns extends Fn[]>(
-  ...funcs: Fns
-): (...args: Parameters<Last<Fns>>) => ReturnType<Fns[0]>
+export default function compose<Fns extends Fn[]>(...funcs: Fns): Composed<Fns>
 // generic base case type signature and function body implementation
 export default function compose<Fns extends Fn[]>(...fns: Fns): Fn {
   const len = fns.length
