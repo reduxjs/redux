@@ -10,7 +10,7 @@ interface Fn extends Function {
  * A type-level utility that extracts the type of a function's input params as
  * a tuple, inferring `unknown` for any input params assigned to generics
  */
-type Params<F> = F extends (...args: infer A) => unknown ? A : never
+// type Params<F> = F extends (...args: infer A) => unknown ? A : never
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -114,7 +114,7 @@ export default function compose<Fns extends Fn[]>(...fns: Fns): Fn {
     return fns[0]
   }
 
-  // `Params<typeof b>` is equal to `unknown[]` in the below type signature,
-  // but, `Params<typeof b>`, arguably, more clearly conveys intent
-  return fns.reduce((a, b) => (...args: Params<typeof b>) => a(b(...args)))
+  // `Parameters<typeof b>` is equalavelnt to `unknown[]` in the below type,
+  // signature, but `Parameters<typeof b>` more clearly conveys intent
+  return fns.reduce((a, b) => (...args: Parameters<typeof b>) => a(b(...args)))
 }
