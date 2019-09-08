@@ -1,7 +1,16 @@
-type Func0<R> = () => R
-type Func1<T1, R> = (a1: T1) => R
-type Func2<T1, T2, R> = (a1: T1, a2: T2) => R
-type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R
+/**
+ * A generic representation of a function exposing more type information than
+ * the built-in `Function` type, allowing extraction of its input param types
+ */
+interface Fn extends Function {
+  <A extends unknown[]>(...args: A): unknown
+}
+
+/**
+ * A type-level utility that extracts the type of a function's input params as
+ * a tuple, inferring `unknown` for any input params assigned to generics
+ */
+type Params<F> = F extends (...args: infer A) => unknown ? A : never
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -13,90 +22,99 @@ type Func3<T1, T2, T3, R> = (a1: T1, a2: T2, a3: T3, ...args: any[]) => R
  *   to left. For example, `compose(f, g, h)` is identical to doing
  *   `(...args) => f(g(h(...args)))`.
  */
-export default function compose(): <R>(a: R) => R
+// when given no args and no generic type params, infer args as tuple
+export default function compose(): <A extends unknown[]>(...a: A) => A[0]
+// allow specifying type param of args tuple
+export default function compose<A extends unknown[]>(): (...a: A) => A[0]
+// when given a single function, just return that function
+export default function compose<A extends unknown[], B>(
+  fab: (...args: A) => B
+): (...args: A) => B
+// standard case, given 2 functions
+export default function compose<A extends unknown[], B, C>(
+  fbc: (b: B) => C,
+  fab: (...args: A) => B
+): (...args: A) => C
+// standard case, given 3 functions
+export default function compose<A extends unknown[], B, C, D>(
+  fcd: (c: C) => D,
+  fbc: (b: B) => C,
+  fab: (...args: A) => B
+): (...args: A) => D
+// standard case, given 4 functions
+export default function compose<A extends unknown[], B, C, D, E>(
+  fde: (d: D) => E,
+  fcd: (c: C) => D,
+  fbc: (b: B) => C,
+  fab: (...args: A) => B
+): (...args: A) => E
+// standard case, given 5 functions
+export default function compose<A extends unknown[], B, C, D, E, F>(
+  fef: (e: E) => F,
+  fde: (d: D) => E,
+  fcd: (c: C) => D,
+  fbc: (b: B) => C,
+  fab: (...args: A) => B
+): (...args: A) => F
+// extra overloads allowing functions other than the right-most function
+// to take in more than one argument, though the extra arguments go unused
+// 2 multi-arg functions
+export default function compose<A extends unknown[], B extends unknown[], C>(
+  fbc: (...b: B) => C,
+  fab: (...args: A) => B[0]
+): (...args: A) => C
+// 3 multi-arg functions
+export default function compose<
+  A extends unknown[],
+  B extends unknown[],
+  C extends unknown[],
+  D
+>(
+  fcd: (...c: C) => D,
+  fbc: (...b: B) => C[0],
+  fab: (...args: A) => B[0]
+): (...args: A) => D
+// 4 multi-arg functions
+export default function compose<
+  A extends unknown[],
+  B extends unknown[],
+  C extends unknown[],
+  D extends unknown[],
+  E
+>(
+  fde: (...d: D) => E,
+  fcd: (...c: C) => D[0],
+  fbc: (...b: B) => C[0],
+  fab: (...args: A) => B[0]
+): (...args: A) => E
+// 5 multi-arg functions
+export default function compose<
+  A extends unknown[],
+  B extends unknown[],
+  C extends unknown[],
+  D extends unknown[],
+  E extends unknown[],
+  F
+>(
+  fef: (...e: E) => F,
+  fde: (...d: D) => E[0],
+  fcd: (...c: C) => D[0],
+  fbc: (...b: B) => C[0],
+  fab: (...args: A) => B[0]
+): (...args: A) => F
+// generic base case type signature and function body implementation
+export default function compose<Fns extends Fn[]>(...fns: Fns): Fn {
+  const len = fns.length
 
-export default function compose<F extends Function>(f: F): F
-
-/* two functions */
-export default function compose<A, R>(f1: (b: A) => R, f2: Func0<A>): Func0<R>
-export default function compose<A, T1, R>(
-  f1: (b: A) => R,
-  f2: Func1<T1, A>
-): Func1<T1, R>
-export default function compose<A, T1, T2, R>(
-  f1: (b: A) => R,
-  f2: Func2<T1, T2, A>
-): Func2<T1, T2, R>
-export default function compose<A, T1, T2, T3, R>(
-  f1: (b: A) => R,
-  f2: Func3<T1, T2, T3, A>
-): Func3<T1, T2, T3, R>
-
-/* three functions */
-export default function compose<A, B, R>(
-  f1: (b: B) => R,
-  f2: (a: A) => B,
-  f3: Func0<A>
-): Func0<R>
-export default function compose<A, B, T1, R>(
-  f1: (b: B) => R,
-  f2: (a: A) => B,
-  f3: Func1<T1, A>
-): Func1<T1, R>
-export default function compose<A, B, T1, T2, R>(
-  f1: (b: B) => R,
-  f2: (a: A) => B,
-  f3: Func2<T1, T2, A>
-): Func2<T1, T2, R>
-export default function compose<A, B, T1, T2, T3, R>(
-  f1: (b: B) => R,
-  f2: (a: A) => B,
-  f3: Func3<T1, T2, T3, A>
-): Func3<T1, T2, T3, R>
-
-/* four functions */
-export default function compose<A, B, C, R>(
-  f1: (b: C) => R,
-  f2: (a: B) => C,
-  f3: (a: A) => B,
-  f4: Func0<A>
-): Func0<R>
-export default function compose<A, B, C, T1, R>(
-  f1: (b: C) => R,
-  f2: (a: B) => C,
-  f3: (a: A) => B,
-  f4: Func1<T1, A>
-): Func1<T1, R>
-export default function compose<A, B, C, T1, T2, R>(
-  f1: (b: C) => R,
-  f2: (a: B) => C,
-  f3: (a: A) => B,
-  f4: Func2<T1, T2, A>
-): Func2<T1, T2, R>
-export default function compose<A, B, C, T1, T2, T3, R>(
-  f1: (b: C) => R,
-  f2: (a: B) => C,
-  f3: (a: A) => B,
-  f4: Func3<T1, T2, T3, A>
-): Func3<T1, T2, T3, R>
-
-/* rest */
-export default function compose<R>(
-  f1: (b: any) => R,
-  ...funcs: Function[]
-): (...args: any[]) => R
-
-export default function compose<R>(...funcs: Function[]): (...args: any[]) => R
-
-export default function compose(...funcs: Function[]) {
-  if (funcs.length === 0) {
-    // infer the argument type so it is usable in inference down the line
-    return <T>(arg: T) => arg
+  if (len === 0) {
+    return <A extends unknown[]>(...args: A): A[0] => args[0]
   }
 
-  if (funcs.length === 1) {
-    return funcs[0]
+  if (len === 1) {
+    return fns[0]
   }
 
-  return funcs.reduce((a, b) => (...args: any) => a(b(...args)))
+  // `Params<typeof b>` is equal to `unknown[]` in the below type signature,
+  // but, `Params<typeof b>`, arguably, more clearly conveys intent
+  return fns.reduce((a, b) => (...args: Params<typeof b>) => a(b(...args)))
 }

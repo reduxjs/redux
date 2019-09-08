@@ -104,7 +104,8 @@ describe('Utils', () => {
     })
 
     it('returns the first given argument if given no functions', () => {
-      expect(compose<number>()(1, 2)).toBe(1)
+      expect(compose<[number, number]>()(1, 2)).toBe(1)
+      expect(compose()('zero', 1, 2)).toBe('zero')
       expect(compose()(3)).toBe(3)
       expect(compose()(undefined)).toBe(undefined)
     })
