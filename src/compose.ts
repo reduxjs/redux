@@ -4,13 +4,23 @@
  */
 interface Fn extends Function {
   <A extends unknown[]>(...args: A): unknown
+  <A>(...args: A[]): unknown
 }
 
 /**
- * A type-level utility that extracts the type of a function's input params as
- * a tuple, inferring `unknown` for any input params assigned to generics
+ * A type-level utility function to
  */
-// type Params<F> = F extends (...args: infer A) => unknown ? A : never
+type Tail<Fns extends Fn[]> = Fns extends <A>(
+  a: A,
+  ...rest: infer Rest
+) => unknown
+  ? Rest
+  : never
+
+/**
+ * A type-level utility function to
+ */
+type Last<Fns extends Fn[]> = Fns[Tail<Fns>['length']]
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -102,6 +112,10 @@ export default function compose<
   fbc: (...b: B) => C[0],
   fab: (...args: A) => B[0]
 ): (...args: A) => F
+// generic type signature for any number of functions
+export default function compose<Fns extends Fn[]>(
+  ...funcs: Fns
+): (...args: Parameters<Last<Fns>>) => ReturnType<Fns[0]>
 // generic base case type signature and function body implementation
 export default function compose<Fns extends Fn[]>(...fns: Fns): Fn {
   const len = fns.length
