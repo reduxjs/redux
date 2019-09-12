@@ -199,16 +199,16 @@ export default function combineReducers(reducers: ReducersMapObject) {
         throw new Error(errorMessage)
       }
       if (nextStateForKey !== previousStateForKey) {
+        // copy previous unchanged values
         if (nextState === null) {
           nextState = {}
-          // copy previous unchanged values and current changed value
-          for (let copyIndex = 0; copyIndex < i + 1; ++copyIndex) {
+          for (let copyIndex = 0; copyIndex < i; ++copyIndex) {
             const copyKey = finalReducerKeys[copyIndex]
             nextState[copyKey] = state[copyKey]
           }
-        } else {
-          nextState[key] = nextStateForKey
         }
+
+        nextState[key] = nextStateForKey
       }
     }
     if (nextState === null) {
