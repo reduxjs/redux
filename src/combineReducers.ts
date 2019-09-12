@@ -188,8 +188,7 @@ export default function combineReducers(reducers: ReducersMapObject) {
       }
     }
 
-    let hasChanged = false
-    const nextState: StateFromReducersMapObject<typeof reducers> = {}
+    let nextState: StateFromReducersMapObject<typeof reducers> | null = null
     for (let i = 0; i < finalReducerKeys.length; i++) {
       const key = finalReducerKeys[i]
       const reducer = finalReducers[key]
@@ -199,11 +198,31 @@ export default function combineReducers(reducers: ReducersMapObject) {
         const errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
       }
-      nextState[key] = nextStateForKey
-      hasChanged = hasChanged || nextStateForKey !== previousStateForKey
+      if (nextStateForKey !== previousStateForKey) {
+        if (nextState === null) {
+          nextState = {}
+          // copy previous unchanged values and current changed value
+          for (let copyIndex = 0; copyIndex < i + 1; ++copyIndex) {
+            const copyKey = finalReducerKeys[copyIndex]
+            nextState[copyKey] = state[copyKey]
+          }
+        } else {
+          nextState[key] = nextStateForKey
+        }
+      }
     }
-    hasChanged =
-      hasChanged || finalReducerKeys.length !== Object.keys(state).length
-    return hasChanged ? nextState : state
+    if (nextState === null) {
+      if (finalReducerKeys.length === Object.keys(state).length) {
+        return state
+      }
+      nextState = {}
+      for (let i = 0; i < finalReducerKeys.length; ++i) {
+        const copyKey = finalReducerKeys[i]
+        nextState[copyKey] = state[copyKey]
+      }
+      return nextState
+    }
+
+    return nextState
   }
 }
