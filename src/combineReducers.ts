@@ -209,6 +209,8 @@ export default function combineReducers(reducers: ReducersMapObject) {
         }
 
         nextState[key] = nextStateForKey
+      } else if (nextState !== null) {
+        nextState[key] = previousStateForKey
       }
     }
     if (nextState === null) {
