@@ -1,7 +1,7 @@
 import compose from './compose'
 import { Middleware, MiddlewareAPI } from './types/middleware'
 import { AnyAction } from './types/actions'
-import { StoreEnhancer, StoreCreator, Dispatch } from './types/store'
+import { StoreEnhancer, StoreCreator, Dispatch, Store } from './types/store'
 import { Reducer } from './types/reducers'
 
 /**
@@ -68,7 +68,7 @@ export default function applyMiddleware(
     }
 
     const middlewareAPI: MiddlewareAPI = {
-      getState: store.getState,
+      ...createStoreApi(store),
       dispatch: (action, ...args) => dispatch(action, ...args)
     }
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
@@ -79,4 +79,18 @@ export default function applyMiddleware(
       dispatch
     }
   }
+}
+
+/**
+ * Creates an API for the store. The API does not include `subscribe` or `replaceReducer`.
+ *
+ * @param store
+ * @returns An API for the store with `subscribe` and `replaceReducer` removed.
+ */
+function createStoreApi<S, A extends AnyAction>({
+  subscribe,
+  replaceReducer,
+  ...store
+}: Store<S, A>) {
+  return store
 }
