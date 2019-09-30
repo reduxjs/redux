@@ -25,15 +25,38 @@ import {
  * @template Ext Dispatch signature added by a middleware.
  * @template S The type of the state supported by a middleware.
  */
-export default function applyMiddleware<
-  S = any,
-  M extends Middleware = Middleware
->(
-  ...middlewares: M[]
-): StoreEnhancer<
-  M extends Middleware<any, any, infer D> ? { dispatch: D } : never,
-  S
-> {
+export default function applyMiddleware(): StoreEnhancer<{ dispatch: {} }, {}>
+export default function applyMiddleware<Ext1, S>(
+  middleware1: Middleware<Ext1, S, any>
+): StoreEnhancer<{ dispatch: Ext1 }, S>
+export default function applyMiddleware<Ext1, Ext2, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 }, S>
+export default function applyMiddleware<Ext1, Ext2, Ext3, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 }, S>
+export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>,
+  middleware4: Middleware<Ext4, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 }, S>
+export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(
+  middleware1: Middleware<Ext1, S, any>,
+  middleware2: Middleware<Ext2, S, any>,
+  middleware3: Middleware<Ext3, S, any>,
+  middleware4: Middleware<Ext4, S, any>,
+  middleware5: Middleware<Ext5, S, any>
+): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5 }, S>
+export default function applyMiddleware<Ext, S = any>(
+  ...middlewares: Middleware<any, S, any>[]
+): StoreEnhancer<{ dispatch: Ext }, S>
+export default function applyMiddleware<S>(
+  ...middlewares: Middleware[]
+): StoreEnhancer<any, S> {
   return (createStore: StoreEnhancerStoreCreator<any>) => (
     reducer,
     ...args: any[]
