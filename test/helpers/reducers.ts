@@ -49,10 +49,7 @@ export function todosReverse(state: Todo[] = [], action: rootActions) {
   }
 }
 
-export function dispatchInTheMiddleOfReducer(
-  state = [],
-  action: rootActions
-) {
+export function dispatchInTheMiddleOfReducer(state = [], action: rootActions) {
   switch (action.type) {
     case DISPATCH_IN_MIDDLE:
       action.boundDispatchFn()
@@ -62,10 +59,7 @@ export function dispatchInTheMiddleOfReducer(
   }
 }
 
-export function getStateInTheMiddleOfReducer(
-  state = [],
-  action: rootActions
-) {
+export function getStateInTheMiddleOfReducer(state = [], action: rootActions) {
   switch (action.type) {
     case GET_STATE_IN_MIDDLE:
       action.boundGetStateFn()
@@ -75,10 +69,7 @@ export function getStateInTheMiddleOfReducer(
   }
 }
 
-export function subscribeInTheMiddleOfReducer(
-  state = [],
-  action: rootActions
-) {
+export function subscribeInTheMiddleOfReducer(state = [], action: rootActions) {
   switch (action.type) {
     case SUBSCRIBE_IN_MIDDLE:
       action.boundSubscribeFn()
