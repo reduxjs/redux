@@ -28,6 +28,10 @@ _Tutorials that teach the basic concepts of Redux and how to use it_
 - **Live React: Hot Reloading and Time Travel**  
   http://youtube.com/watch?v=xsSnOQynTHs  
   Dan Abramov's original conference talk that introduced Redux. See how constraints enforced by Redux make hot reloading with time travel easy
+  
+- **Redux Crash Course With React**  
+  https://www.youtube.com/watch?v=93p3LxR9xfM  
+  Traversy Media explains the daunting Redux in such a beautiful way here. All the jargon words such as reducers, state, actions are very well defined by him. Redux may be seem difficult at the start but Traversy paves out a perfect route for beginners.
 
 - **A Cartoon Guide to Redux**  
   https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6  
