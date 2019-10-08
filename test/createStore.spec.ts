@@ -470,9 +470,7 @@ describe('createStore', () => {
       )
     ).toThrow(/may not dispatch/)
 
-    expect(() =>
-      store.dispatch(dispatchInMiddle(() => {}))
-    ).not.toThrow(/may not dispatch/)
+    expect(() => store.dispatch(dispatchInMiddle(() => {}))).not.toThrow()
   })
 
   it('does not allow getState() from within a reducer', () => {
@@ -482,9 +480,7 @@ describe('createStore', () => {
       store.dispatch(getStateInMiddle(store.getState.bind(store)))
     ).toThrow(/You may not call store.getState()/)
 
-    expect(() =>
-      store.dispatch(getStateInMiddle(() => {}))
-    ).not.toThrow(/You may not call store.getState()/)
+    expect(() => store.dispatch(getStateInMiddle(() => {}))).not.toThrow()
   })
 
   it('does not allow subscribe() from within a reducer', () => {
@@ -494,9 +490,7 @@ describe('createStore', () => {
       store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
     ).toThrow(/You may not call store.subscribe()/)
 
-    expect(() =>
-      store.dispatch(subscribeInMiddle(() => {}))
-    ).not.toThrow(/You may not call store.subscribe()/)
+    expect(() => store.dispatch(subscribeInMiddle(() => {}))).not.toThrow()
   })
 
   it('does not allow unsubscribe from subscribe() from within a reducer', () => {
@@ -507,9 +501,7 @@ describe('createStore', () => {
       store.dispatch(unsubscribeInMiddle(unsubscribe.bind(store)))
     ).toThrow(/You may not unsubscribe from a store/)
 
-    expect(() =>
-      store.dispatch(unsubscribeInMiddle(() => {}))
-    ).not.toThrow(/You may not unsubscribe from a store/)
+    expect(() => store.dispatch(unsubscribeInMiddle(() => {}))).not.toThrow()
   })
 
   it('recovers from an error within a reducer', () => {
