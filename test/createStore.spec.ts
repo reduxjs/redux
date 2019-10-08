@@ -651,6 +651,12 @@ describe('createStore', () => {
         expect(typeof obs.subscribe).toBe('function')
       })
 
+      it('may be used to retrieve itself', () => {
+        const store = createStore(() => {})
+        const obs = store[$$observable]()
+        expect(obs[$$observable]()).toBe(obs)
+      })
+
       it('should throw a TypeError if an observer object is not supplied to subscribe', () => {
         const store = createStore(() => {})
         const obs = store[$$observable]()
