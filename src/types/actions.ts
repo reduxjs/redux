@@ -1,3 +1,5 @@
+import ActionTypes from "src/utils/actionTypes";
+
 /**
  * An *action* is a plain object that represents an intention to change the
  * state. Actions are the only way to get data into the store. Any data,
@@ -18,6 +20,13 @@
 export interface Action<T = any> {
   type: T
 }
+
+/**
+ * An action to assure that the reducer won't need unecessary internal coercion
+ * and may assure more gracefully a reduce with all actions handled and no
+ * unexpected state.
+ */
+export type ReduxAction = Action | { type: typeof ActionTypes.REPLACE } | { type: typeof ActionTypes.INIT }
 
 /**
  * An Action type which accepts any other properties.

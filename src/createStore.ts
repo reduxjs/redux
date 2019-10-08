@@ -8,7 +8,7 @@ import {
   Observer,
   ExtendState
 } from './types/store'
-import { Action } from './types/actions'
+import { ReduxAction } from './types/actions'
 import { Reducer } from './types/reducers'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
@@ -40,7 +40,7 @@ import isPlainObject from './utils/isPlainObject'
  */
 export default function createStore<
   S,
-  A extends Action,
+  A extends ReduxAction,
   Ext = {},
   StateExt = never
 >(
@@ -49,7 +49,7 @@ export default function createStore<
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 export default function createStore<
   S,
-  A extends Action,
+  A extends ReduxAction,
   Ext = {},
   StateExt = never
 >(
@@ -59,7 +59,7 @@ export default function createStore<
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 export default function createStore<
   S,
-  A extends Action,
+  A extends ReduxAction,
   Ext = {},
   StateExt = never
 >(
@@ -221,7 +221,7 @@ export default function createStore<
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-  function dispatch(action: A) {
+  function dispatch(action: A | ReduxAction) {
     if (!isPlainObject(action)) {
       throw new Error(
         'Actions must be plain objects. ' +
@@ -242,7 +242,7 @@ export default function createStore<
 
     try {
       isDispatching = true
-      currentState = currentReducer(currentState, action)
+      currentState = currentReducer(currentState, action as A)
     } finally {
       isDispatching = false
     }
@@ -283,7 +283,7 @@ export default function createStore<
     // Any reducers that existed in both the new and old rootReducer
     // will receive the previous state. This effectively populates
     // the new state tree with any relevant data from the old one.
-    dispatch({ type: ActionTypes.REPLACE } as A)
+    dispatch({ type: ActionTypes.REPLACE })
     // change the type of the store by casting it to the new store
     return (store as unknown) as Store<
       ExtendState<NewState, StateExt>,
@@ -337,7 +337,7 @@ export default function createStore<
   // When a store is created, an "INIT" action is dispatched so that every
   // reducer returns their initial state. This effectively populates
   // the initial state tree.
-  dispatch({ type: ActionTypes.INIT } as A)
+  dispatch({ type: ActionTypes.INIT })
 
   const store = ({
     dispatch: dispatch as Dispatch<A>,
