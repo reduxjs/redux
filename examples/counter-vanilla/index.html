@@ -33,33 +33,37 @@
       var store = Redux.createStore(counter)
       var valueEl = document.getElementById('value')
 
-      function render() {
-        valueEl.innerHTML = store.getState().toString()
+      function render(currentState) {
+        valueEl.innerHTML = (currentState || store.getState()).toString()
       }
 
       render()
       store.subscribe(render)
 
-      document.getElementById('increment')
-        .addEventListener('click', function () {
+      document
+        .getElementById('increment')
+        .addEventListener('click', function() {
           store.dispatch({ type: 'INCREMENT' })
         })
 
-      document.getElementById('decrement')
-        .addEventListener('click', function () {
+      document
+        .getElementById('decrement')
+        .addEventListener('click', function() {
           store.dispatch({ type: 'DECREMENT' })
         })
 
-      document.getElementById('incrementIfOdd')
-        .addEventListener('click', function () {
+      document
+        .getElementById('incrementIfOdd')
+        .addEventListener('click', function() {
           if (store.getState() % 2 !== 0) {
             store.dispatch({ type: 'INCREMENT' })
           }
         })
 
-      document.getElementById('incrementAsync')
-        .addEventListener('click', function () {
-          setTimeout(function () {
+      document
+        .getElementById('incrementAsync')
+        .addEventListener('click', function() {
+          setTimeout(function() {
             store.dispatch({ type: 'INCREMENT' })
           }, 1000)
         })

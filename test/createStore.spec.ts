@@ -405,8 +405,8 @@ describe('createStore', () => {
 
   it('provides an up-to-date state when a subscriber is notified', done => {
     const store = createStore(reducers.todos)
-    store.subscribe(() => {
-      expect(store.getState()).toEqual([
+    store.subscribe(currentState => {
+      expect(currentState).toEqual([
         {
           id: 1,
           text: 'Hello'
@@ -447,9 +447,8 @@ describe('createStore', () => {
 
     const store = createStore(combineReducers({ foo, bar }))
 
-    store.subscribe(function kindaComponentDidUpdate() {
-      const state = store.getState()
-      if (state.bar === 0) {
+    store.subscribe(function kindaComponentDidUpdate(currentState) {
+      if (currentState.bar === 0) {
         store.dispatch({ type: 'bar' })
       }
     })

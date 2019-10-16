@@ -153,8 +153,8 @@ const state: State = store.getState()
 
 /* subscribe / unsubscribe */
 
-const unsubscribe: Unsubscribe = store.subscribe(() => {
-  console.log('Current state:', store.getState())
+const unsubscribe: Unsubscribe = store.subscribe((currentState: State) => {
+  console.log('Current state:', currentState)
 })
 
 unsubscribe()

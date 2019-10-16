@@ -99,7 +99,7 @@ export default function createStore<
 
   let currentReducer = reducer
   let currentState = preloadedState as S
-  let currentListeners: (() => void)[] | null = []
+  let currentListeners: ((currentState: S) => void)[] | null = []
   let nextListeners = currentListeners
   let isDispatching = false
 
@@ -250,7 +250,7 @@ export default function createStore<
     const listeners = (currentListeners = nextListeners)
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i]
-      listener()
+      listener(currentState)
     }
 
     return action
