@@ -50,7 +50,7 @@ console.log(store.getState())
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-const unsubscribe = store.subscribe(() => console.log(store.getState()))
+const unsubscribe = store.subscribe(currentState => console.log(currentState))
 
 // Dispatch some actions
 store.dispatch(addTodo('Learn about actions'))

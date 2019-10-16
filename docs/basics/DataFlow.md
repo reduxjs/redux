@@ -100,7 +100,7 @@ While [`combineReducers()`](../api/combineReducers.md) is a handy helper utility
 
 4. **The Redux store saves the complete state tree returned by the root reducer.**
 
-This new tree is now the next state of your app! Every listener registered with [`store.subscribe(listener)`](../api/Store.md#subscribelistener) will now be invoked; listeners may call [`store.getState()`](../api/Store.md#getState) to get the current state.
+This new tree is now the next state of your app! Every listener registered with [`store.subscribe(listener)`](../api/Store.md#subscribelistener) will now be invoked; listeners may call [`store.getState()`](../api/Store.md#getState) to get the current state or get current state from first argument in `listener`.
 
 Now, the UI can be updated to reflect the new state. If you use bindings like [React Redux](https://github.com/gaearon/react-redux), this is the point at which `component.setState(newState)` is called.
 

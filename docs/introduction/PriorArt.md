@@ -55,7 +55,7 @@ Does it make sense to use Redux together with RxJS? Sure! They work great togeth
 function toObservable(store) {
   return {
     subscribe({ next }) {
-      const unsubscribe = store.subscribe(() => next(store.getState()))
+      const unsubscribe = store.subscribe(currentState => next(currentState))
       next(store.getState())
       return { unsubscribe }
     }

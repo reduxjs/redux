@@ -88,7 +88,7 @@ store.dispatch(addTodo('Read about the middleware'))
 
 ### subscribe(listener)
 
-Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
+Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback or get current state from first argument in `listener`.
 
 You may call [`dispatch()`](#dispatchaction) from a change listener, with the following caveats:
 
@@ -118,8 +118,10 @@ function select(state) {
 }
 
 let currentValue
-function handleChange() {
+function handleChange(currentState) {
   let previousValue = currentValue
+  currentValue = select(currentState)
+  //or
   currentValue = select(store.getState())
 
   if (previousValue !== currentValue) {
