@@ -147,7 +147,6 @@ Type checked chat reducer:
 
 import {
   ChatState,
-  ChatActions,
   ChatActionTypes,
   SEND_MESSAGE,
   DELETE_MESSAGE

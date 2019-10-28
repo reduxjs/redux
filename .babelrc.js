@@ -2,6 +2,7 @@ const { NODE_ENV } = process.env
 
 module.exports = {
   presets: [
+    '@babel/typescript',
     [
       '@babel/env',
       {

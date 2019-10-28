@@ -4,17 +4,51 @@ import {
   Reducer,
   Action,
   StoreEnhancer,
-  StoreCreator,
-  StoreEnhancerStoreCreator,
   Unsubscribe,
-  Observer
-} from 'redux'
+  Observer,
+  ExtendState
+} from '../..'
 import 'symbol-observable'
 
 type State = {
   a: 'a'
   b: {
     c: 'c'
+    d: 'd'
+  }
+}
+
+/* extended state */
+const noExtend: ExtendState<State, never> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  }
+}
+// typings:expect-error
+const noExtendError: ExtendState<State, never> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  e: 'oops'
+}
+
+const yesExtend: ExtendState<State, { yes: 'we can' }> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  yes: 'we can'
+}
+// typings:expect-error
+const yesExtendError: ExtendState<State, { yes: 'we can' }> = {
+  a: 'a',
+  b: {
+    c: 'c',
     d: 'd'
   }
 }
@@ -56,22 +90,49 @@ const funcWithStore = (store: Store<State, DerivedAction>) => {}
 
 const store: Store<State> = createStore(reducer)
 
+// ensure that an array-based state works
+const arrayReducer = (state: any[] = []) => state || []
+const storeWithArrayState: Store<any[]> = createStore(arrayReducer)
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
+  a: 'a',
+  b: { c: 'c', d: 'd' }
+})
+// typings:expect-error
+const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
   b: { c: 'c' }
 })
 
 const storeWithActionReducer = createStore(reducerWithAction)
 const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
-  b: { c: 'c' }
+  a: 'a',
+  b: { c: 'c', d: 'd' }
 })
 funcWithStore(storeWithActionReducer)
 funcWithStore(storeWithActionReducerAndPreloadedState)
+
+// typings:expect-error
+const storeWithActionReducerAndBadPreloadedState = createStore(
+  reducerWithAction,
+  {
+    b: { c: 'c' }
+  }
+)
 
 const enhancer: StoreEnhancer = next => next
 
 const storeWithSpecificEnhancer: Store<State> = createStore(reducer, enhancer)
 
 const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(
+  reducer,
+  {
+    a: 'a',
+    b: { c: 'c', d: 'd' }
+  },
+  enhancer
+)
+
+// typings:expect-error
+const storeWithBadPreloadedStateAndEnhancer: Store<State> = createStore(
   reducer,
   {
     b: { c: 'c' }
