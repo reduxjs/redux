@@ -9,7 +9,7 @@ const React = require("react");
 
 const CompLibrary = require("../../core/CompLibrary.js");
 
-const { MarkdownBlock, GridBlock, Container } = CompLibrary; /* Used to read markdown */
+const { GridBlock, Container } = CompLibrary; /* Used to read markdown */
 
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
