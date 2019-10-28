@@ -9,29 +9,21 @@ const React = require("react");
 
 const CompLibrary = require("../../core/CompLibrary.js");
 
-const {MarkdownBlock, GridBlock, Container} = CompLibrary; /* Used to read markdown */
+const { MarkdownBlock, GridBlock, Container } = CompLibrary; /* Used to read markdown */
 
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
-function docUrl(doc, language) {
-  return `${siteConfig.baseUrl}${language ? `${language}/` : ""}${doc}`;
-}
+const docUrl = (doc, language) => `${siteConfig.baseUrl}${language ? `${language}/` : ""}${doc}`;
 
-function imgUrl(img) {
-  return `${siteConfig.baseUrl}img/${img}`;
-}
+const imgUrl = (img) => `${siteConfig.baseUrl}img/${img}`;
 
-class Button extends React.Component {
-  render() {
-    return (
-      <div className="pluginWrapper buttonWrapper">
-        <a className="button hero" href={this.props.href} target={this.props.target}>
-          {this.props.children}
-        </a>
-      </div>
-    );
-  }
-}
+const Button = ({ href, target, children }) => (
+  <div className="pluginWrapper buttonWrapper">
+    <a className="button hero" href={href} target={target}>
+      {children}
+    </a>
+  </div>
+);
 
 Button.defaultProps = {
   target: "_self"
@@ -45,15 +37,14 @@ const SplashContainer = props => (
   </div>
 );
 
-
 const ProjectTitle = () => (
   <React.Fragment>
-    <div style={{display : "flex", justifyContent : "center", alignItems : "center"}}>
-      <img src={"img/redux.svg"} alt="Redux logo" width={100} height={100}/>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <img src={"img/redux.svg"} alt="Redux logo" width={100} height={100} />
       <h1 className="projectTitle">{siteConfig.title}</h1>
     </div>
 
-    <h2 style={{marginTop : "0.5em"}}>
+    <h2 style={{ marginTop: "0.5em" }}>
       A predictable state container for JavaScript apps.
     </h2>
   </React.Fragment>
@@ -67,44 +58,30 @@ const PromoSection = props => (
   </div>
 );
 
-class HomeSplash extends React.Component {
-  render() {
-    const language = this.props.language || "";
-    return (
-      <SplashContainer>
-        <div className="inner">
-          <ProjectTitle />
-          <PromoSection>
-            <Button href={docUrl("introduction/getting-started", language)}>
-              Get Started
-            </Button>
-          </PromoSection>
-        </div>
-      </SplashContainer>
-    );
-  }
+const HomeSplash = (props) => {
+  const language = props.language || "";
+
+  return (
+    <SplashContainer>
+      <div className="inner">
+        <ProjectTitle />
+        <PromoSection>
+          <Button href={docUrl("introduction/getting-started", language)}>
+            Get Started
+          </Button>
+        </PromoSection>
+      </div>
+    </SplashContainer>
+  );
 }
 
-const Installation = () => (
-  <div
-    className="productShowcaseSection"
-    style={{ textAlign: "center" }}
-  >
-    <h2 style={{marginTop : 10, marginBottom : 5}}>Installation</h2>
-    <MarkdownBlock>
-      ``` npm install --save
-      redux ```
-    </MarkdownBlock>
-  </div>
-);
-
-const Block = props => (
+const Block = ({ id, background, className, children, layout }) => (
   <Container
-    id={props.id}
-    background={props.background}
-    className={props.className}
+    id={id}
+    background={background}
+    className={className}
   >
-    <GridBlock align="center" contents={props.children} layout={props.layout}/>
+    <GridBlock align="center" contents={children} layout={layout} />
   </Container>
 );
 
@@ -142,21 +119,21 @@ const FeaturesTop = () => (
 
 const OtherLibraries = () => (
   <Container className="rowContainer">
-    <h2 style={{margin : 0}}>
+    <h2 style={{ margin: 0 }}>
       Other Libraries from the Redux Team
     </h2>
-  <Block layout="fourColumn" className="libBlock">
-    {[
-      {
-        content: "Official React bindings for Redux",
-        title: "[React-Redux ![link2](img/external-link-square-alt-solid.svg)](https://react-redux.js.org) "
-      },
-      {
-        content: "A simple batteries-included toolset to make using Redux easier",
-        title: "[Redux Starter Kit ![link2](img/external-link-square-alt-solid.svg)](https://redux-starter-kit.js.org)"
-      },
-    ]}
-  </Block>
+    <Block layout="fourColumn" className="libBlock">
+      {[
+        {
+          content: "Official React bindings for Redux",
+          title: "[React-Redux ![link2](img/external-link-square-alt-solid.svg)](https://react-redux.js.org) "
+        },
+        {
+          content: "A simple batteries-included toolset to make using Redux easier",
+          title: "[Redux Starter Kit ![link2](img/external-link-square-alt-solid.svg)](https://redux-starter-kit.js.org)"
+        },
+      ]}
+    </Block>
   </Container>
 );
 
@@ -179,14 +156,12 @@ class Index extends React.Component {
       <div>
         <HomeSplash language={language} />
         <div className="mainContainer">
-
           <div className="productShowcaseSection">
             <Container background="light">
               <FeaturesTop />
             </Container>
             <Container className="libsContainer" wrapper={false}>
-
-              <OtherLibraries/>
+              <OtherLibraries />
               <DocsSurvey />
             </Container>
             <Container background="light">
