@@ -46,7 +46,7 @@ _Tutorials that teach the basic concepts of Redux and how to use it_
   An overview and intro to the basic concepts of Redux. Looks at the benefits of using Redux, how it differs from MVC or Flux, and its relation to functional programming.
 
 - **Redux Tutorial**  
-  https://www.pshrmn.com/tutorials/react/redux/  
+  https://github.com/pshrmn/notes/blob/master/redux/redux.md  
   A short, clear tutorial that introduces basic Redux terms, shows how to split reducer functions, and describes the Redux store API.
 
 - **Redux: From Twitter Hype to Production**  
