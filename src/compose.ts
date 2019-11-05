@@ -15,7 +15,10 @@ export default function compose(): <R>(a: R) => R
 export default function compose<F extends Function>(f: F): F
 
 /* two functions */
-export default function compose<A, T extends any[], R>(f1: (a: A) => R, f2: Func<T, A>): Func<T, R>
+export default function compose<A, T extends any[], R>(
+  f1: (a: A) => R,
+  f2: Func<T, A>
+): Func<T, R>
 
 /* three functions */
 export default function compose<A, B, T extends any[], R>(
