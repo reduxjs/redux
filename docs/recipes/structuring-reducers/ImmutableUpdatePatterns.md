@@ -171,16 +171,16 @@ They can provide a useful alternative to writing manual immutable update logic.
 
 A list of many immutable update utilities can be found in the [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities) section of the [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links).
 
-## Simplifying Immutable Updates with Redux Starter Kit
+## Simplifying Immutable Updates with Redux Toolkit
 
-Our [Redux Starter Kit](https://redux-starter-kit.js.org/) package includes a [`createReducer` utility](https://redux-starter-kit.js.org/api/createReducer) that uses Immer internally.
+Our **[Redux Toolkit](https://redux-toolkit.js.org/)** package includes a [`createReducer` utility](https://redux-toolkit.js.org/api/createReducer) that uses Immer internally.
 Because of this, you can write reducers that appear to "mutate" state, but the updates are actually applied immutably.
 
 This allows immutable update logic to be written in a much simpler way. Here's what the [nested data example](#correct-approach-copying-all-levels-of-nested-data)
 might look like using `createReducer`:
 
 ```js
-import { createReducer } from 'redux-starter-kit'
+import { createReducer } from '@reduxjs/toolkit'
 
 const initialState = {
   first: {
@@ -199,8 +199,11 @@ const reducer = createReducer(initialState, {
 ```
 
 This is clearly _much_ shorter and easier to read. However, **this _only_ works correctly if you are using the "magic"
-`createReducer` function from Redux Starter Kit** that wraps this reducer in Immer's [`produce` function](https://github.com/mweststrate/immer#api).  
+`createReducer` function from Redux Toolkit** that wraps this reducer in Immer's [`produce` function](https://immerjs.github.io/immer/docs/produce).  
 **If this reducer is used without Immer, it will actually mutate the state!**. It's also not obvious just by
 looking at the code that this function is actually safe and updates the state immutably. Please make sure you understand
 the concepts of immutable updates fully. If you do use this, it may help to add some comments to your code that explain
-your reducers are using Redux Starter Kit and Immer.
+your reducers are using Redux Toolkit and Immer.
+
+In addition, Redux Toolkit's [`createSlice` utility](https://redux-toolkit.js.org/api/createSlice) will auto-generate action creators
+and action types based on the reducer functions you provide, with the same Immer-powered update capabilities inside.
