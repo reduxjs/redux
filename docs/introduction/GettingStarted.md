@@ -25,17 +25,18 @@ It is also available as a precompiled UMD package that defines a `window.Redux` 
 
 For more details, see the [Installation](Installation.md) page.
 
-## Redux Starter Kit
+## Redux Toolkit
 
-Redux itself is small and unopinionated. We also have a separate package called **[redux-starter-kit](https://redux-starter-kit.js.org/)**,
-which includes some opinionated defaults that help you use Redux more effectively.
+Redux itself is small and unopinionated. We also have a separate package called **[Redux Toolkit](https://redux-toolkit.js.org/)**,
+which includes some opinionated defaults that help you use Redux more effectively. It's our official recommended approach
+for writing Redux logic.
 
-It helps simplify a lot of common use cases, including [store setup](https://redux-starter-kit.js.org/api/configureStore),
-[creating reducers and writing immutable update logic](https://redux-starter-kit.js.org/api/createreducer),
-and even [creating entire "slices" of state at once](https://redux-starter-kit.js.org/api/createslice).
+RTK includes utilities that help simplify a lot of common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore),
+[creating reducers and writing immutable update logic](https://redux-toolkit.js.org/api/createreducer),
+and even [creating entire "slices" of state at once](https://redux-toolkit-kit.js.org/api/createslice).
 
 Whether you're a brand new Redux user setting up your first project, or an experienced user who wants to
-simplify an existing application, **[redux-starter-kit](https://redux-starter-kit.js.org/)** can help you
+simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org/)** can help you
 make your Redux code better.
 
 ## Basic Example
