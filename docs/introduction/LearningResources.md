@@ -283,9 +283,7 @@ _Deeper looks at how Redux is meant to be used, and why it works the way it does
 
 - **What's So Great About Redux?**  
   https://medium.freecodecamp.org/whats-so-great-about-redux-ac16f1cc0f8b  
-  https://storify.com/acemarke/redux-pros-cons-and-limitations  
-  https://twitter.com/modernserf/status/886426115874717697  
-  Deep and fascinating analysis of how Redux compares to OOP and message-passing, how typical Redux usage can devolve towards Java-like "setter" functions with more boilerplate, and something of a plea for a higher-level "blessed" abstraction on top of Redux to make it easier to work with and learn for newbies. Very worth reading. The author originally wrote a tweetstorm, which is captured in the Storify link, and wrote the blog post to expand on those thoughts. Finally, he followed up with a few more thoughts on abstract vs concrete examples in another shorter tweet thread.
+  Deep and fascinating analysis of how Redux compares to OOP and message-passing, how typical Redux usage can devolve towards Java-like "setter" functions with more boilerplate, and something of a plea for a higher-level "blessed" abstraction on top of Redux to make it easier to work with and learn for newbies. Very worth reading.
 
 ## Redux Architecture
 
