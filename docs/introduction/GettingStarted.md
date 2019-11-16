@@ -18,7 +18,11 @@ You can use Redux together with [React](https://reactjs.org), or with any other 
 Redux is available as a package on NPM for use with a module bundler or in a Node application:
 
 ```bash
+# NPM
 npm install --save redux
+
+# Yarn
+yarn add redux
 ```
 
 It is also available as a precompiled UMD package that defines a `window.Redux` global variable. The UMD package can be used as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) directly.
@@ -27,11 +31,11 @@ For more details, see the [Installation](Installation.md) page.
 
 ## Redux Toolkit
 
-Redux itself is small and unopinionated. We also have a separate package called **[Redux Toolkit](https://redux-toolkit.js.org/)**,
+Redux itself is small and unopinionated. We also have a separate addon package called **[Redux Toolkit](https://redux-toolkit.js.org/)**,
 which includes some opinionated defaults that help you use Redux more effectively. It's our official recommended approach
 for writing Redux logic.
 
-RTK includes utilities that help simplify a lot of common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore),
+RTK includes utilities that help simplify many common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore),
 [creating reducers and writing immutable update logic](https://redux-toolkit.js.org/api/createreducer),
 and even [creating entire "slices" of state at once](https://redux-toolkit-kit.js.org/api/createslice).
 
@@ -99,20 +103,11 @@ In a typical Redux app, there is just a single store with a single root reducing
 
 This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
 
-## Examples
+## Example Projects
 
 The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online.
 
-- [**Counter Vanilla**](/introduction/examples#counter-vanilla): [Source](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla)
-- [**Counter**](/introduction/examples#counter): [Source](https://github.com/reduxjs/redux/tree/master/examples/counter) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter)
-- [**Todos**](/introduction/examples#todos): [Source](https://github.com/reduxjs/redux/tree/master/examples/todos) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos)
-- [**Todos with Undo**](/introduction/examples#todos-with-undo): [Source](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-with-undo)
-- [**TodoMVC**](/introduction/examples#todomvc): [Source](https://github.com/reduxjs/redux/tree/master/examples/todomvc) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todomvc)
-- [**Shopping Cart**](/introduction/examples#shopping-cart): [Source](https://github.com/reduxjs/redux/tree/master/examples/shopping-cart) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/shopping-cart)
-- [**Tree View**](/introduction/examples#tree-view): [Source](https://github.com/reduxjs/redux/tree/master/examples/tree-view) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/tree-view)
-- [**Async**](/introduction/examples#async): [Source](https://github.com/reduxjs/redux/tree/master/examples/async) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/async)
-- [**Universal**](/introduction/examples#universal): [Source](https://github.com/reduxjs/redux/tree/master/examples/universal)
-- [**Real World**](/introduction/examples#real-world): [Source](https://github.com/reduxjs/redux/tree/master/examples/real-world) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/real-world)
+See the complete list of examples in the **[Examples page](./Examples.md)**.
 
 ## Learn Redux
 
@@ -167,8 +162,6 @@ Here are some suggestions on when it makes sense to use Redux:
 - You have reasonable amounts of data changing over time
 - You need a single source of truth for your state
 - You find that keeping all your state in a top-level component is no longer sufficient
-
-Yes, these guidelines are subjective and vague, but this is for good reason. The point at which you should integrate Redux into your application is different for every user and different for every application.
 
 > **For more thoughts on how Redux is meant to be used, see:**<br>
 >
