@@ -5,11 +5,9 @@ about: Fixing a problem in an existing docs page
 
 ## What docs page needs to be fixed?
 
-- **Section**: 
-- **Page**: 
+- **Section**:
+- **Page**:
 
 ## What is the problem?
-
-
 
 ## What should be changed to fix the problem?
