@@ -76,11 +76,7 @@
       "faq/react-redux",
       "faq/miscellaneous"
     ],
-    "Other": [
-      "glossary",
-      "troubleshooting",
-      "feedback"
-    ],
+    "Other": ["glossary", "troubleshooting", "feedback"],
     "API Reference": [
       "api/api-reference",
       "api/createstore",
@@ -89,6 +85,7 @@
       "api/applymiddleware",
       "api/bindactioncreators",
       "api/compose"
-    ]
+    ],
+    "Redux Toolkit": ["redux-toolkit/overview"]
   }
 }
