@@ -5,17 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const React = require("react");
+const React = require('react')
 
 class Footer extends React.Component {
   docUrl(doc, language) {
-    const baseUrl = this.props.config.baseUrl;
-    return `${baseUrl}${language ? `${language}/` : ""}${doc}`;
+    const baseUrl = this.props.config.baseUrl
+    return `${baseUrl}${language ? `${language}/` : ''}${doc}`
   }
 
   pageUrl(doc, language) {
-    const baseUrl = this.props.config.baseUrl;
-    return baseUrl + (language ? `${language}/` : "") + doc;
+    const baseUrl = this.props.config.baseUrl
+    return baseUrl + (language ? `${language}/` : '') + doc
   }
 
   render() {
@@ -34,18 +34,12 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl("introduction/getting-started")}>
+            <a href={this.docUrl('introduction/getting-started')}>
               Getting Started
             </a>
-            <a href={this.docUrl("introduction/core-concepts")}>
-              Core Concepts
-            </a>
-            <a href={this.docUrl("basics/basic-tutorial")}>
-              Basics
-            </a>
-            <a href={this.docUrl("advanced/advanced-tutorial")}>
-              Advanced
-            </a>
+            <a href={this.docUrl('faq')}>FAQ</a>
+            <a href={this.docUrl('basics/basic-tutorial')}>Tutorial</a>
+            <a href={this.docUrl('api/api-reference')}>API Reference</a>
           </div>
           <div>
             <h5>Community</h5>
@@ -56,8 +50,9 @@ class Footer extends React.Component {
             >
               Stack Overflow
             </a>
-            <a href="https://discord.gg/0ZcbPKXt5bZ6au5t">
-              Discord
+            <a href="https://discord.gg/0ZcbPKXt5bZ6au5t">Discord</a>
+            <a href="/introduction/getting-started#help-and-discussion">
+              Feedback
             </a>
           </div>
           <div>
@@ -77,32 +72,38 @@ class Footer extends React.Component {
           </div>
         </section>
         <section className="copyright">
-          {this.props.config.copyright}<br />
-          Some icons copyright <a
+          {this.props.config.copyright}
+          <br />
+          Some icons copyright{' '}
+          <a
             href="https://fontawesome.com/license/free"
-            style={{color : "white"}}
+            style={{ color: 'white' }}
           >
-             Font Awesome
-          </a> and <a
-          href="https://thenounproject.com"
-          style={{color : "white"}}
-        >
-          Noun Project
-        </a> (<a
-          href="https://thenounproject.com/term/check/1870817/"
-          style={{color : "white"}}
-        >
-          Hassan ali
-        </a>, <a
-          href="https://thenounproject.com/term/debugging/1978252/"
-          style={{color : "white"}}
-        >
-          ProSymbols
-        </a>)
-          </section>
+            Font Awesome
+          </a>{' '}
+          and{' '}
+          <a href="https://thenounproject.com" style={{ color: 'white' }}>
+            Noun Project
+          </a>{' '}
+          (
+          <a
+            href="https://thenounproject.com/term/check/1870817/"
+            style={{ color: 'white' }}
+          >
+            Hassan ali
+          </a>
+          ,{' '}
+          <a
+            href="https://thenounproject.com/term/debugging/1978252/"
+            style={{ color: 'white' }}
+          >
+            ProSymbols
+          </a>
+          )
+        </section>
       </footer>
-    );
+    )
   }
 }
 
-module.exports = Footer;
+module.exports = Footer

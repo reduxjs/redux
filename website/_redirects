@@ -140,3 +140,5 @@
 /api/index.html        /api/api-reference
 /recipes/ServerRendering.html*        /recipes/server-rendering:splat
 /advanced/usagewithtypescript*    /recipes/usage-with-typescript:splat
+
+/feedback        /introduction/getting-started#help-and-discussion

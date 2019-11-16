@@ -153,6 +153,8 @@ The **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** of the **[Reactifl
 
 You can also ask questions on [Stack Overflow](https://stackoverflow.com) using the **[#redux tag](https://stackoverflow.com/questions/tagged/redux)**.
 
+If you have a bug report or need to leave other feedback, [please file an issue on the Github repo](https://github.com/reduxjs/redux)
+
 ## Should You Use Redux?
 
 Redux is a valuable tool for organizing your state, but you should also consider whether it's appropriate for your situation. **Don't use Redux just because someone said you should - take some time to understand the potential benefits and tradeoffs of using it**.
