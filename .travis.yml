@@ -2,5 +2,4 @@ language: node_js
 node_js: node
 cache: npm
 script:
-  - npm run examples:lint
-  - npm run examples:test
+  - npm run prepare
