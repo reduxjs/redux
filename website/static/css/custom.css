@@ -211,25 +211,41 @@ header.postHeader:empty + article h1 {
   margin-bottom: 30px;
 }
 
-div.style-guide div.priority-rules h3:after {
+.style-guide .priority-rules h3:after {
   margin-left: 1em;
   font-size: 0.7em;
   position: absolute;
 }
 
-div.style-guide div.priority-essential h3:after {
+.style-guide .priority-essential h3:after {
   content: ' ESSENTIAL';
   color: #6b2a2a;
 }
 
-div.style-guide div.priority-stronglyrecommended h3:after {
+.style-guide .priority-stronglyrecommended h3:after {
   content: ' STRONGLY RECOMMENDED';
   color: #8c480a;
 }
 
-div.style-guide div.priority-recommended h3:after {
+.style-guide .priority-recommended h3:after {
   content: ' RECOMMENDED';
   color: #2b5a99;
+}
+
+.style-guide .tags {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+
+.style-guide .tags .tag {
+  background-color: $primaryColor;
+  color: $accentColor2;
+  border-radius: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 @media only screen and (max-device-width: 480px) {

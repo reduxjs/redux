@@ -1,7 +1,7 @@
 ---
 id: style-guide
-title: Style Guide: Overview
-sidebar_label: Style Guide: Overview
+title: Style Guide
+sidebar_label: Style Guide
 hide_title: true
 ---
 
@@ -47,7 +47,15 @@ By adapting to the community standard, you will:
 
 ## Priority A Rules: Essential
 
-### Rule 1
+### Do Not Mutate State
+
+### Reducers Must Not Have Side Effects
+
+### Do Not Put Non-Serializable Values in State or Actions
+
+(Exception: you may put non-serializable values in actions _if_ the action will be intercepted and stopped by a middleware before it reaches the reducers.)
+
+### Only One Redux Store Per App
 
 </div>
 
@@ -55,7 +63,56 @@ By adapting to the community standard, you will:
 
 ## Priority B Rules: Strongly Recommended
 
-### Rule 1
+### Use Redux Toolkit for Writing Redux Logic
+
+<div class="tags">
+    <span class="tag">tag1</span>
+    <span class="tag">tag2</span>
+</div>
+
+### Use Immer for Writing Immutable Updates
+
+Preferably as part of RTK.
+
+### Structure Files as "Feature Folders" or "Ducks"
+
+Prefer use of feature folders or ducks, vs folder-by-type.
+
+Suggest naming "duck files" as someFeatureSlice.js
+
+### Put as Much Logic as Possible in Reducers
+
+### Reducers Should Own the State Shape
+
+Minimize "blind spreads/returns" like return action.payload or return {...state, ...action.payload}
+
+### Treat Reducers as State Machines
+
+Try to treat reducers as state machines that only update if appropriate based on the current state.
+
+### Normalize Complex Nested/Relational State
+
+### Model Actions as "Events", Not "Setters"
+
+### Write Meaningful Action Names
+
+Define many meaningful actions for a readable history log, vs just a "SET_DATA" or "UPDATE_STORE" action
+
+### Allow Many Reducers to Respond to the Same Action
+
+### Avoid Dispatching Many Actions Sequentially
+
+Minimize multi-dispatch sequences (batch if necessary)
+
+### Evaluate Where Each Piece of State Should Live
+
+### Connect More Components to Read Data from the Store
+
+### Use the "Object Shorthand" Form of `mapDispatch` with `connect`
+
+### Call `useSelector` Multiple Times in Function Components
+
+### Use Static Typing
 
 </div>
 
@@ -63,7 +120,27 @@ By adapting to the community standard, you will:
 
 ## Priority C Rules: Recommended
 
-### Rule 1
+### Write Action Types as `domain/eventName`
+
+### Write Actions Using the "Flux Standard Action" Convention
+
+May model actions with separate error types vs error: true
+
+### Use Action Creators
+
+### Use Thunks for Async Logic
+
+Default to thunks; add sagas or observables if you have truly complex async workflows
+
+### Move Complex Logic Outside Components
+
+Prefer putting more complex sync/async logic outside the component (thunks, etc)
+
+### Use Selector Functions to Read from Store State
+
+Use Reselect. But, find a middle ground for granularity - don't define selectors for every field
+
+### Avoid Putting Form State In Redux
 
 </div>
 
