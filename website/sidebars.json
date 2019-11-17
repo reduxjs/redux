@@ -76,6 +76,7 @@
       "faq/react-redux",
       "faq/miscellaneous"
     ],
+    "Style Guide": ["style-guide/style-guide"],
     "Other": ["glossary", "troubleshooting"],
     "API Reference": [
       "api/api-reference",
