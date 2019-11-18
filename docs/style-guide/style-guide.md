@@ -43,13 +43,54 @@ Where multiple, equally good options exist, an arbitrary choice can be made to e
 
 ### Do Not Mutate State
 
+Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. Actual mutation of state values should always be avoided, both inside reducers and in all other application code.
+
+Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/docs/introduction) to avoid accidental mutations in state updates.
+
+> **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+test text
+**bold text**
+- bullet
+- points
+
+```ts
+const value: string = 'blah'
+```
+
+</details>
+
 ### Reducers Must Not Have Side Effects
+
+Reducer functions should _only_ depend on their `state` and `action` arguments, and should only calculate and return a new state value based on those arguments. They must not execute any kind of asynchronous logic (AJAX calls, timeouts, promises), modify variables outside the reducer, or run other code that affects things outside the scope of the reducer function.
+
+> **Note**: It is acceptable to have a reducer call other functions that are defined outside of itself, such as imports from libraries or utility functions, as long as they follow the same rules.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+The purpose of this rule is to guarantee that reducers will behave predictably when called.  For example, if you are doing time-travel debugging, reducer functions may be called many times with earlier actions to produce the "current" state value.  If a reducer has side effects, this would cause those effects to be executed during the debugging process, and result in the application behaving in unexpected ways.
+
+There are some gray areas to this rule. Strictly speaking, code such as `console.log(state)` is a side effect, but in practice has no effect on how the application behaves.
+
+</details>
 
 ### Do Not Put Non-Serializable Values in State or Actions
 
-(Exception: you may put non-serializable values in actions _if_ the action will be intercepted and stopped by a middleware before it reaches the reducers.)
+Avoid putting non-serializable values such as Promises, Symbols, functions, or class instances into the Redux store state or dispatched actions. This ensures that capabilities such as debugging via the Redux DevTools will work as expected.
+
+> **Exception**: you may put non-serializable values in actions _if_ the action will be intercepted and stopped by a middleware before it reaches the reducers. Middleware such as `redux-thunk` and `redux-promise` are examples of this.
 
 ### Only One Redux Store Per App
+
+A standard Redux application should only have a single Redux store instance, which will be used by the whole application. It should typically be defined in a separate file such as `store.js`.
+
+Ideally, no app logic will import the store directly. It should be passed to a React component tree via `<Provider>`, or referenced indirectly via middleware such as thunks. In rare cases, you may need to import it into other logic files, but this should be a last resort.
 
 </div>
 
@@ -59,20 +100,46 @@ Where multiple, equally good options exist, an arbitrary choice can be made to e
 
 ### Use Redux Toolkit for Writing Redux Logic
 
-<div class="tags">
-    <span class="tag">tag1</span>
-    <span class="tag">tag2</span>
-</div>
+[Redux Toolkit](../redux-toolkit/overview.md) is our recommended toolset for using Redux. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
+
+You are not required to use RTK with Redux, and you are free to use other approaches if desired, but using RTK will simplify your logic and ensure that your application is set up with good defaults.
 
 ### Use Immer for Writing Immutable Updates
 
-Preferably as part of RTK.
+Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/docs/introduction) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md).
 
 ### Structure Files as "Feature Folders" or "Ducks"
 
-Prefer use of feature folders or ducks, vs folder-by-type.
+Redux itself does not care about how your application's folders and files are structured. However, co-locating logic for a given feature in one place typically makes it easier to maintain that code.
 
-Suggest naming "duck files" as someFeatureSlice.js
+Because of this, we recommend that most applications should structure files using a "feature folder" approach (all files for a feature in the same folder) or the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux) (all Redux logic for a feature in a single file), rather than splitting logic across separate folders by "type" of code (reducers, actions, etc).
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+An example folder structure might look something like:
+
+- `/src`
+  - `index.tsx`
+  - `/app`
+    - `store.ts`
+    - `rootReducer.ts`
+    - `App.tsx`
+  - `/common`
+    - hooks, generic components, utils, etc
+  - `/features`
+    - `/todos`
+      - `todosSlice.ts`
+      - `Todos.tsx`
+
+`/app` contains app-wide setup and layout that depends on all the other folders.
+
+`/common` contains truly generic and reusable utilities and components.
+
+`/features` has folders that contain all functionality related to a specific feature. In this example, `todosSlice.ts` is a "duck"-style file that contains a call to RTK's `createSlice()` function, and exports the slice reducer and action creators.
+
+</details>
 
 ### Put as Much Logic as Possible in Reducers
 
@@ -107,6 +174,8 @@ Minimize multi-dispatch sequences (batch if necessary)
 ### Call `useSelector` Multiple Times in Function Components
 
 ### Use Static Typing
+
+### Use the Redux DevTools Extension for Debugging
 
 </div>
 

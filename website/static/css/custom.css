@@ -248,6 +248,16 @@ header.postHeader:empty + article h1 {
   padding-right: 2px;
 }
 
+.style-guide details {
+  background-color: $accentColor4;
+}
+
+.style-guide details summary h4 {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 @media only screen and (max-device-width: 480px) {
   .productShowcaseSection .featureBlock {
     padding-top: 30px;
