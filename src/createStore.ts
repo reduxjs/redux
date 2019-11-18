@@ -102,6 +102,7 @@ export default function createStore<
   let currentListeners: (() => void)[] | null = []
   let nextListeners = currentListeners
   let isDispatching = false
+  let dispatchNesting = 0
 
   /**
    * This makes a shallow copy of currentListeners so we can use
@@ -111,7 +112,7 @@ export default function createStore<
    * subscribe/unsubscribe in the middle of a dispatch.
    */
   function ensureCanMutateNextListeners() {
-    if (nextListeners === currentListeners) {
+    if (dispatchNesting && nextListeners === currentListeners) {
       nextListeners = currentListeners.slice()
     }
   }
@@ -247,10 +248,15 @@ export default function createStore<
       isDispatching = false
     }
 
-    const listeners = (currentListeners = nextListeners)
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+    try {
+      dispatchNesting++
+      const listeners = (currentListeners = nextListeners)
+      for (let i = 0; i < listeners.length; i++) {
+        const listener = listeners[i]
+        listener()
+      }
+    } finally {
+      dispatchNesting--
     }
 
     return action
