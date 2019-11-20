@@ -108,34 +108,33 @@ header.postHeader:empty + article h1 {
   fill: currentColor;
 }
 
-
 .fixedHeaderContainer header .headerTitleWithLogo {
-  color : white;
+  color: white;
   display: block !important;
 }
 
 .navigationSlider .slidingNav ul.nav-site a {
-  color : white;
+  color: white;
   font-weight: 400;
 }
 
 .navigationSlider .slidingNav ul.nav-site a:hover,
 .navigationSlider .slidingNav ul.nav-site a:focus,
 .navigationSlider .slidingNav ul.nav-site a:active {
-  color : white;
+  color: white;
   font-weight: 400;
   text-decoration: underline;
 }
 
-.navigationSlider .slidingNav ul a[href*="github"] {
+.navigationSlider .slidingNav ul a[href*='github'] {
   font-size: 0;
 }
 
-.navigationSlider .slidingNav ul a[href*="github"]::before {
-  content : "";
-  width : 32px;
-  height : 32px;
-  background: url("/img/github-brands.svg");
+.navigationSlider .slidingNav ul a[href*='github']::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  background: url('/img/github-brands.svg');
 }
 
 .nav-footer .copyright,
@@ -148,7 +147,7 @@ header.postHeader:empty + article h1 {
   background: $primaryColor;
   color: #fff;
   font-size: 30px;
-  padding: .5em 1.25em;
+  padding: 0.5em 1.25em;
   font-weight: bold;
 }
 
@@ -161,7 +160,6 @@ header.postHeader:empty + article h1 {
   background: #fff;
   color: $primaryColor;
 }
-
 
 .productShowcaseSection .rowContainer {
   padding-top: 30px;
@@ -186,7 +184,7 @@ header.postHeader:empty + article h1 {
 
 .libBlock h2 a,
 .libBlock h2 a:visited {
-  color : black;
+  color: black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,8 +207,55 @@ header.postHeader:empty + article h1 {
 }
 
 .libsContainer .docsSurvey h2 {
-  margin-top : 0;
+  margin-top: 0;
   margin-bottom: 30px;
+}
+
+.style-guide .priority-rules h3:after {
+  margin-left: 1em;
+  font-size: 0.7em;
+  position: absolute;
+}
+
+.style-guide .priority-essential h3:after {
+  content: ' ESSENTIAL';
+  color: #6b2a2a;
+}
+
+.style-guide .priority-stronglyrecommended h3:after {
+  content: ' STRONGLY RECOMMENDED';
+  color: #8c480a;
+}
+
+.style-guide .priority-recommended h3:after {
+  content: ' RECOMMENDED';
+  color: #2b5a99;
+}
+
+.style-guide .tags {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+
+.style-guide .tags .tag {
+  background-color: $primaryColor;
+  color: $accentColor2;
+  border-radius: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.style-guide details {
+  background-color: $accentColor4;
+}
+
+.style-guide details summary h4 {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 @media only screen and (max-device-width: 480px) {
@@ -233,17 +278,15 @@ header.postHeader:empty + article h1 {
   }
 
   .homeSplashFade img {
-    width : 60px;
-    height : 60px;
+    width: 60px;
+    height: 60px;
   }
 
   .homeSplashFade h1 {
     margin-top: 0;
     margin-bottom: 0;
   }
-
 }
-
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
