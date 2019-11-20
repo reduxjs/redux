@@ -31,7 +31,7 @@ These rules help prevent errors, so learn and abide by them at all costs. Except
 
 ### Priority B: Strongly Recommended
 
-These rules have been found to improve readability and/or developer experience in most projects. Your code will still run if you violate them, but violations should be rare and well-justified.
+These rules have been found to improve readability and/or developer experience in most projects. Your code will still run if you violate them, but violations should be rare and well-justified. Follow these rules whenever it is reasonably possible.
 
 ### Priority C: Recommended
 
@@ -66,7 +66,7 @@ const value: string = 'blah'
 
 ### Reducers Must Not Have Side Effects
 
-Reducer functions should _only_ depend on their `state` and `action` arguments, and should only calculate and return a new state value based on those arguments. They must not execute any kind of asynchronous logic (AJAX calls, timeouts, promises), modify variables outside the reducer, or run other code that affects things outside the scope of the reducer function.
+Reducer functions should _only_ depend on their `state` and `action` arguments, and should only calculate and return a new state value based on those arguments. They must not execute any kind of asynchronous logic (AJAX calls, timeouts, promises), generate random values (`Date.now()`, `Math.random()`), modify variables outside the reducer, or run other code that affects things outside the scope of the reducer function.
 
 > **Note**: It is acceptable to have a reducer call other functions that are defined outside of itself, such as imports from libraries or utility functions, as long as they follow the same rules.
 
@@ -143,15 +143,124 @@ An example folder structure might look something like:
 
 ### Put as Much Logic as Possible in Reducers
 
+Wherever possible, try to put as much of the logic for calculating a new state into the appropriate reducer, rather than in the code that prepares and dispatches the action (like a click handler). This helps ensure that more of the actual app logic is easily testable, enables more effective use of time-travel debugging, and helps avoid common mistakes that can lead to mutations and bugs.
+
+There are valid cases where some or all of the new state should be calculated first (such as generating a unique ID), but that should be kept to a minimum.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+
+The Redux core does not actually care whether a new state value is calculated in the reducer or in the action creation logic. For example, for a todo app, the logic for a "toggle todo" action requires immutably updating an array of todos. It is legal to have the action contain just the todo ID and calculate the new array in the reducer
+
+```js
+// Click handler:
+const onTodoClicked = (id) => {
+    dispatch({type: "todos/toggleTodo", payload: {id}})
+}
+
+// Reducer:
+case "todos/toggleTodo": {
+    return state.map(todo => {
+        if(todo.id !== action.payload.id) return todo;
+
+        return {...todo, id: action.payload.id};
+    })
+}
+```
+
+And also to calculate the new array first and put the entire new array in the action:
+
+```js
+// Click handler:
+const onTodoClicked = id => {
+  const newTodos = todos.map(todo => {
+    if (todo.id !== id) return todo
+
+    return { ...todo, id }
+  })
+
+  dispatch({ type: 'todos/toggleTodo', payload: { todos: newTodos } })
+}
+
+
+// Reducer:
+case "todos/toggleTodo":
+    return action.payload.todos;
+```
+
+However, doing the logic in the reducer is preferable for several reasons:
+
+- Reducers are always easy to test, because they are pure functions - you just call `const result = reducer(testState, action)`, and assert that the result is what you expected. So, the more logic you can put in a reducer, the more logic you have that is easily testable.
+- Redux state updates must always follow [the rules of immutable updates](../recipes/structuring-reducers/ImmutableUpdatePatterns.md). Most Redux users realize they have to follow the rules inside a reducer, but it's not obvious that you _also_ have to do this if the new state is calculated _outside_ the reducer. This can easily lead to mistakes like accidental mutations, or even reading a value from the Redux store and passing it right back inside an action. Doing all of the state calculations in a reducer avoids those mistakes.
+- If you are using Redux Toolkit or Immer, it is much easier to write immutable update logic in reducers, and Immer will freeze the state and catch accidental mutations.
+- Time-travel debugging works by letting you "undo" a dispatched action, then either do something different or "redo" the action. In addition, hot-reloading of reducers normally involves re-running the new reducer with the existing actions. If you have a correct action but a buggy reducer, you can edit the reducer to fix the bug, hot-reload it, and you should get the correct state right away. If the action itself was wrong, you'd have to re-run the steps that led to that action being dispatched. So, it's easier to debug if more logic is in the reducer.
+- Finally, putting logic in reducers means you know where to look for the update logic, instead of having it scattered in random other parts of the application code.
+  </details>
+
 ### Reducers Should Own the State Shape
 
-Minimize "blind spreads/returns" like return action.payload or return {...state, ...action.payload}
+The Redux root state is owned and calculated by the single root reducer function. For maintainability, that reducer is intended to be split up by key/value "slices", with each "slice reducer" being responsible for providing an initial value and calculating the updates to that slice of the state.
+
+In addition, slice reducers should exercise control over what other values are returned as part of the calculated state. Minimize the use of "blind spreads/returns" like `return action.payload` or `return {...state, ...action.payload}`, because those rely on the code that dispatched the action to correctly format the contents, and the reducer effectively gives up its ownership of what that state looks like. That can lead to bugs if the action contents are not correct.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+Picture a "current user" reducer that looks like:
+
+```js
+const initialState = {
+    firstName: null,
+    lastName: null,
+    age: null,
+};
+
+export default usersReducer = (state = initialState, action) {
+    switch(action.type) {
+        case "users/userLoggedIn": {
+            return action.payload;
+        }
+        default: return state;
+    }
+}
+```
+
+In this example, the reducer completely assumes that `action.payload` is going to be a correctly formatted object.
+
+However, imagine if some part of the code were to dispatch a "todo" object inside the action, instead of a "user" object:
+
+```js
+dispatch({
+  type: 'users/userLoggedIn',
+  payload: {
+    id: 42,
+    text: 'Buy milk'
+  }
+})
+```
+
+The reducer would blindly return the todo, and now the rest of the app would likely break when it tries to read the user from the store.
+
+This could be at least partly fixed if the reducer has some validation checks to ensure that `action.payload` actually has the right fields, or tries to read the right fields out by name. That does add more code, though, so it's a question of trading off more code for safety.
+
+Use of static typing does make this kind of code safer and somewhat more acceptable. If the reducer knows that `action` is a `PayloadAction<User>`, then it _should_ be safe to do `return action.payload`.
+
+</details>
 
 ### Treat Reducers as State Machines
 
-Try to treat reducers as state machines that only update if appropriate based on the current state.
+Many Redux reducers are written "unconditionally". They only look at the dispatched action and calculate a new state value, without basing any of the logic on what the current state might be. This can cause bugs, as some actions may not be "valid" conceptually at certain times depending on the rest of the app logic. For example, a "request succeeded" action should only have a new value calculated if the state says that it's already "loading".
+
+To fix this, treat reducers as "state machines", where the combination of both the current state _and_ the dispatched action determines whether a new state value is actually calculated, not just the action itself unconditionally.
 
 ### Normalize Complex Nested/Relational State
+
+Many applications need to cache complex data in the store. That data is often received in a nested form from an API, or has relations between different entities in the data (such as a blog that contains Users, Posts, and Comments).
+
+Prefer storing that data in [a "normalized" form](../recipes/structuring-reducers/NormalizingStateShape.md) in the store. This makes it easier to look up items based on their ID and update a single item in the store, and ultimately leads to better performance patterns.
 
 ### Model Actions as "Events", Not "Setters"
 
