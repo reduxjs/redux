@@ -363,7 +363,7 @@ Many libraries in the Redux ecosystem have adopted the FSA convention, and Redux
 
 However, using action creators provides consistency, especially in cases where some kind of preparation or additional logic is needed to fill in the contents of the action (such as generating a unique ID).
 
-**Prefer using action creators for dispatching any actions**. However, rather than writing action creators by hand, **we recommend using the `createSlice` function from Redux Toolkit, which will automatically generate action creators and action types automatically**.
+**Prefer using action creators for dispatching any actions**. However, rather than writing action creators by hand, **we recommend using the `createSlice` function from Redux Toolkit, which will generate action creators and action types automatically**.
 
 ### Use Thunks for Async Logic
 
