@@ -18,7 +18,7 @@ import {
 import * as reducers from './helpers/reducers'
 import { from, ObservableInput } from 'rxjs'
 import { map } from 'rxjs/operators'
-import $$observable from '../src/utils/symbol-observable';
+import $$observable from '../src/utils/symbol-observable'
 
 describe('createStore', () => {
   it('exposes the public API', () => {
@@ -26,7 +26,7 @@ describe('createStore', () => {
 
     // Since switching to internal Symbol.observable impl, it will show up as a key in node env
     // So we filter it out
-    const methods = Object.keys(store).filter(key => key !== $$observable);
+    const methods = Object.keys(store).filter(key => key !== $$observable)
 
     expect(methods.length).toBe(4)
     expect(methods).toContain('subscribe')
@@ -741,7 +741,10 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([{ foo: 0, bar: 0 }, { foo: 1, bar: 0 }])
+      expect(results).toEqual([
+        { foo: 0, bar: 0 },
+        { foo: 1, bar: 0 }
+      ])
     })
 
     it('should pass an integration test with a common library (RxJS)', () => {

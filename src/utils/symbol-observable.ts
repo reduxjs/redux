@@ -1,1 +1,2 @@
-export default (() => (typeof Symbol === 'function' && Symbol.observable) || '@@observable')();
+export default (() =>
+  (typeof Symbol === 'function' && Symbol.observable) || '@@observable')()
