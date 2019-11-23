@@ -254,6 +254,44 @@ Redux does not care what the contents of the `action.type` field are - it just h
 
 However, **we recommend trying to treat actions more as "describing events that occurred", rather than "setters"**. Treating actions as "events" generally leads to more meaningful action names, fewer total actions being dispatched, and a more meaningful action log history. Writing "setters" often results in too many individual action types, too many dispatches, and an action log that is less meaningful.
 
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+Imagine you've got a restaurant app, and someone orders a pizza and a bottle of Coke.  You could dispatch an action like:
+
+```js
+{ type: "food/orderAdded",  payload: {pizza: 1, coke: 1} }
+```
+
+Or you could dispatch:
+
+```js
+{
+    type: "orders/setPizzasOrdered",
+    payload: {
+        amount: getState().orders.pizza + 1,
+    }
+}
+
+{
+    type: "orders/setCokesOrdered",
+    payload: {
+        amount: getState().orders.coke + 1,
+    }
+}
+```
+
+The first example would be an "event". "Hey, someone ordered a pizza and a pop, deal with it somehow".
+
+The second example is a "setter". "I _know_ there are fields for 'pizzas ordered' and 'pops ordered', and I am commanding you to set their current values to these numbers".
+
+The "event" approach only really needed a single action to be dispatched, and it's more flexible. It doesn't matter how many pizzas were already ordered. Maybe there's no cooks available, so the order gets ignored.
+
+With the "setter" approach, the client code needed to know more about what the actual structure of the state is, what the "right" values should be, and ended up actually having to dispatch multiple actions to finish the "transaction".
+
+</details>
+
 ### Write Meaningful Action Names
 
 The `action.type` field serves two main purposes:
