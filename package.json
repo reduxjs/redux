@@ -49,9 +49,6 @@
     "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
-  "dependencies": {
-    "loose-envify": "^1.4.0"
-  },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
@@ -98,11 +95,6 @@
       ]
     }
   ],
-  "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
-  },
   "jest": {
     "testRegex": "(/test/.*\\.spec\\.[tj]s)$"
   },
