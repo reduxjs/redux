@@ -50,8 +50,7 @@
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
-    "loose-envify": "^1.4.0",
-    "symbol-observable": "^1.2.0"
+    "loose-envify": "^1.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",

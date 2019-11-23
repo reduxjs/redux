@@ -1,4 +1,3 @@
-/// <reference types="symbol-observable" />
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
 
