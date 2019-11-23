@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
+const extensions = ['.ts']
 const noDeclarationFiles = { compilerOptions: { declaration: false } }
 
 const babelRuntimeVersion = pkg.dependencies['@babel/runtime'].replace(
@@ -32,10 +33,11 @@ export default [
     ]),
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ useTsconfigDeclarationDir: true }),
       babel({
+        extensions,
         plugins: [
           ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }]
         ],
@@ -54,10 +56,11 @@ export default [
     ]),
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         plugins: [
           [
             '@babel/plugin-transform-runtime',
@@ -75,13 +78,14 @@ export default [
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         exclude: 'node_modules/**'
       }),
       terser({
@@ -106,10 +110,11 @@ export default [
     },
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         exclude: 'node_modules/**'
       }),
       replace({
@@ -129,10 +134,11 @@ export default [
     },
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         exclude: 'node_modules/**'
       }),
       replace({
