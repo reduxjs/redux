@@ -6,23 +6,41 @@ import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
-const noDeclarationFiles = { compilerOptions: { declaration: false } };
+const noDeclarationFiles = { compilerOptions: { declaration: false } }
+
+const babelRuntimeVersion = pkg.dependencies['@babel/runtime'].replace(
+  /^[^0-9]*/,
+  ''
+)
+
+const makeExternalPredicate = externalArr => {
+  if (externalArr.length === 0) {
+    return () => false
+  }
+  const pattern = new RegExp(`^(${externalArr.join('|')})($|/)`)
+  return id => pattern.test(id)
+}
 
 export default [
   // CommonJS
   {
     input: 'src/index.ts',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
-    external: [
+    external: makeExternalPredicate([
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
-    ],
+    ]),
     plugins: [
       nodeResolve({
         extensions: ['.ts']
       }),
       typescript({ useTsconfigDeclarationDir: true }),
-      babel()
+      babel({
+        plugins: [
+          ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }]
+        ],
+        runtimeHelpers: true
+      })
     ]
   },
 
@@ -30,16 +48,24 @@ export default [
   {
     input: 'src/index.ts',
     output: { file: 'es/redux.js', format: 'es', indent: false },
-    external: [
+    external: makeExternalPredicate([
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
-    ],
+    ]),
     plugins: [
       nodeResolve({
         extensions: ['.ts']
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
-      babel()
+      babel({
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            { version: babelRuntimeVersion, useESModules: true }
+          ]
+        ],
+        runtimeHelpers: true
+      })
     ]
   },
 
