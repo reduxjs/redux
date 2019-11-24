@@ -191,7 +191,6 @@ Type checked system reducer:
 // src/store/system/reducers.ts
 
 import {
-  SystemActions,
   SystemState,
   SystemActionTypes,
   UPDATE_SESSION
