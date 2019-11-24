@@ -190,12 +190,7 @@ Type checked system reducer:
 ```ts
 // src/store/system/reducers.ts
 
-import {
-  SystemActions,
-  SystemState,
-  SystemActionTypes,
-  UPDATE_SESSION
-} from './types'
+import { SystemState, SystemActionTypes, UPDATE_SESSION } from './types'
 
 const initialState: SystemState = {
   loggedIn: false,

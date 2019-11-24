@@ -184,7 +184,7 @@ function mhelmersonExample() {
         ...store,
         replaceReducer<NS, NA extends Action = AnyAction>(
           nextReducer: (
-            state: NS & ExtraState | undefined,
+            state: (NS & ExtraState) | undefined,
             action: NA
           ) => NS & ExtraState
         ) {
@@ -234,7 +234,7 @@ function finalHelmersonExample() {
     config: any,
     reducer: Reducer<S, A>
   ) {
-    return (state: S & ExtraState | undefined, action: AnyAction) => {
+    return (state: (S & ExtraState) | undefined, action: AnyAction) => {
       const newState = reducer(state, (action as unknown) as A)
       return {
         ...newState,
