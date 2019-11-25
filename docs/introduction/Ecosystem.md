@@ -720,6 +720,28 @@ const boundScopeableActions = bindScopedActionFactories(
 const scopedReducers = scopeReducers(reducers)
 ```
 
+**[megazazik/encaps](https://github.com/megazazik/encaps)**  
+Build independent, reusable and extensible modules for applications which use reducers.
+
+```js
+const counter = build()
+  .initState(() => ({ value: 0 }))
+  .handlers({
+    increment: state => ({ value: state.value + 1 }),
+    decrement: state => ({ value: state.value - 1 })
+  })
+
+const counters = build().children({
+  counterA: counter,
+  counterB: counter
+})
+
+counters.actions.counterA.decrement() // {type: 'counterA.decrement'}
+
+counters.reducer(undefined, counters.actions.counterA.increment())
+// { counterA: {value: 1}, counterB: {value: 0} }
+```
+
 ## Dev Tools
 
 #### Debuggers and Viewers
