@@ -236,6 +236,54 @@ Use of static typing does make this kind of code safer and somewhat more accepta
 
 </details>
 
+### Name State Slices Based On the Stored Data
+
+As mentioned in [Reducers Should Own the State Shape ](#reducers-should-own-the-state-shape), the standard approach for splitting reducer logic is based on "slices" of state. Correspondingly, `combineReducers` is the standard function for joining those slice reducers into a larger reducer function.
+
+The key names in the object passed to `combineReducers` will define the names of the keys in the resulting state object. Be sure to name these keys after the data that is kept inside, and avoid use of the word "reducer" in the key names. Your object should look like `{users: {}, posts: {}}`, rather than `{usersReducer: {}, postsReducer: {}}`.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+ES6 object literal shorthand makes it easy to define a key name and a value in an object at the same time:
+
+```js
+const data = 42
+const obj = { data }
+// same as: {data: data}
+```
+
+`combineReducers` accepts an object full of reducer functions, and uses that to generate state objects that have the same key names. This means that the key names in the functions object define the key names in the state object.
+
+This results in a common mistake, where a reducer is imported using "reducer" in the variable name, and then passed to `combineReducers` using the object literal shorthand:
+
+```js
+import usersReducer from 'features/users/usersSlice'
+
+const rootReducer = combineReducers({
+  usersReducer
+})
+```
+
+In this case, use of the object literal shorthand created an object like `{usersReducer: usersReducer}`. So, "reducer" is now in the state key name. This is redundant and useless.
+
+Instead, define key names that only relate to the data inside. We suggest using explicit `key: value` syntax for clarity:
+
+```js
+import usersReducer from 'features/users/usersSlice'
+import postsReducer from 'features/posts/postsSlice'
+
+const rootReducer = combineReducers({
+  users: usersReducer,
+  posts: postsReducer
+})
+```
+
+It's a bit more typing, but it results in the most understandable code and state definition.
+
+</details>
+
 ### Treat Reducers as State Machines
 
 Many Redux reducers are written "unconditionally". They only look at the dispatched action and calculate a new state value, without basing any of the logic on what the current state might be. This can cause bugs, as some actions may not be "valid" conceptually at certain times depending on the rest of the app logic. For example, a "request succeeded" action should only have a new value calculated if the state says that it's already "loading", or an "update this item" action could be dispatched even if there is no item marked as "being edited".
