@@ -332,7 +332,7 @@ const elevatorReducer = (state, action) => {
     case 'ELEVATOR_CRASHED_TO_GROUND_FLOOR':
       return { ...state, floorNumber: 0 }
 
-    case 'PASSENGERS_EXITED':
+    case 'PASSENGER_EXITED':
       // hooray for slice, a non-mutative method! 
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
       return {
@@ -359,6 +359,52 @@ elevatorReducer(
 ```
 
 ## Action `payload`
+
+### Motivation
+If you've been following along, [as of our last example](#achieving-our-desired-outcome-1) we have now written a reducer function that manages object state representing an elevator, with a floor number and list of passengers.
+
+We used a couple of *very silly* assumptions in constructing that example:
+> * We'll assume that passengers *only* exit (and worry about boarding later on)
+> * We'll assume, if a passenger is exiting, then it *must* be the first passenger in the list (a [FIFO structure](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
+
+Clearly, we're not modelling our elevator very well with these two constraints, which we'll now relax.
+
+But how would we model a passenger being added?
+
+```js
+const elevatorReducer = (state, action) => {
+  switch (action.type) {
+    // looking only at the relevant case:
+
+    case 'PASSENGER_JOINED':
+      return {
+        ...state,
+        passengers: [
+          ...state.passengers, // keep all existing passengers
+          someNewPassenger // but where does this new passenger come from...?
+        ]
+      }
+  }
+}
+```
+
+Our `elevatorReducer` needs to be able to refer to a string, representing the new passenger's name.
+
+Where could that come from?
+
+### Definition
+Recall that an [`action`](#actions) is a plain object with a `type` property.
+
+Any other additional information can be passed through a `payload` property, which could be of any type as you see fit.
+
+### Examples
+
+| Action | `payload` might represent... |
+ --- | --- |
+| `{ type: 'PIZZA_ORDERED', payload: 'margherita' }` | Flavour of the pizza ordered |
+|  `{ type: 'ANIMALS_REQUESTED', payload: { species: 'giraffe', quantity: 2 } }` | Species and quantity of the animals requested |
+| `{ type: 'CONTRACT_SIGNED', payload: ['Donald Trump', 'Xi Jinping'] }` | Signatories of the contract |
+
 
 ## Action creators
 
