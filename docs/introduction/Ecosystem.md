@@ -721,7 +721,7 @@ const scopedReducers = scopeReducers(reducers)
 ```
 
 **[megazazik/encaps](https://github.com/megazazik/encaps)**  
-Build independent, reusable and extensible modules for applications which use reducers.
+Creates independent, reusable and extensible modules for applications which use reducers.
 
 ```js
 const counter = build()
