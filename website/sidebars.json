@@ -11,6 +11,9 @@
       "introduction/ecosystem",
       "introduction/examples"
     ],
+    "Tutorials": [
+      "tutorials/barebones"
+    ],
     "Basic Tutorial": [
       "basics/basic-tutorial",
       "basics/actions",
