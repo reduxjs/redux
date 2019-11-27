@@ -554,13 +554,207 @@ elevatorReducer(
 )
 ```
 
-Or, more typically, we can create the action at the point that we need it, i.e. as we're passing it into the reducer:
+Or, more typically, we can create the action at the point that we need it, i.e. call the action creator as an argument of the reducer:
 
 ```js
 elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+  boardPassenger('Eddie the Eagle') // executing this action creator returns an action!
+)
+```
+
+Isn't that much nicer?
+
+```diff
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] },
+-  { type: 'PASSENGER_BOARDED', payload: 'Charlie Chaplin' }
++  boardPassenger('Charlie Chaplin')
+)
+
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+-  { type: 'PASSENGER_BOARDED', payload: 'Dastardly Dan' }
++  boardPassenger('Dastardly Dan')
+)
+
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+-  { type: 'PASSEMGER_BOARDED', payload: 'Eddie the Eagle' }
++  boardPassenger('Eddie the Eagle')
+)
+```
+
+## Redux store
+
+### Motivation
+
+In the above example using [action creators](#passing-into-a-reducer), we're manually keeping track of state and passing it in as the first argument to our [reducer](#definition-1) to form a sequence of actions:
+
+```js
+elevatorReducer(
+  // pass in some first value of state
+  { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] },
+  boardPassenger('Charlie Chaplin')
+)
+
+elevatorReducer(
+  // pass in what we think the second value of state is...
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+  boardPassenger('Dastardly Dan')
+)
+
+elevatorReducer(
+  // pass in what we think the third value of state is...
   { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
   boardPassenger('Eddie the Eagle')
 )
 ```
 
-## Redux store
+This is a bit silly. Remember, a call to a reducer returns us our new value of state, so we should be using that:
+
+```js
+const firstState = { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] }
+
+const secondState = elevatorReducer(
+  firstState,
+  boardPassenger('Charlie Chaplin')
+)
+// => { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] }
+
+const thirdState = elevatorReducer(
+  secondState,
+  boardPassenger('Dastardly Dan')
+)
+// => { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] }
+
+const fourthState = elevatorReducer(
+  thirdState,
+  boardPassenger('Eddie the Eagle')
+)
+// => { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan', 'Eddie the Eagle'] }
+```
+
+Alternatively, instead of creating a bunch of variables, we could reassign a single state variable:
+
+```js
+const initialState = { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] }
+
+let currentState = initialState
+
+currentState = elevatorReducer(
+  currentState,
+  boardPassenger('Charlie Chaplin')
+)
+// currentState is now equal to { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] }
+
+currentState = elevatorReducer(
+  currentState,
+  boardPassenger('Dastardly Dan')
+)
+// currentState is now equal to { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] }
+
+currentState = elevatorReducer(
+  currentState,
+  boardPassenger('Eddie the Eagle')
+)
+// currentState is now equal to { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan', 'Eddie the Eagle'] }
+```
+
+Now, there's a clear pattern emerging here: every time that we 'process' an action using our reducer, we're reassigning our state variable to the return value of the reducer.
+
+Wouldn't it be nice if something could handle that pattern for us?
+
+### Definition
+
+A Redux `store` is an object that holds some state through an internal variable (`currentState`), uses a `reducer` function internally and has a `dispatch` function that accepts an action.
+
+Calling `store.dispatch(action)` triggers a reassignment of `currentState` to the return value of `reducer(currentState, action)`.
+
+Calling `store.getState()` returns the value of `currentState`.
+
+
+### Creating and using a store
+
+Redux has a named export, `createStore`, which we can use to create a store, by passing in a `reducer` function. The reducer function that we pass in is the same one that the store will use to process actions through `reducer(currentState, action)`.
+
+**Note that the `reducer` passed in to `createStore` should have a default value provided for its state argument**, i.e. it should have the signature `(state = initialState, action) => newState`.
+
+```js
+import { createStore } from 'redux'
+import reducer from './path/to/your/reducer'
+import { someActionCreator } from './path/to/your/action/creators'
+
+const store = createStore(reducer)
+store.getState() // returns the store's initial state
+store.dispatch(someActionCreator())
+store.getState() // return's the store's state, having processed the action created above
+```
+
+### Full example: Redux store for elevator state
+```js
+import { createStore } from 'redux'
+
+const initialElevatorState = { floorNumber: 0, passengers: [] }
+
+const elevatorReducer = (state = initialElevatorState, action) => {
+  switch (action.type) {
+    case 'ELEVATOR_FLOOR_ASCENDED':
+      return { ...state, floorNumber: state.floorNumber + 1 }
+
+    case 'ELEVATOR_FLOOR_DESCENDED':
+      return { ...state, floorNumber: state.floorNumber - 1 }
+
+    case 'ELEVATOR_CRASHED_TO_GROUND_FLOOR':
+      return { ...state, floorNumber: 0 }
+
+    case 'PASSENGER_BOARDED':
+      return {
+        ...state,
+        passengers: [ ...state.passengers, action.payload ]
+      }
+
+    case 'PASSENGER_EXITED':
+      return {
+        ...state,
+        passengers: passengers.filter(passenger => passenger !== action.payload)
+      }
+
+    default:
+        return state
+  }
+}
+
+const ascendFloor = () => ({
+  type: 'ELEVATOR_FLOOR_ASCENDED'
+})
+
+const boardPassenger = (passengerName) => ({
+  type: 'PASSENGER_BOARDED',
+  payload: passengerName
+})
+
+const store = createStore(elevatorReducer)
+
+// the store's state will be our initialElevatorState
+store.getState() // => { floorNumber: 0, passengers: [] }
+
+// now let's dispatch an action for the reducer to use
+store.dispatch({ type: 'ELEVATOR_FLOOR_ASCENDED' })
+store.getState() // => { floorNumber: 1, passengers: [] }
+
+// we could also use an action creator for convenience
+store.dispatch(ascendFloor())
+store.getState() // => { floorNumber: 2, passengers: [] }
+
+// let's board a couple of passenger
+store.dispatch(boardPassenger('Minnie Mouse'))
+store.dispatch(boardPassenger('Mickey Mouse'))
+store.getState() // => { floorNumber: 2, passengers: ['Minnie Mouse', 'Mickey Mouse'] }
+
+store.dispatch({ type: 'ELEVATOR_CRASHED_TO_GROUND_FLOOR' })
+store.getState() // => { floorNumber: 0, passengers: ['Minnie Mouse', 'Mickey Mouse'] }
+
+store.dispatch({ type: 'PASSENGER_EXITED', payload: 'Mickey Mouse' })
+store.getState() // => { floorNumber: 0, passengers: ['Minnie Mouse'] }
+```
