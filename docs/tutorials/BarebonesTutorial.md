@@ -16,6 +16,8 @@ In this tutorial, we will cover the key concepts often used in Redux:
 
 Once we've covered those, we'll see how the [Redux store](#redux-store) handily pulls them all together for convenient state management.
 
+**It is recommended that, if you are new to Redux, you follow this tutorial along in its entirety, as it is structured in a way to incrementally build on previously covered material.**
+
 ## Actions
 
 ### Motivation
@@ -35,7 +37,7 @@ A more precise specification of an action is the '[Flux Standard Action](https:/
 
 The `type` property is typically a string that describes the event, interaction or intended state change.
 
-The `type` property does *not* have to have any particular casing or tensing, although `SCREAMING_SNAKE_CASE` is common, and it is recommended to describe some event in the past tense (i.e. `PIZZA_ORDERED`, or `pizza_ordered`, instead of `ORDER_PIZZA`).
+The `type` property is not *required* to use any particular casing or tensing, although `SCREAMING_SNAKE_CASE` is common, and it is recommended to describe some event in the past tense (i.e. `PIZZA_ORDERED`, or `pizza_ordered`, instead of `ORDER_PIZZA`).
 
 ### Examples
 
@@ -380,7 +382,7 @@ const elevatorReducer = (state, action) => {
       return {
         ...state,
         passengers: [
-          ...state.passengers, // keep all existing passengers
+          ...state.passengers, // spread all existing passengers into the array
           someNewPassenger // but where does this new passenger come from...?
         ]
       }
@@ -402,10 +404,72 @@ Any other additional information can be passed through a `payload` property, whi
 | Action | `payload` might represent... |
  --- | --- |
 | `{ type: 'PIZZA_ORDERED', payload: 'margherita' }` | Flavour of the pizza ordered |
-|  `{ type: 'ANIMALS_REQUESTED', payload: { species: 'giraffe', quantity: 2 } }` | Species and quantity of the animals requested |
+|  `{ type: 'ANIMALS_BORN', payload: { species: 'giraffe', quantity: 2 } }` | Species and quantity of the animals born |
 | `{ type: 'CONTRACT_SIGNED', payload: ['Donald Trump', 'Xi Jinping'] }` | Signatories of the contract |
 
+### Usage in a reducer
+
+Building on our [motivating example](#motivation-2), to allow us to handle passengers entering our lift and relaxing our FIFO assumption about passengers exiting:
+
+```js
+/*
+  @param {object} state - An object with two properties, floorNumber and passengers
+  @param {number} state.floorNumber - The current floor number being shown in the elevator
+  @param {string[]} state.passengers - An array of passenger names
+  @param {object} action - Represents an event, interaction or intended state change
+
+  @returns {object} An object with two properties, floorNumber and passengers
+*/
+const elevatorReducer = (state, action) => {
+  switch (action.type) {
+    case 'ELEVATOR_FLOOR_ASCENDED':
+      return { ...state, floorNumber: state.floorNumber + 1 }
+
+    case 'ELEVATOR_FLOOR_DESCENDED':
+      return { ...state, floorNumber: state.floorNumber - 1 }
+
+    case 'ELEVATOR_CRASHED_TO_GROUND_FLOOR':
+      return { ...state, floorNumber: 0 }
+
+    case 'PASSENGER_JOINED':
+      return {
+        ...state,
+        passengers: [
+          ...state.passengers,
+          // we assume the new passenger's name will be
+          //  passed inas the action's payload
+          action.payload
+        ]
+      }
+
+    case 'PASSENGER_EXITED':
+      return {
+        ...state,
+        // Filter out the passenger name passed as action payload
+        // (We assume here that passenger names are unique)
+        passengers: passengers.filter(passenger => passenger !== action.payload)
+      }
+
+    default:
+        return state
+  }
+}
+
+elevatorReducer(
+  { floorNumber: 11, passengers: ['Hansel', 'Gretel'] },
+  { type: 'PASSENGER_JOINED', payload: 'Evil witch' }
+)
+// => { floorNumber: 11, passengers: ['Hansel', 'Gretel', 'Evil witch'] }
+
+elevatorReducer(
+  { floorNumber: 11, passengers: ['Hansel', 'Gretel', 'Evil witch'] },
+  { type: 'PASSENGER_EXITED', payload: 'Gretel' }
+)
+// => { floorNumber: 11, passengers: ['Hansel', 'Evil witch'] }
+```
 
 ## Action creators
+
+
 
 ## Redux store
