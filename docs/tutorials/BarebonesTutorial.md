@@ -22,7 +22,7 @@ Once we've covered those, we'll see how the [Redux store](#redux-store) handily 
 
 ### Motivation
 
-The purpose of an *action* is to represent an event, interaction or intended state change.
+The purpose of an _action_ is to represent an event, interaction or intended state change.
 
 ### Definition
 
@@ -33,7 +33,7 @@ An action satisfies two conditions:
 
 #### An aside: Flux Standard Actions
 
-A more demanding standard for an action to meet is the '[Flux Standard Action (FSAs)](https://github.com/redux-utilities/flux-standard-action)' specification, but **Redux does not *require* actions to be Flux Standard Actions**.
+A more demanding standard for an action to meet is the '[Flux Standard Action (FSAs)](https://github.com/redux-utilities/flux-standard-action)' specification, but **Redux does not _require_ actions to be Flux Standard Actions**.
 
 Having said that, you might be interested in reading more about them and following the FSA conventions. (All FSAs are accepted by Redux as actions, but not all actions are FSAs.)
 
@@ -41,42 +41,48 @@ Having said that, you might be interested in reading more about them and followi
 
 The `type` property is typically a string that describes the event, interaction or intended state change.
 
-The `type` property is not *required* to use any particular casing or tensing, although `SCREAMING_SNAKE_CASE` is common, and it is recommended to describe some event in the past tense (i.e. `PIZZA_ORDERED`, or `pizza_ordered`, instead of `ORDER_PIZZA`).
+The `type` property is not _required_ to use any particular casing or tensing, although `SCREAMING_SNAKE_CASE` is common, and it is recommended to describe some event in the past tense (i.e. `PIZZA_ORDERED`, or `pizza_ordered`, instead of `ORDER_PIZZA`).
 
 ### Examples
 
-| Data | Is this an action? |
- --- | --- |
-| `'PIZZA_ORDERED'` | [No](#not-an-action-pizza_ordered) |
-| `{ event: 'PIZZA_ORDERED' }` | [No](#not-an-action-event-pizza_ordered) |
-| `{ type: 'PIZZA_ORDERED' }` | [**Yes!**](#is-an-action-type-pizza_ordered) |
-| `{ type: 'pizza/count/add' }` | [**Yes!**](#is-an-action-type-pizza-count-add) |
+| Data                                           | Is this an action?                                                          |
+| ---------------------------------------------- | --------------------------------------------------------------------------- |
+| `'PIZZA_ORDERED'`                              | [No](#not-an-action-pizza_ordered)                                          |
+| `{ event: 'PIZZA_ORDERED' }`                   | [No](#not-an-action-event-pizza_ordered)                                    |
+| `{ type: 'PIZZA_ORDERED' }`                    | [**Yes!**](#is-an-action-type-pizza_ordered)                                |
+| `{ type: 'pizza/count/add' }`                  | [**Yes!**](#is-an-action-type-pizza-count-add)                              |
 | `{ type: 'pizza/count/add', otherProp: true }` | [**Yes!**](#is-an-action-type-pizza-count-add-otherprop-true) (but not FSA) |
-| `() => ({ type: 'pizza/count/add' })` | [No](#is-not-an-action-type-pizza-count-add) |
+| `() => ({ type: 'pizza/count/add' })`          | [No](#is-not-an-action-type-pizza-count-add)                                |
 
 #### Not an action: `PIZZA_ORDERED`
+
 This is not an action, because it is not a plain object. Actions must be plain objects.
 
 #### Not an action: `{ event: 'PIZZA_ORDERED' }`
+
 This is not an action, because it does not have a type property. Actions must have a `type` property.
 
 #### Is an action: `{ type: 'PIZZA_ORDERED' }`
+
 This is an action, because: (i) it is a plain object; and (ii) it has a `type` property.
 
 #### Is an action: `{ type: 'pizza/count/add' }`
+
 This is an action, because: (i) it is a plain object; and (ii) it has a `type` property.
 
 #### Is an action: `{ type: 'pizza/count/add', otherProp: true }`
+
 This is an action, because: (i) it is a plain object; and (ii) it has a `type` property. It is not a [Flux-Standard-Action](https://github.com/redux-utilities/flux-standard-action), however.
 
 #### Is not an action: `() => ({ type: 'pizza/count/add' })`
-This is not an action, because it is not a plain object. Actions must be plain objects. (However, since this is a function that *returns* an action, it is an [*action creator*](#action-creators).)
+
+This is not an action, because it is not a plain object. Actions must be plain objects. (However, since this is a function that _returns_ an action, it is an [_action creator_](#action-creators).)
 
 ## Reducers
 
 ### Motivation
 
-The purpose of a *reducer* is to predictably generate the new value for some state, in response to an [action](#actions), subject to a restriction: there should be no mutations or side-effects (i.e., a reducer should be a *pure function*).
+The purpose of a _reducer_ is to predictably generate the new value for some state, in response to an [action](#actions), subject to a restriction: there should be no mutations or side-effects (i.e., a reducer should be a _pure function_).
 
 This restriction is important because it enables Redux to support features like 'hot reloading' and 'time travel'.
 
@@ -108,35 +114,50 @@ What do you think would be sensible return values for the following calls to the
 
 ```js
 // What floor number should be returned if we are at floor three, and the elevator doors are opened?
-const afterDoorsOpenedAtFloorThree = floorNumberReducer(3, { type: 'ELEVATOR_DOORS_OPENED' })
+const afterDoorsOpenedAtFloorThree = floorNumberReducer(3, {
+  type: 'ELEVATOR_DOORS_OPENED'
+})
 
 // What floor number should be returned if we are at floor seven, and somebody gets into the elevator?
-const afterPersonBoardedAtFloorSeven = floorNumberReducer(7, { type: 'PERSON_BOARDED' })
+const afterPersonBoardedAtFloorSeven = floorNumberReducer(7, {
+  type: 'PERSON_BOARDED'
+})
 
 // What floor number should be returned if we are at floor 5, and the elevator ascends one floor?
-const afterAscendingAtFloorFive = floorNumberReducer(5, { type: 'ELEVATOR_FLOOR_ASCENDED' })
+const afterAscendingAtFloorFive = floorNumberReducer(5, {
+  type: 'ELEVATOR_FLOOR_ASCENDED'
+})
 
 // What floor number should be returned if we are at floor 23, and it starts raining outside?
-const afterRainingAtFloorTwentyThree = floorNumberReducer(23, { type: 'RAIN_STARTED' })
+const afterRainingAtFloorTwentyThree = floorNumberReducer(23, {
+  type: 'RAIN_STARTED'
+})
 
 // What floor number should be returned if we are at floor 11, and the elevator descends one floor?
-const afterDescendingAtFloorEleven = floorNumberReducer(11, { type: 'ELEVATOR_FLOOR_DESCENDED' })
+const afterDescendingAtFloorEleven = floorNumberReducer(11, {
+  type: 'ELEVATOR_FLOOR_DESCENDED'
+})
 ```
 
 ##### `afterDoorsOpenedAtFloorThree` should be `3`
+
 The elevator doors opening shouldn't by itself make any difference to 'what floor number the elevator display shows'. The reducer should return the same value as before.
 
 ##### `afterPersonBoardedAtFloorSeven` should be `7`
+
 A person boarding the elevator shouldn't by itself make any difference to 'what floor number the elevator display shows'. The reducer should return the same value as before.
 
 ##### `afterAscendingAtFloorFive` should be `6`
-The elevator *was* at floor five, but has now ascended a floor. The reducer should return an incremented value to reflect this.
+
+The elevator _was_ at floor five, but has now ascended a floor. The reducer should return an incremented value to reflect this.
 
 ##### `afterRainingAtFloorTwentyThree` should be `23`
+
 Rain starting outside the building shouldn't by itself make any difference to 'what floor number the elevator display shows'. The reducer should return the same value as before.
 
 ##### `afterDescendingAtFloorEleven` should be `10`
-The elevator *was* at floor ten, but has now descended a floor. The reducer should return a decremented value to reflect this.
+
+The elevator _was_ at floor ten, but has now descended a floor. The reducer should return a decremented value to reflect this.
 
 **Notice that, for a majority of actions, we are expecting our reducer function to return the same value that it was passed.**
 
@@ -187,7 +208,7 @@ A common pattern which is recommended as slightly cleaner is a switch statement:
 const floorNumberReducer = (state, action) => {
   switch (action.type) {
     case 'ELEVATOR_FLOOR_ASCENDED':
-        return state + 1
+      return state + 1
     case 'ELEVATOR_FLOOR_DESCENDED':
       return state - 1
     case 'ELEVATOR_CRASHED_TO_GROUND_FLOOR':
@@ -209,7 +230,7 @@ You don't have to use a `switch` statement, but it is recommended.
 
 ### Example: object state
 
-We'll now extend our example to handle object state that models both the floor number shown in the elevator *and* a list of names representing passengers who are currently in the elevator.
+We'll now extend our example to handle object state that models both the floor number shown in the elevator _and_ a list of names representing passengers who are currently in the elevator.
 
 This state will look something like this:
 
@@ -221,8 +242,9 @@ const exampleState = {
 ```
 
 As well as modelling increases and decreases in floor number as before, we also now want to be able to model passengers in our elevator. We'll add a couple of simplifying assumptions:
-* We'll assume that passengers *only* exit (and worry about boarding later on)
-* We'll assume, if a passenger is exiting, then it *must* be the first passenger in the list (a [FIFO structure](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
+
+- We'll assume that passengers _only_ exit (and worry about boarding later on)
+- We'll assume, if a passenger is exiting, then it _must_ be the first passenger in the list (a [FIFO structure](<https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)>))
 
 These are ridiculous assumptions, I know. Don't worry - we'll relax them in a later example.
 
@@ -237,7 +259,7 @@ Here, then, are some sensible return values for us to expect from `elevatorReduc
 ```js
 elevatorReducer(
   { floorNumber: 5, passengers: [] }, // first arg of a reducer is previous state
-  { type: 'RAIN_STARTED' }            // second arg of a reducer is an action
+  { type: 'RAIN_STARTED' } // second arg of a reducer is an action
 )
 // This action should affect neither floor number nor passengers inside the elevator
 // we expect: { floorNumber: 5, passengers: [] }
@@ -276,7 +298,10 @@ const elevatorReducer = (state, action) => {
       // we need to return an object, since elevatorReducer handles object state
       // should have two properties, floorNumber and passengers
       // the passengers property should be as it was before
-      return { floorNumber: state.floorNumber + 1, passengers: state.passengers }
+      return {
+        floorNumber: state.floorNumber + 1,
+        passengers: state.passengers
+      }
 
     case 'ELEVATOR_FLOOR_DESCENDED':
       // alternative 'spread' syntax: spreads out all properties of state,
@@ -287,7 +312,7 @@ const elevatorReducer = (state, action) => {
       return { ...state, floorNumber: 0 }
 
     default:
-        return state
+      return state
   }
 }
 ```
@@ -295,10 +320,7 @@ const elevatorReducer = (state, action) => {
 This `elevatorReducer` means that we can now handle the elevator ascending and descending. However, since we haven't yet taught our reducer how to handle passengers exiting, that action is going to get caught in the `default` statement and so the state will be returned, unchanged:
 
 ```js
-elevatorReducer(
-  { floorNumber: 5, passengers: [] },
-  { type: 'RAIN_STARTED' }
-) // this looks good:
+elevatorReducer({ floorNumber: 5, passengers: [] }, { type: 'RAIN_STARTED' }) // this looks good:
 // => { floorNumber: 5, passengers: [] }
 
 elevatorReducer(
@@ -316,7 +338,7 @@ elevatorReducer(
 
 #### Achieving the desired outcome
 
-All we need to do is add a new `case` to handle passengers exiting, [*making sure not to mutate any state*](#definition-1).
+All we need to do is add a new `case` to handle passengers exiting, [_making sure not to mutate any state_](#definition-1).
 
 ```js
 /*
@@ -339,21 +361,21 @@ const elevatorReducer = (state, action) => {
       return { ...state, floorNumber: 0 }
 
     case 'PASSENGER_EXITED':
-      // hooray for slice, a non-mutative method! 
+      // hooray for slice, a non-mutative method!
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
       return {
         ...state,
         passengers: passengers.slice(1)
       }
 
-      /*
+    /*
         or a more readable alternative using array destructuring:
         const [firstPassenger, ...remainingPassengers] = passengers
         return { ...state, passengers: remainingPassengers }
       */
 
     default:
-        return state
+      return state
   }
 }
 
@@ -367,11 +389,13 @@ elevatorReducer(
 ## Action `payload`
 
 ### Motivation
+
 If you've been following along, [as of our last example](#achieving-our-desired-outcome-1) we have now written a reducer function that manages object state representing an elevator, with a floor number and list of passengers.
 
-We used a couple of *very silly* assumptions in constructing that example:
-> * We'll assume that passengers *only* exit (and worry about boarding later on)
-> * We'll assume, if a passenger is exiting, then it *must* be the first passenger in the list (a [FIFO structure](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
+We used a couple of _very silly_ assumptions in constructing that example:
+
+> - We'll assume that passengers _only_ exit (and worry about boarding later on)
+> - We'll assume, if a passenger is exiting, then it _must_ be the first passenger in the list (a [FIFO structure](<https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)>))
 
 Clearly, we're not modelling our elevator very well with these two constraints, which we'll now relax.
 
@@ -399,17 +423,18 @@ Our `elevatorReducer` needs to be able to refer to a string, representing the ne
 Where could that come from?
 
 ### Definition
+
 Recall that an [`action`](#definition) is a plain object with a `type` property.
 
 Any other additional information can be passed through a `payload` property, which could be of any type as you see fit.
 
 ### Examples
 
-| Action | `payload` might represent... |
- --- | --- |
-| `{ type: 'PIZZA_ORDERED', payload: 'margherita' }` | Flavour of the pizza ordered |
-|  `{ type: 'ANIMALS_BORN', payload: { species: 'giraffe', quantity: 2 } }` | Species and quantity of the animals born |
-| `{ type: 'CONTRACT_SIGNED', payload: ['Donald Trump', 'Xi Jinping'] }` | Signatories of the contract |
+| Action                                                                   | `payload` might represent...             |
+| ------------------------------------------------------------------------ | ---------------------------------------- |
+| `{ type: 'PIZZA_ORDERED', payload: 'margherita' }`                       | Flavour of the pizza ordered             |
+| `{ type: 'ANIMALS_BORN', payload: { species: 'giraffe', quantity: 2 } }` | Species and quantity of the animals born |
+| `{ type: 'CONTRACT_SIGNED', payload: ['Donald Trump', 'Xi Jinping'] }`   | Signatories of the contract              |
 
 ### Usage in a reducer
 
@@ -455,7 +480,7 @@ const elevatorReducer = (state, action) => {
       }
 
     default:
-        return state
+      return state
   }
 }
 
@@ -487,12 +512,23 @@ elevatorReducer(
 )
 
 elevatorReducer(
-  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+  {
+    floorNumber: 4,
+    passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin']
+  },
   { type: 'PASSENGER_BOARDED', payload: 'Dastardly Dan' }
 )
 
 elevatorReducer(
-  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+  {
+    floorNumber: 4,
+    passengers: [
+      'Arthur the Aadvark',
+      'Bugs Bunny',
+      'Charlie Chaplin',
+      'Dastardly Dan'
+    ]
+  },
   { type: 'PASSEMGER_BOARDED', payload: 'Eddie the Eagle' }
 )
 ```
@@ -520,13 +556,13 @@ const ascendFloor = () => ({
   type: 'ELEVATOR_FLOOR_ASCENDED'
 })
 
-const boardPassenger = (passengerName) => ({
+const boardPassenger = passengerName => ({
   type: 'PASSENGER_BOARDED',
   payload: passengerName
 })
 ```
 
-All these functions return an [`action`](#definition) upon execution - and, so, these functions are action *creators*.
+All these functions return an [`action`](#definition) upon execution - and, so, these functions are action _creators_.
 
 Note that an action creator does not have to take any arguments, although it might be useful for it to take an argument if you want to create actions with variable payloads:
 
@@ -549,7 +585,10 @@ elevatorReducer(
 )
 
 elevatorReducer(
-  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+  {
+    floorNumber: 4,
+    passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin']
+  },
   actionToBoardDan
 )
 ```
@@ -558,7 +597,15 @@ Or, more typically, we can create the action at the point that we need it, i.e. 
 
 ```js
 elevatorReducer(
-  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+  {
+    floorNumber: 4,
+    passengers: [
+      'Arthur the Aadvark',
+      'Bugs Bunny',
+      'Charlie Chaplin',
+      'Dastardly Dan'
+    ]
+  },
   boardPassenger('Eddie the Eagle') // executing this action creator returns an action!
 )
 ```
@@ -600,13 +647,24 @@ elevatorReducer(
 
 elevatorReducer(
   // pass in what we think the second value of state is...
-  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+  {
+    floorNumber: 4,
+    passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin']
+  },
   boardPassenger('Dastardly Dan')
 )
 
 elevatorReducer(
   // pass in what we think the third value of state is...
-  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+  {
+    floorNumber: 4,
+    passengers: [
+      'Arthur the Aadvark',
+      'Bugs Bunny',
+      'Charlie Chaplin',
+      'Dastardly Dan'
+    ]
+  },
   boardPassenger('Eddie the Eagle')
 )
 ```
@@ -614,7 +672,10 @@ elevatorReducer(
 This is a bit silly. Remember, a call to a reducer returns us our new value of state, so we should be using that:
 
 ```js
-const firstState = { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] }
+const firstState = {
+  floorNumber: 4,
+  passengers: ['Arthur the Aardvark', 'Bugs Bunny']
+}
 
 const secondState = elevatorReducer(
   firstState,
@@ -622,10 +683,7 @@ const secondState = elevatorReducer(
 )
 // => { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] }
 
-const thirdState = elevatorReducer(
-  secondState,
-  boardPassenger('Dastardly Dan')
-)
+const thirdState = elevatorReducer(secondState, boardPassenger('Dastardly Dan'))
 // => { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] }
 
 const fourthState = elevatorReducer(
@@ -638,26 +696,20 @@ const fourthState = elevatorReducer(
 Alternatively, instead of creating a bunch of variables, we could reassign a single state variable:
 
 ```js
-const initialState = { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] }
+const initialState = {
+  floorNumber: 4,
+  passengers: ['Arthur the Aardvark', 'Bugs Bunny']
+}
 
 let currentState = initialState
 
-currentState = elevatorReducer(
-  currentState,
-  boardPassenger('Charlie Chaplin')
-)
+currentState = elevatorReducer(currentState, boardPassenger('Charlie Chaplin'))
 // currentState is now equal to { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] }
 
-currentState = elevatorReducer(
-  currentState,
-  boardPassenger('Dastardly Dan')
-)
+currentState = elevatorReducer(currentState, boardPassenger('Dastardly Dan'))
 // currentState is now equal to { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] }
 
-currentState = elevatorReducer(
-  currentState,
-  boardPassenger('Eddie the Eagle')
-)
+currentState = elevatorReducer(currentState, boardPassenger('Eddie the Eagle'))
 // currentState is now equal to { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan', 'Eddie the Eagle'] }
 ```
 
@@ -672,7 +724,6 @@ A Redux `store` is an object that holds some state through an internal variable 
 Calling `store.dispatch(action)` triggers a reassignment of `currentState` to the return value of `reducer(currentState, action)`.
 
 Calling `store.getState()` returns the value of `currentState`.
-
 
 ### Creating and using a store
 
@@ -692,6 +743,7 @@ store.getState() // return's the store's state, having processed the action crea
 ```
 
 ### Full example: object state
+
 ```js
 import { createStore } from 'redux'
 
@@ -711,7 +763,7 @@ const elevatorReducer = (state = initialElevatorState, action) => {
     case 'PASSENGER_BOARDED':
       return {
         ...state,
-        passengers: [ ...state.passengers, action.payload ]
+        passengers: [...state.passengers, action.payload]
       }
 
     case 'PASSENGER_EXITED':
@@ -721,7 +773,7 @@ const elevatorReducer = (state = initialElevatorState, action) => {
       }
 
     default:
-        return state
+      return state
   }
 }
 
@@ -729,7 +781,7 @@ const ascendFloor = () => ({
   type: 'ELEVATOR_FLOOR_ASCENDED'
 })
 
-const boardPassenger = (passengerName) => ({
+const boardPassenger = passengerName => ({
   type: 'PASSENGER_BOARDED',
   payload: passengerName
 })
