@@ -465,7 +465,7 @@ If you have truly complex async workflows that involve things like cancelation, 
 
 We have traditionally suggested keeping as much logic as possible outside components. That was partly due to encouraging the "container/presentational" pattern, where many components simply accept data as props and display UI accordingly, but also because dealing with async logic in class component lifecycle methods can become difficult to maintain.
 
-**We still encourage moving complex synchronous or async logic outside components, usually into thunks**. This is especially true of the logic needs to read from the store state.
+**We still encourage moving complex synchronous or async logic outside components, usually into thunks**. This is especially true if the logic needs to read from the store state.
 
 However, **the use of React hooks does make it somewhat easier to manage logic like data fetching directly inside a component**, and this may replace the need for thunks in some cases.
 
