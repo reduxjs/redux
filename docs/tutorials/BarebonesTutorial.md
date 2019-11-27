@@ -478,7 +478,7 @@ Note that not all of our `case` statements are making use of `action.payload`. T
 
 ### Motivation
 
-Following on from our [above example](#usage-in-a-reducer), uppose that a series of passengers are going to join.
+Following on from our [above example](#usage-in-a-reducer), suppose that a series of passengers are going to board our elevator.
 
 ```js
 elevatorReducer(
@@ -539,5 +539,28 @@ const actionToBoardDan = boardPassenger('Dastardly Dan')
 ```
 
 ### Passing into a reducer
+
+Now we've created those two actions, we can pass them directly into our reducer:
+
+```js
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] },
+  actionToBoardCharlie
+)
+
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+  actionToBoardDan
+)
+```
+
+Or, more typically, we can create the action at the point that we need it, i.e. as we're passing it into the reducer:
+
+```js
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+  boardPassenger('Eddie the Eagle')
+)
+```
 
 ## Redux store
