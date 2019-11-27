@@ -31,7 +31,11 @@ An action satisfies two conditions:
 1. An action is a plain object
 2. An action has a `type` property
 
-A more precise specification of an action is the '[Flux Standard Action](https://github.com/redux-utilities/flux-standard-action)', which adds some further conditions. **Redux does not *require* actions to be Flux Standard Actions**, but you might be interested in reading more about them.
+#### An aside: Flux Standard Actions
+
+A more demanding standard for an action to meet is the '[Flux Standard Action (FSAs)](https://github.com/redux-utilities/flux-standard-action)' specification, but **Redux does not *require* actions to be Flux Standard Actions**.
+
+Having said that, you might be interested in reading more about them and following the FSA conventions. (All FSAs are accepted by Redux as actions, but not all actions are FSAs.)
 
 #### `type`
 
@@ -288,7 +292,7 @@ const elevatorReducer = (state, action) => {
 }
 ```
 
-This `elevatorReducer` means that we can now handle the lift ascending and descending. However, since we haven't yet taught our reducer how to handle passengers exiting, that action is going to get caught in the `default` statement and so the state will be returned, unchanged:
+This `elevatorReducer` means that we can now handle the elevator ascending and descending. However, since we haven't yet taught our reducer how to handle passengers exiting, that action is going to get caught in the `default` statement and so the state will be returned, unchanged:
 
 ```js
 elevatorReducer(
@@ -378,7 +382,7 @@ const elevatorReducer = (state, action) => {
   switch (action.type) {
     // looking only at the relevant case:
 
-    case 'PASSENGER_JOINED':
+    case 'PASSENGER_BOARDED':
       return {
         ...state,
         passengers: [
@@ -395,7 +399,7 @@ Our `elevatorReducer` needs to be able to refer to a string, representing the ne
 Where could that come from?
 
 ### Definition
-Recall that an [`action`](#actions) is a plain object with a `type` property.
+Recall that an [`action`](#definition) is a plain object with a `type` property.
 
 Any other additional information can be passed through a `payload` property, which could be of any type as you see fit.
 
@@ -409,7 +413,7 @@ Any other additional information can be passed through a `payload` property, whi
 
 ### Usage in a reducer
 
-Building on our [motivating example](#motivation-2), to allow us to handle passengers entering our lift and relaxing our FIFO assumption about passengers exiting:
+Building on our [motivating example](#motivation-2), to allow us to handle passengers entering our elevator and relaxing our FIFO assumption about passengers exiting:
 
 ```js
 /*
@@ -431,7 +435,7 @@ const elevatorReducer = (state, action) => {
     case 'ELEVATOR_CRASHED_TO_GROUND_FLOOR':
       return { ...state, floorNumber: 0 }
 
-    case 'PASSENGER_JOINED':
+    case 'PASSENGER_BOARDED':
       return {
         ...state,
         passengers: [
@@ -457,7 +461,7 @@ const elevatorReducer = (state, action) => {
 
 elevatorReducer(
   { floorNumber: 11, passengers: ['Hansel', 'Gretel'] },
-  { type: 'PASSENGER_JOINED', payload: 'Evil witch' }
+  { type: 'PASSENGER_BOARDED', payload: 'Evil witch' }
 )
 // => { floorNumber: 11, passengers: ['Hansel', 'Gretel', 'Evil witch'] }
 
@@ -468,8 +472,72 @@ elevatorReducer(
 // => { floorNumber: 11, passengers: ['Hansel', 'Evil witch'] }
 ```
 
+Note that not all of our `case` statements are making use of `action.payload`. That is fine! `payload` is an optional property of an [`action`](#definition), there to be used if there is any further information beyond action `type` that might be useful.
+
 ## Action creators
 
+### Motivation
 
+Following on from our [above example](#usage-in-a-reducer), uppose that a series of passengers are going to join.
+
+```js
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aardvark', 'Bugs Bunny'] },
+  { type: 'PASSENGER_BOARDED', payload: 'Charlie Chaplin' }
+)
+
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin'] },
+  { type: 'PASSENGER_BOARDED', payload: 'Dastardly Dan' }
+)
+
+elevatorReducer(
+  { floorNumber: 4, passengers: ['Arthur the Aadvark', 'Bugs Bunny', 'Charlie Chaplin', 'Dastardly Dan'] },
+  { type: 'PASSEMGER_BOARDED', payload: 'Eddie the Eagle' }
+)
+```
+
+Isn't it tedious to have to type out that object literal for 'passenger X joins the elevator' each time?
+
+(It's also tedious to have to manually keep track of and pass in our elevator state, but we'll tackle that [later](#redux-store).)
+
+Constructing actions using an object literal each time also means it's easy for us to make silly typos - for example, above, we've actually made a typo in what should have been the third `'PASSENGER_BOARDED'` event, hitting the `M` key instead of the `N` key - which means that our reducer's `case` statement will miss it, it'll fall through to `default`, and poor Eddie the Eagle won't actually get boarded.
+
+We need a safer and less tedious way of constructing correctly formatted actions.
+
+### Definition
+
+An action creator is a function that returns an [`action`](#definition).
+
+### Examples
+
+```js
+const startRaining = () => ({
+  type: 'RAIN_STARTED'
+})
+
+const ascendFloor = () => ({
+  type: 'ELEVATOR_FLOOR_ASCENDED'
+})
+
+const boardPassenger = (passengerName) => ({
+  type: 'PASSENGER_BOARDED',
+  payload: passengerName
+})
+```
+
+All these functions return an [`action`](#definition) upon execution - and, so, these functions are action *creators*.
+
+Note that an action creator does not have to take any arguments, although it might be useful for it to take an argument if you want to create actions with variable payloads:
+
+```js
+const actionToBoardCharlie = boardPassenger('Charlie Chaplin')
+// => { type: 'PASSENGER_BOARDED', payload: 'Charlie Chaplin' }
+
+const actionToBoardDan = boardPassenger('Dastardly Dan')
+// => { type: 'PASSENGER_BOARDED', payload: 'Dastardly Dan' }
+```
+
+### Passing into a reducer
 
 ## Redux store
