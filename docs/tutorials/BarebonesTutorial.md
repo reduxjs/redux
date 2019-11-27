@@ -691,7 +691,7 @@ store.dispatch(someActionCreator())
 store.getState() // return's the store's state, having processed the action created above
 ```
 
-### Full example: Redux store for elevator state
+### Full example: object state
 ```js
 import { createStore } from 'redux'
 
@@ -747,7 +747,7 @@ store.getState() // => { floorNumber: 1, passengers: [] }
 store.dispatch(ascendFloor())
 store.getState() // => { floorNumber: 2, passengers: [] }
 
-// let's board a couple of passenger
+// let's board a couple of passengers
 store.dispatch(boardPassenger('Minnie Mouse'))
 store.dispatch(boardPassenger('Mickey Mouse'))
 store.getState() // => { floorNumber: 2, passengers: ['Minnie Mouse', 'Mickey Mouse'] }
