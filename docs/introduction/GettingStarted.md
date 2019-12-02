@@ -37,7 +37,7 @@ for writing Redux logic.
 
 RTK includes utilities that help simplify many common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore),
 [creating reducers and writing immutable update logic](https://redux-toolkit.js.org/api/createreducer),
-and even [creating entire "slices" of state at once](https://redux-toolkit-kit.js.org/api/createslice).
+and even [creating entire "slices" of state at once](https://redux-toolkit.js.org/api/createslice).
 
 Whether you're a brand new Redux user setting up your first project, or an experienced user who wants to
 simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org/)** can help you
