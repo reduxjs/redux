@@ -1,4 +1,12 @@
-import { Reducer, Action, combineReducers, ReducersMapObject } from '../..'
+import {
+  Reducer,
+  Action,
+  combineReducers,
+  ReducersMapObject,
+  StateFromReducersMapObject,
+  ActionFromReducersMapObject,
+  ReducerFromReducersMapObject
+} from '../..'
 
 /**
  * Simple reducer definition with no action shape checks.
@@ -233,4 +241,30 @@ function reducersMapObject() {
     // typings:expect-error
     obj[key](undefined, 'not-an-action')
   }
+}
+
+function fromReducersMapObject() {
+  type TodoReducer = Reducer<
+    string[],
+    { type: 0; id: number } | { type: 1; text: string }
+  >
+  type FilterReducer = Reducer<number, { type: 2; filter: number }>
+  type MapObject = { todo: TodoReducer; filter: FilterReducer }
+
+  function stateTest(_state: { todo: string[]; filter: number }) {}
+  let state!: StateFromReducersMapObject<MapObject>
+  stateTest(state)
+
+  function actionTest(
+    _action:
+      | { type: 0; id: number }
+      | { type: 1; text: string }
+      | { type: 2; filter: number }
+  ) {}
+  let action!: ActionFromReducersMapObject<MapObject>
+  actionTest(action)
+
+  function reducersTest(_reducer: Reducer<typeof state, typeof action>) {}
+  let reducer!: ReducerFromReducersMapObject<MapObject>
+  reducersTest(reducer)
 }

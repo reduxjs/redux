@@ -36,7 +36,7 @@ export type Reducer<S = any, A extends Action = AnyAction> = (
  *
  * @template A The type of actions the reducers can potentially respond to.
  */
-export type ReducersMapObject<S = any, A extends Action = Action> = {
+export type ReducersMapObject<S = any, A extends Action = AnyAction> = {
   [K in keyof S]: Reducer<S[K], A>
 }
 
@@ -53,19 +53,6 @@ export type StateFromReducersMapObject<M> = M extends ReducersMapObject<
   : never
 
 /**
- * Infer reducer union type from a `ReducersMapObject`.
- *
- * @template M Object map of reducers as provided to `combineReducers(map: M)`.
- */
-export type ReducerFromReducersMapObject<M> = M extends {
-  [P in keyof M]: infer R
-}
-  ? R extends Reducer<any, any>
-    ? R
-    : never
-  : never
-
-/**
  * Infer action type from a reducer function.
  *
  * @template R Type of reducer.
@@ -77,9 +64,18 @@ export type ActionFromReducer<R> = R extends Reducer<any, infer A> ? A : never
  *
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
-export type ActionFromReducersMapObject<M> = M extends ReducersMapObject<
+export type ActionFromReducersMapObject<M> = {
+  [P in keyof M]: ActionFromReducer<M[P]>
+}[keyof M]
+
+/**
+ * Infer reducer union type from a `ReducersMapObject`.
+ *
+ * @template M Object map of reducers as provided to `combineReducers(map: M)`.
+ */
+export type ReducerFromReducersMapObject<M> = M extends ReducersMapObject<
   any,
   any
 >
-  ? ActionFromReducer<ReducerFromReducersMapObject<M>>
+  ? Reducer<StateFromReducersMapObject<M>, ActionFromReducersMapObject<M>>
   : never
