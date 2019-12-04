@@ -6,7 +6,8 @@ import {
   StoreEnhancer,
   Dispatch,
   Observer,
-  ExtendState
+  ExtendState,
+  UnpackedState
 } from './types/store'
 import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
@@ -41,32 +42,32 @@ import isPlainObject from './utils/isPlainObject'
 export default function createStore<
   S,
   A extends Action,
-  Ext = {},
+  StoreExt = {},
   StateExt = never
 >(
   reducer: Reducer<S, A>,
-  enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  enhancer?: StoreEnhancer<StoreExt, StateExt>
+): Store<ExtendState<UnpackedState<S>, StateExt>, A, StateExt, StoreExt> & StoreExt
 export default function createStore<
   S,
   A extends Action,
-  Ext = {},
+  StoreExt = {},
   StateExt = never
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
-  enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  enhancer?: StoreEnhancer<StoreExt, StateExt>
+): Store<ExtendState<UnpackedState<S>, StateExt>, A, StateExt, StoreExt> & StoreExt
 export default function createStore<
   S,
   A extends Action,
-  Ext = {},
+  StoreExt = {},
   StateExt = never
 >(
   reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
-  enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
+  preloadedState?: PreloadedState<S> | StoreEnhancer<StoreExt, StateExt>,
+  enhancer?: StoreEnhancer<StoreExt, StateExt>
+): Store<ExtendState<UnpackedState<S>, StateExt>, A, StateExt, StoreExt> & StoreExt {
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
@@ -79,7 +80,7 @@ export default function createStore<
   }
 
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState as StoreEnhancer<Ext, StateExt>
+    enhancer = preloadedState as StoreEnhancer<StoreExt, StateExt>
     preloadedState = undefined
   }
 
@@ -90,7 +91,7 @@ export default function createStore<
 
     return enhancer(createStore)(reducer, preloadedState as PreloadedState<
       S
-    >) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+    >) as Store<ExtendState<UnpackedState<S>, StateExt>, A, StateExt, StoreExt> & StoreExt
   }
 
   if (typeof reducer !== 'function') {
@@ -268,7 +269,7 @@ export default function createStore<
    */
   function replaceReducer<NewState, NewActions extends A>(
     nextReducer: Reducer<NewState, NewActions>
-  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext {
+  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, StoreExt> & StoreExt {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
     }
@@ -289,9 +290,9 @@ export default function createStore<
       ExtendState<NewState, StateExt>,
       NewActions,
       StateExt,
-      Ext
+      StoreExt
     > &
-      Ext
+      StoreExt
   }
 
   /**
@@ -345,6 +346,12 @@ export default function createStore<
     getState,
     replaceReducer,
     [$$observable]: observable
-  } as unknown) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  } as unknown) as Store<
+    ExtendState<UnpackedState<S>, StateExt>,
+    A,
+    StateExt,
+    StoreExt
+  > &
+    StoreExt
   return store
 }

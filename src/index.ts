@@ -11,6 +11,7 @@ import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 // store
 export {
   CombinedState,
+  UnpackedState,
   PreloadedState,
   Dispatch,
   Unsubscribe,
