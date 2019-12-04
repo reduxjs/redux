@@ -516,6 +516,7 @@ describe('createStore', () => {
 
   it('throws if action type is missing', () => {
     const store = createStore(reducers.todos)
+    // @ts-ignore
     expect(() => store.dispatch({})).toThrow(
       /Actions may not have an undefined "type" property/
     )
