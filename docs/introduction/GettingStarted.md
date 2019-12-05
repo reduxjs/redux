@@ -117,7 +117,7 @@ We have a variety of resources available to help you learn Redux, no matter what
 
 If you're brand new to Redux and want to understand the basic concepts, see:
 
-- The **[Motivation](./Motivation.md)** behind building Redux, the **[Core Concepts](./CoreConcepts.md)**, and the **[Three Principles](./ThreePrinciples.md)**.
+- The **[Motivation](./Motivation.md)** behind building Redux, the **[Core Concepts](../thinking-in-redux/CoreConcepts.md)**, and the **[Three Principles](../thinking-in-redux/ThreePrinciples.md)**.
 - The **[basic tutorial in the Redux docs](../basics/README.md)**
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** on Egghead.io
 - Redux co-maintainer Mark Erikson's **["Redux Fundamentals" slideshow](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and **[list of suggested resources for learning Redux](http://blog.isquaredsoftware.com/2017/12/blogged-answers-learn-redux/)**

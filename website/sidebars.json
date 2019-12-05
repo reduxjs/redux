@@ -4,12 +4,13 @@
       "introduction/getting-started",
       "introduction/installation",
       "introduction/motivation",
-      "introduction/core-concepts",
-      "introduction/three-principles",
-      "introduction/prior-art",
       "introduction/learning-resources",
-      "introduction/ecosystem",
       "introduction/examples"
+    ],
+    "Thinking in Redux": [
+      "thinking-in-redux/core-concepts",
+      "thinking-in-redux/three-principles",
+      "thinking-in-redux/prior-art"
     ],
     "Basic Tutorial": [
       "basics/basic-tutorial",
@@ -28,6 +29,9 @@
       "advanced/usage-with-react-router",
       "advanced/example-reddit-api",
       "advanced/next-steps"
+    ],
+    "Real World Usage": [
+      "real-world-usage/ecosystem"
     ],
     "Recipes": [
       "recipes/recipe-index",
