@@ -69,6 +69,12 @@ class Footer extends React.Component {
             >
               Star
             </a>
+            <a href="https://www.netlify.com">
+              <img
+                src="https://www.netlify.com/img/global/badges/netlify-light.svg"
+                alt="Deploys by Netlify"
+              />
+            </a>
           </div>
         </section>
         <section className="copyright">
