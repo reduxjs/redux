@@ -84,7 +84,13 @@ function stateExtension() {
  * Store enhancer that adds methods to the store.
  */
 function extraMethods() {
-  const enhancer: StoreEnhancer<{ method(): string }> = null as any
+  const enhancer: StoreEnhancer<{ method(): string }> = createStore => (
+    ...args
+  ) => {
+    const store = createStore(...args)
+    store.method = () => 'foo'
+    return store
+  }
 
   const store = createStore(reducer, enhancer)
 
