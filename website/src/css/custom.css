@@ -10,6 +10,9 @@
   --ifm-code-font-size: 95%;
   --ifm-blockquote-color: #ecf4f9;
   --ifm-blockquote-color-dark: #cbddea;
+
+  --ifm-code-padding-vertical: 0.1rem;
+  --ifm-code-padding-horizontal: 0.2rem;
 }
 
 blockquote {
@@ -21,6 +24,11 @@ blockquote {
 
 code {
   background-color: var(--ifm-color-emphasis-300);
+  border-radius: 0.2rem;
+}
+
+a code {
+  color: inherit;
 }
 
 .footer__logo {
@@ -35,6 +43,22 @@ code {
 .menu__link--sublist {
   color: var(--ifm-font-base-color) !important;
   font-weight: var(--ifm-font-weight-semibold);
+}
+
+.menu .menu__link.menu__link--sublist:after {
+  transform: rotateZ(180deg);
+  -webkit-transition: -webkit-transform 0.2s linear;
+  transition: -webkit-transform 0.2s linear;
+  transition-property: transform, -webkit-transform;
+  transition-duration: 0.2s, 0.2s;
+  transition-timing-function: linear, linear;
+  transition-delay: 0s, 0s;
+  transition: transform 0.2s linear;
+  transition: transform 0.2s linear, -webkit-transform 0.2s linear;
+}
+
+.menu .menu__list-item.menu__list-item--collapsed .menu__link--sublist:after {
+  transform: rotateZ(90deg);
 }
 
 .codesandbox {
