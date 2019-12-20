@@ -81,6 +81,16 @@ module.exports = {
             {
               label: 'GitHub',
               href: 'https://github.com/reduxjs/redux'
+            },
+            {
+              html: `
+                <a href="https://www.netlify.com">
+                  <img
+                    src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+                    alt="Deploys by Netlify"
+                  />
+                </a>
+              `
             }
           ]
         }
@@ -88,7 +98,7 @@ module.exports = {
       logo: {
         alt: 'Redux Logo',
         src: 'img/redux.svg',
-        href: 'https://redux.js.org/',
+        href: 'https://redux.js.org/'
       },
       copyright:
         'Copyright (c) 2015-present Dan Abramov and the Redux documentation authors.'
