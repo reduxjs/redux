@@ -1,11 +1,11 @@
 # <a href='http://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60' alt='Redux Logo' aria-label='redux.js.org' /></a>
 
-Redux is a predictable state container for JavaScript apps.  
+Redux is a predictable state container for JavaScript apps.
 (Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).)
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
-You can use Redux together with [React](https://reactjs.org), or with any other view library.  
+You can use Redux together with [React](https://reactjs.org), or with any other view library.
 It is tiny (2kB, including dependencies).
 
 > **Note**: We are currently planning a rewrite of the Redux docs. Please take some time to **[fill out this survey on what content is most important in a docs site](https://docs.google.com/forms/d/e/1FAIpQLSfzIkY3fXZ8PrQKScYMK0YoEgALfAK2qQ0mOj1_ibKv2qDTuQ/viewform)**. Thanks!
@@ -85,7 +85,7 @@ Dan Abramov (author of Redux) wrote Redux while working on his React Europe talk
 
 ## Influences
 
-Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).  
+Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
 Even if you haven't used Flux or Elm, Redux only takes a few minutes to get started with.
 
 ## Installation
@@ -119,8 +119,8 @@ Note that unlike Redux itself, many packages in the Redux ecosystem don't provid
 
 ## The Gist
 
-The whole state of your app is stored in an object tree inside a single _store_.  
-The only way to change the state tree is to emit an _action_, an object describing what happened.  
+The whole state of your app is stored in an object tree inside a single _store_.
+The only way to change the state tree is to emit an _action_, an object describing what happened.
 To specify how the actions transform the state tree, you write pure _reducers_.
 
 That's it!
@@ -185,19 +185,19 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 **[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux)** is a video course consisting of 30 videos narrated by [Dan Abramov](https://twitter.com/dan_abramov), author of Redux. It is designed to complement the “Basics” part of the docs while bringing additional insights about immutability, testing, Redux best practices, and using Redux with React. **This course is free and will always be.**
 
-> [“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
+> [“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)
 > Sandrino Di Mattia
 
-> [“Plowing through @dan_abramov 'Getting Started with Redux' - its amazing how much simpler concepts get with video.”](https://twitter.com/chrisdhanaraj/status/670328025553219584)  
+> [“Plowing through @dan_abramov 'Getting Started with Redux' - its amazing how much simpler concepts get with video.”](https://twitter.com/chrisdhanaraj/status/670328025553219584)
 > Chris Dhanaraj
 
-> [“This video series on Redux by @dan_abramov on @eggheadio is spectacular!”](https://twitter.com/eddiezane/status/670333133242408960)  
+> [“This video series on Redux by @dan_abramov on @eggheadio is spectacular!”](https://twitter.com/eddiezane/status/670333133242408960)
 > Eddie Zaneski
 
-> [“Come for the name hype. Stay for the rock solid fundamentals. (Thanks, and great job @dan_abramov and @eggheadio!)”](https://twitter.com/danott/status/669909126554607617)  
+> [“Come for the name hype. Stay for the rock solid fundamentals. (Thanks, and great job @dan_abramov and @eggheadio!)”](https://twitter.com/danott/status/669909126554607617)
 > Dan
 
-> [“This series of videos on Redux by @dan_abramov is repeatedly blowing my mind - gunna do some serious refactoring”](https://twitter.com/gelatindesign/status/669658358643892224)  
+> [“This series of videos on Redux by @dan_abramov is repeatedly blowing my mind - gunna do some serious refactoring”](https://twitter.com/gelatindesign/status/669658358643892224)
 > Laurence Roberts
 
 So, what are you waiting for?
@@ -274,13 +274,13 @@ If you're new to the NPM ecosystem and have troubles getting a project up and ru
 
 ## Testimonials
 
-> [“Love what you're doing with Redux”](https://twitter.com/jingc/status/616608251463909376)  
+> [“Love what you're doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
 > Jing Chen, creator of Flux
 
-> [“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
+> [“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
 > Bill Fisher, author of Flux documentation
 
-> [“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
+> [“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
 > André Staltz, creator of Cycle
 
 ## Thanks
@@ -304,12 +304,12 @@ You can find the official logo [on GitHub](https://github.com/reduxjs/redux/tree
 
 ## Change Log
 
-This project adheres to [Semantic Versioning](http://semver.org/).  
+This project adheres to [Semantic Versioning](http://semver.org/).
 Every release, along with the migration instructions, is documented on the GitHub [Releases](https://github.com/reduxjs/redux/releases) page.
 
 ## Patrons
 
-The work on Redux was [funded by the community](https://www.patreon.com/reactdx).  
+The work on Redux was [funded by the community](https://www.patreon.com/reactdx).
 Meet some of the outstanding companies that made it possible:
 
 - [Webflow](https://github.com/webflow)
