@@ -85,6 +85,11 @@ module.exports = {
           ]
         }
       ],
+      logo: {
+        alt: 'Redux Logo',
+        src: 'img/redux_white.svg',
+        href: 'https://redux.js.org/',
+      },
       copyright:
         'Copyright (c) 2015-present Dan Abramov and the Redux documentation authors.'
     },
