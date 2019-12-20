@@ -87,7 +87,7 @@ module.exports = {
       ],
       logo: {
         alt: 'Redux Logo',
-        src: 'img/redux_white.svg',
+        src: 'img/redux.svg',
         href: 'https://redux.js.org/',
       },
       copyright:
