@@ -4,11 +4,6 @@
 # Note that more general URLs need to go later, so we'll put them at the end of each section
 
 
-introduction/ecosystem         real-world-usage/ecosystem
-introduction/core-concepts         thinking-in-redux/core-concepts
-introduction/prior-art         thinking-in-redux/prior-art
-introduction/three-principles         thinking-in-redux/three-principles
-
 
 /advanced/asyncactions*         /advanced/async-actions:splat
 /advanced/asyncflow*        /advanced/async-flow:splat
@@ -69,12 +64,12 @@ introduction/three-principles         thinking-in-redux/three-principles
 
 
 # Old old Gitbook links?
-/docs/introduction/CoreConcepts.html        /introduction/core-concepts
+/docs/thinking-in-redux/CoreConcepts.html        /thinking-in-redux/core-concepts
 /docs/introduction/Motivation.html        /introduction/motivation
-/docs/introduction/Ecosystem.html*        /introduction/ecosystem:splat
+/docs/real-world-usage/Ecosystem.html*        /real-world-usage/ecosystem:splat
 /docs/introduction/CoreConcepts.html        /introduction/core-concepts
-/docs/introduction/PriorArt.html        /introduction/prior-art
-/docs/introduction/ThreePrinciples.html        /introduction/three-principles
+/docs/thinking-in-redux/PriorArt.html        /thinking-in-redux/prior-art
+/docs/thinking-in-redux/ThreePrinciples.html        /thinking-in-redux/three-principles
 /docs/introduction/Examples.html*         /introduction/examples:splat
 /docs/introduction/        /introduction/getting-started
 
