@@ -50,8 +50,7 @@
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
-    "loose-envify": "^1.4.0",
-    "symbol-observable": "^1.2.0"
+    "@babel/runtime": "^7.7.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
@@ -59,11 +58,13 @@
     "@babel/node": "^7.6.1",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-typescript": "^7.6.0",
     "@babel/register": "^7.6.0",
     "@types/jest": "^24.0.18",
+    "@types/node": "^12.12.14",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "babel-eslint": "^10.0.3",
@@ -99,11 +100,6 @@
       ]
     }
   ],
-  "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
-  },
   "jest": {
     "testRegex": "(/test/.*\\.spec\\.[tj]s)$"
   },

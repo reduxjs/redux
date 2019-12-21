@@ -84,7 +84,13 @@ function stateExtension() {
  * Store enhancer that adds methods to the store.
  */
 function extraMethods() {
-  const enhancer: StoreEnhancer<{ method(): string }> = null as any
+  const enhancer: StoreEnhancer<{ method(): string }> = createStore => (
+    ...args
+  ) => {
+    const store = createStore(...args)
+    store.method = () => 'foo'
+    return store
+  }
 
   const store = createStore(reducer, enhancer)
 
@@ -184,7 +190,7 @@ function mhelmersonExample() {
         ...store,
         replaceReducer<NS, NA extends Action = AnyAction>(
           nextReducer: (
-            state: NS & ExtraState | undefined,
+            state: (NS & ExtraState) | undefined,
             action: NA
           ) => NS & ExtraState
         ) {
@@ -234,7 +240,7 @@ function finalHelmersonExample() {
     config: any,
     reducer: Reducer<S, A>
   ) {
-    return (state: S & ExtraState | undefined, action: AnyAction) => {
+    return (state: (S & ExtraState) | undefined, action: AnyAction) => {
       const newState = reducer(state, (action as unknown) as A)
       return {
         ...newState,

@@ -1,17 +1,27 @@
 {
   "scripts": {
-    "start": "docusaurus-start",
-    "build": "docusaurus-build",
-    "publish-gh-pages": "docusaurus-publish",
-    "write-translations": "docusaurus-write-translations",
-    "version": "docusaurus-version",
-    "rename-version": "docusaurus-rename-version"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/preset-react": "^7.0.0"
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy"
   },
   "dependencies": {
-    "docusaurus": "^1.14.0"
+    "@docusaurus/core": "2.0.0-alpha.39",
+    "@docusaurus/preset-classic": "2.0.0-alpha.39",
+    "classnames": "2.2.6",
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

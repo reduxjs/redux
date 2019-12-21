@@ -6,23 +6,43 @@ import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
-const noDeclarationFiles = { compilerOptions: { declaration: false } };
+const extensions = ['.ts']
+const noDeclarationFiles = { compilerOptions: { declaration: false } }
+
+const babelRuntimeVersion = pkg.dependencies['@babel/runtime'].replace(
+  /^[^0-9]*/,
+  ''
+)
+
+const makeExternalPredicate = externalArr => {
+  if (externalArr.length === 0) {
+    return () => false
+  }
+  const pattern = new RegExp(`^(${externalArr.join('|')})($|/)`)
+  return id => pattern.test(id)
+}
 
 export default [
   // CommonJS
   {
     input: 'src/index.ts',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
-    external: [
+    external: makeExternalPredicate([
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
-    ],
+    ]),
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ useTsconfigDeclarationDir: true }),
-      babel()
+      babel({
+        extensions,
+        plugins: [
+          ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }]
+        ],
+        runtimeHelpers: true
+      })
     ]
   },
 
@@ -30,16 +50,25 @@ export default [
   {
     input: 'src/index.ts',
     output: { file: 'es/redux.js', format: 'es', indent: false },
-    external: [
+    external: makeExternalPredicate([
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
-    ],
+    ]),
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
-      babel()
+      babel({
+        extensions,
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            { version: babelRuntimeVersion, useESModules: true }
+          ]
+        ],
+        runtimeHelpers: true
+      })
     ]
   },
 
@@ -49,13 +78,14 @@ export default [
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         exclude: 'node_modules/**'
       }),
       terser({
@@ -80,10 +110,11 @@ export default [
     },
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         exclude: 'node_modules/**'
       }),
       replace({
@@ -103,10 +134,11 @@ export default [
     },
     plugins: [
       nodeResolve({
-        extensions: ['.ts']
+        extensions
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
       babel({
+        extensions,
         exclude: 'node_modules/**'
       }),
       replace({

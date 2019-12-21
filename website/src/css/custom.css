@@ -1,0 +1,109 @@
+:root {
+  --ifm-color-primary: #764abc;
+  --ifm-color-primary-dark: #6a43a9;
+  --ifm-color-primary-darker: #5e3b96;
+  --ifm-color-primary-darkest: #533484;
+  --ifm-color-primary-light: #845cc3;
+  --ifm-color-primary-lighter: #916ec9;
+  --ifm-color-primary-lightest: #9f80d0;
+
+  --ifm-code-font-size: 95%;
+  --ifm-blockquote-color: #ecf4f9;
+  --ifm-blockquote-color-dark: #cbddea;
+
+  --ifm-code-padding-vertical: 0.1rem;
+  --ifm-code-padding-horizontal: 0.2rem;
+}
+
+blockquote {
+  color: var(--ifm-font-base-color);
+  background-color: var(--ifm-blockquote-color);
+  border-left: 6px solid var(--ifm-blockquote-color-dark);
+  border-radius: var(--ifm-global-radius);
+}
+
+code {
+  background-color: var(--ifm-color-emphasis-300);
+  border-radius: 0.2rem;
+}
+
+a code {
+  color: inherit;
+}
+
+.footer__logo {
+  width: 50px;
+  height: 50px;
+}
+
+.menu__link {
+  font-weight: normal;
+}
+
+.menu__link--sublist {
+  color: var(--ifm-font-base-color) !important;
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+.menu .menu__link.menu__link--sublist:after {
+  transform: rotateZ(180deg);
+  -webkit-transition: -webkit-transform 0.2s linear;
+  transition: -webkit-transform 0.2s linear;
+  transition-property: transform, -webkit-transform;
+  transition-duration: 0.2s, 0.2s;
+  transition-timing-function: linear, linear;
+  transition-delay: 0s, 0s;
+  transition: transform 0.2s linear;
+  transition: transform 0.2s linear, -webkit-transform 0.2s linear;
+}
+
+.menu .menu__list-item.menu__list-item--collapsed .menu__link--sublist:after {
+  transform: rotateZ(90deg);
+}
+
+.codesandbox {
+  width: 100%;
+  height: 500px;
+  border: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.style-guide details {
+  background-color: var(--ifm-blockquote-color);
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: var(--ifm-global-radius);
+  cursor: pointer;
+}
+
+.style-guide details summary h4 {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.style-guide details p {
+  margin-bottom: 0;
+}
+
+.style-guide .priority-rules h3:after {
+  margin-left: 1em;
+  font-size: 0.7em;
+  position: absolute;
+}
+
+.style-guide .priority-essential h3:after {
+  content: ' ESSENTIAL';
+  color: #6b2a2a;
+}
+
+.style-guide .priority-stronglyrecommended h3:after {
+  content: ' STRONGLY RECOMMENDED';
+  color: #8c480a;
+}
+
+.style-guide .priority-recommended h3:after {
+  content: ' RECOMMENDED';
+  color: #2b5a99;
+}
