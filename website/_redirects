@@ -4,6 +4,11 @@
 # Note that more general URLs need to go later, so we'll put them at the end of each section
 
 
+introduction/ecosystem         real-world-usage/ecosystem
+introduction/core-concepts         thinking-in-redux/core-concepts
+introduction/prior-art         thinking-in-redux/prior-art
+introduction/three-principles         thinking-in-redux/three-principles
+
 
 /advanced/asyncactions*         /advanced/async-actions:splat
 /advanced/asyncflow*        /advanced/async-flow:splat
