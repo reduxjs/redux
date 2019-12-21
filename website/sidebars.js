@@ -12,7 +12,6 @@ module.exports = {
       'thinking-in-redux/three-principles',
       'thinking-in-redux/prior-art'
     ],
-
     'Basic Tutorial': [
       'basics/basic-tutorial',
       'basics/actions',
