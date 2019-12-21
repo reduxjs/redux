@@ -24,7 +24,7 @@ We have a variety of resources available to help you learn Redux, no matter what
 
 If you're brand new to Redux and want to understand the basic concepts, see:
 
-- The **[Motivation](https://redux.js.org/introduction/motivation)** behind building Redux, the **[Core Concepts](https://redux.js.org/introduction/core-concepts)**, and the **[Three Principles](https://redux.js.org/introduction/three-principles)**.
+- The **[Motivation](https://redux.js.org/introduction/motivation)** behind building Redux, the **[Core Concepts](https://redux.js.org/thinking-in-redux/core-concepts)**, and the **[Three Principles](https://redux.js.org/thinking-in-redux/three-principles)**.
 - The **[basic tutorial in the Redux docs](https://redux.js.org/basics)**
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** on Egghead.io
 - Redux co-maintainer Mark Erikson's **["Redux Fundamentals" slideshow](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and **[list of suggested resources for learning Redux](http://blog.isquaredsoftware.com/2017/12/blogged-answers-learn-redux/)**
@@ -51,7 +51,7 @@ Going from a TodoMVC app to a real production application can be a big jump, but
 - The **[Redux FAQ](https://redux.js.org/faq)** answers many common questions about how to use Redux, and the **["Recipes" docs section](https://redux.js.org/recipes)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
 - Redux co-maintainer Mark Erikson's **["Practical Redux" tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)** demonstrates real-world intermediate and advanced techniques for working with React and Redux (also available as **[an interactive course on Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).
 - The **[React/Redux links list](https://github.com/markerikson/react-redux-links)** has categorized articles on working with [reducers and selectors](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md), [managing side effects](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md), [Redux architecture and best practices](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md), and more.
-- Our community has created thousands of Redux-related libraries, addons, and tools. The **["Ecosystem" docs page](https://redux.js.org/introduction/ecosystem)** lists our recommendations, and there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.
+- Our community has created thousands of Redux-related libraries, addons, and tools. The **["Ecosystem" docs page](https://redux.js.org/real-world-usage/ecosystem)** lists our recommendations, and there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.
 - If you're looking to learn from actual application codebases, the addons catalog also has a list of **[purpose-built examples and real-world applications](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)**.
 
 Finally, Mark Erikson is teaching a series of **[Redux workshops through Workshop.me](#redux-workshops)**. Check the [workshop schedule](https://workshop.me/?a=mark) for upcoming dates and locations.
@@ -242,8 +242,10 @@ Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put togethe
 ## Documentation
 
 - [Introduction](http://redux.js.org/introduction)
+- [Thinking in Redux](http://redux.js.org/thinking-in-redux)
 - [Basics](http://redux.js.org/basics)
 - [Advanced](http://redux.js.org/advanced)
+- [Real World Usage](http://redux.js.org/real-world-usage)
 - [Recipes](http://redux.js.org/recipes)
 - [FAQ](http://redux.js.org/faq)
 - [Troubleshooting](http://redux.js.org/troubleshooting)
