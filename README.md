@@ -248,7 +248,7 @@ Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put togethe
 - [FAQ](http://redux.js.org/faq)
 - [Troubleshooting](http://redux.js.org/troubleshooting)
 - [Glossary](http://redux.js.org/glossary)
-- [API Reference](http://redux.js.org/api)
+- [API Reference](https://redux.js.org/api/api-reference)
 
 For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
