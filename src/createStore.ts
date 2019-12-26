@@ -246,8 +246,21 @@ export default function createStore<
     } finally {
       isDispatching = false
     }
+    let state : any = currentState;
+    const computedStates = state && state.computedStates;
+    let newState, oldState;
+    if (computedStates && computedStates.length > 1) {
+      newState = JSON.stringify(computedStates[computedStates.length - 1]);
+      oldState = JSON.stringify(computedStates[computedStates.length - 2]);
+    }
 
     const listeners = (currentListeners = nextListeners)
+    
+    if (newState === oldState) {
+      console.warn('States are equal. So Listener(s) will not triggered.');
+      return;
+    }
+
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i]
       listener()
