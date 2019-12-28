@@ -263,7 +263,7 @@ Notice that because the two "slice of state" reducers are now getting only their
 
 #### Reducing Boilerplate
 
-We're almost done. Since many people don't like switch statements, it's very common to use a function that creates a lookup table of action types to case functions. We'll use the `createReducer` function described in [Reducing Boilerplate](../recipes/reducing-boilerplate):
+We're almost done. Since many people don't like switch statements, it's very common to use a function that creates a lookup table of action types to case functions. We'll use the `createReducer` function described in [Reducing Boilerplate](../reducing-boilerplate):
 
 ```js
 // Omitted
