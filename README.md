@@ -39,7 +39,7 @@ If you're brand new to Redux and want to understand the basic concepts, see:
 
 Once you've picked up the basics of working with actions, reducers, and the store, you may have questions about topics like working with asynchronous logic and AJAX requests, connecting a UI framework like React to your Redux store, and setting up an application to use Redux:
 
-- The **["Advanced" docs section](https://redux.js.org/advanced)** covers working with async logic, middleware, routing.
+- The **["Advanced" docs section](https://redux.js.org/advanced/advanced-tutorial)** covers working with async logic, middleware, routing.
 - The Redux docs **["Learning Resources"](https://redux.js.org/introduction/learning-resources)** page points to recommended articles on a variety of Redux-related topics.
 - Sophie DeBenedetto's 8-part **[Building a Simple CRUD App with React + Redux](http://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/)** series shows how to put together a basic CRUD app from scratch.
 
