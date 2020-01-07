@@ -2,6 +2,7 @@ module.exports = {
   docs: {
     Introduction: [
       'introduction/getting-started',
+      'introduction/quick-start',
       'introduction/installation',
       'introduction/motivation',
       'introduction/core-concepts',
