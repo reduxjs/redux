@@ -5,68 +5,173 @@ sidebar_label: Quick Start
 hide_title: true
 ---
 
-import { TestComponent } from '../components/TestComponent'
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
 import { DetailedExplanation } from '../components/DetailedExplanation'
 import { Note } from '../components/Note'
 
-export const TC2 = ({ children }) => {
-  return <div style={{ color: 'red' }}>{children}</div>
-}
-
 # Quick Start
-
-Test content here 2
-
-<TestComponent />
-
-<TC2>
-
-- **Bullet 1**
-- Bullet 2
-
-</TC2>
-
-<DetailedExplanation>
-
-Test content
-
-```js
-// code block here
-const testFunc = () => {
-  console.log('blah!')
-}
-```
-
-</DetailedExplanation>
-
-A note:
 
 <Note>
 
-**Note**: Info 1
+### What You'll Learn
+
+- What Redux is, and why you should use it
+- How Redux relates to React
+- How to set up and start using Redux quickly
+- What a small working React+Redux app looks like
+
+### Prerequisites
+
+There are several things you should know in advance before learning Redux:
+
+- Basic familiarity with HTML & CSS, and the DOM.
+- Basic knowledge of JavaScript and programming.
+- Familiarity with ES6 syntax and features.
+- Basic knowledge of React, including components, props, and state.
+- Node.js and `npm` installed globally.
 
 </Note>
 
-<Note type="success">
+## What Is Redux?
 
-**Note**: Success 1
+**Redux** is a predictable state container for JavaScript apps. It acts as the data layer inside an application.
 
-</Note>
+It helps you write applications that behave consistently and can run in different environments (client, server, and native).
+It also helps you to write code that is testable, and enables you to better understand when, where, why, and how the data in your
+application has changed.
 
-<Note type="info">
+Redux does this by asking you to:
 
-**Note**: Info 2
+- Place some data (**_"state"_**) into a special object called a **_"store"_**
+- Write separate functions called **_"reducers"_** that know how to update the state inside the store
+- Follow specific rules for how your code can update and read the state
 
-</Note>
+### What does Redux include?
 
-<Note type="warning">
-
-**Note**: Warning
-
-</Note>
+The core Redux library consists of a few API functions. The most important API is the `createStore` function.
 
 <Note type="error">
 
-**Note**: Error
+**TODO** figure out what else to put here, or if this should be dropped
 
 </Note>
+
+### How does Redux work with a UI?
+
+Redux, by itself, is a plain JavaScript library. You can use Redux together with React, or with any other UI view library.
+
+To help make this possible, there are additional bindings libraries that connect together a Redux store and your UI components. Each different
+UI framework has its own specific bindings library. For example, the [React-Redux library](https://react-redux.js.org) allows your React components to read values from a Redux store,
+and tell the store to calculate an update to the state inside.
+
+### What is Redux Toolkit?
+
+Redux itself is small and unopinionated. We also have a separate addon package called [Redux Toolkit](https://redux-toolkit.js.org), which includes some opinionated defaults
+that help you use Redux more effectively, and includes packages that we think are essential to building a Redux app.
+It's our official recommended approach for writing Redux logic. As with the Redux core, you can use Redux Toolkit with any UI layer.
+
+## Goals
+
+We're going to create a small application with React and Redux together. The app will be a simple employee database, and we'll learn:
+
+- How to set up Redux with React
+- The data flow lifecycle of a Redux app
+- How to write Redux logic that updates data, and shows the updated data in the UI
+- How to create, update, view, and delete users (employees) from the system
+- How to make API calls for each of the above actions
+
+## Setup and Installation
+
+### Create a React Project
+
+We'll start by creating an empty React project. You can do this in one of two ways: creating a local project on your own computer with the
+Create-React-App tool, or creating a project in the CodeSandbox web app.
+
+#### Create a Local Project with Create-React-App
+
+[Create-React-App](https://create-react-app.dev/) is the official tool for creating new React projects.
+
+Create a new React project named `redux-employee-example` by running this command:
+
+```bash
+npx create-react-app redux-employee-example
+```
+
+Then, install the required Redux packages, using either the NPM or Yarn package manager:
+
+<Tabs
+  defaultValue="npm"
+  values={[
+    { label: 'NPM', value: 'npm', },
+    { label: 'Yarn', value: 'yarn', }
+  ]
+}>
+
+<TabItem value="npm">
+
+```bash
+npm add @reduxjs/toolkit react-redux
+```
+
+</TabItem>
+
+<TabItem value="yarn">
+
+```bash
+yarn add @reduxjs/toolkit react-redux
+```
+
+</TabItem>
+
+</Tabs>
+
+#### Create an Online Project with CodeSandbox
+
+[CodeSandbox.io](https://codesandbox.io) is an online IDE that lets you create entire web applications in your browser, without needing to
+install anything locally.
+
+Create a new React project sandbox by browsing to the [CodeSandbox "Create Sandbox" page](https://codesandbox.io/s/) and selecting the official React template.
+
+Once the sandbox has been created, click the "Add Dependency" button on the left, search for `@reduxjs/toolkit`, add it, and then do the same for `react-redux`.
+
+### Create a Redux Store
+
+The React project starts with a single `<App>` component that shows some "hello" text on the page. Our first goal is to create a Redux store instance
+that holds some data inside, and update the `<App>` component to read that data and show it instead.
+
+To create a Redux store, start by updating the `index.js` file to import the `configureStore` function from the `@reduxjs/toolkit` package.
+
+```diff
+import React from "react";
+import ReactDOM from "react-dom";
++import {configureStore} from "@reduxjs/toolkit";
+
+import App from "./App";
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
+```
+
+In order to actually create a Redux store, we need to define our first "reducer" function. Reducers are functions that know how to
+calculate a new state value when asked. A Redux store must always be given a single reducer function when it is created, which we call the
+"root reducer" to say that it is the starting point for any other reducer functions inside.
+
+For now, we can create a small root reducer function that always returns a string, like this:
+
+```diff
+import React from "react";
+import ReactDOM from "react-dom";
+import {configureStore} from "@reduxjs/toolkit";
+
+import App from "./App";
+
++function rootReducer() {
++    return "Hello Redux!";
++}
+
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
+```

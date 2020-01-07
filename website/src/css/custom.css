@@ -56,6 +56,19 @@ a code {
   color: inherit;
 }
 
+/*
+TODO Figure out if it's even possible to keep the +- diff signs from being selected/copied
+
+pre.prism-code.language-diff span.token.inserted.inserted-sign {
+  display: block;
+}
+
+pre.prism-code.language-diff span.token.inserted.inserted-sign:first-letter {
+  color: red;
+  user-select: none;
+}
+*/
+
 .navbar .navbar__items {
   flex: 1 1 auto;
 }
