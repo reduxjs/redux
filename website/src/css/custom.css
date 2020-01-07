@@ -9,17 +9,42 @@
 
   --ifm-code-font-size: 95%;
   --ifm-blockquote-color: #ecf4f9;
-  --ifm-blockquote-color-dark: #cbddea;
+  --ifm-blockquote-color-dark: #2a98b9;
+
+  --ifm-blockquote-color-success: #f1fdf9;
+  --ifm-blockquote-color-success-dark: #00bf88;
+
+  --ifm-blockquote-color-warning: #fffbf5;
+  --ifm-blockquote-color-warning-dark: #f0ad4e;
+
+  --ifm-blockquote-color-error: #fff2f2;
+  --ifm-blockquote-color-error-dark: #d9534f;
 
   --ifm-code-padding-vertical: 0.1rem;
   --ifm-code-padding-horizontal: 0.2rem;
 }
 
-blockquote {
+blockquote,
+blockquote.info {
   color: var(--ifm-font-base-color);
   background-color: var(--ifm-blockquote-color);
   border-left: 6px solid var(--ifm-blockquote-color-dark);
   border-radius: var(--ifm-global-radius);
+}
+
+blockquote.success {
+  background-color: var(--ifm-blockquote-color-success);
+  border-left-color: var(--ifm-blockquote-color-success-dark);
+}
+
+blockquote.warning {
+  background-color: var(--ifm-blockquote-color-warning);
+  border-left-color: var(--ifm-blockquote-color-warning-dark);
+}
+
+blockquote.error {
+  background-color: var(--ifm-blockquote-color-error);
+  border-left-color: var(--ifm-blockquote-color-error-dark);
 }
 
 code {
@@ -73,7 +98,8 @@ a code {
   overflow: hidden;
 }
 
-.style-guide details {
+.style-guide details,
+details.detailed-explanation {
   background-color: var(--ifm-blockquote-color);
   margin: 1rem 0;
   padding: 1rem;
@@ -81,13 +107,15 @@ a code {
   cursor: pointer;
 }
 
-.style-guide details summary h4 {
+.style-guide details summary h4,
+details.detailed-explanation h4 {
   display: inline-block;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.style-guide details p {
+.style-guide details p,
+details.detailed-explanation details p {
   margin-bottom: 0;
 }
 
