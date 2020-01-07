@@ -5,4 +5,68 @@ sidebar_label: Quick Start
 hide_title: true
 ---
 
+import { TestComponent } from '../components/TestComponent'
+import { DetailedExplanation } from '../components/DetailedExplanation'
+import { Note } from '../components/Note'
+
+export const TC2 = ({ children }) => {
+  return <div style={{ color: 'red' }}>{children}</div>
+}
+
 # Quick Start
+
+Test content here 2
+
+<TestComponent />
+
+<TC2>
+
+- **Bullet 1**
+- Bullet 2
+
+</TC2>
+
+<DetailedExplanation>
+
+Test content
+
+```js
+// code block here
+const testFunc = () => {
+  console.log('blah!')
+}
+```
+
+</DetailedExplanation>
+
+A note:
+
+<Note>
+
+**Note**: Info 1
+
+</Note>
+
+<Note type="success">
+
+**Note**: Success 1
+
+</Note>
+
+<Note type="info">
+
+**Note**: Info 2
+
+</Note>
+
+<Note type="warning">
+
+**Note**: Warning
+
+</Note>
+
+<Note type="error">
+
+**Note**: Error
+
+</Note>
