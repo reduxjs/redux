@@ -12,6 +12,30 @@ The articles listed in [Prerequisite Concepts#Immutable Data Management](Prerequ
 
 The key to updating nested data is **that _every_ level of nesting must be copied and updated appropriately**. This is often a difficult concept for those learning Redux, and there are some specific problems that frequently occur when trying to update nested objects. These lead to accidental direct mutation, and should be avoided.
 
+##### Correct Approach: Copying All Levels of Nested Data
+
+Unfortunately, the process of correctly applying immutable updates to deeply nested state can easily become verbose and hard to read. Here's what an example of updating `state.first.second[someId].fourth` might look like:
+
+```js
+function updateVeryNestedField(state, action) {
+  return {
+    ...state,
+    first: {
+      ...state.first,
+      second: {
+        ...state.first.second,
+        [action.someId]: {
+          ...state.first.second[action.someId],
+          fourth: action.someValue
+        }
+      }
+    }
+  }
+}
+```
+
+Obviously, each layer of nesting makes this harder to read, and gives more chances to make mistakes. This is one of several reasons why you are encouraged to keep your state flattened, and compose reducers as much as possible.
+
 ##### Common Mistake #1: New variables that point to the same objects
 
 Defining a new variable does _not_ create a new actual object - it only creates another reference to the same object. An example of this error would be:
@@ -48,30 +72,6 @@ function updateNestedState(state, action) {
 ```
 
 Doing a shallow copy of the top level is _not_ sufficient - the `nestedState` object should be copied as well.
-
-##### Correct Approach: Copying All Levels of Nested Data
-
-Unfortunately, the process of correctly applying immutable updates to deeply nested state can easily become verbose and hard to read. Here's what an example of updating `state.first.second[someId].fourth` might look like:
-
-```js
-function updateVeryNestedField(state, action) {
-  return {
-    ...state,
-    first: {
-      ...state.first,
-      second: {
-        ...state.first.second,
-        [action.someId]: {
-          ...state.first.second[action.someId],
-          fourth: action.someValue
-        }
-      }
-    }
-  }
-}
-```
-
-Obviously, each layer of nesting makes this harder to read, and gives more chances to make mistakes. This is one of several reasons why you are encouraged to keep your state flattened, and compose reducers as much as possible.
 
 ## Inserting and Removing Items in Arrays
 
