@@ -141,37 +141,197 @@ Once the sandbox has been created, click the "Add Dependency" button on the left
 The React project starts with a single `<App>` component that shows some "hello" text on the page. Our first goal is to create a Redux store instance
 that holds some data inside, and update the `<App>` component to read that data and show it instead.
 
+<Note type="success">
+
+#### Key Concept: "Store"
+
+A Redux **_store_** is a special object that holds some data inside, such as a list of users that was fetched from the server.  
+The data inside the store object is called **_state_**.
+
+Each Redux store has three functions that you can call to interact with it:
+
+- `store.getState()` returns the current state value inside the store
+- `store.dispatch()` lets you tell the store that something has happened, and it should calculate a new state value in response
+- `store.subscribe()` lets you run some code whenever the store has been updated
+
+</Note>
+
 To create a Redux store, start by updating the `index.js` file to import the `configureStore` function from the `@reduxjs/toolkit` package.
 
-```diff
-import React from "react";
-import ReactDOM from "react-dom";
-+import {configureStore} from "@reduxjs/toolkit";
+```js {3}
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { configureStore } from '@reduxjs/toolkit'
 
-import App from "./App";
+import App from './App'
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
 ```
 
-In order to actually create a Redux store, we need to define our first "reducer" function. Reducers are functions that know how to
-calculate a new state value when asked. A Redux store must always be given a single reducer function when it is created, which we call the
-"root reducer" to say that it is the starting point for any other reducer functions inside.
+In order to actually create a Redux store, we need to define our first "reducer" function.
+
+<Note type="success">
+
+#### Key Concept: "Reducers"
+
+A **_reducer_** is a function that know how to calculate a new state value when asked. A Redux store requires a single reducer function
+when it is created, which we call the "root reducer" to say that it is the starting point for any other reducer functions inside.
+
+Every reducer is called with two arguments: the current `state`, and an object called an **`action`**. We'll look at actions a bit later.
+
+Reducers must always follow certain rules inside. As a quick summary:
+
+- Reducers must always return a state value, never `undefined`
+- Reducers can only decide what the next state value should be by looking at the `state` and `action` arguments
+- Reducers are not allowed to make changes to the `state` argument, or anything else. They can only create the new state value by making copies of the originals, and updating the copies.
+
+</Note>
 
 For now, we can create a small root reducer function that always returns a string, like this:
 
-```diff
-import React from "react";
-import ReactDOM from "react-dom";
-import {configureStore} from "@reduxjs/toolkit";
+```js {7-9}
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { configureStore } from '@reduxjs/toolkit'
 
-import App from "./App";
+import App from './App'
 
-+function rootReducer() {
-+    return "Hello Redux!";
-+}
+function rootReducer(state, action) {
+  return 'Hello Redux!'
+}
 
-
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
 ```
+
+Now we can create our first Redux store. We pass in the `rootReducer` function as a parameter. The store will call the reducer function,
+take whatever value it returns, and save that value inside as the current "state". We can then ask the store what its current state value is.
+
+```js {11-15}
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { configureStore } from '@reduxjs/toolkit'
+
+import App from './App'
+
+function rootReducer(state, action) {
+  return 'Hello Redux!'
+}
+
+const store = configureStore({
+  reducer: rootReducer
+})
+
+console.log(store.getState())
+
+const rootElement = document.getElementById('root')
+ReactDOM.render(<App />, rootElement)
+```
+
+If you look at the console in your browser's DevTools (or in CodeSandbox), you should see that the words `"Hello Redux!"` were printed.
+
+### Set Up the Provider Component
+
+We've got a Redux store with its state inside, but now we need to find a way to use that state inside our `<App>` component.
+
+It's _possible_ that we could move the store into a separate file, import that store into the `App.js` file, and call `store.getState()`. But, as the
+app gets bigger, we'd have to import the store into _every_ file. That's not a good idea.
+
+This is where the React-Redux library comes in. It gives us a way to read data from the store in any component in our application, without needing
+to import the store into every file.
+
+To do this, we need to pass the store into a React-Redux `<Provider>` component.
+
+<Note type="success">
+
+#### Key Concept: `<Provider>`
+
+The React-Redux library has a `<Provider>` component. It uses [React's context API](https://reactjs.org/docs/context.html) to pass the Redux store
+to all components inside of itself.
+
+Every React-Redux app needs to put a `<Provider>` component around the main `<App>` component so that the whole app can use the store.
+
+</Note>
+
+We'll import the `Provider` component type from React-Redux, render a `<Provider>` around our `<App>`, and then pass the store to the `<Provider>`. (We'll also remove the console log, since we don't need that any more.)
+
+```js {4,18-25}
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { configureStore } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
+
+import App from './App'
+
+function rootReducer(state, action) {
+  return 'Hello Redux!'
+}
+
+const store = configureStore({
+  reducer: rootReducer
+})
+
+const rootElement = document.getElementById('root')
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  rootElement
+)
+```
+
+### Show the State in the App Component
+
+The last step for the initial setup is to update our `<App>` component to read the state value from the Redux store.
+
+We've already seen that the React-Redux `<Provider>` component makes the store available to any components inside. To go along with that, React-Redux
+includes a React hook called `useSelector`, which React function components can call to retrieve the state values from the store.
+
+<Note type="success">
+
+#### Key Concept: "Selectors"
+
+A **_selector_** is a function that takes the Redux store state as an argument, and returns some part of that store state.
+
+The React-Redux `useSelector()` hook takes a selector function, calls the selector by passing in the store state, and then returns
+the selector function's return value to your component.
+
+You can also use selector functions elsewhere in your Redux code as well.
+
+</Note>
+
+Open up `App.js`, and rewrite it to look like this:
+
+```js {2,5-7,10,14}
+import React from 'react'
+import { useSelector } from 'react-redux'
+import './styles.css'
+
+function selectHelloText(state) {
+  return state
+}
+
+export default function App() {
+  const helloText = useSelector(selectHelloText)
+
+  return (
+    <div className="App">
+      <h1>{helloText}</h1>
+    </div>
+  )
+}
+```
+
+We import the `useSelector` function from React-Redux, and then create a function called `selectHelloText`. It receives whatever state is in the Redux
+store as an argument. For now, we'll just return that entire state value.
+
+Inside the component, we call `useSelector` and pass in `selectHelloText`. When `useSelector` runs, it will call our selector function with the store
+state, and pass the return value to our component.
+
+Finally, we can put the text value into the header of our `<App>` component... and there it is!
+
+**You should now see the words "Hello Redux" on screen. Congratulations! You've set up Redux in your app.**
+
+Now that the setup is complete, we can start building the actual application logic.
