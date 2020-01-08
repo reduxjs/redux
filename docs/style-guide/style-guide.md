@@ -66,7 +66,7 @@ There are some gray areas to this rule. Strictly speaking, code such as `console
 
 ### Do Not Put Non-Serializable Values in State or Actions
 
-**Avoid putting non-serializable values such as Promises, Symbols, functions, or class instances into the Redux store state or dispatched actions**. This ensures that capabilities such as debugging via the Redux DevTools will work as expected.
+**Avoid putting non-serializable values such as Promises, Symbols, Maps/Sets, functions, or class instances into the Redux store state or dispatched actions**. This ensures that capabilities such as debugging via the Redux DevTools will work as expected. It also ensures that the UI will update as expected.
 
 > **Exception**: you may put non-serializable values in actions _if_ the action will be intercepted and stopped by a middleware before it reaches the reducers. Middleware such as `redux-thunk` and `redux-promise` are examples of this.
 
