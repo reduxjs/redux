@@ -1,5 +1,4 @@
 import { Dispatch } from './store'
-import { AnyAction } from './actions'
 
 export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
   dispatch: D
@@ -26,6 +25,6 @@ export interface Middleware<
   D extends Dispatch = Dispatch
 > {
   (api: MiddlewareAPI<D, S>): (
-    next: Dispatch<AnyAction>
-  ) => (action: any) => any
+    next: D
+  ) => (action: D extends Dispatch<infer A> ? A : never) => any
 }
