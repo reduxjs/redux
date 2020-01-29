@@ -415,6 +415,40 @@ In addition, the DevTools allows you to do "time-travel debugging", stepping bac
 
 **Redux was specifically designed to enable this kind of debugging, and the DevTools are one of the most powerful reasons to use Redux**.
 
+### Use Plain JavaScript Objects for State
+
+Prefer using plain JavaScript objects and arrays for your state tree, rather than specialized libraries like Immutable.js. While there are some potential benefits to using Immutable.js, most of the commonly stated goals such as easy reference comparisons are a property of immutable updates in general, and do not require a specific library. This also keeps bundle sizes smaller and reduces complexity from data type conversions.
+
+As mentioned above, we specifically recommend using Immer if you want to simplify immutable update logic, specifically as part of Redux Toolkit.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+Immutable.js has been semi-frequently used in Redux apps since the beginning.  There are several common reasons stated for using Immutable.js:
+
+- Performance improvements from cheap reference comparisons
+- Performance improvements from making updates thanks to specialized data structures
+- Prevention of accidental mutations
+- Easier nested updates via APIs like `setIn()`
+
+There are some valid aspects to those reasons, but in practice, the benefits aren't as good as stated, and there's multiple negatives to using it:
+
+- Cheap reference comparisons are a property of any immutable updates, not just Immutable.js
+- Accidental mutations can be prevented via other mechanisms, such as using Immer (which eliminates accident-prone manual copying logic, and deep-freezes state in development by default) or `redux-immutable-state-invariant` (which checks state for mutations)
+- Immer allows simpler update logic overall, eliminating the need for `setIn()`
+- Immutable.js has a very large bundle size
+- The API is fairly complex
+- The API "infects" your application's code. All logic must know whether it's dealing with plain JS objects or Immutable objects
+- Converting from Immutable objects to plain JS objects is relatively expensive, and always produces completely new deep object references
+- Lack of ongoing maintenance to the library
+
+The strongest remaining reason to use Immutable.js is fast updates of _very_ large objects (tens of thousands of keys). Most applications won't deal with objects that large.
+
+Overall, Immutable.js adds too much overhead for too little practical benefit. Immer is a much better option.
+
+</details>
+
 </div>
 
 <div class="priority-rules priority-recommended">
