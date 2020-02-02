@@ -78,6 +78,9 @@ a code {
   margin: 1rem 0;
   padding: 1rem;
   border-radius: var(--ifm-global-radius);
+}
+
+.style-guide details summary {
   cursor: pointer;
 }
 
