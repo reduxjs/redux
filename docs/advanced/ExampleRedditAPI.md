@@ -6,7 +6,7 @@ hide_title: true
 
 # Example: Reddit API
 
-This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).
+This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).  This code is also in [our repository of examples](https://github.com/reduxjs/redux/tree/master/examples/reddit-api) and can be [run in your browser via CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/reddit-api).
 
 ## Entry Point
 
