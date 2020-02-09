@@ -319,7 +319,7 @@ import { ThunkAction } from 'redux-thunk'
 
 export const thunkSendMessage = (
   message: string
-): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+): ThunkAction<void, RootState, unknown, Action<string>> => async dispatch => {
   const asyncResp = await exampleAPI()
   dispatch(
     sendMessage({
@@ -341,7 +341,7 @@ To reduce repetition, you might want to define a reusable `AppThunk` type once, 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
-  null,
+  unknown,
   Action<string>
 >
 ```
