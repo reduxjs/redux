@@ -218,9 +218,3 @@ const App = ({ match: { params } }) => {
 ## Next Steps
 
 Now that you know how to do basic routing, you can learn more about [React Router API](https://reacttraining.com/react-router/)
-
-> ##### Note About Other Routing Libraries
->
-> _Redux Router_ is an experimental library, it lets you keep entirely the state of your URL inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
->
-> _React Router Redux_ creates a binding between your redux app and react-router and it keeps them in sync. Without this binding, you will not be able to rewind the actions with Time Travel. Unless you need this, React Router and Redux can operate completely apart.
