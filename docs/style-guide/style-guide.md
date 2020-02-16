@@ -294,7 +294,7 @@ To fix this, **treat reducers as "state machines", where the combination of both
 <summary>
     <h4>Detailed Explanation</h4>
 </summary>
- 
+
 A [finite state machine](https://en.wikipedia.org/wiki/Finite-state_machine) is a useful way of modeling something that should only be in one of a finite number of "finite states" at any time. For example, if you have a `fetchUserReducer`, the finite states can be:
 
 - `"idle"` (fetching not started yet)
