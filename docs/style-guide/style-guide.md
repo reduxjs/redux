@@ -352,7 +352,7 @@ const fetchUserReducer = (state, action) => {
     case SUCCESS_STATUS:
       return fetchSuccessUserReducer(state, action);
     case FAILURE_STATUS:
-      return fetchLoadingUserReducer(state, action);
+      return fetchFailureUserReducer(state, action);
     default:
       // this should never be reached
       return state;
