@@ -286,9 +286,83 @@ It's a bit more typing, but it results in the most understandable code and state
 
 ### Treat Reducers as State Machines
 
-Many Redux reducers are written "unconditionally". They only look at the dispatched action and calculate a new state value, without basing any of the logic on what the current state might be. This can cause bugs, as some actions may not be "valid" conceptually at certain times depending on the rest of the app logic. For example, a "request succeeded" action should only have a new value calculated if the state says that it's already "loading", or an "update this item" action could be dispatched even if there is no item marked as "being edited".
+Many Redux reducers are written "unconditionally". They only look at the dispatched action and calculate a new state value, without basing any of the logic on what the current state might be. This can cause bugs, as some actions may not be "valid" conceptually at certain times depending on the rest of the app logic. For example, a "request succeeded" action should only have a new value calculated if the state says that it's already "loading", or an "update this item" action should only be dispatched if there is an item marked as "being edited".
 
 To fix this, **treat reducers as "state machines", where the combination of both the current state _and_ the dispatched action determines whether a new state value is actually calculated**, not just the action itself unconditionally.
+
+<details>
+<summary>
+    <h4>Detailed Explanation</h4>
+</summary>
+ 
+A [finite state machine](https://en.wikipedia.org/wiki/Finite-state_machine) is a useful way of modeling something that should only be in one of a finite number of "finite states" at any time. For example, if you have a `fetchUserReducer`, the finite states can be:
+
+- `"idle"` (fetching not started yet)
+- `"loading"` (currently fetching the user)
+- `"success"` (user fetched successfully)
+- `"failure"` (user failed to fetch)
+
+To make these finite states clear and [make impossible states impossible](https://kentcdodds.com/blog/make-impossible-states-impossible), you can specify a property that holds this finite state:
+
+```js
+const initialUserState = {
+  status: 'idle', // explicit finite state
+  user: null,
+  error: null
+}
+```
+
+With TypeScript, this also makes it easy to use [discriminated unions](https://basarat.gitbook.io/typescript/type-system/discriminated-unions) to represent each finite state. For instance, if `state.status === 'success'`, then you would expect `state.user` to be defined and wouldn't expect `state.error` to be truthy. You can enforce this with types.
+
+Typically, reducer logic is written by taking the action into account first. When modeling logic with state machines, it's important to take the state into account first. Creating "finite state reducers" for each state helps encapsulate behavior per state:
+
+```js
+import {
+  FETCH_USER,
+  // ...
+} from './actions'
+
+const IDLE_STATUS = 'idle';
+const LOADING_STATUS = 'loading';
+const SUCCESS_STATUS = 'success';
+const FAILURE_STATUS = 'failure';
+
+const fetchIdleUserReducer = (state, action) => {
+  // state.status is "idle"
+  switch (action.type) {
+    case FETCH_USER:
+      return {
+        ...state,
+        status: LOADING_STATUS
+      }
+    }
+    default:
+      return state;
+  }
+}
+
+// ... other reducers
+
+const fetchUserReducer = (state, action) => {
+  switch (state.status) {
+    case IDLE_STATUS:
+      return fetchIdleUserReducer(state, action);
+    case LOADING_STATUS:
+      return fetchLoadingUserReducer(state, action);
+    case SUCCESS_STATUS:
+      return fetchSuccessUserReducer(state, action);
+    case FAILURE_STATUS:
+      return fetchFailureUserReducer(state, action);
+    default:
+      // this should never be reached
+      return state;
+  }
+}
+```
+
+Now, since you're defining behavior per state instead of per action, you also prevent impossible transitions. For instance, a `FETCH_USER` action should have no effect when `status === LOADING_STATUS`, and you can enforce that, instead of accidentally introducing edge-cases.
+
+</details>
 
 ### Normalize Complex Nested/Relational State
 
