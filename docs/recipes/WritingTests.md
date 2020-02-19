@@ -279,7 +279,7 @@ const Header = ({ addTodo }) => {
       addTodo(text)
     }
   }
-  
+
   return (
     <header className="header" data-testid="header">
       <h1>todos</h1>
@@ -303,14 +303,16 @@ can be tested like:
 
 ```js
 import React from 'react'
-import { render, fireEvent, getByTestId } from'@testing-library/react'
+import { render, fireEvent, getByTestId } from '@testing-library/react'
 import Header from '../../components/Header'
 
 describe('components', () => {
   describe('Header', () => {
     it('should render self and subcomponents', () => {
       const mockAddTodo = jest.fn()
-      const { container, getByText, getByPlaceholder } = render(<Header addTodo={mockAddTodo}/>)
+      const { container, getByText, getByPlaceholder } = render(
+        <Header addTodo={mockAddTodo} />
+      )
       expect(getByTestId(container, 'header')).toBeInTheDocument()
       expect(getByText('todos')).toBeInTheDocument()
       expect(getByPlaceholder('What needs to be done?')).toBeInTheDocument()
@@ -318,26 +320,25 @@ describe('components', () => {
 
     it('should not call addTodo if length of text is 0', () => {
       const mockAddTodo = jest.fn()
-      const { container, getByText } = render(<Header addTodo={mockAddTodo}/>)
-      
+      const { container, getByText } = render(<Header addTodo={mockAddTodo} />)
+
       fireEvent.change(getByPlaceholder('What needs to be done?'), {
         target: { value: '' }
       })
-      
+
       expect(mockAddTodo).toHaveBeenCalledTimes(0)
     })
-    
+
     it('should call addTodo if length of text is greater than 0', () => {
       const mockAddTodo = jest.fn()
-      const { container, getByText } = render(<Header addTodo={mockAddTodo}/>)
+      const { container, getByText } = render(<Header addTodo={mockAddTodo} />)
 
       fireEvent.change(getByPlaceholder('What needs to be done?'), {
         target: { value: 'Use Redux' }
       })
-      
+
       expect(mockAddTodo).toHaveBeenCalledTimes(1)
     })
-
   })
 })
 ```
