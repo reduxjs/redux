@@ -1,20 +1,19 @@
-
 ---
 id: writing-tests
 title: Writing Tests
 hide_title: true
 ---
 
-  # Writing Tests
+# Writing Tests
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.
 
-  ### Setting Up
+### Setting Up
 
 We recommend [Jest](http://facebook.github.io/jest/) as the testing engine.
 Note that it runs in a Node environment, so you won't have access to the DOM.
 
-  ```sh
+```sh
 npm install --save-dev jest
 ```
 
@@ -48,13 +47,13 @@ Then, add this to `scripts` in your `package.json`:
 
 and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
 
-  ### Action Creators
+### Action Creators
 
 In Redux, action creators are functions which return plain objects. When testing action creators, we want to test whether the correct action creator was called and also whether the right action was returned.
 
-  #### Example
+#### Example
 
-  ```js
+```js
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
@@ -65,7 +64,7 @@ export function addTodo(text) {
 
 can be tested like:
 
-  ```js
+```js
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 
@@ -87,7 +86,7 @@ For async action creators using [Redux Thunk](https://github.com/gaearon/redux-t
 
 #### Example
 
-  ```js
+```js
 import 'cross-fetch/polyfill'
 
 function fetchTodosRequest() {
@@ -123,7 +122,7 @@ export function fetchTodos() {
 
 can be tested like:
 
-  ```js
+```js
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import * as actions from '../../actions/TodoActions'
@@ -165,7 +164,7 @@ A reducer should return the new state after applying the action to the previous 
 
 #### Example
 
-  ```js
+```js
 import { ADD_TODO } from '../constants/ActionTypes'
 
 const initialState = [
@@ -196,7 +195,7 @@ export default function todos(state = initialState, action) {
 
 can be tested like:
 
-  ```js
+```js
 import reducer from '../../structuring-reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
@@ -259,27 +258,28 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-  First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is built on top of React-DOM and React-DOM/test-utils, but is more convenient, readable, and powerful.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is built on top of React-DOM and React-DOM/test-utils, but is more convenient, readable, and powerful.
 
-  ```sh
+```sh
 npm install --save-dev @testing-library/react
 ```
 
 To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert wheter the callbacks were called when expected.
 
-  #### Example
+#### Example
 
-  ```js
+```js
 import React from 'react'
 import PropTypes from 'prop-types'
 import TodoTextInput from './TodoTextInput'
 
 const Header = ({ addTodo }) => {
-  const handleSave = (text) => {
+  const handleSave = text => {
     if (text.length !== 0) {
       addTodo(text)
     }
   }
+  
   return (
     <header className="header" data-testid="header">
       <h1>todos</h1>
@@ -301,7 +301,7 @@ export default Header
 
 can be tested like:
 
-  ```js
+```js
 import React from 'react'
 import { render, fireEvent, getByTestId } from'@testing-library/react'
 import Header from '../../components/Header'
@@ -310,7 +310,7 @@ describe('components', () => {
   describe('Header', () => {
     it('should render self and subcomponents', () => {
       const mockAddTodo = jest.fn()
-      const { container, getByText, getByPlaceholder } = render(<Header addTodo={mockAddTodo}/>
+      const { container, getByText, getByPlaceholder } = render(<Header addTodo={mockAddTodo}/>)
       expect(getByTestId(container, 'header')).toBeInTheDocument()
       expect(getByText('todos')).toBeInTheDocument()
       expect(getByPlaceholder('What needs to be done?')).toBeInTheDocument()
@@ -318,7 +318,7 @@ describe('components', () => {
 
     it('should not call addTodo if length of text is 0', () => {
       const mockAddTodo = jest.fn()
-      const { container, getByText } = render(<Header addTodo={mockAddTodo}/>
+      const { container, getByText } = render(<Header addTodo={mockAddTodo}/>)
       
       fireEvent.change(getByPlaceholder('What needs to be done?'), {
         target: { value: '' }
@@ -329,7 +329,7 @@ describe('components', () => {
     
     it('should call addTodo if length of text is greater than 0', () => {
       const mockAddTodo = jest.fn()
-      const { container, getByText } = render(<Header addTodo={mockAddTodo}/>
+      const { container, getByText } = render(<Header addTodo={mockAddTodo}/>)
 
       fireEvent.change(getByPlaceholder('What needs to be done?'), {
         target: { value: 'Use Redux' }
@@ -346,9 +346,9 @@ describe('components', () => {
 
 If you use a library like [React Redux](https://github.com/reduxjs/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://react-redux.js.org/api#connect). This lets you inject Redux state into a regular React component.
 
-  Consider the following `App` component:
+Consider the following `App` component:
 
-  ```js
+```js
 import { connect } from 'react-redux'
 
 class App extends Component {
@@ -368,7 +368,7 @@ However, when you import it, you're actually holding the wrapper component retur
 
 In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 
-  ```js
+```js
 import { connect } from 'react-redux'
 
 // Use named export for unconnected component (for tests)
@@ -382,20 +382,20 @@ export default connect(mapStateToProps)(App)
 
 Since the default export is still the decorated component, the import statement pictured above will work as before so you won't have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
 
-  ```js
+```js
 // Note the curly braces: grab the named export instead of default export
 import { App } from './App'
 ```
 
 And if you need both:
 
-  ```js
+```js
 import ConnectedApp, { App } from './App'
 ```
 
 In the app itself, you would still import it normally:
 
-  ```js
+```js
 import App from './App'
 ```
 
@@ -409,11 +409,11 @@ You would only use the named export for tests.
 
 Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
 
-  #### Example
+#### Example
 
 First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/gaearon/redux-thunk/blob/master/src/index.js).
 
-  ```js
+```js
 const thunk = ({ dispatch, getState }) => next => action => {
   if (typeof action === 'function') {
     return action(dispatch, getState)
@@ -427,7 +427,7 @@ We need to create a fake `getState`, `dispatch`, and `next` functions. We use `j
 
 The invoke function runs our middleware in the same way Redux does.
 
-  ```js
+```js
 const create = () => {
   const store = {
     getState: jest.fn(() => ({})),
@@ -443,7 +443,7 @@ const create = () => {
 
 We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
 
-  ```js
+```js
 it('passes through non-function action', () => {
   const { next, invoke } = create()
   const action = { type: 'TEST' }
@@ -471,7 +471,7 @@ it('passes dispatch and getState', () => {
 
 In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
 
-  ### Glossary
+### Glossary
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
 
