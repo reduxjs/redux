@@ -101,7 +101,7 @@ module.exports = {
         href: 'https://redux.js.org/'
       },
       copyright:
-        'Copyright (c) 2015-present Dan Abramov and the Redux documentation authors.'
+        `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
     },
     algolia: {
       apiKey: '518c6e3c629811d8daa1d21dc8bcfa37',
