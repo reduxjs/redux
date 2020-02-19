@@ -1,6 +1,6 @@
 
 ---
-  id: writing-tests
+id: writing-tests
 title: Writing Tests
 hide_title: true
 ---
