@@ -1,0 +1,15 @@
+name: Compressed Size
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 1
+      - uses: preactjs/compressed-size-action@v1
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
