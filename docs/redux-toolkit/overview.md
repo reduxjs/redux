@@ -16,7 +16,7 @@ Redux Toolkit is available as a package on NPM for use with a module bundler or 
 
 ```bash
 # NPM
-npm install --save @reduxjs/toolkit
+npm install @reduxjs/toolkit
 
 # Yarn
 yarn add @reduxjs/toolkit
