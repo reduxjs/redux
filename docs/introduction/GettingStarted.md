@@ -44,15 +44,24 @@ make your Redux code better.
 
 ## Basic Example
 
-The whole state of your app is stored in an object tree inside a single _store_.
-The only way to change the state tree is to emit an _action_, an object describing what happened.
-To specify how the actions transform the state tree, you write pure _reducers_.
+Open the `index.html` below by your browser and you will see it working.
 
-That's it!
+`index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redux basic example</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <script src="exsample.js"></script>
+  </head>
+</html>
+```
+
+`example.js`
 
 ```js
-import { createStore } from 'redux'
-
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
  * It describes how an action transforms the state into the next state.
@@ -77,8 +86,7 @@ function counter(state = 0, action) {
 }
 
 // Create a Redux store holding the state of your app.
-// Its API is { subscribe, dispatch, getState }.
-let store = createStore(counter)
+let store = Redux.createStore(counter)
 
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
@@ -95,6 +103,12 @@ store.dispatch({ type: 'INCREMENT' })
 store.dispatch({ type: 'DECREMENT' })
 // 1
 ```
+
+The whole state of your app is stored in an object tree inside a single _store_.
+The only way to change the state tree is to emit an _action_, an object describing what happened.
+To specify how the actions transform the state tree, you write pure _reducers_.
+
+That's it!
 
 Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called _actions_. Then you write a special function called a _reducer_ to decide how every action transforms the entire application's state.
 
