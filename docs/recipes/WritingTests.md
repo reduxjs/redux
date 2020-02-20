@@ -352,6 +352,7 @@ export default connect(mapStateToProps)(App)
 ```
 
 To test it, we can build a wrapper function on top of React Testing Library's `render` function that will create a store for each test like:
+
 ```js
 import React from 'react'
 import { render, screen } from '@testing-library/react'
@@ -360,7 +361,10 @@ import { Provider } from 'react-redux'
 import App from '../../containers/App'
 import { initialState, reducer } from './reducer.js'
 
-function renderWithRedux(ui, { initialState, store = createStore(reducer, initialState) } = {}) {
+function renderWithRedux(
+  ui,
+  { initialState, store = createStore(reducer, initialState) } = {}
+) {
   return render(<Provider store={store}>{ui}</Provider>)
 }
 
@@ -369,9 +373,7 @@ it('Renders the connected app with initialState', () => {
 
   expect(screen.getByText(/redux user/i)).toBeInTheDocument()
 })
-
 ```
-
 
 ### Middleware
 
