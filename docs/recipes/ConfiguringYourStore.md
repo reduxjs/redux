@@ -49,7 +49,7 @@ We will add two middlewares and one enhancer:
 #### Install `redux-thunk`
 
 ```sh
-npm install --save redux-thunk
+npm install redux-thunk
 ```
 
 #### middleware/logger.js

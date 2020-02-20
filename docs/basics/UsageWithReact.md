@@ -19,7 +19,7 @@ We will use React to build our simple todo app, and cover the basics of how to u
 [React bindings](https://github.com/reduxjs/react-redux) are not included in Redux by default. You need to install them explicitly:
 
 ```sh
-npm install --save react-redux
+npm install react-redux
 ```
 
 If you don't use npm, you may grab the latest UMD build from unpkg (either a [development](https://unpkg.com/react-redux@latest/dist/react-redux.js) or a [production](https://unpkg.com/react-redux@latest/dist/react-redux.min.js) build). The UMD build exports a global called `window.ReactRedux` if you add it to your page via a `<script>` tag.

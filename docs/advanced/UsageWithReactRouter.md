@@ -12,7 +12,7 @@ So you want to do routing with your Redux app. You can use it with [React Router
 
 `react-router-dom` is available on npm . This guides assumes you are using `react-router-dom@^4.1.1`.
 
-`npm install --save react-router-dom`
+`npm install react-router-dom`
 
 ## Configuring the Fallback URL
 

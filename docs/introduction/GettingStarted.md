@@ -18,7 +18,7 @@ Redux is available as a package on NPM for use with a module bundler or in a Nod
 
 ```bash
 # NPM
-npm install --save redux
+npm install redux
 
 # Yarn
 yarn add redux
