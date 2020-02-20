@@ -258,10 +258,16 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is built on top of React-DOM and React-DOM/test-utils, but is more convenient, readable, and powerful.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
 
 ```sh
 npm install --save-dev @testing-library/react
+```
+
+If you are using jest as recommended above, we also recommend installing [jest-dom](https://github.com/testing-library/jest-dom) as it provides a set of custom jest matchers that you can use to extend jest. These will make your tests more declarative, clear to read and to maintain. jest-dom is being used in the examples below.
+
+```sh
+npm install --save-dev @testing-library/jest-dom
 ```
 
 To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert wheter the callbacks were called when expected.
@@ -281,7 +287,7 @@ const Header = ({ addTodo }) => {
   }
 
   return (
-    <header className="header" data-testid="header">
+    <header className="header">
       <h1>todos</h1>
       <TodoTextInput
         newTodo={true}
@@ -303,43 +309,29 @@ can be tested like:
 
 ```js
 import React from 'react'
-import { render, fireEvent, getByTestId } from '@testing-library/react'
+import { render, fireEvent, screen } from '@testing-library/react'
 import Header from '../../components/Header'
 
-describe('components', () => {
-  describe('Header', () => {
-    it('should render self and subcomponents', () => {
-      const mockAddTodo = jest.fn()
-      const { container, getByText, getByPlaceholder } = render(
-        <Header addTodo={mockAddTodo} />
-      )
-      expect(getByTestId(container, 'header')).toBeInTheDocument()
-      expect(getByText('todos')).toBeInTheDocument()
-      expect(getByPlaceholder('What needs to be done?')).toBeInTheDocument()
-    })
+it('should not call addTodo if length of text is 0', () => {
+  const mockAddTodo = jest.fn()
+  render(<Header addTodo={mockAddTodo} />)
 
-    it('should not call addTodo if length of text is 0', () => {
-      const mockAddTodo = jest.fn()
-      const { container, getByText } = render(<Header addTodo={mockAddTodo} />)
-
-      fireEvent.change(getByPlaceholder('What needs to be done?'), {
-        target: { value: '' }
-      })
-
-      expect(mockAddTodo).toHaveBeenCalledTimes(0)
-    })
-
-    it('should call addTodo if length of text is greater than 0', () => {
-      const mockAddTodo = jest.fn()
-      const { container, getByText } = render(<Header addTodo={mockAddTodo} />)
-
-      fireEvent.change(getByPlaceholder('What needs to be done?'), {
-        target: { value: 'Use Redux' }
-      })
-
-      expect(mockAddTodo).toHaveBeenCalledTimes(1)
-    })
+  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
+    target: { value: '' }
   })
+
+  expect(mockAddTodo).toHaveBeenCalledTimes(0)
+})
+
+it('should call addTodo if length of text is greater than 0', () => {
+  const mockAddTodo = jest.fn()
+  render(<Header addTodo={mockAddTodo} />)
+
+  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
+    target: { value: 'Use Redux' }
+  })
+
+  expect(mockAddTodo).toHaveBeenCalledTimes(1)
 })
 ```
 
@@ -352,59 +344,34 @@ Consider the following `App` component:
 ```js
 import { connect } from 'react-redux'
 
-class App extends Component {
-  /* ... */
+const App = props => {
+  return <div>{props.user}</div>
 }
 
 export default connect(mapStateToProps)(App)
 ```
 
-In a unit test, you would normally import the `App` component like this:
-
+To test it, we can build a wrapper function on top of React Testing Library's `render` function that will create a store for each test like:
 ```js
-import App from './App'
-```
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from '../../containers/App'
+import { initialState, reducer } from './reducer.js'
 
-However, when you import it, you're actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://react-redux.js.org/api/provider) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
-
-In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
-
-```js
-import { connect } from 'react-redux'
-
-// Use named export for unconnected component (for tests)
-export class App extends Component {
-  /* ... */
+function renderWithRedux(ui, { initialState, store = createStore(reducer, initialState) } = {}) {
+  return render(<Provider store={store}>{ui}</Provider>)
 }
 
-// Use default export for the connected component (for app)
-export default connect(mapStateToProps)(App)
+it('Renders the connected app with initialState', () => {
+  renderWithRedux(<App />, { initialState: { user: 'Redux User' } })
+
+  expect(screen.getByText(/redux user/i)).toBeInTheDocument()
+})
+
 ```
 
-Since the default export is still the decorated component, the import statement pictured above will work as before so you won't have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
-
-```js
-// Note the curly braces: grab the named export instead of default export
-import { App } from './App'
-```
-
-And if you need both:
-
-```js
-import ConnectedApp, { App } from './App'
-```
-
-In the app itself, you would still import it normally:
-
-```js
-import App from './App'
-```
-
-You would only use the named export for tests.
-
-> ##### A Note on Mixing ES6 Modules and CommonJS
-
-> If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
 
 ### Middleware
 
@@ -476,4 +443,4 @@ In some cases, you will need to modify the `create` function to use different mo
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
 
-- [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. Used by React Testing Library.
+- [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.
