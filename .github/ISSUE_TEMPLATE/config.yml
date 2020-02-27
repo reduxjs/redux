@@ -1,5 +1,4 @@
 contact_links:
     - name: 🤔 Questions and Help
-      url: https://www.reactiflux.com/
-      about: This issue tracker is not for support questions. Please ask questions here.
-
+      url: https://redux.js.org/introduction/getting-started#help-and-discussion
+      about: This is a bug tracker, not a support system. For usage questions, please use our support resources.
