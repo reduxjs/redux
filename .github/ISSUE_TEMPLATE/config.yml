@@ -1,3 +1,4 @@
+blank_issues_enabled: false
 contact_links:
     - name: 🤔 Questions and Help
       url: https://redux.js.org/introduction/getting-started#help-and-discussion
