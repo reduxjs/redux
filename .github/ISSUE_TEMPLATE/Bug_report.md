@@ -3,17 +3,32 @@ name: "\U0001F41BBug report"
 about: Something is wrong with Redux.
 ---
 
-## Do you want to request a _feature_ or report a _bug_?
+<!--
+Thank you for contributing to open source!
 
-(If this is a _usage question_, please **do not post it here**—post it on [Stack Overflow](http://stackoverflow.com/questions/tagged/redux) instead. If this is not a “feature” or a “bug”, or the phrase “How do I...?” applies, then it's probably a usage question.)
+Do you need some help?
+======================
+
+The issue tracker is meant for bug reports only. This isn't the best place for support or usage questions. Questions here don't have as much visibility as they do elsewhere. Before you ask a question, here are some resources to get help first:
+
+- Read the docs: https://redux.js.org/
+- Check out the troubleshooting guide: https://redux.js.org/troubleshooting
+- Look for/ask questions on Stack Overflow: https://stackoverflow.com/questions/tagged/redux
+- Ask in chat: https://www.reactiflux.com/
+
+Think you found a bug?
+======================
+The best bug report is a failing test in the repository as a pull request. Otherwise, please use the template below.
+
+-->
 
 ### Prior Issues
 
 Are there any existing issues or PRs that relate to this problem? If so, link them here.
 
-## Bug Reports
-
 ### What is the current behavior?
+
+What does Redux do right now.
 
 ### Steps to Reproduce
 
@@ -21,14 +36,8 @@ If the current behavior is a bug, please provide the steps to reproduce and if p
 
 ### What is the expected behavior?
 
+What should Redux be doing?
+
 ### Environment Details
 
 Which versions of Redux, and which browser and OS are affected by this issue? Did this work in previous versions of Redux?
-
-## New Features
-
-### What is the new or updated feature that you are suggesting?
-
-### Why should this feature be included?
-
-### What docs changes are needed to explain this?
