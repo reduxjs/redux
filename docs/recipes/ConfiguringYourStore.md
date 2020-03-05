@@ -116,10 +116,7 @@ import monitorReducerEnhancer from './enhancers/monitorReducer'
 import App from './components/App'
 
 const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
-const composedEnhancers = compose(
-  middlewareEnhancer,
-  monitorReducerEnhancer
-)
+const composedEnhancers = compose(middlewareEnhancer, monitorReducerEnhancer)
 
 const store = createStore(rootReducer, undefined, composedEnhancers)
 
