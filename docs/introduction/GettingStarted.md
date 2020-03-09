@@ -42,6 +42,16 @@ Whether you're a brand new Redux user setting up your first project, or an exper
 simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org/)** can help you
 make your Redux code better.
 
+## Create a React Redux App
+
+The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of **[Redux Toolkit](https://redux-toolkit.js.org/)** and React Redux's integration with React components.
+
+```sh
+npx create-react-app my-app --template redux
+cd my-app
+npm start
+```
+
 ## Basic Example
 
 The whole state of your app is stored in an object tree inside a single _store_.
