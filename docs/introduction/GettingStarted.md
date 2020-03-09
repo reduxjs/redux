@@ -43,6 +43,7 @@ simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org
 make your Redux code better.
 
 ## Create a React Redux App
+
 The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of **[Redux Toolkit](https://redux-toolkit.js.org/)** and React Redux's integration with React components.
 
 ```sh
