@@ -39,6 +39,4 @@ The recommended way to start new apps with React and Redux is by using the [offi
 
 ```sh
 npx create-react-app my-app --template redux
-cd my-app
-npm start
 ```
