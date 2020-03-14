@@ -14,6 +14,16 @@ You can use Redux together with [React](https://reactjs.org), or with any other 
 
 ## Installation
 
+### Using Create React App
+
+The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of **[Redux Toolkit](https://redux-toolkit.js.org/)** and React Redux's integration with React components.
+
+```sh
+npx create-react-app my-app --template redux
+```
+
+### An Existing App
+
 Redux is available as a package on NPM for use with a module bundler or in a Node application:
 
 ```bash
@@ -41,14 +51,6 @@ and even [creating entire "slices" of state at once](https://redux-toolkit.js.or
 Whether you're a brand new Redux user setting up your first project, or an experienced user who wants to
 simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org/)** can help you
 make your Redux code better.
-
-## Create a React Redux App
-
-The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of **[Redux Toolkit](https://redux-toolkit.js.org/)** and React Redux's integration with React components.
-
-```sh
-npx create-react-app my-app --template redux
-```
 
 ## Basic Example
 
