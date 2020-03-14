@@ -1,7 +1,7 @@
 # <a href='http://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60' alt='Redux Logo' aria-label='redux.js.org' /></a>
 
 Redux is a predictable state container for JavaScript apps.
-(Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).)
+(Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).)
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
@@ -90,6 +90,16 @@ Even if you haven't used Flux or Elm, Redux only takes a few minutes to get star
 
 ## Installation
 
+### Using Create React App
+
+The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of [Redux Toolkit](https://redux-toolkit.js.org/) and React Redux's integration with React components.
+
+```sh
+npx create-react-app my-app --template redux
+```
+
+### An Existing App
+
 To install the stable version:
 
 ```sh
@@ -106,7 +116,7 @@ If you don't use a module bundler, it's also fine. The `redux` npm package inclu
 
 The Redux source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in [any modern browser](http://caniuse.com/#feat=es5). You don't need to use Babel or a module bundler to [get started with Redux](https://github.com/reduxjs/redux/blob/master/examples/counter-vanilla/index.html). You can even use the ES module build that's available at [`es/redux.mjs`](https://unpkg.com/redux/es/) which can be referenced using `type="module"` in your `script` tag or as a standard `import`.
 
-### Complementary Packages
+#### Complementary Packages
 
 Most likely, you'll also need [the React bindings](https://github.com/reduxjs/react-redux) and [the developer tools](https://github.com/reduxjs/redux-devtools).
 
