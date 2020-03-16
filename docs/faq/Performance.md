@@ -115,7 +115,7 @@ For React-Redux specifically, starting in [React-Redux v7](https://github.com/re
 
 Since React-Redux needs to work in both ReactDOM and React Native environments, we've taken care of importing this API from the correct renderer at build time for our own use. We also now re-export this function publicly ourselves, renamed to `batch()`. You can use it to ensure that multiple actions dispatched outside of React only result in a single render update, like this:
 
-```
+```js
 import { batch } from "react-redux";
 
 function myThunk() {
