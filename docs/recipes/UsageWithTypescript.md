@@ -133,9 +133,9 @@ With these types we can now also type check system's action creators:
 ```ts
 // src/store/system/actions.ts
 
-import { SystemState, UPDATE_SESSION, SystemActionTypes } from './types'
+import { SystemState, UPDATE_SESSION } from './types'
 
-export function updateSession(newSession: SystemState): SystemActionTypes {
+export function updateSession(newSession: SystemState) {
   return {
     type: UPDATE_SESSION,
     payload: newSession
