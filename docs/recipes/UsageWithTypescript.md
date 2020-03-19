@@ -93,10 +93,10 @@ With these types declared we can now also type check chat's action creators. In 
 ```ts
 // src/store/chat/actions.ts
 
-import { Message, SEND_MESSAGE, DELETE_MESSAGE, ChatActionTypes } from './types'
+import { Message, SEND_MESSAGE, DELETE_MESSAGE } from './types'
 
 // TypeScript infers that this function is returning SendMessageAction
-export function sendMessage(newMessage: Message): ChatActionTypes {
+export function sendMessage(newMessage: Message) {
   return {
     type: SEND_MESSAGE,
     payload: newMessage
@@ -104,7 +104,7 @@ export function sendMessage(newMessage: Message): ChatActionTypes {
 }
 
 // TypeScript infers that this function is returning DeleteMessageAction
-export function deleteMessage(timestamp: number): ChatActionTypes {
+export function deleteMessage(timestamp: number) {
   return {
     type: DELETE_MESSAGE,
     meta: {
