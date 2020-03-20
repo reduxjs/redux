@@ -1,9 +1,6 @@
 name: Compressed Size
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
