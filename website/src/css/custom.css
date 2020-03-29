@@ -145,24 +145,28 @@ a:visited {
   overflow: hidden;
 }
 
-.style-guide details {
+.style-guide details,
+details.detailed-explanation {
   background-color: var(--ifm-blockquote-color);
-  margin: 1rem 0;
-  padding: 1rem;
+  margin: 0.25rem 0;
+  padding: 0.25rem 0.5rem;
   border-radius: var(--ifm-global-radius);
 }
 
-.style-guide details summary {
+.style-guide details summary,
+details.detailed-explanation summary {
   cursor: pointer;
 }
 
-.style-guide details summary h4 {
+.style-guide details summary h4,
+details.detailed-explanation summary h4 {
   display: inline-block;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.style-guide details p {
+.style-guide details p,
+details.detailed-explanation p {
   margin-bottom: 0;
 }
 
