@@ -11,23 +11,34 @@ module.exports = {
       'introduction/ecosystem',
       'introduction/examples'
     ],
-    'Basic Tutorial': [
-      'basics/basic-tutorial',
-      'basics/actions',
-      'basics/reducers',
-      'basics/store',
-      'basics/data-flow',
-      'basics/usage-with-react',
-      'basics/example'
-    ],
-    'Advanced Tutorial': [
-      'advanced/advanced-tutorial',
-      'advanced/async-actions',
-      'advanced/async-flow',
-      'advanced/middleware',
-      'advanced/usage-with-react-router',
-      'advanced/example-reddit-api',
-      'advanced/next-steps'
+    Tutorials: [
+      'tutorials/quick-start',
+      {
+        type: 'category',
+        label: 'Basic Tutorial',
+        items: [
+          'basics/basic-tutorial',
+          'basics/actions',
+          'basics/reducers',
+          'basics/store',
+          'basics/data-flow',
+          'basics/usage-with-react',
+          'basics/example'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Advanced Tutorial',
+        items: [
+          'advanced/advanced-tutorial',
+          'advanced/async-actions',
+          'advanced/async-flow',
+          'advanced/middleware',
+          'advanced/usage-with-react-router',
+          'advanced/example-reddit-api',
+          'advanced/next-steps'
+        ]
+      }
     ],
     Recipes: [
       'recipes/recipe-index',
