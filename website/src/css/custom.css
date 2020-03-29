@@ -23,6 +23,8 @@
   --ifm-code-padding-horizontal: 0.2rem;
   --ifm-pre-background: rgb(39, 40, 34);
 
+  --ifm-alert-color: black;
+
   --ra-admonition-color: #ecf4f9;
   --ra-admonition-color-dark: #2a98b9;
 
@@ -184,7 +186,6 @@ a:visited {
   content: ' RECOMMENDED';
   color: #2b5a99;
 }
-
 
 .admonition {
   color: var(--ifm-font-base-color);
