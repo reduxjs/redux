@@ -12,7 +12,14 @@ module.exports = {
       'introduction/examples'
     ],
     Tutorials: [
-      'tutorials/quick-start',
+      {
+        type: 'category',
+        label: 'Quick Start',
+        items: [
+          'tutorials/quick-start/quick-start-part-1',
+          'tutorials/quick-start/quick-start-part-2'
+        ]
+      },
       {
         type: 'category',
         label: 'Basic Tutorial',
