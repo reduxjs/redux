@@ -292,9 +292,7 @@ Now that you know the pieces that make up a Redux app, let's look at a real work
 
 The sample project we'll look at is a small counter application that lets us add or subtract from a number as we click buttons. It may not be very exciting, but it shows all the important pieces of a React+Redux application in action.
 
-The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/cra-template-redux), and uses two important package:
-
--
+The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/cra-template-redux). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
 
 Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
 
@@ -366,7 +364,7 @@ And if you click the "Diff" tab, you can see that the `state.counter.value` fiel
 
 The ability to see what is happening inside of our app and how our state is changing over time is very powerful!
 
-### Counter App Setup
+### Creating the Redux Store
 
 Now that you know what the app does, let's look at how it works.
 
@@ -384,8 +382,6 @@ Here are the key files that make up this application:
 
 Let's start by looking at how the Redux store is created.
 
-#### Creating the Redux Store
-
 Open up `app/store.js`, which should look like this:
 
 **TODO filename title here**
@@ -401,12 +397,126 @@ export default configureStore({
 })
 ```
 
-The Redux store is created using the `configureStore` function from Redux Toolkit. `configureStore` requires that we pass in a `reducer` argument, which can be either a function, or an object.
+The Redux store is created using the `configureStore` function from Redux Toolkit. `configureStore` requires that we pass in a `reducer` argument.
 
-Earlier, we saw that we can pass a reducer function directly as the `reducer` argument:
+Our application might be made up of many different features, and each of those features might have its own reducer function. When we call `configureStore`, we can pass in all of the different reducers in an object. The key names in the object will define the keys in our final state value.
+
+We have a file named `features/counter/counterSlice.js` that exports a reducer function for the counter logic. We can import that `counterReducer` function here, and include it when we create the store.
+
+When we pass in an object like `{counter: counterReducer}`, that says that we want to have a `state.counter` section of our Redux state object, and that we want the `counterReducer` function to be in charge of deciding if and how to update the `state.counter` section whenever an action is dispatched.
+
+#### Redux Slices
+
+**A "slice" is a collection of Redux reducer logic and actions for a single feature in your app**, typically defined together in a single file. The name comes from splitting up the root Redux state object into multiple "slices" of state.
+
+For example, in a blogging app, our store setup might look like:
+
+```js
+import { configureStore } from '@reduxjs/toolkit'
+import usersReducer from '../features/users/usersSlice'
+import postsReducer from '../features/posts/postsSlice'
+import commentsReducer from '../features/comments/commentsSlice'
+
+export default configureStore({
+  reducer: {
+    users: usersReducer,
+    posts: postsReducer,
+    comments: commentsReducer
+  }
+})
+```
+
+In that example, `state.users`, `state.posts`, and `state.comments` are each a separate "slice" of the Redux state. Since `usersReducer` is responsible for updating the `state.users` slice, we refer to it as a "slice reducer" function.
+
+<DetailedExplanation title="Detailed Explanation: Reducers and State Structure">
+
+A Redux store needs to have a single "root reducer" function passed in when it's created. So if we have many different slice reducer functions, how do we get a single root reducer instead, and how does this define the contents of the Redux store state?
+
+If we tried calling all of the slice reducers by hand, it might look like this:
+
+```js
+function rootReducer(state = {}, action) {
+  return {
+    users: usersReducer(state.users, action),
+    posts: postsReducer(state.posts, action),
+    comments: commentsReducer(state.comments, action)
+  }
+}
+```
+
+That calls each slice reducer individually, passes in the specific slice of the Redux state, and includes the return value in the final new Redux state object.
+
+Redux has a function called [`combineReducers`](../../api/combineReducers.md) that does this for us automatically. It accepts an object full of slice reducers as its argument, and returns a function that calls each slice reducer whenever an action is dispatched. The result from each slice reducer are all combined together into a single object as the final result. We can do the same thing as the previous example using `combineReducers`:
+
+```js
+const rootReducer = combineReducers({
+  users: usersReducer,
+  posts: postsReducer,
+  comments: commentsReducer
+})
+```
+
+When we pass an object of slice reducers to `configureStore`, it passes those to `combineReducers` for us to generate the root reducer.
+
+As we saw earlier, you can also pass a reducer function directly as the `reducer` argument:
 
 ```js
 const store = configureStore({
-  reducer: counterReducer
+  reducer: rootReducer
 })
 ```
+
+</DetailedExplanation>
+
+### The Counter Slice
+
+Since we know that the `counterReducer` function is coming from `feature/counter/counterSlice.js`, let's see what's in that file:
+
+**TODO file name here**
+
+```js
+import { createSlice } from '@reduxjs/toolkit'
+
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+    value: 0
+  },
+  reducers: {
+    increment: state => {
+      // Redux Toolkit allows us to write "mutating" logic in reducers. It
+      // doesn't actually mutate the state because it uses the immer library,
+      // which detects changes to a "draft state" and produces a brand new
+      // immutable state based off those changes
+      state.value += 1
+    },
+    decrement: state => {
+      state.value -= 1
+    },
+    incrementByAmount: (state, action) => {
+      state.value += action.payload
+    }
+  }
+})
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions
+
+// The function below is called a thunk and allows us to perform async logic. It
+// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
+// will call the thunk with the `dispatch` function as the first argument. Async
+// code can then be executed and other actions can be dispatched
+export const incrementAsync = amount => dispatch => {
+  setTimeout(() => {
+    dispatch(incrementByAmount(amount))
+  }, 1000)
+}
+
+// The function below is called a selector and allows us to select a value from
+// the state. Selectors can also be defined inline where they're used instead of
+// in the slice file. For example: `useSelector((state) => state.counter.value)`
+export const selectCount = state => state.counter.value
+
+export default counterSlice.reducer
+```
+
+Let's break this down piece by piece.
