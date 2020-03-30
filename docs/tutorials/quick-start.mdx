@@ -14,13 +14,17 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 - What Redux is and why you might want to use it
 - Key Redux terms and concepts
-- How to write a typical React + Redux app
+- The structure of a typical React + Redux app
 
 :::
 
 ## Introduction
 
 Welcome to the Redux Quick Start tutorial! This tutorial will introduce you to Redux, so that you can begin using it as quickly as possible. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
+
+In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and we'll examine a typical React + Redux app to see how the pieces fit together.
+
+In [Part 2](./part-2.md), we'll use that knowledge to build a small blogging app with some real-world features.
 
 ### How to Read This Tutorial
 
@@ -105,7 +109,7 @@ Redux can integrate with any UI framework, and is most frequently used with Reac
 
 #### Redux Toolkit
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) is our recommended approach for writing Redux logic. It contains functions that build in our suggested best practices, simplify most Redux tasks, prevent common mistakes, and make it easier to write Redux applications.
+[**Redux Toolkit**](https://redux-toolkit.js.org) is our recommended approach for writing Redux logic. It contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
 
 #### Redux DevTools Extension
 
@@ -144,7 +148,7 @@ It is a self-contained app with the following parts:
 - The **view**, a declarative description of the UI based on the current state
 - The **actions**, the events that occur in the app based on user input, and trigger updates in the state
 
-This is a small example of "one-way data flow":
+This is a small example of **"one-way data flow"**:
 
 - State describes the condition of the app at a specific point in time
 - The UI is rendered based on that state
@@ -153,7 +157,7 @@ This is a small example of "one-way data flow":
 
 ![One-way data flow](/img/tutorials/one-way-data-flow.png)
 
-However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but this doesn't always help.
+However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but that doesn't always help.
 
 So why don't we extract the shared state out of the components, and manage it in a global singleton? With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
 
@@ -163,7 +167,7 @@ This is the basic idea behind Redux: a single centralized place to contain the g
 
 ### Terminology
 
-There's some important terms that you'll need to be familiar with before we continue:
+There's some important Redux terms that you'll need to be familiar with before we continue:
 
 #### Actions
 
@@ -205,6 +209,8 @@ Reducers must _always_ follow some specific rules:
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
 - They must not do any asynchronous logic or other "side effects"
 
+We'll talk more about the rules of reducers later, including why they're important and how to follow them correctly.
+
 ```js
 const initialState = { value: 0 }
 
@@ -227,7 +233,7 @@ function counterReducer(state = initialState, action) {
 
 The current Redux application state lives in an object called the **store** .
 
-The store is created using a reducer, and has a method called `getState` that returns the current state value:
+The store is created by passing in a reducer, and has a method called `getState` that returns the current state value:
 
 ```js
 import { configureStore } from '@reduxjs/toolkit'
@@ -240,7 +246,7 @@ console.log(store.getState())
 
 #### Dispatch
 
-The Redux store has a method called `dispatch`. The only way to update the state is to call `store.dispatch()` and pass in an action object. The store will run its reducer function and save the new state value:
+The Redux store has a method called `dispatch`. The only way to update the state is to call `store.dispatch()` and pass in an action object. The store will run its reducer function and save the new state value inside, and we can call `getState()` to retrieve the updated value:
 
 ```js
 store.dispatch({ type: 'counter/increment' })
@@ -281,3 +287,126 @@ console.log(currentValue)
 ## Examining a React and Redux App
 
 Now that you know the pieces that make up a Redux app, let's look at a real working example to see how these pieces fit together.
+
+### The Counter Example App
+
+The sample project we'll look at is a small counter application that lets us add or subtract from a number as we click buttons. It may not be very exciting, but it shows all the important pieces of a React+Redux application in action.
+
+The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/cra-template-redux), and uses two important package:
+
+-
+
+Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
+
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/markerikson/redux-quick-start-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark"
+  title="redux-quick-start-example"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
+
+If you'd like to try create this project on your own computer, you can [start a new Create-React-App project](https://create-react-app.dev/docs/getting-started#selecting-a-template) using our Redux template:
+
+```
+npx create-react-app redux-quickstart-example --template redux
+```
+
+#### Using the Counter App
+
+The counter app has already been set up to let us watch what happens inside as we use it.
+
+Try right-clicking inside the app preview in your browser, and choose "Inspect" from the menu to open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
+
+![Redux DevTools: initial app state](/img/tutorials/quickstart-devtools-initial.png)
+
+On the right, we can see that our Redux store is starting off with an app state value that looks like this:
+
+```js
+{
+  counter: {
+    value: 0
+  }
+}
+```
+
+The DevTools will show us how the store state changes as we use the app.
+
+Let's play with the app first to see what it does. Click the "+" button in the app, then look at the "Diff" tab in the Redux DevTools:
+
+![Redux DevTools: first dispatched action](/img/tutorials/quickstart-devtools-first-action.png)
+
+We can see two important things here:
+
+- When we clicked the "+" button, an action with a type of `"counter/increment"` was dispatched to the store
+- When that action was dispatched, the `state.counter.value` field changed from `0` to `1`
+
+Now try these steps:
+
+- Click the "+" button again. The displayed value should now be 2.
+- Click the "-" button once. The displayed value should now be 1.
+- Click the "Add Amount" button. The displayed value should now be 3.
+- Change the number "2" in the textbox to a "3"
+- Click the "Add Async" button. You should see a progress bar fill the button, and after a couple seconds, the displayed value should change to 6.
+
+Go back to the Redux DevTools. You should see a total of five actions dispatched, one for each time we clicked a button . Now select the last `"counter/increment"` entry from the list on the left, and click the "Action" tab on the right side:
+
+![Redux DevTools: done clicking buttons](/img/tutorials/quickstart-devtools-done-clicking.png)
+
+We can see that this action object looked like this:
+
+```js
+{
+  type: 'counter/incrementByAmount',
+  payload: 3
+}
+```
+
+And if you click the "Diff" tab, you can see that the `state.counter.value` field changed from a `3` to a `6`.
+
+The ability to see what is happening inside of our app and how our state is changing over time is very powerful!
+
+### Counter App Setup
+
+Now that you know what the app does, let's look at how it works.
+
+Here are the key files that make up this application:
+
+- `/src`
+  - `index.js`: the starting point for the app
+  - `App.js`: the top-level React component
+  - `/app`
+    - `store.js`: creates the Redux store instance
+  - `/features`
+    - `/counter`
+      - `Counter.js`: a React component that shows the UI for the counter feature
+      - `counterSlice.js`: the Redux logic for the counter feature
+
+Let's start by looking at how the Redux store is created.
+
+#### Creating the Redux Store
+
+Open up `app/store.js`, which should look like this:
+
+**TODO filename title here**
+
+```js
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from '../features/counter/counterSlice'
+
+export default configureStore({
+  reducer: {
+    counter: counterReducer
+  }
+})
+```
+
+The Redux store is created using the `configureStore` function from Redux Toolkit. `configureStore` requires that we pass in a `reducer` argument, which can be either a function, or an object.
+
+Earlier, we saw that we can pass a reducer function directly as the `reducer` argument:
+
+```js
+const store = configureStore({
+  reducer: counterReducer
+})
+```
