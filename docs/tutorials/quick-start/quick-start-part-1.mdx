@@ -123,7 +123,7 @@ Before we dive into some actual code, let's talk about some of the terms and con
 
 Let's start by looking at a React counter component:
 
-```js
+```jsx
 function Counter() {
   // State: a counter value
   const [counter, setCounter] = useState(0)
@@ -899,7 +899,7 @@ Any time an action has been dispatched and the Redux store has been updated, `us
 
 #### Dispatching Actions with `useDispatch`
 
-Similarly, we know that if we had access to a Redux store, we could dispatch actions using action creators, like `store.dispatch(increent())`. Since we don't have access to the store itself, we need some way to have access to just the `dispatch` method.
+Similarly, we know that if we had access to a Redux store, we could dispatch actions using action creators, like `store.dispatch(increment())`. Since we don't have access to the store itself, we need some way to have access to just the `dispatch` method.
 
 The `useDispatch` hook does that for us, and gives us the actual `dispatch` method from the Redux store:
 
@@ -973,6 +973,8 @@ If you're not sure where to put something, here are some common rules of thumb f
 - Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
 
 This is also a good example of how to think about forms in Redux in general. **Most form state probably shouldn't be kept in Redux.** Instead, keep the data in your form components as you're editing it, and then dispatch Redux actions to update the store when the user is done.
+
+One other thing to note before we move on: remember that `incrementAsync` thunk from `counterSlice.js`? We're using it here in this component. Notice that we use it the same way we dispatch the other normal action creators. This component doesn't care whether we're dispatching a normal action or starting some async logic. It just knows that when you click that button, it dispatches something.
 
 ### Providing the Store
 
