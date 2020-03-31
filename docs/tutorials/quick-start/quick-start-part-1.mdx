@@ -781,11 +781,77 @@ This gives us a way to write whatever sync or async code we want, while still ha
 
 </DetailedExplanation>
 
+There's one more function in this file, but we'll talk about that in just a minute when we look at the `<Counter>` UI component.
+
 :::tip Want to Know More?
 
 See [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
 
 :::
+
+### The React Counter Component
+
+Earlier, we saw what a standalone React `<Counter>` component looks like. Our React+Redux app has a similar `<Counter>` component, but it does a few things differently.
+
+We'll start by looking at the `Counter.js` component file:
+
+```js
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+  incrementAsync,
+  selectCount
+} from './counterSlice'
+import styles from './Counter.module.css'
+
+export function Counter() {
+  const count = useSelector(selectCount)
+  const dispatch = useDispatch()
+  const [incrementAmount, setIncrementAmount] = useState('2')
+
+  return (
+    <div>
+      <div className={styles.row}>
+        <button
+          className={styles.button}
+          aria-label="Increment value"
+          onClick={() => dispatch(increment())}
+        >
+          +
+        </button>
+        <span className={styles.value}>{count}</span>
+        <button
+          className={styles.button}
+          aria-label="Decrement value"
+          onClick={() => dispatch(decrement())}
+        >
+          -
+        </button>
+      </div>
+      {/* omit additional rendering output here */}
+    </div>
+  )
+}
+```
+
+Like with the earlier example, we have a function component called `Counter`, that stores some data in a `useState` hook.
+
+However, in our component, it doesn't look like we're storing the actual current counter value as state. There _is_ a variable called `count`, but it's not coming from a `useState` hook.
+
+While React includes several built-in hooks like `useState` and `useEffect`, other libraries can create their own [custom hooks](https://reactjs.org/docs/hooks-custom.html) that use React's hooks to build custom logic.
+
+The [React-Redux library](https://react-redux.js.org/) has [a set of custom hooks that allow your React component to interact with a Redux store](https://react-redux.js.org/api/hooks).
+
+#### Reading Data with `useSelector`
+
+First, the `useSelector` hook lets our component extract whatever pieces of data it needs from the Redux store state.
+
+Earlier, we saw that we can write "selector" functions, which take `state` as an argument and return some part of the state value.
+
+Our `counterSlice`.js has this selector function at the bottom:
 
 ```js
 // The function below is called a selector and allows us to select a value from
@@ -793,3 +859,135 @@ See [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [Wh
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectCount = state => state.counter.value
 ```
+
+If we had access to a Redux store, we could retrieve the current counter value as:
+
+```js
+const count = selectCount(store.getState())
+console.log(count)
+// 0
+```
+
+Our components can't talk to the Redux store directly, because we're not allowed to import it into component files. But, `useSelector` takes care of talking to the Redux store behind the scenes for us. If we pass in a selector function, it calls `someSelector(store.getState())` for us, and returns the result.
+
+So, we can get the current store counter value by doing:
+
+```js
+const count = useSelector(selectCount)
+```
+
+We don't have to _just_ use selectors that have already been exported, either. For example, we could write:
+
+```js
+const countPlusTwo = useSelector(state => state.counter.value + 2)
+```
+
+Any time an action has been dispatched and the Redux store has been updated, `useSelector` will re-run our selector function. If the selector returns a different value than last time, `useSelector` will make sure our component re-renders with the new value.
+
+#### Dispatching Actions with `useDispatch`
+
+Similarly, we know that if we had access to a Redux store, we could dispatch actions using action creators, like `store.dispatch(increent())`. Since we don't have access to the store itself, we need some way to have access to just the `dispatch` method.
+
+The `useDispatch` hook does that for us, and gives us the actual `dispatch` method from the Redux store:
+
+```js
+const dispatch = useDispatch()
+```
+
+From there, we can dispatch actions when the user does something like clicking on a button:
+
+```js
+<button
+  className={styles.button}
+  aria-label="Increment value"
+  onClick={() => dispatch(increment())}
+>
+  +
+</button>
+```
+
+### Component State and Forms
+
+By now you might be wondering, "Do I always have to put all my app's state into the Redux store?"
+
+The answer is **NO. Global state that is needed across the app should go in the Redux store. State that's only needed in one place should be kept in component state.**
+
+In this example, we have an input textbox where the user can type in the next number to be added to the counter:
+
+```js
+const [incrementAmount, setIncrementAmount] = useState('2')
+
+// later
+return (
+  <div className={styles.row}>
+    <input
+      className={styles.textbox}
+      aria-label="Set increment amount"
+      value={incrementAmount}
+      onChange={e => setIncrementAmount(e.target.value)}
+    />
+    <button
+      className={styles.button}
+      onClick={() => dispatch(incrementByAmount(Number(incrementAmount) || 0))}
+    >
+      Add Amount
+    </button>
+    <button
+      className={styles.asyncButton}
+      onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
+    >
+      Add Async
+    </button>
+  </div>
+)
+```
+
+We _could_ keep the current number string in the Redux store, by dispatching an action in the input's `onChange` handler and keeping it in our reducer. But, that doesn't give us any benefit. The only place that text string is used is here, in the `<Counter>` component. (Sure, there's only one other component in this example: `<App>`. But even if we had a larger application with many components, only `<Counter>` cares about this input value.)
+
+So, it makes sense to keep that value in a `useState` hook here in the `<Counter>` component.
+
+Similarly, if we had a boolean flag called `isDropdownOpen`, no other components in the app would care about that - it should really stay local to this component.
+
+**In a React + Redux app, your global state should go in the Redux store, and your local state should stay in React components.**
+
+If you're not sure where to put something, here are some common rules of thumb for determining what kind of data should be put into Redux:
+
+- Do other parts of the application care about this data?
+- Do you need to be able to create further derived data based on this original data?
+- Is the same data being used to drive multiple components?
+- Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
+- Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
+- Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
+
+This is also a good example of how to think about forms in Redux in general. **Most form state probably shouldn't be kept in Redux.** Instead, keep the data in your form components as you're editing it, and then dispatch Redux actions to update the store when the user is done.
+
+### Providing the Store
+
+We've seen that our components can use the `useSelector` and `useDispatch` hooks to talk to the Redux store. But, since we didn't import the store, how do those hooks know what Redux store to talk to?
+
+Now that we've seen all the different pieces of this application, it's time to circle back to the starting point of this application and see how the last pieces of the puzzle fit together.
+
+**index.js**
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import store from './app/store'
+import { Provider } from 'react-redux'
+import * as serviceWorker from './serviceWorker'
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
+
+We always have to call `ReactDOM.render(<App />)` to tell React to start rendering our root `<App>` component. In order for our hooks like `useSelector` to work right, we need to use a component called `<Provider>` to pass down the Redux store behind the scenes so they can access it.
+
+We already created our store in `app/store.js`, so we can import it here. Then, we put our `<Provider>` component around the whole `<App>`, and pass in the store: `<Provider store={store}>`.
+
+Now, any React components that call `useSelector` or `useDispatch` will be talking to the Redux store we gave to the `<Provider>`.
