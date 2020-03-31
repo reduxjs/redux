@@ -574,11 +574,19 @@ arr[1] = 'd'
 
 This is called _mutating_ the object or array.
 
+:::warning
+
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
+
+:::
 
 So if we can't change the originals, how do we return an updated state?
 
+:::tip
+
 **Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
+
+:::
 
 We can do this by hand using JavaScript's array / object spread operators, as well as array methods that return new copies of the array instead of mutating the original array:
 
@@ -607,6 +615,11 @@ const obj2 = {
 const arr = ["a", "b"];
 // Create a new copy of arr, with "c" appended to the end
 const arr2 = arr.concat("c");
+
+// or, we can make a copy of the original array:
+const arr3 = arr.slice();
+// and mutate the copy:
+arr3.push("c");
 ```
 
 If you're thinking that "this looks hard to remember and do correctly"... yeah, you're right! :)
@@ -795,7 +808,7 @@ Earlier, we saw what a standalone React `<Counter>` component looks like. Our Re
 
 We'll start by looking at the `Counter.js` component file:
 
-```js
+```jsx
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -837,7 +850,7 @@ export function Counter() {
 }
 ```
 
-Like with the earlier example, we have a function component called `Counter`, that stores some data in a `useState` hook.
+Like with the earlier plain React example, we have a function component called `Counter`, that stores some data in a `useState` hook.
 
 However, in our component, it doesn't look like we're storing the actual current counter value as state. There _is_ a variable called `count`, but it's not coming from a `useState` hook.
 
@@ -851,7 +864,7 @@ First, the `useSelector` hook lets our component extract whatever pieces of data
 
 Earlier, we saw that we can write "selector" functions, which take `state` as an argument and return some part of the state value.
 
-Our `counterSlice`.js has this selector function at the bottom:
+Our `counterSlice.js` has this selector function at the bottom:
 
 ```js
 // The function below is called a selector and allows us to select a value from
@@ -876,7 +889,7 @@ So, we can get the current store counter value by doing:
 const count = useSelector(selectCount)
 ```
 
-We don't have to _just_ use selectors that have already been exported, either. For example, we could write:
+We don't have to _just_ use selectors that have already been exported, either. For example, we could write a selector function as an inline argument to `useSelector`:
 
 ```js
 const countPlusTwo = useSelector(state => state.counter.value + 2)
@@ -896,7 +909,7 @@ const dispatch = useDispatch()
 
 From there, we can dispatch actions when the user does something like clicking on a button:
 
-```js
+```jsx
 <button
   className={styles.button}
   aria-label="Increment value"
@@ -914,7 +927,7 @@ The answer is **NO. Global state that is needed across the app should go in the 
 
 In this example, we have an input textbox where the user can type in the next number to be added to the counter:
 
-```js
+```jsx
 const [incrementAmount, setIncrementAmount] = useState('2')
 
 // later
@@ -969,7 +982,7 @@ Now that we've seen all the different pieces of this application, it's time to c
 
 **index.js**
 
-```js
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
