@@ -149,7 +149,7 @@ a:visited {
 details.detailed-explanation {
   background-color: var(--ifm-blockquote-color);
   margin: 0.25rem 0;
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   border-radius: var(--ifm-global-radius);
 }
 

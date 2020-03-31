@@ -50,7 +50,7 @@ You should make sure that you have the Redux DevTools extension installed in you
 
 If you'd like to know more details about specific concepts, we'll have links to other parts of the documentation that will tell you more about how Redux works and the patterns you use with Redux:
 
-:::tip Want to know more?
+:::info Want to know more?
 
 The [Configuring Your Store](../recipes/ConfguringYourStore.md) page has more details about setting up a Redux store
 
@@ -89,7 +89,7 @@ Redux is more useful when:
 
 Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.
 
-:::tip Want to know more?
+:::info Want to know more?
 
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
@@ -700,7 +700,7 @@ In both of those reducers, we don't actually need to have our code look at the `
 
 On the other hand, the `incrementByAmount` reducer _does_ need to know something: how much it should be adding to the counter value. So, we declare the reducer as having both `state` and `action` arguments. In this case, we know that the amount we typed into the textbox is being put into the `action.payload` field, so we can add that to `state.value`.
 
-:::tip Want to Know More?
+:::info Want to Know More?
 
 For more information on immutability and writing immutable updates, see [the "Immutable Update Patterns" docs page](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) and [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/).
 
@@ -796,7 +796,7 @@ This gives us a way to write whatever sync or async code we want, while still ha
 
 There's one more function in this file, but we'll talk about that in just a minute when we look at the `<Counter>` UI component.
 
-:::tip Want to Know More?
+:::info Want to Know More?
 
 See [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
 
