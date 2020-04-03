@@ -351,25 +351,35 @@ const App = props => {
 export default connect(mapStateToProps)(App)
 ```
 
-To test it, we can build a wrapper function on top of React Testing Library's `render` function that will create a store for each test like:
+To test it, we can use the `wrapper` option in React Testing Library's `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
 
+Our `render` function can look like this:
+```js
+function render(
+  ui,
+  {
+    initialState,
+    store = createStore(reducer, initialState),
+    ...renderOptions
+  } = {},
+) {
+  function Wrapper({children}) {
+    return <Provider store={store}>{children}</Provider>
+  }
+  return rtlRender(ui, {wrapper: Wrapper, ...renderOptions})
+}
+```
+
+And our test can use our exported `render` function:
 ```js
 import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import { screen } from '@testing-library/react'
+// We're using our own render here and not RTL's render
+import { render } from '../../test-utils'
 import App from '../../containers/App'
-import { initialState, reducer } from './reducer.js'
-
-function renderWithRedux(
-  ui,
-  { initialState, store = createStore(reducer, initialState) } = {}
-) {
-  return render(<Provider store={store}>{ui}</Provider>)
-}
 
 it('Renders the connected app with initialState', () => {
-  renderWithRedux(<App />, { initialState: { user: 'Redux User' } })
+  render(<App />, { initialState: { user: 'Redux User' } })
 
   expect(screen.getByText(/redux user/i)).toBeInTheDocument()
 })
