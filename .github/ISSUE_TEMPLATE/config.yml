@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+    - name: 🤔 Questions and Help
+      url: https://redux.js.org/introduction/getting-started#help-and-discussion
+      about: This is a bug tracker, not a support system. For usage questions, please use our support resources.

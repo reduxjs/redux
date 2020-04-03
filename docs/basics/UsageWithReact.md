@@ -19,7 +19,7 @@ We will use React to build our simple todo app, and cover the basics of how to u
 [React bindings](https://github.com/reduxjs/react-redux) are not included in Redux by default. You need to install them explicitly:
 
 ```sh
-npm install --save react-redux
+npm install react-redux
 ```
 
 If you don't use npm, you may grab the latest UMD build from unpkg (either a [development](https://unpkg.com/react-redux@latest/dist/react-redux.js) or a [production](https://unpkg.com/react-redux@latest/dist/react-redux.min.js) build). The UMD build exports a global called `window.ReactRedux` if you add it to your page via a `<script>` tag.
@@ -239,10 +239,7 @@ Finally, we create the `VisibleTodoList` by calling `connect()` and passing thes
 ```js
 import { connect } from 'react-redux'
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -272,10 +269,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const FilterLink = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Link)
+const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link)
 
 export default FilterLink
 ```
@@ -312,10 +306,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```

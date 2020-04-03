@@ -382,7 +382,7 @@ In this part of the recipe, you will learn how to make the [Todo List example](.
 First of all, you need to run
 
 ```sh
-npm install --save redux-undo
+npm install redux-undo
 ```
 
 This installs the package that provides the `undoable` reducer enhancer.
@@ -521,10 +521,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-UndoRedo = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UndoRedo)
+UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
 
 export default UndoRedo
 ```

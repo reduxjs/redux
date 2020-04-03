@@ -741,7 +741,10 @@ describe('createStore', () => {
       sub.unsubscribe()
       store.dispatch({ type: 'bar' })
 
-      expect(results).toEqual([{ foo: 0, bar: 0 }, { foo: 1, bar: 0 }])
+      expect(results).toEqual([
+        { foo: 0, bar: 0 },
+        { foo: 1, bar: 0 }
+      ])
     })
 
     it('should pass an integration test with a common library (RxJS)', () => {
