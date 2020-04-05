@@ -9,3 +9,10 @@ description: The official Quick Start tutorial for Redux - the fastest way to le
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Quick Start, Part 2: Building a React + Redux App
+
+:::tip What You'll Learn
+
+- How to use Redux Toolkit and React-Redux to build a typical app
+- Key guidelines and patterns for using Redux
+
+:::
