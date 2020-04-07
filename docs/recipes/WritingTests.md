@@ -355,6 +355,12 @@ To test it, we can use the `wrapper` option in React Testing Library's `render` 
 
 Our `render` function can look like this:
 ```js
+// test-utils.js
+import React from 'react'
+import { render as rtlRender } from '@testing-library/react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+
 function render(
   ui,
   {
@@ -368,14 +374,21 @@ function render(
   }
   return rtlRender(ui, {wrapper: Wrapper, ...renderOptions})
 }
+
+// re-export everything
+export * from '@testing-library/react'
+// override render method
+export { render }
 ```
 
 And our test can use our exported `render` function:
 ```js
 import React from 'react'
-import { screen } from '@testing-library/react'
-// We're using our own render here and not RTL's render
-import { render } from '../../test-utils'
+// We're using our own custom render function and not RTL's render
+// our custom utils also re-export everything from RTL
+// so we can import fireEvent and screen here as well
+import { render, fireEvent, screen } from './test-utils.js
+import { render, screen } from '../../test-utils'
 import App from '../../containers/App'
 
 it('Renders the connected app with initialState', () => {
