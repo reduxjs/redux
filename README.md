@@ -242,9 +242,9 @@ Redux co-maintainer [Mark Erikson](https://twitter.com/acemarke) has put togethe
 ## Documentation
 
 - [Introduction](http://redux.js.org/introduction)
-- [Basics](http://redux.js.org/basics)
-- [Advanced](http://redux.js.org/advanced)
-- [Recipes](http://redux.js.org/recipes)
+- [Basics](http://redux.js.org/basics/basic-tutorial)
+- [Advanced](http://redux.js.org/advanced/advanced-tutorial)
+- [Recipes](http://redux.js.org/recipes/recipe-index)
 - [FAQ](http://redux.js.org/faq)
 - [Troubleshooting](http://redux.js.org/troubleshooting)
 - [Glossary](http://redux.js.org/glossary)
