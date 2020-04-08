@@ -60,8 +60,8 @@
   },
   "homepage": "http://redux.js.org",
   "dependencies": {
-    "lodash": "^4.2.1",
-    "lodash-es": "^4.2.1",
+    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.15",
     "loose-envify": "^1.1.0",
     "symbol-observable": "^1.0.3"
   },
