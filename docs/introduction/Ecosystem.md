@@ -836,6 +836,9 @@ Takes a defined structure and uses 'behaviors' to create a set of actions, reduc
 **[Bloomca/redux-tiles](https://github.com/Bloomca/redux-tiles)** <br />
 Provides minimal abstraction on top of Redux, to allow easy composability, easy async requests, and sane testability.
 
+**[data-provider/core](https://github.com/data-provider/core)** <br />
+An async data provider over Redux. Agnostic about specific data origins, queryable, with powerful selectors inspired by Reselect, cache and memoization, it makes easy connecting views to any type of async data while retains data layer composability. Addons for different UI bindings are also distributed separately.
+
 ## Community Conventions
 
 **[Flux Standard Action](https://github.com/acdlite/flux-standard-action)** <br />
