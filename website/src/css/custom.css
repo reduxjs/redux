@@ -63,8 +63,13 @@ blockquote {
   background-color: rgb(72, 77, 91);
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: calc(-0.25em + var(--ifm-pre-padding));
+  padding-right: var(--ifm-pre-padding);
+  border-left: 0.25em solid #1976d2;
 }
+
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
