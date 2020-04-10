@@ -22,9 +22,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 Welcome to the Redux Quick Start tutorial! This tutorial will introduce you to Redux, so that you can begin using it as quickly as possible. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
 
-In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and we'll examine a typical React + Redux app to see how the pieces fit together.
+In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and we'll examine a basic React + Redux app to see how the pieces fit together.
 
-In [Part 2](./quick-start-part-2.md), we'll use that knowledge to build a small blogging app with some real-world features.
+In [Part 2](./quick-start-part-2.md), we'll use that knowledge to build a small blogging app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
 ### How to Read This Tutorial
 
@@ -201,7 +201,13 @@ const addTodo = text => {
 
 #### Reducers
 
-A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state.
+A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state: `(state, action) => newState`.
+
+:::info
+
+"Reducer" functions get their name because they're similar to the kind of callback function you pass to the [`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) method.
+
+:::
 
 Reducers must _always_ follow some specific rules:
 
@@ -210,6 +216,8 @@ Reducers must _always_ follow some specific rules:
 - They must not do any asynchronous logic or other "side effects"
 
 We'll talk more about the rules of reducers later, including why they're important and how to follow them correctly.
+
+Here's a small example of a reducer, showing the steps that each reducer should follow:
 
 ```js
 const initialState = { value: 0 }
@@ -228,6 +236,64 @@ function counterReducer(state = initialState, action) {
   return state
 }
 ```
+
+Reducers can use any kind of logic inside to decide what the new state should be: `if/else`, `switch`, loops, and so on.
+
+<DetailedExplanation title="Detailed Explanation: Why Are They Called 'Reducers?'" >
+
+The [`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) method lets you take an array of values, process each item in the array one at a time, and return a single final result. You can think of it as "reducing the array down to one value".
+
+`Array.reduce()` takes a callback function as an argument, which will be called one time for each item in the array. It takes two arguments:
+
+- `previousResult`, the value that your callback returned last time
+- `currentItem`, the current item in the array
+
+The first time that the callback runs, there isn't a `previousResult` available, so we need to also pass in an initial value that will be used as the first `previousResult`.
+
+If we wanted to add together an array of numbers to find out what the total is, we could write a reduce callback that looks like this:
+
+```js
+const numbers = [2, 5, 8]
+
+const addNumbers = (previousResult, currentItem) => {
+  console.log({ previousResult, currentItem })
+  return previousResult + currentItem
+}
+
+const initialValue = 0
+
+const total = numbers.reduce(addNumbers, initialValue)
+// {previousResult: 0, currentItem: 2}
+// {previousResult: 2, currentItem: 5}
+// {previousResult: 7, currentItem: 8}
+
+console.log(total)
+// 15
+```
+
+Notice that this `addNumber` "reduce callback" function doesn't need to keep track of anything itself. It just takes the `previousResult` and `currentItem` arguments, does something with them, and returns a new result value.
+
+**A Redux reducer function is exactly the same idea as this "reduce callback" function!** It takes a "previous result" (the `state`), and the "current item" (the `action` object), decides a new state value based on those arguments, and returns that new state.
+
+If we were to create an array of Redux actions, call `reduce()`, and pass in a reducer function, we'd get a final result the same way:
+
+```js
+const actions = [
+  { type: 'counter/increment' },
+  { type: 'counter/increment' },
+  { type: 'counter/increment' }
+]
+
+const initialState = { value: 0 }
+
+const finalResult = actions.reduce(counterReducer, initialState)
+console.log(finalResult)
+// {value: 3}
+```
+
+We can say that **Redux reducers reduce a set of actions (over time) into a single state**. The difference is that with `Array.reduce()` it happens all at once, and with Redux, it happens over the lifetime of your running app.
+
+</DetailedExplanation>
 
 #### Store
 
@@ -283,6 +349,29 @@ const currentValue = selectCounterValue(store.getState())
 console.log(currentValue)
 // 2
 ```
+
+### Redux Application Data Flow
+
+Earlier, we talked about "one-way data flow", which describes this sequence of steps to update the app:
+
+- State describes the condition of the app at a specific point in time
+- The UI is rendered based on that state
+- When something happens (such as a user clicking a button), the state is updated based on what occurred
+- The UI re-renders based on the new state
+
+For Redux specifically, we can break these steps into more detail:
+
+- Initial setup:
+  - A Redux store is created using a root reducer function
+  - The store calls the root reducer once, and saves the return value as its initial `state`
+  - When the UI is first rendered, UI components access the current state of the Redux store, and use that data to decide what to render. They also subscribe to any future store updates so they can know if the state has changed.
+- Updates:
+  - Something happens in the app, such as a user clicking a button
+  - The app code dispatches an action to the Redux store, like `dispatch({type: 'counter/increment'})
+  - The store runs the reducer function again with the previous `state` and the current `action`, and saves the return value as the new `state`
+  - The store notifies all parts of the UI that are subscribed that the store has been updated
+  - Each UI component that needs data from the store checks to see if the parts of the state they need have changed.
+  - Each component that sees its data has changed forces a re-render with the new data, so it can update what's shown on the screen
 
 ## Examining a React and Redux App
 
