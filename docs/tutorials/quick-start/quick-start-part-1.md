@@ -386,9 +386,7 @@ Let's start by looking at how the Redux store is created.
 
 Open up `app/store.js`, which should look like this:
 
-**TODO filename title here**
-
-```js
+```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from '../features/counter/counterSlice'
 
@@ -472,11 +470,9 @@ const store = configureStore({
 
 ### Creating Slice Reducers and Actions
 
-Since we know that the `counterReducer` function is coming from `feature/counter/counterSlice.js`, let's see what's in that file, piece by piece.
+Since we know that the `counterReducer` function is coming from `features/counter/counterSlice.js`, let's see what's in that file, piece by piece.
 
-**TODO file name here**
-
-```js
+```js title="features/counter/counterSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
 
 export const counterSlice = createSlice({
@@ -670,7 +666,7 @@ But, here's something _very_ important to remember:
 
 With that in mind, let's go back and look at the actual reducers from the counter slice.
 
-```js
+```js title="features/counter/counterSlice.js"
 export const counterSlice = createSlice({
   name: 'counter',
   initialState: {
@@ -688,6 +684,7 @@ export const counterSlice = createSlice({
       state.value -= 1
     },
     incrementByAmount: (state, action) => {
+      // highlight-next-line
       state.value += action.payload
     }
   }
@@ -710,7 +707,7 @@ For more information on immutability and writing immutable updates, see [the "Im
 
 The next function that's exported from `counterSlice` might look a bit strange:
 
-```js
+```js title="features/counter/counterSlice.js"
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
@@ -737,7 +734,7 @@ However, thunks require a special kind of addon called _middleware_ to be added 
 
 When you need to make AJAX calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
 
-```js
+```js title="features/counter/counterSlice.js"
 // the outside "thunk creator" function
 const fetchUserById = userId => {
   // the inside "thunk function"
@@ -808,7 +805,7 @@ Earlier, we saw what a standalone React `<Counter>` component looks like. Our Re
 
 We'll start by looking at the `Counter.js` component file:
 
-```jsx
+```jsx title="features/counter/Counter.js"
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -828,6 +825,7 @@ export function Counter() {
   return (
     <div>
       <div className={styles.row}>
+        // highlight-start
         <button
           className={styles.button}
           aria-label="Increment value"
@@ -835,6 +833,7 @@ export function Counter() {
         >
           +
         </button>
+        // highlight-end
         <span className={styles.value}>{count}</span>
         <button
           className={styles.button}
@@ -866,7 +865,7 @@ Earlier, we saw that we can write "selector" functions, which take `state` as an
 
 Our `counterSlice.js` has this selector function at the bottom:
 
-```js
+```js  title="features/counter/counterSlice.js"
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
@@ -909,7 +908,7 @@ const dispatch = useDispatch()
 
 From there, we can dispatch actions when the user does something like clicking on a button:
 
-```jsx
+```jsx  title="features/counter/Counter.js"
 <button
   className={styles.button}
   aria-label="Increment value"
@@ -927,7 +926,7 @@ The answer is **NO. Global state that is needed across the app should go in the 
 
 In this example, we have an input textbox where the user can type in the next number to be added to the counter:
 
-```jsx
+```jsx title="features/counter/Counter.js"
 const [incrementAmount, setIncrementAmount] = useState('2')
 
 // later
@@ -982,21 +981,28 @@ We've seen that our components can use the `useSelector` and `useDispatch` hooks
 
 Now that we've seen all the different pieces of this application, it's time to circle back to the starting point of this application and see how the last pieces of the puzzle fit together.
 
-**index.js**
+```jsx title="src/components/HelloCodeTitle.js"
+function HelloCodeTitle(props) {
+  return <h1>Hello, {props.name}</h1>
+}
+```
 
-```jsx
+```jsx  title="index.js"
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import store from './app/store'
+// highlight-next-line
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
+  // highlight-start
   <Provider store={store}>
     <App />
   </Provider>,
+  // highlight-end
   document.getElementById('root')
 )
 ```
