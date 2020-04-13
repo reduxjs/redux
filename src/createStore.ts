@@ -167,7 +167,7 @@ export default function createStore<
         'You may not call store.subscribe() while the reducer is executing. ' +
           'If you would like to be notified after the store has been updated, subscribe from a ' +
           'component and invoke store.getState() in the callback to access the latest state. ' +
-          'See https://redux.js.org/api-reference/store#subscribelistener for more details.'
+          'See https://redux.js.org/api/store#subscribelistener for more details.'
       )
     }
 
