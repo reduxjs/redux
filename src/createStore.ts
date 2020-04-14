@@ -184,7 +184,7 @@ export default function createStore<
       if (isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
-            'See https://redux.js.org/api-reference/store#subscribelistener for more details.'
+            'See https://redux.js.org/api/store#subscribelistener for more details.'
         )
       }
 
