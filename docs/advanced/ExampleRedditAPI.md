@@ -253,7 +253,6 @@ class AsyncApp extends Component {
 
     const { dispatch, selectedSubreddit } = this.props
     dispatch(invalidateSubreddit(selectedSubreddit))
-    dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
   render() {
