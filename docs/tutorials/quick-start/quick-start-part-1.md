@@ -213,7 +213,7 @@ Reducers must _always_ follow some specific rules:
 
 - They should only calculate the new state value based on the `state` and `action` arguments
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic or other "side effects"
+- They must not do any asynchronous logic, calculate random values, or cause other "side effects"
 
 We'll talk more about the rules of reducers later, including why they're important and how to follow them correctly.
 
@@ -312,7 +312,7 @@ console.log(store.getState())
 
 #### Dispatch
 
-The Redux store has a method called `dispatch`. The only way to update the state is to call `store.dispatch()` and pass in an action object. The store will run its reducer function and save the new state value inside, and we can call `getState()` to retrieve the updated value:
+The Redux store has a method called `dispatch`. **The only way to update the state is to call `store.dispatch()` and pass in an action object**. The store will run its reducer function and save the new state value inside, and we can call `getState()` to retrieve the updated value:
 
 ```js
 store.dispatch({ type: 'counter/increment' })
@@ -367,7 +367,7 @@ For Redux specifically, we can break these steps into more detail:
   - When the UI is first rendered, UI components access the current state of the Redux store, and use that data to decide what to render. They also subscribe to any future store updates so they can know if the state has changed.
 - Updates:
   - Something happens in the app, such as a user clicking a button
-  - The app code dispatches an action to the Redux store, like `dispatch({type: 'counter/increment'})
+  - The app code dispatches an action to the Redux store, like `dispatch({type: 'counter/increment'})`
   - The store runs the reducer function again with the previous `state` and the current `action`, and saves the return value as the new `state`
   - The store notifies all parts of the UI that are subscribed that the store has been updated
   - Each UI component that needs data from the store checks to see if the parts of the state they need have changed.
