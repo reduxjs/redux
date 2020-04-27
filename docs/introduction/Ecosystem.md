@@ -365,10 +365,7 @@ const newData = update(myData, {
 Simpler alternative to immutability-helpers and Immutable.js
 
 ```js
-const newObj = immutable(obj)
-  .set('a.b', 'f')
-  .del(['a', 'c', 0])
-  .value()
+const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
 ```
 
 **[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)** <br />
