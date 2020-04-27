@@ -322,12 +322,12 @@ describe('Utils', () => {
       console.error = preSpy
     })
 
-    describe('With Replace Reducers', function() {
+    describe('With Replace Reducers', function () {
       const foo = (state = {}) => state
       const bar = (state = {}) => state
       const ACTION = { type: 'ACTION' }
 
-      it('should return an updated state when additional reducers are passed to combineReducers', function() {
+      it('should return an updated state when additional reducers are passed to combineReducers', function () {
         const originalCompositeReducer = combineReducers({ foo })
         const store = createStore(originalCompositeReducer)
 
@@ -342,7 +342,7 @@ describe('Utils', () => {
         expect(nextState).not.toBe(initialState)
       })
 
-      it('should return an updated state when reducers passed to combineReducers are changed', function() {
+      it('should return an updated state when reducers passed to combineReducers are changed', function () {
         const baz = (state = {}) => state
 
         const originalCompositeReducer = combineReducers({ foo, bar })
@@ -359,7 +359,7 @@ describe('Utils', () => {
         expect(nextState).not.toBe(initialState)
       })
 
-      it('should return the same state when reducers passed to combineReducers not changed', function() {
+      it('should return the same state when reducers passed to combineReducers not changed', function () {
         const originalCompositeReducer = combineReducers({ foo, bar })
         const store = createStore(originalCompositeReducer)
 
@@ -374,7 +374,7 @@ describe('Utils', () => {
         expect(nextState).toBe(initialState)
       })
 
-      it('should return an updated state when one of more reducers passed to the combineReducers are removed', function() {
+      it('should return an updated state when one of more reducers passed to the combineReducers are removed', function () {
         const originalCompositeReducer = combineReducers({ foo, bar })
         const store = createStore(originalCompositeReducer)
 
