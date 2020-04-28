@@ -4,6 +4,7 @@ import {
   ActionCreator,
   ActionCreatorsMapObject
 } from './types/actions'
+import isPlainObject from './utils/isPlainObject'
 
 function bindActionCreator<A extends AnyAction = AnyAction>(
   actionCreator: ActionCreator<A>,
@@ -62,7 +63,7 @@ export default function bindActionCreators(
     return bindActionCreator(actionCreators, dispatch)
   }
 
-  if (typeof actionCreators !== 'object' || actionCreators === null) {
+  if (!isPlainObject(actionCreators)) {
     throw new Error(
       `bindActionCreators expected an object or a function, instead received ${
         actionCreators === null ? 'null' : typeof actionCreators
