@@ -87,7 +87,7 @@ Redux is more useful when:
 - The logic to update that state may be complex
 - The app has a medium or large-sized codebase, and might be worked on by many people
 
-Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.
+**Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.**
 
 :::info Want to know more?
 
