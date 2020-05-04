@@ -1,7 +1,7 @@
 ---
 id: initializing-state
 title: Initializing State
-description: How Redux state is initialized
+description: 'Structuring Reducers > Initializing State: How Redux state is initialized'
 hide_title: true
 ---
 

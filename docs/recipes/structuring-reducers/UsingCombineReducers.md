@@ -1,7 +1,7 @@
 ---
 id: using-combinereducers
 title: Using combineReducers
-description: Explanations of how combineReducers works in practice
+description: 'Structuring Reducers > Using combineReducers: Explanations of how combineReducers works in practice'
 hide_title: true
 ---
 

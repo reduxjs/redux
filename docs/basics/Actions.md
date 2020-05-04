@@ -1,7 +1,7 @@
 ---
 id: actions
 title: Actions
-description: Core concept - actions are plain objects that describe events
+description: 'Basic Tutorial > Actions: Core concept - actions are plain objects that describe events'
 hide_title: true
 ---
 

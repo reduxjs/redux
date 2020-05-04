@@ -1,7 +1,7 @@
 ---
 id: usage-with-react
 title: Usage with React
-description: How to use Redux with React components
+description: 'Basic Tutorial > Usage with React: How to use Redux with React components'
 hide_title: true
 ---
 
@@ -240,7 +240,10 @@ Finally, we create the `VisibleTodoList` by calling `connect()` and passing thes
 ```js
 import { connect } from 'react-redux'
 
-const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -270,7 +273,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link)
+const FilterLink = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Link)
 
 export default FilterLink
 ```
@@ -307,7 +313,10 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 
 export default VisibleTodoList
 ```

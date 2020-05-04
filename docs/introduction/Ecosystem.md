@@ -1,7 +1,7 @@
 ---
 id: ecosystem
 title: Ecosystem
-description: Links to popular, recommended, and interesting Redux-related libraries
+description: 'Introduction > Ecosystem: Links to popular, recommended, and interesting Redux-related libraries'
 hide_title: true
 ---
 
@@ -368,7 +368,10 @@ const newData = update(myData, {
 Simpler alternative to immutability-helpers and Immutable.js
 
 ```js
-const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
+const newObj = immutable(obj)
+  .set('a.b', 'f')
+  .del(['a', 'c', 0])
+  .value()
 ```
 
 **[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)** <br />

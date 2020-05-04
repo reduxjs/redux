@@ -1,7 +1,7 @@
 ---
 id: store
 title: Store
-description: Core concept - the Redux store
+description: 'Basic Tutorial > Store: Core concept - the Redux store'
 hide_title: true
 ---
 

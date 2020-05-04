@@ -1,7 +1,7 @@
 ---
 id: learning-resources
 title: Learning Resources
-description: Additional articles and resources for learning Redux
+description: 'Introduction > Learning Resources: Additional articles and resources for learning Redux'
 hide_title: true
 ---
 

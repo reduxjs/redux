@@ -1,7 +1,7 @@
 ---
 id: async-flow
 title: Async Flow
-description: Using middleware to add async capabilities
+description: 'Advanced Tutorial > Async Flow: Using middleware to add async capabilities'
 hide_title: true
 ---
 
