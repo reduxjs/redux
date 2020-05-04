@@ -1,6 +1,7 @@
 ---
 id: installation
 title: Installation
+description: Installation instructions for Redux and related packages
 hide_title: true
 ---
 

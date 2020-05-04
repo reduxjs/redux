@@ -1,6 +1,7 @@
 ---
 id: middleware
 title: Middleware
+description: How middleware enable adding additional capabilities to the store
 hide_title: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 id: normalizing-state-shape
 title: Normalizing State Shape
+description: How and why to store data items for lookup based on ID
 hide_title: true
 ---
 

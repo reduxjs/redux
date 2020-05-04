@@ -1,6 +1,7 @@
 ---
 id: updating-normalized-data
 title: Updating Normalized Data
+description: Patterns for updating normalized data
 hide_title: true
 ---
 

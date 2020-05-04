@@ -1,6 +1,7 @@
 ---
 id: example-reddit-api
 title: 'Example: Reddit API'
+description: Source code for the Reddit example app
 hide_title: true
 ---
 

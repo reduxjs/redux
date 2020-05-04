@@ -1,6 +1,7 @@
 ---
 id: async-actions
 title: Async Actions
+description: Working with async logic and data fetching
 hide_title: true
 ---
 
@@ -357,7 +358,7 @@ export function fetchPosts(subreddit) {
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function (dispatch) {
+  return function(dispatch) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 

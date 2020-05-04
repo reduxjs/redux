@@ -1,6 +1,7 @@
 ---
 id: basic-reducer-structure
 title: Basic Reducer Structure
+description: Overview of how reducer functions work with Redux state
 hide_title: true
 ---
 

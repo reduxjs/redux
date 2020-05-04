@@ -1,6 +1,7 @@
 ---
 id: reusing-reducer-logic
 title: Reusing Reducer Logic
+description: Patterns for creating reusable reducers
 hide_title: true
 ---
 

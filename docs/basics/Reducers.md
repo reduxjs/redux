@@ -1,6 +1,7 @@
 ---
 id: reducers
 title: Reducers
+description: Core concept - reducers are plain functions that return new state
 hide_title: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 id: splitting-reducer-logic
 title: Splitting Reducer Logic
+description: Terms for different reducer use cases
 hide_title: true
 ---
 

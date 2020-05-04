@@ -1,6 +1,7 @@
 ---
 id: refactoring-reducer-example
 title: Refactoring Reducers Example
+description: Examples of ways to refactor reducer logic
 hide_title: true
 ---
 

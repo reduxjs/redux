@@ -1,6 +1,7 @@
 ---
 id: example
 title: 'Example: Todo List'
+description: Source code for the Todo List example
 hide_title: true
 ---
 
@@ -270,7 +271,10 @@ const mapDispatchToProps = dispatch => ({
   toggleTodo: id => dispatch(toggleTodo(id))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
 ```
 
 #### `containers/FilterLink.js`
@@ -288,7 +292,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: () => dispatch(setVisibilityFilter(ownProps.filter))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Link)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Link)
 ```
 
 ### Other Components

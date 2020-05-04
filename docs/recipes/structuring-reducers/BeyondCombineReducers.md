@@ -1,6 +1,7 @@
 ---
 id: beyond-combinereducers
 title: Beyond combineReducers
+description: Examples of reducer logic for other use cases not handled by combineReducers
 hide_title: true
 ---
 

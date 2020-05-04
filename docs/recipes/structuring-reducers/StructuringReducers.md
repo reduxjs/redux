@@ -1,6 +1,7 @@
 ---
 id: structuring-reducers
 title: Structuring Reducers
+description: Structuring Reducers intro and overview
 hide_title: true
 ---
 

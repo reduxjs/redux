@@ -1,6 +1,7 @@
 ---
 id: examples
 title: Examples
+description: Redux interactive example apps
 hide_title: true
 ---
 
