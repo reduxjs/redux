@@ -1,6 +1,7 @@
 ---
 id: getting-started
 title: Getting Started with Redux
+description: 'Introduction : Getting Started: Resources to get started learning and using Redux'
 hide_title: true
 ---
 

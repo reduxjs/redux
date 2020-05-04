@@ -1,6 +1,7 @@
 ---
 id: usage-with-react
 title: Usage with React
+description: 'Basic Tutorial > Usage with React: How to use Redux with React components'
 hide_title: true
 ---
 

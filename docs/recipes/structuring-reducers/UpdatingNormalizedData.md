@@ -1,6 +1,7 @@
 ---
 id: updating-normalized-data
 title: Updating Normalized Data
+description: 'Structuring Reducers > Updating Normalized Data: Patterns for updating normalized data'
 hide_title: true
 ---
 

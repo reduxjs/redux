@@ -1,6 +1,7 @@
 ---
 id: usage-with-react-router
 title: Usage with React Router
+description: 'Advanced Tutorial > Usage with React Router: Tips on using Redux with React Router'
 hide_title: true
 ---
 

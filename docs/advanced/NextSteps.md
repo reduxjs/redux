@@ -1,6 +1,7 @@
 ---
 id: next-steps
 title: Next Steps
+description: 'Advanced Tutorial > Next Steps: Suggestions for what to learn next'
 hide_title: true
 ---
 

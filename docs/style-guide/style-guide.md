@@ -1,6 +1,7 @@
 ---
 id: style-guide
 title: Style Guide
+description: 'Redux Style Guide: recommended patterns and best practices for using Redux'
 hide_title: true
 ---
 

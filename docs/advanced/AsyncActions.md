@@ -1,6 +1,7 @@
 ---
 id: async-actions
 title: Async Actions
+description: 'Advanced Tutorial > Async Actions: Working with async logic and data fetching'
 hide_title: true
 ---
 
