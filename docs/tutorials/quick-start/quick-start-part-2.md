@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Reading [Part 1](./quick-start-part-1.md) to understand Redux terms and concepts
+- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 1](./quick-start-part-1.md)** for explanations of these terms.)
 
 :::
 
@@ -85,6 +85,8 @@ Let's take a quick look at what the initial project contains:
 
 If you load the app now, you should see the header and a welcome message. We can also open up the Redux DevTools Extension and see that our initial Redux state is entirely empty.
 
+**TODO Add an explanation of what's in RTK, similar to https://www.apollographql.com/docs/react/get-started/ for Apollo Boost? **
+
 With that, let's get started!
 
 ## Main Posts Feed
@@ -108,13 +110,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = [
   { id: 1, title: 'First Post!', content: 'Hello!' },
-  { id: 2, title: 'Second Post', content: 'More text' }
+  { id: 2, title: 'Second Post', content: 'More text' },
 ]
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {}
+  reducers: {},
 })
 
 export default postsSlice.reducer
@@ -129,8 +131,8 @@ import postsReducer from '../features/posts/postsSlice'
 
 export default configureStore({
   reducer: {
-    posts: postsReducer
-  }
+    posts: postsReducer,
+  },
 })
 ```
 
@@ -153,9 +155,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 export const PostsList = () => {
-  const posts = useSelector(state => state.posts)
+  const posts = useSelector((state) => state.posts)
 
-  const renderedPosts = posts.map(post => (
+  const renderedPosts = posts.map((post) => (
     <article className="post-excerpt">
       <h3>{post.title}</h3>
       <p>{post.content.substring(0, 100)}</p>
@@ -179,7 +181,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from 'react-router-dom'
 
 import { Navbar } from './app/Navbar'
@@ -237,8 +239,8 @@ export const AddPostForm = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  const onTitleChanged = e => setTitle(e.target.value)
-  const onContentChanged = e => setContent(e.target.value)
+  const onTitleChanged = (e) => setTitle(e.target.value)
+  const onContentChanged = (e) => setContent(e.target.value)
 
   return (
     <section>
@@ -304,9 +306,9 @@ const postsSlice = createSlice({
     // highlight-start
     postAdded(state, action) {
       state.push(action.payload)
-    }
+    },
     // highlight-end
-  }
+  },
 })
 
 // highlight-next-line
@@ -345,8 +347,8 @@ export const AddPostForm = () => {
   // highlight-next-line
   const dispatch = useDispatch()
 
-  const onTitleChanged = e => setTitle(e.target.value)
-  const onContentChanged = e => setContent(e.target.value)
+  const onTitleChanged = (e) => setTitle(e.target.value)
+  const onContentChanged = (e) => setContent(e.target.value)
 
   // highlight-start
   const onSavePostClicked = () => {
@@ -355,7 +357,7 @@ export const AddPostForm = () => {
         postAdded({
           id: nanoid(),
           title,
-          content
+          content,
         })
       )
 

@@ -9,7 +9,7 @@ module.exports = {
       'introduction/prior-art',
       'introduction/learning-resources',
       'introduction/ecosystem',
-      'introduction/examples'
+      'introduction/examples',
     ],
     Tutorials: [
       {
@@ -17,8 +17,9 @@ module.exports = {
         label: 'Quick Start',
         items: [
           'tutorials/quick-start/quick-start-part-1',
-          'tutorials/quick-start/quick-start-part-2'
-        ]
+          'tutorials/quick-start/quick-start-part-2',
+          'tutorials/quick-start/quick-start-part-3',
+        ],
       },
       {
         type: 'category',
@@ -30,8 +31,8 @@ module.exports = {
           'basics/store',
           'basics/data-flow',
           'basics/usage-with-react',
-          'basics/example'
-        ]
+          'basics/example',
+        ],
       },
       {
         type: 'category',
@@ -43,9 +44,9 @@ module.exports = {
           'advanced/middleware',
           'advanced/usage-with-react-router',
           'advanced/example-reddit-api',
-          'advanced/next-steps'
-        ]
-      }
+          'advanced/next-steps',
+        ],
+      },
     ],
     Recipes: [
       'recipes/recipe-index',
@@ -76,9 +77,9 @@ module.exports = {
           'recipes/structuring-reducers/updating-normalized-data',
           'recipes/structuring-reducers/reusing-reducer-logic',
           'recipes/structuring-reducers/immutable-update-patterns',
-          'recipes/structuring-reducers/initializing-state'
-        ]
-      }
+          'recipes/structuring-reducers/initializing-state',
+        ],
+      },
     ],
     FAQ: [
       'faq',
@@ -92,7 +93,7 @@ module.exports = {
       'faq/performance',
       'faq/design-decisions',
       'faq/react-redux',
-      'faq/miscellaneous'
+      'faq/miscellaneous',
     ],
     'Style Guide': ['style-guide/style-guide'],
     Other: ['glossary', 'troubleshooting'],
@@ -103,8 +104,8 @@ module.exports = {
       'api/combinereducers',
       'api/applymiddleware',
       'api/bindactioncreators',
-      'api/compose'
+      'api/compose',
     ],
-    'Redux Toolkit': ['redux-toolkit/overview']
-  }
+    'Redux Toolkit': ['redux-toolkit/overview'],
+  },
 }
