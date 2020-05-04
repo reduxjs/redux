@@ -418,6 +418,7 @@ Let's recap what you've learned in this section:
 - **React components dispatch actions to update the store using the `useDispatch` hook**
   - `createSlice` will generate action creator functions for each reducer we add to a slice
   - Call `dispatch(someActionCreator())` in a component to dispatch an action
+  - Reducers will run, check to see if this action is relevant, and return new state if appropriate
   - Temporary data like form input values should be kept as React component state. Dispatch a Redux action to update the store when the user is done with the form.
 
 :::
@@ -431,3 +432,7 @@ Here's what the app looks like so far:
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
+
+## What's Next?
+
+Now that you know the basic Redux data flow, move on to Part 3, where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.
