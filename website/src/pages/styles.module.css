@@ -32,7 +32,7 @@
 .featureImage {
   height: 100px;
   width: 100px;
-  fill: var(--ifm-font-base-color);
+  fill: var(--ifm-font-color-base);
 }
 
 .featureAnchor svg {

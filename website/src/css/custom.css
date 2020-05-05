@@ -15,6 +15,24 @@
   --ifm-code-padding-horizontal: 0.2rem;
 }
 
+:root[data-theme='dark'] {
+  --ifm-color-primary: #ba8fff;
+  --ifm-color-primary-dark: #7431ca;
+  --ifm-color-primary-darker: #6d1cac;
+  --ifm-color-primary-darkest: #730c9a;
+  --ifm-color-primary-light: #b97cfd;
+  --ifm-color-primary-lighter: #cc8ffc;
+  --ifm-color-primary-lightest: #fcf2ff;
+
+  --ifm-blockquote-color: #1a1d1e;
+  --ifm-blockquote-color-dark: #6d1cac;
+}
+
+:root[data-theme='dark'] .hero.hero--primary {
+  --ifm-hero-background-color: #593d88;
+  --ifm-hero-text-color: #ffffff;
+}
+
 blockquote {
   color: var(--ifm-font-base-color);
   background-color: var(--ifm-blockquote-color);
@@ -25,6 +43,10 @@ blockquote {
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
+}
+
+:root[data-theme='dark'] code {
+  background-color: rgb(39, 40, 34);
 }
 
 a code {
@@ -102,15 +124,15 @@ a code {
 
 .style-guide .priority-essential h3:after {
   content: ' ESSENTIAL';
-  color: #6b2a2a;
+  color: var(--ifm-color-danger);
 }
 
 .style-guide .priority-stronglyrecommended h3:after {
   content: ' STRONGLY RECOMMENDED';
-  color: #8c480a;
+  color: var(--ifm-color-warning);
 }
 
 .style-guide .priority-recommended h3:after {
   content: ' RECOMMENDED';
-  color: #2b5a99;
+  color: var(--ifm-color-info);
 }
