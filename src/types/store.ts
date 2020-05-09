@@ -1,5 +1,6 @@
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
+import '../utils/symbol-observable'
 
 /**
  * Extend the state
