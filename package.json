@@ -89,7 +89,8 @@
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.0",
     "rxjs": "^6.5.5",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "typings-tester": "^0.3.2"
   },
   "npmName": "redux",
   "npmFileMap": [
