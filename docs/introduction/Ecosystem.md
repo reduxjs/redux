@@ -653,6 +653,9 @@ JSON-API abstraction with async CRUD, normalization, optimistic updates, caching
 **[jmeas/redux-resource](https://github.com/jmeas/redux-resource)** <br />
 A tiny but powerful system for managing 'resources': data that is persisted to remote servers.
 
+**[wednesday-solutions/jsonapi-redux-data](https://github.com/wednesday-solutions/jsonapi-redux-data)** <br />
+JsonApi Redux data is a one stop shop for all your redux-jsonapi needs: it provides methods to make your API call and automatically formats data based on relationships and updates it in the redux store!
+
 ## Component State and Encapsulation
 
 **[tonyhb/redux-ui](https://github.com/tonyhb/redux-ui)** <br />
