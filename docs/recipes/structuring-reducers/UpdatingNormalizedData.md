@@ -22,7 +22,9 @@ function commentsById(state = {}, action) {
   switch (action.type) {
     default: {
       if (action.entities && action.entities.comments) {
-        return merge({}, state, action.entities.comments.byId)
+        return { ...state, ...action.entities.comments.byId}
+        // or if storing shallow copy of action items is not recommended:
+        // return merge({ ...state}, action.entities.comments.byId)
       }
       return state
     }
