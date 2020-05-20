@@ -7,13 +7,13 @@ hide_title: true
 
 # Managing Normalized Data
 
-As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store. However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application. There are a variety of different approaches that you can use, based on your own preference. We'll use the example of adding a new Comment to a Post.
+As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store. However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application. There are a variety of different approaches that you can use, based on your own preference. We'll use the example of handling mutations for Comments on a Post.
 
 ## Standard Approaches
 
 ### Simple Merging
 
-One approach is to merge the contents of the action into the existing state. In this case, we need to do a deep recursive merge, not just a shallow copy. The Lodash `merge` function can handle this for us:
+One approach is to merge the contents of the action into the existing state. In this case, we can use deep recursive merge, not just a shallow copy, to allow for actions with partial items to update stored items. The Lodash `merge` function can handle this for us:
 
 ```js
 import merge from 'lodash/merge'
