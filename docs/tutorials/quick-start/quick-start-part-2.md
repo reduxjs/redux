@@ -327,6 +327,12 @@ Our `AddPostForm` has text inputs and a "Save Post" button, but the button doesn
 
 Our post objects also need to have an `id` field. Right now, our initial test posts just have some fake numbers for their IDs. We could write some code that would figure out what the next incrementing ID number should be, but it would be better if we generated a random unique ID instead. Redux Toolkit has a `nanoid` function we can use for that.
 
+:::info
+
+We'll talk more about generating IDs and dispatching actions in [Part 3](./quick-start-part-3.md).
+
+:::
+
 In order to dispatch actions from a component, we need access to the store's `dispatch` function. We get this by calling the `useDispatch` hook from React-Redux. We also need to import the `postAdded` action creator into this file.
 
 Once we have the `dispatch` function available in our component, we can call `dispatch(postAdded())` in a click handler. We can take the title and content values from our React component `useState` hooks, generate a new ID, and put them together into a new post object that we pass to `postAdded()`.
