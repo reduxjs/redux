@@ -719,6 +719,12 @@ As we've seen already, `createSlice` lets us write "mutating" logic in our reduc
 
 Notice that **our action object just contains the minimum amount of information needed to describe what happened**. We know which post we need to update, and which reaction name was clicked on. We _could_ have calculated the new reaction counter value and put that in the action, but **it's always better to keep the action objects as small as possible, and do the state update calculations in the reducer**. This also means that **reducers can contain as much logic as necessary to calculate the new state**.
 
+:::info
+
+When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but not both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/docs/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/docs/return) for more details.
+
+:::
+
 Our last step is to update the `<ReactionButtons>` component to dispatch the `reactionAdded` action when the user clicks a button:
 
 ```jsx title="features/posts/ReactionButtons.jsx"
