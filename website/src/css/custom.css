@@ -70,6 +70,10 @@ blockquote {
   border-left: 0.25em solid #1976d2;
 }
 
+div[class*='codeBlockTitle'] {
+  padding: 0.15rem var(--ifm-pre-padding);
+}
+
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
