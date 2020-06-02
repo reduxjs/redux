@@ -137,11 +137,37 @@ function Home() {
   const { siteConfig = {} } = context
   return (
     <Layout
-      title={`${
-        siteConfig.title
-      } - A predictable state container for JavaScript apps.`}
+      title={`${siteConfig.title} - A predictable state container for JavaScript apps.`}
       description="A predictable state container for JavaScript apps."
     >
+      <div style={{ background: '#111', padding: '10px 0', lineHeight: 2 }}>
+        <div className="container">
+          <div
+            style={{
+              color: 'white',
+              fontWeight: 'bold',
+              textAlign: 'center'
+            }}
+          >
+            Black Lives Matter.
+            <a
+              style={{
+                display: 'inline-block',
+                color: 'white',
+                fontWeight: 'bold',
+                margin: '0 10px',
+                padding: '7px 20px',
+                border: '1px solid white'
+              }}
+              href="https://support.eji.org/give/153413"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Support the Equal Justice Initiative.
+            </a>
+          </div>
+        </div>
+      </div>
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
