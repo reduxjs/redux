@@ -49,13 +49,13 @@ export interface AnyAction extends Action {
  *
  * @template A Returned action type.
  */
-export interface ActionCreator<A, P = any> {
-  (...args: P[]): A
+export interface ActionCreator<A, P extends any[] = any[]> {
+  (...args: P): A
 }
 
 /**
  * Object whose values are action creator functions.
  */
-export interface ActionCreatorsMapObject<A = any, P = any> {
+export interface ActionCreatorsMapObject<A = any, P extends any[] = any[]> {
   [key: string]: ActionCreator<A, P>
 }
