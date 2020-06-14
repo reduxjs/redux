@@ -258,46 +258,44 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-First, we will install [Enzyme](http://airbnb.io/enzyme/). Enzyme uses the [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html) underneath, but is more convenient, readable, and powerful.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
 
 ```sh
-npm install --save-dev enzyme
+npm install --save-dev @testing-library/react
 ```
 
-We will also need to install Enzyme adapter for our version of React. Enzyme has adapters that provide compatibility with `React 16.x`, `React 15.x`, `React 0.14.x` and `React 0.13.x`. If you are using React 16 you can run:
+If you are using jest as recommended above, we also recommend installing [jest-dom](https://github.com/testing-library/jest-dom) as it provides a set of custom jest matchers that you can use to extend jest. These will make your tests more declarative, clear to read and to maintain. jest-dom is being used in the examples below.
 
 ```sh
-npm install --save-dev enzyme-adapter-react-16
+npm install --save-dev @testing-library/jest-dom
 ```
 
-To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [shallow rendering](http://airbnb.io/enzyme/docs/api/shallow.html). This lets individual tests assert on whether the callbacks were called when expected.
+To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert wheter the callbacks were called when expected.
 
 #### Example
 
 ```js
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import TodoTextInput from './TodoTextInput'
 
-class Header extends Component {
-  handleSave(text) {
+const Header = ({ addTodo }) => {
+  const handleSave = text => {
     if (text.length !== 0) {
-      this.props.addTodo(text)
+      addTodo(text)
     }
   }
 
-  render() {
-    return (
-      <header className="header">
-        <h1>todos</h1>
-        <TodoTextInput
-          newTodo={true}
-          onSave={this.handleSave.bind(this)}
-          placeholder="What needs to be done?"
-        />
-      </header>
-    )
-  }
+  return (
+    <header className="header">
+      <h1>todos</h1>
+      <TodoTextInput
+        newTodo={true}
+        onSave={handleSave}
+        placeholder="What needs to be done?"
+      />
+    </header>
+  )
 }
 
 Header.propTypes = {
@@ -311,48 +309,29 @@ can be tested like:
 
 ```js
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { render, fireEvent, screen } from '@testing-library/react'
 import Header from '../../components/Header'
 
-Enzyme.configure({ adapter: new Adapter() })
+it('should not call addTodo if length of text is 0', () => {
+  const mockAddTodo = jest.fn()
+  render(<Header addTodo={mockAddTodo} />)
 
-function setup() {
-  const props = {
-    addTodo: jest.fn()
-  }
-
-  const enzymeWrapper = shallow(<Header {...props} />)
-
-  return {
-    props,
-    enzymeWrapper
-  }
-}
-
-describe('components', () => {
-  describe('Header', () => {
-    it('should render self and subcomponents', () => {
-      const { enzymeWrapper } = setup()
-
-      expect(enzymeWrapper.find('header').hasClass('header')).toBe(true)
-
-      expect(enzymeWrapper.find('h1').text()).toBe('todos')
-
-      const todoInputProps = enzymeWrapper.find('TodoTextInput').props()
-      expect(todoInputProps.newTodo).toBe(true)
-      expect(todoInputProps.placeholder).toEqual('What needs to be done?')
-    })
-
-    it('should call addTodo if length of text is greater than 0', () => {
-      const { enzymeWrapper, props } = setup()
-      const input = enzymeWrapper.find('TodoTextInput')
-      input.props().onSave('')
-      expect(props.addTodo.mock.calls.length).toBe(0)
-      input.props().onSave('Use Redux')
-      expect(props.addTodo.mock.calls.length).toBe(1)
-    })
+  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
+    target: { value: '' }
   })
+
+  expect(mockAddTodo).toHaveBeenCalledTimes(0)
+})
+
+it('should call addTodo if length of text is greater than 0', () => {
+  const mockAddTodo = jest.fn()
+  render(<Header addTodo={mockAddTodo} />)
+
+  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
+    target: { value: 'Use Redux' }
+  })
+
+  expect(mockAddTodo).toHaveBeenCalledTimes(1)
 })
 ```
 
@@ -365,59 +344,58 @@ Consider the following `App` component:
 ```js
 import { connect } from 'react-redux'
 
-class App extends Component {
-  /* ... */
+const App = props => {
+  return <div>{props.user}</div>
 }
 
 export default connect(mapStateToProps)(App)
 ```
 
-In a unit test, you would normally import the `App` component like this:
+To test it, we can use the `wrapper` option in React Testing Library's `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
 
+Our `render` function can look like this:
 ```js
-import App from './App'
-```
+// test-utils.js
+import React from 'react'
+import { render as rtlRender } from '@testing-library/react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
-However, when you import it, you're actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://react-redux.js.org/api/provider) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
-
-In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
-
-```js
-import { connect } from 'react-redux'
-
-// Use named export for unconnected component (for tests)
-export class App extends Component {
-  /* ... */
+function render(
+  ui,
+  {
+    initialState,
+    store = createStore(reducer, initialState),
+    ...renderOptions
+  } = {},
+) {
+  function Wrapper({children}) {
+    return <Provider store={store}>{children}</Provider>
+  }
+  return rtlRender(ui, {wrapper: Wrapper, ...renderOptions})
 }
 
-// Use default export for the connected component (for app)
-export default connect(mapStateToProps)(App)
+// re-export everything
+export * from '@testing-library/react'
+// override render method
+export { render }
 ```
 
-Since the default export is still the decorated component, the import statement pictured above will work as before so you won't have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
-
+And our test can use our exported `render` function:
 ```js
-// Note the curly braces: grab the named export instead of default export
-import { App } from './App'
+import React from 'react'
+// We're using our own custom render function and not RTL's render
+// our custom utils also re-export everything from RTL
+// so we can import fireEvent and screen here as well
+import { render, fireEvent, screen } from '../../test-utils'
+import App from '../../containers/App'
+
+it('Renders the connected app with initialState', () => {
+  render(<App />, { initialState: { user: 'Redux User' } })
+
+  expect(screen.getByText(/redux user/i)).toBeInTheDocument()
+})
 ```
-
-And if you need both:
-
-```js
-import ConnectedApp, { App } from './App'
-```
-
-In the app itself, you would still import it normally:
-
-```js
-import App from './App'
-```
-
-You would only use the named export for tests.
-
-> ##### A Note on Mixing ES6 Modules and CommonJS
-
-> If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
 
 ### Middleware
 
@@ -487,8 +465,6 @@ In some cases, you will need to modify the `create` function to use different mo
 
 ### Glossary
 
-- [Enzyme](http://airbnb.io/enzyme/): Enzyme is a JavaScript Testing utility for React that makes it easier to assert, manipulate, and traverse your React Components' output.
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
 
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test Utilities for React. Used by Enzyme.
-
-- [Shallow rendering](http://airbnb.io/enzyme/docs/api/shallow.html): Shallow rendering lets you instantiate a component and effectively get the result of its `render` method just a single level deep instead of rendering components recursively to a DOM. Shallow rendering is useful for unit tests, where you test a particular component only, and importantly not its children. This also means that changing a child component won't affect the tests for the parent component. Testing a component and all its children can be accomplished with [Enzyme's `mount()` method](http://airbnb.io/enzyme/docs/api/mount.html), aka full DOM rendering.
+- [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.
