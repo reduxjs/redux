@@ -107,11 +107,18 @@ describe("unit tests, high isolation", () => {
 
         it('renders a todo', () => {
             const wrapper = shallow(
-                <TodoList todos={[{
-                    id: 1,
-                    completed: false,
-                    text: 'hello world'
-                }]} toggleTodo={jest.fn()} />
+                <TodoList
+                    todos={
+                        [
+                            {
+                                id: 1,
+                                completed: false,
+                                text: 'hello world'
+                            }
+                        ]
+                    }
+                    toggleTodo={jest.fn()}
+                />
             )
             expect(wrapper.html()).toBe('<ul><li style=\"text-decoration:none\">hello world</li></ul>')
         })
