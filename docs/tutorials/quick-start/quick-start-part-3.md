@@ -54,8 +54,8 @@ import { useSelector } from 'react-redux'
 export const SinglePostPage = ({ match }) => {
   const { postId } = match.params
 
-  const post = useSelector((state) =>
-    state.posts.find((post) => post.id === postId)
+  const post = useSelector(state =>
+    state.posts.find(post => post.id === postId)
   )
 
   if (!post) {
@@ -136,9 +136,9 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 export const PostsList = () => {
-  const posts = useSelector((state) => state.posts)
+  const posts = useSelector(state => state.posts)
 
-  const renderedPosts = posts.map((post) => (
+  const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
       <h3>{post.title}</h3>
       <p className="post-content">{post.content.substring(0, 100)}</p>
@@ -224,14 +224,14 @@ const postsSlice = createSlice({
     // highlight-start
     postUpdated(state, action) {
       const { id, title, content } = action.payload
-      const existingPost = state.find((post) => post.id === id)
+      const existingPost = state.find(post => post.id === id)
       if (existingPost) {
         existingPost.title = title
         existingPost.content = content
       }
-    },
+    }
     // highlight-end
-  },
+  }
 })
 
 // highlight-next-line
@@ -254,8 +254,8 @@ import { postUpdated } from './postsSlice'
 export const EditPostForm = ({ match }) => {
   const { postId } = match.params
 
-  const post = useSelector((state) =>
-    state.posts.find((post) => post.id === postId)
+  const post = useSelector(state =>
+    state.posts.find(post => post.id === postId)
   )
 
   const [title, setTitle] = useState(post.title)
@@ -264,8 +264,8 @@ export const EditPostForm = ({ match }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const onTitleChanged = (e) => setTitle(e.target.value)
-  const onContentChanged = (e) => setContent(e.target.value)
+  const onTitleChanged = e => setTitle(e.target.value)
+  const onContentChanged = e => setContent(e.target.value)
 
   const onSavePostClicked = () => {
     if (title && content) {
@@ -334,7 +334,7 @@ function postAdded(title, content) {
   const id = nanoid()
   return {
     type: 'posts/postAdded',
-    payload: { id, title, content },
+    payload: { id, title, content }
   }
 }
 ```
@@ -360,14 +360,14 @@ const postsSlice = createSlice({
           payload: {
             id: nanoid(),
             title,
-            content,
-          },
+            content
+          }
         }
-      },
-    },
+      }
+    }
     // highlight-end
     // other reducers here
-  },
+  }
 })
 ```
 
@@ -400,13 +400,13 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = [
   { id: '0', name: 'Tianna Jenkins' },
   { id: '1', name: 'Kevin Grant' },
-  { id: '2', name: 'Madison Price' },
+  { id: '2', name: 'Madison Price' }
 ]
 
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {}
 })
 
 export default usersSlice.reducer
@@ -427,8 +427,8 @@ export default configureStore({
   reducer: {
     posts: postsReducer,
     // highlight-next-line
-    users: usersReducer,
-  },
+    users: usersReducer
+  }
 })
 ```
 
@@ -457,13 +457,13 @@ const postsSlice = createSlice({
             title,
             content,
             // highlight-next-line
-            user: userId,
-          },
+            user: userId
+          }
         }
-      },
-    },
+      }
+    }
     // other reducers
-  },
+  }
 })
 ```
 
@@ -484,11 +484,11 @@ export const AddPostForm = () => {
   const dispatch = useDispatch()
 
   // highlight-next-line
-  const users = useSelector((state) => state.users)
+  const users = useSelector(state => state.users)
 
-  const onTitleChanged = (e) => setTitle(e.target.value)
-  const onContentChanged = (e) => setContent(e.target.value)
-  const onAuthorChanged = (e) => setUserId(e.target.value)
+  const onTitleChanged = e => setTitle(e.target.value)
+  const onContentChanged = e => setContent(e.target.value)
+  const onAuthorChanged = e => setUserId(e.target.value)
 
   const onSavePostClicked = () => {
     if (title && content) {
@@ -502,7 +502,7 @@ export const AddPostForm = () => {
   // highlight-start
   const canSave = Boolean(title) && Boolean(content) && Boolean(userId)
 
-  const usersOptions = users.map((user) => (
+  const usersOptions = users.map(user => (
     <option key={user.id} value={user.id}>
       {user.name}
     </option>
@@ -552,8 +552,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 export const PostAuthor = ({ userId }) => {
-  const author = useSelector((state) =>
-    state.users.find((user) => user.id === userId)
+  const author = useSelector(state =>
+    state.users.find(user => user.id === userId)
   )
 
   return <span>by {author ? author.name : 'Unknown author'}</span>
@@ -637,7 +637,7 @@ Since `array.sort()` mutates the existing array, we need to make a copy of `stat
 //highlight-start
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
-const renderedPosts = orderedPosts.map((post) => {
+const renderedPosts = orderedPosts.map(post => {
   //highlight-end
   return (
     <article className="post-excerpt" key={post.id}>
@@ -671,7 +671,7 @@ const reactionEmoji = {
   hooray: '🎉',
   heart: '❤️',
   rocket: '🚀',
-  eyes: '👀',
+  eyes: '👀'
 }
 
 export const ReactionButtons = ({ post }) => {
@@ -701,14 +701,14 @@ const postsSlice = createSlice({
     // highlight-start
     reactionAdded(state, action) {
       const { postId, reaction } = action.payload
-      const existingPost = state.find((post) => post.id === postId)
+      const existingPost = state.find(post => post.id === postId)
       if (existingPost) {
         existingPost.reactions[reaction]++
       }
-    },
+    }
     // highlight-end
     // other reducers
-  },
+  }
 })
 
 // highlight-next-line
@@ -740,7 +740,7 @@ const reactionEmoji = {
   hooray: '🎉',
   heart: '❤️',
   rocket: '🚀',
-  eyes: '👀',
+  eyes: '👀'
 }
 
 export const ReactionButtons = ({ post }) => {
@@ -805,4 +805,4 @@ We've covered a lot of information and concepts in this section. Let's recap the
 
 ## What's Next?
 
-By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 4](), we'll see how to work with data that comes from a server API.
+By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 4](./quick-start-part-4.md), we'll see how to work with data that comes from a server API.
