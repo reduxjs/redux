@@ -25,7 +25,11 @@ describe("integration test with mount", () => {
 describe("unit tests", () => {
     describe("mapStateToProps", () => {
         it('maps an empty list to empty list', () => {
-            expect(mapStateToProps({ todos: [], visibilityFilter: VisibilityFilters.SHOW_ALL })).toEqual({ todos: [] })
+            const props = mapStateToProps({
+                todos: [],
+                visibilityFilter: VisibilityFilters.SHOW_ALL
+            })
+            expect(props).toEqual({ todos: [] })
         });
     })
 
