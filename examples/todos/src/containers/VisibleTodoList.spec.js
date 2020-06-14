@@ -86,7 +86,7 @@ describe("unit tests, high isolation", () => {
                     <VisibleTodoList />
                 </Provider>
             )
-            wrapper.find('Todo').prop('onClick')()
+            wrapper.find('TodoList').prop('toggleTodo')(1)
             wrapper.update()
             expect(wrapper.find('TodoList').prop('todos')).toEqual([])
         })
