@@ -260,9 +260,9 @@ In addition to having unit tests that isolate reducers, selectors, middleware, y
 
 ```js
 const store = createStore(rootReducer)
-expect(store.getState()).toMatchObject({loggedIn: false})
-store.dispatch({type: 'LOGIN'})
-expect(store.getState()).toMatchObject({loggedIn: true})
+expect(store.getState()).toMatchObject({ loggedIn: false })
+store.dispatch({ type: 'LOGIN' })
+expect(store.getState()).toMatchObject({ loggedIn: true })
 ```
 
 ### Components
