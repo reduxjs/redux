@@ -20,6 +20,36 @@ describe("integration test, high verification", () => {
         )
         expect(wrapper.html()).toBe('<ul></ul>')
     })
+
+    it('renders a single todo', () => {
+        const store = createStore(rootReducer, {
+            todos: [
+                { id: 1, completed: false, text: 'hello world' }
+            ],
+            visibilityFilter: VisibilityFilters.SHOW_ACTIVE
+        })
+        const wrapper = mount(
+            <Provider store={store}>
+                <VisibleTodoList />
+            </Provider>
+        )
+        expect(wrapper.html()).toBe('<ul><li style=\"text-decoration: none;\">hello world</li></ul>')
+    })
+
+    it('toggles todo', () => {
+        const store = createStore(rootReducer, {
+            todos: [
+                { id: 1, completed: true, text: 'hello world' }
+            ],
+            visibilityFilter: VisibilityFilters.SHOW_ACTIVE
+        })
+        const wrapper = mount(
+            <Provider store={store}>
+                <VisibleTodoList />
+            </Provider>
+        )
+        expect(wrapper.html()).toBe('<ul></ul>')
+    })
 })
 
 describe("unit tests, high isolation", () => {
@@ -41,6 +71,23 @@ describe("unit tests, high isolation", () => {
                     <VisibleTodoList />
                 </Provider>
             )
+            expect(wrapper.find('TodoList').prop('todos')).toEqual([])
+        })
+
+        it('supplies correct callback prop to <TodoList />', () => {
+            const store = createStore(rootReducer, {
+                todos: [
+                    { id: 1, completed: false, text: 'hello world' }
+                ],
+                visibilityFilter: VisibilityFilters.SHOW_ACTIVE
+            })
+            const wrapper = mount(
+                <Provider store={store}>
+                    <VisibleTodoList />
+                </Provider>
+            )
+            wrapper.find('Todo').prop('onClick')()
+            wrapper.update()
             expect(wrapper.find('TodoList').prop('todos')).toEqual([])
         })
     });
