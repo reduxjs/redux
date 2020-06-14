@@ -9,10 +9,10 @@ import TodoList from '../Components/TodoList';
 import { VisibilityFilters } from '../actions'
 
 
-const store = createStore(rootReducer)
 
-describe("integration test with mount", () => {
+describe("integration test, high verification", () => {
     it('renders an empty list', () => {
+        const store = createStore(rootReducer)
         const wrapper = mount(
             <Provider store={store}>
                 <VisibleTodoList />
@@ -22,7 +22,7 @@ describe("integration test with mount", () => {
     })
 })
 
-describe("unit tests", () => {
+describe("unit tests, high isolation", () => {
     describe("mapStateToProps", () => {
         it('maps an empty list to empty list', () => {
             const props = mapStateToProps({
@@ -33,6 +33,18 @@ describe("unit tests", () => {
         });
     })
 
+    describe("<VisibleTodoList />", () => {
+        it('supplies an empty list to the <TodoList />', () => {
+            const store = createStore(rootReducer)
+            const wrapper = mount(
+                <Provider store={store}>
+                    <VisibleTodoList />
+                </Provider>
+            )
+            expect(wrapper.find('TodoList').prop('todos')).toEqual([])
+        })
+    });
+
     describe("<TodoList />", () => {
         it('renders an empty list', () => {
             const wrapper = shallow(
@@ -41,7 +53,4 @@ describe("unit tests", () => {
             expect(wrapper.html()).toBe('<ul></ul>')
         })
     })
-})
-
-describe("unit tests w/ mount", () => {
 })
