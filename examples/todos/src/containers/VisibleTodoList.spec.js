@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import rootReducer from '../reducers'
 import VisibleTodoList, { mapStateToProps } from './VisibleTodoList';
 import TodoList from '../Components/TodoList';
+import Todo from '../Components/Todo';
 import { VisibilityFilters } from '../actions'
 
 
@@ -102,6 +103,34 @@ describe("unit tests, high isolation", () => {
                 <TodoList todos={[]} toggleTodo={jest.fn()} />
             )
             expect(wrapper.html()).toBe('<ul></ul>')
+        })
+
+        it('renders a todo', () => {
+            const wrapper = shallow(
+                <TodoList todos={[{
+                    id: 1,
+                    completed: false,
+                    text: 'hello world'
+                }]} toggleTodo={jest.fn()} />
+            )
+            expect(wrapper.html()).toBe('<ul><li style=\"text-decoration:none\">hello world</li></ul>')
+        })
+    })
+
+    describe("<Todo /> presentation component", () => {
+        it('calls toggleTodo callback prop on click', () => {
+            const toggleTodo = jest.fn()
+            const wrapper = shallow(
+                <Todo
+                    id={1}
+                    completed={false}
+                    text={'hello world'}
+                    onClick={toggleTodo}
+                />
+            )
+            expect(toggleTodo).toHaveBeenCalledTimes(0)
+            wrapper.find('li').prop('onClick')()
+            expect(toggleTodo).toHaveBeenCalledTimes(1)
         })
     })
 })
