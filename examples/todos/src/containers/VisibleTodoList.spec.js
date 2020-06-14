@@ -105,22 +105,32 @@ describe("unit tests, high isolation", () => {
             expect(wrapper.html()).toBe('<ul></ul>')
         })
 
-        it('renders a todo', () => {
+        it('renders a todo, with correct onClick prop', () => {
+            const id = 1
+            const toggleTodo = jest.fn()
             const wrapper = shallow(
                 <TodoList
                     todos={
                         [
                             {
-                                id: 1,
+                                id,
                                 completed: false,
                                 text: 'hello world'
                             }
                         ]
                     }
-                    toggleTodo={jest.fn()}
+                    toggleTodo={toggleTodo}
                 />
             )
-            expect(wrapper.html()).toBe('<ul><li style=\"text-decoration:none\">hello world</li></ul>')
+            expect(wrapper.find('Todo').props()).toMatchObject({
+                id: 1,
+                completed: false,
+                text: 'hello world',
+            })
+            expect(toggleTodo).toHaveBeenCalledTimes(0)
+            wrapper.find('Todo').prop('onClick')()
+            expect(toggleTodo).toHaveBeenCalledTimes(1)
+            expect(toggleTodo).toHaveBeenCalledWith(id)
         })
     })
 
