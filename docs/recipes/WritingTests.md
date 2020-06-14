@@ -258,7 +258,7 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils. Alternatively [Enzyme](https://enzymejs.github.io/enzyme/) or [React test-renderer](https://reactjs.org/docs/test-renderer.html) can be used.
 
 ```sh
 npm install --save-dev @testing-library/react
@@ -270,7 +270,7 @@ If you are using jest as recommended above, we also recommend installing [jest-d
 npm install --save-dev @testing-library/jest-dom
 ```
 
-To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert wheter the callbacks were called when expected.
+To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert whether the callbacks were called when expected.
 
 #### Example
 
@@ -397,6 +397,25 @@ it('Renders the connected app with initialState', () => {
 })
 ```
 
+The same approach can be used with [Enzyme](https://enzymejs.github.io/enzyme/) or [React test-renderer](https://reactjs.org/docs/test-renderer.html), or other testing tools. Just wrap your container in the `<Provider />`:
+
+```js
+import React from 'react'
+import { mount, shallow } from 'enzyme'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+
+it('Renders the connected app with initialState', () => {
+  const store = createStore(rootReducer,  { user: 'Redux User' })
+  const wrapper = mount(
+    <Provider store={store}>
+        <App />
+    </Provider>
+  )
+  expect(wrapper.html()).toContain('Redux User')
+})
+```
+
 ### Middleware
 
 Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
@@ -466,5 +485,7 @@ In some cases, you will need to modify the `create` function to use different mo
 ### Glossary
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
+
+- [Enzyme](https://github.com/enzymejs/enzyme): Enzyme is a JavaScript Testing utility for React that makes it easier to test your React Components' output. You can also manipulate, traverse, and in some ways simulate runtime given the output.
 
 - [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.
