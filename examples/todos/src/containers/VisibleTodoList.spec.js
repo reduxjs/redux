@@ -74,7 +74,7 @@ describe("unit tests, high isolation", () => {
             expect(wrapper.find('TodoList').prop('todos')).toEqual([])
         })
 
-        it('supplies an onClick prop that toggles a todo', () => {
+        it('supplies a toggleTodo prop that toggles a todo', () => {
             const store = createStore(rootReducer, {
                 todos: [
                     { id: 1, completed: false, text: 'hello world' }
