@@ -63,8 +63,8 @@ describe("unit tests, high isolation", () => {
         });
     })
 
-    describe("<VisibleTodoList />", () => {
-        it('supplies an empty list to the <TodoList />', () => {
+    describe("<VisibleTodoList /> container", () => {
+        it('supplies an empty list', () => {
             const store = createStore(rootReducer)
             const wrapper = mount(
                 <Provider store={store}>
@@ -74,7 +74,7 @@ describe("unit tests, high isolation", () => {
             expect(wrapper.find('TodoList').prop('todos')).toEqual([])
         })
 
-        it('supplies correct callback prop to <TodoList />', () => {
+        it('supplies an onClick prop that toggles a todo', () => {
             const store = createStore(rootReducer, {
                 todos: [
                     { id: 1, completed: false, text: 'hello world' }
@@ -92,7 +92,7 @@ describe("unit tests, high isolation", () => {
         })
     });
 
-    describe("<TodoList />", () => {
+    describe("<TodoList /> presentation component", () => {
         it('renders an empty list', () => {
             const wrapper = shallow(
                 <TodoList todos={[]} toggleTodo={jest.fn()} />
