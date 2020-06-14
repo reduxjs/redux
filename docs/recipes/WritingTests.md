@@ -254,6 +254,17 @@ describe('todos reducer', () => {
 })
 ```
 
+### Integration Testing the Store
+
+In addition to having unit tests that isolate reducers, selectors, middleware, you can verify they are all integrated correctly, by integration testing the whole store. These integration style tests will be less brittle & more resilient to to refactorings (such as switching from one type of Redux middleware to another, or renaming a selector), but also may require more mocking.
+
+```js
+const store = createStore(rootReducer)
+expect(store.getState()).toMatchObject({loggedIn: false})
+store.dispatch({type: 'LOGIN'})
+expect(store.getState()).toMatchObject({loggedIn: true})
+```
+
 ### Components
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
