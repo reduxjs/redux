@@ -258,7 +258,7 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils. Alternatively [Enzyme](https://enzymejs.github.io/enzyme/) or [React test-renderer](https://reactjs.org/docs/test-renderer.html) can be used.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilitiy that encourages good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils. Alternatively [Enzyme](https://enzymejs.github.io/enzyme/) or [React test-renderer](https://reactjs.org/docs/test-renderer.html) can be used.
 
 ```sh
 npm install --save-dev @testing-library/react
