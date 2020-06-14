@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "jsdom-global": "^3.0.2",
     "react-scripts": "^3.0.0"
   },
   "dependencies": {
