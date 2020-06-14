@@ -10,11 +10,17 @@ import Todo from '../Components/Todo';
 import { VisibilityFilters } from '../actions'
 
 
-// Feel free to mock out the <TodoList /> here to make it an integration test of only
-// the Container + Redux sub-components. This could still be considered an "integration test",
-// but it could integration test smaller or larger slices of functionality depending on your needs.
-describe("integration test, high verification", () => {
+/**
+ * These integration tests focus on testing user facing behavior. It avoids asserting directly on any reducers,
+ * selectors, or isolating any children components, as well as avoids asserting on implementation details like state/props.
+ * 
+ * Generally, to verify most software, you should be testing in this style.
+ */
+describe("integration test, high verification, less brittle, less error locatalization", () => {
     it('renders an empty list', () => {
+        // Feel free to mock out the <TodoList /> here to make it an integration test of only
+        // the Container + Redux sub-components. This could still be considered an "integration test",
+        // but it could integration test smaller or larger slices of functionality depending on your needs.
         const store = createStore(rootReducer)
         const wrapper = mount(
             <Provider store={store}>
@@ -55,7 +61,27 @@ describe("integration test, high verification", () => {
     })
 })
 
-describe("unit tests, high isolation", () => {
+/**
+ * These types of tests should be used to supplement the above "integration" style tests, for advanced users & complex apps.
+ * 
+ * They do not provide the same level of verification as the integration style tests, but they allow
+ * for testing more edge cases with less mocking, and run faster. It may also provide diminishing returns
+ * to write only (or mostly) integration style tests, depending on the type of app you're testing.
+ * 
+ * For example, an app with a very few, but very complex components may have a lot of "combinatorial"
+ * explosions of feature interactions. It may not be possible to test every combination of functionality, so
+ * it may make sense to have integration tests for more common combinations, and supplement with unit tests.
+ * 
+ * For something simpler like this "todo" list app, these unit tests will be more tightly coupled to the
+ * code & should be avoided. They'll make it harder to refactor, because the tests are pinning down lots of
+ * implementation details. The tradeoff here, which makes this approach worth considering, is that they also
+ * document these implementation details (tests as docs), so in larger teams or complex apps, it can be worthwhile
+ * to have a varying degree of your tests isolation/unit tests like these.
+ * 
+ * In more complex apps, an integration test may fail in a generic way, and having unit tests may increase the
+ * error localization of the tests, making it more obvious about *why* an integration test may have failed.
+ */
+describe("unit tests, high isolation, better error localization, brittle/less verification", () => {
     describe("mapStateToProps", () => {
         it('maps an empty list to empty list', () => {
             const props = mapStateToProps({
