@@ -354,6 +354,7 @@ export default connect(mapStateToProps)(App)
 To test it, we can use the `wrapper` option in React Testing Library's `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
 
 Our `render` function can look like this:
+
 ```js
 // test-utils.js
 import React from 'react'
@@ -367,12 +368,12 @@ function render(
     initialState,
     store = createStore(reducer, initialState),
     ...renderOptions
-  } = {},
+  } = {}
 ) {
-  function Wrapper({children}) {
+  function Wrapper({ children }) {
     return <Provider store={store}>{children}</Provider>
   }
-  return rtlRender(ui, {wrapper: Wrapper, ...renderOptions})
+  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
 // re-export everything
@@ -382,6 +383,7 @@ export { render }
 ```
 
 And our test can use our exported `render` function:
+
 ```js
 import React from 'react'
 // We're using our own custom render function and not RTL's render
