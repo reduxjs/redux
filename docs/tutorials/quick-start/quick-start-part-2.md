@@ -91,7 +91,7 @@ With that, let's get started!
 
 ## Main Posts Feed
 
-The main feature for our social media feed app will be a list of posts. We'll add several more pieces to this feature as we go along, but to start off, our first goal is to just show the list of post entries on screen.
+The main feature for our social media feed app will be a list of posts. We'll add several more pieces to this feature as we go along, but to start off, our first goal is to only show the list of post entries on screen.
 
 ### Creating the Posts Slice
 
@@ -101,7 +101,7 @@ Inside of `src`, create a new `features` folder, put a `posts` folder inside of 
 
 We're going to use the Redux Toolkit `createSlice` function to make a reducer function that knows how to handle our posts data. Reducer functions need to have some initial data included so that the Redux store has those values loaded when the app starts up.
 
-For now, we'll just create an array with some fake post objects inside so that we can begin adding the UI.
+For now, we'll create an array with some fake post objects inside so that we can begin adding the UI.
 
 We'll import `createSlice`, define our initial posts array, pass that to `createSlice`, and export the posts reducer function that `createSlice` generated for us:
 
@@ -110,13 +110,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = [
   { id: 1, title: 'First Post!', content: 'Hello!' },
-  { id: 2, title: 'Second Post', content: 'More text' },
+  { id: 2, title: 'Second Post', content: 'More text' }
 ]
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {}
 })
 
 export default postsSlice.reducer
@@ -131,8 +131,8 @@ import postsReducer from '../features/posts/postsSlice'
 
 export default configureStore({
   reducer: {
-    posts: postsReducer,
-  },
+    posts: postsReducer
+  }
 })
 ```
 
@@ -155,9 +155,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 export const PostsList = () => {
-  const posts = useSelector((state) => state.posts)
+  const posts = useSelector(state => state.posts)
 
-  const renderedPosts = posts.map((post) => (
+  const renderedPosts = posts.map(post => (
     <article className="post-excerpt">
       <h3>{post.title}</h3>
       <p>{post.content.substring(0, 100)}</p>
@@ -181,7 +181,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
+  Redirect
 } from 'react-router-dom'
 
 import { Navbar } from './app/Navbar'
@@ -239,8 +239,8 @@ export const AddPostForm = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  const onTitleChanged = (e) => setTitle(e.target.value)
-  const onContentChanged = (e) => setContent(e.target.value)
+  const onTitleChanged = e => setTitle(e.target.value)
+  const onContentChanged = e => setContent(e.target.value)
 
   return (
     <section>
@@ -292,7 +292,7 @@ Now, let's update our posts slice to add new post entries to the Redux store.
 
 Our posts slice is responsible for handling all updates to the posts data. Inside of the `createSlice` call, there's an object called `reducers`. Right now, it's empty. We need to add a reducer function inside of there to handle the case of a post being added.
 
-Inside of `reducers`, add a function named `postAdded`, which will receive two arguments: the current `state` value, and the `action` object that was dispatched. Since the posts slice _only_ knows about the data it's responsible for, the `state` argument will be just the array of posts, and not the entire Redux state object.
+Inside of `reducers`, add a function named `postAdded`, which will receive two arguments: the current `state` value, and the `action` object that was dispatched. Since the posts slice _only_ knows about the data it's responsible for, the `state` argument will be the array of posts by itself, and not the entire Redux state object.
 
 The `action` object will have our new post entry as the `action.payload` field, and we'll put that new post object into the `state` array.
 
@@ -306,9 +306,9 @@ const postsSlice = createSlice({
     // highlight-start
     postAdded(state, action) {
       state.push(action.payload)
-    },
+    }
     // highlight-end
-  },
+  }
 })
 
 // highlight-next-line
@@ -325,7 +325,7 @@ Remember: **reducer functions must _always_ create new state values immutably, b
 
 Our `AddPostForm` has text inputs and a "Save Post" button, but the button doesn't do anything yet. We need to add a click handler that will dispatch the `postAdded` action creator and pass in a new post object containing the title and content the user wrote.
 
-Our post objects also need to have an `id` field. Right now, our initial test posts just have some fake numbers for their IDs. We could write some code that would figure out what the next incrementing ID number should be, but it would be better if we generated a random unique ID instead. Redux Toolkit has a `nanoid` function we can use for that.
+Our post objects also need to have an `id` field. Right now, our initial test posts are using some fake numbers for their IDs. We could write some code that would figure out what the next incrementing ID number should be, but it would be better if we generated a random unique ID instead. Redux Toolkit has a `nanoid` function we can use for that.
 
 :::info
 
@@ -353,8 +353,8 @@ export const AddPostForm = () => {
   // highlight-next-line
   const dispatch = useDispatch()
 
-  const onTitleChanged = (e) => setTitle(e.target.value)
-  const onContentChanged = (e) => setContent(e.target.value)
+  const onTitleChanged = e => setTitle(e.target.value)
+  const onContentChanged = e => setContent(e.target.value)
 
   // highlight-start
   const onSavePostClicked = () => {
@@ -363,7 +363,7 @@ export const AddPostForm = () => {
         postAdded({
           id: nanoid(),
           title,
-          content,
+          content
         })
       )
 

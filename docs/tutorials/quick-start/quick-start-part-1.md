@@ -271,7 +271,7 @@ console.log(total)
 // 15
 ```
 
-Notice that this `addNumber` "reduce callback" function doesn't need to keep track of anything itself. It just takes the `previousResult` and `currentItem` arguments, does something with them, and returns a new result value.
+Notice that this `addNumber` "reduce callback" function doesn't need to keep track of anything itself. It takes the `previousResult` and `currentItem` arguments, does something with them, and returns a new result value.
 
 **A Redux reducer function is exactly the same idea as this "reduce callback" function!** It takes a "previous result" (the `state`), and the "current item" (the `action` object), decides a new state value based on those arguments, and returns that new state.
 
@@ -819,7 +819,7 @@ We can use them the same way we use a typical Redux action creator:
 store.dispatch(incrementAsync(5))
 ```
 
-However, thunks require a special kind of addon called _middleware_ to be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can just go ahead and use this.
+However, thunks require a special kind of addon called _middleware_ to be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can go ahead and use this.
 
 When you need to make AJAX calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
 
@@ -846,7 +846,7 @@ We'll see thunks being used in Part 2 of this tutorial.
 
 We know that we're not allowed to put any kind of async logic in reducers. But, that logic has to live somewhere.
 
-If we have access to the Redux store, we could just write some async code and call `store.dispatch()` when we're done:
+If we have access to the Redux store, we could write some async code and call `store.dispatch()` when we're done:
 
 ```js
 const store = configureStore({ reducer: counterReducer })
@@ -880,7 +880,7 @@ This gives us a way to write whatever sync or async code we want, while still ha
 
 </DetailedExplanation>
 
-There's one more function in this file, but we'll talk about that in just a minute when we look at the `<Counter>` UI component.
+There's one more function in this file, but we'll talk about that in a minute when we look at the `<Counter>` UI component.
 
 :::info Want to Know More?
 
@@ -977,7 +977,7 @@ So, we can get the current store counter value by doing:
 const count = useSelector(selectCount)
 ```
 
-We don't have to _just_ use selectors that have already been exported, either. For example, we could write a selector function as an inline argument to `useSelector`:
+We don't have to _only_ use selectors that have already been exported, either. For example, we could write a selector function as an inline argument to `useSelector`:
 
 ```js
 const countPlusTwo = useSelector(state => state.counter.value + 2)
@@ -1062,7 +1062,7 @@ If you're not sure where to put something, here are some common rules of thumb f
 
 This is also a good example of how to think about forms in Redux in general. **Most form state probably shouldn't be kept in Redux.** Instead, keep the data in your form components as you're editing it, and then dispatch Redux actions to update the store when the user is done.
 
-One other thing to note before we move on: remember that `incrementAsync` thunk from `counterSlice.js`? We're using it here in this component. Notice that we use it the same way we dispatch the other normal action creators. This component doesn't care whether we're dispatching a normal action or starting some async logic. It just knows that when you click that button, it dispatches something.
+One other thing to note before we move on: remember that `incrementAsync` thunk from `counterSlice.js`? We're using it here in this component. Notice that we use it the same way we dispatch the other normal action creators. This component doesn't care whether we're dispatching a normal action or starting some async logic. It only knows that when you click that button, it dispatches something.
 
 ### Providing the Store
 
