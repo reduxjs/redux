@@ -1,9 +1,9 @@
 ---
 id: quick-start-part-1
-title: Redux Quick Start - Part 1
+title: 'Redux Quick Start, Part 1: Redux Concepts and Structure'
 sidebar_label: 'Redux Concepts and Structure'
 hide_title: true
-description: The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!
+description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'

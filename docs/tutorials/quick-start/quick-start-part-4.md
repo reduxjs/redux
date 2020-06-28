@@ -1,11 +1,12 @@
 ---
-
 id: quick-start-part-4
-title: Redux Quick Start - Part 4
+title: 'Redux Quick Start, Part 4: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
 hide_title: true
-description: The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!
----import { DetailedExplanation } from '../../components/DetailedExplanation'
+description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
+---
+
+import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Quick Start, Part 4: Async Logic and Data Fetching
 

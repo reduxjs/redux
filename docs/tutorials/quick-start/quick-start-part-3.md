@@ -1,9 +1,9 @@
 ---
 id: quick-start-part-3
-title: Redux Quick Start - Part 3
+title: 'Redux Quick Start, Part 3: Using Redux Data'
 sidebar_label: 'Using Redux Data'
 hide_title: true
-description: The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!
+description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
