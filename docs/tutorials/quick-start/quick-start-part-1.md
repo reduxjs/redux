@@ -43,10 +43,14 @@ We've tried to keep these explanations beginner-friendly, but we do need to make
 
 If you're not already comfortable with those topics, we encourage you to take some time to become comfortable with them first, and then come back to learn about Redux. We'll be here when you're ready!
 
-You should make sure that you have the Redux DevTools extension installed in your browser:
+You should make sure that you have the React and Redux DevTools extensions installed in your browser:
 
-- [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
-- [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
+- React DevTools Extension:
+  - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
+  - [React DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
+- Redux DevTools Extension:
+  - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
+  - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
 If you'd like to know more details about specific concepts, we'll have links to other parts of the documentation that will tell you more about how Redux works and the patterns you use with Redux:
 

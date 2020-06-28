@@ -418,11 +418,483 @@ Here's how the notifications tab looks now that we've got the "new/read" behavio
 
 ![New notifications](/img/tutorials/quickstart-notifications-new.png)
 
+## Improving Render Performance
+
+Our application is looking useful, but we've actually got a couple flaws in when and how our components re-render. Let's look at those problems, and talk about some ways to improve the performance.
+
+### Investigating Render Behavior
+
+We can use the React DevTools Profiler to view some graphs of what components re-render when state is updated. Try clicking over to the `<UserPage>` for a single user. Open up your browser's DevTools, and in the React "Profiler" tab, click the circle "Record" button in the upper-left. Then, click the "Refresh Notifications" button in our app, and stop the recording in the React DevTools Profiler. You should see a chart that looks like this:
+
+![React DevTools Profiler render capture - <UserPage>](/img/tutorials/quickstart-userpage-rerender.png)
+
+We can see that the `<Navbar>` re-rendered, which makes sense because it had to show the updated "unread notifications" badge in the tab. But, why did our `<UserPage>` re-render?
+
+If we inspect the last couple dispatched actions in the Redux DevTools, we can see that only the notifications state updated. Since the `<UserPage>` doesn't read any notifications, it shouldn't have re-rendered. Something must be wrong with the component.
+
+If we look at `<UserPage>` carefully, there's a specific problem:
+
+```jsx title="features/UserPage.js
+export const UserPage = ({ match }) => {
+  const { userId } = match.params
+
+  const user = useSelector(state => selectUserById(state, userId))
+
+  // highlight-start
+  const postsForUser = useSelector(state => {
+    const allPosts = selectAllPosts(state)
+    return allPosts.filter(post => post.user === userId)
+  })
+  // highlight-end
+
+  // omit rendering logic
+}
+```
+
+We know that `useSelector` will re-run every time an action is dispatched, and that it force the component to re-render if we return a new reference value.
+
+We're calling `filter()` inside of our `useSelector` hook, so that we only return the list of posts that belong to this user. Unfortunately, **this means that `useSelector` _always_ returns a new array reference, and so our component will re-render after _every_ action even if the posts data hasn't changed!**.
+
+### Memoizing Selector Functions
+
+What we really need is a way to only calculate the new filtered array if either `state.posts` or `userId` have changed. If they _haven't_ changed, we want to return the same filtered array reference as the last time.
+
+This idea is called "memoization". We want to save a previous set of inputs and the calculated result, and if the inputs are the same, return the previous result instead of recalculating it again.
+
+So far, we've been writing selector functions by ourselves, and just so that we don't have to copy and paste the code for reading data from the store. It would be great if there was a way to make our selector functions memoized.
+
+**[Reselect](https://github.com/reduxjs/reselect) is a library for creating memoized selector functions**, and was specifically designed to be used with Redux. It has a `createSelector` function that generates memoized selectors that will only recalculate results when the inputs change. Redux Toolkit [exports the `createSelector` function](https://redux-toolkit.js.org/api/createSelector), so we already have it available.
+
+Let's make a new `selectPostsByUser` selector function, using Reselect, and use it here.
+
+```js title="features/posts/postsSlice.js"
+// highlight-next-line
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
+
+// omit slice logic
+
+export const selectAllPosts = state => state.posts.posts
+
+export const selectPostById = (state, postId) =>
+  state.posts.posts.find(post => post.id === postId)
+
+// highlight-start
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state, userId) => userId],
+  (posts, userId) => posts.filter(post => post.user === userId)
+)
+// highlight-end
+```
+
+`createSelector` takes one or more "input selector" functions as argument, plus an "output selector" function. When we call `selectPostsByUser(state, userId)`, `createSelector` will pass all of the arguments into each of our input selectors. Whatever those input selectors return becomes the arguments for the output selector.
+
+In this case, we know that we need the array of all posts and the user ID as the two arguments for our output selector. We can reuse our existing `selectAllPosts` selector to extract the posts array. Since the user ID is the second argument we're passing into `selectPostsByUser`, we can write a small selector that just returns `userId`.
+
+Our output selector then takes `posts` and `userId`, and returns the filtered array of posts for just that user.
+
+If we try calling `selectPostsByUser` multiple times, it will only re-run the output selector if either `posts` or `userId` has changed:
+
+```js
+const state1 = getState()
+// Output selector runs, because it's the first call
+selectPostsByUser(state1, 'user1')
+// Output selector does _not_ run, because the arguments haven't changed
+selectPostsByUser(state1, 'user1')
+// Output selector runs, because `userId` changed
+selectPostsByUser(state1, 'user2')
+
+dispatch(reactionAdded())
+const state2 = getState()
+// Output selector does not run, because `posts` and `userId` are the same
+selectPostsByUser(state2, 'user2')
+
+// Add some more posts
+dispatch(addNewPost())
+const state3 = getState()
+// Output selector runs, because `posts` has changed
+selectPostsByUser(state3, 'user2')
+```
+
+If we call this selector in `<UserPage>` and re-run the React profiler while fetching notifications, we should see that `<UserPage>` doesn't re-render this time:
+
+```jsx
+export const UserPage = ({ match }) => {
+  const { userId } = match.params
+
+  const user = useSelector(state => selectUserById(state, userId))
+
+  // highlight-start
+  const postsForUser = useSelector(state => selectPostsByUser(state, userId))
+  // highlight-end
+
+  // omit rendering logic
+}
+```
+
+Memoized selectors are a valuable tool for improving performance in a React+Redux application, because they can help us avoid unnecessary re-renders, and also avoid doing potentially complex or expensive calculations if the input data hasn't changed.
+
+### Investigating the Posts List
+
+If we go back to our `<PostsList>` and try clicking a reaction button on one of the posts while capturing a React profiler trace, we'll see that not only did the `<PostsList>` and the updated `<PostExcerpt>` instance render, _all_ of the `<PostExcerpt>` components rendered:
+
+![React DevTools Profiler render capture - <PostsList>](/img/tutorials/quickstart-postslist-rerender.png)
+
+Why is that? None of the other posts changed, so why would they need to re-render?
+
+[**React's default behavior is that when a parent component renders, React will recursively render all child components inside of it!**](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/). The immutable update of one post object also created a new `posts` array. Our `<PostsList>` had to re-render because the `posts` array was a new reference, so after it rendered, React continued downwards and re-rendered all of the `<PostExcerpt>` components too.
+
+This isn't a serious problem for our small example app, but in a larger real-world app, we might have some very long lists or very large component trees, and having all those extra components re-render might slow things down.
+
+There's a few different ways we could optimize this behavior in `<PostsList>`.
+
+First, we could wrap the `<PostExcerpt>` component in [`React.memo()`](https://reactjs.org/docs/react-api.html#reactmemo), which will ensure that the component inside of it only re-renders if the props have actually changed. This will actually work quite well - try it out and see what happens:
+
+```jsx title="features/posts/PostsList.js
+// highlight-next-line
+let PostExcerpt = ({ post }) => {
+  // omit logic
+}
+
+// highlight-next-line
+PostExcerpt = React.memo(PostExcerpt)
+```
+
+Another option is to rewrite `<PostsList>` so that it only selects a list of post IDs from the store instead of the entire `posts` array, and rewrite `<PostExcerpt>` so that it receives a `postId` prop and calls `useSelector` to read the post object it needs. If `<PostsList>` gets the same list of IDs as before, it won't need to re-render, and so only our one changed `<PostExcerpt>` component should have to render.
+
+Unfortunately, this gets tricky because we also need to have all our posts sorted by date and rendered in the right order. We could update our `postsSlice` to keep the array sorted at all times, so we don't have to sort it in the component, and use a memoized selector to extract just the list of post IDs. We could also [customize the comparison function that `useSelector` runs to check the results](https://react-redux.js.org/api/hooks#equality-comparisons-and-updates), like `useSelector(selectPostIds, shallowEqual)`, so that will skip re-rendering if the _contents_ of the IDs array haven't changed.
+
+The last option is to find some way to have our reducer keep a separate array of IDs for all the posts, and only modify that array when posts are added or removed, and do the same rewrite of `<PostsList>` and `<PostExcerpt>`. This way, `<PostsList>` only needs to re-render when that IDs array changes.
+
+Conveniently, Redux Toolkit has a `createEntityAdapter` function that will help us do just that.
+
+## Normalizing Data
+
+You've seen that a lot of our logic has been looking up items by their ID field. Since we've been storing our data in arrays, that means we have to loop over all the items in the array using `array.find()` until we find the item with the ID we're looking for.
+
+Realistically, this doesn't take very long, but if we had arrays with hundreds or thousands of items inside, looking through the entire array to find one item becomes wasted effort. What we need is a way to look up a single item based on its ID, directly, without having to check all the other items. This process is known as "normalization".
+
+### Normalized State Structure
+
+"Normalized state" means that:
+
+- We only have one copy of each particular piece of data in our state, so there's no duplication
+- Data that has been normalized is kept in a lookup table, where the item IDs are the keys, and the items themselves are the values.
+- There may also be an array of all of the IDs for a particular item type
+
+JavaScript objects can be used as lookup tables, similar to "maps" or "dictionaries" in other languages. Here's what the normalized state for a group of `user` objects might look like:
+
+```js
+{
+  users: {
+    ids: ["user1", "user2", "user3"],
+    entities: {
+      "user1": {id: "user1", firstName, lastName},
+      "user2": {id: "user2", firstName, lastName},
+      "user3": {id: "user3", firstName, lastName},
+    }
+  }
+}
+```
+
+This makes it easy to find a particular `user` object by its ID, without having to loop through all the other user objects in an array:
+
+```js
+const userId = 'user2'
+const userObject = state.users.entities[userId]
+```
+
+:::info
+
+For more details on why normalizing state is useful, see [Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md) and the Redux Toolkit Usage Guide section on [Managing Normalized Data](https://redux-toolkit.js.org/usage/usage-guide#managing-normalized-data).
+
+:::
+
+### Managing Normalized State with `createEntityAdapter`
+
+Redux Toolkit's `createEntityAdapter` API provides a standardized way to store your data in a slice by taking a collection of items and putting them into the shape of `{ ids: [], entities: {} }`. Along with this predefined state shape, it generates a set of reducer functions and selectors that know how to work with that data.
+
+This has several benefits:
+
+- We don't have to write the code to manage the normalization ourselves
+- `createEntityAdapter`'s pre-built reducer functions handle common cases like "add all these items", "update one item", or "remove multiple items"
+- `createEntityAdapter` can keep the ID array in a sorted order based on the contents of the items, and will only update that array if items are added / removed or the sorting order changes.
+
+`createEntityAdapter` accepts an options object that may include a `sortComparer` function, which will be used to keep the item IDs array in sorted order by comparing two items (and works the same way as `Array.sort()`).
+
+It returns an object that contains [a set of generated reducer functions for adding, updating, and removing items from an entity state object](https://redux-toolkit.js.org/api/createEntityAdapter#crud-functions). These reducer functions can either be used as a case reducer for a specific action type, or as a "mutating" utility function within another reducer in `createSlice`.
+
+The adapter object also has a `getSelectors` function. You can pass in a selector that returns this particular slice of state from the Redux root state, and it will generate selectors like `selectAll` and `selectById`.
+
+Finally, the adapter object has a `getInitialState` function that generates an empty `{ids: [], entities: {}}` object. You can pass in more fields to `getInitialState`, and those will be merged in.
+
+### Updating the Posts Slice
+
+With that in mind, let's update our `postsSlice` to use `createEntityAdapter`:
+
+```js title="features/posts/postsSlice.js"
+import {
+  // highlight-next-line
+  createEntityAdapter
+  // omit other imports
+} from '@reduxjs/toolkit'
+
+// highlight-start
+const postsAdapter = createEntityAdapter({
+  sortComparer: (a, b) => b.date.localeCompare(a.date)
+})
+
+const initialState = postsAdapter.getInitialState({
+  status: 'idle',
+  error: null
+})
+// highlight-end
+
+// omit thunks
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
+    reactionAdded(state, action) {
+      const { postId, reaction } = action.payload
+      // highlight-next-line
+      const existingPost = state.entities[postId]
+      if (existingPost) {
+        existingPost.reactions[reaction]++
+      }
+    },
+    postUpdated(state, action) {
+      const { id, title, content } = action.payload
+      // highlight-next-line
+      const existingPost = state.entities[id]
+      if (existingPost) {
+        existingPost.title = title
+        existingPost.content = content
+      }
+    }
+  },
+  extraReducers: {
+    // omit other reducers
+
+    [fetchPosts.fulfilled]: (state, action) => {
+      state.status = 'succeeded'
+      // Add any fetched posts to the array
+      // highlight-start
+      // Use the `upsertMany` reducer as a mutating update utility
+      postsAdapter.upsertMany(state, action.payload)
+      // highlight-end
+    },
+    // highlight-start
+    // Use the `addOne` reducer for the fulfilled case
+    [addNewPost.fulfilled]: postsAdapter.addOne
+    // highlight-end
+  }
+})
+
+export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
+
+export default postsSlice.reducer
+
+// highlight-start
+// Export the customized selectors for this adapter using `getSelectors`
+export const {
+  selectAll: selectAllPosts,
+  selectById: selectPostById,
+  selectIds: selectPostIds
+  // Pass in a selector that returns the posts slice of state
+} = postsAdapter.getSelectors(state => state.posts)
+// highlight-end
+
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state, userId) => userId],
+  (posts, userId) => posts.filter(post => post.user === userId)
+)
+```
+
+There's a lot going on there! Let's break it down.
+
+First, we import `createEntityAdapter`, and call it to create our `postsAdapter` object. We know that we want to keep an array of all post IDs sorted with the newest post first, so we pass in a `sortComparer` function that will sort newer items to the front based on the `post.date` field.
+
+`getInitialState()` returns an empty `{ids: [], entities: {}}` normalized state object. Our `postsSlice` needs to keep the `status` and `error` fields for loading state too, so we pass those in to `getInitialState()`.
+
+Now that our posts are being kept as a lookup table in `state.entities`, we can change our `reactionAdded` and `postUpdated` reducers to directly look up the right posts by their IDs, instead of having to loop over the old `posts` array.
+
+When we receive the `fetchPosts.fulfilled` action, we can use the `postsAdapter.upsertMany` function to add all of the incoming posts to the state, by passing in the draft `state` and the array of posts in `action.payload`. If there's any items in `action.payload` that already existing in our state, the `upsertMany` function will merge them together based on matching IDs.
+
+When we receive the `addNewPost.fulfilled` action, we know we need to add that one new post object to our state. We can use the adapter functions as reducers directly, so we'll pass `postsAdapter.addOne` as the reducer function to use to handle that action.
+
+Finally, we can replace the old hand-written `selectAllPosts` and `selectPostById` selector functions with the ones generated by `postsAdapter.getSelectors`. Since the selectors are called with the root Redux state object, they need to know where to find our posts data in the Redux state, so we pass in a small selector that returns `state.posts`. The generated selector functions are always called `selectAll` and `selectById`, so we can use ES6 destructuring syntax to rename them as we export them and match the old selector names. We'll also export `selectPostIds` the same way, since we want to read the list of sorted post IDs in our `<PostsList>` component.
+
+### Optimizing the Posts List
+
+Now that our posts slice is using `createEntityAdapter`, we can update `<PostsList>` to optimize its rendering behavior.
+
+We'll update `<PostsList>` to read just the sorted array of post IDs, and pass `postId` to each `<PostExcerpt>`:
+
+```jsx title="features/posts/PostsList.js"
+// omit other imports
+
+// highlight-start
+import {
+  selectAllPosts,
+  fetchPosts,
+  selectPostIds,
+  selectPostById
+} from './postsSlice'
+
+let PostExcerpt = ({ postId }) => {
+  const post = useSelector(state => selectPostById(state, postId))
+  // highlight-end
+  // omit rendering logic
+}
+
+export const PostsList = () => {
+  const dispatch = useDispatch()
+  // highlight-next-line
+  const orderedPostIds = useSelector(selectPostIds)
+
+  // omit other selections and effects
+
+  if (postStatus === 'loading') {
+    content = <div className="loader">Loading...</div>
+  } else if (postStatus === 'succeeded') {
+    // highlight-start
+    content = orderedPostIds.map(postId => (
+      <PostExcerpt key={postId} postId={postId} />
+    ))
+    // highlight-end
+  } else if (postStatus === 'error') {
+    content = <div>{error}</div>
+  }
+
+  // omit other rendering
+}
+```
+
+Now, if we try clicking a reaction button on one of the posts while capturing a React component performance profile, we should see that _only_ that one component re-rendered:
+
+![React DevTools Profiler render capture - optimized <PostsList>](/img/tutorials/quickstart-postslist-optimized.png)
+
+## Converting Other Slices
+
+We're almost done. As a final cleanup step, we'll update our other two slices to use `createEntityAdapter` as well.
+
+### Converting the Users Slice
+
+The `usersSlice` is fairly small, so we've only got a few things to change:
+
+```js title="features/users/usersSlice.js"
+import {
+  createSlice,
+  createAsyncThunk,
+  // highlight-next-line
+  createEntityAdapter
+} from '@reduxjs/toolkit'
+import { client } from '../../api/client'
+
+// highlight-start
+const usersAdapter = createEntityAdapter()
+
+const initialState = usersAdapter.getInitialState()
+// highlight-end
+
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
+  const response = await client.get('/fakeApi/users')
+  return response.users
+})
+
+const usersSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {},
+  extraReducers: {
+    // highlight-next-line
+    [fetchUsers.fulfilled]: usersAdapter.setAll
+  }
+})
+
+export default usersSlice.reducer
+
+// highlight-start
+export const {
+  selectAll: selectAllUsers,
+  selectById: selectUserById
+} = usersAdapter.getSelectors(state => state.users)
+// highlight-end
+```
+
+The only action we're handling here always replaces the entire list of users with the array we fetched from the server. We can use `usersAdapter.setAll` to implement that instead.
+
+Our `<AddPostForm>` is still trying to read `state.users` as an array, as is `<PostAuthor>`. Update them to use `selectAllUsers` and `selectUserById`, respectively.
+
+### Converting the Notifications Slice
+
+Last but not least, we'll update `notificationsSlice` as well:
+
+```js title="features/notifications/notificationsSlice.js"
+import {
+  createSlice,
+  createAsyncThunk,
+  // highlight-next-line
+  createEntityAdapter
+} from '@reduxjs/toolkit'
+
+import { client } from '../../api/client'
+
+// highlight-start
+const notificationsAdapter = createEntityAdapter({
+  sortComparer: (a, b) => b.date.localeCompare(a.date)
+})
+// highlight-end
+
+// omit fetchNotifications thunk
+
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  // highlight-next-line
+  initialState: notificationsAdapter.getInitialState(),
+  reducers: {
+    allNotificationsRead(state, action) {
+      // highlight-start
+      Object.values(state.entities).forEach(notification => {
+        notification.read = true
+      })
+      // highlight-end
+    }
+  },
+  extraReducers: {
+    [fetchNotifications.fulfilled]: (state, action) => {
+      // highlight-start
+      Object.values(state.entities).forEach(notification => {
+        // Any notifications we've read are no longer new
+        notification.isNew = !notification.read
+      })
+      notificationsAdapter.upsertMany(state, action.payload)
+      // highlight-end
+    }
+  }
+})
+
+export const { allNotificationsRead } = notificationsSlice.actions
+
+export default notificationsSlice.reducer
+
+// highlight-start
+export const {
+  selectAll: selectAllNotifications
+} = notificationsAdapter.getSelectors(state => state.notifications)
+// highlight-end
+```
+
+We again import `createEntityAdapter`, call it, and call `notificationsAdapter.getInitialState()` to help set up the slice.
+
+Ironically, we do have a couple places in here where we need to loop over all notification objects and update them. Since those are no longer being kept in an array, we have to use `Object.values(state.entities)` to get an array of those notifications and loop over that. On the other hand, we can replace the previous fetch update logic with `notificationsAdapter.upsertMany`.
+
+And with that... we're done!
+
 ## What You've Learned
 
 Congratulations, you've completed the Quick Start tutorial! Let's see what the final app looks like in action:
-
-<!--
 
 <iframe
   class="codesandbox"
@@ -432,11 +904,29 @@ Congratulations, you've completed the Quick Start tutorial! Let's see what the f
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
--->
-
-As a reminder, here's what we covered in this section:
+Here's what we covered in this section:
 
 :::tip
+
+- **Memoized selector functions can be used to optimize performance**
+  - Redux Toolkit re-exports the `createSelector` function from Reselect, which generates memoized selectors
+  - Memoized selectors will only recalculate the results if the input selectors return new values
+  - Memoization can skip expensive calculations, and ensure the same result references are returned
+- **There are multiple patterns you can use to optimize React component rendering with Redux**
+  - Avoid creating new object/array references inside of `useSelector` - those will cause unnecessary re-renders
+  - Memoized selector functions can be passed to `useSelector` to optimize rendering
+  - `useSelector` can accept an alternate comparison function like `shallowEqual` instead of reference equality
+  - Components can be wrapped in `React.memo()` to only re-render if their props change
+  - List rendering can be optimized by having list parent components read just an array of item IDs, passing the IDs to list item children, and retrieving items by ID in the children
+- **Normalized state structure is a recommended approach for storing items**
+  - "Normalization" means no duplication of data, and keeping items stored in a lookup table by item ID
+  - Normalized state shape usually looks like `{ids: [], entities: {}}`
+- **Redux Toolkit's `createEntityAdapter` API helps manage normalized data in a slice**
+  - Item IDs can be kept in sorted order by passing in a `sortComparer` option
+  - The adapter object includes:
+    - `adapter.getInitialState`, which can accept additional state fields like loading state
+    - Prebuilt reducers for common cases, like `setAll`, `addMany`, `upsertOne`, and `removeMany`
+    - `adapter.getSelectors`, which generates selectors like `selectAll` and `selectById`
 
 :::
 
@@ -458,4 +948,4 @@ If you'd like to know more about _why_ Redux exists, what problems it tries to s
 
 If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
 
-Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!
+**Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!**
