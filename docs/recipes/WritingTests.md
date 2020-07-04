@@ -270,7 +270,7 @@ If you are using jest as recommended above, we also recommend installing [jest-d
 npm install --save-dev @testing-library/jest-dom
 ```
 
-To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert wheter the callbacks were called when expected.
+To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert whether the callbacks were called when expected.
 
 #### Example
 
