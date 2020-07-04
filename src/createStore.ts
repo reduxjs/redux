@@ -9,7 +9,7 @@ import {
   ExtendState
 } from './types/store'
 import { Action } from './types/actions'
-import { Reducer } from './types/reducers'
+import { Reducer, StrictReducer } from './types/reducers'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 
@@ -55,6 +55,16 @@ export default function createStore<
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
+  enhancer?: StoreEnhancer<Ext, StateExt>
+): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+export default function createStore<
+  S,
+  A extends Action,
+  Ext = {},
+  StateExt = never
+>(
+  reducer: StrictReducer<S, A>,
+  preloadedState: S,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 export default function createStore<

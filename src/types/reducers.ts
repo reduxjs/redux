@@ -32,6 +32,21 @@ export type Reducer<S = any, A extends Action = AnyAction> = (
 ) => S
 
 /**
+ * A reducer that expect fully initialized input state. When you use
+ * this reducer, you should provide defined initial state.
+ *
+ * It can be useful for a normalized state and a reducer delegation,
+ * when you can't provide initial state statically.
+ *
+ * @template S The type of state consumed and produced by this reducer.
+ * @template A The type of actions the reducer can potentially respond to.
+ */
+export type StrictReducer<S = any, A extends Action = AnyAction> = (
+  state: S,
+  action: A
+) => S
+
+/**
  * Object whose values correspond to different reducer functions.
  *
  * @template A The type of actions the reducers can potentially respond to.

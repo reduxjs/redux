@@ -2,6 +2,7 @@ import {
   Store,
   createStore,
   Reducer,
+  StrictReducer,
   Action,
   StoreEnhancer,
   Unsubscribe,
@@ -138,6 +139,26 @@ const storeWithBadPreloadedStateAndEnhancer: Store<State> = createStore(
     b: { c: 'c' }
   },
   enhancer
+)
+
+const strictReducer: StrictReducer<State> = (
+  state: State,
+  action: Action
+): State => {
+  return state
+}
+
+const storeWithStrictReducer: Store<State> = createStore(strictReducer, {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  }
+})
+
+// typings:expect-error
+const storeWithStrictReducerAndWithoutPreloadedState: Store<State> = createStore(
+  strictReducer
 )
 
 /* dispatch */

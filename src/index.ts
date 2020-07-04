@@ -25,6 +25,7 @@ export {
 // reducers
 export {
   Reducer,
+  StrictReducer,
   ReducerFromReducersMapObject,
   ReducersMapObject,
   StateFromReducersMapObject,
