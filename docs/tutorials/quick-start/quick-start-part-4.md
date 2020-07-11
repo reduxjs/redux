@@ -20,20 +20,20 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Understanding the [Redux data flow and React-Redux APIs from Part 2](./quick-start-part-2.md)
+- Understanding the [Redux data flow and React-Redux APIs from Part 3](./quick-start-part-2.md)
 - Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
 
 :::
 
 ## Introduction
 
-In [Part 3: Basic Redux Data Flow](./quick-start-part-2.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
+In [Part 3: Basic Redux Data Flow](./quick-start-part-3.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
 
 Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, and reaction buttons.
 
 :::info
 
-As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [**TODO actual repo link here** `some-working-branch` in the project repo]() for the complete changes in the application.
+As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/markerikson/redux-quickstart-example-app/tree/tutorial-steps) for the complete changes in the application.
 
 :::
 

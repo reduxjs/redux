@@ -52,7 +52,7 @@ To get started, you can open and fork this CodeSandbox:
 
 You can also [clone the same project from this Github repo](https://github.com/markerikson/redux-quickstart-example-app). After cloning the repo, you can install the tools for the project with `npm install`, and start it with `npm start`.
 
-If you'd like to see the final version of what we're going to build, you can check out the **TODO `rough-final-version` branch**, or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/markerikson/redux-quickstart-example-app/tree/rough-final-version).
+If you'd like to see the final version of what we're going to build, you can check out the **`tutorial-steps` branch**, or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/markerikson/redux-quickstart-example-app/tree/tutorial-steps).
 
 > We'd like to thank [Tania Rascia](https://www.taniarascia.com/), whose [Using Redux with React](https://www.taniarascia.com/redux-react-guide/) tutorial helped inspire the example in this page. It also uses her [Primitive UI CSS starter](https://taniarascia.github.io/primitive/) for styling.
 
@@ -64,7 +64,21 @@ If you want to know specific details on how to add Redux to a project, see this 
 
 <DetailedExplanation title="Detailed Explanation: Adding Redux to a React Project">
 
-**TODO Explanation here**
+The Redux template for CRA comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
+
+- Add the `@reduxjs/toolkit` and `react-redux` packages
+- Create a Redux store using RTK's `configureStore` API, and pass in at least one reducer function
+- Import the Redux store into your application's entry point file (such as `src/index.js`)
+- Wrap your root React component with the `<Provider>` component from React-Redux, like:
+
+```jsx
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
 
 </DetailedExplanation>
 
@@ -84,8 +98,6 @@ Let's take a quick look at what the initial project contains:
     - `store.js`: creates the Redux store instance
 
 If you load the app now, you should see the header and a welcome message. We can also open up the Redux DevTools Extension and see that our initial Redux state is entirely empty.
-
-**TODO Add an explanation of what's in RTK, similar to https://www.apollographql.com/docs/react/get-started/ for Apollo Boost? **
 
 With that, let's get started!
 
@@ -329,7 +341,7 @@ Our post objects also need to have an `id` field. Right now, our initial test po
 
 :::info
 
-We'll talk more about generating IDs and dispatching actions in [Part 3](./quick-start-part-3.md).
+We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./quick-start-part-3.md).
 
 :::
 
@@ -416,7 +428,7 @@ Let's recap what you've learned in this section:
 
 :::tip
 
-- **Redux data is updated by "reducer functions"**:
+- **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
   - The Redux Toolkit `createSlice` function generates reducer functions for you, and lets you write "mutating" code that is turned into safe immutable updates
   - Those reducer functions are added to the `reducers` field in `configureStore`, and that defines the data and state field names inside the Redux store
