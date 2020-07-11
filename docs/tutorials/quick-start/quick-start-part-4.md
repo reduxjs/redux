@@ -1,6 +1,6 @@
 ---
-id: quick-start-part-3
-title: 'Redux Quick Start, Part 3: Using Redux Data'
+id: quick-start-part-4
+title: 'Redux Quick Start, Part 4: Using Redux Data'
 sidebar_label: 'Using Redux Data'
 hide_title: true
 description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
@@ -8,7 +8,7 @@ description: 'The official Quick Start tutorial for Redux - the fastest way to l
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 3: Using Redux Data
+# Quick Start, Part 4: Using Redux Data
 
 :::tip What You'll Learn
 
@@ -27,7 +27,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 2 of this tutorial](./quick-start-part-2.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
+In [Part 3: Basic Redux Data Flow](./quick-start-part-2.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
 
 Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, and reaction buttons.
 
