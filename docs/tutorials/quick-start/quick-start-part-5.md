@@ -1,6 +1,6 @@
 ---
 id: quick-start-part-5
-title: 'Redux Quick Start, Part 5, Performance and Normalizing Data'
+title: 'Redux Quick Start, Part 5: Performance and Normalizing Data'
 sidebar_label: 'Performance and Normalizing Data'
 hide_title: true
 description: The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!

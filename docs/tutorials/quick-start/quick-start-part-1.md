@@ -52,22 +52,6 @@ You should make sure that you have the React and Redux DevTools extensions insta
   - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
   - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
-If you'd like to know more details about specific concepts, we'll have links to other parts of the documentation that will tell you more about how Redux works and the patterns you use with Redux:
-
-:::info Want to know more?
-
-The [Configuring Your Store](../recipes/ConfguringYourStore.md) page has more details about setting up a Redux store
-
-:::
-
-We'll also have expandable "Detailed Explanation" sections, like this:
-
-<DetailedExplanation>
-
-Here you'll find more details about specific topics. We keep these collapsed by default so that you can focus on the main tutorial instructions without being distracted.
-
-</DetailedExplanation>
-
 ## What is Redux?
 
 It helps to understand what this "Redux" thing is in the first place. What does it do? What problems does it help me solve? Why would I want to use it?
@@ -93,7 +77,7 @@ Redux is more useful when:
 
 **Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.**
 
-:::info Want to know more?
+:::info Want to Know More?
 
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
@@ -125,7 +109,7 @@ Before we dive into some actual code, let's talk about some of the terms and con
 
 ### Understanding State Management
 
-Let's start by looking at a React counter component:
+Let's start by looking at a small React counter component. It tracks a number in component state, and increments the number when a button is clicked:
 
 ```jsx
 function Counter() {
@@ -163,11 +147,77 @@ This is a small example of **"one-way data flow"**:
 
 However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but that doesn't always help.
 
-So why don't we extract the shared state out of the components, and manage it in a global singleton? With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
+So why don't we extract the shared state out of the components, and manage it in a single global variable? With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
 
 By defining and separating the concepts involved in state management and enforcing rules that maintain independence between views and states, we give our code more structure and maintainability.
 
 This is the basic idea behind Redux: a single centralized place to contain the global state in your application, and specific patterns to follow when updating that state to make the code predictable.
+
+### Immutability
+
+"Mutable" means "changeable". If something is "immutable", it can never be changed.
+
+JavaScript objects and arrays are all mutable by default. If I create an object, I can change the contents of its fields. If I create an array, I can change the contents as well:
+
+```js
+const obj = { a: 1, b: 2 }
+// still the same object outside, but the contents have changed
+obj.b = 3
+
+const arr = ['a', 'b']
+// In the same way, we can change the contents of this array
+arr.push('c')
+arr[1] = 'd'
+```
+
+This is called _mutating_ the object or array. It's the same object or array reference in memory, but now the contents inside the object have changed.
+
+**In order to update values immutably, your code must make _copies_ of existing objects/arrays, and then modify the copies**.
+
+We can do this by hand using JavaScript's array / object spread operators, as well as array methods that return new copies of the array instead of mutating the original array:
+
+```js
+const obj1 = {
+  a: {
+    // To safely update obj.a.c, we have to copy each piece
+    c: 3
+  }
+  b: 2,
+}
+
+
+const obj2 = {
+  // copy obj
+  ...obj
+  // overwrite a
+  a: {
+    // copy obj.a
+    ...obj.a,
+    // overwrite c
+    c: 42
+  }
+}
+
+const arr = ["a", "b"];
+// Create a new copy of arr, with "c" appended to the end
+const arr2 = arr.concat("c");
+
+// or, we can make a copy of the original array:
+const arr3 = arr.slice();
+// and mutate the copy:
+arr3.push("c");
+```
+
+**Redux expects that all state updates are done immutably**. We'll look at where and how this is important a bit later, as well as some easier ways to write immutable update logic.
+
+:::info Want to Know More?
+
+For more info on how immutability works in JavaScript, see:
+
+- [A Visual Guide to References in JavaScript](https://daveceddia.com/javascript-references/)
+- [Immutability in React and Redux: The Complete Guide](https://daveceddia.com/react-redux-immutability-guide/)
+
+:::
 
 ### Terminology
 
@@ -220,6 +270,12 @@ Reducers must _always_ follow some specific rules:
 - They must not do any asynchronous logic, calculate random values, or cause other "side effects"
 
 We'll talk more about the rules of reducers later, including why they're important and how to follow them correctly.
+
+The logic inside reducer functions typically follows the same series of steps:
+
+- Check to see if the reducer cares about this action
+  - If so, make a copy of the state, update the copy with new values, and return it
+- Otherwise, return the existing state unchanged
 
 Here's a small example of a reducer, showing the steps that each reducer should follow:
 
@@ -377,6 +433,10 @@ For Redux specifically, we can break these steps into more detail:
   - Each UI component that needs data from the store checks to see if the parts of the state they need have changed.
   - Each component that sees its data has changed forces a re-render with the new data, so it can update what's shown on the screen
 
+Here's what that data flow looks like visually:
+
+![Redux data flow diagram](/img/tutorials/quickstart-redux-dataflow.gif)
+
 ## Examining a React and Redux App
 
 Now that you know the pieces that make up a Redux app, let's look at a real working example to see how these pieces fit together.
@@ -407,7 +467,7 @@ npx create-react-app redux-quickstart-example --template redux
 
 The counter app has already been set up to let us watch what happens inside as we use it.
 
-Try right-clicking inside the app preview in your browser, and choose "Inspect" from the menu to open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
+Open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
 
 ![Redux DevTools: initial app state](/img/tutorials/quickstart-devtools-initial.png)
 
@@ -648,20 +708,7 @@ The rule about "immutable updates" is particularly important, and worth talking 
 
 ### Reducers and Immutable Updates
 
-If something is "immutable", it can never change. JavaScript objects and arrays are all mutable by default. If I create an object, I can change the contents of its fields. If I create an array, I can change the contents as well:
-
-```js
-const obj = { a: 1, b: 2 }
-// still the same object outside, but the contents have changed
-obj.b = 3
-
-const arr = ['a', 'b']
-// In the same way, we can change the contents of this array
-arr.push('c')
-arr[1] = 'd'
-```
-
-This is called _mutating_ the object or array.
+Earlier, we talked about "mutation" (modifying existing object/array values) and "immutability" (treating values as something that cannot be changed).
 
 :::warning
 
@@ -677,41 +724,7 @@ So if we can't change the originals, how do we return an updated state?
 
 :::
 
-We can do this by hand using JavaScript's array / object spread operators, as well as array methods that return new copies of the array instead of mutating the original array:
-
-```js
-const obj1 = {
-  a: {
-    // To safely update obj.a.c, we have to copy each piece
-    c: 3
-  }
-  b: 2,
-}
-
-
-const obj2 = {
-  // copy obj
-  ...obj
-  // overwrite a
-  a: {
-    // copy obj.a
-    ...obj.a,
-    // overwrite c
-    c: 42
-  }
-}
-
-const arr = ["a", "b"];
-// Create a new copy of arr, with "c" appended to the end
-const arr2 = arr.concat("c");
-
-// or, we can make a copy of the original array:
-const arr3 = arr.slice();
-// and mutate the copy:
-arr3.push("c");
-```
-
-If you're thinking that "this looks hard to remember and do correctly"... yeah, you're right! :)
+We already saw that we can [write immutable updates by hand](#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
 
 Writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
 
@@ -798,13 +811,20 @@ For more information on immutability and writing immutable updates, see [the "Im
 
 ### Writing Async Logic with Thunks
 
-The next function that's exported from `counterSlice` might look a bit strange:
+So far, all the logic in our application has been synchronous. Actions are dispatched, the store runs the reducers and calculates the new state, and the dispatch function finishes. But, the JavaScript language has many ways to write code that is asynchronous, and our apps normally have async logic for things like fetching data from an API. We need a place to put that async logic in our Redux apps.
+
+A **thunk** is a specific kind of Redux function that can contain asynchronous logic. Thunks are written using two functions:
+
+- An inside thunk function, which gets `dispatch` and `getState` as arguments
+- The outside creator function, which creates and returns the thunk function
+
+The next function that's exported from `counterSlice` is an example of a thunk action creator:
 
 ```js title="features/counter/counterSlice.js"
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
+// The function below is called a thunk and allows us to perform async logic.
+// It can be dispatched like a regular action: `dispatch(incrementAsync(10))`.
+// This will call the thunk with the `dispatch` function as the first argument.
+// Async code can then be executed and other actions can be dispatched
 export const incrementAsync = amount => dispatch => {
   setTimeout(() => {
     dispatch(incrementByAmount(amount))
@@ -812,10 +832,7 @@ export const incrementAsync = amount => dispatch => {
 }
 ```
 
-A **thunk** is a special kind of Redux function that can contain asynchronous logic. Thunks are written using two functions:
-
-- An inside thunk function, which gets `dispatch` and `getState` as arguments
-- The outside creator function, which creates and returns the thunk function
+Thunks might look a bit strange at first, but you can copy the pattern
 
 We can use them the same way we use a typical Redux action creator:
 
@@ -823,7 +840,7 @@ We can use them the same way we use a typical Redux action creator:
 store.dispatch(incrementAsync(5))
 ```
 
-However, thunks require a special kind of addon called _middleware_ to be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can go ahead and use this.
+However, using thunks requires that the `redux-thunk` _middleware_ (a type of plugin for Redux) be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can go ahead and use thunks here.
 
 When you need to make AJAX calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
 
@@ -834,7 +851,7 @@ const fetchUserById = userId => {
   return async (dispatch, getState) => {
     try {
       // make an async call in the thunk
-      const user = userAPI.fetchById(userId)
+      const user = await userAPI.fetchById(userId)
       // dispatch an action when we get the response back
       dispatch(userLoaded(user))
     } catch (err) {
@@ -844,7 +861,7 @@ const fetchUserById = userId => {
 }
 ```
 
-We'll see thunks being used in Part 2 of this tutorial.
+We'll see thunks being used in [Part 4 of this tutorial](./quick-start-part-4.md)
 
 <DetailedExplanation title="Detailed Explanation: Thunks and Async Logic">
 
@@ -1073,12 +1090,6 @@ One other thing to note before we move on: remember that `incrementAsync` thunk 
 We've seen that our components can use the `useSelector` and `useDispatch` hooks to talk to the Redux store. But, since we didn't import the store, how do those hooks know what Redux store to talk to?
 
 Now that we've seen all the different pieces of this application, it's time to circle back to the starting point of this application and see how the last pieces of the puzzle fit together.
-
-```jsx title="src/components/HelloCodeTitle.js"
-function HelloCodeTitle(props) {
-  return <h1>Hello, {props.name}</h1>
-}
-```
 
 ```jsx  title="index.js"
 import React from 'react'
