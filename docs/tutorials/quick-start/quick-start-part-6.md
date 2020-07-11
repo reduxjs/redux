@@ -1,6 +1,6 @@
 ---
-id: quick-start-part-5
-title: 'Redux Quick Start, Part 5: Performance and Normalizing Data'
+id: quick-start-part-6
+title: 'Redux Quick Start, Part 6: Performance and Normalizing Data'
 sidebar_label: 'Performance and Normalizing Data'
 hide_title: true
 description: The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!
@@ -8,7 +8,7 @@ description: The official Quick Start tutorial for Redux - the fastest way to le
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 5: Performance and Normalizing Data
+# Quick Start, Part 6: Performance and Normalizing Data
 
 :::tip What You'll Learn
 
@@ -26,7 +26,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 4 of this tutorial](./quick-start-part-4.md), we saw how write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
+In [Part 5: Async Logic and Data Fetching](./quick-start-part-5.md), we saw how write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
 
 In this final section, we'll look at optimized patterns for ensuring good performance in our application, and techniques for automatically handling common updates of data in the store.
 
