@@ -1,6 +1,6 @@
 ---
-id: quick-start-part-4
-title: 'Redux Quick Start, Part 4: Async Logic and Data Fetching'
+id: quick-start-part-5
+title: 'Redux Quick Start, Part 5: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
 hide_title: true
 description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
@@ -8,7 +8,7 @@ description: 'The official Quick Start tutorial for Redux - the fastest way to l
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 4: Async Logic and Data Fetching
+# Quick Start, Part 5: Async Logic and Data Fetching
 
 :::tip What You'll Learn
 
@@ -26,7 +26,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 3 of this tutorial](./quick-start-part-3.md), we saw how to use multiple pieces of data from the Redux store inside of React components, customize the contents of action objects before they're dispatched, and handle more complex update logic in our reducers.
+In [Part 4: Using Redux Data](./quick-start-part-4.md), we saw how to use multiple pieces of data from the Redux store inside of React components, customize the contents of action objects before they're dispatched, and handle more complex update logic in our reducers.
 
 So far, all the data we've worked with has been directly inside of our React client application. However, most real applications need to work with data from a server, by making HTTP API calls to fetch and save items.
 
@@ -783,4 +783,4 @@ As a reminder, here's what we covered in this section:
 
 ## What's Next?
 
-We've got one more set of topics to cover for this tutorial. In [Part 5](), we'll look at how Redux usage affects React performance, and some ways we can optimize our application for improved performance.
+We've got one more set of topics to cover for this tutorial. In [Part 6: Performance and Normalizing Data](./quick-start-part-6.md), we'll look at how Redux usage affects React performance, and some ways we can optimize our application for improved performance.
