@@ -1116,3 +1116,34 @@ We always have to call `ReactDOM.render(<App />)` to tell React to start renderi
 We already created our store in `app/store.js`, so we can import it here. Then, we put our `<Provider>` component around the whole `<App>`, and pass in the store: `<Provider store={store}>`.
 
 Now, any React components that call `useSelector` or `useDispatch` will be talking to the Redux store we gave to the `<Provider>`.
+
+## What You've Learned
+
+Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
+
+:::tip
+
+- **Redux is a library for managing global application state**
+  - Redux is typically used with the React-Redux library for integrating Redux and React together
+  - Redux Toolkit is the recommended way to write Redux logic
+- **Redux uses a "one-way data flow" app structure**
+  - State describes the condition of the app at a point in time, and UI renders based on that state
+  - When something happens in the app, the state is updated based on what occurred
+  - The UI re-renders based on the new state
+- **Redux uses several types of code**
+  - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
+  - _Reducers_ are functions that calculate a new state value based on previous state + an action
+  - A Redux _store_ runs the root reducer whenever an action is _dispatched_
+  - A _thunk_ is a nested function that can contain asynchronous logic
+- **Redux reducers must follow specific rules**
+  - Should only calculate a new state value based on the `state` and `action` arguments
+  - Must make _immutable updates_ by copying the existing state
+  - Cannot contain any asynchronous logic or other "side effects"
+
+:::
+
+## What's Next?
+
+Now that you've seen all the pieces of a Redux app, it's time to write your own! For the rest of this tutorial, you'll be building a larger example app that uses Redux. Along the way, we'll cover all the key ideas you need to know to use Redux the right way.
+
+Continue on to [Part 2](./quick-start-part-2.md) to get started building the example app.
