@@ -1,6 +1,6 @@
 ---
-id: quick-start-part-2
-title: 'Redux Quick Start, Part 2: Basic Redux Data Flow'
+id: quick-start-part-3
+title: 'Redux Quick Start, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
 hide_title: true
 description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
@@ -8,7 +8,7 @@ description: 'The official Quick Start tutorial for Redux - the fastest way to l
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 2: Basic Redux Data Flow
+# Quick Start, Part 3: Basic Redux Data Flow
 
 :::tip What You'll Learn
 
@@ -26,7 +26,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 1](./quick-start-part-1.md) of this tutorial, we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects, using reducer functions that return new state values, and writing async logic using thunks. Finally, we saw how APIs like `configureStore` and `createSlice` from Redux Toolkit and `Provider` and `useSelector` from React-Redux work together to let us write Redux logic and interact with that logic from our React components.
+In [Part 1: Redux Overview and Concepts](./quick-start-part-1.md), we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects, using reducer functions that return new state values, and writing async logic using thunks. In [Part 2: Redux App Structure](./quick-start-part-2.md), we saw how APIs like `configureStore` and `createSlice` from Redux Toolkit and `Provider` and `useSelector` from React-Redux work together to let us write Redux logic and interact with that logic from our React components.
 
 Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small social media feed app, which will include a number of features that demonstrate some real-world use cases. This will help you understand how to use Redux in your own applications.
 
@@ -443,4 +443,4 @@ Here's what the app looks like so far:
 
 ## What's Next?
 
-Now that you know the basic Redux data flow, move on to Part 3, where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.
+Now that you know the basic Redux data flow, move on to [Part 4: Using Redux Data](./quick-start-part-4.md), where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.
