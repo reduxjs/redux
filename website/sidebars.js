@@ -20,7 +20,8 @@ module.exports = {
           'tutorials/quick-start/quick-start-part-2',
           'tutorials/quick-start/quick-start-part-3',
           'tutorials/quick-start/quick-start-part-4',
-          'tutorials/quick-start/quick-start-part-5'
+          'tutorials/quick-start/quick-start-part-5',
+          'tutorials/quick-start/quick-start-part-6'
         ]
       },
       {
