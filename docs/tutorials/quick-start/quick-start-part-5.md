@@ -111,7 +111,7 @@ Data fetching logic for Redux typically follows a predictable pattern:
 - The async request is made
 - Depending on the request result, the async logic dispatches either a "success" action containing the result data, or a "failure" action containing error details. The reducer logic clears the loading state in both cases, and either processes the result data from the success case, or stores the error value for potential display.
 
-These steps are not _required_, but are recommended and commonly used.
+These steps are not _required_, but are commonly used. (If all you care about is a successful result, you can just dispatch a single "success" action when the request finishes, and skip the "start" and "failure" actions.)
 
 Redux Toolkit provides a `createAsyncThunk` API to implement the creation and dispatching of these actions, and we'll look at how to use it shortly.
 
@@ -148,7 +148,7 @@ However, writing code using this approach is tedious. Each separate type of requ
 - Each of those action types usually has a corresponding action creator function
 - A thunk has to be written that dispatches the correct actions in the right sequence
 
-`createAsyncThunk` abstracts this pattern by generating the action types and action creators, and generating a thunk that dispatches those actions.
+`createAsyncThunk` abstracts this pattern by generating the action types and action creators, and generating a thunk that dispatches those actions automatically. You provide a callback function that makes the async call and returns a Promise with the result.
 
 </DetailedExplanation>
 

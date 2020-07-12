@@ -194,7 +194,7 @@ The second argument to our payload creator is a `thunkAPI` object containing sev
 - `signal`: An `AbortController.signal` function that can be used to cancel an in-progress request.
 - `rejectWithValue`: a utility that helps customize the contents of a `rejected` action if the thunk receives an error.
 
-(If you're writing a thunk by hand instead of using `createAsyncThunk, the thunk function will get`(dispatch, getState)` as separate arguments, instead of putting them together in one object.)
+(If you're writing a thunk by hand instead of using `createAsyncThunk`, the thunk function will get`(dispatch, getState)` as separate arguments, instead of putting them together in one object.)
 
 :::info
 
@@ -412,7 +412,7 @@ Let's say we have fetched some notifications while looking at the `<PostsList>`,
 
 There's a couple ways we could potentially avoid that second dispatch, like splitting the logic to dispatch once when the component mounts, and only dispatch again if the size of the notifications array changes. But, this isn't actually hurting anything, so we can leave it alone.
 
-This does actually show that it's possible to dispatch an action and not have _any_ state changes happen at all. Remember, it's always up to your reducers to decide _if_ any state actually needs to be updated, and "nothing needs to happen" is a valid decision for a reducer to make.
+This does actually show that **it's possible to dispatch an action and not have _any_ state changes happen at all**. Remember, **it's always up to your reducers to decide _if_ any state actually needs to be updated, and "nothing needs to happen" is a valid decision for a reducer to make**.
 
 Here's how the notifications tab looks now that we've got the "new/read" behavior working:
 

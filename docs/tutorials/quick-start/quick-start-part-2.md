@@ -310,7 +310,7 @@ So if we can't change the originals, how do we return an updated state?
 
 :::
 
-We already saw that we can [write immutable updates by hand](#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
+We already saw that we can [write immutable updates by hand](./quick-start-part-1.md#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
 
 Writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
 
@@ -445,7 +445,7 @@ const fetchUserById = userId => {
 }
 ```
 
-We'll see thunks being used in [Part 4 of this tutorial](./quick-start-part-4.md)
+We'll see thunks being used in [Part 5 of this tutorial](./quick-start-part-5.md)
 
 <DetailedExplanation title="Detailed Explanation: Thunks and Async Logic">
 
@@ -461,7 +461,7 @@ setTimeout(() => {
 }, 250)
 ```
 
-But, in a real Redux app, we're not allowed to import the store into other files, especially in our React components.
+But, in a real Redux app, we're not allowed to import the store into other files, especially in our React components, because it makes that code harder to test and reuse.
 
 In addition, we often need to write some async logic that we know will be used with _some_ store, eventually, but we don't know _which_ store.
 
@@ -703,7 +703,7 @@ Now, any React components that call `useSelector` or `useDispatch` will be talki
 
 ## What You've Learned
 
-Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
+Even though the counter example app is pretty small, it showed all the key pieces of a React + Redux app working together. Here's what we covered:
 
 :::tip
 

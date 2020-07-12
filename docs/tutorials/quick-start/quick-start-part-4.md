@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Understanding the [Redux data flow and React-Redux APIs from Part 3](./quick-start-part-2.md)
+- Understanding the [Redux data flow and React-Redux APIs from Part 3](./quick-start-part-3.md)
 - Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
 
 :::
@@ -805,4 +805,4 @@ We've covered a lot of information and concepts in this section. Let's recap the
 
 ## What's Next?
 
-By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 4](./quick-start-part-4.md), we'll see how to work with data that comes from a server API.
+By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 5: Async Logic and Data Fetching](./quick-start-part-5.md), we'll see how to work with data that comes from a server API.

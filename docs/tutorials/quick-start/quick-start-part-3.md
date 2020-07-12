@@ -341,7 +341,7 @@ Our post objects also need to have an `id` field. Right now, our initial test po
 
 :::info
 
-We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./quick-start-part-3.md).
+We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./quick-start-part-4.md).
 
 :::
 
@@ -430,8 +430,8 @@ Let's recap what you've learned in this section:
 
 - **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
-  - The Redux Toolkit `createSlice` function generates reducer functions for you, and lets you write "mutating" code that is turned into safe immutable updates
-  - Those reducer functions are added to the `reducers` field in `configureStore`, and that defines the data and state field names inside the Redux store
+  - The Redux Toolkit `createSlice` function generates "slice reducer" functions for you, and lets you write "mutating" code that is turned into safe immutable updates
+  - Those slice reducer functions are added to the `reducer` field in `configureStore`, and that defines the data and state field names inside the Redux store
 - **React components read data from the store with the `useSelector` hook**
   - Selector functions receive the whole `state` object, and should return a value
   - Selectors will re-run whenever the Redux store is updated, and if the data they return has changed, the component will re-render
