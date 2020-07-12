@@ -435,7 +435,7 @@ For Redux specifically, we can break these steps into more detail:
 
 Here's what that data flow looks like visually:
 
-![Redux data flow diagram](/img/tutorials/quickstart-redux-dataflow.gif)
+![Redux data flow diagram](/img/tutorials/ReduxDataFlowDiagram.gif)
 
 ## What You've Learned
 
@@ -448,7 +448,10 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
   - Redux Toolkit is the recommended way to write Redux logic
 - **Redux uses a "one-way data flow" app structure**
   - State describes the condition of the app at a point in time, and UI renders based on that state
-  - When something happens in the app, the state is updated based on what occurred
+  - When something happens in the app:
+    - The UI dispatches an action
+    - The store runs the reducers, and the state is updated based on what occurred
+    - The store notifies the UI that the state has changed
   - The UI re-renders based on the new state
 - **Redux uses several types of code**
   - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
