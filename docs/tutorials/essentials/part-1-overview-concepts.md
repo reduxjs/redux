@@ -435,7 +435,7 @@ For Redux specifically, we can break these steps into more detail:
 
 Here's what that data flow looks like visually:
 
-![Redux data flow diagram](/img/tutorials/ReduxDataFlowDiagram.gif)
+![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
 ## What You've Learned
 
