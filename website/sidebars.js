@@ -12,6 +12,7 @@ module.exports = {
       'introduction/examples'
     ],
     Tutorials: [
+      'tutorials/tutorials-index',
       {
         type: 'category',
         label: 'Redux Essentials',

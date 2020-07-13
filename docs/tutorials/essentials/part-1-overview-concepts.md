@@ -20,11 +20,11 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-Welcome to the Redux Essentials tutorial! This tutorial will introduce you to Redux, so that you can begin using it as quickly as possible. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
+Welcome to the Redux Essentials tutorial! **This tutorial will introduce you to Redux and teach you how to use it the right way, using our latest recommended tools and best practices**. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
 
 In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
 
-Starting in [Part 3](./part-3-data-flow.md), we'll use that knowledge to build a small blogging app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
+Starting in [Part 3](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
 ### How to Read This Tutorial
 
@@ -35,13 +35,13 @@ We've tried to keep these explanations beginner-friendly, but we do need to make
 :::important Prerequisites
 
 - Familiarity with [HTML & CSS](https://internetingishard.com/).
-- Familiarity with ES6 syntax and features
-- Knowledge of React terminology: JSX, State, Function Components, Props, Lifecycle, and Hooks
-- Knowledge of asynchronous JavaScript and making AJAX calls
+- Familiarity with [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
+- Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
+- Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
 
 :::
 
-If you're not already comfortable with those topics, we encourage you to take some time to become comfortable with them first, and then come back to learn about Redux. We'll be here when you're ready!
+**If you're not already comfortable with those topics, we encourage you to take some time to become comfortable with them first, and then come back to learn about Redux**. We'll be here when you're ready!
 
 You should make sure that you have the React and Redux DevTools extensions installed in your browser:
 
@@ -62,7 +62,7 @@ It helps to understand what this "Redux" thing is in the first place. What does 
 
 Redux helps you manage "global" state - state that is needed across many parts of your application.
 
-The patterns and tools provided by Redux make it easier to understand when, where, why, and how the state in your application is being updated, and how your application logic will behave when those changes occur. Redux guides you towards writing code that is predictable and testable, which helps give you confidence that your application will work as expected.
+**The patterns and tools provided by Redux make it easier to understand when, where, why, and how the state in your application is being updated, and how your application logic will behave when those changes occur**. Redux guides you towards writing code that is predictable and testable, which helps give you confidence that your application will work as expected.
 
 ### When Should I Use Redux?
 
@@ -107,7 +107,7 @@ The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-
 
 Before we dive into some actual code, let's talk about some of the terms and concepts you'll need to know to use Redux.
 
-### Understanding State Management
+### State Management
 
 Let's start by looking at a small React counter component. It tracks a number in component state, and increments the number when a button is clicked:
 
@@ -143,11 +143,11 @@ This is a small example of **"one-way data flow"**:
 - When something happens (such as a user clicking a button), the state is updated based on what occurred
 - The UI re-renders based on the new state
 
-![One-way data flow](/img/tutorials/one-way-data-flow.png)
+![One-way data flow](/img/tutorials/essentials/one-way-data-flow.png)
 
 However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but that doesn't always help.
 
-So why don't we extract the shared state out of the components, and manage it in a single global variable? With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
+One way to solve this is to extract the shared state from the components, and put it into a centralized location outside the component tree. With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
 
 By defining and separating the concepts involved in state management and enforcing rules that maintain independence between views and states, we give our code more structure and maintainability.
 

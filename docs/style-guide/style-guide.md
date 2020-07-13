@@ -2,6 +2,8 @@
 id: style-guide
 title: Style Guide
 hide_title: true
+sidebar_label: 'Style Guide: Best Practices'
+description: 'Official recommendations and best practices for using Redux the right way'
 ---
 
 <div class="style-guide">
