@@ -791,7 +791,7 @@ We've covered a lot of information and concepts in this section. Let's recap the
 - **Any React component can use data from the Redux store as needed**
   - Any component can read any data that is in the Redux store
   - Multiple components can read the same data, even at the same time
-  - Components should try to return just the data they need from selectors
+  - Components should extract the smallest amount of data they need to render themselves
   - Components can combine values from props, state, and the Redux store to determine what UI they need to render. They can read multiple pieces of data from the store, and reshape the data as needed for display.
   - Any component can dispatch actions to cause state updates
 - **Redux action creators can prepare action objects with the right contents**
