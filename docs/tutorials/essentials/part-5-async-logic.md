@@ -40,6 +40,8 @@ The project also includes a small HTTP API client object that exposes `client.ge
 
 We'll use the `client` object to make HTTP calls to our in-memory fake REST API for this section.
 
+Also, the mock server has been set up to reuse the same random seed each time the page is loaded, so that it will generate the same list of fake users and fake posts. If you want to reset that, delete the `'randomTimestampSeed'` value in your browser's Local Storage and reload the page, or you can turn that off by editing `src/api/server.js` and commenting out the `setRandom(rng)` call.
+
 :::info
 
 As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) for the complete changes in the application.
