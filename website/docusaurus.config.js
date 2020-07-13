@@ -24,6 +24,11 @@ module.exports = {
           to: 'introduction/getting-started',
           position: 'right'
         },
+        {
+          label: 'Tutorial',
+          to: 'tutorials/essentials/part-1-overview-concepts',
+          position: 'right'
+        },
         { label: 'API', to: 'api/api-reference', position: 'right' },
         { label: 'FAQ', to: 'faq', position: 'right' },
         {
@@ -47,6 +52,10 @@ module.exports = {
             {
               label: 'Getting Started',
               to: 'introduction/getting-started'
+            },
+            {
+              label: 'Tutorial',
+              to: 'tutorials/essentials/part-1-overview-concepts'
             },
             {
               label: 'FAQ',

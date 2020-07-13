@@ -1,3 +1,9 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+/* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #764abc;
   --ifm-color-primary-dark: #6a43a9;
@@ -8,11 +14,43 @@
   --ifm-color-primary-lightest: #9f80d0;
 
   --ifm-code-font-size: 95%;
+  --ifm-code-border-radius: 3px;
+  --ifm-code-background: rgba(27, 31, 35, 0.05);
   --ifm-blockquote-color: #ecf4f9;
   --ifm-blockquote-color-dark: #cbddea;
 
   --ifm-code-padding-vertical: 0.1rem;
   --ifm-code-padding-horizontal: 0.2rem;
+  --ifm-pre-background: rgb(39, 40, 34);
+
+  --ifm-alert-color: black;
+
+  --ra-admonition-color: #ecf4f9;
+  --ra-admonition-color-dark: #2a98b9;
+
+  --ra-admonition-color-important: #2a98b9;
+
+  --ra-admonition-color-success: #f1fdf9;
+  --ra-admonition-color-success-dark: #00bf88;
+
+  --ra-admonition-color-caution: #fffbf5;
+  --ra-admonition-color-caution-dark: #f0ad4e;
+
+  --ra-admonition-color-error: #fff2f2;
+  --ra-admonition-color-error-dark: #d9534f;
+
+  --ra-admonition-icon-color: black !important;
+}
+
+@media screen and (max-width: 996px) {
+  :root {
+    --ifm-font-size-base: 15px;
+  }
+}
+@media screen and (min-width: 997px) {
+  :root {
+    --ifm-font-size-base: 17px;
+  }
 }
 
 :root[data-theme='dark'] {
@@ -40,18 +78,43 @@ blockquote {
   border-radius: var(--ifm-global-radius);
 }
 
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: calc(-0.25em + var(--ifm-pre-padding));
+  padding-right: var(--ifm-pre-padding);
+  border-left: 0.25em solid #1976d2;
+}
+
+div[class*='codeBlockTitle'] {
+  padding: 0.15rem var(--ifm-pre-padding);
+}
+
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
 }
 
-:root[data-theme='dark'] code {
-  background-color: rgb(39, 40, 34);
-}
-
 a code {
   color: inherit;
 }
+
+a.contents__link > code {
+  color: inherit;
+}
+
+a.contents__link.contents__link--active {
+  font-weight: 600;
+}
+
+a:visited {
+  color: var(--ifm-color-primary);
+}
+
+
 
 .navbar .navbar__items {
   flex: 1 1 auto;
@@ -95,24 +158,28 @@ a code {
   overflow: hidden;
 }
 
-.style-guide details {
+.style-guide details,
+details.detailed-explanation {
   background-color: var(--ifm-blockquote-color);
-  margin: 1rem 0;
-  padding: 1rem;
+  margin: 0.25rem 0;
+  padding: 0.5rem 0.5rem;
   border-radius: var(--ifm-global-radius);
 }
 
-.style-guide details summary {
+.style-guide details summary,
+details.detailed-explanation summary {
   cursor: pointer;
 }
 
-.style-guide details summary h4 {
+.style-guide details summary h4,
+details.detailed-explanation summary h4 {
   display: inline-block;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.style-guide details p {
+.style-guide details p,
+details.detailed-explanation p {
   margin-bottom: 0;
 }
 
@@ -135,4 +202,40 @@ a code {
 .style-guide .priority-recommended h3:after {
   content: ' RECOMMENDED';
   color: var(--ifm-color-info);
+}
+
+.admonition {
+  color: var(--ifm-font-base-color);
+  border-radius: var(--ifm-global-radius);
+  border-left: 6px solid var(--ra-admonition-color-dark);
+}
+
+.admonition.admonition-note,
+.admonition.admonition-info,
+.admonition.admonition-important,
+.admonition.admonition-secondary {
+  --ra-admonition-color: #ecf4f9;
+  background-color: var(--ra-admonition-color);
+}
+
+.admonition.admonition-success,
+.admonition.admonition-tip {
+  background-color: var(--ra-admonition-color-success);
+  border-left-color: var(--ra-admonition-color-success-dark);
+}
+
+.admonition.admonition-caution {
+  background-color: var(--ra-admonition-color-caution);
+  border-left-color: var(--ra-admonition-color-caution-dark);
+}
+
+.admonition.admonition-warning,
+.admonition.admonition-danger {
+  background-color: var(--ra-admonition-color-error);
+  border-left-color: var(--ra-admonition-color-error-dark);
+}
+
+.admonition .admonition-icon svg {
+  fill: black;
+  stroke: black;
 }

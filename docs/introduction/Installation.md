@@ -7,13 +7,33 @@ hide_title: true
 
 # Installation
 
+## Redux Toolkit
+
+Redux Toolkit includes the Redux core, as well as other key packages we feel are essential for building Redux applications (such as Redux Thunk and Reselect).
+
+It's available as a package on NPM for use with a module bundler or in a Node application:
+
+```bash
+# NPM
+npm install @reduxjs/toolkit
+
+# Yarn
+yarn add @reduxjs/toolkit
+```
+
+It's also available as a UMD build, which can be loaded from [the `dist` folder on unpkg](https://unpkg.com/@reduxjs/toolkit/dist/). The UMD builds make Redux Toolkit available as a `window.RTK` global variable.
+
+## Redux Core
+
 To install the stable version:
 
 ```bash
+# NPM
 npm install redux
-```
 
-This assumes you are using [npm](https://www.npmjs.com/) as your package manager.
+# Yarn
+yarn add redux
+```
 
 If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 

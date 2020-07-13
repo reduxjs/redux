@@ -11,23 +11,46 @@ module.exports = {
       'introduction/ecosystem',
       'introduction/examples'
     ],
-    'Basic Tutorial': [
-      'basics/basic-tutorial',
-      'basics/actions',
-      'basics/reducers',
-      'basics/store',
-      'basics/data-flow',
-      'basics/usage-with-react',
-      'basics/example'
-    ],
-    'Advanced Tutorial': [
-      'advanced/advanced-tutorial',
-      'advanced/async-actions',
-      'advanced/async-flow',
-      'advanced/middleware',
-      'advanced/usage-with-react-router',
-      'advanced/example-reddit-api',
-      'advanced/next-steps'
+    Tutorials: [
+      'tutorials/tutorials-index',
+      {
+        type: 'category',
+        label: 'Redux Essentials',
+        items: [
+          'tutorials/essentials/part-1-overview-concepts',
+          'tutorials/essentials/part-2-app-structure',
+          'tutorials/essentials/part-3-data-flow',
+          'tutorials/essentials/part-4-using-data',
+          'tutorials/essentials/part-5-async-logic',
+          'tutorials/essentials/part-6-performance-normalization'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Basic Tutorial',
+        items: [
+          'basics/basic-tutorial',
+          'basics/actions',
+          'basics/reducers',
+          'basics/store',
+          'basics/data-flow',
+          'basics/usage-with-react',
+          'basics/example'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Advanced Tutorial',
+        items: [
+          'advanced/advanced-tutorial',
+          'advanced/async-actions',
+          'advanced/async-flow',
+          'advanced/middleware',
+          'advanced/usage-with-react-router',
+          'advanced/example-reddit-api',
+          'advanced/next-steps'
+        ]
+      }
     ],
     Recipes: [
       'recipes/recipe-index',
