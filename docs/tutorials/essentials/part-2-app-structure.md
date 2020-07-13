@@ -33,8 +33,8 @@ Here's the live version of the project. You can play around with it by clicking 
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/markerikson/redux-quick-start-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark"
-  title="redux-quick-start-example"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark"
+  title="redux-essentials-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
@@ -42,7 +42,7 @@ Here's the live version of the project. You can play around with it by clicking 
 If you'd like to try create this project on your own computer, you can [start a new Create-React-App project](https://create-react-app.dev/docs/getting-started#selecting-a-template) using our Redux template:
 
 ```
-npx create-react-app redux-quickstart-example --template redux
+npx create-react-app redux-essentials-example --template redux
 ```
 
 ### Using the Counter App

@@ -33,7 +33,7 @@ Now that you know the core steps to write Redux logic, we're going to use those 
 
 :::info
 
-As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/markerikson/redux-quickstart-example-app/tree/tutorial-steps) for the complete changes in the application.
+As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) for the complete changes in the application.
 
 :::
 
@@ -776,8 +776,8 @@ Here's what our app looks like after all these changes:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/markerikson/redux-quickstart-example-app/tree/checkpoint-2-reactionButtons/?fontsize=14&hidenavigation=1&theme=dark"
-  title="redux-quick-start-example-app"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-2-reactionButtons/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
