@@ -1,6 +1,7 @@
 ---
 id: overview
 title: 'Redux Toolkit: Overview'
+description: 'Redux Toolkit is the recommended way to write Redux logic'
 hide_title: true
 ---
 

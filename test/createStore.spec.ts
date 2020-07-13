@@ -422,7 +422,7 @@ describe('createStore', () => {
 
   it('does not leak private listeners array', done => {
     const store = createStore(reducers.todos)
-    store.subscribe(function() {
+    store.subscribe(function () {
       expect(this).toBe(undefined)
       done()
     })
@@ -664,19 +664,19 @@ describe('createStore', () => {
         const store = createStore(() => {})
         const obs = store[$$observable]()
 
-        expect(function() {
+        expect(function () {
           obs.subscribe()
         }).toThrowError(new TypeError('Expected the observer to be an object.'))
 
-        expect(function() {
+        expect(function () {
           obs.subscribe(null)
         }).toThrowError(new TypeError('Expected the observer to be an object.'))
 
-        expect(function() {
+        expect(function () {
           obs.subscribe(() => {})
         }).toThrowError(new TypeError('Expected the observer to be an object.'))
 
-        expect(function() {
+        expect(function () {
           obs.subscribe({})
         }).not.toThrow()
       })

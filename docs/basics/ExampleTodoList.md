@@ -1,6 +1,7 @@
 ---
 id: example
 title: 'Example: Todo List'
+description: 'Basic Tutorial > Todo List: Source code for the Todo List example'
 hide_title: true
 ---
 

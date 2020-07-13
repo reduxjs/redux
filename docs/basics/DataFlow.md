@@ -1,6 +1,7 @@
 ---
 id: data-flow
 title: Data flow
+description: 'Basic Tutorial > Data Flow: How data flows through a Redux app'
 hide_title: true
 ---
 

@@ -366,7 +366,7 @@ export type AppDispatch = typeof store.dispatch
 `createAction` requires that the type of the payload be explicitly defined, unless there is no payload required:
 
 ```ts
-const add = createAction<number>('add')
+const add = createAction<number>(1)
 ```
 
 ### Typing `createReducer`

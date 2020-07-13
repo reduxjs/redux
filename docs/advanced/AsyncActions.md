@@ -1,6 +1,7 @@
 ---
 id: async-actions
 title: Async Actions
+description: 'Advanced Tutorial > Async Actions: Working with async logic and data fetching'
 hide_title: true
 ---
 
@@ -357,7 +358,7 @@ export function fetchPosts(subreddit) {
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function(dispatch) {
+  return function (dispatch) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
@@ -371,12 +372,10 @@ export function fetchPosts(subreddit) {
 
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(
-        response => response.json(),
-        // Do not use catch, because that will also catch
-        // any errors in the dispatch and resulting render,
-        // causing a loop of 'Unexpected batch number' errors.
-        // https://github.com/facebook/react/issues/6895
-        error => console.log('An error occurred.', error)
+        response => response.json()
+        // Do not use catch, because errors occured during rendering
+        // should be handled by React Error Boundaries
+        // https://reactjs.org/docs/error-boundaries.html
       )
       .then(json =>
         // We can dispatch many times!

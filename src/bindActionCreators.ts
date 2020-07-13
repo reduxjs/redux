@@ -9,7 +9,7 @@ function bindActionCreator<A extends AnyAction = AnyAction>(
   actionCreator: ActionCreator<A>,
   dispatch: Dispatch
 ) {
-  return function(this: any, ...args: any[]) {
+  return function (this: any, ...args: any[]) {
     return dispatch(actionCreator.apply(this, args))
   }
 }
@@ -50,8 +50,8 @@ export default function bindActionCreators<
   M extends ActionCreatorsMapObject<A>
 >(actionCreators: M, dispatch: Dispatch): M
 export default function bindActionCreators<
-  M extends ActionCreatorsMapObject<any>,
-  N extends ActionCreatorsMapObject<any>
+  M extends ActionCreatorsMapObject,
+  N extends ActionCreatorsMapObject
 >(actionCreators: M, dispatch: Dispatch): N
 
 export default function bindActionCreators(
