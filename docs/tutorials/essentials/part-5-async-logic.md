@@ -1,14 +1,14 @@
 ---
-id: quick-start-part-5
-title: 'Redux Quick Start, Part 5: Async Logic and Data Fetching'
+id: part-5-async-logic
+title: 'Redux Essentials, Part 5: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
 hide_title: true
-description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
+description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 5: Async Logic and Data Fetching
+# Redux Essentials, Part 5: Async Logic and Data Fetching
 
 :::tip What You'll Learn
 

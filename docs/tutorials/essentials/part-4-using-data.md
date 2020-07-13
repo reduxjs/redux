@@ -1,14 +1,14 @@
 ---
-id: quick-start-part-4
-title: 'Redux Quick Start, Part 4: Using Redux Data'
+id: part-4-using-data
+title: 'Redux Essentials, Part 4: Using Redux Data'
 sidebar_label: 'Using Redux Data'
 hide_title: true
-description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
+description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 4: Using Redux Data
+# Redux Essentials, Part 4: Using Redux Data
 
 :::tip What You'll Learn
 
@@ -171,7 +171,7 @@ export const Navbar = () => {
   return (
     <nav>
       <section>
-        <h1>Redux Quick Start Example</h1>
+        <h1>Redux Essentials Example</h1>
 
         <div className="navContent">
           // highlight-start

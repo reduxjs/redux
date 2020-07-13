@@ -1,14 +1,14 @@
 ---
-id: quick-start-part-1
-title: 'Redux Quick Start, Part 1: Redux Overview and Concepts'
+id: part-1-overview-concepts
+title: 'Redux Essentials, Part 1: Redux Overview and Concepts'
 sidebar_label: 'Redux Overview and Concepts'
 hide_title: true
-description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
+description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 1: Redux Overview and Concepts
+# Redux Essential, Part 1: Redux Overview and Concepts
 
 :::tip What You'll Learn
 
@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-Welcome to the Redux Quick Start tutorial! This tutorial will introduce you to Redux, so that you can begin using it as quickly as possible. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
+Welcome to the Redux Essentials tutorial! This tutorial will introduce you to Redux, so that you can begin using it as quickly as possible. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
 
 In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2](./quick-start-part-2.md) we'll examine a basic React + Redux app to see how the pieces fit together.
 

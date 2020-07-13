@@ -14,14 +14,14 @@ module.exports = {
     Tutorials: [
       {
         type: 'category',
-        label: 'Quick Start',
+        label: 'Redux Essentials',
         items: [
-          'tutorials/quick-start/quick-start-part-1',
-          'tutorials/quick-start/quick-start-part-2',
-          'tutorials/quick-start/quick-start-part-3',
-          'tutorials/quick-start/quick-start-part-4',
-          'tutorials/quick-start/quick-start-part-5',
-          'tutorials/quick-start/quick-start-part-6'
+          'tutorials/essentials/part-1-overview-concepts',
+          'tutorials/essentials/part-2-app-structure',
+          'tutorials/essentials/part-3-data-flow',
+          'tutorials/essentials/part-4-using-data',
+          'tutorials/essentials/part-5-async-logic',
+          'tutorials/essentials/part-6-performance-normalization'
         ]
       },
       {

@@ -1,14 +1,14 @@
 ---
-id: quick-start-part-3
-title: 'Redux Quick Start, Part 3: Basic Redux Data Flow'
+id: part-3-data-flow
+title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
 hide_title: true
-description: 'The official Quick Start tutorial for Redux - the fastest way to learn and start using Redux today!'
+description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Quick Start, Part 3: Basic Redux Data Flow
+# Redux Essentials, Part 3: Basic Redux Data Flow
 
 :::tip What You'll Learn
 
