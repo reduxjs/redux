@@ -114,21 +114,7 @@ a:visited {
   color: var(--ifm-color-primary);
 }
 
-.pagination-nav .pagination-nav__link {
-  transition: all 0.2s ease;
-  border-color: var(--ifm-color-primary);
-}
-.pagination-nav__link .pagination-nav__link--label {
-  color: var(--ifm-color-primary);
-}
-.pagination-nav__link:hover {
-  background: var(--ifm-color-primary);
-  color: white;
-}
 
-.pagination-nav__link:hover * {
-  color: white;
-}
 
 .navbar .navbar__items {
   flex: 1 1 auto;
