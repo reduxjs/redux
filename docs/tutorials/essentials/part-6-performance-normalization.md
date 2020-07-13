@@ -26,7 +26,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 5: Async Logic and Data Fetching](./quick-start-part-5.md), we saw how write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
+In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw how write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
 
 In this final section, we'll look at optimized patterns for ensuring good performance in our application, and techniques for automatically handling common updates of data in the store.
 
@@ -297,7 +297,7 @@ export const Navbar = () => {
 
 Here's what the "Notifications" tab looks like so far:
 
-![Initial Notifications tab](/img/tutorials/quickstart-notifications-initial.png)
+![Initial Notifications tab](/img/tutorials/essentials/notifications-initial.png)
 
 ### Showing New Notifications
 
@@ -416,7 +416,7 @@ This does actually show that **it's possible to dispatch an action and not have 
 
 Here's how the notifications tab looks now that we've got the "new/read" behavior working:
 
-![New notifications](/img/tutorials/quickstart-notifications-new.png)
+![New notifications](/img/tutorials/essentials/notifications-new.png)
 
 ## Improving Render Performance
 
@@ -426,7 +426,7 @@ Our application is looking useful, but we've actually got a couple flaws in when
 
 We can use the React DevTools Profiler to view some graphs of what components re-render when state is updated. Try clicking over to the `<UserPage>` for a single user. Open up your browser's DevTools, and in the React "Profiler" tab, click the circle "Record" button in the upper-left. Then, click the "Refresh Notifications" button in our app, and stop the recording in the React DevTools Profiler. You should see a chart that looks like this:
 
-![React DevTools Profiler render capture - <UserPage>](/img/tutorials/quickstart-userpage-rerender.png)
+![React DevTools Profiler render capture - <UserPage>](/img/tutorials/essentials/userpage-rerender.png)
 
 We can see that the `<Navbar>` re-rendered, which makes sense because it had to show the updated "unread notifications" badge in the tab. But, why did our `<UserPage>` re-render?
 
@@ -537,7 +537,7 @@ Memoized selectors are a valuable tool for improving performance in a React+Redu
 
 If we go back to our `<PostsList>` and try clicking a reaction button on one of the posts while capturing a React profiler trace, we'll see that not only did the `<PostsList>` and the updated `<PostExcerpt>` instance render, _all_ of the `<PostExcerpt>` components rendered:
 
-![React DevTools Profiler render capture - <PostsList>](/img/tutorials/quickstart-postslist-rerender.png)
+![React DevTools Profiler render capture - <PostsList>](/img/tutorials/essentials/postslist-rerender.png)
 
 Why is that? None of the other posts changed, so why would they need to re-render?
 
@@ -773,7 +773,7 @@ export const PostsList = () => {
 
 Now, if we try clicking a reaction button on one of the posts while capturing a React component performance profile, we should see that _only_ that one component re-rendered:
 
-![React DevTools Profiler render capture - optimized <PostsList>](/img/tutorials/quickstart-postslist-optimized.png)
+![React DevTools Profiler render capture - optimized <PostsList>](/img/tutorials/essentials/postslist-optimized.png)
 
 ## Converting Other Slices
 

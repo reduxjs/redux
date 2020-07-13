@@ -19,7 +19,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 1: Redux Overview and Concepts](./quick-start-part-1.md), we looked at why Redux is useful, the terms and concepts used to describe different parts of Redux code, and how data flows through a Redux app.
+In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we looked at why Redux is useful, the terms and concepts used to describe different parts of Redux code, and how data flows through a Redux app.
 
 Now, let's look at a real working example to see how these pieces fit together.
 
@@ -51,7 +51,7 @@ The counter app has already been set up to let us watch what happens inside as w
 
 Open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
 
-![Redux DevTools: initial app state](/img/tutorials/quickstart-devtools-initial.png)
+![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
 
 On the right, we can see that our Redux store is starting off with an app state value that looks like this:
 
@@ -67,7 +67,7 @@ The DevTools will show us how the store state changes as we use the app.
 
 Let's play with the app first to see what it does. Click the "+" button in the app, then look at the "Diff" tab in the Redux DevTools:
 
-![Redux DevTools: first dispatched action](/img/tutorials/quickstart-devtools-first-action.png)
+![Redux DevTools: first dispatched action](/img/tutorials/essentials/devtools-first-action.png)
 
 We can see two important things here:
 
@@ -84,7 +84,7 @@ Now try these steps:
 
 Go back to the Redux DevTools. You should see a total of five actions dispatched, one for each time we clicked a button . Now select the last `"counter/increment"` entry from the list on the left, and click the "Action" tab on the right side:
 
-![Redux DevTools: done clicking buttons](/img/tutorials/quickstart-devtools-done-clicking.png)
+![Redux DevTools: done clicking buttons](/img/tutorials/essentials/devtools-done-clicking.png)
 
 We can see that this action object looked like this:
 
@@ -310,7 +310,7 @@ So if we can't change the originals, how do we return an updated state?
 
 :::
 
-We already saw that we can [write immutable updates by hand](./quick-start-part-1.md#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
+We already saw that we can [write immutable updates by hand](./part-1-overview-concepts.md#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
 
 Writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
 
@@ -445,7 +445,7 @@ const fetchUserById = userId => {
 }
 ```
 
-We'll see thunks being used in [Part 5 of this tutorial](./quick-start-part-5.md)
+We'll see thunks being used in [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md)
 
 <DetailedExplanation title="Detailed Explanation: Thunks and Async Logic">
 
@@ -731,4 +731,4 @@ Even though the counter example app is pretty small, it showed all the key piece
 
 Now that you've seen all the pieces of a Redux app in action, it's time to write your own! For the rest of this tutorial, you'll be building a larger example app that uses Redux. Along the way, we'll cover all the key ideas you need to know to use Redux the right way.
 
-Continue on to [Part 3: Basic Redux Data Flow](./quick-start-part-3.md) to get started building the example app.
+Continue on to [Part 3: Basic Redux Data Flow](./part-3-data-flow.md) to get started building the example app.

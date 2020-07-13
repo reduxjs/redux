@@ -8,7 +8,7 @@ description: 'The official Essentials tutorial for Redux: how to use Redux the r
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essential, Part 1: Redux Overview and Concepts
+# Redux Essentials, Part 1: Redux Overview and Concepts
 
 :::tip What You'll Learn
 
@@ -22,9 +22,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 Welcome to the Redux Essentials tutorial! This tutorial will introduce you to Redux, so that you can begin using it as quickly as possible. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
 
-In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2](./quick-start-part-2.md) we'll examine a basic React + Redux app to see how the pieces fit together.
+In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
 
-Starting in [Part 3](./quick-start-part-2.md), we'll use that knowledge to build a small blogging app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
+Starting in [Part 3](./part-3-data-flow.md), we'll use that knowledge to build a small blogging app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
 ### How to Read This Tutorial
 
@@ -462,4 +462,4 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
 
 ## What's Next?
 
-We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./quick-start-part-2.md), where we'll look at a full working example to see how the pieces fit together.
+We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.

@@ -20,13 +20,13 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 1](./quick-start-part-1.md)** for explanations of these terms.)
+- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 1](./part-1-overview-concepts.md)** for explanations of these terms.)
 
 :::
 
 ## Introduction
 
-In [Part 1: Redux Overview and Concepts](./quick-start-part-1.md), we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects, using reducer functions that return new state values, and writing async logic using thunks. In [Part 2: Redux App Structure](./quick-start-part-2.md), we saw how APIs like `configureStore` and `createSlice` from Redux Toolkit and `Provider` and `useSelector` from React-Redux work together to let us write Redux logic and interact with that logic from our React components.
+In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects, using reducer functions that return new state values, and writing async logic using thunks. In [Part 2: Redux App Structure](./part-2-app-structure.md), we saw how APIs like `configureStore` and `createSlice` from Redux Toolkit and `Provider` and `useSelector` from React-Redux work together to let us write Redux logic and interact with that logic from our React components.
 
 Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small social media feed app, which will include a number of features that demonstrate some real-world use cases. This will help you understand how to use Redux in your own applications.
 
@@ -58,7 +58,7 @@ If you'd like to see the final version of what we're going to build, you can che
 
 #### Creating a New Redux + React Project
 
-Once you've finished this tutorial, you'll probably want to try working on your own projects. We recommend using the [Redux templates for Create-React-App](https://github.com/reduxjs/cra-template-redux) as the fastest way to create a new Redux + React project. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./quick-start-part-1.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
+Once you've finished this tutorial, you'll probably want to try working on your own projects. We recommend using the [Redux templates for Create-React-App](https://github.com/reduxjs/cra-template-redux) as the fastest way to create a new Redux + React project. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
 
 If you want to know specific details on how to add Redux to a project, see this explanation:
 
@@ -152,7 +152,7 @@ This tells Redux that we want our top-level state object to have a field named `
 
 We can confirm that this works by opening the Redux DevTools Extension and looking at the current state contents:
 
-![Initial posts state](/img/tutorials/quickstart-example-initial-posts.png)
+![Initial posts state](/img/tutorials/essentials/example-initial-posts.png)
 
 ### Showing the Posts List
 
@@ -230,7 +230,7 @@ export default App
 
 Once that's added, the main page of our app should now look like this:
 
-![Initial posts list](/img/tutorials/quickstart-example-initial-posts-list.png)
+![Initial posts list](/img/tutorials/essentials/example-initial-posts-list.png)
 
 Progress! We've added some data to the Redux store, and shown it on screen in a React component.
 
@@ -341,7 +341,7 @@ Our post objects also need to have an `id` field. Right now, our initial test po
 
 :::info
 
-We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./quick-start-part-4.md).
+We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./part-4-using-data.md).
 
 :::
 
@@ -416,7 +416,7 @@ All the new features we'll add after this will follow the same basic patterns yo
 
 We can check the Redux DevTools Extension to see the action we dispatched, and look at how the Redux state was updated in response to that action. If we click the `"posts/postAdded"` entry in the actions list, the "Action" tab should look like this:
 
-![postAdded action contents](/img/tutorials/quickstart-example-postAdded-action.png)
+![postAdded action contents](/img/tutorials/essentials/example-postAdded-action.png)
 
 The "Diff" tab should also show us that `state.posts` had one new item added, which is at index 2.
 
@@ -455,4 +455,4 @@ Here's what the app looks like so far:
 
 ## What's Next?
 
-Now that you know the basic Redux data flow, move on to [Part 4: Using Redux Data](./quick-start-part-4.md), where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.
+Now that you know the basic Redux data flow, move on to [Part 4: Using Redux Data](./part-4-using-data.md), where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.

@@ -20,14 +20,14 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Understanding the [Redux data flow and React-Redux APIs from Part 3](./quick-start-part-3.md)
+- Understanding the [Redux data flow and React-Redux APIs from Part 3](./part-3-data-flow.md)
 - Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
 
 :::
 
 ## Introduction
 
-In [Part 3: Basic Redux Data Flow](./quick-start-part-3.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
+In [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
 
 Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, and reaction buttons.
 
@@ -805,4 +805,4 @@ We've covered a lot of information and concepts in this section. Let's recap the
 
 ## What's Next?
 
-By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 5: Async Logic and Data Fetching](./quick-start-part-5.md), we'll see how to work with data that comes from a server API.
+By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we'll see how to work with data that comes from a server API.
