@@ -465,8 +465,83 @@ it('passes dispatch and getState', () => {
 
 In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
 
+### Testing with Storybook
+
+Integrating [Storybook](https://storybook.js.org/) with your redux-based application is very straightforward. The main requirement is to make sure that your stories are wrapped with `Provider` so that the components have access to the store.
+
+> ##### Note on `connect`ed components
+>
+> If your components are all `connect`-based and not yet utilizing hooks, the follow example is still relevant to you, but you can always pass props into the component instead of relying on setting the `preloadedState` as shown below. There is a complete example of that approach in the [Storybook data documentation](https://www.learnstorybook.com/intro-to-storybook/react/en/data/).
+
+First, we'll add a `createStore` utility that leverages [Redux-Toolkit's](https://redux-toolkit.js.org/api/configureStore) `configureStore`.
+
+```js
+// store.js
+
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from '../features/counter/counterSlice'
+
+// Export a store creator helper for usage by the stories
+export const createStore = options =>
+  configureStore({
+    reducer: {
+      counter: counterReducer
+    },
+    ...options
+  })
+
+export const store = createStore()
+```
+
+Next, we'll create a `withStoreProvider` [`decorator`](https://storybook.js.org/docs/basics/writing-stories/#decorators) that will wrap our stories:
+
+```js
+// ~repo/.storybook/decorators.js
+import React from 'react'
+import { Provider } from 'react-redux'
+import { ConfigureStoreOptions } from '@reduxjs/toolkit'
+import { createStore } from '../src/app/store'
+
+export function withStoreProvider(options) {
+  const store = createStore(options)
+  return storyFn => {
+    return <Provider store={store}>{storyFn()}</Provider>
+  }
+}
+```
+
+Finally, we'll setup a few stories and decorate them with `withStoreProvider`:
+
+```ts
+// src/stories/0-Counter.js
+import React from 'react'
+import { Counter } from '../features/counter/Counter'
+import { withStoreProvider } from '../../.storybook/decorators'
+
+export default {
+  title: 'Counter',
+  component: Counter,
+  decorators: [withStoreProvider()] // Will wrap every story with the default store configuration the App uses
+}
+
+export const WithDefaults = () => <Counter />
+WithDefaults.story = {
+  name: 'With defaults'
+}
+
+export const CounterWithPreloadedState = () => <Counter />
+CounterWithPreloadedState.story = {
+  name: 'With preloaded state',
+  decorators: [
+    withStoreProvider({ preloadedState: { counter: { value: 10 } } }) // Initializes the counter reducer to have a value of 10
+  ]
+}
+```
+
 ### Glossary
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
 
 - [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.
+
+- [Storybook](https://storybook.js.org/): Storybook is a tool for developing UI components in isolation for React, Vue, Angular, and various other frameworks. It can be used on it's own to preview components as well be combined with the testing library of your choice to be a part of a larger testing suite.
