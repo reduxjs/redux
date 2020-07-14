@@ -1,7 +1,12 @@
 import compose from './compose'
 import { Middleware, MiddlewareAPI } from './types/middleware'
 import { AnyAction } from './types/actions'
-import { StoreEnhancer, StoreCreator, Dispatch } from './types/store'
+import {
+  StoreEnhancer,
+  Dispatch,
+  PreloadedState,
+  StoreEnhancerStoreCreator
+} from './types/store'
 import { Reducer } from './types/reducers'
 
 /**
@@ -55,11 +60,11 @@ export default function applyMiddleware<Ext, S = any>(
 export default function applyMiddleware(
   ...middlewares: Middleware[]
 ): StoreEnhancer<any> {
-  return (createStore: StoreCreator) => <S, A extends AnyAction>(
+  return (createStore: StoreEnhancerStoreCreator) => <S, A extends AnyAction>(
     reducer: Reducer<S, A>,
-    ...args: any[]
+    preloadedState?: PreloadedState<S>
   ) => {
-    const store = createStore(reducer, ...args)
+    const store = createStore(reducer, preloadedState)
     let dispatch: Dispatch = () => {
       throw new Error(
         'Dispatching while constructing your middleware is not allowed. ' +
