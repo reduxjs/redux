@@ -499,7 +499,6 @@ Next, we'll create a `withStoreProvider` [`decorator`](https://storybook.js.org/
 // ~repo/.storybook/decorators.js
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { createStore } from '../src/app/store'
 
 export function withStoreProvider(options) {
