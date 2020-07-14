@@ -130,7 +130,7 @@ export default function combineReducers<S>(
 export default function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
 ): Reducer<CombinedState<S>, A>
-export default function combineReducers<M extends ReducersMapObject<any, any>>(
+export default function combineReducers<M extends ReducersMapObject>(
   reducers: M
 ): Reducer<
   CombinedState<StateFromReducersMapObject<M>>,
