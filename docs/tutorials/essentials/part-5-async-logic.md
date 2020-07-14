@@ -40,7 +40,7 @@ The project also includes a small HTTP API client object that exposes `client.ge
 
 We'll use the `client` object to make HTTP calls to our in-memory fake REST API for this section.
 
-Also, the mock server has been set up to reuse the same random seed each time the page is loaded, so that it will generate the same list of fake users and fake posts. If you want to reset that, delete the `'randomTimestampSeed'` value in your browser's Local Storage and reload the page, or you can turn that off by editing `src/api/server.js` and commenting out the `setRandom(rng)` call.
+Also, the mock server has been set up to reuse the same random seed each time the page is loaded, so that it will generate the same list of fake users and fake posts. If you want to reset that, delete the `'randomTimestampSeed'` value in your browser's Local Storage and reload the page, or you can turn that off by editing `src/api/server.js` and setting `useSeededRNG` to `false`.
 
 :::info
 

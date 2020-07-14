@@ -147,7 +147,7 @@ export const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
   async (_, { getState }) => {
     const allNotifications = selectAllNotifications(getState())
-    const [latestNotification] = allNotifications.slice(-1)
+    const [latestNotification] = allNotifications
     const latestTimestamp = latestNotification ? latestNotification.date : ''
     const response = await client.get(
       `/fakeApi/notifications?since=${latestTimestamp}`
@@ -163,7 +163,7 @@ const notificationsSlice = createSlice({
   extraReducers: {
     [fetchNotifications.fulfilled]: (state, action) => {
       state.push(...action.payload)
-      // Sort with newest last
+      // Sort with newest first
       state.sort((a, b) => b.date.localeCompare(a.date))
     }
   }
@@ -202,7 +202,7 @@ For more details on these arguments and how to handle canceling thunks and reque
 
 :::
 
-In this case, we know that the list of notifications is in our Redux store state, and that the latest notification should be last in the array. We can destructure the `getState` function out of the `thunkAPI` object, call it to read the state value, and use the `selectAllNotifications` selector to give us just the array of notifications. Then, to get the last item in the array, we can use `allNotifications.slice(-1)` to create a new array with just the last item, and destructure that. (It's a bit tricky, but also nicer to read than doing `allNotifications[allNotifications.length - 1]`.)
+In this case, we know that the list of notifications is in our Redux store state, and that the latest notification should be first in the array. We can destructure the `getState` function out of the `thunkAPI` object, call it to read the state value, and use the `selectAllNotifications` selector to give us just the array of notifications. Since the array of notifications is sorted newest first, we can grab the latest one using array destructuring.
 
 ### Adding the Notifications List
 
@@ -329,7 +329,7 @@ const notificationsSlice = createSlice({
       })
       // highlight-end
       state.push(...action.payload)
-      // Sort with newest last
+      // Sort with newest first
       state.sort((a, b) => b.date.localeCompare(a.date))
     }
   }
