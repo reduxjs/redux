@@ -55,7 +55,7 @@ export const SinglePostPage = ({ match }) => {
   const { postId } = match.params
 
   const post = useSelector(state =>
-    state.posts.find(post => post.id === postId)
+    state.posts.find(post => post.id.toString() === postId)
   )
 
   if (!post) {
