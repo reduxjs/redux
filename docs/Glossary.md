@@ -66,7 +66,7 @@ The base dispatch function _always_ synchronously sends an action to the store's
 ## Action Creator
 
 ```js
-type ActionCreator = (...args: any) => Action | AsyncAction
+type ActionCreator<A, P extends any[] = any[]> = (...args: P) => Action | AsyncAction
 ```
 
 An _action creator_ is, quite simply, a function that creates an action. Do not confuse the two terms—again, an action is a payload of information, and an action creator is a factory that creates an action.
