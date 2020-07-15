@@ -25,7 +25,7 @@
   ],
   "main": "lib/redux.js",
   "unpkg": "dist/redux.js",
-  "module": "es/redux.js",
+  "module": "es/redux.mjs",
   "types": "types/index.d.ts",
   "files": [
     "dist",
