@@ -11,12 +11,16 @@ import {
 } from 'redux'
 import 'symbol-observable'
 
+type BrandedString = string & { _brand: 'type' }
+const brandedString = 'a string' as BrandedString
+
 type State = {
   a: 'a'
   b: {
     c: 'c'
     d: 'd'
   }
+  c: BrandedString
 }
 
 interface DerivedAction extends Action {
@@ -30,7 +34,8 @@ const reducer: Reducer<State> = (
     b: {
       c: 'c',
       d: 'd'
-    }
+    },
+    c: brandedString
   },
   action: Action
 ): State => {
@@ -43,7 +48,8 @@ const reducerWithAction: Reducer<State, DerivedAction> = (
     b: {
       c: 'c',
       d: 'd'
-    }
+    },
+    c: brandedString
   },
   action: DerivedAction
 ): State => {
@@ -58,17 +64,20 @@ const store: Store<State> = createStore(reducer)
 
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   a: 'a',
-  b: { c: 'c', d: 'd' }
+  b: { c: 'c', d: 'd' },
+  c: brandedString
 })
 // typings:expect-error
 const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
-  b: { c: 'c' }
+  b: { c: 'c' },
+  c: brandedString
 })
 
 const storeWithActionReducer = createStore(reducerWithAction)
 const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
   a: 'a',
-  b: { c: 'c', d: 'd' }
+  b: { c: 'c', d: 'd' },
+  c: brandedString
 })
 funcWithStore(storeWithActionReducer)
 funcWithStore(storeWithActionReducerAndPreloadedState)
@@ -77,7 +86,8 @@ funcWithStore(storeWithActionReducerAndPreloadedState)
 const storeWithActionReducerAndBadPreloadedState = createStore(
   reducerWithAction,
   {
-    b: { c: 'c' }
+    b: { c: 'c' },
+    c: brandedString
   }
 )
 
@@ -89,7 +99,8 @@ const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(
   reducer,
   {
     a: 'a',
-    b: { c: 'c', d: 'd' }
+    b: { c: 'c', d: 'd' },
+    c: brandedString
   },
   enhancer
 )
