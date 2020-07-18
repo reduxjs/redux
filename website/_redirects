@@ -37,7 +37,8 @@
 
 
 /recipes/computingderiveddata*         /recipes/computing-derived-data:splat
-/recipes/configuringyourstore*         /recipes/configuring-your-store:splat
+/recipes/configuringyourstore*         /real-world-usage/configuring-your-store:splat
+/recipes/configuring-your-store:splat   /real-world-usage/configuring-your-store:splat
 /recipes/implementingundohistory*         /recipes/implementing-undo-history:splat
 /recipes/isolatingsubapps*         /recipes/isolating-redux-sub-apps:splat
 /recipes/migratingtoredux*         /recipes/migrating-to-redux:splat

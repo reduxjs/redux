@@ -54,7 +54,6 @@ module.exports = {
     ],
     Recipes: [
       'recipes/recipe-index',
-      'recipes/configuring-your-store',
       'recipes/usage-with-typescript',
       'recipes/migrating-to-redux',
       'recipes/using-object-spread-operator',
@@ -101,6 +100,7 @@ module.exports = {
     ],
     'Style Guide': ['style-guide/style-guide'],
     Other: ['glossary', 'troubleshooting'],
+    'Real World Usage': ['real-world-usage/configuring-your-store'],
     'API Reference': [
       'api/api-reference',
       'api/createstore',
