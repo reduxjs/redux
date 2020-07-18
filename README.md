@@ -44,7 +44,7 @@ The [**Redux Essentials tutorial**](https://redux.js.org/tutorials/essentials/pa
 ### Additional Tutorials
 
 - The Redux docs [**Basic tutorial**](https://redux.js.org/basics/basic-tutorial) and [**Advanced tutorial**](https://redux.js.org/advanced/advanced-tutorial) are a "bottom-up" tutorial that teaches how Redux works, starting from first principles.
-- The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online. See the complete list of examples in the **[Examples page](https://redux.js.org/introduction/examples)**.
+- The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play online. See the complete list of examples in the **[Examples page](https://redux.js.org/introduction/examples)**.
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** and **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** video courses on Egghead.io
 - Redux maintainer Mark Erikson's **["Redux Fundamentals" conference talk](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" workshop slides**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
 - Dave Ceddia's post [**A Complete React Redux Tutorial for Beginners**](https://daveceddia.com/redux-tutorial/)
@@ -148,7 +148,7 @@ This architecture might seem like an overkill for a counter app, but the beauty 
 
 ## Examples
 
-Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online.
+Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play online.
 
 - [**Counter Vanilla**](https://redux.js.org/introduction/examples#counter-vanilla): [Source](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla)
 - [**Counter**](https://redux.js.org/introduction/examples#counter): [Source](https://github.com/reduxjs/redux/tree/master/examples/counter) | [Sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter)
