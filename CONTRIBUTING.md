@@ -16,7 +16,7 @@ As Redux is stable software, changes to its behavior are very carefully consider
 
 **For support or usage questions like “how do I do X with Redux” and “my code doesn't work”, please search and ask on [StackOverflow with a Redux tag](http://stackoverflow.com/questions/tagged/redux?sort=votes&pageSize=50) first.**
 
-We ask you to do this because StackOverflow has a much better job at keeping popular questions visible. Unfortunately good answers get lost and outdated on GitHub.
+We ask you to do this because StackOverflow has a much better job of keeping popular questions visible. Unfortunately good answers get lost and outdated on GitHub.
 
 Some questions take a long time to get an answer. **If your question gets closed or you don't get a reply on StackOverflow for longer than a few days,** we encourage you to post an issue linking to your question. We will close your issue but this will give people watching the repo an opportunity to see your question and reply to it on StackOverflow if they know the answer.
 
@@ -42,7 +42,7 @@ git clone https://github.com/your-username/redux.git
 
 #### Building Redux
 
-Running the `build` task will create a CommonJS module-per-module build, a ES Modules build and a UMD build.
+Running the `build` task will create a CommonJS module-per-module build, an ES Modules build and a UMD build.
 
 ```sh
 npm run build
@@ -100,7 +100,7 @@ In general, the contribution workflow looks like this:
 
 - Open a new issue in the [Issue tracker](https://github.com/reduxjs/redux/issues).
 - Fork the repo.
-- Create a new feature branch based off the `master` branch.
+- Create a new feature branch based on the `master` branch.
 - Make sure all tests pass and there are no linting errors.
 - Submit a pull request, referencing any issues it addresses.
 
