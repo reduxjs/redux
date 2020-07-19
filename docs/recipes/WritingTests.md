@@ -473,24 +473,41 @@ Integrating [Storybook](https://storybook.js.org/) with your redux-based applica
 >
 > If your components are all `connect`-based and not yet utilizing hooks, the follow example is still relevant to you, but you can always pass props into the component instead of relying on setting the `preloadedState` as shown below. There is a complete example of that approach in the [Storybook data documentation](https://www.learnstorybook.com/intro-to-storybook/react/en/data/).
 
-First, we'll add a `createStore` utility that leverages [Redux-Toolkit's](https://redux-toolkit.js.org/api/configureStore) `configureStore`.
+To get started, make sure you have Storybook installed. Using the `cli` is the simplest method and will automatically configure the recommended settings for your project:
 
-```js
+```sh
+npx -p @storybook/cli sb init
+```
+
+First, we'll slightly modify the store to use a `createStore` utility that leverages [Redux-Toolkit's](https://redux-toolkit.js.org/api/configureStore) `configureStore`.
+
+```diff js
 // store.js
 
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from '../features/counter/counterSlice'
 
-// Export a store creator helper for usage by the stories
-export const createStore = options =>
-  configureStore({
-    reducer: {
-      counter: counterReducer
-    },
-    ...options
-  })
+// We'll remove the standard default configureStore and replace it with the helper below
+-export const store = configureStore({
+-  reducer: {
+-    counter: counterReducer
+-    }
+-})
 
-export const store = createStore()
+
+// Export a store creator helper for usage by our app, stories, and other tests
++export const createStore = options =>
++  configureStore({
++    reducer: {
++      counter: counterReducer
++    },
++    ...options
++  })
+
+
+// For the app, just use the default store creator directly
++export const store = createStore()
+
 ```
 
 Next, we'll create a `withStoreProvider` [`decorator`](https://storybook.js.org/docs/basics/writing-stories/#decorators) that will wrap our stories:
@@ -520,7 +537,7 @@ import { withStoreProvider } from '../../.storybook/decorators'
 export default {
   title: 'Counter',
   component: Counter,
-  decorators: [withStoreProvider()] // Will wrap every story with the default store configuration the App uses
+  decorators: [withStoreProvider()] // Wrap every story with a shared store instance using the default store configuration the App uses
 }
 
 export const WithDefaults = () => <Counter />
@@ -532,10 +549,14 @@ export const CounterWithPreloadedState = () => <Counter />
 CounterWithPreloadedState.story = {
   name: 'With preloaded state',
   decorators: [
-    withStoreProvider({ preloadedState: { counter: { value: 10 } } }) // Initializes the counter reducer to have a value of 10
+    withStoreProvider({ preloadedState: { counter: { value: 10 } } }) // Creates a unique store instance for this story and sets the initial value of `counter.value` to 10
   ]
 }
 ```
+
+> ##### Note on `store` instance behavior when using decorators
+>
+> Story decorators follow this order: `individual story` > `story file` > `global`. To clarify, when applying a decorator globally to all stories, every story will share the same store instance unless another instance is provided in the story file or to a story component directly. When creating a store in a specific story file, every story in that file will share the instance of that store. When decorating a specific story with a store, it will use that unique instance.
 
 ### Glossary
 
