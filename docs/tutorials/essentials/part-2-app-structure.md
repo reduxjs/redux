@@ -3,7 +3,7 @@ id: part-2-app-structure
 title: 'Redux Essentials, Part 2: Redux App Structure'
 sidebar_label: 'Redux App Structure'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
+description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'

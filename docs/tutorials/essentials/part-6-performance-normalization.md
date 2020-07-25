@@ -3,7 +3,7 @@ id: part-6-performance-normalization
 title: 'Redux Essentials, Part 6: Performance and Normalizing Data'
 sidebar_label: 'Performance and Normalizing Data'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
+description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'

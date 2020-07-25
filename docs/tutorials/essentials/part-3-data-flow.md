@@ -3,7 +3,7 @@ id: part-3-data-flow
 title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: how to use Redux the right way'
+description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
