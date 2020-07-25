@@ -7,6 +7,14 @@ hide_title: true
 
 # Usage with React
 
+:::info
+
+While the concepts in the "Basic" and "Advanced" tutorials are still valid, these pages are some of the oldest parts of our docs. We'll be updating those tutorials soon to improve the explanations and show some patterns that are simpler and easier to use. Keep an eye out for those updates. We'll also be reorganizing our docs to make it easier to find information.
+
+**We recommend starting with the [Redux Essentials tutorial](../tutorials/essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using Redux to write actual applications.
+
+:::
+
 From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.
 
 That said, Redux works especially well with libraries like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
