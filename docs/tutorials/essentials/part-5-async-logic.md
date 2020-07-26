@@ -506,7 +506,7 @@ const postsSlice = createSlice({
     },
     [fetchPosts.rejected]: (state, action) => {
       state.status = 'failed'
-      state.error = action.payload
+      state.error = action.error.message
     }
   }
   // highlight-end
@@ -555,7 +555,7 @@ export const PostsList = () => {
     content = orderedPosts.map(post => (
       <PostExcerpt key={post.id} post={post} />
     ))
-  } else if (postStatus === 'error') {
+  } else if (postStatus === 'failed') {
     content = <div>{error}</div>
   }
   // highlight-end
