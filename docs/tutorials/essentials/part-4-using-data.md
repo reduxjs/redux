@@ -479,6 +479,7 @@ import { postAdded } from './postsSlice'
 export const AddPostForm = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  // highlight-next-line
   const [userId, setUserId] = useState('')
 
   const dispatch = useDispatch()
