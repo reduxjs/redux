@@ -177,7 +177,7 @@ This is called _mutating_ the object or array. It's the same object or array ref
 We can do this by hand using JavaScript's array / object spread operators, as well as array methods that return new copies of the array instead of mutating the original array:
 
 ```js
-const obj1 = {
+const obj = {
   a: {
     // To safely update obj.a.c, we have to copy each piece
     c: 3
