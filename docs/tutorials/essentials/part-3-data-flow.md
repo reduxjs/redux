@@ -230,7 +230,7 @@ export default App
 
 Once that's added, the main page of our app should now look like this:
 
-![Initial posts list](/img/tutorials/essentials/example-initial-posts-list.png)
+![Initial posts list](/img/tutorials/essentials/working_post_list.png)
 
 Progress! We've added some data to the Redux store, and shown it on screen in a React component.
 
