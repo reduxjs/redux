@@ -451,7 +451,7 @@ export const UserPage = ({ match }) => {
 }
 ```
 
-We know that `useSelector` will re-run every time an action is dispatched, and that it force the component to re-render if we return a new reference value.
+We know that `useSelector` will re-run every time an action is dispatched, and that it forces the component to re-render if we return a new reference value.
 
 We're calling `filter()` inside of our `useSelector` hook, so that we only return the list of posts that belong to this user. Unfortunately, **this means that `useSelector` _always_ returns a new array reference, and so our component will re-render after _every_ action even if the posts data hasn't changed!**.
 
