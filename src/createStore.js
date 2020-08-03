@@ -303,7 +303,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
       [$$observable]() {
         return this
-      },
+      }
     }
   }
 
@@ -318,6 +318,6 @@ export default function createStore(reducer, preloadedState, enhancer) {
     getState,
     replaceReducer,
     setNotifyListenersOnNextFrame,
-    [$$observable]: observable,
+    [$$observable]: observable
   }
 }
