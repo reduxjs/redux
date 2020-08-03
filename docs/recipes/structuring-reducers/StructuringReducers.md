@@ -1,7 +1,7 @@
 ---
 id: structuring-reducers
 title: Structuring Reducers
-sidebar_label: Structuring Reducers: Intro
+description: 'Structuring Reducers > Intro: overview and contents'
 hide_title: true
 ---
 

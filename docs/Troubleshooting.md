@@ -1,13 +1,12 @@
 ---
 id: troubleshooting
 title: Troubleshooting
-sidebar_label: Troubleshooting
 hide_title: true
 ---
 
 # Troubleshooting
 
-This is a place to share common problems and solutions to them.  
+This is a place to share common problems and solutions to them.
 The examples use React, but you should still find them useful if you use something else.
 
 ### Nothing happens when I dispatch an action
@@ -203,5 +202,5 @@ It's possible you're correctly dispatching an action and applying your reducer b
 
 ## Something else doesn't work
 
-Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).  
+Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).
 If you figure it out, [edit this document](https://github.com/reduxjs/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.

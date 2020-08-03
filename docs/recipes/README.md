@@ -1,7 +1,6 @@
 ---
 id: recipe-index
-title: Recipes: Index
-sidebar_label: Recipes: Index
+title: 'Recipes: Index'
 hide_title: true
 ---
 

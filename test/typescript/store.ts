@@ -4,12 +4,14 @@ import {
   Reducer,
   Action,
   StoreEnhancer,
-  StoreCreator,
-  StoreEnhancerStoreCreator,
   Unsubscribe,
-  Observer
-} from 'redux'
+  Observer,
+  ExtendState
+} from '../..'
 import 'symbol-observable'
+
+type BrandedString = string & { _brand: 'type' }
+const brandedString = 'a string' as BrandedString
 
 type State = {
   a: 'a'
@@ -17,6 +19,46 @@ type State = {
     c: 'c'
     d: 'd'
   }
+  e: BrandedString
+}
+
+/* extended state */
+const noExtend: ExtendState<State, never> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  e: brandedString
+}
+// typings:expect-error
+const noExtendError: ExtendState<State, never> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  e: brandedString,
+  f: 'oops'
+}
+
+const yesExtend: ExtendState<State, { yes: 'we can' }> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  e: brandedString,
+  yes: 'we can'
+}
+// typings:expect-error
+const yesExtendError: ExtendState<State, { yes: 'we can' }> = {
+  a: 'a',
+  b: {
+    c: 'c',
+    d: 'd'
+  },
+  e: brandedString
 }
 
 interface DerivedAction extends Action {
@@ -30,7 +72,8 @@ const reducer: Reducer<State> = (
     b: {
       c: 'c',
       d: 'd'
-    }
+    },
+    e: brandedString
   },
   action: Action
 ): State => {
@@ -43,7 +86,8 @@ const reducerWithAction: Reducer<State, DerivedAction> = (
     b: {
       c: 'c',
       d: 'd'
-    }
+    },
+    e: brandedString
   },
   action: DerivedAction
 ): State => {
@@ -56,19 +100,25 @@ const funcWithStore = (store: Store<State, DerivedAction>) => {}
 
 const store: Store<State> = createStore(reducer)
 
+// ensure that an array-based state works
+const arrayReducer = (state: any[] = []) => state || []
+const storeWithArrayState: Store<any[]> = createStore(arrayReducer)
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   a: 'a',
-  b: { c: 'c', d: 'd' }
+  b: { c: 'c', d: 'd' },
+  e: brandedString
 })
 // typings:expect-error
 const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
-  b: { c: 'c' }
+  b: { c: 'c' },
+  e: brandedString
 })
 
 const storeWithActionReducer = createStore(reducerWithAction)
 const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
   a: 'a',
-  b: { c: 'c', d: 'd' }
+  b: { c: 'c', d: 'd' },
+  e: brandedString
 })
 funcWithStore(storeWithActionReducer)
 funcWithStore(storeWithActionReducerAndPreloadedState)
@@ -77,7 +127,8 @@ funcWithStore(storeWithActionReducerAndPreloadedState)
 const storeWithActionReducerAndBadPreloadedState = createStore(
   reducerWithAction,
   {
-    b: { c: 'c' }
+    b: { c: 'c' },
+    e: brandedString
   }
 )
 
@@ -89,7 +140,8 @@ const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(
   reducer,
   {
     a: 'a',
-    b: { c: 'c', d: 'd' }
+    b: { c: 'c', d: 'd' },
+    e: brandedString
   },
   enhancer
 )

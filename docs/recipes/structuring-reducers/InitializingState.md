@@ -1,7 +1,7 @@
 ---
 id: initializing-state
 title: Initializing State
-sidebar_label: Initializing State
+description: 'Structuring Reducers > Initializing State: How Redux state is initialized'
 hide_title: true
 ---
 
@@ -64,7 +64,7 @@ Why is it `42`, and not `0`, this time? Because `createStore` was called with `4
 
 ### Combined Reducers
 
-Now let's consider a case where you use `combineReducers()`.  
+Now let's consider a case where you use `combineReducers()`.
 You have two reducers:
 
 ```js

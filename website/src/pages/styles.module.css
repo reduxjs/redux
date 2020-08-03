@@ -1,0 +1,43 @@
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 966px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureTitle {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.featureImage {
+  height: 100px;
+  width: 100px;
+  fill: var(--ifm-font-color-base);
+}
+
+.featureAnchor svg {
+  margin-left: 5px;
+  max-width: 16px;
+  max-height: 16px;
+  fill: var(--ifm-color-primary);
+}

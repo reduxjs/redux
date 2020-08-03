@@ -1,7 +1,6 @@
 ---
 id: glossary
 title: Glossary
-sidebar_label: Glossary
 hide_title: true
 ---
 
@@ -67,7 +66,7 @@ The base dispatch function _always_ synchronously sends an action to the store's
 ## Action Creator
 
 ```js
-type ActionCreator = (...args: any) => Action | AsyncAction
+type ActionCreator<A, P extends any[] = any[]> = (...args: P) => Action | AsyncAction
 ```
 
 An _action creator_ is, quite simply, a function that creates an action. Do not confuse the two terms—again, an action is a payload of information, and an action creator is a factory that creates an action.
@@ -108,7 +107,7 @@ type Store = {
 }
 ```
 
-A store is an object that holds the application's state tree.  
+A store is an object that holds the application's state tree.
 There should only be a single store in a Redux app, as the composition happens on the reducer level.
 
 - [`dispatch(action)`](api/Store.md#dispatchaction) is the base dispatch function described above.

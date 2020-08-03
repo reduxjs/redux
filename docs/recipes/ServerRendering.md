@@ -1,7 +1,6 @@
 ---
 id: server-rendering
 title: Server Rendering
-sidebar_label: Server Rendering
 hide_title: true
 ---
 
@@ -22,7 +21,7 @@ To send the data down to the client, we need to:
 - pull the state out of store;
 - and then pass the state along to the client.
 
-On the client side, a new Redux store will be created and initialized with the state provided from the server.  
+On the client side, a new Redux store will be created and initialized with the state provided from the server.
 Redux's **_only_** job on the server side is to provide the **initial state** of our app.
 
 ## Setting Up
@@ -34,7 +33,7 @@ In the following recipe, we are going to look at how to set up server-side rende
 For this example, we'll be using [Express](http://expressjs.com/) as a simple web server. We also need to install the React bindings for Redux, since they are not included in Redux by default.
 
 ```sh
-npm install --save express react-redux
+npm install express react-redux
 ```
 
 ## The Server Side
@@ -126,7 +125,7 @@ function renderFullPage(html, preloadedState) {
         <div id="root">${html}</div>
         <script>
           // WARNING: See the following for security issues around embedding JSON in HTML:
-          // http://redux.js.org/recipes/ServerRendering.html#security-considerations
+          // https://redux.js.org/recipes/server-rendering/#security-considerations
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
             /</g,
             '\\u003c'

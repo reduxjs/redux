@@ -1,7 +1,6 @@
 ---
 id: store
 title: Store
-sidebar_label: Store
 hide_title: true
 ---
 
@@ -35,7 +34,7 @@ It is equal to the last value returned by the store's reducer.
 
 _(any)_: The current state tree of your application.
 
-<hr>
+---
 
 ### dispatch(action)
 
@@ -84,7 +83,7 @@ store.dispatch(addTodo('Read the docs'))
 store.dispatch(addTodo('Read about the middleware'))
 ```
 
-<hr>
+---
 
 ### subscribe(listener)
 
@@ -136,7 +135,7 @@ const unsubscribe = store.subscribe(handleChange)
 unsubscribe()
 ```
 
-<hr>
+---
 
 ### replaceReducer(nextReducer)
 

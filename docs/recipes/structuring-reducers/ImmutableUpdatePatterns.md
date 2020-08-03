@@ -1,7 +1,7 @@
 ---
 id: immutable-update-patterns
 title: Immutable Update Patterns
-sidebar_label: Immutable Update Patterns
+description: 'Structuring Reducers > Immutable Update Patterns: How to correctly update state immutably, with examples of common mistakes'
 hide_title: true
 ---
 
@@ -12,6 +12,30 @@ The articles listed in [Prerequisite Concepts#Immutable Data Management](Prerequ
 ## Updating Nested Objects
 
 The key to updating nested data is **that _every_ level of nesting must be copied and updated appropriately**. This is often a difficult concept for those learning Redux, and there are some specific problems that frequently occur when trying to update nested objects. These lead to accidental direct mutation, and should be avoided.
+
+##### Correct Approach: Copying All Levels of Nested Data
+
+Unfortunately, the process of correctly applying immutable updates to deeply nested state can easily become verbose and hard to read. Here's what an example of updating `state.first.second[someId].fourth` might look like:
+
+```js
+function updateVeryNestedField(state, action) {
+  return {
+    ...state,
+    first: {
+      ...state.first,
+      second: {
+        ...state.first.second,
+        [action.someId]: {
+          ...state.first.second[action.someId],
+          fourth: action.someValue
+        }
+      }
+    }
+  }
+}
+```
+
+Obviously, each layer of nesting makes this harder to read, and gives more chances to make mistakes. This is one of several reasons why you are encouraged to keep your state flattened, and compose reducers as much as possible.
 
 ##### Common Mistake #1: New variables that point to the same objects
 
@@ -49,30 +73,6 @@ function updateNestedState(state, action) {
 ```
 
 Doing a shallow copy of the top level is _not_ sufficient - the `nestedState` object should be copied as well.
-
-##### Correct Approach: Copying All Levels of Nested Data
-
-Unfortunately, the process of correctly applying immutable updates to deeply nested state can easily become verbose and hard to read. Here's what an example of updating `state.first.second[someId].fourth` might look like:
-
-```js
-function updateVeryNestedField(state, action) {
-  return {
-    ...state,
-    first: {
-      ...state.first,
-      second: {
-        ...state.first.second,
-        [action.someId]: {
-          ...state.first.second[action.someId],
-          fourth: action.someValue
-        }
-      }
-    }
-  }
-}
-```
-
-Obviously, each layer of nesting makes this harder to read, and gives more chances to make mistakes. This is one of several reasons why you are encouraged to keep your state flattened, and compose reducers as much as possible.
 
 ## Inserting and Removing Items in Arrays
 
@@ -171,16 +171,16 @@ They can provide a useful alternative to writing manual immutable update logic.
 
 A list of many immutable update utilities can be found in the [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities) section of the [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links).
 
-## Simplifying Immutable Updates with Redux Starter Kit
+## Simplifying Immutable Updates with Redux Toolkit
 
-Our [Redux Starter Kit](https://redux-starter-kit.js.org/) package includes a [`createReducer` utility](https://redux-starter-kit.js.org/api/createReducer) that uses Immer internally.
+Our **[Redux Toolkit](https://redux-toolkit.js.org/)** package includes a [`createReducer` utility](https://redux-toolkit.js.org/api/createReducer) that uses Immer internally.
 Because of this, you can write reducers that appear to "mutate" state, but the updates are actually applied immutably.
 
 This allows immutable update logic to be written in a much simpler way. Here's what the [nested data example](#correct-approach-copying-all-levels-of-nested-data)
 might look like using `createReducer`:
 
 ```js
-import { createReducer } from 'redux-starter-kit'
+import { createReducer } from '@reduxjs/toolkit'
 
 const initialState = {
   first: {
@@ -199,8 +199,11 @@ const reducer = createReducer(initialState, {
 ```
 
 This is clearly _much_ shorter and easier to read. However, **this _only_ works correctly if you are using the "magic"
-`createReducer` function from Redux Starter Kit** that wraps this reducer in Immer's [`produce` function](https://github.com/mweststrate/immer#api).  
+`createReducer` function from Redux Toolkit** that wraps this reducer in Immer's [`produce` function](https://immerjs.github.io/immer/docs/produce).
 **If this reducer is used without Immer, it will actually mutate the state!**. It's also not obvious just by
 looking at the code that this function is actually safe and updates the state immutably. Please make sure you understand
 the concepts of immutable updates fully. If you do use this, it may help to add some comments to your code that explain
-your reducers are using Redux Starter Kit and Immer.
+your reducers are using Redux Toolkit and Immer.
+
+In addition, Redux Toolkit's [`createSlice` utility](https://redux-toolkit.js.org/api/createSlice) will auto-generate action creators
+and action types based on the reducer functions you provide, with the same Immer-powered update capabilities inside.

@@ -1,7 +1,6 @@
 ---
 id: applymiddleware
 title: applyMiddleware
-sidebar_label: applyMiddleware
 hide_title: true
 ---
 
@@ -110,7 +109,7 @@ function makeASandwichWithSecretSauce(forPerson) {
   // Invert control!
   // Return a function that accepts `dispatch` so we can dispatch later.
   // Thunk middleware knows how to turn thunk async actions into actions.
-  return function(dispatch) {
+  return function (dispatch) {
     return fetchSecretSauce().then(
       sauce => dispatch(makeASandwich(forPerson, sauce)),
       error => dispatch(apologize('The Sandwich Shop', forPerson, error))
@@ -132,7 +131,7 @@ store.dispatch(makeASandwichWithSecretSauce('My wife')).then(() => {
 // actions and async actions from other action creators,
 // and I can build my control flow with Promises.
 function makeSandwichesForEverybody() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (!getState().sandwiches.isShopOpen) {
       // You don't have to return Promises, but it's a handy convention
       // so the caller can always call .then() on async dispatch result.

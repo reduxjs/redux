@@ -1,7 +1,6 @@
 ---
 id: isolating-redux-sub-apps
 title: Isolating Redux Sub-Apps
-sidebar_label: Isolating Redux Sub-Apps
 hide_title: true
 ---
 

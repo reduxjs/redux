@@ -1,7 +1,7 @@
 ---
 id: example-reddit-api
-title: Example: Reddit API
-sidebar_label: Example: Reddit API
+title: 'Example: Reddit API'
+description: 'Advanced Tutorial > Reddit API: Source code for the Reddit example app'
 hide_title: true
 ---
 

@@ -1,7 +1,6 @@
 ---
 id: implementing-undo-history
 title: Implementing Undo History
-sidebar_label: Implementing Undo History
 hide_title: true
 ---
 
@@ -268,7 +267,7 @@ A reducer enhancer that doesn't do anything looks like this:
 
 ```js
 function doNothingWith(reducer) {
-  return function(state, action) {
+  return function (state, action) {
     // Just call the passed reducer
     return reducer(state, action)
   }
@@ -279,7 +278,7 @@ A reducer enhancer that combines other reducers might look like this:
 
 ```js
 function combineReducers(reducers) {
-  return function(state = {}, action) {
+  return function (state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
       // Call every reducer with the part of the state it manages
       nextState[key] = reducers[key](state[key], action)
@@ -303,7 +302,7 @@ function undoable(reducer) {
   }
 
   // Return a reducer that handles undo and redo
-  return function(state = initialState, action) {
+  return function (state = initialState, action) {
     const { past, present, future } = state
 
     switch (action.type) {
@@ -383,7 +382,7 @@ In this part of the recipe, you will learn how to make the [Todo List example](.
 First of all, you need to run
 
 ```sh
-npm install --save redux-undo
+npm install redux-undo
 ```
 
 This installs the package that provides the `undoable` reducer enhancer.
@@ -522,10 +521,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-UndoRedo = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UndoRedo)
+UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
 
 export default UndoRedo
 ```

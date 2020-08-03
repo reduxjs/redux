@@ -1,7 +1,7 @@
 ---
 id: refactoring-reducer-example
 title: Refactoring Reducers Example
-sidebar_label: Refactoring Reducers Example
+description: 'Structuring Reducers > Refactoring Reducers: Examples of ways to refactor reducer logic'
 hide_title: true
 ---
 
@@ -264,7 +264,7 @@ Notice that because the two "slice of state" reducers are now getting only their
 
 #### Reducing Boilerplate
 
-We're almost done. Since many people don't like switch statements, it's very common to use a function that creates a lookup table of action types to case functions. We'll use the `createReducer` function described in [Reducing Boilerplate](../ReducingBoilerplate.md#generating-reducers):
+We're almost done. Since many people don't like switch statements, it's very common to use a function that creates a lookup table of action types to case functions. We'll use the `createReducer` function described in [Reducing Boilerplate](../reducing-boilerplate):
 
 ```js
 // Omitted

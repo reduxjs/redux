@@ -1,7 +1,7 @@
 ---
 id: middleware
 title: Middleware
-sidebar_label: Middleware
+description: 'Advanced Tutorial > Middleware: How middleware enable adding additional capabilities to the Redux store'
 hide_title: true
 ---
 
@@ -23,7 +23,7 @@ One of the benefits of Redux is that it makes state changes predictable and tran
 
 Wouldn't it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
 
-<img src='https://i.imgur.com/BjGBlES.png' width='70%'>
+<img src='https://i.imgur.com/BjGBlES.png' width='70%' />
 
 How do we approach this with Redux?
 
@@ -178,7 +178,7 @@ We could use it to apply multiple middleware like this:
 applyMiddlewareByMonkeypatching(store, [logger, crashReporter])
 ```
 
-However, it is still monkeypatching.  
+However, it is still monkeypatching.
 The fact that we hide it inside the library doesn't alter this fact.
 
 ### Attempt #5: Removing Monkeypatching

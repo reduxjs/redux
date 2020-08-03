@@ -1,7 +1,6 @@
 ---
 id: code-splitting
 title: Code Splitting
-sidebar_label: Code Splitting
 hide_title: true
 ---
 

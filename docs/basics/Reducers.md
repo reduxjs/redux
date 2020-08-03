@@ -1,11 +1,19 @@
 ---
 id: reducers
 title: Reducers
-sidebar_label: Reducers
+description: 'Basic Tutorial > Reducers: Core concept - reducers are plain functions that return new state'
 hide_title: true
 ---
 
 # Reducers
+
+:::info
+
+While the concepts in the "Basic" and "Advanced" tutorials are still valid, these pages are some of the oldest parts of our docs. We'll be updating those tutorials soon to improve the explanations and show some patterns that are simpler and easier to use. Keep an eye out for those updates. We'll also be reorganizing our docs to make it easier to find information.
+
+**We recommend starting with the [Redux Essentials tutorial](../tutorials/essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using Redux to write actual applications.
+
+:::
 
 **Reducers** specify how the application's state changes in response to [actions](./Actions.md) sent to the store. Remember that actions only describe _what happened_, but don't describe how the application's state changes.
 
@@ -45,7 +53,7 @@ You'll often find that you need to store some data, as well as some UI state, in
 Now that we've decided what our state object looks like, we're ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
 
 ```
-(previousState, action) => newState
+(previousState, action) => nextState
 ```
 
 It's called a reducer because it's the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It's very important that the reducer stays pure. Things you should **never** do inside a reducer:

@@ -1,7 +1,6 @@
 ---
 id: reducing-boilerplate
 title: Reducing Boilerplate
-sidebar_label: Reducing Boilerplate
 hide_title: true
 ---
 
@@ -93,7 +92,7 @@ function addTodoWithoutCheck(text) {
 export function addTodo(text) {
   // This form is allowed by Redux Thunk middleware
   // described below in “Async Action Creators” section.
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (getState().todos.length === 3) {
       // Exit early
       return
@@ -139,7 +138,7 @@ You can always write a function that generates an action creator:
 
 ```js
 function makeActionCreator(type, ...argNames) {
-  return function(...args) {
+  return function (...args) {
     const action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
@@ -260,7 +259,7 @@ However, this quickly gets repetitive because different components request data 
 The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
 
 > ##### Note
-
+>
 > Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It's about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
 
 Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
@@ -270,7 +269,7 @@ Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/
 ```js
 export function loadPosts(userId) {
   // Interpreted by the thunk middleware:
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const { posts } = getState()
     if (posts[userId]) {
       // There is cached data! Don't do anything.
@@ -474,7 +473,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
   }
 })
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register(function (action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       const text = action.text.trim()

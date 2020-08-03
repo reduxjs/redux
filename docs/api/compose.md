@@ -1,7 +1,6 @@
 ---
 id: compose
 title: compose
-sidebar_label: compose
 hide_title: true
 ---
 
@@ -9,7 +8,7 @@ hide_title: true
 
 Composes functions from right to left.
 
-This is a functional programming utility, and is included in Redux as a convenience.  
+This is a functional programming utility, and is included in Redux as a convenience.
 You might want to use it to apply several [store enhancers](../Glossary.md#store-enhancer) in a row.
 
 #### Arguments
@@ -32,10 +31,7 @@ import reducer from '../reducers'
 
 const store = createStore(
   reducer,
-  compose(
-    applyMiddleware(thunk),
-    DevTools.instrument()
-  )
+  compose(applyMiddleware(thunk), DevTools.instrument())
 )
 ```
 
