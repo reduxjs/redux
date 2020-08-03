@@ -62,6 +62,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let currentListeners = []
   let nextListeners = currentListeners
   let isDispatching = false
+  var isNotifyListenersNextFrame = false
+  var alreadyNotifingListenersOnNextFrame = false
 
   /**
    * This makes a shallow copy of currentListeners so we can use
@@ -157,6 +159,18 @@ export default function createStore(reducer, preloadedState, enhancer) {
   }
 
   /**
+   *
+   * @param {boolean} shouldNotifyOnNextFrame A boolean to configure the store
+   * to notify the listeners only on the next frame or after every dispatch.
+   * The state still keep changing between dispatches, only listeners (subscribers to store) don't run.
+   * Set to true if listeners should be notified only once per frame.
+   * Set to false (default) if listeners should be notified after every dispatch
+   */
+  function setNotifyListenersOnNextFrame(shouldNotifyOnNextFrame) {
+    isNotifyListenersNextFrame = shouldNotifyOnNextFrame
+  }
+
+  /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
    * The `reducer` function, used to create the store, will be called with the
@@ -207,10 +221,24 @@ export default function createStore(reducer, preloadedState, enhancer) {
       isDispatching = false
     }
 
-    const listeners = (currentListeners = nextListeners)
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
-      listener()
+    function notifyListeners() {
+      const listeners = (currentListeners = nextListeners)
+      for (let i = 0; i < listeners.length; i++) {
+        const listener = listeners[i]
+        listener()
+      }
+    }
+
+    if (isNotifyListenersNextFrame) {
+      if (!alreadyNotifingListenersOnNextFrame) {
+        alreadyNotifingListenersOnNextFrame = true
+        window.requestAnimationFrame(() => {
+          notifyListeners()
+          alreadyNotifingListenersOnNextFrame = false
+        })
+      }
+    } else {
+      notifyListeners()
     }
 
     return action
@@ -275,7 +303,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
       [$$observable]() {
         return this
-      }
+      },
     }
   }
 
@@ -289,6 +317,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     subscribe,
     getState,
     replaceReducer,
-    [$$observable]: observable
+    setNotifyListenersOnNextFrame,
+    [$$observable]: observable,
   }
 }
