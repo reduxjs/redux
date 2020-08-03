@@ -469,19 +469,15 @@ In some cases, you will need to modify the `create` function to use different mo
 
 Integrating [Storybook](https://storybook.js.org/) with your redux-based application is very straightforward. The main requirement is to make sure that your stories are wrapped with `Provider` so that the components have access to the store.
 
+To get started, make sure you have followed the Storybook [automatic setup docs](https://storybook.js.org/docs/guides/guide-react/#automatic-setup).
+
 > ##### Note on `connect`ed components
 >
-> If your components are all `connect`-based and not yet utilizing hooks, the follow example is still relevant to you, but you can always pass props into the component instead of relying on setting the `preloadedState` as shown below. There is a complete example of that approach in the [Storybook data documentation](https://www.learnstorybook.com/intro-to-storybook/react/en/data/).
+> If your components are all `connect`-based, the following example is still relevant to you, but you can always pass props into the component instead of relying on setting the `preloadedState` as shown below. There is a complete example of that approach in the [Storybook data documentation](https://www.learnstorybook.com/intro-to-storybook/react/en/data/).
 
-To get started, make sure you have Storybook installed. Using the `cli` is the simplest method and will automatically configure the recommended settings for your project:
+First, we'll slightly modify the store to use a `createStore` helper that leverages [Redux-Toolkit's](https://redux-toolkit.js.org/api/configureStore) `configureStore`.
 
-```sh
-npx -p @storybook/cli sb init
-```
-
-First, we'll slightly modify the store to use a `createStore` utility that leverages [Redux-Toolkit's](https://redux-toolkit.js.org/api/configureStore) `configureStore`.
-
-```diff js
+```diff
 // store.js
 
 import { configureStore } from '@reduxjs/toolkit'
@@ -528,7 +524,7 @@ export function withStoreProvider(options) {
 
 Finally, we'll setup a few stories and decorate them with `withStoreProvider`:
 
-```ts
+```js
 // src/stories/0-Counter.js
 import React from 'react'
 import { Counter } from '../features/counter/Counter'
