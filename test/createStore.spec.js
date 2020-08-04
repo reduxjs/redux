@@ -18,11 +18,12 @@ describe('createStore', () => {
     const store = createStore(combineReducers(reducers))
     const methods = Object.keys(store)
 
-    expect(methods.length).toBe(4)
+    expect(methods.length).toBe(5)
     expect(methods).toContain('subscribe')
     expect(methods).toContain('dispatch')
     expect(methods).toContain('getState')
     expect(methods).toContain('replaceReducer')
+    expect(methods).toContain('setNotifyListenersOnNextFrame')
   })
 
   it('throws if reducer is not a function', () => {
