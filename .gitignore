@@ -1,8 +1,6 @@
 .DS_Store
 *.log
 node_modules
-lib
-es
 coverage
 
 website/translated_docs
