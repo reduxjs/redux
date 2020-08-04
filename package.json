@@ -6,7 +6,6 @@
   "homepage": "http://redux.js.org",
   "repository": "github:reduxjs/redux",
   "bugs": "https://github.com/reduxjs/redux/issues",
-  "type": "module",
   "keywords": [
     "redux",
     "reducer",
