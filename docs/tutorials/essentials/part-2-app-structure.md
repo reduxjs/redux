@@ -99,7 +99,11 @@ And if you click the "Diff" tab, you can see that the `state.counter.value` fiel
 
 The ability to see what is happening inside of our app and how our state is changing over time is very powerful!
 
-The DevTools have several more commands and options to help you debug your app, and we'll look at a couple of those later.
+The DevTools have several more commands and options to help you debug your app. Try clicking the "Trace" tab in the upper right. You should see a JavaScript function stack trace in the panel, with several sections of source code showing the lines that were executing when the action reached the store. One line in particular should be highlighted: the line of code where we dispatched this action from the `<Counter>` component:
+
+![Redux DevTools: action stack traces](/img/tutorials/essentials/devtools-action-stacktrace.png)
+
+This makes it easier to trace what part of the code dispatched a specific action.
 
 ## Application Contents
 

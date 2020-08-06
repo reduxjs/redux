@@ -114,8 +114,6 @@ a:visited {
   color: var(--ifm-color-primary);
 }
 
-
-
 .navbar .navbar__items {
   flex: 1 1 auto;
 }
@@ -181,6 +179,7 @@ details.detailed-explanation summary h4 {
 .style-guide details p,
 details.detailed-explanation p {
   margin-bottom: 0;
+  margin-bottom: calc(var(--ifm-paragraph-margin-bottom) / 2);
 }
 
 .style-guide .priority-rules h3:after {
