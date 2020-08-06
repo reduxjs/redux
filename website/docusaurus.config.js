@@ -32,6 +32,11 @@ module.exports = {
         { label: 'API', to: 'api/api-reference', position: 'right' },
         { label: 'FAQ', to: 'faq', position: 'right' },
         {
+          label: 'Best Practices',
+          to: '/style-guide/style-guide',
+          position: 'right'
+        },
+        {
           label: 'GitHub',
           href: 'https://www.github.com/reduxjs/redux',
           position: 'right'
@@ -109,8 +114,7 @@ module.exports = {
         src: 'img/redux.svg',
         href: 'https://redux.js.org/'
       },
-      copyright: 
-        `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
+      copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
     },
     algolia: {
       apiKey: '518c6e3c629811d8daa1d21dc8bcfa37',
