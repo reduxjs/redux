@@ -114,6 +114,10 @@ a:visited {
   color: var(--ifm-color-primary);
 }
 
+.navbar .navbar__inner {
+  flex-wrap: nowrap;
+}
+
 .navbar .navbar__items {
   flex: 1 1 auto;
 }
