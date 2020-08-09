@@ -496,6 +496,7 @@ export const AddPostForm = () => {
 
   const onTitleChanged = e => setTitle(e.target.value)
   const onContentChanged = e => setContent(e.target.value)
+  // highlight-next-line
   const onAuthorChanged = e => setUserId(e.target.value)
 
   const onSavePostClicked = () => {
