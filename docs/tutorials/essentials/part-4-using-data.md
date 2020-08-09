@@ -306,6 +306,13 @@ export const EditPostForm = ({ match }) => {
 Like with `SinglePostPage`, we'll need to import it into `App.js` and add a route that will render this component. We should also add a new link to our `SinglePostPage` that will route to `EditPostPage`, like:
 
 ```jsx title="features/post/SinglePostPage.js"
+// highlight-next-line
+import { Link } from 'react-router-dom'
+
+export const SinglePostPage = ({ match }) => {
+
+        // omit other contents
+
         <p  className="post-content">{post.content}</p>
         // highlight-start
         <Link to={`/editPost/${post.id}`} className="button">
