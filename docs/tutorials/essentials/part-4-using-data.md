@@ -242,7 +242,7 @@ export default postsSlice.reducer
 
 ### Creating an Edit Post Form
 
-Our new `<EditPostForm>` component will look similar to the `<AddPostForm>`, but the logic needs to be a bit different. We need to retrieve the right `post` object from the store, then use that to initialize the state fields in the component so the user can make changes. We'll save the changed title and content values back to the store after the user is done. We'll also uses React Router's history API to switch over to the single post page and show that post.
+Our new `<EditPostForm>` component will look similar to the `<AddPostForm>`, but the logic needs to be a bit different. We need to retrieve the right `post` object from the store, then use that to initialize the state fields in the component so the user can make changes. We'll save the changed title and content values back to the store after the user is done. We'll also use React Router's history API to switch over to the single post page and show that post.
 
 ```jsx title="features/posts/EditPostForm.js"
 import React, { useState } from 'react'
