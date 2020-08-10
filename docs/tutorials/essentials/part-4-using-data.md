@@ -676,14 +676,14 @@ const initialState = [
     // omitted fields
     content: 'Hello!',
     // highlight-next-line
-    date: sub(new Date(), { minutes: 10 }).toISOString(),
+    date: sub(new Date(), { minutes: 10 }).toISOString()
   },
   {
     // omitted fields
     content: 'More text',
     // highlight-next-line
-    date: sub(new Date(), { minutes: 5 }).toISOString(),
-  },
+    date: sub(new Date(), { minutes: 5 }).toISOString()
+  }
 ]
 ```
 
