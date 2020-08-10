@@ -664,6 +664,29 @@ const renderedPosts = orderedPosts.map(post => {
 })
 ```
 
+We also need to add the `date` field to `initialState` in `postsSlice.js`. We'll use `date-fns` here again to subtract minutes from the current date/time so they differ from each other.
+
+```jsx title="features/posts/postsSlice.js"
+import { createSlice, nanoid } from '@reduxjs/toolkit'
+// highlight-next-line
+import { sub } from 'date-fns'
+
+const initialState = [
+  {
+    // omitted fields
+    content: 'Hello!',
+    // highlight-next-line
+    date: sub(new Date(), { minutes: 10 }).toISOString()
+  },
+  {
+    // omitted fields
+    content: 'More text',
+    // highlight-next-line
+    date: sub(new Date(), { minutes: 5 }).toISOString()
+  }
+]
+```
+
 ### Post Reaction Buttons
 
 We have one more new feature to add for this section. Right now, our posts are kind of boring. We need to make them more exciting, and what better way to do that than letting our friends add reaction emoji to our posts?
