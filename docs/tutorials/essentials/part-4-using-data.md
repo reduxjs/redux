@@ -545,6 +545,7 @@ export const AddPostForm = () => {
           value={content}
           onChange={onContentChanged}
         />
+        // highlight-next-line
         <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
           Save Post
         </button>
