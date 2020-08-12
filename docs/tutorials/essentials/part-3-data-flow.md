@@ -325,6 +325,8 @@ const postsSlice = createSlice({
 
 // highlight-next-line
 export const { postAdded } = postsSlice.actions
+
+export default postsSlice.reducer
 ```
 
 :::warning
