@@ -201,7 +201,7 @@ export const PostsList = () => {
 }
 ```
 
-```js title="features/posts/EditPostForm.js"
+```js title="features/posts/SinglePostPage.js"
 // omit imports
 //highlight-next-line
 import { selectPostById } from './postsSlice'
