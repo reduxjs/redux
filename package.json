@@ -23,9 +23,16 @@
     "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
-  "main": "lib/redux.js",
+  "type": "module",
+  "main": "lib/redux.cjs",
   "unpkg": "dist/redux.js",
   "module": "es/redux.js",
+  "exports": {
+    ".": {
+      "import": "./es/redux.js",
+      "require": "./lib/redux.cjs"
+    }
+  },
   "types": "types/index.d.ts",
   "files": [
     "dist",
@@ -36,9 +43,9 @@
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage types",
-    "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
-    "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
-    "lint": "eslint --ext js,ts src test",
+    "format": "prettier --write \"{src,test}/**/*.{js,cjs,ts}\" \"**/*.md\"",
+    "format:check": "prettier --list-different \"{src,test}/**/*.{js,cjs,ts}\" \"**/*.md\"",
+    "lint": "eslint --ext js,cjs,ts src test",
     "check-types": "tsc --noEmit",
     "test": "jest",
     "test:watch": "npm test -- --watch",
@@ -46,7 +53,7 @@
     "build": "rollup -c",
     "pretest": "npm run build",
     "prepublishOnly": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
-    "examples:lint": "eslint --ext js,ts examples",
+    "examples:lint": "eslint --ext js,cjs,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
