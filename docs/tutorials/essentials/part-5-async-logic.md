@@ -125,14 +125,14 @@ If we were to write out the code for a typical async thunk by hand, it might loo
 const getRepoDetailsStarted = () => ({
   type: "repoDetails/fetchStarted"
 })
-const getRepoDetailsSuccess = (repoDetails) => {
+const getRepoDetailsSuccess = (repoDetails) => ({
   type: "repoDetails/fetchSucceeded",
   payload: repoDetails
-}
-const getRepoDetailsFailed = (error) => {
+})
+const getRepoDetailsFailed = (error) => ({
   type: "repoDetails/fetchFailed",
   error
-}
+})
 const fetchIssuesCount = (org, repo) => async dispatch => {
   dispatch(getRepoDetailsStarted())
   try {
