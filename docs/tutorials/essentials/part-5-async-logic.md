@@ -215,6 +215,20 @@ export const SinglePostPage = ({ match }) => {
 }
 ```
 
+```js title="features/posts/EditPostForm.js"
+// omit imports
+//highlight-next-line
+import { postUpdated, selectPostById } from './postsSlice'
+
+export const EditPostForm = ({ match }) => {
+  const { postId } = match.params
+
+  // highlight-next-line
+  const post = useSelector(state => selectPostById(state, postId))
+  // omit component logic
+}
+```
+
 It's often a good idea to encapsulate data lookups by writing reusable selectors. You can also create "memoized" selectors that can help improve performance, which we'll look at in a later part of this tutorial.
 
 But, like any abstraction, it's not something you should do _all_ the time, everywhere. Writing selectors means more code to understand and maintain. **Don't feel like you need to write selectors for every single field of your state**. Try starting without any selectors, and add some later when you find yourself looking up the same values in many parts of your application code.
@@ -533,6 +547,7 @@ export const PostsList = () => {
   const posts = useSelector(selectAllPosts)
 
   const postStatus = useSelector(state => state.posts.status)
+  // highlight-next-line
   const error = useSelector(state => state.posts.error)
 
   useEffect(() => {
