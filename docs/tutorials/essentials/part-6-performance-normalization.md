@@ -295,6 +295,30 @@ export const Navbar = () => {
 }
 ```
 
+Lastly, we need to update `App.js` with the "Notifications" route so we can navigate to it:
+
+```js title="App.js"
+// omit imports
+// highlight-next-line
+import { NotificationsList } from './features/notifications/NotificationsList'
+
+function App() {
+  return (
+    <Router>
+      <Navbar/>
+      <div className="App">
+        <Switch>
+          // omit existing routes
+          // highlight-next-line
+          <Route exact path="/notifications" component={ NotificationsList }/>
+          <Redirect to="/"/>
+        </Switch>
+      </div>
+    </Router>
+  )
+}
+```
+
 Here's what the "Notifications" tab looks like so far:
 
 ![Initial Notifications tab](/img/tutorials/essentials/notifications-initial.png)
