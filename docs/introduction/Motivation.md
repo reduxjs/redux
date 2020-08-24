@@ -1,6 +1,7 @@
 ---
 id: motivation
 title: Motivation
+description: 'Introduction > Motivation: What problems does Redux try to solve?'
 hide_title: true
 ---
 

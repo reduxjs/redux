@@ -1,5 +1,6 @@
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
+import '../utils/symbol-observable'
 
 /**
  * Extend the state
@@ -52,7 +53,9 @@ export type PreloadedState<S> = Required<S> extends {
       }
     : never
   : {
-      [K in keyof S]: S[K] extends object ? PreloadedState<S[K]> : S[K]
+      [K in keyof S]: S[K] extends string | number | boolean | symbol
+        ? S[K]
+        : PreloadedState<S[K]>
     }
 
 /**

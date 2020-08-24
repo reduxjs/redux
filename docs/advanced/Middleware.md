@@ -1,6 +1,7 @@
 ---
 id: middleware
 title: Middleware
+description: 'Advanced Tutorial > Middleware: How middleware enable adding additional capabilities to the Redux store'
 hide_title: true
 ---
 
