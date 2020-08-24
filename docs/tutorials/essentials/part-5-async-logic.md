@@ -123,14 +123,14 @@ If we were to write out the code for a typical async thunk by hand, it might loo
 
 ```js
 const getRepoDetailsStarted = () => ({
-  type: "repoDetails/fetchStarted"
+  type: 'repoDetails/fetchStarted'
 })
-const getRepoDetailsSuccess = (repoDetails) => ({
-  type: "repoDetails/fetchSucceeded",
+const getRepoDetailsSuccess = repoDetails => ({
+  type: 'repoDetails/fetchSucceeded',
   payload: repoDetails
 })
-const getRepoDetailsFailed = (error) => ({
-  type: "repoDetails/fetchFailed",
+const getRepoDetailsFailed = error => ({
+  type: 'repoDetails/fetchFailed',
   error
 })
 const fetchIssuesCount = (org, repo) => async dispatch => {
@@ -207,6 +207,20 @@ export const PostsList = () => {
 import { selectPostById } from './postsSlice'
 
 export const SinglePostPage = ({ match }) => {
+  const { postId } = match.params
+
+  // highlight-next-line
+  const post = useSelector(state => selectPostById(state, postId))
+  // omit component logic
+}
+```
+
+```js title="features/posts/EditPostForm.js"
+// omit imports
+//highlight-next-line
+import { postUpdated, selectPostById } from './postsSlice'
+
+export const EditPostForm = ({ match }) => {
   const { postId } = match.params
 
   // highlight-next-line
@@ -533,6 +547,7 @@ export const PostsList = () => {
   const posts = useSelector(selectAllPosts)
 
   const postStatus = useSelector(state => state.posts.status)
+  // highlight-next-line
   const error = useSelector(state => state.posts.error)
 
   useEffect(() => {

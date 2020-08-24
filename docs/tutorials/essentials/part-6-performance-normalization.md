@@ -305,13 +305,12 @@ import { NotificationsList } from './features/notifications/NotificationsList'
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <div className="App">
         <Switch>
-          // omit existing routes
-          // highlight-next-line
-          <Route exact path="/notifications" component={ NotificationsList }/>
-          <Redirect to="/"/>
+          // omit existing routes // highlight-next-line
+          <Route exact path="/notifications" component={NotificationsList} />
+          <Redirect to="/" />
         </Switch>
       </div>
     </Router>
@@ -449,14 +448,18 @@ The last thing we need to do before we move on is to add the badge on our "Notif
 // highlight-next-line
 import { useDispatch, useSelector } from 'react-redux'
 
-// highlight-next-line
-import { fetchNotifications, selectAllNotifications } from '../features/notifications/notificationsSlice'
+// highlight-start
+import {
+  fetchNotifications,
+  selectAllNotifications
+} from '../features/notifications/notificationsSlice'
+// highlight-end
 
 export const Navbar = () => {
   const dispatch = useDispatch()
   // highlight-start
   const notifications = useSelector(selectAllNotifications)
-  const numUnreadNotifications = notifications.filter((n) => !n.read).length
+  const numUnreadNotifications = notifications.filter(n => !n.read).length
   // highlight-end
   // omit component contents
   // highlight-start
@@ -471,15 +474,15 @@ export const Navbar = () => {
   return (
     <nav>
       // omit component contents
-          <div className="navLinks">
-            <Link to="/">Posts</Link>
-            <Link to="/users">Users</Link>
-            // highlight-start
-            <Link to="/notifications">
-              Notifications {unreadNotificationsBadge}
-            </Link>
-            // highlight-end
-          </div>
+      <div className="navLinks">
+        <Link to="/">Posts</Link>
+        <Link to="/users">Users</Link>
+        // highlight-start
+        <Link to="/notifications">
+          Notifications {unreadNotificationsBadge}
+        </Link>
+        // highlight-end
+      </div>
       // omit component contents
     </nav>
   )
