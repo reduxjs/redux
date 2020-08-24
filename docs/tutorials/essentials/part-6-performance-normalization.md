@@ -295,6 +295,30 @@ export const Navbar = () => {
 }
 ```
 
+Lastly, we need to update `App.js` with the "Notifications" route so we can navigate to it:
+
+```js title="App.js"
+// omit imports
+// highlight-next-line
+import { NotificationsList } from './features/notifications/NotificationsList'
+
+function App() {
+  return (
+    <Router>
+      <Navbar/>
+      <div className="App">
+        <Switch>
+          // omit existing routes
+          // highlight-next-line
+          <Route exact path="/notifications" component={ NotificationsList }/>
+          <Redirect to="/"/>
+        </Switch>
+      </div>
+    </Router>
+  )
+}
+```
+
 Here's what the "Notifications" tab looks like so far:
 
 ![Initial Notifications tab](/img/tutorials/essentials/notifications-initial.png)
@@ -417,6 +441,50 @@ This does actually show that **it's possible to dispatch an action and not have 
 Here's how the notifications tab looks now that we've got the "new/read" behavior working:
 
 ![New notifications](/img/tutorials/essentials/notifications-new.png)
+
+The last thing we need to do before we move on is to add the badge on our "Notifications" tab in the navbar. This will show us the count of "Unread" notifications when we are in other tabs:
+
+```js title="app/Navbar.js"
+// omit imports
+// highlight-next-line
+import { useDispatch, useSelector } from 'react-redux'
+
+// highlight-next-line
+import { fetchNotifications, selectAllNotifications } from '../features/notifications/notificationsSlice'
+
+export const Navbar = () => {
+  const dispatch = useDispatch()
+  // highlight-start
+  const notifications = useSelector(selectAllNotifications)
+  const numUnreadNotifications = notifications.filter((n) => !n.read).length
+  // highlight-end
+  // omit component contents
+  // highlight-start
+  let unreadNotificationsBadge
+
+  if (numUnreadNotifications > 0) {
+    unreadNotificationsBadge = (
+      <span className="badge">{numUnreadNotifications}</span>
+    )
+  }
+  // highlight-end
+  return (
+    <nav>
+      // omit component contents
+          <div className="navLinks">
+            <Link to="/">Posts</Link>
+            <Link to="/users">Users</Link>
+            // highlight-start
+            <Link to="/notifications">
+              Notifications {unreadNotificationsBadge}
+            </Link>
+            // highlight-end
+          </div>
+      // omit component contents
+    </nav>
+  )
+}
+```
 
 ## Improving Render Performance
 
