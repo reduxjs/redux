@@ -448,11 +448,12 @@ The last thing we need to do before we move on is to add the badge on our "Notif
 // highlight-next-line
 import { useDispatch, useSelector } from 'react-redux'
 
-// highlight-next-line
+// highlight-start
 import {
   fetchNotifications,
   selectAllNotifications
 } from '../features/notifications/notificationsSlice'
+// highlight-end
 
 export const Navbar = () => {
   const dispatch = useDispatch()
