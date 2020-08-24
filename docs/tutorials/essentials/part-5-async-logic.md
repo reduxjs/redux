@@ -123,14 +123,14 @@ If we were to write out the code for a typical async thunk by hand, it might loo
 
 ```js
 const getRepoDetailsStarted = () => ({
-  type: "repoDetails/fetchStarted"
+  type: 'repoDetails/fetchStarted'
 })
-const getRepoDetailsSuccess = (repoDetails) => ({
-  type: "repoDetails/fetchSucceeded",
+const getRepoDetailsSuccess = repoDetails => ({
+  type: 'repoDetails/fetchSucceeded',
   payload: repoDetails
 })
-const getRepoDetailsFailed = (error) => ({
-  type: "repoDetails/fetchFailed",
+const getRepoDetailsFailed = error => ({
+  type: 'repoDetails/fetchFailed',
   error
 })
 const fetchIssuesCount = (org, repo) => async dispatch => {
