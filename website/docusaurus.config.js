@@ -7,6 +7,7 @@ module.exports = {
   organizationName: 'reduxjs',
   projectName: 'redux',
   themeConfig: {
+    image: 'https://redux.js.org/img/redux-logo-landscape.png',
     disableDarkMode: false,
     prism: {
       theme: require('./src/js/monokaiTheme.js')
