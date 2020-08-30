@@ -26,7 +26,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw how write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
+In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw how to write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
 
 In this final section, we'll look at optimized patterns for ensuring good performance in our application, and techniques for automatically handling common updates of data in the store.
 
