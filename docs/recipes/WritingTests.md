@@ -348,6 +348,10 @@ const App = props => {
   return <div>{props.user}</div>
 }
 
+const mapStateToProps = state => {
+  return state
+}
+
 export default connect(mapStateToProps)(App)
 ```
 
@@ -361,6 +365,8 @@ import React from 'react'
 import { render as rtlRender } from '@testing-library/react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+// Import your own reducer
+import reducer from '../reducer'
 
 function render(
   ui,
