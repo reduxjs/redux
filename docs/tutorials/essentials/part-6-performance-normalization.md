@@ -308,8 +308,9 @@ function App() {
       <Navbar />
       <div className="App">
         <Switch>
-          // omit existing routes // highlight-next-line
+          // highlight-next-line
           <Route exact path="/notifications" component={NotificationsList} />
+          // omit existing routes
           <Redirect to="/" />
         </Switch>
       </div>
