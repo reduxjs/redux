@@ -25,7 +25,7 @@ Since Redux is just a data store library, it has no direct opinion on how your p
 
 It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
 
-While it ultimately doesn't matter how you lay out your code on disk, it's important to remember that actions and reducers shouldn't be considered in isolation. It's entirely possible (and encouraged) for a reducer defined in one folder to respond to an action defined in another folder.
+While it ultimately doesn't matter how you lay out your code on disk, it's important to remember that actions and reducers should be considered in isolation. It's entirely possible (and encouraged) for a reducer defined in one folder to respond to an action defined in another folder.
 
 #### Further information
 
