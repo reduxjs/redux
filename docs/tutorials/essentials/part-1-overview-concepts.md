@@ -458,7 +458,7 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
   - A Redux _store_ runs the root reducer whenever an action is _dispatched_
   - There is a correspondence between the Redux ecosystem and the event loop:
 
-  |Redux          |      |Event Loop                   |
+  |Redux                ||Event Loop                   |
   |     :----:    |:----:|            :----:           |
   | actions       |↔     |events                       |
   | dispatch      |↔     |emit event                   |
