@@ -254,7 +254,7 @@ const addTodo = text => {
 
 #### Reducers
 
-A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state: `(state, action) => newState`.
+A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state: `(state, action) => newState`. **You can think of a reducer as an event listener which handles events based on the received action (event) type.**
 
 :::info
 
@@ -456,6 +456,13 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
   - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
   - _Reducers_ are functions that calculate a new state value based on previous state + an action
   - A Redux _store_ runs the root reducer whenever an action is _dispatched_
+  - There is a correspondence between the Redux ecosystem and the event loop:
+
+  |Redux          |      |Event Loop                   |
+  |     :----:    |:----:|            :----:           |
+  | actions       |↔     |events                       |
+  | dispatch      |↔     |emit event                   |
+  | root reducer  |↔     |all-receiving event handler  |
 
 :::
 
