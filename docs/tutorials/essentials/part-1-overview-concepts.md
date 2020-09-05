@@ -456,13 +456,6 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
   - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
   - _Reducers_ are functions that calculate a new state value based on previous state + an action
   - A Redux _store_ runs the root reducer whenever an action is _dispatched_
-  - There is a correspondence between the Redux ecosystem and the event loop:
-
-  |Redux                ||Event Loop                   |
-  |     :----:    |:----:|            :----:           |
-  | actions       |↔     |events                       |
-  | dispatch      |↔     |emit event                   |
-  | root reducer  |↔     |all-receiving event handler  |
 
 :::
 
