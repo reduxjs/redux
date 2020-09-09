@@ -30,7 +30,7 @@ Some common rules of thumb for determining what kind of data should be put into 
 - Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
 - Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
 
-There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more. It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
+There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more. It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
 
 #### Further information
 
