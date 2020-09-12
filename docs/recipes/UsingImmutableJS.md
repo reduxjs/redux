@@ -246,7 +246,7 @@ Smart components that access the store via React Redux’s `connect` function mu
 **Documentation**
 
 - [Recipes: Computing Derived Data](./ComputingDerivedData.md)
-- [FAQ: Immutable Data](/faq/ImmutableData.html#immutability-issues-with-react-redux)
+- [FAQ: Immutable Data](../faq/ImmutableData.md#immutability-issues-with-react-redux)
 - [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reduxjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
 **Articles**
