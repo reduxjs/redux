@@ -7,19 +7,21 @@ module.exports = {
   organizationName: 'reduxjs',
   projectName: 'redux',
   themeConfig: {
-    image: 'https://redux.js.org/img/redux-logo-landscape.png',
-    disableDarkMode: false,
+    image: 'img/redux-logo-landscape.png',
+    metadatas: [{ name: 'twitter:card', content: 'summary' }],
     prism: {
       theme: require('./src/js/monokaiTheme.js')
     },
+    colorMode: {
+      disableSwitch: false
+    },
     navbar: {
       title: 'Redux',
-      image: 'img/redux-logo-landscape.png',
       logo: {
         alt: 'Redux Logo',
         src: 'img/redux.svg'
       },
-      links: [
+      items: [
         {
           label: 'Getting Started',
           to: 'introduction/getting-started',
