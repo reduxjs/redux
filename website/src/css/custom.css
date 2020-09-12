@@ -208,7 +208,7 @@ details.detailed-explanation p {
 }
 
 .admonition {
-  color: var(--ifm-font-base-color);
+  color: black;
   border-radius: var(--ifm-global-radius);
   border-left: 6px solid var(--ra-admonition-color-dark);
 }
