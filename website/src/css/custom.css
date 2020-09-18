@@ -175,9 +175,7 @@ details.detailed-explanation summary {
 
 .style-guide details summary h4,
 details.detailed-explanation summary h4 {
-  display: inline-block;
-  margin-top: 0;
-  margin-bottom: 0;
+  display: inline;
 }
 
 .style-guide details p,
