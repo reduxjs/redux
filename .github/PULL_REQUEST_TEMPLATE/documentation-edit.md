@@ -1,5 +1,5 @@
 ---
-name: "\U0001F4DD Documentation Fix"
+name: :memo: Documentation Fix
 about: Fixing a problem in an existing docs page
 ---
 
