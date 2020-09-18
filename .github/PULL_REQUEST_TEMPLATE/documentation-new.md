@@ -1,5 +1,5 @@
 ---
-name: "\U0001F4D6 New/Updated Documentation Content"
+name: :book: New/Updated Documentation Content
 about: Adding a new docs page, or updating content in an existing docs page
 ---
 
