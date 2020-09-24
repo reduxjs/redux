@@ -65,11 +65,11 @@
 
 # Old old Gitbook links?
 /docs/introduction/CoreConcepts.html        /introduction/core-concepts
-/docs/introduction/Motivation.html        /introduction/motivation
+/docs/introduction/Motivation.html        /thinking-in-redux/motivation
 /docs/introduction/Ecosystem.html*        /introduction/ecosystem:splat
 /docs/introduction/CoreConcepts.html        /introduction/core-concepts
-/docs/introduction/PriorArt.html        /introduction/prior-art
-/docs/introduction/ThreePrinciples.html        /introduction/three-principles
+/docs/introduction/PriorArt.html        /thinking-in-redux/prior-art
+/docs/introduction/ThreePrinciples.html        /thinking-in-redux/three-principles
 /docs/introduction/Examples.html*         /introduction/examples:splat
 /docs/introduction/        /introduction/getting-started
 
