@@ -3,13 +3,15 @@ module.exports = {
     Introduction: [
       'introduction/getting-started',
       'introduction/installation',
-      'introduction/motivation',
       'introduction/core-concepts',
-      'introduction/three-principles',
-      'introduction/prior-art',
       'introduction/learning-resources',
       'introduction/ecosystem',
       'introduction/examples'
+    ],
+    'Thinking In Redux': [
+      'thinking-in-redux/motivation',
+      'thinking-in-redux/three-principles',
+      'thinking-in-redux/prior-art'
     ],
     Tutorials: [
       'tutorials/tutorials-index',
