@@ -8,10 +8,20 @@ module.exports = {
       'introduction/ecosystem',
       'introduction/examples'
     ],
-    'Thinking In Redux': [
-      'thinking-in-redux/motivation',
-      'thinking-in-redux/three-principles',
-      'thinking-in-redux/prior-art'
+    'Understanding Redux': [
+      {
+        type: 'category',
+        label: 'Thinking in Redux',
+        items: [
+          'understanding/thinking-in-redux/motivation',
+          'understanding/thinking-in-redux/three-principles'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'History and Design',
+        items: ['understanding/history-and-design/prior-art']
+      }
     ],
     Tutorials: [
       'tutorials/tutorials-index',
