@@ -31,8 +31,8 @@
 
 /introduction/coreconcepts*         /introduction/core-concepts:splat
 /introduction/learningresources*         /introduction/learning-resources:splat
-/introduction/priorart*         /introduction/prior-art:splat
-/introduction/threeprinciples*         /introduction/three-principles:splat
+/introduction/priorart*         /understanding/history-and-design/prior-art:splat
+/introduction/threeprinciples*         /understanding/thinking-in-redux/three-principles:splat
 /introduction         /introduction/getting-started
 
 
@@ -65,11 +65,11 @@
 
 # Old old Gitbook links?
 /docs/introduction/CoreConcepts.html        /introduction/core-concepts
-/docs/introduction/Motivation.html        /introduction/motivation
+/docs/introduction/Motivation.html        /understanding/thinking-in-redux/motivation
 /docs/introduction/Ecosystem.html*        /introduction/ecosystem:splat
 /docs/introduction/CoreConcepts.html        /introduction/core-concepts
-/docs/introduction/PriorArt.html        /introduction/prior-art
-/docs/introduction/ThreePrinciples.html        /introduction/three-principles
+/docs/introduction/PriorArt.html        /understanding/history-and-design/prior-art
+/docs/introduction/ThreePrinciples.html        /understanding/thinking-in-redux/three-principles
 /docs/introduction/Examples.html*         /introduction/examples:splat
 /docs/introduction/        /introduction/getting-started
 
@@ -145,3 +145,9 @@
 
 # PR preview for the new tutorial
 /tutorials/quick-start/quick-start-part-1        /tutorials/essentials/part-1-overview-concepts
+
+# 2020 Site reorganization
+
+/introduction/motivation        /understanding/thinking-in-redux/motivation
+/introduction/three-principles        /understanding/thinking-in-redux/three-principles
+/introduction/prior-art        /understanding/history-and-design/prior-art

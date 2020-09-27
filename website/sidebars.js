@@ -3,13 +3,25 @@ module.exports = {
     Introduction: [
       'introduction/getting-started',
       'introduction/installation',
-      'introduction/motivation',
       'introduction/core-concepts',
-      'introduction/three-principles',
-      'introduction/prior-art',
       'introduction/learning-resources',
       'introduction/ecosystem',
       'introduction/examples'
+    ],
+    'Understanding Redux': [
+      {
+        type: 'category',
+        label: 'Thinking in Redux',
+        items: [
+          'understanding/thinking-in-redux/motivation',
+          'understanding/thinking-in-redux/three-principles'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'History and Design',
+        items: ['understanding/history-and-design/prior-art']
+      }
     ],
     Tutorials: [
       'tutorials/tutorials-index',
