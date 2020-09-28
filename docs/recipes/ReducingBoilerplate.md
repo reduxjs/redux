@@ -160,7 +160,7 @@ There are also utility libraries to aid in generating action creators, such as [
 
 ## Async Action Creators
 
-[Middleware](../Glossary.md#middleware) lets you inject custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
+[Middleware](../understanding/thinking-in-redux/Glossary.md#middleware) lets you inject custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
 
 Without any middleware, [`dispatch`](../api/Store.md#dispatchaction) only accepts a plain object, so we have to perform AJAX calls inside our components:
 

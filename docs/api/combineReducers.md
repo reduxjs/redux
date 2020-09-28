@@ -6,7 +6,7 @@ hide_title: true
 
 # `combineReducers(reducers)`
 
-As your app grows more complex, you'll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
+As your app grows more complex, you'll want to split your [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../understanding/thinking-in-redux/Glossary.md#state).
 
 The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
 

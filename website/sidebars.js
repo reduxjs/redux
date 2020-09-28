@@ -88,7 +88,8 @@ module.exports = {
         label: 'Thinking in Redux',
         items: [
           'understanding/thinking-in-redux/motivation',
-          'understanding/thinking-in-redux/three-principles'
+          'understanding/thinking-in-redux/three-principles',
+          'understanding/thinking-in-redux/glossary'
         ]
       },
       {
@@ -112,7 +113,7 @@ module.exports = {
       'faq/miscellaneous'
     ],
     'Style Guide': ['style-guide/style-guide'],
-    Other: ['glossary', 'troubleshooting'],
+    Other: ['troubleshooting'],
     'API Reference': [
       'api/api-reference',
       'api/createstore',
