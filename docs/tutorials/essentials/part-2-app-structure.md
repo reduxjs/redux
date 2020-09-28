@@ -82,7 +82,7 @@ Now try these steps:
 - Change the number "2" in the textbox to a "3"
 - Click the "Add Async" button. You should see a progress bar fill the button, and after a couple seconds, the displayed value should change to 6.
 
-Go back to the Redux DevTools. You should see a total of five actions dispatched, one for each time we clicked a button . Now select the last `"counter/increment"` entry from the list on the left, and click the "Action" tab on the right side:
+Go back to the Redux DevTools. You should see a total of five actions dispatched, one for each time we clicked a button . Now select the last `"counter/incrementByAmount"` entry from the list on the left, and click the "Action" tab on the right side:
 
 ![Redux DevTools: done clicking buttons](/img/tutorials/essentials/devtools-done-clicking.png)
 
