@@ -39,6 +39,11 @@ module.exports = {
       },
       {
         type: 'category',
+        label: 'Redux Fundamentals',
+        items: ['tutorials/fundamentals/part-1-overview']
+      },
+      {
+        type: 'category',
         label: 'Basic Tutorial',
         items: [
           'basics/basic-tutorial',
