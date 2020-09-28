@@ -27,7 +27,9 @@ Starting in [Part 3](./part-3-state-reducers-actions.md), we'll use that knowled
 
 ### How to Read This Tutorial
 
-This tutorial focuses on the lower-level concepts you need to know to understand Redux. However, **most of the code samples in this tutorial are only meant as examples of concepts to explain "how Redux works"**. They do not include our recommended patterns for efficiently using Redux, and so **these code samples should not be used for writing real applications**.
+This tutorial teaches "how Redux works", using lower-level hand-written approaches to illustrate core concepts. Because of this, **the code samples in this tutorial do not include our recommended patterns for using Redux**.
+
+We specifically recommend that **you should use our official Redux Toolkit package for writing actual applications**. The concepts shown in this tutorial are also used with Redux Toolkit, but it provides APIs that help you write Redux logic that is simpler and more effective. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
 
 :::info
 
