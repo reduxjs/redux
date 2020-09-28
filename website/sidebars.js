@@ -8,21 +8,6 @@ module.exports = {
       'introduction/ecosystem',
       'introduction/examples'
     ],
-    'Understanding Redux': [
-      {
-        type: 'category',
-        label: 'Thinking in Redux',
-        items: [
-          'understanding/thinking-in-redux/motivation',
-          'understanding/thinking-in-redux/three-principles'
-        ]
-      },
-      {
-        type: 'category',
-        label: 'History and Design',
-        items: ['understanding/history-and-design/prior-art']
-      }
-    ],
     Tutorials: [
       'tutorials/tutorials-index',
       {
@@ -95,6 +80,21 @@ module.exports = {
           'recipes/structuring-reducers/immutable-update-patterns',
           'recipes/structuring-reducers/initializing-state'
         ]
+      }
+    ],
+    'Understanding Redux': [
+      {
+        type: 'category',
+        label: 'Thinking in Redux',
+        items: [
+          'understanding/thinking-in-redux/motivation',
+          'understanding/thinking-in-redux/three-principles'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'History and Design',
+        items: ['understanding/history-and-design/prior-art']
       }
     ],
     FAQ: [
