@@ -156,7 +156,7 @@ This, together with its performance and rich API for data manipulation, is why I
 
 **Documentation**
 
-- [Troubleshooting: Nothing happens when I dispatch an action](../Troubleshooting.md#nothing-happens-when-i-dispatch-an-action)
+- [Troubleshooting: Nothing happens when I dispatch an action](./Troubleshooting.md#nothing-happens-when-i-dispatch-an-action)
 
 ## What are some opinionated Best Practices for using Immutable.JS with Redux?
 

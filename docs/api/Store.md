@@ -6,15 +6,15 @@ hide_title: true
 
 # Store
 
-A store holds the whole [state tree](../Glossary.md#state) of your application.
-The only way to change the state inside it is to dispatch an [action](../Glossary.md#action) on it.
+A store holds the whole [state tree](../understanding/thinking-in-redux/Glossary.md#state) of your application.
+The only way to change the state inside it is to dispatch an [action](../understanding/thinking-in-redux/Glossary.md#action) on it.
 
 A store is not a class. It's just an object with a few methods on it.
-To create it, pass your root [reducing function](../Glossary.md#reducer) to [`createStore`](createStore.md).
+To create it, pass your root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) to [`createStore`](createStore.md).
 
 > ##### A Note for Flux Users
 >
-> If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
+> If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
 
 ### Store Methods
 
@@ -44,9 +44,9 @@ The store's reducing function will be called with the current [`getState()`](#ge
 
 > ##### A Note for Flux Users
 >
-> If you attempt to call `dispatch` from inside the [reducer](../Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
+> If you attempt to call `dispatch` from inside the [reducer](../understanding/thinking-in-redux/Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
 >
-> In Redux, subscriptions are called after the root reducer has returned the new state, so you _may_ dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../Glossary.md#action-creator).
+> In Redux, subscriptions are called after the root reducer has returned the new state, so you _may_ dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../understanding/thinking-in-redux/Glossary.md#action-creator).
 
 #### Arguments
 
@@ -60,7 +60,7 @@ The store's reducing function will be called with the current [`getState()`](#ge
 
 <sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
 
-However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../understanding/thinking-in-redux/Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
 
 Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
 

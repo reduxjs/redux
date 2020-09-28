@@ -8,21 +8,6 @@ module.exports = {
       'introduction/ecosystem',
       'introduction/examples'
     ],
-    'Understanding Redux': [
-      {
-        type: 'category',
-        label: 'Thinking in Redux',
-        items: [
-          'understanding/thinking-in-redux/motivation',
-          'understanding/thinking-in-redux/three-principles'
-        ]
-      },
-      {
-        type: 'category',
-        label: 'History and Design',
-        items: ['understanding/history-and-design/prior-art']
-      }
-    ],
     Tutorials: [
       'tutorials/tutorials-index',
       {
@@ -78,6 +63,7 @@ module.exports = {
       'recipes/isolating-redux-sub-apps',
       'recipes/using-immutablejs-with-redux',
       'recipes/code-splitting',
+      'recipes/troubleshooting',
       {
         type: 'category',
         label: 'Structuring Reducers',
@@ -97,6 +83,22 @@ module.exports = {
         ]
       }
     ],
+    'Understanding Redux': [
+      {
+        type: 'category',
+        label: 'Thinking in Redux',
+        items: [
+          'understanding/thinking-in-redux/motivation',
+          'understanding/thinking-in-redux/three-principles',
+          'understanding/thinking-in-redux/glossary'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'History and Design',
+        items: ['understanding/history-and-design/prior-art']
+      }
+    ],
     FAQ: [
       'faq',
       'faq/general',
@@ -112,7 +114,6 @@ module.exports = {
       'faq/miscellaneous'
     ],
     'Style Guide': ['style-guide/style-guide'],
-    Other: ['glossary', 'troubleshooting'],
     'API Reference': [
       'api/api-reference',
       'api/createstore',

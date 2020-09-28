@@ -127,8 +127,8 @@
 /docs/recipes/reducers/ImmutableUpdatePatterns.html*        /recipes/structuring-reducers/immutable-update-patterns:splat
 /docs/recipes/reducers/InitializingState.html*        /recipes/structuring-reducers/initializing-state:splat
 
-/docs/Glossary.html*        /glossary:splat
-/docs/Troubleshooting.html*        /troubleshooting:splat
+/docs/Glossary.html*        /understanding/thinking-in-redux/glossary:splat
+/docs/Troubleshooting.html*        /recipes/troubleshooting:splat
 
 # Unknown?
 /introduction/index.html        /introduction/getting-started
@@ -151,3 +151,6 @@
 /introduction/motivation        /understanding/thinking-in-redux/motivation
 /introduction/three-principles        /understanding/thinking-in-redux/three-principles
 /introduction/prior-art        /understanding/history-and-design/prior-art
+
+/glossary        /understanding/thinking-in-redux/glossary
+/troubleshooting        /recipes/troubleshooting
