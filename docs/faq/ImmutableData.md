@@ -276,7 +276,7 @@ The store will still be updated with the new values for the root state, but beca
 **Documentation**
 
 - [Recipes: Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
-- [Troubleshooting: Never mutate reducer arguments](../Troubleshooting.md#never-mutate-reducer-arguments)
+- [Troubleshooting: Never mutate reducer arguments](../recipes/Troubleshooting.md#never-mutate-reducer-arguments)
 
 ### Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?
 

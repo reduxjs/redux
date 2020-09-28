@@ -128,7 +128,7 @@
 /docs/recipes/reducers/InitializingState.html*        /recipes/structuring-reducers/initializing-state:splat
 
 /docs/Glossary.html*        /understanding/thinking-in-redux/glossary:splat
-/docs/Troubleshooting.html*        /troubleshooting:splat
+/docs/Troubleshooting.html*        /recipes/troubleshooting:splat
 
 # Unknown?
 /introduction/index.html        /introduction/getting-started
@@ -153,3 +153,4 @@
 /introduction/prior-art        /understanding/history-and-design/prior-art
 
 /glossary        /understanding/thinking-in-redux/glossary
+/troubleshooting        /recipes/troubleshooting

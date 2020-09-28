@@ -63,6 +63,7 @@ module.exports = {
       'recipes/isolating-redux-sub-apps',
       'recipes/using-immutablejs-with-redux',
       'recipes/code-splitting',
+      'recipes/troubleshooting',
       {
         type: 'category',
         label: 'Structuring Reducers',
@@ -113,7 +114,6 @@ module.exports = {
       'faq/miscellaneous'
     ],
     'Style Guide': ['style-guide/style-guide'],
-    Other: ['troubleshooting'],
     'API Reference': [
       'api/api-reference',
       'api/createstore',

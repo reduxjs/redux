@@ -54,7 +54,7 @@ Note that “updating data immutably” does _not_ mean that you must use [Immut
 
 **Documentation**
 
-- [Troubleshooting](../Troubleshooting.md)
+- [Troubleshooting](../recipes/Troubleshooting.md)
 - [React Redux: Troubleshooting](https://react-redux.js.org/troubleshooting)
 - [Recipes: Using the Object Spread Operator](../recipes/UsingObjectSpreadOperator.md)
 - [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
