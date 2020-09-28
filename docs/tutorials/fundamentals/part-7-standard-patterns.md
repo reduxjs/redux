@@ -1,12 +1,12 @@
 ---
-id: part-8-standard-patterns
-title: 'Redux Fundamentals, Part 8: Standard Redux Patterns'
+id: part-7-standard-patterns
+title: 'Redux Fundamentals, Part 7: Standard Redux Patterns'
 sidebar_label: 'Standard Redux Patterns'
 hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
 ---
 
-# Redux Fundamentals, Part 8: Standard Redux Patterns
+# Redux Fundamentals, Part 7: Standard Redux Patterns
 
 **TODO** Write this
 

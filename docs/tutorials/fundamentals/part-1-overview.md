@@ -33,7 +33,7 @@ This tutorial focuses on the lower-level concepts you need to know to understand
 
 If you're looking to learn more about how Redux is used to write real-world applications, please see:
 
-- [**The "Modern Redux" page in this tutorial**](./part-9-modern-redux.md), which shows how to convert the low-level examples in from earlier sections into the modern patterns we do recommend for real-world usage
+- [**The "Modern Redux" page in this tutorial**](./part-8-modern-redux.md), which shows how to convert the low-level examples from earlier sections into the modern patterns we do recommend for real-world usage
 - [**The "Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md), which teaches "how to use Redux, the right way" for real-world apps, using our latest recommended patterns and practices.
 
 :::
@@ -116,6 +116,8 @@ The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-
 
 Now that you know what Redux is, let's briefly look at the pieces that make up a Redux app and how it works.
 
+**TODO** Need to emphasize that this tutorial talks about the Redux _core_, but we'll get to the other parts later.
+
 ### The Redux Store
 
 The center of every Redux application is the **store**. A "store" is a container that holds your application's global **state**.
@@ -139,7 +141,7 @@ Let's look at a minimal working example of a Redux app - a small counter applica
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-Because Redux is a standalone JS library with no dependencies, this example is written by only loading a single script tag for the Redux library, and uses basic JS and HTML for the UI. In practice, Redux is normally used by [installing the Redux packages from NPM](../../introduction/Installation.md), and the UI is created using a library like [React](https://reactjs.org);
+Because Redux is a standalone JS library with no dependencies, this example is written by only loading a single script tag for the Redux library, and uses basic JS and HTML for the UI. In practice, Redux is normally used by [installing the Redux packages from NPM](../../introduction/Installation.md), and the UI is created using a library like [React](https://reactjs.org).
 
 Let's break this example down into its separate parts to see what's happening.
 
@@ -186,12 +188,12 @@ acts as a unique name for the action. The `type` should be a readable name so th
 anyone who looks at this code understands what it means. In this case, we use the
 word 'counter' as the first half of our action type, and the second half is a
 description of "what happened". In this case, our 'counter' was 'incremented', so
-we write the action type as `'counter'/incremented'`.
+we write the action type as `'counter/incremented'`.
 
 Based on the type of the action, we either need to return a brand-new object to
 be the new `state` result, or return the existing `state` object if nothing should change.
-Note that we update the state _immutably_ by copying the existing state instead of
-modifying it directly.
+Note that we update the state _immutably_ by copying the existing state and updating the
+copy, instead of modifying the original object directly.
 
 #### Store
 
