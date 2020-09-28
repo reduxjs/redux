@@ -33,7 +33,7 @@ This tutorial focuses on the lower-level concepts you need to know to understand
 
 If you're looking to learn more about how Redux is used to write real-world applications, please see:
 
-- [**The "Modern Redux" page in this tutorial**](./part-9-modern-redux.md), which shows how to convert the low-level examples into the modern patterns we do recommend for real-world usage
+- [**The "Modern Redux" page in this tutorial**](./part-9-modern-redux.md), which shows how to convert the low-level examples in from earlier sections into the modern patterns we do recommend for real-world usage
 - [**The "Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md), which teaches "how to use Redux, the right way" for real-world apps, using our latest recommended patterns and practices.
 
 :::
@@ -111,3 +111,198 @@ Redux can integrate with any UI framework, and is most frequently used with Reac
 #### Redux DevTools Extension
 
 The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-extension) shows a history of the changes to the state in your Redux store over time. This allows you to debug your applications effectively, including using powerful techniques like "time-travel debugging".
+
+## Redux Basics
+
+Now that you know what Redux is, let's briefly look at the pieces that make up a Redux app and how it works.
+
+### The Redux Store
+
+The center of every Redux application is the **store**. A "store" is a container that holds your application's global **state**.
+
+A store is a JavaScript object with a few special functions and abilities that make it different than a plain global object:
+
+- You cannot directly modify or change the state that is kept inside the Redux store
+- Instead, the only way to cause an update to the state is to create a plain **action** object that describes "something that happened in the application", and then **dispatch** the action to the store to tell it what happened.
+- When an action is dispatched, the store runs the root **reducer** function, and lets it calculate the new state based on the old state and the action
+- Finally, the store notifies **subscribers** that the state has been updated so the UI can be updated with the new data.
+
+### Redux Core Example App
+
+Let's look at a minimal working example of a Redux app - a small counter application:
+
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/dank-architecture-lr7k1?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-fundamentals-core-example"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
+
+Because Redux is a standalone JS library with no dependencies, this example is written by only loading a single script tag for the Redux library, and uses basic JS and HTML for the UI. In practice, Redux is normally used by [installing the Redux packages from NPM](../../introduction/Installation.md), and the UI is created using a library like [React](https://reactjs.org);
+
+Let's break this example down into its separate parts to see what's happening.
+
+#### State, Reducers, and Actions
+
+We start by defining an initial **state** value to describe the application:
+
+```js
+// Define an initial state value for the app
+const initialState = {
+  value: 0
+}
+```
+
+For this app, we're going to track a single number with the current value of our counter.
+
+Redux apps normally have a JS object as the root piece of the state, with other values inside that object.
+
+Then, we define a **reducer** function. The reducer receives two arguments, the current `state` and an
+`action` object describing what happened. When the Redux app starts up, we don't have any state yet,
+so we provide the `initialState` as the default value for this reducer:
+
+```js
+// Create a "reducer" function that determines what the new state
+// should be when something happens in the app
+function counterReducer(state = initialState, action) {
+  // Reducers usually look at the type of action that happened
+  // to decide how to update the state
+  switch (action.type) {
+    case 'counter/incremented':
+      return { ...state, value: state.value + 1 }
+    case 'counter/decremented':
+      return { ...state, value: state.value - 1 }
+    default:
+      // If the reducer doesn't care about this action type,
+      // return the existing state unchanged
+      return state
+  }
+}
+```
+
+Action objects always have a `type` field, which is a string you provide that
+acts as a unique name for the action. The `type` should be a readable name so that
+anyone who looks at this code understands what it means. In this case, we use the
+word 'counter' as the first half of our action type, and the second half is a
+description of "what happened". In this case, our 'counter' was 'incremented', so
+we write the action type as `'counter'/incremented'`.
+
+Based on the type of the action, we either need to return a brand-new object to
+be the new `state` result, or return the existing `state` object if nothing should change.
+Note that we update the state _immutably_ by copying the existing state instead of
+modifying it directly.
+
+#### Store
+
+Now that we have a reducer function, we can create a **store** instance by
+calling the Redux library `createStore` API.
+
+```js
+// Create a new Redux store with the `createStore` function,
+// and use the `counterReducer` for the update logic
+const store = Redux.createStore(counterReducer)
+```
+
+We pass the reducer function to `createStore`, which uses the reducer function
+to generate the initial state, and to calculate any future updates.
+
+#### UI
+
+In any application, the user interface will show existing state on screen. When a user
+does something, the app will update its data and then redraw the UI with those values.
+
+```js
+// Our "user interface" is some text in a single HTML element
+const valueEl = document.getElementById('value')
+
+// Whenever the store state changes, update the UI by
+// reading the latest store state and showing new data
+function render() {
+  const state = store.getState()
+  valueEl.innerHTML = state.value.toString()
+}
+
+// Update the UI with the initial data
+render()
+// And subscribe to redraw whenever the data changes in the future
+store.subscribe(render)
+```
+
+In this small example, we're only using some basic HTML elements as our UI,
+with a single `<div>` showing the current value.
+
+So, we write a function that knows how to get the latest state from the Redux
+store using the `store.getState()` method, then takes that value and updates the UI to show it.
+
+The Redux store lets us call `store.subscribe()` and pass a subscriber callback function that will be called
+every time the store is updated. So, we can pass our `render` function as the subscriber, and know that
+each time the store updates, we can update the UI with the latest value.
+
+#### Dispatching Actions
+
+Finally, we need to respond to user input by creating **action** objects that
+describe what happened, and **dispatching** them to the store. When we call `store.dispatch(action)`,
+the store runs the reducer, calculates the updated state, and runs the subscribers
+to update the UI.
+
+```js
+// Handle user inputs by "dispatching" action objects,
+// which should describe "what happened" in the app
+document.getElementById('increment').addEventListener('click', function () {
+  store.dispatch({ type: 'counter/incremented' })
+})
+
+document.getElementById('decrement').addEventListener('click', function () {
+  store.dispatch({ type: 'counter/decremented' })
+})
+
+document
+  .getElementById('incrementIfOdd')
+  .addEventListener('click', function () {
+    // We can write logic to decide what to do based on the state
+    if (store.getState() % 2 !== 0) {
+      store.dispatch({ type: 'counter/incremented' })
+    }
+  })
+
+document
+  .getElementById('incrementAsync')
+  .addEventListener('click', function () {
+    // We can also write async logic that interacts with the store
+    setTimeout(function () {
+      store.dispatch({ type: 'counter/incremented' })
+    }, 1000)
+  })
+```
+
+Here, we'll dispatch the actions that will make the reducer add 1 or
+subtract 1 from the current counter value.
+
+We can also write code that only dispatches an action if a certain
+condition is true, or write some async code that dispatches an action
+after a delay.
+
+## What You've Learned
+
+That counter example was small, but it does show all the working pieces of a real Redux app.
+**Everything we'll talk about in the following sections expands on those basic pieces.**
+
+With that in mind, let's review what we've learned so far:
+
+:::tip
+
+- **Redux is a library for managing global application state**
+  - Redux is typically used with the React-Redux library for integrating Redux and React together
+  - Redux Toolkit is the recommended way to write Redux logic
+- **Redux uses several types of code**
+  - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
+  - _Reducers_ are functions that calculate a new state value based on previous state + an action
+  - A Redux _store_ runs the root reducer whenever an action is _dispatched_
+
+:::
+
+## What's Next?
+
+Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2](./part-2-data-flow),
+where we'll look at how data flows through a Redux app in more detail.
