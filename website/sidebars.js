@@ -40,7 +40,10 @@ module.exports = {
       {
         type: 'category',
         label: 'Redux Fundamentals',
-        items: ['tutorials/fundamentals/part-1-overview']
+        items: [
+          'tutorials/fundamentals/part-1-overview',
+          'tutorials/fundamentals/part-2-concepts-data-flow'
+        ]
       },
       {
         type: 'category',
