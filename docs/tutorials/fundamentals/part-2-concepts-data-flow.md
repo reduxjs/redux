@@ -25,7 +25,7 @@ the pieces that make up the app. We also briefly mentioned some of the terms and
 In this section, we'll look at those terms and concepts in more detail, and talk more about how data flows
 through a Redux application.
 
-## Redux Terms and Concepts
+## Background Concepts
 
 Before we dive into some actual code, let's talk about some of the terms and concepts you'll need to know to use Redux.
 
@@ -140,11 +140,11 @@ For more info on how immutability works in JavaScript, see:
 
 :::
 
-### Terminology
+## Redux Terminology
 
 There's some important Redux terms that you'll need to be familiar with before we continue:
 
-#### Actions
+### Actions
 
 An **action** is a plain JavaScript object that has a `type` field. **You can think of an action as an event that describes something that happened in the application**.
 
@@ -161,7 +161,7 @@ const addTodoAction = {
 }
 ```
 
-#### Reducers
+### Reducers
 
 A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state: `(state, action) => newState`. **You can think of a reducer as an event listener which handles events based on the received action (event) type.**
 
@@ -263,7 +263,7 @@ We can say that **Redux reducers reduce a set of actions (over time) into a sing
 
 </DetailedExplanation>
 
-#### Store
+### Store
 
 The current Redux application state lives in an object called the **store** .
 
@@ -278,7 +278,7 @@ console.log(store.getState())
 // {value: 0}
 ```
 
-#### Dispatch
+### Dispatch
 
 The Redux store has a method called `dispatch`. **The only way to update the state is to call `store.dispatch()` and pass in an action object**. The store will run its reducer function and save the new state value inside, and we can call `getState()` to retrieve the updated value:
 
@@ -291,7 +291,7 @@ console.log(store.getState())
 
 **You can think of dispatching actions as "triggering an event"** in the application. Something happened, and we want the store to know about it. Reducers act like event listeners, and when they hear an action they are interested in, they update the state in response.
 
-#### Selectors
+### Selectors
 
 **Selectors** are functions that know how to extract specific pieces of information from a store state value. As an application grows bigger, this can help avoid repeating logic as different parts of the app need to read the same data:
 
@@ -303,7 +303,11 @@ console.log(currentValue)
 // 2
 ```
 
-### Redux Application Data Flow
+## Core Concepts and Principles
+
+**TODO** Something from the "Core Concepts" and "Three Principles" pages here?
+
+## Redux Application Data Flow
 
 Earlier, we talked about "one-way data flow", which describes this sequence of steps to update the app:
 
