@@ -383,7 +383,7 @@ Writing immutable update logic by hand _is_ hard, and accidentally mutating stat
 
 :::tip
 
-In real-world applications, you won't have to write these complex nested immutable updates by hand. In [Part 8](./part-8-modern-redux), you'll
+In real-world applications, you won't have to write these complex nested immutable updates by hand. In [Part 8](./part-8-modern-redux.md), you'll
 learn how to use Redux Toolkit to simplify writing immutable update logic in reducers.
 
 :::
