@@ -331,7 +331,7 @@ We said earlier that reducers must **always** follow some special rules:
 
 - They should only calculate the new state value based on the `state` and `action` arguments
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic or other "side effects"
+- They must not do any asynchronous logic or other "side effects", including random values like `Math.random()` or `Date.now()`
 
 But why are these rules important? There's a few different reasons:
 
@@ -674,6 +674,7 @@ State, reducers, and actions are the building blocks of Redux. Every Redux app h
   - The root state value should be a plain JS object
   - The state should contain the smallest amount of data needed to make the app work
   - Classes, Promises, functions, and other non-plain values should _not_ go in the Redux state
+  - Reducers must not create random values like `Math.random()` or `Date.now()`
   - It's okay to have other state values that are not in the Redux store
 - **Actions are plain objects with a `type` field that describe what happened**
   - The `type` field should be a readable string, and is usually written as `'feature/eventName'`
