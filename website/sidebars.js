@@ -43,7 +43,8 @@ module.exports = {
         items: [
           'tutorials/fundamentals/part-1-overview',
           'tutorials/fundamentals/part-2-concepts-data-flow',
-          'tutorials/fundamentals/part-3-state-reducers-actions'
+          'tutorials/fundamentals/part-3-state-reducers-actions',
+          'tutorials/fundamentals/part-4-store'
         ]
       },
       {
