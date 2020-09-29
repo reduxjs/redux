@@ -194,7 +194,7 @@ const todoAppState = {
 }
 ```
 
-It's important to note that **it's okay to have other state values outside of Redux!**. This example is small enough so far that we really do have all our state in the Redux store, but as we'll see later, some data really doesn't need to be kept in Redux (like "is this dropdown open?" or "current value of a form input").
+It's important to note that **it's okay to have other state values outside of Redux!**. This example is small enough so far that we actually do have all our state in the Redux store, but as we'll see later, some data really doesn't need to be kept in Redux (like "is this dropdown open?" or "current value of a form input").
 
 ### Designing Actions
 
@@ -223,8 +223,8 @@ Based on that list of things that can happen, we can create a list of actions th
 
 - `{type: 'todos/todoAdded', payload: todoText}`
 - `{type: 'todos/todoToggled', payload: todoId}`
-- `{type: 'todos/allCompleted'}
-- `{type: 'todos/clearedCompleted'}
+- `{type: 'todos/allCompleted'}`
+- `{type: 'todos/clearedCompleted'}`
 - `{type: 'filters/statusFilterChanged', payload: filterValue}`
 - `{type: 'filters/colorFilterChanged', payload: {color, changeType}}`
 
@@ -597,8 +597,17 @@ export default function filtersReducer(state = initialState, action) {
 }
 ```
 
-There's an important thing to note about both of these slice files. **For each of these slice reducers, the `state`
-that they update is just a _part_ of the entire Redux app state.**
+We still have to copy the object containing the filters state, but since there's less nesting, it's easier to read what's happening.
+
+:::info
+
+To keep this page shorter, we'll skip showing how to write the reducer update logic for the other actions.
+
+**Try writing the updates for those yourself**, based on [the requirements described above](#defining-requirements).
+
+If you get stuck, see [the CodeSandbox at the end of this page](#what-youve-learned) for the complete implementation of these reducers.
+
+:::
 
 ## Combining Reducers
 
@@ -657,6 +666,8 @@ values are the slice reducer functions that know how to update those slices of t
 
 State, reducers, and actions are the building blocks of Redux. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
 
+**TODO CodeSandbox here**
+
 :::tip
 
 - **Redux apps use plain JS objects, arrays, and primitives as the state values**
@@ -677,6 +688,7 @@ State, reducers, and actions are the building blocks of Redux. Every Redux app h
   - Reducers are usually split based on top-level state keys or "slices" of state
   - Reducers are usually written in "slice" files, organized into "feature" folders
   - Reducers can be combined together with the Redux `combineReducers` function
+  - The key names given to `combineReducers` define the top-level state object keys
 
 :::
 
