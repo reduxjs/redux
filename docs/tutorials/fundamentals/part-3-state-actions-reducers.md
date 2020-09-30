@@ -101,6 +101,7 @@ Let's take a quick look at what the initial project contains:
   - `/api`
     - `client.js`: a small AJAX request client that allows us to make GET and POST requests
     - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
+- - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
 
 If you load the app now, you should see a welcome message, but the rest of the app is otherwise empty.
 
@@ -327,11 +328,14 @@ That's... an awful lot of work just to add one todo item to the state. Why is al
 
 ### Rules of Reducers
 
-We said earlier that reducers must **always** follow some special rules:
+We said earlier that **reducers must _always_ follow some special rules**:
 
 - They should only calculate the new state value based on the `state` and `action` arguments
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
 - They must not do any asynchronous logic or other "side effects", including random values like `Math.random()` or `Date.now()`
+
+Any function that follows these rules is also known as **"pure" function**, even
+if it's not specifically written as a reducer function.
 
 But why are these rules important? There's a few different reasons:
 
