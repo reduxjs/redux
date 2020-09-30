@@ -23,7 +23,7 @@ Welcome to the Redux Fundamentals tutorial! **This tutorial will introduce you t
 
 In Part 1 of this tutorial, we'll briefly look at a minimal example of a working Redux app to see what the pieces are, and in [Part 2](./part-2-concepts-data-flow.md) we'll look at those pieces in more detail and how data flows in a Redux application.
 
-Starting in [Part 3](./part-3-state-reducers-actions.md), we'll use that knowledge to build a small example app that demonstrates how these pieces fit together and talk about how Redux works in practice. After we finish building the working example app "by hand" so that you can see exactly what's happening, we'll talk about some of the standard patterns and abstractions typically used with Redux. Finally, we'll see how these lower-level examples translate into the higher-level patterns that we recommend for actual usage in real applications.
+Starting in [Part 3](./part-3-state-actions-reducers.md), we'll use that knowledge to build a small example app that demonstrates how these pieces fit together and talk about how Redux works in practice. After we finish building the working example app "by hand" so that you can see exactly what's happening, we'll talk about some of the standard patterns and abstractions typically used with Redux. Finally, we'll see how these lower-level examples translate into the higher-level patterns that we recommend for actual usage in real applications.
 
 ### How to Read This Tutorial
 
@@ -147,7 +147,7 @@ Because Redux is a standalone JS library with no dependencies, this example is w
 
 Let's break this example down into its separate parts to see what's happening.
 
-#### State, Reducers, and Actions
+#### State, Actions, and Reducers
 
 We start by defining an initial **state** value to describe the application:
 

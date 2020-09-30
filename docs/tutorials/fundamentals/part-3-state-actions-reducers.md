@@ -1,14 +1,14 @@
 ---
-id: part-3-state-reducers-actions
-title: 'Redux Fundamentals, Part 3: State, Reducers, and Actions'
-sidebar_label: 'State, Reducers, and Actions'
+id: part-3-state-actions-reducers
+title: 'Redux Fundamentals, Part 3: State, Actions, and Reducers'
+sidebar_label: 'State, Actions, and Reducers'
 hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Fundamentals, Part 3: State, Reducers, and Actions
+# Redux Fundamentals, Part 3: State, Actions, and Reducers
 
 :::tip What You'll Learn
 
@@ -664,7 +664,7 @@ values are the slice reducer functions that know how to update those slices of t
 
 ## What You've Learned
 
-State, reducers, and actions are the building blocks of Redux. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
+State, Actions, and Reducers are the building blocks of Redux. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
 
 **TODO CodeSandbox here**
 
