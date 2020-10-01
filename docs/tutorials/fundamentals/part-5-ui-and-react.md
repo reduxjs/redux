@@ -8,7 +8,7 @@ description: 'The official Redux Fundamentals tutorial: learn how to use Redux w
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Fundamentals, Part 4: Store
+# Redux Fundamentals, Part 5: UI and React
 
 :::tip What You'll Learn
 
