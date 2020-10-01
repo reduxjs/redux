@@ -3,7 +3,7 @@ id: part-4-store
 title: 'Redux Fundamentals, Part 4: Store'
 sidebar_label: 'Store'
 hide_title: true
-description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
+description: 'The official Redux Fundamentals tutorial: learn how to create and use a Redux store'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -168,6 +168,49 @@ test(('Toggles a todo based on id') => {
 ```
 
 :::
+
+## Inside a Redux Store
+
+It might be helpful to take a peek inside a Redux store to see how it works. Here's a miniature example of a working Redux store, in about 25 lines of code:
+
+```js
+function createStore(reducer, preloadedState) {
+  let state = preloadedState
+  const listeners = []
+
+  function getState() {
+    return state
+  }
+
+  function subscribe(listener) {
+    listeners.push(listener)
+    return function unsubscribe() {
+      const index = listeners.indexOf(listener)
+      listeners.splice(index, 1)
+    }
+  }
+
+  function dispatch(action) {
+    state = reducer(state, action)
+    listeners.forEach(listener => listener())
+  }
+
+  dispatch({ type: '@@redux/INIT' })
+
+  return { dispatch, subscribe, getState }
+}
+```
+
+This small version of a Redux store works well enough that you could use it to replace the actual Redux `createStore` function you've been using in your app so far. (Try it and see for yourself!) [The actual Redux store implementation is longer and a bit more complicated](https://github.com/reduxjs/redux/blob/v4.0.5/src/createStore.js), but most of that is comments, warning messages, and handling some edge cases.
+
+As you can see, the actual logic here is fairly short:
+
+- The store has the current `state` value and `reducer` function inside of itself
+- `getState` returns the current state value
+- `subscribe` keeps an array of listener callbacks and returns a function to remove the new callback
+- `dispatch` calls the reducer, saves the state, and runs the listeners
+- The store dispatches one action on startup to initialize the reducers with their state
+- The store API is an object with `{dispatch, subscribe, getState}` inside
 
 ## Configuring the Store
 
@@ -395,7 +438,7 @@ Any middleware can return any value, and the return value from the first middlew
 const alwaysReturnHelloMiddleware = storeAPI => next => action {
   const originalResult = next(action);
   // Ignore the original result, return something else
-  return "Hello!'
+  return 'Hello!'
 }
 
 const middlewareEnhancer = applyMiddleware(alwaysReturnHelloMiddleware)
@@ -490,7 +533,7 @@ Let's see how our example app looks now:
 
 **TODO CodeSandbox here**
 
-Let's recap what we talked about
+Let's recap what we talked about:
 
 :::tip
 
