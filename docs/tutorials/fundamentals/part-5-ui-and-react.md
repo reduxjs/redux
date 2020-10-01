@@ -114,7 +114,7 @@ Based on [the list of business requirements for the app](./part-3-state-actions-
 
 Beyond this basic component structure, we could potentially divide the components up in several different ways. For example, the `<Footer>` component _could_ be just one component, or it could have multiple smaller components inside like `<CompletedTodos>`, `<StatusFilter>`, and `<ColorFilter>`. There's no single right way to divide these, and you'll find that it may be better to write larger components or split things into many smaller components depending on your situation.
 
-For now, we'll start with just this small list of components to keep things easier to follow. On that note, since we assume that [you already know React](https//reactjs.org), we're going to skip past the details of how to write the layout code for these components and focus on how to actually use the React-Redux library in your React components
+For now, we'll start with just this small list of components to keep things easier to follow. On that note, since we assume that [you already know React](https://reactjs.org), we're going to skip past the details of how to write the layout code for these components and focus on how to actually use the React-Redux library in your React components
 
 You can see [the complete source code for the app in this CodeSandbox **TODO create sandbox**](.)
 
