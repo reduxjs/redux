@@ -126,7 +126,7 @@ You should be familiar with [React hooks like `useState`](https://reactjs.org/do
 
 Like many other libraries, React-Redux includes [its own custom hooks](https://react-redux.js.org/api/hooks), which you can use in your own components. The React-Redux hooks give your React component the ability to talk to the Redux store by reading state and dispatching actions.
 
-The first React-Redux hook that we'll look at is [the **`useSelector`** hook](https://react-redux.js.org/api/hooks#useselector), which **lets your React components read data from the Redux store**.
+The first React-Redux hook that we'll look at is the [**`useSelector` hook**](https://react-redux.js.org/api/hooks#useselector), which **lets your React components read data from the Redux store**.
 
 `useSelector` accepts a single function, which we call a **selector** function. **A selector is a function that takes the entire Redux store state as its argument, reads some value from the state, and returns that result**.
 
@@ -149,13 +149,17 @@ So, **selectors can return values from the Redux store state, and also return _d
 
 Let's read the array of todos into our `<TodoList>` component. First, we'll import the `useSelector` hook from the `react-redux` library, then call it with a selector function as its argument:
 
-```js title="src/features/todos/TodoList.js"
+```jsx title="src/features/todos/TodoList.js"
+import React from 'react'
+// highlight-next-line
 import { useSelector } from 'react-redux'
 import TodoListItem from './TodoListItem'
 
+// highlight-next-line
 const selectTodos = state => state.todos
 
 export function TodoList() {
+  // highlight-next-line
   const todos = useSelector(selectTodos)
 
   // since `todos` is an array, we can loop over it
@@ -195,7 +199,7 @@ const selectTodoDescriptions = state => {
 
 :::tip
 
-We'll talk about how you can improve performance and avoid unnecessary re-renders using a special kind of selector function in [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md).
+We'll talk about one way to fix this issue later in this section. We'll also talk about how you can improve performance and avoid unnecessary re-renders using a special kind of selector function in [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md).
 
 :::
 
@@ -204,3 +208,269 @@ It's also worth noting that we don't have to write a selector function as a sepa
 ```js
 const todos = useSelector(state => state.todos)
 ```
+
+### Dispatching Actions with `useDispatch`
+
+We now know how to read data from the Redux store into our components. But, how can we dispatch actions to the store from a component? We know that outside of React, we can call `store.dispatch(action)`. Since we don't have access to the store in a component file, we need some way to get access to just `dispatch` by itself inside our components.
+
+The React-Redux [**`useDispatch` hook**](https://react-redux.js.org/api/hooks#usedispatch) gives us the store's `dispatch` method as its result. (In fact, the implementation of the hook really is `return store.dispatch`.)
+
+So, we can call `const dispatch = useDispatch()` in any component that needs to dispatch actions, and then call `dispatch(someAction)` as needed.
+
+Let's try that in our `<Header>` component. We know that we need to let the user type in some text for a new todo item, and then dispatch a `{type: 'todos/todoAdded'}` action containing that text.
+
+We'll write a typical React form component that uses ["controlled inputs"](https://reactjs.org/docs/forms.html#controlled-components) to let the user type in the form text. Then, when the user presses the Enter key specifically, we'll dispatch that action.
+
+```jsx title="src/features/header/Header.js"
+import React, { useState } from 'react'
+// highlight-next-line
+import { useDispatch } from 'react-redux'
+
+function Header() {
+  const [text, setText] = useState('')
+  // highlight-next-line
+  const dispatch = useDispatch()
+
+  const handleChange = e => setText(e.target.value.trim())
+
+  const handleKeyDown = e => {
+    const text = e.target.value.trim()
+    // If the user pressed the Enter key:
+    if (e.which === 13) {
+      // highlight-start
+      // Dispatch the "todo added" action with this text
+      dispatch({ type: 'todos/todoAdded', payload: text })
+      // highlight-end
+      // And clear out the text input
+      setText('')
+    }
+  }
+
+  return (
+    <input
+      type="text"
+      placeholder="What needs to be done?"
+      autoFocus={true}
+      value={text}
+      onChange={handleChange}
+      onKeyDown={handleSubmit}
+    />
+  )
+}
+```
+
+### Passing the Store with `Provider`
+
+Our components can now read state from the store, and dispatch actions to the store. However, we're still missing something. Where and how are the React-Redux hooks finding the right Redux store? A hook is just a function, so it can't automatically import a store from `store.js` by itself.
+
+Instead, we have to specifically tell React-Redux what store we want to use in our components. We do this by **rendering a `<Provider>` component around our entire `<App>`, and passing the Redux store as a prop to `<Provider>`**. After we do this once, every component in the application will be able to access the Redux store if needs to.
+
+Let's add that to our main `index.js` file:
+
+```jsx title="src/index.js"
+import React from 'react'
+import ReactDOM from 'react-dom'
+// highlight-next-line
+import { Provider } from 'react-redux'
+
+import App from './App'
+import store from './store'
+
+ReactDOM.render(
+  // highlight-start
+  // Render a `<Provider>` around the entire `<App>`,
+  // and pass the Redux store to as a prop
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  // highlight-end
+  document.getElementById('root')
+)
+```
+
+That covers the key parts of using React-Redux with React:
+
+- Call the `useSelector` hook to read data in React components
+- Call the `useDispatch` hook to dispatch actions in React components
+- Put `<Provider store={store}>` around your entire `<App>` component so that other components can talk to the store
+
+Now, let's look at a couple more ways we can use these together in our todo app.
+
+## React-Redux Patterns
+
+### Using Multiple Selectors in a Component
+
+Right now only our `<TodoList>` component is reading data from the store. Let's see what it might look like for the `<Footer>` component to start reading some data as well.
+
+The `<Footer>` needs to know three different pieces of information:
+
+- How many completed todos there are
+- The current "status" filter value
+- The current list of selected "color" category filters
+
+How can we read these values into the component?
+
+**We can call `useSelector` multiple times within one component**. In fact, this is actually a good idea - **each call to `useSelector` should always return the smallest amount of state possible**.
+
+We already saw how to write a selector that counts completed todos earlier. For the filters values, both the status filter value and the color filters values live in the `state.filters` slice. Since this component needs both of them, we can select the entire `state.filters` object.
+
+As we mentioned earlier, we could put all the input handling directly into `<Footer>`, or we could split it out into separate components like `<StatusFilter>`. To keep this explanation shorter, we'll skip the exact details of writing the input handling and assume we've got smaller separate components that just need some data and change handler callbacks.
+
+Given that assumption, the React-Redux parts of the component might look like this:
+
+```jsx title="src/features/footer/Footer.js"
+import React from 'react'
+import { useSelector, useDispatch } from 'react'
+
+export default function Footer() {
+  const totalCompletedTodos = useSelector(state => {
+    const completedTodos = state.todos.filter(todo => todo.completed)
+    return completedTodos.length
+  })
+
+  const { status, colors } = useSelector(state => state.filters)
+
+  const statusFilterChanged = filterValue => {
+    dispatch({ type: 'filters/statusFilterChanged', payload: filterValue })
+  }
+
+  const colorFilterChanged = (color, changeType) => {
+    dispatch({
+      type: 'filters/colorFilterChanged',
+      payload: { color, changeType }
+    })
+  }
+
+  return (
+    <div>
+      <CompletedTodosCounter count={totalCompletedTodos} />
+      <StatusFilter value={status} onChange={statusFilterChanged} />
+      <ColorFilter value={colors} onChange={colorFilterChanged} />
+    </div>
+  )
+}
+```
+
+### Selecting Data in List Items by ID
+
+Currently, our `<TodoList>` is reading the entire `state.todos` array and passing the actual todo objects as a prop to each `<TodoListItem>` component.
+
+This works, but there's a potential performance problem.
+
+- Changing one todo object means creating copies of both the todo and the `state.todos` array, and each copy is a new reference in memory
+- When `useSelector` sees a new reference as its result, it forces its component to re-render
+- So, any time _one_ todo object is updated (like clicking it to toggle its completed status), the whole `<TodoList>` parent component will re-render
+- Then, [because React re-renders all child components recursively by default](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/#standard-render-behavior), it also means that _all_ of the `<TodoListItem>` components will re-render, even though most of them didn't actually change at all!
+
+Re-rendering components isn't bad - that's how React knows if it needs to update the DOM. But, re-rendering lots of components when nothing has actually changed can potentially get too slow if the list is too big.
+
+There's a couple ways we could try to fix this. One option is to [wrap all the `<TodoListItem>` components in `React.memo()`](https://reactjs.org/docs/react-api.html#reactmemo), so that they only re-render when their props actually change. This is often a good choice for improving performance, but it does require that the child component always receives the same props until something really changes. Since each `<TodoListItem>` component is just receiving a todo item as a prop, only one of them should actually get a changed prop and have to re-render.
+
+Another option is to have the `<TodoList>` component only read an array of todo IDs from the store, and pass those IDs as props to the child `<TodoListItem>` components. Then, each `<TodoListItem>` can use that ID to find the right todo object it needs.
+
+Let's give that a shot.
+
+```jsx title="src/features/todos/TodoList.js"
+import React from 'react'
+import { useSelector } from 'react-redux'
+import TodoListItem from './TodoListItem'
+
+// highlight-next-line
+const selectTodoIds = state => state.todos.map(todo => todo.id)
+
+export function TodoList() {
+  // highlight-next-line
+  const todoIds = useSelector(selectTodoIds)
+
+  const todoListItems = todoIds.map(todoId => {
+    // highlight-next-line
+    return <TodoListItem key={todoId} id={todoId} />
+  })
+
+  return <ul className="todo-list">{todoListItems}</ul>
+}
+```
+
+This time, we only select an array of todo IDs from the store in `<TodoList>`, and we pass each `todoId` as an `id` prop to the child `<TodoListItem>`s.
+
+Then, in `<TodoListItem>`, we can use that ID value to read our todo item:
+
+```jsx title="src/features/todos/TodoListItem.js"
+import React from 'react'
+import { useSelector } from 'react-redux'
+
+// highlight-next-line
+const selectTodoById = (state, todoId) => {
+  return state.todos.find(todo => todo.id === todoId)
+}
+
+// Destructure `props.id`, since we just need the ID value
+export default function TodoListItem({ id }) {
+  // Call our `selectTodoById` with the state _and_ the ID value
+  const todo = useSelector(state => selectTodoById(state, id))
+
+  // Render the todo UI content
+  return <li>{todo.text}</li>
+}
+```
+
+There's a problem with this, though. We said earlier that **returning new array references in selectors causes components to re-render every time**, and right now we're returning a new IDs array in `<TodoListItem>`. In this case, the _contents_ of the IDs array should be the same if we're just toggling a todo, because we're still showing the same todo items - we haven't added or deleted any. But, the array _containing_ those IDs is a new reference, so `<TodoList>` will re-render when it really doesn't need to.
+
+One possible solution to this is to change how `useSelector` compares its values to see if they've changed. `useSelector` can take a comparison function as its second argument. A comparison function is called with the old and new values, and returns `true` if they're considered the same. If they're the same, `useSelector` won't make the component re-render.
+
+React-Redux has a `shallowEqual` comparison function we can use to check if the items _inside_ the array are still the same. Let's try that:
+
+```jsx title="src/features/todos/TodoList.js"
+import React from 'react'
+// highlight-next-line
+import { useSelector, shallowEqual } from 'react-redux'
+import TodoListItem from './TodoListItem'
+
+const selectTodoIds = state => state.todos.map(todo => todo.id)
+
+export function TodoList() {
+  // highlight-next-line
+  const todoIds = useSelector(selectTodoIds, shallowEqual)
+
+  const todoListItems = todoIds.map(todoId => {
+    return <TodoListItem key={todoId} id={todoId} />
+  })
+
+  return <ul className="todo-list">{todoListItems}</ul>
+}
+```
+
+Now, if we toggle a todo item, the list of IDs will be considered the same, and `<TodoList>` won't have to re-render. The one `<TodoListItem>` will get an updated todo object and re-render, but all the rest of them will still have the existing todo object and not have to re-render at all.
+
+As mentioned earlier, you can also use a specialized kind of selector function called [a "memoized selector"](part-7-standard-patterns.md) to help improve component rendering, and we'll look at how to use those in another section.
+
+## What You've Learned
+
+We now have a working todo app! Our app creates a store, passes the store to the React UI layer using `<Provider>`, and then calls `useSelector` and `useDispatch` to talk to the store in our React components.
+
+Let's see how the app looks now, including the components and sections we skipped to keep this shorter:
+
+**TODO CodeSandbox here**
+
+:::tip
+
+- **Redux stores can be used with any UI layer**
+  - UI code always subscribes to the store, gets the latest state, and redraws itself
+- **React-Redux is the official Redux UI bindings library for React**
+  - React-Redux is installed as a separate `react-redux` package
+- **The `useSelector` hook lets React components read data from the store**
+  - Selector functions take the entire store `state` as an argument, and return a value based on that state
+  - `useSelector` calls its selector function and returns the result from the selector
+  - `useSelector` subscribes to the store, and re-runs the selector each time an action is dispatched.
+  - Whenever the selector result changes, `useSelector` forces the component to re-render with the new data
+- **The `useDispatch` hook lets React components dispatch actions to the store**
+  - `useDispatch` returns the actual `store.dispatch` function
+  - You can call `dispatch(action)` as needed inside your components
+- **The `<Provider>` component makes the store available to other React components**
+  - Render `<Provider store={store}>` around your entire `<App>`
+
+:::
+
+## What's Next?
+
+Now that our UI is working, it's time to see how to make our Redux app talk to a server. In [Part 6: Async Logic](./part-6-async-logic.md), we'll talk about how asynchronous logic like timeouts and AJAX calls fit into the Redux data flow.

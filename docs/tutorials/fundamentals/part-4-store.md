@@ -564,4 +564,4 @@ Let's recap what we talked about:
 
 We now have a working Redux store that can run our reducers and update the state when we dispatch actions.
 
-However, every app needs a user interface to display the data and let the user do something useful. In [Part 5](./part-5-ui-and-react.md), we'll see how the Redux store works with a UI, and specifically see how Redux can work together with React.
+However, every app needs a user interface to display the data and let the user do something useful. In [Part 5: UI and React](./part-5-ui-and-react.md), we'll see how the Redux store works with a UI, and specifically see how Redux can work together with React.

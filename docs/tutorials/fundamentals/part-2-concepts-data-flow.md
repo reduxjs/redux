@@ -357,4 +357,4 @@ With that in mind, let's review what we've learned so far:
 
 You should now be familiar with the key concepts and terms that describe the different parts of a Redux app.
 
-Now, let's see how those pieces work together as we start building a new Redux application in [Part 3](./part-3-state-actions-reducers).
+Now, let's see how those pieces work together as we start building a new Redux application in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers).

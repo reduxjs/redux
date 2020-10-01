@@ -308,5 +308,5 @@ With that in mind, let's review what we've learned so far:
 
 ## What's Next?
 
-Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2](./part-2-concepts-data-flow.md),
+Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2: Concepts and Data Flow](./part-2-concepts-data-flow.md),
 where we'll look at how data flows through a Redux app in more detail.

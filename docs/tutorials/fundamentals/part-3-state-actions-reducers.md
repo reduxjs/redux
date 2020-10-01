@@ -702,4 +702,4 @@ State, Actions, and Reducers are the building blocks of Redux. Every Redux app h
 We now have some reducer logic that will update our state, but those reducers won't do anything by themselves. They need
 to be put inside a Redux store, which can call the reducer code with actions when something has happened.
 
-In [Part 4](./part-4-store.md), we'll see how to create a Redux store and run our reducer logic.
+In [Part 4: Store](./part-4-store.md), we'll see how to create a Redux store and run our reducer logic.
