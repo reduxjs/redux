@@ -298,6 +298,31 @@ Now, let's look at a couple more ways we can use these together in our todo app.
 
 ## React-Redux Patterns
 
+### Global State, Component State, and Forms
+
+By now you might be wondering, "Do I always have to put all my app's state into the Redux store?"
+
+The answer is **NO. Global state that is needed across the app should go in the Redux store. State that's only needed in one place should be kept in component state.**
+
+A good example of this is the `<Header>` component we wrote earlier. We _could_ keep the current text input string in the Redux store, by dispatching an action in the input's `onChange` handler and keeping it in our reducer. But, that doesn't give us any benefit. The only place that text string is used is here, in the `<Header>` component.
+
+So, it makes sense to keep that value in a `useState` hook here in the `<Header>` component.
+
+Similarly, if we had a boolean flag called `isDropdownOpen`, no other components in the app would care about that - it should really stay local to this component.
+
+**In a React + Redux app, your global state should go in the Redux store, and your local state should stay in React components.**
+
+If you're not sure where to put something, here are some common rules of thumb for determining what kind of data should be put into Redux:
+
+- Do other parts of the application care about this data?
+- Do you need to be able to create further derived data based on this original data?
+- Is the same data being used to drive multiple components?
+- Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
+- Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
+- Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
+
+This is also a good example of how to think about forms in Redux in general. **Most form state probably shouldn't be kept in Redux.** Instead, keep the data in your form components as you're editing it, and then dispatch Redux actions to update the store when the user is done.
+
 ### Using Multiple Selectors in a Component
 
 Right now only our `<TodoList>` component is reading data from the store. Let's see what it might look like for the `<Footer>` component to start reading some data as well.
@@ -343,7 +368,7 @@ export default function Footer() {
 
   return (
     <div>
-      <CompletedTodosCounter count={totalCompletedTodos} />
+      <CompletedTodos count={totalCompletedTodos} />
       <StatusFilter value={status} onChange={statusFilterChanged} />
       <ColorFilter value={colors} onChange={colorFilterChanged} />
     </div>
@@ -399,14 +424,17 @@ Then, in `<TodoListItem>`, we can use that ID value to read our todo item:
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-// highlight-next-line
+// highlight-start
 const selectTodoById = (state, todoId) => {
   return state.todos.find(todo => todo.id === todoId)
 }
+// highlight-end
 
 // Destructure `props.id`, since we just need the ID value
+// highlight-next-line
 export default function TodoListItem({ id }) {
   // Call our `selectTodoById` with the state _and_ the ID value
+  // highlight-next-line
   const todo = useSelector(state => selectTodoById(state, id))
 
   // Render the todo UI content
@@ -429,6 +457,7 @@ import TodoListItem from './TodoListItem'
 const selectTodoIds = state => state.todos.map(todo => todo.id)
 
 export function TodoList() {
+  // Use "shallow equality" comparisons to decide if the component should re-render
   // highlight-next-line
   const todoIds = useSelector(selectTodoIds, shallowEqual)
 
