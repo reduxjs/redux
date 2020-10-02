@@ -243,7 +243,7 @@ import { Middleware } from 'redux'
 import { RootState } from '../store'
 
 export const exampleMiddleware: Middleware<
-  {},
+  {}, // legacy type parameter added to satisfy interface signature
   RootState
 > = store => next => action => {
   // code here
