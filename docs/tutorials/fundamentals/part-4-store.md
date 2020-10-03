@@ -94,17 +94,22 @@ an empty array. That will make the output from this example a bit easier to read
 :::
 
 ```js title="src/index.js"
+// Omit existing React imports
+
 import store from './store'
 
 // Log the initial state
 // highlight-next-line
-console.log(store.getState())
+console.log('Initial state: ', store.getState())
 // {todos: [....], filters: {status, colors}}
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-// highlight-next-line
-const unsubscribe = store.subscribe(() => console.log(store.getState()))
+// highlight-start
+const unsubscribe = store.subscribe(() =>
+  console.log('State after dispatch: ', store.getState())
+)
+// highlight-end
 
 // Now, dispatch some actions
 
@@ -130,6 +135,8 @@ unsubscribe()
 // Dispatch one more action to see what happens
 
 store.dispatch({ type: 'todos/todoAdded', payload: 'Try creating a store' })
+
+// Omit existing React rendering logic
 ```
 
 Remember, every time we call `store.dispatch(action)`:
@@ -143,7 +150,7 @@ Remember, every time we call `store.dispatch(action)`:
 If we look at the console log output from that example, you can see how the
 Redux state changes as each action was dispatched:
 
-**TODO console log image here**
+![Logged Redux state after dispatching actions](/img/tutorials/fundamentals/initial-state-updates.png)
 
 Notice that our app did _not_ log anything from the last action. That's because we removed the listener callback when we called `unsubscribe()`, so nothing else ran when after the action was dispatched.
 
@@ -163,7 +170,7 @@ test(('Toggles a todo based on id') => {
 
   const action = { type: 'todos/todoToggled', payload: 0 }
   const result = todosReducer(initialState, action)
-  expect(result.completed).toBe(true)
+  expect(result[0].completed).toBe(true)
 })
 ```
 
@@ -173,7 +180,7 @@ test(('Toggles a todo based on id') => {
 
 It might be helpful to take a peek inside a Redux store to see how it works. Here's a miniature example of a working Redux store, in about 25 lines of code:
 
-```js
+```js title="miniReduxStoreExample.js"
 function createStore(reducer, preloadedState) {
   let state = preloadedState
   const listeners = []
@@ -234,8 +241,11 @@ import { createStore } from 'redux'
 import rootReducer from './reducer'
 import { sayHiOnDispatch } from './exampleAddons/enhancers'
 
-// highlight-next-line
-const store = createStore(rootReducer, undefined, sayHiOnDispatch)
+// highlight-start
+console.log('Dispatching action')
+store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
+console.log('Dispatch complete')
+// highlight-end
 
 export default store
 ```
@@ -250,7 +260,9 @@ import store from './store'
 store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
 ```
 
-Now look at the console. You should see `'Hi!'` logged there.
+Now look at the console. You should see `'Hi!'` logged there, in between the other two log statements:
+
+![sayHi store enhancer logging](/img/tutorials/fundamentals/sayhi-enhancer-logging.png)
 
 The `sayHiOnDispatch` enhancer wrapped the original `store.dispatch` function with its own specialized version of `dispatch`. When we called `store.dispatch()`, we were actually calling the the wrapper function from `sayHiOnDispatch`, which called the original and then printed 'Hi'.
 
@@ -286,15 +298,25 @@ import store from './store'
 store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
 // log: 'Hi!'
 
-console.log(store.getState())
+console.log('State after dispatch: ', store.getState())
 // log: {todos: [...], filters: {status, colors}, meaningOfLife: 42}
 ```
+
+And the logged output looks like this:
+
+![meaningOfLife store enhancer logging](/img/tutorials/fundamentals/meaningOfLife-enhancer-logging.png)
+
+So, we can see that both enhancers are modifying the behavior of the store at the same time. `sayHiOnDispatch` has changed how `dispatch` works, and `includeMeaningOfLife` has changed how `getState` works.
 
 Store enhancers are a very powerful way to modify the store, and almost all Redux apps will include at least one enhancer when setting up the store.
 
 :::tip
 
-If you don't have any `preloadedState` to pass in, you can pass the `enhancer` as the second argument instead.
+If you don't have any `preloadedState` to pass in, you can pass the `enhancer` as the second argument instead:
+
+```js
+const store = createStore(rootReducer, storeEnhancer)
+```
 
 :::
 
@@ -331,6 +353,8 @@ const store = createStore(rootReducer, middlewareEnhancer)
 export default store
 ```
 
+As their names say, each of these middleware will print a number when an action is dispatched.
+
 What happens if we dispatch now?
 
 ```js title="src/index.js"
@@ -341,6 +365,12 @@ store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
 // log: '2'
 // log: '3'
 ```
+
+And we can see the output in the console:
+
+![print middleware logging](/img/tutorials/fundamentals/print-middleware-logging.png)
+
+So how does that work?
 
 **Middleware form a pipeline around the store's `dispatch` method**. When we call `store.dispatch(action)`, we're _actually_ calling the first middleware in the pipeline. That middleware can then do anything it wants when it sees the action. Typically, a middleware will check to see if the action is a specific type that it cares about, much like a reducer would. If it's the right type, the middleware might run some custom logic. Otherwise, it just passes the action to the next middleware in the pipeline.
 
@@ -412,6 +442,12 @@ We're still nesting those three functions together, and returning each function,
 ### Your First Custom Middleware
 
 Let's say we want to add some logging to our application. We'd like to see the contents of each action in the console when it's dispatched, and we'd like to see what the state is after the action has been handled by the reducers.
+
+:::info
+
+These example middleware aren't specifically part of the actual todo app, but you can try adding them to your project to see what happens when you use them.
+
+:::
 
 We can write a small middleware that will log that information to the console for us:
 
@@ -500,21 +536,25 @@ The [Redux DevTools Extension docs](https://github.com/zalmoxisus/redux-devtools
 
 Here's how that looks:
 
-```js
+```js title="src/store.js"
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import rootReducer from './reducer'
+import { print1, print2, print3 } from './exampleAddons/middleware'
 
 const composedEnhancer = composeWithDevTools(
-  applyMiddleware(middleware1, middleware2, middleware3)
+  // EXAMPLE: Add whatever middleware you actually want to use here
+  applyMiddleware(print1, print1, print1)
   // other store enhancers if any
 )
 
-const store = createStore(reducer, composedEnhancer)
+const store = createStore(rootReducer, composedEnhancer)
+export default store
 ```
 
-Now, open up the Redux DevTools tab in the browser's DevTools window. You should see something that looks like this:
+Make sure that `index.js` is still dispatching an action after importing the store. Now, open up the Redux DevTools tab in the browser's DevTools window. You should see something that looks like this:
 
-**TODO DevTools screenshot here**
+![Redux DevTools Extension: action tab](/img/tutorials/fundamentals/devtools-action-tab.png)
 
 There's a list of dispatched actions on the left. If we click one of them, the right pane shows several tabs:
 
@@ -522,6 +562,12 @@ There's a list of dispatched actions on the left. If we click one of them, the r
 - The entire Redux state as it looked after the reducer ran
 - The diff between the previous state and this state
 - If enabled, the function stack trace leading back to the line of code that called `store.dispatch()` in the first place
+
+Here's what the "State" and "Diff" tabs look like after we dispatched that "add todo" action:
+
+![Redux DevTools Extension: state tab](/img/tutorials/fundamentals/devtools-state-tab.png)
+
+![Redux DevTools Extension: diff tab](/img/tutorials/fundamentals/devtools-diff-tab.png)
 
 These are very powerful tools that can help us debug our apps and unerstand exactly what's happening inside.
 
