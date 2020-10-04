@@ -112,11 +112,19 @@ Based on [the list of business requirements for the app](./part-3-state-actions-
     - **`<TodoListItem>`**: a single todo list item, with a checkbox that can be clicked to toggle the todo's completed status, and a color category selector
   - **`<Footer>`**: Shows the number of active todos and controls for filtering the list based on completed status and color category
 
-Beyond this basic component structure, we could potentially divide the components up in several different ways. For example, the `<Footer>` component _could_ be just one component, or it could have multiple smaller components inside like `<CompletedTodos>`, `<StatusFilter>`, and `<ColorFilter>`. There's no single right way to divide these, and you'll find that it may be better to write larger components or split things into many smaller components depending on your situation.
+Beyond this basic component structure, we could potentially divide the components up in several different ways. For example, the `<Footer>` component _could_ be just one component, or it could have multiple smaller components inside like `<CompletedTodos>`, `<StatusFilter>`, and `<ColorFilters>`. There's no single right way to divide these, and you'll find that it may be better to write larger components or split things into many smaller components depending on your situation.
 
-For now, we'll start with just this small list of components to keep things easier to follow. On that note, since we assume that [you already know React](https://reactjs.org), we're going to skip past the details of how to write the layout code for these components and focus on how to actually use the React-Redux library in your React components
+For now, we'll start with just this small list of components to keep things easier to follow. On that note, since we assume that [you already know React](https://reactjs.org), **we're going to skip past the details of how to write the layout code for these components and focus on how to actually use the React-Redux library in your React components**.
 
-You can see [the complete source code for the app in this CodeSandbox **TODO create sandbox**](.)
+Here's the initial React UI of this app looks like before we start adding any Redux-related logic:
+
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-3-initialUI/?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 ### Reading State from the Store with `useSelector`
 
@@ -158,17 +166,19 @@ import TodoListItem from './TodoListItem'
 // highlight-next-line
 const selectTodos = state => state.todos
 
-export function TodoList() {
+const TodoList = () => {
   // highlight-next-line
   const todos = useSelector(selectTodos)
 
   // since `todos` is an array, we can loop over it
-  const todoListItems = todos.map(todo => {
+  const renderedListItems = todos.map(todo => {
     return <TodoListItem key={todo.id} todo={todo} />
   })
 
-  return <ul className="todo-list">{todoListItems}</ul>
+  return <ul className="todo-list">{renderedListItems}</ul>
 }
+
+export default TodoList
 ```
 
 The first time the `<TodoList>` component renders, the `useSelector` hook will call `selectTodos` and pass in the _entire_ Redux state object. Whatever the selector returns will be returned by the hook to your component. So, the `const todos` in our component will end up holding the same `state.todos` array inside our Redux store state.
@@ -187,7 +197,7 @@ However, there's a very important thing to remember here:
 
 :::
 
-This selector will cause the component to _always_ re-render:
+For example, passing this selector to `useSelector` will cause the component to _always_ re-render, because `array.map()` always returns a new array reference:
 
 ```js
 // Bad: always returning a new reference
@@ -226,7 +236,7 @@ import React, { useState } from 'react'
 // highlight-next-line
 import { useDispatch } from 'react-redux'
 
-function Header() {
+const Header = () => {
   const [text, setText] = useState('')
   // highlight-next-line
   const dispatch = useDispatch()
@@ -257,6 +267,8 @@ function Header() {
     />
   )
 }
+
+export default Header
 ```
 
 ### Passing the Store with `Provider`
@@ -280,9 +292,11 @@ ReactDOM.render(
   // highlight-start
   // Render a `<Provider>` around the entire `<App>`,
   // and pass the Redux store to as a prop
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
   // highlight-end
   document.getElementById('root')
 )
@@ -293,6 +307,16 @@ That covers the key parts of using React-Redux with React:
 - Call the `useSelector` hook to read data in React components
 - Call the `useDispatch` hook to dispatch actions in React components
 - Put `<Provider store={store}>` around your entire `<App>` component so that other components can talk to the store
+
+We should now be able to actually interact with the app! Here's the working UI so far:
+
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-4-initialHooks/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 Now, let's look at a couple more ways we can use these together in our todo app.
 
@@ -345,35 +369,42 @@ Given that assumption, the React-Redux parts of the component might look like th
 
 ```jsx title="src/features/footer/Footer.js"
 import React from 'react'
-import { useSelector, useDispatch } from 'react'
+// highlight-next-line
+import { useSelector } from 'react-redux'
 
-export default function Footer() {
-  const totalCompletedTodos = useSelector(state => {
-    const completedTodos = state.todos.filter(todo => todo.completed)
-    return completedTodos.length
+import { availableColors, capitalize } from '../filters/colors'
+import { StatusFilters } from '../filters/filtersSlice'
+
+// Omit other footer components
+
+const Footer = () => {
+  // highlight-start
+  const todosRemaining = useSelector(state => {
+    const uncompletedTodos = state.todos.filter(todo => !todo.completed)
+    return uncompletedTodos.length
   })
 
   const { status, colors } = useSelector(state => state.filters)
+  // highlight-end
 
-  const statusFilterChanged = filterValue => {
-    dispatch({ type: 'filters/statusFilterChanged', payload: filterValue })
-  }
-
-  const colorFilterChanged = (color, changeType) => {
-    dispatch({
-      type: 'filters/colorFilterChanged',
-      payload: { color, changeType }
-    })
-  }
+  // omit placeholder change handlers
 
   return (
-    <div>
-      <CompletedTodos count={totalCompletedTodos} />
-      <StatusFilter value={status} onChange={statusFilterChanged} />
-      <ColorFilter value={colors} onChange={colorFilterChanged} />
-    </div>
+    <footer className="footer">
+      <div className="actions">
+        <h5>Actions</h5>
+        <button className="button">Mark All Completed</button>
+        <button className="button">Clear Completed</button>
+      </div>
+
+      <RemainingTodos count={todosRemaining} />
+      <StatusFilter value={status} onChange={onStatusChange} />
+      <ColorFilters value={colors} onChange={onColorChange} />
+    </footer>
   )
 }
+
+export default Footer
 ```
 
 ### Selecting Data in List Items by ID
@@ -403,26 +434,29 @@ import TodoListItem from './TodoListItem'
 // highlight-next-line
 const selectTodoIds = state => state.todos.map(todo => todo.id)
 
-export function TodoList() {
+const TodoList = () => {
   // highlight-next-line
   const todoIds = useSelector(selectTodoIds)
 
-  const todoListItems = todoIds.map(todoId => {
+  const renderedListItems = todoIds.map(todoId => {
     // highlight-next-line
     return <TodoListItem key={todoId} id={todoId} />
   })
 
-  return <ul className="todo-list">{todoListItems}</ul>
+  return <ul className="todo-list">{renderedListItems}</ul>
 }
 ```
 
 This time, we only select an array of todo IDs from the store in `<TodoList>`, and we pass each `todoId` as an `id` prop to the child `<TodoListItem>`s.
 
-Then, in `<TodoListItem>`, we can use that ID value to read our todo item:
+Then, in `<TodoListItem>`, we can use that ID value to read our todo item. We can also update `<TodoListItem>` to dispatch the "toggled" action based on the todo's ID.
 
 ```jsx title="src/features/todos/TodoListItem.js"
 import React from 'react'
-import { useSelector } from 'react-redux'
+// highlight-next-line
+import { useSelector, useDispatch } from 'react-redux'
+
+import { availableColors, capitalize } from '../filters/colors'
 
 // highlight-start
 const selectTodoById = (state, todoId) => {
@@ -431,15 +465,40 @@ const selectTodoById = (state, todoId) => {
 // highlight-end
 
 // Destructure `props.id`, since we just need the ID value
-// highlight-next-line
-export default function TodoListItem({ id }) {
+const TodoListItem = ({ id }) => {
   // Call our `selectTodoById` with the state _and_ the ID value
   // highlight-next-line
   const todo = useSelector(state => selectTodoById(state, id))
+  const { text, completed, color } = todo
 
-  // Render the todo UI content
-  return <li>{todo.text}</li>
+  // highlight-next-line
+  const dispatch = useDispatch()
+
+  // highlight-start
+  const handleCompletedChanged = () => {
+    dispatch({ type: 'todos/todoToggled', payload: todo.id })
+  }
+  // highlight-end
+
+  // omit other change handlers
+  // omit other list item rendering logic and contents
+
+  return (
+    <li>
+      <div className="view">
+        <input
+          className="toggle"
+          type="checkbox"
+          checked={completed}
+          onChange={handleCompletedChanged}
+        />
+        <div className="todo-text">{text}</div>
+      </div>
+    </li>
+  )
 }
+
+export default TodoListItem
 ```
 
 There's a problem with this, though. We said earlier that **returning new array references in selectors causes components to re-render every time**, and right now we're returning a new IDs array in `<TodoListItem>`. In this case, the _contents_ of the IDs array should be the same if we're just toggling a todo, because we're still showing the same todo items - we haven't added or deleted any. But, the array _containing_ those IDs is a new reference, so `<TodoList>` will re-render when it really doesn't need to.
@@ -454,18 +513,18 @@ import React from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import TodoListItem from './TodoListItem'
 
+// highlight-next-line
 const selectTodoIds = state => state.todos.map(todo => todo.id)
 
-export function TodoList() {
-  // Use "shallow equality" comparisons to decide if the component should re-render
+const TodoList = () => {
   // highlight-next-line
   const todoIds = useSelector(selectTodoIds, shallowEqual)
 
-  const todoListItems = todoIds.map(todoId => {
+  const renderedListItems = todoIds.map(todoId => {
     return <TodoListItem key={todoId} id={todoId} />
   })
 
-  return <ul className="todo-list">{todoListItems}</ul>
+  return <ul className="todo-list">{renderedListItems}</ul>
 }
 ```
 
@@ -477,9 +536,26 @@ As mentioned earlier, you can also use a specialized kind of selector function c
 
 We now have a working todo app! Our app creates a store, passes the store to the React UI layer using `<Provider>`, and then calls `useSelector` and `useDispatch` to talk to the store in our React components.
 
+:::info
+
+Try implementing the rest of the missing UI features on your own! Here's a list of the things you'll need to add:
+
+- In `<TodoListItem>` component, use the `useDispatch` hook to dispatch actions to for changing the color category and deleting the todo
+- In `<Footer>`, use the `useDispatch` hook to dispatch actions for marking all todos as completed, clearing completed todos, and changing the filter values.
+
+We'll cover implementing the filters in [Part 7](./part-7-standard-patterns.md).
+
+:::
+
 Let's see how the app looks now, including the components and sections we skipped to keep this shorter:
 
-**TODO CodeSandbox here**
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 :::tip
 

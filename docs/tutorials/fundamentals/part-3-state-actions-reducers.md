@@ -42,25 +42,17 @@ For this tutorial, we've created a pre-configured starter project that already h
 
 To get started, you can open and fork this CodeSandbox:
 
-**TODO** Create actual example app, repo, and CodeSandbox
-
-<!--
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark"
-  title="redux-quick-start-example-app"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
--->
 
-You can also [clone the same project from this Github repo **TODO CREATE NEW EXAMPLE REPO**](.). After cloning the repo, you can install the tools for the project with `npm install`, and start it with `npm start`.
+You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-fundamentals-example-app). After cloning the repo, you can install the tools for the project with `npm install`, and start it with `npm start`.
 
-<!--
-
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/tutorial-steps).
-
--->
+If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps).
 
 #### Creating a New Redux + React Project
 
@@ -122,7 +114,7 @@ Let's start by figuring out the initial business requirements for this applicati
   - A list of all the existing todo items
   - A footer section that shows the number of non-completed todos, and shows filtering options
 - Todo list items should have a checkbox that toggles their "completed" status. We should also be able to add a color-coded
-  category tag for a predefined list of colors.
+  category tag for a predefined list of colors, and delete todo items.
 - The counter should pluralize the number of active todos: "0 items", "1 item", "3 items", etc
 - There should be buttons to mark all todos as completed, and to clear all completed todos by removing them
 - There should be to ways to filter the displayed todos in the list:
@@ -130,6 +122,10 @@ Let's start by figuring out the initial business requirements for this applicati
   - Filtering based on selecting one or more colors, and showing any todos whose tag that match those colors
 
 We'll add some more requirements later on, but this is enough to get us started.
+
+The end goal is an app that should look like this:
+
+![Example todo app screenshot](/img/tutorials/fundamentals/todos-app-screenshot.png)
 
 ### Designing the State Values
 
@@ -206,6 +202,8 @@ come up with a list of some of the actions that describe what's happening:
 
 - Add a new todo entry based on the text the user entered
 - Toggle the completed status of a todo
+- Select a color category for a todo
+- Delete a todo
 - Mark all todos as completed
 - Clear all completed todos
 - Choose a different "completed" filter value
@@ -224,8 +222,10 @@ Based on that list of things that can happen, we can create a list of actions th
 
 - `{type: 'todos/todoAdded', payload: todoText}`
 - `{type: 'todos/todoToggled', payload: todoId}`
+- `{type: 'todos/colorSelected, payload: {todoId, color}}`
+- `{type: 'todos/todoDeleted', payload: todoId}`
 - `{type: 'todos/allCompleted'}`
-- `{type: 'todos/clearedCompleted'}`
+- `{type: 'todos/completedCleared'}`
 - `{type: 'filters/statusFilterChanged', payload: filterValue}`
 - `{type: 'filters/colorFilterChanged', payload: {color, changeType}}`
 
@@ -678,7 +678,15 @@ values are the slice reducer functions that know how to update those slices of t
 
 State, Actions, and Reducers are the building blocks of Redux. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
 
-**TODO CodeSandbox here**
+Here's the contents of our app so far:
+
+<iframe 
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark"
+  title="reduxjs/redux-fundamentals-example-app"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
 
 :::tip
 

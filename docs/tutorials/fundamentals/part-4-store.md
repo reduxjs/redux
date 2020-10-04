@@ -544,7 +544,7 @@ import { print1, print2, print3 } from './exampleAddons/middleware'
 
 const composedEnhancer = composeWithDevTools(
   // EXAMPLE: Add whatever middleware you actually want to use here
-  applyMiddleware(print1, print1, print1)
+  applyMiddleware(print1, print2, print3)
   // other store enhancers if any
 )
 
@@ -577,9 +577,15 @@ As you've seen, the store is the central piece of every Redux application. Store
 
 Let's see how our example app looks now:
 
-**TODO CodeSandbox here**
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-2-storeSetup/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Fstore.js"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
-Let's recap what we talked about:
+And as a reminder, here's what we covered in this section:
 
 :::tip
 
