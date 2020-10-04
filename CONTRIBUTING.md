@@ -70,7 +70,7 @@ npm run test:watch
 
 ### Docs
 
-Improvements to the documentation are always welcome. You can find them in the [`docs`](/website/docs) path. We use [Docusaurus](https://docusaurus.io/) to build our documentation website. The website is published automatically whenever the `master` branch is updated.
+Improvements to the documentation are always welcome. You can find them in the [`docs`](/docs) path. We use [Docusaurus](https://docusaurus.io/) to build our documentation website. The website is published automatically whenever the `master` branch is updated.
 
 ### Examples
 
