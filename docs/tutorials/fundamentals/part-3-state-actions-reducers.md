@@ -332,10 +332,22 @@ We said earlier that **reducers must _always_ follow some special rules**:
 
 - They should only calculate the new state value based on the `state` and `action` arguments
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic or other "side effects", including random values like `Math.random()` or `Date.now()`
+- They must not do any asynchronous logic or other "side effects"
 
-Any function that follows these rules is also known as **"pure" function**, even
-if it's not specifically written as a reducer function.
+:::tip
+
+**A "side effect" is any change to state or behavior that can be seen outside of returning a value from a function**. Some common kinds of side effects are things like:
+
+- Logging a value to the console
+- Saving a file
+- Setting an async timer
+- Making an AJAX HTTP request
+- Modifying some state that exists outside of a function, or mutating arguments to a function
+- Generating random numbers or unique random IDs (such as `Math.random()` or `Date.now()`)
+
+:::
+
+Any function that follows these rules is also known as a **"pure" function**, even if it's not specifically written as a reducer function.
 
 But why are these rules important? There's a few different reasons:
 
