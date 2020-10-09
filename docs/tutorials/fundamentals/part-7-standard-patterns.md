@@ -8,7 +8,7 @@ description: 'The official Fundamentals tutorial for Redux: learn the fundamenta
 
 # Redux Fundamentals, Part 7: Standard Redux Patterns
 
-**TODO** Write this
+**FIXME** Write this
 
 #### Action Creators
 

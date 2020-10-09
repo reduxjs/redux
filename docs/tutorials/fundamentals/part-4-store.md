@@ -241,11 +241,7 @@ import { createStore } from 'redux'
 import rootReducer from './reducer'
 import { sayHiOnDispatch } from './exampleAddons/enhancers'
 
-// highlight-start
-console.log('Dispatching action')
-store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
-console.log('Dispatch complete')
-// highlight-end
+const store = createStore(rootReducer, undefined sayHiOnDispatch)
 
 export default store
 ```
@@ -257,7 +253,11 @@ Next, let's try dispatching an action:
 ```js title="src/index.js"
 import store from './store'
 
+// highlight-start
+console.log('Dispatching action')
 store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
+console.log('Dispatch complete')
+// highlight-end
 ```
 
 Now look at the console. You should see `'Hi!'` logged there, in between the other two log statements:
@@ -488,15 +488,14 @@ console.log(dispatchResult)
 Let's try one more example. Middleware often look for a specific action, and then do something when that action is dispatched. Middleware also have the ability to run async logic inside. We can write a middleware that prints something on a delay when it sees a certain action:
 
 ```js
-const delayedMessageMiddleware = storeAPI => next => action {
+const delayedMessageMiddleware = storeAPI => next => action => {
   if (action.type === 'todos/todoAdded') {
-      setTimeout(() => {
-        console.log('Added a new todo: ', action.payload)
-      }, 1000)
+    setTimeout(() => {
+      console.log('Added a new todo: ', action.payload)
+    }, 1000)
   }
 
   return next(action)
-
 }
 ```
 

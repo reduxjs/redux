@@ -514,7 +514,7 @@ Because of that, **the reducer for a specific section of the Redux app state is 
 
 In our project, create a new `features` folder, and then a `todos` folder inside that. Create a new file named `todosSlice.js`, and let's cut and paste the todo-related initial state over into this file:
 
-```js title="src/features/todos=/todosSlice.js"
+```js title="src/features/todos/todosSlice.js"
 const initialState = [
   { id: 0, text: 'Learn React', completed: true },
   { id: 1, text: 'Learn Redux', completed: false, color: 'purple' },
@@ -540,7 +540,7 @@ This is called **reducer composition**, and it's the fundamental pattern of buil
 
 Here's what the updated reducer looks like after we handle those actions:
 
-```js title="src/features/todos=/todosSlice.js"
+```js title="src/features/todos/todosSlice.js"
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     // highlight-start

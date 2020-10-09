@@ -305,7 +305,7 @@ console.log(currentValue)
 
 ## Core Concepts and Principles
 
-**TODO** Something from the "Core Concepts" and "Three Principles" pages here?
+**FIXME** Something from the "Core Concepts" and "Three Principles" pages here?
 
 ## Redux Application Data Flow
 

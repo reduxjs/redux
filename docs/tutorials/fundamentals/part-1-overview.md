@@ -96,6 +96,8 @@ If you're not sure whether Redux is a good choice for your app, these resources 
 - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 - **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 
+**FIXME Link to Redux vs Context material?**
+
 :::
 
 ### Redux Libraries and Tools
@@ -118,7 +120,7 @@ The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-
 
 Now that you know what Redux is, let's briefly look at the pieces that make up a Redux app and how it works.
 
-**TODO** Need to emphasize that this tutorial talks about the Redux _core_, but we'll get to the other parts later.
+**FIXME** Need to emphasize that this tutorial talks about the Redux _core_, but we'll get to the other parts later.
 
 ### The Redux Store
 
@@ -250,6 +252,8 @@ describe what happened, and **dispatching** them to the store. When we call `sto
 the store runs the reducer, calculates the updated state, and runs the subscribers
 to update the UI.
 
+**FIXME Fix broken `% 2` example in sandbox**
+
 ```js
 // Handle user inputs by "dispatching" action objects,
 // which should describe "what happened" in the app
@@ -265,7 +269,7 @@ document
   .getElementById('incrementIfOdd')
   .addEventListener('click', function () {
     // We can write logic to decide what to do based on the state
-    if (store.getState() % 2 !== 0) {
+    if (store.getState().value % 2 !== 0) {
       store.dispatch({ type: 'counter/incremented' })
     }
   })
