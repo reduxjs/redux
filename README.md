@@ -1,7 +1,7 @@
 # <a href='http://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60' alt='Redux Logo' aria-label='redux.js.org' /></a>
 
 Redux is a predictable state container for JavaScript apps.
-(Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/).)
+(Not to be confused with a WordPress framework – [Redux Framework](https://reduxframework.com/))
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
@@ -20,7 +20,7 @@ It is tiny (2kB, including dependencies).
 npm install @reduxjs/toolkit react-redux
 ```
 
-For more details, see [the Installation docs page](https://redux.js.org/introduction/installation).
+For more details, please see [the Installation docs page](https://redux.js.org/introduction/installation).
 
 ## Documentation
 
@@ -39,12 +39,12 @@ For Offline docs, please see: [devdocs](http://devdocs.io/redux/)
 
 ### Redux Essentials Tutorial
 
-The [**Redux Essentials tutorial**](https://redux.js.org/tutorials/essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches how to use Redux the right way, using our latest recommended APIs and best practices. We recommend starting there.
+The [**Redux Essentials tutorial**](https://redux.js.org/tutorials/essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches how to use Redux the right way, using our latest recommended APIs and best practices. We strongly recommend you to start from there.
 
 ### Additional Tutorials
 
-- The Redux docs [**Basic tutorial**](https://redux.js.org/basics/basic-tutorial) and [**Advanced tutorial**](https://redux.js.org/advanced/advanced-tutorial) are a "bottom-up" tutorial that teaches how Redux works, starting from first principles.
-- The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online. See the complete list of examples in the **[Examples page](https://redux.js.org/introduction/examples)**.
+- The Redux docs [**Basic tutorial**](https://redux.js.org/basics/basic-tutorial) and [**Advanced tutorial**](https://redux.js.org/advanced/advanced-tutorial) are "bottom-up" tutorials that teaches how Redux works by starting from its main principles.
+- The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all the examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online. Please see the complete list of examples in the **[Examples page](https://redux.js.org/introduction/examples)**.
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** and **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** video courses on Egghead.io
 - Redux maintainer Mark Erikson's **["Redux Fundamentals" conference talk](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" workshop slides**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
 - Dave Ceddia's post [**A Complete React Redux Tutorial for Beginners**](https://daveceddia.com/redux-tutorial/)
@@ -54,15 +54,15 @@ The [**Redux Essentials tutorial**](https://redux.js.org/tutorials/essentials/pa
 - The **[Redux FAQ](https://redux.js.org/faq)** answers many common questions about how to use Redux, and the **["Recipes" docs section](https://redux.js.org/recipes/recipe-index)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
 - Redux maintainer Mark Erikson's **["Practical Redux" tutorial series](http://blog.isquaredsoftware.com/series/practical-redux/)** demonstrates real-world intermediate and advanced techniques for working with React and Redux (also available as **[an interactive course on Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).
 - The **[React/Redux links list](https://github.com/markerikson/react-redux-links)** has categorized articles on working with [reducers and selectors](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md), [managing side effects](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md), [Redux architecture and best practices](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md), and more.
-- Our community has created thousands of Redux-related libraries, addons, and tools. The **["Ecosystem" docs page](https://redux.js.org/introduction/ecosystem)** lists our recommendations, and there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.
+- Our community has created thousands of Redux-related libraries, addons, and tools. The **["Ecosystem" docs page](https://redux.js.org/introduction/ecosystem)** lists our recommendations, and also there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.
 
 ### Help and Discussion
 
-The **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** of the **[Reactiflux Discord community](http://www.reactiflux.com)** is our official resource for all questions related to learning and using Redux. Reactiflux is a great place to hang out, ask questions, and learn - come join us!
+The **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** of the **[Reactiflux Discord community](http://www.reactiflux.com)** is our official resource for all questions related to learning and using Redux. Reactiflux is a great place to hang out, ask questions, and learn - please come and join us there!
 
 ## Before Proceeding Further
 
-Redux is a valuable tool for organizing your state, but you should also consider whether it's appropriate for your situation. Don't use Redux just because someone said you should - take some time to understand the potential benefits and tradeoffs of using it.
+Redux is a valuable tool for organizing your state, but you should also consider whether it's appropriate for your situation. Please don't use Redux just because someone said you should - instead, please take some time to understand the potential benefits and tradeoffs of using it.
 
 Here are some suggestions on when it makes sense to use Redux:
 
@@ -70,9 +70,9 @@ Here are some suggestions on when it makes sense to use Redux:
 - You need a single source of truth for your state
 - You find that keeping all your state in a top-level component is no longer sufficient
 
-Yes, these guidelines are subjective and vague, but this is for good reason. The point at which you should integrate Redux into your application is different for every user and different for every application.
+Yes, these guidelines are subjective and vague, but this is for a good reason. The point at which you should integrate Redux into your application is different for every user and different for every application.
 
-> **For more thoughts on how Redux is meant to be used, see:**<br>
+> **For more thoughts on how Redux is meant to be used, please see:**<br>
 >
 > - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**<br>
 > - **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**<br>
@@ -85,14 +85,14 @@ Dan Abramov (author of Redux) wrote Redux while working on his React Europe talk
 
 ## Influences
 
-Redux evolves the ideas of [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
-Even if you haven't used Flux or Elm, Redux only takes a few minutes to get started with.
+Redux evolves the ideas from [Flux](http://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
+Even if you haven't used Flux or Elm, Redux only takes a few minutes to get start with.
 
 ## The Gist
 
 The whole state of your app is stored in an object tree inside a single _store_.
-The only way to change the state tree is to emit an _action_, an object describing what happened.
-To specify how the actions transform the state tree, you write pure _reducers_.
+The only way to change the state tree is to emit an _action_, that is an object describing what happened.
+To specify how the actions transform the state tree, you should write pure _reducers_.
 
 That's it!
 
