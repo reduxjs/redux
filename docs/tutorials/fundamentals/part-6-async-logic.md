@@ -155,9 +155,9 @@ Just like with a normal action, we first need to handle a user event in the appl
 
 Once that dispatched value reaches a middleware, it can make an async call, and then dispatch a real action object when the async call completes.
 
-Earlier, we saw [a diagram that represents the normal synchronous Redux data flow](./part-2-concepts-data-flow.md#redux-application-data-flow). When we add async logic to a Redux app, the data flow sequence now looks like this:
+Earlier, we saw [a diagram that represents the normal synchronous Redux data flow](./part-2-concepts-data-flow.md#redux-application-data-flow). When we add async logic to a Redux app, we add an extra step where middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
 
-**FIXME Add async Redux data flow diagram here**
+![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
 ## Using the Redux Thunk Middleware
 
