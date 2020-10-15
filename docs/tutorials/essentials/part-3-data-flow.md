@@ -82,9 +82,9 @@ ReactDOM.render(
 
 </DetailedExplanation>
 
-#### Exploring the Initial Project
+#### Exploring the Tutorial Project
 
-Let's take a quick look at what the initial project contains:
+Now back to our demo project, it contains some aditional files besides the ones created with the template, let's take a quick look at what the project contains:
 
 - `/src`
   - `index.js`: the entry point file for the application. It renders the React-Redux `<Provider>` component and the main `<App>` component.
