@@ -10,7 +10,7 @@ description: 'The official Fundamentals tutorial for Redux: learn the fundamenta
 
 **FIXME** Write this
 
-#### Action Creators
+## Action Creators
 
 An **action creator** is a function that creates and returns an action object. We typically use these so we don't have to write the action object by hand every time:
 
@@ -37,3 +37,11 @@ store.dispatch(incremented())
 console.log(store.getState())
 // {value: 2}
 ```
+
+## Memoized Selectors
+
+## Normalized State
+
+## Async Request Status
+
+## Thunks and Promises

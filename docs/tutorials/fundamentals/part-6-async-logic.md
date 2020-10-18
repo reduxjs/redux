@@ -419,4 +419,35 @@ And now adding a new todo will work correctly:
 
 ![Devtools - async todoAdded state diff](/img/tutorials/fundamentals/devtools-async-todoAdded-diff.png)
 
-## Tracking Request Loading State
+## What You've Learned
+
+We've now succesfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the AJAX calls to our fake server API.
+
+In the process, we saw how Redux middleware are used to let us make async calls and interact with the store by dispatching actions with after the async calls have completed.
+
+Here's what the current app looks like:
+
+**FIXME CodeSandbox here**
+
+:::tip
+
+- **Redux middleware were designed to enable writing logic that has side effects**
+  - "Side effects" are code that changes state/behavior outside a function, like AJAX calls, modifying function arguments, or generating random values
+- **Middleware add an extra step to the standard Redux data flow**
+  - Middleware can intercept other values passed to `dispatch`
+  - Middleware have access to `dispatch` and `getState`, so they can dispatch more actions as part of async logic
+- **The Redux "Thunk" middleware lets us pass functions to `dispatch`**
+  - "Thunk" functions let us write async logic ahead of time, without knowing what Redux store is being used
+  - A Redux thunk function receives `dispatch` and `getState` as arguments, and can dispatch actions like "this data was received from an API response"
+
+:::
+
+## What's Next?
+
+We've now covered all the core pieces of how to use Redux! You've seen how to:
+
+- Write reducers that update state based on dispatched actions,
+- Create and configure a Redux store with a reducer, enhancers, and middleware
+- Use middleware to write async logic that dispatches actions
+
+In [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md), we'll look at several code patterns that are typically used by real-world Redux apps to make our code more consistent and scale better as the application grows.
