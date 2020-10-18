@@ -109,7 +109,7 @@ Both of the middleware in that last section were very specific and only do one t
 
 Here's what that middleware might look like:
 
-```js title="asyncFunctionMiddleware.js"
+```js title="Example async function middleware"
 const asyncFunctionMiddleware = storeAPI => next => action => {
   // If the "action" is actually a function instead...
   if (typeof action === 'function') {
@@ -352,14 +352,15 @@ const Header = () => {
   const [text, setText] = useState('')
   const dispatch = useDispatch()
 
-  const handleChange = e => setText(e.target.value.trim())
+  const handleChange = e => setText(e.target.value)
 
   const handleKeyDown = e => {
     // If the user pressed the Enter key:
-    if (e.which === 13 && text) {
+    const trimmedText = text.trim()
+    if (e.which === 13 && trimmedText) {
       // highlight-start
       // Create the thunk function with the text the user wrote
-      const saveNewTodoThunk = saveNewTodo(text)
+      const saveNewTodoThunk = saveNewTodo(trimmedText)
       // Then dispatch the thunk function itself
       dispatch(saveNewTodoThunk)
       // highlight-end
@@ -377,10 +378,11 @@ component, we can skip creating the temporary variable. Instead, we can call `sa
 ```js title="src/features/header/Header.js"
 const handleKeyDown = e => {
   // If the user pressed the Enter key:
-  if (e.which === 13 && text) {
+  const trimmedText = text.trim()
+  if (e.which === 13 && trimmedText) {
     // highlight-start
     // Create the thunk function and immediately dispatch it
-    dispatch(saveNewTodo(text))
+    dispatch(saveNewTodo(trimmedText))
     // highlight-end
     setText('')
   }
@@ -427,7 +429,13 @@ In the process, we saw how Redux middleware are used to let us make async calls 
 
 Here's what the current app looks like:
 
-**FIXME CodeSandbox here**
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-6-asyncThunks/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 :::tip
 

@@ -241,15 +241,15 @@ const Header = () => {
   // highlight-next-line
   const dispatch = useDispatch()
 
-  const handleChange = e => setText(e.target.value.trim())
+  const handleChange = e => setText(e.target.value
 
   const handleKeyDown = e => {
-    const text = e.target.value.trim()
+    const trimmedText = e.target.value.trim()
     // If the user pressed the Enter key:
-    if (e.which === 13) {
+    if (e.which === 13 && trimmedText) {
       // highlight-start
       // Dispatch the "todo added" action with this text
-      dispatch({ type: 'todos/todoAdded', payload: text })
+      dispatch({ type: 'todos/todoAdded', payload: trimmedText })
       // highlight-end
       // And clear out the text input
       setText('')
