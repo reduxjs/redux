@@ -70,10 +70,6 @@ module.exports = {
               to: 'faq'
             },
             {
-              label: 'Tutorial',
-              to: 'basics/basic-tutorial'
-            },
-            {
               label: 'API Reference',
               to: 'api/api-reference'
             }
