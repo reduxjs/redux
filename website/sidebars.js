@@ -46,7 +46,8 @@ module.exports = {
           'tutorials/fundamentals/part-3-state-actions-reducers',
           'tutorials/fundamentals/part-4-store',
           'tutorials/fundamentals/part-5-ui-react',
-          'tutorials/fundamentals/part-6-async-logic'
+          'tutorials/fundamentals/part-6-async-logic',
+          'tutorials/fundamentals/part-7-standard-patterns'
         ]
       },
       {
