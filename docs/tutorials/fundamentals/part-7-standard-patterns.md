@@ -408,6 +408,15 @@ To learn more about how to use Reselect and memoized selectors, see:
 
 As you've seen, there's several additional patterns that are widely used in Redux apps. These patterns do involve writing more code, but they provide benefits like making logic reusable, encapsulating implementation details, improving app performance, and making it easier to look up data.
 
+:::info
+
+For more details on why these patterns exist and how Redux is meant to be used, see:
+
+- [Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)
+- [Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)
+
+:::
+
 Here's how our app looks after it's been fully converted to use these patterns:
 
 **FIXME Add CodeSandbox here**
