@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the standard patterns used in real-world Redux apps'
 ---
 
+import { DetailedExplanation } from '../../components/DetailedExplanation'
+
 # Redux Fundamentals, Part 7: Standard Redux Patterns
 
 :::tip What You'll Learn
@@ -31,7 +33,7 @@ So far, we've covered the basics of how Redux actually works. But, real world Re
 
 It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists.
 
-In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps.
+In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](https://redux-toolkit.js.org) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
 
 ## Action Creators
 
@@ -62,6 +64,21 @@ store.dispatch(todoAdded('Buy milk'))
 console.log(store.getState().todos)
 // [ {id: 0, text: 'Buy milk', completed: false}]
 ```
+
+<DetailedExplanation title="Detailed Explanation: Why use Action Creators?">
+
+In our small example todo app, writing action objects by hand every time isn't too difficult. In fact, by switching to using action creators, we've added _more_ work - now we have to write a function _and_ the action object.
+
+But, what if we needed to dispatch the same action from many parts of the application? Or what if there's some additional logic that we have to do every time we dispatch an action, like creating a unique ID? We'd end up having to copy-paste the additional setup logic every time we need to dispatch that action.
+
+Action creators have two primary purposes:
+
+- They prepare and format the contents of action objects
+- They encapsulate any additional work needed whenever we create those actions
+
+That way, we have a consistent approach for creating actions, whether or not there's any extra work that needs to be done. The same goes for thunks as well.
+
+</DetailedExplanation>
 
 ### Using Action Creators
 
@@ -206,18 +223,14 @@ export const fetchTodos = () => async dispatch => {
 }
 ```
 
-### Why Use Action Creators?
+Similarly, we _could_ shorten the plain action creators if we wanted to:
 
-In our small example todo app, writing action objects by hand every time isn't too difficult. In fact, by switching to using action creators, we've added _more_ work - now we have to write a function _and_ the action object.
+```js title="src/features/todos/todosSlice.js"
+// highlight-next-line
+export const todoAdded = todo => ({ type: 'todos/todoAdded', payload: todo })
+```
 
-But, what if we needed to dispatch the same action from many parts of the application? Or what if there's some additional logic that we have to do every time we dispatch an action, like creating a unique ID? We'd end up having to copy-paste the additional setup logic every time we need to dispatch that action.
-
-Action creators have two primary purposes:
-
-- They prepare and format the contents of action objects
-- They encapsulate any additional work needed whenever we create those actions
-
-That way, we have a consistent approach for creating actions, whether or not there's any extra work that needs to be done. The same goes for thunks as well.
+It's up to you to decide whether using arrow functions this way is better or not.
 
 :::info
 
@@ -228,6 +241,162 @@ For more details on why action creators are useful, see:
 :::
 
 ## Memoized Selectors
+
+We've already seen that we can write "selector" functions, which accept the Redux `state` object as an argument, and return a value:
+
+```js
+const selectTodos = state => state.todos
+```
+
+What if we need to _derive_ some data? For example, maybe we want to have an array of just the todo IDs:
+
+```js
+const selectTodoIds = state => state.todos.map(todo => todo.id)
+```
+
+However, `array.map()` always returns a new array reference. We know that the React-Redux `useSelector` hook will re-run its selector function after _every_ dispatched action, and if the selector result changes, it will force the component to re-render.
+
+In this example, **calling `useSelector(selectTodoIds)` will _always_ cause the component to re-render after _every_ action, because it's returning a new array reference!**
+
+In Part 5, we saw that [we can pass `shallowEqual` as an argument to `useSelector`](./part-5-ui-and-react.md#selecting-data-in-list-items-by-id). There's another option here, though: we could use "memoized" selectors.
+
+**Memoization** is a kind of caching - specifically, saving the results of an expensive calculation, and reusing those results if we see the same inputs later.
+
+**Memoized selector functions** are selectors that save the most recent result value, and if you call them multiple times with the same inputs, will return the same result value. If you call them with _different_ inputs than last time, they will recalculate a new result value, cache it, and return the new result.
+
+### Memoizing Selectors with `createSelector`
+
+The **[Reselect library](https://github.com/reduxjs/reselect) provides a `createSelector` API that will generate memoized selector functions**. `createSelector` accepts one or more "input selector" functions as arguments, plus an "output selector", and returns the new selector function. Every time you call the selector:
+
+- All "input selectors" are called with all of the arguments
+- If any of the input selector return values have changed, the "output selector" will re-run
+- All of the input selector results become arguments to the output selector
+- The final result of the output selector is cached for next time
+
+Let's create a memoized version of `selectTodoIds` and use that with our `<TodoList>`.
+
+First, we need to install Reselect:
+
+```bash
+npm install reselect
+```
+
+Then, we can import and call `createSelector`. Our original `selectTodoIds` function was defined over in `TodoList.js`, but it's more common for selector functions to be written in the relevant slice file. So, let's add this to the todos slice:
+
+```js title="src/features/todos/todosSlice.js"
+// highlight-next-line
+import { createSelector } from 'reselect'
+
+// omit reducer
+
+// omit action creators
+
+// highlight-start
+export const selectTodoIds = createSelector(
+  // First, pass one or more "input selector" functions:
+  state => state.todos,
+  // Then, an "output selector" that receives all the input results as arguments
+  // and returns a final result value
+  todos => todos.map(todo => todo.id)
+)
+// highlight-end
+```
+
+Then, let's use it in `<TodoList>`:
+
+```js title="src/features/todos/TodoList.js"
+import React from 'react'
+import { useSelector, shallowEqual } from 'react-redux'
+
+// highlight-next-line
+import { selectTodoIds }
+import TodoListItem from './TodoListItem'
+
+const TodoList = () => {
+  // highlight-next-line
+  const todoIds = useSelector(selectTodoIds)
+
+  const renderedListItems = todoIds.map((todoId) => {
+    return <TodoListItem key={todoId} id={todoId} />
+  })
+
+  return <ul className="todo-list">{renderedListItems}</ul>
+}
+```
+
+This actually behaves a bit differently than the `shallowEqual` comparison function does. Any time the `state.todos` array changes, we're going to create a new todo IDs array as a result. That includes any immutable updates to todo items like toggling their `completed` field, since we have to create a new array for the immutable update.
+
+:::tip
+
+Memoized selectors are only helpful when you actually derive additional values from the original data. If you are only looking up and returning an existing value, you can keep the selector as a plain function.
+
+:::
+
+### Selectors with Multiple Arguments
+
+Our todo app is supposed to have the ability to filter the visible todos based on their completed status. Let's write a memoized selector that returns that filtered list of todos.
+
+We know we need the entire `todos` array as one argument to our output selector. We also need to pass in the current completion status filter value as well. We'll add a separate "input selector" to extract each value, and pass the results to the "output selector".
+
+```js title="src/features/todos/todosSlice.js"
+import { createSelector } from 'reselect'
+import { StatusFilters } from '../filters/filtersSlice'
+
+// omit other code
+
+// highlight-start
+export const selectFilteredTodos = createSelector(
+  // First input selector: all todos
+  state => state.todos,
+  // Second input selector: current status filter
+  state => state.filters.status,
+  // Output selector: receives both values
+  (todos, status) => {
+    if (status === StatusFilters.All) {
+      return todos
+    }
+
+    const completedStatus = status === StatusFilters.Completed
+    // Return either active or completed todos based on filter
+    return todos.filter(todo => todo.completed === completedStatus)
+  }
+)
+// highlight-end
+```
+
+:::caution
+
+Note that we've just added an import dependency between two slices - the `todosSlice` is importing a value from the `filtersSlice`. This is legal, but be careful. **If two slices _both_ try to import something from each other, you can end up with a "cyclic import dependency" problem that can cause your code to crash**. If that happens, try moving some common code to its own file and import from that file instead.
+
+:::
+
+Now we can use this new "filtered todos" selector as an input to another selector that returns the IDs of those todos:
+
+```js title="src/features/todos/todosSlice.js"
+export const selectFilteredTodoIds = createSelector(
+  // Pass our other memoized selector as an input
+  selectFilteredTodos,
+  // And derive data in the output selector
+  filteredTodos => filteredTodos.map(todo => todo.id)
+)
+```
+
+If we switch `<TodoList>` to use `selectFilteredTodoIds`, we should then be able to mark a couple todo items as completed:
+
+![Todo app - todos marked completed](/img/tutorials/fundamentals/todos-app-markedCompleted.png)
+
+and then filter the list to _only_ show completed todos:
+
+![Todo app - todos marked completed](/img/tutorials/fundamentals/todos-app-showCompleted.png)
+
+:::info
+
+To learn more about how to use Reselect and memoized selectors, see:
+
+- The [Reselect docs](https://github.com/reduxjs/reselect)
+- [Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance](https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/)
+
+:::
 
 ## Normalized State
 
