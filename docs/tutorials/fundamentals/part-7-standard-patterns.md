@@ -403,3 +403,35 @@ To learn more about how to use Reselect and memoized selectors, see:
 ## Async Request Status
 
 ## Thunks and Promises
+
+## What You've Learned
+
+As you've seen, there's several additional patterns that are widely used in Redux apps. These patterns do involve writing more code, but they provide benefits like making logic reusable, encapsulating implementation details, improving app performance, and making it easier to look up data.
+
+Here's how our app looks after it's been fully converted to use these patterns:
+
+**FIXME Add CodeSandbox here**
+
+:::tip
+
+- **Action creator functions encapsulate preparing action objects and thunks**
+  - Action creators can accept arguments and contain setup logic, and return the final action object or thunk function
+- **Memoized selectors help improve Redux app performance**
+  - Reselect has a `createSelector` API that generates memoized selectors
+  - Memoized selectors return the same result reference if given the same inputs
+- **Normalized state makes it easier to find items by ID**
+  - Normalized data is stored in objects instead of arrays, with item IDs as keys
+- **Request status should be stored as an enum, not booleans**
+  - Using enums like `'idle' | 'loading'` helps track status consistently
+- **Thunks can return promises from `dispatch`**
+  - Components can wait for async thunks to complete then do more work
+
+:::
+
+## What's Next?
+
+Writing all this code "by hand" can be time-consuming and difficult. **That's why we recommend that you use our official [Redux Toolkit](https://redux-toolkit.js.org) package to write your Redux logic instead**.
+
+Redux Toolkit includes APIs that **help you write all the typical Redux usage patterns, but with less code**. It also helps **prevent common mistakes** like accidentally mutating state.
+
+In [Part 8: Modern Redux](./part-8-modern-redux.md), we'll cover how to use Redux Toolkit to simplify all the code we've written so far.
