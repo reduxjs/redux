@@ -1,14 +1,15 @@
-import { Reducer } from './types/reducers'
 import { AnyAction, Action } from './types/actions'
-import ActionTypes from './utils/actionTypes'
-import warning from './utils/warning'
-import isPlainObject from './utils/isPlainObject'
 import {
+  ActionFromReducersMapObject,
+  Reducer,
   ReducersMapObject,
-  StateFromReducersMapObject,
-  ActionFromReducersMapObject
+  StateFromReducersMapObject
 } from './types/reducers'
 import { CombinedState } from './types/store'
+
+import ActionTypes from './utils/actionTypes'
+import isPlainObject from './utils/isPlainObject'
+import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key: string, action: Action) {
   const actionType = action && action.type
