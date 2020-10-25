@@ -125,17 +125,15 @@ This example includes tests.
 
 ## Redux essentials
 
-This example covers the key points you need to know about how to get started using Redux to write actual applications.
+The example app from the ["Redux Essentials" tutorial](../tutorials/essentials/part-1-overview-concepts.md) is a larger "real world"-type app that shows:
 
-Run the [Redux essentials](https://github.com/reduxjs/redux-essentials-example-app) example:
+- Use of Redux Toolkit and the React Redux hooks API
+- A "feature folder" structure with single-file "slices" for Redux logic
+- Async logic, data fetching, and loading state
+- CRUD operations
+- Normalized state
 
-```sh
-git clone https://github.com/reduxjs/redux-essentials-example-app.git
-
-cd redux-essentials-example-app
-npm install
-npm start
-```
+Run the [Redux Essentials](https://github.com/reduxjs/redux-essentials-example-app) example:
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
