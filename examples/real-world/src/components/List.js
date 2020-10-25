@@ -9,18 +9,6 @@ const List = ({
   loadingLabel = 'Loading...',
   onLoadMoreClick
 }) => {
-  const renderLoadMore = React.useCallback(() => {
-    return (
-      <button
-        style={{ fontSize: '150%' }}
-        onClick={onLoadMoreClick}
-        disabled={isFetching}
-      >
-        {isFetching ? 'Loading...' : 'Load More'}
-      </button>
-    )
-  }, [isFetching, onLoadMoreClick])
-
   const isEmpty = items.length === 0
   const isLastPage = !nextPageUrl
   if (isEmpty && isFetching) {
@@ -42,7 +30,15 @@ const List = ({
   return (
     <div>
       {items.map(renderItem)}
-      {pageCount > 0 && !isLastPage && renderLoadMore()}
+      {pageCount > 0 && !isLastPage && (
+        <button
+          style={{ fontSize: '150%' }}
+          onClick={onLoadMoreClick}
+          disabled={isFetching}
+        >
+          {isFetching ? 'Loading...' : 'Load More'}
+        </button>
+      )}
     </div>
   )
 }
