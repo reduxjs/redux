@@ -125,6 +125,8 @@ This example includes tests.
 
 ## Redux essentials
 
+This example covers the key points you need to know about how to get started using Redux to write actual applications.
+
 Run the [Redux essentials](https://github.com/reduxjs/redux-essentials-example-app) example:
 
 ```sh
@@ -139,12 +141,12 @@ npm start
 
 ## Redux fundamentals
 
-Run the [Redux essentials](https://github.com/reduxjs/redux-fundamentals-example-app) example:
+Run the [Redux fundamentals](https://github.com/reduxjs/redux-fundamentals-example-app) example:
 
 ```sh
 git clone https://github.com/reduxjs/redux-fundamentals-example-app.git
 
-cd redux-essentials-example-app
+cd redux-fundamentals-example-app
 npm install
 npm start
 ```
