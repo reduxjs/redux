@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Todo calls onClick when clicked 1`] = `ShallowWrapper {}`;
-
-exports[`Todo puts a line through text when completed 1`] = `ShallowWrapper {}`;
-
-exports[`Todo renders without crashing 1`] = `ShallowWrapper {}`;

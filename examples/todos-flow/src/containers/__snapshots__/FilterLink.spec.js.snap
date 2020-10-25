@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`FilterLink renders without crashing 1`] = `ShallowWrapper {}`;
-
-exports[`FilterLink sets the correct filter when clicked 1`] = `ShallowWrapper {}`;
