@@ -74,6 +74,7 @@ const delayedActionMiddleware = storeAPI => next => action => {
       // Delay this action by one second
       next(action)
     }, 1000)
+    return
   }
 
   return next(action)

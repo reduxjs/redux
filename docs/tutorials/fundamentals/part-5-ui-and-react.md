@@ -485,15 +485,7 @@ const TodoListItem = ({ id }) => {
 
   return (
     <li>
-      <div className="view">
-        <input
-          className="toggle"
-          type="checkbox"
-          checked={completed}
-          onChange={handleCompletedChanged}
-        />
-        <div className="todo-text">{text}</div>
-      </div>
+      <div className="view">{/* omit other rendering output */}</div>
     </li>
   )
 }
