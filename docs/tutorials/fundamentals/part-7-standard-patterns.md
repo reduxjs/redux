@@ -15,8 +15,8 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 - Standard patterns used in real-world Redux apps, and why those patterns exist:
   - Action creators for encapsulating action objects
   - Memoized selectors for improving performance
-  - Normalizing state for manging collections of items
   - Tracking request status via loading enums
+  - Normalizing state for manging collections of items
   - Working with promises and thunks
 
 :::
@@ -29,9 +29,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 In [Part 6: Async Logic and Data Fetching](./part-6-async-logic.md), we saw how to use Redux middleware to write async logic that can talk to the store. In particular, we used the Redux "thunk" middleware to write functions that can contain reusable async logic, without knowing what Redux store they'll be talking to ahead of time.
 
-So far, we've covered the basics of how Redux actually works. But, real world Redux applications use some additional patterns on top of those basics.
+So far, we've covered the basics of how Redux actually works. However, real world Redux applications use some additional patterns on top of those basics.
 
-It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists.
+It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists, and you'll see some or all of them in almost every Redux codebase.
 
 In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](https://redux-toolkit.js.org) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
 
@@ -389,6 +389,54 @@ and then filter the list to _only_ show completed todos:
 
 ![Todo app - todos marked completed](/img/tutorials/fundamentals/todos-app-showCompleted.png)
 
+We can then expand our `selectFilteredTodos` to also include color filtering in the selection as well:
+
+```js title="src/features/todos/todosSlice.js"
+export const selectFilteredTodos = createSelector(
+  // First input selector: all todos
+  selectTodos,
+  // Second input selector: all filter values
+  // highlight-next-line
+  state => state.filters,
+  // Output selector: receives both values
+  (todos, filters) => {
+    // highlight-start
+    const { status, colors } = filters
+    const showAllCompletions = status === StatusFilters.All
+    if (showAllCompletions && colors.length === 0) {
+      // highlight-end
+      return todos
+    }
+
+    // highlight-next-line
+    const completedStatus = status === StatusFilters.Completed
+    // Return either active or completed todos based on filter
+    return todos.filter(todo => {
+      // highlight-start
+      const statusMatches =
+        showAllCompletions || todo.completed === completedStatus
+      const colorMatches = colors.length === 0 || colors.includes(todo.color)
+      return statusMatches && colorMatches
+      // highlight-end
+    })
+  }
+)
+```
+
+Notice that by encapsulating the logic in this selector, our component never needed to change, even as we changed the filtering behavior. Now we can filter by both status and color at once:
+
+![Todo app - status and color filters](/img/tutorials/fundamentals/todos-app-selectorFilters.png)
+
+Finally, we've got several places where our code is looking up `state.todos`. We're going to be making some changes to how that state is designed as we go through the rest of this section, so we'll extract a single `selectTodos` selector and use that everywhere. We can also move `selectTodoById` over into the `todosSlice`:
+
+```js title="src/features/todos/todosSlice.js"
+export const selectTodos = state => state.todos
+
+export const selectTodoById = (state, todoId) => {
+  return selectTodos(state).find(todo => todo.id === todoId)
+}
+```
+
 :::info
 
 To learn more about how to use Reselect and memoized selectors, see:
@@ -398,15 +446,469 @@ To learn more about how to use Reselect and memoized selectors, see:
 
 :::
 
+## Async Request Status
+
+We're using an async thunk to fetch the initial list of todos from the server. Since we're using a fake server API, that response comes back immediately. In a real app, the API call might take a while to resolve. In that case, it's common to show some kind of a loading spinner while we wait for the response to complete.
+
+This is usually handled in Redux apps by:
+
+- Having some kind of "loading state" value to indicate the current status of a request
+- Dispatching a "request started" action _before_ making the API call, which is handled by changing the loading state value
+- Updating the loading state value again when the request completes to indicate that the call is done
+
+The UI layer then shows a loading spinner while the request is in progress, and switches to showing the actual data when the request is complete.
+
+We're going to update our todos slice to track a loading state value, and dispatch an additional `'todos/todosLoading'` action as part of the `fetchTodos` thunk.
+
+Right now, the `state` of our todos reducer is just the array of todos itself. If we want to track the loading state inside the todos slice, we'll need to reorganize the todos state to be an object that has the todos array _and_ the loading state value. That also means rewriting the reducer logic to handle the additional nesting:
+
+```js title="src/features/todos/todosSlice.js"
+// highlight-start
+const initialState = {
+  status: 'idle',
+  entities: []
+}
+// highlight-end
+
+export default function todosReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'todos/todoAdded': {
+      // highlight-start
+      return {
+        ...state,
+        entities: [...state.entities, action.payload]
+      }
+      // highlight-end
+    }
+    case 'todos/todoToggled': {
+      // highlight-start
+      return {
+        ...state,
+        entities: state.entities.map(todo => {
+          if (todo.id !== action.payload) {
+            return todo
+          }
+
+          return {
+            ...todo,
+            completed: !todo.completed
+          }
+        })
+      }
+      // highlight-end
+    }
+    // omit other cases
+    default:
+      return state
+  }
+}
+
+// omit action creators
+
+// highlight-next-line
+export const selectTodos = state => state.todos.entities
+```
+
+There's a few important things to note here:
+
+- The todos array is now nested as `state.entities` in the `todosReducer` state object. The word "entities" is a term that means "unique items with an ID", which does describe our todo objects.
+- That also means the array is nested in the _entire_ Redux state object as `state.todos.entities`
+- We now have to do extra steps in the reducer to copy the additional level of nesting for correct immutable updates, such as `state` object -> `entities` array -> `todo` object
+- Because the rest of our code is _only_ accessing the todos state via selectors, **we only need to update the `selectTodos` selector** - the rest of the UI will continue to work as expected even though we reshaped our state considerably.
+
+### Loading State Enum Values
+
+You'll also notice that we've defined the loading state field as a string enum:
+
+```js
+{
+  status: 'idle' | 'loading'
+}
+```
+
+instead of an `isLoading` boolean.
+
+A boolean limits us to two possibilities: "loading" or "not loading". In reality, **it's possible for a request to actually be in _many_ different states**, such as:
+
+- Hasn't started at all
+- In progress
+- Succeeded
+- Failed
+- Succeeded, but now back in a situation where we might want to refetch
+
+It's also possible that the app logic should only transition between specific states based on certain actions, and this is harder to implement using booleans.
+
+Because of this, we recommend **storing loading state as a string enum value instead of boolean flags**.
+
+:::info
+
+For a detailed explanation of why loading states should be enums, see:
+
+- [Redux Style Guide: treat reducers as state machines](../../style-guide/style-guide.md#treat-reducers-as-state-machines)
+
+:::
+
+Based on that, we'll add a new "loading" action that will set our status to `'loading'`, and update the "loaded" action to reset the state flag to `'idle'`:
+
+```js title="src/features/todos/todosSlice.js"
+const initialState = {
+  status: 'idle',
+  entities: []
+}
+
+export default function todosReducer(state = initialState, action) {
+  switch (action.type) {
+    // omit other cases
+    // highlight-start
+    case 'todos/todosLoading': {
+      return {
+        ...state,
+        status: 'loading'
+      }
+    }
+    // highlight-end
+    case 'todos/todosLoaded': {
+      return {
+        ...state,
+        // highlight-next-line
+        status: 'idle',
+        entities: action.payload
+      }
+    }
+    default:
+      return state
+  }
+}
+
+// omit action creators
+
+// Thunk function
+export const fetchTodos = () => async dispatch => {
+  // highlight-next-line
+  dispatch(todosLoading())
+  const response = await client.get('/fakeApi/todos')
+  dispatch(todosLoaded(response.todos))
+}
+```
+
+However, before we try to show this in the UI, we need to modify the fake server API to add an artificial delay to our API calls. Open up `src/api/server.js`, and look for this commented-out line around line 63:
+
+```js title="src/api/server.js"
+new Server({
+  routes() {
+    this.namespace = 'fakeApi'
+    // highlight-next-line
+    // this.timing = 2000
+
+    // omit other code
+  }
+})
+```
+
+If you uncomment that line, the fake server will add a 2-second delay to every API call our app makes, which gives us enough time to actually see a loading spinner being displayed.
+
+Now, we can read the loading state value in our `<TodoList>` component, and show a loading spinner instead based on that value.
+
+```js title="src/features/todos/TodoList.js"
+// omit imports
+
+const TodoList = () => {
+  const todoIds = useSelector(selectFilteredTodoIds)
+  // highlight-start
+  const loadingStatus = useSelector(state => state.todos.status)
+
+  if (loadingStatus === 'loading') {
+    return (
+      <div className="todo-list">
+        <div className="loader" />
+      </div>
+    )
+  }
+  // highlight-end
+
+  const renderedListItems = todoIds.map(todoId => {
+    return <TodoListItem key={todoId} id={todoId} />
+  })
+
+  return <ul className="todo-list">{renderedListItems}</ul>
+}
+```
+
+In a real app, we'd also want to handle API failure errors and other potential cases.
+
+Here's what the app looks like with that loading status enabled (to see the spinner again, reload the app preview or open it in a new tab):
+
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
+
 ## Normalized State
 
-## Async Request Status
+So far, we've kept our todos in an array. This is reasonable, because we received the data from the server as an array, and we also need to loop over the todos to show them as a list in the UI.
+
+However, in larger Redux apps, it is common to store data in a **normalized state structure**. "Normalization" means:
+
+- Making sure there is only one copy of each piece of data
+- Storing items in a way that allows directly finding items by ID
+- Referring to other items based on IDs, instead of copying the entire item
+
+For example, in a blogging application, you might have `Post` objects that point to `User` and `Comment` objects. There might be many posts by the same person, so if every `Post` object includes an entire `User`, we would have many copies of the same `User` object. Instead, a `Post` object would have a user ID value as `post.user`, and then we could look up `User` objects by ID as `state.users[post.user]`.
+
+This means we typically organize our data as objects instead of arrays, where the item IDs are the keys and the items themselves are the values, like this:
+
+```js
+const rootState = {
+  todos: {
+    status: 'idle',
+    // highlight-start
+    entities: {
+      2: { id: 2, text: 'Buy milk', completed: false },
+      7: { id: 7, text: 'Clean room', completed: true }
+    }
+    // highlight-end
+  }
+}
+```
+
+Let's convert our todos slice to store the todos in a normalized form. This will require some significant changes to our reducer logic, as well as updating the selectors:
+
+```js title="src/features/todos/todosSlice"
+const initialState = {
+  status: 'idle',
+  // highlight-next-line
+  entities: {}
+}
+
+export default function todosReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'todos/todoAdded': {
+      const todo = action.payload
+      // highlight-start
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [todo.id]: todo
+        }
+      }
+      // highlight-end
+    }
+    case 'todos/todoToggled': {
+      // highlight-start
+      const todoId = action.payload
+      const todo = state.entities[todoId]
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [todoId]: {
+            ...todo,
+            completed: !todo.completed
+          }
+        }
+      }
+      // highlight-end
+    }
+    case 'todos/colorSelected': {
+      // highlight-start
+      const { color, todoId } = action.payload
+      const todo = state.entities[todoId]
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [todoId]: {
+            ...todo,
+            color
+          }
+        }
+      }
+      // highlight-end
+    }
+    case 'todos/todoDeleted': {
+      // highlight-start
+      const newEntities = { ...state.entities }
+      delete newEntities[action.payload]
+      return {
+        ...state,
+        entities: newEntities
+      }
+      // highlight-end
+    }
+    case 'todos/allCompleted': {
+      // highlight-start
+      const newEntities = { ...state.entities }
+      Object.values(newEntities).forEach(todo => {
+        newEntities[todo.id] = {
+          ...todo,
+          completed: true
+        }
+      })
+      return {
+        ...state,
+        entities: newEntities
+      }
+      // highlight-end
+    }
+    case 'todos/completedCleared': {
+      // highlight-start
+      const newEntities = { ...state.entities }
+      Object.values(newEntities).forEach(todo => {
+        if (todo.completed) {
+          delete newEntities[todo.id]
+        }
+      })
+      return {
+        ...state,
+        entities: newEntities
+      }
+      // highlight-end
+    }
+    case 'todos/todosLoading': {
+      return {
+        ...state,
+        status: 'loading'
+      }
+    }
+    case 'todos/todosLoaded': {
+      // highlight-start
+      const newEntities = {}
+      action.payload.forEach(todo => {
+        newEntities[todo.id] = todo
+      })
+      return {
+        ...state,
+        status: 'idle',
+        entities: newEntities
+      }
+      // highlight-end
+    }
+    default:
+      return state
+  }
+}
+
+// omit action creators
+
+// highlight-start
+const selectTodoEntities = state => state.todos.entities
+
+export const selectTodos = createSelector(selectTodoEntities, entities =>
+  Object.values(entities)
+)
+
+export const selectTodoById = (state, todoId) => {
+  return selectTodoEntities(state)[todoId]
+}
+// highlight-end
+```
+
+Because our `state.entities` field is now an object instead of an array, we have to use nested object spread operators to update the data instead of array operations. Also, we can't loop over objects the way we loop over arrays, so there's several places where we have to use `Object.values(entities)` to get an array of the todo items so that we can loop over them.
+
+The good news is that because we're using selectors to encapsulate the state lookups, our UI still doesn't have to change. The bad news is that the reducer code is actually longer and more complicated.
+
+Part of the issue here is that **this todo app example is not a large real-world application**. So, normalizing state is not as useful in this particular app, and it's harder to see the potential benefits.
+
+For now, the important things to understand are:
+
+- Normalization _is_ commonly used in Redux apps
+- The primary benefits are being able to look up individual items by ID and ensure that only one copy of an item exists in the state
+
+:::info
+
+For more details on why normalization is useful with Redux, see:
+
+- [Structuring Reducers: Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md)
+
+:::
 
 ## Thunks and Promises
 
+We have one last pattern to look at for this section. We've already seen how to handle loading state in the Redux store based on dispatched actions. What if we need to look at the results of a thunk in our components?
+
+Whenever you call `store.dispatch(action)`, `dispatch` will actually return the `action` as its result. Middleware can then modify that behavior and return some other value instead.
+
+We've already seen that the Redux Thunk middleware lets us pass a function to `dispatch`, calls the function, and then returns the result:
+
+```js title="reduxThunkMiddleware.js"
+const reduxThunkMiddleware = storeAPI => next => action => {
+  // If the "action" is actually a function instead...
+  if (typeof action === 'function') {
+    // then call the function and pass `dispatch` and `getState` as arguments
+    // Also, return whatever the thunk function returns
+    return action(storeAPI.dispatch, storeAPI.getState)
+  }
+
+  // Otherwise, it's a normal action - send it onwards
+  return next(action)
+}
+```
+
+This means that **we can write thunk functions that return a promise, and wait on that promise in our components**.
+
+We already have our `<Header>` component dispatching a thunk to save new todo entries to the server. Let's add some loading state inside the `<Header>` component, then disable the text input and show another loading spinner while we're waiting for the server:
+
+```js title="src/features/header.Header.js"
+const Header = () => {
+  const [text, setText] = useState('')
+  // highlight-next-line
+  const [status, setStatus] = useState('idle')
+  const dispatch = useDispatch()
+
+  const handleChange = e => setText(e.target.value)
+
+  // highlight-start
+  const handleKeyDown = async e => {
+    // If the user pressed the Enter key:
+    const trimmedText = text.trim()
+    if (e.which === 13 && trimmedText) {
+      // Create and dispatch the thunk function itself
+      setStatus('loading')
+      // Wait for the promise returned by saveNewTodo
+      await dispatch(saveNewTodo(trimmedText))
+      // And clear out the text input
+      setText('')
+      setStatus('idle')
+    }
+  }
+
+  let isLoading = status === 'loading'
+  let placeholder = isLoading ? '' : 'What needs to be done?'
+  let loader = isLoading ? <div className="loader" /> : null
+  // highlight-end
+
+  return (
+    <header className="header">
+      <input
+        className="new-todo"
+        placeholder={placeholder}
+        autoFocus={true}
+        value={text}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        // highlight-next-line
+        disabled={isLoading}
+      />
+      // highlight-next-line
+      {loader}
+    </header>
+  )
+}
+
+export default Header
+```
+
+Now, if we add a todo, we'll see a spinner in the header:
+
+![Todo app - component loading spinner](/img/tutorials/fundamentals/todos-app-headerLoading.png)
+
 ## What You've Learned
 
-As you've seen, there's several additional patterns that are widely used in Redux apps. These patterns do involve writing more code, but they provide benefits like making logic reusable, encapsulating implementation details, improving app performance, and making it easier to look up data.
+As you've seen, there's several additional patterns that are widely used in Redux apps. These patterns are not required, and may involve writing more code initially, but they provide benefits like making logic reusable, encapsulating implementation details, improving app performance, and making it easier to look up data.
 
 :::info
 
@@ -419,7 +921,13 @@ For more details on why these patterns exist and how Redux is meant to be used, 
 
 Here's how our app looks after it's been fully converted to use these patterns:
 
-**FIXME Add CodeSandbox here**
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?fontsize=14&hidenavigation=1&theme=dark"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 :::tip
 
@@ -433,7 +941,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 - **Request status should be stored as an enum, not booleans**
   - Using enums like `'idle' | 'loading'` helps track status consistently
 - **Thunks can return promises from `dispatch`**
-  - Components can wait for async thunks to complete then do more work
+  - Components can wait for async thunks to complete, then do more work
 
 :::
 
