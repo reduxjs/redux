@@ -42,7 +42,8 @@ Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/ma
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/counter"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/reduxjs/react-redux) bindings instead.
+This is the most basic example of using Redux together with React and it's also a `create-react-app` template.
+So it's the same code you'd get running `npx create-react-app my-app --template redux`
 
 This example includes tests.
 
@@ -84,44 +85,6 @@ Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/ma
 
 This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your reducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
 
-## Todos w/ Flow
-
-Run the [Todos w/ Flow](https://github.com/reduxjs/redux/tree/master/examples/todos-flow) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/todos-flow
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-flow):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-flow"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This is like the previous Todos examples, but shows how to use Redux in conjunction with [Flow](https://flow.org/).
-
-## TodoMVC
-
-Run the [TodoMVC](https://github.com/reduxjs/redux/tree/master/examples/todomvc) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/todomvc
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todomvc):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todomvc"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the sake of comparison, but it covers the same points as the Todos example.
-
-This example includes tests.
-
 ## Shopping Cart
 
 Run the [Shopping Cart](https://github.com/reduxjs/redux/tree/master/examples/shopping-cart) example:
@@ -159,24 +122,6 @@ Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/ma
 This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from reducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
 
 This example includes tests.
-
-## Async
-
-Run the [Async](https://github.com/reduxjs/redux/tree/master/examples/async) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/async
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/async):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/async"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware to encapsulate asynchronous side effects.
 
 ## Universal
 
