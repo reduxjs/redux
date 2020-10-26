@@ -30,7 +30,7 @@ const RepoPage = () => {
   React.useEffect(() => {
     dispatch(loadRepo(fullName, ['description']))
     dispatch(loadStargazers(fullName))
-  }, [fullName, loadStargazers, loadRepo])
+  }, [fullName, dispatch])
 
   if (!repo || !owner) {
     return (

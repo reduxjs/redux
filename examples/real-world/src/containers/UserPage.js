@@ -19,6 +19,7 @@ const UserPage = () => {
   const user = users[login]
 
   const starredPagination = useMemo(() => starredByUser[login] || { ids: [] }, [
+    login,
     starredByUser
   ])
 
@@ -35,7 +36,7 @@ const UserPage = () => {
   React.useEffect(() => {
     dispatch(loadUser(login, ['name']))
     dispatch(loadStarred(login))
-  }, [login, loadStarred, loadUser])
+  }, [login, dispatch])
 
   if (!user) {
     return (
