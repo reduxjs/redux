@@ -49,8 +49,8 @@ const evalToString = ast => {
  *    throw new Error(1);
  *
  *  After: (without minify):
- *    throw new Error(node.process.env === 'production' ? 0 : "This is my error message.");
- *    throw new Error(node.process.env === 'production' ? 1 : "This is a second error message.");
+ *    throw new Error(node.process.NODE_ENV === 'production' ? 0 : "This is my error message.");
+ *    throw new Error(node.process.NODE_ENV === 'production' ? 1 : "This is a second error message.");
  */
 module.exports = babel => {
   const t = babel.types
