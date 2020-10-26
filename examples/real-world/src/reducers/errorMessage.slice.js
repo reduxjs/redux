@@ -1,4 +1,4 @@
-const { createSlice } = require('@reduxjs/toolkit')
+import { createSlice } from '@reduxjs/toolkit'
 
 const errorMessageSlice = createSlice({
   name: 'errorMessageSlice',
