@@ -28,8 +28,8 @@ const RepoPage = () => {
   const stargazers = stargazersPagination.ids.map(id => users[id])
 
   React.useEffect(() => {
-    dispatch(loadRepo(fullName, ['description']))
-    dispatch(loadStargazers(fullName))
+    dispatch(loadRepo({ fullName, requiredFields: ['description'] }))
+    dispatch(loadStargazers({ fullName }))
   }, [fullName, dispatch])
 
   if (!repo || !owner) {
@@ -48,7 +48,7 @@ const RepoPage = () => {
         renderItem={user => <User user={user} key={user.login} />}
         items={stargazers}
         onLoadMoreClick={() => {
-          loadStargazers(fullName, true)
+          loadStargazers({ fullName, nextPage: true })
         }}
         loadingLabel={`Loading stargazers of ${name}...`}
         {...stargazersPagination}

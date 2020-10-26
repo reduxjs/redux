@@ -1,68 +1,49 @@
 import union from 'lodash/union'
+import { createReducer } from '@reduxjs/toolkit'
 
 // Creates a reducer managing pagination, given the action types to handle,
 // and a function telling how to extract the key from an action.
-const paginate = ({ types, mapActionToKey }) => {
-  if (!Array.isArray(types) || types.length !== 3) {
-    throw new Error('Expected types to be an array of three elements.')
-  }
-  if (!types.every(t => typeof t === 'string')) {
-    throw new Error('Expected types to be strings.')
-  }
-  if (typeof mapActionToKey !== 'function') {
-    throw new Error('Expected mapActionToKey to be a function.')
-  }
+const paginate = ({ asyncThunk, mapActionToKey }) => {
+  const requestType = asyncThunk.pending
+  const successType = asyncThunk.fulfilled
+  const failureType = asyncThunk.rejected
 
-  const [ requestType, successType, failureType ] = types
-
-  const updatePagination = (state = {
-    isFetching: false,
-    nextPageUrl: undefined,
-    pageCount: 0,
-    ids: []
-  }, action) => {
-    switch (action.type) {
-      case requestType:
-        return {
-          ...state,
-          isFetching: true
-        }
-      case successType:
-        return {
-          ...state,
-          isFetching: false,
-          ids: union(state.ids, action.response.result),
-          nextPageUrl: action.response.nextPageUrl,
-          pageCount: state.pageCount + 1
-        }
-      case failureType:
-        return {
-          ...state,
-          isFetching: false
-        }
-      default:
-        return state
+  const updatePagination = createReducer(
+    {
+      isFetching: false,
+      nextPageUrl: undefined,
+      pageCount: 0,
+      ids: []
+    },
+    builder => {
+      builder
+        .addCase(requestType, state => {
+          state.isFetching = true
+        })
+        .addCase(successType, (state, action) => {
+          state.isFetching = false
+          state.ids = union(state.ids, action.payload.result)
+          state.nextPageUrl = action.payload.nextPageUrl
+          state.pageCount = state.pageCount + 1
+        })
+        .addCase(failureType, state => {
+          state.isFetching = false
+        })
     }
-  }
+  )
 
-  return (state = {}, action) => {
-    // Update pagination by key
-    switch (action.type) {
-      case requestType:
-      case successType:
-      case failureType:
+  return createReducer({}, builder => {
+    builder.addMatcher(
+      action => action.type.startsWith(asyncThunk.typePrefix),
+      (state, action) => {
         const key = mapActionToKey(action)
         if (typeof key !== 'string') {
           throw new Error('Expected key to be a string.')
         }
-        return {
-          ...state,
-          [key]: updatePagination(state[key], action)
-        }
-      default:
-        return state
-    }
-  }
+        state[key] = updatePagination(state[key], action)
+      }
+    )
+  })
 }
 
 export default paginate

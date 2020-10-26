@@ -2,15 +2,21 @@ const { createSlice } = require('@reduxjs/toolkit')
 
 const errorMessageSlice = createSlice({
   name: 'errorMessageSlice',
-  initialState: null,
+  initialState: {
+    message: null
+  },
   reducers: {
     reset: state => {
-      state = null
-    },
-    setErrorMessage: (state, action) => {
-      state = action.payload.error
+      state.message = null
     }
-  }
+  },
+  extraReducers: builder =>
+    builder.addMatcher(
+      action => action.error,
+      (state, action) => {
+        state.message = action.payload.message || 'Something bad happened'
+      }
+    )
 })
 
 export default errorMessageSlice

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUser, loadStarred } from '../actions'
+import { loadStarred, loadUser } from '../actions'
 import User from '../components/User'
 import Repo from '../components/Repo'
 import List from '../components/List'
@@ -23,19 +23,17 @@ const UserPage = () => {
     starredByUser
   ])
 
-  const userItems = useMemo(
-    () =>
-      starredPagination.ids.map(id => {
-        const repo = repos[id]
-        const owner = users[repo.owner]
-        return [repo, owner]
-      }),
-    [starredPagination, users, repos]
-  )
+  const userItems = useMemo(() => {
+    return starredPagination.ids.map(id => {
+      const repo = repos[id]
+      const owner = users[repo.owner]
+      return [repo, owner]
+    })
+  }, [starredPagination, users, repos])
 
   React.useEffect(() => {
-    dispatch(loadUser(login, ['name']))
-    dispatch(loadStarred(login))
+    dispatch(loadUser({ login, requiredFields: ['name'] }))
+    dispatch(loadStarred({ login }))
   }, [login, dispatch])
 
   if (!user) {
@@ -59,7 +57,7 @@ const UserPage = () => {
         )}
         items={userItems}
         onLoadMoreClick={() => {
-          dispatch(loadStarred(login, true))
+          dispatch(loadStarred({ login, nextPage: true }))
         }}
         loadingLabel={`Loading ${login}'s starred...`}
         {...starredPagination}
