@@ -13,7 +13,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test": "react-scripts test --verbose"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
