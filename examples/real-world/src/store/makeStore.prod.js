@@ -3,7 +3,7 @@ import rootReducer from '../reducers'
 
 const makeStore = () =>
   configureStore({
-    reducer: rootReducer,
+    reducer: rootReducer
   })
 
 export default makeStore
