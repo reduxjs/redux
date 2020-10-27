@@ -1,5 +1,5 @@
 {
-  "name": "redux-toolkit-tree-view",
+  "name": "redux-tree-view",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,8 +12,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "react-scripts test --verbose"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -29,5 +29,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react": "^11.1.0",
+    "deep-freeze": "0.0.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
+    "redux-mock-store": "^1.5.4"
   }
 }

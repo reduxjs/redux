@@ -1,14 +1,14 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import {
   addChild,
   createNode,
   deleteNode,
-  removeChild,
-  increment
+  increment,
+  removeChild
 } from './treeSlice'
 
-const Node = React.memo(({ id, parentId }) => {
+const MemoNode = React.memo(function Node({ id, parentId }) {
   const node = useSelector(state => state.tree[id])
   const dispatch = useDispatch()
 
@@ -19,21 +19,17 @@ const Node = React.memo(({ id, parentId }) => {
   }
 
   const handleAddChildClick = () => {
-    dispatch(createNode())
-    dispatch(addChild(id))
+    batch(() => {
+      dispatch(createNode())
+      dispatch(addChild(id))
+    })
   }
 
   const handleRemoveClick = () => {
-    dispatch(removeChild({ nodeId: parentId, childId: id }))
-    dispatch(deleteNode(id))
-  }
-
-  const renderChild = ({ childId, id }) => {
-    return (
-      <li key={childId}>
-        <Node id={childId} parentId={id} />
-      </li>
-    )
+    batch(() => {
+      dispatch(removeChild({ nodeId: parentId, childId: id }))
+      dispatch(deleteNode(id))
+    })
   }
 
   return (
@@ -49,7 +45,11 @@ const Node = React.memo(({ id, parentId }) => {
         </a>
       )}
       <ul>
-        {childIds.map(childId => renderChild({ childId, id }))}
+        {childIds.map(childId => (
+          <li key={childId}>
+            <MemoNode id={childId} parentId={id}></MemoNode>
+          </li>
+        ))}
         <li key="add">
           <a
             href="#" // eslint-disable-line jsx-a11y/anchor-is-valid
@@ -63,4 +63,4 @@ const Node = React.memo(({ id, parentId }) => {
   )
 })
 
-export default Node
+export default MemoNode
