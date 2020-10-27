@@ -1,12 +1,9 @@
-import api from '../middleware/api'
 import { configureStore } from '@reduxjs/toolkit'
 import rootReducer from '../reducers'
 
-const makeStore = preloadedState =>
+const makeStore = () =>
   configureStore({
     reducer: rootReducer,
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api),
-    preloadedState
   })
 
 export default makeStore

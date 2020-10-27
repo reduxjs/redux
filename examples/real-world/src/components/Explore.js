@@ -13,8 +13,8 @@ const Explore = ({ onChange, value }) => {
     onChange(inputRef.current.value)
   }
 
-  const handleKeyUp = e => {
-    if (e.keyCode === 13) {
+  const handleKeyPress = e => {
+    if (e.key === 'Enter') {
       handleGoClick()
     }
   }
@@ -26,7 +26,7 @@ const Explore = ({ onChange, value }) => {
         size="45"
         ref={inputRef}
         defaultValue={value}
-        onKeyUp={handleKeyUp}
+        onKeyUp={handleKeyPress}
       />
       <button onClick={handleGoClick}>Go!</button>
       <p>

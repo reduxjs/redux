@@ -1,21 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
 import rootReducer from '../reducers'
-import Devtools from '../containers/DevTools'
-import hasDevtoolsExtension from './hasDevtoolsExtension'
 
-const makeStore = preloadedState => {
-  const enhancers = []
-
-  // if we already have the redux-devtools browser extension,
-  // we will not render the in-browser version.
-  if (!hasDevtoolsExtension) {
-    enhancers.push(Devtools.instrument())
-  }
-
+const makeStore = () => {
   const store = configureStore({
     reducer: rootReducer,
-    preloadedState,
-    enhancers
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger)
   })
 
   if (module.hot) {
