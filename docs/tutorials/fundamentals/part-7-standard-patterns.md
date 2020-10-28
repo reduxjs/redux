@@ -16,7 +16,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
   - Action creators for encapsulating action objects
   - Memoized selectors for improving performance
   - Tracking request status via loading enums
-  - Normalizing state for manging collections of items
+  - Normalizing state for managing collections of items
   - Working with promises and thunks
 
 :::
@@ -522,7 +522,7 @@ You'll also notice that we've defined the loading state field as a string enum:
 
 ```js
 {
-  status: 'idle' | 'loading'
+  status: 'idle' // or: 'loading', 'succeeded', 'failed'
 }
 ```
 
@@ -938,10 +938,10 @@ Here's how our app looks after it's been fully converted to use these patterns:
 - **Memoized selectors help improve Redux app performance**
   - Reselect has a `createSelector` API that generates memoized selectors
   - Memoized selectors return the same result reference if given the same inputs
+- - **Request status should be stored as an enum, not booleans**
+  - Using enums like `'idle'` and `'loading'` helps track status consistently
 - **Normalized state makes it easier to find items by ID**
   - Normalized data is stored in objects instead of arrays, with item IDs as keys
-- **Request status should be stored as an enum, not booleans**
-  - Using enums like `'idle' | 'loading'` helps track status consistently
 - **Thunks can return promises from `dispatch`**
   - Components can wait for async thunks to complete, then do more work
 
