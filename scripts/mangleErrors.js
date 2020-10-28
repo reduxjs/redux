@@ -1,4 +1,5 @@
 const fs = require('fs')
+const helperModuleImports = require('@babel/helper-module-imports');
 
 /**
  * Converts an AST type into a javascript string so that it can be added to the error message lookup.
@@ -73,11 +74,12 @@ module.exports = babel => {
         if (arguments && arguments[0]) {
           // Skip running this logic when certain types come up:
           //  Identifier comes up when a variable is thrown (E.g. throw new error(message))
-          //  NumericLiteral and ConditionalExpression is code we have already processed
+          //  NumericLiteral, CallExpression, and ConditionalExpression is code we have already processed
           if (
             path.node.argument.arguments[0].type === 'Identifier' ||
             path.node.argument.arguments[0].type === 'NumericLiteral' ||
-            path.node.argument.arguments[0].type === 'ConditionalExpression'
+            path.node.argument.arguments[0].type === 'ConditionalExpression' ||
+            path.node.argument.arguments[0].type === 'CallExpression'
           ) {
             return
           }
@@ -92,11 +94,24 @@ module.exports = babel => {
             changeInArray = true
           }
 
+          // Import the error message function
+          const formatProdErrorMessageIdentifier = helperModuleImports.addDefault(
+            path,
+            'src/utils/formatProdErrorMessage',
+            {nameHint: 'formatProdErrorMessage'}
+          );
+
+          // Creates a function call to output the message to the error code page on the website
+          const prodMessage = t.callExpression(
+            formatProdErrorMessageIdentifier,
+            [t.numericLiteral(errorIndex)]
+          );
+
           if (minify) {
             path.replaceWith(
               t.throwStatement(
                 t.newExpression(t.identifier('Error'), [
-                  t.NumericLiteral(errorIndex)
+                    prodMessage
                 ])
               )
             )
@@ -110,7 +125,7 @@ module.exports = babel => {
                       t.identifier('process.env.NODE_ENV'),
                       t.stringLiteral('production')
                     ),
-                    t.NumericLiteral(errorIndex),
+                    prodMessage,
                     path.node.argument.arguments[0]
                   )
                 ])
