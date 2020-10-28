@@ -1,5 +1,5 @@
 const fs = require('fs')
-const helperModuleImports = require('@babel/helper-module-imports');
+const helperModuleImports = require('@babel/helper-module-imports')
 
 /**
  * Converts an AST type into a javascript string so that it can be added to the error message lookup.
@@ -98,21 +98,19 @@ module.exports = babel => {
           const formatProdErrorMessageIdentifier = helperModuleImports.addDefault(
             path,
             'src/utils/formatProdErrorMessage',
-            {nameHint: 'formatProdErrorMessage'}
-          );
+            { nameHint: 'formatProdErrorMessage' }
+          )
 
           // Creates a function call to output the message to the error code page on the website
           const prodMessage = t.callExpression(
             formatProdErrorMessageIdentifier,
             [t.numericLiteral(errorIndex)]
-          );
+          )
 
           if (minify) {
             path.replaceWith(
               t.throwStatement(
-                t.newExpression(t.identifier('Error'), [
-                    prodMessage
-                ])
+                t.newExpression(t.identifier('Error'), [prodMessage])
               )
             )
           } else {
