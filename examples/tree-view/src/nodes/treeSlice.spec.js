@@ -1,10 +1,8 @@
 import deepFreeze from 'deep-freeze'
 import reducer, {
-  addChild,
-  createNode,
-  deleteNode,
+  addChildToNode,
   increment,
-  removeChild
+  removeNodeByParent
 } from './treeSlice'
 
 describe('reducer', () => {
@@ -12,7 +10,7 @@ describe('reducer', () => {
     expect(reducer(undefined, {})).toEqual({})
   })
 
-  it('should handle INCREMENT action', () => {
+  it('should handle increment action', () => {
     const stateBefore = {
       node_0: {
         id: 'node_0',
@@ -35,29 +33,12 @@ describe('reducer', () => {
     expect(reducer(stateBefore, action)).toEqual(stateAfter)
   })
 
-  it('should handle CREATE_NODE action', () => {
-    const stateBefore = {}
-    const action = createNode()
-    const stateAfter = {
-      ['node_1']: {
-        id: 'node_1',
-        counter: 0,
-        childIds: []
-      }
-    }
-
-    deepFreeze(stateBefore)
-    deepFreeze(action)
-
-    expect(reducer(stateBefore, action)).toEqual(stateAfter)
-  })
-
-  it('should handle DELETE_NODE action', () => {
+  it('should handle removeNodeByParent action', () => {
     const stateBefore = {
       node_0: {
         id: 'node_0',
         counter: 0,
-        childIds: ['node_1']
+        childIds: ['node_1', 'node_2']
       },
       node_1: {
         id: 'node_1',
@@ -80,7 +61,7 @@ describe('reducer', () => {
         childIds: []
       }
     }
-    const action = deleteNode('node_2')
+    const action = removeNodeByParent({ parentId: 'node_0', childId: 'node_2' })
     const stateAfter = {
       node_0: {
         id: 'node_0',
@@ -100,58 +81,20 @@ describe('reducer', () => {
     expect(reducer(stateBefore, action)).toEqual(stateAfter)
   })
 
-  it('should handle ADD_CHILD action', () => {
+  it('should handle addChildToNode action', () => {
     const stateBefore = {
       node_0: {
         id: 'node_0',
         counter: 0,
         childIds: []
-      },
-      node_1: {
-        id: 'node_1',
-        counter: 0,
-        childIds: []
       }
     }
-    const action = addChild('node_0')
+    const action = addChildToNode('node_0')
     const stateAfter = {
       node_0: {
         id: 'node_0',
         counter: 0,
         childIds: ['node_1']
-      },
-      node_1: {
-        id: 'node_1',
-        counter: 0,
-        childIds: []
-      }
-    }
-
-    deepFreeze(stateBefore)
-    deepFreeze(action)
-
-    expect(reducer(stateBefore, action)).toEqual(stateAfter)
-  })
-
-  it('should handle REMOVE_CHILD action', () => {
-    const stateBefore = {
-      node_0: {
-        id: 'node_0',
-        counter: 0,
-        childIds: ['node_1']
-      },
-      node_1: {
-        id: 'node_1',
-        counter: 0,
-        childIds: []
-      }
-    }
-    const action = removeChild({ nodeId: 'node_0', childId: 'node_1' })
-    const stateAfter = {
-      node_0: {
-        id: 'node_0',
-        counter: 0,
-        childIds: []
       },
       node_1: {
         id: 'node_1',

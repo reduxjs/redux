@@ -1,12 +1,6 @@
 import React from 'react'
-import { batch, useDispatch, useSelector } from 'react-redux'
-import {
-  addChild,
-  createNode,
-  deleteNode,
-  increment,
-  removeChild
-} from './treeSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { addChildToNode, increment, removeNodeByParent } from './treeSlice'
 
 const MemoNode = React.memo(function Node({ id, parentId }) {
   const node = useSelector(state => state.tree[id])
@@ -19,17 +13,11 @@ const MemoNode = React.memo(function Node({ id, parentId }) {
   }
 
   const handleAddChildClick = () => {
-    batch(() => {
-      dispatch(createNode())
-      dispatch(addChild(id))
-    })
+    dispatch(addChildToNode(id))
   }
 
   const handleRemoveClick = () => {
-    batch(() => {
-      dispatch(removeChild({ nodeId: parentId, childId: id }))
-      dispatch(deleteNode(id))
-    })
+    dispatch(removeNodeByParent({ parentId, childId: id }))
   }
 
   return (

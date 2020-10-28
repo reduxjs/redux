@@ -29,37 +29,30 @@ const treeSlice = createSlice({
       const nodeId = action.payload
       state[nodeId].counter++
     },
-    createNode: {
+    addChildToNode: {
       reducer: (state, action) => {
-        const nextId = action.payload
+        // create Node
+        const { nextId, id } = action.payload
         state[nextId] = { id: nextId, counter: 0, childIds: [] }
-      },
-      prepare: () => {
-        nextId++
-        return { payload: 'node_' + nextId }
-      }
-    },
-    addChild: {
-      reducer: (state, action) => {
-        const { nodeId, nextId } = action.payload
-        const childId = nextId
 
-        state[nodeId].childIds.push(childId)
+        // add child
+        state[id].childIds.push(nextId)
       },
-      prepare: nodeId => {
-        return { payload: { nodeId, nextId: 'node_' + nextId } }
+      prepare: id => {
+        nextId++
+        return { payload: { id, nextId: 'node_' + nextId } }
       }
     },
-    removeChild(state, action) {
-      const { childId, nodeId } = action.payload
-      const filteredChildIds = state[nodeId].childIds.filter(
+    removeNodeByParent(state, action) {
+      const { childId, parentId } = action.payload
+      const filteredChildIds = state[parentId].childIds.filter(
         id => id !== childId
       )
-      state[nodeId].childIds = filteredChildIds
-    },
-    deleteNode(state, action) {
-      const nodeId = action.payload
-      const ids = getAllDescendantIds(state, nodeId)
+      // remove child
+      state[parentId].childIds = filteredChildIds
+
+      // delete Node(s)
+      const ids = getAllDescendantIds(state, childId)
 
       deleteMany(state, ids)
     }
@@ -67,12 +60,8 @@ const treeSlice = createSlice({
 })
 
 export const {
-  addChild,
   addChildToNode,
-  createNode,
   removeNodeByParent,
-  deleteNode,
-  removeChild,
   increment
 } = treeSlice.actions
 
