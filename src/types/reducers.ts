@@ -74,9 +74,6 @@ export type ActionFromReducer<R> = R extends Reducer<any, infer A> ? A : never
  *
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
-export type ActionFromReducersMapObject<M> = M extends ReducersMapObject<
-  any,
-  any
->
+export type ActionFromReducersMapObject<M> = M extends ReducersMapObject
   ? ActionFromReducer<ReducerFromReducersMapObject<M>>
   : never
