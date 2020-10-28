@@ -1,14 +1,16 @@
 import React from 'react'
 import Layout from '@theme/Layout'
+import {useLocation} from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import 'url-search-params-polyfill';
 import styles from './styles.module.css'
 import errorCodes from '../../../errors.json'
+import 'url-search-params-polyfill';
 
 function Errors() {
+  const location = useLocation();
   const context = useDocusaurusContext()
   const { siteConfig = {} } = context
-  const errorCode = new URLSearchParams(window.location.search).get("code");
+  const errorCode = new URLSearchParams(location.search).get("code");
   const error = errorCodes[errorCode];
 
   return (
