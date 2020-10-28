@@ -148,6 +148,7 @@ import comments from "./commentsReducer";
 import dotProp from "dot-prop-immutable";
 import {combineReducers} from "redux";
 import reduceReducers from "reduce-reducers";
+import {createReducer} from 'redux-orm'
 
 const combinedReducer = combineReducers({
     posts,
@@ -183,7 +184,7 @@ function addComment(state, action) {
 
 const featureReducers = createReducer({}, {
     ADD_COMMENT : addComment,
-};
+});
 
 const rootReducer = reduceReducers(
     combinedReducer,
