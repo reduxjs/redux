@@ -641,10 +641,51 @@ Here's what the app looks like with that loading status enabled (to see the spin
 <iframe
   class="codesandbox"
   src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?fontsize=14&hidenavigation=1&theme=dark"
-  title="redux-essentials-example-app"
+  title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
+
+## Flux Standard Actions
+
+The Redux store itself does not actually care what fields you put into your action object. It only cares that `action.type` exists and has a value, and normal Redux actions always use a string for `action.type`. That means that you _could_ put any other fields into the action that you want. Maybe we could have `action.todo` for a "todo added" action, or `action.color`, and so on.
+
+However, if every action uses different field names for its data fields, it can be hard to know ahead of time what fields you need to handle in each reducer.
+
+That's why the Redux community came up with [the "Flux Standard Actions" convention](https://github.com/redux-utilities/flux-standard-action#motivation), or "FSA". This is a suggested approach for how to organize fields inside of action objects. The FSA pattern is widely used in the Redux community, and in fact you've already been using it throughout this whole tutorial.
+
+The FSA convention says that:
+
+- If your action object has any actual data, that "data" value of your action should always go in `action.payload`
+- An action may also have an `action.meta` field with extra descriptive data
+- An action may have an `action.error` field with error information
+
+So, _all_ Redux actions MUST:
+
+- be a plain JavaScript object
+- have a `type` field
+
+And if you write your actions using the FSA pattern, an action MAY
+
+- have a `payload` field
+- have an `error` field
+- have a `meta` field
+
+<DetailedExplanation title="Detailed Explanation: FSAs and Errors">
+
+The FSA specification says that:
+
+> The optional `error` property MAY be set to `true` if the action represents an error.
+> An action whose `error` is true is analogous to a rejected Promise. By convention, the `payload` SHOULD be an error object.
+> If `error` has any other value besides `true`, including `undefined` and `null`, the action MUST NOT be interpreted as an error.
+
+The FSA specs also argue against having specific action types for things like "loading succeeded" and "loading failed".
+
+However, in practice, the Redux community has ignored the idea of using `action.error` as a boolean flag, and instead settled on separate action types, like `'todos/todosLoadingSucceeded'` and `'todos/todosLoadingFailed'`. This is because it's much easier to check for those action types than it is to first handle `'todos/todosLoaded'` and _then_ check `if (action.error)`.
+
+You can do whichever approach works better for you, but most apps use separate action types for success and failure.
+
+</DetailedExplanation>
 
 ## Normalized State
 
@@ -926,7 +967,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 <iframe
   class="codesandbox"
   src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?fontsize=14&hidenavigation=1&theme=dark"
-  title="redux-essentials-example-app"
+  title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
@@ -940,6 +981,8 @@ Here's how our app looks after it's been fully converted to use these patterns:
   - Memoized selectors return the same result reference if given the same inputs
 - - **Request status should be stored as an enum, not booleans**
   - Using enums like `'idle'` and `'loading'` helps track status consistently
+- **"Flux Standard Actions" are the common convention for organizing action objects**
+  - Actions use `payload` for data, `meta` for extra descriptions, and `error` for errors
 - **Normalized state makes it easier to find items by ID**
   - Normalized data is stored in objects instead of arrays, with item IDs as keys
 - **Thunks can return promises from `dispatch`**
