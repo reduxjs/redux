@@ -88,8 +88,7 @@ Now that we have created a store, let's verify our program works! Even without a
 
 :::tip
 
-Before you run this code, try going back to `src/features/todos/todosSlice.js`, and remove all the example todo objects from the `initialState` so that it's just
-an empty array. That will make the output from this example a bit easier to read.
+Before you run this code, try going back to `src/features/todos/todosSlice.js`, and remove all the example todo objects from the `initialState` so that it's an empty array. That will make the output from this example a bit easier to read.
 
 :::
 
@@ -225,7 +224,7 @@ We've already seen that we can pass `rootReducer` and `preloadedState` arguments
 
 Redux stores are customized using something called a **store enhancer**. A store enhancer is like a special version of `createStore` that adds another layer wrapping around the original Redux store. An enhanced store can then change how the store behaves, by supplying its own versions of the store's `dispatch`, `getState`, and `subscribe` functions instead of the originals.
 
-For this tutorial, we won't go into details about how store enhancers actually work - we're just going to show how to use them.
+For this tutorial, we won't go into details about how store enhancers actually work - we'll focus on how to use them.
 
 ### Creating a Store with Enhancers
 
@@ -338,7 +337,7 @@ First, we'll look at how to add middleware to the store, then we'll show how you
 
 We already saw that you can customize a Redux store using store enhancers. Redux middleware are actually implemented on top of a very special store enhancer that comes built in with Redux, called **`applyMiddleware`**.
 
-Since we already know how to add enhancers to our store, we should be able to do that now. We'll start with just `applyMiddleware` by itself, and we'll add three example middleware that have been included in this project.
+Since we already know how to add enhancers to our store, we should be able to do that now. We'll start with `applyMiddleware` by itself, and we'll add three example middleware that have been included in this project.
 
 ```js title="src/store.js"
 import { createStore, applyMiddleware } from 'redux'
@@ -372,7 +371,7 @@ And we can see the output in the console:
 
 So how does that work?
 
-**Middleware form a pipeline around the store's `dispatch` method**. When we call `store.dispatch(action)`, we're _actually_ calling the first middleware in the pipeline. That middleware can then do anything it wants when it sees the action. Typically, a middleware will check to see if the action is a specific type that it cares about, much like a reducer would. If it's the right type, the middleware might run some custom logic. Otherwise, it just passes the action to the next middleware in the pipeline.
+**Middleware form a pipeline around the store's `dispatch` method**. When we call `store.dispatch(action)`, we're _actually_ calling the first middleware in the pipeline. That middleware can then do anything it wants when it sees the action. Typically, a middleware will check to see if the action is a specific type that it cares about, much like a reducer would. If it's the right type, the middleware might run some custom logic. Otherwise, it passes the action to the next middleware in the pipeline.
 
 _Unlike_ a reducer, **middleware can have side effects inside**, including timeouts and other async logic.
 
@@ -390,7 +389,7 @@ And since these are all function calls, they all _return_ from that call stack. 
 
 We can also write our own middleware. You might not need to do this all the time, but custom middleware are a great way to add specific behaviors to a Redux application.
 
-**Redux middleware are written as a series of three nested functions**. Let's see what that pattern looks like. We'll start by trying to write this middleware using the `function` keyword, just to make it more clear what's happening:
+**Redux middleware are written as a series of three nested functions**. Let's see what that pattern looks like. We'll start by trying to write this middleware using the `function` keyword, so that it's more clear what's happening:
 
 ```js
 // Middleware written as ES5 functions
@@ -515,17 +514,17 @@ A middleware can do anything it wants when it sees a dispatched action:
 
 and anything else you can think of.
 
-In particular, **middleware are _intended_ to contain side effects**. In addition, **middleware can modify `dispatch` to accept things that are _not_ just plain action objects**. We'll talk more about both of these [in Part 6: Async Logic](./part-6-async-logic.md).
+In particular, **middleware are _intended_ to contain logic with side effects**. In addition, **middleware can modify `dispatch` to accept things that are _not_ plain action objects**. We'll talk more about both of these [in Part 6: Async Logic](./part-6-async-logic.md).
 
 ## Redux DevTools
 
 Finally, there's one more very important thing to cover with configuring the store.
 
-**Redux was specifically designed to make it easy to understand when, where, why, and how your state has changed over time**. As part of that, Redux was built to enable the use of the **Redux DevTools** - an addon that shows you a history of what actions were dispatched, what those actions contained, and how the state changed after each dispatched action.
+**Redux was specifically designed to make it easier to understand when, where, why, and how your state has changed over time**. As part of that, Redux was built to enable the use of the **Redux DevTools** - an addon that shows you a history of what actions were dispatched, what those actions contained, and how the state changed after each dispatched action.
 
 The Redux DevTools UI is available as a browser extension for [Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) and [Firefox](ttps://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/). If you haven't already added that to your browser, go ahead and do that now.
 
-Once that's installed, open up the browser's DevTools window. You should now see a new "Redux" tab there. It doesn't do anything, yet - we've got to hook it up to a store first.
+Once that's installed, open up the browser's DevTools window. You should now see a new "Redux" tab there. It doesn't do anything, yet - we've got to set it up to talk to a Redux store first.
 
 ### Adding the DevTools to the Store
 
@@ -601,7 +600,7 @@ And as a reminder, here's what we covered in this section:
   - Multiple enhancers can be merged together using the `compose` API
 - **Middleware are the main way to customize the store**
   - Middleware are added using the `applyMiddleware` enhancer
-  - Middleware are made up of three nested functions inside each other
+  - Middleware are written as three nested functions inside each other
   - Middleware run each time an action is dispatched
   - Middleware can have side effects inside
 - **The Redux DevTools let you see what's changed in your app over time**

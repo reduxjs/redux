@@ -66,7 +66,13 @@ Redux Toolkit contains packages and functions that we think are essential for bu
 
 Because of this, **Redux Toolkit is the standard way to write Redux application logic**. The "hand-written" Redux logic you've written so far in this tutorial is actual working code, but **you shouldn't write Redux logic by hand** - we've covered those approaches in this tutorial so that you understand _how_ Redux works. However, **for real applications, you should use Redux Toolkit to write your Redux logic.**
 
-When you use Redux Toolkit, all the concepts that we've covered so far (actions, reducers, store setup, action creators, thunks, etc) still exist, but **Redux Toolkit provides easier ways to write that code**. In addition, Redux Toolkit _only_ covers the Redux logic - we still use React-Redux to let our React components talk to the Redux store, including `useSelector` and `useDispatch`.
+When you use Redux Toolkit, all the concepts that we've covered so far (actions, reducers, store setup, action creators, thunks, etc) still exist, but **Redux Toolkit provides easier ways to write that code**.
+
+:::tip
+
+Redux Toolkit _only_ covers the Redux logic - we still use React-Redux to let our React components talk to the Redux store, including `useSelector` and `useDispatch`.
+
+:::
 
 So, let's see how we can use Redux Toolkit to simplify the code we've already written in our example todo application. We'll primarily be rewriting our "slice" files, but we should be able to keep all the UI code the same.
 
@@ -184,7 +190,7 @@ First, we can switch our `createSelector` import to be from `'@reduxjs/toolkit'`
 npm uninstall redux redux-thunk reselect
 ```
 
-To be clear, **we're still using these packages and need to have them installed**. However, because Redux Toolkit depends on them, they'll be installed automatically - we only need to have `'@reduxjs/toolkit'` listed in our `package.json` file.
+To be clear, **we're still using these packages and need to have them installed**. However, because Redux Toolkit depends on them, they'll be installed automatically when we install `@reduxjs/toolkit`, so we don't need to have the other packages specifically listed in our `package.json` file.
 
 ## Writing Slices
 
@@ -245,7 +251,7 @@ There's several things to see in this example:
 - **`createSlice` allows us to safely "mutate" our state!**
 - But, we can also make immutable copies like before if we want to
 
-The generated action creators will be available as `slice.actions.todoAdded`, and we typically destructure and export those individually just like we did with the action creators we wrote earlier. The complete reducer function is available as `slice.reducer`, and we typically `export default slice.reducer`, again the same as before.
+The generated action creators will be available as `slice.actions.todoAdded`, and we typically destructure and export those individually like we did with the action creators we wrote earlier. The complete reducer function is available as `slice.reducer`, and we typically `export default slice.reducer`, again the same as before.
 
 So what do these auto-generated action objects look like? Let's try calling one of them and logging the action to see:
 
@@ -268,6 +274,11 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
+```js
+// Illegal - don't do this in a normal reducer!
+state.value = 123
+```
+
 :::
 
 So if we can't change the originals, how do we return an updated state?
@@ -276,13 +287,21 @@ So if we can't change the originals, how do we return an updated state?
 
 **Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
 
+```js
+// This is safe, because we made a copy
+return {
+  ...state,
+  value: 123
+}
+```
+
 :::
 
 As you've seen throughout this tutorial, we can write immutable updates by hand by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
 
 **That's why Redux Toolkit's `createSlice` function lets you write immutable updates an easier way!**
 
-`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/docs/introduction) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value, as if you'd written all the immutable update logic by hand.
+`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/docs/introduction) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
 
 So, instead of this:
 
@@ -797,7 +816,7 @@ You should now have a solid understanding of what Redux is, how it works, and ho
 - Reading the Redux state in our React components with `useSelector`
 - Dispatching actions from React components with `useDispatch`
 
-In addition, you've seen how **Redux Toolkit simplifies writing Redux logic**, and why **Redux toolkit is the standard approach for writing real Redux applications**. By seeing how to write Redux code "by hand" first, it should be clear what the Redux Toolkit APIs like `createSlice` are doing for you, so that you don't have to write that code yourself.
+In addition, you've seen how **Redux Toolkit simplifies writing Redux logic**, and why **Redux Toolkit is the standard approach for writing real Redux applications**. By seeing how to write Redux code "by hand" first, it should be clear what the Redux Toolkit APIs like `createSlice` are doing for you, so that you don't have to write that code yourself.
 
 :::info
 

@@ -305,7 +305,29 @@ console.log(currentValue)
 
 ## Core Concepts and Principles
 
-**FIXME** Something from the "Core Concepts" and "Three Principles" pages here?
+Overall, we can summarize the intent behind Redux's design in three core concepts:
+
+### Single Source of Truth
+
+The **global state** of your application is stored as an object inside a single **store**. Any given piece of data should only exist in one location, rather than being duplicated in many places.
+
+This makes it easier to debug and inspect your app's state as things change, as well as centralizing logic that needs to interact with the entire application.
+
+:::tip
+
+This does _not_ mean that _every_ piece of state in your app must go into the Redux store! You should decide whether a piece of state belongs in Redux or your UI components, based on where it's needed.
+
+:::
+
+### State is Read-Only
+
+The only way to change the state is to dispatch an **action**, an object that describes what happened.
+
+This way, the UI won't accidentally overwrite data, and it's easier to trace why a state update happened. Since actions are plain JS objects, they can be logged, serialized, stored, and later replayed for debugging or testing purposes.
+
+### Changes are Made with Pure Reducer Functions
+
+To specify how the state tree is updated based on actions, you write **reducer** functions. Reducers are pure functions that take the previous state and an action, and return the next state. Like any other functions, you can split reducers into smaller functions to help do the work, or write reusable reducers for common tasks.
 
 ## Redux Application Data Flow
 
@@ -336,13 +358,12 @@ Here's what that data flow looks like visually:
 
 ## What You've Learned
 
-That counter example was small, but it does show all the working pieces of a real Redux app.
-**Everything we'll talk about in the following sections expands on those basic pieces.**
-
-With that in mind, let's review what we've learned so far:
-
 :::tip
 
+- **Redux's intent can be summarized in three principles**
+  - Global app state is kept in a single store
+  - The store state is read-only to the rest of the app
+  - Reducer functions are used to update the state in response to actions
 - **Redux uses a "one-way data flow" app structure**
   - State describes the condition of the app at a point in time, and UI renders based on that state
   - When something happens in the app:

@@ -248,7 +248,7 @@ We've already seen that we can write "selector" functions, which accept the Redu
 const selectTodos = state => state.todos
 ```
 
-What if we need to _derive_ some data? For example, maybe we want to have an array of just the todo IDs:
+What if we need to _derive_ some data? For example, maybe we want to have an array of only the todo IDs:
 
 ```js
 const selectTodoIds = state => state.todos.map(todo => todo.id)
@@ -366,7 +366,7 @@ export const selectFilteredTodos = createSelector(
 
 :::caution
 
-Note that we've just added an import dependency between two slices - the `todosSlice` is importing a value from the `filtersSlice`. This is legal, but be careful. **If two slices _both_ try to import something from each other, you can end up with a "cyclic import dependency" problem that can cause your code to crash**. If that happens, try moving some common code to its own file and import from that file instead.
+Note that we've now added an import dependency between two slices - the `todosSlice` is importing a value from the `filtersSlice`. This is legal, but be careful. **If two slices _both_ try to import something from each other, you can end up with a "cyclic import dependency" problem that can cause your code to crash**. If that happens, try moving some common code to its own file and import from that file instead.
 
 :::
 
@@ -460,7 +460,7 @@ The UI layer then shows a loading spinner while the request is in progress, and 
 
 We're going to update our todos slice to track a loading state value, and dispatch an additional `'todos/todosLoading'` action as part of the `fetchTodos` thunk.
 
-Right now, the `state` of our todos reducer is just the array of todos itself. If we want to track the loading state inside the todos slice, we'll need to reorganize the todos state to be an object that has the todos array _and_ the loading state value. That also means rewriting the reducer logic to handle the additional nesting:
+Right now, the `state` of our todos reducer is only the array of todos itself. If we want to track the loading state inside the todos slice, we'll need to reorganize the todos state to be an object that has the todos array _and_ the loading state value. That also means rewriting the reducer logic to handle the additional nesting:
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-start
@@ -652,7 +652,7 @@ The Redux store itself does not actually care what fields you put into your acti
 
 However, if every action uses different field names for its data fields, it can be hard to know ahead of time what fields you need to handle in each reducer.
 
-That's why the Redux community came up with [the "Flux Standard Actions" convention](https://github.com/redux-utilities/flux-standard-action#motivation), or "FSA". This is a suggested approach for how to organize fields inside of action objects. The FSA pattern is widely used in the Redux community, and in fact you've already been using it throughout this whole tutorial.
+That's why the Redux community came up with [the "Flux Standard Actions" convention](https://github.com/redux-utilities/flux-standard-action#motivation), or "FSA". This is a suggested approach for how to organize fields inside of action objects, so that developers always know what fields contain what kind of data. The FSA pattern is widely used in the Redux community, and in fact you've already been using it throughout this whole tutorial.
 
 The FSA convention says that:
 
@@ -979,7 +979,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 - **Memoized selectors help improve Redux app performance**
   - Reselect has a `createSelector` API that generates memoized selectors
   - Memoized selectors return the same result reference if given the same inputs
-- - **Request status should be stored as an enum, not booleans**
+- **Request status should be stored as an enum, not booleans**
   - Using enums like `'idle'` and `'loading'` helps track status consistently
 - **"Flux Standard Actions" are the common convention for organizing action objects**
   - Actions use `payload` for data, `meta` for extra descriptions, and `error` for errors

@@ -92,11 +92,10 @@ Redux is more useful when:
 
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
+- **[When (and when not) To Reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - **[Redux FAQ: When should I use Redux?](../../faq/General.md#when-should-i-use-redux)**
 - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
-
-**FIXME Link to Redux vs Context material?**
 
 :::
 
@@ -120,7 +119,11 @@ The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-
 
 Now that you know what Redux is, let's briefly look at the pieces that make up a Redux app and how it works.
 
-**FIXME** Need to emphasize that this tutorial talks about the Redux _core_, but we'll get to the other parts later.
+:::info
+
+The rest of the description on this page focuses solely on the Redux core library (the `redux` package). We'll talk about the other Redux-related packages as we go through the rest of the tutorial.
+
+:::
 
 ### The Redux Store
 
@@ -251,8 +254,6 @@ Finally, we need to respond to user input by creating **action** objects that
 describe what happened, and **dispatching** them to the store. When we call `store.dispatch(action)`,
 the store runs the reducer, calculates the updated state, and runs the subscribers
 to update the UI.
-
-**FIXME Fix broken `% 2` example in sandbox**
 
 ```js
 // Handle user inputs by "dispatching" action objects,

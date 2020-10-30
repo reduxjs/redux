@@ -300,9 +300,12 @@ The rule about "immutable updates" is particularly important, and worth talking 
 
 Earlier, we talked about "mutation" (modifying existing object/array values) and "immutability" (treating values as something that cannot be changed).
 
-:::warning
-
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
+
+```js
+// Illegal - don't do this in a normal reducer!
+state.value = 123
+```
 
 :::
 
@@ -312,6 +315,14 @@ So if we can't change the originals, how do we return an updated state?
 
 **Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
 
+```js
+// This is safe, because we made a copy
+return {
+  ...state,
+  value: 123
+}
+```
+
 :::
 
 We already saw that we can [write immutable updates by hand](./part-1-overview-concepts.md#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
@@ -320,7 +331,7 @@ Writing immutable update logic by hand _is_ hard, and accidentally mutating stat
 
 **That's why Redux Toolkit's `createSlice` function lets you write immutable updates an easier way!**
 
-`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/docs/introduction) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value, as if you'd written all the immutable update logic by hand.
+`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/docs/introduction) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
 
 So, instead of this:
 

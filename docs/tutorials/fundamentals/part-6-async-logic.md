@@ -19,6 +19,7 @@ description: 'The official Redux Fundamentals tutorial: learn how to use async l
 :::info Prerequisites
 
 - Familiarity with using AJAX requests to fetch and update data from a server
+- Understanding asynchronous logic in JS, including Promises
 
 :::
 
@@ -264,7 +265,7 @@ If we reload the page, there's no visible change in the UI. However, if we open 
 
 Notice that even though we've dispatched an action, nothing's happening to change the state. **We need to handle this action in our todos reducer to have the state updated.**
 
-Let's add a case to the reducer to load this data into the store. Since we're fetching the data from the server, we want to completely replace any existing todos, so we can just return the `action.payload` array to make it be the new todos `state` value:
+Let's add a case to the reducer to load this data into the store. Since we're fetching the data from the server, we want to completely replace any existing todos, so we can return the `action.payload` array to make it be the new todos `state` value:
 
 ```js title="src/features/todos/todosSlice.js"
 import { client } from '../../api/client'
@@ -390,7 +391,7 @@ const handleKeyDown = e => {
 }
 ```
 
-Now the component doesn't actually know that it's even dispatching a thunk function - the `saveNewTodo` function is encapsulating what's actually happening. The `<Header>` component just knows that it needs to dispatch _some value_ when the user presses enter.
+Now the component doesn't actually know that it's even dispatching a thunk function - the `saveNewTodo` function is encapsulating what's actually happening. The `<Header>` component only knows that it needs to dispatch _some value_ when the user presses enter.
 
 This pattern of writing a function to prepare something that will get passed to `dispatch` is called **the "action creator" pattern**, and we'll talk about that more in [the next section](./part-7-standard-patterns.md).
 
@@ -398,7 +399,7 @@ We can now see the updated `'todos/todoAdded'` action being dispatched:
 
 ![Devtools - async todoAdded action contents](/img/tutorials/fundamentals/devtools-async-todoAdded-action.png)
 
-The last thing we need to change here is updating our todos reducer. When we make a POST request to `/fakeApi/todos`, the server will return a completely new todo object (including a new ID value). That means our reducer doesn't have to calculate a new ID, or fill out the other fields - we can just create a new `state` array that includes the new todo item:
+The last thing we need to change here is updating our todos reducer. When we make a POST request to `/fakeApi/todos`, the server will return a completely new todo object (including a new ID value). That means our reducer doesn't have to calculate a new ID, or fill out the other fields - it only needs to create a new `state` array that includes the new todo item:
 
 ```js title="src/features/todos/todosSlice.js"
 const initialState = []
@@ -421,6 +422,12 @@ export default function todosReducer(state = initialState, action) {
 And now adding a new todo will work correctly:
 
 ![Devtools - async todoAdded state diff](/img/tutorials/fundamentals/devtools-async-todoAdded-diff.png)
+
+:::tip
+
+Thunk functions can be used for both asynchronous _and_ synchronous logic. Thunks provide a way to write any reusable logic that needs access to `dispatch` and `getState`.
+
+:::
 
 ## What You've Learned
 

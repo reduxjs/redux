@@ -32,7 +32,7 @@ Now that you have some idea of what these pieces are, it's time to put that know
 
 :::caution
 
-The example app is not meant as a complete production-ready project. The goal is to help you learn core Redux APIs and usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. Please read through the whole tutorial to see all the concepts in use.
+**The example app is not meant as a complete production-ready project**. The goal is to help you learn core Redux APIs and usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. **Please read through the whole tutorial to see all the concepts in use**.
 
 :::
 
@@ -229,8 +229,8 @@ Based on that list of things that can happen, we can create a list of actions th
 - `{type: 'filters/statusFilterChanged', payload: filterValue}`
 - `{type: 'filters/colorFilterChanged', payload: {color, changeType}}`
 
-In this case, the actions mostly just have a single extra piece of data apiece, so we can put that directly in the `action.payload` field. We could have split the color filter behavior into two actions, one for "added" and one for "removed", but in this case
-we'll do it as one action with an extra field inside just to show that we can have objects as an action payload.
+In this case, the actions primarily have a single extra piece of data apiece, so we can put that directly in the `action.payload` field. We could have split the color filter behavior into two actions, one for "added" and one for "removed", but in this case
+we'll do it as one action with an extra field inside specifically to show that we can have objects as an action payload.
 
 Like the state data, **actions should contain the smallest amount of information needed to describe what happened**.
 
@@ -238,15 +238,11 @@ Like the state data, **actions should contain the smallest amount of information
 
 Now that we know what our state structure and our actions look like, it's time to write our first reducer.
 
-**Reducers** are functions that take the current `state` and an `action` as arguments, and return a new `state` result:
-
-```js
-;(state, action) => newState
-```
+**Reducers** are functions that take the current `state` and an `action` as arguments, and return a new `state` result. In other words, **`(state, action) => newState`**.
 
 ### Creating the Root Reducer
 
-A Redux app really only has one reducer function: the "root reducer" function that you will pass to `createStore` later on. That one root reducer function is responsible for handling _all_ of the actions that are dispatched, and calculating what the _entire_ new state result should be every time.
+**A Redux app really only has one reducer function: the "root reducer" function** that you will pass to `createStore` later on. That one root reducer function is responsible for handling _all_ of the actions that are dispatched, and calculating what the _entire_ new state result should be every time.
 
 Let's start by creating a `reducer.js` file in the `src` folder, alongside `index.js` and `App.js`.
 
@@ -277,6 +273,8 @@ export default function appReducer(state = initialState, action) {
   }
 }
 ```
+
+A reducer may be called with `undefined` as the state value when the application is being initialized. If that happens, we need to provide an initial state value so the rest of the reducer code has something to work with. **Reducers normally use ES6 default argument syntax to provide initial state: `(state = initialState, action)`**.
 
 Next, let's add the logic to handle the `'todos/todoAdded'` action.
 
@@ -324,7 +322,7 @@ export default function appReducer(state = initialState, action) {
 }
 ```
 
-That's... an awful lot of work just to add one todo item to the state. Why is all this extra work necessary?
+That's... an awful lot of work to add one todo item to the state. Why is all this extra work necessary?
 
 ### Rules of Reducers
 
@@ -367,7 +365,7 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
 ```js
-// Illegal - don't do this in a reducer!
+// Illegal - don't do this in a normal reducer!
 state.value = 123
 ```
 
@@ -395,11 +393,11 @@ This becomes harder when the data is nested. **A critical rule of immutable upda
 
 However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
 
-Writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
+Writing immutable update logic by hand _is_ hard, and **accidentally mutating state in reducers is the single most common mistake Redux users make**.
 
 :::tip
 
-In real-world applications, you won't have to write these complex nested immutable updates by hand. In [Part 8](./part-8-modern-redux.md), you'll
+**In real-world applications, you won't have to write these complex nested immutable updates by hand**. In [Part 8](./part-8-modern-redux.md), you'll
 learn how to use Redux Toolkit to simplify writing immutable update logic in reducers.
 
 :::
@@ -518,9 +516,9 @@ As part of this, **Redux reducers are typically split apart based on the section
 
 So, where should these split-up reducer functions live?
 
-We recommend organizing your Redux app folders and files based on "features" - code that relates to a specific concept
-or area of your application. The Redux code for a particular feature is usually written as a single file, known as a
-"slice" file, which contains all the reducer logic and all of the action-related code for that part of your app state.
+**We recommend organizing your Redux app folders and files based on "features"** - code that relates to a specific concept
+or area of your application. **The Redux code for a particular feature is usually written as a single file, known as a
+"slice" file**, which contains all the reducer logic and all of the action-related code for that part of your app state.
 
 Because of that, **the reducer for a specific section of the Redux app state is called a "slice reducer"**. Typically, some of the action objects will be closely related to a specific slice reducer, and so the action type strings should start with the name of that feature (like `'todos'`) and describe the event that happened (like `'todoAdded'`), joined together into one string (`'todos/todoAdded'`).
 
@@ -546,7 +544,7 @@ export default function todosReducer(state = initialState, action) {
 }
 ```
 
-Now we can copy over the logic for updating the todos. However, there's an important difference here. **This file only has to update the todos-related state - it's not nested any more!** This is another reason why we split up reducers. Since the todos state is just an array, we don't have to copy the outer root state object in here. That makes this reducer easier to read.
+Now we can copy over the logic for updating the todos. However, there's an important difference here. **This file only has to update the todos-related state - it's not nested any more!** This is another reason why we split up reducers. Since the todos state is an array by itself, we don't have to copy the outer root state object in here. That makes this reducer easier to read.
 
 This is called **reducer composition**, and it's the fundamental pattern of building Redux apps.
 
@@ -629,7 +627,7 @@ If you get stuck, see [the CodeSandbox at the end of this page](#what-youve-lear
 
 We now have two separate slice files, each with its own slice reducer function. But, we said earlier that the Redux store needs _one_ root reducer function when we create it. So, how can we go back to having a root reducer without putting all the code in one big function?
 
-Since reducers are just functions, we can import the slice reducers back into `reducer.js`, and write a new root reducer whose only job is to call the other two functions.
+Since reducers are normal JS functions, we can import the slice reducers back into `reducer.js`, and write a new root reducer whose only job is to call the other two functions.
 
 ```js title="src/reducer.js"
 import todosReducer from './features/todos/todosSlice'
@@ -688,7 +686,7 @@ values are the slice reducer functions that know how to update those slices of t
 
 ## What You've Learned
 
-State, Actions, and Reducers are the building blocks of Redux. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
+**State, Actions, and Reducers are the building blocks of Redux**. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
 
 Here's the contents of our app so far:
 
