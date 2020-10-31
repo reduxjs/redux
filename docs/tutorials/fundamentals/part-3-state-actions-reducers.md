@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 2](./part-2-concepts-data-flow.md)** for explanations of these terms.)
+- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md)** for explanations of these terms.)
 
 :::
 
@@ -397,7 +397,7 @@ Writing immutable update logic by hand _is_ hard, and **accidentally mutating st
 
 :::tip
 
-**In real-world applications, you won't have to write these complex nested immutable updates by hand**. In [Part 8](./part-8-modern-redux.md), you'll
+**In real-world applications, you won't have to write these complex nested immutable updates by hand**. In [Part 8: Modern Redux with Redux Toolkit](./part-8-modern-redux.md), you'll
 learn how to use Redux Toolkit to simplify writing immutable update logic in reducers.
 
 :::

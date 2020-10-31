@@ -21,9 +21,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 Welcome to the Redux Fundamentals tutorial! **This tutorial will introduce you to the core concepts, principles, and patterns for using Redux**. By the time you finish, you should understand the different pieces that make up a Redux app, how data flows when using Redux, and our standard recommended patterns for building Redux apps.
 
-In Part 1 of this tutorial, we'll briefly look at a minimal example of a working Redux app to see what the pieces are, and in [Part 2](./part-2-concepts-data-flow.md) we'll look at those pieces in more detail and how data flows in a Redux application.
+In Part 1 of this tutorial, we'll briefly look at a minimal example of a working Redux app to see what the pieces are, and in [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md) we'll look at those pieces in more detail and how data flows in a Redux application.
 
-Starting in [Part 3](./part-3-state-actions-reducers.md), we'll use that knowledge to build a small example app that demonstrates how these pieces fit together and talk about how Redux works in practice. After we finish building the working example app "by hand" so that you can see exactly what's happening, we'll talk about some of the standard patterns and abstractions typically used with Redux. Finally, we'll see how these lower-level examples translate into the higher-level patterns that we recommend for actual usage in real applications.
+Starting in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers.md), we'll use that knowledge to build a small example app that demonstrates how these pieces fit together and talk about how Redux works in practice. After we finish building the working example app "by hand" so that you can see exactly what's happening, we'll talk about some of the standard patterns and abstractions typically used with Redux. Finally, we'll see how these lower-level examples translate into the higher-level patterns that we recommend for actual usage in real applications.
 
 ### How to Read This Tutorial
 
@@ -313,5 +313,5 @@ With that in mind, let's review what we've learned so far:
 
 ## What's Next?
 
-Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2: Concepts and Data Flow](./part-2-concepts-data-flow.md),
+Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md),
 where we'll look at how data flows through a Redux app in more detail.

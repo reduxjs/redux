@@ -854,7 +854,7 @@ The good news is that because we're using selectors to encapsulate the state loo
 
 Part of the issue here is that **this todo app example is not a large real-world application**. So, normalizing state is not as useful in this particular app, and it's harder to see the potential benefits.
 
-Fortunately, in [Part 8](part-8-modern-redux.md) we'll see some ways to drastically shorten the reducer logic for managing our normalized state.
+Fortunately, in [Part 8: Modern Redux with Redux Toolkit](part-8-modern-redux.md) we'll see some ways to drastically shorten the reducer logic for managing our normalized state.
 
 For now, the important things to understand are:
 
