@@ -50,32 +50,6 @@ module.exports = {
           'tutorials/fundamentals/part-7-standard-patterns',
           'tutorials/fundamentals/part-8-modern-redux'
         ]
-      },
-      {
-        type: 'category',
-        label: 'Basic Tutorial',
-        items: [
-          'basics/basic-tutorial',
-          'basics/actions',
-          'basics/reducers',
-          'basics/store',
-          'basics/data-flow',
-          'basics/usage-with-react',
-          'basics/example'
-        ]
-      },
-      {
-        type: 'category',
-        label: 'Advanced Tutorial',
-        items: [
-          'advanced/advanced-tutorial',
-          'advanced/async-actions',
-          'advanced/async-flow',
-          'advanced/middleware',
-          'advanced/usage-with-react-router',
-          'advanced/example-reddit-api',
-          'advanced/next-steps'
-        ]
       }
     ],
     Recipes: [
