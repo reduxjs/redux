@@ -63,11 +63,9 @@ For more details, see the [Installation](Installation.md) page.
 
 ## Basic Example
 
-The whole state of your app is stored in an object tree inside a single _store_.
+The whole global state of your app is stored in an object tree inside a single _store_.
 The only way to change the state tree is to emit an _action_, an object describing what happened.
-To specify how the actions transform the state tree, you write pure _reducers_.
-
-That's it!
+To specify how the actions transform the state tree, you write pure _reducer_ functions that calculate a new state based on the old state and the action.
 
 ```js
 import { createStore } from 'redux'
@@ -127,11 +125,14 @@ We have a variety of resources available to help you learn Redux.
 
 ### Redux Essentials Tutorial
 
-The [**Redux Essentials tutorial**](../tutorials/essentials/part-1-overview-concepts.md) is a "top-down" tutorial that teaches how to use Redux the right way, using our latest recommended APIs and best practices. We recommend starting there.
+The [**Redux Essentials tutorial**](../tutorials/essentials/part-1-overview-concepts.md) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices. We recommend starting there.
+
+### Redux Fundamentals Tutorial
+
+The [**Redux Fundamentals tutorial**](../tutorials/fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.
 
 ### Additional Tutorials
 
-- The Redux docs [**Basic tutorial**](../basics/README.md) and [**Advanced tutorial**](../advanced/README.md) are a "bottom-up" tutorial that teaches how Redux works, starting from first principles.
 - The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online. See the complete list of examples in the **[Examples page](./Examples.md)**.
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** and **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** video courses on Egghead.io
 - Redux maintainer Mark Erikson's **["Redux Fundamentals" conference talk](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" workshop slides**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
