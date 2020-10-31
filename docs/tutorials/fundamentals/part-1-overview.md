@@ -27,9 +27,9 @@ Starting in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reduce
 
 ### How to Read This Tutorial
 
-This tutorial teaches "how Redux works", using lower-level hand-written approaches to illustrate core concepts. Because of this, **the code samples in this tutorial do not include our recommended patterns for using Redux**.
+**This tutorial will teach you "how Redux works"**, as well as _why_ these patterns exist. Fair warning though - learning the concepts is different from putting them into practice in actual apps.
 
-We specifically recommend that **you should use our official Redux Toolkit package for writing actual applications**. The concepts shown in this tutorial are also used with Redux Toolkit, but it provides APIs that help you write Redux logic that is simpler and more effective. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
+**The initial code will be less concise than the way we suggest writing real app code**, but writing it out long-hand is the best way to learn. Once you understand how everything fits together, we'll look at using Redux Toolkit to simplify things. **Redux Toolkit is the recommended way to build production apps with Redux**, and is built on all of the concepts that we will look at throughout this tutorial. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
 
 :::info
 
@@ -248,6 +248,8 @@ The Redux store lets us call `store.subscribe()` and pass a subscriber callback 
 every time the store is updated. So, we can pass our `render` function as the subscriber, and know that
 each time the store updates, we can update the UI with the latest value.
 
+Redux itself is a standalone library that can be used anywhere. This also means that it can be used with any UI layer.
+
 #### Dispatching Actions
 
 Finally, we need to respond to user input by creating **action** objects that
@@ -291,6 +293,12 @@ subtract 1 from the current counter value.
 We can also write code that only dispatches an action if a certain
 condition is true, or write some async code that dispatches an action
 after a delay.
+
+### Data Flow
+
+We can summarize the flow of data through a Redux app with this diagram:
+
+![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
 ## What You've Learned
 
