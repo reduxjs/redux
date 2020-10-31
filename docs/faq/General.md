@@ -63,10 +63,10 @@ In the end, Redux is just a tool. It's a great tool, and there are some great re
 
 **Articles**
 
-- [React How-To](https://github.com/petehunt/react-howto)
+- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
 - [The Case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
-- [Some Reasons Why Redux is Useful in a React App](https://www.fullstackreact.com/articles/redux-with-mark-erikson/)
 
 **Discussions**
 

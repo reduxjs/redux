@@ -269,19 +269,23 @@ _Advanced tools and techniques for managing async behavior_
 
 _Deeper looks at how Redux is meant to be used, and why it works the way it does_
 
-- **You Might Not Need Redux** <br/>
+- **When (and when not) to reach for Redux** <br />
+  https://changelog.com/posts/when-and-when-not-to-reach-for-redux <br />
+  Redux maintainer Mark Erikson describes the problems Redux was created to solve, and how it compares to other commonly used tools.
+
+* **You Might Not Need Redux** <br/>
   https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367 <br/>
   Dan Abramov discusses the tradeoffs involved in using Redux.
 
-- **Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent** <br/>
+* **Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent** <br/>
   http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/ <br/>
   A deep dive into how Redux actually works, the constraints it asks you to follow, and the intent behind its design and usage.
 
-- **Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy** <br/>
+* **Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy** <br/>
   http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/ <br/>
   A follow-up look at why common Redux usage patterns exist, other ways that Redux can be used, and thoughts on the pros and cons of those different patterns and approaches.
 
-- **What's So Great About Redux?** <br/>
+* **What's So Great About Redux?** <br/>
   https://medium.freecodecamp.org/whats-so-great-about-redux-ac16f1cc0f8b <br/>
   Deep and fascinating analysis of how Redux compares to OOP and message-passing, how typical Redux usage can devolve towards Java-like "setter" functions with more boilerplate, and something of a plea for a higher-level "blessed" abstraction on top of Redux to make it easier to work with and learn for newbies. Very worth reading.
 

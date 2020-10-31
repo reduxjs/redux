@@ -211,5 +211,6 @@ There is a key difference in how Redux and React's Context treat data. Redux mai
 
 #### Further information
 
+- [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
 - [Redux vs. The React Context API](https://daveceddia.com/context-api-vs-redux/)
 - [You Might Not Need Redux (But You Can’t Replace It With Hooks)](https://www.simplethread.com/cant-replace-redux-with-hooks/)

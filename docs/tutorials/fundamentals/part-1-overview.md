@@ -92,7 +92,7 @@ Redux is more useful when:
 
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
-- **[When (and when not) To Reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
 - **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - **[Redux FAQ: When should I use Redux?](../../faq/General.md#when-should-i-use-redux)**
 - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
