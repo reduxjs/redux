@@ -8,11 +8,18 @@ hide_title: true
 
 ## Table of Contents
 
-- [Why should type be a string, or at least serializable? Why should my action types be constants?](#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants)
-- [Is there always a one-to-one mapping between reducers and actions?](#is-there-always-a-one-to-one-mapping-between-reducers-and-actions)
-- [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)
-- [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
-- [Should I dispatch multiple actions in a row from one action creator?](#should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator)
+- [Redux FAQ: Actions](#redux-faq-actions)
+  - [Table of Contents](#table-of-contents)
+  - [Actions](#actions)
+    - [Why should `type` be a string, or at least serializable? Why should my action types be constants?](#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants)
+      - [Further information](#further-information)
+    - [Is there always a one-to-one mapping between reducers and actions?](#is-there-always-a-one-to-one-mapping-between-reducers-and-actions)
+      - [Further information](#further-information-1)
+    - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)
+      - [Further information](#further-information-2)
+    - [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
+    - [Should I dispatch multiple actions in a row from one action creator?](#should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator)
+      - [Further information](#further-information-3)
 
 ## Actions
 
@@ -47,7 +54,7 @@ No. We suggest you write independent small reducer functions that are each respo
 
 **Documentation**
 
-- [Basics: Reducers](../basics/Reducers.md)
+- [Fundamentals: State, Actions, Reducers](../tutorials/fundamentals/part-3-state-actions-reducers.md)
 - [Recipes: Structuring Reducers](../recipes/structuring-reducers/StructuringReducers.md)
 
 **Discussions**
@@ -73,9 +80,8 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 
 **Documentation**
 
-- [Advanced: Async Actions](../advanced/AsyncActions.md)
-- [Advanced: Async Flow](../advanced/AsyncFlow.md)
-- [Advanced: Middleware](../advanced/Middleware.md)
+- [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
+- [Redux Fundamentals: Store - Middleware](../tutorials/fundamentals/part-4-store.md#middleware)
 
 **Articles**
 

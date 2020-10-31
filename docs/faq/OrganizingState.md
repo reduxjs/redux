@@ -8,10 +8,17 @@ hide_title: true
 
 ## Table of Contents
 
-- [Do I have to put all my state into Redux? Should I ever use React's setState()?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
-- [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
-- [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
-- [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
+- [Redux FAQ: Organizing State](#redux-faq-organizing-state)
+  - [Table of Contents](#table-of-contents)
+  - [Organizing State](#organizing-state)
+    - [Do I have to put all my state into Redux? Should I ever use React's `setState()`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+      - [Further information](#further-information)
+    - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
+      - [Further information](#further-information-1)
+    - [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
+      - [Further information](#further-information-2)
+    - [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
+      - [Further Information](#further-information-3)
 
 ## Organizing State
 
@@ -85,7 +92,8 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Documentation**
 
-- [Advanced: Async Actions](../advanced/AsyncActions.md)
+- [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
+- - [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
 - [Examples: Real World example](../introduction/Examples.md#real-world)
 - [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
 - [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/structuring-reducers/NormalizingStateShape.md)

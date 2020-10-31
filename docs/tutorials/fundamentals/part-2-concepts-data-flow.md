@@ -19,8 +19,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 1: Redux Overview](./part-1-overview.md), we saw a small example of what a working Redux app looks like and
-the pieces that make up the app. We also briefly mentioned some of the terms and concepts used with Redux.
+In [Part 1: Redux Overview](./part-1-overview.md), we talked about what Redux is, why you might want to use it, and listed the other Redux libraries that are typically used with the Redux core. We also saw a small example of what a working Redux app looks like and the pieces that make up the app. Finally, we briefly mentioned some of the terms and concepts used with Redux.
 
 In this section, we'll look at those terms and concepts in more detail, and talk more about how data flows
 through a Redux application.

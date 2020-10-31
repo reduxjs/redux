@@ -77,7 +77,7 @@ app.listen(port)
 
 The first thing that we need to do on every request is to create a new Redux store instance. The only purpose of this store instance is to provide the initial state of our application.
 
-When rendering, we will wrap `<App />`, our root component, inside a `<Provider>` to make the store available to all components in the component tree, as we saw in [Usage with React](../basics/UsageWithReact.md).
+When rendering, we will wrap `<App />`, our root component, inside a `<Provider>` to make the store available to all components in the component tree, as we saw in ["Redux Fundamentals" Part 5: UI and React](../tutorials/fundamentals/part-5-ui-and-react.md).
 
 The key step in server side rendering is to render the initial HTML of our component _**before**_ we send it to the client side. To do this, we use [ReactDOMServer.renderToString()](https://facebook.github.io/react/docs/react-dom-server.html#rendertostring).
 
@@ -299,6 +299,6 @@ Furthermore, you can add additional layers of security by sanitizing your state 
 
 ## Next Steps
 
-You may want to read [Async Actions](../advanced/AsyncActions.md) to learn more about expressing asynchronous flow in Redux with async primitives such as Promises and thunks. Keep in mind that anything you learn there can also be applied to universal rendering.
+You may want to read [Redux Fundamentals Part 6: Async Logic and Data Fetching](../tutorials/fundamentals/part-6-async-logic.md) to learn more about expressing asynchronous flow in Redux with async primitives such as Promises and thunks. Keep in mind that anything you learn there can also be applied to universal rendering.
 
-If you use something like [React Router](https://github.com/ReactTraining/react-router), you might also want to express your data fetching dependencies as static `fetchData()` methods on your route handler components. They may return [async actions](../advanced/AsyncActions.md), so that your `handleRender` function can match the route to the route handler component classes, dispatch `fetchData()` result for each of them, and render only after the Promises have resolved. This way the specific API calls required for different routes are colocated with the route handler component definitions. You can also use the same technique on the client side to prevent the router from switching the page until its data has been loaded.
+If you use something like [React Router](https://github.com/ReactTraining/react-router), you might also want to express your data fetching dependencies as static `fetchData()` methods on your route handler components. They may return [thunks](../tutorials/fundamentals/part-6-async-logic.md), so that your `handleRender` function can match the route to the route handler component classes, dispatch `fetchData()` result for each of them, and render only after the Promises have resolved. This way the specific API calls required for different routes are colocated with the route handler component definitions. You can also use the same technique on the client side to prevent the router from switching the page until its data has been loaded.

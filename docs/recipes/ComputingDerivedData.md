@@ -10,7 +10,7 @@ hide_title: true
 
 ### Motivation for Memoized Selectors
 
-Let's revisit the [Todos List example](../basics/UsageWithReact.md):
+Let's revisit the [Todos List example](../tutorials/fundamentals/part-5-ui-and-react.md):
 
 #### `containers/VisibleTodoList.js`
 

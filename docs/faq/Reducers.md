@@ -8,8 +8,13 @@ hide_title: true
 
 ## Table of Contents
 
-- [How do I share state between two reducers? Do I have to use combineReducers?](#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
-- [Do I have to use the switch statement to handle actions?](#do-i-have-to-use-the-switch-statement-to-handle-actions)
+- [Redux FAQ: Reducers](#redux-faq-reducers)
+  - [Table of Contents](#table-of-contents)
+  - [Reducers](#reducers)
+    - [How do I share state between two reducers? Do I have to use `combineReducers`?](#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
+      - [Further information](#further-information)
+    - [Do I have to use the `switch` statement to handle actions?](#do-i-have-to-use-the-switch-statement-to-handle-actions)
+      - [Further information](#further-information-1)
 
 ## Reducers
 
@@ -21,7 +26,7 @@ Many users later want to try to share data between two reducers, but find that `
 
 - If a reducer needs to know data from another slice of state, the state tree shape may need to be reorganized so that a single reducer is handling more of the data.
 - You may need to write some custom functions for handling some of these actions. This may require replacing `combineReducers` with your own top-level reducer function. You can also use a utility such as [reduce-reducers](https://github.com/acdlite/reduce-reducers) to run `combineReducers` to handle most actions, but also run a more specialized reducer for specific actions that cross state slices.
-- [Async action creators](../advanced/AsyncActions.md#async-action-creators) such as [redux-thunk](https://github.com/gaearon/redux-thunk) have access to the entire state through `getState()`. An action creator can retrieve additional data from the state and put it in an action, so that each reducer has enough information to update its own state slice.
+- - [Middleware with async logic](../tutorials/fundamentals/part-4-store.md#middleware) such as [redux-thunk](https://github.com/reduxjs/redux-thunk) have access to the entire state through `getState()`. An action creator can retrieve additional data from the state and put it in an action, so that each reducer has enough information to update its own state slice.
 
 In general, remember that reducers are just functions—you can organize them and subdivide them any way you want, and you are encouraged to break them down into smaller, reusable functions (“reducer composition”). While you do so, you may pass a custom third argument from a parent reducer if a child reducer needs additional data to calculate its next state. You just need to make sure that together they follow the basic rules of reducers: `(state, action) => newState`, and update state immutably rather than mutating it directly.
 

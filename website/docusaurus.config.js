@@ -71,7 +71,7 @@ module.exports = {
             },
             {
               label: 'Tutorial',
-              to: 'basics/basic-tutorial'
+              to: 'tutorials/essentials/part-1-overview-concepts'
             },
             {
               label: 'API Reference',
