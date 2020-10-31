@@ -20,4 +20,5 @@ These are some use cases and code snippets to get you started with Redux in a re
 - [Isolating Redux Sub-Apps](IsolatingSubapps.md)
 - [Using Immutable.JS with Redux](UsingImmutableJS.md)
 - [Code Splitting](CodeSplitting.md)
+- [Troubleshooting](Troubleshooting.md)
 - [Structuring Reducers](structuring-reducers/StructuringReducers.md)

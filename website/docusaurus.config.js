@@ -70,10 +70,6 @@ module.exports = {
               to: 'faq'
             },
             {
-              label: 'Tutorial',
-              to: 'tutorials/essentials/part-1-overview-concepts'
-            },
-            {
               label: 'API Reference',
               to: 'api/api-reference'
             }
@@ -82,6 +78,10 @@ module.exports = {
         {
           title: 'Community',
           items: [
+            {
+              label: 'Reactiflux Discord',
+              href: 'https://discord.gg/reactiflux'
+            },
             {
               label: 'Stack Overflow',
               href: 'http://stackoverflow.com/questions/tagged/redux'

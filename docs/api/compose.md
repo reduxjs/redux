@@ -9,7 +9,7 @@ hide_title: true
 Composes functions from right to left.
 
 This is a functional programming utility, and is included in Redux as a convenience.
-You might want to use it to apply several [store enhancers](../Glossary.md#store-enhancer) in a row.
+You might want to use it to apply several [store enhancers](../understanding/thinking-in-redux/Glossary.md#store-enhancer) in a row.
 
 #### Arguments
 

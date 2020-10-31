@@ -112,7 +112,7 @@ export const UserPage = ({ match }) => {
 }
 ```
 
-As we've seen before, we can take data from one `useSelector` call, or from props, and use that to to help decide what to read from the store in another `useSelector` call.
+As we've seen before, we can take data from one `useSelector` call, or from props, and use that to help decide what to read from the store in another `useSelector` call.
 
 Add routes for these components in `<App>`:
 

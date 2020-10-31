@@ -183,7 +183,7 @@ function addComment(state, action) {
 
 const featureReducers = createReducer({}, {
     ADD_COMMENT : addComment,
-};
+});
 
 const rootReducer = reduceReducers(
     combinedReducer,

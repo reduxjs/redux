@@ -355,6 +355,7 @@ _Patterns and practices for structuring larger Redux applications_
 - [繁體中文文件](https://github.com/chentsulin/redux) — Traditional Chinese
 - [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
 - [Redux en Español](http://es.redux.js.org/) - Spanish
+- [Redux in Korean](https://ko.redux.js.org/) - Korean
 
 ## Books
 
