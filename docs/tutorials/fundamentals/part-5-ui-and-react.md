@@ -25,7 +25,7 @@ In this section, we'll add a User Interface for our todo app. We'll see how Redu
 
 ## Integrating Redux with a UI
 
-Redux is a standalone JS library. As we've already seen, you can create and use a Redux store even if you don't have a user interface set up. This also means that **you can use Redux with any UI framework**. You can write Redux apps with React, Vue, Angular, Ember, jQuery, or vanilla JavaScript.
+Redux is a standalone JS library. As we've already seen, you can create and use a Redux store even if you don't have a user interface set up. This also means that **you can use Redux with any UI framework** (or even without _any_ UI framework), and use it on both client and server. You can write Redux apps with React, Vue, Angular, Ember, jQuery, or vanilla JavaScript.
 
 That said, **Redux was specifically designed to work well with [React](https://reactjs.org)**. React lets you describe your UI as a function of your state, and Redux contains state and updates it in response to actions.
 
@@ -553,7 +553,7 @@ Let's see how the app looks now, including the components and sections we skippe
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip
+:::Summary
 
 - **Redux stores can be used with any UI layer**
   - UI code always subscribes to the store, gets the latest state, and redraws itself

@@ -156,7 +156,7 @@ Notice that our app did _not_ log anything from the last action. That's because 
 We specified the behavior of our app before we even started writing the UI. That
 helps give us confidence that the app will work as intended.
 
-:::tip
+:::info
 
 If you want, you can now try writing tests for your reducers. Because they're [pure functions](../../understanding/thinking-in-redux/ThreePrinciples.md#changes-are-made-with-pure-functions), it should be straightforward to test them. Call them with an example `state` and `action`,
 take the result, and check to see if it matches what you expect:
@@ -217,6 +217,27 @@ As you can see, the actual logic here is fairly short:
 - `dispatch` calls the reducer, saves the state, and runs the listeners
 - The store dispatches one action on startup to initialize the reducers with their state
 - The store API is an object with `{dispatch, subscribe, getState}` inside
+
+To emphasize one of those in particular: notice that `getState` just returns whatever the current `state` value is. That means that **by default, nothing prevents you from accidentally mutating the current state value!** This code will run without any errors, but it's incorrect:
+
+```js
+const state = store.getState()
+// ❌ Don't do this - it mutates the current state!
+state.filters.status = 'Active'
+```
+
+In other words:
+
+- The Redux store doesn't make an extra copy of the `state` value when you call `getState()`. It's exactly the same reference that was returned from the root reducer function
+- The Redux store doesn't do anything else to prevent accidental mutations. It _is_ possible to mutate the state, either inside a reducer or outside the store, and you must always be careful to avoid mutations.
+
+One common cause of accidental mutations is sorting arrays. [**Calling `array.sort()` actually mutates the existing array**](https://doesitmutate.xyz/sort/). If we called `const sortedTodos = state.todos.sort()`, we'd end up mutating the real store state unintentionally.
+
+:::tip
+
+In [Part 8: Modern Redux](./part-8-modern-redux.md), we'll see how Redux Toolkit helps avoid mutations in reducers, and detects and warns about accidental mutations outside of reducers.
+
+:::
 
 ## Configuring the Store
 
@@ -585,7 +606,7 @@ Let's see how our example app looks now:
 
 And as a reminder, here's what we covered in this section:
 
-:::tip
+:::Summary
 
 - **Redux apps always have a single store**
   - Stores are created with the Redux `createStore` API

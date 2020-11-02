@@ -978,7 +978,7 @@ Congratulations, you've completed the Redux Essentials tutorial! Let's see what 
 
 Here's what we covered in this section:
 
-:::tip
+:::Summary
 
 - **Memoized selector functions can be used to optimize performance**
   - Redux Toolkit re-exports the `createSelector` function from Reselect, which generates memoized selectors

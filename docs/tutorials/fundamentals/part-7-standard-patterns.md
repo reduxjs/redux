@@ -972,7 +972,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip
+:::Summary
 
 - **Action creator functions encapsulate preparing action objects and thunks**
   - Action creators can accept arguments and contain setup logic, and return the final action object or thunk function

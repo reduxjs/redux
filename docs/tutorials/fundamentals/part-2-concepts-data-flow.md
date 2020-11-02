@@ -357,7 +357,7 @@ Here's what that data flow looks like visually:
 
 ## What You've Learned
 
-:::tip
+:::Summary
 
 - **Redux's intent can be summarized in three principles**
   - Global app state is kept in a single store

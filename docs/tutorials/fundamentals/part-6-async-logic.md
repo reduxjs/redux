@@ -445,7 +445,7 @@ Here's what the current app looks like:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip
+:::Summary
 
 - **Redux middleware were designed to enable writing logic that has side effects**
   - "Side effects" are code that changes state/behavior outside a function, like AJAX calls, modifying function arguments, or generating random values

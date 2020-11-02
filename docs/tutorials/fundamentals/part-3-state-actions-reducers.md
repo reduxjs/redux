@@ -365,11 +365,19 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
 ```js
-// Illegal - don't do this in a normal reducer!
+// ❌ Illegal - don't do this in a normal reducer!
 state.value = 123
 ```
 
 :::
+
+There are several reasons why you must not mutate state in Redux:
+
+- It causes bugs, such as the UI not updating properly to show the latest values
+- It makes it harder to understand why and how the state has been updated
+- It makes it harder to write tests
+- It breaks the ability to use "time-travel debugging" correctly
+- It goes against the intended spirit and usage patterns for Redux
 
 So if we can't change the originals, how do we return an updated state?
 
@@ -378,7 +386,7 @@ So if we can't change the originals, how do we return an updated state?
 **Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
 
 ```js
-// This is safe, because we made a copy
+// ✅ This is safe, because we made a copy
 return {
   ...state,
   value: 123
@@ -698,14 +706,14 @@ Here's the contents of our app so far:
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
-:::tip
+:::Summary
 
 - **Redux apps use plain JS objects, arrays, and primitives as the state values**
   - The root state value should be a plain JS object
   - The state should contain the smallest amount of data needed to make the app work
   - Classes, Promises, functions, and other non-plain values should _not_ go in the Redux state
   - Reducers must not create random values like `Math.random()` or `Date.now()`
-  - It's okay to have other state values that are not in the Redux store
+  - It's okay to have other state values that are not in the Redux store (like local component state) side-by side with Redux
 - **Actions are plain objects with a `type` field that describe what happened**
   - The `type` field should be a readable string, and is usually written as `'feature/eventName'`
   - Actions may contain other values, which are typically stored in the `action.payload` field

@@ -303,11 +303,19 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
 ```js
-// Illegal - don't do this in a normal reducer!
+// ❌ Illegal - don't do this in a normal reducer!
 state.value = 123
 ```
 
 :::
+
+There are several reasons why you must not mutate state in Redux:
+
+- It causes bugs, such as the UI not updating properly to show the latest values
+- It makes it harder to understand why and how the state has been updated
+- It makes it harder to write tests
+- It breaks the ability to use "time-travel debugging" correctly
+- It goes against the intended spirit and usage patterns for Redux
 
 So if we can't change the originals, how do we return an updated state?
 
@@ -316,7 +324,7 @@ So if we can't change the originals, how do we return an updated state?
 **Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
 
 ```js
-// This is safe, because we made a copy
+// ✅ This is safe, because we made a copy
 return {
   ...state,
   value: 123
@@ -720,7 +728,7 @@ Now, any React components that call `useSelector` or `useDispatch` will be talki
 
 Even though the counter example app is pretty small, it showed all the key pieces of a React + Redux app working together. Here's what we covered:
 
-:::tip
+:::Summary
 
 - **We can create a Redux store using the Redux Toolkit `configureStore` API**
   - `configureStore` accepts a `reducer` function as a named argument

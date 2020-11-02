@@ -838,7 +838,7 @@ Let's take one final look at the completed todo application, including all the c
 
 And we'll do a final recap of the key points you learned in this section:
 
-:::tip
+:::Summary
 
 - **Redux Toolkit (RTK) is the standard way to write Redux logic**
   - RTK includes APIs that simplify most Redux code
