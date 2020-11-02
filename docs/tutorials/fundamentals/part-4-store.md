@@ -588,7 +588,7 @@ Here's what the "State" and "Diff" tabs look like after we dispatched that "add 
 
 ![Redux DevTools Extension: diff tab](/img/tutorials/fundamentals/devtools-diff-tab.png)
 
-These are very powerful tools that can help us debug our apps and unerstand exactly what's happening inside.
+These are very powerful tools that can help us debug our apps and understand exactly what's happening inside.
 
 ## What You've Learned
 
