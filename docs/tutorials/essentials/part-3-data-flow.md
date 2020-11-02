@@ -428,7 +428,7 @@ Notice that our `AddPostForm` component has some React `useState` hooks inside, 
 
 Let's recap what you've learned in this section:
 
-:::Summary
+:::tip Summary
 
 - **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data

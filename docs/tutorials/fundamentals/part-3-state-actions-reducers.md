@@ -706,7 +706,7 @@ Here's the contents of our app so far:
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
-:::Summary
+:::tip Summary
 
 - **Redux apps use plain JS objects, arrays, and primitives as the state values**
   - The root state value should be a plain JS object

@@ -606,7 +606,7 @@ Let's see how our example app looks now:
 
 And as a reminder, here's what we covered in this section:
 
-:::Summary
+:::tip Summary
 
 - **Redux apps always have a single store**
   - Stores are created with the Redux `createStore` API

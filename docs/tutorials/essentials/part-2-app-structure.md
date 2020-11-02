@@ -728,7 +728,7 @@ Now, any React components that call `useSelector` or `useDispatch` will be talki
 
 Even though the counter example app is pretty small, it showed all the key pieces of a React + Redux app working together. Here's what we covered:
 
-:::Summary
+:::tip Summary
 
 - **We can create a Redux store using the Redux Toolkit `configureStore` API**
   - `configureStore` accepts a `reducer` function as a named argument

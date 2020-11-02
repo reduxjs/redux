@@ -441,7 +441,7 @@ Here's what that data flow looks like visually:
 
 Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
 
-:::Summary
+:::tip Summary
 
 - **Redux is a library for managing global application state**
   - Redux is typically used with the React-Redux library for integrating Redux and React together

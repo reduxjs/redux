@@ -553,7 +553,7 @@ Let's see how the app looks now, including the components and sections we skippe
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::Summary
+:::tip Summary
 
 - **Redux stores can be used with any UI layer**
   - UI code always subscribes to the store, gets the latest state, and redraws itself

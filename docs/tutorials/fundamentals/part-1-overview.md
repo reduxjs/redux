@@ -307,7 +307,7 @@ That counter example was small, but it does show all the working pieces of a rea
 
 With that in mind, let's review what we've learned so far:
 
-:::Summary
+:::tip Summary
 
 - **Redux is a library for managing global application state**
   - Redux is typically used with the React-Redux library for integrating Redux and React together

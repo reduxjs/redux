@@ -784,7 +784,7 @@ Here's what our app looks like now that we're fetching data from that fake API:
 
 As a reminder, here's what we covered in this section:
 
-:::Summary
+:::tip Summary
 
 - **You can write reusable "selector" functions to encapsulate reading values from the Redux state**
   - Selectors are functions that get the Redux `state` as an argument, and return some data

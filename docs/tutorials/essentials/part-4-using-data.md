@@ -819,7 +819,7 @@ It's actually starting to look more useful and interesting!
 
 We've covered a lot of information and concepts in this section. Let's recap the important things to remember:
 
-:::Summary
+:::tip Summary
 
 - **Any React component can use data from the Redux store as needed**
   - Any component can read any data that is in the Redux store
