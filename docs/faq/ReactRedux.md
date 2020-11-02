@@ -8,13 +8,23 @@ hide_title: true
 
 ## Table of Contents
 
-- [Why should I use React-Redux?](#why-should-i-use-react-redux)
-- [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
-- [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
-- [How can I speed up my mapStateToProps?](#how-can-i-speed-up-my-mapstatetoprops)
-- [Why don't I have this.props.dispatch available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
-- [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
-- [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
+- [Redux FAQ: React Redux](#redux-faq-react-redux)
+  - [Table of Contents](#table-of-contents)
+  - [React Redux](#react-redux)
+    - [Why should I use React-Redux?](#why-should-i-use-react-redux)
+      - [Further Information](#further-information)
+    - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
+      - [Further information](#further-information-1)
+    - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
+      - [Further information](#further-information-2)
+    - [How can I speed up my `mapStateToProps`?](#how-can-i-speed-up-my-mapstatetoprops)
+      - [Further information](#further-information-3)
+    - [Why don't I have `this.props.dispatch` available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
+      - [Further information](#further-information-4)
+    - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
+      - [Further information](#further-information-5)
+    - [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
+      - [Further information](#further-information-6)
 
 ## React Redux
 
@@ -167,7 +177,7 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Documentation**
 
-- [Basics: Usage with React](../basics/UsageWithReact.md)
+- [Fundamentals: UI and React](../tutorials/fundamentals/part-5-ui-and-react.md)
 - [FAQ: Performance - Scaling](../faq/Performance.md#performance-scaling)
 
 **Articles**
@@ -201,5 +211,6 @@ There is a key difference in how Redux and React's Context treat data. Redux mai
 
 #### Further information
 
+- [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
 - [Redux vs. The React Context API](https://daveceddia.com/context-api-vs-redux/)
 - [You Might Not Need Redux (But You Can’t Replace It With Hooks)](https://www.simplethread.com/cant-replace-redux-with-hooks/)

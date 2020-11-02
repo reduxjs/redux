@@ -7,7 +7,7 @@ hide_title: true
 
 # Prerequisite Reducer Concepts
 
-As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
+As described in ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md), a Redux reducer function:
 
 - Should have a signature of `(previousState, action) => newState`, similar to the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 - Should be "pure", which means the reducer:
@@ -37,7 +37,7 @@ Because of these rules, it's important that the following core concepts are full
 
 **Reading list**:
 
-- [Redux Docs: Reducers](../../basics/Reducers.md)
+- ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md)
 - [Redux Docs: Reducing Boilerplate](../ReducingBoilerplate.md)
 - [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
 - [Redux Docs: `combineReducers`](../../api/combineReducers.md)

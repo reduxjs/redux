@@ -3,7 +3,7 @@ id: part-4-using-data
 title: 'Redux Essentials, Part 4: Using Redux Data'
 sidebar_label: 'Using Redux Data'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn how to work with complex Redux state in React components'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -819,7 +819,7 @@ It's actually starting to look more useful and interesting!
 
 We've covered a lot of information and concepts in this section. Let's recap the important things to remember:
 
-:::tip
+:::Summary
 
 - **Any React component can use data from the Redux store as needed**
   - Any component can read any data that is in the Redux store

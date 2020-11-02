@@ -25,7 +25,7 @@ Your process will look like this:
 
 - When you have ported all of your Flux Stores to be implemented on top of reducers, you can replace the Flux library with a single Redux store, and combine those reducers you already have into one using [`combineReducers(reducers)`](../api/combineReducers.md).
 
-- Now all that's left to do is to port the UI to [use react-redux](../basics/UsageWithReact.md) or equivalent.
+- Now all that's left to do is to port the UI to [use React-Redux](../tutorials/fundamentals/part-5-ui-and-react.md) or equivalent.
 
 - Finally, you might want to begin using some Redux idioms like middleware to further simplify your asynchronous code.
 

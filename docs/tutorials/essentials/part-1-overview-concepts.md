@@ -22,9 +22,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 Welcome to the Redux Essentials tutorial! **This tutorial will introduce you to Redux and teach you how to use it the right way, using our latest recommended tools and best practices**. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
 
-In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
+In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
 
-Starting in [Part 3](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
+Starting in [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
 ### How to Read This Tutorial
 
@@ -81,9 +81,10 @@ Redux is more useful when:
 
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
+- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - **[Redux FAQ: When should I use Redux?](../../faq/General.md#when-should-i-use-redux)**
 - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 
 :::
 
@@ -440,7 +441,7 @@ Here's what that data flow looks like visually:
 
 Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
 
-:::tip
+:::Summary
 
 - **Redux is a library for managing global application state**
   - Redux is typically used with the React-Redux library for integrating Redux and React together

@@ -5,20 +5,20 @@
 
 
 
-/advanced/asyncactions*         /advanced/async-actions:splat
-/advanced/asyncflow*        /advanced/async-flow:splat
-/advanced/exampleredditapi*         /advanced/example-reddit-api:splat
-/advanced/nextsteps*         /advanced/next-steps:splat
-/advanced/usagewithreactrouter*         /advanced/usage-with-react-router:splat
-/advanced         /advanced/advanced-tutorial
+/advanced/asyncactions*         /tutorials/fundamentals/part-6-async-logic
+/advanced/asyncflow*        /tutorials/fundamentals/part-6-async-logic
+/advanced/exampleredditapi*         /tutorials/fundamentals/part-8-modern-redux
+/advanced/nextsteps*         /tutorials/fundamentals/part-8-modern-redux#next-steps-for-learning-and-using-redux
+/advanced/usagewithreactrouter*         /tutorials/essentials/part-4-using-data#showing-single-posts
+/advanced         /tutorials/fundamentals/part-1-overview
 
 /api         /api/api-reference
 
 
-/basics/dataflow*        /basics/data-flow:splat
-/basics/exampletodolist*         /basics/example:splat
-/basics/usagewithreact*         /basics/usage-with-react:splat
-/basics         /basics/basic-tutorial
+/basics/dataflow*        /tutorials/fundamentals/part-2-concepts-data-flow
+/basics/exampletodolist*         /tutorials/fundamentals/part-5-ui-react
+/basics/usagewithreact*         /tutorials/fundamentals/part-5-ui-react
+/basics         /tutorials/fundamentals/part-1-overview
 
 
 /faq/codestructure*         /faq/code-structure:splat
@@ -73,22 +73,22 @@
 /docs/introduction/Examples.html*         /introduction/examples:splat
 /docs/introduction/        /introduction/getting-started
 
-/docs/basics/index.html        /basics/basic-tutorial
-/docs/basics/        /basics/basic-tutorial
-/docs/basics/Reducers.html*        /basics/reducers:splat
-/docs/basics/Actions.html*        /basics/actions:splat
-/docs/basics/DataFlow.html*        /basics/data-flow:splat
-/docs/basics/Store.html*        /basics/store:splat
-/docs/basics/ExampleTodoList.html*        /basics/example:splat
-/docs/basics/UsageWithReact.html*    /basics/usage-with-react:splat
+/docs/basics/index.html        /tutorials/fundamentals/part-1-overview
+/docs/basics/        /tutorials/fundamentals/part-1-overview
+/docs/basics/Reducers.html*        /tutorials/fundamentals/part-3-state-actions-reducers
+/docs/basics/Actions.html*        /tutorials/fundamentals/part-2-concepts-data-flow
+/docs/basics/DataFlow.html*        /tutorials/fundamentals/part-2-concepts-data-flow
+/docs/basics/Store.html*        /tutorials/fundamentals/part-4-store
+/docs/basics/ExampleTodoList.html*        /tutorials/fundamentals/part-5-ui-react
+/docs/basics/UsageWithReact.html*    /tutorials/fundamentals/part-5-ui-react
 
-/docs/advanced/AsyncActions.html*        /advanced/async-actions:splat
-/docs/advanced/Middleware.html*        /advanced/middleware:splat
-/docs/advanced/AsyncFlow.html*         /advanced/async-flow:splat
-/docs/advanced/ExampleRedditAPI.html        /advanced/example-reddit-api
-/docs/advanced/UsageWithReactRouter.html*        /advanced/usage-with-react-router
-/docs/advanced/index.html        /advanced/advanced-tutorial
-/docs/advanced/        /advanced/advanced-tutorial
+/docs/advanced/AsyncActions.html*        /tutorials/fundamentals/part-6-async-logic
+/docs/advanced/Middleware.html*        /tutorials/fundamentals/part-4-store#middleware
+/docs/advanced/AsyncFlow.html*         /tutorials/fundamentals/part-6-async-logic
+/docs/advanced/ExampleRedditAPI.html        /tutorials/fundamentals/part-8-modern-redux
+/docs/advanced/UsageWithReactRouter.html*        /tutorials/essentials/part-4-using-data#showing-single-posts
+/docs/advanced/index.html        /tutorials/fundamentals/part-1-overview
+/docs/advanced/        /tutorials/fundamentals/part-1-overview
 
 
 /docs/faq/General.html*        /faq/general:splat
@@ -134,8 +134,8 @@
 /introduction/index.html        /introduction/getting-started
 /api-reference/*        /api/:splat
 
-/basics/example-todo-list /basics/example
-/basics/index.html        /basics/basic-tutorial
+/basics/example-todo-list /tutorials/fundamentals/part-5-ui-react
+/basics/index.html        /tutorials/fundamentals/part-1-overview
 /recipes/isolating-subapps        /recipes/isolating-redux-sub-apps
 /api/index.html        /api/api-reference
 /recipes/ServerRendering.html*        /recipes/server-rendering:splat
@@ -145,6 +145,27 @@
 
 # PR preview for the new tutorial
 /tutorials/quick-start/quick-start-part-1        /tutorials/essentials/part-1-overview-concepts
+
+
+# New "Fundamentals" tutorial replaces old "Basics/Advanced" tutorials
+
+/basics/basic-tutorial*                 /tutorials/fundamentals/part-1-overview
+/basics/actions*                        /tutorials/fundamentals/part-2-concepts-data-flow
+/basics/reducers*                       /tutorials/fundamentals/part-3-state-actions-reducers
+/basics/store*                          /tutorials/fundamentals/part-4-store
+/basics/data-flow*                      /tutorials/fundamentals/part-2-concepts-data-flow
+/basics/usage-with-react*               /tutorials/fundamentals/part-5-ui-react
+/basics/example*                        /tutorials/fundamentals/part-5-ui-react
+
+/advanced/advanced-tutorial*            /tutorials/fundamentals/part-1-overview
+/advanced/async-actions*                /tutorials/fundamentals/part-6-async-logic
+/advanced/async-flow*                   /tutorials/fundamentals/part-6-async-logic
+/advanced/middleware*                   /tutorials/fundamentals/part-4-store#middleware
+/advanced/usage-with-react-router*      /tutorials/essentials/part-4-using-data#showing-single-posts
+/advanced/example-reddit-api*           /tutorials/fundamentals/part-8-modern-redux
+/advanced/next-steps*                   /tutorials/fundamentals/part-8-modern-redux#next-steps-for-learning-and-using-redux
+
+
 
 # 2020 Site reorganization
 

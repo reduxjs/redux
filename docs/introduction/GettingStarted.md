@@ -63,33 +63,31 @@ For more details, see the [Installation](Installation.md) page.
 
 ## Basic Example
 
-The whole state of your app is stored in an object tree inside a single _store_.
-The only way to change the state tree is to emit an _action_, an object describing what happened.
-To specify how the actions transform the state tree, you write pure _reducers_.
-
-That's it!
+The whole global state of your app is stored in an object tree inside a single _store_.
+The only way to change the state tree is to create an _action_, an object describing what happened, and _dispatch_ it to the store.
+To specify how state gets updated in response to an action, you write pure _reducer_ functions that calculate a new state based on the old state and the action.
 
 ```js
 import { createStore } from 'redux'
 
 /**
- * This is a reducer, a pure function with (state, action) => state signature.
- * It describes how an action transforms the state into the next state.
+ * This is a reducer - a function that takes a current state value and an
+ * action object describing "what happened", and returns a new state value.
+ * A reducer's function signature is: (state, action) => newState
  *
- * The shape of the state is up to you: it can be a primitive, an array, an object,
- * or even an Immutable.js data structure. The only important part is that you should
+ * The Redux state should contain only plain JS objects, arrays, and primitives.
+ * The root state value is usually an object.  It's important that you should
  * not mutate the state object, but return a new object if the state changes.
  *
- * In this example, we use a `switch` statement and strings, but you can use a helper that
- * follows a different convention (such as function maps) if it makes sense for your
- * project.
+ * You can use any conditional logic you want in a reducer. In this example,
+ * we use a switch statement, but it's not required.
  */
-function counter(state = 0, action) {
+function counterReducer(state = { value: 0 }, action) {
   switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
-    case 'DECREMENT':
-      return state - 1
+    case 'counter/incremented':
+      return { value: state.value + 1 }
+    case 'counter/decremented':
+      return { value: state.value - 1 }
     default:
       return state
   }
@@ -101,25 +99,71 @@ let store = createStore(counter)
 
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
-// However it can also be handy to persist the current state in the localStorage.
+// There may be additional use cases where it's helpful to subscribe as well.
 
 store.subscribe(() => console.log(store.getState()))
 
 // The only way to mutate the internal state is to dispatch an action.
 // The actions can be serialized, logged or stored and later replayed.
-store.dispatch({ type: 'INCREMENT' })
-// 1
-store.dispatch({ type: 'INCREMENT' })
-// 2
-store.dispatch({ type: 'DECREMENT' })
-// 1
+store.dispatch({ type: 'counter/incremented' })
+// {value: 1}
+store.dispatch({ type: 'counter/incremented' })
+// {value: 2}
+store.dispatch({ type: 'counter/decremented' })
+// {value: 1}
 ```
 
 Instead of mutating the state directly, you specify the mutations you want to happen with plain objects called _actions_. Then you write a special function called a _reducer_ to decide how every action transforms the entire application's state.
 
 In a typical Redux app, there is just a single store with a single root reducing function. As your app grows, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. This is exactly like how there is just one root component in a React app, but it is composed out of many small components.
 
-This architecture might seem like an overkill for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
+This architecture might seem like a lot for a counter app, but the beauty of this pattern is how well it scales to large and complex apps. It also enables very powerful developer tools, because it is possible to trace every mutation to the action that caused it. You can record user sessions and reproduce them just by replaying every action.
+
+### Redux Toolkit Example
+
+Redux Toolkit simplifies the process of writing Redux logic and setting up the store. With Redux Toolkit, that same logic looks like:
+
+```js
+import { createSlice, configureStore } from '@reduxjs/toolkit'
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+    value: 0
+  },
+  reducers: {
+    incremented: state => {
+      // Redux Toolkit allows us to write "mutating" logic in reducers. It
+      // doesn't actually mutate the state because it uses the Immer library,
+      // which detects changes to a "draft state" and produces a brand new
+      // immutable state based off those changes
+      state.value += 1
+    },
+    decremented: state => {
+      state.value -= 1
+    }
+  }
+})
+
+export const { incremented, decremented } = counterSlice.actions
+
+const store = configureStore({
+  reducer: counterSlice.reducer
+})
+
+// Can still subscribe to the store
+store.subscribe(() => console.log(store.getState()))
+
+// Still pass action objects to `dispatch`, but they're created for us
+store.dispatch(incremented())
+// {value: 1}
+store.dispatch(incremented())
+// {value: 2}
+store.dispatch(decremented())
+// {value: 1}
+```
+
+Redux Toolkit allows us to write shorter logic that's easier to read, while still following the same Redux behavior and data flow.
 
 ## Learn Redux
 
@@ -127,11 +171,14 @@ We have a variety of resources available to help you learn Redux.
 
 ### Redux Essentials Tutorial
 
-The [**Redux Essentials tutorial**](../tutorials/essentials/part-1-overview-concepts.md) is a "top-down" tutorial that teaches how to use Redux the right way, using our latest recommended APIs and best practices. We recommend starting there.
+The [**Redux Essentials tutorial**](../tutorials/essentials/part-1-overview-concepts.md) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices. We recommend starting there.
+
+### Redux Fundamentals Tutorial
+
+The [**Redux Fundamentals tutorial**](../tutorials/fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.
 
 ### Additional Tutorials
 
-- The Redux docs [**Basic tutorial**](../basics/README.md) and [**Advanced tutorial**](../advanced/README.md) are a "bottom-up" tutorial that teaches how Redux works, starting from first principles.
 - The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online. See the complete list of examples in the **[Examples page](./Examples.md)**.
 - Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/series/getting-started-with-redux)** and **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** video courses on Egghead.io
 - Redux maintainer Mark Erikson's **["Redux Fundamentals" conference talk](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" workshop slides**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)

@@ -7,7 +7,7 @@ module.exports = {
     {
       types: ['comment', 'prolog', 'doctype', 'cdata'],
       style: {
-        color: '#778090'
+        color: '#c6cad2'
       }
     },
     {

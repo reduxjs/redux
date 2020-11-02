@@ -3,7 +3,7 @@ id: part-5-async-logic
 title: 'Redux Essentials, Part 5: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn how async logic works in Redux apps'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -54,7 +54,7 @@ As a reminder, the code examples focus on the key concepts and changes for each 
 
 By itself, a Redux store doesn't know anything about async logic. It only knows how to synchronously dispatch actions, update the state by calling the root reducer function, and notify the UI that something has changed. Any asynchronicity has to happen outside the store.
 
-But, what if you want to have async logic interact with the store by dispatching or checking the current store state? That's where [Redux middleware](../../advanced/Middleware.md) come in. They extend the store, and allow you to:
+But, what if you want to have async logic interact with the store by dispatching or checking the current store state? That's where [Redux middleware](../fundamentals/part-4-store.md#middleware) come in. They extend the store, and allow you to:
 
 - Execute extra logic when any action is dispatched (such as logging the action and state)
 - Pause, modify, delay, replace, or halt dispatched actions
@@ -64,6 +64,10 @@ But, what if you want to have async logic interact with the store by dispatching
 [The most common reason to use middleware is to allow different kinds of async logic to interact with the store](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior). This allows you to write code that can dispatch actions and check the store state, while keeping that logic separate from your UI.
 
 There are many kinds of async middleware for Redux, and each lets you write your logic using different syntax. The most common async middleware is [`redux-thunk`](https://github.com/reduxjs/redux-thunk), which lets you write plain functions that may contain async logic directly. Redux Toolkit's `configureStore` function [automatically sets up the thunk middleware by default](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware), and [we recommend using thunks as the standard approach for writing async logic with Redux](../../style-guide/style-guide.md#use-thunks-for-async-logic).
+
+Earlier, we saw [what the synchronous data flow for Redux looks like](part-1-overview-concepts.md#redux-application-data-flow). When we introduce asynchronous logic, we add an extra step where middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
+
+![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
 ### Thunk Functions
 
@@ -780,7 +784,7 @@ Here's what our app looks like now that we're fetching data from that fake API:
 
 As a reminder, here's what we covered in this section:
 
-:::tip
+:::Summary
 
 - **You can write reusable "selector" functions to encapsulate reading values from the Redux state**
   - Selectors are functions that get the Redux `state` as an argument, and return some data

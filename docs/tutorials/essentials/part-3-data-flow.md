@@ -3,7 +3,7 @@ id: part-3-data-flow
 title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 1](./part-1-overview-concepts.md)** for explanations of these terms.)
+- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See [**Part 1: Redux Overview and Concepts**](./part-1-overview-concepts.md) for explanations of these terms.)
 
 :::
 
@@ -428,7 +428,7 @@ Notice that our `AddPostForm` component has some React `useState` hooks inside, 
 
 Let's recap what you've learned in this section:
 
-:::tip
+:::Summary
 
 - **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
