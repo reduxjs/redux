@@ -203,4 +203,4 @@ It's possible you're correctly dispatching an action and applying your reducer b
 ## Something else doesn't work
 
 Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).
-If you figure it out, [edit this document](https://github.com/reduxjs/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.
+If you figure it out, [edit this document](https://github.com/reduxjs/redux/edit/master/docs/recipes/Troubleshooting.md) as a courtesy to the next person having the same problem.
