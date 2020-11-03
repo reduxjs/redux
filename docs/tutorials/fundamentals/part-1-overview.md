@@ -150,6 +150,12 @@ Let's look at a minimal working example of a Redux app - a small counter applica
 
 Because Redux is a standalone JS library with no dependencies, this example is written by only loading a single script tag for the Redux library, and uses basic JS and HTML for the UI. In practice, Redux is normally used by [installing the Redux packages from NPM](../../introduction/Installation.md), and the UI is created using a library like [React](https://reactjs.org).
 
+:::info
+
+[Part 5: UI and React](./part-5-ui-and-react.md) shows how to use Redux and React together.
+
+:::
+
 Let's break this example down into its separate parts to see what's happening.
 
 #### State, Actions, and Reducers
@@ -296,7 +302,13 @@ after a delay.
 
 ### Data Flow
 
-We can summarize the flow of data through a Redux app with this diagram:
+We can summarize the flow of data through a Redux app with this diagram. It represents how:
+
+- actions are dispatched in response to a user interaction like a click
+- the store runs the reducer function to calculate a new state
+- the UI reads the new state to display the new values
+
+(Don't worry if these pieces aren't quite clear yet! Keep this picture in your mind as you go through the rest of this tutorial, and you'll see how the pieces fit together.)
 
 ![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
