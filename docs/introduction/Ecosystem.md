@@ -737,10 +737,10 @@ A cross-platform Electron app for inspecting React and React Native apps, includ
 
 #### DevTools Monitors
 
-**[Log Monitor](https://github.com/reduxjs/redux-devtools-log-monitor)** <br />
+**[Log Monitor](https://github.com/reduxjs/redux-devtools/tree/master/packages/redux-devtools-log-monitor)** <br />
 The default monitor for Redux DevTools with a tree view
 
-**[Dock Monitor](https://github.com/reduxjs/redux-devtools-dock-monitor)** <br />
+**[Dock Monitor](https://github.com/reduxjs/redux-devtools/tree/master/packages/redux-devtools-dock-monitor)** <br />
 A resizable and movable dock for Redux DevTools monitors
 
 **[Slider Monitor](https://github.com/calesce/redux-slider-monitor)** <br />
