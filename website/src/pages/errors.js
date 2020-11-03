@@ -36,6 +36,24 @@ function Errors() {
             <code className={styles.errorDetails}>{error}</code>
           </React.Fragment>
         )}
+
+        <h2>All Error Codes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(errorCodes).map(code => (
+              <tr>
+                <td>{code}</td>
+                <td>{errorCodes[code]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </main>
     </Layout>
   )
