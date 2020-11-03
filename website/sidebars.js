@@ -84,7 +84,10 @@ module.exports = {
       {
         type: 'category',
         label: 'History and Design',
-        items: ['understanding/history-and-design/prior-art']
+        items: [
+          'understanding/history-and-design/prior-art',
+          'understanding/history-and-design/middleware'
+        ]
       }
     ],
     FAQ: [
