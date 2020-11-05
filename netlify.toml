@@ -2,3 +2,4 @@
   base    = "website"
   publish = "website/build"
   command = "npm run build && cp _redirects ./build"
+  ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
