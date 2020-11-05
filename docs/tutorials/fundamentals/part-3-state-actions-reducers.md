@@ -567,7 +567,7 @@ export default function todosReducer(state = initialState, action) {
       return [
         ...state,
         {
-          id: nextTodoId(state.todos),
+          id: nextTodoId(state),
           text: action.payload,
           completed: false
         }
