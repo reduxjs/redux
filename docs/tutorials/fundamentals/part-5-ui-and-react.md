@@ -241,7 +241,7 @@ const Header = () => {
   // highlight-next-line
   const dispatch = useDispatch()
 
-  const handleChange = e => setText(e.target.value
+  const handleChange = e => setText(e.target.value)
 
   const handleKeyDown = e => {
     const trimmedText = e.target.value.trim()
@@ -263,7 +263,7 @@ const Header = () => {
       autoFocus={true}
       value={text}
       onChange={handleChange}
-      onKeyDown={handleSubmit}
+      onKeyDown={handleKeyDown}
     />
   )
 }
