@@ -66,7 +66,7 @@ Redux helps you manage "global" state - state that is needed across many parts o
 
 ### When Should I Use Redux?
 
-Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There's more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
+Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There are more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
 
 Redux is more useful when:
 
@@ -221,7 +221,7 @@ For more info on how immutability works in JavaScript, see:
 
 ### Terminology
 
-There's some important Redux terms that you'll need to be familiar with before we continue:
+There are some important Redux terms that you'll need to be familiar with before we continue:
 
 #### Actions
 
