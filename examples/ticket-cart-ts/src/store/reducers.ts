@@ -1,11 +1,15 @@
 import { combineReducers } from 'redux'
-import { destinationsDataReducer } from './destinations'
-import type { DestinationsState } from './destinations'
+import { ticketsReducer } from './tickets'
+import type { TicketsState } from './tickets'
+import { ordersReducer } from './orders'
+import type { OrdersState } from './orders'
 
 export type RootState = {
-  destinations: DestinationsState
+  tickets: TicketsState
+  orders: OrdersState
 }
 
 export const rootReducer = combineReducers({
-  destinations: destinationsDataReducer
+  tickets: ticketsReducer,
+  orders: ordersReducer
 })
