@@ -129,7 +129,7 @@ It would be nice if we could cut down the number of steps here.
 
 ```js title="src/store.js"
 // highlight-next-line
-import { configureStore } from '@reduxjs/toolki'
+import { configureStore } from '@reduxjs/toolkit'
 
 import todosReducer from './features/todos/todosSlice'
 import filtersReducer from './features/filters/filtersSlice'
