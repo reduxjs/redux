@@ -145,7 +145,7 @@ case "todos/toggleTodo": {
     return state.map(todo => {
         if(todo.id !== action.payload.id) return todo;
 
-        return {...todo, id: action.payload.id};
+        return {...todo, completed: !todo.completed };
     })
 }
 ```
@@ -158,7 +158,7 @@ const onTodoClicked = id => {
   const newTodos = todos.map(todo => {
     if (todo.id !== id) return todo
 
-    return { ...todo, id }
+    return { ...todo, completed: !todo.completed }
   })
 
   dispatch({ type: 'todos/toggleTodo', payload: { todos: newTodos } })
