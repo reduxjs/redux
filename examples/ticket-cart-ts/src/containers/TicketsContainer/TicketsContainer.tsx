@@ -8,9 +8,7 @@ import type { TicketId } from '../../store/tickets/types'
 import { ordersActions } from '../../store/orders'
 
 const TicketsContainer: React.FC = () => {
-  const tickets = useSelector((state: RootState) =>
-    getTickets(state)
-  )
+  const tickets = useSelector((state: RootState) => getTickets(state))
 
   const dispatch = useDispatch()
 

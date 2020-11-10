@@ -1,7 +1,7 @@
 import * as ticketsApi from './tickets'
 
 const api = {
-  tickets: ticketsApi,
+  tickets: ticketsApi
 }
 
 export default api

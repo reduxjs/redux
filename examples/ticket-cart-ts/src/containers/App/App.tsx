@@ -5,9 +5,9 @@ import OrdersContainer from '../OrdersContainer'
 const App = () => (
   <div>
     <h2>Shopping Cart Example</h2>
-    <hr/>
+    <hr />
     <TicketsContainer />
-    <hr/>
+    <hr />
     <OrdersContainer />
   </div>
 )

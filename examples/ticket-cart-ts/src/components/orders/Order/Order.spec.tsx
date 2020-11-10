@@ -12,7 +12,7 @@ describe('Order component', () => {
       price: 10
     }
 
-    const { container } = render(<Order {...props}/>)
+    const { container } = render(<Order {...props} />)
 
     expect(container).toMatchSnapshot()
   })

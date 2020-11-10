@@ -21,7 +21,10 @@ export const initialState: OrdersState = {
 // Simple id generation
 let nextOrderId = 1
 
-export function ordersReducer(state = initialState, action: OrdersActions): OrdersState {
+export function ordersReducer(
+  state = initialState,
+  action: OrdersActions
+): OrdersState {
   switch (action.type) {
     case OrdersActionTypes.ADD_ORDER: {
       const { ticketId } = action.payload

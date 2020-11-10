@@ -16,8 +16,7 @@ const renderOrdersContainer = (store: Store) =>
 
 jest.mock('redux-saga/effects', () => {
   const operators = jest.requireActual('redux-saga/effects')
-  const delay = (s: number) =>
-    new Promise(res => setTimeout(res, 0))
+  const delay = (s: number) => new Promise(res => setTimeout(res, 0))
   return { ...operators, delay }
 })
 
