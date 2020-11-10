@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrdersContainer component should render components 1`] = `
+<div>
+  <div>
+    <h3>
+      Orders
+    </h3>
+    <div />
+  </div>
+</div>
+`;

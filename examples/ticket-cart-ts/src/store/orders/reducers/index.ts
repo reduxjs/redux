@@ -11,7 +11,7 @@ export type OrdersState = {
   }
 }
 
-const initialState: OrdersState = {
+export const initialState: OrdersState = {
   entities: {
     byId: {},
     allIds: []

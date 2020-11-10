@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App component should render components 1`] = `
+<div>
+  <div>
+    <h2>
+      Shopping Cart Example
+    </h2>
+    <hr />
+    <div>
+      <h3>
+        Tickets
+      </h3>
+      <div />
+    </div>
+    <hr />
+    <div>
+      <h3>
+        Orders
+      </h3>
+      <div />
+    </div>
+  </div>
+</div>
+`;

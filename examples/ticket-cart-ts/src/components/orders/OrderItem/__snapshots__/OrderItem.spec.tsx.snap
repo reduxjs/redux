@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderItem component should render props 1`] = `
+<div>
+  <div
+    data-testid="order-item"
+    style="margin-bottom: 20px;"
+  >
+    <div>
+      Order: 
+      1
+       - 
+      111
+      <br />
+      from
+       - 
+      to
+       $
+      10
+    </div>
+    <button
+      data-testid="delete-button"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+`;

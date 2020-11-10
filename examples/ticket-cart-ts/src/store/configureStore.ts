@@ -10,7 +10,9 @@ export function configureAppStore() {
 
   const middlewares: Middleware[] = [sagaMiddleware]
 
-  if (process.env.NODE_ENV !== 'production') {
+  const excludeEnv = ['production', 'test']
+
+  if (!excludeEnv.includes(process.env.NODE_ENV)) {
     middlewares.push(createLogger())
   }
 

@@ -9,7 +9,9 @@ import { ordersActions } from '../../store/orders'
 
 const OrdersContainer: React.FC = () => {
   const dispatch = useDispatch()
-  const orders = useSelector((state: RootState) => getOrdersWithTicketData(state))
+  const orders = useSelector((state: RootState) =>
+    getOrdersWithTicketData(state)
+  )
 
   const deleteOrder = (id: OrderId) => dispatch(ordersActions.deleteOrder(id))
 

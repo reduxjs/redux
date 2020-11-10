@@ -20,7 +20,7 @@ export type TicketsState = {
   }
 }
 
-const initialState: TicketsState = {
+export const initialState: TicketsState = {
   ticketsLoadStatus: TicketsLoadStatus.IDLE,
   error: '',
   entities: {

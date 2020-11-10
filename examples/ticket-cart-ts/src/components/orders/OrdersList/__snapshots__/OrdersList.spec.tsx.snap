@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrdersList component should render props 1`] = `
+<div>
+  <div>
+    <h3>
+      Orders
+    </h3>
+    <div>
+      <p>
+        Order children
+      </p>
+    </div>
+  </div>
+</div>
+`;

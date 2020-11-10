@@ -15,9 +15,11 @@ interface Props {
 }
 
 const OrderItem: React.FC<Props> = ({ order, onDelete }) => (
-  <div style={{ marginBottom: 20 }}>
+  <div style={{ marginBottom: 20 }} data-testid="order-item">
     <Order {...order} />
-    <button onClick={onDelete}>Delete</button>
+    <button data-testid="delete-button" onClick={onDelete}>
+      Delete
+    </button>
   </div>
 )
 

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Order component should render props 1`] = `
+<div>
+  <div>
+    Order: 
+    1
+     - 
+    111
+    <br />
+    from
+     - 
+    to
+     $
+    10
+  </div>
+</div>
+`;
