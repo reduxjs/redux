@@ -425,7 +425,7 @@ const todosSlice = createSlice({
 
 export const {
   todoAdded,
-  todoDeleted,
+  todoToggled,
   todoColorSelected,
   todoDeleted
 } = todosSlice.actions
