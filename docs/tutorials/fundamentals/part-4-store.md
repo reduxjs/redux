@@ -284,7 +284,7 @@ Now look at the console. You should see `'Hi!'` logged there, in between the oth
 
 ![sayHi store enhancer logging](/img/tutorials/fundamentals/sayhi-enhancer-logging.png)
 
-The `sayHiOnDispatch` enhancer wrapped the original `store.dispatch` function with its own specialized version of `dispatch`. When we called `store.dispatch()`, we were actually calling the the wrapper function from `sayHiOnDispatch`, which called the original and then printed 'Hi'.
+The `sayHiOnDispatch` enhancer wrapped the original `store.dispatch` function with its own specialized version of `dispatch`. When we called `store.dispatch()`, we were actually calling the wrapper function from `sayHiOnDispatch`, which called the original and then printed 'Hi'.
 
 Now, let's try adding a second enhancer. We can import `includeMeaningOfLife` from that same file... but we have a problem. **`createStore` only accepts one enhancer as its third argument!** How can we pass _two_ enhancers at the same time?
 
