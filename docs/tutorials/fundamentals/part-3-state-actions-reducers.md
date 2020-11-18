@@ -93,7 +93,7 @@ Let's take a quick look at what the initial project contains:
   - `/api`
     - `client.js`: a small AJAX request client that allows us to make GET and POST requests
     - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
-- - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
+  - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
 
 If you load the app now, you should see a welcome message, but the rest of the app is otherwise empty.
 
