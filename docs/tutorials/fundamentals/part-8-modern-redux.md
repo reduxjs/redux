@@ -380,7 +380,7 @@ const todosSlice = createSlice({
   }
 })
 
-export const { todoAdded, todoDeleted } = todosSlice.actions
+export const { todoAdded, todoToggled } = todosSlice.actions
 
 export default todosSlice.reducer
 // highlight-end
