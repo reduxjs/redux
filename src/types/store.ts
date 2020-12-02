@@ -213,6 +213,11 @@ export interface Store<
    * https://github.com/tc39/proposal-observable
    */
   [Symbol.observable](): Observable<S>
+
+  /*
+   * When creating a store using typescript, next-redux-wrapper and redux-persist, and importing the store to useStore in _app.tsx, an error occurs because the __persistor type is not specified.
+  */
+  __persistor: object;
 }
 
 /**
