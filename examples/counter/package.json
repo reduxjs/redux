@@ -1,5 +1,5 @@
 {
-  "name": "counter",
+  "name": "reactredux1",
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
@@ -12,7 +12,9 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "2.13.8",
+    "redux-thunk": "2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,5 +27,7 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "keywords": [],
+  "description": ""
 }
