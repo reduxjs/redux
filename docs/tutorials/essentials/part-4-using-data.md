@@ -803,6 +803,41 @@ export const ReactionButtons = ({ post }) => {
 
 Now, every time we click a reaction button, the counter should increment. If we browse around to different parts of the app, we should see the correct counter values displayed any time we look at this post, even if we click a reaction button in the `<PostsList>` and then look at the post by itself on the `<SinglePostPage>`.
 
+Whenever adding new properties to state objects, it is important to make sure to also update your initial state if there are any defuault objects. Just like before when we added user and date to our initial state of posts, we also need to add 'initial reactions' as well.
+
+```jsx title="features/posts/postsSlice.js"
+import { createSlice, nanoid } from '@reduxjs/toolkit'
+// highlight-next-line
+import { sub } from 'date-fns'
+
+const initialState = [
+  {
+    // omitted fields
+    content: 'Hello!',
+    // highlight-next-line
+    reactions: {
+      thumbsUp: 0,
+      hooray: 0,
+      heart: 0,
+      rocket: 0,
+      eyes: 0,
+    },
+  },
+  {
+    // omitted fields
+    content: 'More text',
+    // highlight-next-line
+    reactions: {
+      thumbsUp: 0,
+      hooray: 0,
+      heart: 0,
+      rocket: 0,
+      eyes: 0,
+    },
+  }
+]
+```
+
 ## What You've Learned
 
 Here's what our app looks like after all these changes:
