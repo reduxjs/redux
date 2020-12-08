@@ -464,7 +464,7 @@ const postsSlice = createSlice({
             title,
             content,
             // highlight-next-line
-            user: userId
+            userId: userId
           }
         }
       }
