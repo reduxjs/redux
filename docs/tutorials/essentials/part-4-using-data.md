@@ -572,7 +572,7 @@ export const PostAuthor = ({ userId }) => {
 
 Notice that we're following the same pattern in each of our components as we go. Any component that needs to read data from the Redux store can use the `useSelector` hook, and extract the specific pieces of data that it needs. Also, many components can access the same data in the Redux store at the same time.
 
-We can now import the `PostAuthor` component into both `PostsList.js` and `SinglePostPage.js`, and render it as `<PostAuthor userId={post.user} />`, and every time we add a post entry, the selected user's name should show up inside of the rendered post.
+We can now import the `PostAuthor` component into both `PostsList.js` and `SinglePostPage.js`, and render it as `<PostAuthor userId={post.userId} />`, and every time we add a post entry, the selected user's name should show up inside of the rendered post.
 
 ## More Post Features
 
@@ -605,7 +605,7 @@ Since we can't just put a `Date` class instance into the Redux store, we'll trac
             date: new Date().toISOString(),
             title,
             content,
-            user: userId,
+            userId: userId,
           },
         }
       },
@@ -653,7 +653,7 @@ const renderedPosts = orderedPosts.map(post => {
     <article className="post-excerpt" key={post.id}>
       <h3>{post.title}</h3>
       <div>
-        <PostAuthor userId={post.user} />
+        <PostAuthor userId={post.userId} />
         <TimeAgo timestamp={post.date} />
       </div>
       <p className="post-content">{post.content.substring(0, 100)}</p>
