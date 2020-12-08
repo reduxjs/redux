@@ -464,7 +464,7 @@ const postsSlice = createSlice({
             title,
             content,
             // highlight-next-line
-            userId: userId
+            userId
           }
         }
       }
@@ -605,7 +605,7 @@ Since we can't just put a `Date` class instance into the Redux store, we'll trac
             date: new Date().toISOString(),
             title,
             content,
-            userId: userId,
+            userId,
           },
         }
       },
