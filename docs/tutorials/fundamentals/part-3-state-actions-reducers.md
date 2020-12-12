@@ -641,23 +641,15 @@ Since reducers are normal JS functions, we can import the slice reducers back in
 import todosReducer from "./features/todos/todosSlice";
 import filtersReducer from "./features/filters/filtersSlice";
 
-export default function rootReducer(state, action) {
+export default function rootReducer(state = {}, action) {
   // always return a new object for the root state
-  if (state) {
-    return {
-      // the value of `state.todos` is whatever the todos reducer returns
-      todos: todosReducer(state.todos, action),
-      // For both reducers, we only pass in their slice of the state
-      filters: filtersReducer(state.filters, action),
-    };
-  }
-  // will return a initial object for the root state
   return {
-    todos: todosReducer(undefined, action),
-    filters: filtersReducer(undefined, action),
+    // the value of `state.todos` is whatever the todos reducer returns
+    todos: todosReducer(state.todos, action),
+    // For both reducers, we only pass in their slice of the state
+    filters: filtersReducer(state.filters, action),
   };
 }
-
 ```
 
 **Note that each of these reducers is managing its own part of the global state. The state parameter is different for every reducer, and corresponds to the part of the state it manages.**
