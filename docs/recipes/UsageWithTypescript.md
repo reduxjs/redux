@@ -324,7 +324,7 @@ export default connector(MyComponent)
 
 ## Usage with Redux Thunk
 
-Redux Thunk is a commonly used middleware for writing sync and async logic that interacts with the Redux store. Feel free to check out its documentation [here](https://github.com/reduxjs/redux-thunk). A thunk is a function that returns another function that takes parameters `dispatch` and `getState`. Redux Thunk has a built in type `ThunkAction` which we can use to define types for those arguments:
+Redux Thunk is a commonly used middleware for writing sync and async logic that interacts with the Redux store. Feel free to check out its documentation [here](https://github.com/reduxjs/redux-thunk). A thunk is a function that wraps an expression for delaying the evaluation of that expression. In Redux, a thunk takes parameters `dispatch` and `getState`. Redux Thunk has a built in type `ThunkAction` which we can use to define types for those arguments:
 
 ```ts
 // src/thunks.ts
