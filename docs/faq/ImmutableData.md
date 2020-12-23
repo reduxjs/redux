@@ -75,7 +75,7 @@ It's for this improvement in performance that Redux uses shallow equality checki
 
 **Articles**
 
-- [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Pros and Cons of using immutability with React.js](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 ### How does Redux use shallow equality checking?
 
@@ -223,9 +223,9 @@ If the shallow equality check fails between the new values returned from `mapSta
 
 **Articles**
 
-- [Practical Redux, Part 6: Connected Lists, Forms, and Performance](http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
+- [Practical Redux, Part 6: Connected Lists, Forms, and Performance](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
 - [React.js Pure Render Performance Anti-Pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.sb708slq6)
-- [High Performance Redux Apps](http://somebody32.github.io/high-performance-redux/)
+- [High Performance Redux Apps](https://somebody32.github.io/high-performance-redux/)
 
 **Discussions**
 
@@ -257,7 +257,7 @@ The shallow check of `param` and `returnValue` simply checks whether both variab
 
 **Articles**
 
-- [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Pros and Cons of using immutability with React.js](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 ### Does shallow equality checking with a mutable object cause problems with Redux?
 
@@ -335,7 +335,7 @@ Note that, conversely, if an _immutable_ object is used, the [component may re-r
 
 **Articles**
 
-- [Practical Redux, Part 6: Connected Lists, Forms, and Performance](http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
+- [Practical Redux, Part 6: Connected Lists, Forms, and Performance](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
 
 **Discussions**
 
@@ -351,7 +351,7 @@ This mutated copy is a _separate_ object from that passed into the function, and
 
 **Articles**
 
-- [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Pros and Cons of using immutability with React.js](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 ### How can immutability in your reducers cause components to render unnecessarily?
 
@@ -464,7 +464,7 @@ Operating on JavaScript objects and arrays in an immutable way can be slow, part
 
 Remember, to change an immutable object, you must mutate a _copy_ of it, and copying large objects can be slow as every property must be copied.
 
-In contrast, immutable libraries such as Immutable.JS can employ sophisticated optimization techniques such as [structural sharing](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
+In contrast, immutable libraries such as Immutable.JS can employ sophisticated optimization techniques such as [structural sharing](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
 
 For copying very large objects, [plain JavaScript can be over 100 times slower](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) than an optimized immutable library.
 
@@ -477,8 +477,8 @@ For copying very large objects, [plain JavaScript can be over 100 times slower](
 **Articles**
 
 - [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.a2jimoiaf)
-- [A deep dive into Clojure’s data structures](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)
+- [A deep dive into Clojure’s data structures](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
-- [JavaScript and Immutability](http://t4d.io/javascript-and-immutability/)
-- [Immutable Javascript using ES6 and beyond](http://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
-- [Pros and Cons of using immutability with React.js - React Kung Fu](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [JavaScript and Immutability](https://t4d.io/javascript-and-immutability/)
+- [Immutable Javascript using ES6 and beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
+- [Pros and Cons of using immutability with React.js - React Kung Fu](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)

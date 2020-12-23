@@ -78,7 +78,7 @@ The [curried function signature](https://github.com/reactjs/redux/issues/1744) o
 
 - Why does the middleware signature use currying?
   - Prior discussions: [#55](https://github.com/reactjs/redux/pull/55), [#534](https://github.com/reactjs/redux/issues/534), [#784](https://github.com/reactjs/redux/pull/784), [#922](https://github.com/reactjs/redux/issues/922), [#1744](https://github.com/reactjs/redux/issues/1744)
-  - [React Boston 2017: You Might Need Redux (And Its Ecosystem)](http://blog.isquaredsoftware.com/2017/09/presentation-might-need-redux-ecosystem/)
+  - [React Boston 2017: You Might Need Redux (And Its Ecosystem)](https://blog.isquaredsoftware.com/2017/09/presentation-might-need-redux-ecosystem/)
 
 ### Why does `applyMiddleware` use a closure for `dispatch`?
 

@@ -55,7 +55,7 @@ return getAddedIds(state.cart).map(id => ({
 }))
 ```
 
-While the object spread syntax is a [Stage 4](https://github.com/tc39/proposal-object-rest-spread#status-of-this-proposal) proposal for ECMAScript and accepted for the 2018 specification release, you will still need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production systems. You should use the [`env`](https://github.com/babel/babel/tree/master/packages/babel-preset-env) preset, install [`@babel/plugin-proposal-object-rest-spread`](https://babeljs.io/docs/en/babel-plugin-proposal-object-rest-spread) and add it individually to the `plugins` array in your `.babelrc`.
+While the object spread syntax is a [Stage 4](https://github.com/tc39/proposal-object-rest-spread#status-of-this-proposal) proposal for ECMAScript and accepted for the 2018 specification release, you will still need to use a transpiler such as [Babel](https://babeljs.io/) to use it in production systems. You should use the [`env`](https://github.com/babel/babel/tree/master/packages/babel-preset-env) preset, install [`@babel/plugin-proposal-object-rest-spread`](https://babeljs.io/docs/en/babel-plugin-proposal-object-rest-spread) and add it individually to the `plugins` array in your `.babelrc`.
 
 ```json
 {

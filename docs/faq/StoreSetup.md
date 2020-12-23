@@ -46,8 +46,8 @@ With [React Redux](https://github.com/reduxjs/react-redux), the wrapper classes 
 **Discussions**
 
 - [#1346: Is it bad practice to just have a 'stores' directory?](https://github.com/reduxjs/redux/issues/1436)
-- [Stack Overflow: Redux multiple stores, why not?](http://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
-- [Stack Overflow: Accessing Redux state in an action creator](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
+- [Stack Overflow: Redux multiple stores, why not?](https://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
+- [Stack Overflow: Accessing Redux state in an action creator](https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
 - [Gist: Breaking out of Redux paradigm to isolate apps](https://gist.github.com/gaearon/eeee2f619620ab7b55673a4ee2bf8400)
 
 ### Is it OK to have more than one middleware chain in my store enhancer? What is the difference between `next` and `dispatch` in a middleware function?
@@ -67,7 +67,7 @@ This chain of middleware is defined by the arguments passed to the `applyMiddlew
 
 - [#1051: Shortcomings of the current applyMiddleware and composing createStore](https://github.com/reduxjs/redux/issues/1051)
 - [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
-- [Exploring Redux Middleware](http://blog.krawaller.se/posts/exploring-redux-middleware/)
+- [Exploring Redux Middleware](https://blog.krawaller.se/posts/exploring-redux-middleware/)
 
 ### How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?
 

@@ -41,8 +41,8 @@ In general, remember that reducers are just functions—you can organize them an
 
 - [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reduxjs/redux/issues/601)
 - [#1400: Is passing top-level state object to branch reducer an anti-pattern?](https://github.com/reduxjs/redux/issues/1400)
-- [Stack Overflow: Accessing other parts of the state when using combined reducers?](http://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
-- [Stack Overflow: Reducing an entire subtree with redux combineReducers](http://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
+- [Stack Overflow: Accessing other parts of the state when using combined reducers?](https://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
+- [Stack Overflow: Reducing an entire subtree with redux combineReducers](https://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
 - [Sharing State Between Redux Reducers](https://invalidpatent.wordpress.com/2016/02/18/sharing-state-between-redux-reducers/)
 
 ### Do I have to use the `switch` statement to handle actions?

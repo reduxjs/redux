@@ -19,7 +19,7 @@ It is tempting to modify the `state` or `action` passed to you by Redux. Don't d
 
 Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don't use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
 
-Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](http://github.com/reduxjs/redux-devtools).
+Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](https://github.com/reduxjs/redux-devtools).
 
 For example, a reducer like this is wrong because it mutates the state:
 
@@ -202,5 +202,5 @@ It's possible you're correctly dispatching an action and applying your reducer b
 
 ## Something else doesn't work
 
-Ask around on the **#redux** [Reactiflux](http://reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).
+Ask around on the **#redux** [Reactiflux](https://www.reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).
 If you figure it out, [edit this document](https://github.com/reduxjs/redux/edit/master/docs/recipes/Troubleshooting.md) as a courtesy to the next person having the same problem.

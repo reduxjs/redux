@@ -23,7 +23,7 @@ What to learn can be an overwhelming question for a JavaScript developer. It hel
 
 **Articles**
 
-- [Deciding What Not To Learn](http://gedd.ski/post/what-not-to-learn/)
+- [Deciding What Not To Learn](https://gedd.ski/post/what-not-to-learn/)
 - [How to learn web frameworks](https://ux.shopify.com/how-to-learn-web-frameworks-9d447cb71e68)
 - [Redux vs MobX vs Flux vs... Do you even need that?](https://goshakkk.name/redux-vs-mobx-vs-flux-etoomanychoices/)
 
@@ -77,11 +77,11 @@ In the end, Redux is just a tool. It's a great tool, and there are some great re
 - [Twitter: You don't need Redux if your data never changes](https://twitter.com/dan_abramov/status/737036433215610880)
 - [Twitter: If your reducer looks boring, don't use redux](https://twitter.com/dan_abramov/status/802564042648944642)
 - [Reddit: You don't need Redux if your app just fetches something on a single page](https://www.reddit.com/r/reactjs/comments/5exfea/feedback_on_my_first_redux_app/dagglqp/)
-- [Stack Overflow: Why use Redux over Facebook Flux?](http://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
-- [Stack Overflow: Why should I use Redux in this example?](http://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
-- [Stack Overflow: What could be the downsides of using Redux instead of Flux?](http://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
-- [Stack Overflow: When should I add Redux to a React app?](http://stackoverflow.com/questions/36631761/when-should-i-add-redux-to-a-react-app)
-- [Stack Overflow: Redux vs plain React?](http://stackoverflow.com/questions/39260769/redux-vs-plain-react/39261546#39261546)
+- [Stack Overflow: Why use Redux over Facebook Flux?](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
+- [Stack Overflow: Why should I use Redux in this example?](https://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
+- [Stack Overflow: What could be the downsides of using Redux instead of Flux?](https://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
+- [Stack Overflow: When should I add Redux to a React app?](https://stackoverflow.com/questions/36631761/when-should-i-add-redux-to-a-react-app)
+- [Stack Overflow: Redux vs plain React?](https://stackoverflow.com/questions/39260769/redux-vs-plain-react/39261546#39261546)
 - [Twitter: Redux is a platform for developers to build customized state management with reusable things](https://twitter.com/acemarke/status/793862722253447168)
 
 ### Can Redux only be used with React?
