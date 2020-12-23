@@ -1,7 +1,7 @@
-The [Redux logo](./logo/) is dedicated to the public domain and licensed under [CC0](<[CC0](http://creativecommons.org/publicdomain/zero/1.0/)>).  
+The [Redux logo](./logo/) is dedicated to the public domain and licensed under [CC0](<[CC0](https://creativecommons.org/publicdomain/zero/1.0/)>).  
 You can copy, modify, and distribute it, even for commercial purposes, all without asking permission.
 
-[Read more about CC0.](http://creativecommons.org/publicdomain/zero/1.0/)  
+[Read more about CC0.](https://creativecommons.org/publicdomain/zero/1.0/)  
 You can find its legal text below.
 
 #### Creative Commons Zero v1.0 Universal
@@ -121,4 +121,4 @@ party to this document and has no duty or obligation with respect to this
 CC0 or use of the Work.
 
 For more information, please see
-<http://creativecommons.org/publicdomain/zero/1.0/>
+<https://creativecommons.org/publicdomain/zero/1.0/>
