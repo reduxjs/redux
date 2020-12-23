@@ -80,7 +80,7 @@ module.exports = {
           items: [
             {
               label: 'Reactiflux Discord',
-              href: 'https://discord.gg/reactiflux'
+              href: 'https://discord.gg/0ZcbPKXt5bZ6au5t'
             },
             {
               label: 'Stack Overflow',
