@@ -120,7 +120,7 @@ An example of a normalized state structure for the blog example above might look
                 comment : ".....",
             },
         },
-        allIds : ["comment1", "comment2", "comment3", "commment4", "comment5"]
+        allIds : ["comment1", "comment2", "comment3", "comment4", "comment5"]
     },
     users : {
         byId : {
