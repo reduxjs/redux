@@ -1,5 +1,5 @@
 import nodeResolve from '@rollup/plugin-node-resolve'
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import replace from '@rollup/plugin-replace'
 import typescript from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
@@ -41,7 +41,7 @@ export default [
         plugins: [
           ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }],
         ],
-        runtimeHelpers: true,
+	  babelHelpers: 'runtime'
       }),
     ],
   },
@@ -67,7 +67,7 @@ export default [
             { version: babelRuntimeVersion, useESModules: true },
           ],
         ],
-        runtimeHelpers: true,
+	babelHelpers: 'runtime'
       }),
     ],
   },
