@@ -1,5 +1,6 @@
 import $$observable from './utils/symbol-observable'
 
+import * as _ from "lodash";
 import {
   Store,
   PreloadedState,
@@ -198,6 +199,44 @@ export default function createStore<
   }
 
   /**
+   * Adds a change listener that is triggered only when specific properties change.
+   * You may then call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param listener A callback to be invoked on every dispatch.
+   * @param properties An array of property names.
+   * @returns A function to remove this change listener.
+   */
+  function subscribeProperties(listener: () => void, properties: Array<string>) {
+    function getValues() {
+      const oldState = store.getState()
+      return Array.from(_.range(properties.length).map(i => (oldState as {[index in string]: any})[properties[i]]))
+    }
+    let oldValues = getValues()
+    subscribe(() => {
+      const values = getValues()
+      if (!_.isEqual(values, oldValues)) {
+        listener()
+      }
+      oldValues = values
+    })
+  }
+
+  /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
    * The `reducer` function, used to create the store, will be called with the
@@ -343,6 +382,7 @@ export default function createStore<
   const store = ({
     dispatch: dispatch as Dispatch<A>,
     subscribe,
+    subscribeProperties,
     getState,
     replaceReducer,
     [$$observable]: observable

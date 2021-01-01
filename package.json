@@ -50,7 +50,9 @@
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
-    "@babel/runtime": "^7.9.2"
+    "@babel/runtime": "^7.9.2",
+    "@types/lodash": "^4.14.166",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

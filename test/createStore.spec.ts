@@ -418,6 +418,20 @@ describe('createStore', () => {
       done()
     })
     store.dispatch(addTodo('Hello'))
+    // store.subscribeProperties(() => {
+    //   expect(store.getState()).toEqual([
+    //     {
+    //       id: 1,
+    //       text: 'Hello'
+    //     },
+    //     {
+    //       id: 2,
+    //       text: 'Hello2'
+    //     }
+    //   ])
+    //   done()
+    // }, ['text'])
+    // store.dispatch(addTodo('Hello2'))
   })
 
   it('does not leak private listeners array', done => {
