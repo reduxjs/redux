@@ -1,4 +1,6 @@
 import {
+  CHANGE_F1,
+  CHANGE_F2,
   ADD_TODO,
   DISPATCH_IN_MIDDLE,
   GET_STATE_IN_MIDDLE,
@@ -12,6 +14,29 @@ function id(state: { id: number }[]) {
   return (
     state.reduce((result, item) => (item.id > result ? item.id : result), 0) + 1
   )
+}
+
+export interface Simple {
+  f1: number
+  f2: number
+}
+export type SimpleAction = { type: 'CHANGE_F1'; value: number } | { type: 'CHANGE_F2'; value: number } | AnyAction
+
+export function simpleAction(state: Simple[] = [], action: SimpleAction) {
+  switch (action.type) {
+    case CHANGE_F1:
+      return {
+        ...state,
+        f1: action.value
+      }
+    case CHANGE_F2:
+      return {
+        ...state,
+        f2: action.value
+      }
+    default:
+      return state
+  }
 }
 
 export interface Todo {

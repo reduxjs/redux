@@ -1,6 +1,5 @@
 import $$observable from './utils/symbol-observable'
 
-import * as _ from "lodash";
 import {
   Store,
   PreloadedState,
@@ -224,14 +223,22 @@ export default function createStore<
   function subscribeProperties(listener: () => void, properties: Array<string>) {
     function getValues() {
       const oldState = store.getState()
-      return Array.from(_.range(properties.length).map(i => (oldState as {[index in string]: any})[properties[i]]))
+      let result = [];
+      for (let i = 0; i < properties.length; ++i) {
+        result.push((oldState as {[index in string]: any})[properties[i]]);
+      }
+      return result
     }
     let oldValues = getValues()
     subscribe(() => {
       const values = getValues()
-      if (!_.isEqual(values, oldValues)) {
-        listener()
+      for (let i = 0; i < properties.length; ++i) {
+        if (values[i] !== oldValues[i]) {
+          oldValues = values
+          return
+        }
       }
+      listener()
       oldValues = values
     })
   }

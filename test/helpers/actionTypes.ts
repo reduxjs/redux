@@ -1,3 +1,5 @@
+export const CHANGE_F1 = 'CHANGE_F1'
+export const CHANGE_F2 = 'CHANGE_F2'
 export const ADD_TODO = 'ADD_TODO'
 export const DISPATCH_IN_MIDDLE = 'DISPATCH_IN_MIDDLE'
 export const GET_STATE_IN_MIDDLE = 'GET_STATE_IN_MIDDLE'

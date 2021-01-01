@@ -7,6 +7,8 @@ import {
   Store
 } from '..'
 import {
+  changeF1,
+  changeF2,
   addTodo,
   dispatchInMiddle,
   getStateInMiddle,
@@ -28,8 +30,9 @@ describe('createStore', () => {
     // So we filter it out
     const methods = Object.keys(store).filter(key => key !== $$observable)
 
-    expect(methods.length).toBe(4)
+    expect(methods.length).toBe(5)
     expect(methods).toContain('subscribe')
+    expect(methods).toContain('subscribeProperties')
     expect(methods).toContain('dispatch')
     expect(methods).toContain('getState')
     expect(methods).toContain('replaceReducer')
@@ -418,20 +421,40 @@ describe('createStore', () => {
       done()
     })
     store.dispatch(addTodo('Hello'))
-    // store.subscribeProperties(() => {
-    //   expect(store.getState()).toEqual([
-    //     {
-    //       id: 1,
-    //       text: 'Hello'
-    //     },
-    //     {
-    //       id: 2,
-    //       text: 'Hello2'
-    //     }
-    //   ])
-    //   done()
-    // }, ['text'])
-    // store.dispatch(addTodo('Hello2'))
+  })
+
+  it('provides an up-to-date state when a subscriber is notified for a property', done => {
+    const store = createStore(reducers.todos)
+    store.subscribeProperties(() => {
+      expect(store.getState()).toEqual([
+        {
+          id: 1,
+          text: 'Hello'
+        }
+      ])
+      done()
+    }, ['text'])
+    store.dispatch(addTodo('Hello'))
+  })
+
+  it('listener is not called when another property changes', async done => {
+    const store = createStore(reducers.simpleAction)
+    changeF1(11)
+    store.subscribeProperties(() => {
+      expect(store.getState()).toEqual({
+        f1: 12,
+      })
+      done()
+    }, ['f1'])
+    const shouldNotBeCalled = jest.fn(() => {})
+    store.subscribeProperties(shouldNotBeCalled, ['f2'])
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    await sleep(1000) // TODO: hack
+    expect(shouldNotBeCalled).toHaveBeenCalledTimes(0)
+    store.dispatch(changeF1(12))
+    done()
   })
 
   it('does not leak private listeners array', done => {

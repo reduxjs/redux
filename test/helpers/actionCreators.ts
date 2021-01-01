@@ -1,4 +1,6 @@
 import {
+  CHANGE_F1,
+  CHANGE_F2,
   ADD_TODO,
   DISPATCH_IN_MIDDLE,
   GET_STATE_IN_MIDDLE,
@@ -8,6 +10,14 @@ import {
   UNKNOWN_ACTION
 } from './actionTypes'
 import { Action, AnyAction, Dispatch } from '../..'
+
+export function changeF1(value: number): AnyAction {
+  return { type: CHANGE_F1, value }
+}
+
+export function changeF2(value: number): AnyAction {
+  return { type: CHANGE_F2, value }
+}
 
 export function addTodo(text: string): AnyAction {
   return { type: ADD_TODO, text }
