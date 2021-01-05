@@ -3,12 +3,12 @@
  * @returns True if the argument appears to be a plain object.
  */
 export default function isPlainObject(obj: any): boolean {
-  if (typeof obj !== 'object' || obj === null) return false
+  if (!obj) return false
 
-  let proto = obj
-  while (Object.getPrototypeOf(proto) !== null) {
-    proto = Object.getPrototypeOf(proto)
-  }
-
-  return Object.getPrototypeOf(obj) === proto
+  const proto = Object.getPrototypeOf(obj)
+  return (
+    proto === null ||
+    (Object.getPrototypeOf(proto) === null &&
+      proto.constructor === obj.constructor)
+  )
 }
