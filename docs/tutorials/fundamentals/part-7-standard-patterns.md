@@ -309,7 +309,7 @@ import React from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 
 // highlight-next-line
-import { selectTodoIds }
+import { selectTodoIds } from './todosSlice'
 import TodoListItem from './TodoListItem'
 
 const TodoList = () => {
