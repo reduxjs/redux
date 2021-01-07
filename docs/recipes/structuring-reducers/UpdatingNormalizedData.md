@@ -313,3 +313,163 @@ post.comments.filter(c => c.text === 'This is a comment').count() // 1
 ```
 
 Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the "tables" in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.
+
+### ngrx-entity-relationship
+
+[ngrx-entity-relationship](https://github.com/satanTime/ngrx-entity-relationship) is a simple ORM library for selecting entities together with their relationships.
+It supports relationships between single entities and arrays of them.
+Additionally, it provides a solution for bulk state updates with a single action dispatch, that is useful with graphql backends.
+
+For example, we have a normalized state, and we want to select a user entity with its company and its address.
+The shape of the root state looks like that:
+
+```ts
+const rootState = {
+  users: {
+    ids: ['1'],
+    entities: {
+      '1': {
+        id: '1',
+        firstName: 'John',
+        lastName: 'Smith',
+        companyId: '1'
+      }
+    }
+  },
+  companies: {
+    ids: ['1'],
+    entities: {
+      '1': {
+        id: '1',
+        name: 'Magic',
+        addressId: '1'
+      }
+    }
+  },
+  addresses: {
+    existingIds: ['1'],
+    byIds: {
+      '1': {
+        id: '1',
+        street: 'Main st.',
+        city: 'Town',
+        country: 'Land'
+      }
+    }
+  }
+}
+```
+
+The solution is:
+
+```ts
+// building selector
+const selectUser = user(userCompany(companyAddress()))
+
+// using it in mapStateToProps
+const mapStateToProps = state => {
+  return {
+    user: selectUser(state, 'userIdOrItsSelector')
+  }
+}
+```
+
+In the component, the prop will be like that:
+
+```ts
+this.pros.user = {
+  id: '1',
+  firstName: 'John',
+  lastName: 'Smith',
+  companyId: '1',
+  company: {
+    id: '1',
+    name: 'Magic',
+    addressId: '1',
+    address: {
+      id: '1',
+      street: 'Main st.',
+      city: 'Town',
+      country: 'Land'
+    }
+  }
+}
+```
+
+The magic is in factory functions such as `user`, `userCompany` etc.
+They are defined in the next way:
+
+```ts
+// state selectors for every entity type
+export const userState = state => state.users
+export const companyState = state => state.companies
+export const addressState = state => state.addresses
+
+// defining factory fuctions
+
+// user
+export const user = rootEntitySelector(userState)
+// user.company
+export const userCompany = relatedEntitySelector(
+  companyState,
+  'companyId',
+  'company'
+)
+
+// company
+export const company = rootEntitySelector(companyState)
+// company.address
+export const companyAddress = relatedEntitySelector(
+  addressState,
+  'addressId',
+  'address'
+)
+// company.staff
+export const companyStaff = childrenEntitiesSelector(
+  userState,
+  'companyId',
+  'staff'
+)
+
+// address
+export const address = rootEntitySelector(addressState)
+// address.company
+export const addressCompany = childEntitySelector(
+  companyState,
+  'addressId',
+  'company'
+)
+```
+
+Now about bulk updates.
+
+If a backend is returning the same shape (graphql),
+then all 3 entities can be updated with a single action dispatch:
+
+```ts
+store.dispatch(
+  reduceGraph({
+    data: response.body /*{
+      id: '1',
+      firstName: 'John',
+      lastName: 'Smith',
+      companyId: '1',
+      company: {
+        id: '1',
+        name: 'Magic',
+        adminId: '2',
+        addressId: '1',
+        address: {
+          id: '1',
+          street: 'Main st.',
+          city: 'Town',
+          country: 'Land',
+        },
+      },
+    }*/,
+    selector: selectUser
+  })
+)
+```
+
+More detailed information and live examples can be found in [ngrx-entity-relationship documentation](https://github.com/satanTime/ngrx-entity-relationship#readme).
