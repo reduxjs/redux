@@ -309,14 +309,14 @@ import React from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 
 // highlight-next-line
-import { selectTodoIds }
+import { selectTodoIds } from './todosSlice'
 import TodoListItem from './TodoListItem'
 
 const TodoList = () => {
   // highlight-next-line
   const todoIds = useSelector(selectTodoIds)
 
-  const renderedListItems = todoIds.map((todoId) => {
+  const renderedListItems = todoIds.map(todoId => {
     return <TodoListItem key={todoId} id={todoId} />
   })
 
