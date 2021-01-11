@@ -263,7 +263,7 @@ export type StoreEnhancer<Ext = {}, StateExt = never, TState = never> = (
   next: StoreEnhancerStoreCreator<Ext, StateExt, TState>
 ) => StoreEnhancerStoreCreator<Ext, StateExt, TState>
 export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never, TState = any> = <
-  S extends ([TState] extends [never] ? any : TState),
+  S extends ([TState] extends [never] ? any : TState) | TState,
   A extends Action = AnyAction
 >(
   reducer: Reducer<S, A>,

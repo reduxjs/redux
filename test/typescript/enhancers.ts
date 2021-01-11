@@ -300,7 +300,7 @@ function originalStateShapeEnhancer() {
   const originalShapeEnhancer = <TState>(
     initialStateEnhancement: (state: PreloadedState<TState> | undefined) => PreloadedState<TState>,
     reducerDecorator: <S extends TState, A extends AnyAction>(reducer: Reducer<S, A>) => Reducer<S, A>
-  ): StoreEnhancer<{}, never, TState> => next => <S extends ([TState] extends [never] ? any : TState), A extends Action>(
+  ): StoreEnhancer<{}, never, TState> => next => <S extends TState, A extends Action>(
     reducer: Reducer<S, A>,
     state?: PreloadedState<S>
   ) => {
