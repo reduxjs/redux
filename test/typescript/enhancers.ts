@@ -1,7 +1,8 @@
-import { StoreEnhancer, Action, AnyAction, Reducer, createStore } from '../..'
+import { create } from 'domain'
+import { StoreEnhancer, Action, AnyAction, Reducer, createStore, PreloadedState, StoreEnhancerStoreCreator } from '../..'
 
 interface State {
-  someField: 'string'
+  someField: 'string' | 'enhanced!'
 }
 const reducer: Reducer<State> = null as any
 
@@ -293,4 +294,38 @@ function finalHelmersonExample() {
   newStore.getState().whatever
   // typings:expect-error
   newStore.getState().wrongField
+}
+
+function originalStateShapeEnhancer() {
+  const originalShapeEnhancer = <TState>(
+    initialStateEnhancement: (state: PreloadedState<TState> | undefined) => PreloadedState<TState>,
+    reducerDecorator: <S extends TState, A extends AnyAction>(reducer: Reducer<S, A>) => Reducer<S, A>
+  ): StoreEnhancer<{}, never, TState> => next => <S extends ([TState] extends [never] ? any : TState), A extends Action>(
+    reducer: Reducer<S, A>,
+    state?: PreloadedState<S>
+  ) => {
+    const extendedInitialState = initialStateEnhancement(state)
+    const enhancedInitialState = (extendedInitialState ? { ...state, ...extendedInitialState } : state) as PreloadedState<S> | undefined
+
+    return next(reducerDecorator(reducer), enhancedInitialState)
+  };
+  const reducerDecorator = <S extends State, A extends AnyAction>(reducer: Reducer<S, A>): Reducer<S, A> => (state, action) => {
+    state?.someField
+    // typings:expect-error
+    state?.wrongField
+
+    const newState = reducer(state, action)
+
+    state?.someField
+    // typings:expect-error
+    state?.wrongField
+
+    return newState
+  };
+
+  const store = createStore(reducer, originalShapeEnhancer(_ => ({someField: 'enhanced!'}), reducerDecorator))
+
+  store.getState().someField
+  // typings:expect-error
+  store.getState().wrongField
 }

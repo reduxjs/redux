@@ -229,12 +229,12 @@ export interface Store<
 export interface StoreCreator {
   <S, A extends Action, Ext = {}, StateExt = never>(
     reducer: Reducer<S, A>,
-    enhancer?: StoreEnhancer<Ext, StateExt>
+    enhancer?: StoreEnhancer<Ext, StateExt, S>
   ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   <S, A extends Action, Ext = {}, StateExt = never>(
     reducer: Reducer<S, A>,
     preloadedState?: PreloadedState<S>,
-    enhancer?: StoreEnhancer<Ext>
+    enhancer?: StoreEnhancer<Ext, StateExt, S>
   ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 }
 
@@ -259,11 +259,11 @@ export interface StoreCreator {
  * @template Ext Store extension that is mixed into the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
-export type StoreEnhancer<Ext = {}, StateExt = never> = (
-  next: StoreEnhancerStoreCreator<Ext, StateExt>
-) => StoreEnhancerStoreCreator<Ext, StateExt>
-export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never> = <
-  S = any,
+export type StoreEnhancer<Ext = {}, StateExt = never, TState = never> = (
+  next: StoreEnhancerStoreCreator<Ext, StateExt, TState>
+) => StoreEnhancerStoreCreator<Ext, StateExt, TState>
+export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never, TState = any> = <
+  S extends ([TState] extends [never] ? any : TState),
   A extends Action = AnyAction
 >(
   reducer: Reducer<S, A>,
