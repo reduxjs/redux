@@ -88,10 +88,7 @@ export default function createStore<
       throw new Error('Expected the enhancer to be a function.')
     }
 
-    return enhancer(createStore)(
-      reducer,
-      preloadedState as PreloadedState<S>
-    )
+    return enhancer(createStore)(reducer, preloadedState as PreloadedState<S>)
   }
 
   if (typeof reducer !== 'function') {
