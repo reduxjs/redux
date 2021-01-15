@@ -399,7 +399,7 @@ You will need to wrap the reducer you wish to enhance with `undoable` function. 
 #### `reducers/todos.js`
 
 ```js
-import undoable, { distinctState } from 'redux-undo'
+import undoable from 'redux-undo'
 
 /* ... */
 
@@ -407,14 +407,12 @@ const todos = (state = [], action) => {
   /* ... */
 }
 
-const undoableTodos = undoable(todos, {
-  filter: distinctState()
-})
+const undoableTodos = undoable(todos)
 
 export default undoableTodos
 ```
 
-The `distinctState()` filter serves to ignore the actions that didn't result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
+There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
 
 Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
 
