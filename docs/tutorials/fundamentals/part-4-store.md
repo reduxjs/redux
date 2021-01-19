@@ -164,7 +164,7 @@ take the result, and check to see if it matches what you expect:
 ```js title="todosSlice.spec.js"
 import todosReducer from './todosSlice'
 
-test(('Toggles a todo based on id') => {
+test('Toggles a todo based on id', () => {
   const initialState = [{ id: 0, text: 'Test text', completed: false }]
 
   const action = { type: 'todos/todoToggled', payload: 0 }
