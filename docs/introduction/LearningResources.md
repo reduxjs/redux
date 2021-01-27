@@ -311,7 +311,7 @@ _Patterns and practices for structuring larger Redux applications_
   An excellent slideshow with a wide variety of tips and suggestions, including keeping action creators simple and data manipulation in reducers, abstracting away API calls, avoiding spreading props, and more.
 
 - **Redux for state management in large web apps** <br/>
-  https://www.mapbox.com/blog/redux-for-state-management-in-large-web-apps/ <br/>
+  https://blog.mapbox.com/redux-for-state-management-in-large-web-apps-c7f3fab3ce9b <br/>
   Excellent discussion and examples of idiomatic Redux architecture, and how Mapbox applies those approaches to their Mapbox Studio application.
 
 ## Apps and Examples
