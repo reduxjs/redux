@@ -670,22 +670,6 @@ const DynamicCounters = connectLean(
 )(CounterList);
 ```
 
-**[ioof-holdings/redux-subspace](https://github.com/ioof-holdings/redux-subspace)** <br />
-Creates isolated "sub-stores" for decoupled micro front-ends, with integration for React, sagas, and observables
-
-```js
-const reducer = combineReducers({
-  subApp1: namespaced('subApp1')(counter),
-  subApp2: namespaced('subApp2')(counter)
-})
-
-const subApp1Store = subspace(state => state.subApp1, 'subApp1')(store)
-const subApp2Store = subspace(state => state.subApp2, 'subApp2')(store)
-
-subApp1Store.dispatch({ type: 'INCREMENT' })
-console.log('store state:', store.getState()) // { "subApp1": { value: 2 }, "subApp2": { value: 1 } }
-```
-
 **[DataDog/redux-doghouse](https://github.com/DataDog/redux-doghouse)** <br />
 Aims to make reusable components easier to build with Redux by scoping actions and reducers to a particular instance of a component.
 
