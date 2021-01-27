@@ -33,7 +33,7 @@ Here's the live version of the project. You can play around with it by clicking 
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark&runonclick=1"
   title="redux-essentials-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -582,7 +582,7 @@ Earlier, we saw that we can write "selector" functions, which take `state` as an
 
 Our `counterSlice.js` has this selector function at the bottom:
 
-```js  title="features/counter/counterSlice.js"
+```js title="features/counter/counterSlice.js"
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
@@ -625,7 +625,7 @@ const dispatch = useDispatch()
 
 From there, we can dispatch actions when the user does something like clicking on a button:
 
-```jsx  title="features/counter/Counter.js"
+```jsx title="features/counter/Counter.js"
 <button
   className={styles.button}
   aria-label="Increment value"
@@ -698,7 +698,7 @@ We've seen that our components can use the `useSelector` and `useDispatch` hooks
 
 Now that we've seen all the different pieces of this application, it's time to circle back to the starting point of this application and see how the last pieces of the puzzle fit together.
 
-```jsx  title="index.js"
+```jsx title="index.js"
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
