@@ -895,7 +895,7 @@ This means that **we can write thunk functions that return a promise, and wait o
 
 We already have our `<Header>` component dispatching a thunk to save new todo entries to the server. Let's add some loading state inside the `<Header>` component, then disable the text input and show another loading spinner while we're waiting for the server:
 
-```js title="src/features/header.Header.js"
+```js title="src/features/header/Header.js"
 const Header = () => {
   const [text, setText] = useState('')
   // highlight-next-line
