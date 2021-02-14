@@ -64,7 +64,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let isDispatching = false
   let isNotifyListenersNextFrame = false
   let alreadyNotifingListenersOnNextFrame = false
-  let hadVisibilityListener = false;
+  let hasVisibilityListener = false;
 
   /**
    * This makes a shallow copy of currentListeners so we can use
@@ -172,8 +172,8 @@ export default function createStore(reducer, preloadedState, enhancer) {
   function setNotifyListenersOnNextFrame(shouldNotifyOnNextFrame) {
     isNotifyListenersNextFrame = shouldNotifyOnNextFrame
 
-    if (shouldNotifyOnNextFrame && !hadVisibilityListener) {
-      hadVisibilityListener = true;
+    if (shouldNotifyOnNextFrame && !hasVisibilityListener) {
+      hasVisibilityListener = true;
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') {
           alreadyNotifingListenersOnNextFrame = false;
