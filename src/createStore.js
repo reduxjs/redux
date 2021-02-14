@@ -62,8 +62,9 @@ export default function createStore(reducer, preloadedState, enhancer) {
   let currentListeners = []
   let nextListeners = currentListeners
   let isDispatching = false
-  var isNotifyListenersNextFrame = false
-  var alreadyNotifingListenersOnNextFrame = false
+  let isNotifyListenersNextFrame = false
+  let alreadyNotifingListenersOnNextFrame = false
+  let hadVisibilityListener = false;
 
   /**
    * This makes a shallow copy of currentListeners so we can use
@@ -165,12 +166,27 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * The state still keep changing between dispatches, only listeners (subscribers to store) don't run.
    * Set to true if listeners should be notified only once per frame.
    * Set to false (default) if listeners should be notified after every dispatch
+   * As requestAnimationFrame is disabled while tab is inactive, so in case it's in use,
+   * we'll use the other method when leaving the tab, and returning to it when the tab is active again
    */
   function setNotifyListenersOnNextFrame(shouldNotifyOnNextFrame) {
     isNotifyListenersNextFrame = shouldNotifyOnNextFrame
+
+    if (shouldNotifyOnNextFrame && !hadVisibilityListener) {
+      hadVisibilityListener = true;
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'visible') {
+          alreadyNotifingListenersOnNextFrame = false;
+          setNotifyListenersOnNextFrame(true);
+        } else {
+          setNotifyListenersOnNextFrame(false);
+          notifyListeners();
+        }
+      });
+    }
   }
 
-  /**
+   /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
    * The `reducer` function, used to create the store, will be called with the
@@ -195,6 +211,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
+   function notifyListeners() {
+     const listeners = (currentListeners = nextListeners)
+     for (let i = 0; i < listeners.length; i++) {
+       const listener = listeners[i]
+       listener()
+     }
+   }
+
   function dispatch(action) {
     if (!isPlainObject(action)) {
       throw new Error(
@@ -219,14 +243,6 @@ export default function createStore(reducer, preloadedState, enhancer) {
       currentState = currentReducer(currentState, action)
     } finally {
       isDispatching = false
-    }
-
-    function notifyListeners() {
-      const listeners = (currentListeners = nextListeners)
-      for (let i = 0; i < listeners.length; i++) {
-        const listener = listeners[i]
-        listener()
-      }
     }
 
     if (isNotifyListenersNextFrame) {
