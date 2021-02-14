@@ -186,6 +186,14 @@ export default function createStore(reducer, preloadedState, enhancer) {
     }
   }
 
+  function notifyListeners() {
+    const listeners = (currentListeners = nextListeners)
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i]
+      listener()
+    }
+  }
+
    /**
    * Dispatches an action. It is the only way to trigger a state change.
    *
@@ -211,14 +219,6 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * Note that, if you use a custom middleware, it may wrap `dispatch()` to
    * return something else (for example, a Promise you can await).
    */
-   function notifyListeners() {
-     const listeners = (currentListeners = nextListeners)
-     for (let i = 0; i < listeners.length; i++) {
-       const listener = listeners[i]
-       listener()
-     }
-   }
-
   function dispatch(action) {
     if (!isPlainObject(action)) {
       throw new Error(
