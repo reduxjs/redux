@@ -41,7 +41,7 @@ export default [
         plugins: [
           ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }],
         ],
-	  babelHelpers: 'runtime'
+        babelHelpers: 'runtime'
       }),
     ],
   },
@@ -67,7 +67,7 @@ export default [
             { version: babelRuntimeVersion, useESModules: true },
           ],
         ],
-	babelHelpers: 'runtime'
+        babelHelpers: 'runtime'
       }),
     ],
   },
