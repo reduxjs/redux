@@ -47,6 +47,7 @@ hide_title: true
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](faq/CodeStructure.md#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
   - [Why should I use action creators?](faq/CodeStructure.md#why-should-i-use-action-creators)
   - [Where should websockets and other persistent connections live?](faq/CodeStructure.md#where-should-websockets-and-other-persistent-connections-live)
+  - [How can I use the Redux store in non-component files?](faq/CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files)
 - **Performance**
   - [How well does Redux “scale” in terms of performance and architecture?](faq/Performance.md#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
   - [Won't calling “all my reducers” for each action be slow?](faq/Performance.md#wont-calling-all-my-reducers-for-each-action-be-slow)

@@ -23,6 +23,8 @@
 
   --ifm-code-padding-vertical: 0.1rem;
   --ifm-code-padding-horizontal: 0.2rem;
+  --ifm-tabs-padding-vertical: 0.2rem;
+  --ifm-tabs-padding-horizontal: 0.4rem;
   --ifm-pre-background: rgb(39, 40, 34);
 
   --ifm-alert-color: black;
@@ -101,7 +103,9 @@ code {
   border-radius: 0.2rem;
 }
 
-a code {
+a code,
+code a {
+  background-color: var(--ifm-color-emphasis-200);
   color: inherit;
 }
 
