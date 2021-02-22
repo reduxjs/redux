@@ -94,27 +94,28 @@ You are not required to use RTK with Redux, and you are free to use other approa
 
 Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/docs/introduction) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
 
-### Structure Files as Feature Folders or Ducks
+<a id="structure-files-as-feature-folders-or-ducks"></a>
+
+### Structure Files as Feature Folders with Single-File Logic
 
 Redux itself does not care about how your application's folders and files are structured. However, co-locating logic for a given feature in one place typically makes it easier to maintain that code.
 
-Because of this, **we recommend that most applications should structure files using a "feature folder" approach** (all files for a feature in the same folder) **or the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux)** (all Redux logic for a feature in a single file), rather than splitting logic across separate folders by "type" of code (reducers, actions, etc).
+Because of this, **we recommend that most applications should structure files using a "feature folder" approach** (all files for a feature in the same folder). Within a given feature folder, **the Redux logic for that feature should be written as a single "slice" file**, preferably using the Redux Toolkit `createSlice` API. (This is also known as the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux)). While older Redux codebases often used a "folder-by-type" approach with separate folders for "actions" and "reducers", keeping related logic together makes it easier to find and update that code.
 
-<DetailedExplanation>
+<DetailedExplanation title="Detailed Explanation: Example Folder Structure">
 An example folder structure might look something like:
 
 - `/src`
-  - `index.tsx`
+  - `index.tsx`: Entry point file that renders the React component tree
   - `/app`
-    - `store.ts`
-    - `rootReducer.ts`
-    - `App.tsx`
-  - `/common`
-    - hooks, generic components, utils, etc
-  - `/features`
-    - `/todos`
-      - `todosSlice.ts`
-      - `Todos.tsx`
+    - `store.ts`: store setup
+    - `rootReducer.ts`: root reducer (optional)
+    - `App.tsx`: root React component
+  - `/common`: hooks, generic components, utils, etc
+  - `/features`: contains all "feature folders"
+    - `/todos`: a single feature folder
+      - `todosSlice.ts`: Redux reducer logic and associated actions
+      - `Todos.tsx`: a React component
 
 `/app` contains app-wide setup and layout that depends on all the other folders.
 
