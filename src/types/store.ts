@@ -20,6 +20,7 @@ export type ExtendState<State, Extension> = [Extension] extends [never]
  * Internal "virtual" symbol used to make the `CombinedState` type unique.
  */
 declare const $CombinedState: unique symbol
+export type { $CombinedState }
 
 /**
  * State base type for reducers created with `combineReducers()`.
