@@ -124,7 +124,7 @@ store.dispatch({ type: 'filters/statusFilterChanged', payload: 'Active' })
 
 store.dispatch({
   type: 'filters/colorFilterChanged',
-  payload: { color: 'red', changeType: 'selected' }
+  payload: { color: 'red', changeType: 'added' } 
 })
 
 // Stop listening to state updates
