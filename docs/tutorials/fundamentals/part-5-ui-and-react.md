@@ -246,7 +246,7 @@ const Header = () => {
   const handleKeyDown = e => {
     const trimmedText = e.target.value.trim()
     // If the user pressed the Enter key:
-    if (e.which === 13 && trimmedText) {
+    if (e.key === 'Enter' && trimmedText) {
       // highlight-start
       // Dispatch the "todo added" action with this text
       dispatch({ type: 'todos/todoAdded', payload: trimmedText })
