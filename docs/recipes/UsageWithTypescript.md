@@ -29,7 +29,7 @@ hide_title: true
 2. Easy refactoring of typed code
 3. A superior developer experience in a team environment
 
-[**We strongly recommend using TypeScript in Redux applications**](../style-guide/style-guide.md#use-static-typing). However, like all tools, TypeScript has tradeoffs. It adds complexity in terms of writing additional code, understanding TS syntax, and building the application. At the same time, it provides value by catching errors early, enabling correct refactoring, and acting as documentation for existing source code.
+[**We strongly recommend using TypeScript in Redux applications**](../style-guide/style-guide.md#use-static-typing). However, like all tools, TypeScript has tradeoffs. It adds complexity in terms of writing additional code, understanding TS syntax, and building the application. At the same time, it provides value by catching errors earlier in development, enabling safer and more efficient refactoring, and acting as documentation for existing source code.
 
 We believe that **[pragmatic use of Typescript](https://blog.isquaredsoftware.com/2019/11/blogged-answers-learning-and-using-typescript/#pragmatism-is-vital) provides more than enough value and benefit to justify the added overhead**, especially in larger codebases, but you should take time to **evaluate the tradeoffs and decide whether it's worth using TS in your own application**.
 
@@ -41,7 +41,7 @@ We assume that a typical Redux project is using Redux Toolkit and React Redux to
 
 [Redux Toolkit](https://redux-toolkit.js.org) (RTK) is the standard approach for writing modern Redux logic. RTK is already written in TypeScript, and its API is designed to provide a good experience for TypeScript usage.
 
-[React-Redux](https://react-redux.js.org) doesn't ship with its own type definitions. If you are using Typescript you should install the [`@types/react-redux` type definitions](https://npm.im/@types/react-redux) from npm. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
+[React Redux](https://react-redux.js.org) doesn't ship with its own type definitions. If you are using Typescript you should install the [`@types/react-redux` type definitions](https://npm.im/@types/react-redux) from npm. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
 
 The [Redux+TS template for Create-React-App](https://github.com/reduxjs/cra-template-redux-typescript) comes with a working example of these patterns already configured.
 
@@ -147,7 +147,7 @@ The generated action creators will be correctly typed to accept a `payload` argu
 
 ### Use Typed Hooks in Components
 
-In component files, import the pre-typed hooks instead of the standard hooks from React-Redux.
+In component files, import the pre-typed hooks instead of the standard hooks from React Redux.
 
 ```tsx title="features/counter/Counter.tsx"
 import React, { useState } from 'react'
@@ -290,7 +290,7 @@ Don't forget that **the default `useDispatch` hook does not know about thunks**,
 
 While [React Redux](https://react-redux.js.org) is a separate library from Redux itself, it is commonly used with React.
 
-For a complete guide on how to correctly use React-Redux with TypeScript, see **[the "Static Typing" page in the React-Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
+For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
 
 As mentioned above, React Redux doesn't ship with its own type definitions. If you are using Typescript you should install the [`@types/react-redux` type definitions](https://npm.im/@types/react-redux) from npm.
 
@@ -567,9 +567,9 @@ const booksSlice = createSlice({
 
 ## Additional Recommendations
 
-### Use the React-Redux Hooks API
+### Use the React Redux Hooks API
 
-**We recommend using the React-Redux hooks API as the default approach**. The hooks API is much simpler to use with TypeScript, as `useSelector` is a simple hook that takes a selector function, and the return type is easily inferred from the type of the `state` argument.
+**We recommend using the React Redux hooks API as the default approach**. The hooks API is much simpler to use with TypeScript, as `useSelector` is a simple hook that takes a selector function, and the return type is easily inferred from the type of the `state` argument.
 
 While `connect` still works fine, and _can_ be typed, it's much more difficult to type correctly.
 
@@ -584,7 +584,7 @@ In addition, if you're using `createSlice`, you already know that all actions de
 For further information, see these additional resources:
 
 - Redux library documentation:
-  - [React-Redux docs: Static Typing](https://react-redux.js.org/using-react-redux/static-typing): Examples of how to use the React-Redux APIs with TypeScript
+  - [React Redux docs: Static Typing](https://react-redux.js.org/using-react-redux/static-typing): Examples of how to use the React Redux APIs with TypeScript
   - [Redux Toolkit docs: Usage with TypeScript](https://redux-toolkit.js.org/usage/usage-with-typescript): Examples of how to use the Redux Toolkit APIs with TypeScript
 - React + Redux + TypeScript guides:
   - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet): a comprehensive guide to using React with TypeScript
