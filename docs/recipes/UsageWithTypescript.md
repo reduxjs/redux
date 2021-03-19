@@ -483,7 +483,7 @@ const blogSlice = createSlice({
 Finally, on rare occasions you might need to export the slice reducer with a specific type in order to break a circular type dependency problem. This might look like:
 
 ```ts
-export counterSlice.reducer as Reducer<Counter>
+export default counterSlice.reducer as Reducer<Counter>
 ```
 
 ### Typing `createAsyncThunk`
