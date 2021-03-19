@@ -29,9 +29,11 @@ hide_title: true
 2. Easy refactoring of typed code
 3. A superior developer experience in a team environment
 
-[**We strongly recommend using TypeScript in Redux applications**](../style-guide/style-guide.md#use-static-typing). However, like all tools, TypeScript has tradeoffs. It adds complexity in terms of writing additional code, understanding TS syntax, and building the application. At the same time, it provides value by catching errors early, enabling correct refactoring, and acting as documentation for existing source code. We believe that **[pragmatic use of Typescript](https://blog.isquaredsoftware.com/2019/11/blogged-answers-learning-and-using-typescript/#pragmatism-is-vital) provides more than enough value and benefit to justify the added overhead**, especially in larger codebases, but you should take time to **evaluate the tradeoffs and decide whether it's worth using TS in your own application**.
+[**We strongly recommend using TypeScript in Redux applications**](../style-guide/style-guide.md#use-static-typing). However, like all tools, TypeScript has tradeoffs. It adds complexity in terms of writing additional code, understanding TS syntax, and building the application. At the same time, it provides value by catching errors early, enabling correct refactoring, and acting as documentation for existing source code.
 
-There are multiple possible approaches to type checking Redux code. This page demonstrates some of the common and recommended approaches to keep things simple, and is not an exhaustive guide.
+We believe that **[pragmatic use of Typescript](https://blog.isquaredsoftware.com/2019/11/blogged-answers-learning-and-using-typescript/#pragmatism-is-vital) provides more than enough value and benefit to justify the added overhead**, especially in larger codebases, but you should take time to **evaluate the tradeoffs and decide whether it's worth using TS in your own application**.
+
+There are multiple possible approaches to type checking Redux code. **This page shows our standard recommended patterns for using Redux and TypeScript together**, and is not an exhaustive guide. Following these patterns should result in a good TS usage experience, with **the best tradeoffs between type safety and amount of type declarations you have to add to your codebase**.
 
 ## Standard Redux Toolkit Project Setup with TypeScript
 
@@ -280,7 +282,7 @@ Note that this assumes that there is no meaningful return value from the thunk. 
 
 :::caution
 
-Don't forget that **the default `useDispatch` hook does not know about thunks**, and so dispatching a thunk will cause a type error. Be sure to [use an updated form of `Dispatch` that recognizes thunks](#define-root-state-and-dispatch-types) in your components.
+Don't forget that **the default `useDispatch` hook does not know about thunks**, and so dispatching a thunk will cause a type error. Be sure to [use an updated form of `Dispatch` in your components that recognizes thunks as an acceptable type to dispatch](#define-root-state-and-dispatch-types).
 
 :::
 
