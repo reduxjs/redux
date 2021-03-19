@@ -241,7 +241,7 @@ export type ThunkAction<
 > = (dispatch: ThunkDispatch<S, E, A>, getState: () => S, extraArgument: E) => R
 ```
 
-You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providng _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `Action<string>` for `A`:
+You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `Action<string>` for `A`:
 
 ```ts
 import { Action } from 'redux'
