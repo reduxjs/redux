@@ -48,7 +48,7 @@ Where multiple, equally good options exist, an arbitrary choice can be made to e
 
 Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. **Actual mutation of state values should always be avoided**, both inside reducers and in all other application code.
 
-Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/docs/introduction) to avoid accidental mutations in state updates.
+Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/) to avoid accidental mutations in state updates.
 
 > **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
 
@@ -92,7 +92,7 @@ You are not required to use RTK with Redux, and you are free to use other approa
 
 ### Use Immer for Writing Immutable Updates
 
-Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/docs/introduction) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
+Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 

@@ -754,7 +754,7 @@ Notice that **our action object just contains the minimum amount of information 
 
 :::info
 
-When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but not both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/docs/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/docs/return) for more details.
+When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but not both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/return) for more details.
 
 :::
 
