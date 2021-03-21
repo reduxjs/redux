@@ -57,21 +57,23 @@ import { configureStore } from '@reduxjs/toolkit'
 
 const store = configureStore({
   reducer: {
-    one: oneSlice.reducer,
-    two: twoSlice.reducer
+    posts: postsReducer,
+    comments: commentsReducer,
+    users: usersReducer
   }
 })
 
 // highlight-start
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
 // highlight-end
 ```
 
 ### Define Typed Hooks
 
-While it's possible to import the `RootState` and `AppDispatch` types into each component, it's better to create typed versions of the `useDispatch` and `useSelector` hooks for usage in your application. This is important for a couple reasons:
+While it's possible to import the `RootState` and `AppDispatch` types into each component, it's better to **create pre-typed versions of the `useDispatch` and `useSelector` hooks for usage in your application**. This is important for a couple reasons:
 
 - For `useSelector`, it saves you the need to type `(state: RootState)` every time
 - For `useDispatch`, the default `Dispatch` type does not know about thunks or other middleware. In order to correctly dispatch thunks, you need to use the specific customized `AppDispatch` type from the store that includes the thunk middleware types, and use that with `useDispatch`. Adding a pre-typed `useDispatch` hook keeps you from forgetting to import `AppDispatch` where it's needed.
@@ -80,7 +82,7 @@ Since these are actual variables, not types, it's important to define them in a 
 
 ```ts title="app/hooks.ts"
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { RootState, AppDispatch } from './store'
+import type { RootState, AppDispatch } from './store'
 
 // highlight-start
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -101,7 +103,7 @@ You can safely import the `RootState` type from the store file here. It's a circ
 
 ```ts title="features/counter/counterSlice.ts"
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../../app/store'
+import type { RootState } from '../../app/store'
 
 // highlight-start
 // Define a type for the slice state
@@ -145,6 +147,15 @@ export default counterSlice.reducer
 
 The generated action creators will be correctly typed to accept a `payload` argument based on the `PayloadAction<T>` type you provided for the reducer. For example, `incrementByAmount` requires a `number` as its argument.
 
+In some cases, [TypeScript may unnecessarily tighten the type of the initial state](https://github.com/reduxjs/redux-toolkit/pull/827). If that happens, you can work around it by casting the initial state using `as`, instead of declaring the type of the variable:
+
+```ts
+// Workaround: cast state instead of declaring variable type
+const initialState = {
+  value: 0
+} as CounterState
+```
+
 ### Use Typed Hooks in Components
 
 In component files, import the pre-typed hooks instead of the standard hooks from React Redux.
@@ -174,7 +185,7 @@ export function Counter() {
 
 [Reducers](../tutorials/fundamentals/part-3-state-actions-reducers.md) are pure functions that receive the current `state` and incoming `action` as arguments, and return a new state.
 
-If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `AnyAction<string>`:
+If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `AnyAction`:
 
 ```ts
 import { AnyAction } from 'redux'
@@ -189,7 +200,7 @@ const initialState: CounterState = {
 
 export default function counterReducer(
   state = initialState,
-  action: AnyAction<string>
+  action: AnyAction
 ) {
   // logic here
 }
@@ -205,7 +216,7 @@ The Redux core exports a `Middleware` type that can be used to correctly type a 
 
 ```ts
 export interface Middleware<
-  DispatchExt = {}, // legacy type parameter that is no longer relevant
+  DispatchExt = {}, // optional override return behavior of `dispatch`
   S = any, // type of the Redux store state
   D extends Dispatch = Dispatch // type of the dispatch method
 >
@@ -219,7 +230,7 @@ import { Middleware } from 'redux'
 import { RootState } from '../store'
 
 export const exampleMiddleware: Middleware<
-  {}, // legacy type parameter added to satisfy interface signature
+  {}, // Most middleware do not modify the dispatch return value
   RootState
 > = storeApi => next => action => {
   const state = storeApi.getState() // correctly typed as RootState
@@ -241,17 +252,17 @@ export type ThunkAction<
 > = (dispatch: ThunkDispatch<S, E, A>, getState: () => S, extraArgument: E) => R
 ```
 
-You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `Action<string>` for `A`:
+You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `AnyAction` for `A`:
 
 ```ts
-import { Action } from 'redux'
+import { AnyAction } from 'redux'
 import { sendMessage } from './store/chat/actions'
 import { RootState } from './store'
 import { ThunkAction } from 'redux-thunk'
 
 export const thunkSendMessage = (
   message: string
-): ThunkAction<void, RootState, unknown, Action<string>> => async dispatch => {
+): ThunkAction<void, RootState, unknown, AnyAction> => async dispatch => {
   const asyncResp = await exampleAPI()
   dispatch(
     sendMessage({
@@ -274,7 +285,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  Action<string>
+  AnyAction
 >
 ```
 
@@ -308,6 +319,12 @@ const selectIsOn = (state: RootState) => state.isOn
 
 // TS infers `isOn` is boolean
 const isOn = useSelector(selectIsOn)
+```
+
+This can also be done inline as well:
+
+```ts
+const isOn = useSelector((state: RootState) => state.isOn)
 ```
 
 However, prefer creating a pre-typed `useSelector` hook with the correct type of `state` built-in instead.
@@ -494,9 +511,11 @@ For basic usage, the only type you need to provide for `createAsyncThunk` is the
 const fetchUserById = createAsyncThunk(
   'users/fetchById',
   // Declare the type your function argument here:
+  // highlight-next-line
   async (userId: number) => {
     const response = await fetch(`https://reqres.in/api/users/${userId}`)
     // Inferred return type: Promise<MyData>
+    // highlight-next-line
     return (await response.json()) as MyData
   }
 )
@@ -511,6 +530,7 @@ If you need to modify the types of the `thunkApi` parameter, such as supplying t
 
 ```ts
 const fetchUserById = createAsyncThunk<
+  //highlight-start
   // Return type of the payload creator
   MyData,
   // First argument to the payload creator
@@ -523,6 +543,7 @@ const fetchUserById = createAsyncThunk<
       jwt: string
     }
   }
+  // highlight-end
 >('users/fetchById', async (userId, thunkApi) => {
   const response = await fetch(`https://reqres.in/api/users/${userId}`, {
     headers: {
