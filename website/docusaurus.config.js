@@ -79,6 +79,10 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'Reactiflux Discord',
+              href: 'https://discord.gg/0ZcbPKXt5bZ6au5t'
+            },
+            {
               label: 'Stack Overflow',
               href: 'http://stackoverflow.com/questions/tagged/redux'
             },

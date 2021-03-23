@@ -31,7 +31,7 @@ Whichever option you choose, make sure you’re familiar with the concepts of [i
 **Articles**
 
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
-- [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Pros and Cons of using immutability with React.js](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 ## Why should I choose Immutable.JS as an immutable library?
 
@@ -134,7 +134,7 @@ This can be prevented by using `toJS()` in a Higher Order Component, as discusse
 **Articles**
 
 - [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.hzgz7ghbe)
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [Immutable Data Structures and JavaScript](https://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.9ucv6hwk4)
 - [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
 
@@ -170,7 +170,7 @@ Never let a plain JavaScript object contain Immutable.JS properties. Equally, ne
 
 **Articles**
 
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [Immutable Data Structures and JavaScript](https://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
 ### Make your entire Redux state tree an Immutable.JS object
 
@@ -200,7 +200,7 @@ const newState = state.setIn(['prop1'], fromJS(newObj))
 
 **Articles**
 
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [Immutable Data Structures and JavaScript](https://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
 **Libraries**
 
@@ -216,8 +216,8 @@ Do not, however, use Immutable.JS in your dumb components.
 
 **Articles**
 
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
-- [Smart and Dumb Components in React](http://jaketrent.com/post/smart-dumb-components-react/)
+- [Immutable Data Structures and JavaScript](https://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [Smart and Dumb Components in React](https://jaketrent.com/post/smart-dumb-components-react/)
 
 ### Limit your use of `toJS()`
 
@@ -277,8 +277,8 @@ Such a dependency renders the component impure, makes testing the component more
 
 **Articles**
 
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
-- [Smart and Dumb Components in React](http://jaketrent.com/post/smart-dumb-components-react/)
+- [Immutable Data Structures and JavaScript](https://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [Smart and Dumb Components in React](https://jaketrent.com/post/smart-dumb-components-react/)
 - [Tips For a Better Redux Architecture: Lessons for Enterprise Scale](https://hashnode.com/post/tips-for-a-better-redux-architecture-lessons-for-enterprise-scale-civrlqhuy0keqc6539boivk2f)
 
 ### Use a Higher Order Component to convert your Smart Component’s Immutable.JS props to your Dumb Component’s JavaScript props

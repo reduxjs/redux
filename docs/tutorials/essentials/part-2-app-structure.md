@@ -3,7 +3,7 @@ id: part-2-app-structure
 title: 'Redux Essentials, Part 2: Redux App Structure'
 sidebar_label: 'Redux App Structure'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -33,7 +33,7 @@ Here's the live version of the project. You can play around with it by clicking 
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark&runonclick=1"
   title="redux-essentials-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -300,17 +300,36 @@ The rule about "immutable updates" is particularly important, and worth talking 
 
 Earlier, we talked about "mutation" (modifying existing object/array values) and "immutability" (treating values as something that cannot be changed).
 
-:::warning
-
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
+```js
+// ❌ Illegal - by default, this will mutate the state!
+state.value = 123
+```
+
 :::
+
+There are several reasons why you must not mutate state in Redux:
+
+- It causes bugs, such as the UI not updating properly to show the latest values
+- It makes it harder to understand why and how the state has been updated
+- It makes it harder to write tests
+- It breaks the ability to use "time-travel debugging" correctly
+- It goes against the intended spirit and usage patterns for Redux
 
 So if we can't change the originals, how do we return an updated state?
 
 :::tip
 
 **Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
+
+```js
+// ✅ This is safe, because we made a copy
+return {
+  ...state,
+  value: 123
+}
+```
 
 :::
 
@@ -320,7 +339,7 @@ Writing immutable update logic by hand _is_ hard, and accidentally mutating stat
 
 **That's why Redux Toolkit's `createSlice` function lets you write immutable updates an easier way!**
 
-`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/docs/introduction) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value, as if you'd written all the immutable update logic by hand.
+`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
 
 So, instead of this:
 
@@ -563,7 +582,7 @@ Earlier, we saw that we can write "selector" functions, which take `state` as an
 
 Our `counterSlice.js` has this selector function at the bottom:
 
-```js  title="features/counter/counterSlice.js"
+```js title="features/counter/counterSlice.js"
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
@@ -606,7 +625,7 @@ const dispatch = useDispatch()
 
 From there, we can dispatch actions when the user does something like clicking on a button:
 
-```jsx  title="features/counter/Counter.js"
+```jsx title="features/counter/Counter.js"
 <button
   className={styles.button}
   aria-label="Increment value"
@@ -679,7 +698,7 @@ We've seen that our components can use the `useSelector` and `useDispatch` hooks
 
 Now that we've seen all the different pieces of this application, it's time to circle back to the starting point of this application and see how the last pieces of the puzzle fit together.
 
-```jsx  title="index.js"
+```jsx title="index.js"
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
@@ -709,7 +728,7 @@ Now, any React components that call `useSelector` or `useDispatch` will be talki
 
 Even though the counter example app is pretty small, it showed all the key pieces of a React + Redux app working together. Here's what we covered:
 
-:::tip
+:::tip Summary
 
 - **We can create a Redux store using the Redux Toolkit `configureStore` API**
   - `configureStore` accepts a `reducer` function as a named argument

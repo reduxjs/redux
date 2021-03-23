@@ -7,7 +7,7 @@ hide_title: true
 
 # Prerequisite Reducer Concepts
 
-As described in [Reducers](../../basics/Reducers.md), a Redux reducer function:
+As described in ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md), a Redux reducer function:
 
 - Should have a signature of `(previousState, action) => newState`, similar to the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 - Should be "pure", which means the reducer:
@@ -37,13 +37,13 @@ Because of these rules, it's important that the following core concepts are full
 
 **Reading list**:
 
-- [Redux Docs: Reducers](../../basics/Reducers.md)
+- ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md)
 - [Redux Docs: Reducing Boilerplate](../ReducingBoilerplate.md)
 - [Redux Docs: Implementing Undo History](../ImplementingUndoHistory.md)
 - [Redux Docs: `combineReducers`](../../api/combineReducers.md)
-- [The Power of Higher-Order Reducers](http://slides.com/omnidan/hor#/)
-- [Stack Overflow: Store initial state and `combineReducers`](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
-- [Stack Overflow: State key names and `combineReducers`](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer)
+- [The Power of Higher-Order Reducers](https://slides.com/omnidan/hor#/)
+- [Stack Overflow: Store initial state and `combineReducers`](https://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
+- [Stack Overflow: State key names and `combineReducers`](https://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer)
 
 #### Pure Functions and Side Effects
 
@@ -56,7 +56,7 @@ Because of these rules, it's important that the following core concepts are full
 **Reading List**:
 
 - [The Little Idea of Functional Programming](http://jaysoo.ca/2016/01/13/functional-programming-little-ideas/)
-- [Understanding Programmatic Side-Effects](http://c2fo.io/c2fo/programming/2016/05/11/understanding-programmatic-side-effects/)
+- [Understanding Programmatic Side-Effects](https://c2fo.io/c2fo/programming/2016/05/11/understanding-programmatic-side-effects/)
 - [Learning Functional Programming in Javascript](https://youtu.be/e-5obm1G_FY)
 - [An Introduction to Reasonably Pure Functional Programming](https://www.sitepoint.com/an-introduction-to-reasonably-pure-functional-programming/)
 
@@ -70,8 +70,8 @@ Because of these rules, it's important that the following core concepts are full
 
 **Reading List**:
 
-- [Pros and Cons of Using Immutability With React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
-- [Immutable Data using ES6 and Beyond](http://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
+- [Pros and Cons of Using Immutability With React](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Immutable Data using ES6 and Beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
 - [Immutable Data from Scratch](https://ryanfunduk.com/articles/immutable-data-from-scratch/)
 - [Redux Docs: Using the Object Spread Operator](../UsingObjectSpreadOperator.md)
 
@@ -88,11 +88,11 @@ Because of these rules, it's important that the following core concepts are full
 
 **Reading List**:
 
-- [Database Normalization in Simple English](http://www.essentialsql.com/get-ready-to-learn-sql-database-normalization-explained-in-simple-english/)
+- [Database Normalization in Simple English](https://www.essentialsql.com/get-ready-to-learn-sql-database-normalization-explained-in-simple-english/)
 - [Idiomatic Redux: Normalizing the State Shape](https://egghead.io/lessons/javascript-redux-normalizing-the-state-shape)
 - [Normalizr Documentation](https://github.com/paularmstrong/normalizr)
 - [Redux Without Profanity: Normalizr](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 - [Wikipedia: Associative Entity](https://en.wikipedia.org/wiki/Associative_entity)
-- [Database Design: Many-to-Many](http://web.csulb.edu/colleges/coe/cecs/dbdesign/dbdesign.php?page=manymany.php)
+- [Database Design: Many-to-Many](https://web.csulb.edu/colleges/coe/cecs/dbdesign/dbdesign.php?page=manymany.php)
 - [Avoiding Accidental Complexity When Structuring Your App State](https://medium.com/@talkol/avoiding-accidental-complexity-when-structuring-your-app-state-6e6d22ad5e2a)

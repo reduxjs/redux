@@ -3,7 +3,7 @@ id: part-5-async-logic
 title: 'Redux Essentials, Part 5: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn how async logic works in Redux apps'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -54,7 +54,7 @@ As a reminder, the code examples focus on the key concepts and changes for each 
 
 By itself, a Redux store doesn't know anything about async logic. It only knows how to synchronously dispatch actions, update the state by calling the root reducer function, and notify the UI that something has changed. Any asynchronicity has to happen outside the store.
 
-But, what if you want to have async logic interact with the store by dispatching or checking the current store state? That's where [Redux middleware](../../advanced/Middleware.md) come in. They extend the store, and allow you to:
+But, what if you want to have async logic interact with the store by dispatching or checking the current store state? That's where [Redux middleware](../fundamentals/part-4-store.md#middleware) come in. They extend the store, and allow you to:
 
 - Execute extra logic when any action is dispatched (such as logging the action and state)
 - Pause, modify, delay, replace, or halt dispatched actions
@@ -64,6 +64,10 @@ But, what if you want to have async logic interact with the store by dispatching
 [The most common reason to use middleware is to allow different kinds of async logic to interact with the store](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior). This allows you to write code that can dispatch actions and check the store state, while keeping that logic separate from your UI.
 
 There are many kinds of async middleware for Redux, and each lets you write your logic using different syntax. The most common async middleware is [`redux-thunk`](https://github.com/reduxjs/redux-thunk), which lets you write plain functions that may contain async logic directly. Redux Toolkit's `configureStore` function [automatically sets up the thunk middleware by default](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware), and [we recommend using thunks as the standard approach for writing async logic with Redux](../../style-guide/style-guide.md#use-thunks-for-async-logic).
+
+Earlier, we saw [what the synchronous data flow for Redux looks like](part-1-overview-concepts.md#redux-application-data-flow). When we introduce asynchronous logic, we add an extra step where middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
+
+![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
 ### Thunk Functions
 
@@ -356,7 +360,7 @@ If we try calling `dispatch(fetchPosts())`, the `fetchPosts` thunk will first di
 
 We can listen for this action in our reducer and mark the request status as `'loading'`.
 
-Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.posts` array we returned from the callback, and dispatches a `posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
+Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.posts` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
 
 ![`createAsyncThunk`: posts pending action](/img/tutorials/essentials/devtools-posts-fulfilled.png)
 
@@ -594,7 +598,7 @@ Uncommenting that line will force the fake API to wait 2 seconds before respondi
 
 ## Loading Users
 
-We're now fetching and displaying our list of posts. But, if we look at the posts, there's a problem: they all now say "Unknown User" as the authors:
+We're now fetching and displaying our list of posts. But, if we look at the posts, there's a problem: they all now say "Unknown author" as the authors:
 
 ![Unknown post authors](/img/tutorials/essentials/posts-unknownAuthor.png)
 
@@ -704,7 +708,7 @@ const postsSlice = createSlice({
 
 ### Checking Thunk Results in Components
 
-Finally, we'll update `<AddPostForm>` to dispatch the `addNewPost` thunk instead the old `postAdded` action. Since this is another API call to the server, it will take some time and _could_ fail. The `addNewPost()` thunk will automatically dispatch its `pending/fulfilled/rejected` actions to the Redux store, which we're already handling. We _could_ track the request status in `postsSlice` using a second loading enum if we wanted to, but for this example let's keep the loading state tracking limited to the component.
+Finally, we'll update `<AddPostForm>` to dispatch the `addNewPost` thunk instead of the old `postAdded` action. Since this is another API call to the server, it will take some time and _could_ fail. The `addNewPost()` thunk will automatically dispatch its `pending/fulfilled/rejected` actions to the Redux store, which we're already handling. We _could_ track the request status in `postsSlice` using a second loading enum if we wanted to, but for this example let's keep the loading state tracking limited to the component.
 
 It would be good if we can at least disable the "Save Post" button while we're waiting for the request, so the user can't accidentally try to save a post twice. If the request fails, we might also want to show an error message here in the form, or perhaps just log it to the console.
 
@@ -772,7 +776,7 @@ Here's what our app looks like now that we're fetching data from that fake API:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-3-postRequests/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-3-postRequests/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -780,7 +784,7 @@ Here's what our app looks like now that we're fetching data from that fake API:
 
 As a reminder, here's what we covered in this section:
 
-:::tip
+:::tip Summary
 
 - **You can write reusable "selector" functions to encapsulate reading values from the Redux state**
   - Selectors are functions that get the Redux `state` as an argument, and return some data

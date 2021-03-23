@@ -6,7 +6,7 @@ hide_title: true
 
 # Recipes
 
-These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [basic](../basics/README.md) and [advanced](../advanced/README.md) tutorials.
+These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [the "Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md).
 
 - [Configuring Your Store](ConfiguringYourStore.md)
 - [Usage with TypeScript](UsageWithTypescript.md)

@@ -50,7 +50,7 @@ console.log(store.getState())
 
 - Don't create more than one store in an application! Instead, use [`combineReducers`](combineReducers.md) to create a single root reducer out of many.
 
-- It is up to you to choose the state format. You can use plain objects or something like [Immutable](http://facebook.github.io/immutable-js/). If you're not sure, start with plain objects.
+- It is up to you to choose the state format. You can use plain objects or something like [Immutable](https://facebook.github.io/immutable-js/). If you're not sure, start with plain objects.
 
 - If your state is a plain object, make sure you never mutate it! For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don't override the previous `state`. You can also write `return { ...state, ...newData }` if you enable the [object spread operator proposal](../recipes/UsingObjectSpreadOperator.md).
 

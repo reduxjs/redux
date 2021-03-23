@@ -8,12 +8,21 @@ hide_title: true
 
 ## Table of Contents
 
-- [How well does Redux “scale” in terms of performance and architecture?](#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
-- [Won't calling “all my reducers” for each action be slow?](#wont-calling-all-my-reducers-for-each-action-be-slow)
-- [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
-- [How can I reduce the number of store update events?](#how-can-i-reduce-the-number-of-store-update-events)
-- [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
-- [Will caching remote data cause memory problems?](#will-caching-remote-data-cause-memory-problems)
+- [Redux FAQ: Performance](#redux-faq-performance)
+  - [Table of Contents](#table-of-contents)
+  - [Performance](#performance)
+    - [How well does Redux “scale” in terms of performance and architecture?](#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
+      - [Further information](#further-information)
+    - [Won't calling “all my reducers” for each action be slow?](#wont-calling-all-my-reducers-for-each-action-be-slow)
+      - [Further information](#further-information-1)
+    - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
+      - [Further information](#further-information-2)
+    - [How can I reduce the number of store update events?](#how-can-i-reduce-the-number-of-store-update-events)
+      - [Further information](#further-information-3)
+    - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
+      - [Further information](#further-information-4)
+    - [Will caching remote data cause memory problems?](#will-caching-remote-data-cause-memory-problems)
+      - [Further information](#further-information-5)
 
 ## Performance
 
@@ -38,9 +47,9 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 **Articles**
 
 - [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
-- [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
-- [Improving React and Redux Perf with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
-- [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
+- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
+- [Improving React and Redux Perf with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [Encapsulating the Redux State Tree](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [React/Redux Links: Performance - Redux](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
 **Discussions**
@@ -57,7 +66,7 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 - [Reddit: React/Redux for Ultra Large Scale apps](https://www.reddit.com/r/javascript/comments/49box8/reactredux_for_ultra_large_scale_apps/)
 - [Twitter: Redux scaling](https://twitter.com/NickPresta/status/684058236828266496)
 - [Twitter: Redux vs MobX benchmark graph - Redux state shape matters](https://twitter.com/dan_abramov/status/720219615041859584)
-- [Stack Overflow: How to optimize small updates to props of nested components?](http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
+- [Stack Overflow: How to optimize small updates to props of nested components?](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
 - [Chat log: React/Redux perf - updating a 10K-item Todo list](https://gist.github.com/markerikson/53735e4eb151bc228d6685eab00f5f85)
 - [Chat log: React/Redux perf - single connection vs many connections](https://gist.github.com/markerikson/6056565dd65d1232784bf42b65f8b2ad)
 
@@ -77,8 +86,8 @@ If you actually are concerned about reducer performance, you can use a utility s
 
 - [#912: Proposal: action filter utility](https://github.com/reduxjs/redux/issues/912)
 - [#1303: Redux Performance with Large Store and frequent updates](https://github.com/reduxjs/redux/issues/1303)
-- [Stack Overflow: State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
-- [Stack Overflow: How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
+- [Stack Overflow: State in Redux app has the name of the reducer](https://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
+- [Stack Overflow: How does Redux deal with deeply nested models?](https://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
 
 ### Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?
 
@@ -103,7 +112,7 @@ However, you _do_ need to create a copied and updated object for each level of n
 - [#758: Why can't state be mutated?](https://github.com/reduxjs/redux/issues/758)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reduxjs/redux/issues/994)
 - [Twitter: common misconception - deep cloning](https://twitter.com/dan_abramov/status/688087202312491008)
-- [Cloning Objects in JavaScript](http://www.zsoltnagy.eu/cloning-objects-in-javascript/)
+- [Cloning Objects in JavaScript](https://www.zsoltnagy.eu/cloning-objects-in-javascript/)
 
 ### How can I reduce the number of store update events?
 
@@ -154,11 +163,11 @@ Redux does not store a history of actions itself. However, the Redux DevTools do
 
 **Documentation**
 
-- [Docs: Async Actions](../advanced/AsyncActions.md)
+- [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
 
 **Discussions**
 
-- [Stack Overflow: Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
+- [Stack Overflow: Is there any way to "commit" the state in Redux to free memory?](https://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
 - [Stack Overflow: Can a Redux store lead to a memory leak?](https://stackoverflow.com/questions/39943762/can-a-redux-store-lead-to-a-memory-leak/40549594#40549594)
 - [Stack Overflow: Redux and ALL the application state](https://stackoverflow.com/questions/42489557/redux-and-all-the-application-state/42491766#42491766)
 - [Stack Overflow: Memory Usage Concern with Controlled Components](https://stackoverflow.com/questions/44956071/memory-usage-concern-with-controlled-components?noredirect=1&lq=1)

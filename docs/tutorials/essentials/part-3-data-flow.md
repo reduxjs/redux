@@ -3,7 +3,7 @@ id: part-3-data-flow
 title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See **[Part 1](./part-1-overview-concepts.md)** for explanations of these terms.)
+- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See [**Part 1: Redux Overview and Concepts**](./part-1-overview-concepts.md) for explanations of these terms.)
 
 :::
 
@@ -44,7 +44,7 @@ To get started, you can open and fork this CodeSandbox:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-quick-start-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -172,12 +172,12 @@ export const PostsList = () => {
   const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
       <h3>{post.title}</h3>
-      <p>{post.content.substring(0, 100)}</p>
+      <p className="post-content">{post.content.substring(0, 100)}</p>
     </article>
   ))
 
   return (
-    <section>
+    <section className="posts-list">
       <h2>Posts</h2>
       {renderedPosts}
     </section>
@@ -428,7 +428,7 @@ Notice that our `AddPostForm` component has some React `useState` hooks inside, 
 
 Let's recap what you've learned in this section:
 
-:::tip
+:::tip Summary
 
 - **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
@@ -449,7 +449,7 @@ Here's what the app looks like so far:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-1-postAdded/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-1-postAdded/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-quick-start-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

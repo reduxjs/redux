@@ -8,13 +8,23 @@ hide_title: true
 
 ## Table of Contents
 
-- [Why should I use React-Redux?](#why-should-i-use-react-redux)
-- [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
-- [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
-- [How can I speed up my mapStateToProps?](#how-can-i-speed-up-my-mapstatetoprops)
-- [Why don't I have this.props.dispatch available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
-- [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
-- [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
+- [Redux FAQ: React Redux](#redux-faq-react-redux)
+  - [Table of Contents](#table-of-contents)
+  - [React Redux](#react-redux)
+    - [Why should I use React-Redux?](#why-should-i-use-react-redux)
+      - [Further Information](#further-information)
+    - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
+      - [Further information](#further-information-1)
+    - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
+      - [Further information](#further-information-2)
+    - [How can I speed up my `mapStateToProps`?](#how-can-i-speed-up-my-mapstatetoprops)
+      - [Further information](#further-information-3)
+    - [Why don't I have `this.props.dispatch` available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
+      - [Further information](#further-information-4)
+    - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
+      - [Further information](#further-information-5)
+    - [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
+      - [Further information](#further-information-6)
 
 ## React Redux
 
@@ -62,7 +72,7 @@ Note that “updating data immutably” does _not_ mean that you must use [Immut
 
 **Articles**
 
-- [Pros and Cons of Using Immutability with React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Pros and Cons of Using Immutability with React](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 - [React/Redux Links: Immutable Data](https://github.com/markerikson/react-redux-links/blob/master/immutable-data.md)
 
 **Discussions**
@@ -70,7 +80,7 @@ Note that “updating data immutably” does _not_ mean that you must use [Immut
 - [#1262: Immutable data + bad performance](https://github.com/reduxjs/redux/issues/1262)
 - [React Redux #235: Predicate function for updating component](https://github.com/reduxjs/react-redux/issues/235)
 - [React Redux #291: Should mapStateToProps be called every time an action is dispatched?](https://github.com/reduxjs/react-redux/issues/291)
-- [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
+- [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](https://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist: state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
 
 ### Why is my component re-rendering too often?
@@ -99,15 +109,15 @@ For non-connected components, you may want to check what props are being passed 
 
 **Articles**
 
-- [A Deep Dive into React Perf Debugging](http://benchling.engineering/deep-dive-react-perf-debugging/)
+- [A Deep Dive into React Perf Debugging](https://benchling.engineering/deep-dive-react-perf-debugging/)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
-- [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
-- [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
+- [Improving React and Redux Performance with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [Encapsulating the Redux State Tree](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [React/Redux Links: React/Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md)
 
 **Discussions**
 
-- [Stack Overflow: Can a React Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
+- [Stack Overflow: Can a React Redux app scale as well as Backbone?](https://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
 
 **Libraries**
 
@@ -125,7 +135,7 @@ While React Redux does work to minimize the number of times that your `mapStateT
 
 **Articles**
 
-- [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [Improving React and Redux Performance with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
 
 **Discussions**
 
@@ -149,7 +159,7 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 - [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reduxjs/react-redux/issues/89)
 - [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reduxjs/react-redux/issues/145)
 - [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reduxjs/react-redux/issues/255)
-- [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
+- [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](https://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
 ### Should I only connect my top component, or can I connect multiple components in my tree?
 
@@ -167,13 +177,13 @@ In general, try to find a balance between understandable data flow and areas of 
 
 **Documentation**
 
-- [Basics: Usage with React](../basics/UsageWithReact.md)
+- [Fundamentals: UI and React](../tutorials/fundamentals/part-5-ui-and-react.md)
 - [FAQ: Performance - Scaling](../faq/Performance.md#performance-scaling)
 
 **Articles**
 
 - [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
-- [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
+- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
 - [React/Redux Links: Architecture - Redux Architecture](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#redux-architecture)
 - [React/Redux Links: Performance - Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
@@ -183,7 +193,7 @@ In general, try to find a balance between understandable data flow and areas of 
 - [#419: Recommended usage of connect](https://github.com/reduxjs/redux/issues/419)
 - [#756: container vs component?](https://github.com/reduxjs/redux/issues/756)
 - [#1176: Redux+React with only stateless components](https://github.com/reduxjs/redux/issues/1176)
-- [Stack Overflow: can a dumb component use a Redux container?](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
+- [Stack Overflow: can a dumb component use a Redux container?](https://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
 
 ### How does Redux compare to the React Context API?
 
@@ -201,5 +211,6 @@ There is a key difference in how Redux and React's Context treat data. Redux mai
 
 #### Further information
 
+- [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
 - [Redux vs. The React Context API](https://daveceddia.com/context-api-vs-redux/)
 - [You Might Not Need Redux (But You Can’t Replace It With Hooks)](https://www.simplethread.com/cant-replace-redux-with-hooks/)

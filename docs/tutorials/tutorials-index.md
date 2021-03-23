@@ -11,17 +11,11 @@ description: 'Overview of the Redux tutorial pages'
 
 We have two different sets of tutorials:
 
-- The [**Redux Essentials tutorial**](./essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches how to use Redux the right way, using our latest recommended APIs and best practices.
-- The [**Basic tutorial**](../basics/README.md) and [**Advanced tutorial**](../advanced/README.md) are a "bottom-up" tutorial that teaches how Redux works, starting from first principles.
+- The [**Redux Essentials tutorial**](./essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices.
+- The [**Redux Fundamentals tutorial**](./fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.
 
 :::tip
 
 **We recommend starting with the [Redux Essentials tutorial](./essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using Redux to write actual applications.
-
-:::
-
-:::info
-
-While the concepts in the "Basic" and "Advanced" tutorials are still valid, those pages are some of the oldest parts of our docs. We'll be updating those tutorials soon to improve the explanations and show some patterns that are simpler and easier to use. Keep an eye out for those updates. We'll also be reorganizing our docs to make it easier to find information.
 
 :::
