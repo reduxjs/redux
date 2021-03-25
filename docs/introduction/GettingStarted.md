@@ -148,7 +148,7 @@ const counterSlice = createSlice({
 export const { incremented, decremented } = counterSlice.actions
 
 const store = configureStore({
-  reducer: counterSlice.reducer
+  reducer: counterSlice.reducers
 })
 
 // Can still subscribe to the store
