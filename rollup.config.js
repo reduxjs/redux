@@ -89,7 +89,8 @@ export default [
       babel({
         extensions,
         exclude: 'node_modules/**',
-        plugins: [['./scripts/mangleErrors.js', { minify: true }]]
+        plugins: [['./scripts/mangleErrors.js', { minify: true }]],
+        skipPreflightCheck: true
       }),
       terser({
         compress: {
@@ -144,7 +145,8 @@ export default [
       babel({
         extensions,
         exclude: 'node_modules/**',
-        plugins: [['./scripts/mangleErrors.js', { minify: true }]]
+        plugins: [['./scripts/mangleErrors.js', { minify: true }]],
+        skipPreflightCheck: true
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')

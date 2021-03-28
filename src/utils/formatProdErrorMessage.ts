@@ -3,7 +3,7 @@
  *
  * Do not require this module directly! Use normal throw error calls. These messages will be replaced with error codes
  * during build.
- * @param {*} code
+ * @param {number} code
  */
 function formatProdErrorMessage(code: number) {
   return (

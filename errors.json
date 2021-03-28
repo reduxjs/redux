@@ -14,5 +14,6 @@
   "12": "bindActionCreators expected an object or a function, instead received . Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?",
   "13": "Dispatching while constructing your middleware is not allowed. Other middleware would not be applied to this dispatch.",
   "14": "Reducer \"\" returned undefined during initialization. If the state passed to the reducer is undefined, you must explicitly return the initial state. The initial state may not be undefined. If you don't want to set a value for this reducer, you can use null instead of undefined.",
-  "15": "Reducer \"\" returned undefined when probed with a random type. Don't try to handle  or other actions in \"redux/*\" namespace. They are considered private. Instead, you must return the current state for any unknown actions, unless it is undefined, in which case you must return the initial state, regardless of the action type. The initial state may not be undefined, but can be null."
+  "15": "Reducer \"\" returned undefined when probed with a random type. Don't try to handle  or other actions in \"redux/*\" namespace. They are considered private. Instead, you must return the current state for any unknown actions, unless it is undefined, in which case you must return the initial state, regardless of the action type. The initial state may not be undefined, but can be null.",
+  "16": "Super expression must either be null or a function"
 }
