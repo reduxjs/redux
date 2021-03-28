@@ -8,10 +8,17 @@ hide_title: true
 
 ## Table of Contents
 
-- [Do I have to put all my state into Redux? Should I ever use React's setState()?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
-- [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
-- [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
-- [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
+- [Redux FAQ: Organizing State](#redux-faq-organizing-state)
+  - [Table of Contents](#table-of-contents)
+  - [Organizing State](#organizing-state)
+    - [Do I have to put all my state into Redux? Should I ever use React's `setState()`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+      - [Further information](#further-information)
+    - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
+      - [Further information](#further-information-1)
+    - [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
+      - [Further information](#further-information-2)
+    - [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
+      - [Further Information](#further-information-3)
 
 ## Organizing State
 
@@ -36,6 +43,7 @@ There are a number of community packages that implement various approaches for s
 
 **Articles**
 
+- [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
 - [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
 - [Finding `state`'s place with React and Redux](https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172)
 - [A Case for setState](https://medium.com/@zackargyle/a-case-for-setstate-1f1c47cd3f73)
@@ -54,8 +62,8 @@ There are a number of community packages that implement various approaches for s
 - [Twitter: Using a reducer to update a component](https://twitter.com/dan_abramov/status/736310245945933824)
 - [React Forums: Redux and global state vs local state](https://discuss.reactjs.org/t/redux-and-global-state-vs-local-state/4187)
 - [Reddit: "When should I put something into my Redux store?"](https://www.reddit.com/r/reactjs/comments/4w04to/when_using_redux_should_all_asynchronous_actions/d63u4o8)
-- [Stack Overflow: Why is state all in one place, even state that isn't global?](http://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
-- [Stack Overflow: Should all component state be kept in Redux store?](http://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
+- [Stack Overflow: Why is state all in one place, even state that isn't global?](https://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
+- [Stack Overflow: Should all component state be kept in Redux store?](https://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
 
 **Libraries**
 
@@ -85,7 +93,8 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Documentation**
 
-- [Advanced: Async Actions](../advanced/AsyncActions.md)
+- [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
+- [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
 - [Examples: Real World example](../introduction/Examples.md#real-world)
 - [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
 - [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/structuring-reducers/NormalizingStateShape.md)
@@ -93,7 +102,7 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Articles**
 
-- [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
+- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
 **Discussions**
@@ -106,8 +115,8 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [#1269: Add tree view example](https://github.com/reduxjs/redux/pull/1269)
 - [#1824: Normalising state and garbage collection](https://github.com/reduxjs/redux/issues/1824#issuecomment-228585904)
 - [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
-- [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](http://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
-- [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
+- [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](https://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
+- [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
 
 ### Should I put form state or other UI state in my store?
 

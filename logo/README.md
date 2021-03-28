@@ -29,13 +29,13 @@ Download as [PNG](https://raw.githubusercontent.com/reduxjs/redux/master/logo/lo
 
 Whenever possible, we ask you to use the originals provided on this page.
 
-If for some reason you must change how the title is rendered and can't use the prerendered version we provide, we ask that you use the free [Lato Black](http://www.latofonts.com/lato-free-fonts/) font and ensure there is enough space between the logo and the title.
+If for some reason you must change how the title is rendered and can't use the prerendered version we provide, we ask that you use the free [Lato Black](https://www.latofonts.com/lato-free-fonts/) font and ensure there is enough space between the logo and the title.
 
 When in doubt, use the original logos.
 
 ## Credits
 
-The Redux logo was designed by [Matthew Johnston](http://thedeskofmatthew.com/).  
+The Redux logo was designed by [Matthew Johnston](https://thedeskofmatthew.com/).  
 Thanks to [Jay Phelps](https://github.com/jayphelps) and [the community](https://github.com/reduxjs/redux/issues/151) for contributing earlier proposals.
 
 ## License

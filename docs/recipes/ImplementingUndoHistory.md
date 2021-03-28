@@ -6,6 +6,13 @@ hide_title: true
 
 # Implementing Undo History
 
+:::Prerequisites
+
+- Completion of the ["Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md)
+- Understanding of ["reducer composition"](../tutorials/fundamentals/part-3-state-actions-reducers.md#splitting-reducers)
+
+:::
+
 Building an Undo and Redo functionality into an app has traditionally required conscious effort from the developer. It is not an easy problem with classical MVC frameworks because you need to keep track of every past state by cloning all relevant models. In addition, you need to be mindful of the undo stack because the user-initiated changes should be undoable.
 
 This means that implementing Undo and Redo in an MVC application usually forces you to rewrite parts of your application to use a specific data mutation pattern like [Command](https://en.wikipedia.org/wiki/Command_pattern).
@@ -15,8 +22,6 @@ With Redux, however, implementing undo history is a breeze. There are three reas
 - There are no multiple models—just a state subtree that you want to keep track of.
 - The state is already immutable, and mutations are already described as discrete actions, which is close to the undo stack mental model.
 - The reducer `(state, action) => state` signature makes it natural to implement generic “reducer enhancers” or “higher order reducers”. They are functions that take your reducer and enhance it with some additional functionality while preserving its signature. Undo history is exactly such a case.
-
-Before proceeding, make sure you have worked through the [basics tutorial](../basics/README.md) and understand [reducer composition](../basics/Reducers.md) well. This recipe will build on top of the example described in the [basics tutorial](../basics/README.md).
 
 In the first part of this recipe, we will explain the underlying concepts that make Undo and Redo possible to implement in a generic way.
 
@@ -369,13 +374,13 @@ store.dispatch({
 
 There is an important gotcha: you need to remember to append `.present` to the current state when you retrieve it. You may also check `.past.length` and `.future.length` to determine whether to enable or to disable the Undo and Redo buttons, respectively.
 
-You might have heard that Redux was influenced by [Elm Architecture](https://github.com/evancz/elm-architecture-tutorial/). It shouldn't come as a surprise that this example is very similar to [elm-undo-redo package](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
+You might have heard that Redux was influenced by [Elm Architecture](https://github.com/evancz/elm-architecture-tutorial/). It shouldn't come as a surprise that this example is very similar to [elm-undo-redo package](https://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0).
 
 ## Using Redux Undo
 
 This was all very informative, but can't we just drop a library and use it instead of implementing `undoable` ourselves? Sure, we can! Meet [Redux Undo](https://github.com/omnidan/redux-undo), a library that provides simple Undo and Redo functionality for any part of your Redux tree.
 
-In this part of the recipe, you will learn how to make the [Todo List example](../basics/ExampleTodoList.md) undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
+In this part of the recipe, you will learn how to make a small "todo list" app logic undoable. You can find the full source of this recipe in the [`todos-with-undo` example that comes with Redux](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
 
 ### Installation
 
@@ -394,7 +399,7 @@ You will need to wrap the reducer you wish to enhance with `undoable` function. 
 #### `reducers/todos.js`
 
 ```js
-import undoable, { distinctState } from 'redux-undo'
+import undoable from 'redux-undo'
 
 /* ... */
 
@@ -402,14 +407,12 @@ const todos = (state = [], action) => {
   /* ... */
 }
 
-const undoableTodos = undoable(todos, {
-  filter: distinctState()
-})
+const undoableTodos = undoable(todos)
 
 export default undoableTodos
 ```
 
-The `distinctState()` filter serves to ignore the actions that didn't result in a state change. There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
+There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
 
 Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
 

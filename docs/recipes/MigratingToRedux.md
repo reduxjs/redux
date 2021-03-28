@@ -13,11 +13,11 @@ We don't want to lock you in!
 
 ## From Flux
 
-[Reducers](../understanding/thinking-in-redux/Glossary.md#reducer) capture “the essence” of Flux Stores, so it's possible to gradually migrate an existing Flux project towards Redux, whether you are using [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [traditional Flux](https://github.com/facebook/flux), or any other Flux library.
+[Reducers](../understanding/thinking-in-redux/Glossary.md#reducer) capture “the essence” of Flux Stores, so it's possible to gradually migrate an existing Flux project towards Redux, whether you are using [Flummox](https://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [traditional Flux](https://github.com/facebook/flux), or any other Flux library.
 
 Your process will look like this:
 
-- Create a function called `createFluxStore(reducer)` that creates a Flux store compatible with your existing app from a reducer function. Internally it might look similar to [`createStore`](../api/createStore.md) ([source](https://github.com/reduxjs/redux/blob/master/src/createStore.js)) implementation from Redux. Its dispatch handler should just call the `reducer` for any action, store the next state, and emit change.
+- Create a function called `createFluxStore(reducer)` that creates a Flux store compatible with your existing app from a reducer function. Internally it might look similar to [`createStore`](../api/createStore.md) ([source](https://github.com/reduxjs/redux/blob/v4.0.5/src/createStore.js)) implementation from Redux. Its dispatch handler should just call the `reducer` for any action, store the next state, and emit change.
 
 - This allows you to gradually rewrite every Flux Store in your app as a reducer, but still export `createFluxStore(reducer)` so the rest of your app is not aware that this is happening and sees the Flux stores.
 
@@ -25,7 +25,7 @@ Your process will look like this:
 
 - When you have ported all of your Flux Stores to be implemented on top of reducers, you can replace the Flux library with a single Redux store, and combine those reducers you already have into one using [`combineReducers(reducers)`](../api/combineReducers.md).
 
-- Now all that's left to do is to port the UI to [use react-redux](../basics/UsageWithReact.md) or equivalent.
+- Now all that's left to do is to port the UI to [use React-Redux](../tutorials/fundamentals/part-5-ui-and-react.md) or equivalent.
 
 - Finally, you might want to begin using some Redux idioms like middleware to further simplify your asynchronous code.
 

@@ -3,7 +3,7 @@ id: part-6-performance-normalization
 title: 'Redux Essentials, Part 6: Performance and Normalizing Data'
 sidebar_label: 'Performance and Normalizing Data'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
@@ -112,7 +112,7 @@ export const UserPage = ({ match }) => {
 }
 ```
 
-As we've seen before, we can take data from one `useSelector` call, or from props, and use that to to help decide what to read from the store in another `useSelector` call.
+As we've seen before, we can take data from one `useSelector` call, or from props, and use that to help decide what to read from the store in another `useSelector` call.
 
 Add routes for these components in `<App>`:
 
@@ -970,7 +970,7 @@ Congratulations, you've completed the Redux Essentials tutorial! Let's see what 
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-4-entitySlices/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-4-entitySlices/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -978,7 +978,7 @@ Congratulations, you've completed the Redux Essentials tutorial! Let's see what 
 
 Here's what we covered in this section:
 
-:::tip
+:::tip Summary
 
 - **Memoized selector functions can be used to optimize performance**
   - Redux Toolkit re-exports the `createSelector` function from Reselect, which generates memoized selectors
@@ -1006,13 +1006,7 @@ Here's what we covered in this section:
 
 The concepts we've covered in this tutorial should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
 
-The Redux Essentials tutorial focused on "how to use Redux correctly", rather than "how it works" or "why it works this way". In particular, Redux Toolkit is a higher-level set of abstractions and utilities, and it's helpful to understand what the abstractions in RTK are actually doing for you. Reading through the [Basic Tutorial](../../basics/README.md) and [Advanced Tutorial](../../advanced/README.md) will help you understand how to write Redux code "by hand", and why we recommend Redux Toolkit as the default way to write Redux logic.
-
-:::info
-
-While the concepts in the "Basic" and "Advanced" tutorials are still valid, those pages are some of the oldest parts of our docs. We'll be updating those tutorials soon to improve the explanations and show some patterns that are simpler and easier to use. Keep an eye out for those updates. We'll also be reorganizing our docs to make it easier to find information.
-
-:::
+The Redux Essentials tutorial focused on "how to use Redux correctly", rather than "how it works" or "why it works this way". In particular, Redux Toolkit is a higher-level set of abstractions and utilities, and it's helpful to understand what the abstractions in RTK are actually doing for you. Reading through the ["Redux Fundamentals" tutorial](../fundamentals/part-1-overview.md) will help you understand how to write Redux code "by hand", and why we recommend Redux Toolkit as the default way to write Redux logic.
 
 The [Recipes](../../recipes/README.md) section has information on a number of important concepts, like [how to structure your reducers](../../recipes/structuring-reducers/StructuringReducers.md), and [our Style Guide page](../../style-guide/style-guide) has important information on our recommended patterns and best practices.
 

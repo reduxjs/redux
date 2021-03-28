@@ -48,7 +48,7 @@ Where multiple, equally good options exist, an arbitrary choice can be made to e
 
 Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. **Actual mutation of state values should always be avoided**, both inside reducers and in all other application code.
 
-Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/docs/introduction) to avoid accidental mutations in state updates.
+Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/) to avoid accidental mutations in state updates.
 
 > **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
 
@@ -92,29 +92,30 @@ You are not required to use RTK with Redux, and you are free to use other approa
 
 ### Use Immer for Writing Immutable Updates
 
-Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/docs/introduction) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
+Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
 
-### Structure Files as Feature Folders or Ducks
+<a id="structure-files-as-feature-folders-or-ducks"></a>
+
+### Structure Files as Feature Folders with Single-File Logic
 
 Redux itself does not care about how your application's folders and files are structured. However, co-locating logic for a given feature in one place typically makes it easier to maintain that code.
 
-Because of this, **we recommend that most applications should structure files using a "feature folder" approach** (all files for a feature in the same folder) **or the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux)** (all Redux logic for a feature in a single file), rather than splitting logic across separate folders by "type" of code (reducers, actions, etc).
+Because of this, **we recommend that most applications should structure files using a "feature folder" approach** (all files for a feature in the same folder). Within a given feature folder, **the Redux logic for that feature should be written as a single "slice" file**, preferably using the Redux Toolkit `createSlice` API. (This is also known as the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux)). While older Redux codebases often used a "folder-by-type" approach with separate folders for "actions" and "reducers", keeping related logic together makes it easier to find and update that code.
 
-<DetailedExplanation>
+<DetailedExplanation title="Detailed Explanation: Example Folder Structure">
 An example folder structure might look something like:
 
 - `/src`
-  - `index.tsx`
+  - `index.tsx`: Entry point file that renders the React component tree
   - `/app`
-    - `store.ts`
-    - `rootReducer.ts`
-    - `App.tsx`
-  - `/common`
-    - hooks, generic components, utils, etc
-  - `/features`
-    - `/todos`
-      - `todosSlice.ts`
-      - `Todos.tsx`
+    - `store.ts`: store setup
+    - `rootReducer.ts`: root reducer (optional)
+    - `App.tsx`: root React component
+  - `/common`: hooks, generic components, utils, etc
+  - `/features`: contains all "feature folders"
+    - `/todos`: a single feature folder
+      - `todosSlice.ts`: Redux reducer logic and associated actions
+      - `Todos.tsx`: a React component
 
 `/app` contains app-wide setup and layout that depends on all the other folders.
 
@@ -145,7 +146,7 @@ case "todos/toggleTodo": {
     return state.map(todo => {
         if(todo.id !== action.payload.id) return todo;
 
-        return {...todo, id: action.payload.id};
+        return {...todo, completed: !todo.completed };
     })
 }
 ```
@@ -158,7 +159,7 @@ const onTodoClicked = id => {
   const newTodos = todos.map(todo => {
     if (todo.id !== id) return todo
 
-    return { ...todo, id }
+    return { ...todo, completed: !todo.completed }
   })
 
   dispatch({ type: 'todos/toggleTodo', payload: { todos: newTodos } })
@@ -273,6 +274,12 @@ const rootReducer = combineReducers({
 It's a bit more typing, but it results in the most understandable code and state definition.
 
 </DetailedExplanation>
+
+### Organize State Structure Based on Data Types, Not Components
+
+Root state slices should be defined and named based on the major data types or areas of functionality in your application, not based on which specific components you have in your UI. This is because there is not a strict 1:1 correlation between data in the Redux store and components in the UI, and many components may need to access the same data. Think of the state tree as a sort of global database that any part of the app can access to read just the pieces of state needed in that component.
+
+For example, a blogging app might need to track who is logged in, information on authors and posts, and perhaps some info on what screen is active. A good state structure might look like `{auth, posts, users, ui}`. A bad structure would be something like `{loginScreen, usersList, postsList}`.
 
 ### Treat Reducers as State Machines
 
@@ -589,6 +596,10 @@ However, **the use of React hooks does make it somewhat easier to manage logic l
 **We strongly recommend using memoized selector functions for reading store state whenever possible**, and recommend creating those selectors with Reselect.
 
 However, don't feel that you _must_ write selector functions for every field in your state. Find a reasonable balance for granularity, based on how often fields are accessed and updated, and how much actual benefit the selectors are providing in your application.
+
+### Name Selector Functions as `selectThing`
+
+**We recommend prefixing selector function names with the word `select`**, combined with a description of the value being selected. Examples of this would be `selectTodos`, `selectVisibleTodos`, and `selectTodoById`.
 
 ### Avoid Putting Form State In Redux
 

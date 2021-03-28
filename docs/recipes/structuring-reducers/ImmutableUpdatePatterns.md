@@ -199,7 +199,7 @@ const reducer = createReducer(initialState, {
 ```
 
 This is clearly _much_ shorter and easier to read. However, **this _only_ works correctly if you are using the "magic"
-`createReducer` function from Redux Toolkit** that wraps this reducer in Immer's [`produce` function](https://immerjs.github.io/immer/docs/produce).
+`createReducer` function from Redux Toolkit** that wraps this reducer in Immer's [`produce` function](https://immerjs.github.io/immer/produce).
 **If this reducer is used without Immer, it will actually mutate the state!**. It's also not obvious just by
 looking at the code that this function is actually safe and updates the state immutably. Please make sure you understand
 the concepts of immutable updates fully. If you do use this, it may help to add some comments to your code that explain

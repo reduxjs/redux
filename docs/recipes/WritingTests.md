@@ -10,14 +10,14 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 ### Setting Up
 
-We recommend [Jest](http://facebook.github.io/jest/) as the testing engine.
+We recommend [Jest](https://facebook.github.io/jest/) as the testing engine.
 Note that it runs in a Node environment, so you won't have access to the DOM.
 
 ```sh
 npm install --save-dev jest
 ```
 
-To use it together with [Babel](http://babeljs.io), you will need to install `babel-jest`:
+To use it together with [Babel](https://babeljs.io), you will need to install `babel-jest`:
 
 ```sh
 npm install --save-dev babel-jest
@@ -82,7 +82,7 @@ describe('actions', () => {
 
 ### Async Action Creators
 
-For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it's best to completely mock the Redux store for tests. You can apply the middleware to a mock store using [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store). You can also use [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/) to mock the HTTP requests.
+For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it's best to completely mock the Redux store for tests. You can apply the middleware to a mock store using [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store). You can also use [fetch-mock](https://www.wheresrhys.co.uk/fetch-mock/) to mock the HTTP requests.
 
 #### Example
 

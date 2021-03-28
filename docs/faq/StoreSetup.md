@@ -8,9 +8,15 @@ hide_title: true
 
 ## Table of Contents
 
-- [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself)
-- [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between next and dispatch in a middleware function?](#is-it-ok-to-have-more-than-one-middleware-chain-in-my-store-enhancer-what-is-the-difference-between-next-and-dispatch-in-a-middleware-function)
-- [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](#how-do-i-subscribe-to-only-a-portion-of-the-state-can-i-get-the-dispatched-action-as-part-of-the-subscription)
+- [Redux FAQ: Store Setup](#redux-faq-store-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Store Setup](#store-setup)
+    - [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself)
+      - [Further information](#further-information)
+    - [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between `next` and `dispatch` in a middleware function?](#is-it-ok-to-have-more-than-one-middleware-chain-in-my-store-enhancer-what-is-the-difference-between-next-and-dispatch-in-a-middleware-function)
+      - [Further information](#further-information-1)
+    - [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](#how-do-i-subscribe-to-only-a-portion-of-the-state-can-i-get-the-dispatched-action-as-part-of-the-subscription)
+      - [Further information](#further-information-2)
 
 ## Store Setup
 
@@ -40,8 +46,8 @@ With [React Redux](https://github.com/reduxjs/react-redux), the wrapper classes 
 **Discussions**
 
 - [#1346: Is it bad practice to just have a 'stores' directory?](https://github.com/reduxjs/redux/issues/1436)
-- [Stack Overflow: Redux multiple stores, why not?](http://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
-- [Stack Overflow: Accessing Redux state in an action creator](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
+- [Stack Overflow: Redux multiple stores, why not?](https://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
+- [Stack Overflow: Accessing Redux state in an action creator](https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
 - [Gist: Breaking out of Redux paradigm to isolate apps](https://gist.github.com/gaearon/eeee2f619620ab7b55673a4ee2bf8400)
 
 ### Is it OK to have more than one middleware chain in my store enhancer? What is the difference between `next` and `dispatch` in a middleware function?
@@ -54,14 +60,14 @@ This chain of middleware is defined by the arguments passed to the `applyMiddlew
 
 **Documentation**
 
-- [Advanced: Middleware](../advanced/Middleware.md)
+- [Redux Fundamentals: Store - Middleware](../tutorials/fundamentals/part-4-store.md#middleware)
 - [API: applyMiddleware](../api/applyMiddleware.md)
 
 **Discussions**
 
 - [#1051: Shortcomings of the current applyMiddleware and composing createStore](https://github.com/reduxjs/redux/issues/1051)
 - [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
-- [Exploring Redux Middleware](http://blog.krawaller.se/posts/exploring-redux-middleware/)
+- [Exploring Redux Middleware](https://blog.krawaller.se/posts/exploring-redux-middleware/)
 
 ### How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?
 
@@ -75,7 +81,7 @@ The new state is not passed to the listeners in order to simplify implementing s
 
 **Documentation**
 
-- [Basics: Store](../basics/Store.md)
+- [Fundamentals: Store](../tutorials/fundamentals/part-4-store.md)
 - [API: Store](../api/Store.md)
 
 **Discussions**
