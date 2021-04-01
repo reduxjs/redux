@@ -305,16 +305,6 @@ store.dispatch({
 
 #### Data Structures
 
-**[facebook/immutable-js](https://github.com/facebook/immutable-js)** <br />
-Immutable persistent data collections for Javascript
-
-```js
-const map1 = Map({ a: 1, b: 2, c: 3 })
-const map2 = map1.set('b', 50)
-map1.get('b') // 2
-map2.get('b') // 50
-```
-
 **[rtfeldman/seamless-immutable](https://github.com/rtfeldman/seamless-immutable)** <br />
 Frozen immutable arrays/objects, backwards-compatible with JS
 
@@ -361,30 +351,12 @@ const newData = update(myData, {
 })
 ```
 
-**[mariocasciaro/object-path-immutable](https://github.com/mariocasciaro/object-path-immutable)** <br />
-Simpler alternative to immutability-helpers and Immutable.js
-
-```js
-const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
-```
-
 **[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)** <br />
 Immutable version of the dot-prop lib, with some extensions
 
 ```js
 const newState = dotProp.set(state, `todos.${index}.complete`, true)
 const endOfArray = dotProp.get(obj, 'foo.$end')
-```
-
-#### Immutable/Redux Interop
-
-**[gajus/redux-immutable](https://github.com/gajus/redux-immutable)** <br />
-combineReducers equivalent that works with Immutable.js Maps
-
-```js
-const initialState = Immutable.Map()
-const rootReducer = combineReducers({})
-const store = createStore(rootReducer, initialState)
 ```
 
 **[eadmundo/redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable)** <br />
