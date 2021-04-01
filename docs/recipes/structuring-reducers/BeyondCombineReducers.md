@@ -7,13 +7,13 @@ hide_title: true
 
 # Beyond `combineReducers`
 
-The `combineReducers` utility included with Redux is very useful, but is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object, by delegating the work of updating each slice of state to a specific slice reducer. It does _not_ handle other use cases, such as a state tree made up of Immutable.js Maps, trying to pass other portions of the state tree as an additional argument to a slice reducer, or performing "ordering" of slice reducer calls. It also does not care how a given slice reducer does its work.
+The `combineReducers` utility included with Redux is very useful, but is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object, by delegating the work of updating each slice of state to a specific slice reducer. It does _not_ handle other use cases, such as a state tree made up of immutable Maps, trying to pass other portions of the state tree as an additional argument to a slice reducer, or performing "ordering" of slice reducer calls. It also does not care how a given slice reducer does its work.
 
 The common question, then, is "How can I use `combineReducers` to handle these other use cases?". The answer to that is simply: "you don't - you probably need to use something else". **Once you go past the core use case for `combineReducers`, it's time to use more "custom" reducer logic**, whether it be specific logic for a one-off use case, or a reusable function that could be widely shared. Here's some suggestions for dealing with a couple of these typical use cases, but feel free to come up with your own approaches.
 
-## Using slice reducers with Immutable.js objects
+## Using slice reducers with Immer objects
 
-Since `combineReducers` currently only works with plain Javascript objects, an application that uses an Immutable.js Map object for the top of its state tree could not use `combineReducers` to manage that Map. Since many developers do use Immutable.js, there are a number of published utilities that provide equivalent functionality, such as [redux-immutable](https://github.com/gajus/redux-immutable). This package provides its own implementation of `combineReducers` that knows how to iterate over an Immutable Map instead of a plain Javascript object.
+Since `combineReducers` currently only works with plain Javascript objects, an application that uses an Immer Map object for the top of its state tree could not use `combineReducers` to manage that Map. [Redux Toolkit](https://redux-toolkit.js.org/) includes a [createReducer utility](https://redux-toolkit.js.org/api/createReducer) that applies updates immutably.
 
 ## Sharing data between slice reducers
 
