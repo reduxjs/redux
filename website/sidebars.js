@@ -49,7 +49,6 @@ module.exports = {
       'recipes/computing-derived-data',
       'recipes/implementing-undo-history',
       'recipes/isolating-redux-sub-apps',
-      'recipes/using-immutablejs-with-redux',
       'recipes/code-splitting',
       'recipes/troubleshooting',
       {
