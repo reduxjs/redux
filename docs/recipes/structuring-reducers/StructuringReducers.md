@@ -21,7 +21,7 @@ It is vital that these Prerequisite Concepts are **thoroughly understood** befor
 
 #### [Prerequisite Concepts](PrerequisiteConcepts.md)
 
-It's also important to note that some of these suggestions may or may not be directly applicable based on architectural decisions in a specific application. For example, an application using Immer Maps to store data would likely have its reducer logic structured at least somewhat differently than an application using plain Javascript objects. This documentation primarily assumes use of plain Javascript objects, but many of the principles would still apply if using other tools.
+Standard Redux architecture relies on using plain JS objects and arrays for your state. If you're using an alternate approach for some reason, the details may differ based on your approach, but many of the principles will still apply.
 
 ### Reducer Concepts and Techniques
 

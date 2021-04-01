@@ -11,10 +11,6 @@ The `combineReducers` utility included with Redux is very useful, but is deliber
 
 The common question, then, is "How can I use `combineReducers` to handle these other use cases?". The answer to that is simply: "you don't - you probably need to use something else". **Once you go past the core use case for `combineReducers`, it's time to use more "custom" reducer logic**, whether it be specific logic for a one-off use case, or a reusable function that could be widely shared. Here's some suggestions for dealing with a couple of these typical use cases, but feel free to come up with your own approaches.
 
-## Using slice reducers with Immer objects
-
-Since `combineReducers` currently only works with plain Javascript objects, an application that uses an Immer Map object for the top of its state tree could not use `combineReducers` to manage that Map. [Redux Toolkit](https://redux-toolkit.js.org/) includes a [createReducer utility](https://redux-toolkit.js.org/api/createReducer) that applies updates immutably.
-
 ## Sharing data between slice reducers
 
 Similarly, if `sliceReducerA` happens to need some data from `sliceReducerB`'s slice of state in order to handle a particular action, or `sliceReducerB` happens to need the entire state as an argument, `combineReducers` does not handle that itself. This could be resolved by writing a custom function that knows to pass the needed data as an additional argument in those specific cases, such as:

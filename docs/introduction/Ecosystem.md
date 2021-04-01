@@ -359,14 +359,6 @@ const newState = dotProp.set(state, `todos.${index}.complete`, true)
 const endOfArray = dotProp.get(obj, 'foo.$end')
 ```
 
-**[eadmundo/redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable)** <br />
-combineReducers equivalent that works with seamless-immutable values
-
-```js
-import { combineReducers } from 'redux-seamless-immutable';
-const rootReducer = combineReducers({ userReducer, posts
-```
-
 ## Side Effects
 
 #### Widely Used

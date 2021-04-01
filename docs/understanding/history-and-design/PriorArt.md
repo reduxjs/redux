@@ -27,11 +27,11 @@ For what it's worth, Flux's creators [approve](https://twitter.com/jingc/status/
 
 Unlike Redux, Elm is a language, so it is able to benefit from many things like enforced purity, static typing, out of the box immutability, and pattern matching (using the `case` expression). Even if you don't plan to use Elm, you should read about the Elm architecture, and play with it. There is an interesting [JavaScript library playground implementing similar ideas](https://github.com/paldepind/noname-functional-frontend-framework). We should look there for inspiration on Redux! One way that we can get closer to the static typing of Elm is by [using a gradual typing solution like Flow](https://github.com/reduxjs/redux/issues/290).
 
-### Immer
+### Immutable
 
-[Immer](https://immerjs.github.io/immer/) is a JavaScript library implementing persistent data structures. It is performant and has an idiomatic JavaScript API. Immer operates on normal JavaScript objects and arrays.
+[Immutable](https://facebook.github.io/immutable-js) is a JavaScript library implementing persistent data structures. It is performant and has an idiomatic JavaScript API.
 
-Immer and most similar libraries are orthogonal to Redux. Feel free to use them together!
+(Note that while Immutable.js helped inspire Redux, today we recommend [using Immer for immutable updates instead](../../style-guide/style-guide.md#use-immer-for-writing-immutable-updates).)
 
 **Redux doesn't care _how_ you store the state—it can be a plain object, an Immutable object, or anything else.** You'll probably want a (de)serialization mechanism for writing universal apps and hydrating their state from the server, but other than that, you can use any data storage library _as long as it supports immutability_. For example, it doesn't make sense to use Backbone for Redux state, because Backbone models are mutable.
 

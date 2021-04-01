@@ -463,7 +463,7 @@ Operating on JavaScript objects and arrays in an immutable way can be slow, part
 
 Remember, to change an immutable object, you must mutate a _copy_ of it, and copying large objects can be slow as every property must be copied.
 
-In contrast, immutable libraries such as Immer can employ sophisticated optimization techniques such as [structural sharing](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
+In contrast, immutable libraries such as Immer can employ structural sharing, which effectively returns a new object that reuses much of the existing object being copied from.
 
 #### Further Information
 
