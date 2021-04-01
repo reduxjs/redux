@@ -54,7 +54,7 @@ Accidentally mutating or modifying your state directly is by far the most common
 
 It's important to remember that whenever you update a nested value, you must also return new copies of anything above it in your state tree. If you have `state.a.b.c.d`, and you want to make an update to `d`, you would also need to return new copies of `c`, `b`, `a`, and `state`. This [state tree mutation diagram](http://arqex.com/wp-content/uploads/2015/02/trees.png) demonstrates how a change deep in a tree requires changes all the way up.
 
-Note that “updating data immutably” does _not_ mean that you must use [Immutable.js](https://facebook.github.io/immutable-js/), although that is certainly an option. You can do immutable updates to plain JS objects and arrays using several different approaches:
+Note that “updating data immutably” does _not_ mean that you must use [Immer](https://github.com/immerjs/immer), although that is certainly an option. You can do immutable updates to plain JS objects and arrays using several different approaches:
 
 - Copying objects using functions like `Object.assign()` or `_.extend()`, and array functions such as `slice()` and `concat()`
 - The array spread operator in ES6, and the similar object spread operator that is proposed for a future version of JavaScript
