@@ -35,6 +35,8 @@
 /introduction/threeprinciples*         /understanding/thinking-in-redux/three-principles:splat
 /introduction         /introduction/getting-started
 
+/recipes/using-immutablejs-with-redux*         /style-guide/style-guide#use-immer-for-writing-immutable-updates
+/recipes/usingimmutablejs*         /style-guide/style-guide#use-immer-for-writing-immutable-updates
 
 /recipes/computingderiveddata*         /recipes/computing-derived-data:splat
 /recipes/configuringyourstore*         /recipes/configuring-your-store:splat
@@ -43,7 +45,6 @@
 /recipes/migratingtoredux*         /recipes/migrating-to-redux:splat
 /recipes/reducingboilerplate*         /recipes/reducing-boilerplate:splat
 /recipes/serverrendering*         /recipes/server-rendering:splat
-/recipes/usingimmutablejs*         /recipes/using-immutablejs-with-redux:splat
 /recipes/usingobjectspreadoperator*         /recipes/using-object-spread-operator:splat
 /recipes/writingtests*         /recipes/writing-tests:splat
 
@@ -109,13 +110,14 @@
 /docs/api/compose.html*        /api/compose:splat
 /docs/api/Store.html*        /api/store:splat
 
+/docs/recipes/UsingImmutableJS.html*        /style-guide/style-guide#use-immer-for-writing-immutable-updates
+
 /docs/recipes/ComputingDerivedData.html*        /recipes/computing-derived-data:splat
 /docs/recipes/ReducingBoilerplate.html*        /recipes/reducing-boilerplate:splat
 /docs/recipes/ImplementingUndoHistory.html*        /recipes/implementing-undo-history:splat
 /docs/recipes/ServerRendering.html*        /recipes/server-rendering:splat
 /docs/recipes/MigratingToRedux.html        /recipes/migrating-to-redux
 /docs/recipes/UsingObjectSpreadOperator.html*        /recipes/using-object-spread-operator
-/docs/recipes/UsingImmutableJS.html*        /recipes/using-immutablejs-with-redux:splat
 /docs/recipes/IsolatingSubApps.html        /recipes/isolating-redux-sub-apps
 /docs/recipes/WritingTests.html*        /recipes/writing-tests:splat
 /docs/recipes/StructuringReducers.html        /recipes/structuring-reducers/structuring-reducers
