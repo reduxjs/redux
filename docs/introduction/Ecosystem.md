@@ -303,45 +303,7 @@ store.dispatch({
 
 ## Immutable Data
 
-#### Data Structures
-
-**[facebook/immutable-js](https://github.com/facebook/immutable-js)** <br />
-Immutable persistent data collections for Javascript
-
-```js
-const map1 = Map({ a: 1, b: 2, c: 3 })
-const map2 = map1.set('b', 50)
-map1.get('b') // 2
-map2.get('b') // 50
-```
-
-**[rtfeldman/seamless-immutable](https://github.com/rtfeldman/seamless-immutable)** <br />
-Frozen immutable arrays/objects, backwards-compatible with JS
-
-```js
-const array = Immutable(['totally', 'immutable', { a: 42 }])
-array[0] = 'edited' // does nothing
-```
-
-**[planttheidea/crio](https://github.com/planttheidea/crio)** <br />
-Immutable JS objects with a natural API
-
-```js
-const foo = crio(['foo'])
-const fooBar = foo.push('bar') // new array: ['foo', 'bar']
-```
-
-**[aearly/icepick](https://github.com/aearly/icepick)** <br />
-Utilities for treating frozen JS objects as persistent immutable collections.
-
-```js
-const newObj = icepick.assocIn({ c: { d: 'bar' } }, ['c', 'd'], 'baz')
-const obj3 = icepicke.merge(obj1, obj2)
-```
-
-#### Immutable Update Utilities
-
-**[mweststrate/immer](https://github.com/mweststrate/immer)** <br />
+**[ImmerJS/immer](https://github.com/immerjs/immer)** <br />
 Immutable updates with normal mutative code, using Proxies
 
 ```js
@@ -349,50 +311,6 @@ const nextState = produce(baseState, draftState => {
   draftState.push({ todo: 'Tweet about it' })
   draftState[1].done = true
 })
-```
-
-**[kolodny/immutability-helper](https://github.com/kolodny/immutability-helper)** <br />
-A drop-in replacement for react-addons-update
-
-```js
-const newData = update(myData, {
-  x: { y: { z: { $set: 7 } } },
-  a: { b: { $push: [9] } }
-})
-```
-
-**[mariocasciaro/object-path-immutable](https://github.com/mariocasciaro/object-path-immutable)** <br />
-Simpler alternative to immutability-helpers and Immutable.js
-
-```js
-const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
-```
-
-**[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)** <br />
-Immutable version of the dot-prop lib, with some extensions
-
-```js
-const newState = dotProp.set(state, `todos.${index}.complete`, true)
-const endOfArray = dotProp.get(obj, 'foo.$end')
-```
-
-#### Immutable/Redux Interop
-
-**[gajus/redux-immutable](https://github.com/gajus/redux-immutable)** <br />
-combineReducers equivalent that works with Immutable.js Maps
-
-```js
-const initialState = Immutable.Map()
-const rootReducer = combineReducers({})
-const store = createStore(rootReducer, initialState)
-```
-
-**[eadmundo/redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable)** <br />
-combineReducers equivalent that works with seamless-immutable values
-
-```js
-import { combineReducers } from 'redux-seamless-immutable';
-const rootReducer = combineReducers({ userReducer, posts
 ```
 
 ## Side Effects

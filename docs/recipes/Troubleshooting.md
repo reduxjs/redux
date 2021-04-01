@@ -17,7 +17,7 @@ Sometimes, you are trying to dispatch an action, but your view does not update. 
 
 It is tempting to modify the `state` or `action` passed to you by Redux. Don't do this!
 
-Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don't use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
+Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don't use a library like [Immer](https://github.com/immerjs/immer), you need to completely avoid mutation.
 
 Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](https://github.com/reduxjs/redux-devtools).
 

@@ -15,7 +15,7 @@ Redux was inspired by several important qualities of [Flux](https://facebook.git
 
 Unlike Flux, **Redux does not have the concept of a Dispatcher**. This is because it relies on pure functions instead of event emitters, and pure functions are easy to compose and don't need an additional entity managing them. Depending on how you view Flux, you may see this as either a deviation or an implementation detail. Flux has often been [described as `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot-1). In this sense, Redux is true to the Flux architecture, but makes it simpler thanks to pure functions.
 
-Another important difference from Flux is that **Redux assumes you never mutate your data**. You can use plain objects and arrays for your state just fine, but mutating them inside the reducers is strongly discouraged. You should always return a new object, which is easy with the [object spread operator proposal](../../recipes/UsingObjectSpreadOperator.md), or with a library like [Immutable](https://facebook.github.io/immutable-js).
+Another important difference from Flux is that **Redux assumes you never mutate your data**. You can use plain objects and arrays for your state just fine, but mutating them inside the reducers is strongly discouraged. You should always return a new object, which can be done using the [object spread operator](../../recipes/UsingObjectSpreadOperator.md) or [the Immer immutable update library](https://immerjs.github.io/immer/).
 
 While it is technically _possible_ to [write impure reducers](https://github.com/reduxjs/redux/issues/328#issuecomment-125035516) that mutate the data for performance corner cases, we actively discourage you from doing this. Development features like time travel, record/replay, or hot reloading will break. Moreover it doesn't seem like immutability poses performance problems in most real apps, because, as [Om](https://github.com/omcljs/om) demonstrates, even if you lose out on object allocation, you still win by avoiding expensive re-renders and re-calculations, as you know exactly what changed thanks to reducer purity.
 
@@ -31,7 +31,7 @@ Unlike Redux, Elm is a language, so it is able to benefit from many things like 
 
 [Immutable](https://facebook.github.io/immutable-js) is a JavaScript library implementing persistent data structures. It is performant and has an idiomatic JavaScript API.
 
-Immutable and most similar libraries are orthogonal to Redux. Feel free to use them together!
+(Note that while Immutable.js helped inspire Redux, today we recommend [using Immer for immutable updates instead](../../style-guide/style-guide.md#use-immer-for-writing-immutable-updates).)
 
 **Redux doesn't care _how_ you store the state—it can be a plain object, an Immutable object, or anything else.** You'll probably want a (de)serialization mechanism for writing universal apps and hydrating their state from the server, but other than that, you can use any data storage library _as long as it supports immutability_. For example, it doesn't make sense to use Backbone for Redux state, because Backbone models are mutable.
 

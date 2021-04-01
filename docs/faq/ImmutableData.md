@@ -23,7 +23,7 @@ hide_title: true
   - [How does immutability enable a shallow check to detect object mutations?](#how-does-immutability-enable-a-shallow-check-to-detect-object-mutations)
   - [How can immutability in your reducers cause components to render unnecessarily?](#how-can-immutability-in-your-reducers-cause-components-to-render-unnecessarily)
   - [How can immutability in mapStateToProps cause components to render unnecessarily?](#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
-- [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
+- [What approaches are there for handling data immutability? Do I have to use Immer?](#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
 - [What are the issues with using JavaScript for immutable operations?](#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 
 ## What are the benefits of immutability?
@@ -36,9 +36,8 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 **Articles**
 
-- [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
+- [Introduction to Immer](https://immerjs.github.io/immer/)
 - [JavaScript Immutability presentation (PDF - see slide 12 for benefits)](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
-- [Immutable.js - Immutable Collections for JavaScript](https://facebook.github.io/immutable-js/#the-case-for-immutability)
 - [React: Optimizing Performance](https://facebook.github.io/react/docs/optimizing-performance.html)
 - [JavaScript Application Architecture On The Road To 2015](https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b#.djje0rfys)
 
@@ -431,18 +430,18 @@ Note that, conversely, if the values in your props object refer to mutable objec
 - [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
 - [ImmutableJS: worth the price?](https://medium.com/@AlexFaunt/immutablejs-worth-the-price-66391b8742d4#.a3alci2g8)
 
-## What approaches are there for handling data immutability? Do I have to use Immutable.JS?
+## What approaches are there for handling data immutability? Do I have to use Immer?
 
-You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
+You do not need to use Immer with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
 
-However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
+However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immer can significantly improve the reliability of your app, and make your app’s development much easier.
 
 #### Further Information
 
 **Discussions**
 
 - [#1185: Question: Should I use immutable data structures?](https://github.com/reduxjs/redux/issues/1422)
-- [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
+- [Introduction to Immer](https://immerjs.github.io/immer/)
 
 ## What are the issues with using plain JavaScript for immutable operations?
 
@@ -464,9 +463,7 @@ Operating on JavaScript objects and arrays in an immutable way can be slow, part
 
 Remember, to change an immutable object, you must mutate a _copy_ of it, and copying large objects can be slow as every property must be copied.
 
-In contrast, immutable libraries such as Immutable.JS can employ sophisticated optimization techniques such as [structural sharing](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
-
-For copying very large objects, [plain JavaScript can be over 100 times slower](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) than an optimized immutable library.
+In contrast, immutable libraries such as Immer can employ structural sharing, which effectively returns a new object that reuses much of the existing object being copied from.
 
 #### Further Information
 
@@ -476,9 +473,7 @@ For copying very large objects, [plain JavaScript can be over 100 times slower](
 
 **Articles**
 
-- [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.a2jimoiaf)
 - [A deep dive into Clojure’s data structures](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)
-- [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
 - [JavaScript and Immutability](https://t4d.io/javascript-and-immutability/)
 - [Immutable Javascript using ES6 and beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
 - [Pros and Cons of using immutability with React.js - React Kung Fu](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
