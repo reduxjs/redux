@@ -5,27 +5,67 @@ import { terser } from 'rollup-plugin-terser'
 
 import pkg from './package.json'
 
+const extensions = ['.js']
+
+const babelRuntimeVersion = pkg.dependencies['@babel/runtime'].replace(
+  /^[^0-9]*/,
+  ''
+)
+
+const makeExternalPredicate = externalArr => {
+  if (externalArr.length === 0) {
+    return () => false
+  }
+  const pattern = new RegExp(`^(${externalArr.join('|')})($|/)`)
+  return id => pattern.test(id)
+}
+
 export default [
   // CommonJS
   {
     input: 'src/index.js',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
-    external: [
+    external: makeExternalPredicate([
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
-    ],
-    plugins: [babel()]
+    ]),
+    plugins: [
+      nodeResolve({
+        extensions
+      }),
+      babel({
+        extensions,
+        plugins: [
+          ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }],
+        ],
+        babelHelpers: 'runtime'
+      })
+    ]
   },
 
   // ES
   {
     input: 'src/index.js',
     output: { file: 'es/redux.js', format: 'es', indent: false },
-    external: [
+    external: makeExternalPredicate([
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
-    ],
-    plugins: [babel()]
+    ]),
+    plugins: [
+      nodeResolve({
+        extensions
+      }),
+      babel({
+        extensions,
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            { version: babelRuntimeVersion, useESModules: true }
+          ],
+        ],
+        babelHelpers: 'runtime'
+      })
+    ]
   },
 
   // ES for Browsers
@@ -33,9 +73,16 @@ export default [
     input: 'src/index.js',
     output: { file: 'es/redux.mjs', format: 'es', indent: false },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        extensions
+      }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      babel({
+        extensions,
+        exclude: 'node_modules/**',
+        skipPreflightCheck: true
       }),
       terser({
         compress: {
@@ -58,9 +105,12 @@ export default [
       indent: false
     },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        extensions
+      }),
       babel({
-        exclude: 'node_modules/**'
+        extensions,
+        exclude: 'node_modules/**',
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development')
@@ -78,9 +128,13 @@ export default [
       indent: false
     },
     plugins: [
-      nodeResolve(),
+      nodeResolve({
+        extensions
+      }),
       babel({
-        exclude: 'node_modules/**'
+        extensions,
+        exclude: 'node_modules/**',
+        skipPreflightCheck: true
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
