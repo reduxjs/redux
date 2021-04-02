@@ -9,7 +9,8 @@ import {
   Unsubscribe,
   Observer,
 } from 'redux'
-import 'symbol-observable'
+// @ts-ignore
+import $$observable from '../src/utils/symbol-observable'
 
 type BrandedString = string & { _brand: 'type' }
 const brandedString = 'a string' as BrandedString
