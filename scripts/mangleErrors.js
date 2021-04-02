@@ -57,7 +57,10 @@ module.exports = babel => {
   const t = babel.types
   // When the plugin starts up, we'll load in the existing file. This allows us to continually add to it so that the
   // indexes do not change between builds.
-  const errorsFiles = fs.readFileSync('errors.json').toString()
+  let errorsFiles = ''
+  if (fs.existsSync('errors.json')) {
+    errorsFiles = fs.readFileSync('errors.json').toString()
+  }
   let errors = Object.values(JSON.parse(errorsFiles || '{}'))
   // This variable allows us to skip writing back to the file if the errors array hasn't changed
   let changeInArray = false
