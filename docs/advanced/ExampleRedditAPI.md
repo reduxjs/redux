@@ -38,21 +38,21 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 export function selectSubreddit(subreddit) {
   return {
     type: SELECT_SUBREDDIT,
-    subreddit
+    subreddit,
   }
 }
 
 export function invalidateSubreddit(subreddit) {
   return {
     type: INVALIDATE_SUBREDDIT,
-    subreddit
+    subreddit,
   }
 }
 
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    subreddit
+    subreddit,
   }
 }
 
@@ -60,17 +60,17 @@ function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
-    posts: json.data.children.map(child => child.data),
-    receivedAt: Date.now()
+    posts: json.data.children.map((child) => child.data),
+    receivedAt: Date.now(),
   }
 }
 
 function fetchPosts(subreddit) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(requestPosts(subreddit))
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
-      .then(json => dispatch(receivePosts(subreddit, json)))
+      .then((response) => response.json())
+      .then((json) => dispatch(receivePosts(subreddit, json)))
   }
 }
 
@@ -104,7 +104,7 @@ import {
   SELECT_SUBREDDIT,
   INVALIDATE_SUBREDDIT,
   REQUEST_POSTS,
-  RECEIVE_POSTS
+  RECEIVE_POSTS,
 } from './actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
@@ -120,26 +120,26 @@ function posts(
   state = {
     isFetching: false,
     didInvalidate: false,
-    items: []
+    items: [],
   },
   action
 ) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
-        didInvalidate: true
+        didInvalidate: true,
       })
     case REQUEST_POSTS:
       return Object.assign({}, state, {
         isFetching: true,
-        didInvalidate: false
+        didInvalidate: false,
       })
     case RECEIVE_POSTS:
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
         items: action.posts,
-        lastUpdated: action.receivedAt
+        lastUpdated: action.receivedAt,
       })
     default:
       return state
@@ -152,7 +152,7 @@ function postsBySubreddit(state = {}, action) {
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
-        [action.subreddit]: posts(state[action.subreddit], action)
+        [action.subreddit]: posts(state[action.subreddit], action),
       })
     default:
       return state
@@ -161,7 +161,7 @@ function postsBySubreddit(state = {}, action) {
 
 const rootReducer = combineReducers({
   postsBySubreddit,
-  selectedSubreddit
+  selectedSubreddit,
 })
 
 export default rootReducer
@@ -220,7 +220,7 @@ import { connect } from 'react-redux'
 import {
   selectSubreddit,
   fetchPostsIfNeeded,
-  invalidateSubreddit
+  invalidateSubreddit,
 } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
@@ -293,7 +293,7 @@ AsyncApp.propTypes = {
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {
@@ -302,14 +302,14 @@ function mapStateToProps(state) {
     selectedSubreddit
   ] || {
     isFetching: true,
-    items: []
+    items: [],
   }
 
   return {
     selectedSubreddit,
     posts,
     isFetching,
-    lastUpdated
+    lastUpdated,
   }
 }
 
@@ -331,8 +331,8 @@ export default class Picker extends Component {
     return (
       <span>
         <h1>{value}</h1>
-        <select onChange={e => onChange(e.target.value)} value={value}>
-          {options.map(option => (
+        <select onChange={(e) => onChange(e.target.value)} value={value}>
+          {options.map((option) => (
             <option value={option} key={option}>
               {option}
             </option>
@@ -346,7 +346,7 @@ export default class Picker extends Component {
 Picker.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 }
 ```
 
@@ -369,6 +369,6 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.array.isRequired,
 }
 ```

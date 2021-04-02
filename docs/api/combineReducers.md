@@ -100,7 +100,7 @@ import counter from './counter'
 
 export default combineReducers({
   todos,
-  counter
+  counter,
 })
 ```
 
@@ -119,7 +119,7 @@ console.log(store.getState())
 
 store.dispatch({
   type: 'ADD_TODO',
-  text: 'Use Redux'
+  text: 'Use Redux',
 })
 console.log(store.getState())
 // {

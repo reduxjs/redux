@@ -122,8 +122,8 @@ function patchStoreToAddCrashReporting(store) {
       Raven.captureException(err, {
         extra: {
           action,
-          state: store.getState()
-        }
+          state: store.getState(),
+        },
       })
       throw err
     }
@@ -168,7 +168,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares.reverse()
 
   // Transform dispatch function with each middleware.
-  middlewares.forEach(middleware => (store.dispatch = middleware(store)))
+  middlewares.forEach((middleware) => (store.dispatch = middleware(store)))
 }
 ```
 
@@ -221,14 +221,14 @@ function logger(store) {
 It's a [“we need to go deeper”](http://knowyourmeme.com/memes/we-need-to-go-deeper) kind of moment, so it might take a while for this to make sense. The function cascade feels intimidating. ES6 arrow functions make this [currying](https://en.wikipedia.org/wiki/Currying) easier on eyes:
 
 ```js
-const logger = store => next => action => {
+const logger = (store) => (next) => (action) => {
   console.log('dispatching', action)
   let result = next(action)
   console.log('next state', store.getState())
   return result
 }
 
-const crashReporter = store => next => action => {
+const crashReporter = (store) => (next) => (action) => {
   try {
     return next(action)
   } catch (err) {
@@ -236,8 +236,8 @@ const crashReporter = store => next => action => {
     Raven.captureException(err, {
       extra: {
         action,
-        state: store.getState()
-      }
+        state: store.getState(),
+      },
     })
     throw err
   }
@@ -259,7 +259,7 @@ function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
   let dispatch = store.dispatch
-  middlewares.forEach(middleware => (dispatch = middleware(store)(dispatch)))
+  middlewares.forEach((middleware) => (dispatch = middleware(store)(dispatch)))
   return Object.assign({}, store, { dispatch })
 }
 ```
@@ -283,14 +283,14 @@ While `applyMiddleware` executes and sets up your middleware, the `store.dispatc
 Given this middleware we just wrote:
 
 ```js
-const logger = store => next => action => {
+const logger = (store) => (next) => (action) => {
   console.log('dispatching', action)
   let result = next(action)
   console.log('next state', store.getState())
   return result
 }
 
-const crashReporter = store => next => action => {
+const crashReporter = (store) => (next) => (action) => {
   try {
     return next(action)
   } catch (err) {
@@ -298,8 +298,8 @@ const crashReporter = store => next => action => {
     Raven.captureException(err, {
       extra: {
         action,
-        state: store.getState()
-      }
+        state: store.getState(),
+      },
     })
     throw err
   }
@@ -336,7 +336,7 @@ Each function below is a valid Redux middleware. They are not equally useful, bu
 /**
  * Logs all actions and states after they are dispatched.
  */
-const logger = store => next => action => {
+const logger = (store) => (next) => (action) => {
   console.group(action.type)
   console.info('dispatching', action)
   let result = next(action)
@@ -348,7 +348,7 @@ const logger = store => next => action => {
 /**
  * Sends crash reports as state is updated and listeners are notified.
  */
-const crashReporter = store => next => action => {
+const crashReporter = (store) => (next) => (action) => {
   try {
     return next(action)
   } catch (err) {
@@ -356,8 +356,8 @@ const crashReporter = store => next => action => {
     Raven.captureException(err, {
       extra: {
         action,
-        state: store.getState()
-      }
+        state: store.getState(),
+      },
     })
     throw err
   }
@@ -367,7 +367,7 @@ const crashReporter = store => next => action => {
  * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
  * Makes `dispatch` return a function to cancel the timeout in this case.
  */
-const timeoutScheduler = store => next => action => {
+const timeoutScheduler = (store) => (next) => (action) => {
   if (!action.meta || !action.meta.delay) {
     return next(action)
   }
@@ -384,7 +384,7 @@ const timeoutScheduler = store => next => action => {
  * frame.  Makes `dispatch` return a function to remove the action from the queue in
  * this case.
  */
-const rafScheduler = store => next => {
+const rafScheduler = (store) => (next) => {
   const queuedActions = []
   let frame = null
 
@@ -405,7 +405,7 @@ const rafScheduler = store => next => {
     }
   }
 
-  return action => {
+  return (action) => {
     if (!action.meta || !action.meta.raf) {
       return next(action)
     }
@@ -414,7 +414,7 @@ const rafScheduler = store => next => {
     maybeRaf()
 
     return function cancel() {
-      queuedActions = queuedActions.filter(a => a !== action)
+      queuedActions = queuedActions.filter((a) => a !== action)
     }
   }
 }
@@ -424,7 +424,7 @@ const rafScheduler = store => next => {
  * If the promise is resolved, its result will be dispatched as an action.
  * The promise is returned from `dispatch` so the caller may handle rejection.
  */
-const vanillaPromise = store => next => action => {
+const vanillaPromise = (store) => (next) => (action) => {
   if (typeof action.then !== 'function') {
     return next(action)
   }
@@ -440,7 +440,7 @@ const vanillaPromise = store => next => action => {
  *
  * For convenience, `dispatch` will return the promise so the caller can wait.
  */
-const readyStatePromise = store => next => action => {
+const readyStatePromise = (store) => (next) => (action) => {
   if (!action.promise) {
     return next(action)
   }
@@ -453,8 +453,8 @@ const readyStatePromise = store => next => action => {
 
   next(makeAction(false))
   return action.promise.then(
-    result => next(makeAction(true, { result })),
-    error => next(makeAction(true, { error }))
+    (result) => next(makeAction(true, { result })),
+    (error) => next(makeAction(true, { error }))
   )
 }
 
@@ -467,7 +467,7 @@ const readyStatePromise = store => next => action => {
  *
  * `dispatch` will return the return value of the dispatched function.
  */
-const thunk = store => next => action =>
+const thunk = (store) => (next) => (action) =>
   typeof action === 'function'
     ? action(store.dispatch, store.getState)
     : next(action)

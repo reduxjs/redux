@@ -67,7 +67,7 @@ And we write another reducer that manages the complete state of our app by calli
 function todoApp(state = {}, action) {
   return {
     todos: todos(state.todos, action),
-    visibilityFilter: visibilityFilter(state.visibilityFilter, action)
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
   }
 }
 ```

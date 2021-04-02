@@ -25,7 +25,7 @@ function updateNestedState(state, action) {
 
   return {
     ...state,
-    nestedState
+    nestedState,
   }
 }
 ```
@@ -64,10 +64,10 @@ function updateVeryNestedField(state, action) {
         ...state.first.second,
         [action.someId]: {
           ...state.first.second[action.someId],
-          fourth: action.someValue
-        }
-      }
-    }
+          fourth: action.someValue,
+        },
+      },
+    },
   }
 }
 ```
@@ -83,7 +83,7 @@ function insertItem(array, action) {
   return [
     ...array.slice(0, action.index),
     action.item,
-    ...array.slice(action.index)
+    ...array.slice(action.index),
   ]
 }
 
@@ -133,7 +133,7 @@ function updateObjectInArray(array, action) {
     // Otherwise, this is the one we want - return an updated value
     return {
       ...item,
-      ...action.item
+      ...action.item,
     }
   })
 }
@@ -145,7 +145,7 @@ Because writing immutable update code can become tedious, there are a number of 
 
 ```js
 var usersState = [{ name: 'John Doe', address: { city: 'London' } }]
-var newState = immer.produce(usersState, draftState => {
+var newState = immer.produce(usersState, (draftState) => {
   draftState[0].name = 'Jon Doe'
   draftState[0].address.city = 'Paris'
   //nested update similar to mutable way
@@ -163,7 +163,7 @@ Others, like [immutability-helper](https://github.com/kolodny/immutability-helpe
 ```js
 var collection = [1, 2, { a: [12, 17, 15] }]
 var newCollection = update(collection, {
-  2: { a: { $splice: [[1, 1, 13, 14]] } }
+  2: { a: { $splice: [[1, 1, 13, 14]] } },
 })
 ```
 
@@ -186,15 +186,15 @@ const initialState = {
   first: {
     second: {
       id1: { fourth: 'a' },
-      id2: { fourth: 'b' }
-    }
-  }
+      id2: { fourth: 'b' },
+    },
+  },
 }
 
 const reducer = createReducer(initialState, {
   UPDATE_ITEM: (state, action) => {
     state.first.second[action.someId].fourth = action.someValue
-  }
+  },
 })
 ```
 

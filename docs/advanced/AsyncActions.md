@@ -62,7 +62,7 @@ export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 export function selectSubreddit(subreddit) {
   return {
     type: SELECT_SUBREDDIT,
-    subreddit
+    subreddit,
   }
 }
 ```
@@ -75,7 +75,7 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 export function invalidateSubreddit(subreddit) {
   return {
     type: INVALIDATE_SUBREDDIT,
-    subreddit
+    subreddit,
   }
 }
 ```
@@ -90,7 +90,7 @@ export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    subreddit
+    subreddit,
   }
 }
 ```
@@ -106,8 +106,8 @@ function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
-    posts: json.data.children.map(child => child.data),
-    receivedAt: Date.now()
+    posts: json.data.children.map((child) => child.data),
+    receivedAt: Date.now(),
   }
 }
 ```
@@ -225,7 +225,7 @@ import {
   SELECT_SUBREDDIT,
   INVALIDATE_SUBREDDIT,
   REQUEST_POSTS,
-  RECEIVE_POSTS
+  RECEIVE_POSTS,
 } from '../actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
@@ -241,26 +241,26 @@ function posts(
   state = {
     isFetching: false,
     didInvalidate: false,
-    items: []
+    items: [],
   },
   action
 ) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
-        didInvalidate: true
+        didInvalidate: true,
       })
     case REQUEST_POSTS:
       return Object.assign({}, state, {
         isFetching: true,
-        didInvalidate: false
+        didInvalidate: false,
       })
     case RECEIVE_POSTS:
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
         items: action.posts,
-        lastUpdated: action.receivedAt
+        lastUpdated: action.receivedAt,
       })
     default:
       return state
@@ -273,7 +273,7 @@ function postsBySubreddit(state = {}, action) {
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
-        [action.subreddit]: posts(state[action.subreddit], action)
+        [action.subreddit]: posts(state[action.subreddit], action),
       })
     default:
       return state
@@ -282,7 +282,7 @@ function postsBySubreddit(state = {}, action) {
 
 const rootReducer = combineReducers({
   postsBySubreddit,
-  selectedSubreddit
+  selectedSubreddit,
 })
 
 export default rootReducer
@@ -294,7 +294,7 @@ In this code, there are two interesting parts:
 
   ```js
   return Object.assign({}, state, {
-    [action.subreddit]: posts(state[action.subreddit], action)
+    [action.subreddit]: posts(state[action.subreddit], action),
   })
   ```
 
@@ -327,7 +327,7 @@ export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    subreddit
+    subreddit,
   }
 }
 
@@ -336,8 +336,8 @@ function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
-    posts: json.data.children.map(child => child.data),
-    receivedAt: Date.now()
+    posts: json.data.children.map((child) => child.data),
+    receivedAt: Date.now(),
   }
 }
 
@@ -345,7 +345,7 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 export function invalidateSubreddit(subreddit) {
   return {
     type: INVALIDATE_SUBREDDIT,
-    subreddit
+    subreddit,
   }
 }
 
@@ -358,7 +358,7 @@ export function fetchPosts(subreddit) {
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function(dispatch) {
+  return function (dispatch) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
@@ -372,14 +372,14 @@ export function fetchPosts(subreddit) {
 
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(
-        response => response.json(),
+        (response) => response.json(),
         // Do not use catch, because that will also catch
         // any errors in the dispatch and resulting render,
         // causing a loop of 'Unexpected batch number' errors.
         // https://github.com/facebook/react/issues/6895
-        error => console.log('An error occurred.', error)
+        (error) => console.log('An error occurred.', error)
       )
-      .then(json =>
+      .then((json) =>
         // We can dispatch many times!
         // Here, we update the app state with the results of the API call.
 
@@ -443,7 +443,7 @@ export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    subreddit
+    subreddit,
   }
 }
 
@@ -452,8 +452,8 @@ function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
-    posts: json.data.children.map(child => child.data),
-    receivedAt: Date.now()
+    posts: json.data.children.map((child) => child.data),
+    receivedAt: Date.now(),
   }
 }
 
@@ -461,16 +461,16 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 export function invalidateSubreddit(subreddit) {
   return {
     type: INVALIDATE_SUBREDDIT,
-    subreddit
+    subreddit,
   }
 }
 
 function fetchPosts(subreddit) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(requestPosts(subreddit))
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
-      .then(json => dispatch(receivePosts(subreddit, json)))
+      .then((response) => response.json())
+      .then((json) => dispatch(receivePosts(subreddit, json)))
   }
 }
 

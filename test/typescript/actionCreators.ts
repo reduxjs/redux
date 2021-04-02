@@ -3,7 +3,7 @@ import {
   Action,
   Dispatch,
   bindActionCreators,
-  ActionCreatorsMapObject
+  ActionCreatorsMapObject,
 } from 'redux'
 
 interface AddTodoAction extends Action {
@@ -12,7 +12,7 @@ interface AddTodoAction extends Action {
 
 const addTodo: ActionCreator<AddTodoAction> = (text: string) => ({
   type: 'ADD_TODO',
-  text
+  text,
 })
 
 const addTodoAction: AddTodoAction = addTodo('test')
@@ -23,7 +23,7 @@ const addTodoViaThunk: ActionCreator<AddTodoThunk> = (text: string) => (
   dispatch: Dispatch
 ) => ({
   type: 'ADD_TODO',
-  text
+  text,
 })
 
 declare const dispatch: Dispatch
@@ -57,7 +57,7 @@ interface N extends ActionCreatorsMapObject {
 
 const boundActionCreators2 = bindActionCreators<M, N>(
   {
-    addTodoViaThunk
+    addTodoViaThunk,
   },
   dispatch
 )

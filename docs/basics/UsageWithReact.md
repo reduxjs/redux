@@ -128,7 +128,7 @@ const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
     style={{
-      textDecoration: completed ? 'line-through' : 'none'
+      textDecoration: completed ? 'line-through' : 'none',
     }}
   >
     {text}
@@ -138,7 +138,7 @@ const Todo = ({ onClick, completed, text }) => (
 Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
   completed: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
 }
 
 export default Todo
@@ -164,10 +164,10 @@ TodoList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       completed: PropTypes.bool.isRequired,
-      text: PropTypes.string.isRequired
+      text: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  onTodoClick: PropTypes.func.isRequired
+  onTodoClick: PropTypes.func.isRequired,
 }
 
 export default TodoList
@@ -187,7 +187,7 @@ const Link = ({ active, children, onClick }) => {
   return (
     <a
       href=""
-      onClick={e => {
+      onClick={(e) => {
         e.preventDefault()
         onClick()
       }}
@@ -200,7 +200,7 @@ const Link = ({ active, children, onClick }) => {
 Link.propTypes = {
   active: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 }
 
 export default Link
@@ -236,18 +236,18 @@ To use `connect()`, you need to define a special function called `mapStateToProp
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
     case 'SHOW_COMPLETED':
-      return todos.filter(t => t.completed)
+      return todos.filter((t) => t.completed)
     case 'SHOW_ACTIVE':
-      return todos.filter(t => !t.completed)
+      return todos.filter((t) => !t.completed)
     case 'SHOW_ALL':
     default:
       return todos
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, state.visibilityFilter),
   }
 }
 ```
@@ -255,11 +255,11 @@ const mapStateToProps = state => {
 In addition to reading the state, container components can dispatch actions. In a similar fashion, you can define a function called `mapDispatchToProps()` that receives the [`dispatch()`](../api/Store.md#dispatchaction) method and returns callback props that you want to inject into the presentational component. For example, we want the `VisibleTodoList` to inject a prop called `onTodoClick` into the `TodoList` component, and we want `onTodoClick` to dispatch a `TOGGLE_TODO` action:
 
 ```js
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
-    }
+    },
   }
 }
 ```
@@ -269,10 +269,7 @@ Finally, we create the `VisibleTodoList` by calling `connect()` and passing thes
 ```js
 import { connect } from 'react-redux'
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -290,7 +287,7 @@ import Link from '../components/Link'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    active: ownProps.filter === state.visibilityFilter
+    active: ownProps.filter === state.visibilityFilter,
   }
 }
 
@@ -298,14 +295,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
       dispatch(setVisibilityFilter(ownProps.filter))
-    }
+    },
   }
 }
 
-const FilterLink = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Link)
+const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link)
 
 export default FilterLink
 ```
@@ -322,30 +316,27 @@ const getVisibleTodos = (todos, filter) => {
     case 'SHOW_ALL':
       return todos
     case 'SHOW_COMPLETED':
-      return todos.filter(t => t.completed)
+      return todos.filter((t) => t.completed)
     case 'SHOW_ACTIVE':
-      return todos.filter(t => !t.completed)
+      return todos.filter((t) => !t.completed)
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, state.visibilityFilter),
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
-    }
+    },
   }
 }
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -367,7 +358,7 @@ let AddTodo = ({ dispatch }) => {
   return (
     <div>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault()
           if (!input.value.trim()) {
             return
@@ -377,7 +368,7 @@ let AddTodo = ({ dispatch }) => {
         }}
       >
         <input
-          ref={node => {
+          ref={(node) => {
             input = node
           }}
         />

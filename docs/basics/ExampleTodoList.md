@@ -37,26 +37,26 @@ render(
 
 ```js
 let nextTodoId = 0
-export const addTodo = text => ({
+export const addTodo = (text) => ({
   type: 'ADD_TODO',
   id: nextTodoId++,
-  text
+  text,
 })
 
-export const setVisibilityFilter = filter => ({
+export const setVisibilityFilter = (filter) => ({
   type: 'SET_VISIBILITY_FILTER',
-  filter
+  filter,
 })
 
-export const toggleTodo = id => ({
+export const toggleTodo = (id) => ({
   type: 'TOGGLE_TODO',
-  id
+  id,
 })
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
+  SHOW_ACTIVE: 'SHOW_ACTIVE',
 }
 ```
 
@@ -73,11 +73,11 @@ const todos = (state = [], action) => {
         {
           id: action.id,
           text: action.text,
-          completed: false
-        }
+          completed: false,
+        },
       ]
     case 'TOGGLE_TODO':
-      return state.map(todo =>
+      return state.map((todo) =>
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
       )
     default:
@@ -114,7 +114,7 @@ import visibilityFilter from './visibilityFilter'
 
 export default combineReducers({
   todos,
-  visibilityFilter
+  visibilityFilter,
 })
 ```
 
@@ -130,7 +130,7 @@ const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
     style={{
-      textDecoration: completed ? 'line-through' : 'none'
+      textDecoration: completed ? 'line-through' : 'none',
     }}
   >
     {text}
@@ -140,7 +140,7 @@ const Todo = ({ onClick, completed, text }) => (
 Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
   completed: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
 }
 
 export default Todo
@@ -155,7 +155,7 @@ import Todo from './Todo'
 
 const TodoList = ({ todos, toggleTodo }) => (
   <ul>
-    {todos.map(todo => (
+    {todos.map((todo) => (
       <Todo key={todo.id} {...todo} onClick={() => toggleTodo(todo.id)} />
     ))}
   </ul>
@@ -166,10 +166,10 @@ TodoList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       completed: PropTypes.bool.isRequired,
-      text: PropTypes.string.isRequired
+      text: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  toggleTodo: PropTypes.func.isRequired
+  toggleTodo: PropTypes.func.isRequired,
 }
 
 export default TodoList
@@ -186,7 +186,7 @@ const Link = ({ active, children, onClick }) => (
     onClick={onClick}
     disabled={active}
     style={{
-      marginLeft: '4px'
+      marginLeft: '4px',
     }}
   >
     {children}
@@ -196,7 +196,7 @@ const Link = ({ active, children, onClick }) => (
 Link.propTypes = {
   active: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 }
 
 export default Link
@@ -255,26 +255,23 @@ const getVisibleTodos = (todos, filter) => {
     case VisibilityFilters.SHOW_ALL:
       return todos
     case VisibilityFilters.SHOW_COMPLETED:
-      return todos.filter(t => t.completed)
+      return todos.filter((t) => t.completed)
     case VisibilityFilters.SHOW_ACTIVE:
-      return todos.filter(t => !t.completed)
+      return todos.filter((t) => !t.completed)
     default:
       throw new Error('Unknown filter: ' + filter)
   }
 }
 
-const mapStateToProps = state => ({
-  todos: getVisibleTodos(state.todos, state.visibilityFilter)
+const mapStateToProps = (state) => ({
+  todos: getVisibleTodos(state.todos, state.visibilityFilter),
 })
 
-const mapDispatchToProps = dispatch => ({
-  toggleTodo: id => dispatch(toggleTodo(id))
+const mapDispatchToProps = (dispatch) => ({
+  toggleTodo: (id) => dispatch(toggleTodo(id)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
 ```
 
 #### `containers/FilterLink.js`
@@ -285,17 +282,14 @@ import { setVisibilityFilter } from '../actions'
 import Link from '../components/Link'
 
 const mapStateToProps = (state, ownProps) => ({
-  active: ownProps.filter === state.visibilityFilter
+  active: ownProps.filter === state.visibilityFilter,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onClick: () => dispatch(setVisibilityFilter(ownProps.filter))
+  onClick: () => dispatch(setVisibilityFilter(ownProps.filter)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Link)
+export default connect(mapStateToProps, mapDispatchToProps)(Link)
 ```
 
 ### Other Components
@@ -313,7 +307,7 @@ const AddTodo = ({ dispatch }) => {
   return (
     <div>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault()
           if (!input.value.trim()) {
             return
@@ -322,7 +316,7 @@ const AddTodo = ({ dispatch }) => {
           input.value = ''
         }}
       >
-        <input ref={node => (input = node)} />
+        <input ref={(node) => (input = node)} />
         <button type="submit">Add Todo</button>
       </form>
     </div>

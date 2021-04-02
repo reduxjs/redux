@@ -32,7 +32,7 @@ function stateExtension() {
     extraField: 'extra'
   }
 
-  const enhancer: StoreEnhancer<{}, ExtraState> = createStore => <
+  const enhancer: StoreEnhancer<{}, ExtraState> = (createStore) => <
     S,
     A extends Action = AnyAction
   >(

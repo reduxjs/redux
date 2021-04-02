@@ -40,7 +40,7 @@ const store = createStore(todos, ['Use Redux'])
 
 store.dispatch({
   type: 'ADD_TODO',
-  text: 'Read the docs'
+  text: 'Read the docs',
 })
 
 console.log(store.getState())

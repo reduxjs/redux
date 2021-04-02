@@ -32,5 +32,5 @@ export {
   bindActionCreators,
   applyMiddleware,
   compose,
-  __DO_NOT_USE__ActionTypes
+  __DO_NOT_USE__ActionTypes,
 }

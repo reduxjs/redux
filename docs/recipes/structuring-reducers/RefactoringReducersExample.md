@@ -18,14 +18,14 @@ Let's say that our initial reducer looks like this:
 ```js
 const initialState = {
   visibilityFilter: 'SHOW_ALL',
-  todos: []
+  todos: [],
 }
 
 function appReducer(state = initialState, action) {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER': {
       return Object.assign({}, state, {
-        visibilityFilter: action.filter
+        visibilityFilter: action.filter,
       })
     }
     case 'ADD_TODO': {
@@ -33,34 +33,34 @@ function appReducer(state = initialState, action) {
         todos: state.todos.concat({
           id: action.id,
           text: action.text,
-          completed: false
-        })
+          completed: false,
+        }),
       })
     }
     case 'TOGGLE_TODO': {
       return Object.assign({}, state, {
-        todos: state.todos.map(todo => {
+        todos: state.todos.map((todo) => {
           if (todo.id !== action.id) {
             return todo
           }
 
           return Object.assign({}, todo, {
-            completed: !todo.completed
+            completed: !todo.completed,
           })
-        })
+        }),
       })
     }
     case 'EDIT_TODO': {
       return Object.assign({}, state, {
-        todos: state.todos.map(todo => {
+        todos: state.todos.map((todo) => {
           if (todo.id !== action.id) {
             return todo
           }
 
           return Object.assign({}, todo, {
-            text: action.text
+            text: action.text,
           })
-        })
+        }),
       })
     }
     default:
@@ -83,7 +83,7 @@ function updateObject(oldObject, newValues) {
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
-  const updatedItems = array.map(item => {
+  const updatedItems = array.map((item) => {
     if (item.id !== itemId) {
       // Since we only want to update one item, preserve all others as they are now
       return item
@@ -106,20 +106,20 @@ function appReducer(state = initialState, action) {
       const newTodos = state.todos.concat({
         id: action.id,
         text: action.text,
-        completed: false
+        completed: false,
       })
 
       return updateObject(state, { todos: newTodos })
     }
     case 'TOGGLE_TODO': {
-      const newTodos = updateItemInArray(state.todos, action.id, todo => {
+      const newTodos = updateItemInArray(state.todos, action.id, (todo) => {
         return updateObject(todo, { completed: !todo.completed })
       })
 
       return updateObject(state, { todos: newTodos })
     }
     case 'EDIT_TODO': {
-      const newTodos = updateItemInArray(state.todos, action.id, todo => {
+      const newTodos = updateItemInArray(state.todos, action.id, (todo) => {
         return updateObject(todo, { text: action.text })
       })
 
@@ -150,14 +150,14 @@ function addTodo(state, action) {
   const newTodos = state.todos.concat({
     id: action.id,
     text: action.text,
-    completed: false
+    completed: false,
   })
 
   return updateObject(state, { todos: newTodos })
 }
 
 function toggleTodo(state, action) {
-  const newTodos = updateItemInArray(state.todos, action.id, todo => {
+  const newTodos = updateItemInArray(state.todos, action.id, (todo) => {
     return updateObject(todo, { completed: !todo.completed })
   })
 
@@ -165,7 +165,7 @@ function toggleTodo(state, action) {
 }
 
 function editTodo(state, action) {
-  const newTodos = updateItemInArray(state.todos, action.id, todo => {
+  const newTodos = updateItemInArray(state.todos, action.id, (todo) => {
     return updateObject(todo, { text: action.text })
   })
 
@@ -217,14 +217,14 @@ function addTodo(todosState, action) {
   const newTodos = todosState.concat({
     id: action.id,
     text: action.text,
-    completed: false
+    completed: false,
   })
 
   return newTodos
 }
 
 function toggleTodo(todosState, action) {
-  const newTodos = updateItemInArray(todosState, action.id, todo => {
+  const newTodos = updateItemInArray(todosState, action.id, (todo) => {
     return updateObject(todo, { completed: !todo.completed })
   })
 
@@ -232,7 +232,7 @@ function toggleTodo(todosState, action) {
 }
 
 function editTodo(todosState, action) {
-  const newTodos = updateItemInArray(todosState, action.id, todo => {
+  const newTodos = updateItemInArray(todosState, action.id, (todo) => {
     return updateObject(todo, { text: action.text })
   })
 
@@ -255,7 +255,7 @@ function todosReducer(todosState = [], action) {
 function appReducer(state = initialState, action) {
   return {
     todos: todosReducer(state.todos, action),
-    visibilityFilter: visibilityReducer(state.visibilityFilter, action)
+    visibilityFilter: visibilityReducer(state.visibilityFilter, action),
   }
 }
 ```
@@ -285,7 +285,7 @@ function createReducer(initialState, handlers) {
 function setVisibilityFilter(visibilityState, action) {}
 
 const visibilityReducer = createReducer('SHOW_ALL', {
-  SET_VISIBILITY_FILTER: setVisibilityFilter
+  SET_VISIBILITY_FILTER: setVisibilityFilter,
 })
 
 // Omitted
@@ -296,13 +296,13 @@ function editTodo(todosState, action) {}
 const todosReducer = createReducer([], {
   ADD_TODO: addTodo,
   TOGGLE_TODO: toggleTodo,
-  EDIT_TODO: editTodo
+  EDIT_TODO: editTodo,
 })
 
 function appReducer(state = initialState, action) {
   return {
     todos: todosReducer(state.todos, action),
-    visibilityFilter: visibilityReducer(state.visibilityFilter, action)
+    visibilityFilter: visibilityReducer(state.visibilityFilter, action),
   }
 }
 ```
@@ -321,7 +321,7 @@ function updateObject(oldObject, newValues) {
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
-  const updatedItems = array.map(item => {
+  const updatedItems = array.map((item) => {
     if (item.id !== itemId) {
       // Since we only want to update one item, preserve all others as they are now
       return item
@@ -353,7 +353,7 @@ function setVisibilityFilter(visibilityState, action) {
 
 // Handler for an entire slice of state ("slice reducer")
 const visibilityReducer = createReducer('SHOW_ALL', {
-  SET_VISIBILITY_FILTER: setVisibilityFilter
+  SET_VISIBILITY_FILTER: setVisibilityFilter,
 })
 
 // Case reducer
@@ -361,7 +361,7 @@ function addTodo(todosState, action) {
   const newTodos = todosState.concat({
     id: action.id,
     text: action.text,
-    completed: false
+    completed: false,
   })
 
   return newTodos
@@ -369,7 +369,7 @@ function addTodo(todosState, action) {
 
 // Case reducer
 function toggleTodo(todosState, action) {
-  const newTodos = updateItemInArray(todosState, action.id, todo => {
+  const newTodos = updateItemInArray(todosState, action.id, (todo) => {
     return updateObject(todo, { completed: !todo.completed })
   })
 
@@ -378,7 +378,7 @@ function toggleTodo(todosState, action) {
 
 // Case reducer
 function editTodo(todosState, action) {
-  const newTodos = updateItemInArray(todosState, action.id, todo => {
+  const newTodos = updateItemInArray(todosState, action.id, (todo) => {
     return updateObject(todo, { text: action.text })
   })
 
@@ -389,13 +389,13 @@ function editTodo(todosState, action) {
 const todosReducer = createReducer([], {
   ADD_TODO: addTodo,
   TOGGLE_TODO: toggleTodo,
-  EDIT_TODO: editTodo
+  EDIT_TODO: editTodo,
 })
 
 // "Root reducer"
 const appReducer = combineReducers({
   visibilityFilter: visibilityReducer,
-  todos: todosReducer
+  todos: todosReducer,
 })
 ```
 

@@ -108,7 +108,7 @@ const Root = ({ store }) => (
 )
 
 Root.propTypes = {
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired,
 }
 
 export default Root
@@ -148,7 +148,7 @@ const FilterLink = ({ filter, children }) => (
     to={filter === 'SHOW_ALL' ? '/' : `/${filter}`}
     activeStyle={{
       textDecoration: 'none',
-      color: 'black'
+      color: 'black',
     }}
   >
     {children}
@@ -189,7 +189,7 @@ Currently, the todo list is not filtered even after the URL changed. This is bec
 ```js
 const mapStateToProps = (state, ownProps) => {
   return {
-    todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, ownProps.filter), // previously was getVisibleTodos(state.todos, state.visibilityFilter)
   }
 }
 ```

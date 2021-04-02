@@ -42,7 +42,7 @@ import {
   addTodo,
   toggleTodo,
   setVisibilityFilter,
-  VisibilityFilters
+  VisibilityFilters,
 } from './actions'
 
 // Log the initial state

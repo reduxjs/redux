@@ -5,7 +5,7 @@ import {
   SUBSCRIBE_IN_MIDDLE,
   UNSUBSCRIBE_IN_MIDDLE,
   THROW_ERROR,
-  UNKNOWN_ACTION
+  UNKNOWN_ACTION,
 } from './actionTypes'
 
 export function addTodo(text) {
@@ -13,8 +13,8 @@ export function addTodo(text) {
 }
 
 export function addTodoAsync(text) {
-  return dispatch =>
-    new Promise(resolve =>
+  return (dispatch) =>
+    new Promise((resolve) =>
       setImmediate(() => {
         dispatch(addTodo(text))
         resolve()
@@ -33,39 +33,39 @@ export function addTodoIfEmpty(text) {
 export function dispatchInMiddle(boundDispatchFn) {
   return {
     type: DISPATCH_IN_MIDDLE,
-    boundDispatchFn
+    boundDispatchFn,
   }
 }
 
 export function getStateInMiddle(boundGetStateFn) {
   return {
     type: GET_STATE_IN_MIDDLE,
-    boundGetStateFn
+    boundGetStateFn,
   }
 }
 
 export function subscribeInMiddle(boundSubscribeFn) {
   return {
     type: SUBSCRIBE_IN_MIDDLE,
-    boundSubscribeFn
+    boundSubscribeFn,
   }
 }
 
 export function unsubscribeInMiddle(boundUnsubscribeFn) {
   return {
     type: UNSUBSCRIBE_IN_MIDDLE,
-    boundUnsubscribeFn
+    boundUnsubscribeFn,
   }
 }
 
 export function throwError() {
   return {
-    type: THROW_ERROR
+    type: THROW_ERROR,
   }
 }
 
 export function unknownAction() {
   return {
-    type: UNKNOWN_ACTION
+    type: UNKNOWN_ACTION,
   }
 }

@@ -2,7 +2,7 @@
 import {
   createStore,
   combineReducers,
-  __DO_NOT_USE__ActionTypes as ActionTypes
+  __DO_NOT_USE__ActionTypes as ActionTypes,
 } from '../'
 
 describe('Utils', () => {
@@ -12,7 +12,7 @@ describe('Utils', () => {
         counter: (state = 0, action) =>
           action.type === 'increment' ? state + 1 : state,
         stack: (state = [], action) =>
-          action.type === 'push' ? [...state, action.value] : state
+          action.type === 'push' ? [...state, action.value] : state,
       })
 
       const s1 = reducer({}, { type: 'increment' })
@@ -26,7 +26,7 @@ describe('Utils', () => {
         fake: true,
         broken: 'string',
         another: { nested: 'object' },
-        stack: (state = []) => state
+        stack: (state = []) => state,
       })
 
       expect(Object.keys(reducer({}, { type: 'push' }))).toEqual(['stack'])
@@ -68,7 +68,7 @@ describe('Utils', () => {
             default:
               return state
           }
-        }
+        },
       })
 
       expect(() => reducer({ counter: 0 }, { type: 'whatever' })).toThrow(
@@ -91,7 +91,7 @@ describe('Utils', () => {
             default:
               return state
           }
-        }
+        },
       })
       expect(() => reducer({})).toThrow(/"counter".*initialization/)
     })
@@ -100,7 +100,7 @@ describe('Utils', () => {
       const reducer = combineReducers({
         throwingReducer() {
           throw new Error('Error thrown in reducer')
-        }
+        },
       })
       expect(() => reducer({})).toThrow(/Error thrown in reducer/)
     })
@@ -116,7 +116,7 @@ describe('Utils', () => {
             default:
               return state
           }
-        }
+        },
       })
 
       expect(reducer({ counter: 0 }, { type: increment }).counter).toEqual(1)
@@ -132,7 +132,7 @@ describe('Utils', () => {
         },
         child3(state = {}) {
           return state
-        }
+        },
       })
 
       const initialState = reducer(undefined, '@@INIT')
@@ -154,7 +154,7 @@ describe('Utils', () => {
         },
         child3(state = {}) {
           return state
-        }
+        },
       })
 
       const initialState = reducer(undefined, '@@INIT')
@@ -177,7 +177,7 @@ describe('Utils', () => {
             default:
               return undefined
           }
-        }
+        },
       })
       expect(() => reducer()).toThrow(/"counter".*private/)
     })
@@ -208,7 +208,7 @@ describe('Utils', () => {
         },
         baz(state = { qux: 3 }) {
           return state
-        }
+        },
       })
 
       reducer()
@@ -219,7 +219,7 @@ describe('Utils', () => {
 
       reducer({
         foo: { bar: 2 },
-        baz: { qux: 4 }
+        baz: { qux: 4 },
       })
       expect(spy.mock.calls.length).toBe(0)
 
@@ -286,12 +286,12 @@ describe('Utils', () => {
       console.error = preSpy
     })
 
-    describe('With Replace Reducers', function() {
+    describe('With Replace Reducers', function () {
       const foo = (state = {}) => state
       const bar = (state = {}) => state
       const ACTION = { type: 'ACTION' }
 
-      it('should return an updated state when additional reducers are passed to combineReducers', function() {
+      it('should return an updated state when additional reducers are passed to combineReducers', function () {
         const originalCompositeReducer = combineReducers({ foo })
         const store = createStore(originalCompositeReducer)
 
@@ -306,7 +306,7 @@ describe('Utils', () => {
         expect(nextState).not.toBe(initialState)
       })
 
-      it('should return an updated state when reducers passed to combineReducers are changed', function() {
+      it('should return an updated state when reducers passed to combineReducers are changed', function () {
         const baz = (state = {}) => state
 
         const originalCompositeReducer = combineReducers({ foo, bar })
@@ -323,7 +323,7 @@ describe('Utils', () => {
         expect(nextState).not.toBe(initialState)
       })
 
-      it('should return the same state when reducers passed to combineReducers not changed', function() {
+      it('should return the same state when reducers passed to combineReducers not changed', function () {
         const originalCompositeReducer = combineReducers({ foo, bar })
         const store = createStore(originalCompositeReducer)
 
@@ -338,7 +338,7 @@ describe('Utils', () => {
         expect(nextState).toBe(initialState)
       })
 
-      it('should return an updated state when one of more reducers passed to the combineReducers are removed', function() {
+      it('should return an updated state when one of more reducers passed to the combineReducers are removed', function () {
         const originalCompositeReducer = combineReducers({ foo, bar })
         const store = createStore(originalCompositeReducer)
 

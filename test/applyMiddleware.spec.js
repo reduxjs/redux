@@ -7,7 +7,7 @@ describe('applyMiddleware', () => {
   it('warns when dispatching during middleware setup', () => {
     function dispatchingMiddleware(store) {
       store.dispatch(addTodo('Dont dispatch in middleware setup'))
-      return next => action => next(action)
+      return (next) => (action) => next(action)
     }
 
     expect(() =>
@@ -17,9 +17,9 @@ describe('applyMiddleware', () => {
 
   it('wraps dispatch method with middleware once', () => {
     function test(spyOnMethods) {
-      return methods => {
+      return (methods) => {
         spyOnMethods(methods)
-        return next => action => next(action)
+        return (next) => (action) => next(action)
       }
     }
 
@@ -36,13 +36,13 @@ describe('applyMiddleware', () => {
 
     expect(store.getState()).toEqual([
       { id: 1, text: 'Use Redux' },
-      { id: 2, text: 'Flux FTW!' }
+      { id: 2, text: 'Flux FTW!' },
     ])
   })
 
   it('passes recursive dispatches through the middleware chain', () => {
     function test(spyOnMethods) {
-      return () => next => action => {
+      return () => (next) => (action) => {
         spyOnMethods(action)
         return next(action)
       }
@@ -56,51 +56,51 @@ describe('applyMiddleware', () => {
     })
   })
 
-  it('works with thunk middleware', done => {
+  it('works with thunk middleware', (done) => {
     const store = applyMiddleware(thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodoIfEmpty('Hello'))
     expect(store.getState()).toEqual([
       {
         id: 1,
-        text: 'Hello'
-      }
+        text: 'Hello',
+      },
     ])
 
     store.dispatch(addTodoIfEmpty('Hello'))
     expect(store.getState()).toEqual([
       {
         id: 1,
-        text: 'Hello'
-      }
+        text: 'Hello',
+      },
     ])
 
     store.dispatch(addTodo('World'))
     expect(store.getState()).toEqual([
       {
         id: 1,
-        text: 'Hello'
+        text: 'Hello',
       },
       {
         id: 2,
-        text: 'World'
-      }
+        text: 'World',
+      },
     ])
 
     store.dispatch(addTodoAsync('Maybe')).then(() => {
       expect(store.getState()).toEqual([
         {
           id: 1,
-          text: 'Hello'
+          text: 'Hello',
         },
         {
           id: 2,
-          text: 'World'
+          text: 'World',
         },
         {
           id: 3,
-          text: 'Maybe'
-        }
+          text: 'Maybe',
+        },
       ])
       done()
     })
@@ -111,7 +111,7 @@ describe('applyMiddleware', () => {
     const testCallArgs = ['test']
 
     function multiArgMiddleware() {
-      return next => (action, callArgs) => {
+      return (next) => (action, callArgs) => {
         if (Array.isArray(callArgs)) {
           return action(...callArgs)
         }
@@ -120,7 +120,7 @@ describe('applyMiddleware', () => {
     }
 
     function dummyMiddleware({ dispatch }) {
-      return next => action => dispatch(action, testCallArgs)
+      return (next) => (action) => dispatch(action, testCallArgs)
     }
 
     const store = createStore(

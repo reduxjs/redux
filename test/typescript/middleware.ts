@@ -7,7 +7,7 @@ import {
   Dispatch,
   Reducer,
   Action,
-  AnyAction
+  AnyAction,
 } from 'redux'
 
 /**
@@ -17,7 +17,7 @@ import {
 function logger() {
   const loggerMiddleware: Middleware = ({ getState }: MiddlewareAPI) => (
     next: Dispatch
-  ) => action => {
+  ) => (action) => {
     console.log('will dispatch', action)
 
     // Call the next dispatch method in the middleware chain.
@@ -41,8 +41,8 @@ type PromiseDispatch = <T extends Action>(promise: Promise<T>) => Promise<T>
 
 function promise() {
   const promiseMiddleware: Middleware<PromiseDispatch> = ({
-    dispatch
-  }: MiddlewareAPI) => next => <T extends Action>(
+    dispatch,
+  }: MiddlewareAPI) => (next) => <T extends Action>(
     action: AnyAction | Promise<T>
   ) => {
     if (action instanceof Promise) {
@@ -73,7 +73,7 @@ function thunk<S, DispatchExt>() {
     ThunkDispatch<S, DispatchExt>,
     S,
     Dispatch & ThunkDispatch<S>
-  > = api => (next: Dispatch) => <R>(action: AnyAction | Thunk<R, any>) =>
+  > = (api) => (next: Dispatch) => <R>(action: AnyAction | Thunk<R, any>) =>
     typeof action === 'function'
       ? action(api.dispatch, api.getState)
       : next(action)
@@ -87,9 +87,9 @@ function thunk<S, DispatchExt>() {
 function customState() {
   type State = { field: 'string' }
 
-  const customMiddleware: Middleware<{}, State> = api => (
-    next: Dispatch
-  ) => action => {
+  const customMiddleware: Middleware<{}, State> = (api) => (next: Dispatch) => (
+    action
+  ) => {
     api.getState().field
     // typings:expect-error
     api.getState().wrongField
@@ -109,9 +109,9 @@ function customDispatch() {
   // dispatch that expects action union
   type MyDispatch = Dispatch<MyAction>
 
-  const customDispatch: Middleware = (
-    api: MiddlewareAPI<MyDispatch>
-  ) => next => action => {
+  const customDispatch: Middleware = (api: MiddlewareAPI<MyDispatch>) => (
+    next
+  ) => (action) => {
     api.dispatch({ type: 'INCREMENT' })
     api.dispatch({ type: 'DECREMENT' })
     // typings:expect-error
@@ -183,7 +183,7 @@ function apply() {
 
     // injected dispatch accepts actions, thunks and promises
     dispatch({ type: 'INCREMENT' })
-    dispatch(dispatch => dispatch({ type: 'INCREMENT' }))
+    dispatch((dispatch) => dispatch({ type: 'INCREMENT' }))
     dispatch(Promise.resolve({ type: 'INCREMENT' }))
     // typings:expect-error
     dispatch('not-an-action')

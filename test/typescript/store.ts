@@ -7,7 +7,7 @@ import {
   StoreCreator,
   StoreEnhancerStoreCreator,
   Unsubscribe,
-  Observer
+  Observer,
 } from 'redux'
 import 'symbol-observable'
 
@@ -33,9 +33,9 @@ const reducer: Reducer<State> = (
     a: 'a',
     b: {
       c: 'c',
-      d: 'd'
+      d: 'd',
     },
-    c: brandedString
+    c: brandedString,
   },
   action: Action
 ): State => {
@@ -47,9 +47,9 @@ const reducerWithAction: Reducer<State, DerivedAction> = (
     a: 'a',
     b: {
       c: 'c',
-      d: 'd'
+      d: 'd',
     },
-    c: brandedString
+    c: brandedString,
   },
   action: DerivedAction
 ): State => {
@@ -65,19 +65,19 @@ const store: Store<State> = createStore(reducer)
 const storeWithPreloadedState: Store<State> = createStore(reducer, {
   a: 'a',
   b: { c: 'c', d: 'd' },
-  c: brandedString
+  c: brandedString,
 })
 // typings:expect-error
 const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
   b: { c: 'c' },
-  c: brandedString
+  c: brandedString,
 })
 
 const storeWithActionReducer = createStore(reducerWithAction)
 const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
   a: 'a',
   b: { c: 'c', d: 'd' },
-  c: brandedString
+  c: brandedString,
 })
 funcWithStore(storeWithActionReducer)
 funcWithStore(storeWithActionReducerAndPreloadedState)
@@ -87,11 +87,11 @@ const storeWithActionReducerAndBadPreloadedState = createStore(
   reducerWithAction,
   {
     b: { c: 'c' },
-    c: brandedString
+    c: brandedString,
   }
 )
 
-const enhancer: StoreEnhancer = next => next
+const enhancer: StoreEnhancer = (next) => next
 
 const storeWithSpecificEnhancer: Store<State> = createStore(reducer, enhancer)
 
@@ -100,7 +100,7 @@ const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(
   {
     a: 'a',
     b: { c: 'c', d: 'd' },
-    c: brandedString
+    c: brandedString,
   },
   enhancer
 )
@@ -109,7 +109,7 @@ const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(
 const storeWithBadPreloadedStateAndEnhancer: Store<State> = createStore(
   reducer,
   {
-    b: { c: 'c' }
+    b: { c: 'c' },
   },
   enhancer
 )
@@ -118,7 +118,7 @@ const storeWithBadPreloadedStateAndEnhancer: Store<State> = createStore(
 
 store.dispatch({
   type: 'ADD_TODO',
-  text: 'test'
+  text: 'test',
 })
 
 /* getState */
@@ -146,7 +146,7 @@ observable = observable[Symbol.observable]()
 const observer: Observer<State> = {
   next(state: State) {
     console.log('current state:', state)
-  }
+  },
 }
 const unsubscribeFromObservable = observable.subscribe(observer).unsubscribe
 unsubscribeFromObservable()

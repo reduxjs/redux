@@ -40,15 +40,15 @@ let previousState = {
   todos: [
     {
       text: 'Read the docs.',
-      complete: false
-    }
-  ]
+      complete: false,
+    },
+  ],
 }
 
 // The action being performed (adding a todo)
 let action = {
   type: 'ADD_TODO',
-  text: 'Understand the flow.'
+  text: 'Understand the flow.',
 }
 
 // Your reducer returns the next application state
@@ -76,7 +76,7 @@ function visibleTodoFilter(state = 'SHOW_ALL', action) {
 
 let todoApp = combineReducers({
   todos,
-  visibleTodoFilter
+  visibleTodoFilter,
 })
 ```
 
@@ -92,7 +92,7 @@ It will then combine both sets of results into a single state tree:
 ```js
 return {
   todos: nextTodos,
-  visibleTodoFilter: nextVisibleTodoFilter
+  visibleTodoFilter: nextVisibleTodoFilter,
 }
 ```
 

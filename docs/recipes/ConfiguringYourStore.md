@@ -56,7 +56,7 @@ npm install --save redux-thunk
 #### middleware/logger.js
 
 ```js
-const logger = store => next => action => {
+const logger = (store) => (next) => (action) => {
   console.group(action.type)
   console.info('dispatching', action)
   let result = next(action)
@@ -71,9 +71,9 @@ export default logger
 #### enhancers/monitorReducer.js
 
 ```js
-const round = number => Math.round(number * 100) / 100
+const round = (number) => Math.round(number * 100) / 100
 
-const monitorReducerEnhancer = createStore => (
+const monitorReducerEnhancer = (createStore) => (
   reducer,
   initialState,
   enhancer
@@ -117,10 +117,7 @@ import monitorReducerEnhancer from './enhancers/monitorReducer'
 import App from './components/App'
 
 const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
-const composedEnhancers = compose(
-  middlewareEnhancer,
-  monitorReducerEnhancer
-)
+const composedEnhancers = compose(middlewareEnhancer, monitorReducerEnhancer)
 
 const store = createStore(rootReducer, undefined, composedEnhancers)
 
@@ -338,7 +335,7 @@ import { configureStore } from 'redux-starter-kit'
 import rootReducer from './reducers'
 
 const store = configureStore({
-  reducer: rootReducer
+  reducer: rootReducer,
 })
 
 export default store
@@ -365,7 +362,7 @@ export default function configureAppStore(preloadedState) {
     reducer: rootReducer,
     middleware: [loggerMiddleware, ...getDefaultMiddleware()],
     preloadedState,
-    enhancers: [monitorReducersEnhancer]
+    enhancers: [monitorReducersEnhancer],
   })
 
   if (process.env.NODE_ENV !== 'production' && module.hot) {

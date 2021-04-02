@@ -16,7 +16,7 @@ declare function connect<T, D extends Dispatch = Dispatch>(
  * Inject default dispatch.
  */
 function simple() {
-  const hoc: HOC<{ onClick(): void }> = connect(dispatch => {
+  const hoc: HOC<{ onClick(): void }> = connect((dispatch) => {
     return {
       onClick() {
         dispatch({ type: 'INCREMENT' })
@@ -24,7 +24,7 @@ function simple() {
         dispatch(Promise.resolve({ type: 'INCREMENT' }))
         // typings:expect-error
         dispatch('not-an-action')
-      }
+      },
     }
   })
 }
@@ -58,7 +58,7 @@ function discriminated() {
           dispatch({ type: 'SOME_OTHER_TYPE' })
           // typings:expect-error
           dispatch('not-an-action')
-        }
+        },
       }
     }
   )
@@ -79,7 +79,7 @@ function promise() {
         dispatch(Promise.resolve({ type: 'INCREMENT' }))
         // typings:expect-error
         dispatch('not-an-action')
-      }
+      },
     }
   })
 }

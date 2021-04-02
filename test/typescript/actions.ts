@@ -7,7 +7,7 @@ namespace FSA {
 
   const action: Action<string> = {
     type: 'ACTION_TYPE',
-    payload: 'test'
+    payload: 'test',
   }
 
   const payload: string = action.payload
@@ -20,7 +20,7 @@ namespace FreeShapeAction {
 
   const action: Action = {
     type: 'ACTION_TYPE',
-    text: 'test'
+    text: 'test',
   }
 
   const text: string = action['text']
@@ -34,7 +34,7 @@ namespace StringLiteralTypeAction {
   }
 
   const action: Action = {
-    type: 'A'
+    type: 'A',
   }
 
   const type: ActionType = action.type
@@ -44,7 +44,7 @@ namespace EnumTypeAction {
   enum ActionType {
     A,
     B,
-    C
+    C,
   }
 
   interface Action extends ReduxAction {
@@ -52,7 +52,7 @@ namespace EnumTypeAction {
   }
 
   const action: Action = {
-    type: ActionType.A
+    type: ActionType.A,
   }
 
   const type: ActionType = action.type
