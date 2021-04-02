@@ -224,7 +224,7 @@ export interface Unsubscribe {
 
 declare global {
   interface SymbolConstructor {
-    readonly observable: symbol;
+    readonly observable: symbol
   }
 }
 

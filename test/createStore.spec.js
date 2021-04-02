@@ -19,8 +19,8 @@ describe('createStore', () => {
 
     // Since switching to internal Symbol.observable impl, it will show up as a key in node env
     // So we filter it out
-    const methods = Object.keys(store).filter(key => key !== $$observable)
-    
+    const methods = Object.keys(store).filter((key) => key !== $$observable)
+
     expect(methods.length).toBe(4)
     expect(methods).toContain('subscribe')
     expect(methods).toContain('dispatch')
