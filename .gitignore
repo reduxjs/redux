@@ -9,4 +9,5 @@ coverage
 website/translated_docs
 website/build/
 website/node_modules
+website/.docusaurus/
 website/i18n/*
