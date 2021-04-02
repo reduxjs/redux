@@ -4,6 +4,7 @@ import {
   ActionCreator,
   ActionCreatorsMapObject
 } from './types/actions'
+import { kindOf } from './utils/kindOf'
 
 function bindActionCreator<A extends AnyAction = AnyAction>(
   actionCreator: ActionCreator<A>,
@@ -64,9 +65,9 @@ export default function bindActionCreators(
 
   if (typeof actionCreators !== 'object' || actionCreators === null) {
     throw new Error(
-      `bindActionCreators expected an object or a function, instead received ${
-        actionCreators === null ? 'null' : typeof actionCreators
-      }. ` +
+      `bindActionCreators expected an object or a function, but instead received: '${kindOf(
+        actionCreators
+      )}'. ` +
         `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
     )
   }

@@ -89,6 +89,11 @@ module.exports = babel => {
 
           const errorMsgLiteral = evalToString(path.node.argument.arguments[0])
 
+          if (errorMsgLiteral.includes('Super expression')) {
+            // ignore Babel runtime error message
+            return
+          }
+
           // Attempt to get the existing index of the error. If it is not found, add it to the array as a new error.
           let errorIndex = errors.indexOf(errorMsgLiteral)
           if (errorIndex === -1) {

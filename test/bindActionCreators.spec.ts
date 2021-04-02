@@ -77,8 +77,8 @@ describe('bindActionCreators', () => {
     expect(() => {
       bindActionCreators(undefined, store.dispatch)
     }).toThrow(
-      'bindActionCreators expected an object or a function, instead received undefined. ' +
-        'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?'
+      `bindActionCreators expected an object or a function, but instead received: 'undefined'. ` +
+        `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
     )
   })
 
@@ -86,8 +86,8 @@ describe('bindActionCreators', () => {
     expect(() => {
       bindActionCreators(null, store.dispatch)
     }).toThrow(
-      'bindActionCreators expected an object or a function, instead received null. ' +
-        'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?'
+      `bindActionCreators expected an object or a function, but instead received: 'null'. ` +
+        `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
     )
   })
 
@@ -98,8 +98,8 @@ describe('bindActionCreators', () => {
         store.dispatch
       )
     }).toThrow(
-      'bindActionCreators expected an object or a function, instead received string. ' +
-        'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?'
+      `bindActionCreators expected an object or a function, but instead received: 'string'. ` +
+        `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
     )
   })
 })

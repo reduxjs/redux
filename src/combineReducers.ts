@@ -10,18 +10,7 @@ import { CombinedState } from './types/store'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 import warning from './utils/warning'
-
-function getUndefinedStateErrorMessage(key: string, action: Action) {
-  const actionType = action && action.type
-  const actionDescription =
-    (actionType && `action "${String(actionType)}"`) || 'an action'
-
-  return (
-    `Given ${actionDescription}, reducer "${key}" returned undefined. ` +
-    `To ignore an action, you must explicitly return the previous state. ` +
-    `If you want this reducer to hold no value, you can return null instead of undefined.`
-  )
-}
+import { kindOf } from './utils/kindOf'
 
 function getUnexpectedStateShapeWarningMessage(
   inputState: object,
@@ -43,14 +32,10 @@ function getUnexpectedStateShapeWarningMessage(
   }
 
   if (!isPlainObject(inputState)) {
-    const match = Object.prototype.toString
-      .call(inputState)
-      .match(/\s([a-z|A-Z]+)/)
-    const matchType = match ? match[1] : ''
     return (
-      `The ${argumentName} has unexpected type of "` +
-      matchType +
-      `". Expected argument to be an object with the following ` +
+      `The ${argumentName} has unexpected type of "${kindOf(
+        inputState
+      )}". Expected argument to be an object with the following ` +
       `keys: "${reducerKeys.join('", "')}"`
     )
   }
@@ -82,7 +67,7 @@ function assertReducerShape(reducers: ReducersMapObject) {
 
     if (typeof initialState === 'undefined') {
       throw new Error(
-        `Reducer "${key}" returned undefined during initialization. ` +
+        `The slice reducer for key "${key}" returned undefined during initialization. ` +
           `If the state passed to the reducer is undefined, you must ` +
           `explicitly return the initial state. The initial state may ` +
           `not be undefined. If you don't want to set a value for this reducer, ` +
@@ -96,8 +81,8 @@ function assertReducerShape(reducers: ReducersMapObject) {
       }) === 'undefined'
     ) {
       throw new Error(
-        `Reducer "${key}" returned undefined when probed with a random type. ` +
-          `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +
+        `The slice reducer for key "${key}" returned undefined when probed with a random type. ` +
+          `Don't try to handle '${ActionTypes.INIT}' or other actions in "redux/*" ` +
           `namespace. They are considered private. Instead, you must return the ` +
           `current state for any unknown actions, unless it is undefined, ` +
           `in which case you must return the initial state, regardless of the ` +
@@ -197,8 +182,14 @@ export default function combineReducers(reducers: ReducersMapObject) {
       const previousStateForKey = state[key]
       const nextStateForKey = reducer(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
-        const errorMessage = getUndefinedStateErrorMessage(key, action)
-        throw new Error(errorMessage)
+        const actionType = action && action.type
+        throw new Error(
+          `When called with an action of type ${
+            actionType ? `"${String(actionType)}"` : '(unknown type)'
+          }, the slice reducer for key "${key}" returned undefined. ` +
+            `To ignore an action, you must explicitly return the previous state. ` +
+            `If you want this reducer to hold no value, you can return null instead of undefined.`
+        )
       }
       nextState[key] = nextStateForKey
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey

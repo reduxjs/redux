@@ -521,6 +521,32 @@ describe('createStore', () => {
     )
   })
 
+  it('throws an error that correctly describes the type of item dispatched', () => {
+    const store = createStore(reducers.todos)
+    // @ts-ignore
+    expect(() => store.dispatch(Promise.resolve(42))).toThrow(
+      /the actual type was: 'Promise'/
+    )
+
+    // @ts-ignore
+    expect(() => store.dispatch(() => {})).toThrow(
+      /the actual type was: 'function'/
+    )
+
+    // @ts-ignore
+    expect(() => store.dispatch(new Date())).toThrow(
+      /the actual type was: 'date'/
+    )
+
+    // @ts-ignore
+    expect(() => store.dispatch(null)).toThrow(/the actual type was: 'null'/)
+
+    // @ts-ignore
+    expect(() => store.dispatch(undefined)).toThrow(
+      /the actual type was: 'undefined'/
+    )
+  })
+
   it('throws if action type is undefined', () => {
     const store = createStore(reducers.todos)
     expect(() => store.dispatch({ type: undefined })).toThrow(
@@ -666,15 +692,27 @@ describe('createStore', () => {
 
         expect(function () {
           obs.subscribe()
-        }).toThrowError(new TypeError('Expected the observer to be an object.'))
+        }).toThrowError(
+          new TypeError(
+            `Expected the observer to be an object. Instead, received: 'undefined'`
+          )
+        )
 
         expect(function () {
           obs.subscribe(null)
-        }).toThrowError(new TypeError('Expected the observer to be an object.'))
+        }).toThrowError(
+          new TypeError(
+            `Expected the observer to be an object. Instead, received: 'null'`
+          )
+        )
 
         expect(function () {
           obs.subscribe(() => {})
-        }).toThrowError(new TypeError('Expected the observer to be an object.'))
+        }).toThrowError(
+          new TypeError(
+            `Expected the observer to be an object. Instead, received: 'function'`
+          )
+        )
 
         expect(function () {
           obs.subscribe({})
