@@ -114,7 +114,7 @@ export default function createStore<
   let isDispatching = false
 
   /**
-   * This makes a shallow copy of currentListeners so can use
+   * This makes a shallow copy of currentListeners so we can use
    * nextListeners as a temporary list while dispatching.
    *
    * This prevents any bugs around consumers calling
