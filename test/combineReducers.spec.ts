@@ -264,7 +264,7 @@ describe('Utils', () => {
 
       createStore(reducer, (1 as unknown) as ShapeState)
       expect(spy.mock.calls[2][0]).toMatch(
-        /createStore has unexpected type of "Number".*keys: "foo", "baz"/
+        /createStore has unexpected type of "number".*keys: "foo", "baz"/
       )
 
       reducer(({ corge: 2 } as unknown) as ShapeState, nullAction)
@@ -279,7 +279,7 @@ describe('Utils', () => {
 
       reducer((1 as unknown) as ShapeState, nullAction)
       expect(spy.mock.calls[5][0]).toMatch(
-        /reducer has unexpected type of "Number".*keys: "foo", "baz"/
+        /reducer has unexpected type of "number".*keys: "foo", "baz"/
       )
 
       spy.mockClear()

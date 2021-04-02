@@ -12,6 +12,7 @@ import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
+import { kindOf } from './utils/kindOf'
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -74,7 +75,7 @@ export default function createStore<
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
-        'together to a single function.'
+        'together to a single function. See https://redux.js.org/tutorials/fundamentals/part-4-store#creating-a-store-with-enhancers for an example.'
     )
   }
 
@@ -85,7 +86,11 @@ export default function createStore<
 
   if (typeof enhancer !== 'undefined') {
     if (typeof enhancer !== 'function') {
-      throw new Error('Expected the enhancer to be a function.')
+      throw new Error(
+        `Expected the enhancer to be a function. Instead, received: '${kindOf(
+          enhancer
+        )}'`
+      )
     }
 
     return enhancer(createStore)(
@@ -95,7 +100,11 @@ export default function createStore<
   }
 
   if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function.')
+    throw new Error(
+      `Expected the root reducer to be a function. Instead, received: '${kindOf(
+        reducer
+      )}'`
+    )
   }
 
   let currentReducer = reducer
@@ -105,7 +114,7 @@ export default function createStore<
   let isDispatching = false
 
   /**
-   * This makes a shallow copy of currentListeners so we can use
+   * This makes a shallow copy of currentListeners so can use
    * nextListeners as a temporary list while dispatching.
    *
    * This prevents any bugs around consumers calling
@@ -159,7 +168,11 @@ export default function createStore<
    */
   function subscribe(listener: () => void) {
     if (typeof listener !== 'function') {
-      throw new Error('Expected the listener to be a function.')
+      throw new Error(
+        `Expected the listener to be a function. Instead, received: '${kindOf(
+          listener
+        )}'`
+      )
     }
 
     if (isDispatching) {
@@ -225,15 +238,15 @@ export default function createStore<
   function dispatch(action: A) {
     if (!isPlainObject(action)) {
       throw new Error(
-        'Actions must be plain objects. ' +
-          'Use custom middleware for async actions.'
+        `Actions must be plain objects. Instead, the actual type was: '${kindOf(
+          action
+        )}'. You may need to add middleware to your store setup to handle dispatching other values, such as 'redux-thunk' to handle dispatching functions. See https://redux.js.org/tutorials/fundamentals/part-4-store#middleware and https://redux.js.org/tutorials/fundamentals/part-6-async-logic#using-the-redux-thunk-middleware for examples.`
       )
     }
 
     if (typeof action.type === 'undefined') {
       throw new Error(
-        'Actions may not have an undefined "type" property. ' +
-          'Have you misspelled a constant?'
+        'Actions may not have an undefined "type" property. You may have misspelled an action type string constant.'
       )
     }
 
@@ -271,7 +284,11 @@ export default function createStore<
     nextReducer: Reducer<NewState, NewActions>
   ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext {
     if (typeof nextReducer !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.')
+      throw new Error(
+        `Expected the nextReducer to be a function. Instead, received: '${kindOf(
+          nextReducer
+        )}`
+      )
     }
 
     // TODO: do this more elegantly
@@ -314,7 +331,11 @@ export default function createStore<
        */
       subscribe(observer: unknown) {
         if (typeof observer !== 'object' || observer === null) {
-          throw new TypeError('Expected the observer to be an object.')
+          throw new TypeError(
+            `Expected the observer to be an object. Instead, received: '${kindOf(
+              observer
+            )}'`
+          )
         }
 
         function observeState() {
