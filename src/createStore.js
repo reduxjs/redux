@@ -2,6 +2,7 @@ import $$observable from 'symbol-observable'
 
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
+import { kindOf } from './utils/kindOf'
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -36,7 +37,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
-        'together to a single function.'
+        'together to a single function. See https://redux.js.org/tutorials/fundamentals/part-4-store#creating-a-store-with-enhancers for an example.'
     )
   }
 
@@ -47,14 +48,22 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
   if (typeof enhancer !== 'undefined') {
     if (typeof enhancer !== 'function') {
-      throw new Error('Expected the enhancer to be a function.')
+      throw new Error(
+        `Expected the enhancer to be a function. Instead, received: '${kindOf(
+          enhancer
+        )}'`
+      )
     }
 
     return enhancer(createStore)(reducer, preloadedState)
   }
 
   if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function.')
+    throw new Error(
+      `Expected the root reducer to be a function. Instead, received: '${kindOf(
+        reducer
+      )}'`
+    )
   }
 
   let currentReducer = reducer
@@ -118,7 +127,11 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function subscribe(listener) {
     if (typeof listener !== 'function') {
-      throw new Error('Expected the listener to be a function.')
+      throw new Error(
+        `Expected the listener to be a function. Instead, received: '${kindOf(
+          listener
+        )}'`
+      )
     }
 
     if (isDispatching) {
@@ -126,7 +139,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
         'You may not call store.subscribe() while the reducer is executing. ' +
           'If you would like to be notified after the store has been updated, subscribe from a ' +
           'component and invoke store.getState() in the callback to access the latest state. ' +
-          'See https://redux.js.org/api-reference/store#subscribelistener for more details.'
+          'See https://redux.js.org/api/store#subscribelistener for more details.'
       )
     }
 
@@ -143,7 +156,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
       if (isDispatching) {
         throw new Error(
           'You may not unsubscribe from a store listener while the reducer is executing. ' +
-            'See https://redux.js.org/api-reference/store#subscribelistener for more details.'
+            'See https://redux.js.org/api/store#subscribelistener for more details.'
         )
       }
 
@@ -184,15 +197,15 @@ export default function createStore(reducer, preloadedState, enhancer) {
   function dispatch(action) {
     if (!isPlainObject(action)) {
       throw new Error(
-        'Actions must be plain objects. ' +
-          'Use custom middleware for async actions.'
+        `Actions must be plain objects. Instead, the actual type was: '${kindOf(
+          action
+        )}'. You may need to add middleware to your store setup to handle dispatching other values, such as 'redux-thunk' to handle dispatching functions. See https://redux.js.org/tutorials/fundamentals/part-4-store#middleware and https://redux.js.org/tutorials/fundamentals/part-6-async-logic#using-the-redux-thunk-middleware for examples.`
       )
     }
 
     if (typeof action.type === 'undefined') {
       throw new Error(
-        'Actions may not have an undefined "type" property. ' +
-          'Have you misspelled a constant?'
+        'Actions may not have an undefined "type" property. You may have misspelled an action type string constant.'
       )
     }
 
@@ -228,7 +241,11 @@ export default function createStore(reducer, preloadedState, enhancer) {
    */
   function replaceReducer(nextReducer) {
     if (typeof nextReducer !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.')
+      throw new Error(
+        `Expected the nextReducer to be a function. Instead, received: '${kindOf(
+          nextReducer
+        )}`
+      )
     }
 
     currentReducer = nextReducer
@@ -259,7 +276,11 @@ export default function createStore(reducer, preloadedState, enhancer) {
        */
       subscribe(observer) {
         if (typeof observer !== 'object' || observer === null) {
-          throw new TypeError('Expected the observer to be an object.')
+          throw new TypeError(
+            `Expected the observer to be an object. Instead, received: '${kindOf(
+              observer
+            )}'`
+          )
         }
 
         function observeState() {
