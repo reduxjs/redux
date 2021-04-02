@@ -103,9 +103,10 @@ module.exports = babel => {
           }
 
           // Import the error message function
+          // Note that all of our error messages are in `src`, so we can assume a relative path here
           const formatProdErrorMessageIdentifier = helperModuleImports.addDefault(
             path,
-            'src/utils/formatProdErrorMessage',
+            './utils/formatProdErrorMessage',
             { nameHint: 'formatProdErrorMessage' }
           )
 
