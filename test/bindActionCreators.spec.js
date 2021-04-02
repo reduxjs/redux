@@ -9,7 +9,7 @@ describe('bindActionCreators', () => {
   beforeEach(() => {
     store = createStore(todos)
     actionCreatorFunctions = { ...actionCreators }
-    Object.keys(actionCreatorFunctions).forEach(key => {
+    Object.keys(actionCreatorFunctions).forEach((key) => {
       if (typeof actionCreatorFunctions[key] !== 'function') {
         delete actionCreatorFunctions[key]
       }
@@ -53,7 +53,7 @@ describe('bindActionCreators', () => {
         bar: 'baz',
         wow: undefined,
         much: {},
-        test: null
+        test: null,
       },
       store.dispatch
     )

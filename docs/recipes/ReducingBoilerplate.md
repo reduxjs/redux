@@ -52,7 +52,7 @@ For example, instead of calling `dispatch` with an object literal:
 // somewhere in an event handler
 dispatch({
   type: 'ADD_TODO',
-  text: 'Use Redux'
+  text: 'Use Redux',
 })
 ```
 
@@ -64,7 +64,7 @@ You might write an action creator in a separate file, and import it into your co
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
-    text
+    text,
   }
 }
 ```
@@ -86,14 +86,14 @@ Let's say a designer comes back to us after reviewing our prototype, and tells u
 function addTodoWithoutCheck(text) {
   return {
     type: 'ADD_TODO',
-    text
+    text,
   }
 }
 
 export function addTodo(text) {
   // This form is allowed by Redux Thunk middleware
   // described below in “Async Action Creators” section.
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (getState().todos.length === 3) {
       // Exit early
       return
@@ -115,7 +115,7 @@ Writing simple action creators can be tiresome and often ends up generating redu
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
-    text
+    text,
   }
 }
 
@@ -123,14 +123,14 @@ export function editTodo(id, text) {
   return {
     type: 'EDIT_TODO',
     id,
-    text
+    text,
   }
 }
 
 export function removeTodo(id) {
   return {
     type: 'REMOVE_TODO',
-    id
+    id,
   }
 }
 ```
@@ -139,7 +139,7 @@ You can always write a function that generates an action creator:
 
 ```js
 function makeActionCreator(type, ...argNames) {
-  return function(...args) {
+  return function (...args) {
     const action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
@@ -172,7 +172,7 @@ export function loadPostsSuccess(userId, response) {
   return {
     type: 'LOAD_POSTS_SUCCESS',
     userId,
-    response
+    response,
   }
 }
 
@@ -180,14 +180,14 @@ export function loadPostsFailure(userId, error) {
   return {
     type: 'LOAD_POSTS_FAILURE',
     userId,
-    error
+    error,
   }
 }
 
 export function loadPostsRequest(userId) {
   return {
     type: 'LOAD_POSTS_REQUEST',
-    userId
+    userId,
   }
 }
 ```
@@ -200,7 +200,7 @@ import { connect } from 'react-redux'
 import {
   loadPostsRequest,
   loadPostsSuccess,
-  loadPostsFailure
+  loadPostsFailure,
 } from './actionCreators'
 
 class Posts extends Component {
@@ -219,8 +219,8 @@ class Posts extends Component {
 
     // Reducer can react to these actions by filling the `users`.
     fetch(`http://myapi.com/users/${userId}/posts`).then(
-      response => dispatch(loadPostsSuccess(userId, response)),
-      error => dispatch(loadPostsFailure(userId, error))
+      (response) => dispatch(loadPostsSuccess(userId, response)),
+      (error) => dispatch(loadPostsFailure(userId, error))
     )
   }
 
@@ -239,7 +239,7 @@ class Posts extends Component {
       return <p>Loading...</p>
     }
 
-    const posts = this.props.posts.map(post => (
+    const posts = this.props.posts.map((post) => (
       <Post post={post} key={post.id} />
     ))
 
@@ -247,9 +247,9 @@ class Posts extends Component {
   }
 }
 
-export default connect(state => ({
+export default connect((state) => ({
   posts: state.posts,
-  isFetching: state.isFetching
+  isFetching: state.isFetching,
 }))(Posts)
 ```
 
@@ -270,7 +270,7 @@ Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/
 ```js
 export function loadPosts(userId) {
   // Interpreted by the thunk middleware:
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const { posts } = getState()
     if (posts[userId]) {
       // There is cached data! Don't do anything.
@@ -279,22 +279,22 @@ export function loadPosts(userId) {
 
     dispatch({
       type: 'LOAD_POSTS_REQUEST',
-      userId
+      userId,
     })
 
     // Dispatch vanilla actions asynchronously
     fetch(`http://myapi.com/users/${userId}/posts`).then(
-      response =>
+      (response) =>
         dispatch({
           type: 'LOAD_POSTS_SUCCESS',
           userId,
-          response
+          response,
         }),
-      error =>
+      (error) =>
         dispatch({
           type: 'LOAD_POSTS_FAILURE',
           userId,
-          error
+          error,
         })
     )
   }
@@ -324,7 +324,7 @@ class Posts extends Component {
       return <p>Loading...</p>
     }
 
-    const posts = this.props.posts.map(post => (
+    const posts = this.props.posts.map((post) => (
       <Post post={post} key={post.id} />
     ))
 
@@ -332,9 +332,9 @@ class Posts extends Component {
   }
 }
 
-export default connect(state => ({
+export default connect((state) => ({
   posts: state.posts,
-  isFetching: state.isFetching
+  isFetching: state.isFetching,
 }))(Posts)
 ```
 
@@ -348,11 +348,11 @@ export function loadPosts(userId) {
     // Types of actions to emit before and after
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
     // Check the cache (optional):
-    shouldCallAPI: state => !state.posts[userId],
+    shouldCallAPI: (state) => !state.posts[userId],
     // Perform the fetching:
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     // Arguments to inject in begin/end actions
-    payload: { userId }
+    payload: { userId },
   }
 }
 ```
@@ -361,7 +361,7 @@ The middleware that interprets such actions could look like this:
 
 ```js
 function callAPIMiddleware({ dispatch, getState }) {
-  return next => action => {
+  return (next) => (action) => {
     const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
 
     if (!types) {
@@ -372,7 +372,7 @@ function callAPIMiddleware({ dispatch, getState }) {
     if (
       !Array.isArray(types) ||
       types.length !== 3 ||
-      !types.every(type => typeof type === 'string')
+      !types.every((type) => typeof type === 'string')
     ) {
       throw new Error('Expected an array of three string types.')
     }
@@ -389,23 +389,23 @@ function callAPIMiddleware({ dispatch, getState }) {
 
     dispatch(
       Object.assign({}, payload, {
-        type: requestType
+        type: requestType,
       })
     )
 
     return callAPI().then(
-      response =>
+      (response) =>
         dispatch(
           Object.assign({}, payload, {
             response,
-            type: successType
+            type: successType,
           })
         ),
-      error =>
+      (error) =>
         dispatch(
           Object.assign({}, payload, {
             error,
-            type: failureType
+            type: failureType,
           })
         )
     )
@@ -419,9 +419,9 @@ After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddlew
 export function loadPosts(userId) {
   return {
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    shouldCallAPI: state => !state.posts[userId],
+    shouldCallAPI: (state) => !state.posts[userId],
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
-    payload: { userId }
+    payload: { userId },
   }
 }
 
@@ -430,11 +430,11 @@ export function loadComments(postId) {
     types: [
       'LOAD_COMMENTS_REQUEST',
       'LOAD_COMMENTS_SUCCESS',
-      'LOAD_COMMENTS_FAILURE'
+      'LOAD_COMMENTS_FAILURE',
     ],
-    shouldCallAPI: state => !state.comments[postId],
+    shouldCallAPI: (state) => !state.comments[postId],
     callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
-    payload: { postId }
+    payload: { postId },
   }
 }
 
@@ -443,18 +443,18 @@ export function addComment(postId, message) {
     types: [
       'ADD_COMMENT_REQUEST',
       'ADD_COMMENT_SUCCESS',
-      'ADD_COMMENT_FAILURE'
+      'ADD_COMMENT_FAILURE',
     ],
     callAPI: () =>
       fetch(`http://myapi.com/posts/${postId}/comments`, {
         method: 'post',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message }),
       }),
-    payload: { postId, message }
+    payload: { postId, message },
   }
 }
 ```
@@ -471,10 +471,10 @@ const _todos = []
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
   getAll() {
     return _todos
-  }
+  },
 })
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register(function (action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       const text = action.text.trim()
@@ -513,7 +513,7 @@ export const todos = createReducer([], {
   [ActionTypes.ADD_TODO]: (state, action) => {
     const text = action.text.trim()
     return [...state, text]
-  }
+  },
 })
 ```
 

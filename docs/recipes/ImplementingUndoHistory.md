@@ -220,7 +220,7 @@ Let's talk through the algorithm to manipulate the state shape described above. 
 const initialState = {
   past: [],
   present: null, // (?) How do we initialize the present?
-  future: []
+  future: [],
 }
 
 function undoable(state = initialState, action) {
@@ -233,7 +233,7 @@ function undoable(state = initialState, action) {
       return {
         past: newPast,
         present: previous,
-        future: [present, ...future]
+        future: [present, ...future],
       }
     case 'REDO':
       const next = future[0]
@@ -241,7 +241,7 @@ function undoable(state = initialState, action) {
       return {
         past: [...past, present],
         present: next,
-        future: newFuture
+        future: newFuture,
       }
     default:
       // (?) How do we handle other actions?
@@ -268,7 +268,7 @@ A reducer enhancer that doesn't do anything looks like this:
 
 ```js
 function doNothingWith(reducer) {
-  return function(state, action) {
+  return function (state, action) {
     // Just call the passed reducer
     return reducer(state, action)
   }
@@ -279,7 +279,7 @@ A reducer enhancer that combines other reducers might look like this:
 
 ```js
 function combineReducers(reducers) {
-  return function(state = {}, action) {
+  return function (state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
       // Call every reducer with the part of the state it manages
       nextState[key] = reducers[key](state[key], action)
@@ -299,11 +299,11 @@ function undoable(reducer) {
   const initialState = {
     past: [],
     present: reducer(undefined, {}),
-    future: []
+    future: [],
   }
 
   // Return a reducer that handles undo and redo
-  return function(state = initialState, action) {
+  return function (state = initialState, action) {
     const { past, present, future } = state
 
     switch (action.type) {
@@ -313,7 +313,7 @@ function undoable(reducer) {
         return {
           past: newPast,
           present: previous,
-          future: [present, ...future]
+          future: [present, ...future],
         }
       case 'REDO':
         const next = future[0]
@@ -321,7 +321,7 @@ function undoable(reducer) {
         return {
           past: [...past, present],
           present: next,
-          future: newFuture
+          future: newFuture,
         }
       default:
         // Delegate handling the action to the passed reducer
@@ -332,7 +332,7 @@ function undoable(reducer) {
         return {
           past: [...past, present],
           present: newPresent,
-          future: []
+          future: [],
         }
     }
   }
@@ -355,16 +355,16 @@ const store = createStore(undoableTodos)
 
 store.dispatch({
   type: 'ADD_TODO',
-  text: 'Use Redux'
+  text: 'Use Redux',
 })
 
 store.dispatch({
   type: 'ADD_TODO',
-  text: 'Implement Undo'
+  text: 'Implement Undo',
 })
 
 store.dispatch({
-  type: 'UNDO'
+  type: 'UNDO',
 })
 ```
 
@@ -404,7 +404,7 @@ const todos = (state = [], action) => {
 }
 
 const undoableTodos = undoable(todos, {
-  filter: distinctState()
+  filter: distinctState(),
 })
 
 export default undoableTodos
@@ -423,7 +423,7 @@ import visibilityFilter from './visibilityFilter'
 
 const todoApp = combineReducers({
   todos,
-  visibilityFilter
+  visibilityFilter,
 })
 
 export default todoApp
@@ -464,9 +464,9 @@ just `state.todos`:
 #### `containers/VisibleTodoList.js`
 
 ```js
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(state.todos.present, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos.present, state.visibilityFilter),
   }
 }
 ```
@@ -508,24 +508,21 @@ import { connect } from 'react-redux'
 
 /* ... */
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     canUndo: state.todos.past.length > 0,
-    canRedo: state.todos.future.length > 0
+    canRedo: state.todos.future.length > 0,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     onUndo: () => dispatch(UndoActionCreators.undo()),
-    onRedo: () => dispatch(UndoActionCreators.redo())
+    onRedo: () => dispatch(UndoActionCreators.redo()),
   }
 }
 
-UndoRedo = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UndoRedo)
+UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
 
 export default UndoRedo
 ```

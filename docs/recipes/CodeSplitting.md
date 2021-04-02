@@ -20,7 +20,7 @@ The Redux store exposes a `replaceReducer` function, which replaces the current 
 ```js
 const newRootReducer = combineReducers({
   existingSlice: existingSliceReducer,
-  newSlice: newSliceReducer
+  newSlice: newSliceReducer,
 })
 
 store.replaceReducer(newRootReducer)
@@ -40,7 +40,7 @@ import { createStore } from 'redux'
 // Define the Reducers that will always be present in the application
 const staticReducers = {
   users: usersReducer,
-  posts: postsReducer
+  posts: postsReducer,
 }
 
 // Configure the store
@@ -64,7 +64,7 @@ export default function configureStore(initialState) {
 function createReducer(asyncReducers) {
   return combineReducers({
     ...staticReducers,
-    ...asyncReducers
+    ...asyncReducers,
   })
 }
 ```
@@ -119,7 +119,7 @@ export function createReducerManager(initialReducers) {
     },
 
     // Removes a reducer with the specified key
-    remove: key => {
+    remove: (key) => {
       if (!key || !reducers[key]) {
         return
       }
@@ -132,13 +132,13 @@ export function createReducerManager(initialReducers) {
 
       // Generate a new combined reducer
       combinedReducer = combineReducers(reducers)
-    }
+    },
   }
 }
 
 const staticReducers = {
   users: usersReducer,
-  posts: postsReducer
+  posts: postsReducer,
 }
 
 export function configureStore(initialState) {

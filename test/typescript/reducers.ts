@@ -157,7 +157,7 @@ function discriminated() {
 
   // Combined reducer can be made to only accept known actions.
   const strictCombined = combineReducers<{ sub: State }, MyAction0>({
-    sub: reducer0
+    sub: reducer0,
   })
 
   const scs = strictCombined(undefined, { type: 'INCREMENT' })

@@ -92,7 +92,7 @@ import { Message, SEND_MESSAGE, DELETE_MESSAGE, ChatActionTypes } from './types'
 export function sendMessage(newMessage: Message): ChatActionTypes {
   return {
     type: SEND_MESSAGE,
-    payload: newMessage
+    payload: newMessage,
   }
 }
 
@@ -101,8 +101,8 @@ export function deleteMessage(timestamp: number): ChatActionTypes {
   return {
     type: DELETE_MESSAGE,
     meta: {
-      timestamp
-    }
+      timestamp,
+    },
   }
 }
 ```
@@ -131,7 +131,7 @@ import { SystemState, UPDATE_SESSION, SystemActionTypes } from './types'
 export function updateSession(newSession: SystemState): SystemActionTypes {
   return {
     type: UPDATE_SESSION,
-    payload: newSession
+    payload: newSession,
   }
 }
 ```
@@ -149,11 +149,11 @@ import {
   ChatState,
   ChatActionTypes,
   SEND_MESSAGE,
-  DELETE_MESSAGE
+  DELETE_MESSAGE,
 } from './types'
 
 const initialState: ChatState = {
-  messages: []
+  messages: [],
 }
 
 export function chatReducer(
@@ -163,13 +163,13 @@ export function chatReducer(
   switch (action.type) {
     case SEND_MESSAGE:
       return {
-        messages: [...state.messages, action.payload]
+        messages: [...state.messages, action.payload],
       }
     case DELETE_MESSAGE:
       return {
         messages: state.messages.filter(
-          message => message.timestamp !== action.meta.timestamp
-        )
+          (message) => message.timestamp !== action.meta.timestamp
+        ),
       }
     default:
       return state
@@ -186,13 +186,13 @@ import {
   SystemActions,
   SystemState,
   SystemActionTypes,
-  UPDATE_SESSION
+  UPDATE_SESSION,
 } from './types'
 
 const initialState: SystemState = {
   loggedIn: false,
   session: '',
-  userName: ''
+  userName: '',
 }
 
 export function systemReducer(
@@ -203,7 +203,7 @@ export function systemReducer(
     case UPDATE_SESSION: {
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       }
     }
     default:
@@ -222,7 +222,7 @@ import { chatReducer } from './chat/reducers'
 
 const rootReducer = combineReducers({
   system: systemReducer,
-  chat: chatReducer
+  chat: chatReducer,
 })
 
 export type AppState = ReturnType<typeof rootReducer>
@@ -243,7 +243,7 @@ import { AppState } from './store'
 
 const mapStateToProps = (state: AppState) => ({
   system: state.system,
-  chat: state.chat
+  chat: state.chat,
 })
 ```
 
@@ -305,13 +305,13 @@ import { ThunkAction } from 'redux-thunk'
 
 export const thunkSendMessage = (
   message: string
-): ThunkAction<void, AppState, null, Action<string>> => async dispatch => {
+): ThunkAction<void, AppState, null, Action<string>> => async (dispatch) => {
   const asyncResp = await exampleAPI()
   dispatch(
     sendMessage({
       message,
       user: asyncResp,
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
     })
   )
 }

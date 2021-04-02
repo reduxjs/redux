@@ -259,7 +259,7 @@ import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // Query our mock API asynchronously
-  fetchCounter(apiResult => {
+  fetchCounter((apiResult) => {
     // Read the counter from the request, if provided
     const params = qs.parse(req.query)
     const counter = parseInt(params.counter, 10) || apiResult || 0

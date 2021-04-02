@@ -41,14 +41,14 @@ import { combineReducers, createStore } from 'redux'
 
 import theDefaultReducer, {
   firstNamedReducer,
-  secondNamedReducer
+  secondNamedReducer,
 } from './reducers'
 
 // Use ES6 object literal shorthand syntax to define the object shape
 const rootReducer = combineReducers({
   theDefaultReducer,
   firstNamedReducer,
-  secondNamedReducer
+  secondNamedReducer,
 })
 
 const store = createStore(rootReducer)
@@ -68,13 +68,13 @@ import { combineReducers, createStore } from 'redux'
 // Rename the default import to whatever name we want. We can also rename a named import.
 import defaultState, {
   firstNamedReducer,
-  secondNamedReducer as secondState
+  secondNamedReducer as secondState,
 } from './reducers'
 
 const rootReducer = combineReducers({
   defaultState, // key name same as the carefully renamed default export
   firstState: firstNamedReducer, // specific key name instead of the variable name
-  secondState // key name same as the carefully renamed named export
+  secondState, // key name same as the carefully renamed named export
 })
 
 const reducerInitializedStore = createStore(rootReducer)

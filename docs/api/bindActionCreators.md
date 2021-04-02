@@ -33,14 +33,14 @@ For convenience, you can also pass an action creator as the first argument, and 
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
-    text
+    text,
   }
 }
 
 export function removeTodo(id) {
   return {
     type: 'REMOVE_TODO',
-    id
+    id,
   }
 }
 ```
@@ -107,7 +107,7 @@ class TodoListContainer extends Component {
   }
 }
 
-export default connect(state => ({ todos: state.todos }))(TodoListContainer)
+export default connect((state) => ({ todos: state.todos }))(TodoListContainer)
 ```
 
 #### Tips

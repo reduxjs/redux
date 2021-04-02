@@ -70,7 +70,7 @@ export type PreloadedState<S> = Required<S> extends EmptyObject
       }
     : never
   : {
-      [K in keyof S]: S[K] extends (string | number | boolean | symbol)
+      [K in keyof S]: S[K] extends string | number | boolean | symbol
         ? S[K]
         : PreloadedState<S[K]>
     }

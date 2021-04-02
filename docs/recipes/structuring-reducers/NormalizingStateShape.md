@@ -19,14 +19,14 @@ const blogPosts = [
       {
         id: 'comment1',
         author: { username: 'user2', name: 'User 2' },
-        comment: '.....'
+        comment: '.....',
       },
       {
         id: 'comment2',
         author: { username: 'user3', name: 'User 3' },
-        comment: '.....'
-      }
-    ]
+        comment: '.....',
+      },
+    ],
   },
   {
     id: 'post2',
@@ -36,20 +36,20 @@ const blogPosts = [
       {
         id: 'comment3',
         author: { username: 'user3', name: 'User 3' },
-        comment: '.....'
+        comment: '.....',
       },
       {
         id: 'comment4',
         author: { username: 'user1', name: 'User 1' },
-        comment: '.....'
+        comment: '.....',
       },
       {
         id: 'comment5',
         author: { username: 'user3', name: 'User 3' },
-        comment: '.....'
-      }
-    ]
-  }
+        comment: '.....',
+      },
+    ],
+  },
   // and repeat many times
 ]
 ```

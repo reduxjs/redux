@@ -44,12 +44,12 @@ This ensures that neither the views nor the network callbacks will ever write di
 ```js
 store.dispatch({
   type: 'COMPLETE_TODO',
-  index: 1
+  index: 1,
 })
 
 store.dispatch({
   type: 'SET_VISIBILITY_FILTER',
-  filter: 'SHOW_COMPLETED'
+  filter: 'SHOW_COMPLETED',
 })
 ```
 
@@ -76,14 +76,14 @@ function todos(state = [], action) {
         ...state,
         {
           text: action.text,
-          completed: false
-        }
+          completed: false,
+        },
       ]
     case 'COMPLETE_TODO':
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: true
+            completed: true,
           })
         }
         return todo

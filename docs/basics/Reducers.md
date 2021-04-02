@@ -65,7 +65,7 @@ import { VisibilityFilters } from './actions'
 
 const initialState = {
   visibilityFilter: VisibilityFilters.SHOW_ALL,
-  todos: []
+  todos: [],
 }
 
 function todoApp(state, action) {
@@ -192,7 +192,7 @@ function todoApp(state = initialState, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
       return Object.assign({}, state, {
-        visibilityFilter: action.filter
+        visibilityFilter: action.filter,
       })
     case ADD_TODO:
       return Object.assign({}, state, {
@@ -200,20 +200,20 @@ function todoApp(state = initialState, action) {
           ...state.todos,
           {
             text: action.text,
-            completed: false
-          }
-        ]
+            completed: false,
+          },
+        ],
       })
     case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: state.todos.map((todo, index) => {
           if (index === action.index) {
             return Object.assign({}, todo, {
-              completed: !todo.completed
+              completed: !todo.completed,
             })
           }
           return todo
-        })
+        }),
       })
     default:
       return state
@@ -231,14 +231,14 @@ function todos(state = [], action) {
         ...state,
         {
           text: action.text,
-          completed: false
-        }
+          completed: false,
+        },
       ]
     case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: !todo.completed
+            completed: !todo.completed,
           })
         }
         return todo
@@ -252,15 +252,15 @@ function todoApp(state = initialState, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
       return Object.assign({}, state, {
-        visibilityFilter: action.filter
+        visibilityFilter: action.filter,
       })
     case ADD_TODO:
       return Object.assign({}, state, {
-        todos: todos(state.todos, action)
+        todos: todos(state.todos, action),
       })
     case TOGGLE_TODO:
       return Object.assign({}, state, {
-        todos: todos(state.todos, action)
+        todos: todos(state.todos, action),
       })
     default:
       return state
@@ -301,14 +301,14 @@ function todos(state = [], action) {
         ...state,
         {
           text: action.text,
-          completed: false
-        }
+          completed: false,
+        },
       ]
     case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: !todo.completed
+            completed: !todo.completed,
           })
         }
         return todo
@@ -330,7 +330,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
 function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
-    todos: todos(state.todos, action)
+    todos: todos(state.todos, action),
   }
 }
 ```
@@ -346,7 +346,7 @@ import { combineReducers } from 'redux'
 
 const todoApp = combineReducers({
   visibilityFilter,
-  todos
+  todos,
 })
 
 export default todoApp
@@ -358,7 +358,7 @@ Note that this is equivalent to:
 export default function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
-    todos: todos(state.todos, action)
+    todos: todos(state.todos, action),
   }
 }
 ```
@@ -369,7 +369,7 @@ You could also give them different keys, or call functions differently. These tw
 const reducer = combineReducers({
   a: doSomethingWithA,
   b: processB,
-  c: c
+  c: c,
 })
 ```
 
@@ -378,7 +378,7 @@ function reducer(state = {}, action) {
   return {
     a: doSomethingWithA(state.a, action),
     b: processB(state.b, action),
-    c: c(state.c, action)
+    c: c(state.c, action),
   }
 }
 ```
@@ -408,7 +408,7 @@ import {
   ADD_TODO,
   TOGGLE_TODO,
   SET_VISIBILITY_FILTER,
-  VisibilityFilters
+  VisibilityFilters,
 } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
@@ -428,14 +428,14 @@ function todos(state = [], action) {
         ...state,
         {
           text: action.text,
-          completed: false
-        }
+          completed: false,
+        },
       ]
     case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: !todo.completed
+            completed: !todo.completed,
           })
         }
         return todo
@@ -447,7 +447,7 @@ function todos(state = [], action) {
 
 const todoApp = combineReducers({
   visibilityFilter,
-  todos
+  todos,
 })
 
 export default todoApp

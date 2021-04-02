@@ -120,7 +120,7 @@ Reducer factory functions for common data structures: counters, maps, lists (que
 ```js
 const myCounter = counter({
   incrementActionTypes: ['INCREMENT'],
-  decrementActionTypes: ['DECREMENT']
+  decrementActionTypes: ['DECREMENT'],
 })
 ```
 
@@ -167,7 +167,7 @@ Generates action creators based on types and expected fields
 ```js
 const formatTitle = (id, title) => ({
   id,
-  title: toTitleCase(title)
+  title: toTitleCase(title),
 })
 const updateBazTitle = fromType('UPDATE_BAZ_TITLE', formatTitle)
 updateBazTitle(1, 'foo bar baz')
@@ -194,7 +194,7 @@ const user = new schema.Entity('users')
 const comment = new schema.Entity('comments', { commenter: user })
 const article = new schema.Entity('articles', {
   author: user,
-  comments: [comment]
+  comments: [comment],
 })
 const normalizedData = normalize(originalData, article)
 ```
@@ -239,7 +239,7 @@ store.dispatch( subscribe("users.byId.abcd", "subscription1", () => {} );
 Store enhancer that can debounce subscription notifications
 
 ```js
-const debounceNotify = _.debounce(notify => notify())
+const debounceNotify = _.debounce((notify) => notify())
 const store = createStore(
   reducer,
   initialState,
@@ -298,7 +298,7 @@ Persistent store for Offline-First apps, with support for optimistic UIs
 const store = createStore(reducer, offline(offlineConfig))
 store.dispatch({
   type: 'FOLLOW_USER_REQUEST',
-  meta: { offline: { effect: {}, commit: {}, rollback: {} } }
+  meta: { offline: { effect: {}, commit: {}, rollback: {} } },
 })
 ```
 
@@ -346,7 +346,7 @@ const obj3 = icepicke.merge(obj1, obj2)
 Immutable updates with normal mutative code, using Proxies
 
 ```js
-const nextState = produce(baseState, draftState => {
+const nextState = produce(baseState, (draftState) => {
   draftState.push({ todo: 'Tweet about it' })
   draftState[1].done = true
 })
@@ -358,7 +358,7 @@ A drop-in replacement for react-addons-update
 ```js
 const newData = update(myData, {
   x: { y: { z: { $set: 7 } } },
-  a: { b: { $push: [9] } }
+  a: { b: { $push: [9] } },
 })
 ```
 
@@ -366,10 +366,7 @@ const newData = update(myData, {
 Simpler alternative to immutability-helpers and Immutable.js
 
 ```js
-const newObj = immutable(obj)
-  .set('a.b', 'f')
-  .del(['a', 'c', 0])
-  .value()
+const newObj = immutable(obj).set('a.b', 'f').del(['a', 'c', 0]).value()
 ```
 
 **[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)**  
@@ -440,7 +437,7 @@ function* fetchData(action) {
   const { someValue } = action
   try {
     const response = yield call(myAjaxLib.post, '/someEndpoint', {
-      data: someValue
+      data: someValue,
     })
     yield put({ type: 'REQUEST_SUCCEEDED', payload: response })
   } catch (error) {
@@ -450,7 +447,7 @@ function* fetchData(action) {
 
 function* addTodosIfAllowed(action) {
   const { todoText } = action
-  const todos = yield select(state => state.todos)
+  const todos = yield select((state) => state.todos)
 
   if (todos.length < MAX_TODOS) {
     yield put({ type: 'ADD_TODO', text: todoText })
@@ -466,7 +463,7 @@ Compose and cancel async actions to create side effects and more.
 **Best for**: complex async logic, decoupled workflows
 
 ```js
-const loginRequestEpic = action$ =>
+const loginRequestEpic = (action$) =>
   action$
     .ofType(LOGIN_REQUEST)
     .mergeMap(({ payload: { username, password } }) =>
@@ -475,7 +472,7 @@ const loginRequestEpic = action$ =>
         .catch(loginFailure)
     )
 
-const loginSuccessfulEpic = action$ =>
+const loginSuccessfulEpic = (action$) =>
   action$
     .ofType(LOGIN_SUCCESS)
     .delay(2000)
@@ -533,10 +530,10 @@ const loginLogic = createLogic({
 
           setTimeout(() => dispatch(showMessage(msg)), 2000)
         },
-        err => dispatch(loginFailure(err))
+        (err) => dispatch(loginFailure(err))
       )
       .then(done)
-  }
+  },
 })
 ```
 
@@ -590,8 +587,8 @@ const fetchUsers = () => ({
   [CALL_API]: {
     endpoint: 'http://www.example.com/api/users',
     method: 'GET',
-    types: ['REQUEST', 'SUCCESS', 'FAILURE']
-  }
+    types: ['REQUEST', 'SUCCESS', 'FAILURE'],
+  },
 })
 ```
 
@@ -663,7 +660,7 @@ A tiny but powerful system for managing 'resources': data that is persisted to r
 @ui({
   key: 'some-name',
   state: { uiVar1: '', uiVar2: (props, state) => state.someValue },
-  reducer: (state, action) => {}
+  reducer: (state, action) => {},
 })
 class YourComponent extends React.Component {}
 ```
@@ -695,11 +692,11 @@ Creates isolated "sub-stores" for decoupled micro front-ends, with integration f
 ```js
 const reducer = combineReducers({
   subApp1: namespaced('subApp1')(counter),
-  subApp2: namespaced('subApp2')(counter)
+  subApp2: namespaced('subApp2')(counter),
 })
 
-const subApp1Store = subspace(state => state.subApp1, 'subApp1')(store)
-const subApp2Store = subspace(state => state.subApp2, 'subApp2')(store)
+const subApp1Store = subspace((state) => state.subApp1, 'subApp1')(store)
+const subApp2Store = subspace((state) => state.subApp2, 'subApp2')(store)
 
 subApp1Store.dispatch({ type: 'INCREMENT' })
 console.log('store state:', store.getState()) // { "subApp1": { value: 2 }, "subApp2": { value: 1 } }

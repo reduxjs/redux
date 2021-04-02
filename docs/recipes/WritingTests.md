@@ -58,7 +58,7 @@ In Redux, action creators are functions which return plain objects. When testing
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
-    text
+    text,
   }
 }
 ```
@@ -74,7 +74,7 @@ describe('actions', () => {
     const text = 'Finish docs'
     const expectedAction = {
       type: types.ADD_TODO,
-      text
+      text,
     }
     expect(actions.addTodo(text)).toEqual(expectedAction)
   })
@@ -92,31 +92,31 @@ import 'cross-fetch/polyfill'
 
 function fetchTodosRequest() {
   return {
-    type: FETCH_TODOS_REQUEST
+    type: FETCH_TODOS_REQUEST,
   }
 }
 
 function fetchTodosSuccess(body) {
   return {
     type: FETCH_TODOS_SUCCESS,
-    body
+    body,
   }
 }
 
 function fetchTodosFailure(ex) {
   return {
     type: FETCH_TODOS_FAILURE,
-    ex
+    ex,
   }
 }
 
 export function fetchTodos() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchTodosRequest())
     return fetch('http://example.com/todos')
-      .then(res => res.json())
-      .then(body => dispatch(fetchTodosSuccess(body)))
-      .catch(ex => dispatch(fetchTodosFailure(ex)))
+      .then((res) => res.json())
+      .then((body) => dispatch(fetchTodosSuccess(body)))
+      .catch((ex) => dispatch(fetchTodosFailure(ex)))
   }
 }
 ```
@@ -142,12 +142,12 @@ describe('async actions', () => {
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
     fetchMock.getOnce('/todos', {
       body: { todos: ['do something'] },
-      headers: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json' },
     })
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
-      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something'] } }
+      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something'] } },
     ]
     const store = mockStore({ todos: [] })
 
@@ -172,8 +172,8 @@ const initialState = [
   {
     text: 'Use Redux',
     completed: false,
-    id: 0
-  }
+    id: 0,
+  },
 ]
 
 export default function todos(state = initialState, action) {
@@ -183,9 +183,9 @@ export default function todos(state = initialState, action) {
         {
           id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
           completed: false,
-          text: action.text
+          text: action.text,
         },
-        ...state
+        ...state,
       ]
 
     default:
@@ -206,8 +206,8 @@ describe('todos reducer', () => {
       {
         text: 'Use Redux',
         completed: false,
-        id: 0
-      }
+        id: 0,
+      },
     ])
   })
 
@@ -215,14 +215,14 @@ describe('todos reducer', () => {
     expect(
       reducer([], {
         type: types.ADD_TODO,
-        text: 'Run the tests'
+        text: 'Run the tests',
       })
     ).toEqual([
       {
         text: 'Run the tests',
         completed: false,
-        id: 0
-      }
+        id: 0,
+      },
     ])
 
     expect(
@@ -231,25 +231,25 @@ describe('todos reducer', () => {
           {
             text: 'Use Redux',
             completed: false,
-            id: 0
-          }
+            id: 0,
+          },
         ],
         {
           type: types.ADD_TODO,
-          text: 'Run the tests'
+          text: 'Run the tests',
         }
       )
     ).toEqual([
       {
         text: 'Run the tests',
         completed: false,
-        id: 1
+        id: 1,
       },
       {
         text: 'Use Redux',
         completed: false,
-        id: 0
-      }
+        id: 0,
+      },
     ])
   })
 })
@@ -302,7 +302,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  addTodo: PropTypes.func.isRequired
+  addTodo: PropTypes.func.isRequired,
 }
 
 export default Header
@@ -320,14 +320,14 @@ Enzyme.configure({ adapter: new Adapter() })
 
 function setup() {
   const props = {
-    addTodo: jest.fn()
+    addTodo: jest.fn(),
   }
 
   const enzymeWrapper = shallow(<Header {...props} />)
 
   return {
     props,
-    enzymeWrapper
+    enzymeWrapper,
   }
 }
 
@@ -429,7 +429,7 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/gaearon/redux-thunk/blob/master/src/index.js).
 
 ```js
-const thunk = ({ dispatch, getState }) => next => action => {
+const thunk = ({ dispatch, getState }) => (next) => (action) => {
   if (typeof action === 'function') {
     return action(dispatch, getState)
   }
@@ -446,11 +446,11 @@ The invoke function runs our middleware in the same way Redux does.
 const create = () => {
   const store = {
     getState: jest.fn(() => ({})),
-    dispatch: jest.fn()
+    dispatch: jest.fn(),
   }
   const next = jest.fn()
 
-  const invoke = action => thunk(store)(next)(action)
+  const invoke = (action) => thunk(store)(next)(action)
 
   return { store, next, invoke }
 }

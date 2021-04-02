@@ -25,30 +25,27 @@ const getVisibleTodos = (todos, filter) => {
     case 'SHOW_ALL':
       return todos
     case 'SHOW_COMPLETED':
-      return todos.filter(t => t.completed)
+      return todos.filter((t) => t.completed)
     case 'SHOW_ACTIVE':
-      return todos.filter(t => !t.completed)
+      return todos.filter((t) => !t.completed)
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, state.visibilityFilter),
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
-    }
+    },
   }
 }
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -68,8 +65,8 @@ Let's define a memoized selector named `getVisibleTodos` to replace the non-memo
 ```js
 import { createSelector } from 'reselect'
 
-const getVisibilityFilter = state => state.visibilityFilter
-const getTodos = state => state.todos
+const getVisibilityFilter = (state) => state.visibilityFilter
+const getTodos = (state) => state.todos
 
 export const getVisibleTodos = createSelector(
   [getVisibilityFilter, getTodos],
@@ -78,9 +75,9 @@ export const getVisibleTodos = createSelector(
       case 'SHOW_ALL':
         return todos
       case 'SHOW_COMPLETED':
-        return todos.filter(t => t.completed)
+        return todos.filter((t) => t.completed)
       case 'SHOW_ACTIVE':
-        return todos.filter(t => !t.completed)
+        return todos.filter((t) => !t.completed)
     }
   }
 )
@@ -93,12 +90,12 @@ In the example above, `getVisibilityFilter` and `getTodos` are input-selectors. 
 A memoized selector can itself be an input-selector to another memoized selector. Here is `getVisibleTodos` being used as an input-selector to a selector that further filters the todos by keyword:
 
 ```js
-const getKeyword = state => state.keyword
+const getKeyword = (state) => state.keyword
 
 const getVisibleTodosFilteredByKeyword = createSelector(
   [getVisibleTodos, getKeyword],
   (visibleTodos, keyword) =>
-    visibleTodos.filter(todo => todo.text.indexOf(keyword) > -1)
+    visibleTodos.filter((todo) => todo.text.indexOf(keyword) > -1)
 )
 ```
 
@@ -114,24 +111,21 @@ import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
 import { getVisibleTodos } from '../selectors'
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    todos: getVisibleTodos(state)
+    todos: getVisibleTodos(state),
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
-    }
+    },
   }
 }
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -151,7 +145,7 @@ import { combineReducers } from 'redux'
 import todoLists from './todoLists'
 
 export default combineReducers({
-  todoLists
+  todoLists,
 })
 ```
 
@@ -256,22 +250,22 @@ export const addTodo = (text, listId) => ({
   type: 'ADD_TODO',
   id: nextTodoId++,
   text,
-  listId
+  listId,
 })
 export const setVisibilityFilter = (filter, listId) => ({
   type: 'SET_VISIBILITY_FILTER',
   filter,
-  listId
+  listId,
 })
 export const toggleTodo = (id, listId) => ({
   type: 'TOGGLE_TODO',
   id,
-  listId
+  listId,
 })
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
+  SHOW_ACTIVE: 'SHOW_ACTIVE',
 }
 ```
 
@@ -283,7 +277,7 @@ import PropTypes from 'prop-types'
 import Todo from './Todo'
 const TodoList = ({ todos, toggleTodo, listId }) => (
   <ul>
-    {todos.map(todo => (
+    {todos.map((todo) => (
       <Todo
         key={todo.id}
         {...todo}
@@ -330,9 +324,9 @@ const getVisibleTodos = createSelector(
   (visibilityFilter, todos) => {
     switch (visibilityFilter) {
       case 'SHOW_COMPLETED':
-        return todos.filter(todo => todo.completed)
+        return todos.filter((todo) => todo.completed)
       case 'SHOW_ACTIVE':
-        return todos.filter(todo => !todo.completed)
+        return todos.filter((todo) => !todo.completed)
       default:
         return todos
     }
@@ -347,7 +341,7 @@ export default getVisibleTodos
 ```js
 const mapStateToProps = (state, props) => {
   return {
-    todos: getVisibleTodos(state, props)
+    todos: getVisibleTodos(state, props),
   }
 }
 ```
@@ -369,22 +363,19 @@ import { getVisibleTodos } from '../selectors'
 const mapStateToProps = (state, props) => {
   return {
     // WARNING: THE FOLLOWING SELECTOR DOES NOT CORRECTLY MEMOIZE
-    todos: getVisibleTodos(state, props)
+    todos: getVisibleTodos(state, props),
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
-    }
+    },
   }
 }
 
-const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList)
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
 export default VisibleTodoList
 ```
@@ -415,9 +406,9 @@ const makeGetVisibleTodos = () => {
     (visibilityFilter, todos) => {
       switch (visibilityFilter) {
         case 'SHOW_COMPLETED':
-          return todos.filter(todo => todo.completed)
+          return todos.filter((todo) => todo.completed)
         case 'SHOW_ACTIVE':
-          return todos.filter(todo => !todo.completed)
+          return todos.filter((todo) => !todo.completed)
         default:
           return todos
       }
@@ -439,7 +430,7 @@ const makeMapStateToProps = () => {
   const getVisibleTodos = makeGetVisibleTodos()
   const mapStateToProps = (state, props) => {
     return {
-      todos: getVisibleTodos(state, props)
+      todos: getVisibleTodos(state, props),
     }
   }
   return mapStateToProps
@@ -460,17 +451,17 @@ const makeMapStateToProps = () => {
   const getVisibleTodos = makeGetVisibleTodos()
   const mapStateToProps = (state, props) => {
     return {
-      todos: getVisibleTodos(state, props)
+      todos: getVisibleTodos(state, props),
     }
   }
   return mapStateToProps
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onTodoClick: id => {
+    onTodoClick: (id) => {
       dispatch(toggleTodo(id))
-    }
+    },
   }
 }
 

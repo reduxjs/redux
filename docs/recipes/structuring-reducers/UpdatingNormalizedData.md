@@ -47,8 +47,8 @@ function addComment(postId, commentText) {
     payload: {
       postId,
       commentId,
-      commentText
-    }
+      commentText,
+    },
   }
 }
 
@@ -65,8 +65,8 @@ function addComment(state, action) {
     // Update our Post object with a new "comments" array
     [postId]: {
       ...post,
-      comments: post.comments.concat(commentId)
-    }
+      comments: post.comments.concat(commentId),
+    },
   }
 }
 
@@ -85,7 +85,7 @@ function allPosts(state = [], action) {
 
 const postsReducer = combineReducers({
   byId: postsById,
-  allIds: allPosts
+  allIds: allPosts,
 })
 
 // reducers/comments.js
@@ -99,7 +99,7 @@ function addCommentEntry(state, action) {
   // Insert the new Comment object into the updated lookup table
   return {
     ...state,
-    [commentId]: comment
+    [commentId]: comment,
   }
 }
 
@@ -130,7 +130,7 @@ function allComments(state = [], action) {
 
 const commentsReducer = combineReducers({
   byId: commentsById,
-  allIds: allComments
+  allIds: allComments,
 })
 ```
 
@@ -207,7 +207,7 @@ export class Post extends Model {
   static get fields() {
     return {
       id: attr(),
-      name: attr()
+      name: attr(),
     }
   }
 
@@ -231,8 +231,8 @@ export class Comment extends Model {
       postId: fk({
         to: 'Post', // must be the same as Post.modelName
         as: 'post', // name for accessor (comment.post)
-        relatedName: 'comments' // name for backward accessor (post.comments)
-      })
+        relatedName: 'comments', // name for backward accessor (post.comments)
+      }),
     }
   }
 
@@ -260,7 +260,7 @@ const rootReducer = combineReducers({
   // Insert the auto-generated Redux-ORM reducer.  This will
   // initialize our model "tables", and hook up the reducer
   // logic we defined on each Model subclass
-  entities: createReducer(orm)
+  entities: createReducer(orm),
 })
 
 // Dispatch an action to create a Post instance
@@ -268,8 +268,8 @@ store.dispatch({
   type: 'CREATE_POST',
   payload: {
     id: 1,
-    name: 'Test Post Please Ignore'
-  }
+    name: 'Test Post Please Ignore',
+  },
 })
 
 // Dispatch an action to create a Comment instance as a child of that Post
@@ -278,8 +278,8 @@ store.dispatch({
   payload: {
     id: 123,
     text: 'This is a comment',
-    postId: 1
-  }
+    postId: 1,
+  },
 })
 ```
 
@@ -309,7 +309,7 @@ By using the session interface you can now use relationship accessors to directl
 const session = orm.session(store.getState().entities)
 const comment = session.Comment.first() // Comment instance
 const { post } = comment // Post instance
-post.comments.filter(c => c.text === 'This is a comment').count() // 1
+post.comments.filter((c) => c.text === 'This is a comment').count() // 1
 ```
 
 Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the "tables" in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.

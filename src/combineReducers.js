@@ -43,10 +43,10 @@ function getUnexpectedStateShapeWarningMessage(
   }
 
   const unexpectedKeys = Object.keys(inputState).filter(
-    key => !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key]
+    (key) => !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key]
   )
 
-  unexpectedKeys.forEach(key => {
+  unexpectedKeys.forEach((key) => {
     unexpectedKeyCache[key] = true
   })
 
@@ -63,7 +63,7 @@ function getUnexpectedStateShapeWarningMessage(
 }
 
 function assertReducerShape(reducers) {
-  Object.keys(reducers).forEach(key => {
+  Object.keys(reducers).forEach((key) => {
     const reducer = reducers[key]
     const initialState = reducer(undefined, { type: ActionTypes.INIT })
 
@@ -79,7 +79,7 @@ function assertReducerShape(reducers) {
 
     if (
       typeof reducer(undefined, {
-        type: ActionTypes.PROBE_UNKNOWN_ACTION()
+        type: ActionTypes.PROBE_UNKNOWN_ACTION(),
       }) === 'undefined'
     ) {
       throw new Error(

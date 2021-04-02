@@ -275,7 +275,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
 
       [$$observable]() {
         return this
-      }
+      },
     }
   }
 
@@ -289,6 +289,6 @@ export default function createStore(reducer, preloadedState, enhancer) {
     subscribe,
     getState,
     replaceReducer,
-    [$$observable]: observable
+    [$$observable]: observable,
   }
 }

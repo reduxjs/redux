@@ -4,7 +4,7 @@ import {
   GET_STATE_IN_MIDDLE,
   SUBSCRIBE_IN_MIDDLE,
   UNSUBSCRIBE_IN_MIDDLE,
-  THROW_ERROR
+  THROW_ERROR,
 } from './actionTypes'
 
 function id(state = []) {
@@ -20,8 +20,8 @@ export function todos(state = [], action) {
         ...state,
         {
           id: id(state),
-          text: action.text
-        }
+          text: action.text,
+        },
       ]
     default:
       return state
@@ -34,9 +34,9 @@ export function todosReverse(state = [], action) {
       return [
         {
           id: id(state),
-          text: action.text
+          text: action.text,
         },
-        ...state
+        ...state,
       ]
     default:
       return state

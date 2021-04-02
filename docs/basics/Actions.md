@@ -66,7 +66,7 @@ In Redux, action creators simply return an action:
 function addTodo(text) {
   return {
     type: ADD_TODO,
-    text
+    text,
   }
 }
 ```
@@ -79,7 +79,7 @@ In [traditional Flux](http://facebook.github.io/flux), action creators often tri
 function addTodoWithDispatch(text) {
   const action = {
     type: ADD_TODO,
-    text
+    text,
   }
   dispatch(action)
 }
@@ -96,8 +96,8 @@ dispatch(completeTodo(index))
 Alternatively, you can create a **bound action creator** that automatically dispatches:
 
 ```js
-const boundAddTodo = text => dispatch(addTodo(text))
-const boundCompleteTodo = index => dispatch(completeTodo(index))
+const boundAddTodo = (text) => dispatch(addTodo(text))
+const boundCompleteTodo = (index) => dispatch(completeTodo(index))
 ```
 
 Now you'll be able to call them directly:
@@ -131,7 +131,7 @@ export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
+  SHOW_ACTIVE: 'SHOW_ACTIVE',
 }
 
 /*

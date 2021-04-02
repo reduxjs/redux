@@ -58,7 +58,7 @@ function toObservable(store) {
       const unsubscribe = store.subscribe(() => next(store.getState()))
       next(store.getState())
       return { unsubscribe }
-    }
+    },
   }
 }
 ```

@@ -121,7 +121,7 @@ This is a particular issue if you use `toJS()` in a wrapped component’s `mapSt
 // AVOID .toJS() in mapStateToProps
 function mapStateToProps(state) {
   return {
-    todos: state.get('todos').toJS() // Always a new object
+    todos: state.get('todos').toJS(), // Always a new object
   }
 }
 ```
@@ -292,7 +292,7 @@ An example of such a HOC follows. A similar HOC is available as an NPM package f
 import React from 'react'
 import { Iterable } from 'immutable'
 
-export const toJS = WrappedComponent => wrappedComponentProps => {
+export const toJS = (WrappedComponent) => (wrappedComponentProps) => {
   const KEY = 0
   const VALUE = 1
 
@@ -320,13 +320,13 @@ import { connect } from 'react-redux'
 import { toJS } from './to-js'
 import DumbComponent from './dumb.component'
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     // obj is an Immutable object in Smart Component, but it’s converted to a plain
     // JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript
     // object. Because it’s still an Immutable.JS object here in mapStateToProps, though,
     // there is no issue with errant re-renderings.
-    obj: getImmutableObjectFromStateTree(state)
+    obj: getImmutableObjectFromStateTree(state),
   }
 }
 export default connect(mapStateToProps)(toJS(DumbComponent))

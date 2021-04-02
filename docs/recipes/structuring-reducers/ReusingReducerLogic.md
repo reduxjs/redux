@@ -26,7 +26,7 @@ function counter(state = 0, action) {
 const rootReducer = combineReducers({
   counterA: counter,
   counterB: counter,
-  counterC: counter
+  counterC: counter,
 })
 ```
 
@@ -75,7 +75,7 @@ We should now be able to use either of these to generate our specialized counter
 const rootReducer = combineReducers({
   counterA: createCounterWithNamedType('A'),
   counterB: createCounterWithNamedType('B'),
-  counterC: createCounterWithNamedType('C')
+  counterC: createCounterWithNamedType('C'),
 })
 
 store.dispatch({ type: 'INCREMENT_B' })
@@ -110,7 +110,7 @@ function createNamedWrapperReducer(reducerFunction, reducerName) {
 const rootReducer = combineReducers({
   counterA: createNamedWrapperReducer(counter, 'A'),
   counterB: createNamedWrapperReducer(counter, 'B'),
-  counterC: createNamedWrapperReducer(counter, 'C')
+  counterC: createNamedWrapperReducer(counter, 'C'),
 })
 ```
 

@@ -163,7 +163,7 @@ It does so because the props object is actually a hash of prop names and their v
 function mapStateToProps(state) {
   return {
     todos: state.todos, // prop value
-    visibleTodos: getVisibleTodos(state) // selector
+    visibleTodos: getVisibleTodos(state), // selector
   }
 }
 
@@ -194,7 +194,7 @@ In the example below, if `state.todos` and the value returned from `getVisibleTo
 function mapStateToProps(state) {
   return {
     todos: state.todos, // prop value
-    visibleTodos: getVisibleTodos(state) // selector
+    visibleTodos: getVisibleTodos(state), // selector
   }
 }
 
@@ -210,8 +210,8 @@ function mapStateToProps(state) {
     // todos always references a newly-created object
     todos: {
       all: state.todos,
-      visibleTodos: getVisibleTodos(state)
-    }
+      visibleTodos: getVisibleTodos(state),
+    },
   }
 }
 
@@ -304,23 +304,23 @@ For example, the following `mapStateToProps` function will never trigger a re-re
 const state = {
   user: {
     accessCount: 0,
-    name: 'keith'
-  }
+    name: 'keith',
+  },
 }
 
 // Selector function
-const getUser = state => {
+const getUser = (state) => {
   ++state.user.accessCount // mutate the state object
   return state
 }
 
 // mapStateToProps
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   // The object returned from getUser() is always
   // the same object, so this wrapped
   // component will never re-render, even though it's been
   // mutated
-  userRecord: getUser(state)
+  userRecord: getUser(state),
 })
 
 const a = mapStateToProps(state)
@@ -385,27 +385,27 @@ For example, the following will always trigger a re-render:
 ```js
 // A JavaScript array's 'filter' method treats the array as immutable,
 // and returns a filtered copy of the array.
-const getVisibleTodos = todos => todos.filter(t => !t.completed)
+const getVisibleTodos = (todos) => todos.filter((t) => !t.completed)
 
 const state = {
   todos: [
     {
       text: 'do todo 1',
-      completed: false
+      completed: false,
     },
     {
       text: 'do todo 2',
-      completed: true
-    }
-  ]
+      completed: true,
+    },
+  ],
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   // getVisibleTodos() always returns a new array, and so the
   // 'visibleToDos' prop will always reference a different array,
   // causing the wrapped component to re-render, even if the array's
   // values haven't changed
-  visibleToDos: getVisibleTodos(state.todos)
+  visibleToDos: getVisibleTodos(state.todos),
 })
 
 const a = mapStateToProps(state)

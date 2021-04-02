@@ -30,7 +30,7 @@ import { createStore, applyMiddleware } from 'redux'
 import todos from './reducers'
 
 function logger({ getState }) {
-  return next => action => {
+  return (next) => (action) => {
     console.log('will dispatch', action)
 
     // Call the next dispatch method in the middleware chain.
@@ -48,7 +48,7 @@ const store = createStore(todos, ['Use Redux'], applyMiddleware(logger))
 
 store.dispatch({
   type: 'ADD_TODO',
-  text: 'Understand the middleware'
+  text: 'Understand the middleware',
 })
 // (These lines will be logged by the middleware:)
 // will dispatch: { type: 'ADD_TODO', text: 'Understand the middleware' }
@@ -77,7 +77,7 @@ function makeASandwich(forPerson, secretSauce) {
   return {
     type: 'MAKE_SANDWICH',
     forPerson,
-    secretSauce
+    secretSauce,
   }
 }
 
@@ -86,14 +86,14 @@ function apologize(fromPerson, toPerson, error) {
     type: 'APOLOGIZE',
     fromPerson,
     toPerson,
-    error
+    error,
   }
 }
 
 function withdrawMoney(amount) {
   return {
     type: 'WITHDRAW',
-    amount
+    amount,
   }
 }
 
@@ -110,10 +110,10 @@ function makeASandwichWithSecretSauce(forPerson) {
   // Invert control!
   // Return a function that accepts `dispatch` so we can dispatch later.
   // Thunk middleware knows how to turn thunk async actions into actions.
-  return function(dispatch) {
+  return function (dispatch) {
     return fetchSecretSauce().then(
-      sauce => dispatch(makeASandwich(forPerson, sauce)),
-      error => dispatch(apologize('The Sandwich Shop', forPerson, error))
+      (sauce) => dispatch(makeASandwich(forPerson, sauce)),
+      (error) => dispatch(apologize('The Sandwich Shop', forPerson, error))
     )
   }
 }
@@ -132,7 +132,7 @@ store.dispatch(makeASandwichWithSecretSauce('My wife')).then(() => {
 // actions and async actions from other action creators,
 // and I can build my control flow with Promises.
 function makeSandwichesForEverybody() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (!getState().sandwiches.isShopOpen) {
       // You don't have to return Promises, but it's a handy convention
       // so the caller can always call .then() on async dispatch result.
@@ -145,7 +145,7 @@ function makeSandwichesForEverybody() {
       .then(() =>
         Promise.all([
           dispatch(makeASandwichWithSecretSauce('Me')),
-          dispatch(makeASandwichWithSecretSauce('My wife'))
+          dispatch(makeASandwichWithSecretSauce('My wife')),
         ])
       )
       .then(() => dispatch(makeASandwichWithSecretSauce('Our kids')))
@@ -190,8 +190,8 @@ class SandwichShop extends Component {
   }
 }
 
-export default connect(state => ({
-  sandwiches: state.sandwiches
+export default connect((state) => ({
+  sandwiches: state.sandwiches,
 }))(SandwichShop)
 ```
 
