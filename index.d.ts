@@ -1,5 +1,3 @@
-/// <reference types="symbol-observable" />
-
 /**
  * An *action* is a plain object that represents an intention to change the
  * state. Actions are the only way to get data into the store. Any data,
@@ -222,6 +220,12 @@ export interface Dispatch<A extends Action = AnyAction> {
  */
 export interface Unsubscribe {
   (): void
+}
+
+declare global {
+  interface SymbolConstructor {
+    readonly observable: symbol
+  }
 }
 
 /**

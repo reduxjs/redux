@@ -49,8 +49,6 @@
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
   "dependencies": {
-    "loose-envify": "^1.4.0",
-    "symbol-observable": "^2.0.3",
     "@babel/runtime": "^7.9.2"
   },
   "devDependencies": {
@@ -102,11 +100,6 @@
       ]
     }
   ],
-  "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
-  },
   "jest": {
     "testRegex": "(/test/.*\\.spec\\.[tj]s)$",
     "coverageProvider": "v8"
