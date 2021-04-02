@@ -32,9 +32,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check types
-        run: npm run check-types
-
       - name: Check formatting
         run: npm run format:check
 
