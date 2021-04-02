@@ -16,7 +16,8 @@ export function kindOf(val) {
         case 'function': {
           return type
         }
-        default: break;
+        default:
+          break
       }
 
       if (Array.isArray(val)) return 'array'
@@ -32,7 +33,8 @@ export function kindOf(val) {
         case 'Map':
         case 'Set':
           return constructorName
-        default: break;
+        default:
+          break
       }
 
       // other
