@@ -37,6 +37,7 @@ export default [
         extensions,
         plugins: [
           ['@babel/plugin-transform-runtime', { version: babelRuntimeVersion }],
+          ['./scripts/mangleErrors.js', { minify: false }]
         ],
         babelHelpers: 'runtime'
       })
@@ -62,6 +63,7 @@ export default [
             '@babel/plugin-transform-runtime',
             { version: babelRuntimeVersion, useESModules: true }
           ],
+          ['./scripts/mangleErrors.js', { minify: false }]
         ],
         babelHelpers: 'runtime'
       })
@@ -82,6 +84,7 @@ export default [
       babel({
         extensions,
         exclude: 'node_modules/**',
+        plugins: [['./scripts/mangleErrors.js', { minify: true }]],
         skipPreflightCheck: true
       }),
       terser({
@@ -111,6 +114,7 @@ export default [
       babel({
         extensions,
         exclude: 'node_modules/**',
+        plugins: [['./scripts/mangleErrors.js', { minify: false }]]
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development')
@@ -134,6 +138,7 @@ export default [
       babel({
         extensions,
         exclude: 'node_modules/**',
+        plugins: [['./scripts/mangleErrors.js', { minify: true }]],
         skipPreflightCheck: true
       }),
       replace({
