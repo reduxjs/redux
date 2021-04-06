@@ -147,4 +147,28 @@ describe('applyMiddleware', () => {
     store.dispatch(spy)
     expect(spy.mock.calls[0]).toEqual(testCallArgs)
   })
+
+  it('notifies listeners after middleware has executed', () => {
+    const testMiddleware = store => next => action => {
+      next(action)
+      spy(store.getState())
+    }
+
+    const spy = jest.fn()
+    const store = applyMiddleware(testMiddleware)(createStore)(reducers.todos)
+    let dispatched = false
+    store.subscribe(() => {
+      if (dispatched) return
+      dispatched = true
+      store.dispatch(addTodo('Flux FTW!'))
+    })
+    store.dispatch(addTodo('Use Redux'))
+    expect(spy.mock.calls).toEqual([
+      [[{ id: 1, text: 'Use Redux' }]],
+      [[
+        { id: 1, text: 'Use Redux' },
+        { id: 2, text: 'Flux FTW!' }
+      ]]
+    ])
+  })
 })
