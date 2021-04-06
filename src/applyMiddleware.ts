@@ -8,6 +8,7 @@ import {
   StoreEnhancerStoreCreator
 } from './types/store'
 import { Reducer } from './types/reducers'
+import { $$notifyListeners, $$toggleListeners } from './createStore'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -77,8 +78,17 @@ export default function applyMiddleware(
       dispatch: (action, ...args) => dispatch(action, ...args)
     }
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
-    dispatch = compose<typeof dispatch>(...chain)(store.dispatch)
-
+    const composedDispatch = compose<typeof dispatch>(...chain)(store.dispatch)
+    dispatch = (action, ...args) => {
+      store[$$toggleListeners](false);
+      const result = composedDispatch(action, ...args);
+      store[$$toggleListeners](true);
+      // Notify listeners after synchronous middleware has finished so they can access the correct
+      // state if the listener will end up dispatching.
+      // See: https://github.com/reduxjs/redux/issues/4049
+      store[$$notifyListeners]()
+      return result
+    }
     return {
       ...store,
       dispatch

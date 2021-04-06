@@ -1,6 +1,7 @@
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
 import '../utils/symbol-observable'
+import { $$dispatchSilent, $$notifyListeners, $$toggleListeners } from '../createStore'
 
 /**
  * Extend the state
@@ -213,6 +214,27 @@ export interface Store<
    * https://github.com/tc39/proposal-observable
    */
   [Symbol.observable](): Observable<S>
+
+  /**
+   * Base dispatch function, calls the reducer with the state tree and an action but does not notify
+   * listeners of the change.
+   *
+   * notifyListeners() must be called manually after this, it is only to be used when more control
+   * is needed over when listeners are notified.
+   *
+   * @private
+   * @returns For convenience, the same action object you dispatched.
+   *
+   */
+  [$$toggleListeners]: (value: boolean) => void
+
+  /**
+   * Triggers listeners. Should be called after a change to state.
+   * Should only be called after dispatchSilent() for better control on when listeners are notified.
+   * 
+   * @private
+   */
+  [$$notifyListeners]: () => void
 }
 
 /**

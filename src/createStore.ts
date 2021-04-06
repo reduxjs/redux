@@ -14,6 +14,9 @@ import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'
 
+export const $$toggleListeners = Symbol('toggleListeners')
+export const $$notifyListeners = Symbol('notifyListeners')
+
 /**
  * Creates a Redux store that holds the state tree.
  * The only way to change the data in the store is to call `dispatch()` on it.
@@ -112,6 +115,7 @@ export default function createStore<
   let currentListeners: (() => void)[] | null = []
   let nextListeners = currentListeners
   let isDispatching = false
+  let isListening = true
 
   /**
    * This makes a shallow copy of currentListeners so we can use
@@ -261,13 +265,32 @@ export default function createStore<
       isDispatching = false
     }
 
+    notifyListeners()
+
+    return action
+  }
+
+  /**
+   * Enable or disable the notification of listeners, use it to control the timing of when listeners
+   * are called, mainly for use by applyMiddleware() so that it can allow synchronous middleware
+   * to finish before another dispatch has a chance to occur (causing nested middleware)
+   * @private
+   */
+  function toggleListeners(value: boolean) {
+    isListening = value
+  }
+
+  /**
+   * Triggers listeners. Should be called after a change to state.
+   * @private
+   */
+  function notifyListeners() {
+    if (!isListening) return
     const listeners = (currentListeners = nextListeners)
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i]
       listener()
     }
-
-    return action
   }
 
   /**
@@ -366,7 +389,9 @@ export default function createStore<
     subscribe,
     getState,
     replaceReducer,
-    [$$observable]: observable
+    [$$observable]: observable,
+    [$$toggleListeners]: toggleListeners,
+    [$$notifyListeners]: notifyListeners
   } as unknown) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   return store
 }
