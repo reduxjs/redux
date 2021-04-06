@@ -1,7 +1,7 @@
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
 import '../utils/symbol-observable'
-import { $$dispatchSilent, $$notifyListeners, $$toggleListeners } from '../createStore'
+import { $$notifyListeners, $$toggleListeners } from '../createStore'
 
 /**
  * Extend the state
