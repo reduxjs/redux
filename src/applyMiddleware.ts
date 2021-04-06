@@ -80,9 +80,9 @@ export default function applyMiddleware(
     const chain = middlewares.map(middleware => middleware(middlewareAPI))
     const composedDispatch = compose<typeof dispatch>(...chain)(store.dispatch)
     dispatch = (action, ...args) => {
-      store[$$toggleListeners](false);
-      const result = composedDispatch(action, ...args);
-      store[$$toggleListeners](true);
+      store[$$toggleListeners](false)
+      const result = composedDispatch(action, ...args)
+      store[$$toggleListeners](true)
       // Notify listeners after synchronous middleware has finished so they can access the correct
       // state if the listener will end up dispatching.
       // See: https://github.com/reduxjs/redux/issues/4049

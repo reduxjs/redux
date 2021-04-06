@@ -231,7 +231,7 @@ export interface Store<
   /**
    * Triggers listeners. Should be called after a change to state.
    * Should only be called after dispatchSilent() for better control on when listeners are notified.
-   * 
+   *
    * @private
    */
   [$$notifyListeners]: () => void

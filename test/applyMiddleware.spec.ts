@@ -165,10 +165,12 @@ describe('applyMiddleware', () => {
     store.dispatch(addTodo('Use Redux'))
     expect(spy.mock.calls).toEqual([
       [[{ id: 1, text: 'Use Redux' }]],
-      [[
-        { id: 1, text: 'Use Redux' },
-        { id: 2, text: 'Flux FTW!' }
-      ]]
+      [
+        [
+          { id: 1, text: 'Use Redux' },
+          { id: 2, text: 'Flux FTW!' }
+        ]
+      ]
     ])
   })
 })
