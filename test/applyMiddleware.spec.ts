@@ -149,12 +149,12 @@ describe('applyMiddleware', () => {
   })
 
   it('notifies listeners after middleware has executed', () => {
+    const spy = jest.fn()
     const testMiddleware = store => next => action => {
       next(action)
       spy(store.getState())
     }
 
-    const spy = jest.fn()
     const store = applyMiddleware(testMiddleware)(createStore)(reducers.todos)
     let dispatched = false
     store.subscribe(() => {
