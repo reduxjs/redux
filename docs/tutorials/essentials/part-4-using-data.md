@@ -362,7 +362,7 @@ const postsSlice = createSlice({
       reducer(state, action) {
         state.push(action.payload)
       },
-      prepare(title, content) {
+      prepare({title, content}) {
         return {
           payload: {
             id: nanoid(),
@@ -457,7 +457,7 @@ const postsSlice = createSlice({
         state.push(action.payload)
       },
       // highlight-next-line
-      prepare(title, content, userId) {
+      prepare({title, content, userId}) {
         return {
           payload: {
             id: nanoid(),
@@ -597,7 +597,7 @@ Since we can't just put a `Date` class instance into the Redux store, we'll trac
       reducer(state, action) {
         state.push(action.payload)
       },
-      prepare(title, content, userId) {
+      prepare({title, content, userId}) {
         return {
           payload: {
             id: nanoid(),
