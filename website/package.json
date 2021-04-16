@@ -13,6 +13,9 @@
     "react-dom": "16.13.0",
     "url-search-params-polyfill": "^8.1.0"
   },
+  "devDependencies": {
+    "netlify-plugin-cache": "^1.0.3"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
