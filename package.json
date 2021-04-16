@@ -83,6 +83,7 @@
     "eslint-plugin-react-hooks": "^3.0.0",
     "glob": "^7.1.6",
     "jest": "^25.4.0",
+    "netlify-plugin-cache": "^1.0.3",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.2",

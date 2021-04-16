@@ -6,8 +6,8 @@
     "deploy": "docusaurus deploy"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.70",
-    "@docusaurus/preset-classic": "2.0.0-alpha.70",
+    "@docusaurus/core": "^2.0.0-alpha.b305145da9",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.b305145da9",
     "classnames": "2.2.6",
     "react": "16.13.0",
     "react-dom": "16.13.0",

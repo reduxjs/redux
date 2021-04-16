@@ -3,3 +3,11 @@
   publish = "website/build"
   command = "npm run build && cp _redirects ./build"
   ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
+
+
+[[plugins]]
+  package = "netlify-plugin-cache"
+  [plugins.inputs]
+    paths = [
+      "node_modules/.cache",
+    ]
