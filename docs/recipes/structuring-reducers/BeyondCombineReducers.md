@@ -28,7 +28,8 @@ function combinedReducer(state, action) {
       return {
         // specifically pass state.b as an additional argument
         a: sliceReducerA(state.a, action, state.b),
-        b: sliceReducerB(state.b, action)
+        // do not update the other slices
+        b: state.b
       }
     }
     case 'ANOTHER_SPECIAL_ACTION': {
