@@ -452,18 +452,6 @@ Here's the same example as above, using arrow functions:
 ```js
 const anotherExampleMiddleware = storeAPI => next => action => {
   // Do something in here, when each action is dispatched
-  // Access the store with storeAPI.getState()
-
-  return next(action)
-}
-```
-
-Alternatively, storeAPI can be decomposed
-
-```js
-const anotherExampleMiddleware = ({dispatch, getState}) => next => action => {
-  // Do something in here, when each action is dispatched
-  // Access the store with getState()
 
   return next(action)
 }
