@@ -86,7 +86,7 @@ const fetchTodosMiddleware = storeAPI => next => action => {
     // Make an API call to fetch todos from the server
     client.get('todos').then(todos => {
       // Dispatch an action with the todos we received
-      dispatch({ type: 'todos/todosLoaded', payload: todos })
+      storeAPI.dispatch({ type: 'todos/todosLoaded', payload: todos })
     })
   }
 
