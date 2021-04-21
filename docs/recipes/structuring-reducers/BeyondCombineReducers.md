@@ -78,7 +78,8 @@ function crossSliceReducer(state, action) {
       return {
         // specifically pass state.b as an additional argument
         a: handleSpecialCaseForA(state.a, action, state.b),
-        b: sliceReducerB(state.b, action)
+        // do not update other slice
+        b: state.b
       }
     }
     default:
