@@ -459,6 +459,7 @@ const anotherExampleMiddleware = storeAPI => next => action => {
 ```
 
 Alternatively, storeAPI can be decomposed
+
 ```js
 const anotherExampleMiddleware = {dispatch, getState} => next => action => {
   // Do something in here, when each action is dispatched
