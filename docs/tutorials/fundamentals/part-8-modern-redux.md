@@ -354,9 +354,7 @@ Let's start converting our todos slice file to use `createSlice` instead. We'll 
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
-import { createSlice, createSelector } from '@reduxjs/toolkit'
-import { client } from '../../api/client'
-import { StatusFilters } from '../filters/filtersSlice'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   status: 'idle',
