@@ -8,6 +8,8 @@ import {
   StoreEnhancerStoreCreator,
   Unsubscribe,
   Observer,
+  PreloadedState,
+  CombinedState
 } from 'redux'
 // @ts-ignore
 import $$observable from '../src/utils/symbol-observable'
@@ -151,3 +153,24 @@ const observer: Observer<State> = {
 }
 const unsubscribeFromObservable = observable.subscribe(observer).unsubscribe
 unsubscribeFromObservable()
+
+// some type tests for PreloadedState
+const ANY: any = {}
+const notNever: PreloadedState<{ key: unknown }>['key'] = ANY as unknown
+// typings:expect-error
+const isNever: PreloadedState<{ key: never }>['key'] = ANY as unknown
+const is5: 5 = ANY as PreloadedState<{ key: 5 }>['key']
+// typings:expect-error
+const isNot5: 5 = ANY as PreloadedState<{ key: 6 }>['key']
+const isNumber: number = ANY as PreloadedState<{ key: number }>['key']
+const isString: string = ANY as PreloadedState<{ key: string }>['key']
+const isNested: { nested: string } = ANY as PreloadedState<{
+  key: { nested: string }
+}>['key']
+const isNestedOptional: { nested?: string } = ANY as PreloadedState<{
+  key: CombinedState<{ nested: string }>
+}>['key']
+// typings:expect-error
+const isNestedReallyOptional: { nested: string } = ANY as PreloadedState<{
+  key: CombinedState<{ nested: string }>
+}>['key']
