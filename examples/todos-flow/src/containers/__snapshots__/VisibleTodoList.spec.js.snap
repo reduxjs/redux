@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`VisibleTodoList renders without crashing 1`] = `ShallowWrapper {}`;
-
-exports[`VisibleTodoList shows active todos when SHOW_ACTIVE filter is active 1`] = `ShallowWrapper {}`;
-
-exports[`VisibleTodoList shows all todos when SHOW_ALL filter is active 1`] = `ShallowWrapper {}`;
-
-exports[`VisibleTodoList shows completed todos when SHOW_COMPLETED filter is active 1`] = `ShallowWrapper {}`;
