@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^4.0.3"
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
