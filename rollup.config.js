@@ -83,6 +83,7 @@ export default [
         extensions
       }),
       replace({
+        preventAssignment: true,
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
       typescript({ tsconfigOverride: noDeclarationFiles }),
@@ -90,7 +91,8 @@ export default [
         extensions,
         exclude: 'node_modules/**',
         plugins: [['./scripts/mangleErrors.js', { minify: true }]],
-        skipPreflightCheck: true
+        skipPreflightCheck: true,
+        babelHelpers: 'bundled'
       }),
       terser({
         compress: {
@@ -120,9 +122,11 @@ export default [
       babel({
         extensions,
         exclude: 'node_modules/**',
-        plugins: [['./scripts/mangleErrors.js', { minify: false }]]
+        plugins: [['./scripts/mangleErrors.js', { minify: false }]],
+        babelHelpers: 'bundled'
       }),
       replace({
+        preventAssignment: true,
         'process.env.NODE_ENV': JSON.stringify('development')
       })
     ]
@@ -146,9 +150,11 @@ export default [
         extensions,
         exclude: 'node_modules/**',
         plugins: [['./scripts/mangleErrors.js', { minify: true }]],
-        skipPreflightCheck: true
+        skipPreflightCheck: true,
+        babelHelpers: 'bundled'
       }),
       replace({
+        preventAssignment: true,
         'process.env.NODE_ENV': JSON.stringify('production')
       }),
       terser({

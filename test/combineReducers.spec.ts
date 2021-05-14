@@ -222,7 +222,7 @@ describe('Utils', () => {
         baz: { qux: number }
       }
 
-      type ShapeMismatchState = CombinedState<ShapeState>
+      type _ShapeMismatchState = CombinedState<ShapeState>
 
       const reducer = combineReducers<ShapeState>({
         foo(state = { bar: 1 }) {

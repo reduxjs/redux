@@ -7,7 +7,7 @@ module.exports = {
 
   settings: {
     react: {
-      version: '16.8'
+      version: '17'
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx']
@@ -28,7 +28,8 @@ module.exports = {
         vars: 'all',
         args: 'after-used',
         ignoreRestSiblings: true,
-        argsIgnorePattern: '^_' // ignore unused variables whose name is '_'
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
       }
     ]
   }
