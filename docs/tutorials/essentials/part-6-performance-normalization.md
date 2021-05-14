@@ -888,10 +888,8 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 
 // highlight-start
-export const {
-  selectAll: selectAllUsers,
-  selectById: selectUserById
-} = usersAdapter.getSelectors(state => state.users)
+export const { selectAll: selectAllUsers, selectById: selectUserById } =
+  usersAdapter.getSelectors(state => state.users)
 // highlight-end
 ```
 
@@ -952,9 +950,8 @@ export const { allNotificationsRead } = notificationsSlice.actions
 export default notificationsSlice.reducer
 
 // highlight-start
-export const {
-  selectAll: selectAllNotifications
-} = notificationsAdapter.getSelectors(state => state.notifications)
+export const { selectAll: selectAllNotifications } =
+  notificationsAdapter.getSelectors(state => state.notifications)
 // highlight-end
 ```
 
