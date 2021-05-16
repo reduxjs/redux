@@ -27,6 +27,7 @@ import { calculateProvidedByThunk } from './buildThunks'
 import type {
   AssertTagTypes,
   EndpointDefinitions,
+  QueryDefinition,
 } from '../endpointDefinitions'
 import type { Patch } from 'immer'
 import { applyPatches } from 'immer'
@@ -156,11 +157,16 @@ export function buildSlice({
             meta.arg.queryCacheKey,
             (substate) => {
               if (substate.requestId !== meta.requestId) return
+              const { merge = (x: any) => x } = definitions[
+                meta.arg.endpointName
+              ] as QueryDefinition<any, any, any, any>
               substate.status = QueryStatus.fulfilled
+              let newData = merge(payload, substate.data)
+
               substate.data =
                 definitions[meta.arg.endpointName].structuralSharing ?? true
-                  ? copyWithStructuralSharing(substate.data, payload)
-                  : payload
+                  ? copyWithStructuralSharing(substate.data, newData)
+                  : newData
               delete substate.error
               substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
             }

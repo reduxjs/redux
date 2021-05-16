@@ -275,6 +275,18 @@ export interface QueryExtraOptions<
   invalidatesTags?: never
 
   serializeQueryArgs?: SerializeQueryArgs<any>
+
+  /**
+   * Can be provided to merge the current cache value into the new cache value.
+   *
+   * Useful if you don't want a new request to completely override the current cache value,
+   * maybe because you have manually updated it from another source and don't want those
+   * updates to get lost.
+   */
+  merge?(
+    newCacheValue: ResultType,
+    currentCacheValue: ResultType | undefined
+  ): ResultType
 }
 
 export type QueryDefinition<
