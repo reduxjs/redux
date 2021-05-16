@@ -498,7 +498,7 @@ const thunkMiddleware =
   next =>
   action => {
     if (typeof action === 'function') {
-      return action(dispatch, getState, extraArgument)
+      return action(dispatch, getState)
     }
 
     return next(action)
