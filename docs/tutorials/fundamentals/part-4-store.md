@@ -151,7 +151,7 @@ Redux state changes as each action was dispatched:
 
 ![Logged Redux state after dispatching actions](/img/tutorials/fundamentals/initial-state-updates.png)
 
-Notice that our app did _not_ log anything from the last action. That's because we removed the listener callback when we called `unsubscribe()`, so nothing else ran when after the action was dispatched.
+Notice that our app did _not_ log anything from the last action. That's because we removed the listener callback when we called `unsubscribe()`, so nothing else ran after the action was dispatched.
 
 We specified the behavior of our app before we even started writing the UI. That
 helps give us confidence that the app will work as intended.
