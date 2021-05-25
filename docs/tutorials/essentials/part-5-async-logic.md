@@ -109,7 +109,7 @@ Thunks are typically written in "slice" files. `createSlice` itself does not hav
 
 ### Writing Async Thunks
 
-Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, and `async/await`. This makes them a good place to put AJAX calls to a server API.
+Thunks may have async logic inside of them, such as `setTimeout`, `Promises`, and `async/await`. This makes them a good place to put AJAX calls to a server API.
 
 Data fetching logic for Redux typically follows a predictable pattern:
 
