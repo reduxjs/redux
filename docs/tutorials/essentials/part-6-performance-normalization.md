@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Essentials, Part 6: Performance and Normalizing Data

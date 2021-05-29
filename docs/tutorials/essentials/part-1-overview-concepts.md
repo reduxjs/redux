@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Essentials, Part 1: Redux Overview and Concepts

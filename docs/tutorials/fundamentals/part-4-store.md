@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn how to create and use a Redux store'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 4: Store

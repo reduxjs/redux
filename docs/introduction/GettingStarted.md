@@ -5,6 +5,8 @@ description: 'Introduction > Getting Started: Resources to get started learning 
 hide_title: true
 ---
 
+&nbsp;
+
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 

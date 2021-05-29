@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the modern way to write Redux logic'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit

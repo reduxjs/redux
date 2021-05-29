@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Redux Essentials tutorial: learn how to work with complex Redux state in React components'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Essentials, Part 4: Using Redux Data
