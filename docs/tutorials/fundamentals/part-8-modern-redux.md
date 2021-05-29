@@ -421,8 +421,12 @@ const todosSlice = createSlice({
   }
 })
 
-export const { todoAdded, todoToggled, todoColorSelected, todoDeleted } =
-  todosSlice.actions
+export const {
+  todoAdded,
+  todoToggled,
+  todoColorSelected,
+  todoDeleted
+} = todosSlice.actions
 
 export default todosSlice.reducer
 ```
@@ -747,8 +751,10 @@ export const {
 export default todosSlice.reducer
 
 // highlight-start
-export const { selectAll: selectTodos, selectById: selectTodoById } =
-  todosAdapter.getSelectors(state => state.todos)
+export const {
+  selectAll: selectTodos,
+  selectById: selectTodoById
+} = todosAdapter.getSelectors(state => state.todos)
 // highlight-end
 
 export const selectTodoIds = createSelector(

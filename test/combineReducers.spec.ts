@@ -27,9 +27,9 @@ describe('Utils', () => {
     it('ignores all props which are not a function', () => {
       // we double-cast because these conditions can only happen in a javascript setting
       const reducer = combineReducers({
-        fake: true as unknown as Reducer,
-        broken: 'string' as unknown as Reducer,
-        another: { nested: 'object' } as unknown as Reducer,
+        fake: (true as unknown) as Reducer,
+        broken: ('string' as unknown) as Reducer,
+        another: ({ nested: 'object' } as unknown) as Reducer,
         stack: (state = []) => state
       })
 
@@ -83,9 +83,9 @@ describe('Utils', () => {
       expect(() => reducer({ counter: 0 }, null)).toThrow(
         /"counter".*an action/
       )
-      expect(() => reducer({ counter: 0 }, {} as unknown as AnyAction)).toThrow(
-        /"counter".*an action/
-      )
+      expect(() =>
+        reducer({ counter: 0 }, ({} as unknown) as AnyAction)
+      ).toThrow(/"counter".*an action/)
     })
 
     it('throws an error on first call if a reducer returns undefined initializing', () => {
@@ -113,7 +113,7 @@ describe('Utils', () => {
         }
       })
       expect(() =>
-        reducer(undefined, undefined as unknown as AnyAction)
+        reducer(undefined, (undefined as unknown) as AnyAction)
       ).toThrow(/Error thrown in reducer/)
     })
 
@@ -192,7 +192,7 @@ describe('Utils', () => {
         }
       })
       expect(() =>
-        reducer(undefined, undefined as unknown as AnyAction)
+        reducer(undefined, (undefined as unknown) as AnyAction)
       ).toThrow(/"counter".*private/)
     })
 
@@ -214,7 +214,7 @@ describe('Utils', () => {
     it('warns if input state does not match reducer shape', () => {
       const preSpy = console.error
       const spy = jest.fn()
-      const nullAction = undefined as unknown as AnyAction
+      const nullAction = (undefined as unknown) as AnyAction
       console.error = spy
 
       interface ShapeState {
@@ -236,7 +236,7 @@ describe('Utils', () => {
       reducer(undefined, nullAction)
       expect(spy.mock.calls.length).toBe(0)
 
-      reducer({ foo: { bar: 2 } } as unknown as ShapeState, nullAction)
+      reducer(({ foo: { bar: 2 } } as unknown) as ShapeState, nullAction)
       expect(spy.mock.calls.length).toBe(0)
 
       reducer(
@@ -248,36 +248,36 @@ describe('Utils', () => {
       )
       expect(spy.mock.calls.length).toBe(0)
 
-      createStore(reducer, { bar: 2 } as unknown as ShapeState)
+      createStore(reducer, ({ bar: 2 } as unknown) as ShapeState)
       expect(spy.mock.calls[0][0]).toMatch(
         /Unexpected key "bar".*createStore.*instead: "foo", "baz"/
       )
 
-      createStore(reducer, {
+      createStore(reducer, ({
         bar: 2,
         qux: 4,
         thud: 5
-      } as unknown as ShapeState)
+      } as unknown) as ShapeState)
       expect(spy.mock.calls[1][0]).toMatch(
         /Unexpected keys "qux", "thud".*createStore.*instead: "foo", "baz"/
       )
 
-      createStore(reducer, 1 as unknown as ShapeState)
+      createStore(reducer, (1 as unknown) as ShapeState)
       expect(spy.mock.calls[2][0]).toMatch(
         /createStore has unexpected type of "number".*keys: "foo", "baz"/
       )
 
-      reducer({ corge: 2 } as unknown as ShapeState, nullAction)
+      reducer(({ corge: 2 } as unknown) as ShapeState, nullAction)
       expect(spy.mock.calls[3][0]).toMatch(
         /Unexpected key "corge".*reducer.*instead: "foo", "baz"/
       )
 
-      reducer({ fred: 2, grault: 4 } as unknown as ShapeState, nullAction)
+      reducer(({ fred: 2, grault: 4 } as unknown) as ShapeState, nullAction)
       expect(spy.mock.calls[4][0]).toMatch(
         /Unexpected keys "fred", "grault".*reducer.*instead: "foo", "baz"/
       )
 
-      reducer(1 as unknown as ShapeState, nullAction)
+      reducer((1 as unknown) as ShapeState, nullAction)
       expect(spy.mock.calls[5][0]).toMatch(
         /reducer has unexpected type of "number".*keys: "foo", "baz"/
       )
@@ -303,8 +303,8 @@ describe('Utils', () => {
       }
 
       const reducer = combineReducers({ foo, bar })
-      const state = { foo: 1, bar: 2, qux: 3 } as unknown as WarnState
-      const bazState = { ...state, baz: 5 } as unknown as WarnState
+      const state = ({ foo: 1, bar: 2, qux: 3 } as unknown) as WarnState
+      const bazState = ({ ...state, baz: 5 } as unknown) as WarnState
 
       reducer(state, nullAction)
       reducer(state, nullAction)

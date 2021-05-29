@@ -52,9 +52,9 @@ describe('applyMiddleware', () => {
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     // the typing for redux-thunk is super complex, so we will use an as unknown hack
-    const dispatchedValue = store.dispatch(
+    const dispatchedValue = (store.dispatch(
       addTodoAsync('Use Redux')
-    ) as unknown as Promise<void>
+    ) as unknown) as Promise<void>
     return dispatchedValue.then(() => {
       expect(spy.mock.calls.length).toEqual(2)
     })
@@ -92,9 +92,9 @@ describe('applyMiddleware', () => {
     ])
 
     // the typing for redux-thunk is super complex, so we will use an "as unknown" hack
-    const dispatchedValue = store.dispatch(
+    const dispatchedValue = (store.dispatch(
       addTodoAsync('Maybe')
-    ) as unknown as Promise<void>
+    ) as unknown) as Promise<void>
     dispatchedValue.then(() => {
       expect(store.getState()).toEqual([
         {
@@ -122,15 +122,18 @@ describe('applyMiddleware', () => {
       <T extends A>(action: T, extraArg?: string[]): T
     }
 
-    const multiArgMiddleware: Middleware<MultiDispatch, any, MultiDispatch> =
-      _store => {
-        return next => (action, callArgs?: any) => {
-          if (Array.isArray(callArgs)) {
-            return action(...callArgs)
-          }
-          return next(action)
+    const multiArgMiddleware: Middleware<
+      MultiDispatch,
+      any,
+      MultiDispatch
+    > = _store => {
+      return next => (action, callArgs?: any) => {
+        if (Array.isArray(callArgs)) {
+          return action(...callArgs)
         }
+        return next(action)
       }
+    }
 
     function dummyMiddleware({ dispatch }) {
       return _next => action => dispatch(action, testCallArgs)
