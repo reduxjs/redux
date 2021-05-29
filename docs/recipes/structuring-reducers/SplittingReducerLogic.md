@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Splitting Reducer Logic: Terms for differen
 hide_title: true
 ---
 
+&nbsp;
+
 # Splitting Up Reducer Logic
 
 For any meaningful application, putting _all_ your update logic into a single reducer function is quickly going to become unmaintainable. While there's no single rule for how long a function should be, it's generally agreed that functions should be relatively short and ideally only do one specific thing. Because of this, it's good programming practice to take pieces of code that are very long or do many different things, and break them into smaller pieces that are easier to understand.

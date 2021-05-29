@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Intro: overview and contents'
 hide_title: true
 ---
 
+&nbsp;
+
 # Structuring Reducers
 
 At its core, Redux is really a fairly simple design pattern: all your "write" logic goes into a single function, and the only way to run that logic is to give Redux a plain object that describes something that has happened. The Redux store calls that write logic function and passes in the current state tree and the descriptive object, the write logic function returns some new state tree, and the Redux store notifies any subscribers that the state tree has changed.

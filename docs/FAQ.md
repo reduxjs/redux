@@ -2,7 +2,10 @@
 id: faq
 title: FAQ Index
 hide_title: true
+description: 'FAQ Index: Frequently Asked Questions about Redux'
 ---
+
+&nbsp;
 
 # Redux FAQ
 

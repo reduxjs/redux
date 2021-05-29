@@ -4,6 +4,8 @@ title: Code Structure
 hide_title: true
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../components/DetailedExplanation'
 
 # Redux FAQ: Code Structure

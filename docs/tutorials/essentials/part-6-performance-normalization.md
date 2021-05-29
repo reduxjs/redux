@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Essentials, Part 6: Performance and Normalizing Data
@@ -888,8 +890,10 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 
 // highlight-start
-export const { selectAll: selectAllUsers, selectById: selectUserById } =
-  usersAdapter.getSelectors(state => state.users)
+export const {
+  selectAll: selectAllUsers,
+  selectById: selectUserById
+} = usersAdapter.getSelectors(state => state.users)
 // highlight-end
 ```
 
@@ -950,8 +954,9 @@ export const { allNotificationsRead } = notificationsSlice.actions
 export default notificationsSlice.reducer
 
 // highlight-start
-export const { selectAll: selectAllNotifications } =
-  notificationsAdapter.getSelectors(state => state.notifications)
+export const {
+  selectAll: selectAllNotifications
+} = notificationsAdapter.getSelectors(state => state.notifications)
 // highlight-end
 ```
 

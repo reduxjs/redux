@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Essentials, Part 3: Basic Redux Data Flow

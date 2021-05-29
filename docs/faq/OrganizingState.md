@@ -4,6 +4,8 @@ title: Organizing State
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Organizing State
 
 ## Table of Contents

@@ -5,6 +5,8 @@ description: 'Redux Toolkit is the recommended way to write Redux logic'
 hide_title: true
 ---
 
+&nbsp;
+
 ## What is Redux Toolkit?
 
 **[Redux Toolkit](https://redux-toolkit.js.org)** is our official, opinionated, batteries-included toolset for efficient Redux development. It is intended to be the standard way to write Redux logic, and we strongly recommend that you use it.

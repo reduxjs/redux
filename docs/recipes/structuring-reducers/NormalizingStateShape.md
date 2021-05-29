@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Normalizing State Shape: Why and how to sto
 hide_title: true
 ---
 
+&nbsp;
+
 # Normalizing State Shape
 
 Many applications deal with data that is nested or relational in nature. For example, a blog editor could have many Posts, each Post could have many Comments, and both Posts and Comments would be written by a User. Data for this kind of application might look like:

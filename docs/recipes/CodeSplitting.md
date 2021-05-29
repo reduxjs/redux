@@ -4,6 +4,8 @@ title: Code Splitting
 hide_title: true
 ---
 
+&nbsp;
+
 # Code Splitting
 
 In large web applications, it is often desirable to split up the app code into multiple JS bundles that can be loaded on-demand. This strategy, called 'code splitting', helps to increase performance of your application by reducing the size of the initial JS payload that must be fetched.

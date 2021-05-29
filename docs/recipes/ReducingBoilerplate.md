@@ -4,6 +4,8 @@ title: Reducing Boilerplate
 hide_title: true
 ---
 
+&nbsp;
+
 # Reducing Boilerplate
 
 Redux is in part [inspired by Flux](../understanding/history-and-design/PriorArt.md), and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider how Redux lets us choose how verbose we'd like our code to be, depending on personal style, team preferences, longer term maintainability, and so on.

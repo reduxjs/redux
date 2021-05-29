@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn how reducers update state in response to actions'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 3: State, Actions, and Reducers

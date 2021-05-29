@@ -292,7 +292,10 @@ export default function createStore<
     }
 
     // TODO: do this more elegantly
-    ;(currentReducer as unknown as Reducer<NewState, NewActions>) = nextReducer
+    ;((currentReducer as unknown) as Reducer<
+      NewState,
+      NewActions
+    >) = nextReducer
 
     // This action has a similar effect to ActionTypes.INIT.
     // Any reducers that existed in both the new and old rootReducer
@@ -300,7 +303,7 @@ export default function createStore<
     // the new state tree with any relevant data from the old one.
     dispatch({ type: ActionTypes.REPLACE } as A)
     // change the type of the store by casting it to the new store
-    return store as unknown as Store<
+    return (store as unknown) as Store<
       ExtendState<NewState, StateExt>,
       NewActions,
       StateExt,
@@ -358,12 +361,12 @@ export default function createStore<
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT } as A)
 
-  const store = {
+  const store = ({
     dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
     replaceReducer,
     [$$observable]: observable
-  } as unknown as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  } as unknown) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   return store
 }

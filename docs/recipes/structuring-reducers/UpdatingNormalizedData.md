@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Updating Normalized Data: Patterns for upda
 hide_title: true
 ---
 
+&nbsp;
+
 # Managing Normalized Data
 
 As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store. However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application. There are a variety of different approaches that you can use, based on your own preference. We'll use the example of handling mutations for Comments on a Post.

@@ -4,6 +4,8 @@ title: React Redux
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: React Redux
 
 ## Table of Contents

@@ -2,7 +2,10 @@
 id: bindactioncreators
 title: bindActionCreators
 hide_title: true
+description: 'API > bindActionCreators: wrapping action creators for dispatching'
 ---
+
+&nbsp;
 
 # `bindActionCreators(actionCreators, dispatch)`
 

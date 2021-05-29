@@ -5,6 +5,8 @@ description: 'Introduction > Installation: Installation instructions for Redux a
 hide_title: true
 ---
 
+&nbsp;
+
 # Installation
 
 ## Redux Toolkit

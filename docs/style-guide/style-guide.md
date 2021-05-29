@@ -6,6 +6,8 @@ hide_title: true
 sidebar_label: 'Style Guide: Best Practices'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../components/DetailedExplanation'
 
 <div class="style-guide">

@@ -4,6 +4,8 @@ title: API Reference
 hide_title: true
 ---
 
+&nbsp;
+
 # API Reference
 
 The Redux API surface is tiny. Redux defines a set of contracts for you to implement (such as [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.

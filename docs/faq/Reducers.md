@@ -4,6 +4,8 @@ title: Reducers
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Reducers
 
 ## Table of Contents

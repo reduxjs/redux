@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Prerequisite Concepts: Key concepts to unde
 hide_title: true
 ---
 
+&nbsp;
+
 # Prerequisite Reducer Concepts
 
 As described in ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md), a Redux reducer function:

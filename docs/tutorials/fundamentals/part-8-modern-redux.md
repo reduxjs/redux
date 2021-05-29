@@ -6,6 +6,8 @@ hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the modern way to write Redux logic'
 ---
 
+&nbsp;
+
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit
@@ -421,8 +423,12 @@ const todosSlice = createSlice({
   }
 })
 
-export const { todoAdded, todoToggled, todoColorSelected, todoDeleted } =
-  todosSlice.actions
+export const {
+  todoAdded,
+  todoToggled,
+  todoColorSelected,
+  todoDeleted
+} = todosSlice.actions
 
 export default todosSlice.reducer
 ```
@@ -747,8 +753,10 @@ export const {
 export default todosSlice.reducer
 
 // highlight-start
-export const { selectAll: selectTodos, selectById: selectTodoById } =
-  todosAdapter.getSelectors(state => state.todos)
+export const {
+  selectAll: selectTodos,
+  selectById: selectTodoById
+} = todosAdapter.getSelectors(state => state.todos)
 // highlight-end
 
 export const selectTodoIds = createSelector(

@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Basic Reducer Structure: Overview of how re
 hide_title: true
 ---
 
+&nbsp;
+
 # Basic Reducer Structure and State Shape
 
 ## Basic Reducer Structure

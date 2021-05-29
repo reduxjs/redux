@@ -13,25 +13,23 @@ function dispatchExtension() {
 
   const enhancer: StoreEnhancer<{
     dispatch: PromiseDispatch
-  }> =
-    createStore =>
-    <S, A extends Action = AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: any
-    ) => {
-      const store = createStore(reducer, preloadedState)
-      return {
-        ...store,
-        dispatch: (action: any) => {
-          if (action.type) {
-            store.dispatch(action)
-          } else if (action.then) {
-            action.then(store.dispatch)
-          }
-          return action
+  }> = createStore => <S, A extends Action = AnyAction>(
+    reducer: Reducer<S, A>,
+    preloadedState?: any
+  ) => {
+    const store = createStore(reducer, preloadedState)
+    return {
+      ...store,
+      dispatch: (action: any) => {
+        if (action.type) {
+          store.dispatch(action)
+        } else if (action.then) {
+          action.then(store.dispatch)
         }
+        return action
       }
     }
+  }
 
   const store = createStore(reducer, enhancer)
 
@@ -51,27 +49,28 @@ function stateExtension() {
     extraField: 'extra'
   }
 
-  const enhancer: StoreEnhancer<{}, ExtraState> =
-    createStore =>
-    <S, A extends Action = AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: any
-    ) => {
-      const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
-        const newState = reducer(state, action)
-        return {
-          ...newState,
+  const enhancer: StoreEnhancer<{}, ExtraState> = createStore => <
+    S,
+    A extends Action = AnyAction
+  >(
+    reducer: Reducer<S, A>,
+    preloadedState?: any
+  ) => {
+    const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
+      const newState = reducer(state, action)
+      return {
+        ...newState,
+        extraField: 'extra'
+      }
+    }
+    const wrappedPreloadedState = preloadedState
+      ? {
+          ...preloadedState,
           extraField: 'extra'
         }
-      }
-      const wrappedPreloadedState = preloadedState
-        ? {
-            ...preloadedState,
-            extraField: 'extra'
-          }
-        : undefined
-      return createStore(wrappedReducer, wrappedPreloadedState)
-    }
+      : undefined
+    return createStore(wrappedReducer, wrappedPreloadedState)
+  }
 
   const store = createStore(reducer, enhancer)
 
@@ -85,13 +84,13 @@ function stateExtension() {
  * Store enhancer that adds methods to the store.
  */
 function extraMethods() {
-  const enhancer: StoreEnhancer<{ method(): string }> =
-    createStore =>
-    (...args) => {
-      const store = createStore(...args)
-      store.method = () => 'foo'
-      return store
-    }
+  const enhancer: StoreEnhancer<{ method(): string }> = createStore => (
+    ...args
+  ) => {
+    const store = createStore(...args)
+    store.method = () => 'foo'
+    return store
+  }
 
   const store = createStore(reducer, enhancer)
 
@@ -109,27 +108,28 @@ function replaceReducerExtender() {
     extraField: 'extra'
   }
 
-  const enhancer: StoreEnhancer<{ method(): string }, ExtraState> =
-    createStore =>
-    <S, A extends Action = AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: any
-    ) => {
-      const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
-        const newState = reducer(state, action)
-        return {
-          ...newState,
+  const enhancer: StoreEnhancer<
+    { method(): string },
+    ExtraState
+  > = createStore => <S, A extends Action = AnyAction>(
+    reducer: Reducer<S, A>,
+    preloadedState?: any
+  ) => {
+    const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
+      const newState = reducer(state, action)
+      return {
+        ...newState,
+        extraField: 'extra'
+      }
+    }
+    const wrappedPreloadedState = preloadedState
+      ? {
+          ...preloadedState,
           extraField: 'extra'
         }
-      }
-      const wrappedPreloadedState = preloadedState
-        ? {
-            ...preloadedState,
-            extraField: 'extra'
-          }
-        : undefined
-      return createStore(wrappedReducer, wrappedPreloadedState)
-    }
+      : undefined
+    return createStore(wrappedReducer, wrappedPreloadedState)
+  }
 
   const store = createStore(reducer, enhancer)
 
@@ -165,48 +165,49 @@ function mhelmersonExample() {
       extraField: 'extra'
     }
 
-    const enhancer: StoreEnhancer<{}, ExtraState> =
-      createStore =>
-      <S, A extends Action = AnyAction>(
-        reducer: Reducer<S, A>,
-        preloadedState?: any
-      ) => {
-        const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
-          const newState = reducer(state, action)
-          return {
-            ...newState,
-            extraField: 'extra'
-          }
-        }
-        const wrappedPreloadedState = preloadedState
-          ? {
-              ...preloadedState,
-              extraField: 'extra'
-            }
-          : undefined
-        const store = createStore(wrappedReducer, wrappedPreloadedState)
+    const enhancer: StoreEnhancer<{}, ExtraState> = createStore => <
+      S,
+      A extends Action = AnyAction
+    >(
+      reducer: Reducer<S, A>,
+      preloadedState?: any
+    ) => {
+      const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
+        const newState = reducer(state, action)
         return {
-          ...store,
-          replaceReducer<NS, NA extends Action = AnyAction>(
-            nextReducer: (
-              state: (NS & ExtraState) | undefined,
-              action: NA
-            ) => NS & ExtraState
-          ) {
-            const nextWrappedReducer: Reducer<NS & ExtraState, NA> = (
-              state,
-              action
-            ) => {
-              const newState = nextReducer(state, action)
-              return {
-                ...newState,
-                extraField: 'extra'
-              }
-            }
-            return store.replaceReducer(nextWrappedReducer)
-          }
+          ...newState,
+          extraField: 'extra'
         }
       }
+      const wrappedPreloadedState = preloadedState
+        ? {
+            ...preloadedState,
+            extraField: 'extra'
+          }
+        : undefined
+      const store = createStore(wrappedReducer, wrappedPreloadedState)
+      return {
+        ...store,
+        replaceReducer<NS, NA extends Action = AnyAction>(
+          nextReducer: (
+            state: (NS & ExtraState) | undefined,
+            action: NA
+          ) => NS & ExtraState
+        ) {
+          const nextWrappedReducer: Reducer<NS & ExtraState, NA> = (
+            state,
+            action
+          ) => {
+            const newState = nextReducer(state, action)
+            return {
+              ...newState,
+              extraField: 'extra'
+            }
+          }
+          return store.replaceReducer(nextWrappedReducer)
+        }
+      }
+    }
 
     const store = createStore(reducer, enhancer)
     store.replaceReducer(reducer)
@@ -240,7 +241,7 @@ function finalHelmersonExample() {
     reducer: Reducer<S, A>
   ) {
     return (state: (S & ExtraState) | undefined, action: AnyAction) => {
-      const newState = reducer(state, action as unknown as A)
+      const newState = reducer(state, (action as unknown) as A)
       return {
         ...newState,
         foo: 'hi'
@@ -255,25 +256,24 @@ function finalHelmersonExample() {
   function createPersistEnhancer(
     persistConfig: any
   ): StoreEnhancer<{}, ExtraState> {
-    return createStore =>
-      <S, A extends Action = AnyAction>(
-        reducer: Reducer<S, A>,
-        preloadedState?: any
-      ) => {
-        const persistedReducer = persistReducer<S, A>(persistConfig, reducer)
-        const store = createStore(persistedReducer, preloadedState)
-        const persistor = persistStore(store)
+    return createStore => <S, A extends Action = AnyAction>(
+      reducer: Reducer<S, A>,
+      preloadedState?: any
+    ) => {
+      const persistedReducer = persistReducer<S, A>(persistConfig, reducer)
+      const store = createStore(persistedReducer, preloadedState)
+      const persistor = persistStore(store)
 
-        return {
-          ...store,
-          replaceReducer: nextReducer => {
-            return store.replaceReducer(
-              persistReducer(persistConfig, nextReducer)
-            )
-          },
-          persistor
-        }
+      return {
+        ...store,
+        replaceReducer: nextReducer => {
+          return store.replaceReducer(
+            persistReducer(persistConfig, nextReducer)
+          )
+        },
+        persistor
       }
+    }
   }
 
   const store = createStore(reducer, createPersistEnhancer('hi'))
