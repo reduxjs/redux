@@ -2,6 +2,7 @@
 id: combinereducers
 title: combineReducers
 hide_title: true
+description: 'API > combineReducers: merging slice reducers to create combined state'
 ---
 
 &nbsp;

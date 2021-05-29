@@ -2,6 +2,7 @@
 id: compose
 title: compose
 hide_title: true
+description: 'API > compose: composing multiple functions together'
 ---
 
 &nbsp;

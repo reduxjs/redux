@@ -2,6 +2,7 @@
 id: createstore
 title: createStore
 hide_title: true
+description: 'API > createStore: creating a core Redux store'
 ---
 
 &nbsp;

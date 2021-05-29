@@ -2,6 +2,7 @@
 id: applymiddleware
 title: applyMiddleware
 hide_title: true
+description: 'API > applyMiddleware: extending the Redux store'
 ---
 
 &nbsp;
