@@ -4,6 +4,8 @@ title: Configuring Your Store
 hide_title: true
 ---
 
+&nbsp;
+
 # Configuring Your Store
 
 In the ["Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md), we introduced the fundamental Redux concepts by building an example Todo list app. As part of that, we talked about [how to create and configure a Redux store](../tutorials/fundamentals/part-4-store.md).
@@ -72,21 +74,24 @@ export default logger
 ```js
 const round = number => Math.round(number * 100) / 100
 
-const monitorReducerEnhancer =
-  createStore => (reducer, initialState, enhancer) => {
-    const monitoredReducer = (state, action) => {
-      const start = performance.now()
-      const newState = reducer(state, action)
-      const end = performance.now()
-      const diff = round(end - start)
+const monitorReducerEnhancer = createStore => (
+  reducer,
+  initialState,
+  enhancer
+) => {
+  const monitoredReducer = (state, action) => {
+    const start = performance.now()
+    const newState = reducer(state, action)
+    const end = performance.now()
+    const diff = round(end - start)
 
-      console.log('reducer process time:', diff)
+    console.log('reducer process time:', diff)
 
-      return newState
-    }
-
-    return createStore(monitoredReducer, initialState, enhancer)
+    return newState
   }
+
+  return createStore(monitoredReducer, initialState, enhancer)
+}
 
 export default monitorReducerEnhancer
 ```

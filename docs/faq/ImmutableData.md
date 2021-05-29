@@ -4,6 +4,8 @@ title: Immutable Data
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Immutable Data
 
 ## Table of Contents

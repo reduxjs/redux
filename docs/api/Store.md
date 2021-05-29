@@ -4,6 +4,8 @@ title: Store
 hide_title: true
 ---
 
+&nbsp;
+
 # Store
 
 A store holds the whole [state tree](../understanding/thinking-in-redux/Glossary.md#state) of your application.
@@ -35,6 +37,8 @@ It is equal to the last value returned by the store's reducer.
 _(any)_: The current state tree of your application.
 
 ---
+
+&nbsp;
 
 ### dispatch(action)
 
@@ -84,6 +88,8 @@ store.dispatch(addTodo('Read about the middleware'))
 ```
 
 ---
+
+&nbsp;
 
 ### subscribe(listener)
 
@@ -136,6 +142,8 @@ unsubscribe()
 ```
 
 ---
+
+&nbsp;
 
 ### replaceReducer(nextReducer)
 

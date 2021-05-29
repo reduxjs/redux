@@ -4,6 +4,8 @@ title: Glossary
 hide_title: true
 ---
 
+&nbsp;
+
 # Glossary
 
 This is a glossary of the core terms in Redux, along with their type signatures. The types are documented using [Flow notation](https://flowtype.org/docs/quick-reference.html).

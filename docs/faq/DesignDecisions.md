@@ -4,6 +4,8 @@ title: Design Decisions
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Design Decisions
 
 ## Table of Contents

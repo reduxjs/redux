@@ -4,6 +4,8 @@ title: Performance
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Performance
 
 ## Table of Contents

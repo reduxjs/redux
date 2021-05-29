@@ -4,6 +4,8 @@ title: 'Recipes: Index'
 hide_title: true
 ---
 
+&nbsp;
+
 # Recipes
 
 These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [the "Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md).

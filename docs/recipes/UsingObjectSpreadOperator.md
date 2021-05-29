@@ -4,6 +4,8 @@ title: Using Object Spread Operator
 hide_title: true
 ---
 
+&nbsp;
+
 # Using Object Spread Operator
 
 Since one of the core tenets of Redux is to never mutate state, you'll often find yourself using [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) to create copies of objects with new or updated values. For example, in the `todoApp` below `Object.assign()` is used to return a new `state` object with an updated `visibilityFilter` property:

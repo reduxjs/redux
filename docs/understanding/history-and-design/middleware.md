@@ -5,6 +5,8 @@ description: 'History and Design > Middleware: How middleware enable adding addi
 hide_title: true
 ---
 
+&nbsp;
+
 # Middleware
 
 You've seen middleware in action in the ["Redux Fundamentals" tutorial](../../tutorials/fundamentals/part-4-store.md#middleware). If you've used server-side libraries like [Express](https://expressjs.com/) and [Koa](https://koajs.com/), you were also probably already familiar with the concept of _middleware_. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.

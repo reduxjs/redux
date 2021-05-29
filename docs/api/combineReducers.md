@@ -4,6 +4,8 @@ title: combineReducers
 hide_title: true
 ---
 
+&nbsp;
+
 # `combineReducers(reducers)`
 
 As your app grows more complex, you'll want to split your [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../understanding/thinking-in-redux/Glossary.md#state).

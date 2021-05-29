@@ -5,6 +5,8 @@ description: 'Introduction > Prior Art: Influences on the design of Redux'
 hide_title: true
 ---
 
+&nbsp;
+
 # Prior Art
 
 Redux has a mixed heritage. It is similar to some patterns and technologies, but is also different from them in important ways. We'll explore some of the similarities and the differences below.

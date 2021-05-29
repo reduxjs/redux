@@ -4,6 +4,8 @@ title: Store Setup
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Store Setup
 
 ## Table of Contents

@@ -4,6 +4,8 @@ title: compose
 hide_title: true
 ---
 
+&nbsp;
+
 # `compose(...functions)`
 
 Composes functions from right to left.

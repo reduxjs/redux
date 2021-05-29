@@ -5,6 +5,8 @@ description: 'Introduction > Three Principles: Three key principles for using Re
 hide_title: true
 ---
 
+&nbsp;
+
 # Three Principles
 
 Redux can be described in three fundamental principles:

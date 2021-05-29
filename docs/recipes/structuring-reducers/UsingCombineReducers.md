@@ -5,6 +5,8 @@ description: 'Structuring Reducers > Using combineReducers: Explanations of how 
 hide_title: true
 ---
 
+&nbsp;
+
 # Using `combineReducers`
 
 ## Core Concepts

@@ -4,6 +4,8 @@ title: Migrating to Redux
 hide_title: true
 ---
 
+&nbsp;
+
 # Migrating to Redux
 
 Redux is not a monolithic framework, but a set of contracts and a [few functions that make them work together](../api/README.md). The majority of your “Redux code” will not even use Redux APIs, as most of the time you'll be writing functions.

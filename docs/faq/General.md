@@ -4,6 +4,8 @@ title: General
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: General
 
 ## When should I learn Redux?

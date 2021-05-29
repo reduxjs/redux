@@ -4,6 +4,8 @@ title: Actions
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Actions
 
 ## Table of Contents

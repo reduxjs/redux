@@ -4,6 +4,8 @@ title: bindActionCreators
 hide_title: true
 ---
 
+&nbsp;
+
 # `bindActionCreators(actionCreators, dispatch)`
 
 Turns an object whose values are [action creators](../understanding/thinking-in-redux/Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatchaction) call so they may be invoked directly.

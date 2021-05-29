@@ -4,6 +4,8 @@ title: Miscellaneous
 hide_title: true
 ---
 
+&nbsp;
+
 # Redux FAQ: Miscellaneous
 
 ## Table of Contents
