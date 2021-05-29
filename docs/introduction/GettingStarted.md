@@ -5,6 +5,9 @@ description: 'Introduction > Getting Started: Resources to get started learning 
 hide_title: true
 ---
 
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+
 # Getting Started with Redux
 
 Redux is a predictable state container for JavaScript apps.
@@ -176,6 +179,17 @@ The [**Redux Essentials tutorial**](../tutorials/essentials/part-1-overview-conc
 ### Redux Fundamentals Tutorial
 
 The [**Redux Fundamentals tutorial**](../tutorials/fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.
+
+### Learn Modern Redux Livestream
+
+Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with Typescript, as well as the new RTK Query data fetching APIs:
+
+<LiteYouTubeEmbed 
+    id="9zySeP5vH9c"
+    title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
+/>
+
+See [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/let-s-learn-modern-redux) for a transcript and links to the example app source.
 
 ### Additional Tutorials
 

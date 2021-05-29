@@ -7,7 +7,12 @@ hide_title: true
 description: 'Overview of the Redux tutorial pages'
 ---
 
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+
 # Redux Tutorials Index
+
+## Redux Official Tutorials
 
 We have two different sets of tutorials:
 
@@ -19,3 +24,14 @@ We have two different sets of tutorials:
 **We recommend starting with the [Redux Essentials tutorial](./essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using Redux to write actual applications.
 
 :::
+
+## Additional Resources
+
+### Learn Modern Redux Livestream
+
+Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with Typescript, as well as the new RTK Query data fetching APIs:
+
+<LiteYouTubeEmbed 
+    id="9zySeP5vH9c"
+    title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
+/>
