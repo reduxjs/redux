@@ -15,6 +15,55 @@ This page includes our recommendations for some of the best external resources a
 
 _Tutorials that teach the basic concepts of Redux and how to use it_
 
+- **Intro to React, Redux, and Typescript** <br />
+  https://blog.isquaredsoftware.com/2020/12/presentations-react-redux-ts-intro/ <br />
+  Redux maintainer Mark Erikson's slideset that covers the basics of React, Redux, and TypeScript. Redux topics include stores, reducers, middleware, React-Redux, and Redux Toolkit.
+
+- **Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query** <br />
+  https://www.learnwithjason.dev/let-s-learn-modern-redux <br />
+  An episode of the "Learn with Jason" show, with Redux maintainer Mark Erikson as guest. The episode features a live-coded app, and shows how to create a new React+TS project, add the Redux packages, and set up Redux Toolkit and React-Redux from scratch (including our recommended TS hooks configuration). It also shows how to use the upcoming RTK Query data fetching API and display that data in a UI.
+
+- **Redux Tutorial: An Overview and Walkthrough** <br />
+  https://www.taniarascia.com/redux-react-guide/ <br />
+  A well-written tutorial from Tania Rascia that quickly explains key Redux concepts, and shows how to put together a basic Redux + React app using vanilla Redux and Redux Toolkit.
+
+- **Redux for Beginners - The Brain-Friendly Guide to Learning Redux** <br />
+  https://www.freecodecamp.org/news/redux-for-beginners-the-brain-friendly-guide-to-redux/ <br />
+  An easy-to-follow tutorial that builds a small todo app with Redux Toolkit and React-Redux, including data fetching.
+
+- **Redux made easy with Redux Toolkit and Typescript** <br />
+  https://www.mattbutton.com/redux-made-easy-with-redux-toolkit-and-typescript/ <br />
+  A helpful tutorial that shows how to use Redux Toolkit and TypeScript together to write Redux applications, and how RTK simplifies typical Redux usage.
+
+- **Redux: From Twitter Hype to Production** <br/>
+  https://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/ <br/>
+  A well-produced slideshow that visually steps through core Redux concepts, usage with React, project organization, and side effects with thunks and sagas. Has some good animated diagrams demonstrating how data flows through a React+Redux architecture.
+
+## Using Redux With React
+
+_Explanations of the React-Redux bindings library_
+
+- **Modernizing a Legacy Redux Application with React-Redux Hooks** <br />
+  https://app.egghead.io/playlists/modernizing-a-legacy-redux-application-with-react-hooks-c528 <br />
+  A video series that shows the differences between the earlier `connect` API and the newer React-Redux hooks API, and how to use those hooks in your components.
+
+- **Why Redux is Useful in React Apps** <br/>
+  https://www.fullstackreact.com/articles/redux-with-mark-erikson/ <br/>
+  An explanation of some of the benefits of using Redux with React, including sharing data between components and hot module reloading.
+
+## Project-Based Tutorials
+
+_Tutorials that teach Redux concepts by building projects, including larger "real-world"-type applications_
+
+- **Practical Redux** <br/>
+  https://blog.isquaredsoftware.com/2016/10/practical-redux-part-0-introduction/ <br/>
+  https://blog.isquaredsoftware.com/series/practical-redux/ <br/>
+  An ongoing series of posts intended to demonstrate a number of specific Redux techniques by building a sample application, based on the MekHQ application for managing Battletech campaigns. Written by Redux co-maintainer Mark Erikson. Covers topics like managing relational data, connecting multiple components and lists, complex reducer logic for features, handling forms, showing modal dialogs, and much more. (Note: this is an older series, and today we recommend newer patterns for writing Redux code. However, many of the principles in this series are still valuable.)
+
+## Redux Implementation
+
+_Explanations of how Redux works internally, by writing miniature reimplementations_
+
 - **Getting Started with Redux - Video Series** <br/>
   https://app.egghead.io/courses/getting-started-with-redux <br/>
   https://github.com/tayiorbeii/egghead.io_redux_course_notes <br/>
@@ -28,88 +77,6 @@ _Tutorials that teach the basic concepts of Redux and how to use it_
 - **Live React: Hot Reloading and Time Travel** <br/>
   https://youtube.com/watch?v=xsSnOQynTHs <br/>
   Dan Abramov's original conference talk that introduced Redux. See how constraints enforced by Redux make hot reloading with time travel easy
-
-- **Redux Crash Course With React** <br/>
-  https://www.youtube.com/watch?v=93p3LxR9xfM <br/>
-  Traversy Media explains the daunting Redux in such a beautiful way here. All the jargon words such as reducers, state, actions are very well defined by him. Redux may be seem difficult at the start but Traversy paves out a perfect route for beginners.
-
-- **A Cartoon Guide to Redux** <br/>
-  https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6 <br/>
-  A high-level description of Redux, with friendly cartoons to help illustrate the ideas.
-
-- **Leveling Up with React: Redux** <br/>
-  https://css-tricks.com/learning-react-redux/ <br/>
-  A very well-written introduction to Redux and its related concepts, with some nifty cartoon-ish diagrams.
-
-- **An Introduction to Redux** <br/>
-  https://www.smashingmagazine.com/2016/06/an-introduction-to-redux/ <br/>
-  An overview and intro to the basic concepts of Redux. Looks at the benefits of using Redux, how it differs from MVC or Flux, and its relation to functional programming.
-
-- **Redux Tutorial** <br/>
-  https://github.com/pshrmn/notes/blob/master/redux/redux.md <br/>
-  A short, clear tutorial that introduces basic Redux terms, shows how to split reducer functions, and describes the Redux store API.
-
-- **Redux: From Twitter Hype to Production** <br/>
-  https://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/ <br/>
-  An extremely well-produced slideshow that visually steps through core Redux concepts, usage with React, project organization, and side effects with thunks and sagas. Has some absolutely _fantastic_ animated diagrams demonstrating how data flows through a React+Redux architecture.
-
-- **DevGuides: Introduction to Redux** <br/>
-  http://devguides.io/redux/ <br/>
-  A tutorial that covers several aspects of Redux, including actions, reducers, usage with React, and middleware.
-
-## Using Redux With React
-
-_Explanations of the React-Redux bindings and the `connect` function_
-
-- **Why Redux is Useful in React Apps** <br/>
-  https://www.fullstackreact.com/articles/redux-with-mark-erikson/ <br/>
-  An explanation of some of the benefits of using Redux with React, including sharing data between components and hot module reloading.
-
-* **What Does Redux Do? (and when should you use it?)** <br/>
-  https://daveceddia.com/what-does-redux-do/ <br/>
-  An excellent summary of how Redux helps solve data flow problems in a React app.
-
-* **How Redux Works: A Counter-Example** <br/>
-  https://daveceddia.com/how-does-redux-work/ <br/>
-  A great follow-up to the previous article. It explains how to use Redux and React-Redux, by first showing a React component that stores a value in its internal state, and then refactoring it to use Redux instead. Along the way, the article explains important Redux terms and concepts, and how they all fit together to make the Redux data flow work properly.
-
-* **Redux and React: An Introduction** <br/>
-  https://jakesidsmith.com/blog/post/2017-11-18-redux-and-react-an-introduction/ <br/>
-  A great introduction to Redux's core concepts, with explanations of how to use the React-Redux package to use Redux with React.
-
-## Project-Based Tutorials
-
-_Tutorials that teach Redux concepts by building projects, including larger "real-world"-type applications_
-
-- **Practical Redux** <br/>
-  https://blog.isquaredsoftware.com/2016/10/practical-redux-part-0-introduction/ <br/>
-  https://blog.isquaredsoftware.com/series/practical-redux/ <br/>
-  An ongoing series of posts intended to demonstrate a number of specific Redux techniques by building a sample application, based on the MekHQ application for managing Battletech campaigns. Written by Redux co-maintainer Mark Erikson. Covers topics like managing relational data, connecting multiple components and lists, complex reducer logic for features, handling forms, showing modal dialogs, and much more.
-
-- **Building a Simple CRUD App with React + Redux** <br/>
-  https://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/ <br/>
-  A nifty 8-part series that demonstrates building a CRUD app, including routing, AJAX calls, and the various CRUD aspects. Very well written, with some useful diagrams as well.
-
-- **The Soundcloud Client in React + Redux** <br/>
-  https://www.robinwieruch.de/the-soundcloud-client-in-react-redux/ <br/>
-  A detailed walkthrough demonstrating project setup, routing, authentication, fetching of remote data, and wrapping of a stateful library.
-
-- **Full-Stack Redux Tutorial** <br/>
-  https://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html <br/>
-  A full-blown, in-depth tutorial that builds up a complete client-server application.
-
-- **Getting Started with React, Redux and Immutable: a Test-Driven Tutorial** <br/>
-  https://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-1/ <br/>
-  https://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/ <br/>
-  Another solid, in-depth tutorial, similar to the "Full-Stack" tutorial. Builds a client-only TodoMVC app, and demonstrates a good project setup (including a Mocha+JSDOM-based testing configuration). Well-written, covers many concepts, and very easy to follow.
-
-- **Redux Hero: An Intro to Redux and Reselect** <br/>
-  https://decembersoft.com/posts/redux-hero-part-1-a-hero-is-born-a-fun-introduction-to-redux-js/ <br/>
-  An introduction to Redux and related libraries through building a small RPG-style game
-
-## Redux Implementation
-
-_Explanations of how Redux works internally, by writing miniature reimplementations_
 
 - **Build Yourself a Redux** <br/>
   https://zapier.com/engineering/how-to-build-redux/ <br/>
