@@ -197,25 +197,17 @@ details.detailed-explanation p {
   margin-bottom: calc(var(--ifm-paragraph-margin-bottom) / 2);
 }
 
-.style-guide .priority-rules h3:after {
-  margin-left: 1em;
-  font-size: 0.7em;
-  position: absolute;
+.style-guide .priority-rules .badge {
+  position: relative;
+  top: -4px;
 }
 
-.style-guide .priority-essential h3:after {
-  content: ' ESSENTIAL';
-  color: var(--ifm-color-danger);
+.style-guide .priority-rules h3 {
+  display: inline-block;
 }
 
-.style-guide .priority-stronglyrecommended h3:after {
-  content: ' STRONGLY RECOMMENDED';
-  color: var(--ifm-color-warning);
-}
-
-.style-guide .priority-recommended h3:after {
-  content: ' RECOMMENDED';
-  color: var(--ifm-color-info);
+.style-guide .priority-rules .hash-link {
+  margin-right: 5px;
 }
 
 .admonition {

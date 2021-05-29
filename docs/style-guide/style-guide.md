@@ -40,11 +40,12 @@ These rules have been found to improve readability and/or developer experience i
 
 Where multiple, equally good options exist, an arbitrary choice can be made to ensure consistency. In these rules, **we describe each acceptable option and suggest a default choice**. That means you can feel free to make a different choice in your own codebase, as long as you're consistent and have a good reason. Please do have a good reason though!
 
-<div class="priority-rules priority-essential">
+<div class="priority-rules">
 
 ## Priority A Rules: Essential
 
 ### Do Not Mutate State
+<span class="badge badge--danger">Essential</span>
 
 Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. **Actual mutation of state values should always be avoided**, both inside reducers and in all other application code.
 
@@ -53,6 +54,7 @@ Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis
 > **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
 
 ### Reducers Must Not Have Side Effects
+<span class="badge badge--danger">Essential</span>
 
 Reducer functions should _only_ depend on their `state` and `action` arguments, and should only calculate and return a new state value based on those arguments. **They must not execute any kind of asynchronous logic (AJAX calls, timeouts, promises), generate random values (`Date.now()`, `Math.random()`), modify variables outside the reducer, or run other code that affects things outside the scope of the reducer function**.
 
@@ -67,36 +69,37 @@ There are some gray areas to this rule. Strictly speaking, code such as `console
 </DetailedExplanation>
 
 ### Do Not Put Non-Serializable Values in State or Actions
+<span class="badge badge--danger">Essential</span>
 
 **Avoid putting non-serializable values such as Promises, Symbols, Maps/Sets, functions, or class instances into the Redux store state or dispatched actions**. This ensures that capabilities such as debugging via the Redux DevTools will work as expected. It also ensures that the UI will update as expected.
 
 > **Exception**: you may put non-serializable values in actions _if_ the action will be intercepted and stopped by a middleware before it reaches the reducers. Middleware such as `redux-thunk` and `redux-promise` are examples of this.
 
 ### Only One Redux Store Per App
+<span class="badge badge--danger">Essential</span>
 
 **A standard Redux application should only have a single Redux store instance, which will be used by the whole application**. It should typically be defined in a separate file such as `store.js`.
 
 Ideally, no app logic will import the store directly. It should be passed to a React component tree via `<Provider>`, or referenced indirectly via middleware such as thunks. In rare cases, you may need to import it into other logic files, but this should be a last resort.
 
-</div>
-
-<div class="priority-rules priority-stronglyrecommended">
-
 ## Priority B Rules: Strongly Recommended
 
 ### Use Redux Toolkit for Writing Redux Logic
+<span class="badge badge--warning">Strongly Recommended</span>
 
 **[Redux Toolkit](../redux-toolkit/overview.md) is our recommended toolset for using Redux**. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
 
 You are not required to use RTK with Redux, and you are free to use other approaches if desired, but **using RTK will simplify your logic and ensure that your application is set up with good defaults**.
 
 ### Use Immer for Writing Immutable Updates
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 
 ### Structure Files as Feature Folders with Single-File Logic
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Redux itself does not care about how your application's folders and files are structured. However, co-locating logic for a given feature in one place typically makes it easier to maintain that code.
 
@@ -126,6 +129,7 @@ An example folder structure might look something like:
 </DetailedExplanation>
 
 ### Put as Much Logic as Possible in Reducers
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Wherever possible, **try to put as much of the logic for calculating a new state into the appropriate reducer, rather than in the code that prepares and dispatches the action** (like a click handler). This helps ensure that more of the actual app logic is easily testable, enables more effective use of time-travel debugging, and helps avoid common mistakes that can lead to mutations and bugs.
 
@@ -181,6 +185,7 @@ However, doing the logic in the reducer is preferable for several reasons:
 </DetailedExplanation>
 
 ### Reducers Should Own the State Shape
+<span class="badge badge--warning">Strongly Recommended</span>
 
 The Redux root state is owned and calculated by the single root reducer function. For maintainability, that reducer is intended to be split up by key/value "slices", with **each "slice reducer" being responsible for providing an initial value and calculating the updates to that slice of the state**.
 
@@ -231,6 +236,7 @@ Use of static typing does make this kind of code safer and somewhat more accepta
 </DetailedExplanation>
 
 ### Name State Slices Based On the Stored Data
+<span class="badge badge--warning">Strongly Recommended</span>
 
 As mentioned in [Reducers Should Own the State Shape ](#reducers-should-own-the-state-shape), the standard approach for splitting reducer logic is based on "slices" of state. Correspondingly, `combineReducers` is the standard function for joining those slice reducers into a larger reducer function.
 
@@ -276,12 +282,14 @@ It's a bit more typing, but it results in the most understandable code and state
 </DetailedExplanation>
 
 ### Organize State Structure Based on Data Types, Not Components
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Root state slices should be defined and named based on the major data types or areas of functionality in your application, not based on which specific components you have in your UI. This is because there is not a strict 1:1 correlation between data in the Redux store and components in the UI, and many components may need to access the same data. Think of the state tree as a sort of global database that any part of the app can access to read just the pieces of state needed in that component.
 
 For example, a blogging app might need to track who is logged in, information on authors and posts, and perhaps some info on what screen is active. A good state structure might look like `{auth, posts, users, ui}`. A bad structure would be something like `{loginScreen, usersList, postsList}`.
 
 ### Treat Reducers as State Machines
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Many Redux reducers are written "unconditionally". They only look at the dispatched action and calculate a new state value, without basing any of the logic on what the current state might be. This can cause bugs, as some actions may not be "valid" conceptually at certain times depending on the rest of the app logic. For example, a "request succeeded" action should only have a new value calculated if the state says that it's already "loading", or an "update this item" action should only be dispatched if there is an item marked as "being edited".
 
@@ -359,12 +367,14 @@ Now, since you're defining behavior per state instead of per action, you also pr
 </DetailedExplanation>
 
 ### Normalize Complex Nested/Relational State
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Many applications need to cache complex data in the store. That data is often received in a nested form from an API, or has relations between different entities in the data (such as a blog that contains Users, Posts, and Comments).
 
 **Prefer storing that data in [a "normalized" form](../recipes/structuring-reducers/NormalizingStateShape.md) in the store**. This makes it easier to look up items based on their ID and update a single item in the store, and ultimately leads to better performance patterns.
 
 ### Model Actions as Events, Not Setters
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Redux does not care what the contents of the `action.type` field are - it just has to be defined. It is legal to write action types in present tense (`"users/update"`), past tense (`"users/updated"`), described as an event (`"upload/progress"`), or treated as a "setter" (`"users/setUserName"`). It is up to you to determine what a given action means in your application, and how you model those actions.
 
@@ -406,6 +416,7 @@ With the "setter" approach, the client code needed to know more about what the a
 </DetailedExplanation>
 
 ### Write Meaningful Action Names
+<span class="badge badge--warning">Strongly Recommended</span>
 
 The `action.type` field serves two main purposes:
 
@@ -415,12 +426,14 @@ The `action.type` field serves two main purposes:
 Per [Model Actions as "Events"](#model-actions-as-events-not-setters), the actual contents of the `type` field do not matter to Redux itself. However, the `type` value _does_ matter to you, the developer. **Actions should be written with meaningful, informative, descriptive type fields**. Ideally, you should be able to read through a list of dispatched action types, and have a good understanding of what happened in the application without even looking at the contents of each action. Avoid using very generic action names like `"SET_DATA"` or `"UPDATE_STORE"`, as they don't provide meaningful information on what happened.
 
 ### Allow Many Reducers to Respond to the Same Action
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Redux reducer logic is intended to be split into many smaller reducers, each independently updating their own portion of the state tree, and all composed back together to form the root reducer function. When a given action is dispatched, it might be handled by all, some, or none of the reducers.
 
 As part of this, you are encouraged to **have many reducer functions all handle the same action separately** if possible. In practice, experience has shown that most actions are typically only handled by a single reducer function, which is fine. But, modeling actions as "events" and allowing many reducers to respond to those actions will typically allow your application's codebase to scale better, and minimize the number of times you need to dispatch multiple actions to accomplish one meaningful update.
 
 ### Avoid Dispatching Many Actions Sequentially
+<span class="badge badge--warning">Strongly Recommended</span>
 
 **Avoid dispatching many actions in a row to accomplish a larger conceptual "transaction"**. This is legal, but will usually result in multiple relatively expensive UI updates, and some of the intermediate states could be potentially invalid by other parts of the application logic. Prefer dispatching a single "event"-type action that results in all of the appropriate state updates at once, or consider use of action batching addons to dispatch multiple actions with only a single UI update at the end.
 
@@ -436,12 +449,14 @@ If multiple dispatches are truly necessary, consider batching the updates in som
 </DetailedExplanation>
 
 ### Evaluate Where Each Piece of State Should Live
+<span class="badge badge--warning">Strongly Recommended</span>
 
 The ["Three Principles of Redux"](../understanding/thinking-in-redux/ThreePrinciples.md) says that "the state of your whole application is stored in a single tree". This phrasing has been over-interpreted. It does not mean that literally _every_ value in the entire app _must_ be kept in the Redux store. Instead, **there should be a single place to find all values that _you_ consider to be global and app-wide**. Values that are "local" should generally be kept in the nearest UI component instead.
 
 Because of this, it is up to you as a developer to decide what state should actually live in the Redux store, and what should stay in component state. **[Use these rules of thumb to help evaluate each piece of state and decide where it should live](../faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)**.
 
 ### Use the React-Redux Hooks API
+<span class="badge badge--warning">Strongly Recommended</span>
 
 **Prefer using [the React-Redux hooks API (`useSelector` and `useDispatch`)](https://react-redux.js.org/api/hooks) as the default way to interact with a Redux store from your React components**. While the classic `connect` API still works fine and will continue to be supported, the hooks API is generally easier to use in several ways. The hooks have less indirection, less code to write, and are simpler to use with TypeScript than `connect` is.
 
@@ -469,6 +484,7 @@ Also see the [React-Redux hooks API docs](https://react-redux.js.org/api/hooks) 
 </DetailedExplanation>
 
 ### Connect More Components to Read Data from the Store
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Prefer having more UI components subscribed to the Redux store and reading data at a more granular level. This typically leads to better UI performance, as fewer components will need to render when a given piece of state changes.
 
@@ -477,20 +493,24 @@ For example, rather than just connecting a `<UserList>` component and reading th
 This applies for both the React-Redux `connect()` API and the `useSelector()` hook.
 
 ### Use the Object Shorthand Form of `mapDispatch` with `connect`
+<span class="badge badge--warning">Strongly Recommended</span>
 
 The `mapDispatch` argument to `connect` can be defined as either a function that receives `dispatch` as an argument, or an object containing action creators. **We recommend always using [the "object shorthand" form of `mapDispatch`](https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object)**, as it simplifies the code considerably. There is almost never a real need to write `mapDispatch` as a function.
 
 ### Call `useSelector` Multiple Times in Function Components
+<span class="badge badge--warning">Strongly Recommended</span>
 
 **When retrieving data using the `useSelector` hook, prefer calling `useSelector` many times and retrieving smaller amounts of data, instead of having a single larger `useSelector` call that returns multiple results in an object**. Unlike `mapState`, `useSelector` is not required to return an object, and having selectors read smaller values means it is less likely that a given state change will cause this component to render.
 
 However, try to find an appropriate balance of granularity. If a single component does need all fields in a slice of the state , just write one `useSelector` that returns that whole slice instead of separate selectors for each individual field.
 
 ### Use Static Typing
+<span class="badge badge--warning">Strongly Recommended</span>
 
 **Use a static type system like TypeScript or Flow rather than plain JavaScript**. The type systems will catch many common mistakes, improve the documentation of your code, and ultimately lead to better long-term maintainability. While Redux and React-Redux were originally designed with plain JS in mind, both work well with TS and Flow. Redux Toolkit is specifically written in TS and is designed to provide good type safety with a minimal amount of additional type declarations.
 
 ### Use the Redux DevTools Extension for Debugging
+<span class="badge badge--warning">Strongly Recommended</span>
 
 **Configure your Redux store to enable [debugging with the Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)**. It allows you to view:
 
@@ -505,6 +525,7 @@ In addition, the DevTools allows you to do "time-travel debugging", stepping bac
 **Redux was specifically designed to enable this kind of debugging, and the DevTools are one of the most powerful reasons to use Redux**.
 
 ### Use Plain JavaScript Objects for State
+<span class="badge badge--warning">Strongly Recommended</span>
 
 Prefer using plain JavaScript objects and arrays for your state tree, rather than specialized libraries like Immutable.js. While there are some potential benefits to using Immutable.js, most of the commonly stated goals such as easy reference comparisons are a property of immutable updates in general, and do not require a specific library. This also keeps bundle sizes smaller and reduces complexity from data type conversions.
 
@@ -535,13 +556,10 @@ Overall, Immutable.js adds too much overhead for too little practical benefit. I
 
 </DetailedExplanation>
 
-</div>
-
-<div class="priority-rules priority-recommended">
-
 ## Priority C Rules: Recommended
 
 ### Write Action Types as `domain/eventName`
+<span class="badge badge--info">Recommended</span>
 
 The original Redux docs and examples generally used a "SCREAMING_SNAKE_CASE" convention for defining action types, such as `"ADD_TODO"` and `"INCREMENT"`. This matches typical conventions in most programming languages for declaring constant values. The downside is that the uppercase strings can be hard to read.
 
@@ -550,6 +568,7 @@ Other communities have adopted other conventions, usually with some indication o
 Redux Toolkit's `createSlice` function currently generates action types that look like `"domain/action"`, such as `"todos/addTodo"`. Going forward, **we suggest using the `"domain/action"` convention for readability**.
 
 ### Write Actions Using the Flux Standard Action Convention
+<span class="badge badge--info">Recommended</span>
 
 The original "Flux Architecture" documentation only specified that action objects should have a `type` field, and did not give any further guidance on what kinds of fields or naming conventions should be used for fields in actions. To provide consistency, Andrew Clark created a convention called ["Flux Standard Actions"](https://github.com/redux-utilities/flux-standard-action) early in Redux's development. Summarized, the FSA convention says that actions:
 
@@ -564,6 +583,7 @@ Many libraries in the Redux ecosystem have adopted the FSA convention, and Redux
 > **Note**: The FSA spec says that "error" actions should set `error: true`, and use the same action type as the "valid" form of the action. In practice, most developers write separate action types for the "success" and "error" cases. Either is acceptable.
 
 ### Use Action Creators
+<span class="badge badge--info">Recommended</span>
 
 "Action creator" functions started with the original "Flux Architecture" approach. With Redux, action creators are not strictly required. Components and other logic can always call `dispatch({type: "some/action"})` with the action object written inline.
 
@@ -572,6 +592,7 @@ However, using action creators provides consistency, especially in cases where s
 **Prefer using action creators for dispatching any actions**. However, rather than writing action creators by hand, **we recommend using the `createSlice` function from Redux Toolkit, which will generate action creators and action types automatically**.
 
 ### Use Thunks for Async Logic
+<span class="badge badge--info">Recommended</span>
 
 Redux was designed to be extensible, and the middleware API was specifically created to allow different forms of async logic to be plugged into the Redux store. That way, users wouldn't be forced to learn a specific library like RxJS if it wasn't appropriate for their needs.
 
@@ -582,6 +603,7 @@ This led to a wide variety of Redux async middleware addons being created, and t
 If you have truly complex async workflows that involve things like cancelation, debouncing, running logic after a given action was dispatched, or "background-thread"-type behavior, then consider adding more powerful async middleware like Redux-Saga or Redux-Observable.
 
 ### Move Complex Logic Outside Components
+<span class="badge badge--info">Recommended</span>
 
 We have traditionally suggested keeping as much logic as possible outside components. That was partly due to encouraging the "container/presentational" pattern, where many components simply accept data as props and display UI accordingly, but also because dealing with async logic in class component lifecycle methods can become difficult to maintain.
 
@@ -590,6 +612,7 @@ We have traditionally suggested keeping as much logic as possible outside compon
 However, **the use of React hooks does make it somewhat easier to manage logic like data fetching directly inside a component**, and this may replace the need for thunks in some cases.
 
 ### Use Selector Functions to Read from Store State
+<span class="badge badge--info">Recommended</span>
 
 "Selector functions" are a powerful tool for encapsulating reading values from the Redux store state and deriving further data from those values. In addition, libraries like Reselect enable creating memoized selector functions that only recalculate results when the inputs have changed, which is an important aspect of optimizing performance.
 
@@ -598,10 +621,12 @@ However, **the use of React hooks does make it somewhat easier to manage logic l
 However, don't feel that you _must_ write selector functions for every field in your state. Find a reasonable balance for granularity, based on how often fields are accessed and updated, and how much actual benefit the selectors are providing in your application.
 
 ### Name Selector Functions as `selectThing`
+<span class="badge badge--info">Recommended</span>
 
 **We recommend prefixing selector function names with the word `select`**, combined with a description of the value being selected. Examples of this would be `selectTodos`, `selectVisibleTodos`, and `selectTodoById`.
 
 ### Avoid Putting Form State In Redux
+<span class="badge badge--info">Recommended</span>
 
 **Most form state shouldn't go in Redux**. In most use cases, the data is not truly global, is not being cached, and is not being used by multiple components at once. In addition, connecting forms to Redux often involves dispatching actions on every single change event, which causes performance overhead and provides no real benefit. (You probably don't need to time-travel backwards one character from `name: "Mark"` to `name: "Mar"`.)
 
