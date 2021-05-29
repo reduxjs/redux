@@ -256,9 +256,7 @@ describe('todos reducer', () => {
 
 ### Components
 
-A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
-
-First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utility that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
 
 ```sh
 npm install --save-dev @testing-library/react
@@ -270,92 +268,18 @@ If you are using jest as recommended above, we also recommend installing [jest-d
 npm install --save-dev @testing-library/jest-dom
 ```
 
-To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert whether the callbacks were called when expected.
-
-#### Example
-
-```js
-import React from 'react'
-import PropTypes from 'prop-types'
-import TodoTextInput from './TodoTextInput'
-
-const Header = ({ addTodo }) => {
-  const handleSave = text => {
-    if (text.length !== 0) {
-      addTodo(text)
-    }
-  }
-
-  return (
-    <header className="header">
-      <h1>todos</h1>
-      <TodoTextInput
-        newTodo={true}
-        onSave={handleSave}
-        placeholder="What needs to be done?"
-      />
-    </header>
-  )
-}
-
-Header.propTypes = {
-  addTodo: PropTypes.func.isRequired
-}
-
-export default Header
-```
-
-can be tested like:
-
-```js
-import React from 'react'
-import { render, fireEvent, screen } from '@testing-library/react'
-import Header from '../../components/Header'
-
-it('should not call addTodo if length of text is 0', () => {
-  const mockAddTodo = jest.fn()
-  render(<Header addTodo={mockAddTodo} />)
-
-  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
-    target: { value: '' }
-  })
-
-  expect(mockAddTodo).toHaveBeenCalledTimes(0)
-})
-
-it('should call addTodo if length of text is greater than 0', () => {
-  const mockAddTodo = jest.fn()
-  render(<Header addTodo={mockAddTodo} />)
-
-  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
-    target: { value: 'Use Redux' }
-  })
-
-  expect(mockAddTodo).toHaveBeenCalledTimes(1)
-})
-```
-
-### Connected Components
-
-If you use a library like [React Redux](https://github.com/reduxjs/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://react-redux.js.org/api/connect). This lets you inject Redux state into a regular React component.
-
 Consider the following `App` component:
 
 ```js
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-const App = props => {
-  return <div>{props.user}</div>
+export default function App() {
+  const user = useSelector(state => state.user)
+  return <div>{user}</div>
 }
-
-const mapStateToProps = state => {
-  return state
-}
-
-export default connect(mapStateToProps)(App)
 ```
 
-To test it, we can use the `wrapper` option in React Testing Library's `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
+To test the component, we `render` it into the DOM and pass stubbed callbacks as props, then we assert whether the callbacks were called when expected. We can use the `wrapper` option in the `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
 
 Our `render` function can look like this:
 
@@ -398,7 +322,7 @@ import React from 'react'
 import { render, fireEvent, screen } from '../../test-utils'
 import App from '../../containers/App'
 
-it('Renders the connected app with initialState', () => {
+it('Renders the app with initialState', () => {
   render(<App />, { initialState: { user: 'Redux User' } })
 
   expect(screen.getByText(/redux user/i)).toBeInTheDocument()
