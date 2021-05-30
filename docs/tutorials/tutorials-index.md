@@ -16,7 +16,9 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
 ## Redux Official Tutorials
 
-We have two different sets of tutorials:
+The [**Quick Start** page](./quick-start.md) briefly shows the basics of setting up a Redux Toolkit + React application, and the [**TypeScript Quick Start** page](./typescript.md) shows how to set up Redux Toolkit and React for use with TypeScript.
+
+We have two different full-size tutorials:
 
 - The [**Redux Essentials tutorial**](./essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices.
 - The [**Redux Fundamentals tutorial**](./fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.

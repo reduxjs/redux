@@ -10,6 +10,8 @@ module.exports = {
     ],
     Tutorials: [
       'tutorials/tutorials-index',
+      'tutorials/quick-start',
+      'tutorials/typescript-quick-start',
       {
         type: 'category',
         label: 'Redux Essentials',
