@@ -218,4 +218,4 @@ Here's the complete counter application as a running CodeSandbox:
 
 ## What's Next?
 
-We recommend going through [**the "Redux Essentials" and "Redux Fundamentals" tutorials in the Redux core docs**](./tutorials-index), which will give you a complete understanding of how Redux works, what Redux Toolkit does, and how to use it correctly.
+We recommend going through [**the "Redux Essentials" and "Redux Fundamentals" tutorials in the Redux core docs**](./tutorials-index.md), which will give you a complete understanding of how Redux works, what Redux Toolkit does, and how to use it correctly.
