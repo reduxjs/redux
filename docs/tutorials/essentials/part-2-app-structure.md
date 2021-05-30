@@ -495,13 +495,16 @@ The Redux store can be extended with "middleware", which are a kind of add-on or
 The Redux Thunk middleware modifies the store to let you pass functions into `dispatch`. In fact, it's short enough we can paste it here:
 
 ```js
-const thunkMiddleware = ({ dispatch, getState }) => next => action => {
-  if (typeof action === 'function') {
-    return action(dispatch, getState)
-  }
+const thunkMiddleware =
+  ({ dispatch, getState }) =>
+  next =>
+  action => {
+    if (typeof action === 'function') {
+      return action(dispatch, getState)
+    }
 
-  return next(action)
-}
+    return next(action)
+  }
 ```
 
 It looks to see if the "action" that was passed into `dispatch` is actually a function instead of a plain action object. If it's actually a function, it calls the function, and returns the result. Otherwise, since this must be an action object, it passes the action forward to the store.

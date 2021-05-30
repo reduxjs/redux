@@ -7,6 +7,7 @@ type ThunkAction<T extends any = any> = T extends AnyAction
   : never
 
 export function thunk({ dispatch, getState }: MiddlewareAPI) {
-  return (next: Dispatch) => <_>(action: ThunkAction) =>
-    typeof action === 'function' ? action(dispatch, getState) : next(action)
+  return (next: Dispatch) =>
+    <_>(action: ThunkAction) =>
+      typeof action === 'function' ? action(dispatch, getState) : next(action)
 }
