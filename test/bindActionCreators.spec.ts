@@ -49,14 +49,14 @@ describe('bindActionCreators', () => {
     // as this is testing against invalid values, we will cast to unknown and then back to ActionCreator<any>
     // in a typescript environment this test is unnecessary, but required in javascript
     const boundActionCreators = bindActionCreators(
-      ({
+      {
         ...actionCreators,
         foo: 42,
         bar: 'baz',
         wow: undefined,
         much: {},
         test: null
-      } as unknown) as ActionCreator<any>,
+      } as unknown as ActionCreator<any>,
       store.dispatch
     )
     expect(Object.keys(boundActionCreators)).toEqual(
@@ -94,7 +94,7 @@ describe('bindActionCreators', () => {
   it('throws for a primitive actionCreator', () => {
     expect(() => {
       bindActionCreators(
-        ('string' as unknown) as ActionCreator<any>,
+        'string' as unknown as ActionCreator<any>,
         store.dispatch
       )
     }).toThrow(
