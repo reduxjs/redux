@@ -253,7 +253,7 @@ Earlier, we saw that clicking the different buttons in the UI dispatched three d
 - `{type: "counter/decrement"}`
 - `{type: "counter/incrementByAmount"}`
 
-We know that actions are plain objects with a `type` field, that the `type` field is always a string, and that we typically have "action creator" functions that create and return the action objects. So where are those action objects, type strings, and action creators defined?
+We know that actions are plain objects with a `type` field, the `type` field is always a string, and we typically have "action creator" functions that create and return the action objects. So where are those action objects, type strings, and action creators defined?
 
 We _could_ write those all by hand, every time. But, that would be tedious. Besides, what's _really_ important in Redux is the reducer functions, and the logic they have for calculating new state.
 
