@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "emitDeclarationOnly": false,
+    "strict": true,
+    "noEmit": true,
+    "target": "es2018",
+    "jsx": "react",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "noImplicitReturns": false
+  }
+}
