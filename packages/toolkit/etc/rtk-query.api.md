@@ -8,7 +8,7 @@ import type { ActionCreatorWithoutPayload } from '@reduxjs/toolkit';
 import type { ThunkDispatch } from '@reduxjs/toolkit';
 
 // @public (undocumented)
-export type Api<BaseQuery extends BaseQueryFn, Definitions extends EndpointDefinitions, ReducerPath extends string, TagTypes extends string, Enhancers extends ModuleName = CoreModule> = Id<Id<UnionToIntersection<ApiModules<BaseQuery, Definitions, ReducerPath, TagTypes>[Enhancers]>> & {
+export type Api<BaseQuery extends BaseQueryFn, Definitions extends EndpointDefinitions, ReducerPath extends string, TagTypes extends string, Enhancers extends ModuleName = CoreModule> = UnionToIntersection<ApiModules<BaseQuery, Definitions, ReducerPath, TagTypes>[Enhancers]> & {
     injectEndpoints<NewDefinitions extends EndpointDefinitions>(_: {
         endpoints: (build: EndpointBuilder<BaseQuery, TagTypes, ReducerPath>) => NewDefinitions;
         overrideExisting?: boolean;
@@ -19,7 +19,7 @@ export type Api<BaseQuery extends BaseQueryFn, Definitions extends EndpointDefin
             [K in keyof NewDefinitions]?: Partial<NewDefinitions[K]> | ((definition: NewDefinitions[K]) => void);
         } : never;
     }): Api<BaseQuery, ReplaceTagTypes<Definitions, TagTypes | NewTagTypes>, ReducerPath, TagTypes | NewTagTypes, Enhancers>;
-}>;
+};
 
 // @public (undocumented)
 export interface ApiModules<BaseQuery extends BaseQueryFn, Definitions extends EndpointDefinitions, ReducerPath extends string, TagTypes extends string> {
@@ -94,6 +94,12 @@ export interface FetchBaseQueryError {
     // (undocumented)
     status: number;
 }
+
+// @public (undocumented)
+export type FetchBaseQueryMeta = {
+    request: Request;
+    response: Response;
+};
 
 // @public (undocumented)
 export type Module<Name extends ModuleName> = {

@@ -67,9 +67,7 @@
     "netlify-plugin-cache": "^1.0.3",
     "node-fetch": "^2.6.1",
     "prettier": "^2.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.3",
+    "rimraf": "^3.0.2",
     "rollup": "^2.47.0",
     "rollup-plugin-strip-code": "^0.2.6",
     "size-limit": "^4.11.0",
@@ -122,9 +120,5 @@
   "bugs": {
     "url": "https://github.com/reduxjs/redux-toolkit/issues"
   },
-  "homepage": "https://github.com/reduxjs/redux-toolkit#readme",
-  "directories": {
-    "doc": "docs",
-    "example": "example"
-  }
+  "homepage": "https://redux-toolkit.js.org"
 }
