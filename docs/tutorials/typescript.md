@@ -155,7 +155,7 @@ const initialState = {
 In component files, import the pre-typed hooks instead of the standard hooks from React-Redux.
 
 ```tsx title="features/counter/Counter.tsx"
-import React, { useState } from 'react'
+import React from 'react'
 
 // highlight-next-line
 import { useAppSelector, useAppDispatch } from 'app/hooks'
