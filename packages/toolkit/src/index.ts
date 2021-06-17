@@ -110,7 +110,11 @@ export type {
   Comparer,
 } from './entities/models'
 
-export { createAsyncThunk, unwrapResult } from './createAsyncThunk'
+export {
+  createAsyncThunk,
+  unwrapResult,
+  miniSerializeError,
+} from './createAsyncThunk'
 export type {
   AsyncThunk,
   AsyncThunkOptions,

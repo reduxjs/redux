@@ -1443,7 +1443,7 @@ describe('hooks with createApi defaults set', () => {
           return res(ctx.json(posts))
         }),
         rest.put<Partial<Post>>(
-          'http://example.com/posts/:id',
+          'http://example.com/post/:id',
           (req, res, ctx) => {
             const id = Number(req.params.id)
             const idx = posts.findIndex((post) => post.id === id)
@@ -1463,7 +1463,7 @@ describe('hooks with createApi defaults set', () => {
             return res(ctx.json(posts))
           }
         ),
-        rest.post('http://example.com/posts', (req, res, ctx) => {
+        rest.post('http://example.com/post', (req, res, ctx) => {
           let post = req.body as Omit<Post, 'id'>
           startingId += 1
           posts.concat({
@@ -1497,7 +1497,7 @@ describe('hooks with createApi defaults set', () => {
         }),
         updatePost: build.mutation<Post, Partial<Post>>({
           query: ({ id, ...body }) => ({
-            url: `posts/${id}`,
+            url: `post/${id}`,
             method: 'PUT',
             body,
           }),
@@ -1505,7 +1505,7 @@ describe('hooks with createApi defaults set', () => {
         }),
         addPost: build.mutation<Post, Partial<Post>>({
           query: (body) => ({
-            url: `posts`,
+            url: `post`,
             method: 'POST',
             body,
           }),

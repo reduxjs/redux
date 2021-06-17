@@ -99,7 +99,7 @@ const retryWithBackoff: BaseQueryEnhancer<
  *       query: () => ({ url: 'posts' }),
  *     }),
  *     getPost: build.query<PostsResponse, string>({
- *       query: (id) => ({ url: `posts/${id}` }),
+ *       query: (id) => ({ url: `post/${id}` }),
  *       extraOptions: { maxRetries: 8 }, // You can override the retry behavior on each endpoint
  *     }),
  *   }),

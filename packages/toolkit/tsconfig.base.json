@@ -10,6 +10,7 @@
     "rootDir": "./src",
     // stricter type-checking for stronger correctness. Recommended by TS
     "strict": true,
+    // "strictOptionalProperties": false, // disable strictOptionalProperties for now to also build with 4.4
     // linter checks for common issues
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

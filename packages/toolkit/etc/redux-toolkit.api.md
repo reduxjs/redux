@@ -407,6 +407,9 @@ export class MiddlewareArray<Middlewares extends Middleware<any, any>> extends A
     prepend<AdditionalMiddlewares extends ReadonlyArray<Middleware<any, any>>>(...items: AdditionalMiddlewares): MiddlewareArray<AdditionalMiddlewares[number] | Middlewares>;
 }
 
+// @public
+export const miniSerializeError: (value: any) => SerializedError;
+
 // @public (undocumented)
 export let nanoid: (size?: number) => string;
 

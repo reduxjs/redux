@@ -54,7 +54,7 @@ export const server = setupServer(
     return res(ctx.json({ id }))
   }),
   rest.get<Post, any, { id: number }>(
-    'http://example.com/posts/:id',
+    'http://example.com/post/:id',
     (req, res, ctx) => {
       return res(ctx.json(posts[req.params.id]))
     }

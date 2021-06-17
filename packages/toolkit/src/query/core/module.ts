@@ -121,7 +121,7 @@ declare module '../apiTypes' {
         ThunkDispatch<any, any, AnyAction>
       >
       /**
-       * TODO
+       * A collection of utility thunks for various situations.
        */
       util: {
         /**
@@ -130,7 +130,7 @@ declare module '../apiTypes' {
          * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a set of options used to determine if the data actually should be re-fetched based on cache staleness.
          *
          * React Hooks users will most likely never need to use this directly, as the `usePrefetch` hook will dispatch this thunk internally as needed when you call the prefetching function supplied by the hook.
-         * 
+         *
          * @example
          *
          * ```ts no-transpile

@@ -290,7 +290,7 @@ describe('usage scenario tests', () => {
             throw randomResult.error
           }
           const post = randomResult.data as Post
-          const result = await fetchWithBQ(`/posts/${post.id}`)
+          const result = await fetchWithBQ(`/post/${post.id}`)
           return result.data
             ? { data: result.data as Post }
             : { error: result.error as FetchBaseQueryError }

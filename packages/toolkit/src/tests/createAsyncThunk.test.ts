@@ -323,7 +323,7 @@ describe('createAsyncThunk', () => {
         try {
           throw error
         } catch (err) {
-          if (!err.response) {
+          if (!(err as any).response) {
             throw err
           }
           return rejectWithValue(errorPayload)

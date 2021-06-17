@@ -163,7 +163,7 @@ const anyAction = { type: 'foo' } as AnyAction
       )
       return result.data.data
     } catch (err) {
-      let error: AxiosError<ErrorFromServer> = err // cast for access to AxiosError properties
+      let error: AxiosError<ErrorFromServer> = err as any // cast for access to AxiosError properties
       if (!error.response) {
         // let it be handled as any other unknown error
         throw err
