@@ -9,7 +9,7 @@ import {
   Unsubscribe,
   Observer,
   PreloadedState,
-  CombinedState
+  CombinedState,
 } from 'redux'
 // @ts-ignore
 import $$observable from '../src/utils/symbol-observable'
