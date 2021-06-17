@@ -78,10 +78,10 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build-ci": "rimraf dist && tsc && node scripts/cli.js --skipExtraction ",
+    "build-ci": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
     "build-prepare": "npm run build-ci",
-    "build": "rimraf dist && tsc && node scripts/cli.js --local",
-    "build-only": "rimraf dist && tsc && node scripts/cli.js --skipExtraction",
+    "build": "yarn rimraf dist && yarn tsc && node scripts/cli.js --local --skipExtraction",
+    "build-only": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
     "format": "prettier --write \"(src|examples)/**/*.{ts,tsx}\" \"**/*.md\"",
     "format:check": "prettier --list-different \"(src|examples)/**/*.{ts,tsx}\" \"docs/*/**.md\"",
     "lint": "eslint src examples",
