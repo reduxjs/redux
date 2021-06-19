@@ -10,5 +10,6 @@
   [plugins.inputs]
     paths = [
       "node_modules/.cache",
+      "website/node_modules/.cache"
     ]
 
