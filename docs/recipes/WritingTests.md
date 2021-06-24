@@ -2,6 +2,7 @@
 id: writing-tests
 title: Writing Tests
 hide_title: true
+description: "Recipes > Writing Tests: recommended practices and setup for testing Redux apps"
 ---
 
 &nbsp;
@@ -11,25 +12,17 @@ hide_title: true
 :::tip What You'll Learn
 
 - Recommended practices for testing apps using Redux
+- Examples of test configuration and setup
 
 :::
 
-Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking. However, you should consider whether each piece of your Redux code needs it's own dedicated tests.
-
-:::info
-
-See [Blogged Answers: The Evolution of Redux Testing Approaches](https://blog.isquaredsoftware.com/2021/06/the-evolution-of-redux-testing-approaches/) for Mark Erikson's thoughts on how Redux testing has evolved from 'isolation' to 'integration' over time.
-
-:::
-
-### Guiding Principles
+## Guiding Principles
 
 The guiding principles for testing Redux logic closely follow that of React Testing Library:
 
 > [The more your tests resemble the way your software is used, the more confidence they can give you.](https://twitter.com/kentcdodds/status/977018512689455106) - Kent C. Dodds
 
-In the majority of scenarios, the end-user does not know, and does not care whether Redux is used within the application at all.
-As such, the Redux code can be treated as an implementation detail of the app, without requiring explicit tests for the Redux code in many circumstances.
+Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking. However, you should consider whether each piece of your Redux code needs it's own dedicated tests.  In the majority of scenarios, the end-user does not know, and does not care whether Redux is used within the application at all.  As such, the Redux code can be treated as an implementation detail of the app, without requiring explicit tests for the Redux code in many circumstances.
 
 The general advice for testing an app using Redux is as follows:
 
@@ -38,11 +31,14 @@ The general advice for testing an app using Redux is as follows:
 
 :::info
 
-See [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details) for Kent C. Dodds' thoughts on why he recommends avoiding testing implementation details.
+For background on why we recommend integration-style tests, see:
+
+- Kent C Dodds: [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details): thoughts on why he recommends avoiding testing implementation details.
+- Mark Erikson: [Blogged Answers: The Evolution of Redux Testing Approaches](https://blog.isquaredsoftware.com/2021/06/the-evolution-of-redux-testing-approaches/): thoughts on how Redux testing has evolved from 'isolation' to 'integration' over time.
 
 :::
 
-### Setting Up
+## Setting Up
 
 Redux can be tested with any test runner, however in the examples below we will be using [Jest](https://facebook.github.io/jest/), a popular testing framework.
 Note that it runs in a Node environment, so you won't have access to the real DOM.
@@ -82,7 +78,7 @@ Then, add this to `scripts` in your `package.json`:
 
 and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
 
-### Action Creators & Thunks
+## Action Creators & Thunks
 
 In Redux, action creators are functions which return plain objects. Our recommendation is not to write action creators manually, but instead have them generated automatically by [`createSlice`](https://redux-toolkit.js.org/api/createSlice#return-value), or created via [`createAction`](https://redux-toolkit.js.org/api/createAction) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). As such, you should not feel the need to test action creators by themselves (the Redux Toolkit maintainers have already done that for you!).
 
@@ -100,7 +96,7 @@ If you prefer, or are otherwise required to write unit tests for your action cre
 
 :::
 
-### Reducers
+## Reducers
 
 Reducers are pure functions that return the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested.
 
@@ -187,7 +183,7 @@ test('should handle a todo being added to an existing list', () => {
 })
 ```
 
-### Components
+## Components
 
 Our recommendation for testing components that include Redux code is via integration tests that include everything working together, with assertions aimed at verifying that the app behaves the way you expect when the user interacts with it in a given manner.
 
@@ -356,7 +352,7 @@ test('fetches & receives a user after clicking the fetch user button', async () 
 
 In this test, we have completely avoided testing any Redux code directly, treating it as an implementation detail. As a result, we are free to re-factor the _implementation_, while our tests will continue to pass and avoid false negatives (tests that fail despite the app still behaving how we want it to). We might change our state structure, convert our slice to use [RTK-Query](https://redux-toolkit.js.org/rtk-query/overview), or remove Redux entirely, and our tests will still pass. We have a strong degree of confidence that if we change some code and our tests report a failure, then our app really _is_ broken.
 
-### Middleware
+## Middleware
 
 Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
 
@@ -425,7 +421,7 @@ test('passes dispatch and getState', () => {
 
 In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
 
-### Further Information
+## Further Information
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
 
