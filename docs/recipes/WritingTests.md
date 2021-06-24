@@ -8,9 +8,15 @@ hide_title: true
 
 # Writing Tests
 
+:::tip What You'll Learn
+
+- Recommended practices for testing apps using Redux
+
+:::
+
 Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking. However, you should consider whether each piece of your Redux code needs it's own dedicated tests.
 
-:::tip
+:::info
 
 See [Blogged Answers: The Evolution of Redux Testing Approaches](https://blog.isquaredsoftware.com/2021/06/the-evolution-of-redux-testing-approaches/) for Mark Erikson's thoughts on how Redux testing has evolved from 'isolation' to 'integration' over time.
 
@@ -30,7 +36,7 @@ The general advice for testing an app using Redux is as follows:
 - Use integration tests for everything working together. I.e. for a React app using Redux, render a `<Provider>` with a real store instance wrapping the component/s being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
 - If needed, use basic unit tests for pure functions such as particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
 
-:::tip
+:::info
 
 See [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details) for Kent C. Dodds' thoughts on why he recommends avoiding testing implementation details.
 
@@ -38,7 +44,7 @@ See [Testing Implementation Details](https://kentcdodds.com/blog/testing-impleme
 
 ### Setting Up
 
-We recommend [Jest](https://facebook.github.io/jest/) as the testing engine.
+Redux can be tested with any test runner, however in the examples below we will be using [Jest](https://facebook.github.io/jest/), a popular testing framework.
 Note that it runs in a Node environment, so you won't have access to the real DOM.
 Jest can instead use [jsdom](https://github.com/jsdom/jsdom) to emulate portions of the browser in a test environment.
 
@@ -76,23 +82,29 @@ Then, add this to `scripts` in your `package.json`:
 
 and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
 
-### Action Creators & Async Action Creators
+### Action Creators & Thunks
 
 In Redux, action creators are functions which return plain objects. Our recommendation is not to write action creators manually, but instead have them generated automatically by [`createSlice`](https://redux-toolkit.js.org/api/createSlice#return-value), or created via [`createAction`](https://redux-toolkit.js.org/api/createAction) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). As such, you should not feel the need to test action creators by themselves (the Redux Toolkit maintainers have already done that for you!).
 
 The return value of action creators is considered an implementation detail within your application, and when following an integration testing style, do not need explicit tests.
 
-Similarly for async action creators using using [Redux Thunk](https://github.com/gaearon/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started) to create thunk action creators. The created async thunk action creator handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
+Similarly for thunks using [Redux Thunk](https://github.com/gaearon/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
 
 We consider thunk behavior to be an implementation detail of the application, and recommend that it be covered by testing the group of components (or whole app) using it, rather than testing the thunk in isolation.
 
-Our recommendation is to mock async requests at the `fetch/xhr` level using tools like [`msw`](https://mswjs.io/), [`miragejs`](https://miragejs.com/), [`jest-fetch-mock`](https://github.com/jefflau/jest-fetch-mock#readme), [`fetch-mock`](https://www.wheresrhys.co.uk/fetch-mock/), or similar. By mocking requests at this level, none of the thunk logic has to change in a test - the thunk still tries to make a "real" async request, it just gets intercepted. See the [components example](#example-1) for an example of testing a component which internally includes the behavior of async action creators.
+Our recommendation is to mock async requests at the `fetch/xhr` level using tools like [`msw`](https://mswjs.io/), [`miragejs`](https://miragejs.com/), [`jest-fetch-mock`](https://github.com/jefflau/jest-fetch-mock#readme), [`fetch-mock`](https://www.wheresrhys.co.uk/fetch-mock/), or similar. By mocking requests at this level, none of the thunk logic has to change in a test - the thunk still tries to make a "real" async request, it just gets intercepted. See the [components example](#example-1) for an example of testing a component which internally includes the behavior of a thunk.
+
+:::info
+
+If you prefer, or are otherwise required to write unit tests for your action creators or thunks, refer to the tests that Redux Toolkit uses for [`createAction`](https://github.com/reduxjs/redux-toolkit/blob/635d6d5e513e13dd59cd717f600d501b30ca2381/src/tests/createAction.test.ts) and [`createAsyncThunk`](https://github.com/reduxjs/redux-toolkit/blob/635d6d5e513e13dd59cd717f600d501b30ca2381/src/tests/createAsyncThunk.test.ts).
+
+:::
 
 ### Reducers
 
-Reducers pure functions that return the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested. 
+Reducers are pure functions that return the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested.
 
-Because reducers are pure functions, testing them should be straightforward.  Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
+Because reducers are pure functions, testing them should be straightforward. Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
 
 #### Example
 
@@ -177,15 +189,15 @@ test('should handle a todo being added to an existing list', () => {
 
 ### Components
 
-Our recommendation for testing components that include Redux code is via integration tests that include everything working together, with assertions aimed at verifying that the app behaves the way you expect when the user interacts with it in the expected manner.
+Our recommendation for testing components that include Redux code is via integration tests that include everything working together, with assertions aimed at verifying that the app behaves the way you expect when the user interacts with it in a given manner.
 
-First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utility that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
 
 ```sh
 npm install --save-dev @testing-library/react
 ```
 
-If you are using jest as recommended above, we also recommend installing [jest-dom](https://github.com/testing-library/jest-dom) as it provides a set of custom jest matchers that you can use to extend jest. These will make your tests more declarative, clear to read and to maintain. jest-dom is being used in the examples below.
+If you are using jest, we also recommend installing [jest-dom](https://github.com/testing-library/jest-dom) as it provides a set of custom jest matchers that you can use to extend jest. These will make your tests more declarative, clear to read and to maintain. jest-dom is being used in the examples below.
 
 ```sh
 npm install --save-dev @testing-library/jest-dom
@@ -421,4 +433,4 @@ In some cases, you will need to modify the `create` function to use different mo
 
 - [Blogged Answers: The Evolution of Redux Testing Approaches](https://blog.isquaredsoftware.com/2021/06/the-evolution-of-redux-testing-approaches/): Mark Erikson's thoughts on how Redux testing has evolved from 'isolation' to 'integration'.
 
-- [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details): Blog post by Kent C. Dodds on why he recommends to avoid testing implementation details
+- [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details): Blog post by Kent C. Dodds on why he recommends to avoid testing implementation details.
