@@ -28,7 +28,7 @@ As such, the Redux code can be treated as an implementation detail of the app, w
 The general advice for testing an app using Redux is as follows:
 
 - Use integration tests for everything working together. I.e. for a React app using Redux, render a `<Provider>` with a real store instance wrapping the component/s being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
-- Use basic unit tests _where fitting_ for pure functions that deserve it. I.e. particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
+- If needed, use basic unit tests for pure functions such as particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
 
 :::tip
 
@@ -90,7 +90,9 @@ Our recommendation is to mock async requests at the `fetch/xhr` level using tool
 
 ### Reducers
 
-A reducer should be a pure function that returns the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested. As a reducer should always be a pure function, it is easy to write tests for - a given input should always provide a particular output.
+Reducers pure functions that return the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested. 
+
+Because reducers are pure functions, testing them should be straightforward.  Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
 
 #### Example
 
@@ -249,7 +251,7 @@ export default function App() {
 }
 ```
 
-This app involves async action creators, reducers and selectors. All of these can be tested by writing an integration test with the following in mind:
+This app involves thunks, reducers and selectors. All of these can be tested by writing an integration test with the following in mind:
 
 - Upon first loading the app, there should be no user yet - we should see 'No user' on the screen.
 - After clicking the button that says 'Fetch user', we expect it to start fetching the user. We should see 'Fetching user...' displayed on the screen.
