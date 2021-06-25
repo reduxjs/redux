@@ -2,10 +2,7 @@
 id: immutable-update-patterns
 title: Immutable Update Patterns
 description: 'Structuring Reducers > Immutable Update Patterns: How to correctly update state immutably, with examples of common mistakes'
-hide_title: true
 ---
-
-&nbsp;
 
 # Immutable Update Patterns
 

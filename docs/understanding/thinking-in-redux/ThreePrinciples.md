@@ -2,10 +2,7 @@
 id: three-principles
 title: Three Principles
 description: 'Introduction > Three Principles: Three key principles for using Redux'
-hide_title: true
 ---
-
-&nbsp;
 
 # Three Principles
 

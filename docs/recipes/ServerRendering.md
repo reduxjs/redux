@@ -1,10 +1,7 @@
 ---
 id: server-rendering
 title: Server Rendering
-hide_title: true
 ---
-
-&nbsp;
 
 # Server Rendering
 

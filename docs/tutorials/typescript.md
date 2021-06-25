@@ -2,10 +2,7 @@
 id: typescript-quick-start
 title: TypeScript Quick Start
 sidebar_label: TypeScript Quick Start
-hide_title: true
 ---
-
-&nbsp;
 
 # Redux Toolkit TypeScript Quick Start
 

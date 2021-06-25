@@ -1,10 +1,7 @@
 ---
 id: using-object-spread-operator
 title: Using Object Spread Operator
-hide_title: true
 ---
-
-&nbsp;
 
 # Using Object Spread Operator
 

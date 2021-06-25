@@ -1,10 +1,8 @@
 ---
 id: performance
 title: Performance
-hide_title: true
+sidebar_label: Performance
 ---
-
-&nbsp;
 
 # Redux FAQ: Performance
 

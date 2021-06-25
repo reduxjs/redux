@@ -1,10 +1,8 @@
 ---
 id: organizing-state
 title: Organizing State
-hide_title: true
+sidebar_label: Organizing State
 ---
-
-&nbsp;
 
 # Redux FAQ: Organizing State
 

@@ -1,10 +1,8 @@
 ---
 id: code-structure
 title: Code Structure
-hide_title: true
+sidebar_label: Code Structure
 ---
-
-&nbsp;
 
 import { DetailedExplanation } from '../components/DetailedExplanation'
 

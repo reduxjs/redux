@@ -1,10 +1,7 @@
 ---
 id: computing-derived-data
 title: Computing Derived Data
-hide_title: true
 ---
-
-&nbsp;
 
 # Computing Derived Data
 

@@ -2,10 +2,7 @@
 id: getting-started
 title: Getting Started with Redux
 description: 'Introduction > Getting Started: Resources to get started learning and using Redux'
-hide_title: true
 ---
-
-&nbsp;
 
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
@@ -192,7 +189,7 @@ Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain
 
 See [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/let-s-learn-modern-redux) for a transcript and links to the example app source.
 
-<LiteYouTubeEmbed 
+<LiteYouTubeEmbed
     id="9zySeP5vH9c"
     title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
 />

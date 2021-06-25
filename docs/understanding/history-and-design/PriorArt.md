@@ -2,10 +2,7 @@
 id: prior-art
 title: Prior Art
 description: 'Introduction > Prior Art: Influences on the design of Redux'
-hide_title: true
 ---
-
-&nbsp;
 
 # Prior Art
 

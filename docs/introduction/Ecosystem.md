@@ -2,10 +2,7 @@
 id: ecosystem
 title: Ecosystem
 description: 'Introduction > Ecosystem: Links to popular, recommended, and interesting Redux-related libraries'
-hide_title: true
 ---
-
-&nbsp;
 
 # Ecosystem
 

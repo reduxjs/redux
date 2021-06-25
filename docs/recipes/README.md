@@ -1,10 +1,8 @@
 ---
 id: recipe-index
-title: 'Recipes: Index'
-hide_title: true
+title: Recipes Index
+sidebar_label: Recipes Index
 ---
-
-&nbsp;
 
 # Recipes
 

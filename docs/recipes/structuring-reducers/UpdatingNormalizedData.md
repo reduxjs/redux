@@ -1,11 +1,9 @@
 ---
 id: updating-normalized-data
 title: Updating Normalized Data
+sidebar_label: Updating Normalized Data
 description: 'Structuring Reducers > Updating Normalized Data: Patterns for updating normalized data'
-hide_title: true
 ---
-
-&nbsp;
 
 # Managing Normalized Data
 
