@@ -1,10 +1,7 @@
 ---
 id: migrating-to-redux
 title: Migrating to Redux
-hide_title: true
 ---
-
-&nbsp;
 
 # Migrating to Redux
 

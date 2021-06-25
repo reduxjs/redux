@@ -1,11 +1,9 @@
 ---
 id: splitting-reducer-logic
 title: Splitting Reducer Logic
+sidebar_label: Splitting Reducer Logic
 description: 'Structuring Reducers > Splitting Reducer Logic: Terms for different reducer use cases'
-hide_title: true
 ---
-
-&nbsp;
 
 # Splitting Up Reducer Logic
 

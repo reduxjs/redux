@@ -1,10 +1,8 @@
 ---
 id: reducers
 title: Reducers
-hide_title: true
+sidebar_label: Reducers
 ---
-
-&nbsp;
 
 # Redux FAQ: Reducers
 

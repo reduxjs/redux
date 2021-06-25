@@ -1,11 +1,8 @@
 ---
 id: store
 title: Store
-hide_title: true
 description: 'API > Store: the core Redux store methods'
 ---
-
-&nbsp;
 
 # Store
 

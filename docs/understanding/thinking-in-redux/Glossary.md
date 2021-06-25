@@ -1,10 +1,7 @@
 ---
 id: glossary
 title: Glossary
-hide_title: true
 ---
-
-&nbsp;
 
 # Glossary
 

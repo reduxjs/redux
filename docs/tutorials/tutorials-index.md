@@ -3,11 +3,8 @@ id: tutorials-index
 slug: index
 title: 'Redux Tutorials Index'
 sidebar_label: 'Tutorials Index'
-hide_title: true
 description: 'Overview of the Redux tutorial pages'
 ---
-
-&nbsp;
 
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
@@ -35,7 +32,7 @@ We have two different full-size tutorials:
 
 Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with Typescript, as well as the new RTK Query data fetching APIs:
 
-<LiteYouTubeEmbed 
+<LiteYouTubeEmbed
     id="9zySeP5vH9c"
     title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
 />

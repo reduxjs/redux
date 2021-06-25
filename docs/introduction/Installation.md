@@ -2,10 +2,7 @@
 id: installation
 title: Installation
 description: 'Introduction > Installation: Installation instructions for Redux and related packages'
-hide_title: true
 ---
-
-&nbsp;
 
 # Installation
 

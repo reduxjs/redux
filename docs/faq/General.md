@@ -1,10 +1,8 @@
 ---
 id: general
 title: General
-hide_title: true
+sidebar_label: General
 ---
-
-&nbsp;
 
 # Redux FAQ: General
 

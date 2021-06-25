@@ -1,10 +1,8 @@
 ---
 id: design-decisions
 title: Design Decisions
-hide_title: true
+sidebar_label: Design Decisions
 ---
-
-&nbsp;
 
 # Redux FAQ: Design Decisions
 

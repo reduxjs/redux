@@ -1,10 +1,8 @@
 ---
 id: react-redux
 title: React Redux
-hide_title: true
+sidebar_label: React Redux
 ---
-
-&nbsp;
 
 # Redux FAQ: React Redux
 

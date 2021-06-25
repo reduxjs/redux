@@ -1,11 +1,9 @@
 ---
 id: prerequisite-concepts
 title: Prerequisite Concepts
+sidebar_label: Prerequisite Concepts
 description: 'Structuring Reducers > Prerequisite Concepts: Key concepts to understand when using Redux'
-hide_title: true
 ---
-
-&nbsp;
 
 # Prerequisite Reducer Concepts
 

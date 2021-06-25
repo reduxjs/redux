@@ -1,10 +1,8 @@
 ---
 id: configuring-your-store
 title: Configuring Your Store
-hide_title: true
+sidebar_label: Configuring Your Store
 ---
-
-&nbsp;
 
 # Configuring Your Store
 
