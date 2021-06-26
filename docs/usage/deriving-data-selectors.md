@@ -58,7 +58,7 @@ You are not _required_ to use selectors for all state lookups, but they are a st
 
 **A "selector function" is any function that accepts the Redux store state (or part of the state) as an argument, and returns data that is based on that state.**
 
-Selectors don't have to be written using a special library, and it doesn't matter whether you write them as arrow functions or the `function` keyword. For example, all of these are valid selector functions:
+**Selectors don't have to be written using a special library**, and it doesn't matter whether you write them as arrow functions or the `function` keyword. For example, all of these are valid selector functions:
 
 ```js
 // Arrow function, direct lookup
@@ -79,7 +79,7 @@ const selectItemsWhoseNamesStartWith = (items, namePrefix) =>
   items.filter(item => item.name.startsWith(namePrefix))
 ```
 
-A selector function can have any name you want. However, [**we recommend prefixing selector function names with the word `select` combiend with a description of the value being selected**](../style-guide/style-guide.md#name-selector-functions-as-selectthing). Typical examples of this would look like **`selectTodoById`**, **`selectFilteredTodos`**, and **`selectVisibleTodos**`.
+A selector function can have any name you want. However, [**we recommend prefixing selector function names with the word `select` combined with a description of the value being selected**](../style-guide/style-guide.md#name-selector-functions-as-selectthing). Typical examples of this would look like **`selectTodoById`**, **`selectFilteredTodos`**, and **`selectVisibleTodos`**.
 
 If you've used [the `useSelector` hook from React-Redux](../tutorials/fundamentals/part-5-ui-and-react.md), you're probably already familiar with the basic idea of a selector function - the functions that we pass to `useSelector` must be selectors:
 
@@ -97,7 +97,20 @@ Selector functions are typically defined in two different parts of a Redux appli
 - In slice files, alongside the reducer logic
 - In component files, either outside the component, or inline in `useSelector` calls
 
-A selector function can be used anywhere you have access to the entire Redux root state value. This includes the `useSelector` hook, the `mapState` function for `connect`, middleware, thunks, and sagas.
+A selector function can be used anywhere you have access to the entire Redux root state value. This includes the `useSelector` hook, the `mapState` function for `connect`, middleware, thunks, and sagas. For example, thunks and middleware have access to the `getState` argument, so you can call a selector there:
+
+```js
+function addTodosIfAllowed(todoText) {
+  return (dispatch, getState) => {
+    const state = getState()
+    const canAddTodos = selectCanAddTodos(state)
+
+    if (canAddTodos) {
+      dispatch(todoAdded(todoText))
+    }
+  }
+}
+```
 
 It's not typically possible to use selectors inside of reducers, because a slice reducer only has access to its own slice of the Redux state, and most selectors expect to be given the _entire_ Redux root state as an argument.
 
@@ -212,6 +225,7 @@ const brokenSelector = createSelector(
 
 **Any "output selector" that just returns its inputs is incorrect!** The output selector should always have the transformation logic.
 
+Similarly, a memoized selector should _never_ use `state => state` as an input! That will force the selector to always recalculate.
 :::
 
 In typical Reselect usage, you write your top-level "input selectors" as plain functions, and use `createSelector` to create memoized selectors that look up nested values:
@@ -322,7 +336,7 @@ const selectCompletedTodoDescriptions = createSelector(
 
 #### Passing Input Parameters
 
-A Reselect-generated selector function can be called with as many arguments as you want: `selectThings(a, b, c, d, e, f)`. However, what matters for re-running the output is not the number of arguments, or whether the arguments themselves have changed to be new references. Instead, it's about the "input selectors" that were defined, and whether _their_ results have changed. Similarly, the arguments for the "output selector" are solely based on what the input selectors return.
+A Reselect-generated selector function can be called with as many arguments as you want: `selectThings(a, b, c, d, e)`. However, what matters for re-running the output is not the number of arguments, or whether the arguments themselves have changed to be new references. Instead, it's about the "input selectors" that were defined, and whether _their_ results have changed. Similarly, the arguments for the "output selector" are solely based on what the input selectors return.
 
 This means that if you want to pass additional parameters through to the output selector, you must define input selectors that extract those values from the original selector arguments:
 
@@ -343,7 +357,7 @@ For consistency, you may want to consider passing additional parameters to a sel
 
 #### Selector Factories
 
-**`createSelector` only has a default cache size of 1, and this is per each unique instance of a selector**. This creates problems when a single selector function needs to get reused in multiple places with differeing inputs.
+**`createSelector` only has a default cache size of 1, and this is per each unique instance of a selector**. This creates problems when a single selector function needs to get reused in multiple places with differing inputs.
 
 One option is to create a "selector factory" - a function that runs `createSelector()` and generates a new unique selector instance every time it's called:
 
