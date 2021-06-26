@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ESnext",
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "importHelpers": true,
+    // output .d.ts declaration files for consumers
+    "declaration": true,
+    // match output dir to input dir. e.g. dist/index instead of dist/src/index
+    "rootDir": "./src",
+    // stricter type-checking for stronger correctness. Recommended by TS
+    "strict": true,
+    // linter checks for common issues
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    // noUnused* overlap with @typescript-eslint/no-unused-vars, can disable if duplicative
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    // use Node's module resolution algorithm, instead of the legacy TS one
+    "moduleResolution": "node",
+    // transpile JSX to React.createElement
+    "jsx": "react",
+    // interop between ESM and CJS modules. Recommended by TS
+    "esModuleInterop": true,
+    // significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS
+    "skipLibCheck": true,
+    // error out if import and file system have a casing mismatch. Recommended by TS
+    "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDeclarationOnly": true,
+    "baseUrl": ".",
+    "paths": {
+      "@reduxjs/toolkit": ["src/index.ts"], // @remap-prod-remove-line
+      "@reduxjs/toolkit/query": ["src/query/index.ts"], // @remap-prod-remove-line
+      "@reduxjs/toolkit/query/react": ["src/query/react/index.ts"], // @remap-prod-remove-line
+      // for type imports in tests only
+      "@reduxjs/toolkit/dist/query/*": ["src/query/*"], // @remap-prod-remove-line
+      // internal imports in tests only
+      "@internal/*": ["src/*"]
+    }
+  }
+}

@@ -1,0 +1,200 @@
+import { joinUrls } from './utils'
+import { isPlainObject } from '@reduxjs/toolkit'
+import type { BaseQueryFn } from './baseQueryTypes'
+import type { MaybePromise, Override } from './tsHelpers'
+
+export type ResponseHandler =
+  | 'json'
+  | 'text'
+  | ((response: Response) => Promise<any>)
+
+type CustomRequestInit = Override<
+  RequestInit,
+  {
+    headers?:
+      | Headers
+      | string[][]
+      | Record<string, string | undefined>
+      | undefined
+  }
+>
+
+export interface FetchArgs extends CustomRequestInit {
+  url: string
+  params?: Record<string, any>
+  body?: any
+  responseHandler?: ResponseHandler
+  validateStatus?: (response: Response, body: any) => boolean
+}
+
+const defaultValidateStatus = (response: Response) =>
+  response.status >= 200 && response.status <= 299
+
+const isJsonContentType = (headers: Headers) =>
+  headers.get('content-type')?.trim()?.startsWith('application/json')
+
+const handleResponse = async (
+  response: Response,
+  responseHandler: ResponseHandler
+) => {
+  if (typeof responseHandler === 'function') {
+    return responseHandler(response)
+  }
+
+  if (responseHandler === 'text') {
+    return response.text()
+  }
+
+  if (responseHandler === 'json') {
+    const text = await response.text()
+    return text.length ? JSON.parse(text) : undefined
+  }
+}
+
+export interface FetchBaseQueryError {
+  status: number
+  data: unknown
+}
+
+function stripUndefined(obj: any) {
+  if (!isPlainObject(obj)) {
+    return obj
+  }
+  const copy: Record<string, any> = { ...obj }
+  for (const [k, v] of Object.entries(copy)) {
+    if (typeof v === 'undefined') delete copy[k]
+  }
+  return copy
+}
+
+export type FetchBaseQueryArgs = {
+  baseUrl?: string
+  prepareHeaders?: (
+    headers: Headers,
+    api: { getState: () => unknown }
+  ) => MaybePromise<Headers>
+  fetchFn?: (
+    input: RequestInfo,
+    init?: RequestInit | undefined
+  ) => Promise<Response>
+} & RequestInit
+
+export type FetchBaseQueryMeta = { request: Request; response: Response }
+
+/**
+ * This is a very small wrapper around fetch that aims to simplify requests.
+ *
+ * @example
+ * ```ts
+ * const baseQuery = fetchBaseQuery({
+ *   baseUrl: 'https://api.your-really-great-app.com/v1/',
+ *   prepareHeaders: (headers, { getState }) => {
+ *     const token = (getState() as RootState).auth.token;
+ *     // If we have a token set in state, let's assume that we should be passing it.
+ *     if (token) {
+ *       headers.set('authorization', `Bearer ${token}`);
+ *     }
+ *     return headers;
+ *   },
+ * })
+ * ```
+ *
+ * @param {string} baseUrl
+ * The base URL for an API service.
+ * Typically in the format of http://example.com/
+ *
+ * @param {(headers: Headers, api: { getState: () => unknown }) => Headers} prepareHeaders
+ * An optional function that can be used to inject headers on requests.
+ * Provides a Headers object, as well as the `getState` function from the
+ * redux store. Can be useful for authentication.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/Headers
+ *
+ * @param {(input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>} fetchFn
+ * Accepts a custom `fetch` function if you do not want to use the default on the window.
+ * Useful in SSR environments if you need to use a library such as `isomorphic-fetch` or `cross-fetch`
+ *
+ */
+export function fetchBaseQuery({
+  baseUrl,
+  prepareHeaders = (x) => x,
+  fetchFn = fetch,
+  ...baseFetchOptions
+}: FetchBaseQueryArgs = {}): BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError,
+  {},
+  FetchBaseQueryMeta
+> {
+  return async (arg, { signal, getState }) => {
+    let {
+      url,
+      method = 'GET' as const,
+      headers = new Headers({}),
+      body = undefined,
+      params = undefined,
+      responseHandler = 'json' as const,
+      validateStatus = defaultValidateStatus,
+      ...rest
+    } = typeof arg == 'string' ? { url: arg } : arg
+    let config: RequestInit = {
+      ...baseFetchOptions,
+      method,
+      signal,
+      body,
+      ...rest,
+    }
+
+    config.headers = await prepareHeaders(
+      new Headers(stripUndefined(headers)),
+      { getState }
+    )
+
+    // Only set the content-type to json if appropriate. Will not be true for FormData, ArrayBuffer, Blob, etc.
+    const isJsonifiable = (body: any) =>
+      typeof body === 'object' &&
+      (isPlainObject(body) ||
+        Array.isArray(body) ||
+        typeof body.toJSON === 'function')
+
+    if (!config.headers.has('content-type') && isJsonifiable(body)) {
+      config.headers.set('content-type', 'application/json')
+    }
+
+    if (body && isJsonContentType(config.headers)) {
+      config.body = JSON.stringify(body)
+    }
+
+    if (params) {
+      const divider = ~url.indexOf('?') ? '&' : '?'
+      const query = new URLSearchParams(stripUndefined(params))
+      url += divider + query
+    }
+
+    url = joinUrls(baseUrl, url)
+
+    const request = new Request(url, config)
+    const requestClone = request.clone()
+
+    const response = await fetchFn(request)
+    const responseClone = response.clone()
+
+    const meta = { request: requestClone, response: responseClone }
+
+    const resultData = await handleResponse(response, responseHandler)
+
+    return validateStatus(response, resultData)
+      ? {
+          data: resultData,
+          meta,
+        }
+      : {
+          error: {
+            status: response.status,
+            data: resultData,
+          },
+          meta,
+        }
+  }
+}

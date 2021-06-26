@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createAsyncThunk with abortController behaviour with missing AbortController calling \`abort\` on an asyncThunk works with a FallbackAbortController if no global abortController is not available 1`] = `
+"This platform does not implement AbortController. 
+If you want to use the AbortController to react to \`abort\` events, please consider importing a polyfill like 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only'."
+`;
+
+exports[`non-serializable arguments are ignored by serializableStateInvariantMiddleware 1`] = `""`;

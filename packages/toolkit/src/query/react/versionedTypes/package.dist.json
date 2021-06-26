@@ -1,0 +1,10 @@
+{
+  "typesVersions": {
+    ">=4.1": {
+      "index": ["./ts41Types.d.ts"]
+    },
+    "<4.1": {
+      "index": ["./ts40Types.d.ts"]
+    }
+  }
+}

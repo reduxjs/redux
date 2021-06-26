@@ -1,0 +1,12 @@
+{
+  "name": "@reduxjs/toolkit-query",
+  "version": "1.0.0",
+  "description": "",
+  "main": "../dist/query/index.js",
+  "module": "../dist/query/rtk-query.esm.js",
+  "unpkg": "../dist/query/rtk-query.umd.min.js",
+  "types": "../dist/query/index.d.ts",
+  "author": "Mark Erikson <mark@isquaredsoftware.com>",
+  "license": "MIT",
+  "sideEffects": false
+}
