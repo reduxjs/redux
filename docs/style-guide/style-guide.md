@@ -364,6 +364,18 @@ Many applications need to cache complex data in the store. That data is often re
 
 **Prefer storing that data in [a "normalized" form](../usage/structuring-reducers/NormalizingStateShape.md) in the store**. This makes it easier to look up items based on their ID and update a single item in the store, and ultimately leads to better performance patterns.
 
+### Keep State Minimal and Derive Additional Values
+
+Whenever possible, **keep the actual data in the Redux store as minimal as possible, and _derive_ additional values from that state as needed**. This includes things like calculating filtered lists or summing up values. As an example, a todo app would keep an original list of todo objects in state, but derive a filtered list of todos outside the state whenever the state is updated. Similarly, a check for whether all todos have been completed, or number of todos remaining, can be calculated outside the store as well.
+
+This has several benefits:
+
+- The actual state is easier to read
+- Less logic is needed to calculate those additional values and keep them in sync with the rest of the data
+- The original state is still there as a reference and isn't being replaced
+
+Deriving data is often done in "selector" functions, which can encapsulate the logic for doing the derived data calculations. In order to improve performance, these selectors can be _memoized_ to cache previous results, using libraries like `reselect` and `proxy-memoize.
+
 ### Model Actions as Events, Not Setters
 
 Redux does not care what the contents of the `action.type` field are - it just has to be defined. It is legal to write action types in present tense (`"users/update"`), past tense (`"users/updated"`), described as an event (`"upload/progress"`), or treated as a "setter" (`"users/setUserName"`). It is up to you to determine what a given action means in your application, and how you model those actions.

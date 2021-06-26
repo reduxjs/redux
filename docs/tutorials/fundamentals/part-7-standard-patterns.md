@@ -438,10 +438,9 @@ export const selectTodoById = (state, todoId) => {
 
 :::info
 
-To learn more about how to use Reselect and memoized selectors, see:
+For more details on why we use selector functions and how to write memoized selectors with Reselect, see:
 
-- The [Reselect docs](https://github.com/reduxjs/reselect)
-- [Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance](https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/)
+- [Using Redux: Deriving Data with Selectors](../../usage/deriving-data-selectors.md)
 
 :::
 

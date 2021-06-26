@@ -604,6 +604,14 @@ export const UserPage = ({ match }) => {
 
 Memoized selectors are a valuable tool for improving performance in a React+Redux application, because they can help us avoid unnecessary re-renders, and also avoid doing potentially complex or expensive calculations if the input data hasn't changed.
 
+:::info
+
+For more details on why we use selector functions and how to write memoized selectors with Reselect, see:
+
+- [Using Redux: Deriving Data with Selectors](../../usage/deriving-data-selectors.md)
+
+:::
+
 ### Investigating the Posts List
 
 If we go back to our `<PostsList>` and try clicking a reaction button on one of the posts while capturing a React profiler trace, we'll see that not only did the `<PostsList>` and the updated `<PostExcerpt>` instance render, _all_ of the `<PostExcerpt>` components rendered:

@@ -87,7 +87,7 @@ module.exports = {
             ]
           },
           'usage/reducing-boilerplate',
-          'usage/computing-derived-data',
+          'usage/deriving-data-selectors',
           'usage/implementing-undo-history'
         ]
       }

@@ -37,5 +37,5 @@ This section provides information about typical Redux patterns and approaches fo
 
 - [Structuring Reducers](structuring-reducers/StructuringReducers.md)
 - [Reducing Boilerplate](ReducingBoilerplate.md)
-- [Computing Derived Data](ComputingDerivedData.md)
+- [Deriving Data with Selectors](../usage/deriving-data-selectors.md)
 - [Implementing Undo History](ImplementingUndoHistory.md)
