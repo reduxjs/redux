@@ -374,7 +374,7 @@ This has several benefits:
 - Less logic is needed to calculate those additional values and keep them in sync with the rest of the data
 - The original state is still there as a reference and isn't being replaced
 
-Deriving data is often done in "selector" functions, which can encapsulate the logic for doing the derived data calculations. In order to improve performance, these selectors can be _memoized_ to cache previous results, using libraries like `reselect` and `proxy-memoize.
+Deriving data is often done in "selector" functions, which can encapsulate the logic for doing the derived data calculations. In order to improve performance, these selectors can be _memoized_ to cache previous results, using libraries like `reselect` and `proxy-memoize`.
 
 ### Model Actions as Events, Not Setters
 
