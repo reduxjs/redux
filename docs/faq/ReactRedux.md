@@ -130,7 +130,7 @@ While React Redux does work to minimize the number of times that your `mapStateT
 
 **Documentation**
 
-- [Using Redux: Computed Derived Data](../usage/ComputingDerivedData.md)
+- [Using Redux: Deriving Data with Selectors](../usage/deriving-data-selectors.md)
 
 **Articles**
 
