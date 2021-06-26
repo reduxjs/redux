@@ -38,7 +38,7 @@
 /recipes/using-immutablejs-with-redux*         /style-guide/style-guide#use-immer-for-writing-immutable-updates
 /recipes/usingimmutablejs*         /style-guide/style-guide#use-immer-for-writing-immutable-updates
 
-/recipes/computingderiveddata*         /usage/derived-data-selectors
+/recipes/computingderiveddata*         /usage/deriving-data-selectors
 /recipes/configuringyourstore*         /usage/configuring-your-store:splat
 /recipes/implementingundohistory*         /usage/implementing-undo-history:splat
 /recipes/isolatingsubapps*         /usage/isolating-redux-sub-apps:splat
@@ -113,7 +113,7 @@
 
 /docs/recipes/UsingImmutableJS.html*        /style-guide/style-guide#use-immer-for-writing-immutable-updates
 
-/docs/recipes/ComputingDerivedData.html*        /usage/derived-data-selectors
+/docs/recipes/ComputingDerivedData.html*        /usage/deriving-data-selectors
 /docs/recipes/ReducingBoilerplate.html*        /usage/reducing-boilerplate:splat
 /docs/recipes/ImplementingUndoHistory.html*        /usage/implementing-undo-history:splat
 /docs/recipes/ServerRendering.html*        /usage/server-rendering:splat
@@ -185,7 +185,7 @@
 /recipes/using-object-spread-operator           /usage/structuring-reducers/immutable-update-patterns
 /recipes/recipe-index                           /usage/index
 /recipes/migrating-to-redux                     /tutorials/fundamentals/part-8-modern-redux
-/recipes/computing-derived-data                 /usage/derived-data-selectors
+/recipes/computing-derived-data                 /usage/deriving-data-selectors
 
 
 /recipes/*  /usage/:splat
