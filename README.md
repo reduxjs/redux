@@ -35,13 +35,10 @@ For more details, see [the Installation docs page](https://redux.js.org/introduc
 The Redux docs are located at **https://redux.js.org**:
 
 - [Introduction](https://redux.js.org/introduction/getting-started)
-- [Recipes](https://redux.js.org/recipes/recipe-index)
+- [Tutorials](https://redux.js.org/tutorials/index)
+- [Usage Guides](https://redux.js.org/usage/index)
 - [FAQ](https://redux.js.org/faq)
 - [API Reference](https://redux.js.org/api/api-reference)
-
-For PDF, ePub, and MOBI exports for offline reading, and instructions on how to create them, please see: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
-
-For Offline docs, please see: [devdocs](https://devdocs.io/redux/)
 
 ## Learn Redux
 
@@ -62,7 +59,7 @@ The [**Redux Fundamentals tutorial**](https://redux.js.org/tutorials/fundamental
 
 ### Other Resources
 
-- The **[Redux FAQ](https://redux.js.org/faq)** answers many common questions about how to use Redux, and the **["Recipes" docs section](https://redux.js.org/recipes/recipe-index)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
+- The **[Redux FAQ](https://redux.js.org/faq)** answers many common questions about how to use Redux, and the **["Using Redux" docs section](https://redux.js.org/usage/index)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
 - Redux maintainer Mark Erikson's **["Practical Redux" tutorial series](https://blog.isquaredsoftware.com/series/practical-redux/)** demonstrates real-world intermediate and advanced techniques for working with React and Redux (also available as **[an interactive course on Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).
 - The **[React/Redux links list](https://github.com/markerikson/react-redux-links)** has categorized articles on working with [reducers and selectors](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md), [managing side effects](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md), [Redux architecture and best practices](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md), and more.
 - Our community has created thousands of Redux-related libraries, addons, and tools. The **["Ecosystem" docs page](https://redux.js.org/introduction/ecosystem)** lists our recommendations, and also there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.

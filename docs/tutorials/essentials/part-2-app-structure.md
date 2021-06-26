@@ -413,7 +413,7 @@ On the other hand, the `incrementByAmount` reducer _does_ need to know something
 
 :::info Want to Know More?
 
-For more information on immutability and writing immutable updates, see [the "Immutable Update Patterns" docs page](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) and [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/).
+For more information on immutability and writing immutable updates, see [the "Immutable Update Patterns" docs page](../../usage/structuring-reducers/ImmutableUpdatePatterns.md) and [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/).
 
 :::
 

@@ -39,36 +39,56 @@ module.exports = {
         ]
       }
     ],
-    Recipes: [
-      'recipes/recipe-index',
-      'recipes/configuring-your-store',
-      'recipes/usage-with-typescript',
-      'recipes/migrating-to-redux',
-      'recipes/using-object-spread-operator',
-      'recipes/reducing-boilerplate',
-      'recipes/server-rendering',
-      'recipes/writing-tests',
-      'recipes/computing-derived-data',
-      'recipes/implementing-undo-history',
-      'recipes/isolating-redux-sub-apps',
-      'recipes/code-splitting',
-      'recipes/troubleshooting',
+    'Using Redux': [
+      'usage/index',
       {
         type: 'category',
-        label: 'Structuring Reducers',
+        label: 'Setup and Organization',
+        collapsed: false,
         items: [
-          'recipes/structuring-reducers/structuring-reducers',
-          'recipes/structuring-reducers/prerequisite-concepts',
-          'recipes/structuring-reducers/basic-reducer-structure',
-          'recipes/structuring-reducers/splitting-reducer-logic',
-          'recipes/structuring-reducers/refactoring-reducer-example',
-          'recipes/structuring-reducers/using-combinereducers',
-          'recipes/structuring-reducers/beyond-combinereducers',
-          'recipes/structuring-reducers/normalizing-state-shape',
-          'recipes/structuring-reducers/updating-normalized-data',
-          'recipes/structuring-reducers/reusing-reducer-logic',
-          'recipes/structuring-reducers/immutable-update-patterns',
-          'recipes/structuring-reducers/initializing-state'
+          'usage/configuring-your-store',
+          'usage/code-splitting',
+          'usage/server-rendering',
+          'usage/isolating-redux-sub-apps'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Code Quality',
+        collapsed: false,
+        items: [
+          'usage/usage-with-typescript',
+          'usage/writing-tests',
+          'usage/troubleshooting'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Redux Logic and Patterns',
+        collapsed: false,
+        items: [
+          {
+            type: 'category',
+            label: 'Structuring Reducers',
+            collapsed: true,
+            items: [
+              'usage/structuring-reducers/structuring-reducers',
+              'usage/structuring-reducers/prerequisite-concepts',
+              'usage/structuring-reducers/basic-reducer-structure',
+              'usage/structuring-reducers/splitting-reducer-logic',
+              'usage/structuring-reducers/refactoring-reducer-example',
+              'usage/structuring-reducers/using-combinereducers',
+              'usage/structuring-reducers/beyond-combinereducers',
+              'usage/structuring-reducers/normalizing-state-shape',
+              'usage/structuring-reducers/updating-normalized-data',
+              'usage/structuring-reducers/reusing-reducer-logic',
+              'usage/structuring-reducers/immutable-update-patterns',
+              'usage/structuring-reducers/initializing-state'
+            ]
+          },
+          'usage/reducing-boilerplate',
+          'usage/computing-derived-data',
+          'usage/implementing-undo-history'
         ]
       }
     ],

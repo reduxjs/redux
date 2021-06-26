@@ -7,8 +7,6 @@ description: 'Introduction > Getting Started: Resources to get started learning 
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
-# Getting Started with Redux
-
 Redux is a predictable state container for JavaScript apps.
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
@@ -203,7 +201,7 @@ See [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/le
 
 ### Other Resources
 
-- The **[Redux FAQ](../FAQ.md)** answers many common questions about how to use Redux, and the **["Recipes" docs section](../recipes/README.md)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
+- The **[Redux FAQ](../FAQ.md)** answers many common questions about how to use Redux, and the **["Using Redux" docs section](../usage/index.md)** has information on handling derived data, testing, structuring reducer logic, and reducing boilerplate.
 - Redux maintainer Mark Erikson's **["Practical Redux" tutorial series](https://blog.isquaredsoftware.com/series/practical-redux/)** demonstrates real-world intermediate and advanced techniques for working with React and Redux (also available as **[an interactive course on Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).
 - The **[React/Redux links list](https://github.com/markerikson/react-redux-links)** has categorized articles on working with [reducers and selectors](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md), [managing side effects](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md), [Redux architecture and best practices](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md), and more.
 - Our community has created thousands of Redux-related libraries, addons, and tools. The **["Ecosystem" docs page](./Ecosystem.md)** lists our recommendations, and there's a complete listing available in the **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.

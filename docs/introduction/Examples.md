@@ -171,7 +171,7 @@ npm install
 npm start
 ```
 
-This is a basic demonstration of [server rendering](../recipes/ServerRendering.md) with Redux and React. It shows how to prepare the initial store state on the server, and pass it down to the client so the client store can boot up from an existing state.
+This is a basic demonstration of [server rendering](../usage/ServerRendering.md) with Redux and React. It shows how to prepare the initial store state on the server, and pass it down to the client so the client store can boot up from an existing state.
 
 ## Real World
 

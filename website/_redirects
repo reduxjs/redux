@@ -38,30 +38,31 @@
 /recipes/using-immutablejs-with-redux*         /style-guide/style-guide#use-immer-for-writing-immutable-updates
 /recipes/usingimmutablejs*         /style-guide/style-guide#use-immer-for-writing-immutable-updates
 
-/recipes/computingderiveddata*         /recipes/computing-derived-data:splat
-/recipes/configuringyourstore*         /recipes/configuring-your-store:splat
-/recipes/implementingundohistory*         /recipes/implementing-undo-history:splat
-/recipes/isolatingsubapps*         /recipes/isolating-redux-sub-apps:splat
-/recipes/migratingtoredux*         /recipes/migrating-to-redux:splat
-/recipes/reducingboilerplate*         /recipes/reducing-boilerplate:splat
-/recipes/serverrendering*         /recipes/server-rendering:splat
-/recipes/usingobjectspreadoperator*         /recipes/using-object-spread-operator:splat
-/recipes/writingtests*         /recipes/writing-tests:splat
+/recipes/computingderiveddata*         /usage/computing-derived-data:splat
+/recipes/configuringyourstore*         /usage/configuring-your-store:splat
+/recipes/implementingundohistory*         /usage/implementing-undo-history:splat
+/recipes/isolatingsubapps*         /usage/isolating-redux-sub-apps:splat
+/recipes/migratingtoredux*         /tutorials/fundamentals/part-8-modern-redux:splat
+/recipes/reducingboilerplate*         /usage/reducing-boilerplate:splat
+/recipes/serverrendering*         /usage/server-rendering:splat
+/recipes/usingobjectspreadoperator*         /usage/structuring-reducers/immutable-update-patterns:splat
+/recipes/writingtests*         /usage/writing-tests:splat
 
-/recipes/structuringreducers/basicreducerstructure*         /recipes/structuring-reducers/basic-reducer-structure:splat
-/recipes/structuringreducers/beyondcombinereducers*         /recipes/structuring-reducers/beyond-combinereducers:splat
-/recipes/structuringreducers/immutableupdatepatterns*         /recipes/structuring-reducers/immutable-update-patterns:splat
-/recipes/structuringreducers/initializingstate*         /recipes/structuring-reducers/initializing-state:splat
-/recipes/structuringreducers/normalizingstateshape*        /recipes/structuring-reducers/normalizing-state-shape:splat
-/recipes/structuringreducers/prerequisiteconcepts*         /recipes/structuring-reducers/prerequisite-concepts:splat
-/recipes/structuringreducers/refactoringreducersexample*         /recipes/structuring-reducers/refactoring-reducer-example:splat
-/recipes/structuringreducers/reusingreducerlogic*         /recipes/structuring-reducers/reusing-reducer-logic:splat
-/recipes/structuringreducers/splittingreducerlogic*         /recipes/structuring-reducers/splitting-reducer-logic:splat
-/recipes/structuringreducers/updatingnormalizeddata*         /recipes/structuring-reducers/updating-normalized-data:splat
-/recipes/structuringreducers/usingcombinereducers*         /recipes/structuring-reducers/using-combinereducers:splat
+/recipes/structuringreducers/basicreducerstructure*         /usage/structuring-reducers/basic-reducer-structure:splat
+/recipes/structuringreducers/beyondcombinereducers*         /usage/structuring-reducers/beyond-combinereducers:splat
+/recipes/structuringreducers/immutableupdatepatterns*         /usage/structuring-reducers/immutable-update-patterns:splat
+/recipes/structuringreducers/initializingstate*         /usage/structuring-reducers/initializing-state:splat
+/recipes/structuringreducers/normalizingstateshape*        /usage/structuring-reducers/normalizing-state-shape:splat
+/recipes/structuringreducers/prerequisiteconcepts*         /usage/structuring-reducers/prerequisite-concepts:splat
+/recipes/structuringreducers/refactoringreducersexample*         /usage/structuring-reducers/refactoring-reducer-example:splat
+/recipes/structuringreducers/reusingreducerlogic*         /usage/structuring-reducers/reusing-reducer-logic:splat
+/recipes/structuringreducers/splittingreducerlogic*         /usage/structuring-reducers/splitting-reducer-logic:splat
+/recipes/structuringreducers/updatingnormalizeddata*         /usage/structuring-reducers/updating-normalized-data:splat
+/recipes/structuringreducers/usingcombinereducers*         /usage/structuring-reducers/using-combinereducers:splat
 
-/recipes/structuringreducers         /recipes/structuring-reducers/structuring-reducers
-/recipes         /recipes/recipe-index
+/recipes/structuringreducers         /usage/structuring-reducers/structuring-reducers
+/recipes         /usage/index
+
 
 
 # Old old Gitbook links?
@@ -112,25 +113,25 @@
 
 /docs/recipes/UsingImmutableJS.html*        /style-guide/style-guide#use-immer-for-writing-immutable-updates
 
-/docs/recipes/ComputingDerivedData.html*        /recipes/computing-derived-data:splat
-/docs/recipes/ReducingBoilerplate.html*        /recipes/reducing-boilerplate:splat
-/docs/recipes/ImplementingUndoHistory.html*        /recipes/implementing-undo-history:splat
-/docs/recipes/ServerRendering.html*        /recipes/server-rendering:splat
-/docs/recipes/MigratingToRedux.html        /recipes/migrating-to-redux
-/docs/recipes/UsingObjectSpreadOperator.html*        /recipes/using-object-spread-operator
-/docs/recipes/IsolatingSubApps.html        /recipes/isolating-redux-sub-apps
-/docs/recipes/WritingTests.html*        /recipes/writing-tests:splat
-/docs/recipes/StructuringReducers.html        /recipes/structuring-reducers/structuring-reducers
-/docs/recipes/reducers/UsingCombineReducers.html*        /recipes/structuring-reducers/using-combinereducers:splat
-/docs/recipes/reducers/BeyondCombineReducers.html*        /recipes/structuring-reducers/beyond-combinereducers:splat
-/docs/recipes/reducers/NormalizingStateShape.html*        /recipes/structuring-reducers/normalizing-state-shape:splat
-/docs/recipes/reducers/SplittingReducerLogic.html*        /recipes/structuring-reducers/splitting-reducer-logic:splat
-/docs/recipes/reducers/UpdatingNormalizedData.html*        /recipes/structuring-reducers/updating-normalized-data:splat
-/docs/recipes/reducers/ImmutableUpdatePatterns.html*        /recipes/structuring-reducers/immutable-update-patterns:splat
-/docs/recipes/reducers/InitializingState.html*        /recipes/structuring-reducers/initializing-state:splat
+/docs/recipes/ComputingDerivedData.html*        /usage/computing-derived-data:splat
+/docs/recipes/ReducingBoilerplate.html*        /usage/reducing-boilerplate:splat
+/docs/recipes/ImplementingUndoHistory.html*        /usage/implementing-undo-history:splat
+/docs/recipes/ServerRendering.html*        /usage/server-rendering:splat
+/docs/recipes/MigratingToRedux.html        /tutorials/fundamentals/part-8-modern-redux
+/docs/recipes/UsingObjectSpreadOperator.html*        /usage/structuring-reducers/immutable-update-patterns:splat
+/docs/recipes/IsolatingSubApps.html        /usage/isolating-redux-sub-apps
+/docs/recipes/WritingTests.html*        /usage/writing-tests:splat
+/docs/recipes/StructuringReducers.html        /usage/structuring-reducers/structuring-reducers
+/docs/recipes/reducers/UsingCombineReducers.html*        /usage/structuring-reducers/using-combinereducers:splat
+/docs/recipes/reducers/BeyondCombineReducers.html*        /usage/structuring-reducers/beyond-combinereducers:splat
+/docs/recipes/reducers/NormalizingStateShape.html*        /usage/structuring-reducers/normalizing-state-shape:splat
+/docs/recipes/reducers/SplittingReducerLogic.html*        /usage/structuring-reducers/splitting-reducer-logic:splat
+/docs/recipes/reducers/UpdatingNormalizedData.html*        /usage/structuring-reducers/updating-normalized-data:splat
+/docs/recipes/reducers/ImmutableUpdatePatterns.html*        /usage/structuring-reducers/immutable-update-patterns:splat
+/docs/recipes/reducers/InitializingState.html*        /usage/structuring-reducers/initializing-state:splat
 
 /docs/Glossary.html*        /understanding/thinking-in-redux/glossary:splat
-/docs/Troubleshooting.html*        /recipes/troubleshooting:splat
+/docs/Troubleshooting.html*        /usage/troubleshooting:splat
 
 # Unknown?
 /introduction/index.html        /introduction/getting-started
@@ -176,4 +177,14 @@
 /introduction/prior-art        /understanding/history-and-design/prior-art
 
 /glossary        /understanding/thinking-in-redux/glossary
-/troubleshooting        /recipes/troubleshooting
+/troubleshooting        /usage/troubleshooting
+
+
+# 2021 "Using Redux" section rewrite
+
+/recipes/using-object-spread-operator           /usage/structuring-reducers/immutable-update-patterns
+/recipes/recipe-index                           /usage/index
+/recipes/migrating-to-redux                     /tutorials/fundamentals/part-8-modern-redux
+
+
+/recipes/*  /usage/:splat

@@ -1,17 +1,17 @@
 ---
-id: recipe-index
-title: Recipes Index
-sidebar_label: Recipes Index
+id: index
+title: Usage Guides Index
+sidebar_label: Usage Guides Index
 ---
 
-# Recipes
+# Usage Guides
 
-These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [the "Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md).
+The Usage Guides section provides practical guidance on how to correctly use Redux in real-world applications, including project setup and architecture, patterns, practices, and techniques.
+
+These sections assume you understand the topics in [the "Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md).
 
 - [Configuring Your Store](ConfiguringYourStore.md)
 - [Usage with TypeScript](UsageWithTypescript.md)
-- [Migrating to Redux](MigratingToRedux.md)
-- [Using Object Spread Operator](UsingObjectSpreadOperator.md)
 - [Reducing Boilerplate](ReducingBoilerplate.md)
 - [Server Rendering](ServerRendering.md)
 - [Writing Tests](WritingTests.md)

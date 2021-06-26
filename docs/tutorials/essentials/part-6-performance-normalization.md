@@ -676,7 +676,7 @@ const userObject = state.users.entities[userId]
 
 :::info
 
-For more details on why normalizing state is useful, see [Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md) and the Redux Toolkit Usage Guide section on [Managing Normalized Data](https://redux-toolkit.js.org/usage/usage-guide#managing-normalized-data).
+For more details on why normalizing state is useful, see [Normalizing State Shape](../../usage/structuring-reducers/NormalizingStateShape.md) and the Redux Toolkit Usage Guide section on [Managing Normalized Data](https://redux-toolkit.js.org/usage/usage-guide#managing-normalized-data).
 
 :::
 
@@ -1004,7 +1004,7 @@ The concepts we've covered in this tutorial should be enough to get you started 
 
 The Redux Essentials tutorial focused on "how to use Redux correctly", rather than "how it works" or "why it works this way". In particular, Redux Toolkit is a higher-level set of abstractions and utilities, and it's helpful to understand what the abstractions in RTK are actually doing for you. Reading through the ["Redux Fundamentals" tutorial](../fundamentals/part-1-overview.md) will help you understand how to write Redux code "by hand", and why we recommend Redux Toolkit as the default way to write Redux logic.
 
-The [Recipes](../../recipes/README.md) section has information on a number of important concepts, like [how to structure your reducers](../../recipes/structuring-reducers/StructuringReducers.md), and [our Style Guide page](../../style-guide/style-guide) has important information on our recommended patterns and best practices.
+The [Using Redux](../../usage/index.md) section has information on a number of important concepts, like [how to structure your reducers](../../usage/structuring-reducers/StructuringReducers.md), and [our Style Guide page](../../style-guide/style-guide) has important information on our recommended patterns and best practices.
 
 If you'd like to know more about _why_ Redux exists, what problems it tries to solve, and how it's meant to be used, see Redux maintainer Mark Erikson's posts on [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) and [The Tao of Redux, Part 2: Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/).
 
