@@ -864,7 +864,7 @@ For now, the important things to understand are:
 
 For more details on why normalization is useful with Redux, see:
 
-- [Structuring Reducers: Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md)
+- [Structuring Reducers: Normalizing State Shape](../../usage/structuring-reducers/NormalizingStateShape.md)
 
 :::
 

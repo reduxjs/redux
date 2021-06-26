@@ -100,7 +100,7 @@ Finally, to update objects, you'll need something like `_.extend` from Underscor
 
 Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don't override the previous `state`.
 
-You can also enable the [object spread operator proposal](recipes/UsingObjectSpreadOperator.md) for a more succinct syntax:
+You can also use the object spread operator proposal for a more succinct syntax:
 
 ```js
 // Before:
@@ -124,7 +124,7 @@ return state.map((todo, index) => {
 
 Note that experimental language features are subject to change.
 
-Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](./recipes/structuring-reducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
+Also keep an eye out for nested state objects that need to be deeply copied. Both `_.extend` and `Object.assign` make a shallow copy of the state. See [Updating Nested Objects](./usage/structuring-reducers/ImmutableUpdatePatterns.md#updating-nested-objects) for suggestions on how to deal with nested state objects.
 
 #### Don't forget to call [`dispatch(action)`](api/Store.md#dispatchaction)
 
@@ -202,4 +202,5 @@ It's possible you're correctly dispatching an action and applying your reducer b
 ## Something else doesn't work
 
 Ask around on the **#redux** [Reactiflux](https://www.reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).
-If you figure it out, [edit this document](https://github.com/reduxjs/redux/edit/master/docs/recipes/Troubleshooting.md) as a courtesy to the next person having the same problem.
+
+If you figure it out, [edit this document](https://github.com/reduxjs/redux/edit/master/docs/usage/Troubleshooting.md) as a courtesy to the next person having the same problem.

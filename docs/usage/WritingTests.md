@@ -1,7 +1,7 @@
 ---
 id: writing-tests
 title: Writing Tests
-description: 'Recipes > Writing Tests: recommended practices and setup for testing Redux apps'
+description: 'Usage > Writing Tests: recommended practices and setup for testing Redux apps'
 ---
 
 # Writing Tests

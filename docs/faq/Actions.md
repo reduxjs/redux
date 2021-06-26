@@ -35,7 +35,7 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 
 **Documentation**
 
-- [Reducing Boilerplate](../recipes/ReducingBoilerplate.md#actions)
+- [Using Redux: Reducing Boilerplate](../usage/ReducingBoilerplate.md#actions)
 
 **Discussion**
 
@@ -55,7 +55,7 @@ No. We suggest you write independent small reducer functions that are each respo
 **Documentation**
 
 - [Fundamentals: State, Actions, Reducers](../tutorials/fundamentals/part-3-state-actions-reducers.md)
-- [Recipes: Structuring Reducers](../recipes/structuring-reducers/StructuringReducers.md)
+- [Using Redux: Structuring Reducers](../usage/structuring-reducers/StructuringReducers.md)
 
 **Discussions**
 

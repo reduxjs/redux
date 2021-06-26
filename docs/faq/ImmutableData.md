@@ -52,7 +52,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 **Documentation**
 
-- [Recipes: Prerequisite Reducer Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
+- [Using Redux: Prerequisite Reducer Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md)
 
 **Discussions**
 
@@ -274,8 +274,8 @@ The store will still be updated with the new values for the root state, but beca
 
 **Documentation**
 
-- [Recipes: Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
-- [Troubleshooting: Never mutate reducer arguments](../recipes/Troubleshooting.md#never-mutate-reducer-arguments)
+- [Using Redux: Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
+- [Troubleshooting: Never mutate reducer arguments](../usage/Troubleshooting.md#never-mutate-reducer-arguments)
 
 ### Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?
 
@@ -451,7 +451,7 @@ JavaScript was never designed to provide guaranteed immutable operations. Accord
 
 With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new _reference_ to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
 
-To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](../recipes/structuring-reducers/ImmutableUpdatePatterns.md).
+To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](../usage/structuring-reducers/ImmutableUpdatePatterns.md).
 
 ### Verbose Code
 
@@ -469,7 +469,7 @@ In contrast, immutable libraries such as Immer can employ structural sharing, wh
 
 **Documentation**
 
-- [Immutable Update Patterns for ES6](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
+- [Immutable Update Patterns for ES6](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
 
 **Articles**
 
