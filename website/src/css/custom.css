@@ -98,6 +98,14 @@ div[class*='codeBlockTitle'] {
   padding: 0.15rem var(--ifm-pre-padding);
 }
 
+:root[data-theme='dark'] .admonition code {
+  color: var(--ifm-blockquote-color);
+}
+
+:root[data-theme='dark'] blockquote code {
+  color: var(--ifm-blockquote-color);
+}
+
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
