@@ -392,7 +392,7 @@ const selectTodoDescriptionsReselect = createSelector(
 )
 ```
 
-This will unfortunately recalculate the derived array if any other value inside of `state.todos` changes, such as toggling a `todo.completed` flag. The _contents_ of the derived array are identical, but because the input `todos` array changed, it has to calculate a new output array, and that has a new reference.
+Unfortunately, this will recalculate the derived array if any other value inside of `state.todos` changes, such as toggling a `todo.completed` flag. The _contents_ of the derived array are identical, but because the input `todos` array changed, it has to calculate a new output array, and that has a new reference.
 
 The same selector with `proxy-memoize` might look like:
 
@@ -500,7 +500,7 @@ For class components with `connect`, this can be done with an advanced "factory 
 import { makeSelectItemsByCategory } from './categoriesSlice'
 
 const makeMapState = (state, ownProps) => {
-  // closure - create a new unique selector instance here,
+  // Closure - create a new unique selector instance here,
   // and this will run once for every component instance
   const selectItemsByCategory = makeSelectItemsByCategory()
 
@@ -509,6 +509,10 @@ const makeMapState = (state, ownProps) => {
       itemsByCategory: selectItemsByCategory(state, ownProps.category)
     }
   }
+
+  // Returning a function here will tell `connect` to use it as
+  // `mapState` instead of the original one given to `connect`
+  return realMapState
 }
 
 export default connect(makeMapState)(CategoryList)
@@ -560,11 +564,11 @@ export const selectTodos = state => state.todos
 // highlight-end
 ```
 
-That way, if we happen to make an update the structure of the todos slice state, the relevant selectors are right here and can be updated at the same time, with minimal changes to any other parts of the app.
+That way, if we happen to make an update to the structure of the todos slice state, the relevant selectors are right here and can be updated at the same time, with minimal changes to any other parts of the app.
 
 ### Balance Selector Usage
 
-It's possible to add _too many_ selectors to an application. **Adding a separate selector function for every single field is not a good idea!** That ends up turning Redux into something resembling a a Java class with getter/setter functions for every field. It's not going to _improve_ the code, and it's probably going to make the code _worse_ - maintaining all those extra selectors is a lot of additional effort, and it will be harder to trace what values are being used where.
+It's possible to add _too many_ selectors to an application. **Adding a separate selector function for every single field is not a good idea!** That ends up turning Redux into something resembling a Java class with getter/setter functions for every field. It's not going to _improve_ the code, and it's probably going to make the code _worse_ - maintaining all those extra selectors is a lot of additional effort, and it will be harder to trace what values are being used where.
 
 Similarly, **don't make every single selector memoized!**. Memoization is only needed if you are truly _deriving_ results, _and_ if the derived results would likely create new references every time. **A selector function that does a direct lookup and return of a value should be a plain function, not memoized**.
 
