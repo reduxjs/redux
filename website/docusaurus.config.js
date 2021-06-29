@@ -137,7 +137,8 @@ module.exports = {
         docs: {
           path: '../docs',
           routeBasePath: '/',
-          sidebarPath: require.resolve('./sidebars.js')
+          sidebarPath: require.resolve('./sidebars.js'),
+          editUrl: 'https://github.com/reduxjs/redux/edit/master/website'
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')
