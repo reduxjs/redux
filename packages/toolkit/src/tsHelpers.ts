@@ -82,7 +82,7 @@ export type DispatchForMiddlewares<M> = M extends ReadonlyArray<any>
   : never
 
 /**
- * Convert a Union type `(A|B)` to and intersecion type `(A&B)`
+ * Convert a Union type `(A|B)` to an intersection type `(A&B)`
  */
 export type UnionToIntersection<U> = (
   U extends any ? (k: U) => void : never
