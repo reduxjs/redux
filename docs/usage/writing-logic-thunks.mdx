@@ -119,6 +119,8 @@ If you need to add the thunk middleware to a store manually, that can be done by
 
 ### How Does the Middleware Work?
 
+To start, let's review how Redux middleware work in general.
+
 [Redux middleware are all written as a series of 3 nested functions](../tutorials/fundamentals/part-4-store.md#writing-custom-middleware):
 
 - The outer function receives a "store API" object with `{dispatch, getState}`
@@ -126,6 +128,8 @@ If you need to add the thunk middleware to a store manually, that can be done by
 - The inner function will be called with each `action` as it's passed through the middleware chain
 
 It's important to note that middleware can be used to allow passing values that are _not_ action objects into `store.dispatch()`, as long as the middleware intercepts those values and does not let them reach the reducers.
+
+With that in mind, we can look at the specifics of the thunk middleware.
 
 The actual implementation of the thunk middleware is very short - only about 10 lines. Here's the source, with additional added comments:
 
@@ -154,7 +158,7 @@ In other words:
 - If you pass a function into `dispatch`, the thunk middleware sees that it's a function instead of an action object, intercepts it, and calls that function with `(dispatch, getState)` as its arguments
 - If it's a normal action object (or anything else), it's forwarded to the next middleware in the chain
 
-### Injecting Values Into Thunks
+### Injecting Config Values Into Thunks
 
 The thunk middleware does have one customization option. You can create a custom instance of the thunk middleware at setup time, and inject an "extra argument" into the middleware. The middleware will then inject that extra value as the third argument of every thunk function. This is most commonly used for injecting an API service layer into thunk functions, so that they don't have hardcoded dependencies on the API methods:
 
@@ -198,7 +202,7 @@ export const fetchTodoById =
 
 ### Dispatching Actions
 
-Thunks have access to the `dispatch` method. This can be used to dispatch actions, or even other thunks. This can be useful for dispatching multiple actions in a row (although [this is a pattern that should be minimized]), or orchestrating complex logic that needs to dispatch at multiple points in the process.
+Thunks have access to the `dispatch` method. This can be used to dispatch actions, or even other thunks. This can be useful for dispatching multiple actions in a row (although [this is a pattern that should be minimized](../style-guide/style-guide.md#avoid-dispatching-many-actions-sequentially)), or orchestrating complex logic that needs to dispatch at multiple points in the process.
 
 ```js title="Example: thunks dispatching actions and thunks"
 // An example of a thunk dispatching other action creators,
