@@ -7,8 +7,6 @@ description: 'The official Redux Essentials tutorial: learn the structure of a t
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 2: Redux App Structure
-
 :::tip What You'll Learn
 
 - The structure of a typical React + Redux app

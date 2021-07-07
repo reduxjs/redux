@@ -7,8 +7,6 @@ description: 'The official Redux Essentials tutorial: learn how data flows in a 
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 3: Basic Redux Data Flow
-
 :::tip What You'll Learn
 
 - How to add "slices" of reducer logic to the Redux store with `createSlice`

@@ -7,8 +7,6 @@ description: 'The official Redux Essentials tutorial: learn how to improve app p
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 6: Performance and Normalizing Data
-
 :::tip What You'll Learn
 
 - How to create memoized selector functions with `createSelector`

@@ -7,8 +7,6 @@ description: 'The official Redux Essentials tutorial: learn how to work with com
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 4: Using Redux Data
-
 :::tip What You'll Learn
 
 - Using Redux data in multiple React components
