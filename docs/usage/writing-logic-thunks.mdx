@@ -4,6 +4,8 @@ title: Writing Logic with Thunks
 description: 'Usage > Redux Logic > Thunks: writing logic that interacts with the store'
 ---
 
+import { DetailedExplanation } from '../components/DetailedExplanation'
+
 :::tip What You'll Learn
 
 - What "thunks" are, and why they're used for writing Redux logic
@@ -19,7 +21,9 @@ description: 'Usage > Redux Logic > Thunks: writing logic that interacts with th
 
 The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). Rather than execute some logic _now_, we can write a function body or code that can be used to perform the work _later_.
 
-For Redux specifically, "thunks" are a pattern of writing logic that can interact with a Redux store, and require the [`redux-thunk` middleware](https://github.com/redujs/redux-thunk) to be added to the Redux store as part of its configuration.
+For Redux specifically, **"thunks" are a pattern of writing functions with logic inside that can interact with a Redux store's `dispatch` and `getState` methods**.
+
+Using thunks requires the [`redux-thunk` middleware](https://github.com/redujs/redux-thunk) to be added to the Redux store as part of its configuration.
 
 Thunks are [the standard approach for writing async logic in Redux apps](../style-guide/style-guide.md#use-thunks-for-async-logic), and are commonly used for data fetching. However, they can be used for a variety of tasks, and can contain both synchronous and asynchronous logic.
 
@@ -82,9 +86,13 @@ It's common to have logic directly in components, such as making an async reques
 
 In a sense, a thunk is a loophole where **you can write any code that needs to interact with the Redux store, ahead of time, without needing to know _which_ Redux store will be used**. This keeps the logic from being bound to any specific Redux store instance and keeps it reusable.
 
+<DetailedExplanation title={`Detailed Explanation: Thunks, Connect, and "Container Components"`}>
+
 Historically, another reason to use thunks was to help keep React components "unaware of Redux". The `connect` API allowed passing action creators and "binding" them to automatically dispatch actions when called. Since components typically did not have access to `dispatch` internally, passing thunks to `connect` made it possible for components to just call `this.props.doSomething()`, without needing to know if it was a callback from a parent, dispatching a plain Redux action, dispatching a thunk performing sync or async logic, or a mock function in a test.
 
 With the arrival of [the React-Redux hooks API](https://react-redux.js.org/api/hooks), that situation has changed. The community has switched away from the "container/presentational" pattern in general, and [components now have access to `dispatch` directly via the `useDispatch` hook](../tutorials/fundamentals/part-5-ui-and-react.md#dispatching-actions-with-usedispatch). This _does_ mean that it's possible to have more logic directly inside of a component, such as an async fetch + dispatch of the results. However, thunks have access to `getState`, which components do not, and there's still value in moving that logic outside of components.
+
+</DetailedExplanation>
 
 ### Thunk Use Cases
 
