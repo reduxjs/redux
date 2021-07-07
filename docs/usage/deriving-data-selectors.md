@@ -1,7 +1,7 @@
 ---
 id: deriving-data-selectors
 title: Deriving Data with Selectors
-description: 'Usage > Redux Logic > Using Selectors: deriving data from the Redux state'
+description: 'Usage > Redux Logic > Selectors: deriving data from the Redux state'
 ---
 
 :::tip What You'll Learn
