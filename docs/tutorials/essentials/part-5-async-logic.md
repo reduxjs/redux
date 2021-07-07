@@ -7,8 +7,6 @@ description: 'The official Redux Essentials tutorial: learn how async logic work
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 5: Async Logic and Data Fetching
-
 :::tip What You'll Learn
 
 - How to use the Redux "thunk" middleware for async logic
