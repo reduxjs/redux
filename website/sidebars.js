@@ -88,6 +88,7 @@ module.exports = {
           },
           'usage/reducing-boilerplate',
           'usage/deriving-data-selectors',
+          'usage/writing-logic-thunks',
           'usage/implementing-undo-history'
         ]
       }
