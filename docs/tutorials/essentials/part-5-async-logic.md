@@ -106,6 +106,19 @@ store.dispatch(logAndAdd(5))
 
 Thunks are typically written in "slice" files. `createSlice` itself does not have any special support for defining thunks, so you should write them as separate functions in the same slice file. That way, they have access to the plain action creators for that slice, and it's easy to find where the thunk lives.
 
+:::info
+
+The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). For more details on how to use thunks, see the thunk usage guide page:
+
+- [Using Redux: Writing Logic with Thunks](../../usage/writing-logic-thunks.mdx)
+
+as well as these posts:
+
+- [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/)
+- [Thunks in Redux: the basics](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
+
+:::
+
 ### Writing Async Thunks
 
 Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, and `async/await`. This makes them a good place to put AJAX calls to a server API.
