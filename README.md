@@ -8,7 +8,7 @@ It helps you write applications that behave consistently, run in different envir
 You can use Redux together with [React](https://reactjs.org), or with any other view library.
 It is tiny (2kB, including dependencies), and has a rich ecosystem of addons.
 
-[![build status](https://img.shields.io/travis/reduxjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reduxjs/redux)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/reduxjs/redux/CI?style=flat-square)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![npm downloads](https://img.shields.io/npm/dm/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on discord](https://img.shields.io/badge/discord-%23redux%20%40%20reactiflux-61dafb.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZ6au5t)
