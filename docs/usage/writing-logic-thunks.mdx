@@ -348,6 +348,23 @@ const onAddTodoClicked = async () => {
 }
 ```
 
+There's also a neat trick you can do with this: you can repurpose a thunk as a way to make a one-time selection from the Redux state when you only have access to `dispatch`. Since dispatching a thunk returns the thunk return value, you could write a thunk that accepts a selector, and immediately calls the selector with the state and returns the result. This can be useful in a React component, where you have access to `dispatch` but not `getState`.
+
+```js title="Example: reusing thunks for selecting data"
+// In your Redux slices:
+const getSelectedData = selector => (dispatch, getState) => {
+  return selector(getState())
+}
+
+// in a component
+const onClick = () => {
+  const todos = dispatch(getSelectedData(selectTodos))
+  // do more logic with this data
+}
+```
+
+This is not a _recommended_ practice per se, but it's semantically legal and will work fine.
+
 ## Using `createAsyncThunk`
 
 Writing async logic with thunks can be somewhat tedious. Each thunk typically requires defining three different action types + matching action creators for "pending/fulfilled/rejected", plus the actual thunk action creator + thunk function. There's also the edge cases with error handling to deal with.
