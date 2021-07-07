@@ -155,7 +155,7 @@ import thunkMiddleware from 'redux-thunk'
 
 const serviceApi = createServiceApi('/some/url')
 
-const thunkMiddlewareWithArg = thunkMiddleware.withExtraArgument(serviceApi)
+const thunkMiddlewareWithArg = thunkMiddleware.withExtraArgument({ serviceApi })
 ```
 
 Redux Toolkit's `configureStore` supports [this as part of its middleware customization in `getDefaultMiddleware`](https://redux-toolkit.js.org/api/getDefaultMiddleware):
@@ -166,13 +166,25 @@ const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       thunk: {
-        extraArgument: serviceApi
+        extraArgument: { serviceApi }
       }
     })
 })
 ```
 
 There can only be one extra argument value. If you need to pass in multiple values, pass in an object containing those.
+
+The thunk function will then receive that extra value as its third argument:
+
+```js title="Thunk function with extra argument"
+export const fetchTodoById =
+  todoId => async (dispatch, getState, extraArgument) => {
+    // In this example, the extra arg is an object with an API service inside
+    const { serviceApi } = extraArgument
+    const response = await serviceApi.getTodo(todoId)
+    dispatch(todosLoaded(response.todos))
+  }
+```
 
 ## Thunk Usage Patterns
 
