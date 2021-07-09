@@ -531,6 +531,34 @@ describe('fetchFn', () => {
 
     expect(request.url).toEqual(`${baseUrl}/echo?apple=fruit`)
   })
+
+  test('respects mocking window.fetch after a fetch base query is created', async () => {
+    const baseUrl = 'http://example.com'
+    const baseQuery = fetchBaseQuery({ baseUrl })
+
+    const fakeResponse = {
+      ok: true,
+      status: 200,
+      text: async () => `{ "url": "mock-return-url" }`,
+      clone: () => fakeResponse
+    }
+
+    const spiedFetch = jest.spyOn(window, 'fetch');
+    spiedFetch.mockResolvedValueOnce(fakeResponse as any);
+
+    const { data } = await baseQuery(
+      { url: '/echo' },
+      {
+        signal: new AbortController().signal,
+        dispatch: storeRef.store.dispatch,
+        getState: storeRef.store.getState,
+      },
+      {}
+    )
+    expect(data).toEqual({url: 'mock-return-url'})
+
+    spiedFetch.mockClear();
+  })
 })
 
 describe('FormData', () => {

@@ -27,6 +27,13 @@ export interface FetchArgs extends CustomRequestInit {
   validateStatus?: (response: Response, body: any) => boolean
 }
 
+/**
+ * A mini-wrapper that passes arguments straight through to
+ * {@link [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)}.
+ * Avoids storing `fetch` in a closure, in order to permit mocking/monkey-patching.
+ */
+const defaultFetchFn: typeof fetch = (...args) => fetch(...args)
+
 const defaultValidateStatus = (response: Response) =>
   response.status >= 200 && response.status <= 299
 
@@ -118,7 +125,7 @@ export type FetchBaseQueryMeta = { request: Request; response: Response }
 export function fetchBaseQuery({
   baseUrl,
   prepareHeaders = (x) => x,
-  fetchFn = fetch,
+  fetchFn = defaultFetchFn,
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
@@ -127,6 +134,11 @@ export function fetchBaseQuery({
   {},
   FetchBaseQueryMeta
 > {
+  if (typeof fetch === 'undefined' && fetchFn === defaultFetchFn) {
+    console.warn(
+      'Warning: `fetch` is not available. Please supply a custom `fetchFn` property to use `fetchBaseQuery` on SSR environments.'
+    )
+  }
   return async (arg, { signal, getState }) => {
     let {
       url,
