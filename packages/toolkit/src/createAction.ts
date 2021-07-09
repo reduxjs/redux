@@ -83,7 +83,7 @@ export type _ActionCreatorWithPreparedPayload<
  */
 interface BaseActionCreator<P, T extends string, M = never, E = never> {
   type: T
-  match(action: Action<unknown>): action is PayloadAction<P, T, M, E>
+  match: (action: Action<unknown>) => action is PayloadAction<P, T, M, E>
 }
 
 /**

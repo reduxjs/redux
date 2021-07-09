@@ -359,9 +359,9 @@ export type UnknownAsyncThunkAction =
   | UnknownAsyncThunkFulfilledAction
 
 export type AnyAsyncThunk = {
-  pending: { match(action: any): action is any }
-  fulfilled: { match(action: any): action is any }
-  rejected: { match(action: any): action is any }
+  pending: { match: (action: any) => action is any }
+  fulfilled: { match: (action: any) => action is any }
+  rejected: { match: (action: any) => action is any }
 }
 
 export type ActionsFromAsyncThunk<T extends AnyAsyncThunk> =

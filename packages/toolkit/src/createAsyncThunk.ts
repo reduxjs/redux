@@ -235,10 +235,10 @@ export type AsyncThunkAction<
   | ReturnType<AsyncThunkFulfilledActionCreator<Returned, ThunkArg>>
   | ReturnType<AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig>>
 > & {
-  abort(reason?: string): void
+  abort: (reason?: string) => void
   requestId: string
   arg: ThunkArg
-  unwrap(): Promise<Returned>
+  unwrap: () => Promise<Returned>
 }
 
 type AsyncThunkActionCreator<
