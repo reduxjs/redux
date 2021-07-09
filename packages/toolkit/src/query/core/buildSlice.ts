@@ -78,7 +78,7 @@ export function buildSlice({
   reducerPath,
   queryThunk,
   mutationThunk,
-  context: { endpointDefinitions: definitions },
+  context: { endpointDefinitions: definitions, apiUid },
   assertTagType,
   config,
 }: {
@@ -258,9 +258,8 @@ export function buildSlice({
               const subscribedQueries = ((draft[type] ??= {})[
                 id || '__internal_without_id'
               ] ??= [])
-              const alreadySubscribed = subscribedQueries.includes(
-                queryCacheKey
-              )
+              const alreadySubscribed =
+                subscribedQueries.includes(queryCacheKey)
               if (!alreadySubscribed) {
                 subscribedQueries.push(queryCacheKey)
               }
@@ -339,8 +338,11 @@ export function buildSlice({
       ...config,
     } as ConfigState<string>,
     reducers: {
-      middlewareRegistered(state) {
-        state.middlewareRegistered = true
+      middlewareRegistered(state, { payload }: PayloadAction<string>) {
+        state.middlewareRegistered =
+          state.middlewareRegistered === 'conflict' || apiUid !== payload
+            ? 'conflict'
+            : true
       },
     },
     extraReducers: (builder) => {

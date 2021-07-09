@@ -20,10 +20,18 @@ afterEach(() => {
   restore()
 })
 
+const baseUrl =  'http://example.com'
+
 function createApis() {
   const api1 = createApi({
-    reducerPath: 'api1',
-    baseQuery: fetchBaseQuery({}),
+    baseQuery: fetchBaseQuery({ baseUrl }),
+    endpoints: (builder) => ({
+      q1: builder.query({ query: () => '/success' }),
+    }),
+  })
+
+  const api1_2 = createApi({
+    baseQuery: fetchBaseQuery({baseUrl}),
     endpoints: (builder) => ({
       q1: builder.query({ query: () => '/success' }),
     }),
@@ -31,17 +39,17 @@ function createApis() {
 
   const api2 = createApi({
     reducerPath: 'api2',
-    baseQuery: fetchBaseQuery({}),
+    baseQuery: fetchBaseQuery({baseUrl}),
     endpoints: (builder) => ({
       q1: builder.query({ query: () => '/success' }),
     }),
   })
-  return [api1, api2] as const
+  return [api1, api1_2, api2] as const
 }
 
-let [api1, api2] = createApis()
+let [api1, api1_2, api2] = createApis()
 beforeEach(() => {
-  ;[api1, api2] = createApis()
+  ;[api1, api1_2, api2] = createApis()
 })
 
 describe('missing middleware', () => {
@@ -50,11 +58,13 @@ describe('missing middleware', () => {
     ['production', false],
   ])('%s warns if middleware is missing: %s', ([env, shouldWarn]) => {
     ;(process.env as any).NODE_ENV = env
-    const store = configureStore({ reducer: { api1: api1.reducer } })
+    const store = configureStore({
+      reducer: { [api1.reducerPath]: api1.reducer },
+    })
     store.dispatch(api1.endpoints.q1.initiate(undefined))
     expect(getLog().log).toBe(
       shouldWarn
-        ? `Warning: Middleware for RTK-Query API at reducerPath "api1" has not been added to the store.
+        ? `Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
 Features like automatic cache collection, automatic refetching etc. will not be available.`
         : ''
     )
@@ -62,7 +72,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
 
   test('does not warn if middleware is not missing', () => {
     const store = configureStore({
-      reducer: { api1: api1.reducer },
+      reducer: { [api1.reducerPath]: api1.reducer },
       middleware: (gdm) => gdm().concat(api1.middleware),
     })
     store.dispatch(api1.endpoints.q1.initiate(undefined))
@@ -70,22 +80,27 @@ Features like automatic cache collection, automatic refetching etc. will not be 
   })
 
   test('warns only once per api', () => {
-    const store = configureStore({ reducer: { api1: api1.reducer } })
+    const store = configureStore({
+      reducer: { [api1.reducerPath]: api1.reducer },
+    })
     store.dispatch(api1.endpoints.q1.initiate(undefined))
     store.dispatch(api1.endpoints.q1.initiate(undefined))
     expect(getLog().log)
-      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api1" has not been added to the store.
+      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
 Features like automatic cache collection, automatic refetching etc. will not be available.`)
   })
 
   test('warns multiple times for multiple apis', () => {
     const store = configureStore({
-      reducer: { api1: api1.reducer, api2: api2.reducer },
+      reducer: {
+        [api1.reducerPath]: api1.reducer,
+        [api2.reducerPath]: api2.reducer,
+      },
     })
     store.dispatch(api1.endpoints.q1.initiate(undefined))
     store.dispatch(api2.endpoints.q1.initiate(undefined))
     expect(getLog().log)
-      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api1" has not been added to the store.
+      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
 Features like automatic cache collection, automatic refetching etc. will not be available.
 Warning: Middleware for RTK-Query API at reducerPath "api2" has not been added to the store.
 Features like automatic cache collection, automatic refetching etc. will not be available.`)
@@ -117,7 +132,7 @@ describe('missing reducer', () => {
       api1.endpoints.q1.select(undefined)(store.getState())
       expect(getLog().log).toBe(
         shouldWarn
-          ? 'Error: No data found at `state.api1`. Did you forget to add the reducer to the store?'
+          ? 'Error: No data found at `state.api`. Did you forget to add the reducer to the store?'
           : ''
       )
     })
@@ -125,7 +140,7 @@ describe('missing reducer', () => {
 
   test('does not warn if reducer is not missing', () => {
     const store = configureStore({
-      reducer: { api1: api1.reducer },
+      reducer: { [api1.reducerPath]: api1.reducer },
       middleware: (gdm) => gdm().concat(api1.middleware),
     })
     api1.endpoints.q1.select(undefined)(store.getState())
@@ -143,7 +158,7 @@ describe('missing reducer', () => {
     // @ts-expect-error
     api1.endpoints.q1.select(undefined)(store.getState())
     expect(getLog().log).toBe(
-      'Error: No data found at `state.api1`. Did you forget to add the reducer to the store?'
+      'Error: No data found at `state.api`. Did you forget to add the reducer to the store?'
     )
   })
 
@@ -158,7 +173,7 @@ describe('missing reducer', () => {
     // @ts-expect-error
     api2.endpoints.q1.select(undefined)(store.getState())
     expect(getLog().log).toBe(
-      'Error: No data found at `state.api1`. Did you forget to add the reducer to the store?\nError: No data found at `state.api2`. Did you forget to add the reducer to the store?'
+      'Error: No data found at `state.api`. Did you forget to add the reducer to the store?\nError: No data found at `state.api2`. Did you forget to add the reducer to the store?'
     )
   })
 })
@@ -171,9 +186,90 @@ test('warns only for reducer if everything is missing', async () => {
   api1.endpoints.q1.select(undefined)(store.getState())
   await store.dispatch(api1.endpoints.q1.initiate(undefined))
   expect(getLog().log).toBe(
-    'Error: No data found at `state.api1`. Did you forget to add the reducer to the store?'
+    'Error: No data found at `state.api`. Did you forget to add the reducer to the store?'
   )
 })
+
+describe('warns on multiple apis using the same `reducerPath`', () => {
+  test('common: two apis, same order', async () => {
+    const store = configureStore({
+      reducer: {
+        [api1.reducerPath]: api1.reducer,
+        [api1_2.reducerPath]: api1_2.reducer,
+      },
+      middleware: (gDM) => gDM().concat(api1.middleware, api1_2.middleware),
+    })
+    await store.dispatch(api1.endpoints.q1.initiate(undefined))
+    // only second api prints
+    expect(getLog().log).toBe(
+      `There is a mismatch between slice and middleware for the reducerPath "api".
+You can only have one api per reducer path, this will lead to crashes in various situations!
+If you have multiple apis, you *have* to specify the reducerPath option when using createApi!`
+    )
+  })
+
+  test('common: two apis, opposing order', async () => {
+    const store = configureStore({
+      reducer: {
+        [api1.reducerPath]: api1.reducer,
+        [api1_2.reducerPath]: api1_2.reducer,
+      },
+      middleware: (gDM) => gDM().concat(api1_2.middleware, api1.middleware),
+    })
+    await store.dispatch(api1.endpoints.q1.initiate(undefined))
+    // both apis print
+    expect(getLog().log).toBe(
+      `There is a mismatch between slice and middleware for the reducerPath "api".
+You can only have one api per reducer path, this will lead to crashes in various situations!
+If you have multiple apis, you *have* to specify the reducerPath option when using createApi!
+There is a mismatch between slice and middleware for the reducerPath "api".
+You can only have one api per reducer path, this will lead to crashes in various situations!
+If you have multiple apis, you *have* to specify the reducerPath option when using createApi!`
+    )
+  })
+
+  test('common: two apis, only first middleware', async () => {
+    const store = configureStore({
+      reducer: {
+        [api1.reducerPath]: api1.reducer,
+        [api1_2.reducerPath]: api1_2.reducer,
+      },
+      middleware: (gDM) => gDM().concat(api1.middleware),
+    })
+    await store.dispatch(api1.endpoints.q1.initiate(undefined))
+
+    expect(getLog().log).toBe(
+      `There is a mismatch between slice and middleware for the reducerPath "api".
+You can only have one api per reducer path, this will lead to crashes in various situations!
+If you have multiple apis, you *have* to specify the reducerPath option when using createApi!`
+    )
+  })
+
+  /**
+   * This is the one edge case that we currently cannot detect:
+   * Multiple apis with the same reducer key and only the middleware of the last api is being used.
+   *
+   * It would be great to support this case as well, but for now:
+   * "It is what it is."
+   */
+  test.skip('common: two apis, only second middleware', async () => {
+    const store = configureStore({
+      reducer: {
+        [api1.reducerPath]: api1.reducer,
+        [api1_2.reducerPath]: api1_2.reducer,
+      },
+      middleware: (gDM) => gDM().concat(api1_2.middleware),
+    })
+    await store.dispatch(api1.endpoints.q1.initiate(undefined))
+
+    expect(getLog().log).toBe(
+      `There is a mismatch between slice and middleware for the reducerPath "api".
+You can only have one api per reducer path, this will lead to crashes in various situations!
+If you have multiple apis, you *have* to specify the reducerPath option when using createApi!`
+    )
+  })
+})
+
 
 describe('`console.error` on unhandled errors during `initiate`', () => {
   test('error thrown in `baseQuery`', async () => {
@@ -248,7 +344,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
   test('`fetchBaseQuery`: error thrown in `prepareHeaders`', async () => {
     const api = createApi({
       baseQuery: fetchBaseQuery({
-        baseUrl: 'http://example.com',
+        baseUrl,
         prepareHeaders() {
           throw new Error('this was kinda expected')
         },
@@ -275,7 +371,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
   test('`fetchBaseQuery`: error thrown in `validateStatus`',  async () => {
     const api = createApi({
       baseQuery: fetchBaseQuery({
-        baseUrl: 'http://example.com',
+        baseUrl
               }),
       endpoints: (build) => ({
         val: build.query<any, void>({

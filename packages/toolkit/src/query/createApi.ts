@@ -1,16 +1,13 @@
 import type { Api, ApiContext, Module, ModuleName } from './apiTypes'
 import type { BaseQueryArg, BaseQueryFn } from './baseQueryTypes'
-import type {
-  SerializeQueryArgs} from './defaultSerializeQueryArgs';
-import {
-  defaultSerializeQueryArgs
-} from './defaultSerializeQueryArgs'
+import type { SerializeQueryArgs } from './defaultSerializeQueryArgs'
+import { defaultSerializeQueryArgs } from './defaultSerializeQueryArgs'
 import type {
   EndpointBuilder,
-  EndpointDefinitions} from './endpointDefinitions';
-import {
-  DefinitionType
+  EndpointDefinitions,
 } from './endpointDefinitions'
+import { DefinitionType } from './endpointDefinitions'
+import { nanoid } from '@reduxjs/toolkit'
 
 export interface CreateApiOptions<
   BaseQuery extends BaseQueryFn,
@@ -100,10 +97,10 @@ export interface CreateApiOptions<
   ): Definitions
   /**
    * Defaults to `60` _(this value is in seconds)_. This is how long RTK Query will keep your data cached for **after** the last component unsubscribes. For example, if you query an endpoint, then unmount the component, then mount another component that makes the same request within the given time frame, the most recent value will be served from the cache.
-   * 
+   *
    * ```ts
    * // codeblock-meta title="keepUnusedDataFor example"
-   * 
+   *
    * import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
    * interface Post {
    *   id: number
@@ -206,6 +203,7 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
         // placeholder "batch" method to be overridden by plugins, for example with React.unstable_batchedUpdate
         fn()
       },
+      apiUid: nanoid(),
     }
 
     const api = {
