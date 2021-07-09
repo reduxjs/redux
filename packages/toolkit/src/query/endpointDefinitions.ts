@@ -99,7 +99,7 @@ interface EndpointDefinitionWithQueryFn<
    *         if (randomVal < 0.9) {
    *           return { data: 'tails' }
    *         }
-   *         return { error: { status: 500, data: "Coin landed on it's edge!" } }
+   *         return { error: { status: 500, statusText: 'Impossible flip result', data: "Coin landed on it's edge!" } }
    *       }
    *       // highlight-end
    *     })
@@ -458,20 +458,16 @@ function expandTagDescription(
   return typeof description === 'string' ? { type: description } : description
 }
 
-export type QueryArgFrom<
-  D extends BaseEndpointDefinition<any, any, any>
-> = D extends BaseEndpointDefinition<infer QA, any, any> ? QA : unknown
-export type ResultTypeFrom<
-  D extends BaseEndpointDefinition<any, any, any>
-> = D extends BaseEndpointDefinition<any, any, infer RT> ? RT : unknown
+export type QueryArgFrom<D extends BaseEndpointDefinition<any, any, any>> =
+  D extends BaseEndpointDefinition<infer QA, any, any> ? QA : unknown
+export type ResultTypeFrom<D extends BaseEndpointDefinition<any, any, any>> =
+  D extends BaseEndpointDefinition<any, any, infer RT> ? RT : unknown
 
-export type ReducerPathFrom<
-  D extends EndpointDefinition<any, any, any, any>
-> = D extends EndpointDefinition<any, any, any, infer RP> ? RP : unknown
+export type ReducerPathFrom<D extends EndpointDefinition<any, any, any, any>> =
+  D extends EndpointDefinition<any, any, any, infer RP> ? RP : unknown
 
-export type TagTypesFrom<
-  D extends EndpointDefinition<any, any, any, any>
-> = D extends EndpointDefinition<any, any, infer RP, any> ? RP : unknown
+export type TagTypesFrom<D extends EndpointDefinition<any, any, any, any>> =
+  D extends EndpointDefinition<any, any, infer RP, any> ? RP : unknown
 
 export type ReplaceTagTypes<
   Definitions extends EndpointDefinitions,
