@@ -482,7 +482,7 @@ describe('additional transformResponse behaviors', () => {
             meta: {
               request: { headers: getSerializedHeaders(meta?.request.headers) },
               response: {
-                headers: getSerializedHeaders(meta?.response.headers),
+                headers: getSerializedHeaders(meta?.response?.headers),
               },
             },
           }
@@ -507,7 +507,7 @@ describe('additional transformResponse behaviors', () => {
             meta: {
               request: { headers: getSerializedHeaders(meta?.request.headers) },
               response: {
-                headers: getSerializedHeaders(meta?.response.headers),
+                headers: getSerializedHeaders(meta?.response?.headers),
               },
             },
           }

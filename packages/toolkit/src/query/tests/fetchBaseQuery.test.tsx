@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { setupApiStore } from './helpers'
+import { server } from './mocks/server'
 import { default as crossFetch } from 'cross-fetch'
+import { rest } from 'msw'
 
 const defaultHeaders: Record<string, string> = {
   fake: 'header',
@@ -11,8 +13,12 @@ const defaultHeaders: Record<string, string> = {
 
 const baseUrl = 'http://example.com'
 
+// @ts-ignore
+const fetchFn = jest.fn<Promise<any>, any[]>(global.fetch)
+
 const baseQuery = fetchBaseQuery({
   baseUrl,
+  fetchFn: fetchFn as any,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token
 
@@ -95,6 +101,8 @@ describe('fetchBaseQuery', () => {
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
       expect(res.data).toBeUndefined()
     })
 
@@ -111,7 +119,150 @@ describe('fetchBaseQuery', () => {
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
-      expect(res.error).toEqual({ status: 500, data: { value: 'error' } })
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.error).toEqual({
+        status: 500,
+        statusText: 'Internal Server Error',
+        data: { value: 'error' },
+      })
+    })
+
+    it('should handle a connection loss semi-gracefully', async () => {
+      fetchFn.mockRejectedValueOnce(new TypeError('Failed to fetch'))
+
+      const req = baseQuery(
+        '/success',
+        {
+          signal: new AbortController().signal,
+          dispatch: storeRef.store.dispatch,
+          getState: storeRef.store.getState,
+        },
+        {}
+      )
+      expect(req).toBeInstanceOf(Promise)
+      const res = await req
+      expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBe(undefined)
+      expect(res.error).toEqual({
+        status: 'FETCH_ERROR',
+        error: 'TypeError: Failed to fetch',
+      })
+    })
+  })
+
+  describe('non-JSON-body', () => {
+    it('success: should return data ("text" responseHandler)', async () => {
+      server.use(
+        rest.get('http://example.com/success', (_, res, ctx) =>
+          res.once(ctx.text(`this is not json!`))
+        )
+      )
+
+      const req = baseQuery(
+        { url: '/success', responseHandler: 'text' },
+        {
+          signal: new AbortController().signal,
+          dispatch: storeRef.store.dispatch,
+          getState: storeRef.store.getState,
+        },
+        {}
+      )
+      expect(req).toBeInstanceOf(Promise)
+      const res = await req
+      expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.data).toEqual(`this is not json!`)
+    })
+
+    it('success: should fail gracefully (default="json" responseHandler)', async () => {
+      server.use(
+        rest.get('http://example.com/success', (_, res, ctx) =>
+          res.once(ctx.text(`this is not json!`))
+        )
+      )
+
+      const req = baseQuery(
+        '/success',
+        {
+          signal: new AbortController().signal,
+          dispatch: storeRef.store.dispatch,
+          getState: storeRef.store.getState,
+        },
+        {}
+      )
+      expect(req).toBeInstanceOf(Promise)
+      const res = await req
+      expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.error).toEqual({
+        status: 'PARSING_ERROR',
+        error: 'SyntaxError: Unexpected token h in JSON at position 1',
+        originalStatus: 200,
+        statusText: 'OK',
+        data: `this is not json!`,
+      })
+    })
+
+    it('server error: should fail normally with a 500 status ("text" responseHandler)', async () => {
+      server.use(
+        rest.get('http://example.com/error', (_, res, ctx) =>
+          res(ctx.status(500), ctx.text(`this is not json!`))
+        )
+      )
+
+      const req = baseQuery(
+        { url: '/error', responseHandler: 'text' },
+        {
+          signal: new AbortController().signal,
+          dispatch: storeRef.store.dispatch,
+          getState: storeRef.store.getState,
+        },
+        {}
+      )
+      expect(req).toBeInstanceOf(Promise)
+      const res = await req
+      expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.error).toEqual({
+        status: 500,
+        statusText: 'Internal Server Error',
+        data: `this is not json!`,
+      })
+    })
+
+    it('server error: should fail gracefully (default="json" responseHandler)', async () => {
+      server.use(
+        rest.get('http://example.com/error', (_, res, ctx) =>
+          res(ctx.status(500), ctx.text(`this is not json!`))
+        )
+      )
+
+      const req = baseQuery(
+        '/error',
+        {
+          signal: new AbortController().signal,
+          dispatch: storeRef.store.dispatch,
+          getState: storeRef.store.getState,
+        },
+        {}
+      )
+      expect(req).toBeInstanceOf(Promise)
+      const res = await req
+      expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.error).toEqual({
+        status: 'PARSING_ERROR',
+        error: 'SyntaxError: Unexpected token h in JSON at position 1',
+        originalStatus: 500,
+        statusText: 'Internal Server Error',
+        data: `this is not json!`,
+      })
     })
   })
 
@@ -307,6 +458,7 @@ describe('fetchBaseQuery', () => {
 
       expect(res.error).toEqual({
         status: 200,
+        statusText: 'OK',
         data: {
           success: false,
           message: 'This returns a 200 but is really an error',
@@ -583,5 +735,28 @@ describe('FormData', () => {
     )
     const request: any = res.data
     expect(request.headers['content-type']).not.toContain('application/json')
+  })
+})
+
+describe('still throws on completely unexpected errors', () => {
+  test('', async () => {
+    const req = baseQuery(
+      {
+        url: '/success',
+        validateStatus() {
+          throw new Error('some unexpected error')
+        },
+      },
+      {
+        signal: new AbortController().signal,
+        dispatch: storeRef.store.dispatch,
+        getState: storeRef.store.getState,
+      },
+      {}
+    )
+    expect(req).toBeInstanceOf(Promise)
+    await expect(req).rejects.toMatchInlineSnapshot(
+      `[Error: some unexpected error]`
+    )
   })
 })

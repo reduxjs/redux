@@ -58,10 +58,38 @@ const handleResponse = async (
   }
 }
 
-export interface FetchBaseQueryError {
-  status: number
-  data: unknown
-}
+export type FetchBaseQueryError =
+  | {
+      /**
+       * * `number`:
+       *   HTTP status code
+       */
+      status: number
+      data: unknown
+      statusText: string
+    }
+  | {
+      /**
+       * * `"FETCH_ERROR"`:
+       *   An error that occured during execution of `fetch` or the `fetchFn` callback option
+       **/
+      status: 'FETCH_ERROR'
+      data?: undefined
+      error: string
+    }
+  | {
+      /**
+       * * `"PARSING_ERROR"`:
+       *   An error happened during parsing.
+       *   Most likely a non-JSON-response was returned with the default `responseHandler` "JSON",
+       *   or an error occured while executing a custom `responseHandler`.
+       **/
+      status: 'PARSING_ERROR'
+      originalStatus: number
+      statusText: string
+      data: string
+      error: string
+    }
 
 function stripUndefined(obj: any) {
   if (!isPlainObject(obj)) {
@@ -86,7 +114,7 @@ export type FetchBaseQueryArgs = {
   ) => Promise<Response>
 } & RequestInit
 
-export type FetchBaseQueryMeta = { request: Request; response: Response }
+export type FetchBaseQueryMeta = { request: Request; response?: Response }
 
 /**
  * This is a very small wrapper around fetch that aims to simplify requests.
@@ -140,6 +168,7 @@ export function fetchBaseQuery({
     )
   }
   return async (arg, { signal, getState }) => {
+    let meta: FetchBaseQueryMeta | undefined
     let {
       url,
       method = 'GET' as const,
@@ -188,13 +217,33 @@ export function fetchBaseQuery({
 
     const request = new Request(url, config)
     const requestClone = request.clone()
+    meta = { request: requestClone }
 
-    const response = await fetchFn(request)
+    let response
+    try {
+      response = await fetchFn(request)
+    } catch (e) {
+      return { error: { status: 'FETCH_ERROR', error: String(e) }, meta }
+    }
     const responseClone = response.clone()
 
-    const meta = { request: requestClone, response: responseClone }
+    meta.response = responseClone
 
-    const resultData = await handleResponse(response, responseHandler)
+    let resultData
+    try {
+      resultData = await handleResponse(response, responseHandler)
+    } catch (e) {
+      return {
+        error: {
+          status: 'PARSING_ERROR',
+          originalStatus: response.status,
+          statusText: response.statusText,
+          data: await responseClone.clone().text(),
+          error: String(e),
+        },
+        meta,
+      }
+    }
 
     return validateStatus(response, resultData)
       ? {
@@ -205,6 +254,7 @@ export function fetchBaseQuery({
           error: {
             status: response.status,
             data: resultData,
+            statusText: response.statusText,
           },
           meta,
         }
