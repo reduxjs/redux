@@ -174,3 +174,131 @@ test('warns only for reducer if everything is missing', async () => {
     'Error: No data found at `state.api1`. Did you forget to add the reducer to the store?'
   )
 })
+
+describe('`console.error` on unhandled errors during `initiate`', () => {
+  test('error thrown in `baseQuery`', async () => {
+    const api = createApi({
+      baseQuery() {
+        throw new Error('this was kinda expected')
+      },
+      endpoints: (build) => ({
+        baseQuery: build.query<any, void>({ query() {} }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.baseQuery.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occured processing a request for the endpoint "baseQuery".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+
+  test('error thrown in `queryFn`', async () => {
+    const api = createApi({
+      baseQuery() {
+        return { data: {} }
+      },
+      endpoints: (build) => ({
+        queryFn: build.query<any, void>({
+          queryFn() {
+            throw new Error('this was kinda expected')
+          },
+        }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.queryFn.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occured processing a request for the endpoint "queryFn".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+
+  test('error thrown in `transformResponse`', async () => {
+    const api = createApi({
+      baseQuery() {
+        return { data: {} }
+      },
+      endpoints: (build) => ({
+        transformRspn: build.query<any, void>({
+          query() {},
+          transformResponse() {
+            throw new Error('this was kinda expected')
+          },
+        }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.transformRspn.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occured processing a request for the endpoint "transformRspn".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+
+  test('`fetchBaseQuery`: error thrown in `prepareHeaders`', async () => {
+    const api = createApi({
+      baseQuery: fetchBaseQuery({
+        baseUrl: 'http://example.com',
+        prepareHeaders() {
+          throw new Error('this was kinda expected')
+        },
+      }),
+      endpoints: (build) => ({
+        prep: build.query<any, void>({
+          query() {
+            return '/success'
+          },
+        }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.prep.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occured processing a request for the endpoint "prep".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+
+  test('`fetchBaseQuery`: error thrown in `validateStatus`',  async () => {
+    const api = createApi({
+      baseQuery: fetchBaseQuery({
+        baseUrl: 'http://example.com',
+              }),
+      endpoints: (build) => ({
+        val: build.query<any, void>({
+          query() {
+            return { 
+              url:'/success',
+
+          validateStatus() {
+            throw new Error('this was kinda expected')
+          },
+            }
+          },
+        }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.val.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occured processing a request for the endpoint "val".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+})
