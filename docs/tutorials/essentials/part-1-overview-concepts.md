@@ -149,7 +149,7 @@ One way to solve this is to extract the shared state from the components and put
 
 By defining and separating the concepts involved in state management and enforcing rules that maintain independence between views and states, we give our code more structure and maintainability.
 
-This is the basic idea behind Redux.  It is a centralized place that contains the global state for your application. In order to make the code predictable, it uses specific patterns that must be followed for updating that state.
+This is the basic idea behind Redux. It is a centralized place that contains the global state for your application. In order to make the code predictable, it uses specific patterns that must be followed for updating that state.
 
 ### Immutability
 
@@ -170,7 +170,7 @@ arr[1] = 'd'
 
 This is called _mutating_ the object or array. It's the same object or array reference in memory, but now the contents inside the object have changed.
 
-**In order to update values immutable, your code must make _copies_ of existing objects/arrays, and then modify the copies**.
+**In order to update values immutably, your code must make _copies_ of existing objects/arrays, and then modify the copies**.
 
 We can do this by hand using JavaScript's array/object spread operators, as well as array methods that return new copies of the array instead of mutating the original array.
 
@@ -224,7 +224,7 @@ There are some important Redux terms that you'll need to be familiar with before
 
 An **action** is a plain JavaScript object that has a `type` field. **You can think of an action as an event that describes something that happened in the application**.
 
-The `type` field should be a string that gives this action a descriptive name, like `"todos/todoAdded"`. The type string is usually written in the form `"domain/eventName"`, where the first part is the feature/category that this action belongs to and the second part is the specific event that happened.
+The `type` field should be a string that gives this action a descriptive name, like `"todos/todoAdded"`. The type string is usually written in the form `"domain/eventName"`, where the first part is the feature or category that this action belongs to and the second part is the specific event that happened.
 
 An action object can have other fields with additional information about what happened. By convention, we put that information in a field called `payload`.
 
@@ -348,7 +348,7 @@ console.log(finalResult)
 // {value: 3}
 ```
 
-We can say that **Redux reducers reduce a set of actions (over time) into a single state**. The difference is that `Array.reduce()` makes reducing of a set of actions happen all at once, while Redux makes sure that it happens over the lifetime of a running app.
+We can say that **Redux reducers reduce a set of actions (over time) into a single state**. The difference is that `Array.reduce()` only runs once, while Redux runs over the lifetime of an app.
 
 </DetailedExplanation>
 
@@ -356,7 +356,7 @@ We can say that **Redux reducers reduce a set of actions (over time) into a sing
 
 The current Redux application state lives in an object called the **store**.
 
-The store is created by passing in a reducer and has a method called `getState` that returns the current state value.
+The store is created by passing in a reducer and has a method called `getState` that returns the current state value:
 
 ```js
 import { configureStore } from '@reduxjs/toolkit'
@@ -369,7 +369,7 @@ console.log(store.getState())
 
 #### Dispatch
 
-The Redux store has a method called `dispatch`. **The only way to update the state is to call `store.dispatch()` and pass in an action object**. The store will run its reducer function and save the new state value inside.  We can then call `getState()` to retrieve the updated value.
+The Redux store has a method called `dispatch`. **The only way to update the state is to call `store.dispatch()` and pass in an action object**. The store will run its reducer function and save the new state value inside. We can then call `getState()` to retrieve the updated value.
 
 ```js
 store.dispatch({ type: 'counter/increment' })
@@ -380,7 +380,7 @@ console.log(store.getState())
 
 **You can think of dispatching actions as "triggering an event"** in the application. It means that an event happened and we want the store to know about it. Reducers act like event listeners and update the state when they hear about an action they are interested in.
 
-It is common practice to call action creators to dispatch the right action.
+It is common practice to call action creators to dispatch the right action:
 
 ```js
 const increment = () => {
@@ -397,7 +397,7 @@ console.log(store.getState())
 
 #### Selectors
 
-**Selectors** are functions that know how to extract specific pieces of information from a store state value. As an application grows bigger, this can help avoid repeating logic since different parts of the app need to read the same data.
+**Selectors** are functions that know how to extract specific pieces of information from a store state value. As an application grows bigger, this can help avoid repeating logic since different parts of the app need to read the same data:
 
 ```js
 const selectCounterValue = state => state.value
@@ -425,8 +425,8 @@ For Redux specifically, we can break these steps out into more detail:
 
 **Updates**
 1. When something happens in the app (such as a user clicking a button), the app code dispatches an action to the Redux store (like `dispatch({type: 'counter/increment'})`).
-2. The store runs the reducer function again with the previous `state` and the current `action`.  It then saves the return value as the new `state`.
-3. The store notifies all subscribed parts of the UI that the store has been updated.
+2. The store runs the reducer function again with the previous `state` and the current `action` and then saves the return value as the new `state`.
+3. The store notifies all subscribed parts of the UI that its store has been updated.
 4. Each UI component that needs data from the store checks to see if the parts of the state they need have changed.
 5. Each component that sees its data has changed forces a re-render with the new data, so that it can update what's shown on the screen.
 
