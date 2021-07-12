@@ -409,7 +409,7 @@ console.log(currentValue)
 
 ### Redux Application Data Flow
 
-Earlier, we talked about "one-way data flow", which describes this sequence of steps to update the app.  These steps are:
+Earlier, we talked about "one-way data flow", which describes this sequence of steps to update the app. These steps are:
 
 1. State describes the condition of the app at a specific point in time.
 2. The UI is rendered based on that state.
@@ -419,11 +419,13 @@ Earlier, we talked about "one-way data flow", which describes this sequence of s
 For Redux specifically, we can break these steps out into more detail:
 
 **Initial Setup**
+
 1. A Redux store is created using a root reducer function.
 2. The store calls the root reducer once and saves the return value as its initial `state`.
 3. When the UI is first rendered, UI components access the current state of the Redux store and use that data to decide what to render. The UI components also subscribe to any future store updates because they want to know if the state has changed.
 
 **Updates**
+
 1. When something happens in the app (such as a user clicking a button), the app code dispatches an action to the Redux store (like `dispatch({type: 'counter/increment'})`).
 2. The store runs the reducer function again with the previous `state` and the current `action` and then saves the return value as the new `state`.
 3. The store notifies all subscribed parts of the UI that its store has been updated.
