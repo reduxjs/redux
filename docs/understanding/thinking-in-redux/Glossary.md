@@ -130,7 +130,7 @@ A store creator is a function that creates a Redux store. Like with dispatching 
 type StoreEnhancer = (next: StoreCreator) => StoreCreator
 ```
 
-A store enhancer is a higher-order function that composes a store creator to return a new, enhanced store creator. This is similar to middleware in that it allows you to alter the store interface in a composable way.
+A store enhancer is a higher-order function that composes a store creator to return a new enhanced store creator. This is similar to middleware in that it allows you to alter the store interface in a composable way.
 
 Store enhancers are much the same concept as higher-order components in React, which are also occasionally called “component enhancers”.
 
