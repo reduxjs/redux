@@ -23,7 +23,7 @@ The word "thunk" is a programming term that means ["a piece of code that does so
 
 For Redux specifically, **"thunks" are a pattern of writing functions with logic inside that can interact with a Redux store's `dispatch` and `getState` methods**.
 
-Using thunks requires the [`redux-thunk` middleware](https://github.com/redujs/redux-thunk) to be added to the Redux store as part of its configuration.
+Using thunks requires the [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk) to be added to the Redux store as part of its configuration.
 
 Thunks are [the standard approach for writing async logic in Redux apps](../style-guide/style-guide.md#use-thunks-for-async-logic), and are commonly used for data fetching. However, they can be used for a variety of tasks, and can contain both synchronous and asynchronous logic.
 
@@ -109,7 +109,7 @@ Thunks are "one-shot" functions, with no sense of a lifecycle. They also cannot 
 
 ## Redux Thunk Middleware
 
-Dispatching thunk functions requires that the [`redux-thunk` middleware](https://github.com/redujs/redux-thunk) has been added to the Redux store as part of its configuration.
+Dispatching thunk functions requires that the [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk) has been added to the Redux store as part of its configuration.
 
 ### Adding the Middleware
 
