@@ -1,11 +1,8 @@
-import type {
-  AnyAction,
-  Middleware,
-  ThunkAction} from '@reduxjs/toolkit';
+import type { AnyAction, Middleware, ThunkAction } from '@reduxjs/toolkit'
 import {
   getDefaultMiddleware,
   MiddlewareArray,
-  configureStore
+  configureStore,
 } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 

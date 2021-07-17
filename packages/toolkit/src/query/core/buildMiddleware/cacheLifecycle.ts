@@ -193,63 +193,64 @@ export const build: SubMiddlewareBuilder = ({
     }
     const lifecycleMap: Record<string, CacheLifecycle> = {}
 
-    return (next) => (action): any => {
-      const stateBefore = mwApi.getState()
+    return (next) =>
+      (action): any => {
+        const stateBefore = mwApi.getState()
 
-      const result = next(action)
+        const result = next(action)
 
-      const cacheKey = getCacheKey(action)
+        const cacheKey = getCacheKey(action)
 
-      if (queryThunk.pending.match(action)) {
-        const oldState = stateBefore[reducerPath].queries[cacheKey]
-        const state = mwApi.getState()[reducerPath].queries[cacheKey]
-        if (!oldState && state) {
-          handleNewKey(
-            action.meta.arg.endpointName,
-            action.meta.arg.originalArgs,
-            cacheKey,
-            mwApi,
-            action.meta.requestId
-          )
+        if (queryThunk.pending.match(action)) {
+          const oldState = stateBefore[reducerPath].queries[cacheKey]
+          const state = mwApi.getState()[reducerPath].queries[cacheKey]
+          if (!oldState && state) {
+            handleNewKey(
+              action.meta.arg.endpointName,
+              action.meta.arg.originalArgs,
+              cacheKey,
+              mwApi,
+              action.meta.requestId
+            )
+          }
+        } else if (mutationThunk.pending.match(action)) {
+          const state = mwApi.getState()[reducerPath].mutations[cacheKey]
+          if (state) {
+            handleNewKey(
+              action.meta.arg.endpointName,
+              action.meta.arg.originalArgs,
+              cacheKey,
+              mwApi,
+              action.meta.requestId
+            )
+          }
+        } else if (isFullfilledThunk(action)) {
+          const lifecycle = lifecycleMap[cacheKey]
+          if (lifecycle?.valueResolved) {
+            lifecycle.valueResolved({
+              data: action.payload,
+              meta: action.meta.baseQueryMeta,
+            })
+            delete lifecycle.valueResolved
+          }
+        } else if (
+          api.internalActions.removeQueryResult.match(action) ||
+          api.internalActions.unsubscribeMutationResult.match(action)
+        ) {
+          const lifecycle = lifecycleMap[cacheKey]
+          if (lifecycle) {
+            delete lifecycleMap[cacheKey]
+            lifecycle.cacheEntryRemoved()
+          }
+        } else if (api.util.resetApiState.match(action)) {
+          for (const [cacheKey, lifecycle] of Object.entries(lifecycleMap)) {
+            delete lifecycleMap[cacheKey]
+            lifecycle.cacheEntryRemoved()
+          }
         }
-      } else if (mutationThunk.pending.match(action)) {
-        const state = mwApi.getState()[reducerPath].mutations[cacheKey]
-        if (state) {
-          handleNewKey(
-            action.meta.arg.endpointName,
-            action.meta.arg.originalArgs,
-            cacheKey,
-            mwApi,
-            action.meta.requestId
-          )
-        }
-      } else if (isFullfilledThunk(action)) {
-        const lifecycle = lifecycleMap[cacheKey]
-        if (lifecycle?.valueResolved) {
-          lifecycle.valueResolved({
-            data: action.payload,
-            meta: action.meta.baseQueryMeta,
-          })
-          delete lifecycle.valueResolved
-        }
-      } else if (
-        api.internalActions.removeQueryResult.match(action) ||
-        api.internalActions.unsubscribeMutationResult.match(action)
-      ) {
-        const lifecycle = lifecycleMap[cacheKey]
-        if (lifecycle) {
-          delete lifecycleMap[cacheKey]
-          lifecycle.cacheEntryRemoved()
-        }
-      } else if (api.util.resetApiState.match(action)) {
-        for (const [cacheKey, lifecycle] of Object.entries(lifecycleMap)) {
-          delete lifecycleMap[cacheKey]
-          lifecycle.cacheEntryRemoved()
-        }
+
+        return result
       }
-
-      return result
-    }
 
     function getCacheKey(action: any) {
       if (isQueryThunk(action)) return action.meta.arg.queryCacheKey

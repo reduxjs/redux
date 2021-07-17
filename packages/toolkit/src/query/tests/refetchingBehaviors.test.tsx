@@ -46,11 +46,8 @@ describe('refetchOnFocus tests', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery())
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery())
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>
@@ -87,13 +84,10 @@ describe('refetchOnFocus tests', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnFocus: false,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnFocus: false,
+        }))
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>
@@ -130,13 +124,10 @@ describe('refetchOnFocus tests', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnFocus: false,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnFocus: false,
+        }))
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>
@@ -147,13 +138,10 @@ describe('refetchOnFocus tests', () => {
     }
 
     function UserWithRefetchTrue() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnFocus: true,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnFocus: true,
+        }))
       return <div />
     }
 
@@ -196,11 +184,8 @@ describe('refetchOnReconnect tests', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery())
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery())
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>
@@ -242,13 +227,10 @@ describe('refetchOnReconnect tests', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnReconnect: false,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnReconnect: false,
+        }))
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>
@@ -284,13 +266,10 @@ describe('refetchOnReconnect tests', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnReconnect: false,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnReconnect: false,
+        }))
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>
@@ -301,13 +280,10 @@ describe('refetchOnReconnect tests', () => {
     }
 
     function UserWithRefetchTrue() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnReconnect: true,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnReconnect: true,
+        }))
       return <div />
     }
 
@@ -374,13 +350,10 @@ describe('customListenersHandler', () => {
     let data, isLoading, isFetching
 
     function User() {
-      ;({
-        data,
-        isFetching,
-        isLoading,
-      } = defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
-        refetchOnReconnect: true,
-      }))
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnReconnect: true,
+        }))
       return (
         <div>
           <div data-testid="isLoading">{String(isLoading)}</div>

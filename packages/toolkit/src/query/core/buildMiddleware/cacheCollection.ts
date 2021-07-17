@@ -1,6 +1,6 @@
 import type { BaseQueryFn } from '../../baseQueryTypes'
 import type { QueryDefinition } from '../../endpointDefinitions'
-import type { QueryCacheKey} from '../apiState';
+import type { QueryCacheKey } from '../apiState'
 import { QuerySubstateIdentifier } from '../apiState'
 import type {
   QueryStateMeta,
@@ -34,34 +34,35 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
   return (mwApi) => {
     const currentRemovalTimeouts: QueryStateMeta<TimeoutId> = {}
 
-    return (next) => (action): any => {
-      const result = next(action)
+    return (next) =>
+      (action): any => {
+        const result = next(action)
 
-      if (unsubscribeQueryResult.match(action)) {
-        const state = mwApi.getState()[reducerPath]
-        const { queryCacheKey } = action.payload
+        if (unsubscribeQueryResult.match(action)) {
+          const state = mwApi.getState()[reducerPath]
+          const { queryCacheKey } = action.payload
 
-        const endpointDefinition = context.endpointDefinitions[
-          state.queries[queryCacheKey]?.endpointName!
-        ] as QueryDefinition<any, any, any, any>
+          const endpointDefinition = context.endpointDefinitions[
+            state.queries[queryCacheKey]?.endpointName!
+          ] as QueryDefinition<any, any, any, any>
 
-        handleUnsubscribe(
-          queryCacheKey,
-          mwApi,
-          endpointDefinition?.keepUnusedDataFor ??
-            state.config.keepUnusedDataFor
-        )
-      }
-
-      if (api.util.resetApiState.match(action)) {
-        for (const [key, timeout] of Object.entries(currentRemovalTimeouts)) {
-          if (timeout) clearTimeout(timeout)
-          delete currentRemovalTimeouts[key]
+          handleUnsubscribe(
+            queryCacheKey,
+            mwApi,
+            endpointDefinition?.keepUnusedDataFor ??
+              state.config.keepUnusedDataFor
+          )
         }
-      }
 
-      return result
-    }
+        if (api.util.resetApiState.match(action)) {
+          for (const [key, timeout] of Object.entries(currentRemovalTimeouts)) {
+            if (timeout) clearTimeout(timeout)
+            delete currentRemovalTimeouts[key]
+          }
+        }
+
+        return result
+      }
 
     function handleUnsubscribe(
       queryCacheKey: QueryCacheKey,
@@ -73,9 +74,8 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
         clearTimeout(currentTimeout)
       }
       currentRemovalTimeouts[queryCacheKey] = setTimeout(() => {
-        const subscriptions = api.getState()[reducerPath].subscriptions[
-          queryCacheKey
-        ]
+        const subscriptions =
+          api.getState()[reducerPath].subscriptions[queryCacheKey]
         if (!subscriptions || Object.keys(subscriptions).length === 0) {
           api.dispatch(removeQueryResult({ queryCacheKey }))
         }

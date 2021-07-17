@@ -110,7 +110,7 @@ export const reactHooksModule = ({
 }: ReactHooksModuleOptions = {}): Module<ReactHooksModule> => ({
   name: reactHooksModuleName,
   init(api, options, context) {
-    const anyApi = (api as any) as Api<
+    const anyApi = api as any as Api<
       any,
       Record<string, any>,
       string,
@@ -142,9 +142,8 @@ export const reactHooksModule = ({
             useQuerySubscription,
           })
           ;(api as any)[`use${capitalize(endpointName)}Query`] = useQuery
-          ;(api as any)[
-            `useLazy${capitalize(endpointName)}Query`
-          ] = useLazyQuery
+          ;(api as any)[`useLazy${capitalize(endpointName)}Query`] =
+            useLazyQuery
         } else if (isMutationDefinition(definition)) {
           const useMutation = buildMutationHook(endpointName)
           safeAssign(anyApi.endpoints[endpointName], {

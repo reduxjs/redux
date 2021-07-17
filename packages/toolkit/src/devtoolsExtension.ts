@@ -1,4 +1,4 @@
-import type { Action, ActionCreator, StoreEnhancer} from 'redux';
+import type { Action, ActionCreator, StoreEnhancer } from 'redux'
 import { compose } from 'redux'
 
 /**
@@ -186,7 +186,7 @@ export const composeWithDevTools: {
     : function () {
         if (arguments.length === 0) return undefined
         if (typeof arguments[0] === 'object') return compose
-        return compose.apply(null, (arguments as any) as Function[])
+        return compose.apply(null, arguments as any as Function[])
       }
 
 /**

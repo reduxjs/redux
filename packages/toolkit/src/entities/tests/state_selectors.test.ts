@@ -1,14 +1,9 @@
-import type { EntityAdapter, EntityState } from '../index';
+import type { EntityAdapter, EntityState } from '../index'
 import { createEntityAdapter } from '../index'
 import type { EntitySelectors } from '../models'
-import type {
-  BookModel} from './fixtures/book';
-import {
-  AClockworkOrange,
-  AnimalFarm,
-  TheGreatGatsby,
-} from './fixtures/book'
-import type { Selector } from 'reselect';
+import type { BookModel } from './fixtures/book'
+import { AClockworkOrange, AnimalFarm, TheGreatGatsby } from './fixtures/book'
+import type { Selector } from 'reselect'
 import { createSelector } from 'reselect'
 
 describe('Entity State Selectors', () => {

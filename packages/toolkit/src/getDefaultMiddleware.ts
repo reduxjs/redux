@@ -63,7 +63,7 @@ export function curryGetDefaultMiddleware<
  * @return The default middleware used by `configureStore()`.
  *
  * @public
- * 
+ *
  * @deprecated Prefer to use the callback notation for the `middleware` option in `configureStore`
  * to access a pre-typed `getDefaultMiddleware` instead.
  */

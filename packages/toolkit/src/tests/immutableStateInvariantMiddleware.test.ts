@@ -2,10 +2,11 @@ import type {
   Store,
   MiddlewareAPI,
   Dispatch,
-  ImmutableStateInvariantMiddlewareOptions} from '@reduxjs/toolkit';
+  ImmutableStateInvariantMiddlewareOptions,
+} from '@reduxjs/toolkit'
 import {
   createImmutableStateInvariantMiddleware,
-  isImmutableDefault
+  isImmutableDefault,
 } from '@reduxjs/toolkit'
 
 import { trackForMutations } from '@internal/immutableStateInvariantMiddleware'
@@ -309,30 +310,33 @@ describe('trackForMutations', () => {
       },
       path: ['mutation'],
     },
-    'mutating previous state with non immutable type and returning new state without that property': {
-      getState: () => ({ counter: 0 }),
-      fn: (s) => {
-        s.mutation = [1, 2, 3]
-        return { counter: s.counter + 1 }
+    'mutating previous state with non immutable type and returning new state without that property':
+      {
+        getState: () => ({ counter: 0 }),
+        fn: (s) => {
+          s.mutation = [1, 2, 3]
+          return { counter: s.counter + 1 }
+        },
+        path: ['mutation'],
       },
-      path: ['mutation'],
-    },
-    'mutating previous state with non immutable type and returning new simple state': {
-      getState: () => ({ counter: 0 }),
-      fn: (s) => {
-        s.mutation = [1, 2, 3]
-        return 1
+    'mutating previous state with non immutable type and returning new simple state':
+      {
+        getState: () => ({ counter: 0 }),
+        fn: (s) => {
+          s.mutation = [1, 2, 3]
+          return 1
+        },
+        path: ['mutation'],
       },
-      path: ['mutation'],
-    },
-    'mutating previous state by deleting property and returning new state without that property': {
-      getState: () => ({ counter: 0, toBeDeleted: true }),
-      fn: (s) => {
-        delete s.toBeDeleted
-        return { counter: s.counter + 1 }
+    'mutating previous state by deleting property and returning new state without that property':
+      {
+        getState: () => ({ counter: 0, toBeDeleted: true }),
+        fn: (s) => {
+          delete s.toBeDeleted
+          return { counter: s.counter + 1 }
+        },
+        path: ['toBeDeleted'],
       },
-      path: ['toBeDeleted'],
-    },
     'mutating previous state by deleting nested property': {
       getState: () => ({ nested: { counter: 0, toBeDeleted: true }, foo: 1 }),
       fn: (s) => {

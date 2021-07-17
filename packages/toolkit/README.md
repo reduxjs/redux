@@ -24,7 +24,6 @@ Or if you are a TypeScript user, use [cra-template-redux-typescript](https://git
 npx create-react-app my-app --template redux-typescript
 ```
 
-
 ### An Existing App
 
 Redux Toolkit is available as a package on NPM for use with a module bundler or in a Node application:

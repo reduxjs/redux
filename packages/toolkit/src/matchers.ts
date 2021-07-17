@@ -95,9 +95,8 @@ export type UnknownAsyncThunkPendingAction = ReturnType<
   AsyncThunkPendingActionCreator<unknown>
 >
 
-export type PendingActionFromAsyncThunk<
-  T extends AnyAsyncThunk
-> = ActionFromMatcher<T['pending']>
+export type PendingActionFromAsyncThunk<T extends AnyAsyncThunk> =
+  ActionFromMatcher<T['pending']>
 
 /**
  * A higher-order function that returns a function that may be used to check
@@ -157,9 +156,8 @@ export type UnknownAsyncThunkRejectedAction = ReturnType<
   AsyncThunkRejectedActionCreator<unknown, unknown>
 >
 
-export type RejectedActionFromAsyncThunk<
-  T extends AnyAsyncThunk
-> = ActionFromMatcher<T['rejected']>
+export type RejectedActionFromAsyncThunk<T extends AnyAsyncThunk> =
+  ActionFromMatcher<T['rejected']>
 
 /**
  * A higher-order function that returns a function that may be used to check
@@ -221,12 +219,11 @@ export type UnknownAsyncThunkRejectedWithValueAction = ReturnType<
   AsyncThunkRejectedActionCreator<unknown, unknown>
 >
 
-export type RejectedWithValueActionFromAsyncThunk<
-  T extends AnyAsyncThunk
-> = ActionFromMatcher<T['rejected']> &
-  (T extends AsyncThunk<any, any, { rejectValue: infer RejectedValue }>
-    ? { payload: RejectedValue }
-    : unknown)
+export type RejectedWithValueActionFromAsyncThunk<T extends AnyAsyncThunk> =
+  ActionFromMatcher<T['rejected']> &
+    (T extends AsyncThunk<any, any, { rejectValue: infer RejectedValue }>
+      ? { payload: RejectedValue }
+      : unknown)
 
 /**
  * A higher-order function that returns a function that may be used to check
@@ -293,9 +290,8 @@ export type UnknownAsyncThunkFulfilledAction = ReturnType<
   AsyncThunkFulfilledActionCreator<unknown, unknown>
 >
 
-export type FulfilledActionFromAsyncThunk<
-  T extends AnyAsyncThunk
-> = ActionFromMatcher<T['fulfilled']>
+export type FulfilledActionFromAsyncThunk<T extends AnyAsyncThunk> =
+  ActionFromMatcher<T['fulfilled']>
 
 /**
  * A higher-order function that returns a function that may be used to check

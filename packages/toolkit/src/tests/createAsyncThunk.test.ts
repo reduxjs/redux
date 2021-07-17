@@ -563,7 +563,7 @@ describe('conditional skipping of asyncThunks', () => {
 
   test('return falsy from condition does not skip payload creator', async () => {
     // Override TS's expectation that this is a boolean
-    condition.mockReturnValueOnce((undefined as unknown) as boolean)
+    condition.mockReturnValueOnce(undefined as unknown as boolean)
     const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
     const result = await asyncThunk(arg)(dispatch, getState, extra)
 

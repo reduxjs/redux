@@ -1,4 +1,4 @@
-import type { PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice, createAction } from '@reduxjs/toolkit'
 
 describe('createSlice', () => {

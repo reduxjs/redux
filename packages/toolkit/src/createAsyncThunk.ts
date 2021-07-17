@@ -459,49 +459,45 @@ export function createAsyncThunk<
     })
   )
 
-  const pending: AsyncThunkPendingActionCreator<
-    ThunkArg,
-    ThunkApiConfig
-  > = createAction(
-    typePrefix + '/pending',
-    (requestId: string, arg: ThunkArg, meta?: PendingMeta) => ({
-      payload: undefined,
-      meta: {
-        ...((meta as any) || {}),
-        arg,
-        requestId,
-        requestStatus: 'pending' as const,
-      },
-    })
-  )
+  const pending: AsyncThunkPendingActionCreator<ThunkArg, ThunkApiConfig> =
+    createAction(
+      typePrefix + '/pending',
+      (requestId: string, arg: ThunkArg, meta?: PendingMeta) => ({
+        payload: undefined,
+        meta: {
+          ...((meta as any) || {}),
+          arg,
+          requestId,
+          requestStatus: 'pending' as const,
+        },
+      })
+    )
 
-  const rejected: AsyncThunkRejectedActionCreator<
-    ThunkArg,
-    ThunkApiConfig
-  > = createAction(
-    typePrefix + '/rejected',
-    (
-      error: Error | null,
-      requestId: string,
-      arg: ThunkArg,
-      payload?: RejectedValue,
-      meta?: RejectedMeta
-    ) => ({
-      payload,
-      error: ((options && options.serializeError) || miniSerializeError)(
-        error || 'Rejected'
-      ) as GetSerializedErrorType<ThunkApiConfig>,
-      meta: {
-        ...((meta as any) || {}),
-        arg,
-        requestId,
-        rejectedWithValue: !!payload,
-        requestStatus: 'rejected' as const,
-        aborted: error?.name === 'AbortError',
-        condition: error?.name === 'ConditionError',
-      },
-    })
-  )
+  const rejected: AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig> =
+    createAction(
+      typePrefix + '/rejected',
+      (
+        error: Error | null,
+        requestId: string,
+        arg: ThunkArg,
+        payload?: RejectedValue,
+        meta?: RejectedMeta
+      ) => ({
+        payload,
+        error: ((options && options.serializeError) || miniSerializeError)(
+          error || 'Rejected'
+        ) as GetSerializedErrorType<ThunkApiConfig>,
+        meta: {
+          ...((meta as any) || {}),
+          arg,
+          requestId,
+          rejectedWithValue: !!payload,
+          requestStatus: 'rejected' as const,
+          aborted: error?.name === 'AbortError',
+          condition: error?.name === 'ConditionError',
+        },
+      })
+    )
 
   let displayedWarning = false
 

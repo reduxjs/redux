@@ -1,4 +1,9 @@
-import type { EntityDefinition, Comparer, IdSelector, EntityAdapter } from './models'
+import type {
+  EntityDefinition,
+  Comparer,
+  IdSelector,
+  EntityAdapter,
+} from './models'
 import { createInitialStateFactory } from './entity_state'
 import { createSelectorsFactory } from './state_selectors'
 import { createSortedStateAdapter } from './sorted_state_adapter'

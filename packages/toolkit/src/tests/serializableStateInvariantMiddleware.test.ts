@@ -3,8 +3,7 @@ import {
   createConsole,
   getLog,
 } from 'console-testing-library/pure'
-import type {
-  Reducer} from '@reduxjs/toolkit';
+import type { Reducer } from '@reduxjs/toolkit'
 import {
   configureStore,
   createSerializableStateInvariantMiddleware,
@@ -94,7 +93,8 @@ describe('serializableStateInvariantMiddleware', () => {
   it('Should log an error when a non-serializable action is dispatched', () => {
     const reducer: Reducer = (state = 0, _action) => state + 1
 
-    const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware()
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware()
 
     const store = configureStore({
       reducer,
@@ -137,7 +137,8 @@ describe('serializableStateInvariantMiddleware', () => {
       }
     }
 
-    const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware()
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware()
 
     const store = configureStore({
       reducer: {
@@ -196,7 +197,8 @@ describe('serializableStateInvariantMiddleware', () => {
       }
 
       // use default options
-      const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware()
+      const serializableStateInvariantMiddleware =
+        createSerializableStateInvariantMiddleware()
 
       const store = configureStore({
         reducer: {
@@ -239,9 +241,11 @@ describe('serializableStateInvariantMiddleware', () => {
         }
       }
 
-      const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware(
-        { isSerializable, getEntries }
-      )
+      const serializableStateInvariantMiddleware =
+        createSerializableStateInvariantMiddleware({
+          isSerializable,
+          getEntries,
+        })
 
       const store = configureStore({
         reducer: {
@@ -282,11 +286,10 @@ describe('serializableStateInvariantMiddleware', () => {
       }
     }
 
-    const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware(
-      {
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware({
         isSerializable: () => true,
-      }
-    )
+      })
 
     const store = configureStore({
       reducer: {
@@ -305,15 +308,14 @@ describe('serializableStateInvariantMiddleware', () => {
   it('should not check serializability for ignored action types', () => {
     let numTimesCalled = 0
 
-    const serializableStateMiddleware = createSerializableStateInvariantMiddleware(
-      {
+    const serializableStateMiddleware =
+      createSerializableStateInvariantMiddleware({
         isSerializable: () => {
           numTimesCalled++
           return true
         },
         ignoredActions: ['IGNORE_ME'],
-      }
-    )
+      })
 
     const store = configureStore({
       reducer: () => ({}),
@@ -413,8 +415,8 @@ describe('serializableStateInvariantMiddleware', () => {
       }
     }
 
-    const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware(
-      {
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware({
         ignoredPaths: [
           // Test for ignoring a single value
           'testSlice.a',
@@ -423,8 +425,7 @@ describe('serializableStateInvariantMiddleware', () => {
           // Test for ignoring an object and its children
           'testSlice.e',
         ],
-      }
-    )
+      })
 
     const store = configureStore({
       reducer: {
@@ -463,9 +464,8 @@ describe('serializableStateInvariantMiddleware', () => {
       return state
     }
 
-    const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware(
-      { warnAfter: 4 }
-    )
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware({ warnAfter: 4 })
 
     const store = configureStore({
       reducer: {
@@ -490,9 +490,8 @@ describe('serializableStateInvariantMiddleware', () => {
       return state
     }
 
-    const serializableStateInvariantMiddleware = createSerializableStateInvariantMiddleware(
-      { warnAfter: 4 }
-    )
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware({ warnAfter: 4 })
 
     const store = configureStore({
       reducer: {

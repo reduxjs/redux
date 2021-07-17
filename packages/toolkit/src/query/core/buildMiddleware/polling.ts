@@ -1,4 +1,4 @@
-import type { QuerySubstateIdentifier, Subscribers } from '../apiState';
+import type { QuerySubstateIdentifier, Subscribers } from '../apiState'
 import { QueryStatus } from '../apiState'
 import type {
   QueryStateMeta,
@@ -19,33 +19,34 @@ export const build: SubMiddlewareBuilder = ({
       timeout?: TimeoutId
       pollingInterval: number
     }> = {}
-    return (next) => (action): any => {
-      const result = next(action)
+    return (next) =>
+      (action): any => {
+        const result = next(action)
 
-      if (api.internalActions.updateSubscriptionOptions.match(action)) {
-        updatePollingInterval(action.payload, mwApi)
+        if (api.internalActions.updateSubscriptionOptions.match(action)) {
+          updatePollingInterval(action.payload, mwApi)
+        }
+
+        if (
+          queryThunk.pending.match(action) ||
+          (queryThunk.rejected.match(action) && action.meta.condition)
+        ) {
+          updatePollingInterval(action.meta.arg, mwApi)
+        }
+
+        if (
+          queryThunk.fulfilled.match(action) ||
+          (queryThunk.rejected.match(action) && !action.meta.condition)
+        ) {
+          startNextPoll(action.meta.arg, mwApi)
+        }
+
+        if (api.util.resetApiState.match(action)) {
+          clearPolls()
+        }
+
+        return result
       }
-
-      if (
-        queryThunk.pending.match(action) ||
-        (queryThunk.rejected.match(action) && action.meta.condition)
-      ) {
-        updatePollingInterval(action.meta.arg, mwApi)
-      }
-
-      if (
-        queryThunk.fulfilled.match(action) ||
-        (queryThunk.rejected.match(action) && !action.meta.condition)
-      ) {
-        startNextPoll(action.meta.arg, mwApi)
-      }
-
-      if (api.util.resetApiState.match(action)) {
-        clearPolls()
-      }
-
-      return result
-    }
 
     function startNextPoll(
       { queryCacheKey }: QuerySubstateIdentifier,

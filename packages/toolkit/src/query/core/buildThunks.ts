@@ -198,67 +198,60 @@ export function buildThunks<
 }) {
   type State = RootState<any, string, ReducerPath>
 
-  const patchQueryData: PatchQueryDataThunk<EndpointDefinitions, State> = (
-    endpointName,
-    args,
-    patches
-  ) => (dispatch) => {
-    const endpointDefinition = endpointDefinitions[endpointName]
-    dispatch(
-      api.internalActions.queryResultPatched({
-        queryCacheKey: serializeQueryArgs({
-          queryArgs: args,
-          endpointDefinition,
-          endpointName,
-        }),
-        patches,
-      })
-    )
-  }
-
-  const updateQueryData: UpdateQueryDataThunk<EndpointDefinitions, State> = (
-    endpointName,
-    args,
-    updateRecipe
-  ) => (dispatch, getState) => {
-    const currentState = (api.endpoints[endpointName] as ApiEndpointQuery<
-      any,
-      any
-    >).select(args)(getState())
-    let ret: PatchCollection = {
-      patches: [],
-      inversePatches: [],
-      undo: () =>
-        dispatch(
-          api.util.patchQueryData(endpointName, args, ret.inversePatches)
-        ),
+  const patchQueryData: PatchQueryDataThunk<EndpointDefinitions, State> =
+    (endpointName, args, patches) => (dispatch) => {
+      const endpointDefinition = endpointDefinitions[endpointName]
+      dispatch(
+        api.internalActions.queryResultPatched({
+          queryCacheKey: serializeQueryArgs({
+            queryArgs: args,
+            endpointDefinition,
+            endpointName,
+          }),
+          patches,
+        })
+      )
     }
-    if (currentState.status === QueryStatus.uninitialized) {
+
+  const updateQueryData: UpdateQueryDataThunk<EndpointDefinitions, State> =
+    (endpointName, args, updateRecipe) => (dispatch, getState) => {
+      const currentState = (
+        api.endpoints[endpointName] as ApiEndpointQuery<any, any>
+      ).select(args)(getState())
+      let ret: PatchCollection = {
+        patches: [],
+        inversePatches: [],
+        undo: () =>
+          dispatch(
+            api.util.patchQueryData(endpointName, args, ret.inversePatches)
+          ),
+      }
+      if (currentState.status === QueryStatus.uninitialized) {
+        return ret
+      }
+      if ('data' in currentState) {
+        if (isDraftable(currentState.data)) {
+          const [, patches, inversePatches] = produceWithPatches(
+            currentState.data,
+            updateRecipe
+          )
+          ret.patches.push(...patches)
+          ret.inversePatches.push(...inversePatches)
+        } else {
+          const value = updateRecipe(currentState.data)
+          ret.patches.push({ op: 'replace', path: [], value })
+          ret.inversePatches.push({
+            op: 'replace',
+            path: [],
+            value: currentState.data,
+          })
+        }
+      }
+
+      dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
+
       return ret
     }
-    if ('data' in currentState) {
-      if (isDraftable(currentState.data)) {
-        const [, patches, inversePatches] = produceWithPatches(
-          currentState.data,
-          updateRecipe
-        )
-        ret.patches.push(...patches)
-        ret.inversePatches.push(...inversePatches)
-      } else {
-        const value = updateRecipe(currentState.data)
-        ret.patches.push({ op: 'replace', path: [], value })
-        ret.inversePatches.push({
-          op: 'replace',
-          path: [],
-          value: currentState.data,
-        })
-      }
-    }
-
-    dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
-
-    return ret
-  }
 
   const executeEndpoint: AsyncThunkPayloadCreator<
     ThunkResult,
@@ -271,10 +264,8 @@ export function buildThunks<
     const endpointDefinition = endpointDefinitions[arg.endpointName]
 
     try {
-      let transformResponse: (
-        baseQueryReturnValue: any,
-        meta: any
-      ) => any = defaultTransformResponse
+      let transformResponse: (baseQueryReturnValue: any, meta: any) => any =
+        defaultTransformResponse
       let result: QueryReturnValue
       const baseQueryApi = {
         signal,
@@ -317,11 +308,14 @@ export function buildThunks<
         typeof process !== 'undefined' &&
         process.env.NODE_ENV === 'development'
       ) {
-        console.error(`An unhandled error occured processing a request for the endpoint "${arg.endpointName}".
-In the case of an unhandled error, no tags will be "provided" or "invalidated".`, error)
+        console.error(
+          `An unhandled error occured processing a request for the endpoint "${arg.endpointName}".
+In the case of an unhandled error, no tags will be "provided" or "invalidated".`,
+          error
+        )
       } else {
         console.error(error)
-      } 
+      }
       throw error
     }
   }
@@ -380,46 +374,44 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     options: any
   ): options is { ifOlderThan: false | number } => 'ifOlderThan' in options
 
-  const prefetch = <EndpointName extends QueryKeys<Definitions>>(
-    endpointName: EndpointName,
-    arg: any,
-    options: PrefetchOptions
-  ): ThunkAction<void, any, any, AnyAction> => (
-    dispatch: ThunkDispatch<any, any, any>,
-    getState: () => any
-  ) => {
-    const force = hasTheForce(options) && options.force
-    const maxAge = hasMaxAge(options) && options.ifOlderThan
+  const prefetch =
+    <EndpointName extends QueryKeys<Definitions>>(
+      endpointName: EndpointName,
+      arg: any,
+      options: PrefetchOptions
+    ): ThunkAction<void, any, any, AnyAction> =>
+    (dispatch: ThunkDispatch<any, any, any>, getState: () => any) => {
+      const force = hasTheForce(options) && options.force
+      const maxAge = hasMaxAge(options) && options.ifOlderThan
 
-    const queryAction = (force: boolean = true) =>
-      (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).initiate(
-        arg,
-        { forceRefetch: force }
-      )
-    const latestStateValue = (api.endpoints[endpointName] as ApiEndpointQuery<
-      any,
-      any
-    >).select(arg)(getState())
+      const queryAction = (force: boolean = true) =>
+        (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).initiate(
+          arg,
+          { forceRefetch: force }
+        )
+      const latestStateValue = (
+        api.endpoints[endpointName] as ApiEndpointQuery<any, any>
+      ).select(arg)(getState())
 
-    if (force) {
-      dispatch(queryAction())
-    } else if (maxAge) {
-      const lastFulfilledTs = latestStateValue?.fulfilledTimeStamp
-      if (!lastFulfilledTs) {
+      if (force) {
         dispatch(queryAction())
-        return
+      } else if (maxAge) {
+        const lastFulfilledTs = latestStateValue?.fulfilledTimeStamp
+        if (!lastFulfilledTs) {
+          dispatch(queryAction())
+          return
+        }
+        const shouldRetrigger =
+          (Number(new Date()) - Number(new Date(lastFulfilledTs))) / 1000 >=
+          maxAge
+        if (shouldRetrigger) {
+          dispatch(queryAction())
+        }
+      } else {
+        // If prefetching with no options, just let it try
+        dispatch(queryAction(false))
       }
-      const shouldRetrigger =
-        (Number(new Date()) - Number(new Date(lastFulfilledTs))) / 1000 >=
-        maxAge
-      if (shouldRetrigger) {
-        dispatch(queryAction())
-      }
-    } else {
-      // If prefetching with no options, just let it try
-      dispatch(queryAction(false))
     }
-  }
 
   function matchesEndpoint(endpointName: string) {
     return (action: any): action is AnyAction =>

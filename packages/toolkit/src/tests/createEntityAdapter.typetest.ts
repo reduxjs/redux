@@ -12,13 +12,8 @@ import { expectType } from './helpers'
 function extractReducers<T>(
   adapter: EntityAdapter<T>
 ): Omit<EntityStateAdapter<T>, 'map'> {
-  const {
-    selectId,
-    sortComparer,
-    getInitialState,
-    getSelectors,
-    ...rest
-  } = adapter
+  const { selectId, sortComparer, getInitialState, getSelectors, ...rest } =
+    adapter
   return rest
 }
 
