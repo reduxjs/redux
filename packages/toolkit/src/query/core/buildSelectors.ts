@@ -39,7 +39,7 @@ export type SkipToken = typeof skipToken
  * If passed directly into a query or mutation selector, that selector will always
  * return an uninitialized state.
  */
-export const skipToken = /* @__PURE__ */ Symbol('skip selector')
+export const skipToken = /* @__PURE__ */ Symbol.for('RTKQ/skipToken')
 /** @deprecated renamed to `skipToken` */
 export const skipSelector = skipToken
 
