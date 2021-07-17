@@ -286,9 +286,7 @@ export function createAction(type: string, prepareAction?: Function): any {
   return actionCreator
 }
 
-export function isFSA(
-  action: unknown
-): action is {
+export function isFSA(action: unknown): action is {
   type: string
   payload?: unknown
   error?: unknown

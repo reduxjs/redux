@@ -16,7 +16,7 @@ const api = createApi({
       query() {
         return { url: 'bananas' }
       },
-      providesTags: ['Banana']
+      providesTags: ['Banana'],
     }),
     getBread: build.query<unknown, number>({
       query(id) {

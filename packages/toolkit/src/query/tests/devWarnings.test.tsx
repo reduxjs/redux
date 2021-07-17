@@ -20,7 +20,7 @@ afterEach(() => {
   restore()
 })
 
-const baseUrl =  'http://example.com'
+const baseUrl = 'http://example.com'
 
 function createApis() {
   const api1 = createApi({
@@ -31,7 +31,7 @@ function createApis() {
   })
 
   const api1_2 = createApi({
-    baseQuery: fetchBaseQuery({baseUrl}),
+    baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
       q1: builder.query({ query: () => '/success' }),
     }),
@@ -39,7 +39,7 @@ function createApis() {
 
   const api2 = createApi({
     reducerPath: 'api2',
-    baseQuery: fetchBaseQuery({baseUrl}),
+    baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
       q1: builder.query({ query: () => '/success' }),
     }),
@@ -270,7 +270,6 @@ If you have multiple apis, you *have* to specify the reducerPath option when usi
   })
 })
 
-
 describe('`console.error` on unhandled errors during `initiate`', () => {
   test('error thrown in `baseQuery`', async () => {
     const api = createApi({
@@ -368,20 +367,20 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 
-  test('`fetchBaseQuery`: error thrown in `validateStatus`',  async () => {
+  test('`fetchBaseQuery`: error thrown in `validateStatus`', async () => {
     const api = createApi({
       baseQuery: fetchBaseQuery({
-        baseUrl
-              }),
+        baseUrl,
+      }),
       endpoints: (build) => ({
         val: build.query<any, void>({
           query() {
-            return { 
-              url:'/success',
+            return {
+              url: '/success',
 
-          validateStatus() {
-            throw new Error('this was kinda expected')
-          },
+              validateStatus() {
+                throw new Error('this was kinda expected')
+              },
             }
           },
         }),

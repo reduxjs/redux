@@ -1,9 +1,5 @@
-import type {
-  StoreEnhancer,
-  StoreEnhancerStoreCreator} from '@reduxjs/toolkit';
-import {
-  configureStore
-} from '@reduxjs/toolkit'
+import type { StoreEnhancer, StoreEnhancerStoreCreator } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import * as RTK from '@reduxjs/toolkit'
 import * as redux from 'redux'
 import * as devtools from '@internal/devtoolsExtension'
@@ -139,8 +135,9 @@ describe('configureStore', () => {
 
   describe('middleware builder notation', () => {
     it('calls builder, passes getDefaultMiddleware and uses returned middlewares', () => {
-      const thank = jest.fn(((_store) => (next) => (action) =>
-        'foobar') as redux.Middleware)
+      const thank = jest.fn(
+        ((_store) => (next) => (action) => 'foobar') as redux.Middleware
+      )
 
       const builder = jest.fn((getDefaultMiddleware) => {
         expect(getDefaultMiddleware).toEqual(expect.any(Function))
@@ -222,13 +219,13 @@ describe('configureStore', () => {
     it('accepts a callback for customizing enhancers', () => {
       let dummyEnhancerCalled = false
 
-      const dummyEnhancer: StoreEnhancer = (
-        createStore: StoreEnhancerStoreCreator
-      ) => (reducer, ...args: any[]) => {
-        dummyEnhancerCalled = true
+      const dummyEnhancer: StoreEnhancer =
+        (createStore: StoreEnhancerStoreCreator) =>
+        (reducer, ...args: any[]) => {
+          dummyEnhancerCalled = true
 
-        return createStore(reducer, ...args)
-      }
+          return createStore(reducer, ...args)
+        }
 
       const reducer = () => ({})
 

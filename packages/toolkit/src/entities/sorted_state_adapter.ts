@@ -20,9 +20,8 @@ export function createSortedStateAdapter<T>(
 ): EntityStateAdapter<T> {
   type R = EntityState<T>
 
-  const { removeOne, removeMany, removeAll } = createUnsortedStateAdapter(
-    selectId
-  )
+  const { removeOne, removeMany, removeAll } =
+    createUnsortedStateAdapter(selectId)
 
   function addOneMutably(entity: T, state: R): void {
     return addManyMutably([entity], state)

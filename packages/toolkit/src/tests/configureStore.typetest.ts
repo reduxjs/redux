@@ -169,7 +169,7 @@ const _anyMiddleware: any = () => () => () => {}
   type StateA = number
   const reducerA = () => 0
   function thunkA() {
-    return ((() => {}) as any) as ThunkAction<Promise<'A'>, StateA, any, any>
+    return (() => {}) as any as ThunkAction<Promise<'A'>, StateA, any, any>
   }
 
   type StateB = string
@@ -232,7 +232,7 @@ const _anyMiddleware: any = () => () => () => {}
   {
     const store = configureStore({
       reducer: reducerA,
-      middleware: ([] as any) as [Middleware<(a: StateA) => boolean, StateA>],
+      middleware: [] as any as [Middleware<(a: StateA) => boolean, StateA>],
     })
     const result: boolean = store.dispatch(5)
     // @ts-expect-error
@@ -244,7 +244,7 @@ const _anyMiddleware: any = () => () => () => {}
   {
     const store = configureStore({
       reducer: reducerA,
-      middleware: ([] as any) as [
+      middleware: [] as any as [
         Middleware<(a: 'a') => 'A', StateA>,
         Middleware<(b: 'b') => 'B', StateA>,
         ThunkMiddleware<StateA>
@@ -283,7 +283,7 @@ const _anyMiddleware: any = () => () => () => {}
     const store = configureStore({
       reducer: reducerA,
       middleware: [
-        ((() => {}) as any) as Middleware<(a: 'a') => 'A', StateA>,
+        (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>,
         ...getDefaultMiddleware<StateA>(),
       ] as const,
     })
@@ -343,7 +343,7 @@ const _anyMiddleware: any = () => () => () => {}
       reducer: reducerA,
       middleware: (getDefaultMiddleware) =>
         [
-          ((() => {}) as any) as Middleware<(a: 'a') => 'A', StateA>,
+          (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>,
           ...getDefaultMiddleware(),
         ] as const,
     })
@@ -381,7 +381,7 @@ const _anyMiddleware: any = () => () => () => {}
       reducer: reducerA,
       middleware: (getDefaultMiddleware) =>
         [
-          ((() => {}) as any) as Middleware<(a: 'a') => 'A', StateA>,
+          (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>,
           ...getDefaultMiddleware({ thunk: false }),
         ] as const,
     })

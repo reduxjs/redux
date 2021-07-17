@@ -201,8 +201,8 @@ export function buildInitiate({
   function middlewareWarning(getState: () => RootState<{}, string, string>) {
     if (process.env.NODE_ENV !== 'production') {
       if ((middlewareWarning as any).triggered) return
-      const registered = getState()[api.reducerPath]?.config
-        ?.middlewareRegistered
+      const registered =
+        getState()[api.reducerPath]?.config?.middlewareRegistered
       if (registered !== undefined) {
         ;(middlewareWarning as any).triggered = true
       }
@@ -219,64 +219,65 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     endpointName: string,
     endpointDefinition: QueryDefinition<any, any, any, any>
   ) {
-    const queryAction: StartQueryActionCreator<any> = (
-      arg,
-      { subscribe = true, forceRefetch, subscriptionOptions } = {}
-    ) => (dispatch, getState) => {
-      const queryCacheKey = serializeQueryArgs({
-        queryArgs: arg,
-        endpointDefinition,
-        endpointName,
-      })
-      const thunk = queryThunk({
-        subscribe,
-        forceRefetch,
-        subscriptionOptions,
-        endpointName,
-        originalArgs: arg,
-        queryCacheKey,
-      })
-      const thunkResult = dispatch(thunk)
-      middlewareWarning(getState)
-      const { requestId, abort } = thunkResult
-      const statePromise = Object.assign(
-        thunkResult.then(() =>
-          (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
-            arg
-          )(getState())
-        ),
-        {
-          arg,
-          requestId,
+    const queryAction: StartQueryActionCreator<any> =
+      (arg, { subscribe = true, forceRefetch, subscriptionOptions } = {}) =>
+      (dispatch, getState) => {
+        const queryCacheKey = serializeQueryArgs({
+          queryArgs: arg,
+          endpointDefinition,
+          endpointName,
+        })
+        const thunk = queryThunk({
+          subscribe,
+          forceRefetch,
           subscriptionOptions,
-          abort,
-          refetch() {
-            dispatch(queryAction(arg, { subscribe: false, forceRefetch: true }))
-          },
-          unsubscribe() {
-            if (subscribe)
+          endpointName,
+          originalArgs: arg,
+          queryCacheKey,
+        })
+        const thunkResult = dispatch(thunk)
+        middlewareWarning(getState)
+        const { requestId, abort } = thunkResult
+        const statePromise = Object.assign(
+          thunkResult.then(() =>
+            (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
+              arg
+            )(getState())
+          ),
+          {
+            arg,
+            requestId,
+            subscriptionOptions,
+            abort,
+            refetch() {
               dispatch(
-                unsubscribeQueryResult({
-                  queryCacheKey,
+                queryAction(arg, { subscribe: false, forceRefetch: true })
+              )
+            },
+            unsubscribe() {
+              if (subscribe)
+                dispatch(
+                  unsubscribeQueryResult({
+                    queryCacheKey,
+                    requestId,
+                  })
+                )
+            },
+            updateSubscriptionOptions(options: SubscriptionOptions) {
+              statePromise.subscriptionOptions = options
+              dispatch(
+                updateSubscriptionOptions({
+                  endpointName,
                   requestId,
+                  queryCacheKey,
+                  options,
                 })
               )
-          },
-          updateSubscriptionOptions(options: SubscriptionOptions) {
-            statePromise.subscriptionOptions = options
-            dispatch(
-              updateSubscriptionOptions({
-                endpointName,
-                requestId,
-                queryCacheKey,
-                options,
-              })
-            )
-          },
-        }
-      )
-      return statePromise
-    }
+            },
+          }
+        )
+        return statePromise
+      }
     return queryAction
   }
 
@@ -284,28 +285,29 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     endpointName: string,
     definition: MutationDefinition<any, any, any, any>
   ): StartMutationActionCreator<any> {
-    return (arg, { track = true } = {}) => (dispatch, getState) => {
-      const thunk = mutationThunk({
-        endpointName,
-        originalArgs: arg,
-        track,
-      })
-      const thunkResult = dispatch(thunk)
-      middlewareWarning(getState)
-      const { requestId, abort } = thunkResult
-      const returnValuePromise = thunkResult
-        .unwrap()
-        .then((data) => ({ data }))
-        .catch((error) => ({ error }))
-      return Object.assign(returnValuePromise, {
-        arg: thunkResult.arg,
-        requestId,
-        abort,
-        unwrap: thunkResult.unwrap,
-        unsubscribe() {
-          if (track) dispatch(unsubscribeMutationResult({ requestId }))
-        },
-      })
-    }
+    return (arg, { track = true } = {}) =>
+      (dispatch, getState) => {
+        const thunk = mutationThunk({
+          endpointName,
+          originalArgs: arg,
+          track,
+        })
+        const thunkResult = dispatch(thunk)
+        middlewareWarning(getState)
+        const { requestId, abort } = thunkResult
+        const returnValuePromise = thunkResult
+          .unwrap()
+          .then((data) => ({ data }))
+          .catch((error) => ({ error }))
+        return Object.assign(returnValuePromise, {
+          arg: thunkResult.arg,
+          requestId,
+          abort,
+          unwrap: thunkResult.unwrap,
+          unsubscribe() {
+            if (track) dispatch(unsubscribeMutationResult({ requestId }))
+          },
+        })
+      }
   }
 }

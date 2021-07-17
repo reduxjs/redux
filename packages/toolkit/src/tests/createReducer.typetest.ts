@@ -1,10 +1,6 @@
 import type { Reducer } from 'redux'
-import type {
-  ActionReducerMapBuilder} from '@reduxjs/toolkit';
-import {
-  createReducer,
-  createAction
-} from '@reduxjs/toolkit'
+import type { ActionReducerMapBuilder } from '@reduxjs/toolkit'
+import { createReducer, createAction } from '@reduxjs/toolkit'
 import { expectType } from './helpers'
 
 /*

@@ -446,7 +446,7 @@ export const coreModule = (): Module<CoreModule> => ({
     return {
       name: coreModuleName,
       injectEndpoint(endpointName, definition) {
-        const anyApi = (api as any) as Api<
+        const anyApi = api as any as Api<
           any,
           Record<string, any>,
           string,

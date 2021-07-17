@@ -1,23 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
-import type {
-  BaseQueryFn,
-  FetchBaseQueryError} from '@reduxjs/toolkit/query';
-import {
-  createApi,
-  fetchBaseQuery
-} from '@reduxjs/toolkit/query'
-import type { Post} from './mocks/server';
+import type { BaseQueryFn, FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
+import type { Post } from './mocks/server'
 import { posts } from './mocks/server'
 import { actionsReducer, setupApiStore } from './helpers'
 
 describe('queryFn base implementation tests', () => {
-  const baseQuery: BaseQueryFn<
-    string,
-    { wrappedByBaseQuery: string },
-    string
-  > = jest.fn((arg: string) => ({
-    data: { wrappedByBaseQuery: arg },
-  }))
+  const baseQuery: BaseQueryFn<string, { wrappedByBaseQuery: string }, string> =
+    jest.fn((arg: string) => ({
+      data: { wrappedByBaseQuery: arg },
+    }))
 
   const api = createApi({
     baseQuery,

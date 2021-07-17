@@ -6,10 +6,9 @@ import type {
   ActionCreatorWithOptionalPayload,
   ActionCreatorWithPayload,
   ActionCreatorWithNonInferrablePayload,
-  ActionCreatorWithPreparedPayload} from '@reduxjs/toolkit';
-import {
-  createAction
+  ActionCreatorWithPreparedPayload,
 } from '@reduxjs/toolkit'
+import { createAction } from '@reduxjs/toolkit'
 import type { IsAny } from '@internal/tsHelpers'
 import { expectType } from './helpers'
 
@@ -102,9 +101,8 @@ import { expectType } from './helpers'
     { type: 'action' }
   ) as PayloadActionCreator<number>
 
-  const actionCreator2: ActionCreator<
-    PayloadAction<number>
-  > = payloadActionCreator2
+  const actionCreator2: ActionCreator<PayloadAction<number>> =
+    payloadActionCreator2
 }
 
 /* createAction() */

@@ -8,11 +8,9 @@ import type {
   ActionReducerMapBuilder,
   PayloadAction,
   SliceCaseReducers,
-  ValidateSliceCaseReducers} from '@reduxjs/toolkit';
-import {
-  createAction,
-  createSlice
+  ValidateSliceCaseReducers,
 } from '@reduxjs/toolkit'
+import { createAction, createSlice } from '@reduxjs/toolkit'
 import { expectType } from './helpers'
 
 /*

@@ -1,8 +1,7 @@
 import { expectExactType, expectUnknown } from './helpers'
 import { IsUnknown } from '@internal/tsHelpers'
 import type { AnyAction } from 'redux'
-import type {
-  SerializedError} from '../../src';
+import type { SerializedError } from '../../src'
 import {
   createAction,
   createAsyncThunk,
@@ -12,7 +11,7 @@ import {
   isFulfilled,
   isPending,
   isRejected,
-  isRejectedWithValue
+  isRejectedWithValue,
 } from '../../src'
 
 /* isAnyOf */

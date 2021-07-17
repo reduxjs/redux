@@ -4,17 +4,13 @@ import type {
   PayloadAction,
   PayloadActionCreator,
   PrepareAction,
-  _ActionCreatorWithPreparedPayload} from './createAction';
-import {
-  createAction
+  _ActionCreatorWithPreparedPayload,
 } from './createAction'
-import type { CaseReducer, CaseReducers} from './createReducer';
+import { createAction } from './createAction'
+import type { CaseReducer, CaseReducers } from './createReducer'
 import { createReducer } from './createReducer'
-import type {
-  ActionReducerMapBuilder} from './mapBuilders';
-import {
-  executeReducerBuilderCallback,
-} from './mapBuilders'
+import type { ActionReducerMapBuilder } from './mapBuilders'
+import { executeReducerBuilderCallback } from './mapBuilders'
 import type { NoInfer } from './tsHelpers'
 
 /**
@@ -173,9 +169,8 @@ export type CaseReducerActions<CaseReducers extends SliceCaseReducers<any>> = {
  *
  * @internal
  */
-type ActionCreatorForCaseReducerWithPrepare<
-  CR extends { prepare: any }
-> = _ActionCreatorWithPreparedPayload<CR['prepare'], string>
+type ActionCreatorForCaseReducerWithPrepare<CR extends { prepare: any }> =
+  _ActionCreatorWithPreparedPayload<CR['prepare'], string>
 
 /**
  * Get a `PayloadActionCreator` type for a passed `CaseReducer`

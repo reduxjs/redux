@@ -40,7 +40,7 @@ export function buildMiddleware<
     buildQueryLifecycle,
   ].map((build) =>
     build({
-      ...((input as any) as BuildMiddlewareInput<
+      ...(input as any as BuildMiddlewareInput<
         EndpointDefinitions,
         string,
         string

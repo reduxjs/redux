@@ -1,6 +1,4 @@
-import type {
-  ThunkAction,
-  AnyAction} from '@reduxjs/toolkit';
+import type { ThunkAction, AnyAction } from '@reduxjs/toolkit'
 import {
   isAllOf,
   isAnyOf,
@@ -11,7 +9,7 @@ import {
   isRejectedWithValue,
   createAction,
   createAsyncThunk,
-  createReducer
+  createReducer,
 } from '@reduxjs/toolkit'
 
 const thunk: ThunkAction<any, any, any, AnyAction> = () => {}

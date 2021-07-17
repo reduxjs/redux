@@ -75,9 +75,9 @@ declare module '../../endpointDefinitions' {
   > {
     /**
      * A function that is called when the individual query is started. The function is called with a lifecycle api object containing properties such as `queryFulfilled`, allowing code to be run when a query is started, when it succeeds, and when it fails (i.e. throughout the lifecycle of an individual query/mutation call).
-     * 
+     *
      * Can be used to perform side-effects throughout the lifecycle of the query.
-     * 
+     *
      * @example
      * ```ts
      * import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
@@ -126,11 +126,11 @@ declare module '../../endpointDefinitions' {
   > {
     /**
      * A function that is called when the individual mutation is started. The function is called with a lifecycle api object containing properties such as `queryFulfilled`, allowing code to be run when a query is started, when it succeeds, and when it fails (i.e. throughout the lifecycle of an individual query/mutation call).
-     * 
+     *
      * Can be used for `optimistic updates`.
-     * 
+     *
      * @example
-     * 
+     *
      * ```ts
      * import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
      * export interface Post {
@@ -217,73 +217,76 @@ export const build: SubMiddlewareBuilder = ({
     }
     const lifecycleMap: Record<string, CacheLifecycle> = {}
 
-    return (next) => (action): any => {
-      const result = next(action)
+    return (next) =>
+      (action): any => {
+        const result = next(action)
 
-      if (isPendingThunk(action)) {
-        const {
-          requestId,
-          arg: { endpointName, originalArgs },
-        } = action.meta
-        const endpointDefinition = context.endpointDefinitions[endpointName]
-        const onQueryStarted = endpointDefinition?.onQueryStarted
-        if (onQueryStarted) {
-          const lifecycle = {} as CacheLifecycle
-          const queryFulfilled = new (Promise as PromiseConstructorWithKnownReason)<
-            { data: unknown; meta: unknown },
-            QueryFulfilledRejectionReason<any>
-          >((resolve, reject) => {
-            lifecycle.resolve = resolve
-            lifecycle.reject = reject
-          })
-          // prevent uncaught promise rejections from happening.
-          // if the original promise is used in any way, that will create a new promise that will throw again
-          queryFulfilled.catch(() => {})
-          lifecycleMap[requestId] = lifecycle
-          const selector = (api.endpoints[endpointName] as any).select(
-            endpointDefinition.type === DefinitionType.query
-              ? originalArgs
-              : requestId
-          )
-
-          const extra = mwApi.dispatch((_, __, extra) => extra)
-          const lifecycleApi = {
-            ...mwApi,
-            getCacheEntry: () => selector(mwApi.getState()),
+        if (isPendingThunk(action)) {
+          const {
             requestId,
-            extra,
-            updateCachedData: (endpointDefinition.type === DefinitionType.query
-              ? (updateRecipe: Recipe<any>) =>
-                  mwApi.dispatch(
-                    api.util.updateQueryData(
-                      endpointName as never,
-                      originalArgs,
-                      updateRecipe
-                    )
-                  )
-              : undefined) as any,
-            queryFulfilled,
-          }
-          onQueryStarted(originalArgs, lifecycleApi)
-        }
-      } else if (isFullfilledThunk(action)) {
-        const { requestId, baseQueryMeta } = action.meta
-        lifecycleMap[requestId]?.resolve({
-          data: action.payload,
-          meta: baseQueryMeta,
-        })
-        delete lifecycleMap[requestId]
-      } else if (isRejectedThunk(action)) {
-        const { requestId, rejectedWithValue, baseQueryMeta } = action.meta
-        lifecycleMap[requestId]?.reject({
-          error: action.payload ?? action.error,
-          isUnhandledError: !rejectedWithValue,
-          meta: baseQueryMeta as any,
-        })
-        delete lifecycleMap[requestId]
-      }
+            arg: { endpointName, originalArgs },
+          } = action.meta
+          const endpointDefinition = context.endpointDefinitions[endpointName]
+          const onQueryStarted = endpointDefinition?.onQueryStarted
+          if (onQueryStarted) {
+            const lifecycle = {} as CacheLifecycle
+            const queryFulfilled =
+              new (Promise as PromiseConstructorWithKnownReason)<
+                { data: unknown; meta: unknown },
+                QueryFulfilledRejectionReason<any>
+              >((resolve, reject) => {
+                lifecycle.resolve = resolve
+                lifecycle.reject = reject
+              })
+            // prevent uncaught promise rejections from happening.
+            // if the original promise is used in any way, that will create a new promise that will throw again
+            queryFulfilled.catch(() => {})
+            lifecycleMap[requestId] = lifecycle
+            const selector = (api.endpoints[endpointName] as any).select(
+              endpointDefinition.type === DefinitionType.query
+                ? originalArgs
+                : requestId
+            )
 
-      return result
-    }
+            const extra = mwApi.dispatch((_, __, extra) => extra)
+            const lifecycleApi = {
+              ...mwApi,
+              getCacheEntry: () => selector(mwApi.getState()),
+              requestId,
+              extra,
+              updateCachedData: (endpointDefinition.type ===
+              DefinitionType.query
+                ? (updateRecipe: Recipe<any>) =>
+                    mwApi.dispatch(
+                      api.util.updateQueryData(
+                        endpointName as never,
+                        originalArgs,
+                        updateRecipe
+                      )
+                    )
+                : undefined) as any,
+              queryFulfilled,
+            }
+            onQueryStarted(originalArgs, lifecycleApi)
+          }
+        } else if (isFullfilledThunk(action)) {
+          const { requestId, baseQueryMeta } = action.meta
+          lifecycleMap[requestId]?.resolve({
+            data: action.payload,
+            meta: baseQueryMeta,
+          })
+          delete lifecycleMap[requestId]
+        } else if (isRejectedThunk(action)) {
+          const { requestId, rejectedWithValue, baseQueryMeta } = action.meta
+          lifecycleMap[requestId]?.reject({
+            error: action.payload ?? action.error,
+            isUnhandledError: !rejectedWithValue,
+            meta: baseQueryMeta as any,
+          })
+          delete lifecycleMap[requestId]
+        }
+
+        return result
+      }
   }
 }

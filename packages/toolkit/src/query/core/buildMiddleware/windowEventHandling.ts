@@ -7,18 +7,20 @@ export const build: SubMiddlewareBuilder = ({
   context,
   refetchQuery,
 }) => {
-  return (mwApi) => (next) => (action): any => {
-    const result = next(action)
+  return (mwApi) =>
+    (next) =>
+    (action): any => {
+      const result = next(action)
 
-    if (onFocus.match(action)) {
-      refetchValidQueries(mwApi, 'refetchOnFocus')
-    }
-    if (onOnline.match(action)) {
-      refetchValidQueries(mwApi, 'refetchOnReconnect')
-    }
+      if (onFocus.match(action)) {
+        refetchValidQueries(mwApi, 'refetchOnFocus')
+      }
+      if (onOnline.match(action)) {
+        refetchValidQueries(mwApi, 'refetchOnReconnect')
+      }
 
-    return result
-  }
+      return result
+    }
 
   function refetchValidQueries(
     api: SubMiddlewareApi,

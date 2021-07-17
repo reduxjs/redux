@@ -3,12 +3,9 @@ import type {
   PayloadAction,
   Draft,
   Reducer,
-  AnyAction} from '@reduxjs/toolkit';
-import {
-  createReducer,
-  createAction,
-  createNextState
+  AnyAction,
 } from '@reduxjs/toolkit'
+import { createReducer, createAction, createNextState } from '@reduxjs/toolkit'
 
 interface Todo {
   text: string

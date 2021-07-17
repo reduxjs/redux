@@ -1,7 +1,6 @@
 import type { EntityStateAdapter, EntityState } from '../models'
 import { createEntityAdapter } from '../create_adapter'
-import type {
-  BookModel} from './fixtures/book';
+import type { BookModel } from './fixtures/book'
 import {
   TheGreatGatsby,
   AClockworkOrange,

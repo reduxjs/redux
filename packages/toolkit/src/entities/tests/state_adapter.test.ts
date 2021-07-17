@@ -1,4 +1,4 @@
-import type { EntityAdapter } from '../index';
+import type { EntityAdapter } from '../index'
 import { createEntityAdapter } from '../index'
 import type { PayloadAction } from '../../createAction'
 import { configureStore } from '../../configureStore'
