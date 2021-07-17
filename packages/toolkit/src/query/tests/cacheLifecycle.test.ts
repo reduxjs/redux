@@ -417,7 +417,6 @@ test(`mutation: getCacheEntry`, async () => {
     isLoading: true,
     isSuccess: false,
     isUninitialized: false,
-    originalArgs: 'arg',
     startedTimeStamp: expect.any(Number),
     status: 'pending',
   })
@@ -431,7 +430,6 @@ test(`mutation: getCacheEntry`, async () => {
     isLoading: false,
     isSuccess: true,
     isUninitialized: false,
-    originalArgs: 'arg',
     startedTimeStamp: expect.any(Number),
     status: 'fulfilled',
   })

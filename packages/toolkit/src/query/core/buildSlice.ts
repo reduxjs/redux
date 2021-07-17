@@ -190,7 +190,6 @@ export function buildSlice({
 
             draft[requestId] = {
               status: QueryStatus.pending,
-              originalArgs: arg.originalArgs,
               endpointName: arg.endpointName,
               startedTimeStamp,
             }

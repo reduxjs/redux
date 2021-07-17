@@ -175,7 +175,6 @@ export type QuerySubState<D extends BaseEndpointDefinition<any, any, any>> = Id<
 >
 
 type BaseMutationSubState<D extends BaseEndpointDefinition<any, any, any>> = {
-  originalArgs?: QueryArgFrom<D>
   data?: ResultTypeFrom<D>
   error?:
     | SerializedError
@@ -202,7 +201,6 @@ export type MutationSubState<D extends BaseEndpointDefinition<any, any, any>> =
     } & WithRequiredProp<BaseMutationSubState<D>, 'error'>)
   | {
       status: QueryStatus.uninitialized
-      originalArgs?: undefined
       data?: undefined
       error?: undefined
       endpointName?: string

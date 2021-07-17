@@ -363,9 +363,11 @@ export type UseMutationStateOptions<
 }
 
 export type UseMutationStateResult<
-  _ extends MutationDefinition<any, any, any, any>,
+  D extends MutationDefinition<any, any, any, any>,
   R
-> = NoInfer<R>
+> = NoInfer<R> & {
+  originalArgs?: QueryArgFrom<D>
+}
 
 /**
  * A React hook that lets you trigger an update request for a given endpoint, and subscribes the component to read the request status from the Redux store. The component will re-render as the loading status changes.
@@ -740,11 +742,19 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       )
 
       const currentState = useSelector(mutationSelector, shallowEqual)
+      const originalArgs = promiseRef.current?.arg.originalArgs
+      const finalState = useMemo(
+        () => ({
+          ...currentState,
+          originalArgs,
+        }),
+        [currentState, originalArgs]
+      )
 
-      return useMemo(() => [triggerMutation, currentState], [
-        triggerMutation,
-        currentState,
-      ])
+      return useMemo(
+        () => [triggerMutation, finalState],
+        [triggerMutation, finalState]
+      )
     }
   }
 }
