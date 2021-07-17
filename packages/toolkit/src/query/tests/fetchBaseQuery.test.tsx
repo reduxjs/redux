@@ -123,7 +123,6 @@ describe('fetchBaseQuery', () => {
       expect(res.meta?.response).toBeInstanceOf(Object)
       expect(res.error).toEqual({
         status: 500,
-        statusText: 'Internal Server Error',
         data: { value: 'error' },
       })
     })
@@ -202,7 +201,6 @@ describe('fetchBaseQuery', () => {
         status: 'PARSING_ERROR',
         error: 'SyntaxError: Unexpected token h in JSON at position 1',
         originalStatus: 200,
-        statusText: 'OK',
         data: `this is not json!`,
       })
     })
@@ -230,7 +228,6 @@ describe('fetchBaseQuery', () => {
       expect(res.meta?.response).toBeInstanceOf(Object)
       expect(res.error).toEqual({
         status: 500,
-        statusText: 'Internal Server Error',
         data: `this is not json!`,
       })
     })
@@ -260,7 +257,6 @@ describe('fetchBaseQuery', () => {
         status: 'PARSING_ERROR',
         error: 'SyntaxError: Unexpected token h in JSON at position 1',
         originalStatus: 500,
-        statusText: 'Internal Server Error',
         data: `this is not json!`,
       })
     })
@@ -458,7 +454,6 @@ describe('fetchBaseQuery', () => {
 
       expect(res.error).toEqual({
         status: 200,
-        statusText: 'OK',
         data: {
           success: false,
           message: 'This returns a 200 but is really an error',
@@ -692,11 +687,11 @@ describe('fetchFn', () => {
       ok: true,
       status: 200,
       text: async () => `{ "url": "mock-return-url" }`,
-      clone: () => fakeResponse
+      clone: () => fakeResponse,
     }
 
-    const spiedFetch = jest.spyOn(window, 'fetch');
-    spiedFetch.mockResolvedValueOnce(fakeResponse as any);
+    const spiedFetch = jest.spyOn(window, 'fetch')
+    spiedFetch.mockResolvedValueOnce(fakeResponse as any)
 
     const { data } = await baseQuery(
       { url: '/echo' },
@@ -707,9 +702,9 @@ describe('fetchFn', () => {
       },
       {}
     )
-    expect(data).toEqual({url: 'mock-return-url'})
+    expect(data).toEqual({ url: 'mock-return-url' })
 
-    spiedFetch.mockClear();
+    spiedFetch.mockClear()
   })
 })
 

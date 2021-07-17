@@ -67,7 +67,6 @@ describe('fetchBaseQuery', () => {
     ).resolves.toEqual({
       error: {
         data: { value: 'error' },
-        statusText: 'Internal Server Error',
         status: 500,
       },
       meta: {
@@ -118,7 +117,6 @@ describe('query error handling', () => {
         isSuccess: false,
         error: {
           status: 500,
-          statusText: 'Internal Server Error',
           data: { value: 'error' },
         },
       })
@@ -161,7 +159,6 @@ describe('query error handling', () => {
         isSuccess: false,
         error: {
           status: 500,
-          statusText: 'Internal Server Error',
           data: { value: 'error' },
         },
         // last data will stay available
@@ -193,7 +190,6 @@ describe('query error handling', () => {
         isSuccess: false,
         error: {
           status: 500,
-          statusText: 'Internal Server Error',
           data: { value: 'error' },
         },
       })
@@ -261,7 +257,6 @@ describe('mutation error handling', () => {
         isSuccess: false,
         error: {
           status: 500,
-          statusText: 'Internal Server Error',
           data: { value: 'error' },
         },
       })
@@ -313,7 +308,6 @@ describe('mutation error handling', () => {
           isSuccess: false,
           error: {
             status: 500,
-            statusText: 'Internal Server Error',
             data: { value: 'error' },
           },
         })
@@ -351,7 +345,6 @@ describe('mutation error handling', () => {
           isSuccess: false,
           error: {
             status: 500,
-            statusText: 'Internal Server Error',
             data: { value: 'error' },
           },
         })
@@ -587,7 +580,6 @@ describe('error handling in a component', () => {
       expect(result).toMatchObject({
         error: {
           status: 500,
-          statusText: 'Internal Server Error',
           data: { value: 'error' },
         },
       })
@@ -625,7 +617,6 @@ describe('error handling in a component', () => {
       const unwrappedPromise = mutationqueryFulfilled!.unwrap()
       expect(unwrappedPromise).rejects.toMatchObject({
         status: 500,
-        statusText: 'Internal Server Error',
         data: { value: 'error' },
       })
     })

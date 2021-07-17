@@ -66,7 +66,6 @@ export type FetchBaseQueryError =
        */
       status: number
       data: unknown
-      statusText: string
     }
   | {
       /**
@@ -86,8 +85,16 @@ export type FetchBaseQueryError =
        **/
       status: 'PARSING_ERROR'
       originalStatus: number
-      statusText: string
       data: string
+      error: string
+    }
+  | {
+      /**
+       * * `"CUSTOM_ERROR"`:
+       *   A custom error type that you can return from your `fetchFn` where another error might not make sense.
+       **/
+      status: 'CUSTOM_ERROR'
+      data?: unknown
       error: string
     }
 
@@ -237,7 +244,6 @@ export function fetchBaseQuery({
         error: {
           status: 'PARSING_ERROR',
           originalStatus: response.status,
-          statusText: response.statusText,
           data: await responseClone.clone().text(),
           error: String(e),
         },
@@ -254,7 +260,6 @@ export function fetchBaseQuery({
           error: {
             status: response.status,
             data: resultData,
-            statusText: response.statusText,
           },
           meta,
         }

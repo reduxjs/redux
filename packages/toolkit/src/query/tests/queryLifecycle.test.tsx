@@ -98,7 +98,6 @@ describe.each([['query'], ['mutation']] as const)(
         expect(onError).toHaveBeenCalledWith({
           error: {
             status: 500,
-            statusText: 'Internal Server Error',
             data: { value: 'error' },
           },
           isUnhandledError: false,
@@ -221,7 +220,6 @@ test('query: getCacheEntry (error)', async () => {
     error: {
       data: { value: 'error' },
       status: 500,
-      statusText: 'Internal Server Error',
     },
     endpointName: 'injected',
     isError: true,
@@ -340,7 +338,6 @@ test('mutation: getCacheEntry (error)', async () => {
     error: {
       data: { value: 'error' },
       status: 500,
-      statusText: 'Internal Server Error',
     },
     endpointName: 'injected',
     isError: true,
