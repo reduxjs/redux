@@ -142,6 +142,17 @@ export default function createStore<
 
     return currentState as S
   }
+  
+  /**
+   * Reads the reducing function of the store.
+   * This will be helpful if you want to wrap current reducer then replace it.
+   *
+   * @returns The current reducer of your application.
+   */
+  function getReducer(): Reducer<S, A> {
+
+    return currentReducer as Reducer<S, A>
+  }
 
   /**
    * Adds a change listener. It will be called any time an action is dispatched,
@@ -362,6 +373,7 @@ export default function createStore<
     dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
+    getReducer,
     replaceReducer,
     [$$observable]: observable
   } as unknown as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext

@@ -28,10 +28,11 @@ describe('createStore', () => {
     // So we filter it out
     const methods = Object.keys(store).filter(key => key !== $$observable)
 
-    expect(methods.length).toBe(4)
+    expect(methods.length).toBe(5)
     expect(methods).toContain('subscribe')
     expect(methods).toContain('dispatch')
     expect(methods).toContain('getState')
+    expect(methods).toContain('getReducer')
     expect(methods).toContain('replaceReducer')
   })
 

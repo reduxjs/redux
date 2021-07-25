@@ -19,6 +19,7 @@ To create it, pass your root [reducing function](../understanding/thinking-in-re
 ### Store Methods
 
 - [`getState()`](#getstate)
+- [`getReducer()`](#getreducer)
 - [`dispatch(action)`](#dispatchaction)
 - [`subscribe(listener)`](#subscribelistener)
 - [`replaceReducer(nextReducer)`](#replacereducernextreducer)
@@ -33,6 +34,35 @@ It is equal to the last value returned by the store's reducer.
 #### Returns
 
 _(any)_: The current state tree of your application.
+
+---
+
+&nbsp;
+
+### getReducer()
+
+Returns the current reducing function of the store.
+
+It is an advanced API. You might need this if you want to wrap the original reducer and add additional behavior, then replace it using [`replaceReducer(updatedReducer)`](#replacereducernextreducer).
+
+#### Returns
+
+_(any)_: The current reducer of your application.
+
+#### Example
+
+```js
+
+const existingReducer = store.getReducer()
+
+const updatedReducer = (state, action) => {
+    // Add additional reducing behaviors
+    
+    return existingReducer(state, action)
+}
+
+store.replaceReducer(updatedReducer)
+```
 
 ---
 
