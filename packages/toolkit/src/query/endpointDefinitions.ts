@@ -99,7 +99,7 @@ interface EndpointDefinitionWithQueryFn<
    *         if (randomVal < 0.9) {
    *           return { data: 'tails' }
    *         }
-   *         return { error: { status: 500, data: "Coin landed on it's edge!" } }
+   *         return { error: { status: 500, statusText: 'Internal Server Error', data: "Coin landed on it's edge!" } }
    *       }
    *       // highlight-end
    *     })
