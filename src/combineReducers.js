@@ -150,6 +150,15 @@ export default function combineReducers(reducers) {
 
     let hasChanged = false
     const nextState = {}
+    if (Reflect.has(action, 'reducers')) {
+      const key = action.reducers
+      const reducer = finalReducers[key]
+      const previousStateForKey = state[key]
+      const nextStateForKey = reducer(previousStateForKey, action)
+      nextState[key] = nextStateForKey
+      hasChanged = nextStateForKey !== previousStateForKey
+      return hasChanged ? Object.assign({}, state, nextState) : state;
+    }
     for (let i = 0; i < finalReducerKeys.length; i++) {
       const key = finalReducerKeys[i]
       const reducer = finalReducers[key]
