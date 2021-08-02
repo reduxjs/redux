@@ -83,6 +83,16 @@ blockquote {
   border-radius: var(--ifm-global-radius);
 }
 
+.admonition a,
+blockquote a {
+  color: var(--ifm-color-primary-darkest);
+  text-decoration: none;
+}
+.admonition a:hover,
+blockquote a:hover {
+  color: var(--blockquote-text-color);
+}
+
 .docusaurus-highlight-code-line {
   background-color: rgb(72, 77, 91);
   display: block;
