@@ -29,6 +29,7 @@ describe('Utils', () => {
       expect(() =>
         compose(square, add, false as unknown as sFunc)(1, 2)
       ).toThrow()
+      // @ts-expect-error
       expect(() => compose(square, add, undefined)(1, 2)).toThrow()
       expect(() =>
         compose(square, add, true as unknown as sFunc)(1, 2)

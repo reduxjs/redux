@@ -43,13 +43,14 @@ describe('Utils', () => {
       const spy = jest.fn()
       console.error = spy
 
-      let isNotDefined
+      let isNotDefined: any
       combineReducers({ isNotDefined })
       expect(spy.mock.calls[0][0]).toMatch(
         /No reducer provided for key "isNotDefined"/
       )
 
       spy.mockClear()
+      // @ts-expect-error
       combineReducers({ thing: undefined })
       expect(spy.mock.calls[0][0]).toMatch(
         /No reducer provided for key "thing"/
@@ -80,6 +81,7 @@ describe('Utils', () => {
       expect(() => reducer({ counter: 0 }, { type: 'whatever' })).toThrow(
         /"whatever".*"counter"/
       )
+      // @ts-expect-error
       expect(() => reducer({ counter: 0 }, null)).toThrow(
         /"counter".*an action/
       )

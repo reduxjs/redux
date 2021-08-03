@@ -1,25 +1,36 @@
-import { createStore, applyMiddleware, Middleware, AnyAction, Action } from '..'
+import {
+  createStore,
+  applyMiddleware,
+  Middleware,
+  MiddlewareAPI,
+  AnyAction,
+  Action,
+  Store,
+  Dispatch
+} from '..'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
 
 describe('applyMiddleware', () => {
   it('warns when dispatching during middleware setup', () => {
-    function dispatchingMiddleware(store) {
-      store.dispatch(addTodo('Dont dispatch in middleware setup'))
-      return next => action => next(action)
+    function dispatchingMiddleware(store: Store) {
+      store.dispatch(addTodo("Don't dispatch in middleware setup"))
+      return (next: Dispatch) => (action: Action) => next(action)
     }
 
     expect(() =>
-      applyMiddleware(dispatchingMiddleware)(createStore)(reducers.todos)
+      applyMiddleware(dispatchingMiddleware as Middleware)(createStore)(
+        reducers.todos
+      )
     ).toThrow()
   })
 
   it('wraps dispatch method with middleware once', () => {
-    function test(spyOnMethods) {
-      return methods => {
+    function test(spyOnMethods: any) {
+      return (methods: any) => {
         spyOnMethods(methods)
-        return next => action => next(action)
+        return (next: Dispatch) => (action: Action) => next(action)
       }
     }
 
@@ -41,8 +52,8 @@ describe('applyMiddleware', () => {
   })
 
   it('passes recursive dispatches through the middleware chain', () => {
-    function test(spyOnMethods) {
-      return () => next => action => {
+    function test(spyOnMethods: any) {
+      return () => (next: Dispatch) => (action: Action) => {
         spyOnMethods(action)
         return next(action)
       }
@@ -53,7 +64,7 @@ describe('applyMiddleware', () => {
 
     // the typing for redux-thunk is super complex, so we will use an as unknown hack
     const dispatchedValue = store.dispatch(
-      addTodoAsync('Use Redux')
+      addTodoAsync('Use Redux') as any
     ) as unknown as Promise<void>
     return dispatchedValue.then(() => {
       expect(spy.mock.calls.length).toEqual(2)
@@ -63,7 +74,7 @@ describe('applyMiddleware', () => {
   it('works with thunk middleware', done => {
     const store = applyMiddleware(thunk)(createStore)(reducers.todos)
 
-    store.dispatch(addTodoIfEmpty('Hello'))
+    store.dispatch(addTodoIfEmpty('Hello') as any)
     expect(store.getState()).toEqual([
       {
         id: 1,
@@ -71,7 +82,7 @@ describe('applyMiddleware', () => {
       }
     ])
 
-    store.dispatch(addTodoIfEmpty('Hello'))
+    store.dispatch(addTodoIfEmpty('Hello') as any)
     expect(store.getState()).toEqual([
       {
         id: 1,
@@ -93,7 +104,7 @@ describe('applyMiddleware', () => {
 
     // the typing for redux-thunk is super complex, so we will use an "as unknown" hack
     const dispatchedValue = store.dispatch(
-      addTodoAsync('Maybe')
+      addTodoAsync('Maybe') as any
     ) as unknown as Promise<void>
     dispatchedValue.then(() => {
       expect(store.getState()).toEqual([
@@ -124,7 +135,7 @@ describe('applyMiddleware', () => {
 
     const multiArgMiddleware: Middleware<MultiDispatch, any, MultiDispatch> =
       _store => {
-        return next => (action, callArgs?: any) => {
+        return next => (action: any, callArgs?: any) => {
           if (Array.isArray(callArgs)) {
             return action(...callArgs)
           }
@@ -132,8 +143,9 @@ describe('applyMiddleware', () => {
         }
       }
 
-    function dummyMiddleware({ dispatch }) {
-      return _next => action => dispatch(action, testCallArgs)
+    function dummyMiddleware({ dispatch }: MiddlewareAPI) {
+      return (_next: Dispatch) => (action: Action) =>
+        dispatch(action, testCallArgs)
     }
 
     const store = createStore(
@@ -141,7 +153,7 @@ describe('applyMiddleware', () => {
       applyMiddleware(multiArgMiddleware, dummyMiddleware)
     )
 
-    store.dispatch(spy)
+    store.dispatch(spy as any)
     expect(spy.mock.calls[0]).toEqual(testCallArgs)
   })
 })
