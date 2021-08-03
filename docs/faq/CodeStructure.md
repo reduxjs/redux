@@ -190,7 +190,7 @@ You can expose an `injectStore` function from the interceptor file instead:
 ```js title="common/api.js"
 let store
 
-export const injectStore(_store) {
+export const injectStore = (_store) => {
   store = _store
 }
 
