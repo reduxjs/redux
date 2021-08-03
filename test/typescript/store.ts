@@ -31,7 +31,7 @@ const noExtend: ExtendState<State, never> = {
   },
   e: brandedString
 }
-// typings:expect-error
+
 const noExtendError: ExtendState<State, never> = {
   a: 'a',
   b: {
@@ -39,6 +39,7 @@ const noExtendError: ExtendState<State, never> = {
     d: 'd'
   },
   e: brandedString,
+  // @ts-expect-error
   f: 'oops'
 }
 
@@ -51,7 +52,7 @@ const yesExtend: ExtendState<State, { yes: 'we can' }> = {
   e: brandedString,
   yes: 'we can'
 }
-// typings:expect-error
+// @ts-expect-error
 const yesExtendError: ExtendState<State, { yes: 'we can' }> = {
   a: 'a',
   b: {
@@ -108,7 +109,7 @@ const storeWithPreloadedState: Store<State> = createStore(reducer, {
   b: { c: 'c', d: 'd' },
   e: brandedString
 })
-// typings:expect-error
+// @ts-expect-error
 const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
   b: { c: 'c' },
   e: brandedString
@@ -123,7 +124,7 @@ const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
 funcWithStore(storeWithActionReducer)
 funcWithStore(storeWithActionReducerAndPreloadedState)
 
-// typings:expect-error
+// @ts-expect-error
 const storeWithActionReducerAndBadPreloadedState = createStore(
   reducerWithAction,
   {
@@ -146,10 +147,10 @@ const storeWithPreloadedStateAndEnhancer: Store<State> = createStore(
   enhancer
 )
 
-// typings:expect-error
 const storeWithBadPreloadedStateAndEnhancer: Store<State> = createStore(
   reducer,
   {
+    // @ts-expect-error
     b: { c: 'c' }
   },
   enhancer

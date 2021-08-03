@@ -37,9 +37,9 @@ function dispatchExtension() {
 
   store.dispatch({ type: 'INCREMENT' })
   store.dispatch(Promise.resolve({ type: 'INCREMENT' }))
-  // typings:expect-error
+  // @ts-expect-error
   store.dispatch('not-an-action')
-  // typings:expect-error
+  // @ts-expect-error
   store.dispatch(Promise.resolve('not-an-action'))
 }
 
@@ -77,7 +77,7 @@ function stateExtension() {
 
   store.getState().someField
   store.getState().extraField
-  // typings:expect-error
+  // @ts-expect-error
   store.getState().wrongField
 }
 
@@ -97,7 +97,7 @@ function extraMethods() {
 
   store.getState()
   const res: string = store.method()
-  // typings:expect-error
+  // @ts-expect-error
   store.wrongMethod()
 }
 
@@ -141,11 +141,11 @@ function replaceReducerExtender() {
   const newStore = store.replaceReducer(newReducer)
   newStore.getState().test
   newStore.getState().extraField
-  // typings:expect-error
+  // @ts-expect-error
   newStore.getState().wrongField
 
   const res: string = newStore.method()
-  // typings:expect-error
+  // @ts-expect-error
   newStore.wrongMethod()
 }
 
@@ -212,9 +212,9 @@ function mhelmersonExample() {
     store.replaceReducer(reducer)
 
     store.getState().extraField
-    // typings:expect-error
+    // @ts-expect-error
     store.getState().wrongField
-    // typings:expect-error
+    // @ts-expect-error
     store.getState().test
 
     const newReducer = (
@@ -225,7 +225,7 @@ function mhelmersonExample() {
     const newStore = store.replaceReducer(newReducer)
     newStore.getState().test
     newStore.getState().extraField
-    // typings:expect-error
+    // @ts-expect-error
     newStore.getState().wrongField
   }
 }
@@ -279,7 +279,7 @@ function finalHelmersonExample() {
   const store = createStore(reducer, createPersistEnhancer('hi'))
 
   store.getState().foo
-  // typings:expect-error
+  // @ts-expect-error
   store.getState().wrongField
 
   const newReducer = (
@@ -289,8 +289,8 @@ function finalHelmersonExample() {
 
   const newStore = store.replaceReducer(newReducer)
   newStore.getState().test
-  // typings:expect-error
+  // @ts-expect-error
   newStore.getState().whatever
-  // typings:expect-error
+  // @ts-expect-error
   newStore.getState().wrongField
 }

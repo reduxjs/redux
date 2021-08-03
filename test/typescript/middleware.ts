@@ -92,7 +92,7 @@ function customState() {
   const customMiddleware: Middleware<{}, State> =
     api => (next: Dispatch) => action => {
       api.getState().field
-      // typings:expect-error
+      // @ts-expect-error
       api.getState().wrongField
 
       return next(action)
@@ -114,7 +114,7 @@ function customDispatch() {
     (api: MiddlewareAPI<MyDispatch>) => next => action => {
       api.dispatch({ type: 'INCREMENT' })
       api.dispatch({ type: 'DECREMENT' })
-      // typings:expect-error
+      // @ts-expect-error
       api.dispatch({ type: 'UNKNOWN' })
     }
 }
@@ -134,9 +134,9 @@ function apply() {
   const storeWithLogger = createStore(reducer, applyMiddleware(logger()))
   // can only dispatch actions
   storeWithLogger.dispatch({ type: 'INCREMENT' })
-  // typings:expect-error
+  // @ts-expect-error
   storeWithLogger.dispatch(Promise.resolve({ type: 'INCREMENT' }))
-  // typings:expect-error
+  // @ts-expect-error
   storeWithLogger.dispatch('not-an-action')
 
   /**
@@ -146,9 +146,9 @@ function apply() {
   // can dispatch actions and promises
   storeWithPromise.dispatch({ type: 'INCREMENT' })
   storeWithPromise.dispatch(Promise.resolve({ type: 'INCREMENT' }))
-  // typings:expect-error
+  // @ts-expect-error
   storeWithPromise.dispatch('not-an-action')
-  // typings:expect-error
+  // @ts-expect-error
   storeWithPromise.dispatch(Promise.resolve('not-an-action'))
 
   /**
@@ -161,9 +161,9 @@ function apply() {
   // can dispatch actions and promises
   storeWithPromiseAndLogger.dispatch({ type: 'INCREMENT' })
   storeWithPromiseAndLogger.dispatch(Promise.resolve({ type: 'INCREMENT' }))
-  // typings:expect-error
+  // @ts-expect-error
   storeWithPromiseAndLogger.dispatch('not-an-action')
-  // typings:expect-error
+  // @ts-expect-error
   storeWithPromiseAndLogger.dispatch(Promise.resolve('not-an-action'))
 
   /**
@@ -178,19 +178,19 @@ function apply() {
   storeWithPromiseAndThunk.dispatch(Promise.resolve({ type: 'INCREMENT' }))
   storeWithPromiseAndThunk.dispatch((dispatch, getState) => {
     getState().someField
-    // typings:expect-error
+    // @ts-expect-error
     getState().wrongField
 
     // injected dispatch accepts actions, thunks and promises
     dispatch({ type: 'INCREMENT' })
     dispatch(dispatch => dispatch({ type: 'INCREMENT' }))
     dispatch(Promise.resolve({ type: 'INCREMENT' }))
-    // typings:expect-error
+    // @ts-expect-error
     dispatch('not-an-action')
   })
-  // typings:expect-error
+  // @ts-expect-error
   storeWithPromiseAndThunk.dispatch('not-an-action')
-  // typings:expect-error
+  // @ts-expect-error
   storeWithPromiseAndThunk.dispatch(Promise.resolve('not-an-action'))
 
   /**

@@ -20,9 +20,9 @@ function simple() {
     return {
       onClick() {
         dispatch({ type: 'INCREMENT' })
-        // typings:expect-error
+        // @ts-expect-error
         dispatch(Promise.resolve({ type: 'INCREMENT' }))
-        // typings:expect-error
+        // @ts-expect-error
         dispatch('not-an-action')
       }
     }
@@ -52,11 +52,11 @@ function discriminated() {
         onClick() {
           dispatch({ type: 'INCREMENT' })
           dispatch({ type: 'DECREMENT', count: 10 })
-          // typings:expect-error
+          // @ts-expect-error
           dispatch({ type: 'DECREMENT', count: '' })
-          // typings:expect-error
+          // @ts-expect-error
           dispatch({ type: 'SOME_OTHER_TYPE' })
-          // typings:expect-error
+          // @ts-expect-error
           dispatch('not-an-action')
         }
       }
@@ -77,7 +77,7 @@ function promise() {
       onClick() {
         dispatch({ type: 'INCREMENT' })
         dispatch(Promise.resolve({ type: 'INCREMENT' }))
-        // typings:expect-error
+        // @ts-expect-error
         dispatch('not-an-action')
       }
     }

@@ -36,7 +36,7 @@ function simple() {
   s = reducer(s, { type: 'SOME_OTHER_TYPE', someField: 'value' })
 
   // State shape is strictly checked.
-  // typings:expect-error
+  // @ts-expect-error
   reducer('string', { type: 'INCREMENT' })
 
   // Combined reducer also accepts any action.
@@ -46,7 +46,7 @@ function simple() {
   cs = combined(cs, { type: 'INCREMENT', count: 10 })
 
   // Combined reducer's state is strictly checked.
-  // typings:expect-error
+  // @ts-expect-error
   combined({ unknown: '' }, { type: 'INCREMENT' })
 }
 
@@ -85,7 +85,7 @@ function discriminated() {
   const reducer0: Reducer<State, MyAction0> = (state = 0, action) => {
     if (action.type === 'INCREMENT') {
       // Action shape is determined by `type` discriminator.
-      // typings:expect-error
+      // @ts-expect-error
       action.wrongField
 
       const { count = 1 } = action
@@ -94,7 +94,7 @@ function discriminated() {
     }
 
     if (action.type === 'DECREMENT') {
-      // typings:expect-error
+      // @ts-expect-error
       action.wrongField
 
       const { count = 1 } = action
@@ -107,7 +107,7 @@ function discriminated() {
 
   const reducer1: Reducer<State, MyAction1> = (state = 0, action) => {
     if (action.type === 'MULTIPLY') {
-      // typings:expect-error
+      // @ts-expect-error
       action.wrongField
 
       const { count = 1 } = action
@@ -116,7 +116,7 @@ function discriminated() {
     }
 
     if (action.type === 'DIVIDE') {
-      // typings:expect-error
+      // @ts-expect-error
       action.wrongField
 
       const { count = 1 } = action
@@ -134,13 +134,13 @@ function discriminated() {
   s = reducer0(s, { type: 'INCREMENT' })
   s = reducer0(s, { type: 'INCREMENT', count: 10 })
   // Known actions are strictly checked.
-  // typings:expect-error
+  // @ts-expect-error
   s = reducer0(s, { type: 'DECREMENT', coun: 10 })
   s = reducer0(s, { type: 'DECREMENT', count: 10 })
   // Unknown actions are rejected.
-  // typings:expect-error
+  // @ts-expect-error
   s = reducer0(s, { type: 'SOME_OTHER_TYPE' })
-  // typings:expect-error
+  // @ts-expect-error
   s = reducer0(s, { type: 'SOME_OTHER_TYPE', someField: 'value' })
 
   // Combined reducer infers state and actions by default which maintains type
@@ -150,9 +150,9 @@ function discriminated() {
 
   const cs = combined(undefined, { type: 'INCREMENT' })
   combined(cs, { type: 'MULTIPLY' })
-  // typings:expect-error
+  // TODO // @ts-expect-error
   combined(cs, { type: 'init' })
-  // typings:expect-error
+  // TODO // @ts-expect-error
   combined(cs, { type: 'SOME_OTHER_TYPE' })
 
   // Combined reducer can be made to only accept known actions.
@@ -162,7 +162,7 @@ function discriminated() {
 
   const scs = strictCombined(undefined, { type: 'INCREMENT' })
   strictCombined(scs, { type: 'DECREMENT' })
-  // typings:expect-error
+  // @ts-expect-error
   strictCombined(scs, { type: 'SOME_OTHER_TYPE' })
 }
 
@@ -189,7 +189,7 @@ function typeGuards() {
   const reducer: Reducer<State> = (state = 0, action) => {
     if (isAction<IncrementAction>(action, 'INCREMENT')) {
       // Action shape is determined by the type guard returned from `isAction`
-      // typings:expect-error
+      // @ts-expect-error
       action.wrongField
 
       const { count = 1 } = action
@@ -198,7 +198,7 @@ function typeGuards() {
     }
 
     if (isAction<DecrementAction>(action, 'DECREMENT')) {
-      // typings:expect-error
+      // @ts-expect-error
       action.wrongField
 
       const { count = 1 } = action
@@ -230,7 +230,7 @@ function reducersMapObject() {
 
   for (const key of Object.keys(obj)) {
     obj[key](undefined, { type: 'SOME_TYPE' })
-    // typings:expect-error
+    // @ts-expect-error
     obj[key](undefined, 'not-an-action')
   }
 }

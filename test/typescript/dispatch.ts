@@ -9,10 +9,10 @@ function simple() {
   const a = dispatch({ type: 'INCREMENT', count: 10 })
 
   a.count
-  // typings:expect-error
+  // @ts-expect-error
   a.wrongProp
 
-  // typings:expect-error
+  // @ts-expect-error
   dispatch('not-an-action')
 }
 
@@ -38,9 +38,9 @@ function discriminated() {
   dispatch({ type: 'INCREMENT' })
   dispatch({ type: 'DECREMENT', count: 10 })
   // Known actions are strictly checked.
-  // typings:expect-error
+  // @ts-expect-error
   dispatch({ type: 'DECREMENT', count: '' })
   // Unknown actions are rejected.
-  // typings:expect-error
+  // @ts-expect-error
   dispatch({ type: 'SOME_OTHER_TYPE' })
 }

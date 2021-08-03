@@ -15,12 +15,12 @@ store.dispatch(ACTION)
 
 const firstState = store.getState()
 firstState.bar.value
-// typings:expect-error
+// @ts-expect-error
 firstState.baz.value
 
 const nextStore = store.replaceReducer(combineReducers({ baz })) // returns ->  { baz: { value: 'baz' }}
 
 const nextState = nextStore.getState()
-// typings:expect-error
+// @ts-expect-error
 nextState.bar.value
 nextState.baz.value

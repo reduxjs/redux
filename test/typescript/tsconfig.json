@@ -1,7 +1,20 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2017", "dom"],
-    "strict": true,
-    "baseUrl": "../.."
-  }
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "emitDeclarationOnly": false,
+    "strict": false,
+    "noEmit": true,
+    "target": "esnext",
+    "jsx": "react",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["."]
 }
