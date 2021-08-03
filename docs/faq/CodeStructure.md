@@ -190,16 +190,14 @@ You can expose an `injectStore` function from the interceptor file instead:
 ```js title="common/api.js"
 let store
 
-export const injectStore = (_store) => {
+export const injectStore = _store => {
   store = _store
 }
 
-axiosInstance.interceptors.request.use(
-  config => {
-    config.headers.authorization = store.getState().auth.token
-    return config;
-  }
-)
+axiosInstance.interceptors.request.use(config => {
+  config.headers.authorization = store.getState().auth.token
+  return config
+})
 ```
 
 Then, in your entry point file, inject the store into the API setup file:
