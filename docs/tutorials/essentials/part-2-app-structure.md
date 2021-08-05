@@ -125,14 +125,15 @@ Let's start by looking at how the Redux store is created.
 Open up `app/store.js`, which should look like this:
 
 ```js title="app/store.js"
-import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from '../features/counter/counterSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "../features/counter/counterSlice";
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
-    counter: counterReducer
-  }
-})
+    counter: counterReducer,
+  },
+});
+
 ```
 
 The Redux store is created using the `configureStore` function from Redux Toolkit. `configureStore` requires that we pass in a `reducer` argument.
