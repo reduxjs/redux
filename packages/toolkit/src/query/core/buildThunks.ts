@@ -259,7 +259,7 @@ export function buildThunks<
     ThunkApiMetaConfig & { state: RootState<any, string, ReducerPath> }
   > = async (
     arg,
-    { signal, rejectWithValue, fulfillWithValue, dispatch, getState }
+    { signal, rejectWithValue, fulfillWithValue, dispatch, getState, extra }
   ) => {
     const endpointDefinition = endpointDefinitions[arg.endpointName]
 
@@ -271,6 +271,7 @@ export function buildThunks<
         signal,
         dispatch,
         getState,
+        extra,
       }
       if (endpointDefinition.query) {
         result = await baseQuery(

@@ -5,6 +5,7 @@ export interface BaseQueryApi {
   signal: AbortSignal
   dispatch: ThunkDispatch<any, any, any>
   getState: () => unknown
+  extra: unknown
 }
 
 export type QueryReturnValue<T = unknown, E = unknown, M = unknown> =

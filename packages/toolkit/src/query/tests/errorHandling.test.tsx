@@ -41,6 +41,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -61,6 +62,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )

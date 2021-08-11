@@ -79,6 +79,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -95,6 +96,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -113,6 +115,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -136,6 +139,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -165,6 +169,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -189,6 +194,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -218,6 +224,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -245,6 +252,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -275,6 +283,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -293,6 +302,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -318,6 +328,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -341,6 +352,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -359,6 +371,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -376,6 +389,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -393,6 +407,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -410,6 +425,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -427,6 +443,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -448,6 +465,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       )
@@ -471,6 +489,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -488,6 +507,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -512,6 +532,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -533,6 +554,7 @@ describe('fetchBaseQuery', () => {
           signal: new AbortController().signal,
           dispatch: storeRef.store.dispatch,
           getState: storeRef.store.getState,
+          extra: undefined,
         },
         {}
       ))
@@ -563,6 +585,7 @@ describe('fetchBaseQuery', () => {
             signal: new AbortController().signal,
             dispatch: storeRef.store.dispatch,
             getState: storeRef.store.getState,
+            extra: undefined,
           },
           {}
         )
@@ -582,6 +605,7 @@ describe('fetchBaseQuery', () => {
             signal: new AbortController().signal,
             dispatch: storeRef.store.dispatch,
             getState: storeRef.store.getState,
+            extra: undefined,
           },
           {}
         )
@@ -607,6 +631,7 @@ describe('fetchBaseQuery', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     ))
@@ -625,6 +650,7 @@ describe('fetchBaseQuery', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     ))
@@ -644,6 +670,7 @@ describe('fetchBaseQuery', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     ))
@@ -672,6 +699,7 @@ describe('fetchFn', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     ))
@@ -699,6 +727,7 @@ describe('fetchFn', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     )
@@ -725,6 +754,7 @@ describe('FormData', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     )
@@ -746,6 +776,7 @@ describe('still throws on completely unexpected errors', () => {
         signal: new AbortController().signal,
         dispatch: storeRef.store.dispatch,
         getState: storeRef.store.getState,
+        extra: undefined,
       },
       {}
     )

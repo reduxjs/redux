@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { createApi } from '@reduxjs/toolkit/query/react'
 
 import { renderHook } from '@testing-library/react-hooks'
+import type { BaseQueryApi } from '../baseQueryTypes'
 import { withProvider } from './helpers'
 
 test('handles a non-async baseQuery without error', async () => {
@@ -47,6 +48,28 @@ test('handles a non-async baseQuery without error', async () => {
     startedTimeStamp: expect.any(Number),
     fulfilledTimeStamp: expect.any(Number),
   })
+})
+
+test('passes the extraArgument property to the baseQueryApi', async () => {
+  const baseQuery = (_args: any, api: BaseQueryApi) => ({ data: api.extra })
+  const api = createApi({
+    baseQuery,
+    endpoints: (build) => ({
+      getUser: build.query<unknown, void>({
+        query: () => '',
+      }),
+    }),
+  })
+  const store = configureStore({
+    reducer: {
+      [api.reducerPath]: api.reducer,
+    },
+    middleware: (gDM) =>
+      gDM({ thunk: { extraArgument: 'cakes' } }).concat(api.middleware),
+  })
+  const { getUser } = api.endpoints
+  const { data } = await store.dispatch(getUser.initiate())
+  expect(data).toBe('cakes')
 })
 
 describe('re-triggering behavior on arg change', () => {
