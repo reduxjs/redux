@@ -34,7 +34,7 @@ npm install redux
 yarn add redux
 ```
 
-If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
+If you're not using a package manager, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
 
 Most commonly, people consume Redux as a collection of [CommonJS](http://www.commonjs.org/) modules. These modules are what you get when you import `redux` in a [Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](https://rollupjs.org), we support that as well.
 
