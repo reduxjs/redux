@@ -201,8 +201,6 @@ That was a brief overview of how to set up and use Redux Toolkit with React. Rec
 
 ### Full Counter App Example
 
-The counter example app shown here is also the
-
 Here's the complete counter application as a running CodeSandbox:
 
 <iframe
