@@ -18,7 +18,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Completion of [Part 7](./part-7-rtk-query-basics.md)
+- Completion of [Part 7](./part-7-rtk-query-basics.md) to understand RTK Query setup and basic usage
 
 :::
 
@@ -138,7 +138,7 @@ When the number of active subscriptions goes down to 0, RTK Query starts an inte
 
 In this case, our `<SinglePostPage>` mounted and requested that individual `Post` by ID. When we clicked on "Edit Post", the `<SinglePostPage>` component was unmounted by the router, and the active subscription was removed due to unmounting. RTK Query immediately started a "remove this post data" timer. But, the `<EditPostPage>` component mounted right away and subscribed to the same `Post` data with the same cache key. So, RTK Query canceled the timer and kept using the same cached data instead of fetching it from the server.
 
-By default, **unused data is removed from the cache after 60 seconds**, but this can be configured in either the root API slice definition or overridden in the individual endpoint definitions using the `keepUnuseDataFor` flag, which specifies a cache lifetime in seconds.
+By default, **unused data is removed from the cache after 60 seconds**, but this can be configured in either the root API slice definition or overridden in the individual endpoint definitions using the `keepUnusedDataFor` flag, which specifies a cache lifetime in seconds.
 
 ### Invalidating Specific Items
 
@@ -175,8 +175,7 @@ export const apiSlice = createApi({
     getPost: builder.query({
       query: postId => `/posts/${postId}`,
       // highlight-start
-      providesTags: (result, error, arg) =>
-        result ? [{ type: 'Post', id: result.id }] : []
+      providesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }]
       // highlight-end
     }),
     addNewPost: builder.mutation({
@@ -201,7 +200,7 @@ export const apiSlice = createApi({
 })
 ```
 
-It's possible for the `result` argument in these callbacks to be undefined if the response hasn't come back yet, so we have to handle that safely. For `getPosts` we can do that by using a default argument array value to map over, and for `getPost` we just return an empty array if `result` isn't there. For `editPost`, we know the ID of the post from the partial post object that was passed into the trigger function, so we can read it from there.
+It's possible for the `result` argument in these callbacks to be undefined if the response has no data or there's an error, so we have to handle that safely. For `getPosts` we can do that by using a default argument array value to map over, and for `getPost` we just return an empty array if `result` isn't there. For `editPost`, we know the ID of the post from the partial post object that was passed into the trigger function, so we can read it from there.
 
 With those changes in place, let's go back and try editing a post again, with the Network tab open in the browser DevTools.
 
@@ -214,6 +213,20 @@ When we save the edited post this time, we should see three requests happen:
 - A `GET /posts` as the `getPosts` query is refetched
 
 Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed!
+
+There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPost` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead.
+
+:::info
+
+RTK Query has many other options for controlling when and how to refetch data, including "conditional fetching", "lazy queries", and "prefetching", and query definitions can be customized in a variety of ways. See the RTK Query usage guide docs for more details on using these features:
+
+- [RTK Query: Automated Re-Fetching](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching)
+- [RTK Query: Conditional Fetching](https://redux-toolkit.js.org/rtk-query/usage/conditional-fetching)
+- [RTK Query: Prefetching](https://redux-toolkit.js.org/rtk-query/usage/prefetching)
+- [RTK Query: Customizing Queries](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries)
+- [RTK Query: `useLazyQuery`](https://redux-toolkit.js.org/rtk-query/api/created-api/hooks#uselazyquery)
+
+:::
 
 ## Managing Users Data
 
@@ -265,7 +278,7 @@ Each endpoint object contains:
 - An `initiate` thunk that triggers a request for this endpoint
 - A `select` function that creates [memoized selectors](../../usage/deriving-data-selectors.md) that can retrieve the cached result data + status entries for this endpoint
 
-If we wat to fetch the list of users outside of React, we can dispatch the `getUsers.initiate()` thunk in our index file:
+If we want to fetch the list of users outside of React, we can dispatch the `getUsers.initiate()` thunk in our index file:
 
 ```jsx title="index.js"
 // omit other imports
@@ -343,7 +356,7 @@ export const {
 */
 ```
 
-Once we have that initial `selectUsersResult` selector, selector, we can replace the existing `selectAllUsers` selector with one that returns the array of users from the cache result, and then replace `selectUserById` with one that finds the right user from that array.
+Once we have that initial `selectUsersResult` selector, we can replace the existing `selectAllUsers` selector with one that returns the array of users from the cache result, and then replace `selectUserById` with one that finds the right user from that array.
 
 For now we're going to comment out those selectors from the `usersAdapter` - we're going to make another change later that switches back to using those.
 
@@ -353,9 +366,9 @@ Since the `usersSlice` is no longer even being used at all, we can go ahead and 
 
 ### Injecting Endpoints
 
-It's common for larger applications to "code-split" features into separate bundles, and then "lazy load" them on demand as the feature is used for the first time. We said that RTK Query normally has a single "API slice" per application, and so far we've defined all of our endpoints directly in `apiSlice.js`. What happens if we want to code-split some of our endpoint definitions?
+It's common for larger applications to "code-split" features into separate bundles, and then "lazy load" them on demand as the feature is used for the first time. We said that RTK Query normally has a single "API slice" per application, and so far we've defined all of our endpoints directly in `apiSlice.js`. What happens if we want to code-split some of our endpoint definitions, or move them into another file to keep the API slice file from getting too big?
 
-\*\*RTK Query supports code-splitting endpoints with `apiSlice.injectEndpoints()`. That way, we can still have a single API slice with a single middleware and cache reducer, but we can move the definition of some endpoints to other files. This enables code-splitting scenarios, as well as co-locating some endpoints alongside feature folders if desired.
+**RTK Query supports splitting out endpoint definitions with `apiSlice.injectEndpoints()`**. That way, we can still have a single API slice with a single middleware and cache reducer, but we can move the definition of some endpoints to other files. This enables code-splitting scenarios, as well as co-locating some endpoints alongside feature folders if desired.
 
 To illustrate this process, let's switch the `getUsers` endpoint to be injected in `usersSlice.js`, instead of defined in `apiSlice.js`.
 
@@ -379,7 +392,10 @@ export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 // highlight-end
 ```
 
-`injectEndpoints()` returns **a _new_ API slice object containing the additional endpoint definitions**. The actual caching reducer and middleware that we originally added to the store still work okay as-is, but if we want to use any of the `getUsers` functionality, we need to use the endpoint object and hooks that are attached to the `extendedApiSlice` object instead of `apiSlice`.
+**// FIXME** `injectEndpoints` mutates the existing object and returns it, but that doesn't help TS types
+
+`injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns it**. The actual caching reducer and middleware that we originally added to the store still work okay as-is. At this point, `apiSlice` and `extendedApiSlice` are the same object, but
+it can be helpful to refer to the `extendedApiSlice` object instead of `apiSlice` here as a reminder to ourselves. (This is more important if you're using TypeScript, because only the `extendedApiSlice` value is has the added types for the new endpoints.)
 
 At the moment, the only file that references the `getUsers` endpoint is our index file, which is dispatching the `initiate` thunk. We need to update that to import the extended API slice instead:
 
@@ -480,13 +496,13 @@ RTK Query deliberately **does _not_ implement a cache that would deduplicate ide
 - In many cases, simply re-fetching data when it's invalidated works well and is easier to understand
 - At a minimum, RTKQ can help solve the general use case of "fetch some data", which is a big pain point for a lot of people
 
-In comparison, we just normalized the response data for the `getUsers` endpoint, in that it's being stored as an `{id: value}` lookup table. However, **this is _not_ the same thing as a "normalized cache" - we only transformed _how this one response is stored_** rather than deduplicating results across endpoints or requests.
+In comparison, we just normalized the response data for the `getUsers` endpoint, in that it's being stored as an `{[id]: value}` lookup table. However, **this is _not_ the same thing as a "normalized cache" - we only transformed _how this one response is stored_** rather than deduplicating results across endpoints or requests.
 
 ### Selecting Values from Results
 
-The last component that is reading from the old `postsSlice` is `<UserPage>`, which filters the list of posts based on the current user. We've already seen that we can get the entire list of posts with `useGetPostsQuery()` and then transform it in the component, such as sorting inside of a `useMemo`. The query hooks also give us the ability to select pieces of the cached state by providing a `selectFromResponse` option, and only re-render when the selected pieces change.
+The last component that is reading from the old `postsSlice` is `<UserPage>`, which filters the list of posts based on the current user. We've already seen that we can get the entire list of posts with `useGetPostsQuery()` and then transform it in the component, such as sorting inside of a `useMemo`. The query hooks also give us the ability to select pieces of the cached state by providing a `selectFromResult` option, and only re-render when the selected pieces change.
 
-We can use `selectFromResponse` to have `<UserPage>` read just a filtered list of posts from the cache. However, in order for `selectFromResponse` to avoid unnecessary re-renders, we need to ensure that whatever data we extract is memoized correctly. To do this, we should create a new selector instance that the `<UsersPage>` component can reuse every time it renders, so that the selector memoizes the result based on its inputs.
+We can use `selectFromResult` to have `<UserPage>` read just a filtered list of posts from the cache. However, in order for `selectFromResult` to avoid unnecessary re-renders, we need to ensure that whatever data we extract is memoized correctly. To do this, we should create a new selector instance that the `<UsersPage>` component can reuse every time it renders, so that the selector memoizes the result based on its inputs.
 
 ```jsx title="features/users/UsersPage.js"
 // highlight-next-line
@@ -517,9 +533,10 @@ export const UserPage = ({ match }) => {
   const { postsForUser } = useGetPostsQuery(undefined, {
     // highlight-start
     selectFromResult: result => ({
+      // We can optionally include the other metadata fields from the result here
       ...result,
       // Include a field called `postsForUser` in the hook result object,
-      // which will be filtered list of posts
+      // which will be a filtered list of posts
       postsForUser: selectPostsForUser(result, userId)
     })
     // highlight-end
@@ -531,7 +548,9 @@ export const UserPage = ({ match }) => {
 
 There's a key difference with the memoized selector function we've created here. Normally, [selectors expect the entire Redux `state` as their first argument](../../usage/deriving-data-selectors.md), and extract or derive a value from `state`. However, in this case we're only dealing with the "result" value that is kept in the cache. The result object has a `data` field inside with the actual values we need, as well as some of the request metadata fields.
 
-Our `selectFromResult` callback receives the `result` object, and needs to return a _copy_ of `result` with an additional field for the extra derived data we're extracting. The query hook will do a "shallow" comparison on this returned object, and only re-render the component if one of the fields has changed, so it's okay that we're returning a new object reference here.
+Our `selectFromResult` callback receives the `result` object containing the original request metadata and the `data` from the server, and should return some extracted or derived values. Because query hooks add an additional `refetch` method to whatever is returned here, it's preferably to always return an object from `selectFromResult` with the fields inside that you need.
+
+Since `result` is being kept in the Redux store, we can't mutate it - we need to return a new object. The query hook will do a "shallow" comparison on this returned object, and only re-render the component if one of the fields has changed. We can optimize re-renders by only returning the specific fields needed by this component - if we don't need the rest of the metadata flags, we could omit them entirely. If you do need them, you can spread the original `result` value to include them in the output.
 
 In this case, we'll call the field `postsForUser`, and we can destructure that new field from the hook result. By calling `selectPostsForUser(result, userId)` every time, it will memoize the filtered array and only recalculate it if the fetched data or the user ID changes.
 
@@ -555,7 +574,7 @@ We've completed updating our posts and users data, so all that's left is working
 
 ### Persisting Reactions
 
-Originally, we only tracked reactions on the client side and did not persist them to the server. let's add a new `addReaction` mutation and use that to update the corresponding `Post` on the server every time the user clicks a reaction button.
+Originally, we only tracked reactions on the client side and did not persist them to the server. Let's add a new `addReaction` mutation and use that to update the corresponding `Post` on the server every time the user clicks a reaction button.
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -799,7 +818,7 @@ Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives t
 
 Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we add a thunk we can dispatch that reads the latest timestamp from the cache state and tells the mock server to generate newer notifications.
 
-Inside of `onCacheEntryAdded`, we create a real `Websocket` connection to `localhost`. Whenever the mock server sends us an update, we push all of the received notifications into the cache and re-sort it.
+Inside of `onCacheEntryAdded`, we create a real `Websocket` connection to `localhost`. In a real app, this could be any kind of external subscription or polling connection you need to receive ongoing updates. Whenever the mock server sends us an update, we push all of the received notifications into the cache and re-sort it.
 
 When the cache entry is removed, we clean up the Websocket subscription. In this app, the notifications cache entry will never be removed because we never unsubscribe from the data, but it's important to see how the cleanup would work for a real app.
 
@@ -887,23 +906,7 @@ export const extendedApi = apiSlice.injectEndpoints({
 
 export const { useGetNotificationsQuery } = extendedApi
 
-const emptyNotifications = []
-
-export const selectNotificationsResult =
-  extendedApi.endpoints.getNotifications.select()
-
-const selectNotificationsData = createSelector(
-  selectNotificationsResult,
-  notificationsResult => notificationsResult.data ?? emptyNotifications
-)
-
-export const fetchNotificationsWebsocket = () => (dispatch, getState) => {
-  const allNotifications = selectNotificationsData(getState())
-  const [latestNotification] = allNotifications
-  const latestTimestamp = latestNotification?.date ?? ''
-  // Hardcode a call to the mock server to simulate a server push scenario over websockets
-  forceGenerateNotifications(latestTimestamp)
-}
+// omit selectors and websocket thunk
 
 // highlight-start
 const notificationsAdapter = createEntityAdapter()
@@ -945,14 +948,7 @@ const notificationsSlice = createSlice({
   }
 })
 
-export const { allNotificationsRead } = notificationsSlice.actions
-
-export default notificationsSlice.reducer
-
-export const {
-  selectAll: selectNotificationsMetadata,
-  selectEntities: selectMetadataEntities
-} = notificationsAdapter.getSelectors(state => state.notifications)
+// omit slice exports
 ```
 
 There's a lot going on, but let's break down the changes one at a time.
@@ -1012,7 +1008,6 @@ In `<NavBar>`, we trigger the initial notifications fetch with `useGetNotificati
 Our `<NotificationsList>` similarly switches over to reading the cached data and metadata.
 
 ```jsx title="features/notifications/NotificationsList.js"
-
 import {
   // highlight-start
   useGetNotificationsQuery,
@@ -1054,7 +1049,17 @@ export const NotificationsList = () => {
 
 We read the list of notifications from cache and the new metadata entries from the notificationsSlice, and continue displaying them the same way as before.
 
+As a final step, we can do some additional cleanup here - the `postsSlice` is no longer being used, so that can be removed entirely.
+
+With that, we've finished converting our application over to use RTK Query! All of the data fetching has been switched over to use RTKQ, and we've improved the user experience by adding optimistic updates and streaming updates.
+
 ## What You've Learned
+
+As we've seen, RTK Query includes some powerful options for controlling how we manage cached data. While you may not need all of these options right away, they provide flexibility and key capabilities to help implement specific application behaviors.
+
+Let's take one last look at the whole application in action:
+
+**// FIXME** CodeSandbox here
 
 :::tip Summary
 
@@ -1072,3 +1077,15 @@ We read the list of notifications from cache and the new metadata entries from t
   - The `onCacheEntryAdded` lifecycle can be used for streaming updates by updating cache over time based on server push connections
 
 :::
+
+## What's Next?
+
+Congratulations, **you've completed the Redux Essentials tutorial!** You should now have a solid understanding of what Redux Toolkit and React-Redux are, how to write and organize Redux logic, Redux data flow and usage with React, and how to use APIs like `configureStore` and `createSlice`. You should also see how RTK Query can simplify the process of fetching and using cached data.
+
+The ["What's Next?" section in Part 6](./part-6-performance-normalization.md) has links to additional resources for app ideas, tutorials, and documentation.
+
+For more details on using RTK Query, see [the RTK Query usage guide docs](https://redux-toolkit.js.org/rtk-query/usage/queries) and [API reference](https://redux-toolkit.js.org/rtk-query/api/createApi).
+
+If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
+
+**Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!**

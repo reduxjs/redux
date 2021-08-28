@@ -17,7 +17,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Completion of the previous sections of this tutorial
+- Completion of the previous sections of this tutorial to understand Redux Toolkit usage patterns
 
 :::
 
@@ -53,7 +53,7 @@ RTK Query takes inspiration from other tools that have pioneered solutions for d
 - The data fetching and caching logic is built on top of Redux Toolkit's `createSlice` and `createAsyncThunk` APIs
 - Because Redux Toolkit is UI-agnostic, RTK Query's functionality can be used with any UI layer
 - API endpoints are defined ahead of time, including how to generate query parameters from arguments and transform responses for caching
-- RTK Query can also generate React hooks that encapsulate the entire data fetching process, provide `data` and `isLoading` fields to components, and manage the lifetime of cached data as components mount and unmount
+- RTK Query can also generate React hooks that encapsulate the entire data fetching process, provide `data` and `isFetching` fields to components, and manage the lifetime of cached data as components mount and unmount
 - RTK Query provides "cache entry lifecycle" options that enable use cases like streaming cache updates via websocket messages after fetching the initial data
 - We have early working examples of code generation of API slices from OpenAPI and GraphQL schemas
 - Finally, RTK Query is completely written in TypeScript, and is designed to provide an excellent TS usage experience
@@ -118,7 +118,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 // Define our single API slice object
 export const apiSlice = createApi({
-  // The cache reducer expects to be added at `state.api`
+  // The cache reducer expects to be added at `state.api` (already default - this is optional)
   reducerPath: 'api',
   // All of our requests will have URLs starting with '/fakeApi'
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
@@ -136,15 +136,18 @@ export const apiSlice = createApi({
 export const { useGetPostsQuery } = apiSlice
 ```
 
-RTK Query's functionality is based on a single method, called `createApi`. All of the Redux Toolkit APIs we've seen so far are UI-agnostic, and could be used with _any_ UI layer. The RTK Query core logic is the same way. However, RTK Query also includes a React-specific version of `createApi`, and we need to use that. So, we import from `'@reduxjs/toolkit/query/react'` specifically.
+RTK Query's functionality is based on a single method, called `createApi`. All of the Redux Toolkit APIs we've seen so far are UI-agnostic, and could be used with _any_ UI layer. The RTK Query core logic is the same way. However, RTK Query also includes a React-specific version of `createApi`, and since we're using RTK and React together, we need to use that to take advantage of RTK's React integration. So, we import from `'@reduxjs/toolkit/query/react'` specifically.
 
 #### API Slice Parameters
 
-When we call `createApi`, there are three fields that are required:
+When we call `createApi`, there are two fields that are required:
 
-- `reducerPath`: defines the expected top-level state slice field. For our other slices like `postsSlice`, there's no guarantee that it will be used to update `state.posts` - we _could_ have attached the reducer anywhere in the root state, like `someOtherField: postsReducer`. Here, `createApi` expects us to tell it where the cache state will exist when we add the cache reducer to the store.
 - `baseQuery`: a function that knows how to fetch data from the server. RTK Query includes `fetchBaseQuery`, a small wrapper around the standard `fetch()` function that handles typical processing of requests and responses. When we create a `fetchBaseQuery` instance, we can pass in the base URL of all future requests, as well as override behavior such as modifying request headers.
 - `endpoints`: a set of operations that we've defined for interacting with this server. Endpoints can be **_queries_**, which return data for caching, or **_mutations_**, which send an update to the server. The endpoints are defined using a callback function that accepts a `builder` parameter and returns an object containing endpoint definitions created with `builder.query()` and `builder.mutation()`.
+
+`createApi` also accepts a `reducerPath` field, which defines the expected top-level state slice field for the generated reducer. For our other slices like `postsSlice`, there's no guarantee that it will be used to update `state.posts` - we _could_ have attached the reducer anywhere in the root state, like `someOtherField: postsReducer`. Here, `createApi` expects us to tell it where the cache state will exist when we add the cache reducer to the store. If you don't provide a `reducerPath` option, it defaults to `'api'`, so all your RTKQ cache data will be stored under `state.api`.
+
+If you forget to add the reducer to the store, or attach it at a different key than what is specified in `reducerPath`, RTKQ will log an error to let you know this needs to be fixed.
 
 #### Defining Endpoints
 
@@ -152,11 +155,11 @@ The first part of the URL for all requests is defined as `'/fakeApi'` in the `fe
 
 For our first step, we want to add an endpoint that will return the entire list of posts from the fake API server. We'll include an endpoint called `getPosts`, and define it as a **query endpoint** using `builder.query()`. This method accepts many options for configuring how to make the request and process the response. For now, all we need to do is supply the remaining piece of the URL path by defining a `query` option, with a callback that returns the URL string: `() => '/posts'`.
 
-By default, query endpoints will use a `GET` HTTP request, but you can override that by returning an object like `{url: '/posts', method: 'POST', body}` instead of just the URL string itself.
+By default, query endpoints will use a `GET` HTTP request, but you can override that by returning an object like `{url: '/posts', method: 'POST', body: newPost}` instead of just the URL string itself. You can also define several other options for the request this way, such as setting headers.
 
 #### Exporting API Slices and Hooks
 
-In our earlier slice files, we just exported the action creators and the slice reducers. With RTK Query, we typically export the entire "API slice" object itself.
+In our earlier slice files, we just exported the action creators and the slice reducers, because those are all that's needed in other files. With RTK Query, we typically export the entire "API slice" object itself, because it has several fields that may be useful.
 
 Finally, look carefully at the last line of this file. Where's this `useGetPostsQuery` value coming from?
 
@@ -276,18 +279,16 @@ export const PostsList = () => {
 
 Conceptually, `<PostsList>` is still doing all the same work it was before, but we were able to replace the multiple `useSelector` calls and the `useEffect` dispatch with a single call to `useGetPostsQuery()`.
 
-Each generated query hook returns an object containing several fields, including:
+Each generated query hook returns a "result" object containing several fields, including:
 
 - `data`: the actual response contents from the server. **This field will be `undefined` until the response is received**.
-- `isLoading`: a boolean indicating if the hook is currently making the _first_ request to the server for this data
+- `isLoading`: a boolean indicating if this hook is currently making the _first_ request to the server. (Note that if the parameters change to request different data, `isLoading` will remain false.)
 - `isFetching`: a boolean indicating if the hook is currently making _any_ request to the server
 - `isSuccess`: a boolean indicating if the hook has made a successful request and has cached data available (ie, `data` should be defined now)
 - `isError`: a boolean indicating if the last request had an error
 - `error`: a serialized error object
 
-Typically, you'll want to destructure fields from the result object, and possibly rename `data` to a more specific variable like `posts` to describe what it contains.
-
-We can then use the status booleans and the `data/error` fields to render the UI that we want.
+It's common to destructure fields from the result object, and possibly rename `data` to a more specific variable like `posts` to describe what it contains. We can then use the status booleans and the `data/error` fields to render the UI that we want. However, if you're using TypeScript, you may need to keep the original object as-is and refer to flags as `result.isSuccess` in your conditional checks, so that TS can correctly infer that `data` is valid.
 
 Previously, we were selecting a list of post IDs from the store, passing a post ID to each `<PostExcerpt>` component, and selecting each individual `Post` object from the store separately. Since the `posts` array already has all of the post objects, we've switched back to passing the post objects themselves down as props.
 
@@ -347,7 +348,7 @@ We've updated `<PostsList>` to fetch a list of _all_ posts, and we're showing pi
 
 There's a couple ways we could do this. One would be to have `<SinglePostPage>` call the same `useGetPostsQuery()` hook, get the _entire_ array of posts, and find just the one `Post` object it needs to display. Query hooks also have a `selectFromResult` option that would allow us to do that same lookup earlier, inside the hook itself - we'll see this in action later.
 
-Instead, we're going to try adding another endpoint definition that will let us request a single post from the server based on its ID. This may seem a bit redundant, but it will allow us to see how RTK Query can be used to customize query requests based on arguments.
+Instead, we're going to try adding another endpoint definition that will let us request a single post from the server based on its ID. This is somewhat redundant, but it will allow us to see how RTK Query can be used to customize query requests based on arguments.
 
 ### Adding the Single Post Query Endpoint
 
@@ -673,6 +674,10 @@ Note that there's nothing special about the literal string `'Post'` here. We cou
 
 ## What You've Learned
 
+With RTK Query, the actual details of how to manage data fetching, caching, and loading state are abstracted away. This simplifies application code considerably, and lets us focus on higher-level concerns about intended app behavior instead. Since RTK Query is implemented using the same Redux Toolkit APIs we've already seen, we can still use the Redux DevTools to view the changes in our state over time.
+
+**// FIXME** CodeSandbox here
+
 :::tip Summary
 
 - **RTK Query is a data fetching and caching solution included in Redux Toolkit**
@@ -690,3 +695,7 @@ Note that there's nothing special about the literal string `'Post'` here. We cou
   - The trigger function returns a Promise that can be "unwrapped" and awaited
 
 :::
+
+## What's Next?
+
+RTK Query provides solid default behavior, but also includes many options for customizing how requests are managed and working with cached data. In [Part 8: RTK Query Advanced Patterns](./part-8-rtk-query-advanced.md), we'll see how to use these options to implement useful features like optimistic updates.

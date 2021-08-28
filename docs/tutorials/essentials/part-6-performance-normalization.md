@@ -23,7 +23,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw to write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
+In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw how to write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
 
 In this section, we'll look at optimized patterns for ensuring good performance in our application, and techniques for automatically handling common updates of data in the store.
 
@@ -964,11 +964,11 @@ We again import `createEntityAdapter`, call it, and call `notificationsAdapter.g
 
 Ironically, we do have a couple places in here where we need to loop over all notification objects and update them. Since those are no longer being kept in an array, we have to use `Object.values(state.entities)` to get an array of those notifications and loop over that. On the other hand, we can replace the previous fetch update logic with `notificationsAdapter.upsertMany`.
 
-And with that... we're done!
+And with that... we're done learning the core concepts and functionality of Redux Toolkit!
 
 ## What You've Learned
 
-Congratulations, you've completed the Redux Essentials tutorial! Let's see what the final app looks like in action:
+We've built a lot of new behavior in this section. Let's see what how the app looks with all those changes:
 
 <iframe
   class="codesandbox"
@@ -1006,7 +1006,9 @@ Here's what we covered in this section:
 
 ## What's Next?
 
-The concepts we've covered in this tutorial should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
+The concepts we've covered in this tutorial so far should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
+
+**Redux Toolkit also includes a powerful data fetching and caching API called "RTK Query"**. RTK Query is an optional addon that can completely eliminate the need to write any data fetching logic yourself. In [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md), you'll learn what RTK Query is, what problems it solves, and how to use it to fetch and use cached data in your application.
 
 The Redux Essentials tutorial focused on "how to use Redux correctly", rather than "how it works" or "why it works this way". In particular, Redux Toolkit is a higher-level set of abstractions and utilities, and it's helpful to understand what the abstractions in RTK are actually doing for you. Reading through the ["Redux Fundamentals" tutorial](../fundamentals/part-1-overview.md) will help you understand how to write Redux code "by hand", and why we recommend Redux Toolkit as the default way to write Redux logic.
 
