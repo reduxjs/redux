@@ -31,7 +31,7 @@ In this section, we'll convert our social media app to fetch the posts and users
 
 ### Example REST API and Client
 
-To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using [the Mirage.js mock API tool](https://miragejs.com/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.js`.
+To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.js`.
 
 The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.js`.
 
@@ -174,7 +174,7 @@ However, writing code using this approach is tedious. Each separate type of requ
 
 Redux Toolkit has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We encourage you to try it out and see if it can help simplify the data fetching code in your own apps!
 
-We'll be updating the Redux tutorials soon to include sections on using RTK Query. Until then, see [the RTK Query section in the Redux Toolkit docs](https://redux-toolkit.js.org/rtk-query/overview).
+We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md).
 
 :::
 
@@ -266,10 +266,11 @@ When we make an API call, we can view its progress as a small state machine that
 - The request succeeded, and we now have the data we need
 - The request failed, and there's probably an error message
 
-We _could_ track that information using some booleans, like `isLoading: true`, but it's better to track these states as a single enum value. A good pattern for this is to have a state section that looks like:
+We _could_ track that information using some booleans, like `isLoading: true`, but it's better to track these states as a single enum value. A good pattern for this is to have a state section that looks like this (using TypeScript type notation):
 
 ```ts
 {
+  // Multiple possible status enum values
   status: 'idle' | 'loading' | 'succeeded' | 'failed',
   error: string | null
 }
@@ -444,7 +445,40 @@ console.log(
 
 However, there are times when a slice reducer needs to respond to _other_ actions that weren't defined as part of this slice's `reducers` field. We can do that using the slice `extraReducers` field instead.
 
+The `extraReducers` option should be a function that receives a parameter called `builder`. The `builder` object provides methods that let us define additional case reducers that will run in response to actions defined outside of the slice. We'll use `builder.addCase(actionCreator, reducer)` to handle each of the actions dispatched by our async thunks.
+
 <DetailedExplanation title="Detailed Explanation: Adding Extra Reducers to Slices">
+
+The `builder` object in `extraReducers` provides methods that let us define additional case reducers that will run in response to actions defined outside of the slice:
+
+- `builder.addCase(actionCreator, reducer)`: defines a case reducer that handles a single known action type based on either an RTK action creator or a plain action type string
+- `builder.addMatcher(matcher, reducer)`: defines a case reducer that can run in response to any action where the `matcher` function returns `true`
+- `builder.addDefaultCase(reducer)`: defines a case reducer that will run if no other case reducers were executed for this action.
+
+You can chain these together, like `builder.addCase().addCase().addMatcher().addDefault()`. If multiple matchers match the action, they will run in the order they were defined.
+
+```js
+import { increment } from '../features/counter/counterSlice'
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
+    // slice-specific reducers here
+  },
+  // highlight-start
+  extraReducers: builder => {
+    builder
+      .addCase('counter/decrement', (state, action) => {})
+      .addCase(increment, (state, action) => {})
+  }
+  // highlight-end
+})
+```
+
+If you're using TypeScript, you should use the builder callback form of `extraReducers`.
+
+Alternately, `extraReducers` can also be an object. **This is a legacy syntax - it's still supported, but we recommend the "builder callback" syntax as it works better with TypeScript.**
 
 The keys in the `extraReducers` object should be Redux action type strings, like `'counter/increment'`. We _could_ write those by hand ourselves, although we'd have to quote the keys if they contain any characters like '/':
 
@@ -474,7 +508,7 @@ console.log(object)
 // { "counter/increment": Function}
 ```
 
-This works for the `extraReducers` field:
+This works for the `extraReducers` field when used as an object:
 
 ```js
 import { increment } from '../features/counter/counterSlice'
@@ -494,27 +528,7 @@ const postsSlice = createSlice({
 })
 ```
 
-We can also add extra reducers by using the "builder callback" syntax for `extraReducers`. If we pass a function for `extraReducers` instead of an object, we can use the `builder` parameter to add individual cases. The `builder.addCase()` function takes either a plain string action type to listen for, or a Redux Toolkit action creator:
-
-```js
-import { increment } from '../features/counter/counterSlice'
-
-const postsSlice = createSlice({
-  name: 'posts',
-  initialState,
-  reducers: {
-    // slice-specific reducers here
-  },
-  // highlight-start
-  extraReducers: builder => {
-    builder.addCase('counter/decrement', (state, action) => {})
-    builder.addCase(increment, (state, action) => {})
-  }
-  // highlight-end
-})
-```
-
-If you're using TypeScript, you should use the builder callback form of `extraReducers`.
+Unfortunately, TypeScript fails to recognize this will work correctly, so you have to use `increment.type` here to pass the type string. It also will not correctly infer the type of `action` inside the reducer.
 
 </DetailedExplanation>
 
@@ -533,19 +547,20 @@ const postsSlice = createSlice({
     // omit existing reducers here
   },
   // highlight-start
-  extraReducers: {
-    [fetchPosts.pending]: (state, action) => {
-      state.status = 'loading'
-    },
-    [fetchPosts.fulfilled]: (state, action) => {
-      state.status = 'succeeded'
-      // Add any fetched posts to the array
-      state.posts = state.posts.concat(action.payload)
-    },
-    [fetchPosts.rejected]: (state, action) => {
-      state.status = 'failed'
-      state.error = action.error.message
-    }
+  extraReducers(builder) {
+    builder
+      .addCase(fetchPosts.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        // Add any fetched posts to the array
+        state.posts = state.posts.concat(action.payload)
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
   }
   // highlight-end
 })
@@ -563,9 +578,38 @@ Our `<PostsList>` component is already checking for any updates to the posts tha
 
 The fake API we're using returns data immediately. However, a real API call will probably take some time to return a response. It's usually a good idea to show some kind of "loading..." indicator in the UI so the user knows we're waiting for data.
 
-We can update our `<PostsList>` to show a different bit of UI based on the `state.posts.status` enum: a spinner if we're loading, an error message if it failed, or the actual posts list if we have the data. The result might look like this:
+We can update our `<PostsList>` to show a different bit of UI based on the `state.posts.status` enum: a spinner if we're loading, an error message if it failed, or the actual posts list if we have the data. While we're at it, this is probably a good time to extract a `<PostExcerpt>` component to encapsulate the rendering for one item in the list as well.
 
-```js title="features/posts/PostsList.js"
+The result might look like this:
+
+```jsx title="features/posts/PostsList.js"
+// highlight-next-line
+import { Spinner } from '../../components/Spinner'
+import { PostAuthor } from './PostAuthor'
+import { TimeAgo } from './TimeAgo'
+import { ReactionButtons } from './ReactionButtons'
+import { selectAllPosts, fetchPosts } from './postsSlice'
+
+// highlight-start
+const PostExcerpt = ({ post }) => {
+  return (
+    <article className="post-excerpt" key={post.id}>
+      <h3>{post.title}</h3>
+      <div>
+        <PostAuthor userId={post.user} />
+        <TimeAgo timestamp={post.date} />
+      </div>
+      <p className="post-content">{post.content.substring(0, 100)}</p>
+
+      <ReactionButtons post={post} />
+      <Link to={`/posts/${post.id}`} className="button muted-button">
+        View Post
+      </Link>
+    </article>
+  )
+}
+// highlight-end
+
 export const PostsList = () => {
   const dispatch = useDispatch()
   const posts = useSelector(selectAllPosts)
@@ -584,7 +628,7 @@ export const PostsList = () => {
   let content
 
   if (postStatus === 'loading') {
-    content = <div className="loader">Loading...</div>
+    content = <Spinner text="Loading..." />
   } else if (postStatus === 'succeeded') {
     // Sort posts in reverse chronological order by datetime string
     const orderedPosts = posts
@@ -608,13 +652,14 @@ export const PostsList = () => {
 }
 ```
 
-But, the fake API call is still returning almost immediately, so we can barely see the loading spinner right now. If you want to force the fake API call to take longer, you can open up `api/server.js`, and uncomment this line:
+You might notice that the API calls are taking a while to complete, and that the loading spinner is staying on screen for a couple seconds. Our mock API server is configured to add a 2-second delay to all responses, specifically to help visualize times when there's a loading spinner visible. If you want to change this behavior, you can open up `api/server.js`, and alter this line:
 
 ```js title="api/server.js"
-//this.timing = 2000
+// Add an extra delay to all endpoints, so loading spinners show up.
+const ARTIFICIAL_DELAY_MS = 2000
 ```
 
-Uncommenting that line will force the fake API to wait 2 seconds before responding. Feel free to turn that on and off as we go if you want to see how the UI shows our loading spinner.
+Feel free to turn that on and off as we go if you want the API calls to complete faster.
 
 ## Loading Users
 
@@ -646,10 +691,10 @@ const usersSlice = createSlice({
   initialState,
   reducers: {},
   // highlight-start
-  extraReducers: {
-    [fetchUsers.fulfilled]: (state, action) => {
+  extraReducers(builder) {
+    builder.addCase(fetchUsers.fulfilled, (state, action) => {
       return action.payload
-    }
+    })
   }
   // highlight-end
 })
@@ -665,7 +710,10 @@ We only need to fetch the list of users once, and we want to do it right when th
 // highlight-next-line
 import { fetchUsers } from './features/users/usersSlice'
 
-import './api/server'
+import { worker } from './api/server'
+
+// Start our mock API server
+worker.start({ onUnhandledRequest: 'bypass' })
 
 // highlight-next-line
 store.dispatch(fetchUsers())
@@ -714,13 +762,13 @@ const postsSlice = createSlice({
     reactionAdded(state, action) {}, // omit logic
     postUpdated(state, action) {} // omit logic
   },
-  extraReducers: {
+  extraReducers(builder) {
     // omit posts loading reducers
     // highlight-start
-    [addNewPost.fulfilled]: (state, action) => {
+    builder.addCase(addNewPost.fulfilled, (state, action) => {
       // We can directly add the new post object to our posts array
       state.posts.push(action.payload)
-    }
+    })
     // highlight-end
   }
 })
@@ -760,10 +808,7 @@ export const AddPostForm = () => {
     if (canSave) {
       try {
         setAddRequestStatus('pending')
-        const resultAction = await dispatch(
-          addNewPost({ title, content, user: userId })
-        )
-        unwrapResult(resultAction)
+        await dispatch(addNewPost({ title, content, user: userId })).unwrap()
         setTitle('')
         setContent('')
         setUserId('')
@@ -784,7 +829,9 @@ We can add a loading status enum field as a React `useState` hook, similar to ho
 
 When we call `dispatch(addNewPost())`, the async thunk returns a `Promise` from `dispatch`. We can `await` that promise here to know when the thunk has finished its request. But, we don't yet know if that request succeeded or failed.
 
-`createAsyncThunk` handles any errors internally, so that we don't see any messages about "rejected Promises" in our logs. It then returns the final action it dispatched: either the `fulfilled` action if it succeeded, or the `rejected` action if it failed. Redux Toolkit has a utility function called `unwrapResult` that will return either the actual `action.payload` value from a `fulfilled` action, or throw an error if it's the `rejected` action. This lets us handle success and failure in the component using normal `try/catch` logic. So, we'll clear out the input fields to reset the form if the post was successfully created, and log the error to the console if it failed.
+`createAsyncThunk` handles any errors internally, so that we don't see any messages about "rejected Promises" in our logs. It then returns the final action it dispatched: either the `fulfilled` action if it succeeded, or the `rejected` action if it failed.
+
+However, it's common to want to write logic that looks at the success or failure of the actual request that was made. Redux Toolkit adds a `.unwrap()` function to the returned `Promise`, which will return a new `Promise` that either has the actual `action.payload` value from a `fulfilled` action, or throws an error if it's the `rejected` action. This lets us handle success and failure in the component using normal `try/catch` logic. So, we'll clear out the input fields to reset the form if the post was successfully created, and log the error to the console if it failed.
 
 If you want to see what happens when the `addNewPost` API call fails, try creating a new post where the "Content" field only has the word "error" (without quotes). The server will see that and send back a failed response, so you should see a message logged to the console.
 
@@ -819,9 +866,10 @@ As a reminder, here's what we covered in this section:
   - Generated action creators like `fetchPosts` dispatch those actions based on the `Promise` you return
   - You can listen for these action types in `createSlice` using the `extraReducers` field, and update the state in reducers based on those actions.
   - Action creators can be used to automatically fill in the keys of the `extraReducers` object so the slice knows what actions to listen for.
+  - Thunks can return promises. For `createAsyncThunk` specifically, you can `await dispatch(someThunk()).unwrap()` to handle the request success or failure at the component level.
 
 :::
 
 ## What's Next?
 
-We've got one more set of topics to cover for this tutorial. In [Part 6: Performance and Normalizing Data](./part-6-performance-normalization.md), we'll look at how Redux usage affects React performance, and some ways we can optimize our application for improved performance.
+We've got one more set of topics to cover the core Redux Toolkit APIs and usage patterns. In [Part 6: Performance and Normalizing Data](./part-6-performance-normalization.md), we'll look at how Redux usage affects React performance, and some ways we can optimize our application for improved performance.

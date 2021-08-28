@@ -17,7 +17,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info Prerequisites
 
-- Completion of the previous sections of this tutorial
+- Completion of [Part 5](./part-5-async-logic.md) to understand data fetching flow
 
 :::
 
@@ -111,7 +111,7 @@ export const UserPage = ({ match }) => {
 
 As we've seen before, we can take data from one `useSelector` call, or from props, and use that to help decide what to read from the store in another `useSelector` call.
 
-Add routes for these components in `<App>`:
+As usual, we will add routes for these components in `<App>`:
 
 ```jsx title="App.js"
           <Route exact path="/posts/:postId" component={SinglePostPage} />
@@ -123,7 +123,27 @@ Add routes for these components in `<App>`:
           <Redirect to="/" />
 ```
 
-And add another tab in `<Navbar>` that links to `/users` so that we can click and go to `<UsersList>`.
+We'll also add another tab in `<Navbar>` that links to `/users` so that we can click and go to `<UsersList>`:
+
+```jsx title="app/Navbar.js"
+export const Navbar = () => {
+  return (
+    <nav>
+      <section>
+        <h1>Redux Essentials Example</h1>
+
+        <div className="navContent">
+          <div className="navLinks">
+            <Link to="/">Posts</Link>
+            // highlight-next-line
+            <Link to="/users">Users</Link>
+          </div>
+        </div>
+      </section>
+    </nav>
+  )
+}
+```
 
 ## Adding Notifications
 
@@ -133,7 +153,7 @@ In a real application, our app client would be in constant communication with th
 
 ### Notifications Slice
 
-Since this is a new part of our app, the first step is to create a new slice for our notifications, and an async thunk to fetch some notification entries from the API:
+Since this is a new part of our app, the first step is to create a new slice for our notifications, and an async thunk to fetch some notification entries from the API. In order to create some realistic notifications, we'll include the timestamp of the latest notification we have in state. That will let our mock server generate notifications newer than that timestamp.
 
 ```js title="features/notifications/notificationsSlice.js"
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
@@ -341,8 +361,8 @@ const notificationsSlice = createSlice({
     }
     // highlight-end
   },
-  extraReducers: {
-    [fetchNotifications.fulfilled]: (state, action) => {
+  extraReducers(builder) {
+    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
       // highlight-start
       state.forEach(notification => {
         // Any notifications we've read are no longer new
@@ -352,7 +372,7 @@ const notificationsSlice = createSlice({
       state.push(...action.payload)
       // Sort with newest first
       state.sort((a, b) => b.date.localeCompare(a.date))
-    }
+    })
   }
 })
 
@@ -362,10 +382,10 @@ export const { allNotificationsRead } = notificationsSlice.actions
 export default notificationsSlice.reducer
 ```
 
-We want to mark these notifications as read whenever our `<NotificationsList>` component renders, either because we clicked on the tab to view the notifications, or because we already have it open and we just received some additional notifications. We can do this by dispatching `allNotificationsRead` in a `useEffect` hook. We also want to add an additional classname to any notification list entries in the page, to highlight them:
+We want to mark these notifications as read whenever our `<NotificationsList>` component renders, either because we clicked on the tab to view the notifications, or because we already have it open and we just received some additional notifications. We can do this by dispatching `allNotificationsRead` any time this component re-renders. In order to avoid flashing of old data as this updates, we'll dispatch the action in a `useLayoutEffect` hook. We also want to add an additional classname to any notification list entries in the page, to highlight them:
 
-```js title="features/notifications/NotificationsList.js"
-import React, { useEffect } from 'react'
+```jsx title="features/notifications/NotificationsList.js"
+import React, { useLayoutEffect } from 'react'
 // highlight-next-line
 import { useSelector, useDispatch } from 'react-redux'
 import { formatDistanceToNow, parseISO } from 'date-fns'
@@ -388,7 +408,7 @@ export const NotificationsList = () => {
   const users = useSelector(selectAllUsers)
 
   // highlight-start
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(allNotificationsRead())
   })
   // highlight-end
@@ -441,7 +461,7 @@ Here's how the notifications tab looks now that we've got the "new/read" behavio
 
 The last thing we need to do before we move on is to add the badge on our "Notifications" tab in the navbar. This will show us the count of "Unread" notifications when we are in other tabs:
 
-```js title="app/Navbar.js"
+```jsx title="app/Navbar.js"
 // omit imports
 // highlight-next-line
 import { useDispatch, useSelector } from 'react-redux'
@@ -750,20 +770,21 @@ const postsSlice = createSlice({
       }
     }
   },
-  extraReducers: {
+  extraReducers(builder) {
     // omit other reducers
 
-    [fetchPosts.fulfilled]: (state, action) => {
-      state.status = 'succeeded'
-      // Add any fetched posts to the array
+    builder
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        // Add any fetched posts to the array
+        // highlight-start
+        // Use the `upsertMany` reducer as a mutating update utility
+        postsAdapter.upsertMany(state, action.payload)
+        // highlight-end
+      })
       // highlight-start
-      // Use the `upsertMany` reducer as a mutating update utility
-      postsAdapter.upsertMany(state, action.payload)
-      // highlight-end
-    },
-    // highlight-start
-    // Use the `addOne` reducer for the fulfilled case
-    [addNewPost.fulfilled]: postsAdapter.addOne
+      // Use the `addOne` reducer for the fulfilled case
+      .addCase(addNewPost.fulfilled, postsAdapter.addOne)
     // highlight-end
   }
 })
@@ -833,7 +854,7 @@ export const PostsList = () => {
   // omit other selections and effects
 
   if (postStatus === 'loading') {
-    content = <div className="loader">Loading...</div>
+    content = <Spinner text="Loading..." />
   } else if (postStatus === 'succeeded') {
     // highlight-start
     content = orderedPostIds.map(postId => (
@@ -884,9 +905,9 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {},
-  extraReducers: {
+  extraReducers(builder) {
     // highlight-next-line
-    [fetchUsers.fulfilled]: usersAdapter.setAll
+    builder.addCase(fetchUsers.fulfilled, usersAdapter.setAll)
   }
 })
 
@@ -937,8 +958,8 @@ const notificationsSlice = createSlice({
       // highlight-end
     }
   },
-  extraReducers: {
-    [fetchNotifications.fulfilled]: (state, action) => {
+  extraReducers(builder) {
+    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
       // highlight-start
       Object.values(state.entities).forEach(notification => {
         // Any notifications we've read are no longer new
@@ -946,7 +967,7 @@ const notificationsSlice = createSlice({
       })
       notificationsAdapter.upsertMany(state, action.payload)
       // highlight-end
-    }
+    })
   }
 })
 
@@ -1005,6 +1026,8 @@ Here's what we covered in this section:
 :::
 
 ## What's Next?
+
+There's a couple more sections in the Redux Essentials tutorial, but this is a good spot to pause and put what you've learned into practice.
 
 The concepts we've covered in this tutorial so far should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
 
