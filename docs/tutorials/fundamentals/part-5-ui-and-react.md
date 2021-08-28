@@ -101,7 +101,7 @@ See **the official React-Redux docs at https://react-redux.js.org** for a comple
 
 ### Designing the Component Tree
 
-Much like we [designed the state structure](./part-3-state-actions-reducers.md#designing-the-state-structure) based on requirements, we can also design the overall set of UI components and how they related to each other in the application.
+Much like we [designed the state structure](./part-3-state-actions-reducers.md#designing-the-state-structure) based on requirements, we can also design the overall set of UI components and how they relate to each other in the application.
 
 Based on [the list of business requirements for the app](./part-3-state-actions-reducers.md#defining-requirements), at a minimum we're going to need this set of components:
 
