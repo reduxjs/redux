@@ -431,7 +431,7 @@ Notice that we're taking the `postId` we've read from the router match, and pass
 
 So how is all this data being cached, anyway? Let's click "View Post" for one of our post entries, then take a look at what's inside the Redux store at this point.
 
-**// FIXME** Screenshots of the DevTools
+![RTK Query data cached in the store state](/img/tutorials/essentials/devtools-rtkq-cache.png)
 
 We can see that we have a top-level `state.api` slice, as expected from the store setup. Inside of there is a section called `queries`, and it currently has two items. The key `getPosts(undefined)` represents the metadata and response contents for the request we made with the `getPosts` endpoint. Similarly, the key `getPost('abcd1234')` is for the specific request we just made for this one post.
 

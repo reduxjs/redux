@@ -130,7 +130,7 @@ Let's try this out and see what happens. Open up your browser's DevTools, go to 
 
 Now click "Edit Post" inside the single post page. The UI switches over to show `<EditPostForm>`, but this time there's no network request for the individual post. Why not?
 
-**// FIXME** Network tab screenshots
+![RTK Query network requests](/img/tutorials/essentials/devtools-cached-requests.png)
 
 **RTK Query allows multiple components to subscribe to the same data, and will ensure that each unique set of data is only fetched once.** Internally, RTK Query keeps a reference counter of active "subscriptions" to each endpoint + cache key combination. If Component A calls `useGetPostQuery(42)`, that data will be fetched. If Component B then mounts and also calls `useGetPostQuery(42)`, it's the exact same data being requested. The two hook usages will return the exact same results, including fetched `data` and loading status flags.
 
@@ -204,15 +204,18 @@ It's possible for the `result` argument in these callbacks to be undefined if th
 
 With those changes in place, let's go back and try editing a post again, with the Network tab open in the browser DevTools.
 
-**// FIXME** Network tab screenshot
+![RTK Query invalidation and refetching](/img/tutorials/essentials/devtools-cached-invalidation-refetching.png)
 
-When we save the edited post this time, we should see three requests happen:
+When we save the edited post this time, we should see two requests happen back-to-back:
 
 - The `POST /posts/:postId` from the `editPost` mutation
 - A `GET /posts/:postId` as the `getPost` query is refetched
+
+Then, if we click back to the main "Posts" tab, we should also see:
+
 - A `GET /posts` as the `getPosts` query is refetched
 
-Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed!
+Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed! Also, while RTK Query knew that the posts list data was invalid, it did _not_ refetch it right away because the component with `useGetPostsQuery()` wasn't being shown when we edited the post. When we opened the `<PostsList>` component again, RTK Query saw that the data was stale and refetched it.
 
 There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPost` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead.
 
@@ -268,7 +271,7 @@ export const {
 
 If we inspect the API slice object, it includes an `endpoints` field, with one endpoint object inside for each endpoint we've defined.
 
-**// FIXME** Screenshot of the API slice object in the DevTools
+![API slice endpoint contents](/img/tutorials/essentials/api-slice-contents.png)
 
 Each endpoint object contains:
 
@@ -391,8 +394,6 @@ export const { useGetUsersQuery } = extendedApiSlice
 export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 // highlight-end
 ```
-
-**// FIXME** `injectEndpoints` mutates the existing object and returns it, but that doesn't help TS types
 
 `injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns it**. The actual caching reducer and middleware that we originally added to the store still work okay as-is. At this point, `apiSlice` and `extendedApiSlice` are the same object, but
 it can be helpful to refer to the `extendedApiSlice` object instead of `apiSlice` here as a reminder to ourselves. (This is more important if you're using TypeScript, because only the `extendedApiSlice` value is has the added types for the new endpoints.)
@@ -658,7 +659,7 @@ export const ReactionButtons = ({ post }) => {
 
 Let's see this in action! Go to the main `<PostsList>`, and click one of the reactions to see what happens.
 
-**// FIXME** List screenshot
+![PostsList disabled while fetching](/img/tutorials/essentials/disabled-posts-fetching.png)
 
 Uh-oh. The entire `<PostsList>` component was grayed out, because we just refetched the _entire_ list of posts in response to that one post being updated. This is deliberately more visible because our mock API server is set to have a 2-second delay before responding, but even if the response is faster, this still isn't a good user experience.
 
