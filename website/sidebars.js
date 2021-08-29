@@ -21,7 +21,9 @@ module.exports = {
           'tutorials/essentials/part-3-data-flow',
           'tutorials/essentials/part-4-using-data',
           'tutorials/essentials/part-5-async-logic',
-          'tutorials/essentials/part-6-performance-normalization'
+          'tutorials/essentials/part-6-performance-normalization',
+          'tutorials/essentials/part-7-rtk-query-basics',
+          'tutorials/essentials/part-8-rtk-query-advanced'
         ]
       },
       {

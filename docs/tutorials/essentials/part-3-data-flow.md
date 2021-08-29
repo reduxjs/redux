@@ -83,6 +83,7 @@ ReactDOM.render(
 
 Let's take a quick look at what the initial project contains:
 
+- `/public`: the HTML host page template and other static files like icons
 - `/src`
   - `index.js`: the entry point file for the application. It renders the React-Redux `<Provider>` component and the main `<App>` component.
   - `App.js`: the main application component. Renders the top navbar and handles client-side routing for the other content.
