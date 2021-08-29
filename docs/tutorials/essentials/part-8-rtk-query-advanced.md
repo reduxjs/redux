@@ -175,7 +175,7 @@ export const apiSlice = createApi({
     getPost: builder.query({
       query: postId => `/posts/${postId}`,
       // highlight-start
-      providesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }]
+      providesTags: (result, error, arg) => [{ type: 'Post', id: arg }]
       // highlight-end
     }),
     addNewPost: builder.mutation({
@@ -200,7 +200,7 @@ export const apiSlice = createApi({
 })
 ```
 
-It's possible for the `result` argument in these callbacks to be undefined if the response has no data or there's an error, so we have to handle that safely. For `getPosts` we can do that by using a default argument array value to map over, and for `getPost` we just return an empty array if `result` isn't there. For `editPost`, we know the ID of the post from the partial post object that was passed into the trigger function, so we can read it from there.
+It's possible for the `result` argument in these callbacks to be undefined if the response has no data or there's an error, so we have to handle that safely. For `getPosts` we can do that by using a default argument array value to map over, and for `getPost` we're already returning a single-item array based on the argument ID. For `editPost`, we know the ID of the post from the partial post object that was passed into the trigger function, so we can read it from there.
 
 With those changes in place, let's go back and try editing a post again, with the Network tab open in the browser DevTools.
 
@@ -208,16 +208,16 @@ With those changes in place, let's go back and try editing a post again, with th
 
 When we save the edited post this time, we should see two requests happen back-to-back:
 
-- The `POST /posts/:postId` from the `editPost` mutation
+- The `PATCH /posts/:postId` from the `editPost` mutation
 - A `GET /posts/:postId` as the `getPost` query is refetched
 
 Then, if we click back to the main "Posts" tab, we should also see:
 
 - A `GET /posts` as the `getPosts` query is refetched
 
-Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed! Also, while RTK Query knew that the posts list data was invalid, it did _not_ refetch it right away because the component with `useGetPostsQuery()` wasn't being shown when we edited the post. When we opened the `<PostsList>` component again, RTK Query saw that the data was stale and refetched it.
+Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed! Meanwhile, as we were editing the post, the cache removal timer for the `getPosts` data expired, so it was removed from the cache. When we opened the `<PostsList>` component again, RTK Query saw that it did not have the data in cache and refetched it.
 
-There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPost` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead.
+There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPost` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead. The RTK Query docs have [a table that describes what will happen if certain general/specific tag combinations are invalidated](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#tag-invalidation-behavior).
 
 :::info
 
@@ -305,6 +305,12 @@ ReactDOM.render(
 ```
 
 This dispatch happens automatically inside the query hooks, but we can start it manually if needed.
+
+:::caution
+
+Manually dispatching an RTKQ request thunk will create a subscription entry, but it's then up to you to [unsubscribe from that data later](https://redux-toolkit.js.org/rtk-query/usage/usage-without-react-hooks#removing-a-subscription) - otherwise the data stays in the cache permanently. In this case, we always need user data, so we can skip unsuscribing.
+
+:::
 
 ### Selecting Users Data
 
@@ -395,8 +401,7 @@ export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 // highlight-end
 ```
 
-`injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns it**. The actual caching reducer and middleware that we originally added to the store still work okay as-is. At this point, `apiSlice` and `extendedApiSlice` are the same object, but
-it can be helpful to refer to the `extendedApiSlice` object instead of `apiSlice` here as a reminder to ourselves. (This is more important if you're using TypeScript, because only the `extendedApiSlice` value is has the added types for the new endpoints.)
+`injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns it**. The actual caching reducer and middleware that we originally added to the store still work okay as-is. At this point, `apiSlice` and `extendedApiSlice` are the same object, but it can be helpful to refer to the `extendedApiSlice` object instead of `apiSlice` here as a reminder to ourselves. (This is more important if you're using TypeScript, because only the `extendedApiSlice` value has the added types for the new endpoints.)
 
 At the moment, the only file that references the `getUsers` endpoint is our index file, which is dispatching the `initiate` thunk. We need to update that to import the extended API slice instead:
 
@@ -410,6 +415,8 @@ worker.start({ onUnhandledRequest: 'bypass' })
 // highlight-next-line
 store.dispatch(extendedApiSlice.endpoints.getUsers.initiate())
 ```
+
+Alternately, you could just export the specific endpoints themselves from the slice file.
 
 ## Manipulating Response Data
 
@@ -1060,7 +1067,13 @@ As we've seen, RTK Query includes some powerful options for controlling how we m
 
 Let's take one last look at the whole application in action:
 
-**// FIXME** CodeSandbox here
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-6-rtkqConversion/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 :::tip Summary
 

@@ -676,7 +676,13 @@ Note that there's nothing special about the literal string `'Post'` here. We cou
 
 With RTK Query, the actual details of how to manage data fetching, caching, and loading state are abstracted away. This simplifies application code considerably, and lets us focus on higher-level concerns about intended app behavior instead. Since RTK Query is implemented using the same Redux Toolkit APIs we've already seen, we can still use the Redux DevTools to view the changes in our state over time.
 
-**// FIXME** CodeSandbox here
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-5-createApi/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  title="redux-essentials-example-app"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 :::tip Summary
 
