@@ -361,7 +361,7 @@ const initialState = {
 // highlight-start
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   const response = await client.get('/fakeApi/posts')
-  return response.posts
+  return response.data
 })
 // highlight-end
 ```
@@ -373,7 +373,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 
 The payload creator will usually make an AJAX call of some kind, and can either return the `Promise` from the AJAX call directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use `Promise`s while using standard `try/catch` logic instead of `somePromise.then()` chains.
 
-In this case, we pass in `'posts/fetchPosts'` as the action type prefix. Our payload creation callback waits for the API call to return a response. The response object looks like `{posts: []}`, and we want our dispatched Redux action to have a payload that is _just_ the array of posts. So, we extract `response.posts`, and return that from the callback.
+In this case, we pass in `'posts/fetchPosts'` as the action type prefix. Our payload creation callback waits for the API call to return a response. The response object looks like `{posts: []}`, and we want our dispatched Redux action to have a payload that is _just_ the array of posts. So, we extract `response.data`, and return that from the callback.
 
 If we try calling `dispatch(fetchPosts())`, the `fetchPosts` thunk will first dispatch an action type of `'posts/fetchPosts/pending'`:
 
@@ -381,7 +381,7 @@ If we try calling `dispatch(fetchPosts())`, the `fetchPosts` thunk will first di
 
 We can listen for this action in our reducer and mark the request status as `'loading'`.
 
-Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.posts` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
+Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.data` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
 
 ![`createAsyncThunk`: posts pending action](/img/tutorials/essentials/devtools-posts-fulfilled.png)
 
@@ -537,7 +537,7 @@ In this case, we need to listen for the "pending" and "fulfilled" action types d
 ```js
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   const response = await client.get('/fakeApi/posts')
-  return response.posts
+  return response.data
 })
 
 const postsSlice = createSlice({
@@ -682,7 +682,7 @@ const initialState = []
 // highlight-start
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   const response = await client.get('/fakeApi/users')
-  return response.users
+  return response.data
 })
 // highlight-end
 
@@ -749,7 +749,7 @@ export const addNewPost = createAsyncThunk(
     // We send the initial data to the fake API server
     const response = await client.post('/fakeApi/posts', { post: initialPost })
     // The response includes the complete post object, including unique ID
-    return response.post
+    return response.data
   }
 )
 // highlight-end
