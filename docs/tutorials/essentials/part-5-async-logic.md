@@ -747,7 +747,7 @@ export const addNewPost = createAsyncThunk(
   // The payload creator receives the partial `{title, content, user}` object
   async initialPost => {
     // We send the initial data to the fake API server
-    const response = await client.post('/fakeApi/posts', { post: initialPost })
+    const response = await client.post('/fakeApi/posts', initialPost)
     // The response includes the complete post object, including unique ID
     return response.data
   }
