@@ -6,13 +6,10 @@ import rollup from 'rollup'
 import path from 'path'
 import fs from 'fs-extra'
 import ts from 'typescript'
-import { RawSourceMap, SourceMapConsumer } from 'source-map'
+import type { RawSourceMap } from 'source-map'
 import merge from 'merge-source-map'
-import {
-  Extractor,
-  ExtractorConfig,
-  ExtractorResult,
-} from '@microsoft/api-extractor'
+import type { ExtractorResult } from '@microsoft/api-extractor'
+import { Extractor, ExtractorConfig } from '@microsoft/api-extractor'
 import yargs from 'yargs/yargs'
 
 import { extractInlineSourcemap, removeInlineSourceMap } from './sourcemap'
@@ -201,12 +198,14 @@ async function bundle(options: BuildOptions & EntryPointOptions) {
     const origin = chunk.text
     const sourcemap = extractInlineSourcemap(origin)
     const result = ts.transpileModule(removeInlineSourceMap(origin), {
+      fileName: chunk.path.replace(/.js$/, '.ts'),
       compilerOptions: {
         sourceMap: true,
         module:
           format !== 'cjs' ? ts.ModuleKind.ES2015 : ts.ModuleKind.CommonJS,
         target: esVersion,
       },
+      fileName: chunk.path
     })
 
     const mergedSourcemap = merge(sourcemap, result.sourceMapText)
@@ -217,7 +216,11 @@ async function bundle(options: BuildOptions & EntryPointOptions) {
       const transformResult = await terser.minify(
         appendInlineSourceMap(code, mapping),
         {
-          sourceMap: { content: 'inline', asObject: true } as any,
+          sourceMap: {
+            content: 'inline',
+            asObject: true,
+            url: path.basename(chunk.path) + '.map',
+          } as any,
           output: {
             comments: false,
           },
