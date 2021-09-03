@@ -137,6 +137,16 @@ const anyAction = { type: 'foo' } as AnyAction
   expectType<RejectValue>(unwrapResult(returned))
 })()
 
+/**
+ * regression #1156: union return values fall back to allowing only single member
+ */
+;(async () => {
+  const fn = createAsyncThunk('session/isAdmin', async () => {
+    const response: boolean = false
+    return response
+  })
+})()
+
 {
   interface Item {
     name: string

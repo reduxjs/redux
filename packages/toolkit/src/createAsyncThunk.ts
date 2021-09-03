@@ -177,7 +177,7 @@ type GetSerializedErrorType<ThunkApiConfig> = ThunkApiConfig extends {
   ? GetSerializedErrorType
   : SerializedError
 
-type MaybePromise<T> = T | Promise<T>
+type MaybePromise<T> = T | Promise<T> | (T extends any ? Promise<T> : never)
 
 /**
  * A type describing the return value of the `payloadCreator` argument to `createAsyncThunk`.
