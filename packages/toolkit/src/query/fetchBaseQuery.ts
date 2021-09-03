@@ -236,15 +236,29 @@ export function fetchBaseQuery({
 
     meta.response = responseClone
 
-    let resultData
+    let resultData: any
+    let responseText: string = ''
     try {
-      resultData = await handleResponse(response, responseHandler)
+      let handleResponseError
+      await Promise.all([
+        handleResponse(response, responseHandler).then(
+          (r) => (resultData = r),
+          (e) => (handleResponseError = e)
+        ),
+        // see https://github.com/node-fetch/node-fetch/issues/665#issuecomment-538995182
+        // we *have* to "use up" both streams at the same time or they will stop running in node-fetch scenarios
+        responseClone.text().then(
+          (r) => (responseText = r),
+          () => {}
+        ),
+      ])
+      if (handleResponseError) throw handleResponseError
     } catch (e) {
       return {
         error: {
           status: 'PARSING_ERROR',
           originalStatus: response.status,
-          data: await responseClone.clone().text(),
+          data: responseText,
           error: String(e),
         },
         meta,
