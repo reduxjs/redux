@@ -102,7 +102,7 @@ Because reducers are pure functions, testing them should be straightforward. Cal
 #### Example
 
 ```js
-import { createReducer } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = [
   {
