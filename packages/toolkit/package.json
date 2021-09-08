@@ -98,7 +98,7 @@
     "query"
   ],
   "dependencies": {
-    "immer": "^9.0.1",
+    "immer": "^9.0.6",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0"
