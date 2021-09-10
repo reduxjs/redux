@@ -818,7 +818,7 @@ test('`condition` will see state changes from a synchonously invoked asyncThunk'
   expect(onStart).toHaveBeenCalledTimes(2)
 })
 
-describe.only('meta', () => {
+describe('meta', () => {
   const getNewStore = () =>
     configureStore({
       reducer(actions = [], action) {
