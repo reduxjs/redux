@@ -56,7 +56,7 @@ Since those are types, it's safe to export them directly from your store setup f
 import { configureStore } from '@reduxjs/toolkit'
 // ...
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     posts: postsReducer,
     comments: commentsReducer,
