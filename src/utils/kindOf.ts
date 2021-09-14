@@ -30,7 +30,11 @@ export function miniKindOf(val: any): string {
   }
 
   // other
-  return type.slice(8, -1).toLowerCase().replace(/\s/g, '')
+  return Object.prototype.toString
+    .call(val)
+    .slice(8, -1)
+    .toLowerCase()
+    .replace(/\s/g, '')
 }
 
 function ctorName(val: any): string | null {
