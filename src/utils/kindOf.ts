@@ -3,7 +3,7 @@ export function miniKindOf(val: any): string {
   if (val === void 0) return 'undefined'
   if (val === null) return 'null'
 
-  let type = typeof val
+  const type = typeof val
   switch (type) {
     case 'boolean':
     case 'string':
@@ -30,7 +30,11 @@ export function miniKindOf(val: any): string {
   }
 
   // other
-  return Object.prototype.toString.call(val).slice(8, -1).toLowerCase().replace(/\s/g, '')
+  return Object.prototype.toString
+    .call(val)
+    .slice(8, -1)
+    .toLowerCase()
+    .replace(/\s/g, '')
 }
 
 function ctorName(val: any): string | null {
