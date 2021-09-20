@@ -66,7 +66,7 @@ export const apiSlice = createApi({
     // highlight-start
     editPost: builder.mutation({
       query: post => ({
-        url: `posts/${post.id}`,
+        url: `/posts/${post.id}`,
         method: 'PATCH',
         body: post
       })
@@ -308,7 +308,7 @@ This dispatch happens automatically inside the query hooks, but we can start it 
 
 :::caution
 
-Manually dispatching an RTKQ request thunk will create a subscription entry, but it's then up to you to [unsubscribe from that data later](https://redux-toolkit.js.org/rtk-query/usage/usage-without-react-hooks#removing-a-subscription) - otherwise the data stays in the cache permanently. In this case, we always need user data, so we can skip unsuscribing.
+Manually dispatching an RTKQ request thunk will create a subscription entry, but it's then up to you to [unsubscribe from that data later](https://redux-toolkit.js.org/rtk-query/usage/usage-without-react-hooks#removing-a-subscription) - otherwise the data stays in the cache permanently. In this case, we always need user data, so we can skip unsubscribing.
 
 :::
 
