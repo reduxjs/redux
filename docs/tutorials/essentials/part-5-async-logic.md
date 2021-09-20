@@ -785,8 +785,6 @@ We can have our component logic wait for the async thunk to finish, and check th
 ```js title="features/posts/AddPostForm.js"
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// highlight-next-line
-import { unwrapResult } from '@reduxjs/toolkit'
 
 // highlight-next-line
 import { addNewPost } from './postsSlice'
