@@ -31,7 +31,7 @@ In this section, we'll convert our social media app to fetch the posts and users
 
 ### Example REST API and Client
 
-To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.js`.
+To keep the example project isolated but realistic, the initial project setup already includes a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.js`.
 
 The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.js`.
 
@@ -705,27 +705,30 @@ export default usersSlice.reducer
 We only need to fetch the list of users once, and we want to do it right when the application starts. We can do that in our `index.js` file, and directly dispatch the `fetchUsers` thunk because we have the `store` right there:
 
 ```js title="index.js"
-// omit imports
+// omit other imports
 
 // highlight-next-line
 import { fetchUsers } from './features/users/usersSlice'
 
 import { worker } from './api/server'
 
-// Start our mock API server
-worker.start({ onUnhandledRequest: 'bypass' })
+async function main() {
+  // Start our mock API server
+  await worker.start({ onUnhandledRequest: 'bypass' })
 
-// highlight-next-line
-store.dispatch(fetchUsers())
+  // highlight-next-line
+  store.dispatch(fetchUsers())
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+  ReactDOM.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
+}
+main()
 ```
 
 Now, each of the posts should be showing a username again, and we should also have that same list of users shown in the "Author" dropdown in our `<AddPostForm>`.
