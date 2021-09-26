@@ -96,6 +96,12 @@ Writing immutable update logic by hand is frequently difficult and prone to erro
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 
+### Avoid hand-writing API Caching Logic
+
+When writing API caching logic by hand, you might end up with a lot of very repetitive code and no real "business logic" in that code.  
+Use [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) (which is part of Redux Toolkit) or another API cache library like [React Query](https://react-query.tanstack.com/), [SWR](https://swr.vercel.app/), [urql](https://formidable.com/open-source/urql/) or [Apollo Client](https://www.apollographql.com/docs/react/) to handle cache state for you instead.  
+Only handle caching logic yourself when you have specific business logic attached to that data that cannot be sufficiently covered by one of those libraries.
+
 ### Structure Files as Feature Folders with Single-File Logic
 
 Redux itself does not care about how your application's folders and files are structured. However, co-locating logic for a given feature in one place typically makes it easier to maintain that code.
