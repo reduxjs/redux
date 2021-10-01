@@ -864,6 +864,7 @@ describe('hooks tests', () => {
           expectType<string>(res.requestId)
           expectType<() => void>(res.abort)
           expectType<() => Promise<{ name: string }>>(res.unwrap)
+          expectType<() => void>(res.reset)
           expectType<() => void>(res.unsubscribe)
 
           // abort the mutation immediately to force an error
@@ -1938,7 +1939,7 @@ describe('hooks with createApi defaults set', () => {
         increment.matchPending,
         increment.matchFulfilled,
         increment.matchPending,
-        api.internalActions.unsubscribeMutationResult.match,
+        api.internalActions.removeMutationResult.match,
         increment.matchFulfilled
       )
     })
