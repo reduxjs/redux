@@ -15,7 +15,9 @@ const api = createApi({
   baseQuery: (...args: any[]) => {
     const result = baseQuery(...args)
     if ('then' in result)
-      return result.then((data: any) => ({ data, meta: 'meta' }))
+      return result
+        .then((data: any) => ({ data, meta: 'meta' }))
+        .catch((e: any) => ({ error: e }))
     return { data: result, meta: 'meta' }
   },
   tagTypes: ['Post'],
@@ -38,7 +40,7 @@ const api = createApi({
         )
         queryFulfilled.catch(undo)
       },
-      invalidatesTags: ['Post'],
+      invalidatesTags: (result) => (result ? ['Post'] : []),
     }),
   }),
 })
@@ -119,8 +121,9 @@ describe('basic lifecycle', () => {
     expect(onSuccess).not.toHaveBeenCalled()
     await act(() => waitMs(5))
     expect(onError).toHaveBeenCalledWith({
-      error: { message: 'error' },
-      isUnhandledError: true,
+      error: 'error',
+      isUnhandledError: false,
+      meta: undefined,
     })
     expect(onSuccess).not.toHaveBeenCalled()
   })

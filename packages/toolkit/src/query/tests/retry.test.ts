@@ -21,7 +21,7 @@ describe('configuration', () => {
       ReturnType<BaseQueryFn>,
       Parameters<BaseQueryFn>
     >()
-    baseBaseQuery.mockRejectedValue(new Error('rejected'))
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(baseBaseQuery)
     const api = createApi({
@@ -46,7 +46,7 @@ describe('configuration', () => {
       ReturnType<BaseQueryFn>,
       Parameters<BaseQueryFn>
     >()
-    baseBaseQuery.mockRejectedValue(new Error('rejected'))
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(baseBaseQuery, { maxRetries: 3 })
     const api = createApi({
@@ -71,7 +71,7 @@ describe('configuration', () => {
       ReturnType<BaseQueryFn>,
       Parameters<BaseQueryFn>
     >()
-    baseBaseQuery.mockRejectedValue(new Error('rejected'))
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(baseBaseQuery, { maxRetries: 3 })
     const api = createApi({
@@ -109,8 +109,8 @@ describe('configuration', () => {
       Parameters<BaseQueryFn>
     >()
     baseBaseQuery
-      .mockRejectedValueOnce(new Error('rejected'))
-      .mockRejectedValueOnce(new Error('rejected'))
+      .mockResolvedValueOnce({ error: 'rejected' })
+      .mockResolvedValueOnce({ error: 'rejected' })
       .mockResolvedValue({ data: { success: true } })
 
     const baseQuery = retry(baseBaseQuery, { maxRetries: 10 })
@@ -136,7 +136,7 @@ describe('configuration', () => {
       ReturnType<BaseQueryFn>,
       Parameters<BaseQueryFn>
     >()
-    baseBaseQuery.mockRejectedValue(new Error('rejected'))
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(baseBaseQuery, { maxRetries: 3 })
     const api = createApi({
@@ -263,7 +263,7 @@ describe('configuration', () => {
       ReturnType<BaseQueryFn>,
       Parameters<BaseQueryFn>
     >()
-    baseBaseQuery.mockRejectedValue(new Error('rejected'))
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(retry(baseBaseQuery, { maxRetries: 3 }), {
       maxRetries: 3,
@@ -291,7 +291,7 @@ describe('configuration', () => {
       ReturnType<BaseQueryFn>,
       Parameters<BaseQueryFn>
     >()
-    baseBaseQuery.mockRejectedValue(new Error('rejected'))
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(baseBaseQuery, {
       maxRetries: 8,

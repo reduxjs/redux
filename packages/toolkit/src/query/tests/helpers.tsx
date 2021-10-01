@@ -12,6 +12,12 @@ import type { Reducer } from 'react'
 import React, { useCallback } from 'react'
 import { Provider } from 'react-redux'
 
+import {
+  mockConsole,
+  createConsole,
+  getLog,
+} from 'console-testing-library/pure'
+
 export const ANY = 0 as any
 
 export const DEFAULT_DELAY_MS = 150
@@ -103,6 +109,54 @@ expect.extend({
       message: () => `All actions match the sequence.`,
       pass: true,
     }
+  },
+})
+
+declare global {
+  namespace jest {
+    interface Matchers<R> {
+      toHaveConsoleOutput(expectedOutput: string): Promise<R>
+    }
+  }
+}
+
+function normalize(str: string) {
+  return str
+    .normalize()
+    .replace(/\s*\r?\n\r?\s*/g, '')
+    .trim()
+}
+
+expect.extend({
+  async toHaveConsoleOutput(
+    fn: () => void | Promise<void>,
+    expectedOutput: string
+  ) {
+    const restore = mockConsole(createConsole())
+    await fn()
+    const log = getLog().log
+    restore()
+
+    if (normalize(log) === normalize(expectedOutput))
+      return {
+        message: () => `Console output matches 
+===
+${expectedOutput}
+===`,
+        pass: true,
+      }
+    else
+      return {
+        message: () => `Console output 
+===
+${log}
+=== 
+does not match 
+===
+${expectedOutput}
+===`,
+        pass: false,
+      }
   },
 })
 
