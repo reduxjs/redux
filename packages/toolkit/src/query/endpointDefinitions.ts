@@ -60,7 +60,8 @@ interface EndpointDefinitionWithQuery<
    */
   transformResponse?(
     baseQueryReturnValue: BaseQueryResult<BaseQuery>,
-    meta: BaseQueryMeta<BaseQuery>
+    meta: BaseQueryMeta<BaseQuery>,
+    arg: QueryArg
   ): ResultType | Promise<ResultType>
 }
 
