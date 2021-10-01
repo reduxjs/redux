@@ -14,3 +14,5 @@ process.on('unhandledRejection', (error) => {
   // eslint-disable-next-line no-undef
   fail(error)
 })
+
+process.env.NODE_ENV = 'development'

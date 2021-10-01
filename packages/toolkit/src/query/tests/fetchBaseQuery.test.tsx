@@ -765,11 +765,12 @@ describe('FormData', () => {
 
 describe('still throws on completely unexpected errors', () => {
   test('', async () => {
+    const error = new Error('some unexpected error')
     const req = baseQuery(
       {
         url: '/success',
         validateStatus() {
-          throw new Error('some unexpected error')
+          throw error
         },
       },
       {
@@ -781,8 +782,6 @@ describe('still throws on completely unexpected errors', () => {
       {}
     )
     expect(req).toBeInstanceOf(Promise)
-    await expect(req).rejects.toMatchInlineSnapshot(
-      `[Error: some unexpected error]`
-    )
+    await expect(req).rejects.toBe(error)
   })
 })
