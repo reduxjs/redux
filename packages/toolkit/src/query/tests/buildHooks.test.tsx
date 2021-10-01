@@ -906,6 +906,63 @@ describe('hooks tests', () => {
       expect(screen.queryByText(/Successfully updated user/i)).toBeNull()
       screen.getByText('Request was aborted')
     })
+
+    test('useMutation return value contains originalArgs', async () => {
+      const { result } = renderHook(api.endpoints.updateUser.useMutation, {
+        wrapper: storeRef.wrapper,
+      })
+      const arg = { name: 'Foo' }
+
+      const firstRenderResult = result.current
+      expect(firstRenderResult[1].originalArgs).toBe(undefined)
+      act(() => void firstRenderResult[0](arg))
+      const secondRenderResult = result.current
+      expect(firstRenderResult[1].originalArgs).toBe(undefined)
+      expect(secondRenderResult[1].originalArgs).toBe(arg)
+    })
+
+    test('`reset` sets state back to original state', async () => {
+      function User() {
+        const [updateUser, result] = api.endpoints.updateUser.useMutation()
+        return (
+          <>
+            <span>
+              {result.isUninitialized
+                ? 'isUninitialized'
+                : result.isSuccess
+                ? 'isSuccess'
+                : 'other'}
+            </span>
+            <span>{result.originalArgs?.name}</span>
+            <button onClick={() => updateUser({ name: 'Yay' })}>trigger</button>
+            <button onClick={result.reset}>reset</button>
+          </>
+        )
+      }
+      render(<User />, { wrapper: storeRef.wrapper })
+
+      await screen.findByText(/isUninitialized/i)
+      expect(screen.queryByText('Yay')).toBeNull()
+      expect(Object.keys(storeRef.store.getState().api.mutations).length).toBe(
+        0
+      )
+
+      userEvent.click(screen.getByRole('button', { name: 'trigger' }))
+
+      await screen.findByText(/isSuccess/i)
+      expect(screen.queryByText('Yay')).not.toBeNull()
+      expect(Object.keys(storeRef.store.getState().api.mutations).length).toBe(
+        1
+      )
+
+      userEvent.click(screen.getByRole('button', { name: 'reset' }))
+
+      await screen.findByText(/isUninitialized/i)
+      expect(screen.queryByText('Yay')).toBeNull()
+      expect(Object.keys(storeRef.store.getState().api.mutations).length).toBe(
+        0
+      )
+    })
   })
 
   describe('usePrefetch', () => {
@@ -1880,8 +1937,8 @@ describe('hooks with createApi defaults set', () => {
         api.internalActions.middlewareRegistered.match,
         increment.matchPending,
         increment.matchFulfilled,
-        api.internalActions.unsubscribeMutationResult.match,
         increment.matchPending,
+        api.internalActions.unsubscribeMutationResult.match,
         increment.matchFulfilled
       )
     })
@@ -1964,19 +2021,6 @@ describe('hooks with createApi defaults set', () => {
         expect(screen.getByTestId('status').textContent).toBe('fulfilled')
       )
       expect(getRenderCount()).toBe(5)
-    })
-
-    test('useMutation return value contains originalArgs', async () => {
-      const { result } = renderHook(api.endpoints.increment.useMutation, {
-        wrapper: storeRef.wrapper,
-      })
-
-      const firstRenderResult = result.current
-      expect(firstRenderResult[1].originalArgs).toBe(undefined)
-      firstRenderResult[0](5)
-      const secondRenderResult = result.current
-      expect(firstRenderResult[1].originalArgs).toBe(undefined)
-      expect(secondRenderResult[1].originalArgs).toBe(5)
     })
 
     it('useMutation with selectFromResult option has a type error if the result is not an object', async () => {

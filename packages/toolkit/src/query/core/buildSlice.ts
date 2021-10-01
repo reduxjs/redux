@@ -172,7 +172,7 @@ export function buildSlice({
     name: `${reducerPath}/mutations`,
     initialState: initialState as MutationState<any>,
     reducers: {
-      unsubscribeMutationResult(
+      removeMutationResult(
         draft,
         action: PayloadAction<MutationSubstateIdentifier>
       ) {
@@ -379,6 +379,8 @@ export function buildSlice({
     ...querySlice.actions,
     ...subscriptionSlice.actions,
     ...mutationSlice.actions,
+    /** @deprecated has been renamed to `removeMutationResult` */
+    unsubscribeMutationResult: mutationSlice.actions.removeMutationResult,
     resetApiState,
   }
 
