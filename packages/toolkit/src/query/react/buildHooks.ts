@@ -406,16 +406,17 @@ const queryStatePreSelector = (
   lastResult: UseQueryStateDefaultResult<any>
 ): UseQueryStateDefaultResult<any> => {
   // data is the last known good request result we have tracked - or if none has been tracked yet the last good result for the current args
-  const data =
-    (currentState.isSuccess ? currentState.data : lastResult?.data) ??
-    currentState.data
+  let data = currentState.isSuccess ? currentState.data : lastResult?.data
+  if (data === undefined) data = currentState.data
+
+  const hasData = data !== undefined
 
   // isFetching = true any time a request is in flight
   const isFetching = currentState.isLoading
   // isLoading = true only when loading while no data is present yet (initial load with no data in the cache)
-  const isLoading = !data && isFetching
+  const isLoading = !hasData && isFetching
   // isSuccess = true when data is present
-  const isSuccess = currentState.isSuccess || (isFetching && !!data)
+  const isSuccess = currentState.isSuccess || (isFetching && hasData)
 
   return {
     ...currentState,
@@ -440,7 +441,7 @@ const noPendingQueryStateSelector: QueryStateSelector<any, any> = (
       ...selected,
       isUninitialized: false,
       isFetching: true,
-      isLoading: true,
+      isLoading: selected.data !== undefined ? false : true,
       status: QueryStatus.pending,
     } as any
   }
