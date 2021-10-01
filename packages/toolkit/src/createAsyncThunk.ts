@@ -286,7 +286,7 @@ export type AsyncThunkOptions<
   condition?(
     arg: ThunkArg,
     api: Pick<GetThunkAPI<ThunkApiConfig>, 'getState' | 'extra'>
-  ): boolean | undefined
+  ): MaybePromise<boolean | undefined>
   /**
    * If `condition` returns `false`, the asyncThunk will be skipped.
    * This option allows you to control whether a `rejected` action with `meta.condition == false`
@@ -553,11 +553,11 @@ If you want to use the AbortController to react to \`abort\` events, please cons
       const promise = (async function () {
         let finalAction: ReturnType<typeof fulfilled | typeof rejected>
         try {
-          if (
-            options &&
-            options.condition &&
-            options.condition(arg, { getState, extra }) === false
-          ) {
+          let conditionResult = options?.condition?.(arg, { getState, extra })
+          if (isThenable(conditionResult)) {
+            conditionResult = await conditionResult
+          }
+          if (conditionResult === false) {
             // eslint-disable-next-line no-throw-literal
             throw {
               name: 'ConditionError',
@@ -678,3 +678,11 @@ export function unwrapResult<R extends UnwrappableAction>(
 type WithStrictNullChecks<True, False> = undefined extends boolean
   ? False
   : True
+
+function isThenable(value: any): value is PromiseLike<any> {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    typeof value.then === 'function'
+  )
+}
