@@ -307,6 +307,12 @@ export type UseQueryStateResult<
 type UseQueryStateBaseResult<D extends QueryDefinition<any, any, any, any>> =
   QuerySubState<D> & {
     /**
+     * Where `data` tries to hold data as much as possible, also re-using
+     * data from the last arguments passed into the hook, this property
+     * will always contain the received data from the query, for the current query arguments.
+     */
+    currentData?: ResultTypeFrom<D>
+    /**
      * Query has not started yet.
      */
     isUninitialized: false
@@ -342,10 +348,20 @@ type UseQueryStateDefaultResult<D extends QueryDefinition<any, any, any, any>> =
         | { isLoading: true; isFetching: boolean; data: undefined }
         | ({
             isSuccess: true
-            isFetching: boolean
+            isFetching: true
             error: undefined
           } & Required<
             Pick<UseQueryStateBaseResult<D>, 'data' | 'fulfilledTimeStamp'>
+          >)
+        | ({
+            isSuccess: true
+            isFetching: false
+            error: undefined
+          } & Required<
+            Pick<
+              UseQueryStateBaseResult<D>,
+              'data' | 'fulfilledTimeStamp' | 'currentData'
+            >
           >)
         | ({ isError: true } & Required<
             Pick<UseQueryStateBaseResult<D>, 'error'>
@@ -421,6 +437,7 @@ const queryStatePreSelector = (
   return {
     ...currentState,
     data,
+    currentData: currentState.data,
     isFetching,
     isLoading,
     isSuccess,
