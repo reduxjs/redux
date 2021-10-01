@@ -494,18 +494,19 @@ describe('hooks tests', () => {
 
       let { unmount } = render(<User />, { wrapper: storeRef.wrapper })
 
+      expect(screen.getByTestId('isFetching').textContent).toBe('false')
+
       // skipped queries do nothing by default, so we need to toggle that to get a cached result
       fireEvent.click(screen.getByText('change skip'))
 
       await waitFor(() =>
         expect(screen.getByTestId('isFetching').textContent).toBe('true')
       )
-      await waitFor(() =>
-        expect(screen.getByTestId('isFetching').textContent).toBe('false')
-      )
-      await waitFor(() =>
+
+      await waitFor(() => {
         expect(screen.getByTestId('amount').textContent).toBe('1')
-      )
+        expect(screen.getByTestId('isFetching').textContent).toBe('false')
+      })
 
       unmount()
 

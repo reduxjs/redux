@@ -31,8 +31,9 @@ import type {
   QueryActionCreatorResult,
   MutationActionCreatorResult,
 } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
+import type { SerializeQueryArgs } from '@reduxjs/toolkit/dist/query/defaultSerializeQueryArgs'
 import { shallowEqual } from 'react-redux'
-import type { Api } from '@reduxjs/toolkit/dist/query/apiTypes'
+import type { Api, ApiContext } from '@reduxjs/toolkit/dist/query/apiTypes'
 import type {
   Id,
   NoInfer,
@@ -45,9 +46,10 @@ import type {
   PrefetchOptions,
 } from '@reduxjs/toolkit/dist/query/core/module'
 import type { ReactHooksModuleOptions } from './module'
-import { useShallowStableValue } from './useShallowStableValue'
+import { useStableQueryArgs } from './useSerializedStableValue'
 import type { UninitializedValue } from './constants'
 import { UNINITIALIZED_VALUE } from './constants'
+import { useShallowStableValue } from './useShallowStableValue'
 
 // Copy-pasted from React-Redux
 export const useIsomorphicLayoutEffect =
@@ -482,9 +484,13 @@ type GenericPrefetchThunk = (
 export function buildHooks<Definitions extends EndpointDefinitions>({
   api,
   moduleOptions: { batch, useDispatch, useSelector, useStore },
+  serializeQueryArgs,
+  context,
 }: {
   api: Api<any, Definitions, any, any, CoreModule>
   moduleOptions: Required<ReactHooksModuleOptions>
+  serializeQueryArgs: SerializeQueryArgs<any>
+  context: ApiContext<Definitions>
 }) {
   return { buildQueryHooks, buildMutationHook, usePrefetch }
 
@@ -523,7 +529,12 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         Definitions
       >
       const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
-      const stableArg = useShallowStableValue(skip ? skipToken : arg)
+      const stableArg = useStableQueryArgs(
+        skip ? skipToken : arg,
+        serializeQueryArgs,
+        context.endpointDefinitions[name],
+        name
+      )
       const stableSubscriptionOptions = useShallowStableValue({
         refetchOnReconnect,
         refetchOnFocus,
@@ -658,7 +669,12 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         QueryDefinition<any, any, any, any, any>,
         Definitions
       >
-      const stableArg = useShallowStableValue(skip ? skipToken : arg)
+      const stableArg = useStableQueryArgs(
+        skip ? skipToken : arg,
+        serializeQueryArgs,
+        context.endpointDefinitions[name],
+        name
+      )
 
       const lastValue = useRef<any>()
 
