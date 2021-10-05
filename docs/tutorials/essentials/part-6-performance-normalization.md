@@ -361,8 +361,8 @@ const notificationsSlice = createSlice({
     }
     // highlight-end
   },
-  extraReducers(builder) {
-    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
+  extraReducers: {
+    [fetchNotifications.fulfilled]: (state, action) => {
       state.push(...action.payload)
       // highlight-start
       state.forEach(notification => {
@@ -372,7 +372,7 @@ const notificationsSlice = createSlice({
       // highlight-end
       // Sort with newest first
       state.sort((a, b) => b.date.localeCompare(a.date))
-    })
+    }
   }
 })
 
