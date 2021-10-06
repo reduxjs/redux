@@ -177,12 +177,13 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: [],
   reducers: {},
-  extraReducers: {
-    [fetchNotifications.fulfilled]: (state, action) => {
-      state.push(...action.payload)
-      // Sort with newest first
-      state.sort((a, b) => b.date.localeCompare(a.date))
-    }
+  extraReducers(builder {
+    builder
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
+        state.push(...action.payload)
+        // Sort with newest first
+        state.sort((a, b) => b.date.localeCompare(a.date))
+      }
   }
 })
 
@@ -361,18 +362,19 @@ const notificationsSlice = createSlice({
     }
     // highlight-end
   },
-  extraReducers: {
-    [fetchNotifications.fulfilled]: (state, action) => {
-      state.push(...action.payload)
-      // highlight-start
-      state.forEach(notification => {
-        // Any notifications we've read are no longer new
-        notification.isNew = !notification.read
-      })
-      // highlight-end
-      // Sort with newest first
-      state.sort((a, b) => b.date.localeCompare(a.date))
-    }
+  extraReducers(builder) {
+    builder
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.push(...action.payload)
+        // highlight-start
+        state.forEach(notification => {
+          // Any notifications we've read are no longer new
+          notification.isNew = !notification.read
+        })
+        // highlight-end
+        // Sort with newest first
+        state.sort((a, b) => b.date.localeCompare(a.date))
+      }
   }
 })
 
