@@ -749,7 +749,6 @@ export const extendedApi = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getNotifications: builder.query({
       query: () => '/notifications',
-      transformResponse: res => res.notifications,
       async onCacheEntryAdded(
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
