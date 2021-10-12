@@ -177,7 +177,7 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: [],
   reducers: {},
-  extraReducers(builder {
+  extraReducers(builder) {
     builder
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.push(...action.payload)
@@ -364,7 +364,7 @@ const notificationsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.push(...action.payload)
         // highlight-start
         state.forEach(notification => {
