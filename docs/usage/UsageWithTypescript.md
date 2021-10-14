@@ -304,7 +304,11 @@ While [React Redux](https://react-redux.js.org) is a separate library from Redux
 
 For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
 
-As mentioned above, React Redux doesn't ship with its own type definitions. If you are using TypeScript you should install the [`@types/react-redux` type definitions](https://npm.im/@types/react-redux) from npm.
+If you are using TypeScript, the React Redux types are maintained separately in DefinitelyTyped, but included as a dependency of the react-redux package, so they should be installed automatically. If you still need to install them manually, run:
+
+```sh
+npm install @types/react-redux
+```
 
 ### Typing the `useSelector` hook
 
