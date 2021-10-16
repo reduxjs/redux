@@ -825,16 +825,19 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       const originalArgs =
         fixedCacheKey == null ? promise?.arg.originalArgs : undefined
       const reset = useCallback(() => {
-        if (promise) {
-          setPromise(undefined)
-        } else if (fixedCacheKey) {
-          dispatch(
-            api.internalActions.removeMutationResult({
-              requestId,
-              fixedCacheKey,
-            })
-          )
-        }
+        batch(() => {
+          if (promise) {
+            setPromise(undefined)
+          }
+          if (fixedCacheKey) {
+            dispatch(
+              api.internalActions.removeMutationResult({
+                requestId,
+                fixedCacheKey,
+              })
+            )
+          }
+        })
       }, [dispatch, fixedCacheKey, promise, requestId])
       const finalState = useMemo(
         () => ({ ...currentState, originalArgs, reset }),
