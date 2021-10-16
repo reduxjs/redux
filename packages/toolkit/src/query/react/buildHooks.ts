@@ -401,6 +401,7 @@ export type UseMutationStateOptions<
   R extends Record<string, any>
 > = {
   selectFromResult?: MutationStateSelector<R, D>
+  fixedCacheKey?: string
 }
 
 export type UseMutationStateResult<
@@ -781,7 +782,10 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
   }
 
   function buildMutationHook(name: string): UseMutation<any> {
-    return ({ selectFromResult = defaultMutationStateSelector } = {}) => {
+    return ({
+      selectFromResult = defaultMutationStateSelector,
+      fixedCacheKey,
+    } = {}) => {
       const { select, initiate } = api.endpoints[name] as ApiEndpointMutation<
         MutationDefinition<any, any, any, any, any>,
         Definitions
@@ -789,27 +793,49 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
       const [promise, setPromise] = useState<MutationActionCreatorResult<any>>()
 
-      useEffect(() => () => promise?.reset(), [promise])
+      useEffect(
+        () => () => {
+          if (!promise?.arg.fixedCacheKey) {
+            promise?.reset()
+          }
+        },
+        [promise]
+      )
 
       const triggerMutation = useCallback(
         function (arg) {
-          const promise = dispatch(initiate(arg))
+          const promise = dispatch(initiate(arg, { fixedCacheKey }))
           setPromise(promise)
           return promise
         },
-        [dispatch, initiate]
+        [dispatch, initiate, fixedCacheKey]
       )
 
       const { requestId } = promise || {}
       const mutationSelector = useMemo(
         () =>
-          createSelector([select(requestId || skipToken)], selectFromResult),
-        [select, requestId, selectFromResult]
+          createSelector(
+            [select({ fixedCacheKey, requestId: promise?.requestId })],
+            selectFromResult
+          ),
+        [select, promise, selectFromResult, fixedCacheKey]
       )
 
       const currentState = useSelector(mutationSelector, shallowEqual)
-      const originalArgs = promise?.arg.originalArgs
-      const reset = useCallback(() => setPromise(undefined), [])
+      const originalArgs =
+        fixedCacheKey == null ? promise?.arg.originalArgs : undefined
+      const reset = useCallback(() => {
+        if (promise) {
+          setPromise(undefined)
+        } else if (fixedCacheKey) {
+          dispatch(
+            api.internalActions.removeMutationResult({
+              requestId,
+              fixedCacheKey,
+            })
+          )
+        }
+      }, [dispatch, fixedCacheKey, promise, requestId])
       const finalState = useMemo(
         () => ({ ...currentState, originalArgs, reset }),
         [currentState, originalArgs, reset]

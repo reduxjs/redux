@@ -28,13 +28,7 @@ import type {
   ConfigState,
 } from './apiState'
 import { QueryStatus } from './apiState'
-import type {
-  MutationThunk,
-  MutationThunkArg,
-  QueryThunk,
-  QueryThunkArg,
-  ThunkResult,
-} from './buildThunks'
+import type { MutationThunk, QueryThunk } from './buildThunks'
 import { calculateProvidedByThunk } from './buildThunks'
 import type {
   AssertTagTypes,
@@ -61,12 +55,33 @@ function updateQuerySubstateIfExists(
   }
 }
 
+export function getMutationCacheKey(
+  id:
+    | MutationSubstateIdentifier
+    | { requestId: string; arg: { fixedCacheKey?: string | undefined } }
+): string
+export function getMutationCacheKey(id: {
+  fixedCacheKey?: string
+  requestId?: string
+}): string | undefined
+
+export function getMutationCacheKey(
+  id:
+    | { fixedCacheKey?: string; requestId?: string }
+    | MutationSubstateIdentifier
+    | { requestId: string; arg: { fixedCacheKey?: string | undefined } }
+): string | undefined {
+  return ('arg' in id ? id.arg.fixedCacheKey : id.fixedCacheKey) ?? id.requestId
+}
+
 function updateMutationSubstateIfExists(
   state: MutationState<any>,
-  { requestId }: MutationSubstateIdentifier,
+  id:
+    | MutationSubstateIdentifier
+    | { requestId: string; arg: { fixedCacheKey?: string | undefined } },
   update: (substate: MutationSubState<any>) => void
 ) {
-  const substate = state[requestId]
+  const substate = state[getMutationCacheKey(id)]
   if (substate) {
     update(substate)
   }
@@ -174,10 +189,11 @@ export function buildSlice({
     reducers: {
       removeMutationResult(
         draft,
-        action: PayloadAction<MutationSubstateIdentifier>
+        { payload }: PayloadAction<MutationSubstateIdentifier>
       ) {
-        if (action.payload.requestId in draft) {
-          delete draft[action.payload.requestId]
+        const cacheKey = getMutationCacheKey(payload)
+        if (cacheKey in draft) {
+          delete draft[cacheKey]
         }
       },
     },
@@ -185,39 +201,38 @@ export function buildSlice({
       builder
         .addCase(
           mutationThunk.pending,
-          (draft, { meta: { arg, requestId, startedTimeStamp } }) => {
+          (draft, { meta, meta: { requestId, arg, startedTimeStamp } }) => {
             if (!arg.track) return
 
-            draft[requestId] = {
+            draft[getMutationCacheKey(meta)] = {
+              requestId,
               status: QueryStatus.pending,
               endpointName: arg.endpointName,
               startedTimeStamp,
             }
           }
         )
-        .addCase(
-          mutationThunk.fulfilled,
-          (draft, { payload, meta, meta: { requestId } }) => {
-            if (!meta.arg.track) return
+        .addCase(mutationThunk.fulfilled, (draft, { payload, meta }) => {
+          if (!meta.arg.track) return
 
-            updateMutationSubstateIfExists(draft, { requestId }, (substate) => {
-              substate.status = QueryStatus.fulfilled
-              substate.data = payload
-              substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
-            })
-          }
-        )
-        .addCase(
-          mutationThunk.rejected,
-          (draft, { payload, error, meta: { requestId, arg } }) => {
-            if (!arg.track) return
+          updateMutationSubstateIfExists(draft, meta, (substate) => {
+            if (substate.requestId !== meta.requestId) return
 
-            updateMutationSubstateIfExists(draft, { requestId }, (substate) => {
-              substate.status = QueryStatus.rejected
-              substate.error = (payload ?? error) as any
-            })
-          }
-        )
+            substate.status = QueryStatus.fulfilled
+            substate.data = payload
+            substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
+          })
+        })
+        .addCase(mutationThunk.rejected, (draft, { payload, error, meta }) => {
+          if (!meta.arg.track) return
+
+          updateMutationSubstateIfExists(draft, meta, (substate) => {
+            if (substate.requestId !== meta.requestId) return
+
+            substate.status = QueryStatus.rejected
+            substate.error = (payload ?? error) as any
+          })
+        })
     },
   })
 

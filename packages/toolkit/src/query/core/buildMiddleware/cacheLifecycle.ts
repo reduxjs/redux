@@ -8,6 +8,7 @@ import type {
   MutationResultSelectorResult,
   QueryResultSelectorResult,
 } from '../buildSelectors'
+import { getMutationCacheKey } from '../buildSlice'
 import type { PatchCollection, Recipe } from '../buildThunks'
 import type {
   PromiseWithKnownReason,
@@ -258,7 +259,7 @@ export const build: SubMiddlewareBuilder = ({
       if (api.internalActions.removeQueryResult.match(action))
         return action.payload.queryCacheKey
       if (api.internalActions.removeMutationResult.match(action))
-        return action.payload.requestId
+        return getMutationCacheKey(action.payload)
       return ''
     }
 

@@ -15,6 +15,7 @@ import type {
   ReducerPathFrom,
 } from '../endpointDefinitions'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
+import { getMutationCacheKey } from './buildSlice'
 
 export type SkipToken = typeof skipToken
 /**
@@ -88,7 +89,10 @@ type MutationResultSelectorFactory<
   Definition extends MutationDefinition<any, any, any, any>,
   RootState
 > = (
-  requestId: string | SkipToken
+  requestId:
+    | string
+    | { requestId: string | undefined; fixedCacheKey: string | undefined }
+    | SkipToken
 ) => (state: RootState) => MutationResultSelectorResult<Definition>
 
 export type MutationResultSelectorResult<
@@ -172,7 +176,13 @@ export function buildSelectors<
     any,
     RootState
   > {
-    return (mutationId) => {
+    return (id) => {
+      let mutationId: string | typeof skipToken
+      if (typeof id === 'object') {
+        mutationId = getMutationCacheKey(id) ?? skipToken
+      } else {
+        mutationId = id
+      }
       const selectMutationSubstate = createSelector(
         selectInternalState,
         (internalState) =>

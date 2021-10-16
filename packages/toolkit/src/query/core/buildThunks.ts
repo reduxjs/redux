@@ -111,6 +111,7 @@ export interface MutationThunkArg {
   originalArgs: unknown
   endpointName: string
   track?: boolean
+  fixedCacheKey?: string
 }
 
 export type ThunkResult = unknown
