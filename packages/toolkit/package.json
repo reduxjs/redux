@@ -66,6 +66,7 @@
     "msw": "^0.28.2",
     "node-fetch": "^2.6.1",
     "prettier": "^2.2.1",
+    "query-string": "^7.0.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.47.0",
     "rollup-plugin-strip-code": "^0.2.6",

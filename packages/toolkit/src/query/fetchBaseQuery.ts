@@ -119,6 +119,7 @@ export type FetchBaseQueryArgs = {
     input: RequestInfo,
     init?: RequestInit | undefined
   ) => Promise<Response>
+  paramsSerializer?: (params: Record<string, any>) => string
 } & RequestInit
 
 export type FetchBaseQueryMeta = { request: Request; response?: Response }
@@ -156,11 +157,14 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  * Accepts a custom `fetch` function if you do not want to use the default on the window.
  * Useful in SSR environments if you need to use a library such as `isomorphic-fetch` or `cross-fetch`
  *
+ * @param {(params: Record<string, unknown> => string} paramsSerializer
+ * An optional function that can be used to stringify querystring parameters.
  */
 export function fetchBaseQuery({
   baseUrl,
   prepareHeaders = (x) => x,
   fetchFn = defaultFetchFn,
+  paramsSerializer,
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
@@ -216,7 +220,9 @@ export function fetchBaseQuery({
 
     if (params) {
       const divider = ~url.indexOf('?') ? '&' : '?'
-      const query = new URLSearchParams(stripUndefined(params))
+      const query = paramsSerializer
+        ? paramsSerializer(params)
+        : new URLSearchParams(stripUndefined(params))
       url += divider + query
     }
 

@@ -4,6 +4,7 @@ import { setupApiStore } from './helpers'
 import { server } from './mocks/server'
 import { default as crossFetch } from 'cross-fetch'
 import { rest } from 'msw'
+import queryString from 'query-string'
 
 const defaultHeaders: Record<string, string> = {
   fake: 'header',
@@ -449,6 +450,53 @@ describe('fetchBaseQuery', () => {
       ))
 
       expect(request.url).toEqual(`${baseUrl}/echo?apple=fruit&randy=null`)
+    })
+
+    it('should support a paramsSerializer', async () => {
+      const baseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        paramsSerializer: (params: Record<string, unknown>) =>
+          queryString.stringify(params, { arrayFormat: 'bracket' }),
+      })
+
+      const api = createApi({
+        baseQuery,
+        endpoints(build) {
+          return {
+            query: build.query({
+              query: () => ({ url: '/echo', headers: {} }),
+            }),
+            mutation: build.mutation({
+              query: () => ({
+                url: '/echo',
+                method: 'POST',
+                credentials: 'omit',
+              }),
+            }),
+          }
+        },
+      })
+
+      const params = {
+        someArray: ['a', 'b', 'c'],
+      }
+
+      let request: any
+      ;({ data: request } = await baseQuery(
+        { url: '/echo', params },
+        {
+          signal: new AbortController().signal,
+          dispatch: storeRef.store.dispatch,
+          getState: storeRef.store.getState,
+          extra: undefined,
+        },
+        {}
+      ))
+
+      expect(request.url).toEqual(
+        `${baseUrl}/echo?someArray[]=a&someArray[]=b&someArray[]=c`
+      )
     })
   })
 
