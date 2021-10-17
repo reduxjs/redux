@@ -433,10 +433,15 @@ const anyAction = { type: 'foo' } as AnyAction
   // @ts-expect-error
   const shouldFailNumWithoutArgs = createAsyncThunk('foo', () => {}, { idGenerator: returnsNumWithoutArgs })
 
-  const returnsStrWithArgs = (foo: any) => 'foo'
+  const returnsStrWithNumberArg = (foo: number) => 'foo'
   // prettier-ignore
   // @ts-expect-error
-  const shouldFailStrArgs = createAsyncThunk('foo', () => {}, { idGenerator: returnsStrWithArgs })
+  const shouldFailWrongArgs = createAsyncThunk('foo', (arg: string) => {}, { idGenerator: returnsStrWithNumberArg })
+
+  const returnsStrWithStringArg = (foo: string) => 'foo'
+  const shoulducceedCorrectArgs = createAsyncThunk('foo', (arg: string) => {}, {
+    idGenerator: returnsStrWithStringArg,
+  })
 
   const returnsStrWithoutArgs = () => 'foo'
   const shouldSucceed = createAsyncThunk('foo', () => {}, {

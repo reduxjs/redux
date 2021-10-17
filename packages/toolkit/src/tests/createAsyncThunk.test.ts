@@ -815,6 +815,26 @@ describe('idGenerator option', () => {
       expect.stringContaining('fake-fandom-id')
     )
   })
+
+  test('idGenerator should be called with thunkArg', async () => {
+    const customIdGenerator = jest.fn((seed) => `fake-unique-random-id-${seed}`)
+    let generatedRequestId = ''
+    const asyncThunk = createAsyncThunk(
+      'test',
+      async (args: any, { requestId }) => {
+        generatedRequestId = requestId
+      },
+      { idGenerator: customIdGenerator }
+    )
+
+    const thunkArg = 1
+    const expected = 'fake-unique-random-id-1'
+    const asyncThunkPromise = asyncThunk(thunkArg)(dispatch, getState, extra)
+
+    expect(customIdGenerator).toHaveBeenCalledWith(thunkArg)
+    expect(asyncThunkPromise.requestId).toEqual(expected)
+    expect((await asyncThunkPromise).meta.requestId).toEqual(expected)
+  })
 })
 
 test('`condition` will see state changes from a synchronously invoked asyncThunk', () => {

@@ -303,7 +303,7 @@ export type AsyncThunkOptions<
    *
    * @default `nanoid`
    */
-  idGenerator?: () => string
+  idGenerator?: (arg: ThunkArg) => string
 } & IsUnknown<
   GetPendingMeta<ThunkApiConfig>,
   {
@@ -531,7 +531,9 @@ If you want to use the AbortController to react to \`abort\` events, please cons
     arg: ThunkArg
   ): AsyncThunkAction<Returned, ThunkArg, ThunkApiConfig> {
     return (dispatch, getState, extra) => {
-      const requestId = (options?.idGenerator ?? nanoid)()
+      const requestId = options?.idGenerator
+        ? options.idGenerator(arg)
+        : nanoid();
 
       const abortController = new AC()
       let abortReason: string | undefined
