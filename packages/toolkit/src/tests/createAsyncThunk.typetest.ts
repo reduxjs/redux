@@ -147,6 +147,34 @@ const anyAction = { type: 'foo' } as AnyAction
   })
 })()
 
+/**
+ * Should handle reject withvalue within a try catch block
+ *
+ * Note:
+ * this is a sample code taken from #1605
+ *
+ */
+;(async () => {
+  type ResultType = {
+    text: string
+  }
+  const demoPromise = async (): Promise<ResultType> =>
+    new Promise((resolve, _) => resolve({ text: '' }))
+  const thunk = createAsyncThunk('thunk', async (args, thunkAPI) => {
+    try {
+      const result = await demoPromise()
+      return result
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  })
+  createReducer({}, (builder) =>
+    builder.addCase(thunk.fulfilled, (s, action) => {
+      expectType<ResultType>(action.payload)
+    })
+  )
+})()
+
 {
   interface Item {
     name: string
