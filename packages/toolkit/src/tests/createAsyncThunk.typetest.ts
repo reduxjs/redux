@@ -481,8 +481,13 @@ const anyAction = { type: 'foo' } as AnyAction
 {
   // return values
   createAsyncThunk<'ret', void, {}>('test', (_, api) => 'ret' as const)
+  createAsyncThunk<'ret', void, {}>('test', async (_, api) => 'ret' as const)
   createAsyncThunk<'ret', void, { fulfilledMeta: string }>('test', (_, api) =>
     api.fulfillWithValue('ret' as const, '')
+  )
+  createAsyncThunk<'ret', void, { fulfilledMeta: string }>(
+    'test',
+    async (_, api) => api.fulfillWithValue('ret' as const, '')
   )
   createAsyncThunk<'ret', void, { fulfilledMeta: string }>(
     'test',
@@ -490,17 +495,34 @@ const anyAction = { type: 'foo' } as AnyAction
     (_, api) => 'ret' as const
   )
   createAsyncThunk<'ret', void, { fulfilledMeta: string }>(
+    'test',
+    // @ts-expect-error has to be a fulfilledWithValue call
+    async (_, api) => 'ret' as const
+  )
+  createAsyncThunk<'ret', void, { fulfilledMeta: string }>(
     'test', // @ts-expect-error should only allow returning with 'test'
     (_, api) => api.fulfillWithValue(5, '')
+  )
+  createAsyncThunk<'ret', void, { fulfilledMeta: string }>(
+    'test', // @ts-expect-error should only allow returning with 'test'
+    async (_, api) => api.fulfillWithValue(5, '')
   )
 
   // reject values
   createAsyncThunk<'ret', void, { rejectValue: string }>('test', (_, api) =>
     api.rejectWithValue('ret')
   )
+  createAsyncThunk<'ret', void, { rejectValue: string }>(
+    'test',
+    async (_, api) => api.rejectWithValue('ret')
+  )
   createAsyncThunk<'ret', void, { rejectValue: string; rejectedMeta: number }>(
     'test',
     (_, api) => api.rejectWithValue('ret', 5)
+  )
+  createAsyncThunk<'ret', void, { rejectValue: string; rejectedMeta: number }>(
+    'test',
+    async (_, api) => api.rejectWithValue('ret', 5)
   )
   createAsyncThunk<'ret', void, { rejectValue: string; rejectedMeta: number }>(
     'test',
@@ -513,7 +535,17 @@ const anyAction = { type: 'foo' } as AnyAction
   )
   createAsyncThunk<'ret', void, { rejectValue: string; rejectedMeta: number }>(
     'test',
+    // @ts-expect-error wrong rejectedMeta type
+    async (_, api) => api.rejectWithValue('ret', '')
+  )
+  createAsyncThunk<'ret', void, { rejectValue: string; rejectedMeta: number }>(
+    'test',
     // @ts-expect-error wrong rejectValue type
     (_, api) => api.rejectWithValue(5, '')
+  )
+  createAsyncThunk<'ret', void, { rejectValue: string; rejectedMeta: number }>(
+    'test',
+    // @ts-expect-error wrong rejectValue type
+    async (_, api) => api.rejectWithValue(5, '')
   )
 }

@@ -423,10 +423,35 @@ export type AsyncThunk<
  *
  * @public
  */
+// separate signature without `AsyncThunkConfig` for better inference
+export function createAsyncThunk<Returned, ThunkArg = void>(
+  typePrefix: string,
+  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, {}>,
+  options?: AsyncThunkOptions<ThunkArg, {}>
+): AsyncThunk<Returned, ThunkArg, {}>
+
+/**
+ *
+ * @param typePrefix
+ * @param payloadCreator
+ * @param options
+ *
+ * @public
+ */
 export function createAsyncThunk<
   Returned,
-  ThunkArg = void,
-  ThunkApiConfig extends AsyncThunkConfig = {}
+  ThunkArg,
+  ThunkApiConfig extends AsyncThunkConfig
+>(
+  typePrefix: string,
+  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
+  options?: AsyncThunkOptions<ThunkArg, ThunkApiConfig>
+): AsyncThunk<Returned, ThunkArg, ThunkApiConfig>
+
+export function createAsyncThunk<
+  Returned,
+  ThunkArg,
+  ThunkApiConfig extends AsyncThunkConfig
 >(
   typePrefix: string,
   payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
@@ -533,7 +558,7 @@ If you want to use the AbortController to react to \`abort\` events, please cons
     return (dispatch, getState, extra) => {
       const requestId = options?.idGenerator
         ? options.idGenerator(arg)
-        : nanoid();
+        : nanoid()
 
       const abortController = new AC()
       let abortReason: string | undefined
