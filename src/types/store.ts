@@ -33,9 +33,9 @@ declare const $CombinedState: unique symbol
  * `$CombinedState` symbol property. Without the property, this type would
  * match any object. The symbol doesn't really exist because it's an internal
  * (i.e. not exported), and internally we never check its value. Since it's a
- * symbol property, it's not expected to be unumerable, and the value is
+ * symbol property, it's not expected to be enumerable, and the value is
  * typed as always undefined, so its never expected to have a meaningful
- * value anyway. It just makes this type distinquishable from plain `{}`.
+ * value anyway. It just makes this type distinguishable from plain `{}`.
  */
 export type CombinedState<S> = { readonly [$CombinedState]?: undefined } & S
 
