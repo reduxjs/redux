@@ -316,7 +316,7 @@ const nextState = produce(baseState, draftState => {
 
 #### Widely Used
 
-**[gaearon/redux-thunk](https://github.com/gaearon/redux-thunk)** <br />
+**[reduxjs/redux-thunk](https://github.com/reduxjs/redux-thunk)** <br />
 Dispatch functions, which are called and given `dispatch` and `getState` as parameters. This acts as a loophole for AJAX calls and other async behavior.
 
 **Best for**: getting started, simple async and complex synchronous logic.

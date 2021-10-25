@@ -81,7 +81,7 @@ In Redux, action creators are functions which return plain objects. Our recommen
 
 The return value of action creators is considered an implementation detail within your application, and when following an integration testing style, do not need explicit tests.
 
-Similarly for thunks using [Redux Thunk](https://github.com/gaearon/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
+Similarly for thunks using [Redux Thunk](https://github.com/reduxjs/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
 
 We consider thunk behavior to be an implementation detail of the application, and recommend that it be covered by testing the group of components (or whole app) using it, rather than testing the thunk in isolation.
 
@@ -355,7 +355,7 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 
 #### Example
 
-First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/gaearon/redux-thunk/blob/master/src/index.js).
+First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.ts).
 
 ```js
 const thunk =
