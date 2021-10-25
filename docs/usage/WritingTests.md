@@ -355,7 +355,7 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 
 #### Example
 
-First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/reduxjs/redux-thunk).
+First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.ts).
 
 ```js
 const thunk =
