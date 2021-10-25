@@ -175,6 +175,12 @@ And that's it! That is all we need to do to implement server side rendering.
 
 But the result is pretty vanilla. It essentially renders a static view from dynamic code. What we need to do next is build an initial state dynamically to allow that rendered view to be dynamic.
 
+:::info
+
+We recommend passing `window.__PRELOADED_STATE__` directly to `createStore` and avoid creating additional references to the preloaded state (e.g. `const preloadedState = window.__PRELOADED_STATE__`) so that it can be garbage collected.
+
+:::
+
 ## Preparing the Initial State
 
 Because the client side executes ongoing code, it can start with an empty initial state and obtain any necessary state on demand and over time. On the server side, rendering is synchronous and we only get one shot to render our view. We need to be able to compile our initial state during the request, which will have to react to input and obtain external state (such as that from an API or database).
