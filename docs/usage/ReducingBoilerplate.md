@@ -78,7 +78,7 @@ dispatch(addTodo('Use Redux'))
 
 Action creators have often been criticized as boilerplate. Well, you don't have to write them! **You can use object literals if you feel this better suits your project.** There are, however, some benefits for writing action creators you should know about.
 
-Let's say a designer comes back to us after reviewing our prototype, and tells us that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with [redux-thunk](https://github.com/gaearon/redux-thunk) middleware and adding an early exit:
+Let's say a designer comes back to us after reviewing our prototype, and tells us that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with [redux-thunk](https://github.com/reduxjs/redux-thunk) middleware and adding an early exit:
 
 ```js
 function addTodoWithoutCheck(text) {
@@ -255,13 +255,13 @@ However, this quickly gets repetitive because different components request data 
 
 **Middleware lets us write more expressive, potentially async action creators.** It lets us dispatch something other than plain objects, and interprets the values. For example, middleware can “catch” dispatched Promises and turn them into a pair of request and success/failure actions.
 
-The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
+The simplest example of middleware is [redux-thunk](https://github.com/reduxjs/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
 
 > ##### Note
 >
 > Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It's about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
 
-Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
+Consider the code above rewritten with [redux-thunk](https://github.com/reduxjs/redux-thunk):
 
 #### `actionCreators.js`
 
