@@ -153,14 +153,11 @@ import { Provider } from 'react-redux'
 import App from './containers/App'
 import counterApp from './reducers'
 
-// Grab the state from a global variable injected into the server-generated HTML
-const preloadedState = window.__PRELOADED_STATE__
+// Create Redux store with state injected by the server
+const store = createStore(counterApp, window.__PRELOADED_STATE__)
 
 // Allow the passed state to be garbage-collected
 delete window.__PRELOADED_STATE__
-
-// Create Redux store with initial state
-const store = createStore(counterApp, preloadedState)
 
 hydrate(
   <Provider store={store}>
@@ -177,6 +174,12 @@ When the page loads, the bundle file will be started up and [`ReactDOM.hydrate()
 And that's it! That is all we need to do to implement server side rendering.
 
 But the result is pretty vanilla. It essentially renders a static view from dynamic code. What we need to do next is build an initial state dynamically to allow that rendered view to be dynamic.
+
+:::info
+
+We recommend passing `window.__PRELOADED_STATE__` directly to `createStore` and avoid creating additional references to the preloaded state (e.g. `const preloadedState = window.__PRELOADED_STATE__`) so that it can be garbage collected.
+
+:::
 
 ## Preparing the Initial State
 
