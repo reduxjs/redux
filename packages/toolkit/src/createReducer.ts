@@ -66,7 +66,7 @@ export type CaseReducers<S, AS extends Actions> = {
   [T in keyof AS]: AS[T] extends Action ? CaseReducer<S, AS[T]> : void
 }
 
-type NotFunction<T> = T extends Function ? never : T
+export type NotFunction<T> = T extends Function ? never : T
 
 function isStateFunction<S>(x: unknown): x is () => S {
   return typeof x === 'function'

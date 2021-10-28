@@ -8,7 +8,7 @@ import type {
 } from './createAction'
 import { createAction } from './createAction'
 import type { CaseReducer, CaseReducers } from './createReducer'
-import { createReducer } from './createReducer'
+import { createReducer, NotFunction } from './createReducer'
 import type { ActionReducerMapBuilder } from './mapBuilders'
 import { executeReducerBuilderCallback } from './mapBuilders'
 import type { NoInfer } from './tsHelpers'
@@ -53,6 +53,12 @@ export interface Slice<
    * This enables reuse and testing if they were defined inline when calling `createSlice`.
    */
   caseReducers: SliceDefinedCaseReducers<CaseReducers>
+
+  /**
+   * Provides access to the initial state value given to the slice.
+   * If a lazy state initializer was provided, it will be called and a fresh value returned.
+   */
+  getInitialState: () => State
 }
 
 /**
@@ -72,8 +78,10 @@ export interface CreateSliceOptions<
 
   /**
    * The initial state to be returned by the slice reducer.
+   * This may optionally be a "lazy state initializer" that returns the
+   * intended initial state value when called.
    */
-  initialState: State
+  initialState: State | (() => State)
 
   /**
    * A mapping from action types to action-type-specific *case reducer*
@@ -301,5 +309,6 @@ export function createSlice<
     reducer,
     actions: actionCreators as any,
     caseReducers: sliceCaseReducersByName as any,
+    getInitialState: reducer.getInitialState,
   }
 }
