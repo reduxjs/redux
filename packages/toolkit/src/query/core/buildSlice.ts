@@ -1,4 +1,4 @@
-import type { AsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import type { AnyAction, PayloadAction } from '@reduxjs/toolkit'
 import {
   combineReducers,
   createAction,
@@ -6,12 +6,6 @@ import {
   isAnyOf,
   isFulfilled,
   isRejectedWithValue,
-  // Workaround for API-Extractor
-  AnyAction,
-  CombinedState,
-  Reducer,
-  ActionCreatorWithPayload,
-  ActionCreatorWithoutPayload,
 } from '@reduxjs/toolkit'
 import type {
   CombinedState as CombinedQueryState,
@@ -43,6 +37,7 @@ import {
   copyWithStructuralSharing,
 } from '../utils'
 import type { ApiContext } from '../apiTypes'
+import { defaultMemoize } from 'reselect'
 
 function updateQuerySubstateIfExists(
   state: QueryState<any>,
@@ -93,7 +88,12 @@ export function buildSlice({
   reducerPath,
   queryThunk,
   mutationThunk,
-  context: { endpointDefinitions: definitions, apiUid },
+  context: {
+    endpointDefinitions: definitions,
+    apiUid,
+    extractRehydrationInfo,
+    hasRehydrationInfo,
+  },
   assertTagType,
   config,
 }: {
@@ -181,6 +181,18 @@ export function buildSlice({
             )
           }
         )
+        .addMatcher(hasRehydrationInfo, (draft, action) => {
+          const { queries } = extractRehydrationInfo(action)!
+          for (const [key, entry] of Object.entries(queries)) {
+            if (
+              // do not rehydrate entries that were currently in flight.
+              entry?.status === QueryStatus.fulfilled ||
+              entry?.status === QueryStatus.rejected
+            ) {
+              draft[key] = entry
+            }
+          }
+        })
     },
   })
   const mutationSlice = createSlice({
@@ -217,7 +229,6 @@ export function buildSlice({
 
           updateMutationSubstateIfExists(draft, meta, (substate) => {
             if (substate.requestId !== meta.requestId) return
-
             substate.status = QueryStatus.fulfilled
             substate.data = payload
             substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
@@ -232,6 +243,20 @@ export function buildSlice({
             substate.status = QueryStatus.rejected
             substate.error = (payload ?? error) as any
           })
+        })
+        .addMatcher(hasRehydrationInfo, (draft, action) => {
+          const { mutations } = extractRehydrationInfo(action)!
+          for (const [key, entry] of Object.entries(mutations)) {
+            if (
+              // do not rehydrate entries that were currently in flight.
+              (entry?.status === QueryStatus.fulfilled ||
+                entry?.status === QueryStatus.rejected) &&
+              // only rehydrate endpoints that were persisted using a `fixedCacheKey`
+              key !== entry?.requestId
+            ) {
+              draft[key] = entry
+            }
+          }
         })
     },
   })
@@ -257,6 +282,23 @@ export function buildSlice({
             }
           }
         )
+        .addMatcher(hasRehydrationInfo, (draft, action) => {
+          const { provided } = extractRehydrationInfo(action)!
+          for (const [type, incomingTags] of Object.entries(provided)) {
+            for (const [id, cacheKeys] of Object.entries(incomingTags)) {
+              const subscribedQueries = ((draft[type] ??= {})[
+                id || '__internal_without_id'
+              ] ??= [])
+              for (const queryCacheKey of cacheKeys) {
+                const alreadySubscribed =
+                  subscribedQueries.includes(queryCacheKey)
+                if (!alreadySubscribed) {
+                  subscribedQueries.push(queryCacheKey)
+                }
+              }
+            }
+          }
+        })
         .addMatcher(
           isAnyOf(isFulfilled(queryThunk), isRejectedWithValue(queryThunk)),
           (draft, action) => {
@@ -332,14 +374,17 @@ export function buildSlice({
         .addCase(
           queryThunk.rejected,
           (draft, { meta: { condition, arg, requestId }, error, payload }) => {
-            const substate = draft[arg.queryCacheKey]
             // request was aborted due to condition (another query already running)
-            if (condition && arg.subscribe && substate) {
+            if (condition && arg.subscribe) {
+              const substate = (draft[arg.queryCacheKey] ??= {})
               substate[requestId] =
                 arg.subscriptionOptions ?? substate[requestId] ?? {}
             }
           }
         )
+        // update the state to be a new object to be picked up as a "state change"
+        // by redux-persist's `autoMergeLevel2`
+        .addMatcher(hasRehydrationInfo, (draft) => ({ ...draft }))
     },
   })
 
@@ -373,6 +418,9 @@ export function buildSlice({
         .addCase(onFocusLost, (state) => {
           state.focused = false
         })
+        // update the state to be a new object to be picked up as a "state change"
+        // by redux-persist's `autoMergeLevel2`
+        .addMatcher(hasRehydrationInfo, (draft) => ({ ...draft }))
     },
   })
 

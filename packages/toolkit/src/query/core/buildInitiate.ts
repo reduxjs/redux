@@ -5,22 +5,12 @@ import type {
   QueryArgFrom,
   ResultTypeFrom,
 } from '../endpointDefinitions'
-import type {
-  QueryThunkArg,
-  MutationThunkArg,
-  QueryThunk,
-  MutationThunk,
-} from './buildThunks'
-import type {
-  AnyAction,
-  AsyncThunk,
-  ThunkAction,
-  SerializedError,
-} from '@reduxjs/toolkit'
-import { unwrapResult } from '@reduxjs/toolkit'
+import { DefinitionType } from '../endpointDefinitions'
+import type { QueryThunk, MutationThunk } from './buildThunks'
+import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
 import type { QuerySubState, SubscriptionOptions, RootState } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
-import type { Api } from '../apiTypes'
+import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
 import type { BaseQueryError } from '../baseQueryTypes'
 
@@ -120,6 +110,7 @@ export type MutationActionCreatorResult<
    * A unique string generated for the request sequence
    */
   requestId: string
+
   /**
    * A method to cancel the mutation promise. Note that this is not intended to prevent the mutation
    * that was fired off from reaching the server, but only to assist in handling the response.
@@ -189,18 +180,58 @@ export function buildInitiate({
   queryThunk,
   mutationThunk,
   api,
+  context,
 }: {
   serializeQueryArgs: InternalSerializeQueryArgs
   queryThunk: QueryThunk
   mutationThunk: MutationThunk
   api: Api<any, EndpointDefinitions, any, any>
+  context: ApiContext<EndpointDefinitions>
 }) {
+  const runningQueries: Record<
+    string,
+    QueryActionCreatorResult<any> | undefined
+  > = {}
+  const runningMutations: Record<
+    string,
+    MutationActionCreatorResult<any> | undefined
+  > = {}
+
   const {
     unsubscribeQueryResult,
     removeMutationResult,
     updateSubscriptionOptions,
   } = api.internalActions
-  return { buildInitiateQuery, buildInitiateMutation }
+  return {
+    buildInitiateQuery,
+    buildInitiateMutation,
+    getRunningOperationPromises,
+    getRunningOperationPromise,
+  }
+
+  function getRunningOperationPromise(
+    endpointName: string,
+    argOrRequestId: any
+  ): any {
+    const endpointDefinition = context.endpointDefinitions[endpointName]
+    if (endpointDefinition.type === DefinitionType.query) {
+      const queryCacheKey = serializeQueryArgs({
+        queryArgs: argOrRequestId,
+        endpointDefinition,
+        endpointName,
+      })
+      return runningQueries[queryCacheKey]
+    } else {
+      return runningMutations[argOrRequestId]
+    }
+  }
+
+  function getRunningOperationPromises() {
+    return [
+      ...Object.values(runningQueries),
+      ...Object.values(runningMutations),
+    ].filter(<T>(t: T | undefined): t is T => !!t)
+  }
 
   function middlewareWarning(getState: () => RootState<{}, string, string>) {
     if (process.env.NODE_ENV !== 'production') {
@@ -242,8 +273,8 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         const thunkResult = dispatch(thunk)
         middlewareWarning(getState)
         const { requestId, abort } = thunkResult
-        const statePromise = Object.assign(
-          thunkResult.then(() =>
+        const statePromise: QueryActionCreatorResult<any> = Object.assign(
+          Promise.all([runningQueries[queryCacheKey], thunkResult]).then(() =>
             (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
               arg
             )(getState())
@@ -280,14 +311,21 @@ Features like automatic cache collection, automatic refetching etc. will not be 
             },
           }
         )
+
+        if (!runningQueries[queryCacheKey]) {
+          runningQueries[queryCacheKey] = statePromise
+          statePromise.then(() => {
+            delete runningQueries[queryCacheKey]
+          })
+        }
+
         return statePromise
       }
     return queryAction
   }
 
   function buildInitiateMutation(
-    endpointName: string,
-    definition: MutationDefinition<any, any, any, any>
+    endpointName: string
   ): StartMutationActionCreator<any> {
     return (arg, { track = true, fixedCacheKey } = {}) =>
       (dispatch, getState) => {
@@ -309,7 +347,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           dispatch(removeMutationResult({ requestId, fixedCacheKey }))
         }
 
-        return Object.assign(returnValuePromise, {
+        const ret = Object.assign(returnValuePromise, {
           arg: thunkResult.arg,
           requestId,
           abort,
@@ -317,6 +355,20 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           unsubscribe: reset,
           reset,
         })
+
+        runningMutations[requestId] = ret
+        ret.then(() => {
+          delete runningMutations[requestId]
+        })
+        if (fixedCacheKey) {
+          runningMutations[fixedCacheKey] = ret
+          ret.then(() => {
+            if (runningMutations[fixedCacheKey] === ret)
+              delete runningMutations[fixedCacheKey]
+          })
+        }
+
+        return ret
       }
   }
 }

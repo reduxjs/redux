@@ -1,5 +1,6 @@
 import type { AnyAction, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit'
 import { createSelector } from '@reduxjs/toolkit'
+import type { DependencyList } from 'react'
 import {
   useCallback,
   useEffect,
@@ -220,7 +221,10 @@ export type UseLazyQuerySubscription<
   D extends QueryDefinition<any, any, any, any>
 > = (
   options?: SubscriptionOptions
-) => [(arg: QueryArgFrom<D>) => void, QueryArgFrom<D> | UninitializedValue]
+) => readonly [
+  (arg: QueryArgFrom<D>) => void,
+  QueryArgFrom<D> | UninitializedValue
+]
 
 export type QueryStateSelector<
   R extends Record<string, any>,
@@ -430,7 +434,7 @@ export type UseMutation<D extends MutationDefinition<any, any, any, any>> = <
   R extends Record<string, any> = MutationResultSelectorResult<D>
 >(
   options?: UseMutationStateOptions<D, R>
-) => [MutationTrigger<D>, UseMutationStateResult<D, R>]
+) => readonly [MutationTrigger<D>, UseMutationStateResult<D, R>]
 
 export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
   {
@@ -520,7 +524,13 @@ type GenericPrefetchThunk = (
  */
 export function buildHooks<Definitions extends EndpointDefinitions>({
   api,
-  moduleOptions: { batch, useDispatch, useSelector, useStore },
+  moduleOptions: {
+    batch,
+    useDispatch,
+    useSelector,
+    useStore,
+    unstable__sideEffectsInRender,
+  },
   serializeQueryArgs,
   context,
 }: {
@@ -529,6 +539,11 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
   serializeQueryArgs: SerializeQueryArgs<any>
   context: ApiContext<Definitions>
 }) {
+  const usePossiblyImmediateEffect: (
+    effect: () => void | undefined,
+    deps?: DependencyList
+  ) => void = unstable__sideEffectsInRender ? (cb) => cb() : useEffect
+
   return { buildQueryHooks, buildMutationHook, usePrefetch }
 
   function usePrefetch<EndpointName extends QueryKeys<Definitions>>(
@@ -580,7 +595,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
 
       const promiseRef = useRef<QueryActionCreatorResult<any>>()
 
-      useEffect(() => {
+      usePossiblyImmediateEffect((): void | undefined => {
         const lastPromise = promiseRef.current
 
         if (stableArg === skipToken) {
@@ -649,7 +664,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         pollingInterval,
       })
 
-      useEffect(() => {
+      usePossiblyImmediateEffect(() => {
         const lastSubscriptionOptions = promiseRef.current?.subscriptionOptions
 
         if (stableSubscriptionOptions !== lastSubscriptionOptions) {
@@ -660,7 +675,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       }, [stableSubscriptionOptions])
 
       const subscriptionOptionsRef = useRef(stableSubscriptionOptions)
-      useEffect(() => {
+      usePossiblyImmediateEffect(() => {
         subscriptionOptionsRef.current = stableSubscriptionOptions
       }, [stableSubscriptionOptions])
 
@@ -695,7 +710,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         }
       }, [arg, trigger])
 
-      return useMemo(() => [trigger, arg], [trigger, arg])
+      return useMemo(() => [trigger, arg] as const, [trigger, arg])
     }
 
     const useQueryState: UseQueryState<any> = (
@@ -845,7 +860,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       )
 
       return useMemo(
-        () => [triggerMutation, finalState],
+        () => [triggerMutation, finalState] as const,
         [triggerMutation, finalState]
       )
     }

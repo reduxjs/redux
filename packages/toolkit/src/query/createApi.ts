@@ -1,4 +1,5 @@
 import type { Api, ApiContext, Module, ModuleName } from './apiTypes'
+import type { CombinedState } from './core/apiState'
 import type { BaseQueryArg, BaseQueryFn } from './baseQueryTypes'
 import type { SerializeQueryArgs } from './defaultSerializeQueryArgs'
 import { defaultSerializeQueryArgs } from './defaultSerializeQueryArgs'
@@ -8,6 +9,9 @@ import type {
 } from './endpointDefinitions'
 import { DefinitionType } from './endpointDefinitions'
 import { nanoid } from '@reduxjs/toolkit'
+import type { AnyAction } from '@reduxjs/toolkit'
+import type { NoInfer } from './tsHelpers'
+import { defaultMemoize } from 'reselect'
 
 export interface CreateApiOptions<
   BaseQuery extends BaseQueryFn,
@@ -147,6 +151,21 @@ export interface CreateApiOptions<
    * Note: requires [`setupListeners`](./setupListeners) to have been called.
    */
   refetchOnReconnect?: boolean
+
+  extractRehydrationInfo?: (
+    action: AnyAction,
+    {
+      reducerPath,
+    }: {
+      reducerPath: ReducerPath
+    }
+  ) =>
+    | undefined
+    | CombinedState<
+        NoInfer<Definitions>,
+        NoInfer<TagTypes>,
+        NoInfer<ReducerPath>
+      >
 }
 
 export type CreateApi<Modules extends ModuleName> = {
@@ -186,6 +205,11 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
   ...modules: Modules
 ): CreateApi<Modules[number]['name']> {
   return function baseCreateApi(options) {
+    const extractRehydrationInfo = defaultMemoize((action: AnyAction) =>
+      options.extractRehydrationInfo?.(action, {
+        reducerPath: (options.reducerPath ?? 'api') as any,
+      })
+    )
     const optionsWithDefaults = {
       reducerPath: 'api',
       serializeQueryArgs: defaultSerializeQueryArgs,
@@ -194,6 +218,7 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
       refetchOnFocus: false,
       refetchOnReconnect: false,
       ...options,
+      extractRehydrationInfo,
       tagTypes: [...(options.tagTypes || [])],
     }
 
@@ -204,6 +229,10 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
         fn()
       },
       apiUid: nanoid(),
+      extractRehydrationInfo,
+      hasRehydrationInfo: defaultMemoize(
+        (action) => extractRehydrationInfo(action) != null
+      ),
     }
 
     const api = {
