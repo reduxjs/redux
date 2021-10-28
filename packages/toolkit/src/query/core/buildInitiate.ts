@@ -263,6 +263,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           endpointName,
         })
         const thunk = queryThunk({
+          type: 'query',
           subscribe,
           forceRefetch,
           subscriptionOptions,
@@ -330,6 +331,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     return (arg, { track = true, fixedCacheKey } = {}) =>
       (dispatch, getState) => {
         const thunk = mutationThunk({
+          type: 'mutation',
           endpointName,
           originalArgs: arg,
           track,

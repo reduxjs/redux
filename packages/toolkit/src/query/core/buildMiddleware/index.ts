@@ -75,6 +75,7 @@ export function buildMiddleware<
     override: Partial<QueryThunkArg> = {}
   ) {
     return queryThunk({
+      type: 'query',
       endpointName: querySubState.endpointName,
       originalArgs: querySubState.originalArgs,
       subscribe: false,

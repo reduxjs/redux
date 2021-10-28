@@ -103,11 +103,13 @@ export interface Matchers<
 export interface QueryThunkArg
   extends QuerySubstateIdentifier,
     StartQueryActionCreatorOptions {
+  type: 'query'
   originalArgs: unknown
   endpointName: string
 }
 
 export interface MutationThunkArg {
+  type: 'mutation'
   originalArgs: unknown
   endpointName: string
   track?: boolean
@@ -276,6 +278,10 @@ export function buildThunks<
         dispatch,
         getState,
         extra,
+        endpoint: arg.endpointName,
+        type: arg.type,
+        forced:
+          arg.type === 'query' ? isForcedQuery(arg, getState()) : undefined,
       }
       if (endpointDefinition.query) {
         result = await baseQuery(
@@ -325,6 +331,28 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     }
   }
 
+  function isForcedQuery(
+    arg: QueryThunkArg,
+    state: RootState<any, string, ReducerPath>
+  ) {
+    const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
+    const baseFetchOnMountOrArgChange =
+      state[reducerPath]?.config.refetchOnMountOrArgChange
+
+    const fulfilledVal = requestState?.fulfilledTimeStamp
+    const refetchVal =
+      arg.forceRefetch ?? (arg.subscribe && baseFetchOnMountOrArgChange)
+
+    if (refetchVal) {
+      // Return if its true or compare the dates because it must be a number
+      return (
+        refetchVal === true ||
+        (Number(new Date()) - Number(fulfilledVal)) / 1000 >= refetchVal
+      )
+    }
+    return false
+  }
+
   const queryThunk = createAsyncThunk<
     ThunkResult,
     QueryThunkArg,
@@ -334,29 +362,20 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       return { startedTimeStamp: Date.now() }
     },
     condition(arg, { getState }) {
-      const state = getState()[reducerPath]
-      const requestState = state?.queries?.[arg.queryCacheKey]
-      const baseFetchOnMountOrArgChange = state.config.refetchOnMountOrArgChange
-
+      const state = getState()
+      const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
       const fulfilledVal = requestState?.fulfilledTimeStamp
-      const refetchVal =
-        arg.forceRefetch ?? (arg.subscribe && baseFetchOnMountOrArgChange)
 
       // Don't retry a request that's currently in-flight
       if (requestState?.status === 'pending') return false
 
+      // if this is forced, continue
+      if (isForcedQuery(arg, state)) return true
+
       // Pull from the cache unless we explicitly force refetch or qualify based on time
-      if (fulfilledVal) {
-        if (refetchVal) {
-          // Return if its true or compare the dates because it must be a number
-          return (
-            refetchVal === true ||
-            (Number(new Date()) - Number(fulfilledVal)) / 1000 >= refetchVal
-          )
-        }
+      if (fulfilledVal)
         // Value is cached and we didn't specify to refresh, skip it.
         return false
-      }
 
       return true
     },

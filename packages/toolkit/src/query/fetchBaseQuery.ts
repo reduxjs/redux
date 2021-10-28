@@ -1,6 +1,6 @@
 import { joinUrls } from './utils'
 import { isPlainObject } from '@reduxjs/toolkit'
-import type { BaseQueryFn } from './baseQueryTypes'
+import type { BaseQueryApi, BaseQueryFn } from './baseQueryTypes'
 import type { MaybePromise, Override } from './tsHelpers'
 
 export type ResponseHandler =
@@ -113,7 +113,7 @@ export type FetchBaseQueryArgs = {
   baseUrl?: string
   prepareHeaders?: (
     headers: Headers,
-    api: { getState: () => unknown }
+    api: Pick<BaseQueryApi, 'getState' | 'endpoint' | 'type' | 'forced'>
   ) => MaybePromise<Headers>
   fetchFn?: (
     input: RequestInfo,
@@ -178,7 +178,7 @@ export function fetchBaseQuery({
       'Warning: `fetch` is not available. Please supply a custom `fetchFn` property to use `fetchBaseQuery` on SSR environments.'
     )
   }
-  return async (arg, { signal, getState }) => {
+  return async (arg, { signal, getState, endpoint, forced, type }) => {
     let meta: FetchBaseQueryMeta | undefined
     let {
       url,
@@ -200,7 +200,7 @@ export function fetchBaseQuery({
 
     config.headers = await prepareHeaders(
       new Headers(stripUndefined(headers)),
-      { getState }
+      { getState, endpoint, forced, type }
     )
 
     // Only set the content-type to json if appropriate. Will not be true for FormData, ArrayBuffer, Blob, etc.
