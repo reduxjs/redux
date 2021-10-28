@@ -1,6 +1,6 @@
 {
   "name": "redux",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Predictable state container for JavaScript apps",
   "license": "MIT",
   "homepage": "http://redux.js.org",
