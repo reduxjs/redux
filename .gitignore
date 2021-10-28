@@ -5,6 +5,7 @@ dist
 lib
 es
 coverage
+types
 
 website/translated_docs
 website/build/
