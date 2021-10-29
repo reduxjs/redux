@@ -567,7 +567,7 @@ In this case, we'll call the field `postsForUser`, and we can destructure that n
 We've now seen three different ways that we can manage transforming responses:
 
 - Keep original response in cache, read full result in component and derive values
-- Keep original response in cache, read derived result with `selectFromResponse`
+- Keep original response in cache, read derived result with `selectFromResult`
 - Transform response before storing in cache
 
 Each of these approaches can be useful in different situations. Here's some suggestions for when you should consider using them:
@@ -1083,7 +1083,7 @@ Let's take one last look at the whole application in action:
   - Endpoint objects include functions for initating requests, generating result selectors, and matching request action objects
 - **Responses can be transformed in different ways as needed**
   - Endpoints can define a `transformResponse` callback to modify the data before caching
-  - Hooks can be given a `selectFromResponse` option to extract/transform data
+  - Hooks can be given a `selectFromResult` option to extract/transform data
   - Components can read an entire value and transform with `useMemo`
 - **RTK Query has advanced options for manipulating cached data for better user experience**
   - The `onQueryStarted` lifecycle can be used for optimistic updates by updating cache immediately before a request returns
