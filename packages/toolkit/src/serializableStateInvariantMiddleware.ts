@@ -115,7 +115,7 @@ export interface SerializableStateInvariantMiddlewareOptions {
 
   /**
    * An array of dot-separated path strings to ignore when checking
-   * for serializability, Defaults to ['meta.arg']
+   * for serializability, Defaults to ['meta.arg', 'meta.baseQueryMeta']
    */
   ignoredActionPaths?: string[]
 
