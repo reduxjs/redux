@@ -212,11 +212,14 @@ export function createReducer<S extends NotFunction<any>>(
       ? executeReducerBuilderCallback(mapOrBuilderCallback)
       : [mapOrBuilderCallback, actionMatchers, defaultCaseReducer]
 
-  const getInitialState = () =>
-    createNextState(
-      isStateFunction(initialState) ? initialState() : initialState,
-      () => {}
-    )
+  // Ensure the initial state gets frozen either way
+  let getInitialState: () => S
+  if (isStateFunction(initialState)) {
+    getInitialState = () => createNextState(initialState(), () => {})
+  } else {
+    const frozenInitialState = createNextState(initialState, () => {})
+    getInitialState = () => frozenInitialState
+  }
 
   function reducer(state = getInitialState(), action: any): S {
     let caseReducers = [
