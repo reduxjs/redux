@@ -63,6 +63,48 @@ describe('createSlice', () => {
       expect(caseReducers.increment).toBeTruthy()
       expect(typeof caseReducers.increment).toBe('function')
     })
+
+    it('getInitialState should return the state', () => {
+      const initialState = 42
+      const slice = createSlice({
+        name: 'counter',
+        initialState,
+        reducers: {},
+      })
+
+      expect(slice.getInitialState()).toBe(initialState)
+    })
+  })
+
+  describe('when initialState is a function', () => {
+    const initialState = () => ({ user: '' })
+
+    const { actions, reducer } = createSlice({
+      reducers: {
+        setUserName: (state, action) => {
+          state.user = action.payload
+        },
+      },
+      initialState,
+      name: 'user',
+    })
+
+    it('should set the username', () => {
+      expect(reducer(undefined, actions.setUserName('eric'))).toEqual({
+        user: 'eric',
+      })
+    })
+
+    it('getInitialState should return the state', () => {
+      const initialState = () => 42
+      const slice = createSlice({
+        name: 'counter',
+        initialState,
+        reducers: {},
+      })
+
+      expect(slice.getInitialState()).toBe(42)
+    })
   })
 
   describe('when mutating state object', () => {
