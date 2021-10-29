@@ -94,8 +94,8 @@ export type ReducerWithInitialState<S extends NotFunction<any>> = Reducer<S> & {
  * That builder provides `addCase`, `addMatcher` and `addDefaultCase` functions that may be
  * called to define what actions this reducer will handle.
  *
- * @param initialState - The initial state that should be used when the reducer is called the first time.
- * @param builderCallback - A callback that receives a *builder* object to define
+ * @param initialState - `State | (() => State)`: The initial state that should be used when the reducer is called the first time. This may also be a "lazy initializer" function, which should return an initial state value when called. This will be used whenever the reducer is called with `undefined` as its state value, and is primarily useful for cases like reading initial state from `localStorage`.
+ * @param builderCallback - `(builder: Builder) => void` A callback that receives a *builder* object to define
  *   case reducers via calls to `builder.addCase(actionCreatorOrType, reducer)`.
  * @example
 ```ts
@@ -115,7 +115,7 @@ function isActionWithNumberPayload(
   return typeof action.payload === "number";
 }
 
-createReducer(
+const reducer = createReducer(
   {
     counter: 0,
     sumOfNumberPayloads: 0,
@@ -161,7 +161,7 @@ export function createReducer<S extends NotFunction<any>>(
  * This overload accepts an object where the keys are string action types, and the values
  * are case reducer functions to handle those action types.
  *
- * @param initialState - The initial state that should be used when the reducer is called the first time. This may optionally be a "lazy state initializer" that returns the intended initial state value when called.
+ * @param initialState - `State | (() => State)`: The initial state that should be used when the reducer is called the first time. This may also be a "lazy initializer" function, which should return an initial state value when called. This will be used whenever the reducer is called with `undefined` as its state value, and is primarily useful for cases like reading initial state from `localStorage`.
  * @param actionsMap - An object mapping from action types to _case reducers_, each of which handles one specific action type.
  * @param actionMatchers - An array of matcher definitions in the form `{matcher, reducer}`.
  *   All matching reducers will be executed in order, independently if a case reducer matched or not.
@@ -171,6 +171,14 @@ export function createReducer<S extends NotFunction<any>>(
  * @example
 ```js
 const counterReducer = createReducer(0, {
+  increment: (state, action) => state + action.payload,
+  decrement: (state, action) => state - action.payload
+})
+
+// Alternately, use a "lazy initializer" to provide the initial state
+// (works with either form of createReducer)
+const initialState = () => 0
+const counterReducer = createReducer(initialState, {
   increment: (state, action) => state + action.payload,
   decrement: (state, action) => state - action.payload
 })

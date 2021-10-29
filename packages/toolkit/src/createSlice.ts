@@ -77,9 +77,7 @@ export interface CreateSliceOptions<
   name: Name
 
   /**
-   * The initial state to be returned by the slice reducer.
-   * This may optionally be a "lazy state initializer" that returns the
-   * intended initial state value when called.
+   * The initial state that should be used when the reducer is called the first time. This may also be a "lazy initializer" function, which should return an initial state value when called. This will be used whenever the reducer is called with `undefined` as its state value, and is primarily useful for cases like reading initial state from `localStorage`.
    */
   initialState: State | (() => State)
 
