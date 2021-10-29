@@ -86,6 +86,24 @@ export interface ReactHooksModuleOptions {
    * The version of the `useStore` hook to be used
    */
   useStore?: RR['useStore']
+  /**
+   * Enables performing asynchronous tasks immediately within a render.
+   *
+   * @example
+   *
+   * ```ts
+   * import {
+   *   buildCreateApi,
+   *   coreModule,
+   *   reactHooksModule
+   * } from '@reduxjs/toolkit/query/react'
+   *
+   * const createApi = buildCreateApi(
+   *   coreModule(),
+   *   reactHooksModule({ unstable__sideEffectsInRender: true })
+   * )
+   * ```
+   */
   unstable__sideEffectsInRender?: boolean
 }
 

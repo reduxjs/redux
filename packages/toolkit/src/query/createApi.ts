@@ -151,7 +151,32 @@ export interface CreateApiOptions<
    * Note: requires [`setupListeners`](./setupListeners) to have been called.
    */
   refetchOnReconnect?: boolean
-
+  /**
+   * A function that is passed every dispatched action. If this returns something other than `undefined`,
+   * that return value will be used to rehydrate fulfilled & errored queries.
+   *
+   * @example
+   *
+   * ```ts
+   * // codeblock-meta title="next-redux-wrapper rehydration example"
+   * import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+   * import { HYDRATE } from 'next-redux-wrapper'
+   *
+   * export const api = createApi({
+   *   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+   *   // highlight-start
+   *   extractRehydrationInfo(action, { reducerPath }) {
+   *     if (action.type === HYDRATE) {
+   *       return action.payload[reducerPath]
+   *     }
+   *   },
+   *   // highlight-end
+   *   endpoints: (build) => ({
+   *     // omitted
+   *   }),
+   * })
+   * ```
+   */
   extractRehydrationInfo?: (
     action: AnyAction,
     {

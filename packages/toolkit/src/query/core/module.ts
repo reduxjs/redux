@@ -133,7 +133,18 @@ declare module '../apiTypes' {
        * A collection of utility thunks for various situations.
        */
       util: {
+        /**
+         * Returns all promises for running queries and mutations.
+         * Useful for SSR scenarios to await everything triggered in any way,
+         * including via hook calls, or manually dispatching `initiate` actions.
+         */
         getRunningOperationPromises: () => Array<Promise<unknown>>
+        /**
+         * If a promise is running for a given endpoint name + argument combination,
+         * returns that promise. Otherwise, returns `undefined`.
+         * Can be used to await a specific query/mutation triggered in any way,
+         * including via hook calls, or manually dispatching `initiate` actions.
+         */
         getRunningOperationPromise<EndpointName extends QueryKeys<Definitions>>(
           endpointName: EndpointName,
           args: QueryArgFrom<Definitions[EndpointName]>
