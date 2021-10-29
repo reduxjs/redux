@@ -453,7 +453,7 @@ function isFunction<T>(t: T): t is Extract<T, Function> {
   return typeof t === 'function'
 }
 
-function expandTagDescription(
+export function expandTagDescription(
   description: TagDescription<string>
 ): FullTagDescription<string> {
   return typeof description === 'string' ? { type: description } : description

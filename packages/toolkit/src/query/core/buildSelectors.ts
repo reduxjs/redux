@@ -4,6 +4,7 @@ import type {
   QuerySubState,
   RootState as _RootState,
   RequestStatusFlags,
+  QueryCacheKey,
 } from './apiState'
 import { QueryStatus, getRequestStatusFlags } from './apiState'
 import type {
@@ -13,9 +14,12 @@ import type {
   QueryArgFrom,
   TagTypesFrom,
   ReducerPathFrom,
+  TagDescription,
 } from '../endpointDefinitions'
+import { expandTagDescription } from '../endpointDefinitions'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import { getMutationCacheKey } from './buildSlice'
+import { flatten } from '../utils'
 
 export type SkipToken = typeof skipToken
 /**
@@ -125,7 +129,7 @@ export function buildSelectors<
 }) {
   type RootState = _RootState<Definitions, string, string>
 
-  return { buildQuerySelector, buildMutationSelector }
+  return { buildQuerySelector, buildMutationSelector, selectInvalidatedBy }
 
   function withRequestFlags<T extends { status: QueryStatus }>(
     substate: T
@@ -192,5 +196,49 @@ export function buildSelectors<
       )
       return createSelector(selectMutationSubstate, withRequestFlags)
     }
+  }
+
+  function selectInvalidatedBy(
+    state: RootState,
+    tags: ReadonlyArray<TagDescription<string>>
+  ): Array<{
+    endpointName: string
+    originalArgs: any
+    queryCacheKey: QueryCacheKey
+  }> {
+    const apiState = state[reducerPath]
+    const toInvalidate = new Set<QueryCacheKey>()
+    for (const tag of tags.map(expandTagDescription)) {
+      const provided = apiState.provided[tag.type]
+      if (!provided) {
+        continue
+      }
+
+      let invalidateSubscriptions =
+        (tag.id !== undefined
+          ? // id given: invalidate all queries that provide this type & id
+            provided[tag.id]
+          : // no id: invalidate all queries that provide this type
+            flatten(Object.values(provided))) ?? []
+
+      for (const invalidate of invalidateSubscriptions) {
+        toInvalidate.add(invalidate)
+      }
+    }
+
+    return flatten(
+      Array.from(toInvalidate.values()).map((queryCacheKey) => {
+        const querySubState = apiState.queries[queryCacheKey]
+        return querySubState
+          ? [
+              {
+                queryCacheKey,
+                endpointName: querySubState.endpointName!,
+                originalArgs: querySubState.originalArgs,
+              },
+            ]
+          : []
+      })
+    )
   }
 }

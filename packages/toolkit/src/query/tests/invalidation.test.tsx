@@ -1,10 +1,19 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query'
 import { setupApiStore, waitMs } from './helpers'
-import type { ResultDescription } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import type { TagDescription } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import { waitFor } from '@testing-library/react'
 
-const tagTypes = ['apple', 'pear', 'banana', 'tomato'] as const
+const tagTypes = [
+  'apple',
+  'pear',
+  'banana',
+  'tomato',
+  'cat',
+  'dog',
+  'giraffe',
+] as const
 type TagTypes = typeof tagTypes[number]
-type Tags = ResultDescription<TagTypes, any, any, any>
+type Tags = TagDescription<TagTypes>[]
 
 /** providesTags, invalidatesTags, shouldInvalidate */
 const caseMatrix: [Tags, Tags, boolean][] = [
@@ -62,8 +71,9 @@ test.each(caseMatrix)(
     let queryCount = 0
     const {
       store,
+      api,
       api: {
-        endpoints: { invalidating, providing },
+        endpoints: { invalidating, providing, unrelated },
       },
     } = setupApiStore(
       createApi({
@@ -77,6 +87,12 @@ test.each(caseMatrix)(
             },
             providesTags,
           }),
+          unrelated: build.query<unknown, void>({
+            queryFn() {
+              return { data: {} }
+            },
+            providesTags: ['cat', 'dog', { type: 'giraffe', id: 8 }],
+          }),
           invalidating: build.mutation<unknown, void>({
             queryFn() {
               return { data: {} }
@@ -88,7 +104,33 @@ test.each(caseMatrix)(
     )
 
     store.dispatch(providing.initiate())
+    store.dispatch(unrelated.initiate())
     expect(queryCount).toBe(1)
+    await waitFor(() => {
+      expect(api.endpoints.providing.select()(store.getState()).status).toBe(
+        'fulfilled'
+      )
+      expect(api.endpoints.unrelated.select()(store.getState()).status).toBe(
+        'fulfilled'
+      )
+    })
+    const toInvalidate = api.util.selectInvalidatedBy(
+      store.getState(),
+      invalidatesTags
+    )
+
+    if (shouldInvalidate) {
+      expect(toInvalidate).toEqual([
+        {
+          queryCacheKey: 'providing(undefined)',
+          endpointName: 'providing',
+          originalArgs: undefined,
+        },
+      ])
+    } else {
+      expect(toInvalidate).toEqual([])
+    }
+
     store.dispatch(invalidating.initiate())
     expect(queryCount).toBe(1)
     await waitMs(2)
