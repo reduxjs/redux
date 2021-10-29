@@ -1,4 +1,5 @@
-import { createAsyncThunk, SerializedError } from '@internal/createAsyncThunk'
+import type { SerializedError } from '@internal/createAsyncThunk';
+import { createAsyncThunk } from '@internal/createAsyncThunk'
 import { executeReducerBuilderCallback } from '@internal/mapBuilders'
 import type { AnyAction } from '@reduxjs/toolkit'
 import { createAction } from '@reduxjs/toolkit'
