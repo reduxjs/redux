@@ -7,7 +7,10 @@ import type { AxiosError } from 'axios'
 import apiRequest from 'axios'
 import type { IsAny, IsUnknown } from '@internal/tsHelpers'
 import { expectType } from './helpers'
-import { AsyncThunkPayloadCreator } from '@internal/createAsyncThunk'
+import type {
+  AsyncThunkFulfilledActionCreator,
+  AsyncThunkRejectedActionCreator,
+} from '@internal/createAsyncThunk'
 
 const defaultDispatch = (() => {}) as ThunkDispatch<{}, any, AnyAction>
 const anyAction = { type: 'foo' } as AnyAction
@@ -420,6 +423,44 @@ const anyAction = { type: 'foo' } as AnyAction
     return 'ret' as const
   })
   expectType<AsyncThunk<'ret', void, {}>>(thunk)
+}
+
+// createAsyncThunk rejectWithValue without generics: Expect correct return type
+{
+  const asyncThunk = createAsyncThunk(
+    'test',
+    (_: void, { rejectWithValue }) => {
+      try {
+        return Promise.resolve(true)
+      } catch (e) {
+        return rejectWithValue(e)
+      }
+    }
+  )
+
+  defaultDispatch(asyncThunk())
+    .then((result) => {
+      if (asyncThunk.fulfilled.match(result)) {
+        expectType<ReturnType<AsyncThunkFulfilledActionCreator<boolean, void>>>(
+          result
+        )
+        expectType<boolean>(result.payload)
+        // @ts-expect-error
+        expectType<any>(result.error)
+      } else {
+        expectType<ReturnType<AsyncThunkRejectedActionCreator<unknown, void>>>(
+          result
+        )
+        expectType<SerializedError>(result.error)
+        expectType<unknown>(result.payload)
+      }
+
+      return result
+    })
+    .then(unwrapResult)
+    .then((unwrapped) => {
+      expectType<boolean>(unwrapped)
+    })
 }
 
 {
