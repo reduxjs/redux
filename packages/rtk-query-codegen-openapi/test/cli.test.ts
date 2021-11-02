@@ -1,4 +1,5 @@
-import { exec, ExecException } from 'child_process';
+import type { ExecException } from 'child_process';
+import { exec } from 'child_process';
 import * as fs from 'fs';
 import path from 'path';
 import del from 'del';
@@ -43,6 +44,8 @@ describe('CLI options testing', () => {
   });
 
   test('ts, js and json all work the same', async () => {
+    jest.setTimeout(15000);
+
     await cli([`./config.example.js`], __dirname);
     const fromJs = fs.readFileSync(path.resolve(tmpDir, 'example.ts'), 'utf-8');
     await cli([`./config.example.ts`], __dirname);

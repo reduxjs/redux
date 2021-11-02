@@ -1,5 +1,5 @@
 import * as ts from 'typescript';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
 export type OperationDefinition = {
   path: string;

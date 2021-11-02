@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
-const { factory } = ts;
 import { GenerationOptions } from './types';
+const { factory } = ts;
 
 const defaultEndpointBuilder = factory.createIdentifier('build');
 
@@ -30,11 +30,9 @@ export function generateImportNode(pkg: string, namedImports: Record<string, str
 }
 
 export function generateCreateApiCall({
-  exportName,
   endpointBuilder = defaultEndpointBuilder,
   endpointDefinitions,
 }: {
-  exportName: string;
   endpointBuilder?: ts.Identifier;
   endpointDefinitions: ts.ObjectLiteralExpression;
 }) {

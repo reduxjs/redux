@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { CommonOptions, ConfigFile, GenerationOptions, OutputFileOptions } from './types';
+import type { CommonOptions, ConfigFile, GenerationOptions, OutputFileOptions } from './types';
 import { generateApi } from './generate';
 import { isValidUrl, prettify } from './utils';
 export { ConfigFile } from './types';

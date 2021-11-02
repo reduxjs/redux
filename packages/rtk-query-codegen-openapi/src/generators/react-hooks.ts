@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { getOperationName } from 'oazapfts/lib/codegen/generate';
 import { capitalize, isQuery } from '../utils';
-import { OperationDefinition, EndpointOverrides } from '../types';
+import type { OperationDefinition, EndpointOverrides } from '../types';
 import { getOverrides } from '../generate';
 
 const { factory } = ts;

@@ -13,9 +13,10 @@ import {
   createPropertyAssignment,
   isValidIdentifier,
 } from 'oazapfts/lib/codegen/tscodegen';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import { generateReactHooks } from './generators/react-hooks';
-import { EndpointOverrides, GenerationOptions, OperationDefinition, OutputFileOptions } from './types';
+import type { EndpointOverrides, GenerationOptions, OperationDefinition } from './types';
+import { OutputFileOptions } from './types';
 import {
   capitalize,
   getOperationDefinitions,
@@ -24,12 +25,8 @@ import {
   MESSAGES,
   removeUndefined,
 } from './utils';
-import {
-  generateCreateApiCall,
-  generateEndpointDefinition,
-  ObjectPropertyDefinitions,
-  generateImportNode,
-} from './codegen';
+import type { ObjectPropertyDefinitions } from './codegen';
+import { generateCreateApiCall, generateEndpointDefinition, generateImportNode } from './codegen';
 
 const { factory } = ts;
 
@@ -112,7 +109,6 @@ export async function generateApi(
       [
         generateImportNode(apiFile, { api: apiImport }),
         generateCreateApiCall({
-          exportName,
           endpointDefinitions: factory.createObjectLiteralExpression(
             operationDefinitions.map((operationDefinition) =>
               generateEndpoint({
