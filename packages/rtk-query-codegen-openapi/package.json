@@ -1,11 +1,17 @@
 {
-  "name": "@rtk-incubator/rtk-query-codegen-openapi",
+  "name": "@rtk-query/codgen-openapi",
   "version": "0.5.0",
   "main": "index.js",
   "author": "Lenz Weber",
   "license": "MIT",
-  "homepage": "https://github.com/rtk-incubator/rtk-query-codegen",
-  "repository": "https://github.com/rtk-incubator/rtk-query-codegen.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reduxjs/redux-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/reduxjs/redux-toolkit/issues"
+  },
+  "homepage": "https://redux-toolkit.js.org",
   "bin": {
     "rtk-query-codegen-openapi": "lib/bin/cli.js"
   },
