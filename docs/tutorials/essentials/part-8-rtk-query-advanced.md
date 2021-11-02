@@ -955,7 +955,16 @@ const notificationsSlice = createSlice({
   }
 })
 
-// omit slice exports
+export const { allNotificationsRead } = notificationsSlice.actions
+
+export default notificationsSlice.reducer
+
+export const {
+  // highlight-start
+  selectAll: selectNotificationsMetadata,
+  selectEntities: selectMetadataEntities
+  // highlight-end
+} = notificationsAdapter.getSelectors(state => state.notifications)
 ```
 
 There's a lot going on, but let's break down the changes one at a time.
@@ -964,7 +973,11 @@ There isn't currently a good way for the `notificationsSlice` reducer to know wh
 
 We want to run the same "add read/new metadata" logic for _both_ the "fulfilled `getNotifications`" action _and_ the "received from Websocket" action. We can create a new "matcher" function by calling `isAnyOf()` and passing in each of those action creators. The `matchNotificationsReceived` matcher function will return true if the current action matches either of those types.
 
-Finally, we can use the `builder.addMatcher()` API inside of `extraReducers` to add a case reducer that runs whenever we match one of those two action types. Inside of there, we add a new "read/isNew" metadata entry that corresponds to each notification by ID, and store that inside of `notificationsSlice`.
+Previously, we had a normalized lookup table for all of our notifications, and the UI selected those as a single sorted array. We're going to repurpose this slice to instead store "metadata" objects that describe the read/unread status.
+
+We can use the `builder.addMatcher()` API inside of `extraReducers` to add a case reducer that runs whenever we match one of those two action types. Inside of there, we add a new "read/isNew" metadata entry that corresponds to each notification by ID, and store that inside of `notificationsSlice`.
+
+Finally, we need change the selectors we're exporting from this slice. Instead of exporting `selectAll` as `selectAllNotifications`, we're going to export it as `selectNotificationsMetadata`. It still returns an array of the values from the normalized state, but we're changing the name since the items themselves have changed. We're also going to export the `selectEntities` selector, which returns the lookup table object itself, as `selectMetadataEntities`. That will be useful when we try to use this data in the UI.
 
 With those changes in place, we can update our UI components to fetch and display notifications.
 
