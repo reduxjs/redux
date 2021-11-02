@@ -55,6 +55,7 @@ describe('CLI options testing', () => {
   });
 });
 
+// TODO
 describe.skip('yaml parsing', () => {
   it('should parse a yaml schema from a URL', async () => {
     const result = await cli([`https://petstore3.swagger.io/api/v3/openapi.yaml`], '.');

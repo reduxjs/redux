@@ -1,6 +1,6 @@
 {
   "name": "@rtk-query/codgen-openapi",
-  "version": "0.5.0",
+  "version": "1.0.0-alpha.1",
   "main": "index.js",
   "author": "Lenz Weber",
   "license": "MIT",
