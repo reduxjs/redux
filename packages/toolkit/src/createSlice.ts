@@ -1,4 +1,5 @@
-import type { Reducer } from 'redux'
+import type { AnyAction, Reducer } from 'redux'
+import { createNextState } from '.'
 import type {
   ActionCreatorWithoutPayload,
   PayloadAction,
@@ -7,7 +8,11 @@ import type {
   _ActionCreatorWithPreparedPayload,
 } from './createAction'
 import { createAction } from './createAction'
-import type { CaseReducer, CaseReducers } from './createReducer'
+import type {
+  CaseReducer,
+  CaseReducers,
+  ReducerWithInitialState,
+} from './createReducer'
 import { createReducer, NotFunction } from './createReducer'
 import type { ActionReducerMapBuilder } from './mapBuilders'
 import { executeReducerBuilderCallback } from './mapBuilders'
@@ -253,19 +258,16 @@ export function createSlice<
 >(
   options: CreateSliceOptions<State, CaseReducers, Name>
 ): Slice<State, CaseReducers, Name> {
-  const { name, initialState } = options
+  const { name } = options
   if (!name) {
     throw new Error('`name` is a required option for createSlice')
   }
+  const initialState =
+    typeof options.initialState == 'function'
+      ? options.initialState
+      : createNextState(options.initialState, () => {})
+
   const reducers = options.reducers || {}
-  const [
-    extraReducers = {},
-    actionMatchers = [],
-    defaultCaseReducer = undefined,
-  ] =
-    typeof options.extraReducers === 'function'
-      ? executeReducerBuilderCallback(options.extraReducers)
-      : [options.extraReducers]
 
   const reducerNames = Object.keys(reducers)
 
@@ -294,19 +296,40 @@ export function createSlice<
       : createAction(type)
   })
 
-  const finalCaseReducers = { ...extraReducers, ...sliceCaseReducersByType }
-  const reducer = createReducer(
-    initialState,
-    finalCaseReducers as any,
-    actionMatchers,
-    defaultCaseReducer
-  )
+  function buildReducer() {
+    const [
+      extraReducers = {},
+      actionMatchers = [],
+      defaultCaseReducer = undefined,
+    ] =
+      typeof options.extraReducers === 'function'
+        ? executeReducerBuilderCallback(options.extraReducers)
+        : [options.extraReducers]
+
+    const finalCaseReducers = { ...extraReducers, ...sliceCaseReducersByType }
+    return createReducer(
+      initialState,
+      finalCaseReducers as any,
+      actionMatchers,
+      defaultCaseReducer
+    )
+  }
+
+  let _reducer: ReducerWithInitialState<State>
 
   return {
     name,
-    reducer,
+    reducer(state, action) {
+      if (!_reducer) _reducer = buildReducer()
+
+      return _reducer(state, action)
+    },
     actions: actionCreators as any,
     caseReducers: sliceCaseReducersByName as any,
-    getInitialState: reducer.getInitialState,
+    getInitialState() {
+      if (!_reducer) _reducer = buildReducer()
+
+      return _reducer.getInitialState()
+    },
   }
 }

@@ -181,8 +181,8 @@ describe('createSlice', () => {
       })
 
       test('prevents the same action type from being specified twice', () => {
-        expect(() =>
-          createSlice({
+        expect(() => {
+          const slice = createSlice({
             name: 'counter',
             initialState: 0,
             reducers: {},
@@ -191,7 +191,8 @@ describe('createSlice', () => {
                 .addCase('increment', (state) => state + 1)
                 .addCase('increment', (state) => state + 1),
           })
-        ).toThrowErrorMatchingInlineSnapshot(
+          slice.reducer(undefined, { type: 'unrelated' })
+        }).toThrowErrorMatchingInlineSnapshot(
           `"addCase cannot be called with two reducers for the same action type"`
         )
       })
@@ -266,6 +267,60 @@ describe('createSlice', () => {
       expect(reducer).toHaveBeenCalledWith(
         0,
         expect.objectContaining({ payload: 'testPayload' })
+      )
+    })
+  })
+
+  describe('circularity', () => {
+    test('extraReducers can reference each other circularly', () => {
+      const first = createSlice({
+        name: 'first',
+        initialState: 'firstInitial',
+        reducers: {
+          something() {
+            return 'firstSomething'
+          },
+        },
+        extraReducers(builder) {
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          builder.addCase(second.actions.other, () => {
+            return 'firstOther'
+          })
+        },
+      })
+      const second = createSlice({
+        name: 'second',
+        initialState: 'secondInitial',
+        reducers: {
+          other() {
+            return 'secondOther'
+          },
+        },
+        extraReducers(builder) {
+          builder.addCase(first.actions.something, () => {
+            return 'secondSomething'
+          })
+        },
+      })
+
+      expect(first.reducer(undefined, { type: 'unrelated' })).toBe(
+        'firstInitial'
+      )
+      expect(first.reducer(undefined, first.actions.something())).toBe(
+        'firstSomething'
+      )
+      expect(first.reducer(undefined, second.actions.other())).toBe(
+        'firstOther'
+      )
+
+      expect(second.reducer(undefined, { type: 'unrelated' })).toBe(
+        'secondInitial'
+      )
+      expect(second.reducer(undefined, first.actions.something())).toBe(
+        'secondSomething'
+      )
+      expect(second.reducer(undefined, second.actions.other())).toBe(
+        'secondOther'
       )
     })
   })
