@@ -2,6 +2,21 @@ import { resolve } from 'path';
 import { generateEndpoints } from '../src';
 import fs from 'fs';
 import path from 'path';
+import del from 'del';
+
+const tmpDir = fs.mkdtempSync(path.resolve(__dirname, 'tmp'), 'utf-8');
+
+beforeAll(async () => {
+  if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+});
+
+afterEach(() => {
+  del.sync(`${tmpDir}/*.*`);
+});
+
+afterAll(() => {
+  del.sync(tmpDir);
+});
 
 test('calling without `outputFile` returns the generated api', async () => {
   const api = await generateEndpoints({
@@ -90,14 +105,6 @@ test('apiImport builds correct `import` statement', async () => {
 });
 
 describe('import paths', () => {
-  beforeEach(async () => {
-    const dir = resolve(__dirname, 'tmp');
-    const files = await fs.promises.readdir(dir);
-    for (const file of files) {
-      if (!file.startsWith('.')) await fs.promises.unlink(path.join(dir, file));
-    }
-  });
-
   test('should create paths relative to `outFile` when `apiFile` is relative (different folder)', async () => {
     process.chdir(__dirname);
     await generateEndpoints({
@@ -123,5 +130,54 @@ describe('import paths', () => {
       hooks: true,
     });
     expect(await fs.promises.readFile('./tmp/out.ts', 'utf8')).toContain("import { api } from './emptyApi'");
+  });
+});
+
+describe('yaml parsing', () => {
+  it.skip('should parse a yaml schema from a URL', async () => {
+    // TODO
+    const result = await generateEndpoints({
+      apiFile: './tmp/emptyApi.ts',
+      schemaFile: `https://petstore3.swagger.io/api/v3/openapi.yaml`,
+      hooks: true,
+    });
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should be able to use read a yaml file', async () => {
+    const result = await generateEndpoints({
+      apiFile: './tmp/emptyApi.ts',
+      schemaFile: `./fixtures/petstore.yaml`,
+      hooks: true,
+    });
+    expect(result).toMatchSnapshot();
+  });
+
+  it("should generate params with non quoted keys if they don't contain special characters", async () => {
+    const output = await generateEndpoints({
+      apiFile: './tmp/emptyApi.ts',
+      schemaFile: `./fixtures/fhir.yaml`,
+      hooks: true,
+    });
+
+    expect(output).toMatchSnapshot();
+
+    expect(output).toContain('foo: queryArg.foo,');
+    expect(output).toContain('_foo: queryArg._foo,');
+    expect(output).toContain('_bar_bar: queryArg._bar_bar,');
+    expect(output).toContain('foo_bar: queryArg.fooBar,');
+    expect(output).toContain('namingConflict: queryArg.namingConflict,');
+    expect(output).toContain('naming_conflict: queryArg.naming_conflict,');
+  });
+
+  it('should generate params with quoted keys if they contain special characters', async () => {
+    const output = await generateEndpoints({
+      apiFile: './tmp/emptyApi.ts',
+      schemaFile: `./fixtures/fhir.yaml`,
+      hooks: true,
+    });
+
+    expect(output).toContain('"-bar-bar": queryArg["-bar-bar"],');
+    expect(output).toContain('"foo:bar-foo.bar/foo": queryArg["foo:bar-foo.bar/foo"],');
   });
 });

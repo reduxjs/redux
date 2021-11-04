@@ -4,13 +4,6 @@ import * as fs from 'fs';
 import path from 'path';
 import del from 'del';
 
-let id = 0;
-const tmpDir = path.resolve(__dirname, 'tmp');
-
-function getTmpFileName() {
-  return path.resolve(tmpDir, `${++id}.test.generated.ts`);
-}
-
 function cli(args: string[], cwd: string): Promise<{ error: ExecException | null; stdout: string; stderr: string }> {
   return new Promise((resolve) => {
     exec(
@@ -27,13 +20,13 @@ function cli(args: string[], cwd: string): Promise<{ error: ExecException | null
   });
 }
 
-beforeAll(() => {
-  if (!fs.existsSync(tmpDir)) {
-    fs.mkdirSync(tmpDir);
-  }
+const tmpDir = path.resolve(__dirname, 'tmp');
+
+beforeAll(async () => {
+  if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
 });
 
-afterAll(() => {
+afterEach(() => {
   del.sync(`${tmpDir}/*.ts`);
 });
 
@@ -55,44 +48,5 @@ describe('CLI options testing', () => {
 
     expect(fromTs).toEqual(fromJs);
     expect(fromJson).toEqual(fromJs);
-  });
-});
-
-// TODO
-describe.skip('yaml parsing', () => {
-  it('should parse a yaml schema from a URL', async () => {
-    const result = await cli([`https://petstore3.swagger.io/api/v3/openapi.yaml`], '.');
-    expect(result.stdout).toMatchSnapshot();
-  });
-
-  it('should be able to use read a yaml file and create a file with the output when --file is specified', async () => {
-    const fileName = getTmpFileName();
-    await cli([`--file ${fileName}`, `../fixtures/petstore.yaml`], tmpDir);
-
-    expect(fs.readFileSync(fileName, { encoding: 'utf-8' })).toMatchSnapshot();
-  });
-
-  it("should generate params with non quoted keys if they don't contain special characters", async () => {
-    const result = await cli([`./test/fixtures/fhir.yaml`], '.');
-
-    const output = result.stdout;
-
-    expect(output).toMatchSnapshot();
-
-    expect(output).toContain('foo: queryArg.foo,');
-    expect(output).toContain('_foo: queryArg._foo,');
-    expect(output).toContain('_bar_bar: queryArg._bar_bar,');
-    expect(output).toContain('foo_bar: queryArg.fooBar,');
-    expect(output).toContain('namingConflict: queryArg.namingConflict,');
-    expect(output).toContain('naming_conflict: queryArg.naming_conflict,');
-  });
-
-  it('should generate params with quoted keys if they contain special characters', async () => {
-    const result = await cli([`./test/fixtures/fhir.yaml`], '.');
-
-    const output = result.stdout;
-
-    expect(output).toContain('"-bar-bar": queryArg["-bar-bar"],');
-    expect(output).toContain('"foo:bar-foo.bar/foo": queryArg["foo:bar-foo.bar/foo"],');
   });
 });
