@@ -1,5 +1,7 @@
 import { resolve } from 'path';
 import { generateEndpoints } from '../src';
+import fs from 'fs';
+import path from 'path';
 
 test('calling without `outputFile` returns the generated api', async () => {
   const api = await generateEndpoints({
@@ -72,6 +74,54 @@ test('should use brackets in a querystring urls arg, when the arg contains full 
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/params.json'),
   });
+  // eslint-disable-next-line no-template-curly-in-string
   expect(api).toContain('`/api/v1/list/${queryArg["item.id"]}`');
   expect(api).toMatchSnapshot();
+});
+
+test('apiImport builds correct `import` statement', async () => {
+  const api = await generateEndpoints({
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/params.json'),
+    filterEndpoints: [],
+    apiImport: 'myApi',
+  });
+  expect(api).toContain('myApi as api');
+});
+
+describe('import paths', () => {
+  beforeEach(async () => {
+    const dir = resolve(__dirname, 'tmp');
+    const files = await fs.promises.readdir(dir);
+    for (const file of files) {
+      if (!file.startsWith('.')) await fs.promises.unlink(path.join(dir, file));
+    }
+  });
+
+  test('should create paths relative to `outFile` when `apiFile` is relative (different folder)', async () => {
+    process.chdir(__dirname);
+    await generateEndpoints({
+      apiFile: './fixtures/emptyApi.ts',
+      outputFile: './tmp/out.ts',
+      schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+      filterEndpoints: [],
+      hooks: true,
+    });
+    expect(await fs.promises.readFile('./tmp/out.ts', 'utf8')).toContain("import { api } from '../fixtures/emptyApi'");
+  });
+
+  test('should create paths relative to `outFile` when `apiFile` is relative (same folder)', async () => {
+    process.chdir(__dirname);
+
+    await fs.promises.writeFile('./tmp/emptyApi.ts', await fs.promises.readFile('./fixtures/emptyApi.ts'));
+
+    await generateEndpoints({
+      apiFile: './tmp/emptyApi.ts',
+      outputFile: './tmp/out.ts',
+      schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+      filterEndpoints: [],
+      hooks: true,
+    });
+    expect(await fs.promises.readFile('./tmp/out.ts', 'utf8')).toContain("import { api } from './emptyApi'");
+  });
 });

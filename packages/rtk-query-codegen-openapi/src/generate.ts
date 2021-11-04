@@ -16,15 +16,7 @@ import {
 import type { OpenAPIV3 } from 'openapi-types';
 import { generateReactHooks } from './generators/react-hooks';
 import type { EndpointOverrides, GenerationOptions, OperationDefinition } from './types';
-import { OutputFileOptions } from './types';
-import {
-  capitalize,
-  getOperationDefinitions,
-  getV3Doc,
-  isQuery as testIsQuery,
-  MESSAGES,
-  removeUndefined,
-} from './utils';
+import { capitalize, getOperationDefinitions, getV3Doc, isQuery as testIsQuery, removeUndefined } from './utils';
 import type { ObjectPropertyDefinitions } from './codegen';
 import { generateCreateApiCall, generateEndpointDefinition, generateImportNode } from './codegen';
 
@@ -45,7 +37,7 @@ function patternMatches(pattern?: string | RegExp | (string | RegExp)[]) {
     if (!pattern) return true;
     const operationName = getOperationName(operationDefinition);
     return filters.some((filter) =>
-      typeof filter === 'string' ? filter == operationName : filter?.test(operationName)
+      typeof filter === 'string' ? filter === operationName : filter?.test(operationName)
     );
   };
 }
@@ -97,9 +89,12 @@ export async function generateApi(
     return declaration;
   }
 
-  if (outputFile && outputFile !== '-') {
+  if (outputFile) {
     outputFile = path.resolve(process.cwd(), outputFile);
-    apiFile = path.relative(path.dirname(outputFile), apiFile);
+    if (apiFile.startsWith('.')) {
+      apiFile = path.relative(path.dirname(outputFile), apiFile);
+      if (!apiFile.startsWith('.')) apiFile = './' + apiFile;
+    }
   }
   apiFile = apiFile.replace(/\.[jt]sx?$/, '');
 
@@ -107,7 +102,7 @@ export async function generateApi(
     ts.EmitHint.Unspecified,
     factory.createSourceFile(
       [
-        generateImportNode(apiFile, { api: apiImport }),
+        generateImportNode(apiFile, { [apiImport]: 'api' }),
         generateCreateApiCall({
           endpointDefinitions: factory.createObjectLiteralExpression(
             operationDefinitions.map((operationDefinition) =>
@@ -350,25 +345,25 @@ export async function generateApi(
                   factory.createIdentifier('method'),
                   factory.createStringLiteral(verb.toUpperCase())
                 ),
-            bodyParameter == undefined
+            bodyParameter === undefined
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('body'),
                   factory.createPropertyAccessExpression(rootObject, factory.createIdentifier(bodyParameter.name))
                 ),
-            cookieParameters.length == 0
+            cookieParameters.length === 0
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('cookies'),
                   generateQuerArgObjectLiteralExpression(cookieParameters, rootObject)
                 ),
-            headerParameters.length == 0
+            headerParameters.length === 0
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('headers'),
                   generateQuerArgObjectLiteralExpression(headerParameters, rootObject)
                 ),
-            queryParameters.length == 0
+            queryParameters.length === 0
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('params'),
@@ -381,10 +376,12 @@ export async function generateApi(
     );
   }
 
+  // eslint-disable-next-line no-empty-pattern
   function generateQueryEndpointProps({}: { operationDefinition: OperationDefinition }): ObjectPropertyDefinitions {
     return {}; /* TODO needs implementation - skip for now */
   }
 
+  // eslint-disable-next-line no-empty-pattern
   function generateMutationEndpointProps({}: { operationDefinition: OperationDefinition }): ObjectPropertyDefinitions {
     return {}; /* TODO needs implementation - skip for now */
   }

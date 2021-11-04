@@ -1,7 +1,8 @@
 {
   "name": "@rtk-query/codgen-openapi",
   "version": "1.0.0-alpha.1",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": "Lenz Weber",
   "license": "MIT",
   "repository": {
