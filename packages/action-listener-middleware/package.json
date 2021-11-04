@@ -1,0 +1,38 @@
+{
+  "name": "@rtk-incubator/action-listener-middleware",
+  "version": "0.1.0",
+  "author": {
+    "name": "Lenz Weber",
+    "email": "mail@phryneas.de",
+    "url": "https://phryneas.de/"
+  },
+  "license": "MIT",
+  "type": "module",
+  "source": "src/index.ts",
+  "exports": "./dist/index.modern.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "unpkg": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && microbundle",
+    "dev": "microbundle watch",
+    "prepublishOnly": "yarn build"
+  },
+  "peerDependencies": {
+    "@reduxjs/toolkit": "^1.6.0"
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
+    "microbundle": "^0.13.3",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "dist"
+  ]
+}
