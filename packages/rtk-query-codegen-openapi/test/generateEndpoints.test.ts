@@ -4,18 +4,14 @@ import fs from 'fs';
 import path from 'path';
 import del from 'del';
 
-const tmpDir = fs.mkdtempSync(path.resolve(__dirname, 'tmp'), 'utf-8');
+const tmpDir = path.resolve(__dirname, 'tmp');
 
 beforeAll(async () => {
   if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
 });
 
 afterEach(() => {
-  del.sync(`${tmpDir}/*.*`);
-});
-
-afterAll(() => {
-  del.sync(tmpDir);
+  del.sync(`${tmpDir}/*.ts`);
 });
 
 test('calling without `outputFile` returns the generated api', async () => {
