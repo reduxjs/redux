@@ -115,7 +115,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type GetHealthcheckApiResponse = /** status 200 OK */ {
   message: string;
 };
@@ -292,7 +292,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type PlaceOrderApiResponse = /** status 200 successful operation */ Order;
 export type PlaceOrderApiArg = {
   order: Order;
@@ -339,7 +339,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type LoginUserApiResponse = /** status 200 successful operation */ string;
 export type LoginUserApiArg = {
   /** The user name for login */
@@ -364,7 +364,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type LoginUserApiResponse = /** status 200 successful operation */ string;
 export type LoginUserApiArg = {
   /** The user name for login */
@@ -372,7 +372,7 @@ export type LoginUserApiArg = {
   /** The password for login in clear text */
   password?: string;
 };
-export const { useLoginUserMutation } = enhancedApi;
+export const { useLoginUserMutation } = injectedRtkApi;
 
 `;
 
@@ -393,7 +393,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
 export type AddPetApiArg = {
   /** Create a new pet in the store */
@@ -420,7 +420,7 @@ export type Pet = {
   tags?: Tag[];
   status?: 'available' | 'pending' | 'sold';
 };
-export const { useAddPetMutation, useGetPetByIdQuery } = enhancedApi;
+export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
 
 `;
 
@@ -437,7 +437,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type PatchApiV1ListByItemIdApiResponse = /** status 200 A successful response. */ string;
 export type PatchApiV1ListByItemIdApiArg = {
   'item.id': string;
@@ -557,7 +557,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type UpdatePetApiResponse = /** status 200 Successful operation */ Pet;
 export type UpdatePetApiArg = {
   /** Update an existent pet in the store */
@@ -718,7 +718,7 @@ export const {
   useGetUserByNameQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
-} = enhancedApi;
+} = injectedRtkApi;
 
 `;
 
@@ -744,7 +744,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type GetStructureDefinitionApiResponse = unknown;
 export type GetStructureDefinitionApiArg = {
   /** Some description */
@@ -764,7 +764,7 @@ export type GetStructureDefinitionApiArg = {
   /** Some description */
   naming_conflict?: any;
 };
-export const { useGetStructureDefinitionQuery } = enhancedApi;
+export const { useGetStructureDefinitionQuery } = injectedRtkApi;
 
 `;
 

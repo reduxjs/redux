@@ -1,5 +1,5 @@
 {
-  "name": "@rtk-query/codgen-openapi",
+  "name": "@rtk-query/codegen-openapi",
   "version": "1.0.0-alpha.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

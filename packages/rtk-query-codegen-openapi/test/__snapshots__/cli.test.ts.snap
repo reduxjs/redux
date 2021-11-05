@@ -76,7 +76,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as api };
+export { injectedRtkApi as enhancedApi };
 export type UpdatePetApiResponse = /** status 200 Successful operation */ Pet;
 export type UpdatePetApiArg = {
   /** Update an existent pet in the store */
