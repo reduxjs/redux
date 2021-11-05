@@ -100,12 +100,12 @@
   ],
   "dependencies": {
     "immer": "^9.0.6",
-    "redux": "^4.1.0",
-    "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.0",
+    "reselect": "^4.1.2"
   },
   "peerDependencies": {
-    "react": "^16.14.0 || ^17.0.0",
+    "react": "^16.9.0 || ^17.0.0",
     "react-redux": "^7.2.1"
   },
   "peerDependenciesMeta": {

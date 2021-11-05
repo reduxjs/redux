@@ -157,8 +157,8 @@ export function buildSelectors<
   function buildQuerySelector(
     endpointName: string,
     endpointDefinition: QueryDefinition<any, any, any, any>
-  ): QueryResultSelectorFactory<any, RootState> {
-    return (queryArgs) => {
+  ) {
+    return ((queryArgs: any) => {
       const selectQuerySubState = createSelector(
         selectInternalState,
         (internalState) =>
@@ -173,14 +173,11 @@ export function buildSelectors<
               ]) ?? defaultQuerySubState
       )
       return createSelector(selectQuerySubState, withRequestFlags)
-    }
+    }) as QueryResultSelectorFactory<any, RootState>
   }
 
-  function buildMutationSelector(): MutationResultSelectorFactory<
-    any,
-    RootState
-  > {
-    return (id) => {
+  function buildMutationSelector() {
+    return ((id) => {
       let mutationId: string | typeof skipToken
       if (typeof id === 'object') {
         mutationId = getMutationCacheKey(id) ?? skipToken
@@ -195,7 +192,7 @@ export function buildSelectors<
             : internalState?.mutations?.[mutationId]) ?? defaultMutationSubState
       )
       return createSelector(selectMutationSubstate, withRequestFlags)
-    }
+    }) as MutationResultSelectorFactory<any, RootState>
   }
 
   function selectInvalidatedBy(
