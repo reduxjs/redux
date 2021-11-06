@@ -65,10 +65,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
       )}'`
     )
   }
-
+  // 当前的reducer。Redux支持我们替换当前的reducer为另一个函数
   let currentReducer = reducer
+  // 用来存储我们整个程序的状态
   let currentState = preloadedState
+  // 状态监听函数，当状态发生改变的时候会被调用。可以注册多个监听函数。
   let currentListeners = []
+  // 这个是为了处理一些异常情况而保存一份currentListeners的shallow copy副本，不影响核心逻辑的理解，可以暂时忽略
   let nextListeners = currentListeners
   let isDispatching = false
 
@@ -121,6 +124,13 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * the listener is called. It is, however, guaranteed that all subscribers
    * registered before the `dispatch()` started will be called with the latest
    * state by the time it exits.
+   * 
+   * 添加更改侦听器。当一个动作被分派时，它将被调用，并且状态树的某些部分可能已经发生了变化。然后你可以调用' getState() '来读取回调函数中的当前状态树。
+   * 你可以从一个更改监听器调用' dispatch() '，注意事项如下:
+   * 1. 订阅在每次' dispatch() '调用之前被快照。
+   * 如果您在调用侦听器时订阅或取消订阅，这将不会对当前正在进行的' dispatch() '产生任何影响。
+   * 然而，下一个' dispatch() '调用，无论是否嵌套，都将使用订阅列表最近的快照。
+   * 2. 侦听器不应该期望看到所有状态的变化，因为在调用侦听器之前，在嵌套的' dispatch() '期间，状态可能已经更新了多次。但是，可以保证在' dispatch() '启动之前注册的所有订阅者在它退出时将以最新的状态被调用。
    *
    * @param {Function} listener A callback to be invoked on every dispatch.
    * @returns {Function} A function to remove this change listener.
@@ -235,7 +245,7 @@ export default function createStore(reducer, preloadedState, enhancer) {
    * You might need this if your app implements code splitting and you want to
    * load some of the reducers dynamically. You might also need this if you
    * implement a hot reloading mechanism for Redux.
-   *
+   * 更换reducer函数
    * @param {Function} nextReducer The reducer for the store to use instead.
    * @returns {void}
    */
