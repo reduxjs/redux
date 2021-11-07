@@ -961,11 +961,11 @@ const notificationsSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchNotifications.fulfilled, (state, action) => {
       // highlight-start
+      notificationsAdapter.upsertMany(state, action.payload)
       Object.values(state.entities).forEach(notification => {
         // Any notifications we've read are no longer new
         notification.isNew = !notification.read
       })
-      notificationsAdapter.upsertMany(state, action.payload)
       // highlight-end
     })
   }
