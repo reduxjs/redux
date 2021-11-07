@@ -1,4 +1,9 @@
-import { configureStore, createAction, AnyAction } from '@reduxjs/toolkit'
+import {
+  configureStore,
+  createAction,
+  AnyAction,
+  isAnyOf,
+} from '@reduxjs/toolkit'
 import {
   createActionListenerMiddleware,
   addListenerAction,
@@ -27,6 +32,9 @@ describe('createActionListenerMiddleware', () => {
   const testAction1 = createAction<string>('testAction1')
   type TestAction1 = ReturnType<typeof testAction1>
   const testAction2 = createAction<string>('testAction2')
+  type TestAction2 = ReturnType<typeof testAction2>
+  const testAction3 = createAction<string>('testAction3')
+  type TestAction3 = ReturnType<typeof testAction3>
 
   beforeEach(() => {
     middleware = createActionListenerMiddleware()
@@ -49,6 +57,44 @@ describe('createActionListenerMiddleware', () => {
     expect(listener.mock.calls).toEqual([
       [testAction1('a'), middlewareApi],
       [testAction1('c'), middlewareApi],
+    ])
+  })
+
+  test('can subscribe with a string action type', () => {
+    const listener = jest.fn((_: AnyAction) => {})
+
+    store.dispatch(addListenerAction(testAction2.type, listener))
+
+    store.dispatch(testAction2('b'))
+    expect(listener.mock.calls).toEqual([[testAction2('b'), middlewareApi]])
+
+    store.dispatch(removeListenerAction(testAction2.type, listener))
+
+    store.dispatch(testAction2('b'))
+    expect(listener.mock.calls).toEqual([[testAction2('b'), middlewareApi]])
+  })
+
+  test('can subscribe with a matcher function', () => {
+    const listener = jest.fn((_: AnyAction) => {})
+
+    const isAction1Or2 = isAnyOf(testAction1, testAction2)
+
+    const unsubscribe = middleware.addListener(isAction1Or2, listener)
+
+    store.dispatch(testAction1('a'))
+    store.dispatch(testAction2('b'))
+    store.dispatch(testAction3('c'))
+    expect(listener.mock.calls).toEqual([
+      [testAction1('a'), middlewareApi],
+      [testAction2('b'), middlewareApi],
+    ])
+
+    unsubscribe()
+
+    store.dispatch(testAction2('b'))
+    expect(listener.mock.calls).toEqual([
+      [testAction1('a'), middlewareApi],
+      [testAction2('b'), middlewareApi],
     ])
   })
 
