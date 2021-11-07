@@ -376,6 +376,48 @@ describe('createActionListenerMiddleware', () => {
     }
   )
 
+  test('Passes both getState and getOriginalState in the API', () => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    let listener1Calls = 0
+    middleware.addListener(
+      increment,
+      (action, listenerApi) => {
+        // TODO getState functions aren't typed right here
+        const stateBefore = listenerApi.getOriginalState() as CounterState
+        const currentState = listenerApi.getOriginalState() as CounterState
+
+        listener1Calls++
+        // In the "before" phase, we pass the same state
+        expect(currentState).toBe(stateBefore)
+      },
+      { when: 'beforeReducer' }
+    )
+
+    let listener2Calls = 0
+    middleware.addListener(
+      increment,
+      (action, listenerApi) => {
+        // TODO getState functions aren't typed right here
+        const stateBefore = listenerApi.getOriginalState() as CounterState
+        const currentState = listenerApi.getOriginalState() as CounterState
+
+        listener2Calls++
+        // In the "after" phase, we pass the new state for `getState`, and still have original state too
+        expect(currentState.value).toBe(stateBefore.value + 1)
+      },
+      { when: 'afterReducer' }
+    )
+
+    store.dispatch(increment())
+
+    expect(listener1Calls).toBe(1)
+    expect(listener2Calls).toBe(1)
+  })
+
   test('mixing "before" and "after"', () => {
     const calls: Function[] = []
     function before1() {
