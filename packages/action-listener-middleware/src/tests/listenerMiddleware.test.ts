@@ -27,8 +27,20 @@ const noop = () => {}
 describe('createActionListenerMiddleware', () => {
   let store = configureStore({
     reducer: () => ({}),
-    middleware: [createActionListenerMiddleware()] as const,
+    middleware: (gDM) => gDM().prepend(createActionListenerMiddleware()),
   })
+
+  const counterSlice = createSlice({
+    name: 'counter',
+    initialState: 0,
+    reducers: {
+      increment(state) {
+        return state + 1
+      },
+    },
+  })
+  const { increment } = counterSlice.actions
+
   let reducer: jest.Mock
   let middleware: ReturnType<typeof createActionListenerMiddleware>
 
@@ -44,7 +56,7 @@ describe('createActionListenerMiddleware', () => {
     reducer = jest.fn(() => ({}))
     store = configureStore({
       reducer,
-      middleware: [middleware] as const,
+      middleware: (gDM) => gDM().prepend(middleware),
     })
   })
 
@@ -56,7 +68,7 @@ describe('createActionListenerMiddleware', () => {
     reducer = jest.fn(() => ({}))
     store = configureStore({
       reducer,
-      middleware: [middleware] as const,
+      middleware: (gDM) => gDM().prepend(middleware),
     })
 
     let foundExtra = null
@@ -76,6 +88,32 @@ describe('createActionListenerMiddleware', () => {
     const originalAction = testAction1('a')
     const resultAction = store.dispatch(originalAction)
     expect(resultAction).toBe(originalAction)
+  })
+
+  test.skip('Allows dispatching a thunk without TS errors', () => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+    store.dispatch(increment())
+
+    let testState = 0
+
+    middleware.addListener(
+      (action, state) => {
+        return increment.match(action) && state > 1
+      },
+      (action, listenerApi) => {
+        // TODO Can't get the thunk dispatch types to carry through
+        // listenerApi.dispatch((dispatch, getState) => {
+        //   testState = getState()
+        // })
+      }
+    )
+
+    store.dispatch(increment())
+
+    expect(testState).toBe(2)
   })
 
   test('directly subscribing', () => {
@@ -132,23 +170,10 @@ describe('createActionListenerMiddleware', () => {
   })
 
   test('Can subscribe with an action predicate function', () => {
-    const slice = createSlice({
-      name: 'counter',
-      initialState: 0,
-      reducers: {
-        increment(state) {
-          return state + 1
-        },
-      },
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
     })
-    const { increment } = slice.actions
-
-    store = configureStore({
-      reducer: slice.reducer,
-      middleware: [middleware] as const,
-    })
-
-    const listener = jest.fn((_: TestAction1) => {})
 
     let listenerCalls = 0
 
