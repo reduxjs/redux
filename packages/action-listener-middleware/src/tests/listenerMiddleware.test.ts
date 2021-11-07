@@ -109,7 +109,7 @@ describe('createActionListenerMiddleware', () => {
     let testState = 0
 
     middleware.addListener(
-      (action, state) => {
+      (action: any, state: any) => {
         return increment.match(action) && state > 1
       },
       (action, listenerApi) => {
