@@ -45,6 +45,30 @@ describe('createActionListenerMiddleware', () => {
     })
   })
 
+  test('Allows passing an extra argument on middleware creation', () => {
+    const originalExtra = 42
+    middleware = createActionListenerMiddleware({
+      extra: originalExtra,
+    })
+    reducer = jest.fn(() => ({}))
+    store = configureStore({
+      reducer,
+      middleware: [middleware] as const,
+    })
+
+    let foundExtra = null
+
+    middleware.addListener(
+      (action: AnyAction) => true,
+      (action, listenerApi) => {
+        foundExtra = listenerApi.extra
+      }
+    )
+
+    store.dispatch(testAction1('a'))
+    expect(foundExtra).toBe(originalExtra)
+  })
+
   test('directly subscribing', () => {
     const listener = jest.fn((_: TestAction1) => {})
 

@@ -7,6 +7,7 @@ import {
   AnyAction,
   MiddlewareAPI,
   Action,
+  ThunkDispatch,
 } from '@reduxjs/toolkit'
 
 interface BaseActionCreator<P, T extends string, M = never, E = never> {
@@ -61,6 +62,8 @@ export interface ActionListenerMiddlewareAPI<
 > extends MiddlewareAPI<D, S> {
   unsubscribe(): void
   currentPhase: MiddlewarePhase
+  // TODO Figure out how to pass this through the other types correctly
+  extra: unknown
 }
 
 /**
@@ -80,6 +83,10 @@ export interface ActionListenerOptions {
    * Defaults to 'before'.
    */
   when?: When
+}
+
+export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
+  extra?: ExtraArgument
 }
 
 export interface AddListenerAction<
@@ -201,8 +208,10 @@ const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
  */
 export function createActionListenerMiddleware<
   S,
-  D extends Dispatch<AnyAction> = Dispatch
->() {
+  // TODO Carry through the thunk extra arg somehow?
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  ExtraArgument = unknown
+>(middlewareOptions: CreateListenerMiddlewareOptions<ExtraArgument> = {}) {
   type ListenerEntry = ActionListenerOptions & {
     id: string
     listener: ActionListener<any, S, D, any>
@@ -212,6 +221,7 @@ export function createActionListenerMiddleware<
   }
 
   const listenerMap = new Map<string, ListenerEntry>()
+  const { extra } = middlewareOptions
 
   const middleware: Middleware<
     {
@@ -253,10 +263,11 @@ export function createActionListenerMiddleware<
           entry.listener(action, {
             ...api,
             currentPhase,
+            extra,
             unsubscribe: entry.unsubscribe,
           })
         } catch (err) {
-          // ignore
+          // ignore errors deliberately
         }
       }
       if (currentPhase === 'beforeReducer') {
