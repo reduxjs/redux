@@ -16,6 +16,7 @@ import {
 const middlewareApi = {
   getState: expect.any(Function),
   getOriginalState: expect.any(Function),
+  condition: expect.any(Function),
   extra: undefined,
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
@@ -44,6 +45,10 @@ describe('createActionListenerMiddleware', () => {
     },
   })
   const { increment } = counterSlice.actions
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
 
   let reducer: jest.Mock
   let middleware: ReturnType<typeof createActionListenerMiddleware>
@@ -468,5 +473,88 @@ describe('createActionListenerMiddleware', () => {
 
     store.dispatch(testAction1('a'))
     expect(listener.mock.calls).toEqual([[testAction1('a'), middlewareApi]])
+  })
+
+  test('condition method resolves promise when the predicate succeeds', async () => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    let finalCount = 0
+    let listenerStarted = false
+
+    middleware.addListener(
+      // @ts-expect-error
+      (action, currentState: CounterState) => {
+        return increment.match(action) && currentState.value === 0
+      },
+      async (action, listenerApi) => {
+        listenerStarted = true
+        const result = await listenerApi.condition(
+          // @ts-expect-error
+          (action, currentState: CounterState) => {
+            return currentState.value === 3
+          }
+        )
+
+        expect(result).toBe(true)
+        const latestState = listenerApi.getState() as CounterState
+        finalCount = latestState.value
+      },
+      { when: 'beforeReducer' }
+    )
+
+    store.dispatch(increment())
+    expect(listenerStarted).toBe(true)
+    await delay(50)
+    store.dispatch(increment())
+    store.dispatch(increment())
+
+    await delay(50)
+
+    expect(finalCount).toBe(3)
+  })
+
+  test('condition method resolves promise when there is a timeout', async () => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    let finalCount = 0
+    let listenerStarted = false
+
+    middleware.addListener(
+      // @ts-expect-error
+      (action, currentState: CounterState) => {
+        return increment.match(action) && currentState.value === 0
+      },
+      async (action, listenerApi) => {
+        listenerStarted = true
+        const result = await listenerApi.condition(
+          // @ts-expect-error
+          (action, currentState: CounterState) => {
+            return currentState.value === 3
+          },
+          50
+        )
+
+        expect(result).toBe(false)
+        const latestState = listenerApi.getState() as CounterState
+        finalCount = latestState.value
+      },
+      { when: 'beforeReducer' }
+    )
+
+    store.dispatch(increment())
+    expect(listenerStarted).toBe(true)
+
+    store.dispatch(increment())
+
+    await delay(150)
+    store.dispatch(increment())
+
+    expect(finalCount).toBe(2)
   })
 })

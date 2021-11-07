@@ -27,6 +27,11 @@ type ListenerPredicate<Action extends AnyAction, State> = (
   originalState?: State
 ) => boolean
 
+type ConditionFunction<Action extends AnyAction, State> = (
+  predicate: ListenerPredicate<Action, State> | (() => boolean),
+  timeout?: number
+) => Promise<boolean>
+
 type MatchFunction<T> = (v: any) => v is T
 
 export interface HasMatchFunction<T> {
@@ -73,6 +78,7 @@ export interface ActionListenerMiddlewareAPI<
 > extends MiddlewareAPI<D, S> {
   getOriginalState: () => S
   unsubscribe(): void
+  condition: ConditionFunction<AnyAction, S>
   currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
   extra: unknown
@@ -281,6 +287,8 @@ export function createActionListenerMiddleware<
           entry.listener(action, {
             ...api,
             getOriginalState,
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            condition,
             currentPhase,
             extra,
             unsubscribe: entry.unsubscribe,
@@ -426,6 +434,41 @@ export function createActionListenerMiddleware<
     }
 
     return undefined
+  }
+
+  const condition: ConditionFunction<AnyAction, S> = async (
+    predicate,
+    timeout
+  ) => {
+    let unsubscribe: Unsubscribe = () => {}
+
+    const conditionSucceededPromise = new Promise<boolean>(
+      (resolve, reject) => {
+        unsubscribe = addListener(predicate, (action, listenerApi) => {
+          // One-shot listener that cleans up as soon as the predicate resolves
+          listenerApi.unsubscribe()
+          resolve(true)
+        })
+      }
+    )
+
+    if (timeout === undefined) {
+      return conditionSucceededPromise
+    }
+
+    const timedOutPromise = new Promise<boolean>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(false)
+      }, timeout)
+    })
+
+    const result = await Promise.race([
+      conditionSucceededPromise,
+      timedOutPromise,
+    ])
+
+    unsubscribe()
+    return result
   }
 
   return Object.assign(
