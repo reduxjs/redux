@@ -247,6 +247,9 @@ export function createActionListenerMiddleware<
     }
 
     let stateBefore = api.getState()
+    if (listenerMap.size === 0) {
+      return next(action)
+    }
 
     let result: unknown
     for (const currentPhase of actualMiddlewarePhases) {
@@ -276,7 +279,6 @@ export function createActionListenerMiddleware<
         return result
       }
     }
-    return next(action)
   }
 
   type Unsubscribe = () => void

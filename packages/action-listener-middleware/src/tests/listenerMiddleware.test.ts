@@ -69,6 +69,12 @@ describe('createActionListenerMiddleware', () => {
     expect(foundExtra).toBe(originalExtra)
   })
 
+  test('Passes through if there are no listeners', () => {
+    const originalAction = testAction1('a')
+    const resultAction = store.dispatch(originalAction)
+    expect(resultAction).toBe(originalAction)
+  })
+
   test('directly subscribing', () => {
     const listener = jest.fn((_: TestAction1) => {})
 
