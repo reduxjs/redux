@@ -16,7 +16,8 @@
   "scripts": {
     "build": "rimraf dist && microbundle",
     "dev": "microbundle watch",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "test": "jest --runInBand"
   },
   "peerDependencies": {
     "@reduxjs/toolkit": "^1.6.0"
