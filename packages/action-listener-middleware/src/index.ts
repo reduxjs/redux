@@ -45,7 +45,9 @@ export type WithMiddlewareType<T extends Middleware<any, any, any>> = {
   [declaredMiddlewareType]: T
 }
 
-export type When = 'before' | 'after' | undefined
+export type MiddlewarePhase = 'beforeReducer' | 'afterReducer'
+
+export type When = MiddlewarePhase | 'both' | undefined
 type WhenFromOptions<O extends ActionListenerOptions> =
   O extends ActionListenerOptions ? O['when'] : never
 
@@ -57,8 +59,8 @@ export interface ActionListenerMiddlewareAPI<
   D extends Dispatch<AnyAction>,
   O extends ActionListenerOptions
 > extends MiddlewareAPI<D, S> {
-  stopPropagation: WhenFromOptions<O> extends 'before' ? () => void : undefined
   unsubscribe(): void
+  currentPhase: MiddlewarePhase
 }
 
 /**
@@ -191,6 +193,9 @@ export const removeListenerAction = createAction(
   ): RemoveListenerAction<AnyAction, S, D>
 }
 
+const defaultWhen: MiddlewarePhase = 'afterReducer'
+const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
+
 /**
  * @alpha
  */
@@ -233,46 +238,24 @@ export function createActionListenerMiddleware<
 
     let stateBefore = api.getState()
 
-    const defaultWhen: When = 'after'
     let result: unknown
-    for (const phase of ['before', 'after'] as const) {
+    for (const currentPhase of actualMiddlewarePhases) {
       let stateNow = api.getState()
       for (let entry of listenerMap.values()) {
-        if (
-          (entry.when || defaultWhen) !== phase ||
-          !entry.predicate(action, stateNow)
-        ) {
+        const runThisPhase =
+          entry.when === 'both' || entry.when === currentPhase
+        const runListener = runThisPhase && entry.predicate(action, stateNow)
+        if (!runListener) {
           continue
         }
 
-        let stoppedPropagation = false
-        let currentPhase = phase
-        let synchronousListenerFinished = false
         entry.listener(action, {
           ...api,
-          stopPropagation() {
-            if (currentPhase === 'before') {
-              if (!synchronousListenerFinished) {
-                stoppedPropagation = true
-              } else {
-                throw new Error(
-                  'stopPropagation can only be called synchronously'
-                )
-              }
-            } else {
-              throw new Error(
-                'stopPropagation can only be called by action listeners with the `when` option set to "before"'
-              )
-            }
-          },
+          currentPhase,
           unsubscribe: entry.unsubscribe,
         })
-        synchronousListenerFinished = true
-        if (stoppedPropagation) {
-          return action
-        }
       }
-      if (phase === 'before') {
+      if (currentPhase === 'beforeReducer') {
         result = next(action)
       } else {
         return result
@@ -345,6 +328,7 @@ export function createActionListenerMiddleware<
       const id = nanoid()
       const unsubscribe = () => listenerMap.delete(id)
       entry = {
+        when: defaultWhen,
         ...options,
         id,
         listener,
