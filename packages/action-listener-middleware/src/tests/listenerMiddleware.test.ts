@@ -298,4 +298,18 @@ describe('createActionListenerMiddleware', () => {
 
     expect(reducer.mock.calls).toEqual([[{}, testAction1('a')]])
   })
+
+  test('Continues running other listeners if there is an error', () => {
+    const matcher = (action: any) => true
+
+    middleware.addListener(matcher, () => {
+      throw new Error('Panic!')
+    })
+
+    const listener = jest.fn(() => {})
+    middleware.addListener(matcher, listener)
+
+    store.dispatch(testAction1('a'))
+    expect(listener.mock.calls).toEqual([[testAction1('a'), middlewareApi]])
+  })
 })

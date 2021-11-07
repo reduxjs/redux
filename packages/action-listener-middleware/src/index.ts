@@ -249,11 +249,15 @@ export function createActionListenerMiddleware<
           continue
         }
 
-        entry.listener(action, {
-          ...api,
-          currentPhase,
-          unsubscribe: entry.unsubscribe,
-        })
+        try {
+          entry.listener(action, {
+            ...api,
+            currentPhase,
+            unsubscribe: entry.unsubscribe,
+          })
+        } catch (err) {
+          // ignore
+        }
       }
       if (currentPhase === 'beforeReducer') {
         result = next(action)
