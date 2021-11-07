@@ -7,7 +7,6 @@
     "url": "https://phryneas.de/"
   },
   "license": "MIT",
-  "type": "module",
   "source": "src/index.ts",
   "exports": "./dist/index.modern.js",
   "main": "./dist/index.cjs",
