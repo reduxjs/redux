@@ -1,6 +1,7 @@
 import {
   configureStore,
   createAction,
+  createSlice,
   AnyAction,
   isAnyOf,
 } from '@reduxjs/toolkit'
@@ -14,6 +15,8 @@ import {
 
 const middlewareApi = {
   getState: expect.any(Function),
+  getOriginalState: expect.any(Function),
+  extra: undefined,
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
@@ -126,6 +129,43 @@ describe('createActionListenerMiddleware', () => {
       [testAction1('a'), middlewareApi],
       [testAction2('b'), middlewareApi],
     ])
+  })
+
+  test('Can subscribe with an action predicate function', () => {
+    const slice = createSlice({
+      name: 'counter',
+      initialState: 0,
+      reducers: {
+        increment(state) {
+          return state + 1
+        },
+      },
+    })
+    const { increment } = slice.actions
+
+    store = configureStore({
+      reducer: slice.reducer,
+      middleware: [middleware] as const,
+    })
+
+    const listener = jest.fn((_: TestAction1) => {})
+
+    let listenerCalls = 0
+
+    middleware.addListener(
+      (action, state) => {
+        return state > 1
+      },
+      (action, listenerApi) => {
+        listenerCalls++
+      }
+    )
+
+    store.dispatch(increment())
+    store.dispatch(increment())
+    store.dispatch(increment())
+
+    expect(listenerCalls).toBe(2)
   })
 
   test('subscribing with the same listener will not make it trigger twice (like EventTarget.addEventListener())', () => {

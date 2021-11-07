@@ -60,6 +60,7 @@ export interface ActionListenerMiddlewareAPI<
   D extends Dispatch<AnyAction>,
   O extends ActionListenerOptions
 > extends MiddlewareAPI<D, S> {
+  getOriginalState: () => S
   unsubscribe(): void
   currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
@@ -246,12 +247,14 @@ export function createActionListenerMiddleware<
       return
     }
 
-    let stateBefore = api.getState()
     if (listenerMap.size === 0) {
       return next(action)
     }
 
     let result: unknown
+    const originalState = api.getState()
+    const getOriginalState = () => originalState
+
     for (const currentPhase of actualMiddlewarePhases) {
       let stateNow = api.getState()
       for (let entry of listenerMap.values()) {
@@ -265,6 +268,7 @@ export function createActionListenerMiddleware<
         try {
           entry.listener(action, {
             ...api,
+            getOriginalState,
             currentPhase,
             extra,
             unsubscribe: entry.unsubscribe,
@@ -302,20 +306,21 @@ export function createActionListenerMiddleware<
   // eslint-disable-next-line no-redeclare
   function addListener<
     MA extends AnyAction,
-    M extends MatchFunction<MA>,
-    O extends ActionListenerOptions
-  >(
-    matcher: M,
-    listener: ActionListener<GuardedType<M>, S, D, O>,
-    options?: O
-  ): Unsubscribe // eslint-disable-next-line no-redeclare
-  function addListener<
-    MA extends AnyAction,
     M extends ListenerPredicate<MA>,
     O extends ActionListenerOptions
   >(
     matcher: M,
     listener: ActionListener<AnyAction, S, D, O>,
+    options?: O
+  ): Unsubscribe
+  // eslint-disable-next-line no-redeclare
+  function addListener<
+    MA extends AnyAction,
+    M extends MatchFunction<MA>,
+    O extends ActionListenerOptions
+  >(
+    matcher: M,
+    listener: ActionListener<GuardedType<M>, S, D, O>,
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
