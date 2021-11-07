@@ -26,16 +26,20 @@ const noop = () => {}
 
 describe('createActionListenerMiddleware', () => {
   let store = configureStore({
-    reducer: () => ({}),
+    reducer: () => 42,
     middleware: (gDM) => gDM().prepend(createActionListenerMiddleware()),
   })
 
+  interface CounterState {
+    value: number
+  }
+
   const counterSlice = createSlice({
     name: 'counter',
-    initialState: 0,
+    initialState: { value: 0 } as CounterState,
     reducers: {
       increment(state) {
-        return state + 1
+        state.value += 1
       },
     },
   })
@@ -175,22 +179,38 @@ describe('createActionListenerMiddleware', () => {
       middleware: (gDM) => gDM().prepend(middleware),
     })
 
-    let listenerCalls = 0
+    let listener1Calls = 0
 
     middleware.addListener(
-      (action, state) => {
-        return state > 1
+      // TODO Can't figure out how to get `any` or a real state type instead of `unknown` here
+      // @ts-expect-error
+      (action: AnyAction, state: CounterState) => {
+        return state.value > 1
       },
       (action, listenerApi) => {
-        listenerCalls++
+        listener1Calls++
+      }
+    )
+
+    let listener2Calls = 0
+
+    middleware.addListener(
+      // @ts-expect-error
+      (action, state: CounterState, prevState: CounterState) => {
+        return state.value > 1 && prevState.value % 2 === 0
+      },
+      (action, listenerApi) => {
+        listener2Calls++
       }
     )
 
     store.dispatch(increment())
     store.dispatch(increment())
     store.dispatch(increment())
+    store.dispatch(increment())
 
-    expect(listenerCalls).toBe(2)
+    expect(listener1Calls).toBe(3)
+    expect(listener2Calls).toBe(1)
   })
 
   test('subscribing with the same listener will not make it trigger twice (like EventTarget.addEventListener())', () => {
@@ -284,11 +304,11 @@ describe('createActionListenerMiddleware', () => {
     expect(listener.mock.calls).toEqual([[testAction1('a'), middlewareApi]])
   })
 
-  const unforwaredActions: [string, AnyAction][] = [
+  const unforwardedActions: [string, AnyAction][] = [
     ['addListenerAction', addListenerAction(testAction1, noop)],
     ['removeListenerAction', removeListenerAction(testAction1, noop)],
   ]
-  test.each(unforwaredActions)(
+  test.each(unforwardedActions)(
     '"%s" is not forwarded to the reducer',
     (_, action) => {
       reducer.mockClear()

@@ -21,9 +21,10 @@ interface TypedActionCreator<Type extends string> {
   match: MatchFunction<any>
 }
 
-type ListenerPredicate<Action extends AnyAction, State = unknown> = (
+type ListenerPredicate<Action extends AnyAction, State> = (
   action: Action,
-  state?: State
+  currentState?: State,
+  originalState?: State
 ) => boolean
 
 type MatchFunction<T> = (v: any) => v is T
@@ -36,6 +37,16 @@ export const hasMatchFunction = <T>(
   v: Matcher<T>
 ): v is HasMatchFunction<T> => {
   return v && typeof (v as HasMatchFunction<T>).match === 'function'
+}
+
+export const isActionCreator = (
+  item: Function
+): item is TypedActionCreator<any> => {
+  return (
+    typeof item === 'function' &&
+    typeof (item as any).type === 'string' &&
+    hasMatchFunction(item as any)
+  )
 }
 
 /** @public */
@@ -208,7 +219,7 @@ const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
  * @alpha
  */
 export function createActionListenerMiddleware<
-  S,
+  S = any,
   // TODO Carry through the thunk extra arg somehow?
   D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
   ExtraArgument = unknown
@@ -218,7 +229,7 @@ export function createActionListenerMiddleware<
     listener: ActionListener<any, S, D, any>
     unsubscribe: () => void
     type?: string
-    predicate: ListenerPredicate<any>
+    predicate: ListenerPredicate<any, any>
   }
 
   const listenerMap = new Map<string, ListenerEntry>()
@@ -256,11 +267,12 @@ export function createActionListenerMiddleware<
     const getOriginalState = () => originalState
 
     for (const currentPhase of actualMiddlewarePhases) {
-      let stateNow = api.getState()
+      let currentState = api.getState()
       for (let entry of listenerMap.values()) {
         const runThisPhase =
           entry.when === 'both' || entry.when === currentPhase
-        const runListener = runThisPhase && entry.predicate(action, stateNow)
+        const runListener =
+          runThisPhase && entry.predicate(action, currentState, originalState)
         if (!runListener) {
           continue
         }
@@ -306,16 +318,6 @@ export function createActionListenerMiddleware<
   // eslint-disable-next-line no-redeclare
   function addListener<
     MA extends AnyAction,
-    M extends ListenerPredicate<MA>,
-    O extends ActionListenerOptions
-  >(
-    matcher: M,
-    listener: ActionListener<AnyAction, S, D, O>,
-    options?: O
-  ): Unsubscribe
-  // eslint-disable-next-line no-redeclare
-  function addListener<
-    MA extends AnyAction,
     M extends MatchFunction<MA>,
     O extends ActionListenerOptions
   >(
@@ -324,12 +326,25 @@ export function createActionListenerMiddleware<
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
+  function addListener<
+    MA extends AnyAction,
+    M extends ListenerPredicate<MA, S>,
+    O extends ActionListenerOptions
+  >(
+    matcher: M,
+    listener: ActionListener<AnyAction, S, D, O>,
+    options?: O
+  ): Unsubscribe
+  // eslint-disable-next-line no-redeclare
   function addListener(
-    typeOrActionCreator: string | TypedActionCreator<any>,
+    typeOrActionCreator:
+      | string
+      | TypedActionCreator<any>
+      | ListenerPredicate<any, any>,
     listener: ActionListener<AnyAction, S, D, any>,
     options?: ActionListenerOptions
   ): Unsubscribe {
-    let predicate: ListenerPredicate<any>
+    let predicate: ListenerPredicate<any, any>
     let type: string | undefined
 
     let entry = findListenerEntry(
@@ -340,11 +355,16 @@ export function createActionListenerMiddleware<
       if (typeof typeOrActionCreator === 'string') {
         type = typeOrActionCreator
         predicate = (action: any) => action.type === type
-      } else if (typeof typeOrActionCreator.type === 'string') {
-        type = typeOrActionCreator.type
-        predicate = typeOrActionCreator.match
       } else {
-        predicate = typeOrActionCreator as unknown as ListenerPredicate<any>
+        if (isActionCreator(typeOrActionCreator)) {
+          type = typeOrActionCreator.type
+          predicate = typeOrActionCreator.match
+        } else {
+          predicate = typeOrActionCreator as unknown as ListenerPredicate<
+            any,
+            any
+          >
+        }
       }
 
       const id = nanoid()
