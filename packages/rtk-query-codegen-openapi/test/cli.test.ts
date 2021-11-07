@@ -5,8 +5,10 @@ import path from 'path';
 import del from 'del';
 
 function cli(args: string[], cwd: string): Promise<{ error: ExecException | null; stdout: string; stderr: string }> {
-  const cmd = `${require.resolve('ts-node/dist/bin')} -T -P ${path.resolve('./tsconfig.json')} ${path.resolve(
-    './src/bin/cli.ts'
+  const pwd = (process.env && process.env.PWD) || '.';
+  const cmd = `${require.resolve('ts-node/dist/bin')} -T -P ${path.resolve(pwd, 'tsconfig.json')} ${path.resolve(
+    pwd,
+    'src/bin/cli.ts'
   )} ${args.join(' ')}`;
   return new Promise((resolve) => {
     exec(cmd, { cwd }, (error, stdout, stderr) => {
