@@ -60,6 +60,10 @@ describe('createActionListenerMiddleware', () => {
   const testAction3 = createAction<string>('testAction3')
   type TestAction3 = ReturnType<typeof testAction3>
 
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(noop)
+  })
+
   beforeEach(() => {
     middleware = createActionListenerMiddleware()
     reducer = jest.fn(() => ({}))
@@ -461,7 +465,7 @@ describe('createActionListenerMiddleware', () => {
     expect(reducer.mock.calls).toEqual([[{}, testAction1('a')]])
   })
 
-  test('Continues running other listeners if there is an error', () => {
+  test('Continues running other listeners if one of them raises an error', () => {
     const matcher = (action: any) => true
 
     middleware.addListener(matcher, () => {
@@ -473,6 +477,47 @@ describe('createActionListenerMiddleware', () => {
 
     store.dispatch(testAction1('a'))
     expect(listener.mock.calls).toEqual([[testAction1('a'), middlewareApi]])
+  })
+
+  test('Continues running other listeners if a predicate raises an error', () => {
+    const matcher = (action: any) => true
+    const firstListener = jest.fn(() => {})
+    const secondListener = jest.fn(() => {})
+
+    middleware.addListener(() => {
+      throw new Error('Predicate Panic!')
+    }, firstListener);
+
+    middleware.addListener(matcher, secondListener)
+
+    store.dispatch(testAction1('a'))
+    expect(firstListener).not.toHaveBeenCalled();
+    expect(secondListener.mock.calls).toEqual([
+      [testAction1('a'), middlewareApi],
+    ])
+  })
+
+  test('Notifies listener errors to `onError`, if provided', () => {
+    const onError = jest.fn();
+    middleware = createActionListenerMiddleware({
+      onError
+    })
+    reducer = jest.fn(() => ({}))
+    store = configureStore({
+      reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+  
+    const listenerError = new Error('Boom!');
+  
+    const matcher = (action: any) => true
+  
+    middleware.addListener(matcher, () => {
+      throw listenerError;
+    });
+
+    store.dispatch(testAction1('a'))
+    expect(onError).toBeCalledWith(listenerError);
   })
 
   test('condition method resolves promise when the predicate succeeds', async () => {
