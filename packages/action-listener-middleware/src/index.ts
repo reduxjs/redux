@@ -1,11 +1,13 @@
 import {
   createAction,
+  nanoid,
   PayloadAction,
   Middleware,
   Dispatch,
   AnyAction,
   MiddlewareAPI,
   Action,
+  ThunkDispatch,
 } from '@reduxjs/toolkit'
 
 interface BaseActionCreator<P, T extends string, M = never, E = never> {
@@ -16,7 +18,19 @@ interface BaseActionCreator<P, T extends string, M = never, E = never> {
 interface TypedActionCreator<Type extends string> {
   (...args: any[]): Action<Type>
   type: Type
+  match: MatchFunction<any>
 }
+
+type ListenerPredicate<Action extends AnyAction, State> = (
+  action: Action,
+  currentState?: State,
+  originalState?: State
+) => boolean
+
+type ConditionFunction<Action extends AnyAction, State> = (
+  predicate: ListenerPredicate<Action, State> | (() => boolean),
+  timeout?: number
+) => Promise<boolean>
 
 type MatchFunction<T> = (v: any) => v is T
 
@@ -30,6 +44,16 @@ export const hasMatchFunction = <T>(
   return v && typeof (v as HasMatchFunction<T>).match === 'function'
 }
 
+export const isActionCreator = (
+  item: Function
+): item is TypedActionCreator<any> => {
+  return (
+    typeof item === 'function' &&
+    typeof (item as any).type === 'string' &&
+    hasMatchFunction(item as any)
+  )
+}
+
 /** @public */
 export type Matcher<T> = HasMatchFunction<T> | MatchFunction<T>
 
@@ -38,7 +62,9 @@ export type WithMiddlewareType<T extends Middleware<any, any, any>> = {
   [declaredMiddlewareType]: T
 }
 
-export type When = 'before' | 'after' | undefined
+export type MiddlewarePhase = 'beforeReducer' | 'afterReducer'
+
+export type When = MiddlewarePhase | 'both' | undefined
 type WhenFromOptions<O extends ActionListenerOptions> =
   O extends ActionListenerOptions ? O['when'] : never
 
@@ -50,8 +76,12 @@ export interface ActionListenerMiddlewareAPI<
   D extends Dispatch<AnyAction>,
   O extends ActionListenerOptions
 > extends MiddlewareAPI<D, S> {
-  stopPropagation: WhenFromOptions<O> extends 'before' ? () => void : undefined
+  getOriginalState: () => S
   unsubscribe(): void
+  condition: ConditionFunction<AnyAction, S>
+  currentPhase: MiddlewarePhase
+  // TODO Figure out how to pass this through the other types correctly
+  extra: unknown
 }
 
 /**
@@ -71,6 +101,10 @@ export interface ActionListenerOptions {
    * Defaults to 'before'.
    */
   when?: When
+}
+
+export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
+  extra?: ExtraArgument
 }
 
 export interface AddListenerAction<
@@ -184,24 +218,28 @@ export const removeListenerAction = createAction(
   ): RemoveListenerAction<AnyAction, S, D>
 }
 
+const defaultWhen: MiddlewarePhase = 'afterReducer'
+const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
+
 /**
  * @alpha
  */
 export function createActionListenerMiddleware<
-  S,
-  D extends Dispatch<AnyAction> = Dispatch
->() {
+  S = any,
+  // TODO Carry through the thunk extra arg somehow?
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  ExtraArgument = unknown
+>(middlewareOptions: CreateListenerMiddlewareOptions<ExtraArgument> = {}) {
   type ListenerEntry = ActionListenerOptions & {
+    id: string
     listener: ActionListener<any, S, D, any>
     unsubscribe: () => void
+    type?: string
+    predicate: ListenerPredicate<any, any>
   }
 
-  type ListenerEntryWithMatcher = ListenerEntry & {
-    matcher: MatchFunction<any>
-  }
-
-  const listenerMap: Record<string, Set<ListenerEntry> | undefined> = {}
-  const matcherListeners = new Set<ListenerEntryWithMatcher>()
+  const listenerMap = new Map<string, ListenerEntry>()
+  const { extra } = middlewareOptions
 
   const middleware: Middleware<
     {
@@ -225,113 +263,49 @@ export function createActionListenerMiddleware<
 
       return
     }
-    // @ts-ignore
-    const listeners = listenerMap[action.type]
-    let matchedMatcherListeners: ListenerEntry[] = []
 
-    if (matcherListeners.size > 0) {
-      matchedMatcherListeners = Array.from(matcherListeners).filter((entry) => {
-        return entry.matcher(action)
-      })
+    if (listenerMap.size === 0) {
+      return next(action)
     }
 
-    if (listeners || matcherListeners.size > 0) {
-      const allListeners = Array.from(listeners ?? []).concat(
-        matchedMatcherListeners
-      )
-      const defaultWhen = 'after'
-      let result: unknown
-      for (const phase of ['before', 'after'] as const) {
-        for (const entry of allListeners) {
-          if (phase !== (entry.when || defaultWhen)) {
-            continue
-          }
-          let stoppedPropagation = false
-          let currentPhase = phase
-          let synchronousListenerFinished = false
+    let result: unknown
+    const originalState = api.getState()
+    const getOriginalState = () => originalState
+
+    for (const currentPhase of actualMiddlewarePhases) {
+      let currentState = api.getState()
+      for (let entry of listenerMap.values()) {
+        const runThisPhase =
+          entry.when === 'both' || entry.when === currentPhase
+        const runListener =
+          runThisPhase && entry.predicate(action, currentState, originalState)
+        if (!runListener) {
+          continue
+        }
+
+        try {
           entry.listener(action, {
             ...api,
-            stopPropagation() {
-              if (currentPhase === 'before') {
-                if (!synchronousListenerFinished) {
-                  stoppedPropagation = true
-                } else {
-                  throw new Error(
-                    'stopPropagation can only be called synchronously'
-                  )
-                }
-              } else {
-                throw new Error(
-                  'stopPropagation can only be called by action listeners with the `when` option set to "before"'
-                )
-              }
-            },
+            getOriginalState,
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            condition,
+            currentPhase,
+            extra,
             unsubscribe: entry.unsubscribe,
           })
-          synchronousListenerFinished = true
-          if (stoppedPropagation) {
-            return action
-          }
-        }
-        if (phase === 'before') {
-          result = next(action)
-        } else {
-          return result
+        } catch (err) {
+          // ignore errors deliberately
         }
       }
+      if (currentPhase === 'beforeReducer') {
+        result = next(action)
+      } else {
+        return result
+      }
     }
-    return next(action)
   }
 
   type Unsubscribe = () => void
-
-  function addStringListener<T extends string, O extends ActionListenerOptions>(
-    type: T,
-    listener: ActionListener<Action<T>, S, D, O>,
-    options?: O
-  ): Unsubscribe {
-    const listeners = getListenerMap(type)
-    let entry = findListenerEntry(listeners, listener)
-
-    if (!entry) {
-      entry = {
-        ...options,
-        listener,
-        unsubscribe: () => listeners.delete(entry!),
-      }
-
-      listeners.add(entry)
-    }
-
-    return entry.unsubscribe
-  }
-
-  function addMatcherListener<
-    MA extends AnyAction,
-    M extends MatchFunction<MA>,
-    O extends ActionListenerOptions
-  >(
-    matcher: M,
-    listener: ActionListener<MA, S, D, O>,
-    options?: O
-  ): Unsubscribe {
-    let entry = findListenerEntry(matcherListeners, listener) as
-      | ListenerEntryWithMatcher
-      | undefined
-
-    if (!entry) {
-      entry = {
-        ...options,
-        listener,
-        matcher,
-        unsubscribe: () => matcherListeners.delete(entry!),
-      }
-
-      matcherListeners.add(entry)
-    }
-
-    return entry.unsubscribe
-  }
 
   type GuardedType<T> = T extends (x: any) => x is infer T ? T : never
 
@@ -360,26 +334,63 @@ export function createActionListenerMiddleware<
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
+  function addListener<
+    MA extends AnyAction,
+    M extends ListenerPredicate<MA, S>,
+    O extends ActionListenerOptions
+  >(
+    matcher: M,
+    listener: ActionListener<AnyAction, S, D, O>,
+    options?: O
+  ): Unsubscribe
+  // eslint-disable-next-line no-redeclare
   function addListener(
-    typeOrActionCreator: string | TypedActionCreator<any>,
+    typeOrActionCreator:
+      | string
+      | TypedActionCreator<any>
+      | ListenerPredicate<any, any>,
     listener: ActionListener<AnyAction, S, D, any>,
     options?: ActionListenerOptions
   ): Unsubscribe {
-    if (typeof typeOrActionCreator === 'string') {
-      return addStringListener(typeOrActionCreator, listener, options)
-    } else if (typeof typeOrActionCreator.type === 'string') {
-      return addStringListener(typeOrActionCreator.type, listener, options)
-    } else {
-      const matcher = typeOrActionCreator as unknown as MatchFunction<any>
-      return addMatcherListener(matcher, listener, options)
-    }
-  }
+    let predicate: ListenerPredicate<any, any>
+    let type: string | undefined
 
-  function getListenerMap(type: string) {
-    if (!listenerMap[type]) {
-      listenerMap[type] = new Set()
+    let entry = findListenerEntry(
+      (existingEntry) => existingEntry.listener === listener
+    )
+
+    if (!entry) {
+      if (typeof typeOrActionCreator === 'string') {
+        type = typeOrActionCreator
+        predicate = (action: any) => action.type === type
+      } else {
+        if (isActionCreator(typeOrActionCreator)) {
+          type = typeOrActionCreator.type
+          predicate = typeOrActionCreator.match
+        } else {
+          predicate = typeOrActionCreator as unknown as ListenerPredicate<
+            any,
+            any
+          >
+        }
+      }
+
+      const id = nanoid()
+      const unsubscribe = () => listenerMap.delete(id)
+      entry = {
+        when: defaultWhen,
+        ...options,
+        id,
+        listener,
+        type,
+        predicate,
+        unsubscribe,
+      }
+
+      listenerMap.set(id, entry)
     }
-    return listenerMap[type]!
+
+    return entry.unsubscribe
   }
 
   function removeListener<C extends TypedActionCreator<any>>(
@@ -401,31 +412,63 @@ export function createActionListenerMiddleware<
         ? typeOrActionCreator
         : typeOrActionCreator.type
 
-    const listeners = listenerMap[type]
-
-    if (!listeners) {
-      return false
-    }
-
-    let entry = findListenerEntry(listeners, listener)
+    let entry = findListenerEntry(
+      (entry) => entry.type === type && entry.listener === listener
+    )
 
     if (!entry) {
       return false
     }
 
-    listeners.delete(entry)
+    listenerMap.delete(entry.id)
     return true
   }
 
   function findListenerEntry(
-    entries: Set<ListenerEntry>,
-    listener: Function
+    comparator: (entry: ListenerEntry) => boolean
   ): ListenerEntry | undefined {
-    for (const entry of entries) {
-      if (entry.listener === listener) {
+    for (const entry of listenerMap.values()) {
+      if (comparator(entry)) {
         return entry
       }
     }
+
+    return undefined
+  }
+
+  const condition: ConditionFunction<AnyAction, S> = async (
+    predicate,
+    timeout
+  ) => {
+    let unsubscribe: Unsubscribe = () => {}
+
+    const conditionSucceededPromise = new Promise<boolean>(
+      (resolve, reject) => {
+        unsubscribe = addListener(predicate, (action, listenerApi) => {
+          // One-shot listener that cleans up as soon as the predicate resolves
+          listenerApi.unsubscribe()
+          resolve(true)
+        })
+      }
+    )
+
+    if (timeout === undefined) {
+      return conditionSucceededPromise
+    }
+
+    const timedOutPromise = new Promise<boolean>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(false)
+      }, timeout)
+    })
+
+    const result = await Promise.race([
+      conditionSucceededPromise,
+      timedOutPromise,
+    ])
+
+    unsubscribe()
+    return result
   }
 
   return Object.assign(
