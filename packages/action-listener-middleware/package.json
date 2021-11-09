@@ -38,5 +38,6 @@
   "files": [
     "src",
     "dist"
-  ]
+  ],
+  "sideEffects": false
 }
