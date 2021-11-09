@@ -38,6 +38,15 @@ export interface HasMatchFunction<T> {
   match: MatchFunction<T>
 }
 
+function assertFunction(
+  func: unknown,
+  expected: string
+): asserts func is (...args: unknown[]) => unknown {
+  if (typeof func !== 'function') {
+    throw new TypeError(`${expected} in not a function`)
+  }
+}
+
 export const hasMatchFunction = <T>(
   v: Matcher<T>
 ): v is HasMatchFunction<T> => {
@@ -94,6 +103,10 @@ export type ActionListener<
   O extends ActionListenerOptions
 > = (action: A, api: ActionListenerMiddlewareAPI<S, D, O>) => void
 
+export interface ListenerErrorHandler {
+  (error: unknown): void
+}
+
 export interface ActionListenerOptions {
   /**
    * Determines if the listener runs 'before' or 'after' the reducers have been called.
@@ -105,6 +118,10 @@ export interface ActionListenerOptions {
 
 export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
   extra?: ExtraArgument
+  /**
+   * Receives synchronous errors that are raised by `listener` and `listenerOption.predicate`.
+   */
+  onError?: ListenerErrorHandler
 }
 
 export interface AddListenerAction<
@@ -118,6 +135,28 @@ export interface AddListenerAction<
     type: string
     listener: ActionListener<A, S, D, O>
     options?: O
+  }
+}
+
+/**
+ * Safely reports errors to the `errorHandler` provided.
+ * Errors that occur inside `errorHandler` are notified in a new task.
+ * Inspired by [rxjs reportUnhandledError](https://github.com/ReactiveX/rxjs/blob/6fafcf53dc9e557439b25debaeadfd224b245a66/src/internal/util/reportUnhandledError.ts)
+ * @param errorHandler
+ * @param errorToNotify
+ */
+const safelyNotifyError = (
+  errorHandler: ListenerErrorHandler,
+  errorToNotify: unknown
+): void => {
+  try {
+    errorHandler(errorToNotify)
+  } catch (errorHandlerError) {
+    // We cannot let an error raised here block the listener queue.
+    // The error raised here will be picked up by `window.onerror`, `process.on('error')` etc...
+    setTimeout(() => {
+      throw errorHandlerError
+    }, 0)
   }
 }
 
@@ -220,6 +259,9 @@ export const removeListenerAction = createAction(
 
 const defaultWhen: MiddlewarePhase = 'afterReducer'
 const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
+const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
+  console.error('action-listener-middleware-error', ...args)
+}
 
 /**
  * @alpha
@@ -239,7 +281,9 @@ export function createActionListenerMiddleware<
   }
 
   const listenerMap = new Map<string, ListenerEntry>()
-  const { extra } = middlewareOptions
+  const { extra, onError = defaultErrorHandler } = middlewareOptions
+
+  assertFunction(onError, 'onError')
 
   const middleware: Middleware<
     {
@@ -277,8 +321,18 @@ export function createActionListenerMiddleware<
       for (let entry of listenerMap.values()) {
         const runThisPhase =
           entry.when === 'both' || entry.when === currentPhase
-        const runListener =
-          runThisPhase && entry.predicate(action, currentState, originalState)
+
+        let runListener = runThisPhase
+
+        if (runListener) {
+          try {
+            runListener = entry.predicate(action, currentState, originalState)
+          } catch (predicateError) {
+            safelyNotifyError(onError, predicateError)
+            runListener = false
+          }
+        }
+
         if (!runListener) {
           continue
         }
@@ -293,8 +347,8 @@ export function createActionListenerMiddleware<
             extra,
             unsubscribe: entry.unsubscribe,
           })
-        } catch (err) {
-          // ignore errors deliberately
+        } catch (listenerError) {
+          safelyNotifyError(onError, listenerError)
         }
       }
       if (currentPhase === 'beforeReducer') {
