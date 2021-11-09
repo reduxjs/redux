@@ -88,7 +88,9 @@ For more background and debate over the use cases and API design, see the origin
 
 ## API Reference
 
-`createActionListenerMiddleware` lets you add listeners by providing an action type and a callback, lets you specify whether your callback should run before or after the action is processed by the reducers, and gives you access to `dispatch` and `getState` for use in your logic. Callbacks can also unsubscribe.
+`createActionListenerMiddleware` lets you add listeners by providing a "listener callback" containing additional logic, a way to specify when that callback should run based on dispatched actions or state changes, and whether your callback should run before or after the action is processed by the reducers.
+
+The middleware then gives you access to `dispatch` and `getState` for use in your listener callback's logic. Callbacks can also unsubscribe to stop from being run again in the future.
 
 Listeners can be defined statically by calling `listenerMiddleware.addListener()` during setup, or added and removed dynamically at runtime with special `dispatch(addListenerAction())` and `dispatch(removeListenerAction())` actions.
 
@@ -119,7 +121,9 @@ Parameters:
   - `unsubscribe` will remove the listener from the middleware
 - `options: {when?: 'before' | 'after'}`: an options object. Currently only one options field is accepted - an enum indicating whether to run this listener 'before' the action is processed by the reducers, or 'after'. If not provided, the default is 'after'.
 
-The return value is a standard `unsubscribe()` callback that will remove this listener. If a listener entry with this exact function reference already exists, no new entry will be added, and the existing `unsubscribe` method will be returned.
+The return value is a standard `unsubscribe()` callback that will remove this listener.
+
+If you try to add a listener entry but another entry with this exact function reference already exists, no new entry will be added, and the existing `unsubscribe` method will be returned.
 
 Adding a listener takes a "listener predicate" callback, which will be called when an action is dispatched, and should return `true` if the listener itself should be called:
 
