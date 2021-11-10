@@ -39,25 +39,7 @@ import { kindOf } from './utils/kindOf'
  * @returns A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-export default function createStore<
-  S,
-  A extends Action,
-  Ext = {},
-  StateExt = never
->(
-  reducer: Reducer<S, A>,
-  enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
-export default function createStore<
-  S,
-  A extends Action,
-  Ext = {},
-  StateExt = never
->(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>,
-  enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+
 export default function createStore<
   S,
   A extends Action,
