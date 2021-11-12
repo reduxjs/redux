@@ -37,7 +37,6 @@ import {
   copyWithStructuralSharing,
 } from '../utils'
 import type { ApiContext } from '../apiTypes'
-import { defaultMemoize } from 'reselect'
 
 function updateQuerySubstateIfExists(
   state: QueryState<any>,
@@ -145,7 +144,9 @@ export function buildSlice({
           updateQuerySubstateIfExists(draft, arg.queryCacheKey, (substate) => {
             substate.status = QueryStatus.pending
             substate.requestId = meta.requestId
-            substate.originalArgs = arg.originalArgs
+            if (arg.originalArgs !== undefined) {
+              substate.originalArgs = arg.originalArgs
+            }
             substate.startedTimeStamp = meta.startedTimeStamp
           })
         })
