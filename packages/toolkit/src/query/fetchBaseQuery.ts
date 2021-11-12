@@ -104,7 +104,7 @@ function stripUndefined(obj: any) {
   }
   const copy: Record<string, any> = { ...obj }
   for (const [k, v] of Object.entries(copy)) {
-    if (typeof v === 'undefined') delete copy[k]
+    if (v === undefined) delete copy[k]
   }
   return copy
 }

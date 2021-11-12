@@ -14,8 +14,7 @@ import { getTimeMeasureUtils } from './utils'
 export function isPlain(val: any) {
   const type = typeof val
   return (
-    type === 'undefined' ||
-    val === null ||
+    val == null ||
     type === 'string' ||
     type === 'boolean' ||
     type === 'number' ||
