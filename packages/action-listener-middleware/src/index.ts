@@ -73,17 +73,12 @@ export type WithMiddlewareType<T extends Middleware<any, any, any>> = {
 export type MiddlewarePhase = 'beforeReducer' | 'afterReducer'
 
 export type When = MiddlewarePhase | 'both' | undefined
-type WhenFromOptions<O extends ActionListenerOptions> =
-  O extends ActionListenerOptions ? O['when'] : never
 
 /**
  * @alpha
  */
-export interface ActionListenerMiddlewareAPI<
-  S,
-  D extends Dispatch<AnyAction>,
-  O extends ActionListenerOptions
-> extends MiddlewareAPI<D, S> {
+export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
+  extends MiddlewareAPI<D, S> {
   getOriginalState: () => S
   unsubscribe(): void
   condition: ConditionFunction<AnyAction, S>
@@ -98,9 +93,8 @@ export interface ActionListenerMiddlewareAPI<
 export type ActionListener<
   A extends AnyAction,
   S,
-  D extends Dispatch<AnyAction>,
-  O extends ActionListenerOptions
-> = (action: A, api: ActionListenerMiddlewareAPI<S, D, O>) => void
+  D extends Dispatch<AnyAction>
+> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => void
 
 export interface ListenerErrorHandler {
   (error: unknown): void
@@ -126,14 +120,12 @@ export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
 export interface AddListenerAction<
   A extends AnyAction,
   S,
-  D extends Dispatch<AnyAction>,
-  O extends ActionListenerOptions
+  D extends Dispatch<AnyAction>
 > {
   type: 'actionListenerMiddleware/add'
   payload: {
     type: string
-    listener: ActionListener<A, S, D, O>
-    options?: O
+    listener: ActionListener<A, S, D>
   }
 }
 
@@ -166,7 +158,7 @@ export const addListenerAction = createAction(
   'actionListenerMiddleware/add',
   function prepare(
     typeOrActionCreator: string | TypedActionCreator<string>,
-    listener: ActionListener<any, any, any, any>,
+    listener: ActionListener<any, any, any>,
     options?: ActionListenerOptions
   ) {
     const type =
@@ -185,7 +177,7 @@ export const addListenerAction = createAction(
 ) as BaseActionCreator<
   {
     type: string
-    listener: ActionListener<any, any, any, any>
+    listener: ActionListener<any, any, any>
     options: ActionListenerOptions
   },
   'actionListenerMiddleware/add'
@@ -197,15 +189,15 @@ export const addListenerAction = createAction(
     O extends ActionListenerOptions
   >(
     actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D, O>,
+    listener: ActionListener<ReturnType<C>, S, D>,
     options?: O
-  ): AddListenerAction<ReturnType<C>, S, D, O>
+  ): AddListenerAction<ReturnType<C>, S, D>
 
   <S, D extends Dispatch, O extends ActionListenerOptions>(
     type: string,
-    listener: ActionListener<AnyAction, S, D, O>,
+    listener: ActionListener<AnyAction, S, D>,
     options?: O
-  ): AddListenerAction<AnyAction, S, D, O>
+  ): AddListenerAction<AnyAction, S, D>
 }
 
 interface RemoveListenerAction<
@@ -216,7 +208,7 @@ interface RemoveListenerAction<
   type: 'actionListenerMiddleware/remove'
   payload: {
     type: string
-    listener: ActionListener<A, S, D, any>
+    listener: ActionListener<A, S, D>
   }
 }
 
@@ -227,7 +219,7 @@ export const removeListenerAction = createAction(
   'actionListenerMiddleware/remove',
   function prepare(
     typeOrActionCreator: string | TypedActionCreator<string>,
-    listener: ActionListener<any, any, any, any>
+    listener: ActionListener<any, any, any>
   ) {
     const type =
       typeof typeOrActionCreator === 'string'
@@ -242,17 +234,17 @@ export const removeListenerAction = createAction(
     }
   }
 ) as BaseActionCreator<
-  { type: string; listener: ActionListener<any, any, any, any> },
+  { type: string; listener: ActionListener<any, any, any> },
   'actionListenerMiddleware/remove'
 > & {
   <C extends TypedActionCreator<any>, S, D extends Dispatch>(
     actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D, any>
+    listener: ActionListener<ReturnType<C>, S, D>
   ): RemoveListenerAction<ReturnType<C>, S, D>
 
   <S, D extends Dispatch>(
     type: string,
-    listener: ActionListener<AnyAction, S, D, any>
+    listener: ActionListener<AnyAction, S, D>
   ): RemoveListenerAction<AnyAction, S, D>
 }
 
@@ -273,7 +265,7 @@ export function createActionListenerMiddleware<
 >(middlewareOptions: CreateListenerMiddlewareOptions<ExtraArgument> = {}) {
   type ListenerEntry = ActionListenerOptions & {
     id: string
-    listener: ActionListener<any, S, D, any>
+    listener: ActionListener<any, S, D>
     unsubscribe: () => void
     type?: string
     predicate: ListenerPredicate<any, any>
@@ -367,13 +359,13 @@ export function createActionListenerMiddleware<
     O extends ActionListenerOptions
   >(
     actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D, O>,
+    listener: ActionListener<ReturnType<C>, S, D>,
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
   function addListener<T extends string, O extends ActionListenerOptions>(
     type: T,
-    listener: ActionListener<Action<T>, S, D, O>,
+    listener: ActionListener<Action<T>, S, D>,
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
@@ -383,7 +375,7 @@ export function createActionListenerMiddleware<
     O extends ActionListenerOptions
   >(
     matcher: M,
-    listener: ActionListener<GuardedType<M>, S, D, O>,
+    listener: ActionListener<GuardedType<M>, S, D>,
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
@@ -393,7 +385,7 @@ export function createActionListenerMiddleware<
     O extends ActionListenerOptions
   >(
     matcher: M,
-    listener: ActionListener<AnyAction, S, D, O>,
+    listener: ActionListener<AnyAction, S, D>,
     options?: O
   ): Unsubscribe
   // eslint-disable-next-line no-redeclare
@@ -402,7 +394,7 @@ export function createActionListenerMiddleware<
       | string
       | TypedActionCreator<any>
       | ListenerPredicate<any, any>,
-    listener: ActionListener<AnyAction, S, D, any>,
+    listener: ActionListener<AnyAction, S, D>,
     options?: ActionListenerOptions
   ): Unsubscribe {
     let predicate: ListenerPredicate<any, any>
@@ -448,17 +440,17 @@ export function createActionListenerMiddleware<
 
   function removeListener<C extends TypedActionCreator<any>>(
     actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D, any>
+    listener: ActionListener<ReturnType<C>, S, D>
   ): boolean
   // eslint-disable-next-line no-redeclare
   function removeListener(
     type: string,
-    listener: ActionListener<AnyAction, S, D, any>
+    listener: ActionListener<AnyAction, S, D>
   ): boolean
   // eslint-disable-next-line no-redeclare
   function removeListener(
     typeOrActionCreator: string | TypedActionCreator<any>,
-    listener: ActionListener<AnyAction, S, D, any>
+    listener: ActionListener<AnyAction, S, D>
   ): boolean {
     const type =
       typeof typeOrActionCreator === 'string'
