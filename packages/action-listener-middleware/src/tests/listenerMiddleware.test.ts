@@ -4,6 +4,7 @@ import {
   createSlice,
   AnyAction,
   isAnyOf,
+  PayloadAction,
 } from '@reduxjs/toolkit'
 import {
   createActionListenerMiddleware,
@@ -11,6 +12,12 @@ import {
   removeListenerAction,
   When,
   ActionListenerMiddlewareAPI,
+<<<<<<< HEAD
+=======
+  ActionListenerMiddleware,
+  TypedAddListenerAction,
+  TypedAddListener,
+>>>>>>> 12a04c75 (Add type tests)
 } from '../index'
 
 const middlewareApi = {
@@ -24,6 +31,44 @@ const middlewareApi = {
 }
 
 const noop = () => {}
+
+export declare type IsAny<T, True, False = never> = true | false extends (
+  T extends never ? true : false
+)
+  ? True
+  : False
+
+export declare type IsUnknown<T, True, False = never> = unknown extends T
+  ? IsAny<T, False, True>
+  : False
+
+export function expectType<T>(t: T): T {
+  return t
+}
+
+type Equals<T, U> = IsAny<
+  T,
+  never,
+  IsAny<U, never, [T] extends [U] ? ([U] extends [T] ? any : never) : never>
+>
+export function expectExactType<T>(t: T) {
+  return <U extends Equals<T, U>>(u: U) => {}
+}
+
+type EnsureUnknown<T extends any> = IsUnknown<T, any, never>
+export function expectUnknown<T extends EnsureUnknown<T>>(t: T) {
+  return t
+}
+
+type EnsureAny<T extends any> = IsAny<T, any, never>
+export function expectExactAny<T extends EnsureAny<T>>(t: T) {
+  return t
+}
+
+type IsNotAny<T> = IsAny<T, never, any>
+export function expectNotAny<T extends IsNotAny<T>>(t: T): T {
+  return t
+}
 
 describe('createActionListenerMiddleware', () => {
   let store = configureStore({
@@ -42,9 +87,13 @@ describe('createActionListenerMiddleware', () => {
       increment(state) {
         state.value += 1
       },
+      // Use the PayloadAction type to declare the contents of `action.payload`
+      incrementByAmount: (state, action: PayloadAction<number>) => {
+        state.value += action.payload
+      },
     },
   })
-  const { increment } = counterSlice.actions
+  const { increment, incrementByAmount } = counterSlice.actions
 
   function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -52,6 +101,7 @@ describe('createActionListenerMiddleware', () => {
 
   let reducer: jest.Mock
   let middleware: ReturnType<typeof createActionListenerMiddleware>
+  // let middleware: ActionListenerMiddleware<CounterState> //: ReturnType<typeof createActionListenerMiddleware>
 
   const testAction1 = createAction<string>('testAction1')
   type TestAction1 = ReturnType<typeof testAction1>
@@ -101,32 +151,6 @@ describe('createActionListenerMiddleware', () => {
     const originalAction = testAction1('a')
     const resultAction = store.dispatch(originalAction)
     expect(resultAction).toBe(originalAction)
-  })
-
-  test.skip('Allows dispatching a thunk without TS errors', () => {
-    const store = configureStore({
-      reducer: counterSlice.reducer,
-      middleware: (gDM) => gDM().prepend(middleware),
-    })
-    store.dispatch(increment())
-
-    let testState = 0
-
-    middleware.addListener(
-      (action: any, state: any) => {
-        return increment.match(action) && state > 1
-      },
-      (action, listenerApi) => {
-        // TODO Can't get the thunk dispatch types to carry through
-        // listenerApi.dispatch((dispatch, getState) => {
-        //   testState = getState()
-        // })
-      }
-    )
-
-    store.dispatch(increment())
-
-    expect(testState).toBe(2)
   })
 
   test('directly subscribing', () => {
@@ -335,10 +359,14 @@ describe('createActionListenerMiddleware', () => {
 
   test('"can unsubscribe via middleware api', () => {
     const listener = jest.fn(
+<<<<<<< HEAD
       (
         action: TestAction1,
         api: ActionListenerMiddlewareAPI<any, any, any>
       ) => {
+=======
+      (action: TestAction1, api: ActionListenerMiddlewareAPI<any, any>) => {
+>>>>>>> 12a04c75 (Add type tests)
         if (action.payload === 'b') {
           api.unsubscribe()
         }
@@ -486,38 +514,38 @@ describe('createActionListenerMiddleware', () => {
 
     middleware.addListener(() => {
       throw new Error('Predicate Panic!')
-    }, firstListener);
+    }, firstListener)
 
     middleware.addListener(matcher, secondListener)
 
     store.dispatch(testAction1('a'))
-    expect(firstListener).not.toHaveBeenCalled();
+    expect(firstListener).not.toHaveBeenCalled()
     expect(secondListener.mock.calls).toEqual([
       [testAction1('a'), middlewareApi],
     ])
   })
 
   test('Notifies listener errors to `onError`, if provided', () => {
-    const onError = jest.fn();
+    const onError = jest.fn()
     middleware = createActionListenerMiddleware({
-      onError
+      onError,
     })
     reducer = jest.fn(() => ({}))
     store = configureStore({
       reducer,
       middleware: (gDM) => gDM().prepend(middleware),
     })
-  
-    const listenerError = new Error('Boom!');
-  
-    const matcher = (action: any) => true
-  
+
+    const listenerError = new Error('Boom!')
+
+    const matcher = (action: any): action is any => true
+
     middleware.addListener(matcher, () => {
-      throw listenerError;
-    });
+      throw listenerError
+    })
 
     store.dispatch(testAction1('a'))
-    expect(onError).toBeCalledWith(listenerError);
+    expect(onError).toBeCalledWith(listenerError)
   })
 
   test('condition method resolves promise when the predicate succeeds', async () => {
@@ -601,5 +629,190 @@ describe('createActionListenerMiddleware', () => {
     store.dispatch(increment())
 
     expect(finalCount).toBe(2)
+  })
+
+  describe('Type tests', () => {
+    const middleware = createActionListenerMiddleware()
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    test.skip('State args default to unknown', () => {
+      middleware.addListener(
+        (action, currentState, previousState): action is AnyAction => {
+          expectUnknown(currentState)
+          expectUnknown(previousState)
+          return true
+        },
+        (action, listenerApi) => {}
+      )
+
+      middleware.addListener(increment.match, (action, listenerApi) => {
+        const listenerState = listenerApi.getState()
+        expectUnknown(listenerState)
+        listenerApi.dispatch((dispatch, getState) => {
+          const thunkState = getState()
+          expectUnknown(thunkState)
+        })
+      })
+
+      store.dispatch(
+        addListenerAction(
+          (action, currentState, previousState): action is AnyAction => {
+            expectUnknown(currentState)
+            expectUnknown(previousState)
+            return true
+          },
+          (action, listenerApi) => {
+            const listenerState = listenerApi.getState()
+            expectUnknown(listenerState)
+            listenerApi.dispatch((dispatch, getState) => {
+              const thunkState = getState()
+              expectUnknown(thunkState)
+            })
+          }
+        )
+      )
+
+      store.dispatch(
+        addListenerAction(increment.match, (action, listenerApi) => {
+          const listenerState = listenerApi.getState()
+          expectUnknown(listenerState)
+          // TODO Can't get the thunk dispatch types to carry through
+          listenerApi.dispatch((dispatch, getState) => {
+            const thunkState = getState()
+            expectUnknown(thunkState)
+          })
+        })
+      )
+    })
+
+    test.skip('Action type is inferred from args', () => {
+      middleware.addListener('abcd', (action, listenerApi) => {
+        expectType<{ type: 'abcd' }>(action)
+      })
+
+      middleware.addListener(incrementByAmount, (action, listenerApi) => {
+        expectType<PayloadAction<number>>(action)
+      })
+
+      middleware.addListener(incrementByAmount.match, (action, listenerApi) => {
+        expectType<PayloadAction<number>>(action)
+      })
+
+      store.dispatch(
+        addListenerAction('abcd', (action, listenerApi) => {
+          expectType<{ type: 'abcd' }>(action)
+        })
+      )
+
+      store.dispatch(
+        addListenerAction(incrementByAmount, (action, listenerApi) => {
+          expectType<PayloadAction<number>>(action)
+        })
+      )
+
+      store.dispatch(
+        addListenerAction(incrementByAmount.match, (action, listenerApi) => {
+          expectType<PayloadAction<number>>(action)
+        })
+      )
+    })
+
+    test.skip('Can create a pre-typed middleware', () => {
+      const typedMiddleware = createActionListenerMiddleware<CounterState>()
+
+      typedMiddleware.addListener(
+        (action, currentState, previousState): action is AnyAction => {
+          expectNotAny(currentState)
+          expectNotAny(previousState)
+          expectExactType<CounterState>(currentState)
+          expectExactType<CounterState>(previousState)
+          return true
+        },
+        (action, listenerApi) => {}
+      )
+
+      typedMiddleware.addListener(incrementByAmount, (action, listenerApi) => {
+        const listenerState = listenerApi.getState()
+        expectExactType<CounterState>(listenerState)
+        // TODO Can't get the thunk dispatch types to carry through
+        listenerApi.dispatch((dispatch, getState) => {
+          const thunkState = listenerApi.getState()
+          expectExactType<CounterState>(thunkState)
+        })
+      })
+    })
+
+    test.skip('Can create pre-typed versions of addListener and addListenerAction', () => {
+      const typedAddListener =
+        middleware.addListener as TypedAddListener<CounterState>
+      const typedAddListenerAction =
+        addListenerAction as TypedAddListenerAction<CounterState>
+
+      typedAddListener(
+        (action, currentState, previousState): action is AnyAction => {
+          expectNotAny(currentState)
+          expectNotAny(previousState)
+          expectExactType<CounterState>(currentState)
+          expectExactType<CounterState>(previousState)
+          return true
+        },
+        (action, listenerApi) => {
+          const listenerState = listenerApi.getState()
+          expectExactType<CounterState>(listenerState)
+          // TODO Can't get the thunk dispatch types to carry through
+          listenerApi.dispatch((dispatch, getState) => {
+            const thunkState = listenerApi.getState()
+            expectExactType<CounterState>(thunkState)
+          })
+        }
+      )
+
+      typedAddListener(incrementByAmount.match, (action, listenerApi) => {
+        const listenerState = listenerApi.getState()
+        expectExactType<CounterState>(listenerState)
+        // TODO Can't get the thunk dispatch types to carry through
+        listenerApi.dispatch((dispatch, getState) => {
+          const thunkState = listenerApi.getState()
+          expectExactType<CounterState>(thunkState)
+        })
+      })
+
+      store.dispatch(
+        typedAddListenerAction(
+          (action, currentState, previousState): action is AnyAction => {
+            expectNotAny(currentState)
+            expectNotAny(previousState)
+            expectExactType<CounterState>(currentState)
+            expectExactType<CounterState>(previousState)
+            return true
+          },
+          (action, listenerApi) => {
+            const listenerState = listenerApi.getState()
+            expectExactType<CounterState>(listenerState)
+            listenerApi.dispatch((dispatch, getState) => {
+              const thunkState = listenerApi.getState()
+              expectExactType<CounterState>(thunkState)
+            })
+          }
+        )
+      )
+
+      store.dispatch(
+        typedAddListenerAction(
+          incrementByAmount.match,
+          (action, listenerApi) => {
+            const listenerState = listenerApi.getState()
+            expectExactType<CounterState>(listenerState)
+            listenerApi.dispatch((dispatch, getState) => {
+              const thunkState = listenerApi.getState()
+              expectExactType<CounterState>(thunkState)
+            })
+          }
+        )
+      )
+    })
   })
 })
