@@ -1,6 +1,4 @@
-import {
-  createAction,
-  nanoid,
+import type {
   PayloadAction,
   Middleware,
   Dispatch,
@@ -9,6 +7,7 @@ import {
   Action,
   ThunkDispatch,
 } from '@reduxjs/toolkit'
+import { createAction, nanoid } from '@reduxjs/toolkit'
 
 interface BaseActionCreator<P, T extends string, M = never, E = never> {
   type: T
