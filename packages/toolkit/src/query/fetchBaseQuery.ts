@@ -54,7 +54,7 @@ const handleResponse = async (
 
   if (responseHandler === 'json') {
     const text = await response.text()
-    return text.length ? JSON.parse(text) : undefined
+    return text.length ? JSON.parse(text) : null
   }
 }
 

@@ -302,6 +302,39 @@ export function buildThunks<
             baseQuery(arg, baseQueryApi, endpointDefinition.extraOptions as any)
         )
       }
+      if (
+        typeof process !== 'undefined' &&
+        process.env.NODE_ENV === 'development'
+      ) {
+        const what = endpointDefinition.query ? '`baseQuery`' : '`queryFn`'
+        let err: undefined | string
+        if (!result) {
+          err = `${what} did not return anything.`
+        } else if (typeof result !== 'object') {
+          err = `${what} did not return an object.`
+        } else if (result.error && result.data) {
+          err = `${what} returned an object containing both \`error\` and \`result\`.`
+        } else if (result.error === undefined && result.data === undefined) {
+          err = `${what} returned an object containing neither a valid \`error\` and \`result\`. At least one of them should not be \`undefined\``
+        } else {
+          for (const key of Object.keys(result)) {
+            if (key !== 'error' && key !== 'data' && key !== 'meta') {
+              err = `The object returned by ${what} has the unknown property ${key}.`
+              break
+            }
+          }
+        }
+        if (err) {
+          console.error(
+            `Error encountered handling the endpoint ${arg.endpointName}.
+              ${err}
+              It needs to return an object with either the shape \`{ data: <value> }\` or \`{ error: <value> }\` that may contain an optional \`meta\` property.
+              Object returned was:`,
+            result
+          )
+        }
+      }
+
       if (result.error) throw new HandledError(result.error, result.meta)
 
       return fulfillWithValue(

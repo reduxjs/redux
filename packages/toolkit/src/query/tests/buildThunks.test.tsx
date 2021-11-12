@@ -74,7 +74,7 @@ test('passes the extraArgument property to the baseQueryApi', async () => {
 
 describe('re-triggering behavior on arg change', () => {
   const api = createApi({
-    baseQuery: () => ({ data: undefined }),
+    baseQuery: () => ({ data: null }),
     endpoints: (build) => ({
       getUser: build.query<any, any>({
         query: (obj) => obj,

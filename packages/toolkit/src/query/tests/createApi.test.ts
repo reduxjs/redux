@@ -136,7 +136,7 @@ describe('wrong tagTypes log errors', () => {
   })
 
   beforeEach(() => {
-    baseQuery.mockResolvedValue({})
+    baseQuery.mockResolvedValue({ data: 'foo' })
   })
 
   test.each<[keyof typeof api.endpoints, boolean?]>([

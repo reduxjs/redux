@@ -101,7 +101,7 @@ describe('fetchBaseQuery', () => {
       expect(res).toBeInstanceOf(Object)
       expect(res.meta?.request).toBeInstanceOf(Request)
       expect(res.meta?.response).toBeInstanceOf(Object)
-      expect(res.data).toBeUndefined()
+      expect(res.data).toBeNull()
     })
 
     it('should return an error and status for error responses', async () => {

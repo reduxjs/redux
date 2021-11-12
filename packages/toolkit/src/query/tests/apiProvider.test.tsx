@@ -6,7 +6,7 @@ import { waitMs } from './helpers'
 const api = createApi({
   baseQuery: async (arg: any) => {
     await waitMs()
-    return { data: arg?.body ? arg.body : undefined }
+    return { data: arg?.body ? arg.body : null }
   },
   endpoints: (build) => ({
     getUser: build.query<any, number>({
