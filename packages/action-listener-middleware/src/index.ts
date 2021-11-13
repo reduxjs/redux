@@ -421,7 +421,15 @@ export function createActionListenerMiddleware<
     D
   > = (api) => (next) => (action) => {
     if (addListenerAction.match(action)) {
-      return insertEntry(action.payload)
+      let entry = findListenerEntry(
+        (existingEntry) => existingEntry.listener === action.payload.listener
+      )
+
+      if (!entry) {
+        entry = action.payload
+      }
+
+      return insertEntry(entry)
     }
     if (removeListenerAction.match(action)) {
       removeListener(action.payload.type, action.payload.listener)
