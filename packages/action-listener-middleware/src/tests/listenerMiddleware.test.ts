@@ -806,10 +806,15 @@ describe('createActionListenerMiddleware', () => {
       })
 
       middleware.addListener({
-        predicate: (action, currentState): action is PayloadAction<number> => {
-          return typeof action.payload === 'number'
+        predicate: (
+          action,
+          currentState,
+          previousState
+        ): action is PayloadAction<number> => {
+          return typeof action.payload === 'boolean'
         },
         listener: (action, listenerApi) => {
+          // @ts-expect-error
           expectExactType<PayloadAction<number>>(action)
         },
       })
@@ -878,12 +883,18 @@ describe('createActionListenerMiddleware', () => {
 
       // Can pass a predicate function with fewer args
       typedMiddleware.addListener({
-        predicate: (action, currentState): action is AnyAction => {
+        // TODO Why won't this infer the listener's `action` with implicit argument types?
+        predicate: (
+          action: AnyAction,
+          currentState: CounterState
+        ): action is PayloadAction<number> => {
           expectNotAny(currentState)
           expectExactType<CounterState>(currentState)
           return true
         },
         listener: (action, listenerApi) => {
+          expectType<PayloadAction<number>>(action)
+
           const listenerState = listenerApi.getState()
           expectExactType<CounterState>(listenerState)
           listenerApi.dispatch((dispatch, getState) => {
