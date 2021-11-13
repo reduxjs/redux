@@ -2,19 +2,21 @@ import {
   configureStore,
   createAction,
   createSlice,
-  AnyAction,
   isAnyOf,
-  PayloadAction,
 } from '@reduxjs/toolkit'
+
+import type { AnyAction, PayloadAction, Action } from '@reduxjs/toolkit'
+
 import {
   createActionListenerMiddleware,
   createListenerEntry,
   addListenerAction,
   removeListenerAction,
+} from '../index'
+
+import type {
   When,
   ActionListenerMiddlewareAPI,
-  ActionListenerMiddleware,
-  TypedCreateListenerEntry,
   TypedAddListenerAction,
   TypedAddListener,
 } from '../index'
@@ -345,6 +347,7 @@ describe('createActionListenerMiddleware', () => {
         listener,
       })
     )
+    expectType<Action<'actionListenerMiddleware/add'>>(unsubscribe)
 
     store.dispatch(testAction1('a'))
     // TODO This return type isn't correct
