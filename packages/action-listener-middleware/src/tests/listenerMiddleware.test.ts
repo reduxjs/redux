@@ -27,6 +27,7 @@ const middlewareApi = {
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
+  subscribe: expect.any(Function),
 }
 
 const noop = () => {}
@@ -417,6 +418,36 @@ describe('createActionListenerMiddleware', () => {
       [testAction1('a'), middlewareApi],
       [testAction1('b'), middlewareApi],
     ])
+  })
+
+  test('Can re-subscribe via middleware api', async () => {
+    let numListenerRuns = 0
+    middleware.addListener({
+      actionCreator: testAction1,
+      listener: async (action, listenerApi) => {
+        numListenerRuns++
+
+        listenerApi.unsubscribe()
+
+        await listenerApi.condition(testAction2.match)
+
+        listenerApi.subscribe()
+      },
+    })
+
+    store.dispatch(testAction1('a'))
+    expect(numListenerRuns).toBe(1)
+
+    store.dispatch(testAction1('a'))
+    expect(numListenerRuns).toBe(1)
+
+    store.dispatch(testAction2('b'))
+    expect(numListenerRuns).toBe(1)
+
+    await delay(5)
+
+    store.dispatch(testAction1('b'))
+    expect(numListenerRuns).toBe(2)
   })
 
   const whenMap: [When, string, string, number][] = [

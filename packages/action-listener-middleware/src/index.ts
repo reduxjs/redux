@@ -110,6 +110,7 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   extends MiddlewareAPI<D, S> {
   getOriginalState: () => S
   unsubscribe(): void
+  subscribe(): void
   condition: ConditionFunction<S>
   currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
@@ -479,6 +480,9 @@ export function createActionListenerMiddleware<
             currentPhase,
             extra,
             unsubscribe: entry.unsubscribe,
+            subscribe: () => {
+              listenerMap.set(entry.id, entry)
+            },
           })
         } catch (listenerError) {
           safelyNotifyError(onError, listenerError)
