@@ -249,7 +249,7 @@ import { useHistory } from 'react-router-dom'
 import { postUpdated } from './postsSlice'
 
 export const EditPostForm = ({ match }) => {
-  const  postId  = Number(match.params.postId)
+  const postId = Number(match.params.postId)
 
   const post = useSelector(state =>
     state.posts.find(post => post.id === postId)
