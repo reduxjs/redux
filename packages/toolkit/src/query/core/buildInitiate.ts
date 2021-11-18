@@ -8,11 +8,12 @@ import type {
 import { DefinitionType } from '../endpointDefinitions'
 import type { QueryThunk, MutationThunk } from './buildThunks'
 import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
-import type { QuerySubState, SubscriptionOptions, RootState } from './apiState'
+import type { SubscriptionOptions, RootState } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
 import type { BaseQueryError } from '../baseQueryTypes'
+import type { QueryResultSelectorResult } from './buildSelectors'
 
 declare module './module' {
   export interface ApiEndpointQuery<
@@ -47,11 +48,12 @@ type StartQueryActionCreator<
 
 export type QueryActionCreatorResult<
   D extends QueryDefinition<any, any, any, any>
-> = Promise<QuerySubState<D>> & {
+> = Promise<QueryResultSelectorResult<D>> & {
   arg: QueryArgFrom<D>
   requestId: string
   subscriptionOptions: SubscriptionOptions | undefined
   abort(): void
+  unwrap(): Promise<ResultTypeFrom<D>>
   unsubscribe(): void
   refetch(): void
   updateSubscriptionOptions(options: SubscriptionOptions): void
@@ -273,7 +275,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         })
         const thunkResult = dispatch(thunk)
         middlewareWarning(getState)
-        const { requestId, abort } = thunkResult
+        const { requestId, abort, unwrap } = thunkResult
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
           Promise.all([runningQueries[queryCacheKey], thunkResult]).then(() =>
             (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
@@ -285,6 +287,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
             requestId,
             subscriptionOptions,
             abort,
+            unwrap,
             refetch() {
               dispatch(
                 queryAction(arg, { subscribe: false, forceRefetch: true })
@@ -339,7 +342,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         })
         const thunkResult = dispatch(thunk)
         middlewareWarning(getState)
-        const { requestId, abort } = thunkResult
+        const { requestId, abort, unwrap } = thunkResult
         const returnValuePromise = thunkResult
           .unwrap()
           .then((data) => ({ data }))
@@ -353,7 +356,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           arg: thunkResult.arg,
           requestId,
           abort,
-          unwrap: thunkResult.unwrap,
+          unwrap,
           unsubscribe: reset,
           reset,
         })

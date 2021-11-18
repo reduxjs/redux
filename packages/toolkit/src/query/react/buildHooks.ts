@@ -202,8 +202,25 @@ export type LazyQueryTrigger<D extends QueryDefinition<any, any, any, any>> = {
    *
    * By default, this will start a new request even if there is already a value in the cache.
    * If you want to use the cache value and only start a request if there is no cache value, set the second argument to `true`.
+   *
+   * @remarks
+   * If you need to access the error or success payload immediately after a lazy query, you can chain .unwrap().
+   *
+   * @example
+   * ```ts
+   * // codeblock-meta title="Using .unwrap with async await"
+   * try {
+   *   const payload = await getUserById(1).unwrap();
+   *   console.log('fulfilled', payload)
+   * } catch (error) {
+   *   console.error('rejected', error);
+   * }
+   * ```
    */
-  (arg: QueryArgFrom<D>, preferCacheValue?: boolean): void
+  (
+    arg: QueryArgFrom<D>,
+    preferCacheValue?: boolean
+  ): QueryActionCreatorResult<D>
 }
 
 /**
@@ -221,10 +238,7 @@ export type UseLazyQuerySubscription<
   D extends QueryDefinition<any, any, any, any>
 > = (
   options?: SubscriptionOptions
-) => readonly [
-  (arg: QueryArgFrom<D>) => void,
-  QueryArgFrom<D> | UninitializedValue
-]
+) => readonly [LazyQueryTrigger<D>, QueryArgFrom<D> | UninitializedValue]
 
 export type QueryStateSelector<
   R extends Record<string, any>,
@@ -681,17 +695,22 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
 
       const trigger = useCallback(
         function (arg: any, preferCacheValue = false) {
+          let promise: QueryActionCreatorResult<any>
+
           batch(() => {
             promiseRef.current?.unsubscribe()
 
-            promiseRef.current = dispatch(
+            promiseRef.current = promise = dispatch(
               initiate(arg, {
                 subscriptionOptions: subscriptionOptionsRef.current,
                 forceRefetch: !preferCacheValue,
               })
             )
+
             setArg(arg)
           })
+
+          return promise!
         },
         [dispatch, initiate]
       )
