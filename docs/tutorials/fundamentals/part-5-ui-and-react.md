@@ -535,7 +535,7 @@ We now have a working todo app! Our app creates a store, passes the store to the
 
 Try implementing the rest of the missing UI features on your own! Here's a list of the things you'll need to add:
 
-- In `<TodoListItem>` component, use the `useDispatch` hook to dispatch actions to for changing the color category and deleting the todo
+- In `<TodoListItem>` component, use the `useDispatch` hook to dispatch actions for changing the color category and deleting the todo
 - In `<Footer>`, use the `useDispatch` hook to dispatch actions for marking all todos as completed, clearing completed todos, and changing the filter values.
 
 We'll cover implementing the filters in [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md).
