@@ -150,8 +150,7 @@ describe('import paths', () => {
 });
 
 describe('yaml parsing', () => {
-  it.skip('should parse a yaml schema from a URL', async () => {
-    // TODO
+  it('should parse a yaml schema from a URL', async () => {
     const result = await generateEndpoints({
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `https://petstore3.swagger.io/api/v3/openapi.yaml`,

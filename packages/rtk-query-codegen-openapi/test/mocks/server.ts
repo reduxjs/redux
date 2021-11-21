@@ -15,5 +15,7 @@ export const server = setupServer(
   ),
 
   rest.get('https://petstore3.swagger.io/api/v3/openapi.json', (req, res, ctx) => res(ctx.json(petstoreJSON))),
-  rest.get('https://petstore3.swagger.io/api/v3/openapi.yaml', (req, res, ctx) => res(ctx.json(petstoreYAML)))
+  rest.get('https://petstore3.swagger.io/api/v3/openapi.yaml', (req, res, ctx) =>
+    res(ctx.text(petstoreYAML), ctx.set('Content-Type', 'application/yaml'))
+  )
 );

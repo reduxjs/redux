@@ -1,4 +1,4 @@
-export default `/
+export default `
 openapi: 3.0.2
 info:
   title: Swagger Petstore - OpenAPI 3.0
