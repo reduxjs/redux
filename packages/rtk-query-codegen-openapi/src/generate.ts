@@ -1,6 +1,6 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import * as path from 'path';
-import { camelCase, filter } from 'lodash';
+import { camelCase } from 'lodash';
 import ApiGenerator, {
   getOperationName as _getOperationName,
   getReferenceName,
@@ -19,8 +19,7 @@ import type { EndpointMatcher, EndpointOverrides, GenerationOptions, OperationDe
 import { capitalize, getOperationDefinitions, getV3Doc, isQuery as testIsQuery, removeUndefined } from './utils';
 import type { ObjectPropertyDefinitions } from './codegen';
 import { generateCreateApiCall, generateEndpointDefinition, generateImportNode } from './codegen';
-
-const { factory } = ts;
+import { factory } from './utils/factory';
 
 const generatedApiName = 'injectedRtkApi';
 

@@ -1,6 +1,5 @@
-import * as ts from 'typescript';
-import { GenerationOptions } from './types';
-const { factory } = ts;
+import ts from 'typescript';
+import { factory } from './utils/factory';
 
 const defaultEndpointBuilder = factory.createIdentifier('build');
 
