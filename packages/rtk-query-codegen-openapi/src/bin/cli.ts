@@ -23,7 +23,13 @@ try {
 try {
   if (!ts) {
     if (require.resolve('typescript') && require.resolve('ts-node')) {
-      require('ts-node/register/transpile-only');
+      (require('ts-node') as typeof import('ts-node')).register({
+        transpileOnly: true,
+        compilerOptions: {
+          target: 'es6',
+          module: 'commonjs',
+        },
+      });
     }
 
     ts = true;
