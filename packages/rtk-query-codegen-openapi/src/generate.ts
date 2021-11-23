@@ -353,7 +353,7 @@ export async function generateApi(
               factory.createIdentifier('url'),
               generatePathExpression(path, pathParameters, rootObject)
             ),
-            isQuery
+            isQuery && verb.toUpperCase() === 'GET'
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('method'),
