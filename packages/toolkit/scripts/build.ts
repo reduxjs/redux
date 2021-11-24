@@ -104,14 +104,14 @@ const entryPoints: EntryPointOptions[] = [
     folder: 'query',
     entryPoint: 'src/query/index.ts',
     extractionConfig: 'api-extractor.query.json',
-    globalName: 'RTK.QUERY',
+    globalName: 'RTKQ',
   },
   {
     prefix: 'rtk-query-react',
     folder: 'query/react',
     entryPoint: 'src/query/react/index.ts',
     extractionConfig: 'api-extractor.query-react.json',
-    globalName: 'RTK.QUERY.REACT',
+    globalName: 'RTKQ',
   },
 ]
 
