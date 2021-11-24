@@ -23,7 +23,7 @@ async function defaultBackoff(attempt: number = 0, maxRetries: number = 5) {
   )
 }
 
-interface StaggerOptions {
+export interface RetryOptions {
   /**
    * How many times the query will be retried (default: 5)
    */
@@ -42,8 +42,8 @@ function fail(e: any): never {
 
 const retryWithBackoff: BaseQueryEnhancer<
   unknown,
-  StaggerOptions,
-  StaggerOptions | void
+  RetryOptions,
+  RetryOptions | void
 > = (baseQuery, defaultOptions) => async (args, api, extraOptions) => {
   const options = {
     maxRetries: 5,
