@@ -33,6 +33,8 @@ afterEach(() => {
 
 describe('CLI options testing', () => {
   test('generation with `config.example.js`', async () => {
+    jest.setTimeout(10000);
+
     const out = await cli([`./config.example.js`], __dirname);
 
     expect(out).toEqual({
@@ -47,6 +49,8 @@ Done
   });
 
   test('paths are relative to configfile, not to cwd', async () => {
+    jest.setTimeout(10000);
+
     const out = await cli([`../test/config.example.js`], path.resolve(__dirname, '../src'));
 
     expect(out).toEqual({
@@ -61,7 +65,7 @@ Done
   });
 
   test('ts, js and json all work the same', async () => {
-    jest.setTimeout(15000);
+    jest.setTimeout(25000);
 
     await cli([`./config.example.js`], __dirname);
     const fromJs = fs.readFileSync(path.resolve(tmpDir, 'example.ts'), 'utf-8');
