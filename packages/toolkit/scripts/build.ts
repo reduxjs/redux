@@ -202,7 +202,7 @@ async function bundle(options: BuildOptions & EntryPointOptions) {
     const origin = chunk.text
     const sourcemap = extractInlineSourcemap(origin)
     const result = ts.transpileModule(removeInlineSourceMap(origin), {
-      fileName: chunk.path.replace(/.js$/, '.ts'),
+      fileName: chunk.path,
       compilerOptions: {
         sourceMap: true,
         module:
@@ -253,7 +253,11 @@ async function bundle(options: BuildOptions & EntryPointOptions) {
 /**
  * since esbuild doesn't support umd, we use rollup to convert esm to umd
  */
-async function buildUMD(outputPath: string, prefix: string, globalName: string) {
+async function buildUMD(
+  outputPath: string,
+  prefix: string,
+  globalName: string
+) {
   for (let umdExtension of ['umd', 'umd.min']) {
     const input = path.join(outputPath, `${prefix}.${umdExtension}.js`)
     const instance = await rollup.rollup({
