@@ -57,6 +57,7 @@ export type QueryActionCreatorResult<
   unsubscribe(): void
   refetch(): void
   updateSubscriptionOptions(options: SubscriptionOptions): void
+  queryCacheKey: string
 }
 
 type StartMutationActionCreator<
@@ -286,6 +287,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
             arg,
             requestId,
             subscriptionOptions,
+            queryCacheKey,
             abort,
             unwrap,
             refetch() {

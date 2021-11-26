@@ -474,33 +474,6 @@ export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
 const defaultQueryStateSelector: QueryStateSelector<any, any> = (x) => x
 const defaultMutationStateSelector: MutationStateSelector<any, any> = (x) => x
 
-const queryStatePreSelector = (
-  currentState: QueryResultSelectorResult<any>,
-  lastResult: UseQueryStateDefaultResult<any>
-): UseQueryStateDefaultResult<any> => {
-  // data is the last known good request result we have tracked - or if none has been tracked yet the last good result for the current args
-  let data = currentState.isSuccess ? currentState.data : lastResult?.data
-  if (data === undefined) data = currentState.data
-
-  const hasData = data !== undefined
-
-  // isFetching = true any time a request is in flight
-  const isFetching = currentState.isLoading
-  // isLoading = true only when loading while no data is present yet (initial load with no data in the cache)
-  const isLoading = !hasData && isFetching
-  // isSuccess = true when data is present
-  const isSuccess = currentState.isSuccess || (isFetching && hasData)
-
-  return {
-    ...currentState,
-    data,
-    currentData: currentState.data,
-    isFetching,
-    isLoading,
-    isSuccess,
-  } as UseQueryStateDefaultResult<any>
-}
-
 /**
  * Wrapper around `defaultQueryStateSelector` to be used in `useQuery`.
  * We want the initial render to already come back with
@@ -560,6 +533,55 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
 
   return { buildQueryHooks, buildMutationHook, usePrefetch }
 
+  function queryStatePreSelector(
+    currentState: QueryResultSelectorResult<any>,
+    lastResult: UseQueryStateDefaultResult<any> | undefined,
+    queryArgs: any
+  ): UseQueryStateDefaultResult<any> {
+    // if we had a last result and the current result is uninitialized,
+    // we might have called `api.util.resetApiState`
+    // in this case, reset the hook
+    if (lastResult?.endpointName && currentState.isUninitialized) {
+      const { endpointName } = lastResult
+      const endpointDefinition = context.endpointDefinitions[endpointName]
+      if (
+        serializeQueryArgs({
+          queryArgs: lastResult.originalArgs,
+          endpointDefinition,
+          endpointName,
+        }) ===
+        serializeQueryArgs({
+          queryArgs,
+          endpointDefinition,
+          endpointName,
+        })
+      )
+      lastResult = undefined
+    }
+
+    // data is the last known good request result we have tracked - or if none has been tracked yet the last good result for the current args
+    let data = currentState.isSuccess ? currentState.data : lastResult?.data
+    if (data === undefined) data = currentState.data
+
+    const hasData = data !== undefined
+
+    // isFetching = true any time a request is in flight
+    const isFetching = currentState.isLoading
+    // isLoading = true only when loading while no data is present yet (initial load with no data in the cache)
+    const isLoading = !hasData && isFetching
+    // isSuccess = true when data is present
+    const isSuccess = currentState.isSuccess || (isFetching && hasData)
+
+    return {
+      ...currentState,
+      data,
+      currentData: currentState.data,
+      isFetching,
+      isLoading,
+      isSuccess,
+    } as UseQueryStateDefaultResult<any>
+  }
+
   function usePrefetch<EndpointName extends QueryKeys<Definitions>>(
     endpointName: EndpointName,
     defaultOptions?: PrefetchOptions
@@ -609,8 +631,27 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
 
       const promiseRef = useRef<QueryActionCreatorResult<any>>()
 
+      let { queryCacheKey, requestId } = promiseRef.current || {}
+      const subscriptionRemoved = useSelector(
+        (state: RootState<Definitions, string, string>) =>
+          !!queryCacheKey &&
+          !!requestId &&
+          !state[api.reducerPath].subscriptions[queryCacheKey]?.[requestId]
+      )
+
+      usePossiblyImmediateEffect((): void | undefined => {
+        promiseRef.current = undefined
+      }, [subscriptionRemoved])
+
       usePossiblyImmediateEffect((): void | undefined => {
         const lastPromise = promiseRef.current
+        if (
+          typeof process !== 'undefined' &&
+          process.env.NODE_ENV === 'removeMeOnCompilation'
+        ) {
+          // this is only present to enforce the rule of hooks to keep `isSubscribed` in the dependency array
+          console.log(subscriptionRemoved)
+        }
 
         if (stableArg === skipToken) {
           lastPromise?.unsubscribe()
@@ -638,6 +679,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         refetchOnMountOrArgChange,
         stableArg,
         stableSubscriptionOptions,
+        subscriptionRemoved,
       ])
 
       useEffect(() => {
@@ -752,7 +794,11 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       const selectDefaultResult = useMemo(
         () =>
           createSelector(
-            [select(stableArg), (_: any, lastResult: any) => lastResult],
+            [
+              select(stableArg),
+              (_: any, lastResult: any) => lastResult,
+              () => stableArg,
+            ],
             queryStatePreSelector
           ),
         [select, stableArg]
