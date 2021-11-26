@@ -11,10 +11,13 @@
 export default function isPlainObject(value: unknown): value is object {
   if (typeof value !== 'object' || value === null) return false
 
-  let proto = value
-  while (Object.getPrototypeOf(proto) !== null) {
-    proto = Object.getPrototypeOf(proto)
+  let proto = Object.getPrototypeOf(value)
+  if (proto === null) return true
+
+  let baseProto = proto
+  while (Object.getPrototypeOf(baseProto) !== null) {
+    baseProto = Object.getPrototypeOf(baseProto)
   }
 
-  return Object.getPrototypeOf(value) === proto
+  return proto === baseProto
 }
