@@ -1,5 +1,5 @@
 {
-  "extends": "../toolkit/tsconfig.base.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

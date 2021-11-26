@@ -19,4 +19,6 @@ export interface EntryPointOptions {
   folder: string
   entryPoint: string
   extractionConfig: string
+  // globalName is used in the conversion to umd files to separate rtk from rtk-query on a global namespace
+  globalName: string
 }
