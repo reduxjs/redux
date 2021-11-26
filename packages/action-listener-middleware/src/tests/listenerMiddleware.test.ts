@@ -347,6 +347,8 @@ describe('createActionListenerMiddleware', () => {
         listener,
       })
     )
+    // TODO This hopefully will be resolved in RTK 1.7 / thunk 2.4.1
+    // @ts-expect-error
     expectType<Action<'actionListenerMiddleware/add'>>(unsubscribe)
 
     store.dispatch(testAction1('a'))
