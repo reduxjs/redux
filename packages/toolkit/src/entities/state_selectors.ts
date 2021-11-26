@@ -1,3 +1,4 @@
+import type { Selector } from 'reselect'
 import { createDraftSafeSelector } from '../createDraftSafeSelector'
 import type {
   EntityState,
@@ -11,21 +12,20 @@ export function createSelectorsFactory<T>() {
   function getSelectors<V>(
     selectState: (state: V) => EntityState<T>
   ): EntitySelectors<T, V>
-  function getSelectors(
-    selectState?: (state: any) => EntityState<T>
+  function getSelectors<V>(
+    selectState?: (state: V) => EntityState<T>
   ): EntitySelectors<T, any> {
-    const selectIds = (state: any) => state.ids
+    const selectIds = (state: EntityState<T>) => state.ids
 
     const selectEntities = (state: EntityState<T>) => state.entities
 
     const selectAll = createDraftSafeSelector(
       selectIds,
       selectEntities,
-      (ids: readonly T[], entities: Dictionary<T>): any =>
-        ids.map((id: any) => (entities as any)[id])
+      (ids, entities): T[] => ids.map((id) => entities[id]!)
     )
 
-    const selectId = (_: any, id: EntityId) => id
+    const selectId = (_: unknown, id: EntityId) => id
 
     const selectById = (entities: Dictionary<T>, id: EntityId) => entities[id]
 
@@ -46,7 +46,7 @@ export function createSelectorsFactory<T>() {
     }
 
     const selectGlobalizedEntities = createDraftSafeSelector(
-      selectState,
+      selectState as Selector<V, EntityState<T>>,
       selectEntities
     )
 

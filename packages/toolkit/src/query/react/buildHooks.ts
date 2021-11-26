@@ -1,5 +1,5 @@
 import type { AnyAction, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit'
-import { createSelector } from '@reduxjs/toolkit'
+import { createSelector, Selector } from '@reduxjs/toolkit'
 import type { DependencyList } from 'react'
 import {
   useCallback,
@@ -556,7 +556,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
           endpointName,
         })
       )
-      lastResult = undefined
+        lastResult = undefined
     }
 
     // data is the last known good request result we have tracked - or if none has been tracked yet the last good result for the current args
@@ -789,22 +789,24 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         name
       )
 
+      type ApiRootState = Parameters<ReturnType<typeof select>>[0]
+
       const lastValue = useRef<any>()
 
-      const selectDefaultResult = useMemo(
+      const selectDefaultResult: Selector<ApiRootState, any, [any]> = useMemo(
         () =>
           createSelector(
             [
               select(stableArg),
-              (_: any, lastResult: any) => lastResult,
-              () => stableArg,
+              (_: ApiRootState, lastResult: any) => lastResult,
+              (_: ApiRootState) => stableArg,
             ],
             queryStatePreSelector
           ),
         [select, stableArg]
       )
 
-      const querySelector = useMemo(
+      const querySelector: Selector<ApiRootState, any, [any]> = useMemo(
         () => createSelector([selectDefaultResult], selectFromResult),
         [selectDefaultResult, selectFromResult]
       )
