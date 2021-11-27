@@ -1,0 +1,71 @@
+{
+  "name": "@rtk-query/codegen-openapi",
+  "version": "1.0.0-alpha.1",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "Lenz Weber",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reduxjs/redux-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/reduxjs/redux-toolkit/issues"
+  },
+  "homepage": "https://redux-toolkit.js.org",
+  "bin": {
+    "rtk-query-codegen-openapi": "lib/bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build && chmod +x ./lib/bin/cli.js",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "test:update": "lib/bin/cli.js test/fixtures/petstore.json --file test/fixtures/generated.ts -h",
+    "test": "jest --runInBand",
+    "cli": "esr src/bin/cli.ts"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.12.7",
+    "@reduxjs/toolkit": "^1.6.0",
+    "@types/commander": "^2.12.2",
+    "@types/glob-to-regexp": "^0.4.0",
+    "@types/jest": "^26.0.20",
+    "@types/lodash": "^4.14.165",
+    "@types/node": "^14.14.12",
+    "@types/prettier": "^2.1.6",
+    "@types/semver": "^7.3.9",
+    "babel-jest": "^26.6.3",
+    "chalk": "^4.1.0",
+    "del": "^6.0.0",
+    "esbuild": "^0.13.10",
+    "esbuild-runner": "^2.2.1",
+    "husky": "^4.3.6",
+    "jest": "^26.6.3",
+    "msw": "^0.25.0",
+    "openapi-types": "^9.1.0",
+    "pretty-quick": "^3.1.0",
+    "ts-jest": "^26.4.4",
+    "ts-node": "^10.4.0",
+    "yalc": "^1.0.0-pre.47"
+  },
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^10.0.2",
+    "commander": "^6.2.0",
+    "oazapfts": "^3.5.0",
+    "prettier": "^2.2.1",
+    "semver": "^7.3.5",
+    "swagger2openapi": "^7.0.4",
+    "typescript": ">=4.1 <=4.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}

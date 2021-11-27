@@ -30,7 +30,6 @@
     "allowSyntheticDefaultImports": true,
     "emitDeclarationOnly": true,
     "baseUrl": ".",
-    "paths": {
-    }
+    "paths": {}
   }
 }

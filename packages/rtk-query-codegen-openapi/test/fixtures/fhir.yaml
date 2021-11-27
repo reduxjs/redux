@@ -1,0 +1,66 @@
+openapi: 3.0.1
+info:
+  title: FHIR Server
+  contact: {}
+  version: 5.4.0-PRE10-SNAPSHOT/5db01f3139/2021-05-03
+tags:
+  - name: StructureDefinition
+    description: The StructureDefinition FHIR resource type
+paths:
+  /StructureDefinition:
+    get:
+      tags:
+        - StructureDefinition
+      summary: Some summary
+      description: This is a search type
+      parameters:
+        - name: foo
+          in: query
+          description: Some description
+          style: simple
+        - name: _foo
+          in: query
+          description: Some description
+          style: simple
+        - name: -bar-bar
+          in: query
+          description: Some description
+          style: simple
+        - name: _bar_bar
+          in: query
+          description: Some description
+          style: simple
+        - name: foo:bar-foo.bar/foo
+          in: query
+          description: Some description
+          style: simple
+        - name: foo_bar
+          in: query
+          description: Some description
+          style: simple
+        - name: namingConflict
+          in: query
+          description: Some description
+          style: simple
+        - name: naming_conflict
+          in: query
+          description: Some description
+          style: simple
+      responses:
+        '200':
+          description: Success
+          content:
+            application/fhir+json:
+              schema:
+                $ref: '#/components/schemas/FHIR-JSON-RESOURCE'
+            application/fhir+xml:
+              schema:
+                $ref: '#/components/schemas/FHIR-XML-RESOURCE'
+components:
+  schemas:
+    FHIR-JSON-RESOURCE:
+      type: object
+      description: A FHIR resource
+    FHIR-XML-RESOURCE:
+      type: object
+      description: A FHIR resource
