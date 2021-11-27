@@ -114,8 +114,12 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     predicate = options.actionCreator.match
   } else if ('matcher' in options) {
     predicate = options.matcher
-  } else {
+  } else if ('predicate' in options) {
     predicate = options.predicate
+  } else {
+    throw new Error(
+      'Creating a listener requires one of the known fields for matching against actions'
+    )
   }
 
   const id = nanoid()
