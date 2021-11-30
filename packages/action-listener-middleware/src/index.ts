@@ -413,6 +413,94 @@ export function createActionListenerMiddleware<
     return entry.unsubscribe
   }
 
+  function findListenerEntry(
+    comparator: (entry: ListenerEntry) => boolean
+  ): ListenerEntry | undefined {
+    for (const entry of listenerMap.values()) {
+      if (comparator(entry)) {
+        return entry
+      }
+    }
+
+    return undefined
+  }
+
+  const addListener = ((options: FallbackAddListenerOptions) => {
+    let entry = findListenerEntry(
+      (existingEntry) => existingEntry.listener === options.listener
+    )
+
+    if (!entry) {
+      entry = createListenerEntry(options as any)
+    }
+
+    return insertEntry(entry)
+  }) as TypedAddListener<S, D>
+
+  function removeListener<C extends TypedActionCreator<any>>(
+    actionCreator: C,
+    listener: ActionListener<ReturnType<C>, S, D>
+  ): boolean
+  function removeListener(
+    type: string,
+    listener: ActionListener<AnyAction, S, D>
+  ): boolean
+  function removeListener(
+    typeOrActionCreator: string | TypedActionCreator<any>,
+    listener: ActionListener<AnyAction, S, D>
+  ): boolean {
+    const type =
+      typeof typeOrActionCreator === 'string'
+        ? typeOrActionCreator
+        : typeOrActionCreator.type
+
+    let entry = findListenerEntry(
+      (entry) => entry.type === type && entry.listener === listener
+    )
+
+    if (!entry) {
+      return false
+    }
+
+    listenerMap.delete(entry.id)
+    return true
+  }
+
+  const condition: ConditionFunction<S> = async (predicate, timeout) => {
+    let unsubscribe: Unsubscribe = () => {}
+
+    const conditionSucceededPromise = new Promise<boolean>(
+      (resolve, reject) => {
+        unsubscribe = addListener({
+          predicate,
+          listener: (action, listenerApi) => {
+            // One-shot listener that cleans up as soon as the predicate resolves
+            listenerApi.unsubscribe()
+            resolve(true)
+          },
+        })
+      }
+    )
+
+    if (timeout === undefined) {
+      return conditionSucceededPromise
+    }
+
+    const timedOutPromise = new Promise<boolean>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(false)
+      }, timeout)
+    })
+
+    const result = await Promise.race([
+      conditionSucceededPromise,
+      timedOutPromise,
+    ])
+
+    unsubscribe()
+    return result
+  }
+
   const middleware: Middleware<
     {
       (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
@@ -469,7 +557,6 @@ export function createActionListenerMiddleware<
           entry.listener(action, {
             ...api,
             getOriginalState,
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             condition,
             currentPhase,
             extra,
@@ -488,94 +575,6 @@ export function createActionListenerMiddleware<
         return result
       }
     }
-  }
-
-  const addListener = ((options: FallbackAddListenerOptions) => {
-    let entry = findListenerEntry(
-      (existingEntry) => existingEntry.listener === options.listener
-    )
-
-    if (!entry) {
-      entry = createListenerEntry(options as any)
-    }
-
-    return insertEntry(entry)
-  }) as TypedAddListener<S, D>
-
-  function removeListener<C extends TypedActionCreator<any>>(
-    actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D>
-  ): boolean
-  function removeListener(
-    type: string,
-    listener: ActionListener<AnyAction, S, D>
-  ): boolean
-  function removeListener(
-    typeOrActionCreator: string | TypedActionCreator<any>,
-    listener: ActionListener<AnyAction, S, D>
-  ): boolean {
-    const type =
-      typeof typeOrActionCreator === 'string'
-        ? typeOrActionCreator
-        : typeOrActionCreator.type
-
-    let entry = findListenerEntry(
-      (entry) => entry.type === type && entry.listener === listener
-    )
-
-    if (!entry) {
-      return false
-    }
-
-    listenerMap.delete(entry.id)
-    return true
-  }
-
-  function findListenerEntry(
-    comparator: (entry: ListenerEntry) => boolean
-  ): ListenerEntry | undefined {
-    for (const entry of listenerMap.values()) {
-      if (comparator(entry)) {
-        return entry
-      }
-    }
-
-    return undefined
-  }
-
-  const condition: ConditionFunction<S> = async (predicate, timeout) => {
-    let unsubscribe: Unsubscribe = () => {}
-
-    const conditionSucceededPromise = new Promise<boolean>(
-      (resolve, reject) => {
-        unsubscribe = addListener({
-          predicate,
-          listener: (action, listenerApi) => {
-            // One-shot listener that cleans up as soon as the predicate resolves
-            listenerApi.unsubscribe()
-            resolve(true)
-          },
-        })
-      }
-    )
-
-    if (timeout === undefined) {
-      return conditionSucceededPromise
-    }
-
-    const timedOutPromise = new Promise<boolean>((resolve, reject) => {
-      setTimeout(() => {
-        resolve(false)
-      }, timeout)
-    })
-
-    const result = await Promise.race([
-      conditionSucceededPromise,
-      timedOutPromise,
-    ])
-
-    unsubscribe()
-    return result
   }
 
   return Object.assign(
