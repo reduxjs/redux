@@ -26,6 +26,7 @@ const middlewareApi = {
   getOriginalState: expect.any(Function),
   condition: expect.any(Function),
   extra: undefined,
+  take: expect.any(Function),
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
@@ -646,6 +647,68 @@ describe('createActionListenerMiddleware', () => {
 
     store.dispatch(testAction1('a'))
     expect(onError).toBeCalledWith(listenerError)
+  })
+
+  test('take resolves to the tuple [A, CurrentState, PreviousState] when the predicate matches the action', (done) => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    middleware.addListener({
+      predicate: incrementByAmount.match,
+      listener: async (_, listenerApi) => {
+        const stateBefore = listenerApi.getState()
+        const result = await listenerApi.take(increment.match)
+
+        expect(result).toEqual([
+          increment(),
+          listenerApi.getState(),
+          stateBefore,
+        ])
+        done()
+      },
+    })
+    store.dispatch(incrementByAmount(1))
+    store.dispatch(increment())
+  })
+
+  test('take resolves to null if the timeout exipires', async () => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    middleware.addListener({
+      predicate: incrementByAmount.match,
+      listener: async (_, listenerApi) => {
+        const result = await listenerApi.take(increment.match, 50)
+
+        expect(result).toBe(null)
+      },
+    })
+    store.dispatch(incrementByAmount(1))
+    await delay(200)
+  })
+
+  test("take resolves to [A, CurrentState, PreviousState] if the timeout is provided but doesn't expires", (done) => {
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    middleware.addListener({
+      predicate: incrementByAmount.match,
+      listener: async (_, listenerApi) => {
+        const stateBefore = listenerApi.getState()
+        const result = await listenerApi.take(increment.match, 50)
+
+        expect(result).toEqual([increment(), listenerApi.getState(), stateBefore])
+        done()
+      },
+    })
+    store.dispatch(incrementByAmount(1))
+    store.dispatch(increment())
   })
 
   test('condition method resolves promise when the predicate succeeds', async () => {
