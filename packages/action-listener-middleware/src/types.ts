@@ -318,18 +318,6 @@ export type ListenerPredicateGuardedActionType<T> = T extends ListenerPredicate<
   ? Action
   : never
 
-export type SyncActionListener<
-  A extends AnyAction,
-  S,
-  D extends Dispatch<AnyAction>
-> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => void
-
-export type AsyncActionListener<
-  A extends AnyAction,
-  S,
-  D extends Dispatch<AnyAction>
-> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => Promise<void>
-
 /**
  * Additional infos regarding the error raised.
  */
