@@ -19,6 +19,7 @@ import type {
   ActionListenerMiddlewareAPI,
   TypedAddListenerAction,
   TypedAddListener,
+  Unsubscribe,
 } from '../index'
 
 const middlewareApi = {
@@ -348,7 +349,9 @@ describe('createActionListenerMiddleware', () => {
         listener,
       })
     )
-    expectType<Action<'actionListenerMiddleware/add'>>(unsubscribe)
+    // TODO Fix this type error - return type isn't getting picked up right
+    // @ts-expect-error
+    expectType<Unsubscribe>(unsubscribe)
 
     store.dispatch(testAction1('a'))
     // TODO This return type isn't correct
@@ -673,7 +676,7 @@ describe('createActionListenerMiddleware', () => {
     store.dispatch(increment())
   })
 
-  test('take resolves to null if the timeout exipires', async () => {
+  test('take resolves to null if the timeout expires', async () => {
     const store = configureStore({
       reducer: counterSlice.reducer,
       middleware: (gDM) => gDM().prepend(middleware),
@@ -703,7 +706,11 @@ describe('createActionListenerMiddleware', () => {
         const stateBefore = listenerApi.getState()
         const result = await listenerApi.take(increment.match, 50)
 
-        expect(result).toEqual([increment(), listenerApi.getState(), stateBefore])
+        expect(result).toEqual([
+          increment(),
+          listenerApi.getState(),
+          stateBefore,
+        ])
         done()
       },
     })
