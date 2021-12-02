@@ -1,3 +1,5 @@
+// Source: https://github.com/ethossoftworks/job-ts
+
 import { Outcome } from './outcome'
 import type { Error as OutcomeError } from './outcome'
 

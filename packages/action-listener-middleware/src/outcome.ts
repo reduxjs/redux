@@ -1,3 +1,5 @@
+// Source: https://github.com/ethossoftworks/outcome-ts
+
 const outcomeSymbol = Symbol()
 
 export class Ok<T> {
