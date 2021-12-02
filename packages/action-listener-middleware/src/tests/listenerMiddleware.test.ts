@@ -850,7 +850,7 @@ describe('createActionListenerMiddleware', () => {
   })
 
   describe('Job API', () => {
-    test.skip('Allows canceling previous jobs', () => {
+    test('Allows canceling previous jobs', () => {
       let jobsStarted = 0
 
       middleware.addListener({
