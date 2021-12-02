@@ -13,7 +13,7 @@ export type JobFunc<T> = (job: JobHandle) => Promise<Outcome<T>>
  * A handle for the current job used in [JobFunc]. This interface is equivalent to [Job]'s interface with the exception
  * of [run] and [runWithTimeout] to prevent recursive running of the [Job] inside its [JobFunc].
  */
-interface JobHandle {
+export interface JobHandle {
   isActive: boolean
   isCompleted: boolean
   isCancelled: boolean
@@ -24,7 +24,10 @@ interface JobHandle {
   pause<R>(func: Promise<R>): Promise<R>
   delay(milliseconds: number): Promise<void>
   cancel(reason?: JobCancellationException): void
-  cancelChildren(reason?: JobCancellationException): void
+  cancelChildren(
+    reason?: JobCancellationException,
+    skipChildren?: JobHandle[]
+  ): void
 }
 
 /**
@@ -281,14 +284,20 @@ export class Job<T> implements JobHandle {
   /**
    * Cancels all children jobs without cancelling the current job.
    */
-  cancelChildren(reason?: JobCancellationException) {
+  cancelChildren(
+    reason?: JobCancellationException,
+    skipChildren: JobHandle[] = []
+  ) {
     const childrenCopy = [...this._children]
-    childrenCopy.forEach((job) =>
-      job.cancel(
-        reason ??
-          new JobCancellationException(JobCancellationReason.JobCancelled)
-      )
-    )
+    const skipSet = new Set(skipChildren)
+    childrenCopy.forEach((job) => {
+      if (!skipSet.has(job)) {
+        job.cancel(
+          reason ??
+            new JobCancellationException(JobCancellationReason.JobCancelled)
+        )
+      }
+    })
     this._children = []
   }
 
