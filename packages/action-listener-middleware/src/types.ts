@@ -8,6 +8,8 @@ import type {
   ThunkDispatch,
 } from '@reduxjs/toolkit'
 
+import type { JobHandle } from './job'
+
 /**
  * Types copied from RTK
  */
@@ -71,6 +73,8 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   subscribe(): void
   condition: ConditionFunction<S>
   take: TakePattern<S>
+  cancelPrevious: () => void
+  job: JobHandle
   currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
   extra: unknown
@@ -282,6 +286,7 @@ export type ListenerEntry<
   unsubscribe: () => void
   type?: string
   predicate: ListenerPredicate<AnyAction, S>
+  parentJob: JobHandle
 }
 
 const declaredMiddlewareType: unique symbol = undefined as any
@@ -322,7 +327,6 @@ export type ListenerPredicateGuardedActionType<T> = T extends ListenerPredicate<
  * Additional infos regarding the error raised.
  */
 export interface ListenerErrorInfo {
-  async: boolean
   /**
    * Which function has generated the exception.
    */

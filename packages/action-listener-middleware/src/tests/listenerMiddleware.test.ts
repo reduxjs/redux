@@ -32,6 +32,8 @@ const middlewareApi = {
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
   subscribe: expect.any(Function),
+  cancelPrevious: expect.any(Function),
+  job: expect.any(Object),
 }
 
 const noop = () => {}
@@ -626,7 +628,7 @@ describe('createActionListenerMiddleware', () => {
     ])
   })
 
-  test('Notifies sync listener errors to `onError`, if provided', () => {
+  test('Notifies sync listener errors to `onError`, if provided', async () => {
     const onError = jest.fn()
     middleware = createActionListenerMiddleware({
       onError,
@@ -649,8 +651,9 @@ describe('createActionListenerMiddleware', () => {
     })
 
     store.dispatch(testAction1('a'))
+    await delay(100)
+
     expect(onError).toBeCalledWith(listenerError, {
-      async: false,
       raisedBy: 'listener',
       phase: 'afterReducer',
     })
@@ -679,10 +682,9 @@ describe('createActionListenerMiddleware', () => {
 
     store.dispatch(testAction1('a'))
 
-    await Promise.resolve()
+    await delay(100)
 
     expect(onError).toBeCalledWith(listenerError, {
-      async: true,
       raisedBy: 'listener',
       phase: 'afterReducer',
     })

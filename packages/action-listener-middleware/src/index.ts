@@ -30,6 +30,15 @@ import type {
   ListenerErrorInfo,
 } from './types'
 
+import {
+  Job,
+  SupervisorJob,
+  JobHandle,
+  JobCancellationReason,
+  JobCancellationException,
+} from './job'
+import { Outcome } from './outcome'
+
 export type {
   ActionListener,
   ActionListenerMiddleware,
@@ -132,6 +141,7 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     unsubscribe: () => {
       throw new Error('Unsubscribe not initialized')
     },
+    parentJob: new SupervisorJob(),
   }
 
   return entry
@@ -342,7 +352,6 @@ export function createActionListenerMiddleware<
             runListener = false
 
             safelyNotifyError(onError, predicateError, {
-              async: false,
               raisedBy: 'predicate',
               phase: currentPhase,
             })
@@ -353,38 +362,39 @@ export function createActionListenerMiddleware<
           continue
         }
 
-        try {
-          let promiseLikeOrUndefined = entry.listener(action, {
-            ...api,
-            getOriginalState,
-            condition,
-            take,
-            currentPhase,
-            extra,
-            unsubscribe: entry.unsubscribe,
-            subscribe: () => {
-              listenerMap.set(entry.id, entry)
-            },
-          })
-
-          if (promiseLikeOrUndefined) {
-            Promise.resolve(promiseLikeOrUndefined).catch(
-              (asyncListenerError) => {
-                safelyNotifyError(onError, asyncListenerError, {
-                  async: true,
-                  raisedBy: 'listener',
-                  phase: currentPhase,
-                })
-              }
-            )
+        entry.parentJob.launchAndRun(async (jobHandle) => {
+          const result = await Outcome.try(async () =>
+            entry.listener(action, {
+              ...api,
+              getOriginalState,
+              condition,
+              take,
+              currentPhase,
+              extra,
+              unsubscribe: entry.unsubscribe,
+              subscribe: () => {
+                listenerMap.set(entry.id, entry)
+              },
+              job: jobHandle,
+              cancelPrevious: () => {
+                entry.parentJob.cancelChildren(
+                  new JobCancellationException(
+                    JobCancellationReason.JobCancelled
+                  ),
+                  [jobHandle]
+                )
+              },
+            })
+          )
+          if (result.isError()) {
+            safelyNotifyError(onError, result.error, {
+              raisedBy: 'listener',
+              phase: currentPhase,
+            })
           }
-        } catch (syncListenerError) {
-          safelyNotifyError(onError, syncListenerError, {
-            async: false,
-            raisedBy: 'listener',
-            phase: currentPhase,
-          })
-        }
+
+          return Outcome.ok(1)
+        })
       }
       if (currentPhase === 'beforeReducer') {
         result = next(action)
