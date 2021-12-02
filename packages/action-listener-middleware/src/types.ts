@@ -83,7 +83,7 @@ export type ActionListener<
   A extends AnyAction,
   S,
   D extends Dispatch<AnyAction>
-> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => void
+> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => void | Promise<void>
 
 export interface ListenerErrorHandler {
   (error: unknown): void
@@ -317,3 +317,35 @@ export type ListenerPredicateGuardedActionType<T> = T extends ListenerPredicate<
 >
   ? Action
   : never
+
+/**
+ * Additional infos regarding the error raised.
+ */
+export interface ListenerErrorInfo {
+  async: boolean
+  /**
+   * Which function has generated the exception.
+   */
+  raisedBy: 'listener' | 'predicate'
+  /**
+   * When the function that has raised the error has been called.
+   */
+  phase: MiddlewarePhase
+}
+
+/**
+ * Gets notified with synchronous and asynchronous errors raised by `listeners` or `predicates`.
+ * @param error The thrown error.
+ * @param errorInfo Additional information regarding the thrown error.
+ */
+export interface ListenerErrorHandler {
+  (error: unknown, errorInfo: ListenerErrorInfo): void
+}
+
+export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
+  extra?: ExtraArgument
+  /**
+   * Receives synchronous and asynchronous errors that are raised by `listener` and `listenerOption.predicate`.
+   */
+  onError?: ListenerErrorHandler
+}

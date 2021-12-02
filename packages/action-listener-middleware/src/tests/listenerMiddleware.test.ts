@@ -626,7 +626,7 @@ describe('createActionListenerMiddleware', () => {
     ])
   })
 
-  test('Notifies listener errors to `onError`, if provided', () => {
+  test('Notifies sync listener errors to `onError`, if provided', () => {
     const onError = jest.fn()
     middleware = createActionListenerMiddleware({
       onError,
@@ -649,7 +649,43 @@ describe('createActionListenerMiddleware', () => {
     })
 
     store.dispatch(testAction1('a'))
-    expect(onError).toBeCalledWith(listenerError)
+    expect(onError).toBeCalledWith(listenerError, {
+      async: false,
+      raisedBy: 'listener',
+      phase: 'afterReducer',
+    })
+  })
+
+  test('Notifies async listeners errors to `onError`, if provided', async () => {
+    const onError = jest.fn()
+    middleware = createActionListenerMiddleware({
+      onError,
+    })
+    reducer = jest.fn(() => ({}))
+    store = configureStore({
+      reducer,
+      middleware: (gDM) => gDM().prepend(middleware),
+    })
+
+    const listenerError = new Error('Boom!')
+    const matcher = (action: any): action is any => true
+
+    middleware.addListener({
+      matcher,
+      listener: async () => {
+        throw listenerError
+      },
+    })
+
+    store.dispatch(testAction1('a'))
+
+    await Promise.resolve()
+
+    expect(onError).toBeCalledWith(listenerError, {
+      async: true,
+      raisedBy: 'listener',
+      phase: 'afterReducer',
+    })
   })
 
   test('take resolves to the tuple [A, CurrentState, PreviousState] when the predicate matches the action', (done) => {

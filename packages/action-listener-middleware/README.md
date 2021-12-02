@@ -102,7 +102,7 @@ Current options are:
 
 - `extra`: an optional "extra argument" that will be injected into the `listenerApi` parameter of each listener. Equivalent to [the "extra argument" in the Redux Thunk middleware](https://redux.js.org/usage/writing-logic-thunks#injecting-config-values-into-thunks).
 
-- `onError`: an optional error handler that gets called with synchronous errors raised by `listener` and `predicate`.
+- `onError`: an optional error handler that gets called with synchronous and async errors raised by `listener` and synchronous errors thrown by `predicate`.
 
 ### `listenerMiddleware.addListener(predicate, listener, options?) : Unsubscribe`
 

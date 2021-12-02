@@ -27,6 +27,7 @@ import type {
   MiddlewarePhase,
   WithMiddlewareType,
   TakePattern,
+  ListenerErrorInfo,
 } from './types'
 
 export type {
@@ -48,7 +49,7 @@ function assertFunction(
   expected: string
 ): asserts func is (...args: unknown[]) => unknown {
   if (typeof func !== 'function') {
-    throw new TypeError(`${expected} in not a function`)
+    throw new TypeError(`${expected} is not a function`)
   }
 }
 
@@ -141,10 +142,11 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
  */
 const safelyNotifyError = (
   errorHandler: ListenerErrorHandler,
-  errorToNotify: unknown
+  errorToNotify: unknown,
+  errorInfo: ListenerErrorInfo
 ): void => {
   try {
-    errorHandler(errorToNotify)
+    errorHandler(errorToNotify, errorInfo)
   } catch (errorHandlerError) {
     // We cannot let an error raised here block the listener queue.
     // The error raised here will be picked up by `window.onerror`, `process.on('error')` etc...
@@ -333,8 +335,13 @@ export function createActionListenerMiddleware<
           try {
             runListener = entry.predicate(action, currentState, originalState)
           } catch (predicateError) {
-            safelyNotifyError(onError, predicateError)
             runListener = false
+
+            safelyNotifyError(onError, predicateError, {
+              async: false,
+              raisedBy: 'predicate',
+              phase: currentPhase,
+            })
           }
         }
 
@@ -343,7 +350,7 @@ export function createActionListenerMiddleware<
         }
 
         try {
-          entry.listener(action, {
+          let promiseLikeOrUndefined = entry.listener(action, {
             ...api,
             getOriginalState,
             condition,
@@ -355,8 +362,24 @@ export function createActionListenerMiddleware<
               listenerMap.set(entry.id, entry)
             },
           })
-        } catch (listenerError) {
-          safelyNotifyError(onError, listenerError)
+
+          if (promiseLikeOrUndefined) {
+            Promise.resolve(promiseLikeOrUndefined).catch(
+              (asyncListenerError) => {
+                safelyNotifyError(onError, asyncListenerError, {
+                  async: true,
+                  raisedBy: 'listener',
+                  phase: currentPhase,
+                })
+              }
+            )
+          }
+        } catch (syncListenerError) {
+          safelyNotifyError(onError, syncListenerError, {
+            async: false,
+            raisedBy: 'listener',
+            phase: currentPhase,
+          })
         }
       }
       if (currentPhase === 'beforeReducer') {
