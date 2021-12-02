@@ -93,13 +93,16 @@ describe('createActionListenerMiddleware', () => {
       increment(state) {
         state.value += 1
       },
+      decrement(state) {
+        state.value -= 1
+      },
       // Use the PayloadAction type to declare the contents of `action.payload`
       incrementByAmount: (state, action: PayloadAction<number>) => {
         state.value += action.payload
       },
     },
   })
-  const { increment, incrementByAmount } = counterSlice.actions
+  const { increment, decrement, incrementByAmount } = counterSlice.actions
 
   function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -843,6 +846,30 @@ describe('createActionListenerMiddleware', () => {
       store.dispatch(increment())
 
       expect(finalCount).toBe(2)
+    })
+  })
+
+  describe('Job API', () => {
+    test.skip('Allows canceling previous jobs', () => {
+      let jobsStarted = 0
+
+      middleware.addListener({
+        actionCreator: increment,
+        listener: async (action, listenerApi) => {
+          jobsStarted++
+
+          if (jobsStarted < 3) {
+            await listenerApi.condition(decrement.match)
+            // Cancelation _should_ cause `condition()` to throw so we never
+            // end up hitting this next line
+            console.log('Continuing after decrement')
+          } else {
+            listenerApi.cancelPrevious()
+          }
+        },
+      })
+
+      // TODO Write the rest of this test
     })
   })
 

@@ -66,13 +66,20 @@ const defaultWhen: MiddlewarePhase = 'afterReducer'
 const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
 
 function createTakePattern<S>(
-  addListener: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>
+  addListener: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>,
+  parentJob?: Job<any>
 ): TakePattern<S> {
   async function take<P extends AnyActionListenerPredicate<S>>(
     predicate: P,
     timeout: number | undefined
   ) {
     let unsubscribe: Unsubscribe = () => {}
+    let job: JobHandle
+
+    // TODO Need to figure out how to propagate cancelations of the job that
+    // is locked inside of the middleware back up into here, so that a canceled
+    // listener waiting on a condition has that condition throw instead.
+    // Maybe rewrite these around use of `Job.pause()` instead?
 
     const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
       unsubscribe = addListener({
@@ -86,20 +93,22 @@ function createTakePattern<S>(
             listenerApi.getOriginalState(),
           ])
         },
+        parentJob,
       })
     })
 
-    if (timeout === undefined) {
-      return tuplePromise
+    let promises: Promise<unknown>[] = [tuplePromise]
+
+    if (timeout !== undefined) {
+      const timedOutPromise = new Promise<null>((resolve, reject) => {
+        setTimeout(() => {
+          resolve(null)
+        }, timeout)
+      })
+      promises = [tuplePromise, timedOutPromise]
     }
 
-    const timedOutPromise = new Promise<null>((resolve, reject) => {
-      setTimeout(() => {
-        resolve(null)
-      }, timeout)
-    })
-
-    const result = await Promise.race([tuplePromise, timedOutPromise])
+    const result = await Promise.race(promises)
 
     unsubscribe()
     return result
@@ -386,7 +395,10 @@ export function createActionListenerMiddleware<
               },
             })
           )
-          if (result.isError()) {
+          if (
+            result.isError() &&
+            !(result.error instanceof JobCancellationException)
+          ) {
             safelyNotifyError(onError, result.error, {
               raisedBy: 'listener',
               phase: currentPhase,

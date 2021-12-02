@@ -8,7 +8,7 @@ import type {
   ThunkDispatch,
 } from '@reduxjs/toolkit'
 
-import type { JobHandle } from './job'
+import type { JobHandle, Job } from './job'
 
 /**
  * Types copied from RTK
@@ -100,6 +100,7 @@ export interface ActionListenerOptions {
    * Defaults to 'before'.
    */
   when?: When
+  parentJob?: JobHandle
 }
 
 export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
