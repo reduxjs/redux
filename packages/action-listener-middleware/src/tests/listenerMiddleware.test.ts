@@ -21,6 +21,8 @@ import type {
   TypedAddListener,
   Unsubscribe,
 } from '../index'
+import { JobCancellationException } from '../job'
+import { createNonNullChain } from 'typescript'
 
 const middlewareApi = {
   getState: expect.any(Function),
@@ -732,40 +734,42 @@ describe('createActionListenerMiddleware', () => {
         middleware: (gDM) => gDM().prepend(middleware),
       })
 
+      let takeResult: any = undefined
+
       middleware.addListener({
         predicate: incrementByAmount.match,
         listener: async (_, listenerApi) => {
-          const result = await listenerApi.take(increment.match, 50)
-
-          expect(result).toBe(null)
+          takeResult = await listenerApi.take(increment.match, 15)
         },
       })
       store.dispatch(incrementByAmount(1))
-      await delay(200)
+      await delay(25)
+
+      expect(takeResult).toBe(null)
     })
 
-    test("take resolves to [A, CurrentState, PreviousState] if the timeout is provided but doesn't expires", (done) => {
+    test("take resolves to [A, CurrentState, PreviousState] if the timeout is provided but doesn't expires", async () => {
       const store = configureStore({
         reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
       })
+      let takeResult: any = undefined
+      let stateBefore: any = undefined
+      let stateCurrent: any = undefined
 
       middleware.addListener({
         predicate: incrementByAmount.match,
         listener: async (_, listenerApi) => {
-          const stateBefore = listenerApi.getState()
-          const result = await listenerApi.take(increment.match, 50)
-
-          expect(result).toEqual([
-            increment(),
-            listenerApi.getState(),
-            stateBefore,
-          ])
-          done()
+          stateBefore = listenerApi.getState()
+          takeResult = await listenerApi.take(increment.match, 50)
+          stateCurrent = listenerApi.getState()
         },
       })
       store.dispatch(incrementByAmount(1))
       store.dispatch(increment())
+
+      await delay(25)
+      expect(takeResult).toEqual([increment(), stateCurrent, stateBefore])
     })
 
     test('condition method resolves promise when the predicate succeeds', async () => {
@@ -799,11 +803,11 @@ describe('createActionListenerMiddleware', () => {
 
       store.dispatch(increment())
       expect(listenerStarted).toBe(true)
-      await delay(50)
+      await delay(25)
       store.dispatch(increment())
       store.dispatch(increment())
 
-      await delay(50)
+      await delay(25)
 
       expect(finalCount).toBe(3)
     })
@@ -828,7 +832,7 @@ describe('createActionListenerMiddleware', () => {
           listenerStarted = true
           const result = await listenerApi.condition((action, currentState) => {
             return (currentState as CounterState).value === 3
-          }, 50)
+          }, 25)
 
           expect(result).toBe(false)
           const latestState = listenerApi.getState() as CounterState
@@ -842,7 +846,7 @@ describe('createActionListenerMiddleware', () => {
 
       store.dispatch(increment())
 
-      await delay(150)
+      await delay(50)
       store.dispatch(increment())
 
       expect(finalCount).toBe(2)
@@ -850,8 +854,10 @@ describe('createActionListenerMiddleware', () => {
   })
 
   describe('Job API', () => {
-    test('Allows canceling previous jobs', () => {
+    test('Allows canceling previous jobs', async () => {
       let jobsStarted = 0
+      let jobsContinued = 0
+      let jobsCanceled = 0
 
       middleware.addListener({
         actionCreator: increment,
@@ -859,17 +865,30 @@ describe('createActionListenerMiddleware', () => {
           jobsStarted++
 
           if (jobsStarted < 3) {
-            await listenerApi.condition(decrement.match)
-            // Cancelation _should_ cause `condition()` to throw so we never
-            // end up hitting this next line
-            console.log('Continuing after decrement')
+            try {
+              await listenerApi.condition(decrement.match)
+              // Cancelation _should_ cause `condition()` to throw so we never
+              // end up hitting this next line
+              jobsContinued++
+            } catch (err) {
+              if (err instanceof JobCancellationException) {
+                jobsCanceled++
+              }
+            }
           } else {
             listenerApi.cancelPrevious()
           }
         },
       })
 
-      // TODO Write the rest of this test
+      store.dispatch(increment())
+      store.dispatch(increment())
+      store.dispatch(increment())
+
+      await delay(10)
+      expect(jobsStarted).toBe(3)
+      expect(jobsContinued).toBe(0)
+      expect(jobsCanceled).toBe(2)
     })
   })
 
