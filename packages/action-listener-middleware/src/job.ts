@@ -53,10 +53,10 @@ export class JobCancellationException implements Error {
  * [JobCompleted]: The current job was already completed. This only happens if the same job is run more than once.
  */
 export enum JobCancellationReason {
-  ParentJobCancelled,
-  ParentJobCompleted,
-  JobCancelled,
-  JobCompleted,
+  ParentJobCancelled = 'ParentJobCancelled',
+  ParentJobCompleted = 'ParentJobCompleted',
+  JobCancelled = 'JobCancelled',
+  JobCompleted = 'JobCompleted',
 }
 
 /**

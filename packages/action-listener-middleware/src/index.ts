@@ -67,51 +67,75 @@ const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
 
 function createTakePattern<S>(
   addListener: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>,
-  parentJob?: Job<any>
+  parentJob: Job<any>
 ): TakePattern<S> {
+  /**
+   * A function that takes an ActionListenerPredicate and an optional timeout,
+   * and resolves when either the predicate returns `true` based on an action
+   * state combination or when the timeout expires.
+   * If the parent listener is canceled while waiting, this will throw a
+   * JobCancellationException.
+   */
   async function take<P extends AnyActionListenerPredicate<S>>(
     predicate: P,
     timeout: number | undefined
   ) {
+    // Placeholder unsubscribe function until the listener is added
     let unsubscribe: Unsubscribe = () => {}
-    let job: JobHandle
 
-    // TODO Need to figure out how to propagate cancelations of the job that
-    // is locked inside of the middleware back up into here, so that a canceled
-    // listener waiting on a condition has that condition throw instead.
-    // Maybe rewrite these around use of `Job.pause()` instead?
+    // We'll add an additional nested Job representing this function.
+    // TODO This is really a duplicate of the other job inside the middleware.
+    // This behavior requires some additional nesting:
+    // We're going to create a `Promise` representing the result of the listener,
+    // but then wrap that in an `Outcome` for consistent error handling.
+    let job: Job<[AnyAction, S, S]> = parentJob.launch(async (job) =>
+      Outcome.wrap(
+        new Promise<[AnyAction, S, S]>((resolve) => {
+          // Inside the Promise, we synchronously add the listener.
+          unsubscribe = addListener({
+            predicate: predicate as any,
+            listener: (action, listenerApi): void => {
+              // One-shot listener that cleans up as soon as the predicate passes
+              listenerApi.unsubscribe()
+              // Resolve the promise with the same arguments the predicate saw
+              resolve([
+                action,
+                listenerApi.getState(),
+                listenerApi.getOriginalState(),
+              ])
+            },
+            parentJob,
+          })
+        })
+      )
+    )
 
-    const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
-      unsubscribe = addListener({
-        predicate: predicate as any,
-        listener: (action, listenerApi): void => {
-          // One-shot listener that cleans up as soon as the predicate resolves
-          listenerApi.unsubscribe()
-          resolve([
-            action,
-            listenerApi.getState(),
-            listenerApi.getOriginalState(),
-          ])
-        },
-        parentJob,
-      })
-    })
+    let result: Outcome<[AnyAction, S, S]>
 
-    let promises: Promise<unknown>[] = [tuplePromise]
+    try {
+      // Run the job and use the timeout if given
+      result = await (timeout !== undefined
+        ? job.runWithTimeout(timeout)
+        : job.run())
 
-    if (timeout !== undefined) {
-      const timedOutPromise = new Promise<null>((resolve, reject) => {
-        setTimeout(() => {
-          resolve(null)
-        }, timeout)
-      })
-      promises = [tuplePromise, timedOutPromise]
+      if (result.isOk()) {
+        // Resolve the actual `take` promise with the action+states
+        return result.value
+      } else {
+        if (
+          result.error instanceof JobCancellationException &&
+          result.error.reason === JobCancellationReason.JobCancelled
+        ) {
+          // The `take` job itself was canceled due to timeout.
+          return null
+        }
+        // The parent was canceled - reject this promise with that error
+        throw result.error
+      }
+    } finally {
+      // Always clean up the listener
+      unsubscribe()
     }
-
-    const result = await Promise.race(promises)
-
-    unsubscribe()
-    return result
   }
 
   return take as TakePattern<S>
@@ -310,11 +334,6 @@ export function createActionListenerMiddleware<
     return true
   }
 
-  const take = createTakePattern(addListener)
-  const condition: ConditionFunction<S> = (predicate, timeout) => {
-    return take(predicate, timeout).then(Boolean)
-  }
-
   const middleware: Middleware<
     {
       (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
@@ -372,6 +391,11 @@ export function createActionListenerMiddleware<
         }
 
         entry.parentJob.launchAndRun(async (jobHandle) => {
+          const take = createTakePattern(addListener, jobHandle as Job<any>)
+          const condition: ConditionFunction<S> = (predicate, timeout) => {
+            return take(predicate, timeout).then(Boolean)
+          }
+
           const result = await Outcome.try(async () =>
             entry.listener(action, {
               ...api,
