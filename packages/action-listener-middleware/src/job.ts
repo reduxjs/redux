@@ -290,15 +290,18 @@ export class Job<T> implements JobHandle {
   ) {
     const childrenCopy = [...this._children]
     const skipSet = new Set(skipChildren)
+    const remainingChildren: typeof this._children = []
     childrenCopy.forEach((job) => {
-      if (!skipSet.has(job)) {
+      if (skipSet.has(job)) {
+        remainingChildren.push(job)
+      } else {
         job.cancel(
           reason ??
             new JobCancellationException(JobCancellationReason.JobCancelled)
         )
       }
     })
-    this._children = []
+    this._children = remainingChildren
   }
 
   private _addChild(child: Job<any>) {
