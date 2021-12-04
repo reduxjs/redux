@@ -22,7 +22,6 @@ import type {
   Unsubscribe,
 } from '../index'
 import { JobCancellationException } from '../job'
-import { createNonNullChain } from 'typescript'
 
 const middlewareApi = {
   getState: expect.any(Function),
