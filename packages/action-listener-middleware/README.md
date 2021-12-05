@@ -59,7 +59,7 @@ The Redux community has settled around three primary side effects libraries over
 
 - Thunks use basic functions passed to `dispatch`. They let users run arbitrary logic, including dispatching actions and getting state. These are mostly used for basic AJAX requests and logic that needs to read from state before dispatching actions
 - Sagas use generator functions and a custom set of "effects" APIs, which are then executed by a middleware. Sagas let users write powerful async logic and workflows that can respond to any dispatched action, including "background thread"-type behavior like infinite loops and cancelation.
-- Observables use RxJS obesrvable operators. Observables form pipelines that do arbitrary processing similar to sagas, but with a more functional API style.
+- Observables use RxJS observable operators. Observables form pipelines that do arbitrary processing similar to sagas, but with a more functional API style.
 
 All three of those have strengths and weaknesses:
 
@@ -167,7 +167,7 @@ The return value is a standard `unsubscribe()` callback that will remove this li
 
 The `listener` callback will receive the current action as its first argument, as well as a "listener API" object similar to the "thunk API" object in `createAsyncThunk`.
 
-The listener may be configured to run _before_ an action reaches the reducer, _after_ the reducer, or both, by passing a `when` option when adding the listene. If the `when` option is not provided, the default is 'afterReducer':
+The listener may be configured to run _before_ an action reaches the reducer, _after_ the reducer, or both, by passing a `when` option when adding the listener. If the `when` option is not provided, the default is 'afterReducer':
 
 ```ts
 middleware.addListener({
@@ -228,7 +228,7 @@ The `listenerApi` object is the second argument to each listener callback. It co
 
 - `unsubscribe: () => void`: will remove the listener from the middleware
 - `subscribe: () => void`: will re-subscribe the listener if it was previously removed, or no-op if currently subscribed
-- `cancelPrevious: () => void`: cancels any previously running instances of this same listener. (The cancelation will only have a meaningful effect if the previous instances are paused using one of the `job` APIs, `take`, or `condition` - see "Job Management" in the "Usage" section for more details)
+- `cancelPrevious: () => void`: cancels any previously running instances of this same listener. (The cancelation will only have a meaningful effect if the previous instances are paused using one of the `job` APIs, `take`, or `condition` - see "Cancelation and Job Management" in the "Usage" section for more details)
 
 Dynamically unsubscribing and re-subscribing this listener allows for more complex async workflows, such as avoiding duplicate running instances by calling `listenerApi.unsubscribe()` at the start of a listener, or calling `listenerApi.cancelPrevious()` to ensure that only the most recent instance is allowed to complete.
 
@@ -289,38 +289,39 @@ This middleware lets you run additional logic when some action is dispatched, as
 
 This middleware is not intended to handle all possible use cases. Like thunks, it provides you with a basic set of primitives (including access to `dispatch` and `getState`), and gives you freedom to write any sync or async logic you want. This is both a strength (you can do anything!) and a weakness (you can do anything, with no guard rails!).
 
-As of v0.4.0, the middleware does include several async workflow primitives that are sufficient to write equivalents to many Redux-Saga effects operators, like `takeLatest`, `takeLeading`, and `debounce`.
+As of v0.4.0, the middleware does include several async workflow primitives that are sufficient to write equivalents to many Redux-Saga effects operators like `takeLatest`, `takeLeading`, and `debounce`.
 
 ### Standard Usage Patterns
 
 The most common expected usage is "run some logic after a given action was dispatched". For example, you could set up a simple analytics tracker by looking for certain actions and sending extracted data to the server, including pulling user details from the store:
 
 ```js
-middleware.addListener(
-  isAnyOf(action1, action2, action3),
-  (action, listenerApi) => {
+middleware.addListener({
+  matcher: isAnyOf(action1, action2, action3),
+  listener: (action, listenerApi) => {
     const user = selectUserDetails(listenerApi.getState())
 
     const { specialData } = action.meta
 
     analyticsApi.trackUsage(action.type, user, specialData)
-  }
-)
+  },
+})
 ```
 
 You could also implement a generic API fetching capability, where the UI dispatches a plain action describing the type of resource to be requested, and the middleware automatically fetches it and dispatches a result action:
 
 ```js
-middleware.addListener(resourceRequested, async (action, listenerApi) => {
-  const { name, args } = action.payload
-  dispatch(resourceLoading())
+middleware.addListener({
+  actionCreator: resourceRequested,
+  listener: async (action, listenerApi) => {
+    const { name, args } = action.payload
+    listenerApi.dispatch(resourceLoading())
 
-  const res = await serverApi.fetch(`/api/${name}`, ...args)
-  dispatch(resourceLoaded(res.data))
+    const res = await serverApi.fetch(`/api/${name}`, ...args)
+    listenerApi.dispatch(resourceLoaded(res.data))
+  },
 })
 ```
-
-The provided `listenerPredicate` should be `(action, currentState?, originalState?) => boolean`
 
 The `listenerApi.unsubscribe` method may be used at any time, and will remove the listener from handling any future actions. As an example, you could create a one-shot listener by unconditionally calling `unsubscribe()` in the body - it would run the first time the relevant action is seen, and then immediately stop and not handle any future actions.
 
@@ -400,7 +401,7 @@ test('condition method resolves promise when there is a timeout', async () => {
 })
 ```
 
-### Cancelation, and Job Management
+### Cancelation and Job Management
 
 As of 0.4.0, the middleware now uses a `Job` abstraction to help manage cancelation of existing listener instances. The `Job` implementation is based on https://github.com/ethossoftworks/job-ts .
 
