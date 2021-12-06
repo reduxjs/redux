@@ -160,4 +160,6 @@ There are a few good libraries out there that can help you add the above functio
 
 - [`redux-dynamic-modules`](https://github.com/Microsoft/redux-dynamic-modules):
   This library introduces the concept of a 'Redux Module', which is a bundle of Redux artifacts (reducers, middleware) that should be dynamically loaded. It also exposes a React higher-order component to load 'modules' when areas of the application come online. Additionally, it has integrations with libraries like `redux-thunk` and `redux-saga` which also help dynamically load their artifacts (thunks, sagas).
+- [Redux Eggs](https://github.com/fostyfost/redux-eggs):
+  It is a monorepository that contains packages that allow you to easily split your Redux store into separate parts (`eggs`), and then dynamically add and remove them when you need it.
 - [Redux Ecosystem Links: Reducers - Dynamic Reducer Injection](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md#dynamic-reducer-injection)
