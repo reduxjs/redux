@@ -455,7 +455,7 @@ The `builder` object in `extraReducers` provides methods that let us define addi
 - `builder.addMatcher(matcher, reducer)`: defines a case reducer that can run in response to any action where the `matcher` function returns `true`
 - `builder.addDefaultCase(reducer)`: defines a case reducer that will run if no other case reducers were executed for this action.
 
-You can chain these together, like `builder.addCase().addCase().addMatcher().addDefault()`. If multiple matchers match the action, they will run in the order they were defined.
+You can chain these together, like `builder.addCase().addCase().addMatcher().addDefaultCase()`. If multiple matchers match the action, they will run in the order they were defined.
 
 ```js
 import { increment } from '../features/counter/counterSlice'
