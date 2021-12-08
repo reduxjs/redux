@@ -248,9 +248,9 @@ export class Job<T> implements JobHandle {
    */
   async pause<R>(func: Promise<R>): Promise<R> {
     this.ensureActive()
-    const result = await func
+    const result = await Promise.race([func, this._cancelPromise])
     this.ensureActive()
-    return result
+    return result as R
   }
 
   /**
