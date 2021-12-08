@@ -276,7 +276,9 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         })
         const thunkResult = dispatch(thunk)
         middlewareWarning(getState)
-        const { requestId, abort, unwrap } = thunkResult
+
+        const { requestId, abort } = thunkResult
+
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
           Promise.all([runningQueries[queryCacheKey], thunkResult]).then(() =>
             (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
@@ -289,7 +291,15 @@ Features like automatic cache collection, automatic refetching etc. will not be 
             subscriptionOptions,
             queryCacheKey,
             abort,
-            unwrap,
+            async unwrap() {
+              const result = await statePromise
+
+              if (result.isError) {
+                throw result.error
+              }
+
+              return result.data
+            },
             refetch() {
               dispatch(
                 queryAction(arg, { subscribe: false, forceRefetch: true })

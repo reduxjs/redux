@@ -54,6 +54,13 @@ const api = createApi({
         body: { name: 'Timmy' },
       }),
     }),
+    getUserAndForceError: build.query<{ name: string }, number>({
+      query: () => ({
+        body: {
+          forceError: true,
+        },
+      }),
+    }),
     getIncrementedAmount: build.query<any, void>({
       query: () => ({
         url: '',
@@ -914,6 +921,111 @@ describe('hooks tests', () => {
       await screen.findByText('Successfully fetched user Timmy')
       expect(screen.queryByText(/An error has occurred/i)).toBeNull()
       expect(screen.queryByText('Request was aborted')).toBeNull()
+    })
+
+    test('unwrapping the useLazyQuery trigger result does not throw on ConditionError and instead returns the aggregate error', async () => {
+      function User() {
+        const [getUser, { data, error }] =
+          api.endpoints.getUserAndForceError.useLazyQuery()
+
+        const [unwrappedError, setUnwrappedError] = React.useState<any>()
+
+        const handleClick = async () => {
+          const res = getUser(1)
+
+          try {
+            await res.unwrap()
+          } catch (error) {
+            setUnwrappedError(error)
+          }
+        }
+
+        return (
+          <div>
+            <button onClick={handleClick}>Fetch User</button>
+            <div data-testid="result">{JSON.stringify(data)}</div>
+            <div data-testid="error">{JSON.stringify(error)}</div>
+            <div data-testid="unwrappedError">
+              {JSON.stringify(unwrappedError)}
+            </div>
+          </div>
+        )
+      }
+
+      render(<User />, { wrapper: storeRef.wrapper })
+
+      const fetchButton = screen.getByRole('button', { name: 'Fetch User' })
+      fireEvent.click(fetchButton)
+      fireEvent.click(fetchButton) // This technically dispatches a ConditionError, but we don't want to see that here. We want the real error to resolve.
+
+      await waitFor(() => {
+        const errorResult = screen.getByTestId('error')?.textContent
+        const unwrappedErrorResult =
+          screen.getByTestId('unwrappedError')?.textContent
+
+        errorResult &&
+          unwrappedErrorResult &&
+          expect(JSON.parse(errorResult)).toMatchObject({
+            status: 500,
+            data: null,
+          }) &&
+          expect(JSON.parse(unwrappedErrorResult)).toMatchObject(
+            JSON.parse(errorResult)
+          )
+      })
+
+      expect(screen.getByTestId('result').textContent).toBe('')
+    })
+
+    test('useLazyQuery does not throw on ConditionError and instead returns the aggregate result', async () => {
+      function User() {
+        const [getUser, { data, error }] = api.endpoints.getUser.useLazyQuery()
+
+        const [unwrappedResult, setUnwrappedResult] = React.useState<
+          undefined | { name: string }
+        >()
+
+        const handleClick = async () => {
+          const res = getUser(1)
+
+          const result = await res.unwrap()
+          setUnwrappedResult(result)
+        }
+
+        return (
+          <div>
+            <button onClick={handleClick}>Fetch User</button>
+            <div data-testid="result">{JSON.stringify(data)}</div>
+            <div data-testid="error">{JSON.stringify(error)}</div>
+            <div data-testid="unwrappedResult">
+              {JSON.stringify(unwrappedResult)}
+            </div>
+          </div>
+        )
+      }
+
+      render(<User />, { wrapper: storeRef.wrapper })
+
+      const fetchButton = screen.getByRole('button', { name: 'Fetch User' })
+      fireEvent.click(fetchButton)
+      fireEvent.click(fetchButton) // This technically dispatches a ConditionError, but we don't want to see that here. We want the real result to resolve and ignore the error.
+
+      await waitFor(() => {
+        const dataResult = screen.getByTestId('error')?.textContent
+        const unwrappedDataResult =
+          screen.getByTestId('unwrappedResult')?.textContent
+
+        dataResult &&
+          unwrappedDataResult &&
+          expect(JSON.parse(dataResult)).toMatchObject({
+            name: 'Timmy',
+          }) &&
+          expect(JSON.parse(unwrappedDataResult)).toMatchObject(
+            JSON.parse(dataResult)
+          )
+      })
+
+      expect(screen.getByTestId('error').textContent).toBe('')
     })
   })
 
