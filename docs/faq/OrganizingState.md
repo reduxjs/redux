@@ -44,7 +44,6 @@ There are a number of community packages that implement various approaches for s
 **Articles**
 
 - [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
-- [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
 - [Finding `state`'s place with React and Redux](https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172)
 - [A Case for setState](https://medium.com/@zackargyle/a-case-for-setstate-1f1c47cd3f73)
 - [How to handle state in React: the missing FAQ](https://medium.com/react-ecosystem/how-to-handle-state-in-react-6f2d3cd73a0c)
