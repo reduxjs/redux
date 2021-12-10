@@ -6,6 +6,17 @@ export interface BaseQueryApi {
   dispatch: ThunkDispatch<any, any, any>
   getState: () => unknown
   extra: unknown
+  endpoint: string
+  type: 'query' | 'mutation'
+  /**
+   * Only available for queries: indicates if a query has been forced,
+   * i.e. it would have been fetched even if there would already be a cache entry
+   * (this does not mean that there is already a cache entry though!)
+   *
+   * This can be used to for example add a `Cache-Control: no-cache` header for
+   * invalidated queries.
+   */
+  forced?: boolean
 }
 
 export type QueryReturnValue<T = unknown, E = unknown, M = unknown> =

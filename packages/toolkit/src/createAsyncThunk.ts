@@ -286,7 +286,7 @@ export type AsyncThunkOptions<
   condition?(
     arg: ThunkArg,
     api: Pick<GetThunkAPI<ThunkApiConfig>, 'getState' | 'extra'>
-  ): boolean | undefined
+  ): MaybePromise<boolean | undefined>
   /**
    * If `condition` returns `false`, the asyncThunk will be skipped.
    * This option allows you to control whether a `rejected` action with `meta.condition == false`
@@ -303,7 +303,7 @@ export type AsyncThunkOptions<
    *
    * @default `nanoid`
    */
-  idGenerator?: () => string
+  idGenerator?: (arg: ThunkArg) => string
 } & IsUnknown<
   GetPendingMeta<ThunkApiConfig>,
   {
@@ -423,10 +423,35 @@ export type AsyncThunk<
  *
  * @public
  */
+// separate signature without `AsyncThunkConfig` for better inference
+export function createAsyncThunk<Returned, ThunkArg = void>(
+  typePrefix: string,
+  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, {}>,
+  options?: AsyncThunkOptions<ThunkArg, {}>
+): AsyncThunk<Returned, ThunkArg, {}>
+
+/**
+ *
+ * @param typePrefix
+ * @param payloadCreator
+ * @param options
+ *
+ * @public
+ */
 export function createAsyncThunk<
   Returned,
-  ThunkArg = void,
-  ThunkApiConfig extends AsyncThunkConfig = {}
+  ThunkArg,
+  ThunkApiConfig extends AsyncThunkConfig
+>(
+  typePrefix: string,
+  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
+  options?: AsyncThunkOptions<ThunkArg, ThunkApiConfig>
+): AsyncThunk<Returned, ThunkArg, ThunkApiConfig>
+
+export function createAsyncThunk<
+  Returned,
+  ThunkArg,
+  ThunkApiConfig extends AsyncThunkConfig
 >(
   typePrefix: string,
   payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
@@ -531,7 +556,9 @@ If you want to use the AbortController to react to \`abort\` events, please cons
     arg: ThunkArg
   ): AsyncThunkAction<Returned, ThunkArg, ThunkApiConfig> {
     return (dispatch, getState, extra) => {
-      const requestId = (options?.idGenerator ?? nanoid)()
+      const requestId = options?.idGenerator
+        ? options.idGenerator(arg)
+        : nanoid()
 
       const abortController = new AC()
       let abortReason: string | undefined
@@ -553,11 +580,11 @@ If you want to use the AbortController to react to \`abort\` events, please cons
       const promise = (async function () {
         let finalAction: ReturnType<typeof fulfilled | typeof rejected>
         try {
-          if (
-            options &&
-            options.condition &&
-            options.condition(arg, { getState, extra }) === false
-          ) {
+          let conditionResult = options?.condition?.(arg, { getState, extra })
+          if (isThenable(conditionResult)) {
+            conditionResult = await conditionResult
+          }
+          if (conditionResult === false) {
             // eslint-disable-next-line no-throw-literal
             throw {
               name: 'ConditionError',
@@ -678,3 +705,11 @@ export function unwrapResult<R extends UnwrappableAction>(
 type WithStrictNullChecks<True, False> = undefined extends boolean
   ? False
   : True
+
+function isThenable(value: any): value is PromiseLike<any> {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    typeof value.then === 'function'
+  )
+}

@@ -12,7 +12,15 @@ import type { Id, WithRequiredProp } from '../tsHelpers'
 
 export type QueryCacheKey = string & { _type: 'queryCacheKey' }
 export type QuerySubstateIdentifier = { queryCacheKey: QueryCacheKey }
-export type MutationSubstateIdentifier = { requestId: string }
+export type MutationSubstateIdentifier =
+  | {
+      requestId: string
+      fixedCacheKey?: string
+    }
+  | {
+      requestId?: string
+      fixedCacheKey: string
+    }
 
 export type RefetchConfigOptions = {
   refetchOnMountOrArgChange: boolean | number
@@ -175,6 +183,7 @@ export type QuerySubState<D extends BaseEndpointDefinition<any, any, any>> = Id<
 >
 
 type BaseMutationSubState<D extends BaseEndpointDefinition<any, any, any>> = {
+  requestId: string
   data?: ResultTypeFrom<D>
   error?:
     | SerializedError
@@ -200,6 +209,7 @@ export type MutationSubState<D extends BaseEndpointDefinition<any, any, any>> =
       status: QueryStatus.rejected
     } & WithRequiredProp<BaseMutationSubState<D>, 'error'>)
   | {
+      requestId?: undefined
       status: QueryStatus.uninitialized
       data?: undefined
       error?: undefined

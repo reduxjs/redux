@@ -4,10 +4,16 @@ import type {
   EndpointDefinition,
   ReplaceTagTypes,
 } from './endpointDefinitions'
-import type { UnionToIntersection, NoInfer } from './tsHelpers'
+import type {
+  UnionToIntersection,
+  NoInfer,
+  WithRequiredProp,
+} from './tsHelpers'
 import type { CoreModule } from './core/module'
 import type { CreateApiOptions } from './createApi'
 import type { BaseQueryFn } from './baseQueryTypes'
+import type { CombinedState } from './core/apiState'
+import type { AnyAction } from '@reduxjs/toolkit'
 
 export interface ApiModules<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,8 +37,15 @@ export type Module<Name extends ModuleName> = {
     TagTypes extends string
   >(
     api: Api<BaseQuery, EndpointDefinitions, ReducerPath, TagTypes, ModuleName>,
-    options: Required<
-      CreateApiOptions<BaseQuery, Definitions, ReducerPath, TagTypes>
+    options: WithRequiredProp<
+      CreateApiOptions<BaseQuery, Definitions, ReducerPath, TagTypes>,
+      | 'reducerPath'
+      | 'serializeQueryArgs'
+      | 'keepUnusedDataFor'
+      | 'refetchOnMountOrArgChange'
+      | 'refetchOnFocus'
+      | 'refetchOnReconnect'
+      | 'tagTypes'
     >,
     context: ApiContext<Definitions>
   ): {
@@ -47,6 +60,10 @@ export interface ApiContext<Definitions extends EndpointDefinitions> {
   apiUid: string
   endpointDefinitions: Definitions
   batch(cb: () => void): void
+  extractRehydrationInfo: (
+    action: AnyAction
+  ) => CombinedState<any, any, any> | undefined
+  hasRehydrationInfo: (action: AnyAction) => boolean
 }
 
 export type Api<

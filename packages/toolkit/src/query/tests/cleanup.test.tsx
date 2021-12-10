@@ -7,7 +7,7 @@ import { render, waitFor } from '@testing-library/react'
 import { setupApiStore } from './helpers'
 
 const api = createApi({
-  baseQuery: () => ({ data: undefined }),
+  baseQuery: () => ({ data: null }),
   endpoints: (build) => ({
     a: build.query<unknown, void>({ query: () => '' }),
     b: build.query<unknown, void>({ query: () => '' }),

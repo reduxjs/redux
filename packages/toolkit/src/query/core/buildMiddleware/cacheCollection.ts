@@ -1,6 +1,6 @@
 import type { BaseQueryFn } from '../../baseQueryTypes'
 import type { QueryDefinition } from '../../endpointDefinitions'
-import type { QueryCacheKey } from '../apiState'
+import type { ConfigState, QueryCacheKey } from '../apiState'
 import { QuerySubstateIdentifier } from '../apiState'
 import type {
   QueryStateMeta,
@@ -42,15 +42,11 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
           const state = mwApi.getState()[reducerPath]
           const { queryCacheKey } = action.payload
 
-          const endpointDefinition = context.endpointDefinitions[
-            state.queries[queryCacheKey]?.endpointName!
-          ] as QueryDefinition<any, any, any, any>
-
           handleUnsubscribe(
             queryCacheKey,
+            state.queries[queryCacheKey]?.endpointName,
             mwApi,
-            endpointDefinition?.keepUnusedDataFor ??
-              state.config.keepUnusedDataFor
+            state.config
           )
         }
 
@@ -61,14 +57,37 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
           }
         }
 
+        if (context.hasRehydrationInfo(action)) {
+          const state = mwApi.getState()[reducerPath]
+          const { queries } = context.extractRehydrationInfo(action)!
+          for (const [queryCacheKey, queryState] of Object.entries(queries)) {
+            // Gotcha:
+            // If rehydrating before the endpoint has been injected,the global `keepUnusedDataFor`
+            // will be used instead of the endpoint-specific one.
+            handleUnsubscribe(
+              queryCacheKey as QueryCacheKey,
+              queryState?.endpointName,
+              mwApi,
+              state.config
+            )
+          }
+        }
+
         return result
       }
 
     function handleUnsubscribe(
       queryCacheKey: QueryCacheKey,
+      endpointName: string | undefined,
       api: SubMiddlewareApi,
-      keepUnusedDataFor: number
+      config: ConfigState<string>
     ) {
+      const endpointDefinition = context.endpointDefinitions[
+        endpointName!
+      ] as QueryDefinition<any, any, any, any>
+      const keepUnusedDataFor =
+        endpointDefinition?.keepUnusedDataFor ?? config.keepUnusedDataFor
+
       const currentTimeout = currentRemovalTimeouts[queryCacheKey]
       if (currentTimeout) {
         clearTimeout(currentTimeout)

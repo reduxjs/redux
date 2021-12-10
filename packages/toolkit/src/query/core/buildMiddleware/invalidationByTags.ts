@@ -2,7 +2,6 @@ import { isAnyOf, isFulfilled, isRejectedWithValue } from '@reduxjs/toolkit'
 
 import type { FullTagDescription } from '../../endpointDefinitions'
 import { calculateProvidedBy } from '../../endpointDefinitions'
-import { flatten } from '../../utils'
 import type { QueryCacheKey } from '../apiState'
 import { QueryStatus } from '../apiState'
 import { calculateProvidedByThunk } from '../buildThunks'
@@ -59,39 +58,27 @@ export const build: SubMiddlewareBuilder = ({
 
   function invalidateTags(
     tags: readonly FullTagDescription<string>[],
-    api: SubMiddlewareApi
+    mwApi: SubMiddlewareApi
   ) {
-    const state = api.getState()[reducerPath]
+    const rootState = mwApi.getState()
+    const state = rootState[reducerPath]
 
-    const toInvalidate = new Set<QueryCacheKey>()
-    for (const tag of tags) {
-      const provided = state.provided[tag.type]
-      if (!provided) {
-        continue
-      }
-
-      let invalidateSubscriptions =
-        (tag.id !== undefined
-          ? // id given: invalidate all queries that provide this type & id
-            provided[tag.id]
-          : // no id: invalidate all queries that provide this type
-            flatten(Object.values(provided))) ?? []
-
-      for (const invalidate of invalidateSubscriptions) {
-        toInvalidate.add(invalidate)
-      }
-    }
+    const toInvalidate = api.util.selectInvalidatedBy(rootState, tags)
 
     context.batch(() => {
       const valuesArray = Array.from(toInvalidate.values())
-      for (const queryCacheKey of valuesArray) {
+      for (const { queryCacheKey } of valuesArray) {
         const querySubState = state.queries[queryCacheKey]
         const subscriptionSubState = state.subscriptions[queryCacheKey]
         if (querySubState && subscriptionSubState) {
           if (Object.keys(subscriptionSubState).length === 0) {
-            api.dispatch(removeQueryResult({ queryCacheKey }))
+            mwApi.dispatch(
+              removeQueryResult({
+                queryCacheKey: queryCacheKey as QueryCacheKey,
+              })
+            )
           } else if (querySubState.status !== QueryStatus.uninitialized) {
-            api.dispatch(refetchQuery(querySubState, queryCacheKey))
+            mwApi.dispatch(refetchQuery(querySubState, queryCacheKey))
           } else {
           }
         }

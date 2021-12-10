@@ -74,7 +74,7 @@ test('passes the extraArgument property to the baseQueryApi', async () => {
 
 describe('re-triggering behavior on arg change', () => {
   const api = createApi({
-    baseQuery: () => ({ data: undefined }),
+    baseQuery: () => ({ data: null }),
     endpoints: (build) => ({
       getUser: build.query<any, any>({
         query: (obj) => obj,
@@ -156,12 +156,14 @@ describe('re-triggering behavior on arg change', () => {
     }
   })
 
-  test('re-trigger every time on deeper value changes', async () => {
+  test('re-triggers every time on deeper value changes', async () => {
+    const name = 'Tim'
+
     const { result, rerender, waitForNextUpdate } = renderHook(
       (props) => getUser.useQuery(props),
       {
         wrapper: withProvider(store),
-        initialProps: { person: { name: 'Tim' } },
+        initialProps: { person: { name } },
       }
     )
 
@@ -171,7 +173,7 @@ describe('re-triggering behavior on arg change', () => {
     expect(spy).toHaveBeenCalledTimes(1)
 
     for (let x = 1; x < 3; x++) {
-      rerender({ person: { name: 'Tim' } })
+      rerender({ person: { name: name + x } })
       // @ts-ignore
       while (result.current.status === 'pending') {
         await waitForNextUpdate()

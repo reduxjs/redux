@@ -1,4 +1,4 @@
-import type { AsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import type { AnyAction, PayloadAction } from '@reduxjs/toolkit'
 import {
   combineReducers,
   createAction,
@@ -6,12 +6,6 @@ import {
   isAnyOf,
   isFulfilled,
   isRejectedWithValue,
-  // Workaround for API-Extractor
-  AnyAction,
-  CombinedState,
-  Reducer,
-  ActionCreatorWithPayload,
-  ActionCreatorWithoutPayload,
 } from '@reduxjs/toolkit'
 import type {
   CombinedState as CombinedQueryState,
@@ -28,13 +22,7 @@ import type {
   ConfigState,
 } from './apiState'
 import { QueryStatus } from './apiState'
-import type {
-  MutationThunk,
-  MutationThunkArg,
-  QueryThunk,
-  QueryThunkArg,
-  ThunkResult,
-} from './buildThunks'
+import type { MutationThunk, QueryThunk } from './buildThunks'
 import { calculateProvidedByThunk } from './buildThunks'
 import type {
   AssertTagTypes,
@@ -61,12 +49,33 @@ function updateQuerySubstateIfExists(
   }
 }
 
+export function getMutationCacheKey(
+  id:
+    | MutationSubstateIdentifier
+    | { requestId: string; arg: { fixedCacheKey?: string | undefined } }
+): string
+export function getMutationCacheKey(id: {
+  fixedCacheKey?: string
+  requestId?: string
+}): string | undefined
+
+export function getMutationCacheKey(
+  id:
+    | { fixedCacheKey?: string; requestId?: string }
+    | MutationSubstateIdentifier
+    | { requestId: string; arg: { fixedCacheKey?: string | undefined } }
+): string | undefined {
+  return ('arg' in id ? id.arg.fixedCacheKey : id.fixedCacheKey) ?? id.requestId
+}
+
 function updateMutationSubstateIfExists(
   state: MutationState<any>,
-  { requestId }: MutationSubstateIdentifier,
+  id:
+    | MutationSubstateIdentifier
+    | { requestId: string; arg: { fixedCacheKey?: string | undefined } },
   update: (substate: MutationSubState<any>) => void
 ) {
-  const substate = state[requestId]
+  const substate = state[getMutationCacheKey(id)]
   if (substate) {
     update(substate)
   }
@@ -78,7 +87,12 @@ export function buildSlice({
   reducerPath,
   queryThunk,
   mutationThunk,
-  context: { endpointDefinitions: definitions, apiUid },
+  context: {
+    endpointDefinitions: definitions,
+    apiUid,
+    extractRehydrationInfo,
+    hasRehydrationInfo,
+  },
   assertTagType,
   config,
 }: {
@@ -130,7 +144,9 @@ export function buildSlice({
           updateQuerySubstateIfExists(draft, arg.queryCacheKey, (substate) => {
             substate.status = QueryStatus.pending
             substate.requestId = meta.requestId
-            substate.originalArgs = arg.originalArgs
+            if (arg.originalArgs !== undefined) {
+              substate.originalArgs = arg.originalArgs
+            }
             substate.startedTimeStamp = meta.startedTimeStamp
           })
         })
@@ -166,18 +182,31 @@ export function buildSlice({
             )
           }
         )
+        .addMatcher(hasRehydrationInfo, (draft, action) => {
+          const { queries } = extractRehydrationInfo(action)!
+          for (const [key, entry] of Object.entries(queries)) {
+            if (
+              // do not rehydrate entries that were currently in flight.
+              entry?.status === QueryStatus.fulfilled ||
+              entry?.status === QueryStatus.rejected
+            ) {
+              draft[key] = entry
+            }
+          }
+        })
     },
   })
   const mutationSlice = createSlice({
     name: `${reducerPath}/mutations`,
     initialState: initialState as MutationState<any>,
     reducers: {
-      unsubscribeMutationResult(
+      removeMutationResult(
         draft,
-        action: PayloadAction<MutationSubstateIdentifier>
+        { payload }: PayloadAction<MutationSubstateIdentifier>
       ) {
-        if (action.payload.requestId in draft) {
-          delete draft[action.payload.requestId]
+        const cacheKey = getMutationCacheKey(payload)
+        if (cacheKey in draft) {
+          delete draft[cacheKey]
         }
       },
     },
@@ -185,39 +214,51 @@ export function buildSlice({
       builder
         .addCase(
           mutationThunk.pending,
-          (draft, { meta: { arg, requestId, startedTimeStamp } }) => {
+          (draft, { meta, meta: { requestId, arg, startedTimeStamp } }) => {
             if (!arg.track) return
 
-            draft[requestId] = {
+            draft[getMutationCacheKey(meta)] = {
+              requestId,
               status: QueryStatus.pending,
               endpointName: arg.endpointName,
               startedTimeStamp,
             }
           }
         )
-        .addCase(
-          mutationThunk.fulfilled,
-          (draft, { payload, meta, meta: { requestId } }) => {
-            if (!meta.arg.track) return
+        .addCase(mutationThunk.fulfilled, (draft, { payload, meta }) => {
+          if (!meta.arg.track) return
 
-            updateMutationSubstateIfExists(draft, { requestId }, (substate) => {
-              substate.status = QueryStatus.fulfilled
-              substate.data = payload
-              substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
-            })
-          }
-        )
-        .addCase(
-          mutationThunk.rejected,
-          (draft, { payload, error, meta: { requestId, arg } }) => {
-            if (!arg.track) return
+          updateMutationSubstateIfExists(draft, meta, (substate) => {
+            if (substate.requestId !== meta.requestId) return
+            substate.status = QueryStatus.fulfilled
+            substate.data = payload
+            substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
+          })
+        })
+        .addCase(mutationThunk.rejected, (draft, { payload, error, meta }) => {
+          if (!meta.arg.track) return
 
-            updateMutationSubstateIfExists(draft, { requestId }, (substate) => {
-              substate.status = QueryStatus.rejected
-              substate.error = (payload ?? error) as any
-            })
+          updateMutationSubstateIfExists(draft, meta, (substate) => {
+            if (substate.requestId !== meta.requestId) return
+
+            substate.status = QueryStatus.rejected
+            substate.error = (payload ?? error) as any
+          })
+        })
+        .addMatcher(hasRehydrationInfo, (draft, action) => {
+          const { mutations } = extractRehydrationInfo(action)!
+          for (const [key, entry] of Object.entries(mutations)) {
+            if (
+              // do not rehydrate entries that were currently in flight.
+              (entry?.status === QueryStatus.fulfilled ||
+                entry?.status === QueryStatus.rejected) &&
+              // only rehydrate endpoints that were persisted using a `fixedCacheKey`
+              key !== entry?.requestId
+            ) {
+              draft[key] = entry
+            }
           }
-        )
+        })
     },
   })
 
@@ -242,6 +283,23 @@ export function buildSlice({
             }
           }
         )
+        .addMatcher(hasRehydrationInfo, (draft, action) => {
+          const { provided } = extractRehydrationInfo(action)!
+          for (const [type, incomingTags] of Object.entries(provided)) {
+            for (const [id, cacheKeys] of Object.entries(incomingTags)) {
+              const subscribedQueries = ((draft[type] ??= {})[
+                id || '__internal_without_id'
+              ] ??= [])
+              for (const queryCacheKey of cacheKeys) {
+                const alreadySubscribed =
+                  subscribedQueries.includes(queryCacheKey)
+                if (!alreadySubscribed) {
+                  subscribedQueries.push(queryCacheKey)
+                }
+              }
+            }
+          }
+        })
         .addMatcher(
           isAnyOf(isFulfilled(queryThunk), isRejectedWithValue(queryThunk)),
           (draft, action) => {
@@ -317,14 +375,17 @@ export function buildSlice({
         .addCase(
           queryThunk.rejected,
           (draft, { meta: { condition, arg, requestId }, error, payload }) => {
-            const substate = draft[arg.queryCacheKey]
             // request was aborted due to condition (another query already running)
-            if (condition && arg.subscribe && substate) {
+            if (condition && arg.subscribe) {
+              const substate = (draft[arg.queryCacheKey] ??= {})
               substate[requestId] =
                 arg.subscriptionOptions ?? substate[requestId] ?? {}
             }
           }
         )
+        // update the state to be a new object to be picked up as a "state change"
+        // by redux-persist's `autoMergeLevel2`
+        .addMatcher(hasRehydrationInfo, (draft) => ({ ...draft }))
     },
   })
 
@@ -358,6 +419,9 @@ export function buildSlice({
         .addCase(onFocusLost, (state) => {
           state.focused = false
         })
+        // update the state to be a new object to be picked up as a "state change"
+        // by redux-persist's `autoMergeLevel2`
+        .addMatcher(hasRehydrationInfo, (draft) => ({ ...draft }))
     },
   })
 
@@ -379,6 +443,8 @@ export function buildSlice({
     ...querySlice.actions,
     ...subscriptionSlice.actions,
     ...mutationSlice.actions,
+    /** @deprecated has been renamed to `removeMutationResult` */
+    unsubscribeMutationResult: mutationSlice.actions.removeMutationResult,
     resetApiState,
   }
 

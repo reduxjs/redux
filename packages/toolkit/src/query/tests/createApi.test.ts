@@ -136,7 +136,7 @@ describe('wrong tagTypes log errors', () => {
   })
 
   beforeEach(() => {
-    baseQuery.mockResolvedValue({})
+    baseQuery.mockResolvedValue({ data: 'foo' })
   })
 
   test.each<[keyof typeof api.endpoints, boolean?]>([
@@ -305,10 +305,14 @@ describe('endpoint definition typings', () => {
 
   describe('enhancing endpoint definitions', () => {
     const baseQuery = jest.fn((x: string) => ({ data: 'success' }))
-    const baseQueryApiMatcher = {
+    const commonBaseQueryApi = {
       dispatch: expect.any(Function),
+      endpoint: expect.any(String),
+      extra: undefined,
+      forced: expect.any(Boolean),
       getState: expect.any(Function),
       signal: expect.any(Object),
+      type: expect.any(String),
     }
     beforeEach(() => {
       baseQuery.mockClear()
@@ -337,11 +341,56 @@ describe('endpoint definition typings', () => {
       storeRef.store.dispatch(api.endpoints.query2.initiate('in2'))
       storeRef.store.dispatch(api.endpoints.mutation1.initiate('in1'))
       storeRef.store.dispatch(api.endpoints.mutation2.initiate('in2'))
+
       expect(baseQuery.mock.calls).toEqual([
-        ['in1', baseQueryApiMatcher, undefined],
-        ['in2', baseQueryApiMatcher, undefined],
-        ['in1', baseQueryApiMatcher, undefined],
-        ['in2', baseQueryApiMatcher, undefined],
+        [
+          'in1',
+          {
+            dispatch: expect.any(Function),
+            endpoint: expect.any(String),
+            getState: expect.any(Function),
+            signal: expect.any(Object),
+            forced: expect.any(Boolean),
+            type: expect.any(String),
+          },
+          undefined,
+        ],
+        [
+          'in2',
+          {
+            dispatch: expect.any(Function),
+            endpoint: expect.any(String),
+            getState: expect.any(Function),
+            signal: expect.any(Object),
+            forced: expect.any(Boolean),
+            type: expect.any(String),
+          },
+          undefined,
+        ],
+        [
+          'in1',
+          {
+            dispatch: expect.any(Function),
+            endpoint: expect.any(String),
+            getState: expect.any(Function),
+            signal: expect.any(Object),
+            // forced: undefined,
+            type: expect.any(String),
+          },
+          undefined,
+        ],
+        [
+          'in2',
+          {
+            dispatch: expect.any(Function),
+            endpoint: expect.any(String),
+            getState: expect.any(Function),
+            signal: expect.any(Object),
+            // forced: undefined,
+            type: expect.any(String),
+          },
+          undefined,
+        ],
       ])
     })
 
@@ -439,11 +488,12 @@ describe('endpoint definition typings', () => {
       storeRef.store.dispatch(api.endpoints.query2.initiate('in2'))
       storeRef.store.dispatch(api.endpoints.mutation1.initiate('in1'))
       storeRef.store.dispatch(api.endpoints.mutation2.initiate('in2'))
+
       expect(baseQuery.mock.calls).toEqual([
-        ['modified1', baseQueryApiMatcher, undefined],
-        ['modified2', baseQueryApiMatcher, undefined],
-        ['modified1', baseQueryApiMatcher, undefined],
-        ['modified2', baseQueryApiMatcher, undefined],
+        ['modified1', commonBaseQueryApi, undefined],
+        ['modified2', commonBaseQueryApi, undefined],
+        ['modified1', { ...commonBaseQueryApi, forced: undefined }, undefined],
+        ['modified2', { ...commonBaseQueryApi, forced: undefined }, undefined],
       ])
     })
   })

@@ -110,7 +110,7 @@ export interface EnhancedStore<
    *
    * @inheritdoc
    */
-  dispatch: DispatchForMiddlewares<M> & Dispatch<A>
+  dispatch: Dispatch<A> & DispatchForMiddlewares<M>
 }
 
 /**

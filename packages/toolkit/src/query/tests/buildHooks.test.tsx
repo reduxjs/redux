@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import {
   actionsReducer,
+  ANY,
   expectExactType,
   expectType,
   setupApiStore,
@@ -48,8 +49,17 @@ const api = createApi({
     }
   },
   endpoints: (build) => ({
-    getUser: build.query<any, number>({
-      query: (arg) => arg,
+    getUser: build.query<{ name: string }, number>({
+      query: () => ({
+        body: { name: 'Timmy' },
+      }),
+    }),
+    getUserAndForceError: build.query<{ name: string }, number>({
+      query: () => ({
+        body: {
+          forceError: true,
+        },
+      }),
     }),
     getIncrementedAmount: build.query<any, void>({
       query: () => ({
@@ -494,18 +504,19 @@ describe('hooks tests', () => {
 
       let { unmount } = render(<User />, { wrapper: storeRef.wrapper })
 
+      expect(screen.getByTestId('isFetching').textContent).toBe('false')
+
       // skipped queries do nothing by default, so we need to toggle that to get a cached result
       fireEvent.click(screen.getByText('change skip'))
 
       await waitFor(() =>
         expect(screen.getByTestId('isFetching').textContent).toBe('true')
       )
-      await waitFor(() =>
-        expect(screen.getByTestId('isFetching').textContent).toBe('false')
-      )
-      await waitFor(() =>
+
+      await waitFor(() => {
         expect(screen.getByTestId('amount').textContent).toBe('1')
-      )
+        expect(screen.getByTestId('isFetching').textContent).toBe('false')
+      })
 
       unmount()
 
@@ -545,6 +556,52 @@ describe('hooks tests', () => {
       await waitFor(() =>
         expect(screen.getByTestId('amount').textContent).toBe('2')
       )
+    })
+
+    describe('api.util.resetApiState resets hook', () => {
+      test('without `selectFromResult`', async () => {
+        const { result } = renderHook(() => api.endpoints.getUser.useQuery(5), {
+          wrapper: storeRef.wrapper,
+        })
+
+        await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+        act(() => void storeRef.store.dispatch(api.util.resetApiState()))
+
+        expect(result.current).toEqual(
+          expect.objectContaining({
+            isError: false,
+            isFetching: true,
+            isLoading: true,
+            isSuccess: false,
+            isUninitialized: false,
+            refetch: expect.any(Function),
+            status: 'pending',
+          })
+        )
+      })
+      test('with `selectFromResult`', async () => {
+        const selectFromResult = jest.fn((x) => x)
+        const { result } = renderHook(
+          () => api.endpoints.getUser.useQuery(5, { selectFromResult }),
+          {
+            wrapper: storeRef.wrapper,
+          }
+        )
+
+        await waitFor(() => expect(result.current.isSuccess).toBe(true))
+        selectFromResult.mockClear()
+        act(() => void storeRef.store.dispatch(api.util.resetApiState()))
+
+        expect(selectFromResult).toHaveBeenNthCalledWith(1, {
+          isError: false,
+          isFetching: false,
+          isLoading: false,
+          isSuccess: false,
+          isUninitialized: true,
+          status: 'uninitialized',
+        })
+      })
     })
   })
 
@@ -773,6 +830,203 @@ describe('hooks tests', () => {
           .actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(4)
     })
+
+    test('useLazyQuery hook callback returns various properties to handle the result', async () => {
+      function User() {
+        const [getUser] = api.endpoints.getUser.useLazyQuery()
+        const [{ successMsg, errMsg, isAborted }, setValues] = React.useState({
+          successMsg: '',
+          errMsg: '',
+          isAborted: false,
+        })
+
+        const handleClick = (abort: boolean) => async () => {
+          const res = getUser(1)
+
+          // no-op simply for clearer type assertions
+          res.then((result) => {
+            if (result.isSuccess) {
+              expectType<{
+                data: {
+                  name: string
+                }
+              }>(result)
+            }
+            if (result.isError) {
+              expectType<{
+                error: { status: number; data: unknown } | SerializedError
+              }>(result)
+            }
+          })
+
+          expectType<number>(res.arg)
+          expectType<string>(res.requestId)
+          expectType<() => void>(res.abort)
+          expectType<() => Promise<{ name: string }>>(res.unwrap)
+          expectType<() => void>(res.unsubscribe)
+          expectType<(options: SubscriptionOptions) => void>(
+            res.updateSubscriptionOptions
+          )
+          expectType<() => void>(res.refetch)
+
+          // abort the query immediately to force an error
+          if (abort) res.abort()
+          res
+            .unwrap()
+            .then((result) => {
+              expectType<{ name: string }>(result)
+              setValues({
+                successMsg: `Successfully fetched user ${result.name}`,
+                errMsg: '',
+                isAborted: false,
+              })
+            })
+            .catch((err) => {
+              setValues({
+                successMsg: '',
+                errMsg: `An error has occurred fetching userId: ${res.arg}`,
+                isAborted: err.name === 'AbortError',
+              })
+            })
+        }
+
+        return (
+          <div>
+            <button onClick={handleClick(false)}>
+              Fetch User successfully
+            </button>
+            <button onClick={handleClick(true)}>Fetch User and abort</button>
+            <div>{successMsg}</div>
+            <div>{errMsg}</div>
+            <div>{isAborted ? 'Request was aborted' : ''}</div>
+          </div>
+        )
+      }
+
+      render(<User />, { wrapper: storeRef.wrapper })
+      expect(screen.queryByText(/An error has occurred/i)).toBeNull()
+      expect(screen.queryByText(/Successfully fetched user/i)).toBeNull()
+      expect(screen.queryByText('Request was aborted')).toBeNull()
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Fetch User and abort' })
+      )
+      await screen.findByText('An error has occurred fetching userId: 1')
+      expect(screen.queryByText(/Successfully fetched user/i)).toBeNull()
+      screen.getByText('Request was aborted')
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Fetch User successfully' })
+      )
+      await screen.findByText('Successfully fetched user Timmy')
+      expect(screen.queryByText(/An error has occurred/i)).toBeNull()
+      expect(screen.queryByText('Request was aborted')).toBeNull()
+    })
+
+    test('unwrapping the useLazyQuery trigger result does not throw on ConditionError and instead returns the aggregate error', async () => {
+      function User() {
+        const [getUser, { data, error }] =
+          api.endpoints.getUserAndForceError.useLazyQuery()
+
+        const [unwrappedError, setUnwrappedError] = React.useState<any>()
+
+        const handleClick = async () => {
+          const res = getUser(1)
+
+          try {
+            await res.unwrap()
+          } catch (error) {
+            setUnwrappedError(error)
+          }
+        }
+
+        return (
+          <div>
+            <button onClick={handleClick}>Fetch User</button>
+            <div data-testid="result">{JSON.stringify(data)}</div>
+            <div data-testid="error">{JSON.stringify(error)}</div>
+            <div data-testid="unwrappedError">
+              {JSON.stringify(unwrappedError)}
+            </div>
+          </div>
+        )
+      }
+
+      render(<User />, { wrapper: storeRef.wrapper })
+
+      const fetchButton = screen.getByRole('button', { name: 'Fetch User' })
+      fireEvent.click(fetchButton)
+      fireEvent.click(fetchButton) // This technically dispatches a ConditionError, but we don't want to see that here. We want the real error to resolve.
+
+      await waitFor(() => {
+        const errorResult = screen.getByTestId('error')?.textContent
+        const unwrappedErrorResult =
+          screen.getByTestId('unwrappedError')?.textContent
+
+        errorResult &&
+          unwrappedErrorResult &&
+          expect(JSON.parse(errorResult)).toMatchObject({
+            status: 500,
+            data: null,
+          }) &&
+          expect(JSON.parse(unwrappedErrorResult)).toMatchObject(
+            JSON.parse(errorResult)
+          )
+      })
+
+      expect(screen.getByTestId('result').textContent).toBe('')
+    })
+
+    test('useLazyQuery does not throw on ConditionError and instead returns the aggregate result', async () => {
+      function User() {
+        const [getUser, { data, error }] = api.endpoints.getUser.useLazyQuery()
+
+        const [unwrappedResult, setUnwrappedResult] = React.useState<
+          undefined | { name: string }
+        >()
+
+        const handleClick = async () => {
+          const res = getUser(1)
+
+          const result = await res.unwrap()
+          setUnwrappedResult(result)
+        }
+
+        return (
+          <div>
+            <button onClick={handleClick}>Fetch User</button>
+            <div data-testid="result">{JSON.stringify(data)}</div>
+            <div data-testid="error">{JSON.stringify(error)}</div>
+            <div data-testid="unwrappedResult">
+              {JSON.stringify(unwrappedResult)}
+            </div>
+          </div>
+        )
+      }
+
+      render(<User />, { wrapper: storeRef.wrapper })
+
+      const fetchButton = screen.getByRole('button', { name: 'Fetch User' })
+      fireEvent.click(fetchButton)
+      fireEvent.click(fetchButton) // This technically dispatches a ConditionError, but we don't want to see that here. We want the real result to resolve and ignore the error.
+
+      await waitFor(() => {
+        const dataResult = screen.getByTestId('error')?.textContent
+        const unwrappedDataResult =
+          screen.getByTestId('unwrappedResult')?.textContent
+
+        dataResult &&
+          unwrappedDataResult &&
+          expect(JSON.parse(dataResult)).toMatchObject({
+            name: 'Timmy',
+          }) &&
+          expect(JSON.parse(unwrappedDataResult)).toMatchObject(
+            JSON.parse(dataResult)
+          )
+      })
+
+      expect(screen.getByTestId('error').textContent).toBe('')
+    })
   })
 
   describe('useMutation', () => {
@@ -843,7 +1097,7 @@ describe('hooks tests', () => {
 
           // no-op simply for clearer type assertions
           res.then((result) => {
-            expectExactType<
+            expectType<
               | {
                   error: { status: number; data: unknown } | SerializedError
                 }
@@ -863,6 +1117,7 @@ describe('hooks tests', () => {
           expectType<string>(res.requestId)
           expectType<() => void>(res.abort)
           expectType<() => Promise<{ name: string }>>(res.unwrap)
+          expectType<() => void>(res.reset)
           expectType<() => void>(res.unsubscribe)
 
           // abort the mutation immediately to force an error
@@ -905,6 +1160,63 @@ describe('hooks tests', () => {
       expect(screen.queryByText(/Successfully updated user/i)).toBeNull()
       screen.getByText('Request was aborted')
     })
+
+    test('useMutation return value contains originalArgs', async () => {
+      const { result } = renderHook(api.endpoints.updateUser.useMutation, {
+        wrapper: storeRef.wrapper,
+      })
+      const arg = { name: 'Foo' }
+
+      const firstRenderResult = result.current
+      expect(firstRenderResult[1].originalArgs).toBe(undefined)
+      act(() => void firstRenderResult[0](arg))
+      const secondRenderResult = result.current
+      expect(firstRenderResult[1].originalArgs).toBe(undefined)
+      expect(secondRenderResult[1].originalArgs).toBe(arg)
+    })
+
+    test('`reset` sets state back to original state', async () => {
+      function User() {
+        const [updateUser, result] = api.endpoints.updateUser.useMutation()
+        return (
+          <>
+            <span>
+              {result.isUninitialized
+                ? 'isUninitialized'
+                : result.isSuccess
+                ? 'isSuccess'
+                : 'other'}
+            </span>
+            <span>{result.originalArgs?.name}</span>
+            <button onClick={() => updateUser({ name: 'Yay' })}>trigger</button>
+            <button onClick={result.reset}>reset</button>
+          </>
+        )
+      }
+      render(<User />, { wrapper: storeRef.wrapper })
+
+      await screen.findByText(/isUninitialized/i)
+      expect(screen.queryByText('Yay')).toBeNull()
+      expect(Object.keys(storeRef.store.getState().api.mutations).length).toBe(
+        0
+      )
+
+      userEvent.click(screen.getByRole('button', { name: 'trigger' }))
+
+      await screen.findByText(/isSuccess/i)
+      expect(screen.queryByText('Yay')).not.toBeNull()
+      expect(Object.keys(storeRef.store.getState().api.mutations).length).toBe(
+        1
+      )
+
+      userEvent.click(screen.getByRole('button', { name: 'reset' }))
+
+      await screen.findByText(/isUninitialized/i)
+      expect(screen.queryByText('Yay')).toBeNull()
+      expect(Object.keys(storeRef.store.getState().api.mutations).length).toBe(
+        0
+      )
+    })
   })
 
   describe('usePrefetch', () => {
@@ -939,7 +1251,7 @@ describe('hooks tests', () => {
       expect(
         api.endpoints.getUser.select(USER_ID)(storeRef.store.getState() as any)
       ).toEqual({
-        data: {},
+        data: { name: 'Timmy' },
         endpointName: 'getUser',
         error: undefined,
         fulfilledTimeStamp: expect.any(Number),
@@ -960,7 +1272,7 @@ describe('hooks tests', () => {
       expect(
         api.endpoints.getUser.select(USER_ID)(storeRef.store.getState() as any)
       ).toEqual({
-        data: {},
+        data: { name: 'Timmy' },
         endpointName: 'getUser',
         fulfilledTimeStamp: expect.any(Number),
         isError: false,
@@ -1008,7 +1320,7 @@ describe('hooks tests', () => {
       expect(
         api.endpoints.getUser.select(USER_ID)(storeRef.store.getState() as any)
       ).toEqual({
-        data: {},
+        data: { name: 'Timmy' },
         endpointName: 'getUser',
         fulfilledTimeStamp: expect.any(Number),
         isError: false,
@@ -1026,7 +1338,7 @@ describe('hooks tests', () => {
       expect(
         api.endpoints.getUser.select(USER_ID)(storeRef.store.getState() as any)
       ).toEqual({
-        data: {},
+        data: { name: 'Timmy' },
         endpointName: 'getUser',
         fulfilledTimeStamp: expect.any(Number),
         isError: false,
@@ -1076,7 +1388,7 @@ describe('hooks tests', () => {
       expect(
         api.endpoints.getUser.select(USER_ID)(storeRef.store.getState() as any)
       ).toEqual({
-        data: {},
+        data: { name: 'Timmy' },
         endpointName: 'getUser',
         fulfilledTimeStamp: expect.any(Number),
         isError: false,
@@ -1096,7 +1408,7 @@ describe('hooks tests', () => {
       expect(
         api.endpoints.getUser.select(USER_ID)(storeRef.store.getState() as any)
       ).toEqual({
-        data: {},
+        data: { name: 'Timmy' },
         endpointName: 'getUser',
         fulfilledTimeStamp: expect.any(Number),
         isError: false,
@@ -1879,8 +2191,8 @@ describe('hooks with createApi defaults set', () => {
         api.internalActions.middlewareRegistered.match,
         increment.matchPending,
         increment.matchFulfilled,
-        api.internalActions.unsubscribeMutationResult.match,
         increment.matchPending,
+        api.internalActions.removeMutationResult.match,
         increment.matchFulfilled
       )
     })
@@ -1963,19 +2275,6 @@ describe('hooks with createApi defaults set', () => {
         expect(screen.getByTestId('status').textContent).toBe('fulfilled')
       )
       expect(getRenderCount()).toBe(5)
-    })
-
-    test('useMutation return value contains originalArgs', async () => {
-      const { result } = renderHook(api.endpoints.increment.useMutation, {
-        wrapper: storeRef.wrapper,
-      })
-
-      const firstRenderResult = result.current
-      expect(firstRenderResult[1].originalArgs).toBe(undefined)
-      firstRenderResult[0](5)
-      const secondRenderResult = result.current
-      expect(firstRenderResult[1].originalArgs).toBe(undefined)
-      expect(secondRenderResult[1].originalArgs).toBe(5)
     })
 
     it('useMutation with selectFromResult option has a type error if the result is not an object', async () => {
