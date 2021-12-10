@@ -1,250 +1,145 @@
 import type {
-  PayloadAction,
   Middleware,
   Dispatch,
   AnyAction,
-  MiddlewareAPI,
   Action,
   ThunkDispatch,
 } from '@reduxjs/toolkit'
 import { createAction, nanoid } from '@reduxjs/toolkit'
 
-interface BaseActionCreator<P, T extends string, M = never, E = never> {
-  type: T
-  match(action: Action<unknown>): action is PayloadAction<P, T, M, E>
-}
+import type {
+  ActionListener,
+  AddListenerOverloads,
+  BaseActionCreator,
+  AnyActionListenerPredicate,
+  CreateListenerMiddlewareOptions,
+  ConditionFunction,
+  ListenerPredicate,
+  TypedActionCreator,
+  TypedAddListener,
+  TypedAddListenerAction,
+  TypedCreateListenerEntry,
+  RemoveListenerAction,
+  FallbackAddListenerOptions,
+  ListenerEntry,
+  ListenerErrorHandler,
+  Unsubscribe,
+  MiddlewarePhase,
+  WithMiddlewareType,
+  TakePattern,
+  ListenerErrorInfo,
+} from './types'
 
-interface TypedActionCreator<Type extends string> {
-  (...args: any[]): Action<Type>
-  type: Type
-  match: MatchFunction<any>
-}
+import {
+  Job,
+  SupervisorJob,
+  JobHandle,
+  JobCancellationReason,
+  JobCancellationException,
+} from './job'
+import { Outcome } from './outcome'
 
-type AnyActionListenerPredicate<State> = (
-  action: AnyAction,
-  currentState: State,
-  originalState: State
-) => boolean
-
-type ListenerPredicate<Action extends AnyAction, State> = (
-  action: AnyAction,
-  currentState: State,
-  originalState: State
-) => action is Action
-
-interface ConditionFunction<State> {
-  (
-    predicate: AnyActionListenerPredicate<State>,
-    timeout?: number
-  ): Promise<boolean>
-  (
-    predicate: AnyActionListenerPredicate<State>,
-    timeout?: number
-  ): Promise<boolean>
-  (predicate: () => boolean, timeout?: number): Promise<boolean>
-}
-
-type MatchFunction<T> = (v: any) => v is T
-
-export interface HasMatchFunction<T> {
-  match: MatchFunction<T>
-}
+export type {
+  ActionListener,
+  ActionListenerMiddleware,
+  ActionListenerMiddlewareAPI,
+  ActionListenerOptions,
+  CreateListenerMiddlewareOptions,
+  MiddlewarePhase,
+  When,
+  ListenerErrorHandler,
+  TypedAddListener,
+  TypedAddListenerAction,
+  Unsubscribe,
+} from './types'
 
 function assertFunction(
   func: unknown,
   expected: string
 ): asserts func is (...args: unknown[]) => unknown {
   if (typeof func !== 'function') {
-    throw new TypeError(`${expected} in not a function`)
+    throw new TypeError(`${expected} is not a function`)
   }
 }
-
-type Unsubscribe = () => void
-
-type GuardedType<T> = T extends (x: any, ...args: unknown[]) => x is infer T
-  ? T
-  : never
-
-type ListenerPredicateGuardedActionType<T> = T extends ListenerPredicate<
-  infer Action,
-  any
->
-  ? Action
-  : never
-
-const declaredMiddlewareType: unique symbol = undefined as any
-export type WithMiddlewareType<T extends Middleware<any, any, any>> = {
-  [declaredMiddlewareType]: T
-}
-
-export type MiddlewarePhase = 'beforeReducer' | 'afterReducer'
 
 const defaultWhen: MiddlewarePhase = 'afterReducer'
 const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
 
-export type When = MiddlewarePhase | 'both' | undefined
-
-/**
- * @alpha
- */
-export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
-  extends MiddlewareAPI<D, S> {
-  getOriginalState: () => S
-  unsubscribe(): void
-  subscribe(): void
-  condition: ConditionFunction<S>
-  currentPhase: MiddlewarePhase
-  // TODO Figure out how to pass this through the other types correctly
-  extra: unknown
-}
-
-/**
- * @alpha
- */
-export type ActionListener<
-  A extends AnyAction,
-  S,
-  D extends Dispatch<AnyAction>
-> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => void
-
-export interface ListenerErrorHandler {
-  (error: unknown): void
-}
-
-export interface ActionListenerOptions {
+function createTakePattern<S>(
+  addListener: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>,
+  parentJob: Job<any>
+): TakePattern<S> {
   /**
-   * Determines if the listener runs 'before' or 'after' the reducers have been called.
-   * If set to 'before', calling `api.stopPropagation()` from the listener becomes possible.
-   * Defaults to 'before'.
+   * A function that takes an ActionListenerPredicate and an optional timeout,
+   * and resolves when either the predicate returns `true` based on an action
+   * state combination or when the timeout expires.
+   * If the parent listener is canceled while waiting, this will throw a
+   * JobCancellationException.
    */
-  when?: When
+  async function take<P extends AnyActionListenerPredicate<S>>(
+    predicate: P,
+    timeout: number | undefined
+  ) {
+    // Placeholder unsubscribe function until the listener is added
+    let unsubscribe: Unsubscribe = () => {}
+
+    // We'll add an additional nested Job representing this function.
+    // TODO This is really a duplicate of the other job inside the middleware.
+    // This behavior requires some additional nesting:
+    // We're going to create a `Promise` representing the result of the listener,
+    // but then wrap that in an `Outcome` for consistent error handling.
+    let job: Job<[AnyAction, S, S]> = parentJob.launch(async (job) =>
+      Outcome.wrap(
+        new Promise<[AnyAction, S, S]>((resolve) => {
+          // Inside the Promise, we synchronously add the listener.
+          unsubscribe = addListener({
+            predicate: predicate as any,
+            listener: (action, listenerApi): void => {
+              // One-shot listener that cleans up as soon as the predicate passes
+              listenerApi.unsubscribe()
+              // Resolve the promise with the same arguments the predicate saw
+              resolve([
+                action,
+                listenerApi.getState(),
+                listenerApi.getOriginalState(),
+              ])
+            },
+            parentJob,
+          })
+        })
+      )
+    )
+
+    let result: Outcome<[AnyAction, S, S]>
+
+    try {
+      // Run the job and use the timeout if given
+      result = await (timeout !== undefined
+        ? job.runWithTimeout(timeout)
+        : job.run())
+
+      if (result.isOk()) {
+        // Resolve the actual `take` promise with the action+states
+        return result.value
+      } else {
+        if (
+          result.error instanceof JobCancellationException &&
+          result.error.reason === JobCancellationReason.JobCancelled
+        ) {
+          // The `take` job itself was canceled due to timeout.
+          return null
+        }
+        // The parent was canceled - reject this promise with that error
+        throw result.error
+      }
+    } finally {
+      // Always clean up the listener
+      unsubscribe()
+    }
+  }
+
+  return take as TakePattern<S>
 }
-
-export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
-  extra?: ExtraArgument
-  /**
-   * Receives synchronous errors that are raised by `listener` and `listenerOption.predicate`.
-   */
-  onError?: ListenerErrorHandler
-}
-
-/**
- * The possible overloads and options for defining a listener. The return type of each function is specified as a generic arg, so the overloads can be reused for multiple different functions
- */
-interface AddListenerOverloads<
-  Return,
-  S = unknown,
-  D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>
-> {
-  /** Accepts a "listener predicate" that is also a TS type predicate for the action*/
-  <MA extends AnyAction, LP extends ListenerPredicate<MA, S>>(
-    options: {
-      actionCreator?: never
-      type?: never
-      matcher?: never
-      predicate: LP
-      listener: ActionListener<ListenerPredicateGuardedActionType<LP>, S, D>
-    } & ActionListenerOptions
-  ): Return
-
-  /** Accepts an RTK action creator, like `incrementByAmount` */
-  <C extends TypedActionCreator<any>>(
-    options: {
-      actionCreator: C
-      type?: never
-      matcher?: never
-      predicate?: never
-      listener: ActionListener<ReturnType<C>, S, D>
-    } & ActionListenerOptions
-  ): Return
-
-  /** Accepts a specific action type string */
-  <T extends string>(
-    options: {
-      actionCreator?: never
-      type: T
-      matcher?: never
-      predicate?: never
-      listener: ActionListener<Action<T>, S, D>
-    } & ActionListenerOptions
-  ): Return
-
-  /** Accepts an RTK matcher function, such as `incrementByAmount.match` */
-  <MA extends AnyAction, M extends MatchFunction<MA>>(
-    options: {
-      actionCreator?: never
-      type?: never
-      matcher: M
-      predicate?: never
-      listener: ActionListener<GuardedType<M>, S, D>
-    } & ActionListenerOptions
-  ): Return
-
-  /** Accepts a "listener predicate" that just returns a boolean, no type assertion */
-  <LP extends AnyActionListenerPredicate<S>>(
-    options: {
-      actionCreator?: never
-      type?: never
-      matcher?: never
-      predicate: LP
-      listener: ActionListener<AnyAction, S, D>
-    } & ActionListenerOptions
-  ): Return
-}
-
-interface RemoveListenerOverloads<
-  S = unknown,
-  D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>
-> {
-  <C extends TypedActionCreator<any>>(
-    actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D>
-  ): boolean
-  (type: string, listener: ActionListener<AnyAction, S, D>): boolean
-}
-
-/** A "pre-typed" version of `addListenerAction`, so the listener args are well-typed */
-export type TypedAddListenerAction<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
-  Payload = ListenerEntry<S, D>,
-  T extends string = 'actionListenerMiddleware/add'
-> = BaseActionCreator<Payload, T> &
-  AddListenerOverloads<PayloadAction<Payload, T>, S, D>
-
-/** A "pre-typed" version of `middleware.addListener`, so the listener args are well-typed */
-export type TypedAddListener<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
-> = AddListenerOverloads<Unsubscribe, S, D>
-
-/** @internal An single listener entry */
-type ListenerEntry<
-  S = unknown,
-  D extends Dispatch<AnyAction> = Dispatch<AnyAction>
-> = {
-  id: string
-  when: When
-  listener: ActionListener<any, S, D>
-  unsubscribe: () => void
-  type?: string
-  predicate: ListenerPredicate<AnyAction, S>
-}
-
-/** A "pre-typed" version of `createListenerEntry`, so the listener args are well-typed */
-export type TypedCreateListenerEntry<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
-> = AddListenerOverloads<ListenerEntry<S, D>, S, D>
-
-// A shorthand form of the accepted args, solely so that `createListenerEntry` has validly-typed conditional logic when checking the options contents
-type FallbackAddListenerOptions = (
-  | { actionCreator: TypedActionCreator<string> }
-  | { type: string }
-  | { matcher: MatchFunction<any> }
-  | { predicate: ListenerPredicate<any, any> }
-) &
-  ActionListenerOptions & { listener: ActionListener<any, any, any> }
 
 /** Accepts the possible options for creating a listener, and returns a formatted listener entry */
 export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
@@ -261,8 +156,12 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     predicate = options.actionCreator.match
   } else if ('matcher' in options) {
     predicate = options.matcher
-  } else {
+  } else if ('predicate' in options) {
     predicate = options.predicate
+  } else {
+    throw new Error(
+      'Creating a listener requires one of the known fields for matching against actions'
+    )
   }
 
   const id = nanoid()
@@ -275,30 +174,10 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     unsubscribe: () => {
       throw new Error('Unsubscribe not initialized')
     },
+    parentJob: new SupervisorJob(),
   }
 
   return entry
-}
-
-export type ActionListenerMiddleware<
-  S = unknown,
-  // TODO Carry through the thunk extra arg somehow?
-  D extends ThunkDispatch<S, unknown, AnyAction> = ThunkDispatch<
-    S,
-    unknown,
-    AnyAction
-  >,
-  ExtraArgument = unknown
-> = Middleware<
-  {
-    (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
-  },
-  S,
-  D
-> & {
-  addListener: AddListenerOverloads<Unsubscribe, S, D>
-  removeListener: RemoveListenerOverloads<S, D>
-  addListenerAction: TypedAddListenerAction<S, D>
 }
 
 /**
@@ -310,10 +189,11 @@ export type ActionListenerMiddleware<
  */
 const safelyNotifyError = (
   errorHandler: ListenerErrorHandler,
-  errorToNotify: unknown
+  errorToNotify: unknown,
+  errorInfo: ListenerErrorInfo
 ): void => {
   try {
-    errorHandler(errorToNotify)
+    errorHandler(errorToNotify, errorInfo)
   } catch (errorHandlerError) {
     // We cannot let an error raised here block the listener queue.
     // The error raised here will be picked up by `window.onerror`, `process.on('error')` etc...
@@ -339,18 +219,6 @@ export const addListenerAction = createAction(
     }
   }
 ) as TypedAddListenerAction<unknown>
-
-interface RemoveListenerAction<
-  A extends AnyAction,
-  S,
-  D extends Dispatch<AnyAction>
-> {
-  type: 'actionListenerMiddleware/remove'
-  payload: {
-    type: string
-    listener: ActionListener<A, S, D>
-  }
-}
 
 /**
  * @alpha
@@ -413,81 +281,16 @@ export function createActionListenerMiddleware<
     return entry.unsubscribe
   }
 
-  const middleware: Middleware<
-    {
-      (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
-    },
-    S,
-    D
-  > = (api) => (next) => (action) => {
-    if (addListenerAction.match(action)) {
-      let entry = findListenerEntry(
-        (existingEntry) => existingEntry.listener === action.payload.listener
-      )
-
-      if (!entry) {
-        entry = action.payload
-      }
-
-      return insertEntry(entry)
-    }
-    if (removeListenerAction.match(action)) {
-      removeListener(action.payload.type, action.payload.listener)
-      return
-    }
-
-    if (listenerMap.size === 0) {
-      return next(action)
-    }
-
-    let result: unknown
-    const originalState = api.getState()
-    const getOriginalState = () => originalState
-
-    for (const currentPhase of actualMiddlewarePhases) {
-      let currentState = api.getState()
-      for (let entry of listenerMap.values()) {
-        const runThisPhase =
-          entry.when === 'both' || entry.when === currentPhase
-
-        let runListener = runThisPhase
-
-        if (runListener) {
-          try {
-            runListener = entry.predicate(action, currentState, originalState)
-          } catch (predicateError) {
-            safelyNotifyError(onError, predicateError)
-            runListener = false
-          }
-        }
-
-        if (!runListener) {
-          continue
-        }
-
-        try {
-          entry.listener(action, {
-            ...api,
-            getOriginalState,
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            condition,
-            currentPhase,
-            extra,
-            unsubscribe: entry.unsubscribe,
-            subscribe: () => {
-              listenerMap.set(entry.id, entry)
-            },
-          })
-        } catch (listenerError) {
-          safelyNotifyError(onError, listenerError)
-        }
-      }
-      if (currentPhase === 'beforeReducer') {
-        result = next(action)
-      } else {
-        return result
+  function findListenerEntry(
+    comparator: (entry: ListenerEntry) => boolean
+  ): ListenerEntry | undefined {
+    for (const entry of listenerMap.values()) {
+      if (comparator(entry)) {
+        return entry
       }
     }
+
+    return undefined
   }
 
   const addListener = ((options: FallbackAddListenerOptions) => {
@@ -531,51 +334,110 @@ export function createActionListenerMiddleware<
     return true
   }
 
-  function findListenerEntry(
-    comparator: (entry: ListenerEntry) => boolean
-  ): ListenerEntry | undefined {
-    for (const entry of listenerMap.values()) {
-      if (comparator(entry)) {
-        return entry
+  const middleware: Middleware<
+    {
+      (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
+    },
+    S,
+    D
+  > = (api) => (next) => (action) => {
+    if (addListenerAction.match(action)) {
+      let entry = findListenerEntry(
+        (existingEntry) => existingEntry.listener === action.payload.listener
+      )
+
+      if (!entry) {
+        entry = action.payload
       }
+
+      return insertEntry(entry)
+    }
+    if (removeListenerAction.match(action)) {
+      removeListener(action.payload.type, action.payload.listener)
+      return
     }
 
-    return undefined
-  }
+    if (listenerMap.size === 0) {
+      return next(action)
+    }
 
-  const condition: ConditionFunction<S> = async (predicate, timeout) => {
-    let unsubscribe: Unsubscribe = () => {}
+    let result: unknown
+    const originalState = api.getState()
+    const getOriginalState = () => originalState
 
-    const conditionSucceededPromise = new Promise<boolean>(
-      (resolve, reject) => {
-        unsubscribe = addListener({
-          predicate,
-          listener: (action, listenerApi) => {
-            // One-shot listener that cleans up as soon as the predicate resolves
-            listenerApi.unsubscribe()
-            resolve(true)
-          },
+    for (const currentPhase of actualMiddlewarePhases) {
+      let currentState = api.getState()
+      for (let entry of listenerMap.values()) {
+        const runThisPhase =
+          entry.when === 'both' || entry.when === currentPhase
+
+        let runListener = runThisPhase
+
+        if (runListener) {
+          try {
+            runListener = entry.predicate(action, currentState, originalState)
+          } catch (predicateError) {
+            runListener = false
+
+            safelyNotifyError(onError, predicateError, {
+              raisedBy: 'predicate',
+              phase: currentPhase,
+            })
+          }
+        }
+
+        if (!runListener) {
+          continue
+        }
+
+        entry.parentJob.launchAndRun(async (jobHandle) => {
+          const take = createTakePattern(addListener, jobHandle as Job<any>)
+          const condition: ConditionFunction<S> = (predicate, timeout) => {
+            return take(predicate, timeout).then(Boolean)
+          }
+
+          const result = await Outcome.try(async () =>
+            entry.listener(action, {
+              ...api,
+              getOriginalState,
+              condition,
+              take,
+              currentPhase,
+              extra,
+              unsubscribe: entry.unsubscribe,
+              subscribe: () => {
+                listenerMap.set(entry.id, entry)
+              },
+              job: jobHandle,
+              cancelPrevious: () => {
+                entry.parentJob.cancelChildren(
+                  new JobCancellationException(
+                    JobCancellationReason.JobCancelled
+                  ),
+                  [jobHandle]
+                )
+              },
+            })
+          )
+          if (
+            result.isError() &&
+            !(result.error instanceof JobCancellationException)
+          ) {
+            safelyNotifyError(onError, result.error, {
+              raisedBy: 'listener',
+              phase: currentPhase,
+            })
+          }
+
+          return Outcome.ok(1)
         })
       }
-    )
-
-    if (timeout === undefined) {
-      return conditionSucceededPromise
+      if (currentPhase === 'beforeReducer') {
+        result = next(action)
+      } else {
+        return result
+      }
     }
-
-    const timedOutPromise = new Promise<boolean>((resolve, reject) => {
-      setTimeout(() => {
-        resolve(false)
-      }, timeout)
-    })
-
-    const result = await Promise.race([
-      conditionSucceededPromise,
-      timedOutPromise,
-    ])
-
-    unsubscribe()
-    return result
   }
 
   return Object.assign(
