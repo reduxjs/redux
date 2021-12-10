@@ -338,7 +338,7 @@ export function buildThunks<
       if (result.error) throw new HandledError(result.error, result.meta)
 
       return fulfillWithValue(
-        await transformResponse(result.data, result.meta, arg),
+        await transformResponse(result.data, result.meta, arg.originalArgs),
         {
           fulfilledTimeStamp: Date.now(),
           baseQueryMeta: result.meta,
