@@ -464,8 +464,9 @@ export type QueryArgFrom<D extends BaseEndpointDefinition<any, any, any>> =
 export type ResultTypeFrom<D extends BaseEndpointDefinition<any, any, any>> =
   D extends BaseEndpointDefinition<any, any, infer RT> ? RT : unknown
 
-export type ReducerPathFrom<D extends EndpointDefinition<any, any, any, any>> =
-  D extends EndpointDefinition<any, any, any, infer RP> ? RP : unknown
+export type ReducerPathFrom<
+  D extends EndpointDefinition<any, any, any, any, any>
+> = D extends EndpointDefinition<any, any, any, any, infer RP> ? RP : unknown
 
 export type TagTypesFrom<D extends EndpointDefinition<any, any, any, any>> =
   D extends EndpointDefinition<any, any, infer RP, any> ? RP : unknown
