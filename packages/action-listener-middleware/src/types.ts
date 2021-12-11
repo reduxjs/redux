@@ -7,9 +7,7 @@ import type {
   Action,
   ThunkDispatch,
 } from '@reduxjs/toolkit'
-
-import type { JobHandle, Job } from './job'
-
+import type { Outcome } from './outcome'
 /**
  * Types copied from RTK
  */
@@ -63,6 +61,21 @@ export interface HasMatchFunction<T> {
   match: MatchFunction<T>
 }
 
+export interface AsyncTaskExecutor<T> {
+  (): Promise<T>
+}
+
+export interface SyncTaskExecutor<T> {
+  (): T
+}
+
+export type TaskExecutor<T> = AsyncTaskExecutor<T> | SyncTaskExecutor<T>
+
+export interface ForkedTask<T> {
+  promise: Promise<Outcome<T>>
+  controller: AbortController
+}
+
 /**
  * @alpha
  */
@@ -74,7 +87,9 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   condition: ConditionFunction<S>
   take: TakePattern<S>
   cancelPrevious: () => void
-  job: JobHandle
+  signal: AbortSignal,
+  delay(timeoutMs: number): Promise<void>
+  fork<T>(executor: TaskExecutor<T>): ForkedTask<T>
   currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
   extra: unknown
@@ -100,7 +115,6 @@ export interface ActionListenerOptions {
    * Defaults to 'before'.
    */
   when?: When
-  parentJob?: JobHandle
 }
 
 export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
@@ -175,6 +189,7 @@ export interface AddListenerOverloads<
   /** Accepts a "listener predicate" that is also a TS type predicate for the action*/
   <MA extends AnyAction, LP extends ListenerPredicate<MA, S>>(
     options: {
+      signal?: AbortSignal
       actionCreator?: never
       type?: never
       matcher?: never
@@ -285,9 +300,9 @@ export type ListenerEntry<
   when: When
   listener: ActionListener<any, S, D>
   unsubscribe: () => void
+  taskAbortControllerSet: Set<AbortController>
   type?: string
   predicate: ListenerPredicate<AnyAction, S>
-  parentJob: JobHandle
 }
 
 const declaredMiddlewareType: unique symbol = undefined as any

@@ -12,6 +12,7 @@ import {
   createListenerEntry,
   addListenerAction,
   removeListenerAction,
+  TaskAbortError,
 } from '../index'
 
 import type {
@@ -21,7 +22,6 @@ import type {
   TypedAddListener,
   Unsubscribe,
 } from '../index'
-import { JobCancellationException } from '../job'
 
 const middlewareApi = {
   getState: expect.any(Function),
@@ -29,12 +29,14 @@ const middlewareApi = {
   condition: expect.any(Function),
   extra: undefined,
   take: expect.any(Function),
+  signal: expect.any(Object),
+  fork: expect.any(Function),
+  delay: expect.any(Function),
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
   subscribe: expect.any(Function),
   cancelPrevious: expect.any(Function),
-  job: expect.any(Object),
 }
 
 const noop = () => {}
@@ -870,7 +872,7 @@ describe('createActionListenerMiddleware', () => {
               // end up hitting this next line
               jobsContinued++
             } catch (err) {
-              if (err instanceof JobCancellationException) {
+              if (err instanceof TaskAbortError) {
                 jobsCanceled++
               }
             }

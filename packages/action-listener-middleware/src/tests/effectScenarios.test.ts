@@ -12,6 +12,7 @@ import {
   createListenerEntry,
   addListenerAction,
   removeListenerAction,
+  TaskAbortError,
 } from '../index'
 
 import type {
@@ -21,8 +22,6 @@ import type {
   TypedAddListener,
   Unsubscribe,
 } from '../index'
-import { JobCancellationException } from '../job'
-import { Outcome } from '../outcome'
 
 describe('Saga-style Effects Scenarios', () => {
   interface CounterState {
@@ -145,7 +144,7 @@ describe('Saga-style Effects Scenarios', () => {
         listenerApi.cancelPrevious()
 
         // Delay before starting actual work
-        await listenerApi.job.delay(15)
+        await listenerApi.delay(15)
 
         workPerformed++
       },
@@ -208,7 +207,7 @@ describe('Saga-style Effects Scenarios', () => {
         listenerApi.unsubscribe()
 
         // Pretend we're doing expensive work
-        await listenerApi.job.delay(15)
+        await listenerApi.delay(15)
 
         workPerformed++
 
@@ -260,18 +259,16 @@ describe('Saga-style Effects Scenarios', () => {
 
     addListener({
       actionCreator: increment,
-      listener: async (action, listenerApi) => {
+      listener: async (_, listenerApi) => {
+        const childOutput = 42
         // Spawn a child job and start it immediately
-        const childJobPromise = listenerApi.job.launchAndRun(
-          async (jobHandle) => {
-            // Artificially wait a bit inside the child
-            await jobHandle.delay(5)
-            // Complete the child by returning an Outcome-wrapped value
-            return Outcome.ok(42)
-          }
-        )
+        const result = await listenerApi.fork(async () => {
+          // Artificially wait a bit inside the child
+          await listenerApi.delay(5)
+          // Complete the child by returning an Outcome-wrapped value
+          return childOutput
+        }).promise
 
-        const result = await childJobPromise
         // Unwrap the child result in the listener
         if (result.isOk()) {
           childResult = result.value
@@ -297,18 +294,17 @@ describe('Saga-style Effects Scenarios', () => {
       actionCreator: increment,
       listener: async (action, listenerApi) => {
         // Spawn a child job and start it immediately
-        const childJob = listenerApi.job.launch(async (jobHandle) => {
+        const forkedTask = listenerApi.fork(async () => {
           // Artificially wait a bit inside the child
-          await jobHandle.delay(15)
+          await listenerApi.delay(15)
           // Complete the child by returning an Outcome-wrapped value
           childResult = 42
 
-          return Outcome.ok(0)
+          return 0
         })
 
-        childJob.run()
-        await listenerApi.job.delay(5)
-        childJob.cancel()
+        await listenerApi.delay(5)
+        forkedTask.controller.abort()
         listenerCompleted = true
       },
     })
@@ -337,10 +333,10 @@ describe('Saga-style Effects Scenarios', () => {
         if (increment.match(action)) {
           // Have this branch wait around to be canceled by the other
           try {
-            await listenerApi.job.delay(10)
+            await listenerApi.delay(10)
           } catch (err) {
             // Can check cancelation based on the exception and its reason
-            if (err instanceof JobCancellationException) {
+            if (err instanceof TaskAbortError) {
               canceledAndCaught = true
             }
           }
@@ -348,9 +344,9 @@ describe('Saga-style Effects Scenarios', () => {
           // do a non-cancelation-aware wait
           await delay(15)
           // Or can check based on `job.isCancelled`
-          if (listenerApi.job.isCancelled) {
-            canceledCheck = true
-          }
+            if (listenerApi.signal.aborted) {
+              canceledCheck = true
+            }
         } else if (decrement.match(action)) {
           listenerApi.cancelPrevious()
         }
