@@ -189,7 +189,6 @@ export interface AddListenerOverloads<
   /** Accepts a "listener predicate" that is also a TS type predicate for the action*/
   <MA extends AnyAction, LP extends ListenerPredicate<MA, S>>(
     options: {
-      signal?: AbortSignal
       actionCreator?: never
       type?: never
       matcher?: never

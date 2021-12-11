@@ -35,6 +35,7 @@ import type {
 
 import { TaskAbortError } from './exceptions'
 import { Outcome } from './outcome'
+export type { Outcome, Ok, Error } from './outcome';
 export { TaskAbortError } from './exceptions'
 export type {
   ActionListener,
