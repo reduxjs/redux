@@ -74,19 +74,10 @@ function assertActive(signal: AbortSignal, reason?: string) {
 }
 
 function createDelay(signal: AbortSignal) {
-  return function delay(timeoutMs: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      assertActive(signal)
-
-      setTimeout(() => {
-        try {
-          assertActive(signal)
-        } catch (err) {
-          reject(err)
-        }
-        resolve()
-      }, timeoutMs)
-    })
+  return async function delay(timeoutMs: number): Promise<void> {
+    assertActive(signal)
+    await new Promise((resolve) =>setTimeout(resolve, timeoutMs))
+    assertActive(signal)
   }
 }
 
