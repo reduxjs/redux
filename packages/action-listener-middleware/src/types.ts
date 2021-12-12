@@ -87,7 +87,7 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   condition: ConditionFunction<S>
   take: TakePattern<S>
   cancelPrevious: () => void
-  signal: AbortSignal,
+  signal: AbortSignal
   delay(timeoutMs: number): Promise<void>
   fork<T>(executor: TaskExecutor<T>): ForkedTask<T>
   currentPhase: MiddlewarePhase

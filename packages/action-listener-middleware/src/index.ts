@@ -35,7 +35,7 @@ import type {
 
 import { TaskAbortError } from './exceptions'
 import { Outcome } from './outcome'
-export type { Outcome, Ok, Error } from './outcome';
+export type { Outcome, Ok, Error } from './outcome'
 export { TaskAbortError } from './exceptions'
 export type {
   ActionListener,
@@ -76,7 +76,7 @@ function assertActive(signal: AbortSignal, reason?: string) {
 function createDelay(signal: AbortSignal) {
   return async function delay(timeoutMs: number): Promise<void> {
     assertActive(signal)
-    await new Promise((resolve) =>setTimeout(resolve, timeoutMs))
+    await new Promise((resolve) => setTimeout(resolve, timeoutMs))
     assertActive(signal)
   }
 }
@@ -123,10 +123,14 @@ function createTakePattern<S>(
     let unsubscribe: Unsubscribe = () => {}
 
     const signalPromise = new Promise<null>((_, reject) => {
-      signal.addEventListener('abort', () => {
-        reject(new TaskAbortError())
-      }, { once: true });
-    });
+      signal.addEventListener(
+        'abort',
+        () => {
+          reject(new TaskAbortError())
+        },
+        { once: true }
+      )
+    })
 
     const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
       // Inside the Promise, we synchronously add the listener.
