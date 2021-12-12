@@ -84,17 +84,14 @@ function createDelay(signal: AbortSignal) {
 function createFork(parentAbortSignal: AbortSignal) {
   return function fork<T>(childJobExecutor: TaskExecutor<T>): ForkedTask<T> {
     const childAbortController = new AbortController()
-    const promise = Outcome.wrap(
-      new Promise<T>((resolve, reject) => {
-        assertActive(parentAbortSignal)
-        Promise.resolve(childJobExecutor()).then((val) => {
-          assertActive(parentAbortSignal)
-          assertActive(childAbortController.signal)
-          resolve(val)
-        }, reject)
-      })
-    )
+    const promise = Outcome.try(async () => {
+      assertActive(parentAbortSignal)
+      const result = await Promise.resolve(childJobExecutor())
+      assertActive(parentAbortSignal)
+      assertActive(childAbortController.signal)
 
+      return result
+    })
     return {
       promise,
       controller: childAbortController,

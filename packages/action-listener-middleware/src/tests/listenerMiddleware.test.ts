@@ -891,6 +891,34 @@ describe('createActionListenerMiddleware', () => {
       expect(jobsContinued).toBe(0)
       expect(jobsCanceled).toBe(2)
     })
+
+    test('runs forked sync tasks immediatly', async () => {
+      const store = configureStore({
+        reducer: counterSlice.reducer,
+        middleware: (gDM) => gDM().prepend(middleware),
+      })
+
+      middleware.addListener({
+        actionCreator: increment,
+        listener: async (action, listenerApi) => {
+          const outcome = listenerApi.fork(() => {
+            listenerApi.dispatch(decrement())
+            listenerApi.dispatch(decrement())
+            listenerApi.dispatch(decrement())
+          })
+          outcome.controller.abort()
+          expect(listenerApi.getState()).toBe(-2)
+
+          try {
+            await outcome
+          } catch (err) {
+            expect(err).toBeInstanceOf(TaskAbortError)
+          }
+        },
+      })
+
+      store.dispatch(increment())
+    })
   })
 
   describe('Type tests', () => {
