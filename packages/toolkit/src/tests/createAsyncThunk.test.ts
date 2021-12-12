@@ -595,6 +595,32 @@ describe('conditional skipping of asyncThunks', () => {
     )
   })
 
+  test('pending is dispatched synchronously if condition is synchronous', async () => {
+    const condition = () => true
+    const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
+    const thunkCallPromise = asyncThunk(arg)(dispatch, getState, extra)
+    expect(dispatch).toHaveBeenCalledTimes(1)
+    await thunkCallPromise
+    expect(dispatch).toHaveBeenCalledTimes(2)
+  })
+
+  test('async condition', async () => {
+    const condition = () => Promise.resolve(false)
+    const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
+    await asyncThunk(arg)(dispatch, getState, extra)
+    expect(dispatch).toHaveBeenCalledTimes(0)
+  })
+
+  test('async condition with rejected promise', async () => {
+    const condition = () => Promise.reject()
+    const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
+    await asyncThunk(arg)(dispatch, getState, extra)
+    expect(dispatch).toHaveBeenCalledTimes(1)
+    expect(dispatch).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: 'test/rejected' })
+    )
+  })
+
   test('rejected action is not dispatched by default', async () => {
     const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
     await asyncThunk(arg)(dispatch, getState, extra)
@@ -644,38 +670,39 @@ describe('conditional skipping of asyncThunks', () => {
       })
     )
   })
-
-  test('serializeError implementation', async () => {
-    function serializeError() {
-      return 'serialized!'
-    }
-    const errorObject = 'something else!'
-
-    const store = configureStore({
-      reducer: (state = [], action) => [...state, action],
-    })
-
-    const asyncThunk = createAsyncThunk<
-      unknown,
-      void,
-      { serializedErrorType: string }
-    >('test', () => Promise.reject(errorObject), { serializeError })
-    const rejected = await store.dispatch(asyncThunk())
-    if (!asyncThunk.rejected.match(rejected)) {
-      throw new Error()
-    }
-
-    const expectation = {
-      type: 'test/rejected',
-      payload: undefined,
-      error: 'serialized!',
-      meta: expect.any(Object),
-    }
-    expect(rejected).toEqual(expectation)
-    expect(store.getState()[2]).toEqual(expectation)
-    expect(rejected.error).not.toEqual(miniSerializeError(errorObject))
-  })
 })
+
+test('serializeError implementation', async () => {
+  function serializeError() {
+    return 'serialized!'
+  }
+  const errorObject = 'something else!'
+
+  const store = configureStore({
+    reducer: (state = [], action) => [...state, action],
+  })
+
+  const asyncThunk = createAsyncThunk<
+    unknown,
+    void,
+    { serializedErrorType: string }
+  >('test', () => Promise.reject(errorObject), { serializeError })
+  const rejected = await store.dispatch(asyncThunk())
+  if (!asyncThunk.rejected.match(rejected)) {
+    throw new Error()
+  }
+
+  const expectation = {
+    type: 'test/rejected',
+    payload: undefined,
+    error: 'serialized!',
+    meta: expect.any(Object),
+  }
+  expect(rejected).toEqual(expectation)
+  expect(store.getState()[2]).toEqual(expectation)
+  expect(rejected.error).not.toEqual(miniSerializeError(errorObject))
+})
+
 describe('unwrapResult', () => {
   const getState = jest.fn(() => ({}))
   const dispatch = jest.fn((x: any) => x)
@@ -788,9 +815,29 @@ describe('idGenerator option', () => {
       expect.stringContaining('fake-fandom-id')
     )
   })
+
+  test('idGenerator should be called with thunkArg', async () => {
+    const customIdGenerator = jest.fn((seed) => `fake-unique-random-id-${seed}`)
+    let generatedRequestId = ''
+    const asyncThunk = createAsyncThunk(
+      'test',
+      async (args: any, { requestId }) => {
+        generatedRequestId = requestId
+      },
+      { idGenerator: customIdGenerator }
+    )
+
+    const thunkArg = 1
+    const expected = 'fake-unique-random-id-1'
+    const asyncThunkPromise = asyncThunk(thunkArg)(dispatch, getState, extra)
+
+    expect(customIdGenerator).toHaveBeenCalledWith(thunkArg)
+    expect(asyncThunkPromise.requestId).toEqual(expected)
+    expect((await asyncThunkPromise).meta.requestId).toEqual(expected)
+  })
 })
 
-test('`condition` will see state changes from a synchonously invoked asyncThunk', () => {
+test('`condition` will see state changes from a synchronously invoked asyncThunk', () => {
   type State = ReturnType<typeof store.getState>
   const onStart = jest.fn()
   const asyncThunk = createAsyncThunk<

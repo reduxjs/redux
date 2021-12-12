@@ -4,6 +4,8 @@ import { setupApiStore } from './helpers'
 import { server } from './mocks/server'
 import { default as crossFetch } from 'cross-fetch'
 import { rest } from 'msw'
+import queryString from 'query-string'
+import type { BaseQueryApi } from '../baseQueryTypes'
 
 const defaultHeaders: Record<string, string> = {
   fake: 'header',
@@ -70,19 +72,22 @@ const authSlice = createSlice({
 const storeRef = setupApiStore(api, { auth: authSlice.reducer })
 type RootState = ReturnType<typeof storeRef.store.getState>
 
+let commonBaseQueryApi: BaseQueryApi = {} as any
+beforeEach(() => {
+  commonBaseQueryApi = {
+    signal: new AbortController().signal,
+    dispatch: storeRef.store.dispatch,
+    getState: storeRef.store.getState,
+    extra: undefined,
+    type: 'query',
+    endpoint: 'doesntmatterhere',
+  }
+})
+
 describe('fetchBaseQuery', () => {
   describe('basic functionality', () => {
     it('should return an object for a simple GET request when it is json data', async () => {
-      const req = baseQuery(
-        '/success',
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
-        {}
-      )
+      const req = baseQuery('/success', commonBaseQueryApi, {})
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
@@ -90,35 +95,17 @@ describe('fetchBaseQuery', () => {
     })
 
     it('should return undefined for a simple GET request when the response is empty', async () => {
-      const req = baseQuery(
-        '/empty',
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
-        {}
-      )
+      const req = baseQuery('/empty', commonBaseQueryApi, {})
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
       expect(res.meta?.request).toBeInstanceOf(Request)
       expect(res.meta?.response).toBeInstanceOf(Object)
-      expect(res.data).toBeUndefined()
+      expect(res.data).toBeNull()
     })
 
     it('should return an error and status for error responses', async () => {
-      const req = baseQuery(
-        '/error',
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
-        {}
-      )
+      const req = baseQuery('/error', commonBaseQueryApi, {})
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
@@ -133,16 +120,7 @@ describe('fetchBaseQuery', () => {
     it('should handle a connection loss semi-gracefully', async () => {
       fetchFn.mockRejectedValueOnce(new TypeError('Failed to fetch'))
 
-      const req = baseQuery(
-        '/success',
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
-        {}
-      )
+      const req = baseQuery('/success', commonBaseQueryApi, {})
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
@@ -165,12 +143,7 @@ describe('fetchBaseQuery', () => {
 
       const req = baseQuery(
         { url: '/success', responseHandler: 'text' },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       )
       expect(req).toBeInstanceOf(Promise)
@@ -188,16 +161,7 @@ describe('fetchBaseQuery', () => {
         )
       )
 
-      const req = baseQuery(
-        '/success',
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
-        {}
-      )
+      const req = baseQuery('/success', commonBaseQueryApi, {})
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
@@ -220,12 +184,7 @@ describe('fetchBaseQuery', () => {
 
       const req = baseQuery(
         { url: '/error', responseHandler: 'text' },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       )
       expect(req).toBeInstanceOf(Promise)
@@ -246,16 +205,7 @@ describe('fetchBaseQuery', () => {
         )
       )
 
-      const req = baseQuery(
-        '/error',
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
-        {}
-      )
+      const req = baseQuery('/error', commonBaseQueryApi, {})
       expect(req).toBeInstanceOf(Promise)
       const res = await req
       expect(res).toBeInstanceOf(Object)
@@ -279,12 +229,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', body: data, method: 'POST' },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        { ...commonBaseQueryApi, type: 'mutation' },
         {}
       ))
 
@@ -298,12 +243,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', body: data, method: 'POST' },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -324,12 +264,7 @@ describe('fetchBaseQuery', () => {
           method: 'POST',
           headers: { 'content-type': 'text/html' },
         },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -348,12 +283,7 @@ describe('fetchBaseQuery', () => {
           method: 'POST',
           headers: { 'content-type': 'text/html' },
         },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -367,12 +297,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo' },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -385,12 +310,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', params },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -403,12 +323,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo?banana=pudding', params },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -421,12 +336,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', params },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -439,16 +349,53 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', params },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
       expect(request.url).toEqual(`${baseUrl}/echo?apple=fruit&randy=null`)
+    })
+
+    it('should support a paramsSerializer', async () => {
+      const baseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        paramsSerializer: (params: Record<string, unknown>) =>
+          queryString.stringify(params, { arrayFormat: 'bracket' }),
+      })
+
+      const api = createApi({
+        baseQuery,
+        endpoints(build) {
+          return {
+            query: build.query({
+              query: () => ({ url: '/echo', headers: {} }),
+            }),
+            mutation: build.mutation({
+              query: () => ({
+                url: '/echo',
+                method: 'POST',
+                credentials: 'omit',
+              }),
+            }),
+          }
+        },
+      })
+
+      const params = {
+        someArray: ['a', 'b', 'c'],
+      }
+
+      let request: any
+      ;({ data: request } = await baseQuery(
+        { url: '/echo', params },
+        commonBaseQueryApi,
+        {}
+      ))
+
+      expect(request.url).toEqual(
+        `${baseUrl}/echo?someArray[]=a&someArray[]=b&someArray[]=c`
+      )
     })
   })
 
@@ -461,12 +408,7 @@ describe('fetchBaseQuery', () => {
           validateStatus: (response, body) =>
             response.status === 200 && body.success === false ? false : true,
         },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       )
 
@@ -485,12 +427,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo' },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -503,12 +440,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', headers: { authorization: 'Bearer banana' } },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -528,12 +460,7 @@ describe('fetchBaseQuery', () => {
             'content-type': 'custom-content-type',
           },
         },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -550,12 +477,7 @@ describe('fetchBaseQuery', () => {
       let request: any
       ;({ data: request } = await baseQuery(
         { url: '/echo', headers: { fake, delete: '', delete2: '' } },
-        {
-          signal: new AbortController().signal,
-          dispatch: storeRef.store.dispatch,
-          getState: storeRef.store.getState,
-          extra: undefined,
-        },
+        commonBaseQueryApi,
         {}
       ))
 
@@ -579,16 +501,7 @@ describe('fetchBaseQuery', () => {
       })
 
       const doRequest = async () =>
-        _baseQuery(
-          { url: '/echo' },
-          {
-            signal: new AbortController().signal,
-            dispatch: storeRef.store.dispatch,
-            getState: storeRef.store.getState,
-            extra: undefined,
-          },
-          {}
-        )
+        _baseQuery({ url: '/echo' }, commonBaseQueryApi, {})
 
       ;({ data: request } = await doRequest())
 
@@ -606,6 +519,8 @@ describe('fetchBaseQuery', () => {
             dispatch: storeRef.store.dispatch,
             getState: storeRef.store.getState,
             extra: undefined,
+            type: 'query',
+            endpoint: '',
           },
           {}
         )
@@ -627,12 +542,7 @@ describe('fetchBaseQuery', () => {
     let request: any
     ;({ data: request } = await baseQuery(
       { url: '/echo', headers: undefined },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
+      commonBaseQueryApi,
       {}
     ))
 
@@ -646,12 +556,7 @@ describe('fetchBaseQuery', () => {
     let request: any
     ;({ data: request } = await baseQuery(
       { url: '/echo', headers: { banana } },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
+      commonBaseQueryApi,
       {}
     ))
 
@@ -666,12 +571,7 @@ describe('fetchBaseQuery', () => {
     let request: any
     ;({ data: request } = await baseQuery(
       { url: '/echo', headers: { banana } },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
+      commonBaseQueryApi,
       {}
     ))
 
@@ -695,12 +595,7 @@ describe('fetchFn', () => {
     let request: any
     ;({ data: request } = await baseQuery(
       { url: '/echo', params },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
+      commonBaseQueryApi,
       {}
     ))
 
@@ -721,16 +616,7 @@ describe('fetchFn', () => {
     const spiedFetch = jest.spyOn(window, 'fetch')
     spiedFetch.mockResolvedValueOnce(fakeResponse as any)
 
-    const { data } = await baseQuery(
-      { url: '/echo' },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
-      {}
-    )
+    const { data } = await baseQuery({ url: '/echo' }, commonBaseQueryApi, {})
     expect(data).toEqual({ url: 'mock-return-url' })
 
     spiedFetch.mockClear()
@@ -750,12 +636,7 @@ describe('FormData', () => {
 
     const res = await baseQuery(
       { url: '/echo', method: 'POST', body },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
+      commonBaseQueryApi,
       {}
     )
     const request: any = res.data
@@ -773,12 +654,7 @@ describe('still throws on completely unexpected errors', () => {
           throw error
         },
       },
-      {
-        signal: new AbortController().signal,
-        dispatch: storeRef.store.dispatch,
-        getState: storeRef.store.getState,
-        extra: undefined,
-      },
+      commonBaseQueryApi,
       {}
     )
     expect(req).toBeInstanceOf(Promise)

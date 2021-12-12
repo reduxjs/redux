@@ -8,6 +8,7 @@ import type {
   MutationResultSelectorResult,
   QueryResultSelectorResult,
 } from '../buildSelectors'
+import { getMutationCacheKey } from '../buildSlice'
 import type { PatchCollection, Recipe } from '../buildThunks'
 import type {
   PromiseWithKnownReason,
@@ -235,7 +236,7 @@ export const build: SubMiddlewareBuilder = ({
           }
         } else if (
           api.internalActions.removeQueryResult.match(action) ||
-          api.internalActions.unsubscribeMutationResult.match(action)
+          api.internalActions.removeMutationResult.match(action)
         ) {
           const lifecycle = lifecycleMap[cacheKey]
           if (lifecycle) {
@@ -257,8 +258,8 @@ export const build: SubMiddlewareBuilder = ({
       if (isMutationThunk(action)) return action.meta.requestId
       if (api.internalActions.removeQueryResult.match(action))
         return action.payload.queryCacheKey
-      if (api.internalActions.unsubscribeMutationResult.match(action))
-        return action.payload.requestId
+      if (api.internalActions.removeMutationResult.match(action))
+        return getMutationCacheKey(action.payload)
       return ''
     }
 

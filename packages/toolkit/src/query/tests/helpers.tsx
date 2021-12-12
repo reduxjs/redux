@@ -17,6 +17,7 @@ import {
   createConsole,
   getLog,
 } from 'console-testing-library/pure'
+import { cleanup } from '@testing-library/react'
 
 export const ANY = 0 as any
 
@@ -213,6 +214,7 @@ export function setupApiStore<
     }
   })
   afterEach(() => {
+    cleanup()
     if (!withoutListeners) {
       cleanupListeners()
     }

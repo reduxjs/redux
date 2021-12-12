@@ -14,7 +14,7 @@ beforeEach(() => baseQuery.mockReset())
 const api = createApi({
   baseQuery: (...args: any[]) => {
     const result = baseQuery(...args)
-    if ('then' in result)
+    if (typeof result === 'object' && 'then' in result)
       return result
         .then((data: any) => ({ data, meta: 'meta' }))
         .catch((e: any) => ({ error: e }))
@@ -131,11 +131,16 @@ describe('basic lifecycle', () => {
 
 describe('updateQueryData', () => {
   test('updates cache values, can apply inverse patch', async () => {
-    baseQuery.mockResolvedValueOnce({
-      id: '3',
-      title: 'All about cheese.',
-      contents: 'TODO',
-    })
+    baseQuery
+      .mockResolvedValueOnce({
+        id: '3',
+        title: 'All about cheese.',
+        contents: 'TODO',
+      })
+      // TODO I have no idea why the query is getting called multiple times,
+      // but passing an additional mocked value (_any_ value)
+      // seems to silence some annoying "got an undefined result" logging
+      .mockResolvedValueOnce(42)
     const { result } = renderHook(() => api.endpoints.post.useQuery('3'), {
       wrapper: storeRef.wrapper,
     })
@@ -172,7 +177,7 @@ describe('updateQueryData', () => {
 
     act(() => {
       storeRef.store.dispatch(
-        api.util.patchQueryResult('post', '3', returnValue.inversePatches)
+        api.util.patchQueryData('post', '3', returnValue.inversePatches)
       )
     })
 
@@ -180,11 +185,14 @@ describe('updateQueryData', () => {
   })
 
   test('does not update non-existing values', async () => {
-    baseQuery.mockResolvedValueOnce({
-      id: '3',
-      title: 'All about cheese.',
-      contents: 'TODO',
-    })
+    baseQuery
+      .mockImplementationOnce(async () => ({
+        id: '3',
+        title: 'All about cheese.',
+        contents: 'TODO',
+      }))
+      .mockResolvedValueOnce(42)
+
     const { result } = renderHook(() => api.endpoints.post.useQuery('3'), {
       wrapper: storeRef.wrapper,
     })
@@ -234,6 +242,7 @@ describe('full integration', () => {
         title: 'Meanwhile, this changed server-side.',
         contents: 'Delicious cheese!',
       })
+      .mockResolvedValueOnce(42)
     const { result } = renderHook(
       () => ({
         query: api.endpoints.post.useQuery('3'),
@@ -283,6 +292,7 @@ describe('full integration', () => {
         title: 'Meanwhile, this changed server-side.',
         contents: 'TODO',
       })
+      .mockResolvedValueOnce(42)
 
     const { result } = renderHook(
       () => ({

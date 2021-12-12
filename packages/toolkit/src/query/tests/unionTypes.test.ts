@@ -115,6 +115,20 @@ describe.skip('TS only tests', () => {
       expectExactType(false as false)(result.isError)
     }
 
+    expectExactType('' as string | undefined)(result.currentData)
+    // @ts-expect-error
+    expectExactType('' as string)(result.currentData)
+
+    if (result.isSuccess) {
+      if (!result.isFetching) {
+        expectExactType('' as string)(result.currentData)
+      } else {
+        expectExactType('' as string | undefined)(result.currentData)
+        // @ts-expect-error
+        expectExactType('' as string)(result.currentData)
+      }
+    }
+
     // @ts-expect-error
     expectType<never>(result)
     // is always one of those four
@@ -483,6 +497,7 @@ describe.skip('TS only tests', () => {
       isLoading: true,
       isSuccess: false,
       isError: false,
+      reset: () => {},
     })(result)
   })
 

@@ -60,7 +60,8 @@ interface EndpointDefinitionWithQuery<
    */
   transformResponse?(
     baseQueryReturnValue: BaseQueryResult<BaseQuery>,
-    meta: BaseQueryMeta<BaseQuery>
+    meta: BaseQueryMeta<BaseQuery>,
+    arg: QueryArg
   ): ResultType | Promise<ResultType>
 }
 
@@ -452,7 +453,7 @@ function isFunction<T>(t: T): t is Extract<T, Function> {
   return typeof t === 'function'
 }
 
-function expandTagDescription(
+export function expandTagDescription(
   description: TagDescription<string>
 ): FullTagDescription<string> {
   return typeof description === 'string' ? { type: description } : description
@@ -463,8 +464,9 @@ export type QueryArgFrom<D extends BaseEndpointDefinition<any, any, any>> =
 export type ResultTypeFrom<D extends BaseEndpointDefinition<any, any, any>> =
   D extends BaseEndpointDefinition<any, any, infer RT> ? RT : unknown
 
-export type ReducerPathFrom<D extends EndpointDefinition<any, any, any, any>> =
-  D extends EndpointDefinition<any, any, any, infer RP> ? RP : unknown
+export type ReducerPathFrom<
+  D extends EndpointDefinition<any, any, any, any, any>
+> = D extends EndpointDefinition<any, any, any, any, infer RP> ? RP : unknown
 
 export type TagTypesFrom<D extends EndpointDefinition<any, any, any, any>> =
   D extends EndpointDefinition<any, any, infer RP, any> ? RP : unknown

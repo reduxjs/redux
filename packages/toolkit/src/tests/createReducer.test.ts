@@ -98,8 +98,10 @@ describe('createReducer', () => {
     test('Freezes initial state', () => {
       const initialState = [{ text: 'Buy milk' }]
       const todosReducer = createReducer(initialState, {})
+      const frozenInitialState = todosReducer(undefined, { type: 'dummy' })
 
-      const mutateStateOutsideReducer = () => (initialState[0].text = 'edited')
+      const mutateStateOutsideReducer = () =>
+        (frozenInitialState[0].text = 'edited')
       expect(mutateStateOutsideReducer).toThrowError(
         /Cannot assign to read only property/
       )
@@ -130,6 +132,41 @@ describe('createReducer', () => {
     })
 
     behavesLikeReducer(todosReducer)
+  })
+
+  describe('Accepts a lazy state init function to generate initial state', () => {
+    const addTodo: AddTodoReducer = (state, action) => {
+      const { newTodo } = action.payload
+      state.push({ ...newTodo, completed: false })
+    }
+
+    const toggleTodo: ToggleTodoReducer = (state, action) => {
+      const { index } = action.payload
+      const todo = state[index]
+      todo.completed = !todo.completed
+    }
+
+    const lazyStateInit = () => [] as TodoState
+
+    const todosReducer = createReducer(lazyStateInit, {
+      ADD_TODO: addTodo,
+      TOGGLE_TODO: toggleTodo,
+    })
+
+    behavesLikeReducer(todosReducer)
+
+    it('Should only call the init function when `undefined` state is passed in', () => {
+      const spy = jest.fn().mockReturnValue(42)
+
+      const dummyReducer = createReducer(spy, {})
+      expect(spy).not.toHaveBeenCalled()
+
+      dummyReducer(123, { type: 'dummy' })
+      expect(spy).not.toHaveBeenCalled()
+
+      const initialState = dummyReducer(undefined, { type: 'dummy' })
+      expect(spy).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('given draft state from immer', () => {

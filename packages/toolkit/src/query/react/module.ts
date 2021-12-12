@@ -86,6 +86,25 @@ export interface ReactHooksModuleOptions {
    * The version of the `useStore` hook to be used
    */
   useStore?: RR['useStore']
+  /**
+   * Enables performing asynchronous tasks immediately within a render.
+   *
+   * @example
+   *
+   * ```ts
+   * import {
+   *   buildCreateApi,
+   *   coreModule,
+   *   reactHooksModule
+   * } from '@reduxjs/toolkit/query/react'
+   *
+   * const createApi = buildCreateApi(
+   *   coreModule(),
+   *   reactHooksModule({ unstable__sideEffectsInRender: true })
+   * )
+   * ```
+   */
+  unstable__sideEffectsInRender?: boolean
 }
 
 /**
@@ -107,9 +126,10 @@ export const reactHooksModule = ({
   useDispatch = rrUseDispatch,
   useSelector = rrUseSelector,
   useStore = rrUseStore,
+  unstable__sideEffectsInRender = false,
 }: ReactHooksModuleOptions = {}): Module<ReactHooksModule> => ({
   name: reactHooksModuleName,
-  init(api, options, context) {
+  init(api, { serializeQueryArgs }, context) {
     const anyApi = api as any as Api<
       any,
       Record<string, any>,
@@ -119,7 +139,15 @@ export const reactHooksModule = ({
     >
     const { buildQueryHooks, buildMutationHook, usePrefetch } = buildHooks({
       api,
-      moduleOptions: { batch, useDispatch, useSelector, useStore },
+      moduleOptions: {
+        batch,
+        useDispatch,
+        useSelector,
+        useStore,
+        unstable__sideEffectsInRender,
+      },
+      serializeQueryArgs,
+      context,
     })
     safeAssign(anyApi, { usePrefetch })
     safeAssign(context, { batch })

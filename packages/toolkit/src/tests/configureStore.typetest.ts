@@ -2,7 +2,11 @@
 import type { Dispatch, AnyAction, Middleware, Reducer, Store } from 'redux'
 import { applyMiddleware } from 'redux'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import {
+  configureStore,
+  getDefaultMiddleware,
+  createSlice,
+} from '@reduxjs/toolkit'
 import type { ThunkMiddleware, ThunkAction } from 'redux-thunk'
 import thunk, { ThunkDispatch } from 'redux-thunk'
 import { expectNotAny, expectType } from './helpers'
@@ -187,6 +191,60 @@ const _anyMiddleware: any = () => () => () => {}
     store.dispatch(thunkA())
     // @ts-expect-error
     store.dispatch(thunkB())
+
+    const res = store.dispatch((dispatch, getState) => {
+      return 42
+    })
+
+    const action = store.dispatch({ type: 'foo' })
+  }
+  /**
+   * Test: return type of thunks and actions is inferred correctly
+   */
+  {
+    const slice = createSlice({
+      name: 'counter',
+      initialState: {
+        value: 0,
+      },
+      reducers: {
+        incrementByAmount: (state, action: PayloadAction<number>) => {
+          state.value += action.payload
+        },
+      },
+    })
+
+    const store = configureStore({
+      reducer: {
+        counter: slice.reducer,
+      },
+    })
+
+    const action = slice.actions.incrementByAmount(2)
+
+    const dispatchResult = store.dispatch(action)
+    expectType<{ type: string; payload: number }>(dispatchResult)
+
+    const promiseResult = store.dispatch(async (dispatch) => {
+      return 42
+    })
+
+    expectType<Promise<number>>(promiseResult)
+
+    const store2 = configureStore({
+      reducer: {
+        counter: slice.reducer,
+      },
+      middleware: (gDM) =>
+        gDM({
+          thunk: {
+            extraArgument: 42,
+          },
+        }),
+    })
+
+    const dispatchResult2 = store2.dispatch(action)
+    expectType<{ type: string; payload: number }>(dispatchResult2)
   }
   /**
    * Test: removing the Thunk Middleware

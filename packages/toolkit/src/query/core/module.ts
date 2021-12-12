@@ -17,15 +17,24 @@ import type {
   QueryDefinition,
   MutationDefinition,
   AssertTagTypes,
-  FullTagDescription,
+  TagDescription,
 } from '../endpointDefinitions'
 import { isQueryDefinition, isMutationDefinition } from '../endpointDefinitions'
-import type { CombinedState, QueryKeys, RootState } from './apiState'
+import type {
+  CombinedState,
+  QueryKeys,
+  MutationKeys,
+  RootState,
+} from './apiState'
 import type { Api, Module } from '../apiTypes'
 import { onFocus, onFocusLost, onOnline, onOffline } from './setupListeners'
 import { buildSlice } from './buildSlice'
 import { buildMiddleware } from './buildMiddleware'
 import { buildSelectors } from './buildSelectors'
+import type {
+  MutationActionCreatorResult,
+  QueryActionCreatorResult,
+} from './buildInitiate'
 import { buildInitiate } from './buildInitiate'
 import { assertCast, safeAssign } from '../tsHelpers'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
@@ -124,6 +133,29 @@ declare module '../apiTypes' {
        * A collection of utility thunks for various situations.
        */
       util: {
+        /**
+         * Returns all promises for running queries and mutations.
+         * Useful for SSR scenarios to await everything triggered in any way,
+         * including via hook calls, or manually dispatching `initiate` actions.
+         */
+        getRunningOperationPromises: () => Array<Promise<unknown>>
+        /**
+         * If a promise is running for a given endpoint name + argument combination,
+         * returns that promise. Otherwise, returns `undefined`.
+         * Can be used to await a specific query/mutation triggered in any way,
+         * including via hook calls, or manually dispatching `initiate` actions.
+         */
+        getRunningOperationPromise<EndpointName extends QueryKeys<Definitions>>(
+          endpointName: EndpointName,
+          args: QueryArgFrom<Definitions[EndpointName]>
+        ): QueryActionCreatorResult<Definitions[EndpointName]> | undefined
+        getRunningOperationPromise<
+          EndpointName extends MutationKeys<Definitions>
+        >(
+          endpointName: EndpointName,
+          fixedCacheKeyOrRequestId: string
+        ): MutationActionCreatorResult<Definitions[EndpointName]> | undefined
+
         /**
          * A Redux thunk that can be used to manually trigger pre-fetching of data.
          *
@@ -242,9 +274,18 @@ declare module '../apiTypes' {
          * ```
          */
         invalidateTags: ActionCreatorWithPayload<
-          Array<TagTypes | FullTagDescription<TagTypes>>,
+          Array<TagDescription<TagTypes>>,
           string
         >
+
+        selectInvalidatedBy: (
+          state: RootState<Definitions, string, ReducerPath>,
+          tags: ReadonlyArray<TagDescription<TagTypes>>
+        ) => Array<{
+          endpointName: string
+          originalArgs: any
+          queryCacheKey: string
+        }>
       }
       /**
        * Endpoints based on the input endpoints provided to `createApi`, containing `select` and `action matchers`.
@@ -431,16 +472,30 @@ export const coreModule = (): Module<CoreModule> => ({
 
     safeAssign(api, { reducer: reducer as any, middleware })
 
-    const { buildQuerySelector, buildMutationSelector } = buildSelectors({
-      serializeQueryArgs: serializeQueryArgs as any,
-      reducerPath,
-    })
+    const { buildQuerySelector, buildMutationSelector, selectInvalidatedBy } =
+      buildSelectors({
+        serializeQueryArgs: serializeQueryArgs as any,
+        reducerPath,
+      })
 
-    const { buildInitiateQuery, buildInitiateMutation } = buildInitiate({
+    safeAssign(api.util, { selectInvalidatedBy })
+
+    const {
+      buildInitiateQuery,
+      buildInitiateMutation,
+      getRunningOperationPromises,
+      getRunningOperationPromise,
+    } = buildInitiate({
       queryThunk,
       mutationThunk,
       api,
       serializeQueryArgs: serializeQueryArgs as any,
+      context,
+    })
+
+    safeAssign(api.util, {
+      getRunningOperationPromises,
+      getRunningOperationPromise,
     })
 
     return {
@@ -468,7 +523,7 @@ export const coreModule = (): Module<CoreModule> => ({
             anyApi.endpoints[endpointName],
             {
               select: buildMutationSelector(),
-              initiate: buildInitiateMutation(endpointName, definition),
+              initiate: buildInitiateMutation(endpointName),
             },
             buildMatchThunkActions(mutationThunk, endpointName)
           )

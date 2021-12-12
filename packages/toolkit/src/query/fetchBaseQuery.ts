@@ -1,6 +1,6 @@
 import { joinUrls } from './utils'
 import { isPlainObject } from '@reduxjs/toolkit'
-import type { BaseQueryFn } from './baseQueryTypes'
+import type { BaseQueryApi, BaseQueryFn } from './baseQueryTypes'
 import type { MaybePromise, Override } from './tsHelpers'
 
 export type ResponseHandler =
@@ -54,7 +54,7 @@ const handleResponse = async (
 
   if (responseHandler === 'json') {
     const text = await response.text()
-    return text.length ? JSON.parse(text) : undefined
+    return text.length ? JSON.parse(text) : null
   }
 }
 
@@ -113,12 +113,13 @@ export type FetchBaseQueryArgs = {
   baseUrl?: string
   prepareHeaders?: (
     headers: Headers,
-    api: { getState: () => unknown }
+    api: Pick<BaseQueryApi, 'getState' | 'endpoint' | 'type' | 'forced'>
   ) => MaybePromise<Headers>
   fetchFn?: (
     input: RequestInfo,
     init?: RequestInit | undefined
   ) => Promise<Response>
+  paramsSerializer?: (params: Record<string, any>) => string
 } & RequestInit
 
 export type FetchBaseQueryMeta = { request: Request; response?: Response }
@@ -156,11 +157,14 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  * Accepts a custom `fetch` function if you do not want to use the default on the window.
  * Useful in SSR environments if you need to use a library such as `isomorphic-fetch` or `cross-fetch`
  *
+ * @param {(params: Record<string, unknown> => string} paramsSerializer
+ * An optional function that can be used to stringify querystring parameters.
  */
 export function fetchBaseQuery({
   baseUrl,
   prepareHeaders = (x) => x,
   fetchFn = defaultFetchFn,
+  paramsSerializer,
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
@@ -174,7 +178,7 @@ export function fetchBaseQuery({
       'Warning: `fetch` is not available. Please supply a custom `fetchFn` property to use `fetchBaseQuery` on SSR environments.'
     )
   }
-  return async (arg, { signal, getState }) => {
+  return async (arg, { signal, getState, endpoint, forced, type }) => {
     let meta: FetchBaseQueryMeta | undefined
     let {
       url,
@@ -196,7 +200,7 @@ export function fetchBaseQuery({
 
     config.headers = await prepareHeaders(
       new Headers(stripUndefined(headers)),
-      { getState }
+      { getState, endpoint, forced, type }
     )
 
     // Only set the content-type to json if appropriate. Will not be true for FormData, ArrayBuffer, Blob, etc.
@@ -216,7 +220,9 @@ export function fetchBaseQuery({
 
     if (params) {
       const divider = ~url.indexOf('?') ? '&' : '?'
-      const query = new URLSearchParams(stripUndefined(params))
+      const query = paramsSerializer
+        ? paramsSerializer(params)
+        : new URLSearchParams(stripUndefined(params))
       url += divider + query
     }
 
