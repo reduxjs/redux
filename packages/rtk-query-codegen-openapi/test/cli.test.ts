@@ -77,4 +77,11 @@ Done
     expect(fromTs).toEqual(fromJs);
     expect(fromJson).toEqual(fromJs);
   });
+
+  test('missing parameters doesnt fail', async () => {
+    jest.setTimeout(25000);
+
+    const out = await cli([`./config.invalid-example.json`], __dirname);
+    expect(out.stderr).toContain("Error: path parameter petId does not seem to be defined in '/pet/{petId}'!")
+  });
 });

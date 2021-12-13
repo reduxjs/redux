@@ -413,7 +413,7 @@ function generatePathExpression(path: string, pathParameters: QueryArgDefinition
   const head = path.replace(/\{(.*?)\}(.*?)(?=\{|$)/g, (_, expression, literal) => {
     const param = pathParameters.find((p) => p.originalName === expression);
     if (!param) {
-      throw new Error(`path parameter ${expression} does not seem to be defined?`);
+      throw new Error(`path parameter ${expression} does not seem to be defined in '${path}'!`);
     }
     expressions.push([param.name, literal]);
     return '';
