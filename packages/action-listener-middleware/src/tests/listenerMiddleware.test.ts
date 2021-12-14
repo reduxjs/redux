@@ -2,6 +2,7 @@ import {
   configureStore,
   createAction,
   createSlice,
+  Dispatch,
   isAnyOf,
 } from '@reduxjs/toolkit'
 
@@ -32,6 +33,7 @@ const middlewareApi = {
   signal: expect.any(Object),
   fork: expect.any(Function),
   delay: expect.any(Function),
+  pause: expect.any(Function),
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
@@ -40,6 +42,28 @@ const middlewareApi = {
 }
 
 const noop = () => {}
+
+// Copyright 2018-2021 the Deno authors. All rights reserved. MIT license.
+export interface Deferred<T> extends Promise<T> {
+  resolve(value?: T | PromiseLike<T>): void
+  // deno-lint-ignore no-explicit-any
+  reject(reason?: any): void
+}
+
+/** Creates a Promise with the `reject` and `resolve` functions
+ * placed as methods on the promise object itself. It allows you to do:
+ *
+ *     const p = deferred<number>();
+ *     // ...
+ *     p.resolve(42);
+ */
+export function deferred<T>(): Deferred<T> {
+  let methods
+  const promise = new Promise<T>((resolve, reject): void => {
+    methods = { resolve, reject }
+  })
+  return Object.assign(promise, methods) as Deferred<T>
+}
 
 export declare type IsAny<T, True, False = never> = true | false extends (
   T extends never ? true : false
@@ -890,34 +914,6 @@ describe('createActionListenerMiddleware', () => {
       expect(jobsStarted).toBe(3)
       expect(jobsContinued).toBe(0)
       expect(jobsCanceled).toBe(2)
-    })
-
-    test('runs forked sync tasks immediatly', async () => {
-      const store = configureStore({
-        reducer: counterSlice.reducer,
-        middleware: (gDM) => gDM().prepend(middleware),
-      })
-
-      middleware.addListener({
-        actionCreator: increment,
-        listener: async (action, listenerApi) => {
-          const outcome = listenerApi.fork(() => {
-            listenerApi.dispatch(decrement())
-            listenerApi.dispatch(decrement())
-            listenerApi.dispatch(decrement())
-          })
-          outcome.controller.abort()
-          expect(listenerApi.getState()).toBe(-2)
-
-          try {
-            await outcome
-          } catch (err) {
-            expect(err).toBeInstanceOf(TaskAbortError)
-          }
-        },
-      })
-
-      store.dispatch(increment())
     })
   })
 

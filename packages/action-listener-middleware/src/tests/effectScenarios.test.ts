@@ -267,10 +267,10 @@ describe('Saga-style Effects Scenarios', () => {
           await listenerApi.delay(5)
           // Complete the child by returning an Outcome-wrapped value
           return childOutput
-        }).promise
+        }).result
 
         // Unwrap the child result in the listener
-        if (result.isOk()) {
+        if (result.status === 'ok') {
           childResult = result.value
         }
       },
@@ -304,7 +304,7 @@ describe('Saga-style Effects Scenarios', () => {
         })
 
         await listenerApi.delay(5)
-        forkedTask.controller.abort()
+        forkedTask.cancel()
         listenerCompleted = true
       },
     })

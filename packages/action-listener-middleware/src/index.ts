@@ -29,13 +29,18 @@ import type {
   WithMiddlewareType,
   TakePattern,
   ListenerErrorInfo,
-  TaskExecutor,
+  ForkedTaskExecutor,
   ForkedTask,
 } from './types'
-
+import { assertFunction } from './utils'
 import { TaskAbortError } from './exceptions'
-import { Outcome } from './outcome'
-export type { Outcome, Ok, Error } from './outcome'
+import {
+  runTask,
+  promisifyAbortSignal,
+  validateActive,
+  createPause,
+  createDelay,
+} from './task'
 export { TaskAbortError } from './exceptions'
 export type {
   ActionListener,
@@ -49,60 +54,52 @@ export type {
   TypedAddListener,
   TypedAddListenerAction,
   Unsubscribe,
-  TaskExecutor,
+  ForkedTaskExecutor,
   ForkedTask,
+  ForkedTaskAPI,
   AsyncTaskExecutor,
   SyncTaskExecutor,
+  TaskCancelled,
+  TaskRejected,
+  TaskResolved,
+  TaskResult,
 } from './types'
-
-function assertFunction(
-  func: unknown,
-  expected: string
-): asserts func is (...args: unknown[]) => unknown {
-  if (typeof func !== 'function') {
-    throw new TypeError(`${expected} is not a function`)
-  }
-}
 
 const defaultWhen: MiddlewarePhase = 'afterReducer'
 const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
 
-function assertActive(signal: AbortSignal, reason?: string) {
-  if (signal.aborted) {
-    throw new TaskAbortError(reason)
-  }
-}
-
-function createDelay(signal: AbortSignal) {
-  return async function delay(timeoutMs: number): Promise<void> {
-    assertActive(signal)
-    await new Promise((resolve) => setTimeout(resolve, timeoutMs))
-    assertActive(signal)
-  }
-}
-
-function createFork(parentAbortSignal: AbortSignal) {
-  return function fork<T>(childJobExecutor: TaskExecutor<T>): ForkedTask<T> {
+const createFork = (parentAbortSignal: AbortSignal) => {
+  return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
+    assertFunction(taskExecutor, 'taskExecutor')
     const childAbortController = new AbortController()
-    const promise = Outcome.try(async () => {
-      assertActive(parentAbortSignal)
-      const result = await Promise.resolve(childJobExecutor())
-      assertActive(parentAbortSignal)
-      assertActive(childAbortController.signal)
+    const cancel = () => {
+      childAbortController.abort()
+    }
 
+    const result = runTask<T>(async (): Promise<T> => {
+      validateActive(parentAbortSignal)
+      validateActive(childAbortController.signal)
+      const result = (await taskExecutor({
+        pause: createPause(childAbortController.signal),
+        delay: createDelay(childAbortController.signal),
+        signal: childAbortController.signal,
+      })) as T
+      validateActive(parentAbortSignal)
+      validateActive(childAbortController.signal)
       return result
-    })
+    }, cancel)
+
     return {
-      promise,
-      controller: childAbortController,
+      result,
+      cancel,
     }
   }
 }
 
-function createTakePattern<S>(
+const createTakePattern = <S>(
   addListener: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>,
   signal: AbortSignal
-): TakePattern<S> {
+): TakePattern<S> => {
   /**
    * A function that takes an ActionListenerPredicate and an optional timeout,
    * and resolves when either the predicate returns `true` based on an action
@@ -110,24 +107,14 @@ function createTakePattern<S>(
    * If the parent listener is canceled while waiting, this will throw a
    * TaskAbortError.
    */
-  async function take<P extends AnyActionListenerPredicate<S>>(
+  const take = async <P extends AnyActionListenerPredicate<S>>(
     predicate: P,
     timeout: number | undefined
-  ) {
-    assertActive(signal)
+  ) => {
+    validateActive(signal)
 
     // Placeholder unsubscribe function until the listener is added
     let unsubscribe: Unsubscribe = () => {}
-
-    const signalPromise = new Promise<null>((_, reject) => {
-      signal.addEventListener(
-        'abort',
-        () => {
-          reject(new TaskAbortError())
-        },
-        { once: true }
-      )
-    })
 
     const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
       // Inside the Promise, we synchronously add the listener.
@@ -147,7 +134,7 @@ function createTakePattern<S>(
     })
 
     const promises: (Promise<null> | Promise<[AnyAction, S, S]>)[] = [
-      signalPromise,
+      promisifyAbortSignal(signal),
       tuplePromise,
     ]
 
@@ -160,7 +147,7 @@ function createTakePattern<S>(
     try {
       const output = await Promise.race(promises)
 
-      assertActive(signal)
+      validateActive(signal)
       return output
     } finally {
       // Always clean up the listener
@@ -201,7 +188,7 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     listener: options.listener,
     type,
     predicate,
-    taskAbortControllerSet: new Set<AbortController>(),
+    pendingSet: new Set<AbortController>(),
     unsubscribe: () => {
       throw new Error('Unsubscribe not initialized')
     },
@@ -311,9 +298,9 @@ export function createActionListenerMiddleware<
     return entry.unsubscribe
   }
 
-  function findListenerEntry(
+  const findListenerEntry = (
     comparator: (entry: ListenerEntry) => boolean
-  ): ListenerEntry | undefined {
+  ): ListenerEntry | undefined => {
     for (const entry of listenerMap.values()) {
       if (comparator(entry)) {
         return entry
@@ -364,13 +351,13 @@ export function createActionListenerMiddleware<
     return true
   }
 
-  async function notifyListener(
+  const notifyListener = async (
     entry: ListenerEntry<unknown, Dispatch<AnyAction>>,
     action: AnyAction,
     api: MiddlewareAPI,
     getOriginalState: () => S,
     currentPhase: MiddlewarePhase
-  ) {
+  ) => {
     const internalTaskController = new AbortController()
     const take = createTakePattern(addListener, internalTaskController.signal)
     const condition: ConditionFunction<S> = (predicate, timeout) => {
@@ -378,9 +365,11 @@ export function createActionListenerMiddleware<
     }
     const delay = createDelay(internalTaskController.signal)
     const fork = createFork(internalTaskController.signal)
-
+    const pause: (val: Promise<any>) => Promise<any> = createPause(
+      internalTaskController.signal
+    )
     try {
-      entry.taskAbortControllerSet.add(internalTaskController)
+      entry.pendingSet.add(internalTaskController)
       await Promise.resolve(
         entry.listener(action, {
           ...api,
@@ -388,6 +377,7 @@ export function createActionListenerMiddleware<
           condition,
           take,
           delay,
+          pause,
           currentPhase,
           extra,
           signal: internalTaskController.signal,
@@ -397,12 +387,10 @@ export function createActionListenerMiddleware<
             listenerMap.set(entry.id, entry)
           },
           cancelPrevious: () => {
-            entry.taskAbortControllerSet.forEach((controller, _, set) => {
-              if (
-                controller !== internalTaskController &&
-                !controller.signal.aborted
-              ) {
+            entry.pendingSet.forEach((controller, _, set) => {
+              if (controller !== internalTaskController) {
                 controller.abort()
+                set.delete(controller)
               }
             })
           },
@@ -417,7 +405,7 @@ export function createActionListenerMiddleware<
       }
     } finally {
       internalTaskController.abort() // Notify that the task has completed
-      entry.taskAbortControllerSet.delete(internalTaskController)
+      entry.pendingSet.delete(internalTaskController)
     }
   }
 

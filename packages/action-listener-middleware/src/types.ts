@@ -7,7 +7,8 @@ import type {
   Action,
   ThunkDispatch,
 } from '@reduxjs/toolkit'
-import type { Outcome } from './outcome'
+import type { TaskAbortError } from './exceptions'
+
 /**
  * Types copied from RTK
  */
@@ -26,7 +27,6 @@ export interface TypedActionCreator<Type extends string> {
 /**
  * Action Listener Options types
  */
-
 export type MiddlewarePhase = 'beforeReducer' | 'afterReducer'
 
 export type When = MiddlewarePhase | 'both' | undefined
@@ -61,19 +61,63 @@ export interface HasMatchFunction<T> {
   match: MatchFunction<T>
 }
 
+export interface ForkedTaskAPI {
+  /**
+   * Returns a promise that resolves when `waitFor` resolves or
+   * rejects if the task has been cancelled or completed.
+   */
+  pause<W>(waitFor: Promise<W>): Promise<W>
+  /**
+   * Returns a promise resolves after `timeoutMs` or
+   * rejects if the task has been cancelled or is completed.
+   * @param timeoutMs
+   */
+  delay(timeoutMs: number): Promise<void>
+  /**
+   * An abort signal whose `aborted` property is set to `true`
+   * if the task execution is either aborted or completed.
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+   */
+  signal: AbortSignal
+}
+
 export interface AsyncTaskExecutor<T> {
-  (): Promise<T>
+  (forkApi: ForkedTaskAPI): Promise<T>
 }
 
 export interface SyncTaskExecutor<T> {
-  (): T
+  (forkApi: ForkedTaskAPI): T
 }
 
-export type TaskExecutor<T> = AsyncTaskExecutor<T> | SyncTaskExecutor<T>
+export type ForkedTaskExecutor<T> = AsyncTaskExecutor<T> | SyncTaskExecutor<T>
+
+export type TaskResolved<T> = {
+  readonly status: 'ok'
+  readonly value: T
+}
+
+export type TaskRejected = {
+  readonly status: 'rejected'
+  readonly error: unknown
+}
+
+export type TaskCancelled = {
+  readonly status: 'cancelled'
+  readonly error: TaskAbortError
+}
+
+export type TaskResult<Value> =
+  | TaskResolved<Value>
+  | TaskRejected
+  | TaskCancelled
 
 export interface ForkedTask<T> {
-  promise: Promise<Outcome<T>>
-  controller: AbortController
+  result: Promise<TaskResult<T>>
+  /**
+   * Cancel task if it is in progress or not yet started,
+   * it is noop otherwise.
+   */
+  cancel(): void
 }
 
 /**
@@ -87,9 +131,28 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   condition: ConditionFunction<S>
   take: TakePattern<S>
   cancelPrevious: () => void
+  /**
+   * An abort signal whose `aborted` property is set to `true`
+   * if the listener execution is either aborted or completed.
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+   */
   signal: AbortSignal
+  /**
+   * Returns a promise resolves after `timeoutMs` or
+   * rejects if the listener has been cancelled or is completed.
+   */
   delay(timeoutMs: number): Promise<void>
-  fork<T>(executor: TaskExecutor<T>): ForkedTask<T>
+  /**
+   * Queues in the next microtask the execution of a task.
+   * @param executor
+   */
+  fork<T>(executor: ForkedTaskExecutor<T>): ForkedTask<T>
+  /**
+   * Returns a promise that resolves when `waitFor` resolves or
+   * rejects if the listener has been cancelled or is completed.
+   * @param promise
+   */
+  pause<M>(promise: Promise<M>): Promise<M>
   currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
   extra: unknown
@@ -299,7 +362,7 @@ export type ListenerEntry<
   when: When
   listener: ActionListener<any, S, D>
   unsubscribe: () => void
-  taskAbortControllerSet: Set<AbortController>
+  pendingSet: Set<AbortController>
   type?: string
   predicate: ListenerPredicate<AnyAction, S>
 }

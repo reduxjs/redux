@@ -22,7 +22,6 @@ import type {
   Unsubscribe,
 } from '../index'
 import { TaskAbortError } from '../exceptions'
-import { Outcome } from '../outcome'
 
 interface CounterState {
   value: number
@@ -78,7 +77,7 @@ describe('Saga-style Effects Scenarios', () => {
     })
   })
 
-  test.skip('Long polling loop', async () => {
+  test('Long polling loop', async () => {
     // Reimplementation of a saga-based long-polling loop that is controlled
     // by "start/stop" actions. The infinite loop waits for a message from the
     // server, processes it somehow, and waits for the next message.
@@ -123,7 +122,7 @@ describe('Saga-style Effects Scenarios', () => {
     }
 
     let pollingTaskStarted = false
-    let pollingJobCanceled = false
+    let pollingTaskCanceled = false
 
     addListener({
       actionCreator: eventPollingStarted,
@@ -131,14 +130,12 @@ describe('Saga-style Effects Scenarios', () => {
         listenerApi.unsubscribe()
 
         // Start a child job that will infinitely loop receiving messages
-        const pollingTask = listenerApi.fork(async () => {
+        const pollingTask = listenerApi.fork(async (forkApi) => {
           pollingTaskStarted = true
           try {
             while (true) {
-              const eventPromise = pollForEvent()
               // Cancelation-aware pause for a new server message
-              const serverEvent = await eventPromise
-
+              const serverEvent = await forkApi.pause(pollForEvent())
               // Process the message. In this case, just count the times we've seen this message.
               if (serverEvent.type in receivedMessages) {
                 receivedMessages[
@@ -148,15 +145,15 @@ describe('Saga-style Effects Scenarios', () => {
             }
           } catch (err) {
             if (err instanceof TaskAbortError) {
-              pollingJobCanceled = true
+              pollingTaskCanceled = true
             }
           }
-          return Outcome.ok(0)
+          return 0
         })
 
         // Wait for the "stop polling" action
         await listenerApi.condition(eventPollingStopped.match)
-        pollingTask.controller.abort();
+        pollingTask.cancel()
       },
     })
 
@@ -184,6 +181,6 @@ describe('Saga-style Effects Scenarios', () => {
     // the cancelation took effect, but after another pause, the
     // cancelation kicked in and the second C is ignored.
     expect(receivedMessages).toEqual({ a: 1, b: 1, c: 0 })
-    expect(pollingJobCanceled).toBe(true)
+    expect(pollingTaskCanceled).toBe(true)
   })
 })
