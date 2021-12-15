@@ -373,13 +373,12 @@ export type WithMiddlewareType<T extends Middleware<any, any, any>> = {
 }
 
 // A shorthand form of the accepted args, solely so that `createListenerEntry` has validly-typed conditional logic when checking the options contents
-export type FallbackAddListenerOptions = (
-  | { actionCreator: TypedActionCreator<string> }
-  | { type: string }
-  | { matcher: MatchFunction<any> }
-  | { predicate: ListenerPredicate<any, any> }
-) &
-  ActionListenerOptions & { listener: ActionListener<any, any, any> }
+export type FallbackAddListenerOptions = {
+  actionCreator?: TypedActionCreator<string>
+  type?: string
+  matcher?: MatchFunction<any>
+  predicate?: ListenerPredicate<any, any>
+} & ActionListenerOptions & { listener: ActionListener<any, any, any> }
 
 /**
  * Utility Types
