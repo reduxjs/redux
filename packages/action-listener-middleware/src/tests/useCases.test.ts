@@ -21,8 +21,7 @@ import type {
   TypedAddListener,
   Unsubscribe,
 } from '../index'
-import { JobCancellationException } from '../job'
-import { Outcome } from '../outcome'
+import { TaskAbortError } from '../exceptions'
 
 interface CounterState {
   value: number
@@ -122,8 +121,8 @@ describe('Saga-style Effects Scenarios', () => {
       c: 0,
     }
 
-    let pollingJobStarted = false
-    let pollingJobCanceled = false
+    let pollingTaskStarted = false
+    let pollingTaskCanceled = false
 
     addListener({
       actionCreator: eventPollingStarted,
@@ -131,14 +130,12 @@ describe('Saga-style Effects Scenarios', () => {
         listenerApi.unsubscribe()
 
         // Start a child job that will infinitely loop receiving messages
-        const pollingJob = listenerApi.job.launch(async (handle) => {
-          pollingJobStarted = true
+        const pollingTask = listenerApi.fork(async (forkApi) => {
+          pollingTaskStarted = true
           try {
             while (true) {
-              const eventPromise = pollForEvent()
               // Cancelation-aware pause for a new server message
-              const serverEvent = await handle.pause(eventPromise)
-
+              const serverEvent = await forkApi.pause(pollForEvent())
               // Process the message. In this case, just count the times we've seen this message.
               if (serverEvent.type in receivedMessages) {
                 receivedMessages[
@@ -147,23 +144,22 @@ describe('Saga-style Effects Scenarios', () => {
               }
             }
           } catch (err) {
-            if (err instanceof JobCancellationException) {
-              pollingJobCanceled = true
+            if (err instanceof TaskAbortError) {
+              pollingTaskCanceled = true
             }
           }
-          return Outcome.ok(0)
+          return 0
         })
-        pollingJob.run()
 
         // Wait for the "stop polling" action
         await listenerApi.condition(eventPollingStopped.match)
-        pollingJob.cancel()
+        pollingTask.cancel()
       },
     })
 
     store.dispatch(eventPollingStarted())
     await delay(5)
-    expect(pollingJobStarted).toBe(true)
+    expect(pollingTaskStarted).toBe(true)
 
     await delay(5)
     emitter.emit('serverEvent', 'a')
@@ -185,6 +181,6 @@ describe('Saga-style Effects Scenarios', () => {
     // the cancelation took effect, but after another pause, the
     // cancelation kicked in and the second C is ignored.
     expect(receivedMessages).toEqual({ a: 1, b: 1, c: 0 })
-    expect(pollingJobCanceled).toBe(true)
+    expect(pollingTaskCanceled).toBe(true)
   })
 })

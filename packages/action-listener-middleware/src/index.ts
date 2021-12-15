@@ -4,6 +4,7 @@ import type {
   AnyAction,
   Action,
   ThunkDispatch,
+  MiddlewareAPI,
 } from '@reduxjs/toolkit'
 import { createAction, nanoid } from '@reduxjs/toolkit'
 
@@ -28,17 +29,19 @@ import type {
   WithMiddlewareType,
   TakePattern,
   ListenerErrorInfo,
+  ForkedTaskExecutor,
+  ForkedTask,
 } from './types'
-
+import { assertFunction } from './utils'
+import { TaskAbortError } from './exceptions'
 import {
-  Job,
-  SupervisorJob,
-  JobHandle,
-  JobCancellationReason,
-  JobCancellationException,
-} from './job'
-import { Outcome } from './outcome'
-
+  runTask,
+  promisifyAbortSignal,
+  validateActive,
+  createPause,
+  createDelay,
+} from './task'
+export { TaskAbortError } from './exceptions'
 export type {
   ActionListener,
   ActionListenerMiddleware,
@@ -51,87 +54,101 @@ export type {
   TypedAddListener,
   TypedAddListenerAction,
   Unsubscribe,
+  ForkedTaskExecutor,
+  ForkedTask,
+  ForkedTaskAPI,
+  AsyncTaskExecutor,
+  SyncTaskExecutor,
+  TaskCancelled,
+  TaskRejected,
+  TaskResolved,
+  TaskResult,
 } from './types'
-
-function assertFunction(
-  func: unknown,
-  expected: string
-): asserts func is (...args: unknown[]) => unknown {
-  if (typeof func !== 'function') {
-    throw new TypeError(`${expected} is not a function`)
-  }
-}
 
 const defaultWhen: MiddlewarePhase = 'afterReducer'
 const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
 
-function createTakePattern<S>(
+const createFork = (parentAbortSignal: AbortSignal) => {
+  return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
+    assertFunction(taskExecutor, 'taskExecutor')
+    const childAbortController = new AbortController()
+    const cancel = () => {
+      childAbortController.abort()
+    }
+
+    const result = runTask<T>(async (): Promise<T> => {
+      validateActive(parentAbortSignal)
+      validateActive(childAbortController.signal)
+      const result = (await taskExecutor({
+        pause: createPause(childAbortController.signal),
+        delay: createDelay(childAbortController.signal),
+        signal: childAbortController.signal,
+      })) as T
+      validateActive(parentAbortSignal)
+      validateActive(childAbortController.signal)
+      return result
+    }, cancel)
+
+    return {
+      result,
+      cancel,
+    }
+  }
+}
+
+const createTakePattern = <S>(
   addListener: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>,
-  parentJob: Job<any>
-): TakePattern<S> {
+  signal: AbortSignal
+): TakePattern<S> => {
   /**
    * A function that takes an ActionListenerPredicate and an optional timeout,
    * and resolves when either the predicate returns `true` based on an action
    * state combination or when the timeout expires.
    * If the parent listener is canceled while waiting, this will throw a
-   * JobCancellationException.
+   * TaskAbortError.
    */
-  async function take<P extends AnyActionListenerPredicate<S>>(
+  const take = async <P extends AnyActionListenerPredicate<S>>(
     predicate: P,
     timeout: number | undefined
-  ) {
+  ) => {
+    validateActive(signal)
+
     // Placeholder unsubscribe function until the listener is added
     let unsubscribe: Unsubscribe = () => {}
 
-    // We'll add an additional nested Job representing this function.
-    // TODO This is really a duplicate of the other job inside the middleware.
-    // This behavior requires some additional nesting:
-    // We're going to create a `Promise` representing the result of the listener,
-    // but then wrap that in an `Outcome` for consistent error handling.
-    let job: Job<[AnyAction, S, S]> = parentJob.launch(async (job) =>
-      Outcome.wrap(
-        new Promise<[AnyAction, S, S]>((resolve) => {
-          // Inside the Promise, we synchronously add the listener.
-          unsubscribe = addListener({
-            predicate: predicate as any,
-            listener: (action, listenerApi): void => {
-              // One-shot listener that cleans up as soon as the predicate passes
-              listenerApi.unsubscribe()
-              // Resolve the promise with the same arguments the predicate saw
-              resolve([
-                action,
-                listenerApi.getState(),
-                listenerApi.getOriginalState(),
-              ])
-            },
-            parentJob,
-          })
-        })
-      )
-    )
+    const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
+      // Inside the Promise, we synchronously add the listener.
+      unsubscribe = addListener({
+        predicate: predicate as any,
+        listener: (action, listenerApi): void => {
+          // One-shot listener that cleans up as soon as the predicate passes
+          listenerApi.unsubscribe()
+          // Resolve the promise with the same arguments the predicate saw
+          resolve([
+            action,
+            listenerApi.getState(),
+            listenerApi.getOriginalState(),
+          ])
+        },
+      })
+    })
 
-    let result: Outcome<[AnyAction, S, S]>
+    const promises: (Promise<null> | Promise<[AnyAction, S, S]>)[] = [
+      promisifyAbortSignal(signal),
+      tuplePromise,
+    ]
+
+    if (timeout != null) {
+      promises.push(
+        new Promise<null>((resolve) => setTimeout(resolve, timeout, null))
+      )
+    }
 
     try {
-      // Run the job and use the timeout if given
-      result = await (timeout !== undefined
-        ? job.runWithTimeout(timeout)
-        : job.run())
+      const output = await Promise.race(promises)
 
-      if (result.isOk()) {
-        // Resolve the actual `take` promise with the action+states
-        return result.value
-      } else {
-        if (
-          result.error instanceof JobCancellationException &&
-          result.error.reason === JobCancellationReason.JobCancelled
-        ) {
-          // The `take` job itself was canceled due to timeout.
-          return null
-        }
-        // The parent was canceled - reject this promise with that error
-        throw result.error
-      }
+      validateActive(signal)
+      return output
     } finally {
       // Always clean up the listener
       unsubscribe()
@@ -171,10 +188,10 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     listener: options.listener,
     type,
     predicate,
+    pendingSet: new Set<AbortController>(),
     unsubscribe: () => {
       throw new Error('Unsubscribe not initialized')
     },
-    parentJob: new SupervisorJob(),
   }
 
   return entry
@@ -281,9 +298,9 @@ export function createActionListenerMiddleware<
     return entry.unsubscribe
   }
 
-  function findListenerEntry(
+  const findListenerEntry = (
     comparator: (entry: ListenerEntry) => boolean
-  ): ListenerEntry | undefined {
+  ): ListenerEntry | undefined => {
     for (const entry of listenerMap.values()) {
       if (comparator(entry)) {
         return entry
@@ -332,6 +349,64 @@ export function createActionListenerMiddleware<
 
     listenerMap.delete(entry.id)
     return true
+  }
+
+  const notifyListener = async (
+    entry: ListenerEntry<unknown, Dispatch<AnyAction>>,
+    action: AnyAction,
+    api: MiddlewareAPI,
+    getOriginalState: () => S,
+    currentPhase: MiddlewarePhase
+  ) => {
+    const internalTaskController = new AbortController()
+    const take = createTakePattern(addListener, internalTaskController.signal)
+    const condition: ConditionFunction<S> = (predicate, timeout) => {
+      return take(predicate, timeout).then(Boolean)
+    }
+    const delay = createDelay(internalTaskController.signal)
+    const fork = createFork(internalTaskController.signal)
+    const pause: (val: Promise<any>) => Promise<any> = createPause(
+      internalTaskController.signal
+    )
+    try {
+      entry.pendingSet.add(internalTaskController)
+      await Promise.resolve(
+        entry.listener(action, {
+          ...api,
+          getOriginalState,
+          condition,
+          take,
+          delay,
+          pause,
+          currentPhase,
+          extra,
+          signal: internalTaskController.signal,
+          fork,
+          unsubscribe: entry.unsubscribe,
+          subscribe: () => {
+            listenerMap.set(entry.id, entry)
+          },
+          cancelPrevious: () => {
+            entry.pendingSet.forEach((controller, _, set) => {
+              if (controller !== internalTaskController) {
+                controller.abort()
+                set.delete(controller)
+              }
+            })
+          },
+        })
+      )
+    } catch (listenerError) {
+      if (!(listenerError instanceof TaskAbortError)) {
+        safelyNotifyError(onError, listenerError, {
+          raisedBy: 'listener',
+          phase: currentPhase,
+        })
+      }
+    } finally {
+      internalTaskController.abort() // Notify that the task has completed
+      entry.pendingSet.delete(internalTaskController)
+    }
   }
 
   const middleware: Middleware<
@@ -390,47 +465,7 @@ export function createActionListenerMiddleware<
           continue
         }
 
-        entry.parentJob.launchAndRun(async (jobHandle) => {
-          const take = createTakePattern(addListener, jobHandle as Job<any>)
-          const condition: ConditionFunction<S> = (predicate, timeout) => {
-            return take(predicate, timeout).then(Boolean)
-          }
-
-          const result = await Outcome.try(async () =>
-            entry.listener(action, {
-              ...api,
-              getOriginalState,
-              condition,
-              take,
-              currentPhase,
-              extra,
-              unsubscribe: entry.unsubscribe,
-              subscribe: () => {
-                listenerMap.set(entry.id, entry)
-              },
-              job: jobHandle,
-              cancelPrevious: () => {
-                entry.parentJob.cancelChildren(
-                  new JobCancellationException(
-                    JobCancellationReason.JobCancelled
-                  ),
-                  [jobHandle]
-                )
-              },
-            })
-          )
-          if (
-            result.isError() &&
-            !(result.error instanceof JobCancellationException)
-          ) {
-            safelyNotifyError(onError, result.error, {
-              raisedBy: 'listener',
-              phase: currentPhase,
-            })
-          }
-
-          return Outcome.ok(1)
-        })
+        notifyListener(entry, action, api, getOriginalState, currentPhase)
       }
       if (currentPhase === 'beforeReducer') {
         result = next(action)

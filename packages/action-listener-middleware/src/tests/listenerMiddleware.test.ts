@@ -2,6 +2,7 @@ import {
   configureStore,
   createAction,
   createSlice,
+  Dispatch,
   isAnyOf,
 } from '@reduxjs/toolkit'
 
@@ -12,6 +13,7 @@ import {
   createListenerEntry,
   addListenerAction,
   removeListenerAction,
+  TaskAbortError,
 } from '../index'
 
 import type {
@@ -21,7 +23,6 @@ import type {
   TypedAddListener,
   Unsubscribe,
 } from '../index'
-import { JobCancellationException } from '../job'
 
 const middlewareApi = {
   getState: expect.any(Function),
@@ -29,15 +30,40 @@ const middlewareApi = {
   condition: expect.any(Function),
   extra: undefined,
   take: expect.any(Function),
+  signal: expect.any(Object),
+  fork: expect.any(Function),
+  delay: expect.any(Function),
+  pause: expect.any(Function),
   dispatch: expect.any(Function),
   currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
   subscribe: expect.any(Function),
   cancelPrevious: expect.any(Function),
-  job: expect.any(Object),
 }
 
 const noop = () => {}
+
+// Copyright 2018-2021 the Deno authors. All rights reserved. MIT license.
+export interface Deferred<T> extends Promise<T> {
+  resolve(value?: T | PromiseLike<T>): void
+  // deno-lint-ignore no-explicit-any
+  reject(reason?: any): void
+}
+
+/** Creates a Promise with the `reject` and `resolve` functions
+ * placed as methods on the promise object itself. It allows you to do:
+ *
+ *     const p = deferred<number>();
+ *     // ...
+ *     p.resolve(42);
+ */
+export function deferred<T>(): Deferred<T> {
+  let methods
+  const promise = new Promise<T>((resolve, reject): void => {
+    methods = { resolve, reject }
+  })
+  return Object.assign(promise, methods) as Deferred<T>
+}
 
 export declare type IsAny<T, True, False = never> = true | false extends (
   T extends never ? true : false
@@ -870,7 +896,7 @@ describe('createActionListenerMiddleware', () => {
               // end up hitting this next line
               jobsContinued++
             } catch (err) {
-              if (err instanceof JobCancellationException) {
+              if (err instanceof TaskAbortError) {
                 jobsCanceled++
               }
             }
