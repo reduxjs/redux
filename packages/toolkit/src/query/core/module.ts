@@ -148,13 +148,21 @@ declare module '../apiTypes' {
         getRunningOperationPromise<EndpointName extends QueryKeys<Definitions>>(
           endpointName: EndpointName,
           args: QueryArgFrom<Definitions[EndpointName]>
-        ): QueryActionCreatorResult<Definitions[EndpointName]> | undefined
+        ):
+          | QueryActionCreatorResult<
+              Definitions[EndpointName] & { type: 'query' }
+            >
+          | undefined
         getRunningOperationPromise<
           EndpointName extends MutationKeys<Definitions>
         >(
           endpointName: EndpointName,
           fixedCacheKeyOrRequestId: string
-        ): MutationActionCreatorResult<Definitions[EndpointName]> | undefined
+        ):
+          | MutationActionCreatorResult<
+              Definitions[EndpointName] & { type: 'mutation' }
+            >
+          | undefined
 
         /**
          * A Redux thunk that can be used to manually trigger pre-fetching of data.
