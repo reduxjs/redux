@@ -65,8 +65,14 @@ export type {
   TaskResult,
 } from './types'
 
-const defaultWhen: MiddlewarePhase = 'afterReducer'
-const actualMiddlewarePhases = ['beforeReducer', 'afterReducer'] as const
+//Overly-aggressive byte-shaving
+const { assign } = Object
+
+const beforeReducer = 'beforeReducer' as const
+const afterReducer = 'afterReducer' as const
+
+const defaultWhen: MiddlewarePhase = afterReducer
+const actualMiddlewarePhases = [beforeReducer, afterReducer] as const
 
 const createFork = (parentAbortSignal: AbortSignal) => {
   return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
@@ -162,19 +168,17 @@ const createTakePattern = <S>(
 export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   options: FallbackAddListenerOptions
 ) => {
-  let predicate: ListenerPredicate<any, any>
-  let type: string | undefined
+  let { type, actionCreator, matcher, predicate, listener } = options
 
-  if ('type' in options) {
-    type = options.type
-    predicate = (action: any): action is any => action.type === type
-  } else if ('actionCreator' in options) {
-    type = options.actionCreator!.type
-    predicate = options.actionCreator.match
-  } else if ('matcher' in options) {
-    predicate = options.matcher
-  } else if ('predicate' in options) {
-    predicate = options.predicate
+  if (type) {
+    predicate = createAction(type).match
+  } else if (actionCreator) {
+    type = actionCreator!.type
+    predicate = actionCreator.match
+  } else if (matcher) {
+    predicate = matcher
+  } else if (predicate) {
+    // pass
   } else {
     throw new Error(
       'Creating a listener requires one of the known fields for matching against actions'
@@ -185,7 +189,7 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   const entry: ListenerEntry<unknown> = {
     when: options.when || defaultWhen,
     id,
-    listener: options.listener,
+    listener,
     type,
     predicate,
     pendingSet: new Set<AbortController>(),
@@ -371,30 +375,33 @@ export function createActionListenerMiddleware<
     try {
       entry.pendingSet.add(internalTaskController)
       await Promise.resolve(
-        entry.listener(action, {
-          ...api,
-          getOriginalState,
-          condition,
-          take,
-          delay,
-          pause,
-          currentPhase,
-          extra,
-          signal: internalTaskController.signal,
-          fork,
-          unsubscribe: entry.unsubscribe,
-          subscribe: () => {
-            listenerMap.set(entry.id, entry)
-          },
-          cancelPrevious: () => {
-            entry.pendingSet.forEach((controller, _, set) => {
-              if (controller !== internalTaskController) {
-                controller.abort()
-                set.delete(controller)
-              }
-            })
-          },
-        })
+        entry.listener(
+          action,
+          // Use assign() rather than ... to avoid extra helper functions added to bundle
+          assign({}, api, {
+            getOriginalState,
+            condition,
+            take,
+            delay,
+            pause,
+            currentPhase,
+            extra,
+            signal: internalTaskController.signal,
+            fork,
+            unsubscribe: entry.unsubscribe,
+            subscribe: () => {
+              listenerMap.set(entry.id, entry)
+            },
+            cancelPrevious: () => {
+              entry.pendingSet.forEach((controller, _, set) => {
+                if (controller !== internalTaskController) {
+                  controller.abort()
+                  set.delete(controller)
+                }
+              })
+            },
+          })
+        )
       )
     } catch (listenerError) {
       if (!(listenerError instanceof TaskAbortError)) {
@@ -467,7 +474,7 @@ export function createActionListenerMiddleware<
 
         notifyListener(entry, action, api, getOriginalState, currentPhase)
       }
-      if (currentPhase === 'beforeReducer') {
+      if (currentPhase === beforeReducer) {
         result = next(action)
       } else {
         return result
@@ -475,7 +482,7 @@ export function createActionListenerMiddleware<
     }
   }
 
-  return Object.assign(
+  return assign(
     middleware,
     {
       addListener,
