@@ -343,7 +343,6 @@ describe('Saga-style Effects Scenarios', () => {
         } else if (incrementByAmount.match(action)) {
           // do a non-cancelation-aware wait
           await delay(15)
-          // Or can check based on `job.isCancelled`
           if (listenerApi.signal.aborted) {
             canceledCheck = true
           }
