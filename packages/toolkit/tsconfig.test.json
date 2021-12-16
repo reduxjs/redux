@@ -11,7 +11,7 @@
     "target": "es2018",
     "jsx": "react",
     "baseUrl": ".",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "noImplicitReturns": false
   }
 }
