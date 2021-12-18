@@ -23,15 +23,17 @@ export const promisifyAbortSignal = (
   signal: AbortSignal,
   reason?: string
 ): Promise<never> => {
-  return catchRejection(new Promise<never>((_, reject) => {
-    const notifyRejection = () => reject(new TaskAbortError(reason))
+  return catchRejection(
+    new Promise<never>((_, reject) => {
+      const notifyRejection = () => reject(new TaskAbortError(reason))
 
-    if (signal.aborted) {
-      notifyRejection()
-    } else {
-      signal.addEventListener('abort', notifyRejection, { once: true })
-    }
-  }))
+      if (signal.aborted) {
+        notifyRejection()
+      } else {
+        signal.addEventListener('abort', notifyRejection, { once: true })
+      }
+    })
+  )
 }
 
 /**

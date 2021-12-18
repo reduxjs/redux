@@ -931,19 +931,25 @@ describe('createActionListenerMiddleware', () => {
         predicate: () => true,
         listener: async (_, listenerApi) => {
           listenerApi.unsubscribe() // run once
-          listenerApi.signal.addEventListener('abort', deferredCompletedEvt.resolve)
+          listenerApi.signal.addEventListener(
+            'abort',
+            deferredCompletedEvt.resolve
+          )
           listenerApi.take(() => true) // missing await
-        }
+        },
       })
 
       middleware.addListener({
         predicate: () => true,
         listener: async (_, listenerApi) => {
           listenerApi.cancelPrevious()
-          listenerApi.signal.addEventListener('abort', deferredCancelledEvt.resolve)
+          listenerApi.signal.addEventListener(
+            'abort',
+            deferredCancelledEvt.resolve
+          )
           listenerApi.take(() => true) // missing await
           await listenerApi.pause(godotPauseTrigger)
-        }
+        },
       })
 
       store.dispatch({ type: 'type' })

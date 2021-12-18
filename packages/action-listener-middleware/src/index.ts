@@ -32,7 +32,7 @@ import type {
   ForkedTaskExecutor,
   ForkedTask,
 } from './types'
-import { assertFunction,   catchRejection, } from './utils'
+import { assertFunction, catchRejection } from './utils'
 import { TaskAbortError } from './exceptions'
 import {
   runTask,
