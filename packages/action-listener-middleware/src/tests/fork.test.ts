@@ -296,6 +296,52 @@ describe('fork', () => {
         error: new TaskAbortError(),
       })
     })
+
+    test('fork.delay does not trigger unhandledRejections for completed or cancelled tasks', async () => {
+      let deferredCompletedEvt = deferred()
+      let deferredCancelledEvt = deferred()
+
+      // Unfortunately we cannot test declaratively unhandleRejections in jest: https://github.com/facebook/jest/issues/5620
+      // This test just fails if an `unhandledRejection` occurs.
+      middleware.addListener({
+        actionCreator: increment,
+        listener: async (_, listenerApi) => {
+          const completedTask = listenerApi.fork(async (forkApi) => {
+            forkApi.signal.addEventListener(
+              'abort',
+              deferredCompletedEvt.resolve,
+              { once: true }
+            )
+            forkApi.delay(100) // missing await
+
+            return 4
+          })
+
+          deferredCompletedEvt.resolve(await completedTask.result)
+
+          const godotPauseTrigger = deferred()
+
+          const cancelledTask = listenerApi.fork(async (forkApi) => {
+            forkApi.signal.addEventListener(
+              'abort',
+              deferredCompletedEvt.resolve,
+              { once: true }
+            )
+            forkApi.delay(1_000) // missing await
+            await forkApi.pause(godotPauseTrigger)
+            return 4
+          })
+
+          await Promise.resolve()
+          cancelledTask.cancel()
+          deferredCancelledEvt.resolve(await cancelledTask.result)
+        },
+      })
+
+      store.dispatch(increment())
+      expect(await deferredCompletedEvt).toBeDefined()
+      expect(await deferredCancelledEvt).toBeDefined()
+    })
   })
 
   test('forkApi.pause rejects if task is cancelled', async () => {

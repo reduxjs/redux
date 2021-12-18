@@ -32,7 +32,7 @@ import type {
   ForkedTaskExecutor,
   ForkedTask,
 } from './types'
-import { assertFunction } from './utils'
+import { assertFunction,   catchRejection, } from './utils'
 import { TaskAbortError } from './exceptions'
 import {
   runTask,
@@ -161,7 +161,10 @@ const createTakePattern = <S>(
     }
   }
 
-  return take as TakePattern<S>
+  return ((
+    predicate: AnyActionListenerPredicate<S>,
+    timeout: number | undefined
+  ) => catchRejection(take(predicate, timeout))) as TakePattern<S>
 }
 
 /** Accepts the possible options for creating a listener, and returns a formatted listener entry */

@@ -1,6 +1,6 @@
 import { TaskAbortError } from './exceptions'
 import type { TaskResult } from './types'
-import { noop } from './utils'
+import { noop, catchRejection } from './utils'
 
 /**
  * Synchronously raises {@link TaskAbortError} if the task tied to the input `signal` has been cancelled.
@@ -23,7 +23,7 @@ export const promisifyAbortSignal = (
   signal: AbortSignal,
   reason?: string
 ): Promise<never> => {
-  const promise = new Promise<never>((_, reject) => {
+  return catchRejection(new Promise<never>((_, reject) => {
     const notifyRejection = () => reject(new TaskAbortError(reason))
 
     if (signal.aborted) {
@@ -31,12 +31,7 @@ export const promisifyAbortSignal = (
     } else {
       signal.addEventListener('abort', notifyRejection, { once: true })
     }
-  })
-
-  // We do not want 'unhandledRejection' warnings or crashes caused by cancelled tasks
-  promise.catch(noop)
-
-  return promise
+  }))
 }
 
 /**
@@ -74,11 +69,13 @@ export const runTask = async <T>(
  * @returns
  */
 export const createPause = <T>(signal: AbortSignal) => {
-  return async (promise: Promise<T>): Promise<T> => {
-    validateActive(signal)
-    const result = await Promise.race([promisifyAbortSignal(signal), promise])
-    validateActive(signal)
-    return result
+  return (promise: Promise<T>): Promise<T> => {
+    return catchRejection(
+      Promise.race([promisifyAbortSignal(signal), promise]).then((output) => {
+        validateActive(signal)
+        return output
+      })
+    )
   }
 }
 
