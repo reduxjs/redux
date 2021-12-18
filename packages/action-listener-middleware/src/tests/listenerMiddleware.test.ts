@@ -623,6 +623,47 @@ describe('createActionListenerMiddleware', () => {
 
       expect(reducer.mock.calls).toEqual([[{}, testAction1('a')]])
     })
+
+    test('listenerApi.delay does not trigger unhandledRejections for completed or cancelled listners', async () => {
+      let deferredCompletedEvt = deferred()
+      let deferredCancelledEvt = deferred()
+      const godotPauseTrigger = deferred()
+
+      // Unfortunately we cannot test declaratively unhandleRejections in jest: https://github.com/facebook/jest/issues/5620
+      // This test just fails if an `unhandledRejection` occurs.
+      middleware.addListener({
+        actionCreator: increment,
+        listener: async (_, listenerApi) => {
+          listenerApi.unsubscribe()
+          listenerApi.signal.addEventListener(
+            'abort',
+            deferredCompletedEvt.resolve,
+            { once: true }
+          )
+          listenerApi.delay(100) // missing await
+        },
+      })
+
+      middleware.addListener({
+        actionCreator: increment,
+        listener: async (_, listenerApi) => {
+          listenerApi.cancelPrevious()
+          listenerApi.signal.addEventListener(
+            'abort',
+            deferredCancelledEvt.resolve,
+            { once: true }
+          )
+          listenerApi.delay(100) // missing await
+          listenerApi.pause(godotPauseTrigger)
+        },
+      })
+
+      store.dispatch(increment())
+      store.dispatch(increment())
+
+      expect(await deferredCompletedEvt).toBeDefined()
+      expect(await deferredCancelledEvt).toBeDefined()
+    })
   })
 
   describe('Error handling', () => {
@@ -875,6 +916,45 @@ describe('createActionListenerMiddleware', () => {
       store.dispatch(increment())
 
       expect(finalCount).toBe(2)
+    })
+
+    test('take does not trigger unhandledRejections for completed or cancelled tasks', async () => {
+      let deferredCompletedEvt = deferred()
+      let deferredCancelledEvt = deferred()
+      const store = configureStore({
+        reducer: counterSlice.reducer,
+        middleware: (gDM) => gDM().prepend(middleware),
+      })
+      const godotPauseTrigger = deferred()
+
+      middleware.addListener({
+        predicate: () => true,
+        listener: async (_, listenerApi) => {
+          listenerApi.unsubscribe() // run once
+          listenerApi.signal.addEventListener(
+            'abort',
+            deferredCompletedEvt.resolve
+          )
+          listenerApi.take(() => true) // missing await
+        },
+      })
+
+      middleware.addListener({
+        predicate: () => true,
+        listener: async (_, listenerApi) => {
+          listenerApi.cancelPrevious()
+          listenerApi.signal.addEventListener(
+            'abort',
+            deferredCancelledEvt.resolve
+          )
+          listenerApi.take(() => true) // missing await
+          await listenerApi.pause(godotPauseTrigger)
+        },
+      })
+
+      store.dispatch({ type: 'type' })
+      store.dispatch({ type: 'type' })
+      expect(await deferredCompletedEvt).toBeDefined()
     })
   })
 
