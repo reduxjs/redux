@@ -65,6 +65,8 @@ export type {
 //Overly-aggressive byte-shaving
 const { assign } = Object
 
+const alm = 'actionListenerMiddleware' as const
+
 const createFork = (parentAbortSignal: AbortSignal) => {
   return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
     assertFunction(taskExecutor, 'taskExecutor')
@@ -175,7 +177,7 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     // pass
   } else {
     throw new Error(
-      'Creating a listener requires one of the known fields for matching against actions'
+      'Creating a listener requires one of the known fields for matching an action'
     )
   }
 
@@ -185,7 +187,7 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     listener,
     type,
     predicate,
-    pendingSet: new Set<AbortController>(),
+    pending: new Set<AbortController>(),
     unsubscribe: () => {
       throw new Error('Unsubscribe not initialized')
     },
@@ -221,7 +223,7 @@ const safelyNotifyError = (
  * @alpha
  */
 export const addListenerAction = createAction(
-  'actionListenerMiddleware/add',
+  `${alm}/add`,
   function prepare(options: unknown) {
     const entry = createListenerEntry(
       // Fake out TS here
@@ -238,7 +240,7 @@ export const addListenerAction = createAction(
  * @alpha
  */
 export const removeListenerAction = createAction(
-  'actionListenerMiddleware/remove',
+  `${alm}/remove`,
   function prepare(
     typeOrActionCreator: string | TypedActionCreator<string>,
     listener: ActionListener<any, any, any>
@@ -271,7 +273,7 @@ export const removeListenerAction = createAction(
 }
 
 const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
-  console.error('action-listener-middleware-error', ...args)
+  console.error(`${alm}/error`, ...args)
 }
 
 /**
@@ -368,7 +370,7 @@ export function createActionListenerMiddleware<
       internalTaskController.signal
     )
     try {
-      entry.pendingSet.add(internalTaskController)
+      entry.pending.add(internalTaskController)
       await Promise.resolve(
         entry.listener(
           action,
@@ -387,7 +389,7 @@ export function createActionListenerMiddleware<
               listenerMap.set(entry.id, entry)
             },
             cancelPrevious: () => {
-              entry.pendingSet.forEach((controller, _, set) => {
+              entry.pending.forEach((controller, _, set) => {
                 if (controller !== internalTaskController) {
                   controller.abort()
                   set.delete(controller)
@@ -405,13 +407,13 @@ export function createActionListenerMiddleware<
       }
     } finally {
       internalTaskController.abort() // Notify that the task has completed
-      entry.pendingSet.delete(internalTaskController)
+      entry.pending.delete(internalTaskController)
     }
   }
 
   const middleware: Middleware<
     {
-      (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
+      (action: Action<`${typeof alm}/add`>): Unsubscribe
     },
     S,
     D
@@ -439,29 +441,27 @@ export function createActionListenerMiddleware<
     // Actually forward the action to the reducer before we handle listeners
     const result: unknown = next(action)
 
-    if (listenerMap.size === 0) {
-      return result
-    }
+    if (listenerMap.size > 0) {
+      let currentState = api.getState()
+      for (let entry of listenerMap.values()) {
+        let runListener = false
 
-    let currentState = api.getState()
-    for (let entry of listenerMap.values()) {
-      let runListener = false
+        try {
+          runListener = entry.predicate(action, currentState, originalState)
+        } catch (predicateError) {
+          runListener = false
 
-      try {
-        runListener = entry.predicate(action, currentState, originalState)
-      } catch (predicateError) {
-        runListener = false
+          safelyNotifyError(onError, predicateError, {
+            raisedBy: 'predicate',
+          })
+        }
 
-        safelyNotifyError(onError, predicateError, {
-          raisedBy: 'predicate',
-        })
+        if (!runListener) {
+          continue
+        }
+
+        notifyListener(entry, action, api, getOriginalState)
       }
-
-      if (!runListener) {
-        continue
-      }
-
-      notifyListener(entry, action, api, getOriginalState)
     }
 
     return result

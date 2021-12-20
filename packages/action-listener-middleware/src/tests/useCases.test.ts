@@ -5,22 +5,11 @@ import {
   isAnyOf,
 } from '@reduxjs/toolkit'
 
-import type { AnyAction, PayloadAction, Action } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
-import {
-  createActionListenerMiddleware,
-  createListenerEntry,
-  addListenerAction,
-  removeListenerAction,
-} from '../index'
+import { createActionListenerMiddleware } from '../index'
 
-import type {
-  When,
-  ActionListenerMiddlewareAPI,
-  TypedAddListenerAction,
-  TypedAddListener,
-  Unsubscribe,
-} from '../index'
+import type { TypedAddListener } from '../index'
 import { TaskAbortError } from '../exceptions'
 
 interface CounterState {

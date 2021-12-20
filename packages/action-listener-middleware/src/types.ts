@@ -348,7 +348,7 @@ export type ListenerEntry<
   id: string
   listener: ActionListener<any, S, D>
   unsubscribe: () => void
-  pendingSet: Set<AbortController>
+  pending: Set<AbortController>
   type?: string
   predicate: ListenerPredicate<AnyAction, S>
 }
