@@ -17,7 +17,6 @@ import {
 } from '../index'
 
 import type {
-  When,
   ActionListenerMiddlewareAPI,
   TypedAddListenerAction,
   TypedAddListener,
@@ -35,7 +34,6 @@ const middlewareApi = {
   delay: expect.any(Function),
   pause: expect.any(Function),
   dispatch: expect.any(Function),
-  currentPhase: expect.stringMatching(/beforeReducer|afterReducer/),
   unsubscribe: expect.any(Function),
   subscribe: expect.any(Function),
   cancelPrevious: expect.any(Function),
@@ -293,7 +291,7 @@ describe('createActionListenerMiddleware', () => {
       store.dispatch(increment())
 
       expect(listener1Calls).toBe(3)
-      expect(listener2Calls).toBe(1)
+      expect(listener2Calls).toBe(2)
     })
 
     test('subscribing with the same listener will not make it trigger twice (like EventTarget.addEventListener())', () => {
@@ -493,39 +491,7 @@ describe('createActionListenerMiddleware', () => {
     })
   })
 
-  describe('Middleware phases and listener API', () => {
-    const whenMap: [When, string, string, number][] = [
-      [undefined, 'reducer', 'listener', 1],
-      ['beforeReducer', 'listener', 'reducer', 1],
-      ['afterReducer', 'reducer', 'listener', 1],
-      ['both', 'reducer', 'listener', 2],
-    ]
-    test.each(whenMap)(
-      'with "when" set to %s, %s runs before %s',
-      (when, _, shouldRunLast, listenerCalls) => {
-        let whoRanLast = ''
-
-        reducer.mockClear()
-        reducer.mockImplementationOnce(() => {
-          whoRanLast = 'reducer'
-        })
-        const listener = jest.fn(() => {
-          whoRanLast = 'listener'
-        })
-
-        middleware.addListener({
-          actionCreator: testAction1,
-          listener,
-          when,
-        })
-
-        store.dispatch(testAction1('a'))
-        expect(reducer).toHaveBeenCalledTimes(1)
-        expect(listener).toHaveBeenCalledTimes(listenerCalls)
-        expect(whoRanLast).toBe(shouldRunLast)
-      }
-    )
-
+  describe('Listener API', () => {
     test('Passes both getState and getOriginalState in the API', () => {
       const store = configureStore({
         reducer: counterSlice.reducer,
@@ -543,7 +509,6 @@ describe('createActionListenerMiddleware', () => {
           // In the "before" phase, we pass the same state
           expect(currentState).toBe(stateBefore)
         },
-        when: 'beforeReducer',
       })
 
       let listener2Calls = 0
@@ -558,55 +523,12 @@ describe('createActionListenerMiddleware', () => {
           // In the "after" phase, we pass the new state for `getState`, and still have original state too
           expect(currentState.value).toBe(stateBefore.value + 1)
         },
-        when: 'afterReducer',
       })
 
       store.dispatch(increment())
 
       expect(listener1Calls).toBe(1)
       expect(listener2Calls).toBe(1)
-    })
-
-    test('mixing "before" and "after"', () => {
-      const calls: Function[] = []
-      function before1() {
-        calls.push(before1)
-      }
-      function before2() {
-        calls.push(before2)
-      }
-      function after1() {
-        calls.push(after1)
-      }
-      function after2() {
-        calls.push(after2)
-      }
-
-      middleware.addListener({
-        actionCreator: testAction1,
-        listener: before1,
-        when: 'beforeReducer',
-      })
-      middleware.addListener({
-        actionCreator: testAction1,
-        listener: before2,
-        when: 'beforeReducer',
-      })
-      middleware.addListener({
-        actionCreator: testAction1,
-        listener: after1,
-        when: 'afterReducer',
-      })
-      middleware.addListener({
-        actionCreator: testAction1,
-        listener: after2,
-        when: 'afterReducer',
-      })
-
-      store.dispatch(testAction1('a'))
-      store.dispatch(testAction2('a'))
-
-      expect(calls).toEqual([before1, before2, after1, after2])
     })
 
     test('by default, actions are forwarded to the store', () => {
@@ -733,7 +655,6 @@ describe('createActionListenerMiddleware', () => {
 
       expect(onError).toBeCalledWith(listenerError, {
         raisedBy: 'listener',
-        phase: 'afterReducer',
       })
     })
 
@@ -764,34 +685,31 @@ describe('createActionListenerMiddleware', () => {
 
       expect(onError).toBeCalledWith(listenerError, {
         raisedBy: 'listener',
-        phase: 'afterReducer',
       })
     })
   })
 
   describe('take and condition methods', () => {
-    test('take resolves to the tuple [A, CurrentState, PreviousState] when the predicate matches the action', (done) => {
+    test.only('take resolves to the tuple [A, CurrentState, PreviousState] when the predicate matches the action', async () => {
       const store = configureStore({
         reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
       })
 
+      let result = null
+
       middleware.addListener({
         predicate: incrementByAmount.match,
         listener: async (_, listenerApi) => {
-          const stateBefore = listenerApi.getState()
-          const result = await listenerApi.take(increment.match)
-
-          expect(result).toEqual([
-            increment(),
-            listenerApi.getState(),
-            stateBefore,
-          ])
-          done()
+          result = await listenerApi.take(increment.match)
         },
       })
       store.dispatch(incrementByAmount(1))
       store.dispatch(increment())
+
+      await delay(10)
+
+      expect(result).toEqual([increment(), { value: 2 }, { value: 1 }])
     })
 
     test('take resolves to null if the timeout expires', async () => {
@@ -864,7 +782,6 @@ describe('createActionListenerMiddleware', () => {
           const latestState = listenerApi.getState() as CounterState
           finalCount = latestState.value
         },
-        when: 'beforeReducer',
       })
 
       store.dispatch(increment())
@@ -904,7 +821,6 @@ describe('createActionListenerMiddleware', () => {
           const latestState = listenerApi.getState() as CounterState
           finalCount = latestState.value
         },
-        when: 'beforeReducer',
       })
 
       store.dispatch(increment())

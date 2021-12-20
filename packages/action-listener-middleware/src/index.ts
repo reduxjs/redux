@@ -25,7 +25,6 @@ import type {
   ListenerEntry,
   ListenerErrorHandler,
   Unsubscribe,
-  MiddlewarePhase,
   WithMiddlewareType,
   TakePattern,
   ListenerErrorInfo,
@@ -48,8 +47,6 @@ export type {
   ActionListenerMiddlewareAPI,
   ActionListenerOptions,
   CreateListenerMiddlewareOptions,
-  MiddlewarePhase,
-  When,
   ListenerErrorHandler,
   TypedAddListener,
   TypedAddListenerAction,
@@ -67,12 +64,6 @@ export type {
 
 //Overly-aggressive byte-shaving
 const { assign } = Object
-
-const beforeReducer = 'beforeReducer' as const
-const afterReducer = 'afterReducer' as const
-
-const defaultWhen: MiddlewarePhase = afterReducer
-const actualMiddlewarePhases = [beforeReducer, afterReducer] as const
 
 const createFork = (parentAbortSignal: AbortSignal) => {
   return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
@@ -190,7 +181,6 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
 
   const id = nanoid()
   const entry: ListenerEntry<unknown> = {
-    when: options.when || defaultWhen,
     id,
     listener,
     type,
@@ -362,12 +352,14 @@ export function createActionListenerMiddleware<
     entry: ListenerEntry<unknown, Dispatch<AnyAction>>,
     action: AnyAction,
     api: MiddlewareAPI,
-    getOriginalState: () => S,
-    currentPhase: MiddlewarePhase
+    getOriginalState: () => S
   ) => {
     const internalTaskController = new AbortController()
     const take = createTakePattern(addListener, internalTaskController.signal)
-    const condition: ConditionFunction<S> = (predicate, timeout) => {
+    const condition: ConditionFunction<S> = (
+      predicate: AnyActionListenerPredicate<any>,
+      timeout?: number
+    ) => {
       return take(predicate, timeout).then(Boolean)
     }
     const delay = createDelay(internalTaskController.signal)
@@ -387,7 +379,6 @@ export function createActionListenerMiddleware<
             take,
             delay,
             pause,
-            currentPhase,
             extra,
             signal: internalTaskController.signal,
             fork,
@@ -410,7 +401,6 @@ export function createActionListenerMiddleware<
       if (!(listenerError instanceof TaskAbortError)) {
         safelyNotifyError(onError, listenerError, {
           raisedBy: 'listener',
-          phase: currentPhase,
         })
       }
     } finally {
@@ -442,47 +432,39 @@ export function createActionListenerMiddleware<
       return
     }
 
-    if (listenerMap.size === 0) {
-      return next(action)
-    }
-
-    let result: unknown
+    // Need to get this state _before_ the reducer processes the action
     const originalState = api.getState()
     const getOriginalState = () => originalState
 
-    for (const currentPhase of actualMiddlewarePhases) {
-      let currentState = api.getState()
-      for (let entry of listenerMap.values()) {
-        const runThisPhase =
-          entry.when === 'both' || entry.when === currentPhase
+    // Actually forward the action to the reducer before we handle listeners
+    const result: unknown = next(action)
 
-        let runListener = runThisPhase
-
-        if (runListener) {
-          try {
-            runListener = entry.predicate(action, currentState, originalState)
-          } catch (predicateError) {
-            runListener = false
-
-            safelyNotifyError(onError, predicateError, {
-              raisedBy: 'predicate',
-              phase: currentPhase,
-            })
-          }
-        }
-
-        if (!runListener) {
-          continue
-        }
-
-        notifyListener(entry, action, api, getOriginalState, currentPhase)
-      }
-      if (currentPhase === beforeReducer) {
-        result = next(action)
-      } else {
-        return result
-      }
+    if (listenerMap.size === 0) {
+      return result
     }
+
+    let currentState = api.getState()
+    for (let entry of listenerMap.values()) {
+      let runListener = false
+
+      try {
+        runListener = entry.predicate(action, currentState, originalState)
+      } catch (predicateError) {
+        runListener = false
+
+        safelyNotifyError(onError, predicateError, {
+          raisedBy: 'predicate',
+        })
+      }
+
+      if (!runListener) {
+        continue
+      }
+
+      notifyListener(entry, action, api, getOriginalState)
+    }
+
+    return result
   }
 
   return assign(
