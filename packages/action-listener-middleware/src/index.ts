@@ -388,7 +388,7 @@ export function createActionListenerMiddleware<
             subscribe: () => {
               listenerMap.set(entry.id, entry)
             },
-            cancelPrevious: () => {
+            cancelActiveListeners: () => {
               entry.pending.forEach((controller, _, set) => {
                 if (controller !== internalTaskController) {
                   controller.abort()

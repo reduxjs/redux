@@ -129,7 +129,7 @@ describe('Saga-style Effects Scenarios', () => {
         listenerCalls++
 
         // Cancel any in-progress instances of this listener
-        listenerApi.cancelPrevious()
+        listenerApi.cancelActiveListeners()
 
         // Delay before starting actual work
         await listenerApi.delay(15)
@@ -335,7 +335,7 @@ describe('Saga-style Effects Scenarios', () => {
             canceledCheck = true
           }
         } else if (decrement.match(action)) {
-          listenerApi.cancelPrevious()
+          listenerApi.cancelActiveListeners()
         }
       },
     })

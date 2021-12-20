@@ -123,7 +123,7 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   subscribe(): void
   condition: ConditionFunction<S>
   take: TakePattern<S>
-  cancelPrevious: () => void
+  cancelActiveListeners: () => void
   /**
    * An abort signal whose `aborted` property is set to `true`
    * if the listener execution is either aborted or completed.
