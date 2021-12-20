@@ -143,8 +143,6 @@ interface AddListenerOptions {
   predicate?: ListenerPredicate
 
   listener: (action: Action, listenerApi: ListenerApi) => void | Promise<void>
-
-  when?: 'beforeReducer' | 'afterReducer' | 'both'
 }
 ```
 
@@ -174,15 +172,7 @@ The return value is a standard `unsubscribe()` callback that will remove this li
 
 The `listener` callback will receive the current action as its first argument, as well as a "listener API" object similar to the "thunk API" object in `createAsyncThunk`.
 
-The listener may be configured to run _before_ an action reaches the reducer, _after_ the reducer, or both, by passing a `when` option when adding the listener. If the `when` option is not provided, the default is 'afterReducer':
-
-```ts
-middleware.addListener({
-  actionCreator: increment,
-  listener,
-  when: 'beforeReducer',
-})
-```
+All listener predicates and callbacks are checked _after_ the root reducer has already processed the action and updated the state. The `listenerApi.getOriginalState()` method can be used to get the state value that existed before the action that triggered this listener was processed.
 
 ### `listenerMiddleware.removeListener(typeOrActionCreator, listener)`
 
@@ -226,7 +216,6 @@ The `listenerApi` object is the second argument to each listener callback. It co
 
 #### Middleware Options
 
-- `currentPhase: 'beforeReducer' | 'afterReducer'`: an string indicating when the listener is being called relative to the action processing
 - `extra: unknown`: the "extra argument" that was provided as part of the middleware setup, if any
 
 `extra` can be used to inject a value such as an API service layer into the middleware at creation time, and is accessible here.

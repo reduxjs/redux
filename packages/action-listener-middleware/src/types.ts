@@ -24,13 +24,6 @@ export interface TypedActionCreator<Type extends string> {
   match: MatchFunction<any>
 }
 
-/**
- * Action Listener Options types
- */
-export type MiddlewarePhase = 'beforeReducer' | 'afterReducer'
-
-export type When = MiddlewarePhase | 'both' | undefined
-
 export type AnyActionListenerPredicate<State> = (
   action: AnyAction,
   currentState: State,
@@ -153,7 +146,6 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
    * @param promise
    */
   pause<M>(promise: Promise<M>): Promise<M>
-  currentPhase: MiddlewarePhase
   // TODO Figure out how to pass this through the other types correctly
   extra: unknown
 }
@@ -172,12 +164,7 @@ export interface ListenerErrorHandler {
 }
 
 export interface ActionListenerOptions {
-  /**
-   * Determines if the listener runs 'before' or 'after' the reducers have been called.
-   * If set to 'before', calling `api.stopPropagation()` from the listener becomes possible.
-   * Defaults to 'before'.
-   */
-  when?: When
+  /** TODO Empty after removing `when` - will leave here for now */
 }
 
 export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
@@ -359,10 +346,9 @@ export type ListenerEntry<
   D extends Dispatch<AnyAction> = Dispatch<AnyAction>
 > = {
   id: string
-  when: When
   listener: ActionListener<any, S, D>
   unsubscribe: () => void
-  pendingSet: Set<AbortController>
+  pending: Set<AbortController>
   type?: string
   predicate: ListenerPredicate<AnyAction, S>
 }
@@ -408,10 +394,6 @@ export interface ListenerErrorInfo {
    * Which function has generated the exception.
    */
   raisedBy: 'listener' | 'predicate'
-  /**
-   * When the function that has raised the error has been called.
-   */
-  phase: MiddlewarePhase
 }
 
 /**

@@ -7,21 +7,9 @@ import {
 
 import type { AnyAction, PayloadAction, Action } from '@reduxjs/toolkit'
 
-import {
-  createActionListenerMiddleware,
-  createListenerEntry,
-  addListenerAction,
-  removeListenerAction,
-  TaskAbortError,
-} from '../index'
+import { createActionListenerMiddleware, TaskAbortError } from '../index'
 
-import type {
-  When,
-  ActionListenerMiddlewareAPI,
-  TypedAddListenerAction,
-  TypedAddListener,
-  Unsubscribe,
-} from '../index'
+import type { TypedAddListener } from '../index'
 
 describe('Saga-style Effects Scenarios', () => {
   interface CounterState {
