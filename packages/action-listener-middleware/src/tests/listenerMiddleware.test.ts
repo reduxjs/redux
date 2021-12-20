@@ -36,7 +36,7 @@ const middlewareApi = {
   dispatch: expect.any(Function),
   unsubscribe: expect.any(Function),
   subscribe: expect.any(Function),
-  cancelPrevious: expect.any(Function),
+  cancelActiveListeners: expect.any(Function),
 }
 
 const noop = () => {}
@@ -569,7 +569,7 @@ describe('createActionListenerMiddleware', () => {
       middleware.addListener({
         actionCreator: increment,
         listener: async (_, listenerApi) => {
-          listenerApi.cancelPrevious()
+          listenerApi.cancelActiveListeners()
           listenerApi.signal.addEventListener(
             'abort',
             deferredCancelledEvt.resolve,
@@ -858,7 +858,7 @@ describe('createActionListenerMiddleware', () => {
       middleware.addListener({
         predicate: () => true,
         listener: async (_, listenerApi) => {
-          listenerApi.cancelPrevious()
+          listenerApi.cancelActiveListeners()
           listenerApi.signal.addEventListener(
             'abort',
             deferredCancelledEvt.resolve
@@ -897,7 +897,7 @@ describe('createActionListenerMiddleware', () => {
               }
             }
           } else {
-            listenerApi.cancelPrevious()
+            listenerApi.cancelActiveListeners()
           }
         },
       })

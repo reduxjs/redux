@@ -97,7 +97,7 @@ describe('fork', () => {
     middleware.addListener({
       actionCreator: increment,
       listener: async (_, listenerApi) => {
-        listenerApi.cancelPrevious()
+        listenerApi.cancelActiveListeners()
         const result = await listenerApi.fork(async () => {
           await delay(20)
 
@@ -374,7 +374,7 @@ describe('fork', () => {
     middleware.addListener({
       actionCreator: increment,
       listener: async (_, listenerApi) => {
-        listenerApi.cancelPrevious()
+        listenerApi.cancelActiveListeners()
         const forkedTask = listenerApi.fork(async (forkApi) => {
           await forkApi.pause(delay(30))
 

@@ -33,8 +33,8 @@ listenerMiddleware.addListener(todoAdded, async (action, listenerApi) => {
   // Run whatever additional side-effect-y logic you want here
   console.log('Todo added: ', action.payload.text)
 
-  // Can cancel previous running instances
-  listenerApi.cancelPrevious()
+  // Can cancel other running instances
+  listenerApi.cancelActiveListeners()
 
   // Run async logic
   const data = await fetchData()
@@ -224,10 +224,10 @@ The `listenerApi` object is the second argument to each listener callback. It co
 
 - `unsubscribe: () => void`: will remove the listener from the middleware
 - `subscribe: () => void`: will re-subscribe the listener if it was previously removed, or no-op if currently subscribed
-- `cancelPrevious: () => void`: cancels any previously running instances of this same listener. (The cancelation will only have a meaningful effect if the previous instances are paused using one of the cancelation-aware APIs like `take/cancel/pause/delay` - see "Cancelation and Task Management" in the "Usage" section for more details)
+- `cancelActiveListeners: () => void`: cancels all other running instances of this same listener _except_ for the one that made this call. (The cancelation will only have a meaningful effect if the other instances are paused using one of the cancelation-aware APIs like `take/cancel/pause/delay` - see "Cancelation and Task Management" in the "Usage" section for more details)
 - `signal: AbortSignal`: An [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) whose `aborted` property will be set to `true` if the listener execution is aborted or completed.
 
-Dynamically unsubscribing and re-subscribing this listener allows for more complex async workflows, such as avoiding duplicate running instances by calling `listenerApi.unsubscribe()` at the start of a listener, or calling `listenerApi.cancelPrevious()` to ensure that only the most recent instance is allowed to complete.
+Dynamically unsubscribing and re-subscribing this listener allows for more complex async workflows, such as avoiding duplicate running instances by calling `listenerApi.unsubscribe()` at the start of a listener, or calling `listenerApi.cancelActiveListeners()` to ensure that only the most recent instance is allowed to complete.
 
 #### Conditional Workflow Execution
 
@@ -438,7 +438,7 @@ middleware.addListener({
 
 ### Complex Async Workflows
 
-The provided async workflow primitives (`cancelPrevious`, `unsuscribe`, `subscribe`, `take`, `condition`, `pause`, `delay`) can be used to implement many of the more complex async workflow capabilities found in the Redux-Saga library. This includes effects such as `throttle`, `debounce`, `takeLatest`, `takeLeading`, and `fork/join`. Some examples:
+The provided async workflow primitives (`cancelActiveListeners`, `unsuscribe`, `subscribe`, `take`, `condition`, `pause`, `delay`) can be used to implement many of the more complex async workflow capabilities found in the Redux-Saga library. This includes effects such as `throttle`, `debounce`, `takeLatest`, `takeLeading`, and `fork/join`. Some examples:
 
 ```js
 test('debounce / takeLatest', async () => {
@@ -452,7 +452,7 @@ test('debounce / takeLatest', async () => {
     actionCreator: increment,
     listener: async (action, listenerApi) => {
       // Cancel any in-progress instances of this listener
-      listenerApi.cancelPrevious()
+      listenerApi.cancelActiveListeners()
 
       // Delay before starting actual work
       await listenerApi.delay(15)
@@ -510,7 +510,7 @@ test('canceled', async () => {
           canceledCheck = true
         }
       } else if (decrement.match(action)) {
-        listenerApi.cancelPrevious()
+        listenerApi.cancelActiveListeners()
       }
     },
   })
