@@ -530,7 +530,7 @@ export const UserPage = ({ match }) => {
     // Return a unique selector instance for this page so that
     // the filtered results are correctly memoized
     return createSelector(
-      res => res.data,
+      res => res.data ?? [],
       (res, userId) => userId,
       (data, userId) => data.filter(post => post.user === userId)
     )
