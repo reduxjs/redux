@@ -80,7 +80,7 @@ import { createStore } from 'redux'
  * A reducer's function signature is: (state, action) => newState
  *
  * The Redux state should contain only plain JS objects, arrays, and primitives.
- * The root state value is usually an object.  It's important that you should
+ * The root state value is usually an object. It's important that you should
  * not mutate the state object, but return a new object if the state changes.
  *
  * You can use any conditional logic you want in a reducer. In this example,
