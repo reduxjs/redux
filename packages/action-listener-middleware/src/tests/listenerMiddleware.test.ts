@@ -263,10 +263,10 @@ describe('createActionListenerMiddleware', () => {
       let listener1Calls = 0
 
       middleware.addListener({
-        predicate: (action, state, previousState) => {
+        predicate: (action, state) => {
           return (state as CounterState).value > 1
         },
-        listener: (action, listenerApi) => {
+        listener: () => {
           listener1Calls++
         },
       })
@@ -280,7 +280,7 @@ describe('createActionListenerMiddleware', () => {
             (prevState as CounterState).value % 2 === 0
           )
         },
-        listener: (action, listenerApi) => {
+        listener: () => {
           listener2Calls++
         },
       })
@@ -291,7 +291,7 @@ describe('createActionListenerMiddleware', () => {
       store.dispatch(increment())
 
       expect(listener1Calls).toBe(3)
-      expect(listener2Calls).toBe(2)
+      expect(listener2Calls).toBe(1)
     })
 
     test('subscribing with the same listener will not make it trigger twice (like EventTarget.addEventListener())', () => {
@@ -690,7 +690,7 @@ describe('createActionListenerMiddleware', () => {
   })
 
   describe('take and condition methods', () => {
-    test.only('take resolves to the tuple [A, CurrentState, PreviousState] when the predicate matches the action', async () => {
+    test('take resolves to the tuple [A, CurrentState, PreviousState] when the predicate matches the action', async () => {
       const store = configureStore({
         reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
@@ -766,10 +766,10 @@ describe('createActionListenerMiddleware', () => {
       let listenerStarted = false
 
       middleware.addListener({
-        predicate: (action, currentState) => {
+        predicate: (action, _, previousState) => {
           return (
             increment.match(action) &&
-            (currentState as CounterState).value === 0
+            (previousState as CounterState).value === 0
           )
         },
         listener: async (action, listenerApi) => {
@@ -785,6 +785,7 @@ describe('createActionListenerMiddleware', () => {
       })
 
       store.dispatch(increment())
+
       expect(listenerStarted).toBe(true)
       await delay(25)
       store.dispatch(increment())
@@ -808,7 +809,7 @@ describe('createActionListenerMiddleware', () => {
         predicate: (action, currentState) => {
           return (
             increment.match(action) &&
-            (currentState as CounterState).value === 0
+            (currentState as CounterState).value === 1
           )
         },
         listener: async (action, listenerApi) => {
