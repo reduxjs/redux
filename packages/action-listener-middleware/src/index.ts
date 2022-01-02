@@ -224,7 +224,7 @@ const safelyNotifyError = (
  */
 export const addListenerAction = createAction(
   `${alm}/add`,
-  function prepare(options: unknown) {
+  (options: unknown) => {
     const entry = createListenerEntry(
       // Fake out TS here
       options as Parameters<AddListenerOverloads<unknown>>[0]
@@ -241,10 +241,10 @@ export const addListenerAction = createAction(
  */
 export const removeListenerAction = createAction(
   `${alm}/remove`,
-  function prepare(
+  (
     typeOrActionCreator: string | TypedActionCreator<string>,
     listener: ActionListener<any, any, any>
-  ) {
+  ) => {
     const type =
       typeof typeOrActionCreator === 'string'
         ? typeOrActionCreator
@@ -321,18 +321,22 @@ export function createActionListenerMiddleware<
     return insertEntry(entry)
   }) as TypedAddListener<S, D>
 
-  function removeListener<C extends TypedActionCreator<any>>(
-    actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D>
-  ): boolean
-  function removeListener(
-    type: string,
-    listener: ActionListener<AnyAction, S, D>
-  ): boolean
-  function removeListener(
+  type RemoveListener = {
+    <C extends TypedActionCreator<any>>(
+      actionCreator: C,
+      listener: ActionListener<ReturnType<C>, S, D>
+    ): boolean
+    (type: string, listener: ActionListener<AnyAction, S, D>): boolean
+    (
+      typeOrActionCreator: string | TypedActionCreator<any>,
+      listener: ActionListener<AnyAction, S, D>
+    ): boolean
+  }
+
+  const removeListener: RemoveListener = (
     typeOrActionCreator: string | TypedActionCreator<any>,
     listener: ActionListener<AnyAction, S, D>
-  ): boolean {
+  ): boolean => {
     const type =
       typeof typeOrActionCreator === 'string'
         ? typeOrActionCreator
@@ -358,17 +362,7 @@ export function createActionListenerMiddleware<
   ) => {
     const internalTaskController = new AbortController()
     const take = createTakePattern(addListener, internalTaskController.signal)
-    const condition: ConditionFunction<S> = (
-      predicate: AnyActionListenerPredicate<any>,
-      timeout?: number
-    ) => {
-      return take(predicate, timeout).then(Boolean)
-    }
-    const delay = createDelay(internalTaskController.signal)
-    const fork = createFork(internalTaskController.signal)
-    const pause: (val: Promise<any>) => Promise<any> = createPause(
-      internalTaskController.signal
-    )
+
     try {
       entry.pending.add(internalTaskController)
       await Promise.resolve(
@@ -377,13 +371,16 @@ export function createActionListenerMiddleware<
           // Use assign() rather than ... to avoid extra helper functions added to bundle
           assign({}, api, {
             getOriginalState,
-            condition,
+            condition: (
+              predicate: AnyActionListenerPredicate<any>,
+              timeout?: number
+            ) => take(predicate, timeout).then(Boolean),
             take,
-            delay,
-            pause,
+            delay: createDelay(internalTaskController.signal),
+            pause: createPause<any>(internalTaskController.signal),
             extra,
             signal: internalTaskController.signal,
-            fork,
+            fork: createFork(internalTaskController.signal),
             unsubscribe: entry.unsubscribe,
             subscribe: () => {
               listenerMap.set(entry.id, entry)
