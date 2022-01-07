@@ -138,6 +138,7 @@ module.exports = {
           path: '../docs',
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
+          showLastUpdateTime: true,
           editUrl: 'https://github.com/reduxjs/redux/edit/master/website'
         },
         theme: {
