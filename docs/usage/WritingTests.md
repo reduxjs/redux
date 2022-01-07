@@ -330,7 +330,7 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 test('fetches & receives a user after clicking the fetch user button', async () => {
-  render(<App />)
+  const screen = render(<App />)
 
   // should show no user initially, and not be fetching a user
   expect(screen.getByText(/no user/i)).toBeInTheDocument()
