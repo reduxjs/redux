@@ -31,7 +31,7 @@ import type {
   ForkedTaskExecutor,
   ForkedTask,
 } from './types'
-import { assertFunction, catchRejection, INTERNAL_NIL_TOKEN } from './utils'
+import { assertFunction, catchRejection } from './utils'
 import { TaskAbortError } from './exceptions'
 import {
   runTask,
@@ -64,6 +64,10 @@ export type {
 
 //Overly-aggressive byte-shaving
 const { assign } = Object
+/**
+ * @internal
+ */
+const INTERNAL_NIL_TOKEN = {} as const
 
 const alm = 'actionListenerMiddleware' as const
 

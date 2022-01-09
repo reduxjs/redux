@@ -20,8 +20,3 @@ export const catchRejection = <T>(
 
   return promise
 }
-
-/**
- * @internal
- */
-export const INTERNAL_NIL_TOKEN = {} as const
