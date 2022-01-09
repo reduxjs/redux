@@ -56,6 +56,7 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/eslint-parser": "^7.16.5",
     "@babel/node": "^7.8.7",
     "@babel/plugin-external-helpers": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
@@ -71,7 +72,6 @@
     "@types/node": "^16.4.10",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.0",
     "cross-env": "^7.0.2",
     "eslint": "^8.6.0",
