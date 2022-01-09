@@ -5,7 +5,7 @@ export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
   getState(): S
 }
 
-/**
+/*
  * A middleware is a higher-order function that composes a dispatch function
  * to return a new dispatch function. It often turns async actions into
  * actions.
