@@ -50,7 +50,7 @@ export function removeTodo(id) {
 #### `SomeComponent.js`
 
 ```js
-import { Component } from 'react'
+import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
@@ -61,29 +61,23 @@ console.log(TodoActionCreators)
 //   removeTodo: Function
 // }
 
-class TodoListContainer extends Component {
-  constructor(props) {
-    super(props)
+function TodoListContainer(props) {
+  // Injected by react-redux:
+  const { dispatch, todos } = props
 
-    const { dispatch } = props
+  // Here's a good use case for bindActionCreators:
+  // You want a child component to be completely unaware of Redux.
+  // We create bound versions of these functions now so we can
+  // pass them down to our child later.
 
-    // Here's a good use case for bindActionCreators:
-    // You want a child component to be completely unaware of Redux.
-    // We create bound versions of these functions now so we can
-    // pass them down to our child later.
+  const boundActionCreators = useMemo(() => bindActionCreators(TodoActionCreators, dispatch), [dispatch]);
+  console.log(boundActionCreators)
+  // {
+  //   addTodo: Function,
+  //   removeTodo: Function
+  // }
 
-    this.boundActionCreators = bindActionCreators(TodoActionCreators, dispatch)
-    console.log(this.boundActionCreators)
-    // {
-    //   addTodo: Function,
-    //   removeTodo: Function
-    // }
-  }
-
-  componentDidMount() {
-    // Injected by react-redux:
-    let { dispatch } = this.props
-
+  useEffect(() => {
     // Note: this won't work:
     // TodoActionCreators.addTodo('Use Redux')
 
@@ -93,20 +87,15 @@ class TodoListContainer extends Component {
     // This will work:
     let action = TodoActionCreators.addTodo('Use Redux')
     dispatch(action)
-  }
+  }, []);
 
-  render() {
-    // Injected by react-redux:
-    let { todos } = this.props
+  return <TodoList todos={todos} {...this.boundActionCreators} />
 
-    return <TodoList todos={todos} {...this.boundActionCreators} />
+  // An alternative to bindActionCreators is to pass
+  // just the dispatch function down, but then your child component
+  // needs to import action creators and know about them.
 
-    // An alternative to bindActionCreators is to pass
-    // just the dispatch function down, but then your child component
-    // needs to import action creators and know about them.
-
-    // return <TodoList todos={todos} dispatch={dispatch} />
-  }
+  // return <TodoList todos={todos} dispatch={dispatch} />
 }
 
 export default connect(state => ({ todos: state.todos }))(TodoListContainer)
