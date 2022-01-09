@@ -64,6 +64,10 @@ export type {
 
 //Overly-aggressive byte-shaving
 const { assign } = Object
+/**
+ * @internal
+ */
+const INTERNAL_NIL_TOKEN = {} as const
 
 const alm = 'actionListenerMiddleware' as const
 
@@ -432,33 +436,51 @@ export function createActionListenerMiddleware<
     }
 
     // Need to get this state _before_ the reducer processes the action
-    const originalState = api.getState()
-    const getOriginalState = () => originalState
+    let originalState: S | typeof INTERNAL_NIL_TOKEN = api.getState()
 
-    // Actually forward the action to the reducer before we handle listeners
-    const result: unknown = next(action)
-
-    if (listenerMap.size > 0) {
-      let currentState = api.getState()
-      for (let entry of listenerMap.values()) {
-        let runListener = false
-
-        try {
-          runListener = entry.predicate(action, currentState, originalState)
-        } catch (predicateError) {
-          runListener = false
-
-          safelyNotifyError(onError, predicateError, {
-            raisedBy: 'predicate',
-          })
-        }
-
-        if (!runListener) {
-          continue
-        }
-
-        notifyListener(entry, action, api, getOriginalState)
+    // `getOriginalState` can only be called synchronously.
+    // @see https://github.com/reduxjs/redux-toolkit/discussions/1648#discussioncomment-1932820
+    const getOriginalState = (): S => {
+      if (originalState === INTERNAL_NIL_TOKEN) {
+        throw new Error(
+          `${alm}: getOriginalState can only be called synchronously`
+        )
       }
+
+      return originalState as S
+    }
+
+    let result: unknown
+
+    try {
+      // Actually forward the action to the reducer before we handle listeners
+      result = next(action)
+
+      if (listenerMap.size > 0) {
+        let currentState = api.getState()
+        for (let entry of listenerMap.values()) {
+          let runListener = false
+
+          try {
+            runListener = entry.predicate(action, currentState, originalState)
+          } catch (predicateError) {
+            runListener = false
+
+            safelyNotifyError(onError, predicateError, {
+              raisedBy: 'predicate',
+            })
+          }
+
+          if (!runListener) {
+            continue
+          }
+
+          notifyListener(entry, action, api, getOriginalState)
+        }
+      }
+    } finally {
+      // Remove `originalState` store from this scope.
+      originalState = INTERNAL_NIL_TOKEN
     }
 
     return result

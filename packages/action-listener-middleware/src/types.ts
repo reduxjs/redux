@@ -118,6 +118,30 @@ export interface ForkedTask<T> {
  */
 export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
   extends MiddlewareAPI<D, S> {
+  /**
+   * Returns the store state as it existed when the action was originally dispatched, _before_ the reducers ran.
+   *
+   * ### Synchronous invocation
+   *
+   * This function can **only** be invoked **synchronously**, it throws error otherwise.
+   *
+   * @example
+   *
+   * ```ts
+   * middleware.addListener({
+   *  predicate: () => true,
+   *  async listener(_, { getOriginalState }) {
+   *    getOriginalState(); // sync: OK!
+   *
+   *    setTimeout(getOriginalState, 0); // async: throws Error
+   *
+   *    await Promise().resolve();
+   *
+   *    getOriginalState() // async: throws Error
+   *  }
+   * })
+   * ```
+   */
   getOriginalState: () => S
   unsubscribe(): void
   subscribe(): void

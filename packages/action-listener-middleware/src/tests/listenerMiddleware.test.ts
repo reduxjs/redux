@@ -21,6 +21,7 @@ import type {
   TypedAddListenerAction,
   TypedAddListener,
   Unsubscribe,
+  ActionListenerMiddleware,
 } from '../index'
 
 const middlewareApi = {
@@ -529,6 +530,56 @@ describe('createActionListenerMiddleware', () => {
 
       expect(listener1Calls).toBe(1)
       expect(listener2Calls).toBe(1)
+    })
+
+    test('getOriginalState can only be invoked synchronously', async () => {
+      const onError = jest.fn()
+
+      middleware = createActionListenerMiddleware({ onError })
+      const store = configureStore({
+        reducer: counterSlice.reducer,
+        middleware: (gDM) => gDM().prepend(middleware),
+      })
+
+      let appMidleware = middleware as ActionListenerMiddleware<
+        CounterState,
+        typeof store.dispatch
+      >
+
+      appMidleware.addListener({
+        actionCreator: increment,
+        async listener(_, listenerApi) {
+          const runIncrementBy = () => {
+            listenerApi.dispatch(
+              counterSlice.actions.incrementByAmount(
+                listenerApi.getOriginalState().value + 2
+              )
+            )
+          }
+
+          runIncrementBy()
+
+          await Promise.resolve()
+
+          runIncrementBy()
+        },
+      })
+
+      expect(store.getState()).toEqual({ value: 0 })
+
+      store.dispatch(increment()) // state.value+=1 && trigger listener
+      expect(onError).not.toHaveBeenCalled()
+      expect(store.getState()).toEqual({ value: 3 })
+
+      await delay(0)
+
+      expect(onError).toBeCalledWith(
+        new Error(
+          'actionListenerMiddleware: getOriginalState can only be called synchronously'
+        ),
+        { raisedBy: 'listener' }
+      )
+      expect(store.getState()).toEqual({ value: 3 })
     })
 
     test('by default, actions are forwarded to the store', () => {
