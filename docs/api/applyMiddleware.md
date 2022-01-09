@@ -173,23 +173,17 @@ store
 // I can also dispatch a thunk async action from a component
 // any time its props change to load the missing data.
 
+import React from 'react';
 import { connect } from 'react-redux'
-import { Component } from 'react'
 
-class SandwichShop extends Component {
-  componentDidMount() {
-    this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
-  }
+function SandwichShop(props) {
+  const { dispatch, forPerson } = props;
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.forPerson !== this.props.forPerson) {
-      this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
-    }
-  }
+  useEffect(() => {
+    dispatch(makeASandwichWithSecretSauce(forPerson));
+  }, [forPerson]);
 
-  render() {
-    return <p>{this.props.sandwiches.join('mustard')}</p>
-  }
+  return <p>{this.props.sandwiches.join('mustard')}</p>
 }
 
 export default connect(state => ({
