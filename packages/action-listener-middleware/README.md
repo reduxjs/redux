@@ -210,8 +210,7 @@ The `listenerApi` object is the second argument to each listener callback. It co
 
 - `dispatch: Dispatch`: the standard `store.dispatch` method
 - `getState: () => State`: the standard `store.getState` method
-- `getOriginalState: () => State`: returns the store state as it existed when the action was originally dispatched, _before_ the reducers ran.
-  This method can only be called synchronously, it throws error otherwise.
+- `getOriginalState: () => State`: returns the store state as it existed when the action was originally dispatched, _before_ the reducers ran. (**Note**: this method can only be called synchronously, during the initial dispatch call stack, to avoid memory leaks. Calling it asynchronously will throw an error.)
 
 `dispatch` and `getState` are exactly the same as in a thunk. `getOriginalState` can be used to compare the original state before the listener was started.
 
