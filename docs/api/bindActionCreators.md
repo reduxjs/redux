@@ -70,7 +70,10 @@ function TodoListContainer(props) {
   // We create bound versions of these functions now so we can
   // pass them down to our child later.
 
-  const boundActionCreators = useMemo(() => bindActionCreators(TodoActionCreators, dispatch), [dispatch]);
+  const boundActionCreators = useMemo(
+    () => bindActionCreators(TodoActionCreators, dispatch),
+    [dispatch]
+  )
   console.log(boundActionCreators)
   // {
   //   addTodo: Function,
@@ -87,7 +90,7 @@ function TodoListContainer(props) {
     // This will work:
     let action = TodoActionCreators.addTodo('Use Redux')
     dispatch(action)
-  }, []);
+  }, [])
 
   return <TodoList todos={todos} {...this.boundActionCreators} />
 

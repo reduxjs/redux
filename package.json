@@ -89,7 +89,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.7.2",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-typescript2": "^0.31.1",
     "rxjs": "^7.3.0",
     "ts-jest": "^27.0.4",
     "typescript": "^4.3.5"
