@@ -513,6 +513,7 @@ export function calculateProvidedByThunk(
     isFulfilled(action) ? action.payload : undefined,
     isRejectedWithValue(action) ? action.payload : undefined,
     action.meta.arg.originalArgs,
+    action.meta,
     assertTagType
   )
 }

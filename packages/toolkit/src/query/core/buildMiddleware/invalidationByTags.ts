@@ -47,6 +47,7 @@ export const build: SubMiddlewareBuilder = ({
             undefined,
             undefined,
             undefined,
+            undefined,
             assertTagType
           ),
           mwApi

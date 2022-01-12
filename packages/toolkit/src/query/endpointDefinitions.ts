@@ -147,11 +147,13 @@ export type GetResultDescriptionFn<
   TagTypes extends string,
   ResultType,
   QueryArg,
-  ErrorType
+  ErrorType,
+  MetaType
 > = (
   result: ResultType | undefined,
   error: ErrorType | undefined,
-  arg: QueryArg
+  arg: QueryArg,
+  meta: MetaType
 ) => ReadonlyArray<TagDescription<TagTypes>>
 
 export type FullTagDescription<TagType> = {
@@ -163,10 +165,11 @@ export type ResultDescription<
   TagTypes extends string,
   ResultType,
   QueryArg,
-  ErrorType
+  ErrorType,
+  MetaType
 > =
   | ReadonlyArray<TagDescription<TagTypes>>
-  | GetResultDescriptionFn<TagTypes, ResultType, QueryArg, ErrorType>
+  | GetResultDescriptionFn<TagTypes, ResultType, QueryArg, ErrorType, MetaType>
 
 /** @deprecated please use `onQueryStarted` instead */
 export interface QueryApi<ReducerPath extends string, Context extends {}> {
@@ -236,7 +239,8 @@ export interface QueryExtraOptions<
     TagTypes,
     ResultType,
     QueryArg,
-    BaseQueryError<BaseQuery>
+    BaseQueryError<BaseQuery>,
+    BaseQueryMeta<BaseQuery>
   >
   /**
    * Not to be used. A query should not invalidate tags in the cache.
@@ -310,7 +314,8 @@ export interface MutationExtraOptions<
     TagTypes,
     ResultType,
     QueryArg,
-    BaseQueryError<BaseQuery>
+    BaseQueryError<BaseQuery>,
+    BaseQueryMeta<BaseQuery>
   >
   /**
    * Not to be used. A mutation should not provide tags to the cache.
@@ -429,17 +434,23 @@ export type EndpointBuilder<
 
 export type AssertTagTypes = <T extends FullTagDescription<string>>(t: T) => T
 
-export function calculateProvidedBy<ResultType, QueryArg, ErrorType>(
+export function calculateProvidedBy<ResultType, QueryArg, ErrorType, MetaType>(
   description:
-    | ResultDescription<string, ResultType, QueryArg, ErrorType>
+    | ResultDescription<string, ResultType, QueryArg, ErrorType, MetaType>
     | undefined,
   result: ResultType | undefined,
   error: ErrorType | undefined,
   queryArg: QueryArg,
+  meta: MetaType | undefined,
   assertTagTypes: AssertTagTypes
 ): readonly FullTagDescription<string>[] {
   if (isFunction(description)) {
-    return description(result as ResultType, error as undefined, queryArg)
+    return description(
+      result as ResultType,
+      error as undefined,
+      queryArg,
+      meta as MetaType
+    )
       .map(expandTagDescription)
       .map(assertTagTypes)
   }
