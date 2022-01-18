@@ -241,6 +241,7 @@ export const exampleMiddleware: Middleware<
 The dispatch generic should likely only be needed if you are dispatching additional thunks within the middleware.
 
 In cases where `type RootState = ReturnType<typeof store.getState>` is used, a [circular type reference between the middleware and store definitions](https://github.com/reduxjs/redux/issues/4267) can be avoided by switching the type definition of `RootState` to:
+
 ```ts
 const rootReducer = combineReducers({ ... });
 type RootState = ReturnType<typeof rootReducer>;
