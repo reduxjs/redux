@@ -240,6 +240,13 @@ export const exampleMiddleware: Middleware<
 
 The dispatch generic should likely only be needed if you are dispatching additional thunks within the middleware.
 
+In cases where `type RootState = ReturnType<typeof store.getState>` is used, a [circular type reference between the middleware and store definitions](https://github.com/reduxjs/redux/issues/4267) can be avoided by switching the type definition of `RootState` to:
+
+```ts
+const rootReducer = combineReducers({ ... });
+type RootState = ReturnType<typeof rootReducer>;
+```
+
 ### Type Checking Redux Thunks
 
 [Redux Thunk](https://github.com/reduxjs/redux-thunk) is the standard middleware for writing sync and async logic that interacts with the Redux store. A thunk function receives `dispatch` and `getState` as its parameters. Redux Thunk has a built in `ThunkAction` type which we can use to define types for those arguments:
