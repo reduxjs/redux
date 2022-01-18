@@ -147,7 +147,7 @@ export default function combineReducers(reducers: ReducersMapObject) {
     unexpectedKeyCache = {}
   }
 
-  let shapeAssertionError: Error
+  let shapeAssertionError: unknown
   try {
     assertReducerShape(finalReducers)
   } catch (e) {
