@@ -133,15 +133,18 @@ describe('applyMiddleware', () => {
       <T extends A>(action: T, extraArg?: string[]): T
     }
 
-    const multiArgMiddleware: Middleware<MultiDispatch, any, MultiDispatch> =
-      _store => {
-        return next => (action: any, callArgs?: any) => {
-          if (Array.isArray(callArgs)) {
-            return action(...callArgs)
-          }
-          return next(action)
+    const multiArgMiddleware: Middleware<
+      MultiDispatch,
+      any,
+      MultiDispatch
+    > = _store => {
+      return next => (action: any, callArgs?: any) => {
+        if (Array.isArray(callArgs)) {
+          return action(...callArgs)
         }
+        return next(action)
       }
+    }
 
     function dummyMiddleware({ dispatch }: MiddlewareAPI) {
       return (_next: Dispatch) => (action: Action) =>
