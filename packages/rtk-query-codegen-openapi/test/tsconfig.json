@@ -2,7 +2,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./test/fixtures/*"],
-      "@rtk-incubator/rtk-query-codegen-openapi": ["./src"]
+      "@rtk-query/codegen-openapi": ["./src"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
