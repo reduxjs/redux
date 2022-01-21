@@ -1,9 +1,9 @@
-import type { SerializedError } from '@internal/createAsyncThunk';
+import type { SerializedError } from '@internal/createAsyncThunk'
 import { createAsyncThunk } from '@internal/createAsyncThunk'
 import { executeReducerBuilderCallback } from '@internal/mapBuilders'
 import type { AnyAction } from '@reduxjs/toolkit'
 import { createAction } from '@reduxjs/toolkit'
-import { expectType } from './helpers'
+import { expectExactType, expectType } from './helpers'
 
 /** Test:  alternative builder callback for actionMap */
 {
@@ -56,10 +56,34 @@ import { expectType } from './helpers'
       expectType<ReturnType<typeof increment>>(action)
     })
 
+    {
+      // action type is inferred when type predicate lacks `type` property
+      type PredicateWithoutTypeProperty = {
+        payload: number
+      }
+
+      builder.addMatcher(
+        (action): action is PredicateWithoutTypeProperty => true,
+        (state, action) => {
+          expectType<PredicateWithoutTypeProperty>(action)
+          expectType<AnyAction>(action)
+        }
+      )
+    }
+
     // action type defaults to AnyAction if no type predicate matcher is passed
     builder.addMatcher(
       () => true,
       (state, action) => {
+        expectExactType({} as AnyAction)(action)
+      }
+    )
+
+    // with a boolean checker, action can also be typed by type argument
+    builder.addMatcher<{ foo: boolean }>(
+      () => true,
+      (state, action) => {
+        expectType<{ foo: boolean }>(action)
         expectType<AnyAction>(action)
       }
     )

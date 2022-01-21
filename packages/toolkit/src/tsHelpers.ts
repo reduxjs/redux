@@ -101,8 +101,12 @@ export type NoInfer<T> = [T][T extends any ? 0 : never]
 
 export type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
 
+export interface TypeGuard<T> {
+  (value: any): value is T
+}
+
 export interface HasMatchFunction<T> {
-  match: (v: any) => v is T
+  match: TypeGuard<T>
 }
 
 export const hasMatchFunction = <T>(
@@ -112,7 +116,7 @@ export const hasMatchFunction = <T>(
 }
 
 /** @public */
-export type Matcher<T> = HasMatchFunction<T> | ((v: any) => v is T)
+export type Matcher<T> = HasMatchFunction<T> | TypeGuard<T>
 
 /** @public */
 export type ActionFromMatcher<M extends Matcher<any>> = M extends Matcher<
