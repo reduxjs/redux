@@ -5,9 +5,8 @@ import type {
   BaseQueryError,
   QueryReturnValue,
 } from '../baseQueryTypes'
-import { BaseQueryArg } from '../baseQueryTypes'
 import type { RootState, QueryKeys, QuerySubstateIdentifier } from './apiState'
-import { QueryStatus, CombinedState } from './apiState'
+import { QueryStatus } from './apiState'
 import type { StartQueryActionCreatorOptions } from './buildInitiate'
 import type {
   AssertTagTypes,
@@ -18,7 +17,7 @@ import type {
   QueryDefinition,
   ResultTypeFrom,
 } from '../endpointDefinitions'
-import { calculateProvidedBy, FullTagDescription } from '../endpointDefinitions'
+import { calculateProvidedBy } from '../endpointDefinitions'
 import type { AsyncThunkPayloadCreator, Draft } from '@reduxjs/toolkit'
 import {
   isAllOf,
@@ -513,7 +512,7 @@ export function calculateProvidedByThunk(
     isFulfilled(action) ? action.payload : undefined,
     isRejectedWithValue(action) ? action.payload : undefined,
     action.meta.arg.originalArgs,
-    action.meta,
+    'baseQueryMeta' in action.meta ? action.meta.baseQueryMeta : undefined,
     assertTagType
   )
 }

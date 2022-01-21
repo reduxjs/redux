@@ -5,6 +5,8 @@ import type {
   QueryDefinition,
 } from '@reduxjs/toolkit/query'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
+import type { FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/query/fetchBaseQuery'
+
 import {
   ANY,
   expectType,
@@ -721,4 +723,43 @@ describe('query endpoint lifecycles - onStart, onSuccess, onError', () => {
     await successAttempt
     expect(storeRef.store.getState().testReducer.count).toBe(1)
   })
+})
+
+test('providesTags and invalidatesTags can use baseQueryMeta', async () => {
+  let _meta: FetchBaseQueryMeta | undefined
+
+  type SuccessResponse = { value: 'success' }
+
+  const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+    tagTypes: ['success'],
+    endpoints: (build) => ({
+      query: build.query<SuccessResponse, void>({
+        query: () => '/success',
+        providesTags: (_result, _error, _arg, meta) => {
+          _meta = meta
+          return ['success']
+        },
+      }),
+      mutation: build.mutation<SuccessResponse, void>({
+        query: () => ({ url: '/success', method: 'POST' }),
+        invalidatesTags: (_result, _error, _arg, meta) => {
+          _meta = meta
+          return ['success']
+        },
+      }),
+    }),
+  })
+
+  const storeRef = setupApiStore(api)
+
+  await storeRef.store.dispatch(api.endpoints.query.initiate())
+
+  expect('request' in _meta! && 'response' in _meta!).toBe(true)
+
+  _meta = undefined
+
+  await storeRef.store.dispatch(api.endpoints.mutation.initiate())
+
+  expect('request' in _meta! && 'response' in _meta!).toBe(true)
 })
