@@ -198,7 +198,9 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   return entry
 }
 
-const createClearAllListeners = (listenerMap: Map<string, ListenerEntry>) => {
+const createClearListenerMiddleware = (
+  listenerMap: Map<string, ListenerEntry>
+) => {
   return () => {
     listenerMap.forEach((entry) => {
       entry.pending.forEach((controller) => {
@@ -249,6 +251,11 @@ export const addListenerAction = createAction(
     }
   }
 ) as TypedAddListenerAction<unknown>
+
+/**
+ * @alpha
+ */
+export const clearListenerMiddlewareAction = createAction(`${alm}/clear`)
 
 /**
  * @alpha
@@ -422,6 +429,8 @@ export function createActionListenerMiddleware<
     }
   }
 
+  const clearListenerMiddleware = createClearListenerMiddleware(listenerMap)
+
   const middleware: Middleware<
     {
       (action: Action<`${typeof alm}/add`>): Unsubscribe
@@ -440,6 +449,12 @@ export function createActionListenerMiddleware<
 
       return insertEntry(entry)
     }
+
+    if (clearListenerMiddlewareAction.match(action)) {
+      clearListenerMiddleware()
+      return
+    }
+
     if (removeListenerAction.match(action)) {
       removeListener(action.payload.type, action.payload.listener)
       return
@@ -501,7 +516,7 @@ export function createActionListenerMiddleware<
     {
       addListener,
       removeListener,
-      clear: createClearAllListeners(listenerMap),
+      clear: clearListenerMiddleware,
       addListenerAction: addListenerAction as TypedAddListenerAction<S>,
     },
     {} as WithMiddlewareType<typeof middleware>
