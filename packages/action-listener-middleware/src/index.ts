@@ -14,8 +14,6 @@ import type {
   BaseActionCreator,
   AnyActionListenerPredicate,
   CreateListenerMiddlewareOptions,
-  ConditionFunction,
-  ListenerPredicate,
   TypedActionCreator,
   TypedAddListener,
   TypedAddListenerAction,
@@ -198,6 +196,18 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   }
 
   return entry
+}
+
+const createClearAllListeners = (listenerMap: Map<string, ListenerEntry>) => {
+  return () => {
+    listenerMap.forEach((entry) => {
+      entry.pending.forEach((controller) => {
+        controller.abort()
+      })
+    })
+
+    listenerMap.clear()
+  }
 }
 
 /**
@@ -491,6 +501,7 @@ export function createActionListenerMiddleware<
     {
       addListener,
       removeListener,
+      clear: createClearAllListeners(listenerMap),
       addListenerAction: addListenerAction as TypedAddListenerAction<S>,
     },
     {} as WithMiddlewareType<typeof middleware>

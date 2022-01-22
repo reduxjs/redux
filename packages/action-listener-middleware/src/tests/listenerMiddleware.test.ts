@@ -492,6 +492,64 @@ describe('createActionListenerMiddleware', () => {
     })
   })
 
+  test('clear() cancels running listeners and removes all subscriptions', async () => {
+    const listener1Test = deferred()
+
+    let listener1Calls = 0
+    let listener2Calls = 0
+
+    middleware.addListener({
+      actionCreator: testAction1,
+      async listener(_, listenerApi) {
+        listener1Calls++
+        listenerApi.signal.addEventListener(
+          'abort',
+          () => listener1Test.resolve(listener1Calls),
+          { once: true }
+        )
+        await listenerApi.condition(() => true)
+        listener1Test.reject(new Error('unreachable: listener1Test'))
+      },
+    })
+
+    middleware.addListener({
+      actionCreator: testAction2,
+      listener() {
+        listener2Calls++
+      },
+    })
+
+    store.dispatch(testAction1('a'))
+
+    middleware.clear()
+    store.dispatch(testAction1('b'))
+    store.dispatch(testAction2('c'))
+
+    expect(listener2Calls).toBe(0)
+    expect(await listener1Test).toBe(1)
+  })
+
+  test('clear() cancels all running forked tasks', async () => {
+    const fork1Test = deferred()
+
+    middleware.addListener({
+      actionCreator: testAction1,
+      async listener(_, { fork }) {
+        const taskResult = await fork(() => {
+          return 3
+        }).result
+        fork1Test.resolve(taskResult)
+      },
+    })
+
+    store.dispatch(testAction1('a'))
+
+    middleware.clear()
+    store.dispatch(testAction1('b'))
+
+    expect(await fork1Test).toHaveProperty('status', 'cancelled')
+  })
+
   describe('Listener API', () => {
     test('Passes both getState and getOriginalState in the API', () => {
       const store = configureStore({
