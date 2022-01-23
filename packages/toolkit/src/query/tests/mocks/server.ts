@@ -14,26 +14,26 @@ export const posts: Record<number, Post> = {
 }
 
 export const server = setupServer(
-  rest.get('http://example.com/echo', (req, res, ctx) =>
+  rest.get('https://example.com/echo', (req, res, ctx) =>
     res(ctx.json({ ...req, headers: req.headers.all() }))
   ),
-  rest.post('http://example.com/echo', (req, res, ctx) =>
+  rest.post('https://example.com/echo', (req, res, ctx) =>
     res(ctx.json({ ...req, headers: req.headers.all() }))
   ),
-  rest.get('http://example.com/success', (_, res, ctx) =>
+  rest.get('https://example.com/success', (_, res, ctx) =>
     res(ctx.json({ value: 'success' }))
   ),
-  rest.post('http://example.com/success', (_, res, ctx) =>
+  rest.post('https://example.com/success', (_, res, ctx) =>
     res(ctx.json({ value: 'success' }))
   ),
-  rest.get('http://example.com/empty', (_, res, ctx) => res(ctx.body(''))),
-  rest.get('http://example.com/error', (_, res, ctx) =>
+  rest.get('https://example.com/empty', (_, res, ctx) => res(ctx.body(''))),
+  rest.get('https://example.com/error', (_, res, ctx) =>
     res(ctx.status(500), ctx.json({ value: 'error' }))
   ),
-  rest.post('http://example.com/error', (_, res, ctx) =>
+  rest.post('https://example.com/error', (_, res, ctx) =>
     res(ctx.status(500), ctx.json({ value: 'error' }))
   ),
-  rest.get('http://example.com/nonstandard-error', (_, res, ctx) =>
+  rest.get('https://example.com/nonstandard-error', (_, res, ctx) =>
     res(
       ctx.status(200),
       ctx.json({
@@ -42,19 +42,19 @@ export const server = setupServer(
       })
     )
   ),
-  rest.get('http://example.com/mirror', (req, res, ctx) =>
+  rest.get('https://example.com/mirror', (req, res, ctx) =>
     res(ctx.json(req.params))
   ),
-  rest.post('http://example.com/mirror', (req, res, ctx) =>
+  rest.post('https://example.com/mirror', (req, res, ctx) =>
     res(ctx.json(req.params))
   ),
-  rest.get('http://example.com/posts/random', (req, res, ctx) => {
+  rest.get('https://example.com/posts/random', (req, res, ctx) => {
     // just simulate an api that returned a random ID
     const { id, ..._post } = posts[1]
     return res(ctx.json({ id }))
   }),
   rest.get<Post, any, { id: number }>(
-    'http://example.com/post/:id',
+    'https://example.com/post/:id',
     (req, res, ctx) => {
       return res(ctx.json(posts[req.params.id]))
     }

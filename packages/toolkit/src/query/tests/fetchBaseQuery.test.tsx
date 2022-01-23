@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { setupApiStore } from './helpers'
 import { server } from './mocks/server'
-import { default as crossFetch } from 'cross-fetch'
+// @ts-ignore
+import nodeFetch from 'node-fetch'
+
 import { rest } from 'msw'
 import queryString from 'query-string'
 import type { BaseQueryApi } from '../baseQueryTypes'
@@ -13,7 +15,7 @@ const defaultHeaders: Record<string, string> = {
   delete2: '1',
 }
 
-const baseUrl = 'http://example.com'
+const baseUrl = 'https://example.com'
 
 // @ts-ignore
 const fetchFn = jest.fn<Promise<any>, any[]>(global.fetch)
@@ -136,7 +138,7 @@ describe('fetchBaseQuery', () => {
   describe('non-JSON-body', () => {
     it('success: should return data ("text" responseHandler)', async () => {
       server.use(
-        rest.get('http://example.com/success', (_, res, ctx) =>
+        rest.get('https://example.com/success', (_, res, ctx) =>
           res.once(ctx.text(`this is not json!`))
         )
       )
@@ -156,7 +158,7 @@ describe('fetchBaseQuery', () => {
 
     it('success: should fail gracefully (default="json" responseHandler)', async () => {
       server.use(
-        rest.get('http://example.com/success', (_, res, ctx) =>
+        rest.get('https://example.com/success', (_, res, ctx) =>
           res.once(ctx.text(`this is not json!`))
         )
       )
@@ -177,7 +179,7 @@ describe('fetchBaseQuery', () => {
 
     it('server error: should fail normally with a 500 status ("text" responseHandler)', async () => {
       server.use(
-        rest.get('http://example.com/error', (_, res, ctx) =>
+        rest.get('https://example.com/error', (_, res, ctx) =>
           res(ctx.status(500), ctx.text(`this is not json!`))
         )
       )
@@ -200,7 +202,7 @@ describe('fetchBaseQuery', () => {
 
     it('server error: should fail gracefully (default="json" responseHandler)', async () => {
       server.use(
-        rest.get('http://example.com/error', (_, res, ctx) =>
+        rest.get('https://example.com/error', (_, res, ctx) =>
           res(ctx.status(500), ctx.text(`this is not json!`))
         )
       )
@@ -536,6 +538,54 @@ describe('fetchBaseQuery', () => {
 
       expect(request.headers['authorization']).toBe(`Bearer ${token}`)
     })
+
+    test('prepareHeaders provides extra api information for getState, extra, endpoint, type and forced', async () => {
+      let _getState, _extra, _endpoint, _type, _forced
+
+      const baseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        prepareHeaders: (
+          headers,
+          { getState, extra, endpoint, type, forced }
+        ) => {
+          _getState = getState
+          _endpoint = endpoint
+          _type = type
+          _forced = forced
+          _extra = extra
+
+          return headers
+        },
+      })
+
+      const fakeAuth0Client = {
+        getTokenSilently: async () => 'fakeToken',
+      }
+
+      const doRequest = async () =>
+        baseQuery(
+          { url: '/echo' },
+          {
+            signal: new AbortController().signal,
+            dispatch: storeRef.store.dispatch,
+            getState: storeRef.store.getState,
+            extra: fakeAuth0Client,
+            type: 'query',
+            forced: true,
+            endpoint: 'someEndpointName',
+          },
+          {}
+        )
+
+      await doRequest()
+
+      expect(_getState).toBeDefined()
+      expect(_endpoint).toBe('someEndpointName')
+      expect(_type).toBe('query')
+      expect(_forced).toBe(true)
+      expect(_extra).toBe(fakeAuth0Client)
+    })
   })
 
   test('lets a header be undefined', async () => {
@@ -584,14 +634,13 @@ describe('fetchBaseQuery', () => {
 
 describe('fetchFn', () => {
   test('accepts a custom fetchFn', async () => {
-    const baseUrl = 'http://example.com'
+    const baseUrl = 'https://example.com'
     const params = new URLSearchParams({ apple: 'fruit' })
 
     const baseQuery = fetchBaseQuery({
       baseUrl,
-      fetchFn: crossFetch,
+      fetchFn: nodeFetch as any,
     })
-
     let request: any
     ;({ data: request } = await baseQuery(
       { url: '/echo', params },
@@ -603,7 +652,7 @@ describe('fetchFn', () => {
   })
 
   test('respects mocking window.fetch after a fetch base query is created', async () => {
-    const baseUrl = 'http://example.com'
+    const baseUrl = 'https://example.com'
     const baseQuery = fetchBaseQuery({ baseUrl })
 
     const fakeResponse = {

@@ -7,10 +7,10 @@ import petstoreYAML from '../fixtures/petstore.yaml.mock';
 // This configures a request mocking server with the given request handlers.
 
 export const server = setupServer(
-  rest.get('http://example.com/echo', (req, res, ctx) =>
+  rest.get('https://example.com/echo', (req, res, ctx) =>
     res(ctx.json({ ...req, headers: req.headers.getAllHeaders() }))
   ),
-  rest.post('http://example.com/echo', (req, res, ctx) =>
+  rest.post('https://example.com/echo', (req, res, ctx) =>
     res(ctx.json({ ...req, headers: req.headers.getAllHeaders() }))
   ),
 

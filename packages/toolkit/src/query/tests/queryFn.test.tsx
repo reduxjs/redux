@@ -307,7 +307,7 @@ describe('usage scenario tests', () => {
     return { collection, doc }
   }
 
-  const baseQuery = fetchBaseQuery({ baseUrl: 'http://example.com/' })
+  const baseQuery = fetchBaseQuery({ baseUrl: 'https://example.com/' })
   const api = createApi({
     baseQuery,
     endpoints: (build) => ({

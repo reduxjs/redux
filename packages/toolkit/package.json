@@ -47,7 +47,6 @@
     "axios": "^0.19.2",
     "console-testing-library": "^0.3.1",
     "convert-source-map": "^1.7.0",
-    "cross-fetch": "^3.1.4",
     "esbuild": "^0.11.13",
     "eslint": "^7.25.0",
     "eslint-config-prettier": "^8.3.0",

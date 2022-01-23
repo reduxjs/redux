@@ -18,7 +18,7 @@ interface ArgType {
   count: 3
 }
 
-const baseQuery = fetchBaseQuery({ baseUrl: 'http://example.com' })
+const baseQuery = fetchBaseQuery({ baseUrl: 'https://example.com' })
 const api = createApi({
   baseQuery,
   endpoints(build) {

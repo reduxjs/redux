@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux'
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import type { BaseQueryApi } from '../baseQueryTypes'
 
-const baseQuery = fetchBaseQuery({ baseUrl: 'http://example.com' })
+const baseQuery = fetchBaseQuery({ baseUrl: 'https://example.com' })
 
 const api = createApi({
   baseQuery,
@@ -76,7 +76,7 @@ describe('fetchBaseQuery', () => {
 describe('query error handling', () => {
   test('success', async () => {
     server.use(
-      rest.get('http://example.com/query', (_, res, ctx) =>
+      rest.get('https://example.com/query', (_, res, ctx) =>
         res(ctx.json({ value: 'success' }))
       )
     )
@@ -97,7 +97,7 @@ describe('query error handling', () => {
 
   test('error', async () => {
     server.use(
-      rest.get('http://example.com/query', (_, res, ctx) =>
+      rest.get('https://example.com/query', (_, res, ctx) =>
         res(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -121,7 +121,7 @@ describe('query error handling', () => {
 
   test('success -> error', async () => {
     server.use(
-      rest.get('http://example.com/query', (_, res, ctx) =>
+      rest.get('https://example.com/query', (_, res, ctx) =>
         res(ctx.json({ value: 'success' }))
       )
     )
@@ -140,7 +140,7 @@ describe('query error handling', () => {
     )
 
     server.use(
-      rest.get('http://example.com/query', (_, res, ctx) =>
+      rest.get('https://example.com/query', (_, res, ctx) =>
         res.once(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -165,12 +165,12 @@ describe('query error handling', () => {
 
   test('error -> success', async () => {
     server.use(
-      rest.get('http://example.com/query', (_, res, ctx) =>
+      rest.get('https://example.com/query', (_, res, ctx) =>
         res(ctx.json({ value: 'success' }))
       )
     )
     server.use(
-      rest.get('http://example.com/query', (_, res, ctx) =>
+      rest.get('https://example.com/query', (_, res, ctx) =>
         res.once(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -208,7 +208,7 @@ describe('query error handling', () => {
 describe('mutation error handling', () => {
   test('success', async () => {
     server.use(
-      rest.post('http://example.com/mutation', (_, res, ctx) =>
+      rest.post('https://example.com/mutation', (_, res, ctx) =>
         res(ctx.json({ value: 'success' }))
       )
     )
@@ -233,7 +233,7 @@ describe('mutation error handling', () => {
 
   test('error', async () => {
     server.use(
-      rest.post('http://example.com/mutation', (_, res, ctx) =>
+      rest.post('https://example.com/mutation', (_, res, ctx) =>
         res(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -261,7 +261,7 @@ describe('mutation error handling', () => {
 
   test('success -> error', async () => {
     server.use(
-      rest.post('http://example.com/mutation', (_, res, ctx) =>
+      rest.post('https://example.com/mutation', (_, res, ctx) =>
         res(ctx.json({ value: 'success' }))
       )
     )
@@ -286,7 +286,7 @@ describe('mutation error handling', () => {
     }
 
     server.use(
-      rest.post('http://example.com/mutation', (_, res, ctx) =>
+      rest.post('https://example.com/mutation', (_, res, ctx) =>
         res.once(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -314,12 +314,12 @@ describe('mutation error handling', () => {
 
   test('error -> success', async () => {
     server.use(
-      rest.post('http://example.com/mutation', (_, res, ctx) =>
+      rest.post('https://example.com/mutation', (_, res, ctx) =>
         res(ctx.json({ value: 'success' }))
       )
     )
     server.use(
-      rest.post('http://example.com/mutation', (_, res, ctx) =>
+      rest.post('https://example.com/mutation', (_, res, ctx) =>
         res.once(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -403,7 +403,7 @@ describe('custom axios baseQuery', () => {
   type SuccessResponse = { value: 'success' }
   const api = createApi({
     baseQuery: axiosBaseQuery({
-      baseUrl: 'http://example.com',
+      baseUrl: 'https://example.com',
     }),
     endpoints(build) {
       return {
@@ -433,7 +433,7 @@ describe('custom axios baseQuery', () => {
 
   test('axios errors behave as expected', async () => {
     server.use(
-      rest.get('http://example.com/success', (_, res, ctx) =>
+      rest.get('https://example.com/success', (_, res, ctx) =>
         res(ctx.status(500), ctx.json({ value: 'error' }))
       )
     )
@@ -458,7 +458,7 @@ describe('error handling in a component', () => {
   const mockSuccessResponse = { value: 'success' }
 
   const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
     endpoints: (build) => ({
       update: build.mutation<typeof mockSuccessResponse, any>({
         query: () => ({ url: 'success' }),
@@ -472,7 +472,7 @@ describe('error handling in a component', () => {
 
   test('a mutation is unwrappable and has the correct types', async () => {
     server.use(
-      rest.get('http://example.com/success', (_, res, ctx) =>
+      rest.get('https://example.com/success', (_, res, ctx) =>
         res.once(ctx.status(500), ctx.json(mockErrorResponse))
       )
     )

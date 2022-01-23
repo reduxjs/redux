@@ -113,7 +113,10 @@ export type FetchBaseQueryArgs = {
   baseUrl?: string
   prepareHeaders?: (
     headers: Headers,
-    api: Pick<BaseQueryApi, 'getState' | 'endpoint' | 'type' | 'forced'>
+    api: Pick<
+      BaseQueryApi,
+      'getState' | 'extra' | 'endpoint' | 'type' | 'forced'
+    >
   ) => MaybePromise<Headers>
   fetchFn?: (
     input: RequestInfo,
@@ -144,12 +147,12 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  *
  * @param {string} baseUrl
  * The base URL for an API service.
- * Typically in the format of http://example.com/
+ * Typically in the format of https://example.com/
  *
- * @param {(headers: Headers, api: { getState: () => unknown }) => Headers} prepareHeaders
+ * @param {(headers: Headers, api: { getState: () => unknown; extra: unknown; endpoint: string; type: 'query' | 'mutation'; forced: boolean; }) => Headers} prepareHeaders
  * An optional function that can be used to inject headers on requests.
- * Provides a Headers object, as well as the `getState` function from the
- * redux store. Can be useful for authentication.
+ * Provides a Headers object, as well as most of the `BaseQueryApi` (`dispatch` is not available).
+ * Useful for setting authentication or headers that need to be set conditionally.
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Headers
  *
@@ -157,7 +160,7 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  * Accepts a custom `fetch` function if you do not want to use the default on the window.
  * Useful in SSR environments if you need to use a library such as `isomorphic-fetch` or `cross-fetch`
  *
- * @param {(params: Record<string, unknown> => string} paramsSerializer
+ * @param {(params: Record<string, unknown>) => string} paramsSerializer
  * An optional function that can be used to stringify querystring parameters.
  */
 export function fetchBaseQuery({
@@ -178,7 +181,8 @@ export function fetchBaseQuery({
       'Warning: `fetch` is not available. Please supply a custom `fetchFn` property to use `fetchBaseQuery` on SSR environments.'
     )
   }
-  return async (arg, { signal, getState, endpoint, forced, type }) => {
+  return async (arg, api) => {
+    const { signal, getState, extra, endpoint, forced, type } = api
     let meta: FetchBaseQueryMeta | undefined
     let {
       url,
@@ -200,7 +204,7 @@ export function fetchBaseQuery({
 
     config.headers = await prepareHeaders(
       new Headers(stripUndefined(headers)),
-      { getState, endpoint, forced, type }
+      { getState, extra, endpoint, forced, type }
     )
 
     // Only set the content-type to json if appropriate. Will not be true for FormData, ArrayBuffer, Blob, etc.

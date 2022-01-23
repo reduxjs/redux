@@ -1751,11 +1751,11 @@ describe('hooks with createApi defaults set', () => {
       posts = [...initialPosts]
 
       const handlers = [
-        rest.get('http://example.com/posts', (req, res, ctx) => {
+        rest.get('https://example.com/posts', (req, res, ctx) => {
           return res(ctx.json(posts))
         }),
         rest.put<Partial<Post>>(
-          'http://example.com/post/:id',
+          'https://example.com/post/:id',
           (req, res, ctx) => {
             const id = Number(req.params.id)
             const idx = posts.findIndex((post) => post.id === id)
@@ -1775,7 +1775,7 @@ describe('hooks with createApi defaults set', () => {
             return res(ctx.json(posts))
           }
         ),
-        rest.post('http://example.com/post', (req, res, ctx) => {
+        rest.post('https://example.com/post', (req, res, ctx) => {
           let post = req.body as Omit<Post, 'id'>
           startingId += 1
           posts.concat({
@@ -1799,7 +1799,7 @@ describe('hooks with createApi defaults set', () => {
     type PostsResponse = Post[]
 
     const api = createApi({
-      baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com/' }),
+      baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com/' }),
       tagTypes: ['Posts'],
       endpoints: (build) => ({
         getPosts: build.query<PostsResponse, void>({

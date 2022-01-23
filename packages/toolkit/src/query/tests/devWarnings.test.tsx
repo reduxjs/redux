@@ -20,7 +20,7 @@ afterEach(() => {
   restore()
 })
 
-const baseUrl = 'http://example.com'
+const baseUrl = 'https://example.com'
 
 function createApis() {
   const api1 = createApi({

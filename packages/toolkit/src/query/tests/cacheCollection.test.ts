@@ -16,7 +16,7 @@ beforeEach(() => {
 test(`query: await cleanup, defaults`, async () => {
   const { store, api } = storeForApi(
     createApi({
-      baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+      baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
       endpoints: (build) => ({
         query: build.query<unknown, string>({
           query: () => '/success',
@@ -35,7 +35,7 @@ test(`query: await cleanup, defaults`, async () => {
 test(`query: await cleanup, keepUnusedDataFor set`, async () => {
   const { store, api } = storeForApi(
     createApi({
-      baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+      baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
       endpoints: (build) => ({
         query: build.query<unknown, string>({
           query: () => '/success',
@@ -55,7 +55,7 @@ test(`query: await cleanup, keepUnusedDataFor set`, async () => {
 describe(`query: await cleanup, keepUnusedDataFor set`, () => {
   const { store, api } = storeForApi(
     createApi({
-      baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+      baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
       endpoints: (build) => ({
         query: build.query<unknown, string>({
           query: () => '/success',

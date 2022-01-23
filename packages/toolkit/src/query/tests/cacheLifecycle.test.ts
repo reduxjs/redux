@@ -8,7 +8,7 @@ beforeAll(() => {
 })
 
 const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
   endpoints: () => ({}),
 })
 const storeRef = setupApiStore(api)

@@ -10,7 +10,7 @@ import { server } from './mocks/server'
 import { rest } from 'msw'
 
 const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
   endpoints: () => ({}),
 })
 const storeRef = setupApiStore(api)
@@ -397,7 +397,7 @@ test('query: updateCachedData', async () => {
   // request 2: error
   expect(onError).not.toHaveBeenCalled()
   server.use(
-    rest.get('http://example.com/success', (_, req, ctx) =>
+    rest.get('https://example.com/success', (_, req, ctx) =>
       req.once(ctx.status(500), ctx.json({ value: 'failed' }))
     )
   )
