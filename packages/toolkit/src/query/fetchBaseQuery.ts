@@ -70,7 +70,7 @@ export type FetchBaseQueryError =
   | {
       /**
        * * `"FETCH_ERROR"`:
-       *   An error that occured during execution of `fetch` or the `fetchFn` callback option
+       *   An error that occurred during execution of `fetch` or the `fetchFn` callback option
        **/
       status: 'FETCH_ERROR'
       data?: undefined
@@ -81,7 +81,7 @@ export type FetchBaseQueryError =
        * * `"PARSING_ERROR"`:
        *   An error happened during parsing.
        *   Most likely a non-JSON-response was returned with the default `responseHandler` "JSON",
-       *   or an error occured while executing a custom `responseHandler`.
+       *   or an error occurred while executing a custom `responseHandler`.
        **/
       status: 'PARSING_ERROR'
       originalStatus: number
@@ -91,7 +91,7 @@ export type FetchBaseQueryError =
   | {
       /**
        * * `"CUSTOM_ERROR"`:
-       *   A custom error type that you can return from your `fetchFn` where another error might not make sense.
+       *   A custom error type that you can return from your `queryFn` where another error might not make sense.
        **/
       status: 'CUSTOM_ERROR'
       data?: unknown
