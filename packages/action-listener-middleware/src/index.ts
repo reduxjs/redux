@@ -12,6 +12,7 @@ import type {
   AddListenerOverloads,
   AnyActionListenerPredicate,
   CreateListenerMiddlewareOptions,
+  TypedActionCreator,
   TypedAddListener,
   TypedAddListenerAction,
   TypedCreateListenerEntry,
@@ -180,7 +181,7 @@ const getListenerEntryPropsFrom = (options: FallbackAddListenerOptions) => {
     )
   }
 
-  assertFunction(listener, 'options.listener');
+  assertFunction(listener, 'options.listener')
 
   return { predicate, type, listener }
 }
@@ -204,6 +205,20 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   }
 
   return entry
+}
+
+const createClearListenerMiddleware = (
+  listenerMap: Map<string, ListenerEntry>
+) => {
+  return () => {
+    listenerMap.forEach((entry) => {
+      entry.pending.forEach((controller) => {
+        controller.abort()
+      })
+    })
+
+    listenerMap.clear()
+  }
 }
 
 /**
@@ -235,6 +250,11 @@ const safelyNotifyError = (
 export const addListenerAction = createAction(
   `${alm}/add`
 ) as TypedAddListenerAction<unknown>
+
+/**
+ * @alpha
+ */
+export const clearListenerMiddlewareAction = createAction(`${alm}/clear`)
 
 /**
  * @alpha
@@ -361,6 +381,8 @@ export function createActionListenerMiddleware<
     }
   }
 
+  const clearListenerMiddleware = createClearListenerMiddleware(listenerMap)
+
   const middleware: Middleware<
     {
       (action: Action<`${typeof alm}/add`>): Unsubscribe
@@ -371,6 +393,12 @@ export function createActionListenerMiddleware<
     if (addListenerAction.match(action)) {
       return addListener(action.payload)
     }
+
+    if (clearListenerMiddlewareAction.match(action)) {
+      clearListenerMiddleware()
+      return
+    }
+
     if (removeListenerAction.match(action)) {
       return removeListener(action.payload)
     }
@@ -432,7 +460,9 @@ export function createActionListenerMiddleware<
       addListener: addListener as TypedAddListener<S, D>,
       removeListener: removeListener as TypedRemoveListener<S, D>,
       addListenerAction: addListenerAction as TypedAddListenerAction<S>,
-      removeListenerAction: removeListenerAction as TypedRemoveListenerAction<S>,
+      removeListenerAction:
+        removeListenerAction as TypedRemoveListenerAction<S>,
+      clear: clearListenerMiddleware,
     },
     {} as WithMiddlewareType<typeof middleware>
   )
