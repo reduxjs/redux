@@ -23,6 +23,10 @@ import type {
   Unsubscribe,
   ActionListenerMiddleware,
 } from '../index'
+import type {
+  ActionListener,
+  AddListenerOverloads,
+} from '../types'
 
 const middlewareApi = {
   getState: expect.any(Function),
@@ -222,7 +226,7 @@ describe('createActionListenerMiddleware', () => {
       store.dispatch(testAction2('b'))
       expect(listener.mock.calls).toEqual([[testAction2('b'), middlewareApi]])
 
-      store.dispatch(removeListenerAction(testAction2.type, listener))
+      store.dispatch(removeListenerAction({ type: testAction2.type, listener }))
 
       store.dispatch(testAction2('b'))
       expect(listener.mock.calls).toEqual([[testAction2('b'), middlewareApi]])
@@ -343,7 +347,7 @@ describe('createActionListenerMiddleware', () => {
 
       store.dispatch(testAction1('a'))
 
-      middleware.removeListener(testAction1, listener)
+      middleware.removeListener({ actionCreator: testAction1, listener })
       store.dispatch(testAction2('b'))
       store.dispatch(testAction1('c'))
 
@@ -351,7 +355,7 @@ describe('createActionListenerMiddleware', () => {
     })
 
     test('unsubscribing without any subscriptions does not trigger an error', () => {
-      middleware.removeListener(testAction1, noop)
+      middleware.removeListener({ matcher: testAction1.match, listener: noop })
     })
 
     test('subscribing via action', () => {
@@ -405,21 +409,65 @@ describe('createActionListenerMiddleware', () => {
         listener,
       })
 
+      middleware.addListener({
+        actionCreator: testAction1,
+        listener,
+      })
+
       store.dispatch(testAction1('a'))
 
-      store.dispatch(removeListenerAction(testAction1, listener))
+      store.dispatch(
+        removeListenerAction({ actionCreator: testAction1, listener })
+      )
       store.dispatch(testAction2('b'))
       store.dispatch(testAction1('c'))
 
       expect(listener.mock.calls).toEqual([[testAction1('a'), middlewareApi]])
     })
 
+    const addListenerOptions: [
+      string,
+      Omit<
+        AddListenerOverloads<() => void, typeof store.getState, typeof store.dispatch>,
+        'listener'
+      >
+    ][] = [
+      ['predicate', { predicate: () => true }],
+      ['actionCreator', { actionCreator: testAction1 }],
+      ['matcher', { matcher: isAnyOf(testAction1, testAction2) }],
+      ['type', { type: testAction1.type }],
+    ]
+
+    test.each(addListenerOptions)(
+      'add and remove listener with "%s" param correctly',
+      (_, params) => {
+        const listener: ActionListener<
+          AnyAction,
+          typeof store.getState,
+          typeof store.dispatch
+        > = jest.fn()
+
+        middleware.addListener({ ...params, listener } as any)
+
+        store.dispatch(testAction1('a'))
+        expect(listener).toBeCalledTimes(1)
+
+        middleware.removeListener({ ...params, listener } as any)
+
+        store.dispatch(testAction1('b'))
+        expect(listener).toBeCalledTimes(1)
+      }
+    )
+
     const unforwardedActions: [string, AnyAction][] = [
       [
         'addListenerAction',
         addListenerAction({ actionCreator: testAction1, listener: noop }),
       ],
-      ['removeListenerAction', removeListenerAction(testAction1, noop)],
+      [
+        'removeListenerAction',
+        removeListenerAction({ actionCreator: testAction1, listener: noop }),
+      ],
     ]
     test.each(unforwardedActions)(
       '"%s" is not forwarded to the reducer',

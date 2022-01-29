@@ -218,6 +218,7 @@ export type ActionListenerMiddleware<
   addListener: AddListenerOverloads<Unsubscribe, S, D>
   removeListener: RemoveListenerOverloads<S, D>
   addListenerAction: TypedAddListenerAction<S, D>
+  removeListenerAction: TypedRemoveListenerAction<S, D>
 }
 
 /**
@@ -316,16 +317,10 @@ export interface AddListenerOverloads<
   ): Return
 }
 
-export interface RemoveListenerOverloads<
+export type RemoveListenerOverloads<
   S = unknown,
   D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>
-> {
-  <C extends TypedActionCreator<any>>(
-    actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D>
-  ): boolean
-  (type: string, listener: ActionListener<AnyAction, S, D>): boolean
-}
+> = AddListenerOverloads<boolean, S, D>
 
 export interface RemoveListenerAction<
   A extends AnyAction,
@@ -348,11 +343,26 @@ export type TypedAddListenerAction<
 > = BaseActionCreator<Payload, T> &
   AddListenerOverloads<PayloadAction<Payload, T>, S, D>
 
+/** A "pre-typed" version of `removeListenerAction`, so the listener args are well-typed */
+export type TypedRemoveListenerAction<
+  S,
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  Payload = ListenerEntry<S, D>,
+  T extends string = 'actionListenerMiddleware/remove'
+> = BaseActionCreator<Payload, T> &
+  AddListenerOverloads<PayloadAction<Payload, T>, S, D>
+
 /** A "pre-typed" version of `middleware.addListener`, so the listener args are well-typed */
 export type TypedAddListener<
   S,
   D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
 > = AddListenerOverloads<Unsubscribe, S, D>
+
+/** A "pre-typed" version of `middleware.removeListener`, so the listener args are well-typed */
+export type TypedRemoveListener<
+  S,
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
+> = RemoveListenerOverloads<S, D>
 
 /** A "pre-typed" version of `createListenerEntry`, so the listener args are well-typed */
 export type TypedCreateListenerEntry<

@@ -114,7 +114,7 @@ Current options are:
 
 - `onError`: an optional error handler that gets called with synchronous and async errors raised by `listener` and synchronous errors thrown by `predicate`.
 
-### `listenerMiddleware.addListener(options?: AddListenerOptions) : Unsubscribe`
+### `listenerMiddleware.addListener(options: AddListenerOptions) : Unsubscribe`
 
 Statically adds a new listener callback to the middleware.
 
@@ -166,6 +166,7 @@ middleware.addListener({
 })
 ```
 
+It throws error if listener is not a function.
 The ["matcher" utility functions included in RTK](https://redux-toolkit.js.org/api/matching-utilities) are acceptable as predicates.
 
 The return value is a standard `unsubscribe()` callback that will remove this listener. If you try to add a listener entry but another entry with this exact function reference already exists, no new entry will be added, and the existing `unsubscribe` method will be returned.
@@ -174,20 +175,33 @@ The `listener` callback will receive the current action as its first argument, a
 
 All listener predicates and callbacks are checked _after_ the root reducer has already processed the action and updated the state. The `listenerApi.getOriginalState()` method can be used to get the state value that existed before the action that triggered this listener was processed.
 
-### `listenerMiddleware.removeListener(typeOrActionCreator, listener)`
+### `listenerMiddleware.removeListener(options: AddListenerOptions): boolean`
 
-Removes a given listener. Accepts two arguments:
+Removes a given listener. Accepts the same arguments as `middleware.addListener()` and throws error if listener is not a function.
+Returns `true` if the `options.listener` listener has been removed, `false` if no subscription matching the input provided has been found.
 
-- `typeOrActionCreator: string | ActionCreator`: the same action type / action creator that was used to add the listener
-- `listener: ListenerCallback`: the same listener callback reference that was added originally
-
-Note that matcher-based listeners currently cannot be removed with this approach - you must use the `unsubscribe()` callback that was returned when adding the listener.
+```ts
+// 1) Action type string
+middleware.removeListener({ type: 'todos/todoAdded', listener })
+// 2) RTK action creator
+middleware.removeListener({ actionCreator: todoAdded, listener })
+// 3) RTK matcher function
+middleware.removeListener({ matcher: isAnyOf(todoAdded, todoToggled), listener })
+// 4) Listener predicate
+middleware.removeListener({
+  predicate: (action, currentState, previousState) => {
+    // return true when the listener should run
+  },
+  listener,
+})
+```
 
 ### `addListenerAction`
 
 A standard RTK action creator that tells the middleware to dynamically add a new listener at runtime. It accepts exactly the same options as `middleware.addListener()`
 
 Dispatching this action returns an `unsubscribe()` callback from `dispatch`.
+It throws error if listener is not a function.
 
 ```js
 // Per above, provide `predicate` or any of the other comparison options
@@ -197,9 +211,11 @@ const unsubscribe = store.dispatch(addListenerAction({ predicate, listener }))
 ### `removeListenerAction`
 
 A standard RTK action creator that tells the middleware to remove a listener at runtime. Accepts the same arguments as `middleware.removeListener()`:
+Returns `true` if the `options.listener` listener has been removed, `false` if no subscription matching the input provided has been found.
+It throws error if listener is not a function.
 
 ```js
-store.dispatch(removeListenerAction('todos/todoAdded', listener))
+store.dispatch(removeListenerAction({ predicate, listener }))
 ```
 
 ### `listenerApi`
