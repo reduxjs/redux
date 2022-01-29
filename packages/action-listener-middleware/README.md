@@ -201,7 +201,6 @@ middleware.removeListener({
 A standard RTK action creator that tells the middleware to dynamically add a new listener at runtime. It accepts exactly the same options as `middleware.addListener()`
 
 Dispatching this action returns an `unsubscribe()` callback from `dispatch`.
-It throws error if listener is not a function.
 
 ```js
 // Per above, provide `predicate` or any of the other comparison options
@@ -212,7 +211,7 @@ const unsubscribe = store.dispatch(addListenerAction({ predicate, listener }))
 
 A standard RTK action creator that tells the middleware to remove a listener at runtime. Accepts the same arguments as `middleware.removeListener()`:
 Returns `true` if the `options.listener` listener has been removed, `false` if no subscription matching the input provided has been found.
-It throws error if listener is not a function.
+
 
 ```js
 store.dispatch(removeListenerAction({ predicate, listener }))
