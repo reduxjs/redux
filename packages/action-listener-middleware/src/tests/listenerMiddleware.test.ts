@@ -211,6 +211,48 @@ describe('createActionListenerMiddleware', () => {
       ])
     })
 
+    test('removeListener returns true if an entry has been unsubscribed, false otherwise', () => {
+      const listener = jest.fn((_: TestAction1) => {})
+
+      middleware.addListener({
+        actionCreator: testAction1,
+        listener,
+      })
+
+      expect(
+        middleware.removeListener({ actionCreator: testAction2, listener })
+      ).toBe(false)
+      expect(
+        middleware.removeListener({ actionCreator: testAction1, listener })
+      ).toBe(true)
+    })
+
+    test('dispatch(removeListenerAction({...})) returns true if an entry has been unsubscribed, false otherwise', () => {
+      const listener = jest.fn((_: TestAction1) => {})
+
+      middleware.addListener({
+        actionCreator: testAction1,
+        listener,
+      })
+
+      expect(
+        store.dispatch(
+          middleware.removeListenerAction({
+            actionCreator: testAction2,
+            listener,
+          })
+        )
+      ).toBe(false)
+      expect(
+        store.dispatch(
+          middleware.removeListenerAction({
+            actionCreator: testAction1,
+            listener,
+          })
+        )
+      ).toBe(true)
+    })
+
     test('can subscribe with a string action type', () => {
       const listener = jest.fn((_: AnyAction) => {})
 

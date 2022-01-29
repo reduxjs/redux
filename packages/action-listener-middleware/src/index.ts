@@ -322,7 +322,9 @@ export function createActionListenerMiddleware<
           : entry.predicate === predicate
 
       return matchPredicateOrType && entry.listener === listener
-    })?.unsubscribe()
+    })
+
+    entry?.unsubscribe()
 
     return !!entry
   }
