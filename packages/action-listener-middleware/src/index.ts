@@ -14,8 +14,6 @@ import type {
   BaseActionCreator,
   AnyActionListenerPredicate,
   CreateListenerMiddlewareOptions,
-  ConditionFunction,
-  ListenerPredicate,
   TypedActionCreator,
   TypedAddListener,
   TypedAddListenerAction,
@@ -200,6 +198,20 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   return entry
 }
 
+const createClearListenerMiddleware = (
+  listenerMap: Map<string, ListenerEntry>
+) => {
+  return () => {
+    listenerMap.forEach((entry) => {
+      entry.pending.forEach((controller) => {
+        controller.abort()
+      })
+    })
+
+    listenerMap.clear()
+  }
+}
+
 /**
  * Safely reports errors to the `errorHandler` provided.
  * Errors that occur inside `errorHandler` are notified in a new task.
@@ -239,6 +251,11 @@ export const addListenerAction = createAction(
     }
   }
 ) as TypedAddListenerAction<unknown>
+
+/**
+ * @alpha
+ */
+export const clearListenerMiddlewareAction = createAction(`${alm}/clear`)
 
 /**
  * @alpha
@@ -412,6 +429,8 @@ export function createActionListenerMiddleware<
     }
   }
 
+  const clearListenerMiddleware = createClearListenerMiddleware(listenerMap)
+
   const middleware: Middleware<
     {
       (action: Action<`${typeof alm}/add`>): Unsubscribe
@@ -430,6 +449,12 @@ export function createActionListenerMiddleware<
 
       return insertEntry(entry)
     }
+
+    if (clearListenerMiddlewareAction.match(action)) {
+      clearListenerMiddleware()
+      return
+    }
+
     if (removeListenerAction.match(action)) {
       removeListener(action.payload.type, action.payload.listener)
       return
@@ -491,6 +516,7 @@ export function createActionListenerMiddleware<
     {
       addListener,
       removeListener,
+      clear: clearListenerMiddleware,
       addListenerAction: addListenerAction as TypedAddListenerAction<S>,
     },
     {} as WithMiddlewareType<typeof middleware>

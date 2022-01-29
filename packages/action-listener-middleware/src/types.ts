@@ -218,6 +218,10 @@ export type ActionListenerMiddleware<
   addListener: AddListenerOverloads<Unsubscribe, S, D>
   removeListener: RemoveListenerOverloads<S, D>
   addListenerAction: TypedAddListenerAction<S, D>
+  /**
+   * Unsubscribes all listeners, cancels running listeners and tasks.
+   */
+  clear: () => void
 }
 
 /**
