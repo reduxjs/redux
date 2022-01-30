@@ -42,6 +42,7 @@ describe('buildSelector', () => {
     const store = configureStore({
       reducer: {
         [exampleApi.reducerPath]: exampleApi.reducer,
+        other: () => 1,
       },
     })
 
