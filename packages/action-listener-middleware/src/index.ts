@@ -9,16 +9,14 @@ import type {
 import { createAction, nanoid } from '@reduxjs/toolkit'
 
 import type {
-  ActionListener,
+  ActionListenerMiddleware,
   AddListenerOverloads,
-  BaseActionCreator,
   AnyActionListenerPredicate,
   CreateListenerMiddlewareOptions,
   TypedActionCreator,
   TypedAddListener,
   TypedAddListenerAction,
   TypedCreateListenerEntry,
-  RemoveListenerAction,
   FallbackAddListenerOptions,
   ListenerEntry,
   ListenerErrorHandler,
@@ -28,6 +26,8 @@ import type {
   ListenerErrorInfo,
   ForkedTaskExecutor,
   ForkedTask,
+  TypedRemoveListenerAction,
+  TypedRemoveListener,
 } from './types'
 import { assertFunction, catchRejection } from './utils'
 import { TaskAbortError } from './exceptions'
@@ -48,6 +48,8 @@ export type {
   ListenerErrorHandler,
   TypedAddListener,
   TypedAddListenerAction,
+  TypedRemoveListener,
+  TypedRemoveListenerAction,
   Unsubscribe,
   ForkedTaskExecutor,
   ForkedTask,
@@ -162,10 +164,7 @@ const createTakePattern = <S>(
   ) => catchRejection(take(predicate, timeout))) as TakePattern<S>
 }
 
-/** Accepts the possible options for creating a listener, and returns a formatted listener entry */
-export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
-  options: FallbackAddListenerOptions
-) => {
+const getListenerEntryPropsFrom = (options: FallbackAddListenerOptions) => {
   let { type, actionCreator, matcher, predicate, listener } = options
 
   if (type) {
@@ -179,9 +178,20 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
     // pass
   } else {
     throw new Error(
-      'Creating a listener requires one of the known fields for matching an action'
+      'Creating or removing a listener requires one of the known fields for matching an action'
     )
   }
+
+  assertFunction(listener, 'options.listener')
+
+  return { predicate, type, listener }
+}
+
+/** Accepts the possible options for creating a listener, and returns a formatted listener entry */
+export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
+  options: FallbackAddListenerOptions
+) => {
+  const { type, predicate, listener } = getListenerEntryPropsFrom(options)
 
   const id = nanoid()
   const entry: ListenerEntry<unknown> = {
@@ -239,17 +249,7 @@ const safelyNotifyError = (
  * @alpha
  */
 export const addListenerAction = createAction(
-  `${alm}/add`,
-  (options: unknown) => {
-    const entry = createListenerEntry(
-      // Fake out TS here
-      options as Parameters<AddListenerOverloads<unknown>>[0]
-    )
-
-    return {
-      payload: entry,
-    }
-  }
+  `${alm}/add`
 ) as TypedAddListenerAction<unknown>
 
 /**
@@ -261,37 +261,8 @@ export const clearListenerMiddlewareAction = createAction(`${alm}/clear`)
  * @alpha
  */
 export const removeListenerAction = createAction(
-  `${alm}/remove`,
-  (
-    typeOrActionCreator: string | TypedActionCreator<string>,
-    listener: ActionListener<any, any, any>
-  ) => {
-    const type =
-      typeof typeOrActionCreator === 'string'
-        ? typeOrActionCreator
-        : (typeOrActionCreator as TypedActionCreator<string>).type
-
-    return {
-      payload: {
-        type,
-        listener,
-      },
-    }
-  }
-) as BaseActionCreator<
-  { type: string; listener: ActionListener<any, any, any> },
-  'actionListenerMiddleware/remove'
-> & {
-  <C extends TypedActionCreator<any>, S, D extends Dispatch>(
-    actionCreator: C,
-    listener: ActionListener<ReturnType<C>, S, D>
-  ): RemoveListenerAction<ReturnType<C>, S, D>
-
-  <S, D extends Dispatch>(
-    type: string,
-    listener: ActionListener<AnyAction, S, D>
-  ): RemoveListenerAction<AnyAction, S, D>
-}
+  `${alm}/remove`
+) as TypedRemoveListenerAction<unknown>
 
 const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
   console.error(`${alm}/error`, ...args)
@@ -330,7 +301,7 @@ export function createActionListenerMiddleware<
     return undefined
   }
 
-  const addListener = ((options: FallbackAddListenerOptions) => {
+  const addListener = (options: FallbackAddListenerOptions) => {
     let entry = findListenerEntry(
       (existingEntry) => existingEntry.listener === options.listener
     )
@@ -340,39 +311,23 @@ export function createActionListenerMiddleware<
     }
 
     return insertEntry(entry)
-  }) as TypedAddListener<S, D>
-
-  type RemoveListener = {
-    <C extends TypedActionCreator<any>>(
-      actionCreator: C,
-      listener: ActionListener<ReturnType<C>, S, D>
-    ): boolean
-    (type: string, listener: ActionListener<AnyAction, S, D>): boolean
-    (
-      typeOrActionCreator: string | TypedActionCreator<any>,
-      listener: ActionListener<AnyAction, S, D>
-    ): boolean
   }
 
-  const removeListener: RemoveListener = (
-    typeOrActionCreator: string | TypedActionCreator<any>,
-    listener: ActionListener<AnyAction, S, D>
-  ): boolean => {
-    const type =
-      typeof typeOrActionCreator === 'string'
-        ? typeOrActionCreator
-        : typeOrActionCreator.type
+  const removeListener = (options: FallbackAddListenerOptions): boolean => {
+    const { type, listener, predicate } = getListenerEntryPropsFrom(options)
 
-    let entry = findListenerEntry(
-      (entry) => entry.type === type && entry.listener === listener
-    )
+    const entry = findListenerEntry((entry) => {
+      const matchPredicateOrType =
+        typeof type === 'string'
+          ? entry.type === type
+          : entry.predicate === predicate
 
-    if (!entry) {
-      return false
-    }
+      return matchPredicateOrType && entry.listener === listener
+    })
 
-    listenerMap.delete(entry.id)
-    return true
+    entry?.unsubscribe()
+
+    return !!entry
   }
 
   const notifyListener = async (
@@ -439,15 +394,7 @@ export function createActionListenerMiddleware<
     D
   > = (api) => (next) => (action) => {
     if (addListenerAction.match(action)) {
-      let entry = findListenerEntry(
-        (existingEntry) => existingEntry.listener === action.payload.listener
-      )
-
-      if (!entry) {
-        entry = action.payload
-      }
-
-      return insertEntry(entry)
+      return addListener(action.payload)
     }
 
     if (clearListenerMiddlewareAction.match(action)) {
@@ -456,8 +403,7 @@ export function createActionListenerMiddleware<
     }
 
     if (removeListenerAction.match(action)) {
-      removeListener(action.payload.type, action.payload.listener)
-      return
+      return removeListener(action.payload)
     }
 
     // Need to get this state _before_ the reducer processes the action
@@ -514,10 +460,9 @@ export function createActionListenerMiddleware<
   return assign(
     middleware,
     {
-      addListener,
-      removeListener,
-      clear: clearListenerMiddleware,
-      addListenerAction: addListenerAction as TypedAddListenerAction<S>,
+      addListener: addListener as TypedAddListener<S, D>,
+      removeListener: removeListener as TypedRemoveListener<S, D>,
+      clearListeners: clearListenerMiddleware,
     },
     {} as WithMiddlewareType<typeof middleware>
   )
