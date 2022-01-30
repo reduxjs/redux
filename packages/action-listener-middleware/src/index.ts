@@ -9,6 +9,7 @@ import type {
 import { createAction, nanoid } from '@reduxjs/toolkit'
 
 import type {
+  ActionListenerMiddleware,
   AddListenerOverloads,
   AnyActionListenerPredicate,
   CreateListenerMiddlewareOptions,
@@ -461,10 +462,7 @@ export function createActionListenerMiddleware<
     {
       addListener: addListener as TypedAddListener<S, D>,
       removeListener: removeListener as TypedRemoveListener<S, D>,
-      addListenerAction: addListenerAction as TypedAddListenerAction<S>,
-      removeListenerAction:
-        removeListenerAction as TypedRemoveListenerAction<S>,
-      clear: clearListenerMiddleware,
+      clearListeners: clearListenerMiddleware,
     },
     {} as WithMiddlewareType<typeof middleware>
   )

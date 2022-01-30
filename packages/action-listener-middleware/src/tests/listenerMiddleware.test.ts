@@ -24,7 +24,11 @@ import type {
   Unsubscribe,
   ActionListenerMiddleware,
 } from '../index'
-import type { ActionListener, AddListenerOverloads } from '../types'
+import type {
+  ActionListener,
+  AddListenerOverloads,
+  TypedRemoveListenerAction,
+} from '../types'
 
 const middlewareApi = {
   getState: expect.any(Function),
@@ -138,6 +142,10 @@ describe('createActionListenerMiddleware', () => {
 
   let reducer: jest.Mock
   let middleware: ReturnType<typeof createActionListenerMiddleware>
+  let addTypedListenerAction =
+    addListenerAction as TypedAddListenerAction<CounterState>
+  let removeTypedListenerAction =
+    removeListenerAction as TypedRemoveListenerAction<CounterState>
   // let middleware: ActionListenerMiddleware<CounterState> //: ReturnType<typeof createActionListenerMiddleware>
 
   const testAction1 = createAction<string>('testAction1')
@@ -237,7 +245,7 @@ describe('createActionListenerMiddleware', () => {
 
       expect(
         store.dispatch(
-          middleware.removeListenerAction({
+          removeTypedListenerAction({
             actionCreator: testAction2,
             listener,
           })
@@ -245,7 +253,7 @@ describe('createActionListenerMiddleware', () => {
       ).toBe(false)
       expect(
         store.dispatch(
-          middleware.removeListenerAction({
+          removeTypedListenerAction({
             actionCreator: testAction1,
             listener,
           })
@@ -657,7 +665,7 @@ describe('createActionListenerMiddleware', () => {
 
       store.dispatch(testAction1('a'))
 
-      middleware.clear()
+      middleware.clearListeners()
       store.dispatch(testAction1('b'))
       store.dispatch(testAction2('c'))
 
@@ -680,7 +688,7 @@ describe('createActionListenerMiddleware', () => {
 
       store.dispatch(testAction1('a'))
 
-      middleware.clear()
+      middleware.clearListeners()
       store.dispatch(testAction1('b'))
 
       expect(await fork1Test).toHaveProperty('status', 'cancelled')
@@ -1385,7 +1393,7 @@ describe('createActionListenerMiddleware', () => {
       })
 
       store.dispatch(
-        typedMiddleware.addListenerAction({
+        addTypedListenerAction({
           predicate: (
             action,
             currentState,
@@ -1409,7 +1417,7 @@ describe('createActionListenerMiddleware', () => {
       )
 
       store.dispatch(
-        typedMiddleware.addListenerAction({
+        addTypedListenerAction({
           predicate: (
             action,
             currentState,
