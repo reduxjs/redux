@@ -390,10 +390,10 @@ export type EndpointBuilder<
    */
   query<ResultType, QueryArg>(
     definition: OmitFromUnion<
-      QueryDefinition<QueryArg, BaseQuery, TagTypes, ResultType>,
+      QueryDefinition<QueryArg, BaseQuery, TagTypes, ResultType, ReducerPath>,
       'type'
     >
-  ): QueryDefinition<QueryArg, BaseQuery, TagTypes, ResultType>
+  ): QueryDefinition<QueryArg, BaseQuery, TagTypes, ResultType, ReducerPath>
   /**
    * An endpoint definition that alters data on the server or will possibly invalidate the cache.
    *
