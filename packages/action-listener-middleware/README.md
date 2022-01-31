@@ -1,8 +1,8 @@
 # RTK Incubator - Action Listener Middleware
 
-This package provides an experimental callback-based Redux middleware that we hope to include in Redux Toolkit directly in a future release. We're publishing it as a standalone package to allow users to try it out separately and give us feedback on its API design.
+This package provides a callback-based Redux middleware that we plan to include in Redux Toolkit directly in a future release. We're publishing it as a standalone package to allow users to try it out separately and give us feedback on its API design.
 
-This middleware lets you define callbacks that will run in response to specific actions being dispatched. It's intended to be a lightweight alternative to more widely used Redux async middleware like sagas and observables. While similar to thunks in level of complexity and concept, it can be used to replicate some common saga usage patterns.
+This middleware lets you define "listener" callbacks that will run in response to specific actions being dispatched. It's intended to be a lightweight alternative to more widely used Redux async middleware like sagas and observables. While similar to thunks in level of complexity and concept, it can be used to replicate some common saga usage patterns.
 
 ## Installation
 
@@ -106,7 +106,7 @@ Listeners can be defined statically by calling `listenerMiddleware.addListener()
 
 ### `createActionListenerMiddleware: (options?: CreateMiddlewareOptions) => Middleware`
 
-Creates an instance of the middleware, which should then be added to the store via the `middleware` parameter.
+Creates an instance of the middleware, which should then be added to the store via `configureStore`'s `middleware` parameter.
 
 Current options are:
 
@@ -166,7 +166,6 @@ middleware.addListener({
 })
 ```
 
-It throws error if listener is not a function.
 The ["matcher" utility functions included in RTK](https://redux-toolkit.js.org/api/matching-utilities) are acceptable as predicates.
 
 The return value is a standard `unsubscribe()` callback that will remove this listener. If you try to add a listener entry but another entry with this exact function reference already exists, no new entry will be added, and the existing `unsubscribe` method will be returned.
@@ -177,7 +176,8 @@ All listener predicates and callbacks are checked _after_ the root reducer has a
 
 ### `listenerMiddleware.removeListener(options: AddListenerOptions): boolean`
 
-Removes a given listener. Accepts the same arguments as `middleware.addListener()` and throws error if listener is not a function.
+Removes a given listener. It accepts the same arguments as `middleware.addListener()`. It checks for an existing listener entry by comparing the function references of `listener` and the provided `actionCreator/matcher/predicate` function or `type` string.
+
 Returns `true` if the `options.listener` listener has been removed, `false` if no subscription matching the input provided has been found.
 
 ```ts
@@ -186,19 +186,18 @@ middleware.removeListener({ type: 'todos/todoAdded', listener })
 // 2) RTK action creator
 middleware.removeListener({ actionCreator: todoAdded, listener })
 // 3) RTK matcher function
-middleware.removeListener({ matcher: isAnyOf(todoAdded, todoToggled), listener })
+middleware.removeListener({ matcher, listener })
 // 4) Listener predicate
-middleware.removeListener({
-  predicate: (action, currentState, previousState) => {
-    // return true when the listener should run
-  },
-  listener,
-})
+middleware.removeListener({ predicate, listener })
 ```
+
+### `listenerMiddleware.clearListeners(): void`
+
+Removes all current listener entries. This is most likely useful for test scenarios where a single middleware or store instance might be used in multiple tests, as well as some app cleanup situations.
 
 ### `addListenerAction`
 
-A standard RTK action creator that tells the middleware to dynamically add a new listener at runtime. It accepts exactly the same options as `middleware.addListener()`
+A standard RTK action creator. Dispatching this action tells the middleware to dynamically add a new listener at runtime. It accepts exactly the same options as `middleware.addListener()`
 
 Dispatching this action returns an `unsubscribe()` callback from `dispatch`.
 
@@ -209,9 +208,9 @@ const unsubscribe = store.dispatch(addListenerAction({ predicate, listener }))
 
 ### `removeListenerAction`
 
-A standard RTK action creator that tells the middleware to remove a listener at runtime. Accepts the same arguments as `middleware.removeListener()`:
-Returns `true` if the `options.listener` listener has been removed, `false` if no subscription matching the input provided has been found.
+A standard RTK action creator. Dispatching this action tells the middleware to dynamically remove a listener at runtime. Accepts the same arguments as `middleware.removeListener()`.
 
+Returns `true` if the `options.listener` listener has been removed, `false` if no subscription matching the input provided has been found.
 
 ```js
 store.dispatch(removeListenerAction({ predicate, listener }))
