@@ -683,7 +683,7 @@ Makes integration and unit testing of sagas a breeze
 ## Routing
 
 **[supasate/connected-react-router](https://github.com/supasate/connected-react-router)**
-Synchronize React Router 4 state with your Redux store.
+Synchronize React Router v4+ state with your Redux store.
 
 **[faceyspacey/redux-first-router](https://github.com/faceyspacey/redux-first-router)** <br />
 Seamless Redux-first routing. Think of your app in states, not routes, not components, while keeping the address bar in sync. Everything is state. Connect your components and just dispatch flux standard actions.
