@@ -132,9 +132,14 @@ export interface SerializableStateInvariantMiddlewareOptions {
   warnAfter?: number
 
   /**
-   * Opt out of checking state, but continue checking actions
+   * Opt out of checking state. When set to `true`, other state-related params will be ignored.
    */
   ignoreState?: boolean
+
+  /**
+   * Opt out of checking actions. When set to `true`, other action-related params will be ignored.
+   */
+  ignoreActions?: boolean
 }
 
 /**
@@ -160,10 +165,14 @@ export function createSerializableStateInvariantMiddleware(
     ignoredPaths = [],
     warnAfter = 32,
     ignoreState = false,
+    ignoreActions = false,
   } = options
 
   return (storeAPI) => (next) => (action) => {
-    if (ignoredActions.length && ignoredActions.indexOf(action.type) !== -1) {
+    if (
+      ignoreActions ||
+      (ignoredActions.length && ignoredActions.indexOf(action.type) !== -1)
+    ) {
       return next(action)
     }
 

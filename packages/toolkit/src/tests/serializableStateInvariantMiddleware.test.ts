@@ -389,6 +389,30 @@ describe('serializableStateInvariantMiddleware', () => {
     })
   })
 
+  it('allows ignoring actions entirely', () => {
+    let numTimesCalled = 0
+
+    const serializableStateMiddleware =
+      createSerializableStateInvariantMiddleware({
+        isSerializable: () => {
+          numTimesCalled++
+          return true
+        },
+        ignoreActions: true,
+      })
+
+    const store = configureStore({
+      reducer: () => ({}),
+      middleware: [serializableStateMiddleware],
+    })
+
+    expect(numTimesCalled).toBe(0)
+
+    store.dispatch({ type: 'THIS_DOESNT_MATTER' })
+
+    expect(numTimesCalled).toBe(0)
+  })
+
   it('should not check serializability for ignored slice names', () => {
     const ACTION_TYPE = 'TEST_ACTION'
 

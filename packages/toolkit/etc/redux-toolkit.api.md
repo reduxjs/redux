@@ -86,9 +86,9 @@ export interface ActionReducerMapBuilder<State> {
     reducer: CaseReducer<State, A>
   ): ActionReducerMapBuilder<State>
   addDefaultCase(reducer: CaseReducer<State, AnyAction>): {}
-  addMatcher<A extends AnyAction>(
-    matcher: ActionMatcher<A> | ((action: AnyAction) => boolean),
-    reducer: CaseReducer<State, A>
+  addMatcher<A>(
+    matcher: TypeGuard<A> | ((action: any) => boolean),
+    reducer: CaseReducer<State, A extends AnyAction ? A : A & AnyAction>
   ): Omit<ActionReducerMapBuilder<State>, 'addCase'>
 }
 
@@ -124,10 +124,10 @@ export type AsyncThunkAction<
   | ReturnType<AsyncThunkFulfilledActionCreator<Returned, ThunkArg>>
   | ReturnType<AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig>>
 > & {
-  abort(reason?: string): void
+  abort: (reason?: string) => void
   requestId: string
   arg: ThunkArg
-  unwrap(): Promise<Returned>
+  unwrap: () => Promise<Returned>
 }
 
 // @public
@@ -138,10 +138,10 @@ export type AsyncThunkOptions<
   condition?(
     arg: ThunkArg,
     api: Pick<GetThunkAPI<ThunkApiConfig>, 'getState' | 'extra'>
-  ): boolean | undefined
+  ): MaybePromise<boolean | undefined>
   dispatchConditionRejection?: boolean
   serializeError?: (x: unknown) => GetSerializedErrorType<ThunkApiConfig>
-  idGenerator?: () => string
+  idGenerator?: (arg: ThunkArg) => string
 } & IsUnknown<
   GetPendingMeta<ThunkApiConfig>,
   {
@@ -259,10 +259,17 @@ export function createAction<
 ): PayloadActionCreator<ReturnType<PA>['payload'], T, PA>
 
 // @public (undocumented)
+export function createAsyncThunk<Returned, ThunkArg = void>(
+  typePrefix: string,
+  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, {}>,
+  options?: AsyncThunkOptions<ThunkArg, {}>
+): AsyncThunk<Returned, ThunkArg, {}>
+
+// @public (undocumented)
 export function createAsyncThunk<
   Returned,
-  ThunkArg = void,
-  ThunkApiConfig extends AsyncThunkConfig = {}
+  ThunkArg,
+  ThunkApiConfig extends AsyncThunkConfig
 >(
   typePrefix: string,
   payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
@@ -286,21 +293,21 @@ export function createImmutableStateInvariantMiddleware(
 export { createNextState }
 
 // @public
-export function createReducer<S>(
-  initialState: S,
+export function createReducer<S extends NotFunction<any>>(
+  initialState: S | (() => S),
   builderCallback: (builder: ActionReducerMapBuilder<S>) => void
-): Reducer<S>
+): ReducerWithInitialState<S>
 
 // @public
 export function createReducer<
-  S,
+  S extends NotFunction<any>,
   CR extends CaseReducers<S, any> = CaseReducers<S, any>
 >(
-  initialState: S,
+  initialState: S | (() => S),
   actionsMap: CR,
   actionMatchers?: ActionMatcherDescriptionCollection<S>,
   defaultCaseReducer?: CaseReducer<S>
-): Reducer<S>
+): ReducerWithInitialState<S>
 
 export { createSelector }
 
@@ -327,7 +334,7 @@ export interface CreateSliceOptions<
   extraReducers?:
     | CaseReducers<NoInfer<State>, any>
     | ((builder: ActionReducerMapBuilder<NoInfer<State>>) => void)
-  initialState: State
+  initialState: State | (() => State)
   name: Name
   reducers: ValidateSliceCaseReducers<State, CR>
 }
@@ -348,7 +355,7 @@ export interface EnhancedStore<
   A extends Action = AnyAction,
   M extends Middlewares<S> = Middlewares<S>
 > extends Store<S, A> {
-  dispatch: DispatchForMiddlewares<M> & Dispatch<A>
+  dispatch: Dispatch<A> & DispatchForMiddlewares<M>
 }
 
 // @public (undocumented)
@@ -509,7 +516,7 @@ export function findNonSerializableValue(
 
 export { freeze }
 
-// @public
+// @public @deprecated
 export function getDefaultMiddleware<
   S = any,
   O extends Partial<GetDefaultMiddlewareOptions> = {
@@ -783,6 +790,7 @@ export interface Slice<
 > {
   actions: CaseReducerActions<CaseReducers>
   caseReducers: SliceDefinedCaseReducers<CaseReducers>
+  getInitialState: () => State
   name: Name
   reducer: Reducer<State>
 }

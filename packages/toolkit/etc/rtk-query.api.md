@@ -4,6 +4,8 @@
 
 ```ts
 import type { ActionCreatorWithoutPayload } from '@reduxjs/toolkit'
+import type { AnyAction } from '@reduxjs/toolkit'
+import type { SerializedError } from '@reduxjs/toolkit'
 import type { ThunkDispatch } from '@reduxjs/toolkit'
 
 // @public (undocumented)
@@ -77,7 +79,9 @@ export type BaseQueryFn<
   Args = any,
   Result = unknown,
   Error = unknown,
-  DefinitionExtraOptions = {},
+  DefinitionExtraOptions = {
+    copyWithStructuralSharing?: boolean
+  },
   Meta = {}
 > = (
   args: Args,
@@ -122,12 +126,27 @@ export interface CreateApiOptions<
   endpoints(
     build: EndpointBuilder<BaseQuery, TagTypes, ReducerPath>
   ): Definitions
+  extractRehydrationInfo?: (
+    action: AnyAction,
+    {
+      reducerPath,
+    }: {
+      reducerPath: ReducerPath
+    }
+  ) =>
+    | undefined
+    | CombinedState<
+        NoInfer<Definitions>,
+        NoInfer<TagTypes>,
+        NoInfer<ReducerPath>
+      >
   keepUnusedDataFor?: number
   reducerPath?: ReducerPath
   refetchOnFocus?: boolean
   refetchOnMountOrArgChange?: boolean | number
   refetchOnReconnect?: boolean
   serializeQueryArgs?: SerializeQueryArgs<BaseQueryArg<BaseQuery>>
+  structuralSharing?: boolean
   tagTypes?: readonly TagTypes[]
 }
 
@@ -175,6 +194,7 @@ export function fetchBaseQuery({
   baseUrl,
   prepareHeaders,
   fetchFn,
+  paramsSerializer,
   ...baseFetchOptions
 }?: FetchBaseQueryArgs): BaseQueryFn<
   string | FetchArgs,
@@ -185,17 +205,32 @@ export function fetchBaseQuery({
 >
 
 // @public (undocumented)
-export interface FetchBaseQueryError {
-  // (undocumented)
-  data: unknown
-  // (undocumented)
-  status: number
-}
+export type FetchBaseQueryError =
+  | {
+      status: number
+      data: unknown
+    }
+  | {
+      status: 'FETCH_ERROR'
+      data?: undefined
+      error: string
+    }
+  | {
+      status: 'PARSING_ERROR'
+      originalStatus: number
+      data: string
+      error: string
+    }
+  | {
+      status: 'CUSTOM_ERROR'
+      data?: unknown
+      error: string
+    }
 
 // @public (undocumented)
 export type FetchBaseQueryMeta = {
   request: Request
-  response: Response
+  response?: Response
 }
 
 // @public (undocumented)
@@ -208,8 +243,16 @@ export type Module<Name extends ModuleName> = {
     TagTypes extends string
   >(
     api: Api<BaseQuery, EndpointDefinitions, ReducerPath, TagTypes, ModuleName>,
-    options: Required<
-      CreateApiOptions<BaseQuery, Definitions, ReducerPath, TagTypes>
+    options: WithRequiredProp<
+      CreateApiOptions<BaseQuery, Definitions, ReducerPath, TagTypes>,
+      | 'reducerPath'
+      | 'serializeQueryArgs'
+      | 'keepUnusedDataFor'
+      | 'refetchOnMountOrArgChange'
+      | 'refetchOnFocus'
+      | 'refetchOnReconnect'
+      | 'tagTypes'
+      | 'structuralSharing'
     >,
     context: ApiContext<Definitions>
   ): {
@@ -255,8 +298,8 @@ export enum QueryStatus {
 // @public
 export const retry: BaseQueryEnhancer<
   unknown,
-  StaggerOptions,
-  void | StaggerOptions
+  RetryOptions,
+  void | RetryOptions
 > & {
   fail: typeof fail_2
 }
