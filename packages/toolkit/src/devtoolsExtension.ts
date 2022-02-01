@@ -29,7 +29,7 @@ export interface EnhancerOptions {
    */
   maxAge?: number
   /**
-   * See detailed documentation at http://extension.remotedev.io/docs/API/Arguments.html#serialize
+   * See detailed documentation at https://github.com/reduxjs/redux-devtools/blob/%40redux-devtools/extension%403.2.1/extension/docs/API/Arguments.md#serialize
    */
   serialize?:
     | boolean
