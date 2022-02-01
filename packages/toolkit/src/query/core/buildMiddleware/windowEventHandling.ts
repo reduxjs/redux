@@ -1,12 +1,16 @@
 import { QueryStatus } from '../apiState'
+import type { QueryCacheKey } from '../apiState'
 import { onFocus, onOnline } from '../setupListeners'
 import type { SubMiddlewareApi, SubMiddlewareBuilder } from './types'
 
 export const build: SubMiddlewareBuilder = ({
   reducerPath,
   context,
+  api,
   refetchQuery,
 }) => {
+  const { removeQueryResult } = api.internalActions
+
   return (mwApi) =>
     (next) =>
     (action): any => {
@@ -35,12 +39,7 @@ export const build: SubMiddlewareBuilder = ({
         const querySubState = queries[queryCacheKey]
         const subscriptionSubState = subscriptions[queryCacheKey]
 
-        if (
-          !subscriptionSubState ||
-          !querySubState ||
-          querySubState.status === QueryStatus.uninitialized
-        )
-          return
+        if (!subscriptionSubState || !querySubState) continue
 
         const shouldRefetch =
           Object.values(subscriptionSubState).some(
@@ -52,7 +51,15 @@ export const build: SubMiddlewareBuilder = ({
             state.config[type])
 
         if (shouldRefetch) {
-          api.dispatch(refetchQuery(querySubState, queryCacheKey))
+          if (Object.keys(subscriptionSubState).length === 0) {
+            api.dispatch(
+              removeQueryResult({
+                queryCacheKey: queryCacheKey as QueryCacheKey,
+              })
+            )
+          } else if (querySubState.status !== QueryStatus.uninitialized) {
+            api.dispatch(refetchQuery(querySubState, queryCacheKey))
+          }
         }
       }
     })

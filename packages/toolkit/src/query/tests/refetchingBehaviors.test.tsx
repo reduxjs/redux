@@ -37,6 +37,9 @@ const defaultApi = createApi({
 
 const storeRef = setupApiStore(defaultApi)
 
+let getIncrementedAmountState = () =>
+  storeRef.store.getState().api.queries['getIncrementedAmount(undefined)']
+
 afterEach(() => {
   amount = 0
 })
@@ -176,6 +179,46 @@ describe('refetchOnFocus tests', () => {
     await waitFor(() =>
       expect(screen.getByTestId('amount').textContent).toBe('2')
     )
+  })
+
+  test('useQuery hook cleans data if refetch without active subscribers', async () => {
+    let data, isLoading, isFetching
+
+    function User() {
+      ;({ data, isFetching, isLoading } =
+        defaultApi.endpoints.getIncrementedAmount.useQuery(undefined, {
+          refetchOnFocus: true,
+        }))
+      return (
+        <div>
+          <div data-testid="isLoading">{String(isLoading)}</div>
+          <div data-testid="isFetching">{String(isFetching)}</div>
+          <div data-testid="amount">{String(data?.amount)}</div>
+        </div>
+      )
+    }
+
+    const { unmount } = render(<User />, { wrapper: storeRef.wrapper })
+
+    await waitFor(() =>
+      expect(screen.getByTestId('isLoading').textContent).toBe('true')
+    )
+    await waitFor(() =>
+      expect(screen.getByTestId('isLoading').textContent).toBe('false')
+    )
+    await waitFor(() =>
+      expect(screen.getByTestId('amount').textContent).toBe('1')
+    )
+
+    unmount()
+
+    expect(getIncrementedAmountState()).not.toBeUndefined()
+
+    act(() => {
+      fireEvent.focus(window)
+    })
+
+    expect(getIncrementedAmountState()).toBeUndefined()
   })
 })
 
