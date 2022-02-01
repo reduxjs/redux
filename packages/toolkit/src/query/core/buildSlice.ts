@@ -157,7 +157,10 @@ export function buildSlice({
             (substate) => {
               if (substate.requestId !== meta.requestId) return
               substate.status = QueryStatus.fulfilled
-              substate.data = copyWithStructuralSharing(substate.data, payload)
+              substate.data =
+                definitions[meta.arg.endpointName].structuralSharing ?? true
+                  ? copyWithStructuralSharing(substate.data, payload)
+                  : payload
               delete substate.error
               substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
             }

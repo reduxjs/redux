@@ -63,6 +63,19 @@ interface EndpointDefinitionWithQuery<
     meta: BaseQueryMeta<BaseQuery>,
     arg: QueryArg
   ): ResultType | Promise<ResultType>
+  /**
+   * Defaults to `true`.
+   *
+   * Most apps should leave this setting on. The only time it can be a performance issue
+   * is if an API returns extremely large amounts of data (e.g. 10,000 rows per request) and
+   * you're unable to paginate it.
+   *
+   * For details of how this works, please see the below. When it is set to `false`,
+   * every request will cause subscribed components to rerender, even when the data has not changed.
+   *
+   * @see https://redux-toolkit.js.org/api/other-exports#copywithstructuralsharing
+   */
+  structuralSharing?: boolean
 }
 
 interface EndpointDefinitionWithQueryFn<
@@ -116,6 +129,19 @@ interface EndpointDefinitionWithQueryFn<
   ): MaybePromise<QueryReturnValue<ResultType, BaseQueryError<BaseQuery>>>
   query?: never
   transformResponse?: never
+  /**
+   * Defaults to `true`.
+   *
+   * Most apps should leave this setting on. The only time it can be a performance issue
+   * is if an API returns extremely large amounts of data (e.g. 10,000 rows per request) and
+   * you're unable to paginate it.
+   *
+   * For details of how this works, please see the below. When it is set to `false`,
+   * every request will cause subscribed components to rerender, even when the data has not changed.
+   *
+   * @see https://redux-toolkit.js.org/api/other-exports#copywithstructuralsharing
+   */
+  structuralSharing?: boolean
 }
 
 export type BaseEndpointDefinition<

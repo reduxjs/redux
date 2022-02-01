@@ -235,6 +235,7 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
         reducerPath: (options.reducerPath ?? 'api') as any,
       })
     )
+
     const optionsWithDefaults = {
       reducerPath: 'api',
       serializeQueryArgs: defaultSerializeQueryArgs,

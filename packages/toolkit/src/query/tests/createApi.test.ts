@@ -763,3 +763,51 @@ test('providesTags and invalidatesTags can use baseQueryMeta', async () => {
 
   expect('request' in _meta! && 'response' in _meta!).toBe(true)
 })
+
+describe('structuralSharing flag behaviors', () => {
+  type SuccessResponse = { value: 'success' }
+
+  const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
+    tagTypes: ['success'],
+    endpoints: (build) => ({
+      enabled: build.query<SuccessResponse, void>({
+        query: () => '/success',
+      }),
+      disabled: build.query<SuccessResponse, void>({
+        query: () => ({ url: '/success' }),
+        structuralSharing: false,
+      }),
+    }),
+  })
+
+  const storeRef = setupApiStore(api)
+
+  it('enables structural sharing for query endpoints by default', async () => {
+    await storeRef.store.dispatch(api.endpoints.enabled.initiate())
+    const firstRef = api.endpoints.enabled.select()(storeRef.store.getState())
+
+    await storeRef.store.dispatch(
+      api.endpoints.enabled.initiate(undefined, { forceRefetch: true })
+    )
+
+    const secondRef = api.endpoints.enabled.select()(storeRef.store.getState())
+
+    expect(firstRef.requestId).not.toEqual(secondRef.requestId)
+    expect(firstRef.data === secondRef.data).toBeTruthy()
+  })
+
+  it('allows a query endpoint to opt-out of structural sharing', async () => {
+    await storeRef.store.dispatch(api.endpoints.disabled.initiate())
+    const firstRef = api.endpoints.disabled.select()(storeRef.store.getState())
+
+    await storeRef.store.dispatch(
+      api.endpoints.disabled.initiate(undefined, { forceRefetch: true })
+    )
+
+    const secondRef = api.endpoints.disabled.select()(storeRef.store.getState())
+
+    expect(firstRef.requestId).not.toEqual(secondRef.requestId)
+    expect(firstRef.data === secondRef.data).toBeFalsy()
+  })
+})
