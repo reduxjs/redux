@@ -1,0 +1,484 @@
+---
+id: writing-logic-thunks
+title: Writing Logic with Thunks
+description: 'Usage > Redux Logic > Thunks: writing logic that interacts with the store'
+---
+
+import { DetailedExplanation } from '../components/DetailedExplanation'
+
+:::tip What You'll Learn
+
+- What "thunks" are, and why they're used for writing Redux logic
+- How the thunk middleware works
+- Techniques for writing sync and async logic in thunks
+- Common thunk usage patterns
+
+:::
+
+## Thunk Overview
+
+### What is a "thunk"?
+
+The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). Rather than execute some logic _now_, we can write a function body or code that can be used to perform the work _later_.
+
+For Redux specifically, **"thunks" are a pattern of writing functions with logic inside that can interact with a Redux store's `dispatch` and `getState` methods**.
+
+Using thunks requires the [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk) to be added to the Redux store as part of its configuration.
+
+Thunks are [the standard approach for writing async logic in Redux apps](../style-guide/style-guide.md#use-thunks-for-async-logic), and are commonly used for data fetching. However, they can be used for a variety of tasks, and can contain both synchronous and asynchronous logic.
+
+### Writing Thunks
+
+A _thunk function_ is a function that accepts two arguments: the Redux store `dispatch` method, and the Redux store `getState` method. Thunk functions are not directly called by application code. Instead, they are passed to `store.dispatch()`:
+
+```js title="Dispatching thunk functions"
+const thunkFunction = (dispatch, getState) => {
+  // logic here that can dispatch actions or read state
+}
+
+store.dispatch(thunkFunction)
+```
+
+A thunk function may contain _any_ arbitrary logic, sync or async, and can call `dispatch` or `getState` at any time.
+
+In the same way that Redux code normally uses [action creators to generate action objects for dispatching](../tutorials/fundamentals/part-7-standard-patterns.md#action-creators) instead of writing action objects by hand, we normally use _thunk action creators_ to generate the thunk functions that are dispatched. A thunk action creator is a function that may have some arguments, and returns a new thunk function. The thunk typically closes over any arguments passed to the action creator, so they can be used in the logic:
+
+```js title="Thunk action creators and thunk functions"
+// fetchTodoById is the "thunk action creator"
+export function fetchTodoById(todoId) {
+  // fetchTodoByIdThunk is the "thunk function"
+  return async function fetchTodosThunk(dispatch, getState) {
+    const response = await client.get(`/fakeApi/todo/${todoId}`)
+    dispatch(todosLoaded(response.todos))
+  }
+}
+```
+
+Thunk functions and action creators can be written using either the `function` keyword or arrow functions - there's no meaningful difference here. The same `fetchTodoById` thunk could also be written using arrow functions, like this:
+
+```js title="Writing thunks using arrow functions"
+export const fetchTodoById = todoId => async dispatch => {
+  const response = await client.get(`/fakeApi/todo/${todoId}`)
+  dispatch(todosLoaded(response.todos))
+}
+```
+
+In either case, the thunk is dispatched by calling the action creator, in the same way as you'd dispatch any other Redux action:
+
+```js
+function TodoComponent({ todoId }) {
+  const dispatch = useDispatch()
+
+  const onFetchClicked = () => {
+    // Calls the thunk action creator, and passes the thunk function to dispatch
+    dispatch(fetchTodoById(todoId))
+  }
+}
+```
+
+### Why Use Thunks?
+
+Thunks allow us to write additional Redux-related logic separate from a UI layer. This logic can include side effects, such as async requests or generating random values, as well as logic that requires dispatching multiple actions or access to the Redux store state.
+
+Redux reducers [must not contain side effects](../tutorials/fundamentals/part-3-state-actions-reducers.md#rules-of-reducers), but real applications require logic that has side effects. Some of that may live inside components, but some may need to live outside the UI layer. Thunks (and other Redux middleware) give us a place to put those side effects.
+
+It's common to have logic directly in components, such as making an async request in a click handler or a `useEffect` hook and then processing the results. However, it's often necessary to move as much of that logic as possible outside the UI layer. This may be done to improve testability of the logic, to keep the UI layer as thin and "presentational" as possible, or to improve code reuse and sharing.
+
+In a sense, a thunk is a loophole where **you can write any code that needs to interact with the Redux store, ahead of time, without needing to know _which_ Redux store will be used**. This keeps the logic from being bound to any specific Redux store instance and keeps it reusable.
+
+<DetailedExplanation title={`Detailed Explanation: Thunks, Connect, and "Container Components"`}>
+
+Historically, another reason to use thunks was to help keep React components "unaware of Redux". The `connect` API allowed passing action creators and "binding" them to automatically dispatch actions when called. Since components typically did not have access to `dispatch` internally, passing thunks to `connect` made it possible for components to just call `this.props.doSomething()`, without needing to know if it was a callback from a parent, dispatching a plain Redux action, dispatching a thunk performing sync or async logic, or a mock function in a test.
+
+With the arrival of [the React-Redux hooks API](https://react-redux.js.org/api/hooks), that situation has changed. The community has switched away from the "container/presentational" pattern in general, and [components now have access to `dispatch` directly via the `useDispatch` hook](../tutorials/fundamentals/part-5-ui-and-react.md#dispatching-actions-with-usedispatch). This _does_ mean that it's possible to have more logic directly inside of a component, such as an async fetch + dispatch of the results. However, thunks have access to `getState`, which components do not, and there's still value in moving that logic outside of components.
+
+</DetailedExplanation>
+
+### Thunk Use Cases
+
+Because thunks are a general-purpose tool that can contain arbitrary logic, they can be used for a wide variety of purposes. The most common use cases are:
+
+- Moving complex logic out of components
+- Making async requests or other async logic
+- Writing logic that needs to dispatch multiple actions in a row or over time
+- Writing logic that needs access to `getState` to make decisions or include other state values in an action
+
+Thunks are "one-shot" functions, with no sense of a lifecycle. They also cannot see other dispatched actions. So, they should not generally be used for initializing persistent connections like websockets, and you can't use them to respond to other actions.
+
+**Thunks are best used for complex synchronous logic, and simple to moderate async logic such as making a standard AJAX request and dispatching actions based on the request results.**
+
+## Redux Thunk Middleware
+
+Dispatching thunk functions requires that the [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk) has been added to the Redux store as part of its configuration.
+
+### Adding the Middleware
+
+The [Redux Toolkit `configureStore` API automatically adds the thunk middleware during store creation](../tutorials/fundamentals/part-8-modern-redux.md#using-configurestore), so it should typically be available with no extra configuration needed.
+
+If you need to add the thunk middleware to a store manually, that can be done by [passing the thunk middleware to `applyMiddleware()`](..//tutorials/fundamentals/part-6-async-logic.md#configuring-the-store) as part of the setup process.
+
+### How Does the Middleware Work?
+
+To start, let's review how Redux middleware work in general.
+
+[Redux middleware are all written as a series of 3 nested functions](../tutorials/fundamentals/part-4-store.md#writing-custom-middleware):
+
+- The outer function receives a "store API" object with `{dispatch, getState}`
+- The middle function receives the `next` middleware in the chain (or the actual `store.dispatch` method)
+- The inner function will be called with each `action` as it's passed through the middleware chain
+
+It's important to note that middleware can be used to allow passing values that are _not_ action objects into `store.dispatch()`, as long as the middleware intercepts those values and does not let them reach the reducers.
+
+With that in mind, we can look at the specifics of the thunk middleware.
+
+The actual implementation of the thunk middleware is very short - only about 10 lines. Here's the source, with additional added comments:
+
+```js title="Redux thunk middleware implementation, annotated"
+// standard middleware definition, with 3 nested functions:
+// 1) Accepts `{dispatch, getState}`
+// 2) Accepts `next`
+// 3) Accepts `action`
+const thunkMiddleware =
+  ({ dispatch, getState }) =>
+  next =>
+  action => {
+    // If the "action" is actually a function instead...
+    if (typeof action === 'function') {
+      // then call the function and pass `dispatch` and `getState` as arguments
+      return action(dispatch, getState)
+    }
+
+    // Otherwise, it's a normal action - send it onwards
+    return next(action)
+  }
+```
+
+In other words:
+
+- If you pass a function into `dispatch`, the thunk middleware sees that it's a function instead of an action object, intercepts it, and calls that function with `(dispatch, getState)` as its arguments
+- If it's a normal action object (or anything else), it's forwarded to the next middleware in the chain
+
+### Injecting Config Values Into Thunks
+
+The thunk middleware does have one customization option. You can create a custom instance of the thunk middleware at setup time, and inject an "extra argument" into the middleware. The middleware will then inject that extra value as the third argument of every thunk function. This is most commonly used for injecting an API service layer into thunk functions, so that they don't have hardcoded dependencies on the API methods:
+
+```js title="Thunk setup with an extra argument"
+import thunkMiddleware from 'redux-thunk'
+
+const serviceApi = createServiceApi('/some/url')
+
+const thunkMiddlewareWithArg = thunkMiddleware.withExtraArgument({ serviceApi })
+```
+
+Redux Toolkit's `configureStore` supports [this as part of its middleware customization in `getDefaultMiddleware`](https://redux-toolkit.js.org/api/getDefaultMiddleware):
+
+```js title="Thunk extra argument with configureStore"
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: { serviceApi }
+      }
+    })
+})
+```
+
+There can only be one extra argument value. If you need to pass in multiple values, pass in an object containing those.
+
+The thunk function will then receive that extra value as its third argument:
+
+```js title="Thunk function with extra argument"
+export const fetchTodoById =
+  todoId => async (dispatch, getState, extraArgument) => {
+    // In this example, the extra arg is an object with an API service inside
+    const { serviceApi } = extraArgument
+    const response = await serviceApi.getTodo(todoId)
+    dispatch(todosLoaded(response.todos))
+  }
+```
+
+## Thunk Usage Patterns
+
+### Dispatching Actions
+
+Thunks have access to the `dispatch` method. This can be used to dispatch actions, or even other thunks. This can be useful for dispatching multiple actions in a row (although [this is a pattern that should be minimized](../style-guide/style-guide.md#avoid-dispatching-many-actions-sequentially)), or orchestrating complex logic that needs to dispatch at multiple points in the process.
+
+```js title="Example: thunks dispatching actions and thunks"
+// An example of a thunk dispatching other action creators,
+// which may or may not be thunks themselves. No async code, just
+// orchestration of higher-level synchronous logic.
+function complexSynchronousThunk(someValue) {
+  return (dispatch, getState) => {
+    dispatch(someBasicActionCreator(someValue))
+    dispatch(someThunkActionCreator())
+  }
+}
+```
+
+### Accessing State
+
+Unlike components, thunks also have access to `getState`. This can be called at any time to retrieve the current root Redux state value. This can be useful for running conditional logic basic on the current state. It's common to [use selector functions when reading state inside of thunks](./deriving-data-selectors.md) rather than accessing nested state fields directly, but either approach is fine.
+
+```js title="Example: Conditional dispatching based on state"
+const MAX_TODOS = 5
+
+function addTodosIfAllowed(todoText) {
+  return (dispatch, getState) => {
+    const state = getState()
+
+    // Could also check `state.todos.length < MAX_TODOS`
+    if (selectCanAddNewTodo(state, MAX_TODOS)) {
+      dispatch(todoAdded(todoText))
+    }
+  }
+}
+```
+
+It's preferable to [put as much logic as possible in reducers](../style-guide/style-guide.md#put-as-much-logic-as-possible-in-reducers), but it's fine for thunks to also have additional logic inside as well.
+
+Since the state is synchronously updated as soon as the reducers process an action, you can call `getState` after a dispatch to get the updated state.
+
+```js title="Example: checking state after dispatch"
+function checkStateAfterDispatch() {
+  return (dispatch, getState) => {
+    const firstState = getState()
+    dispatch(firstAction())
+
+    const secondState = getState()
+
+    if (secondState.someField != firstState.someField) {
+      dispatch(secondAction())
+    }
+  }
+}
+```
+
+One other reason to consider accessing state in a thunk is to fill out an action with additional info. Sometimes a slice reducer really needs to read a value that isn't in its own slice of state. A possible workaround to that is to dispatch a thunk, extract the needed values from state, and then dispatch a plain action containing the additional info.
+
+```js title="Example: actions containing cross-slice data"
+// One solution to the "cross-slice state in reducers" problem:
+// read the current state in a thunk, and include all the necessary
+// data in the action
+function crossSliceActionThunk() {
+  return (dispatch, getState) => {
+    const state = getState()
+    // Read both slices out of state
+    const { a, b } = state
+
+    // Include data from both slices in the action
+    dispatch(actionThatNeedsMoreData(a, b))
+  }
+}
+```
+
+### Async Logic and Side Effects
+
+Thunks may contain async logic, as well as side effects such as updating `localStorage`. That logic may use `Promise` chaining such as `someResponsePromise.then()`, although the `async/await` syntax is usually preferable for readability.
+
+When making async requests, it's standard to dispatch actions before and after a request to [help track loading state](../tutorials/fundamentals/part-7-standard-patterns.md#async-request-status). Typically, a "pending" action _before_ the request and a loading state enum is marked as "in progress". If the request succeeds, a "fulfilled" action is dispatched with the result data, or a "rejected" action is dispatched containing the error info.
+
+Error handling here can be trickier than most people think. If you chain `resPromise.then(dispatchFulfilled).catch(dispatchRejected)` together, you may end up dispatching a "rejected" action if some non-network error occurs during the process of handling the "fulfilled" action. It's better to use the second argument of `.then()` to ensure you only handle errors related to the request itself:
+
+```js title="Example: async request with promise chaining"
+function fetchData(someValue) {
+  return (dispatch, getState) => {
+    dispatch(requestStarted())
+
+    myAjaxLib.post('/someEndpoint', { data: someValue }).then(
+      response => dispatch(requestSucceeded(response.data)),
+      error => dispatch(requestFailed(error.message))
+    )
+  }
+}
+```
+
+With `async/await`, this can be even trickier, because of how `try/catch` logic is usually organized. In order to ensure that the `catch` block _only_ handles errors from the network level, it may be necessary to reorganize the logic so that the thunk returns early if there's an error, and "fulfilled" action only happens at the end:
+
+```js title="Example: error handling with async/await"
+function fetchData(someValue) {
+  return async (dispatch, getState) => {
+    dispatch(requestStarted())
+
+    // Have to declare the response variable outside the try block
+    let response
+
+    try {
+      response = await myAjaxLib.post('/someEndpoint', { data: someValue })
+    } catch (error) {
+      // Ensure we only catch network errors
+      dispatch(requestFailed(error.message))
+      // Bail out early on failure
+      return
+    }
+
+    // We now have the result and there's no error. Dispatch "fulfilled".
+    dispatch(requestSucceeded(response.data))
+  }
+}
+```
+
+Note that this issue isn't exclusive to Redux or thunks - it can apply even if you're only working with React component state as well, or any other logic that requires additional processing of a successful result.
+
+This pattern is admittedly awkward to write and read. In most cases you can _probably_ get away with a more typical `try/catch` pattern where the request and the `dispatch(requestSucceeded())` are back-to-back. It's still worth knowing that this _can_ be an issue.
+
+### Returning Values from Thunks
+
+By default, `store.dispatch(action)` returns the actual action object. Middleware can override the return value being passed back from `dispatch`, and substitute whatever other value they want to return. For example, a middleware could choose to always return `42` instead:
+
+```js title="Middleware return values"
+const return42Middleware = storeAPI => next => action => {
+  const originalReturnValue = next(action)
+  return 42
+}
+
+// later
+const result = dispatch(anyAction())
+console.log(result) // 42
+```
+
+The thunk middleware does this, by returning whatever the called thunk function returns.
+
+The most common use case for this is returning a promise from a thunk. This allows the code that dispatched the thunk to wait on the promise to know that the thunk's async work is complete. This is often used by components to coordinate additional work:
+
+```js title="Example: Awaiting a thunk result promise"
+const onAddTodoClicked = async () => {
+  await dispatch(saveTodo(todoText))
+  setTodoText('')
+}
+```
+
+There's also a neat trick you can do with this: you can repurpose a thunk as a way to make a one-time selection from the Redux state when you only have access to `dispatch`. Since dispatching a thunk returns the thunk return value, you could write a thunk that accepts a selector, and immediately calls the selector with the state and returns the result. This can be useful in a React component, where you have access to `dispatch` but not `getState`.
+
+```js title="Example: reusing thunks for selecting data"
+// In your Redux slices:
+const getSelectedData = selector => (dispatch, getState) => {
+  return selector(getState())
+}
+
+// in a component
+const onClick = () => {
+  const todos = dispatch(getSelectedData(selectTodos))
+  // do more logic with this data
+}
+```
+
+This is not a _recommended_ practice per se, but it's semantically legal and will work fine.
+
+## Using `createAsyncThunk`
+
+Writing async logic with thunks can be somewhat tedious. Each thunk typically requires defining three different action types + matching action creators for "pending/fulfilled/rejected", plus the actual thunk action creator + thunk function. There's also the edge cases with error handling to deal with.
+
+Redux Toolkit has [a `createAsyncThunk` API](../tutorials/fundamentals/part-8-modern-redux.md#writing-thunks) that abstracts the process of generating those actions, dispatching them based on a `Promise` lifecycle, and handling the errors correctly. It accepts a partial action type string (used to generate the action types for `pending`, `fulfilled`, and `rejected`), and a "payload creation callback" that does the actual async request and returns a `Promise`. It then automatically dispatches the actions before and after the request, with the right arguments.
+
+Since this is an abstraction for the specific use case of async requests, **`createAsyncThunk` does not address all possible use cases for thunks**. If you need to write synchronous logic or other custom behavior, you should still write a "normal" thunk by hand yourself instead.
+
+The thunk action creator has the action creators for `pending`, `fulfilled`, and `rejected` attached. You can use the `extraReducers` option in `createSlice` to listen for those action types and update the slice's state accordingly.
+
+```js title="Example: createAsyncThunk"
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+// omit imports and state
+
+export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
+  const response = await client.get('/fakeApi/todos')
+  return response.todos
+})
+
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+    // omit reducer cases
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchTodos.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchTodos.fulfilled, (state, action) => {
+        const newEntities = {}
+        action.payload.forEach(todo => {
+          newEntities[todo.id] = todo
+        })
+        state.entities = newEntities
+        state.status = 'idle'
+      })
+  }
+})
+```
+
+## Fetching Data with RTK Query
+
+Redux Toolkit has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**.
+
+RTK Query actually uses `createAsyncThunk` internally for all requests, along with a custom middleware to manage cache data lifetimes.
+
+First, create an "API slice" with definitions for the server endpoints your app will talk to. Each endpoint will auto-generate a React hook with a name based on the endpoint and request type, like `useGetPokemonByNameQuery`:
+
+```js title="RTK Query: API slice (pokemonSlice.js)"
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+export const pokemonApi = createApi({
+  reducerPath: 'pokemonApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  endpoints: builder => ({
+    getPokemonByName: builder.query({
+      query: (name: string) => `pokemon/${name}`
+    })
+  })
+})
+
+export const { useGetPokemonByNameQuery } = pokemonApi
+```
+
+Then, add the generated API slice reducer and custom middleware to the store:
+
+```js title="RTK Query: store setup"
+import { configureStore } from '@reduxjs/toolkit'
+// Or from '@reduxjs/toolkit/query/react'
+import { setupListeners } from '@reduxjs/toolkit/query'
+import { pokemonApi } from './services/pokemon'
+
+export const store = configureStore({
+  reducer: {
+    // highlight-start
+    // Add the generated reducer as a specific top-level slice
+    [pokemonApi.reducerPath]: pokemonApi.reducer
+    // highlight-end
+  },
+  // highlight-start
+  // Adding the api middleware enables caching, invalidation, polling,
+  // and other useful features of `rtk-query`.
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(pokemonApi.middleware)
+  // highlight-end
+})
+```
+
+Finally, import the auto-generated React hook into your component and call it. The hook will automatically fetch data when the component mounts, and if multiple components use the same hook with the same arguments, they will share the cached results:
+
+```js title="RTK Query: using fetching hooks"
+// highlight-next-line
+import { useGetPokemonByNameQuery } from './services/pokemon'
+
+export default function Pokemon() {
+  // highlight-start
+  // Using a query hook automatically fetches data and returns query values
+  const { data, error, isLoading } = useGetPokemonByNameQuery('bulbasaur')
+  // highlight-end
+
+  // rendering logic
+}
+```
+
+**We encourage you to try out RTK Query and see if it can help simplify the data fetching code in your own apps.**
+
+## Further Information
+
+- Reason for middleware and side effects:
+  - ["How to dispatch a Redux action with a timeout?"](https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559)
+  - ["Why do we need middleware for async flow?"](https://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux/34599594#34599594)
+- Thunk tutorials:
+  - [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/)
+  - [Thunks in Redux: the basics](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
