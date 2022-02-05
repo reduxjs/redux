@@ -326,11 +326,13 @@ describe('serializableStateInvariantMiddleware', () => {
 
     store.dispatch({ type: 'IGNORE_ME' })
 
-    expect(numTimesCalled).toBe(0)
+    // The state check only calls `isSerializable` once
+    expect(numTimesCalled).toBe(1)
 
     store.dispatch({ type: 'ANY_OTHER_ACTION' })
 
-    expect(numTimesCalled).toBeGreaterThan(0)
+    // Action checks call `isSerializable` 2+ times when enabled
+    expect(numTimesCalled).toBeGreaterThanOrEqual(3)
   })
 
   describe('ignored action paths', () => {
@@ -410,7 +412,12 @@ describe('serializableStateInvariantMiddleware', () => {
 
     store.dispatch({ type: 'THIS_DOESNT_MATTER' })
 
-    expect(numTimesCalled).toBe(0)
+    // `isSerializable` is called once for a state check
+    expect(numTimesCalled).toBe(1)
+
+    store.dispatch({ type: 'THIS_DOESNT_MATTER_AGAIN' })
+
+    expect(numTimesCalled).toBe(2)
   })
 
   it('should not check serializability for ignored slice names', () => {
@@ -470,17 +477,55 @@ describe('serializableStateInvariantMiddleware', () => {
 
   it('allows ignoring state entirely', () => {
     const badValue = new Map()
+    let numTimesCalled = 0
     const reducer = () => badValue
-    configureStore({
+    const store = configureStore({
       reducer,
       middleware: [
         createSerializableStateInvariantMiddleware({
+          isSerializable: () => {
+            numTimesCalled++
+            return true
+          },
           ignoreState: true,
         }),
       ],
-    }).dispatch({ type: 'test' })
+    })
+
+    expect(numTimesCalled).toBe(0)
+
+    store.dispatch({ type: 'test' })
 
     expect(getLog().log).toMatchInlineSnapshot(`""`)
+
+    // Should be called twice for the action - there is an initial check for early returns, then a second and potentially 3rd for nested properties
+    expect(numTimesCalled).toBe(2)
+  })
+
+  it('never calls isSerializable if both ignoreState and ignoreActions are true', () => {
+    const badValue = new Map()
+    let numTimesCalled = 0
+    const reducer = () => badValue
+    const store = configureStore({
+      reducer,
+      middleware: [
+        createSerializableStateInvariantMiddleware({
+          isSerializable: () => {
+            numTimesCalled++
+            return true
+          },
+          ignoreState: true,
+          ignoreActions: true,
+        }),
+      ],
+    })
+
+    expect(numTimesCalled).toBe(0)
+
+    store.dispatch({ type: 'TEST', payload: new Date() })
+    store.dispatch({ type: 'OTHER_THING' })
+
+    expect(numTimesCalled).toBe(0)
   })
 
   it('Should print a warning if execution takes too long', () => {
