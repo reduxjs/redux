@@ -8,6 +8,7 @@ import { createImmutableStateInvariantMiddleware } from './immutableStateInvaria
 
 import type { SerializableStateInvariantMiddlewareOptions } from './serializableStateInvariantMiddleware'
 import { createSerializableStateInvariantMiddleware } from './serializableStateInvariantMiddleware'
+import type { ExcludeFromTuple } from './tsHelpers'
 import { MiddlewareArray } from './utils'
 
 function isBoolean(x: any): x is boolean {
@@ -33,9 +34,7 @@ export type ThunkMiddlewareFor<
   ? never
   : O extends { thunk: { extraArgument: infer E } }
   ? ThunkMiddleware<S, AnyAction, E>
-  :
-      | ThunkMiddleware<S, AnyAction, null> //The ThunkMiddleware with a `null` ExtraArgument is here to provide backwards-compatibility.
-      | ThunkMiddleware<S, AnyAction>
+  : ThunkMiddleware<S, AnyAction>
 
 export type CurriedGetDefaultMiddleware<S = any> = <
   O extends Partial<GetDefaultMiddlewareOptions> = {
@@ -45,7 +44,7 @@ export type CurriedGetDefaultMiddleware<S = any> = <
   }
 >(
   options?: O
-) => MiddlewareArray<Middleware<{}, S> | ThunkMiddlewareFor<S, O>>
+) => MiddlewareArray<ExcludeFromTuple<[ThunkMiddlewareFor<S, O>], never>>
 
 export function curryGetDefaultMiddleware<
   S = any
@@ -76,14 +75,14 @@ export function getDefaultMiddleware<
   }
 >(
   options: O = {} as O
-): MiddlewareArray<Middleware<{}, S> | ThunkMiddlewareFor<S, O>> {
+): MiddlewareArray<ExcludeFromTuple<[ThunkMiddlewareFor<S, O>], never>> {
   const {
     thunk = true,
     immutableCheck = true,
     serializableCheck = true,
   } = options
 
-  let middlewareArray: Middleware<{}, S>[] = new MiddlewareArray()
+  let middlewareArray = new MiddlewareArray<Middleware[]>()
 
   if (thunk) {
     if (isBoolean(thunk)) {

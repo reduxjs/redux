@@ -1,4 +1,5 @@
-import type { Middleware } from 'redux'
+import type { Middleware, Dispatch } from 'redux'
+import type { MiddlewareArray } from './utils'
 
 /**
  * return True if T is `any`, otherwise return False
@@ -65,20 +66,30 @@ export type IsUnknownOrNonInferrable<T, True, False> = AtLeastTS35<
   IsEmptyObj<T, True, IsUnknown<T, True, False>>
 >
 
-/**
- * Combines all dispatch signatures of all middlewares in the array `M` into
- * one intersected dispatch signature.
- */
-export type DispatchForMiddlewares<M> = M extends ReadonlyArray<any>
-  ? UnionToIntersection<
-      M[number] extends infer MiddlewareValues
-        ? MiddlewareValues extends Middleware<infer DispatchExt, any, any>
-          ? DispatchExt extends Function
-            ? IsAny<DispatchExt, never, DispatchExt>
-            : never
-          : never
-        : never
+// Appears to have a convenient side effect of ignoring `never` even if that's not what you specified
+export type ExcludeFromTuple<T, E, Acc extends unknown[] = []> = T extends [
+  infer Head,
+  ...infer Tail
+]
+  ? ExcludeFromTuple<Tail, E, [...Acc, ...([Head] extends [E] ? [] : [Head])]>
+  : Acc
+
+type ExtractDispatchFromMiddlewareTuple<
+  MiddlewareTuple extends any[],
+  Acc extends {}
+> = MiddlewareTuple extends [infer Head, ...infer Tail]
+  ? ExtractDispatchFromMiddlewareTuple<
+      Tail,
+      Acc & (Head extends Middleware<infer D, any> ? IsAny<D, {}, D> : {})
     >
+  : Acc
+
+export type ExtractDispatchExtensions<M> = M extends MiddlewareArray<
+  infer MiddlewareTuple
+>
+  ? ExtractDispatchFromMiddlewareTuple<MiddlewareTuple, {}>
+  : M extends Middleware[]
+  ? ExtractDispatchFromMiddlewareTuple<[...M], {}>
   : never
 
 /**

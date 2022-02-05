@@ -26,10 +26,9 @@ It is disabled in production builds, so you don't need to worry about that.`)
  * @public
  */
 export class MiddlewareArray<
-  Middlewares extends Middleware<any, any>
-> extends Array<Middlewares> {
-  constructor(arrayLength?: number)
-  constructor(...items: Middlewares[])
+  Middlewares extends Middleware<any, any>[]
+> extends Array<Middlewares[number]> {
+  constructor(...items: Middlewares)
   constructor(...args: any[]) {
     super(...args)
     Object.setPrototypeOf(this, MiddlewareArray.prototype)
@@ -41,22 +40,22 @@ export class MiddlewareArray<
 
   concat<AdditionalMiddlewares extends ReadonlyArray<Middleware<any, any>>>(
     items: AdditionalMiddlewares
-  ): MiddlewareArray<Middlewares | AdditionalMiddlewares[number]>
+  ): MiddlewareArray<[...Middlewares, ...AdditionalMiddlewares]>
 
   concat<AdditionalMiddlewares extends ReadonlyArray<Middleware<any, any>>>(
     ...items: AdditionalMiddlewares
-  ): MiddlewareArray<Middlewares | AdditionalMiddlewares[number]>
+  ): MiddlewareArray<[...Middlewares, ...AdditionalMiddlewares]>
   concat(...arr: any[]) {
     return super.concat.apply(this, arr)
   }
 
   prepend<AdditionalMiddlewares extends ReadonlyArray<Middleware<any, any>>>(
     items: AdditionalMiddlewares
-  ): MiddlewareArray<AdditionalMiddlewares[number] | Middlewares>
+  ): MiddlewareArray<[...AdditionalMiddlewares, ...Middlewares]>
 
   prepend<AdditionalMiddlewares extends ReadonlyArray<Middleware<any, any>>>(
     ...items: AdditionalMiddlewares
-  ): MiddlewareArray<AdditionalMiddlewares[number] | Middlewares>
+  ): MiddlewareArray<[...AdditionalMiddlewares, ...Middlewares]>
 
   prepend(...arr: any[]) {
     if (arr.length === 1 && Array.isArray(arr[0])) {

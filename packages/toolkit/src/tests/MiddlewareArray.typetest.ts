@@ -1,6 +1,8 @@
 import { getDefaultMiddleware } from '@reduxjs/toolkit'
 import type { Middleware } from 'redux'
-import type { DispatchForMiddlewares } from '@internal/tsHelpers'
+import type { ExtractDispatchExtensions } from '@internal/tsHelpers'
+import thunk from 'redux-thunk'
+import { MiddlewareArray } from '../utils'
 
 declare const expectType: <T>(t: T) => T
 
@@ -14,7 +16,7 @@ declare const middleware2: Middleware<{
 
 declare const getDispatch: <M extends Array<Middleware>>(
   m: M
-) => DispatchForMiddlewares<M>
+) => ExtractDispatchExtensions<M>
 
 type ThunkReturn = Promise<'thunk'>
 declare const thunkCreator: () => () => ThunkReturn
