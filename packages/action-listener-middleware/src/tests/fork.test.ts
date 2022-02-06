@@ -3,7 +3,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ForkedTaskExecutor, TaskResult } from '../types'
-import { createActionListenerMiddleware, TaskAbortError } from '../index'
+import { createListenerMiddleware, TaskAbortError } from '../index'
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -52,14 +52,14 @@ describe('fork', () => {
     },
   })
   const { increment, decrement, incrementByAmount } = counterSlice.actions
-  let middleware = createActionListenerMiddleware()
+  let middleware = createListenerMiddleware()
   let store = configureStore({
     reducer: counterSlice.reducer,
     middleware: (gDM) => gDM().prepend(middleware),
   })
 
   beforeEach(() => {
-    middleware = createActionListenerMiddleware()
+    middleware = createListenerMiddleware()
     store = configureStore({
       reducer: counterSlice.reducer,
       middleware: (gDM) => gDM().prepend(middleware),

@@ -9,7 +9,7 @@ import {
 import type { AnyAction, PayloadAction, Action } from '@reduxjs/toolkit'
 
 import {
-  createActionListenerMiddleware,
+  createListenerMiddleware,
   createListenerEntry,
   addListenerAction,
   removeListenerAction,
@@ -108,10 +108,10 @@ export function expectNotAny<T extends IsNotAny<T>>(t: T): T {
   return t
 }
 
-describe('createActionListenerMiddleware', () => {
+describe('createListenerMiddleware', () => {
   let store = configureStore({
     reducer: () => 42,
-    middleware: (gDM) => gDM().prepend(createActionListenerMiddleware()),
+    middleware: (gDM) => gDM().prepend(createListenerMiddleware()),
   })
 
   interface CounterState {
@@ -141,12 +141,12 @@ describe('createActionListenerMiddleware', () => {
   }
 
   let reducer: jest.Mock
-  let middleware: ReturnType<typeof createActionListenerMiddleware>
+  let middleware: ReturnType<typeof createListenerMiddleware>
   let addTypedListenerAction =
     addListenerAction as TypedAddListenerAction<CounterState>
   let removeTypedListenerAction =
     removeListenerAction as TypedRemoveListenerAction<CounterState>
-  // let middleware: ActionListenerMiddleware<CounterState> //: ReturnType<typeof createActionListenerMiddleware>
+  // let middleware: ActionListenerMiddleware<CounterState> //: ReturnType<typeof createListenerMiddleware>
 
   const testAction1 = createAction<string>('testAction1')
   type TestAction1 = ReturnType<typeof testAction1>
@@ -160,7 +160,7 @@ describe('createActionListenerMiddleware', () => {
   })
 
   beforeEach(() => {
-    middleware = createActionListenerMiddleware()
+    middleware = createListenerMiddleware()
     reducer = jest.fn(() => ({}))
     store = configureStore({
       reducer,
@@ -171,7 +171,7 @@ describe('createActionListenerMiddleware', () => {
   describe('Middleware setup', () => {
     test('Allows passing an extra argument on middleware creation', () => {
       const originalExtra = 42
-      const middleware = createActionListenerMiddleware({
+      const middleware = createListenerMiddleware({
         extra: originalExtra,
       })
       const store = configureStore({
@@ -744,7 +744,7 @@ describe('createActionListenerMiddleware', () => {
     test('getOriginalState can only be invoked synchronously', async () => {
       const onError = jest.fn()
 
-      middleware = createActionListenerMiddleware({ onError })
+      middleware = createListenerMiddleware({ onError })
       const store = configureStore({
         reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
@@ -890,7 +890,7 @@ describe('createActionListenerMiddleware', () => {
 
     test('Notifies sync listener errors to `onError`, if provided', async () => {
       const onError = jest.fn()
-      middleware = createActionListenerMiddleware({
+      middleware = createListenerMiddleware({
         onError,
       })
       reducer = jest.fn(() => ({}))
@@ -920,7 +920,7 @@ describe('createActionListenerMiddleware', () => {
 
     test('Notifies async listeners errors to `onError`, if provided', async () => {
       const onError = jest.fn()
-      middleware = createActionListenerMiddleware({
+      middleware = createListenerMiddleware({
         onError,
       })
       reducer = jest.fn(() => ({}))
@@ -1175,7 +1175,7 @@ describe('createActionListenerMiddleware', () => {
   })
 
   describe('Type tests', () => {
-    const middleware = createActionListenerMiddleware()
+    const middleware = createListenerMiddleware()
     const store = configureStore({
       reducer: counterSlice.reducer,
       middleware: (gDM) => gDM().prepend(middleware),
@@ -1339,7 +1339,7 @@ describe('createActionListenerMiddleware', () => {
     })
 
     test('Can create a pre-typed middleware', () => {
-      const typedMiddleware = createActionListenerMiddleware<CounterState>()
+      const typedMiddleware = createListenerMiddleware<CounterState>()
 
       typedMiddleware.addListener({
         predicate: (

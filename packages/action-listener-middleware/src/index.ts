@@ -271,7 +271,7 @@ const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
 /**
  * @alpha
  */
-export function createActionListenerMiddleware<
+export function createListenerMiddleware<
   S = unknown,
   D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
   ExtraArgument = unknown

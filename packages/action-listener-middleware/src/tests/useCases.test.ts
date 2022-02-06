@@ -7,7 +7,7 @@ import {
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import { createActionListenerMiddleware } from '../index'
+import { createListenerMiddleware } from '../index'
 
 import type { TypedAddListener } from '../index'
 import { TaskAbortError } from '../exceptions'
@@ -35,11 +35,11 @@ const counterSlice = createSlice({
 const { increment, decrement, incrementByAmount } = counterSlice.actions
 
 describe('Saga-style Effects Scenarios', () => {
-  let middleware: ReturnType<typeof createActionListenerMiddleware>
+  let middleware: ReturnType<typeof createListenerMiddleware>
 
   let store = configureStore({
     reducer: counterSlice.reducer,
-    middleware: (gDM) => gDM().prepend(createActionListenerMiddleware()),
+    middleware: (gDM) => gDM().prepend(createListenerMiddleware()),
   })
 
   const testAction1 = createAction<string>('testAction1')
@@ -58,7 +58,7 @@ describe('Saga-style Effects Scenarios', () => {
   }
 
   beforeEach(() => {
-    middleware = createActionListenerMiddleware()
+    middleware = createListenerMiddleware()
     addListener = middleware.addListener as TypedAddListener<RootState>
     store = configureStore({
       reducer: counterSlice.reducer,
