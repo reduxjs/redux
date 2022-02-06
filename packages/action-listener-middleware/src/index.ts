@@ -273,7 +273,6 @@ const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
  */
 export function createActionListenerMiddleware<
   S = unknown,
-  // TODO Carry through the thunk extra arg somehow?
   D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
   ExtraArgument = unknown
 >(middlewareOptions: CreateListenerMiddlewareOptions<ExtraArgument> = {}) {

@@ -171,21 +171,27 @@ describe('createActionListenerMiddleware', () => {
   describe('Middleware setup', () => {
     test('Allows passing an extra argument on middleware creation', () => {
       const originalExtra = 42
-      middleware = createActionListenerMiddleware({
+      const middleware = createActionListenerMiddleware({
         extra: originalExtra,
       })
-      reducer = jest.fn(() => ({}))
-      store = configureStore({
-        reducer,
+      const store = configureStore({
+        reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
       })
 
       let foundExtra = null
 
-      middleware.addListener({
+      const typedAddListener = middleware.addListener as TypedAddListener<
+        CounterState,
+        typeof store.dispatch,
+        typeof originalExtra
+      >
+
+      typedAddListener({
         matcher: (action: AnyAction): action is AnyAction => true,
         listener: (action, listenerApi) => {
           foundExtra = listenerApi.extra
+          expectType<typeof originalExtra>(listenerApi.extra)
         },
       })
 
