@@ -339,7 +339,7 @@ This can also be done inline as well:
 const isOn = useSelector((state: RootState) => state.isOn)
 ```
 
-However, prefer creating a pre-typed `useSelector` hook with the correct type of `state` built-in instead.
+However, prefer creating a pre-typed `useAppSelector` hook with the correct type of `state` built-in instead.
 
 ### Typing the `useDispatch` hook
 
