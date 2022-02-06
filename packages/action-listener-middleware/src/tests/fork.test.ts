@@ -52,8 +52,11 @@ describe('fork', () => {
     },
   })
   const { increment, decrement, incrementByAmount } = counterSlice.actions
-  let middleware: ReturnType<typeof createActionListenerMiddleware>
-  let store: EnhancedStore<CounterSlice>
+  let middleware = createActionListenerMiddleware()
+  let store = configureStore({
+    reducer: counterSlice.reducer,
+    middleware: (gDM) => gDM().prepend(middleware),
+  })
 
   beforeEach(() => {
     middleware = createActionListenerMiddleware()

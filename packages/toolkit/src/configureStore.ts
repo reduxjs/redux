@@ -20,7 +20,7 @@ import type {
   CurriedGetDefaultMiddleware,
 } from './getDefaultMiddleware'
 import { curryGetDefaultMiddleware } from './getDefaultMiddleware'
-import type { DispatchForMiddlewares, NoInfer } from './tsHelpers'
+import type { NoInfer, ExtractDispatchExtensions } from './tsHelpers'
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
@@ -110,7 +110,7 @@ export interface EnhancedStore<
    *
    * @inheritdoc
    */
-  dispatch: Dispatch<A> & DispatchForMiddlewares<M>
+  dispatch: ExtractDispatchExtensions<M> & Dispatch<A>
 }
 
 /**
@@ -160,7 +160,7 @@ export function configureStore<
   }
   if (
     !IS_PRODUCTION &&
-    finalMiddleware.some((item) => typeof item !== 'function')
+    finalMiddleware.some((item: any) => typeof item !== 'function')
   ) {
     throw new Error(
       'each middleware provided to configureStore must be a function'

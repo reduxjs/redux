@@ -1,10 +1,20 @@
-import type { AnyAction, Middleware, ThunkAction } from '@reduxjs/toolkit'
+import type {
+  AnyAction,
+  Middleware,
+  ThunkAction,
+  Action,
+  ThunkDispatch,
+  Dispatch,
+} from '@reduxjs/toolkit'
 import {
   getDefaultMiddleware,
   MiddlewareArray,
   configureStore,
 } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
+import type { ThunkMiddleware } from 'redux-thunk'
+
+import { expectType } from './helpers'
 
 describe('getDefaultMiddleware', () => {
   const ORIGINAL_NODE_ENV = process.env.NODE_ENV
@@ -27,6 +37,7 @@ describe('getDefaultMiddleware', () => {
 
   it('removes the thunk middleware if disabled', () => {
     const middleware = getDefaultMiddleware({ thunk: false })
+    // @ts-ignore
     expect(middleware.includes(thunk)).toBe(false)
     expect(middleware.length).toBe(2)
   })
@@ -44,12 +55,45 @@ describe('getDefaultMiddleware', () => {
   })
 
   it('allows passing options to thunk', () => {
-    const extraArgument = 42
+    const extraArgument = 42 as const
     const middleware = getDefaultMiddleware({
       thunk: { extraArgument },
       immutableCheck: false,
       serializableCheck: false,
     })
+
+    const m2 = getDefaultMiddleware({
+      thunk: false,
+    })
+
+    expectType<MiddlewareArray<[]>>(m2)
+
+    const dummyMiddleware: Middleware<
+      {
+        (action: Action<'actionListenerMiddleware/add'>): () => void
+      },
+      { counter: number }
+    > = (storeApi) => (next) => (action) => {}
+
+    const dummyMiddleware2: Middleware = (storeApi) => (next) => (action) => {}
+
+    const m3 = middleware.concat(dummyMiddleware, dummyMiddleware2)
+
+    expectType<
+      MiddlewareArray<
+        [
+          ThunkMiddleware<any, AnyAction, 42>,
+          Middleware<
+            (action: Action<'actionListenerMiddleware/add'>) => () => void,
+            {
+              counter: number
+            },
+            Dispatch<AnyAction>
+          >,
+          Middleware<{}, any, Dispatch<AnyAction>>
+        ]
+      >
+    >(m3)
 
     const testThunk: ThunkAction<void, {}, number, AnyAction> = (
       dispatch,
@@ -65,6 +109,10 @@ describe('getDefaultMiddleware', () => {
       reducer,
       middleware,
     })
+
+    expectType<ThunkDispatch<any, 42, AnyAction> & Dispatch<AnyAction>>(
+      store.dispatch
+    )
 
     store.dispatch(testThunk)
   })
