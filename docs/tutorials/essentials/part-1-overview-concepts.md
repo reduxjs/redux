@@ -200,7 +200,7 @@ const arr = ['a', 'b']
 const arr2 = arr.concat('c')
 
 // or, we can make a copy of the original array:
-const arr3 = arr.slice()
+const arr3 = [...arr]
 // and mutate the copy:
 arr3.push('c')
 ```
