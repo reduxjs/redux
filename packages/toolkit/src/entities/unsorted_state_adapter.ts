@@ -158,9 +158,7 @@ export function createUnsortedStateAdapter<T>(
         0
 
       if (didMutateIds) {
-        state.ids = Array.from(
-          new Set(state.ids.map((id) => newKeys[id] || id))
-        )
+        state.ids = Object.keys(state.entities)
       }
     }
   }
