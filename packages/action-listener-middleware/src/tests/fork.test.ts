@@ -52,14 +52,18 @@ describe('fork', () => {
     },
   })
   const { increment, decrement, incrementByAmount } = counterSlice.actions
-  let middleware = createListenerMiddleware()
+  let listenerMiddleware = createListenerMiddleware()
+  let { middleware, startListening, stopListening } = listenerMiddleware
   let store = configureStore({
     reducer: counterSlice.reducer,
     middleware: (gDM) => gDM().prepend(middleware),
   })
 
   beforeEach(() => {
-    middleware = createListenerMiddleware()
+    listenerMiddleware = createListenerMiddleware()
+    middleware = listenerMiddleware.middleware
+    startListening = listenerMiddleware.startListening
+    stopListening = listenerMiddleware.stopListening
     store = configureStore({
       reducer: counterSlice.reducer,
       middleware: (gDM) => gDM().prepend(middleware),
@@ -70,9 +74,9 @@ describe('fork', () => {
     let hasRunSyncExector = false
     let hasRunAsyncExecutor = false
 
-    middleware.addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         listenerApi.fork(() => {
           hasRunSyncExector = true
         })
@@ -97,9 +101,9 @@ describe('fork', () => {
   it('runs forked tasks that are cancelled if parent listener is cancelled', async () => {
     const deferredForkedTaskError = deferred()
 
-    middleware.addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         listenerApi.cancelActiveListeners()
         const result = await listenerApi.fork(async () => {
           await delay(20)
@@ -124,9 +128,9 @@ describe('fork', () => {
   it('synchronously throws TypeError error if the provided executor is not a function', () => {
     const invalidExecutors = [null, {}, undefined, 1]
 
-    middleware.addListener({
+    startListening({
       predicate: () => true,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         invalidExecutors.forEach((invalidExecutor) => {
           let caughtError
           try {
@@ -148,9 +152,9 @@ describe('fork', () => {
   it('does not run an executor if the task is synchronously cancelled', async () => {
     const storeStateAfter = deferred()
 
-    middleware.addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (action, listenerApi) => {
+      effect: async (action, listenerApi) => {
         const forkedTask = listenerApi.fork(() => {
           listenerApi.dispatch(decrement())
           listenerApi.dispatch(decrement())
@@ -248,9 +252,9 @@ describe('fork', () => {
     let deferredResult = deferred()
     let forkedTask: any = {}
 
-    middleware.addListener({
+    startListening({
       predicate: () => true,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         forkedTask = listenerApi.fork(executor)
 
         deferredResult.resolve(await forkedTask.result)
@@ -277,9 +281,9 @@ describe('fork', () => {
     test('forkApi.delay rejects as soon as the task is cancelled', async () => {
       let deferredResult = deferred()
 
-      middleware.addListener({
+      startListening({
         actionCreator: increment,
-        listener: async (_, listenerApi) => {
+        effect: async (_, listenerApi) => {
           const forkedTask = listenerApi.fork(async (forkApi) => {
             await forkApi.delay(100)
 
@@ -306,9 +310,9 @@ describe('fork', () => {
 
       // Unfortunately we cannot test declaratively unhandleRejections in jest: https://github.com/facebook/jest/issues/5620
       // This test just fails if an `unhandledRejection` occurs.
-      middleware.addListener({
+      startListening({
         actionCreator: increment,
-        listener: async (_, listenerApi) => {
+        effect: async (_, listenerApi) => {
           const completedTask = listenerApi.fork(async (forkApi) => {
             forkApi.signal.addEventListener(
               'abort',
@@ -349,9 +353,9 @@ describe('fork', () => {
 
   test('forkApi.pause rejects if task is cancelled', async () => {
     let deferredResult = deferred()
-    middleware.addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         const forkedTask = listenerApi.fork(async (forkApi) => {
           await forkApi.pause(delay(30))
 
@@ -374,9 +378,9 @@ describe('fork', () => {
 
   test('forkApi.pause rejects if listener is cancelled', async () => {
     let deferredResult = deferred()
-    middleware.addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         listenerApi.cancelActiveListeners()
         const forkedTask = listenerApi.fork(async (forkApi) => {
           await forkApi.pause(delay(30))
