@@ -25,7 +25,12 @@ import type {
   Unsubscribe,
   ListenerMiddleware,
 } from '../index'
-import type { AddListenerOverloads, TypedRemoveListener } from '../types'
+import type {
+  AbortSignalWithReason,
+  AddListenerOverloads,
+  TypedRemoveListener,
+} from '../types'
+import { listenerCancelled, listenerCompleted } from '../exceptions'
 
 const middlewareApi = {
   getState: expect.any(Function),
@@ -536,6 +541,36 @@ describe('createListenerMiddleware', () => {
         ])
       }
     )
+
+    test('listenerApi.signal has correct reason when listener is cancelled or completes', async () => {
+      const notifyDeferred = createAction<Deferred<string>>('notify-deferred')
+
+      startListening({
+        actionCreator: notifyDeferred,
+        async effect({ payload }, { signal, cancelActiveListeners, delay }) {
+          signal.addEventListener(
+            'abort',
+            () => {
+              payload.resolve((signal as AbortSignalWithReason<string>).reason)
+            },
+            { once: true }
+          )
+
+          cancelActiveListeners()
+          delay(10)
+        },
+      })
+
+      const deferredCancelledSignalReason = store.dispatch(
+        notifyDeferred(deferred<string>())
+      ).payload
+      const deferredCompletedSignalReason = store.dispatch(
+        notifyDeferred(deferred<string>())
+      ).payload
+
+      expect(await deferredCancelledSignalReason).toBe(listenerCancelled)
+      expect(await deferredCompletedSignalReason).toBe(listenerCompleted)
+    })
 
     test('"can unsubscribe via middleware api', () => {
       const effect = jest.fn(

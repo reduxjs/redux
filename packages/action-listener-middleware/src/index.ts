@@ -29,8 +29,18 @@ import type {
   TypedRemoveListener,
   TypedStopListening,
 } from './types'
-import { assertFunction, catchRejection } from './utils'
-import { TaskAbortError } from './exceptions'
+import {
+  abortControllerWithReason,
+  assertFunction,
+  catchRejection,
+} from './utils'
+import {
+  listenerCancelled,
+  listenerCompleted,
+  TaskAbortError,
+  taskCancelled,
+  taskCompleted,
+} from './exceptions'
 import {
   runTask,
   promisifyAbortSignal,
@@ -75,21 +85,24 @@ const createFork = (parentAbortSignal: AbortSignal) => {
     assertFunction(taskExecutor, 'taskExecutor')
     const childAbortController = new AbortController()
     const cancel = () => {
-      childAbortController.abort()
+      abortControllerWithReason(childAbortController, taskCancelled)
     }
 
-    const result = runTask<T>(async (): Promise<T> => {
-      validateActive(parentAbortSignal)
-      validateActive(childAbortController.signal)
-      const result = (await taskExecutor({
-        pause: createPause(childAbortController.signal),
-        delay: createDelay(childAbortController.signal),
-        signal: childAbortController.signal,
-      })) as T
-      validateActive(parentAbortSignal)
-      validateActive(childAbortController.signal)
-      return result
-    }, cancel)
+    const result = runTask<T>(
+      async (): Promise<T> => {
+        validateActive(parentAbortSignal)
+        validateActive(childAbortController.signal)
+        const result = (await taskExecutor({
+          pause: createPause(childAbortController.signal),
+          delay: createDelay(childAbortController.signal),
+          signal: childAbortController.signal,
+        })) as T
+        validateActive(parentAbortSignal)
+        validateActive(childAbortController.signal)
+        return result
+      },
+      () => abortControllerWithReason(childAbortController, taskCompleted)
+    )
 
     return {
       result,
@@ -211,7 +224,7 @@ const createClearListenerMiddleware = (
   return () => {
     listenerMap.forEach((entry) => {
       entry.pending.forEach((controller) => {
-        controller.abort()
+        abortControllerWithReason(controller, listenerCancelled)
       })
     })
 
@@ -363,7 +376,7 @@ export function createListenerMiddleware<
             cancelActiveListeners: () => {
               entry.pending.forEach((controller, _, set) => {
                 if (controller !== internalTaskController) {
-                  controller.abort()
+                  abortControllerWithReason(controller, listenerCancelled)
                   set.delete(controller)
                 }
               })
@@ -378,7 +391,7 @@ export function createListenerMiddleware<
         })
       }
     } finally {
-      internalTaskController.abort() // Notify that the task has completed
+      abortControllerWithReason(internalTaskController, listenerCompleted) // Notify that the task has completed
       entry.pending.delete(internalTaskController)
     }
   }

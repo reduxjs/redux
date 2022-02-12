@@ -4,6 +4,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ForkedTaskExecutor, TaskResult } from '../types'
 import { createListenerMiddleware, TaskAbortError } from '../index'
+import { listenerCancelled, taskCancelled } from '../exceptions'
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -122,7 +123,9 @@ describe('fork', () => {
     store.dispatch(increment())
     store.dispatch(increment())
 
-    expect(await deferredForkedTaskError).toEqual(new TaskAbortError())
+    expect(await deferredForkedTaskError).toEqual(
+      new TaskAbortError(listenerCancelled)
+    )
   })
 
   it('synchronously throws TypeError error if the provided executor is not a function', () => {
@@ -193,7 +196,10 @@ describe('fork', () => {
       desc: 'sync exec - sync cancel',
       executor: () => 42,
       cancelAfterMs: -1,
-      expected: { status: 'cancelled', error: new TaskAbortError() },
+      expected: {
+        status: 'cancelled',
+        error: new TaskAbortError(taskCancelled),
+      },
     },
     {
       desc: 'sync exec - async cancel',
@@ -208,7 +214,10 @@ describe('fork', () => {
         throw new Error('2020')
       },
       cancelAfterMs: 10,
-      expected: { status: 'cancelled', error: new TaskAbortError() },
+      expected: {
+        status: 'cancelled',
+        error: new TaskAbortError(taskCancelled),
+      },
     },
     {
       desc: 'async exec - success',
@@ -300,7 +309,7 @@ describe('fork', () => {
 
       expect(await deferredResult).toEqual({
         status: 'cancelled',
-        error: new TaskAbortError(),
+        error: new TaskAbortError(taskCancelled),
       })
     })
 
@@ -357,12 +366,12 @@ describe('fork', () => {
       actionCreator: increment,
       effect: async (_, listenerApi) => {
         const forkedTask = listenerApi.fork(async (forkApi) => {
-          await forkApi.pause(delay(30))
+          await forkApi.pause(delay(1_000))
 
           return 4
         })
 
-        await listenerApi.delay(10)
+        await Promise.resolve()
         forkedTask.cancel()
         deferredResult.resolve(await forkedTask.result)
       },
@@ -372,7 +381,7 @@ describe('fork', () => {
 
     expect(await deferredResult).toEqual({
       status: 'cancelled',
-      error: new TaskAbortError(),
+      error: new TaskAbortError(taskCancelled),
     })
   })
 
@@ -396,7 +405,7 @@ describe('fork', () => {
 
     expect(await deferredResult).toEqual({
       status: 'cancelled',
-      error: new TaskAbortError(),
+      error: new TaskAbortError(listenerCancelled),
     })
   })
 })

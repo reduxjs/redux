@@ -10,6 +10,12 @@ import type {
 import type { TaskAbortError } from './exceptions'
 
 /**
+ * @internal
+ * At the time of writing `lib.dom.ts` does not provide `abortSignal.reason`.
+ */
+export type AbortSignalWithReason<T> = AbortSignal & { reason?: T }
+
+/**
  * Types copied from RTK
  */
 
