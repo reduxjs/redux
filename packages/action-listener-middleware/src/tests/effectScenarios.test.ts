@@ -7,7 +7,7 @@ import {
 
 import type { AnyAction, PayloadAction, Action } from '@reduxjs/toolkit'
 
-import { createActionListenerMiddleware, TaskAbortError } from '../index'
+import { createListenerMiddleware, TaskAbortError } from '../index'
 
 import type { TypedAddListener } from '../index'
 
@@ -35,13 +35,13 @@ describe('Saga-style Effects Scenarios', () => {
   const { increment, decrement, incrementByAmount } = counterSlice.actions
 
   let { reducer } = counterSlice
-  let middleware: ReturnType<typeof createActionListenerMiddleware>
+  let listenerMiddleware = createListenerMiddleware<CounterState>()
+  let { middleware, startListening, stopListening } = listenerMiddleware
 
   let store = configureStore({
     reducer,
-    middleware: (gDM) => gDM().prepend(createActionListenerMiddleware()),
+    middleware: (gDM) => gDM().prepend(middleware),
   })
-  // let middleware: ActionListenerMiddleware<CounterState> //: ReturnType<typeof createActionListenerMiddleware>
 
   const testAction1 = createAction<string>('testAction1')
   type TestAction1 = ReturnType<typeof testAction1>
@@ -51,8 +51,6 @@ describe('Saga-style Effects Scenarios', () => {
   type TestAction3 = ReturnType<typeof testAction3>
 
   type RootState = ReturnType<typeof store.getState>
-
-  let addListener: TypedAddListener<RootState>
 
   function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -64,8 +62,9 @@ describe('Saga-style Effects Scenarios', () => {
   })
 
   beforeEach(() => {
-    middleware = createActionListenerMiddleware()
-    addListener = middleware.addListener as TypedAddListener<RootState>
+    listenerMiddleware = createListenerMiddleware<CounterState>()
+    middleware = listenerMiddleware.middleware
+    startListening = listenerMiddleware.startListening
     store = configureStore({
       reducer,
       middleware: (gDM) => gDM().prepend(middleware),
@@ -79,9 +78,9 @@ describe('Saga-style Effects Scenarios', () => {
     let listenerCalls = 0
     let workPerformed = 0
 
-    addListener({
+    startListening({
       actionCreator: increment,
-      listener: (action, listenerApi) => {
+      effect: (action, listenerApi) => {
         listenerCalls++
 
         // Stop listening until further notice
@@ -123,9 +122,9 @@ describe('Saga-style Effects Scenarios', () => {
     let listenerCalls = 0
     let workPerformed = 0
 
-    addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (action, listenerApi) => {
+      effect: async (action, listenerApi) => {
         listenerCalls++
 
         // Cancel any in-progress instances of this listener
@@ -165,9 +164,9 @@ describe('Saga-style Effects Scenarios', () => {
     // NOTE: This is already the default behavior - nothing special here!
 
     let listenerCalls = 0
-    addListener({
+    startListening({
       actionCreator: increment,
-      listener: (action, listenerApi) => {
+      effect: (action, listenerApi) => {
         listenerCalls++
       },
     })
@@ -186,9 +185,9 @@ describe('Saga-style Effects Scenarios', () => {
     let listenerCalls = 0
     let workPerformed = 0
 
-    addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (action, listenerApi) => {
+      effect: async (action, listenerApi) => {
         listenerCalls++
 
         // Stop listening for this action
@@ -245,9 +244,9 @@ describe('Saga-style Effects Scenarios', () => {
 
     let childResult = 0
 
-    addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (_, listenerApi) => {
+      effect: async (_, listenerApi) => {
         const childOutput = 42
         // Spawn a child job and start it immediately
         const result = await listenerApi.fork(async () => {
@@ -278,9 +277,9 @@ describe('Saga-style Effects Scenarios', () => {
     let childResult = 0
     let listenerCompleted = false
 
-    addListener({
+    startListening({
       actionCreator: increment,
-      listener: async (action, listenerApi) => {
+      effect: async (action, listenerApi) => {
         // Spawn a child job and start it immediately
         const forkedTask = listenerApi.fork(async () => {
           // Artificially wait a bit inside the child
@@ -315,9 +314,9 @@ describe('Saga-style Effects Scenarios', () => {
     let canceledAndCaught = false
     let canceledCheck = false
 
-    addListener({
+    startListening({
       matcher: isAnyOf(increment, decrement, incrementByAmount),
-      listener: async (action, listenerApi) => {
+      effect: async (action, listenerApi) => {
         if (increment.match(action)) {
           // Have this branch wait around to be canceled by the other
           try {

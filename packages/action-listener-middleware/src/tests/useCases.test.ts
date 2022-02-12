@@ -7,7 +7,7 @@ import {
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import { createActionListenerMiddleware } from '../index'
+import { createListenerMiddleware } from '../index'
 
 import type { TypedAddListener } from '../index'
 import { TaskAbortError } from '../exceptions'
@@ -35,11 +35,12 @@ const counterSlice = createSlice({
 const { increment, decrement, incrementByAmount } = counterSlice.actions
 
 describe('Saga-style Effects Scenarios', () => {
-  let middleware: ReturnType<typeof createActionListenerMiddleware>
+  let listenerMiddleware = createListenerMiddleware<CounterState>()
+  let { middleware, startListening, stopListening } = listenerMiddleware
 
   let store = configureStore({
     reducer: counterSlice.reducer,
-    middleware: (gDM) => gDM().prepend(createActionListenerMiddleware()),
+    middleware: (gDM) => gDM().prepend(middleware),
   })
 
   const testAction1 = createAction<string>('testAction1')
@@ -51,15 +52,14 @@ describe('Saga-style Effects Scenarios', () => {
 
   type RootState = ReturnType<typeof store.getState>
 
-  let addListener: TypedAddListener<RootState>
-
   function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   beforeEach(() => {
-    middleware = createActionListenerMiddleware()
-    addListener = middleware.addListener as TypedAddListener<RootState>
+    listenerMiddleware = createListenerMiddleware<CounterState>()
+    middleware = listenerMiddleware.middleware
+    startListening = listenerMiddleware.startListening
     store = configureStore({
       reducer: counterSlice.reducer,
       middleware: (gDM) => gDM().prepend(middleware),
@@ -113,9 +113,9 @@ describe('Saga-style Effects Scenarios', () => {
     let pollingTaskStarted = false
     let pollingTaskCanceled = false
 
-    addListener({
+    startListening({
       actionCreator: eventPollingStarted,
-      listener: async (action, listenerApi) => {
+      effect: async (action, listenerApi) => {
         listenerApi.unsubscribe()
 
         // Start a child job that will infinitely loop receiving messages

@@ -24,7 +24,7 @@ export interface TypedActionCreator<Type extends string> {
   match: MatchFunction<any>
 }
 
-export type AnyActionListenerPredicate<State> = (
+export type AnyListenerPredicate<State> = (
   action: AnyAction,
   currentState: State,
   originalState: State
@@ -37,14 +37,8 @@ export type ListenerPredicate<Action extends AnyAction, State> = (
 ) => action is Action
 
 export interface ConditionFunction<State> {
-  (
-    predicate: AnyActionListenerPredicate<State>,
-    timeout?: number
-  ): Promise<boolean>
-  (
-    predicate: AnyActionListenerPredicate<State>,
-    timeout?: number
-  ): Promise<boolean>
+  (predicate: AnyListenerPredicate<State>, timeout?: number): Promise<boolean>
+  (predicate: AnyListenerPredicate<State>, timeout?: number): Promise<boolean>
   (predicate: () => boolean, timeout?: number): Promise<boolean>
 }
 
@@ -116,8 +110,11 @@ export interface ForkedTask<T> {
 /**
  * @alpha
  */
-export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
-  extends MiddlewareAPI<D, S> {
+export interface ListenerEffectAPI<
+  S,
+  D extends Dispatch<AnyAction>,
+  ExtraArgument = unknown
+> extends MiddlewareAPI<D, S> {
   /**
    * Returns the store state as it existed when the action was originally dispatched, _before_ the reducers ran.
    *
@@ -128,7 +125,7 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
    * @example
    *
    * ```ts
-   * middleware.addListener({
+   * middleware.startListening({
    *  predicate: () => true,
    *  async listener(_, { getOriginalState }) {
    *    getOriginalState(); // sync: OK!
@@ -171,24 +168,24 @@ export interface ActionListenerMiddlewareAPI<S, D extends Dispatch<AnyAction>>
    */
   pause<M>(promise: Promise<M>): Promise<M>
   // TODO Figure out how to pass this through the other types correctly
-  extra: unknown
+  extra: ExtraArgument
 }
 
 /**
  * @alpha
  */
-export type ActionListener<
+export type ListenerEffect<
   A extends AnyAction,
   S,
-  D extends Dispatch<AnyAction>
-> = (action: A, api: ActionListenerMiddlewareAPI<S, D>) => void | Promise<void>
+  D extends Dispatch<AnyAction>,
+  ExtraArgument = unknown
+> = (
+  action: A,
+  api: ListenerEffectAPI<S, D, ExtraArgument>
+) => void | Promise<void>
 
 export interface ListenerErrorHandler {
   (error: unknown): void
-}
-
-export interface ActionListenerOptions {
-  /** TODO Empty after removing `when` - will leave here for now */
 }
 
 export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
@@ -199,7 +196,7 @@ export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
   onError?: ListenerErrorHandler
 }
 
-export type ActionListenerMiddleware<
+export type ListenerMiddleware<
   S = unknown,
   // TODO Carry through the thunk extra arg somehow?
   D extends ThunkDispatch<S, unknown, AnyAction> = ThunkDispatch<
@@ -210,13 +207,25 @@ export type ActionListenerMiddleware<
   ExtraArgument = unknown
 > = Middleware<
   {
-    (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
+    (action: Action<'listenerMiddleware/add'>): Unsubscribe
   },
   S,
   D
-> & {
-  addListener: AddListenerOverloads<Unsubscribe, S, D>
-  removeListener: RemoveListenerOverloads<S, D>
+>
+
+export interface ListenerMiddlewareInstance<
+  S = unknown,
+  // TODO Carry through the thunk extra arg somehow?
+  D extends ThunkDispatch<S, unknown, AnyAction> = ThunkDispatch<
+    S,
+    unknown,
+    AnyAction
+  >,
+  ExtraArgument = unknown
+> {
+  middleware: ListenerMiddleware<S, D, ExtraArgument>
+  startListening: AddListenerOverloads<Unsubscribe, S, D, ExtraArgument>
+  stopListening: RemoveListenerOverloads<S, D>
   /**
    * Unsubscribes all listeners, cancels running listeners and tasks.
    */
@@ -229,27 +238,27 @@ export type ActionListenerMiddleware<
 
 export type TakePatternOutputWithoutTimeout<
   State,
-  Predicate extends AnyActionListenerPredicate<State>
+  Predicate extends AnyListenerPredicate<State>
 > = Predicate extends MatchFunction<infer Action>
   ? Promise<[Action, State, State]>
   : Promise<[AnyAction, State, State]>
 
 export type TakePatternOutputWithTimeout<
   State,
-  Predicate extends AnyActionListenerPredicate<State>
+  Predicate extends AnyListenerPredicate<State>
 > = Predicate extends MatchFunction<infer Action>
   ? Promise<[Action, State, State] | null>
   : Promise<[AnyAction, State, State] | null>
 
 export interface TakePattern<State> {
-  <Predicate extends AnyActionListenerPredicate<State>>(
+  <Predicate extends AnyListenerPredicate<State>>(
     predicate: Predicate
   ): TakePatternOutputWithoutTimeout<State, Predicate>
-  <Predicate extends AnyActionListenerPredicate<State>>(
+  <Predicate extends AnyListenerPredicate<State>>(
     predicate: Predicate,
     timeout: number
   ): TakePatternOutputWithTimeout<State, Predicate>
-  <Predicate extends AnyActionListenerPredicate<State>>(
+  <Predicate extends AnyListenerPredicate<State>>(
     predicate: Predicate,
     timeout?: number | undefined
   ): Promise<[AnyAction, State, State] | null>
@@ -261,62 +270,58 @@ export interface TakePattern<State> {
 export interface AddListenerOverloads<
   Return,
   S = unknown,
-  D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>
+  D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>,
+  ExtraArgument = unknown
 > {
   /** Accepts a "listener predicate" that is also a TS type predicate for the action*/
-  <MA extends AnyAction, LP extends ListenerPredicate<MA, S>>(
-    options: {
-      actionCreator?: never
-      type?: never
-      matcher?: never
-      predicate: LP
-      listener: ActionListener<ListenerPredicateGuardedActionType<LP>, S, D>
-    } & ActionListenerOptions
-  ): Return
+  <MA extends AnyAction, LP extends ListenerPredicate<MA, S>>(options: {
+    actionCreator?: never
+    type?: never
+    matcher?: never
+    predicate: LP
+    effect: ListenerEffect<
+      ListenerPredicateGuardedActionType<LP>,
+      S,
+      D,
+      ExtraArgument
+    >
+  }): Return
 
   /** Accepts an RTK action creator, like `incrementByAmount` */
-  <C extends TypedActionCreator<any>>(
-    options: {
-      actionCreator: C
-      type?: never
-      matcher?: never
-      predicate?: never
-      listener: ActionListener<ReturnType<C>, S, D>
-    } & ActionListenerOptions
-  ): Return
+  <C extends TypedActionCreator<any>>(options: {
+    actionCreator: C
+    type?: never
+    matcher?: never
+    predicate?: never
+    effect: ListenerEffect<ReturnType<C>, S, D, ExtraArgument>
+  }): Return
 
   /** Accepts a specific action type string */
-  <T extends string>(
-    options: {
-      actionCreator?: never
-      type: T
-      matcher?: never
-      predicate?: never
-      listener: ActionListener<Action<T>, S, D>
-    } & ActionListenerOptions
-  ): Return
+  <T extends string>(options: {
+    actionCreator?: never
+    type: T
+    matcher?: never
+    predicate?: never
+    effect: ListenerEffect<Action<T>, S, D, ExtraArgument>
+  }): Return
 
   /** Accepts an RTK matcher function, such as `incrementByAmount.match` */
-  <MA extends AnyAction, M extends MatchFunction<MA>>(
-    options: {
-      actionCreator?: never
-      type?: never
-      matcher: M
-      predicate?: never
-      listener: ActionListener<GuardedType<M>, S, D>
-    } & ActionListenerOptions
-  ): Return
+  <MA extends AnyAction, M extends MatchFunction<MA>>(options: {
+    actionCreator?: never
+    type?: never
+    matcher: M
+    predicate?: never
+    effect: ListenerEffect<GuardedType<M>, S, D, ExtraArgument>
+  }): Return
 
   /** Accepts a "listener predicate" that just returns a boolean, no type assertion */
-  <LP extends AnyActionListenerPredicate<S>>(
-    options: {
-      actionCreator?: never
-      type?: never
-      matcher?: never
-      predicate: LP
-      listener: ActionListener<AnyAction, S, D>
-    } & ActionListenerOptions
-  ): Return
+  <LP extends AnyListenerPredicate<S>>(options: {
+    actionCreator?: never
+    type?: never
+    matcher?: never
+    predicate: LP
+    effect: ListenerEffect<AnyAction, S, D, ExtraArgument>
+  }): Return
 }
 
 export type RemoveListenerOverloads<
@@ -329,39 +334,41 @@ export interface RemoveListenerAction<
   S,
   D extends Dispatch<AnyAction>
 > {
-  type: 'actionListenerMiddleware/remove'
+  type: 'listenerMiddleware/remove'
   payload: {
     type: string
-    listener: ActionListener<A, S, D>
+    listener: ListenerEffect<A, S, D>
   }
 }
 
 /** A "pre-typed" version of `addListenerAction`, so the listener args are well-typed */
-export type TypedAddListenerAction<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
-  Payload = ListenerEntry<S, D>,
-  T extends string = 'actionListenerMiddleware/add'
-> = BaseActionCreator<Payload, T> &
-  AddListenerOverloads<PayloadAction<Payload, T>, S, D>
-
-/** A "pre-typed" version of `removeListenerAction`, so the listener args are well-typed */
-export type TypedRemoveListenerAction<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
-  Payload = ListenerEntry<S, D>,
-  T extends string = 'actionListenerMiddleware/remove'
-> = BaseActionCreator<Payload, T> &
-  AddListenerOverloads<PayloadAction<Payload, T>, S, D>
-
-/** A "pre-typed" version of `middleware.addListener`, so the listener args are well-typed */
 export type TypedAddListener<
   S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
-> = AddListenerOverloads<Unsubscribe, S, D>
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  ExtraArgument = unknown,
+  Payload = ListenerEntry<S, D>,
+  T extends string = 'listenerMiddleware/add'
+> = BaseActionCreator<Payload, T> &
+  AddListenerOverloads<PayloadAction<Payload, T>, S, D, ExtraArgument>
 
-/** A "pre-typed" version of `middleware.removeListener`, so the listener args are well-typed */
+/** A "pre-typed" version of `removeListenerAction`, so the listener args are well-typed */
 export type TypedRemoveListener<
+  S,
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  Payload = ListenerEntry<S, D>,
+  T extends string = 'listenerMiddleware/remove'
+> = BaseActionCreator<Payload, T> &
+  AddListenerOverloads<PayloadAction<Payload, T>, S, D>
+
+/** A "pre-typed" version of `middleware.startListening`, so the listener args are well-typed */
+export type TypedStartListening<
+  S,
+  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  ExtraArgument = unknown
+> = AddListenerOverloads<Unsubscribe, S, D, ExtraArgument>
+
+/** A "pre-typed" version of `middleware.stopListening`, so the listener args are well-typed */
+export type TypedStopListening<
   S,
   D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
 > = RemoveListenerOverloads<S, D>
@@ -382,7 +389,7 @@ export type ListenerEntry<
   D extends Dispatch<AnyAction> = Dispatch<AnyAction>
 > = {
   id: string
-  listener: ActionListener<any, S, D>
+  effect: ListenerEffect<any, S, D>
   unsubscribe: () => void
   pending: Set<AbortController>
   type?: string
@@ -400,7 +407,7 @@ export type FallbackAddListenerOptions = {
   type?: string
   matcher?: MatchFunction<any>
   predicate?: ListenerPredicate<any, any>
-} & ActionListenerOptions & { listener: ActionListener<any, any, any> }
+} & { effect: ListenerEffect<any, any, any> }
 
 /**
  * Utility Types
@@ -429,7 +436,7 @@ export interface ListenerErrorInfo {
   /**
    * Which function has generated the exception.
    */
-  raisedBy: 'listener' | 'predicate'
+  raisedBy: 'effect' | 'predicate'
 }
 
 /**
