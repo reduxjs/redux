@@ -53,6 +53,7 @@ export type {
   ListenerEffect,
   ListenerMiddleware,
   ListenerEffectAPI,
+  ListenerMiddlewareInstance,
   CreateListenerMiddlewareOptions,
   ListenerErrorHandler,
   TypedStartListening,
