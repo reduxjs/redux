@@ -228,7 +228,7 @@ Based on that list of things that can happen, we can create a list of actions th
 - `{type: 'filters/statusFilterChanged', payload: filterValue}`
 - `{type: 'filters/colorFilterChanged', payload: {color, changeType}}`
 
-In this case, the actions primarily have a single extra piece of data apiece, so we can put that directly in the `action.payload` field. We could have split the color filter behavior into two actions, one for "added" and one for "removed", but in this case
+In this case, the actions primarily have a single extra piece of data, so we can put that directly in the `action.payload` field. We could have split the color filter behavior into two actions, one for "added" and one for "removed", but in this case
 we'll do it as one action with an extra field inside specifically to show that we can have objects as an action payload.
 
 Like the state data, **actions should contain the smallest amount of information needed to describe what happened**.
@@ -277,7 +277,7 @@ A reducer may be called with `undefined` as the state value when the application
 
 Next, let's add the logic to handle the `'todos/todoAdded'` action.
 
-We know we need to check to see the current action's type matches that specific string.
+We first need to check if the current action's type matches that specific string.
 Then, we need to return a new object containing _all_ of the state, even for the fields
 that didn't change.
 
