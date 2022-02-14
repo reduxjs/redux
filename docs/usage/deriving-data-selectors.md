@@ -305,7 +305,7 @@ const selectItems = state => state.items;
 const selectItemId = (state, itemId) => itemId;
 
 // expects an object as the second argument
-const selectOtherField (state, someObject) => someObject.someField;
+const selectOtherField = (state, someObject) => someObject.someField;
 
 const selectItemById = createSelector(
     [selectItems, selectItemId, selectOtherField],
