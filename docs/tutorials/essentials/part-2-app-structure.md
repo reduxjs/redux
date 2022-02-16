@@ -215,7 +215,7 @@ Since we know that the `counterReducer` function is coming from `features/counte
 ```js title="features/counter/counterSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
 
-export const counterSlice = createSlice({
+export const slice = createSlice({
   name: 'counter',
   initialState: {
     value: 0
@@ -237,9 +237,9 @@ export const counterSlice = createSlice({
   }
 })
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { increment, decrement, incrementByAmount } = slice.actions
 
-export default counterSlice.reducer
+export default slice.reducer
 ```
 
 Earlier, we saw that clicking the different buttons in the UI dispatched three different Redux action types:
@@ -261,16 +261,16 @@ We can see here that there are three reducer functions, and that corresponds to 
 `createSlice` automatically generates action creators with the same names as the reducer functions we wrote. We can check that by calling one of them and seeing what it returns:
 
 ```js
-console.log(counterSlice.actions.increment())
+console.log(slice.actions.increment())
 // {type: "counter/increment"}
 ```
 
 It also generates the slice reducer function that knows how to respond to all these action types:
 
 ```js
-const newState = counterSlice.reducer(
+const newState = slice.reducer(
   { value: 10 },
-  counterSlice.actions.increment()
+  slice.actions.increment()
 )
 console.log(newState)
 // {value: 11}
@@ -379,7 +379,7 @@ But, here's something _very_ important to remember:
 With that in mind, let's go back and look at the actual reducers from the counter slice.
 
 ```js title="features/counter/counterSlice.js"
-export const counterSlice = createSlice({
+export const slice = createSlice({
   name: 'counter',
   initialState: {
     value: 0
