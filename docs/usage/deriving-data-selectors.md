@@ -299,18 +299,18 @@ return result;
 Because of this, **it's important that all of the "input selectors" you provide should accept the same types of parameters**. Otherwise, the selectors will break.
 
 ```js
-const selectItems = state => state.items;
+const selectItems = state => state.items
 
 // expects a number as the second argument
-const selectItemId = (state, itemId) => itemId;
+const selectItemId = (state, itemId) => itemId
 
 // expects an object as the second argument
-const selectOtherField = (state, someObject) => someObject.someField;
+const selectOtherField = (state, someObject) => someObject.someField
 
 const selectItemById = createSelector(
-    [selectItems, selectItemId, selectOtherField],
-    (items, itemId, someField) => items[itemId]
-);
+  [selectItems, selectItemId, selectOtherField],
+  (items, itemId, someField) => items[itemId]
+)
 ```
 
 In this example, `selectItemId` expects that its second argument will be some simple value, while `selectOtherField` expects that the second argument is an object. If you call `selectItemById(state, 42)`, `selectOtherField` will break because it's trying to access `42.someField`.
