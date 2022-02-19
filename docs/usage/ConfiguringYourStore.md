@@ -201,7 +201,7 @@ This also makes our `createStore` function easier to reason about - each step is
 
 Another common feature which you may wish to add to your app is the `redux-devtools-extension` integration.
 
-The extension is a suite of tools which give you absolute control over your Redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/zalmoxisus/redux-devtools-extension)
+The extension is a suite of tools which give you absolute control over your Redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/reduxjs/redux-devtools/tree/main/extension)
 
 There are several ways to integrate the extension, but we will use the most convenient option.
 
