@@ -550,7 +550,7 @@ Once that's installed, open up the browser's DevTools window. You should now see
 
 Once the extension is installed, we need to configure the store so that the DevTools can see what's happening inside. The DevTools require a specific store enhancer to be added to make that possible.
 
-The [Redux DevTools Extension docs](https://github.com/zalmoxisus/redux-devtools-extension) have some instructions on how to set up the store, but the steps listed are a bit complicated. However, there's an NPM package called `redux-devtools-extension` that takes care of the complicated part. That package exports a specialized `composeWithDevTools` function that we can use instead of the original Redux `compose` function.
+The [Redux DevTools Extension docs](https://github.com/reduxjs/redux-devtools/tree/main/extension) have some instructions on how to set up the store, but the steps listed are a bit complicated. However, there's an NPM package called `redux-devtools-extension` that takes care of the complicated part. That package exports a specialized `composeWithDevTools` function that we can use instead of the original Redux `compose` function.
 
 Here's how that looks:
 

@@ -504,13 +504,13 @@ However, try to find an appropriate balance of granularity. If a single componen
 
 ### Use the Redux DevTools Extension for Debugging
 
-**Configure your Redux store to enable [debugging with the Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)**. It allows you to view:
+**Configure your Redux store to enable [debugging with the Redux DevTools Extension](https://github.com/reduxjs/redux-devtools/tree/main/extension)**. It allows you to view:
 
 - The history log of dispatched actions
 - The contents of each action
 - The final state after an action was dispatched
 - The diff in the state after an action
-- The [function stack trace showing the code where the action was actually dispatched](https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Features/Trace.md)
+- The [function stack trace showing the code where the action was actually dispatched](https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/Features/Trace.md)
 
 In addition, the DevTools allows you to do "time-travel debugging", stepping back and forth in the action history to see the entire app state and UI at different points in time.
 
