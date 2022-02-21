@@ -12,7 +12,6 @@ module.exports = {
       'tutorials/tutorials-index',
       'tutorials/quick-start',
       'tutorials/typescript-quick-start',
-      'tutorials/react-native-quick-start',
       {
         type: 'category',
         label: 'Redux Essentials',
@@ -52,7 +51,8 @@ module.exports = {
           'usage/configuring-your-store',
           'usage/code-splitting',
           'usage/server-rendering',
-          'usage/isolating-redux-sub-apps'
+          'usage/isolating-redux-sub-apps',
+          'usage/application-setup'
         ]
       },
       {
