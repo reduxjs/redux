@@ -12,6 +12,7 @@ module.exports = {
       'tutorials/tutorials-index',
       'tutorials/quick-start',
       'tutorials/typescript-quick-start',
+      'tutorials/react-native-quick-start',
       {
         type: 'category',
         label: 'Redux Essentials',
