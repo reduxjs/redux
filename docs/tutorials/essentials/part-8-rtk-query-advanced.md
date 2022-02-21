@@ -527,12 +527,13 @@ export const UserPage = ({ match }) => {
 
   // highlight-start
   const selectPostsForUser = useMemo(() => {
+    const emptyArray = []
     // Return a unique selector instance for this page so that
     // the filtered results are correctly memoized
     return createSelector(
       res => res.data,
       (res, userId) => userId,
-      (data, userId) => data.filter(post => post.user === userId)
+      (data, userId) => data?.filter(post => post.user === userId) ?? emptyArray
     )
   }, [])
   // highlight-end
