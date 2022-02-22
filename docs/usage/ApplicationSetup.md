@@ -8,7 +8,7 @@ sidebar_label: Application Setup
 
 ## Introduction
 
-Welcome to the Application Setup section! **This page focus on showing how to set up Redux in different environments like Create React App/Vite, React Native, and Next.**
+Welcome to the Application Setup section! **This page will focus on showing you how to set up Redux in different environments like Create React App/Vite, React Native, and Next.**
 
 ## React Native
 This section will teach you how to setup a React Native project with Redux Toolkit. If you want to start a React Native project with the Redux Toolkit already setup in your terminal, run the following command:
@@ -17,14 +17,14 @@ This section will teach you how to setup a React Native project with Redux Toolk
 ```
 You can also follow this link to view the template on [**GitHub**](https://github.com/betomoedano/react-native-template-redux-toolkit). If you want to use Typescript checkout this [**Template**](https://github.com/rahsheen/react-native-template-redux-typescript).
 ### File Structure
-Typically in React Native projects, we have an `src` folder that contains the code for our application such as components, screens, etc. and at the root of the project, we have the `App.js` that usually is the initial file to the app.
+Typically in React Native projects, we have an `src` folder that contains the code for our application such as components, screens, etc. And at the root of the project, we have the `App.js` that usually is the initial file to the app.
 
 #### Where do I put the slices?
 Although Redux doesn't care about your file structure we recommend putting all your slices under a folder called `features` the idea is that you pick the concept or multiple concepts of your app and create separate folders per feature. 
 For example, if we have a counter slice our file structure would look like this: `src/features/counter/counterSlice.js`
 
 #### Where do I put the store? 
-We recommend keeping the `store.js` file inside a folder named `app` under `src`. If you are using Typescript and have a predefined version of the [Redux hooks](https://react-redux.js.org/api/hooks) we recommend putting those hooks inside the `app` folder as well.
+We recommend keeping the `store.js` file inside a folder named `app` under `src`. If you are using Typescript and have a predefined version of the [Redux hooks](https://react-redux.js.org/api/hooks) we recommend putting these hooks inside the `app` folder as well.
 
 :::tip
 See [Redux FAQ: Code Structure](https://redux.js.org/faq/code-structure) for extended details on file structure.
@@ -51,7 +51,7 @@ export default function App() {
 
 ### Additional considerations when initializing the app
 In some cases, you could need access to the Redux store in the `<App>` component but since we are adding the Provider inside the `<App>` we can not access the store within the `<App>`. 
-In the example below we show how to solve this by creating an `<AppWrapper>` which contains the `<Provider>` and the `<App>`
+In the example below we show how to solve this by creating an `<AppWrapper>` which contains the `<Provider>` and the `<App>`.
 
 ```js title="App.js"
 import { View, Text } from "react-native";
