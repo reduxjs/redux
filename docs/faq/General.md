@@ -48,7 +48,7 @@ Similarly, Dan Abramov, one of the creators of Redux, says:
 
 > I would like to amend this: don't use Redux until you have problems with vanilla React.
 
-**Redux is most useful when in cases when**:
+**Redux is most useful in cases when**:
 
 - You have large amounts of application state that are needed in many places in the app
 - The app state is updated frequently
