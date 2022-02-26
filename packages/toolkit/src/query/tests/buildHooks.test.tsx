@@ -963,15 +963,15 @@ describe('hooks tests', () => {
         const unwrappedErrorResult =
           screen.getByTestId('unwrappedError')?.textContent
 
-        errorResult &&
-          unwrappedErrorResult &&
+        if (errorResult && unwrappedErrorResult) {
           expect(JSON.parse(errorResult)).toMatchObject({
             status: 500,
             data: null,
-          }) &&
+          })
           expect(JSON.parse(unwrappedErrorResult)).toMatchObject(
             JSON.parse(errorResult)
           )
+        }
       })
 
       expect(screen.getByTestId('result').textContent).toBe('')
@@ -1015,14 +1015,14 @@ describe('hooks tests', () => {
         const unwrappedDataResult =
           screen.getByTestId('unwrappedResult')?.textContent
 
-        dataResult &&
-          unwrappedDataResult &&
+        if (dataResult && unwrappedDataResult) {
           expect(JSON.parse(dataResult)).toMatchObject({
             name: 'Timmy',
-          }) &&
+          })
           expect(JSON.parse(unwrappedDataResult)).toMatchObject(
             JSON.parse(dataResult)
           )
+        }
       })
 
       expect(screen.getByTestId('error').textContent).toBe('')

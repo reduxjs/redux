@@ -1,12 +1,7 @@
-import type {
-  Middleware,
-  Dispatch,
-  AnyAction,
-  Action,
-  ThunkDispatch,
-  MiddlewareAPI,
-} from '@reduxjs/toolkit'
-import { createAction, nanoid } from '@reduxjs/toolkit'
+import type { Dispatch, AnyAction, MiddlewareAPI } from 'redux'
+import type { ThunkDispatch } from 'redux-thunk'
+import { createAction } from '../createAction'
+import { nanoid } from '../nanoid'
 
 import type {
   ListenerMiddleware,
@@ -14,8 +9,6 @@ import type {
   AddListenerOverloads,
   AnyListenerPredicate,
   CreateListenerMiddlewareOptions,
-  TypedActionCreator,
-  TypedStartListening,
   TypedAddListener,
   TypedCreateListenerEntry,
   FallbackAddListenerOptions,
@@ -27,7 +20,6 @@ import type {
   ForkedTaskExecutor,
   ForkedTask,
   TypedRemoveListener,
-  TypedStopListening,
   TaskResult,
 } from './types'
 import {

@@ -150,3 +150,34 @@ export type {
 export { nanoid } from './nanoid'
 
 export { default as isPlainObject } from './isPlainObject'
+
+export type {
+  ListenerEffect,
+  ListenerMiddleware,
+  ListenerEffectAPI,
+  ListenerMiddlewareInstance,
+  CreateListenerMiddlewareOptions,
+  ListenerErrorHandler,
+  TypedStartListening,
+  TypedAddListener,
+  TypedStopListening,
+  TypedRemoveListener,
+  Unsubscribe,
+  ForkedTaskExecutor,
+  ForkedTask,
+  ForkedTaskAPI,
+  AsyncTaskExecutor,
+  SyncTaskExecutor,
+  TaskCancelled,
+  TaskRejected,
+  TaskResolved,
+  TaskResult,
+} from './listenerMiddleware/index'
+
+export {
+  createListenerMiddleware,
+  addListener,
+  removeListener,
+  removeAllListeners,
+  TaskAbortError,
+} from './listenerMiddleware/index'
