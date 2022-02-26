@@ -1,6 +1,6 @@
 import { TaskAbortError } from './exceptions'
 import type { AbortSignalWithReason, TaskResult } from './types'
-import { catchRejection } from './utils'
+import { addAbortSignalListener, catchRejection } from './utils'
 
 /**
  * Synchronously raises {@link TaskAbortError} if the task tied to the input `signal` has been cancelled.
@@ -29,7 +29,7 @@ export const promisifyAbortSignal = (
       if (signal.aborted) {
         notifyRejection()
       } else {
-        signal.addEventListener('abort', notifyRejection, { once: true })
+        addAbortSignalListener(signal, notifyRejection)
       }
     })
   )
