@@ -1,12 +1,12 @@
+import type { PayloadAction } from '../createAction'
 import type {
-  PayloadAction,
-  Middleware,
   Dispatch,
   AnyAction,
   MiddlewareAPI,
+  Middleware,
   Action,
-  ThunkDispatch,
-} from '@reduxjs/toolkit'
+} from 'redux'
+import type { ThunkDispatch } from 'redux-thunk'
 import type { TaskAbortError } from './exceptions'
 
 /**
