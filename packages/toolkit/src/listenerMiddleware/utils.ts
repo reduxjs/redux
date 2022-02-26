@@ -23,6 +23,13 @@ export const catchRejection = <T>(
   return promise
 }
 
+export const addAbortSignalListener = (
+  abortSignal: AbortSignal,
+  callback: (evt: Event) => void
+) => {
+  abortSignal.addEventListener('abort', callback, { once: true })
+}
+
 /**
  * Calls `abortController.abort(reason)` and patches `signal.reason`.
  * if it is not supported.

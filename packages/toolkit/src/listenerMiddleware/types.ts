@@ -54,12 +54,12 @@ export type MatchFunction<T> = (v: any) => v is T
 export interface ForkedTaskAPI {
   /**
    * Returns a promise that resolves when `waitFor` resolves or
-   * rejects if the task has been cancelled or completed.
+   * rejects if the task or the parent listener has been cancelled or is completed.
    */
   pause<W>(waitFor: Promise<W>): Promise<W>
   /**
    * Returns a promise resolves after `timeoutMs` or
-   * rejects if the task has been cancelled or is completed.
+   * rejects if the task or the parent listener has been cancelled or is completed.
    * @param timeoutMs
    */
   delay(timeoutMs: number): Promise<void>

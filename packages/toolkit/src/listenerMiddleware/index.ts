@@ -21,9 +21,11 @@ import type {
   ForkedTask,
   TypedRemoveListener,
   TaskResult,
+  AbortSignalWithReason,
 } from './types'
 import {
   abortControllerWithReason,
+  addAbortSignalListener,
   assertFunction,
   catchRejection,
 } from './utils'
@@ -74,10 +76,17 @@ const INTERNAL_NIL_TOKEN = {} as const
 
 const alm = 'listenerMiddleware' as const
 
-const createFork = (parentAbortSignal: AbortSignal) => {
+const createFork = (parentAbortSignal: AbortSignalWithReason<unknown>) => {
+  const linkControllers = (controller: AbortController) =>
+    addAbortSignalListener(parentAbortSignal, () =>
+      abortControllerWithReason(controller, parentAbortSignal.reason)
+    )
+
   return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
     assertFunction(taskExecutor, 'taskExecutor')
     const childAbortController = new AbortController()
+
+    linkControllers(childAbortController)
 
     const result = runTask<T>(
       async (): Promise<T> => {

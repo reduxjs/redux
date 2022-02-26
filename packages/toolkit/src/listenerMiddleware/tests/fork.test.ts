@@ -2,9 +2,17 @@ import type { EnhancedStore } from '@reduxjs/toolkit'
 import { configureStore, createSlice, createAction } from '@reduxjs/toolkit'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { ForkedTaskExecutor, TaskResult } from '../types'
+import type {
+  AbortSignalWithReason,
+  ForkedTaskExecutor,
+  TaskResult,
+} from '../types'
 import { createListenerMiddleware, TaskAbortError } from '../index'
-import { listenerCancelled, taskCancelled } from '../exceptions'
+import {
+  listenerCancelled,
+  listenerCompleted,
+  taskCancelled,
+} from '../exceptions'
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -312,6 +320,58 @@ describe('fork', () => {
       })
     })
 
+    test('forkApi.delay rejects as soon as the parent listener is cancelled', async () => {
+      let deferredResult = deferred()
+
+      startListening({
+        actionCreator: increment,
+        effect: async (_, listenerApi) => {
+          listenerApi.cancelActiveListeners()
+          await listenerApi.fork(async (forkApi) => {
+            await forkApi
+              .delay(100)
+              .then(deferredResult.resolve, deferredResult.resolve)
+
+            return 4
+          }).result
+
+          deferredResult.resolve(new Error('unreachable'))
+        },
+      })
+
+      store.dispatch(increment())
+
+      await Promise.resolve()
+
+      store.dispatch(increment())
+      expect(await deferredResult).toEqual(
+        new TaskAbortError(listenerCancelled)
+      )
+    })
+
+    test('forkApi.signal listener is invoked as soon as the parent listener is cancelled or completed', async () => {
+      let deferredResult = deferred()
+
+      startListening({
+        actionCreator: increment,
+        async effect(_, listenerApi) {
+          const wronglyDoNotAwaitResultOfTask = listenerApi.fork(
+            async (forkApi) => {
+              forkApi.signal.addEventListener('abort', () => {
+                deferredResult.resolve(
+                  (forkApi.signal as AbortSignalWithReason<unknown>).reason
+                )
+              })
+            }
+          )
+        },
+      })
+
+      store.dispatch(increment)
+
+      expect(await deferredResult).toBe(listenerCompleted)
+    })
+
     test('fork.delay does not trigger unhandledRejections for completed or cancelled tasks', async () => {
       let deferredCompletedEvt = deferred()
       let deferredCancelledEvt = deferred()
@@ -382,6 +442,34 @@ describe('fork', () => {
       status: 'cancelled',
       error: new TaskAbortError(taskCancelled),
     })
+  })
+
+  test('forkApi.pause rejects as soon as the parent listener is cancelled', async () => {
+    let deferredResult = deferred()
+
+    startListening({
+      actionCreator: increment,
+      effect: async (_, listenerApi) => {
+        listenerApi.cancelActiveListeners()
+        const forkedTask = listenerApi.fork(async (forkApi) => {
+          await forkApi
+            .pause(delay(100))
+            .then(deferredResult.resolve, deferredResult.resolve)
+
+          return 4
+        })
+
+        await forkedTask.result
+        deferredResult.resolve(new Error('unreachable'))
+      },
+    })
+
+    store.dispatch(increment())
+
+    await Promise.resolve()
+
+    store.dispatch(increment())
+    expect(await deferredResult).toEqual(new TaskAbortError(listenerCancelled))
   })
 
   test('forkApi.pause rejects if listener is cancelled', async () => {
