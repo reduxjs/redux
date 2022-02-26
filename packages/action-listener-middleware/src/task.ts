@@ -37,8 +37,9 @@ export const promisifyAbortSignal = (
 
 /**
  * Runs a task and returns promise that resolves to {@link TaskResult}.
- *
  * Second argument is an optional `cleanUp` function that always runs after task.
+ *
+ * **Note:** `runTask` runs the executor in the next microtask.
  * @returns
  */
 export const runTask = async <T>(

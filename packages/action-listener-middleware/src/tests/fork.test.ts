@@ -1,5 +1,5 @@
 import type { EnhancedStore } from '@reduxjs/toolkit'
-import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { configureStore, createSlice, createAction } from '@reduxjs/toolkit'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ForkedTaskExecutor, TaskResult } from '../types'
@@ -99,24 +99,23 @@ describe('fork', () => {
     expect(hasRunAsyncExecutor).toBe(true)
   })
 
-  it('runs forked tasks that are cancelled if parent listener is cancelled', async () => {
+  test('forkedTask.result rejects TaskAbortError if listener is cancelled', async () => {
     const deferredForkedTaskError = deferred()
 
     startListening({
       actionCreator: increment,
-      effect: async (_, listenerApi) => {
+      async effect(_, listenerApi) {
         listenerApi.cancelActiveListeners()
-        const result = await listenerApi.fork(async () => {
-          await delay(20)
+        listenerApi
+          .fork(async () => {
+            await delay(10)
 
-          throw new Error('unreachable code')
-        }).result
-
-        if (result.status !== 'ok') {
-          deferredForkedTaskError.resolve(result.error)
-        } else {
-          deferredForkedTaskError.reject(new Error('unreachable code'))
-        }
+            throw new Error('unreachable code')
+          })
+          .result.then(
+            deferredForkedTaskError.resolve,
+            deferredForkedTaskError.resolve
+          )
       },
     })
 
@@ -386,26 +385,25 @@ describe('fork', () => {
   })
 
   test('forkApi.pause rejects if listener is cancelled', async () => {
-    let deferredResult = deferred()
-    startListening({
-      actionCreator: increment,
-      effect: async (_, listenerApi) => {
-        listenerApi.cancelActiveListeners()
-        const forkedTask = listenerApi.fork(async (forkApi) => {
-          await forkApi.pause(delay(30))
+    const incrementByInListener = createAction<number>('incrementByInListener')
 
-          return 4
-        })
-        deferredResult.resolve(await forkedTask.result)
+    startListening({
+      actionCreator: incrementByInListener,
+      async effect({ payload: amountToIncrement }, listenerApi) {
+        listenerApi.cancelActiveListeners()
+        await listenerApi.fork(async (forkApi) => {
+          await forkApi.pause(delay(10))
+          listenerApi.dispatch(incrementByAmount(amountToIncrement))
+        }).result
+        listenerApi.dispatch(incrementByAmount(2 * amountToIncrement))
       },
     })
 
-    store.dispatch(increment())
-    store.dispatch(increment())
+    store.dispatch(incrementByInListener(10))
+    store.dispatch(incrementByInListener(100))
 
-    expect(await deferredResult).toEqual({
-      status: 'cancelled',
-      error: new TaskAbortError(listenerCancelled),
-    })
+    await delay(50)
+
+    expect(store.getState().value).toEqual(300)
   })
 })

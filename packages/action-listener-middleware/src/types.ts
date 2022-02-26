@@ -105,6 +105,19 @@ export type TaskResult<Value> =
   | TaskCancelled
 
 export interface ForkedTask<T> {
+  /**
+   * A promise that resolves when the task is either completed or cancelled or rejects
+   * if parent listener execution is cancelled or completed.
+   *
+   * ### Example
+   * ```ts
+   * const result = await fork(async (forkApi) => Promise.resolve(4)).result
+   *
+   * if(result.status === 'ok') {
+   *   console.log(result.value) // logs 4
+   * }}
+   * ```
+   */
   result: Promise<TaskResult<T>>
   /**
    * Cancel task if it is in progress or not yet started,

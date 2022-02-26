@@ -709,24 +709,27 @@ describe('createListenerMiddleware', () => {
     })
 
     test('clear() cancels all running forked tasks', async () => {
-      const fork1Test = deferred()
+      const store = configureStore({
+        reducer: counterSlice.reducer,
+        middleware: (gDM) => gDM().prepend(middleware),
+      })
 
       startListening({
         actionCreator: testAction1,
-        async effect(_, { fork }) {
-          const taskResult = await fork(() => {
-            return 3
-          }).result
-          fork1Test.resolve(taskResult)
+        async effect(_, { fork, dispatch }) {
+          await fork(() => dispatch(incrementByAmount(3))).result
+          dispatch(incrementByAmount(4))
         },
       })
 
+      expect(store.getState().value).toBe(0)
       store.dispatch(testAction1('a'))
 
       clearListeners()
-      store.dispatch(testAction1('b'))
 
-      expect(await fork1Test).toHaveProperty('status', 'cancelled')
+      await Promise.resolve() // Forked tasks run on the next microtask.
+
+      expect(store.getState().value).toBe(0)
     })
   })
 

@@ -28,6 +28,7 @@ import type {
   ForkedTask,
   TypedRemoveListener,
   TypedStopListening,
+  TaskResult,
 } from './types'
 import {
   abortControllerWithReason,
@@ -85,9 +86,6 @@ const createFork = (parentAbortSignal: AbortSignal) => {
   return <T>(taskExecutor: ForkedTaskExecutor<T>): ForkedTask<T> => {
     assertFunction(taskExecutor, 'taskExecutor')
     const childAbortController = new AbortController()
-    const cancel = () => {
-      abortControllerWithReason(childAbortController, taskCancelled)
-    }
 
     const result = runTask<T>(
       async (): Promise<T> => {
@@ -98,7 +96,6 @@ const createFork = (parentAbortSignal: AbortSignal) => {
           delay: createDelay(childAbortController.signal),
           signal: childAbortController.signal,
         })) as T
-        validateActive(parentAbortSignal)
         validateActive(childAbortController.signal)
         return result
       },
@@ -106,8 +103,10 @@ const createFork = (parentAbortSignal: AbortSignal) => {
     )
 
     return {
-      result,
-      cancel,
+      result: createPause<TaskResult<T>>(parentAbortSignal)(result),
+      cancel() {
+        abortControllerWithReason(childAbortController, taskCancelled)
+      },
     }
   }
 }
