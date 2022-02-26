@@ -1,10 +1,10 @@
-import type { PayloadAction } from '../createAction'
+import type { PayloadAction, BaseActionCreator } from '../createAction'
 import type {
-  Dispatch,
+  Dispatch as ReduxDispatch,
   AnyAction,
   MiddlewareAPI,
   Middleware,
-  Action,
+  Action as ReduxAction,
 } from 'redux'
 import type { ThunkDispatch } from 'redux-thunk'
 import type { TaskAbortError } from './exceptions'
@@ -19,41 +19,38 @@ export type AbortSignalWithReason<T> = AbortSignal & { reason?: T }
  * Types copied from RTK
  */
 
-export interface BaseActionCreator<P, T extends string, M = never, E = never> {
-  type: T
-  match(action: Action<unknown>): action is PayloadAction<P, T, M, E>
-}
-
+/** @internal */
 export interface TypedActionCreator<Type extends string> {
-  (...args: any[]): Action<Type>
+  (...args: any[]): ReduxAction<Type>
   type: Type
   match: MatchFunction<any>
 }
 
+/** @internal */
 export type AnyListenerPredicate<State> = (
   action: AnyAction,
   currentState: State,
   originalState: State
 ) => boolean
 
+/** @public */
 export type ListenerPredicate<Action extends AnyAction, State> = (
   action: AnyAction,
   currentState: State,
   originalState: State
 ) => action is Action
 
+/** @public */
 export interface ConditionFunction<State> {
   (predicate: AnyListenerPredicate<State>, timeout?: number): Promise<boolean>
   (predicate: AnyListenerPredicate<State>, timeout?: number): Promise<boolean>
   (predicate: () => boolean, timeout?: number): Promise<boolean>
 }
 
+/** @internal */
 export type MatchFunction<T> = (v: any) => v is T
 
-export interface HasMatchFunction<T> {
-  match: MatchFunction<T>
-}
-
+/** @public */
 export interface ForkedTaskAPI {
   /**
    * Returns a promise that resolves when `waitFor` resolves or
@@ -74,36 +71,44 @@ export interface ForkedTaskAPI {
   signal: AbortSignal
 }
 
+/** @public */
 export interface AsyncTaskExecutor<T> {
   (forkApi: ForkedTaskAPI): Promise<T>
 }
 
+/** @public */
 export interface SyncTaskExecutor<T> {
   (forkApi: ForkedTaskAPI): T
 }
 
+/** @public */
 export type ForkedTaskExecutor<T> = AsyncTaskExecutor<T> | SyncTaskExecutor<T>
 
+/** @public */
 export type TaskResolved<T> = {
   readonly status: 'ok'
   readonly value: T
 }
 
+/** @public */
 export type TaskRejected = {
   readonly status: 'rejected'
   readonly error: unknown
 }
 
+/** @public */
 export type TaskCancelled = {
   readonly status: 'cancelled'
   readonly error: TaskAbortError
 }
 
+/** @public */
 export type TaskResult<Value> =
   | TaskResolved<Value>
   | TaskRejected
   | TaskCancelled
 
+/** @public */
 export interface ForkedTask<T> {
   /**
    * A promise that resolves when the task is either completed or cancelled or rejects
@@ -126,14 +131,12 @@ export interface ForkedTask<T> {
   cancel(): void
 }
 
-/**
- * @alpha
- */
+/** @public */
 export interface ListenerEffectAPI<
-  S,
-  D extends Dispatch<AnyAction>,
+  State,
+  Dispatch extends ReduxDispatch<AnyAction>,
   ExtraArgument = unknown
-> extends MiddlewareAPI<D, S> {
+> extends MiddlewareAPI<Dispatch, State> {
   /**
    * Returns the store state as it existed when the action was originally dispatched, _before_ the reducers ran.
    *
@@ -158,11 +161,11 @@ export interface ListenerEffectAPI<
    * })
    * ```
    */
-  getOriginalState: () => S
+  getOriginalState: () => State
   unsubscribe(): void
   subscribe(): void
-  condition: ConditionFunction<S>
-  take: TakePattern<S>
+  condition: ConditionFunction<State>
+  take: TakePattern<State>
   cancelActiveListeners: () => void
   /**
    * An abort signal whose `aborted` property is set to `true`
@@ -190,23 +193,39 @@ export interface ListenerEffectAPI<
   extra: ExtraArgument
 }
 
-/**
- * @alpha
- */
+/** @public */
 export type ListenerEffect<
-  A extends AnyAction,
-  S,
-  D extends Dispatch<AnyAction>,
+  Action extends AnyAction,
+  State,
+  Dispatch extends ReduxDispatch<AnyAction>,
   ExtraArgument = unknown
 > = (
-  action: A,
-  api: ListenerEffectAPI<S, D, ExtraArgument>
+  action: Action,
+  api: ListenerEffectAPI<State, Dispatch, ExtraArgument>
 ) => void | Promise<void>
 
-export interface ListenerErrorHandler {
-  (error: unknown): void
+/**
+ * @public
+ * Additional infos regarding the error raised.
+ */
+export interface ListenerErrorInfo {
+  /**
+   * Which function has generated the exception.
+   */
+  raisedBy: 'effect' | 'predicate'
 }
 
+/**
+ * @public
+ * Gets notified with synchronous and asynchronous errors raised by `listeners` or `predicates`.
+ * @param error The thrown error.
+ * @param errorInfo Additional information regarding the thrown error.
+ */
+export interface ListenerErrorHandler {
+  (error: unknown, errorInfo: ListenerErrorInfo): void
+}
+
+/** @public */
 export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
   extra?: ExtraArgument
   /**
@@ -215,36 +234,41 @@ export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
   onError?: ListenerErrorHandler
 }
 
+/** @public */
 export type ListenerMiddleware<
-  S = unknown,
-  // TODO Carry through the thunk extra arg somehow?
-  D extends ThunkDispatch<S, unknown, AnyAction> = ThunkDispatch<
-    S,
+  State = unknown,
+  Dispatch extends ThunkDispatch<State, unknown, AnyAction> = ThunkDispatch<
+    State,
     unknown,
     AnyAction
   >,
   ExtraArgument = unknown
 > = Middleware<
   {
-    (action: Action<'listenerMiddleware/add'>): Unsubscribe
+    (action: ReduxAction<'listenerMiddleware/add'>): Unsubscribe
   },
-  S,
-  D
+  State,
+  Dispatch
 >
 
+/** @public */
 export interface ListenerMiddlewareInstance<
-  S = unknown,
-  // TODO Carry through the thunk extra arg somehow?
-  D extends ThunkDispatch<S, unknown, AnyAction> = ThunkDispatch<
-    S,
+  State = unknown,
+  Dispatch extends ThunkDispatch<State, unknown, AnyAction> = ThunkDispatch<
+    State,
     unknown,
     AnyAction
   >,
   ExtraArgument = unknown
 > {
-  middleware: ListenerMiddleware<S, D, ExtraArgument>
-  startListening: AddListenerOverloads<Unsubscribe, S, D, ExtraArgument>
-  stopListening: RemoveListenerOverloads<S, D>
+  middleware: ListenerMiddleware<State, Dispatch, ExtraArgument>
+  startListening: AddListenerOverloads<
+    Unsubscribe,
+    State,
+    Dispatch,
+    ExtraArgument
+  >
+  stopListening: RemoveListenerOverloads<State, Dispatch>
   /**
    * Unsubscribes all listeners, cancels running listeners and tasks.
    */
@@ -255,6 +279,7 @@ export interface ListenerMiddlewareInstance<
  * API Function Overloads
  */
 
+/** @public */
 export type TakePatternOutputWithoutTimeout<
   State,
   Predicate extends AnyListenerPredicate<State>
@@ -262,6 +287,7 @@ export type TakePatternOutputWithoutTimeout<
   ? Promise<[Action, State, State]>
   : Promise<[AnyAction, State, State]>
 
+/** @public */
 export type TakePatternOutputWithTimeout<
   State,
   Predicate extends AnyListenerPredicate<State>
@@ -269,6 +295,7 @@ export type TakePatternOutputWithTimeout<
   ? Promise<[Action, State, State] | null>
   : Promise<[AnyAction, State, State] | null>
 
+/** @public */
 export interface TakePattern<State> {
   <Predicate extends AnyListenerPredicate<State>>(
     predicate: Predicate
@@ -284,24 +311,25 @@ export interface TakePattern<State> {
 }
 
 /**
+ * @public
  * The possible overloads and options for defining a listener. The return type of each function is specified as a generic arg, so the overloads can be reused for multiple different functions
  */
 export interface AddListenerOverloads<
   Return,
-  S = unknown,
-  D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>,
+  State = unknown,
+  Dispatch extends ReduxDispatch = ThunkDispatch<State, unknown, AnyAction>,
   ExtraArgument = unknown
 > {
   /** Accepts a "listener predicate" that is also a TS type predicate for the action*/
-  <MA extends AnyAction, LP extends ListenerPredicate<MA, S>>(options: {
+  <MA extends AnyAction, LP extends ListenerPredicate<MA, State>>(options: {
     actionCreator?: never
     type?: never
     matcher?: never
     predicate: LP
     effect: ListenerEffect<
       ListenerPredicateGuardedActionType<LP>,
-      S,
-      D,
+      State,
+      Dispatch,
       ExtraArgument
     >
   }): Return
@@ -312,7 +340,7 @@ export interface AddListenerOverloads<
     type?: never
     matcher?: never
     predicate?: never
-    effect: ListenerEffect<ReturnType<C>, S, D, ExtraArgument>
+    effect: ListenerEffect<ReturnType<C>, State, Dispatch, ExtraArgument>
   }): Return
 
   /** Accepts a specific action type string */
@@ -321,7 +349,7 @@ export interface AddListenerOverloads<
     type: T
     matcher?: never
     predicate?: never
-    effect: ListenerEffect<Action<T>, S, D, ExtraArgument>
+    effect: ListenerEffect<ReduxAction<T>, State, Dispatch, ExtraArgument>
   }): Return
 
   /** Accepts an RTK matcher function, such as `incrementByAmount.match` */
@@ -330,73 +358,108 @@ export interface AddListenerOverloads<
     type?: never
     matcher: M
     predicate?: never
-    effect: ListenerEffect<GuardedType<M>, S, D, ExtraArgument>
+    effect: ListenerEffect<GuardedType<M>, State, Dispatch, ExtraArgument>
   }): Return
 
   /** Accepts a "listener predicate" that just returns a boolean, no type assertion */
-  <LP extends AnyListenerPredicate<S>>(options: {
+  <LP extends AnyListenerPredicate<State>>(options: {
     actionCreator?: never
     type?: never
     matcher?: never
     predicate: LP
-    effect: ListenerEffect<AnyAction, S, D, ExtraArgument>
+    effect: ListenerEffect<AnyAction, State, Dispatch, ExtraArgument>
   }): Return
 }
 
+/** @public */
 export type RemoveListenerOverloads<
-  S = unknown,
-  D extends Dispatch = ThunkDispatch<S, unknown, AnyAction>
-> = AddListenerOverloads<boolean, S, D>
+  State = unknown,
+  Dispatch extends ReduxDispatch = ThunkDispatch<State, unknown, AnyAction>
+> = AddListenerOverloads<boolean, State, Dispatch>
 
+/** @public */
 export interface RemoveListenerAction<
-  A extends AnyAction,
-  S,
-  D extends Dispatch<AnyAction>
+  Action extends AnyAction,
+  State,
+  Dispatch extends ReduxDispatch<AnyAction>
 > {
   type: 'listenerMiddleware/remove'
   payload: {
     type: string
-    listener: ListenerEffect<A, S, D>
+    listener: ListenerEffect<Action, State, Dispatch>
   }
 }
 
-/** A "pre-typed" version of `addListenerAction`, so the listener args are well-typed */
+/**
+ * @public
+ * A "pre-typed" version of `addListenerAction`, so the listener args are well-typed */
 export type TypedAddListener<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  State,
+  Dispatch extends ReduxDispatch<AnyAction> = ThunkDispatch<
+    State,
+    unknown,
+    AnyAction
+  >,
   ExtraArgument = unknown,
-  Payload = ListenerEntry<S, D>,
+  Payload = ListenerEntry<State, Dispatch>,
   T extends string = 'listenerMiddleware/add'
 > = BaseActionCreator<Payload, T> &
-  AddListenerOverloads<PayloadAction<Payload, T>, S, D, ExtraArgument>
+  AddListenerOverloads<
+    PayloadAction<Payload, T>,
+    State,
+    Dispatch,
+    ExtraArgument
+  >
 
-/** A "pre-typed" version of `removeListenerAction`, so the listener args are well-typed */
+/**
+ * @public
+ * A "pre-typed" version of `removeListenerAction`, so the listener args are well-typed */
 export type TypedRemoveListener<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
-  Payload = ListenerEntry<S, D>,
+  State,
+  Dispatch extends ReduxDispatch<AnyAction> = ThunkDispatch<
+    State,
+    unknown,
+    AnyAction
+  >,
+  Payload = ListenerEntry<State, Dispatch>,
   T extends string = 'listenerMiddleware/remove'
 > = BaseActionCreator<Payload, T> &
-  AddListenerOverloads<PayloadAction<Payload, T>, S, D>
+  AddListenerOverloads<PayloadAction<Payload, T>, State, Dispatch>
 
-/** A "pre-typed" version of `middleware.startListening`, so the listener args are well-typed */
+/**
+ * @public
+ * A "pre-typed" version of `middleware.startListening`, so the listener args are well-typed */
 export type TypedStartListening<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>,
+  State,
+  Dispatch extends ReduxDispatch<AnyAction> = ThunkDispatch<
+    State,
+    unknown,
+    AnyAction
+  >,
   ExtraArgument = unknown
-> = AddListenerOverloads<Unsubscribe, S, D, ExtraArgument>
+> = AddListenerOverloads<Unsubscribe, State, Dispatch, ExtraArgument>
 
-/** A "pre-typed" version of `middleware.stopListening`, so the listener args are well-typed */
+/** @public
+ * A "pre-typed" version of `middleware.stopListening`, so the listener args are well-typed */
 export type TypedStopListening<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
-> = RemoveListenerOverloads<S, D>
+  State,
+  Dispatch extends ReduxDispatch<AnyAction> = ThunkDispatch<
+    State,
+    unknown,
+    AnyAction
+  >
+> = RemoveListenerOverloads<State, Dispatch>
 
-/** A "pre-typed" version of `createListenerEntry`, so the listener args are well-typed */
+/** @public
+ * A "pre-typed" version of `createListenerEntry`, so the listener args are well-typed */
 export type TypedCreateListenerEntry<
-  S,
-  D extends Dispatch<AnyAction> = ThunkDispatch<S, unknown, AnyAction>
-> = AddListenerOverloads<ListenerEntry<S, D>, S, D>
+  State,
+  Dispatch extends ReduxDispatch<AnyAction> = ThunkDispatch<
+    State,
+    unknown,
+    AnyAction
+  >
+> = AddListenerOverloads<ListenerEntry<State, Dispatch>, State, Dispatch>
 
 /**
  * Internal Types
@@ -404,23 +467,21 @@ export type TypedCreateListenerEntry<
 
 /** @internal An single listener entry */
 export type ListenerEntry<
-  S = unknown,
-  D extends Dispatch<AnyAction> = Dispatch<AnyAction>
+  State = unknown,
+  Dispatch extends ReduxDispatch<AnyAction> = ReduxDispatch<AnyAction>
 > = {
   id: string
-  effect: ListenerEffect<any, S, D>
+  effect: ListenerEffect<any, State, Dispatch>
   unsubscribe: () => void
   pending: Set<AbortController>
   type?: string
-  predicate: ListenerPredicate<AnyAction, S>
+  predicate: ListenerPredicate<AnyAction, State>
 }
 
-const declaredMiddlewareType: unique symbol = undefined as any
-export type WithMiddlewareType<T extends Middleware<any, any, any>> = {
-  [declaredMiddlewareType]: T
-}
-
-// A shorthand form of the accepted args, solely so that `createListenerEntry` has validly-typed conditional logic when checking the options contents
+/**
+ * @internal
+ * A shorthand form of the accepted args, solely so that `createListenerEntry` has validly-typed conditional logic when checking the options contents
+ */
 export type FallbackAddListenerOptions = {
   actionCreator?: TypedActionCreator<string>
   type?: string
@@ -432,8 +493,10 @@ export type FallbackAddListenerOptions = {
  * Utility Types
  */
 
+/** @public */
 export type Unsubscribe = () => void
 
+/** @public */
 export type GuardedType<T> = T extends (
   x: any,
   ...args: unknown[]
@@ -441,36 +504,10 @@ export type GuardedType<T> = T extends (
   ? T
   : never
 
+/** @public */
 export type ListenerPredicateGuardedActionType<T> = T extends ListenerPredicate<
   infer Action,
   any
 >
   ? Action
   : never
-
-/**
- * Additional infos regarding the error raised.
- */
-export interface ListenerErrorInfo {
-  /**
-   * Which function has generated the exception.
-   */
-  raisedBy: 'effect' | 'predicate'
-}
-
-/**
- * Gets notified with synchronous and asynchronous errors raised by `listeners` or `predicates`.
- * @param error The thrown error.
- * @param errorInfo Additional information regarding the thrown error.
- */
-export interface ListenerErrorHandler {
-  (error: unknown, errorInfo: ListenerErrorInfo): void
-}
-
-export interface CreateListenerMiddlewareOptions<ExtraArgument = unknown> {
-  extra?: ExtraArgument
-  /**
-   * Receives synchronous and asynchronous errors that are raised by `listener` and `listenerOption.predicate`.
-   */
-  onError?: ListenerErrorHandler
-}

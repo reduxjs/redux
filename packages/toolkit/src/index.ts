@@ -176,7 +176,6 @@ export type {
 
 export {
   createListenerMiddleware,
-  createListenerEntry,
   addListener,
   removeListener,
   removeAllListeners,
