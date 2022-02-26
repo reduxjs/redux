@@ -222,18 +222,21 @@ details.detailed-explanation p {
 }
 
 .style-guide .priority-essential h3:after {
-  content: ' ESSENTIAL';
+  content: 'ESSENTIAL';
   color: var(--ifm-color-danger);
+  position: relative;
 }
 
 .style-guide .priority-stronglyrecommended h3:after {
-  content: ' STRONGLY RECOMMENDED';
+  content: 'STRONGLY RECOMMENDED';
   color: var(--ifm-color-warning);
+  position: relative;
 }
 
 .style-guide .priority-recommended h3:after {
-  content: ' RECOMMENDED';
+  content: 'RECOMMENDED';
   color: var(--ifm-color-info);
+  position: relative;
 }
 
 .admonition {
