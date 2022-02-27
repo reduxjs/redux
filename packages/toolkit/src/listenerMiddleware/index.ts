@@ -437,7 +437,9 @@ export function createListenerMiddleware<
 
         if (listenerMap.size > 0) {
           let currentState = api.getState()
-          for (let entry of listenerMap.values()) {
+          // Work around ESBuild+TS transpilation issue
+          const listenerEntries = Array.from(listenerMap.values())
+          for (let entry of listenerEntries) {
             let runListener = false
 
             try {
