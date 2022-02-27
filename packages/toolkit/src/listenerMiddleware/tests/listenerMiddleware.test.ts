@@ -14,7 +14,7 @@ import {
   addListener,
   removeListener,
   TaskAbortError,
-  removeAllListeners,
+  clearAllListeners,
 } from '../index'
 
 import type {
@@ -22,7 +22,7 @@ import type {
   ListenerEffectAPI,
   TypedAddListener,
   TypedStartListening,
-  Unsubscribe,
+  UnsubscribeListener,
   ListenerMiddleware,
 } from '../index'
 import type {
@@ -445,7 +445,7 @@ describe('createListenerMiddleware', () => {
         })
       )
 
-      expectType<Unsubscribe>(unsubscribe)
+      expectType<UnsubscribeListener>(unsubscribe)
 
       store.dispatch(testAction1('a'))
 
@@ -476,6 +476,80 @@ describe('createListenerMiddleware', () => {
       store.dispatch(testAction1('c'))
 
       expect(effect.mock.calls).toEqual([[testAction1('a'), middlewareApi]])
+    })
+
+    test('can cancel an active listener when unsubscribing directly', async () => {
+      let wasCancelled = false
+      const unsubscribe = startListening({
+        actionCreator: testAction1,
+        effect: async (action, listenerApi) => {
+          try {
+            await listenerApi.condition(testAction2.match)
+          } catch (err) {
+            if (err instanceof TaskAbortError) {
+              wasCancelled = true
+            }
+          }
+        },
+      })
+
+      store.dispatch(testAction1('a'))
+      unsubscribe({ cancelActive: true })
+      expect(wasCancelled).toBe(false)
+      await delay(10)
+      expect(wasCancelled).toBe(true)
+    })
+
+    test('can cancel an active listener when unsubscribing via stopListening', async () => {
+      let wasCancelled = false
+      const effect = async (action: any, listenerApi: any) => {
+        try {
+          await listenerApi.condition(testAction2.match)
+        } catch (err) {
+          if (err instanceof TaskAbortError) {
+            wasCancelled = true
+          }
+        }
+      }
+      startListening({
+        actionCreator: testAction1,
+        effect,
+      })
+
+      store.dispatch(testAction1('a'))
+      stopListening({ actionCreator: testAction1, effect, cancelActive: true })
+      expect(wasCancelled).toBe(false)
+      await delay(10)
+      expect(wasCancelled).toBe(true)
+    })
+
+    test('can cancel an active listener when unsubscribing via removeListener', async () => {
+      let wasCancelled = false
+      const effect = async (action: any, listenerApi: any) => {
+        try {
+          await listenerApi.condition(testAction2.match)
+        } catch (err) {
+          if (err instanceof TaskAbortError) {
+            wasCancelled = true
+          }
+        }
+      }
+      startListening({
+        actionCreator: testAction1,
+        effect,
+      })
+
+      store.dispatch(testAction1('a'))
+      store.dispatch(
+        removeListener({
+          actionCreator: testAction1,
+          effect,
+          cancelActive: true,
+        })
+      )
+      expect(wasCancelled).toBe(false)
+      await delay(10)
+      expect(wasCancelled).toBe(true)
     })
 
     const addListenerOptions: [
@@ -649,7 +723,7 @@ describe('createListenerMiddleware', () => {
       })
 
       startListening({
-        actionCreator: removeAllListeners,
+        actionCreator: clearAllListeners,
         effect() {
           listener2Calls++
         },
@@ -663,7 +737,7 @@ describe('createListenerMiddleware', () => {
       })
 
       store.dispatch(testAction1('a'))
-      store.dispatch(removeAllListeners())
+      store.dispatch(clearAllListeners())
       store.dispatch(testAction1('b'))
       expect(await listener1Test).toBe(1)
       expect(listener1Calls).toBe(1)

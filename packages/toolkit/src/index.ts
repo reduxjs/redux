@@ -162,7 +162,8 @@ export type {
   TypedAddListener,
   TypedStopListening,
   TypedRemoveListener,
-  Unsubscribe,
+  UnsubscribeListener,
+  UnsubscribeListenerOptions,
   ForkedTaskExecutor,
   ForkedTask,
   ForkedTaskAPI,
@@ -178,6 +179,6 @@ export {
   createListenerMiddleware,
   addListener,
   removeListener,
-  removeAllListeners,
+  clearAllListeners,
   TaskAbortError,
 } from './listenerMiddleware/index'
