@@ -1,6 +1,6 @@
 import { TaskAbortError } from './exceptions'
-import type { TaskResult } from './types'
-import { noop, catchRejection } from './utils'
+import type { AbortSignalWithReason, TaskResult } from './types'
+import { addAbortSignalListener, catchRejection } from './utils'
 
 /**
  * Synchronously raises {@link TaskAbortError} if the task tied to the input `signal` has been cancelled.
@@ -8,9 +8,9 @@ import { noop, catchRejection } from './utils'
  * @param reason
  * @see {TaskAbortError}
  */
-export const validateActive = (signal: AbortSignal, reason?: string): void => {
+export const validateActive = (signal: AbortSignal): void => {
   if (signal.aborted) {
-    throw new TaskAbortError(reason)
+    throw new TaskAbortError((signal as AbortSignalWithReason<string>).reason)
   }
 }
 
@@ -20,17 +20,16 @@ export const validateActive = (signal: AbortSignal, reason?: string): void => {
  * @returns
  */
 export const promisifyAbortSignal = (
-  signal: AbortSignal,
-  reason?: string
+  signal: AbortSignalWithReason<string>
 ): Promise<never> => {
   return catchRejection(
     new Promise<never>((_, reject) => {
-      const notifyRejection = () => reject(new TaskAbortError(reason))
+      const notifyRejection = () => reject(new TaskAbortError(signal.reason))
 
       if (signal.aborted) {
         notifyRejection()
       } else {
-        signal.addEventListener('abort', notifyRejection, { once: true })
+        addAbortSignalListener(signal, notifyRejection)
       }
     })
   )
@@ -38,8 +37,9 @@ export const promisifyAbortSignal = (
 
 /**
  * Runs a task and returns promise that resolves to {@link TaskResult}.
- *
  * Second argument is an optional `cleanUp` function that always runs after task.
+ *
+ * **Note:** `runTask` runs the executor in the next microtask.
  * @returns
  */
 export const runTask = async <T>(

@@ -1,15 +1,23 @@
 /* eslint-disable no-lone-blocks */
-import type { Dispatch, AnyAction, Middleware, Reducer, Store } from 'redux'
+import type {
+  Dispatch,
+  AnyAction,
+  Middleware,
+  Reducer,
+  Store,
+  Action,
+} from 'redux'
 import { applyMiddleware } from 'redux'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction, MiddlewareArray } from '@reduxjs/toolkit'
 import {
   configureStore,
   getDefaultMiddleware,
   createSlice,
 } from '@reduxjs/toolkit'
-import type { ThunkMiddleware, ThunkAction } from 'redux-thunk'
-import thunk, { ThunkDispatch } from 'redux-thunk'
+import type { ThunkMiddleware, ThunkAction, ThunkDispatch } from 'redux-thunk'
+import thunk from 'redux-thunk'
 import { expectNotAny, expectType } from './helpers'
+import type { IsAny, ExtractDispatchExtensions } from '../tsHelpers'
 
 const _anyMiddleware: any = () => () => () => {}
 
@@ -300,14 +308,16 @@ const _anyMiddleware: any = () => () => () => {}
    * Test: multiple custom middleware
    */
   {
+    const middleware = [] as any as [
+      Middleware<(a: 'a') => 'A', StateA>,
+      Middleware<(b: 'b') => 'B', StateA>,
+      ThunkMiddleware<StateA>
+    ]
     const store = configureStore({
       reducer: reducerA,
-      middleware: [] as any as [
-        Middleware<(a: 'a') => 'A', StateA>,
-        Middleware<(b: 'b') => 'B', StateA>,
-        ThunkMiddleware<StateA>
-      ],
+      middleware,
     })
+
     const result: 'A' = store.dispatch('a')
     const result2: 'B' = store.dispatch('b')
     const result3: Promise<'A'> = store.dispatch(thunkA())
@@ -324,7 +334,9 @@ const _anyMiddleware: any = () => () => () => {}
       undefined,
       AnyAction
     >)
-    // null was previously documented in the redux docs
+    // `null` for the `extra` generic was previously documented in the RTK "Advanced Tutorial", but
+    // is a bad pattern and users should use `unknown` instead
+    // @ts-expect-error
     store.dispatch(function () {} as ThunkAction<void, {}, null, AnyAction>)
     // unknown is the best way to type a ThunkAction if you do not care
     // about the value of the extraArgument, as it will always work with every
@@ -338,13 +350,14 @@ const _anyMiddleware: any = () => () => () => {}
    * Test: custom middleware and getDefaultMiddleware
    */
   {
+    const middleware = getDefaultMiddleware<StateA>().prepend(
+      (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>
+    )
     const store = configureStore({
       reducer: reducerA,
-      middleware: [
-        (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>,
-        ...getDefaultMiddleware<StateA>(),
-      ] as const,
+      middleware,
     })
+
     const result1: 'A' = store.dispatch('a')
     const result2: Promise<'A'> = store.dispatch(thunkA())
     // @ts-expect-error
@@ -400,10 +413,10 @@ const _anyMiddleware: any = () => () => () => {}
     const store = configureStore({
       reducer: reducerA,
       middleware: (getDefaultMiddleware) =>
-        [
-          (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>,
-          ...getDefaultMiddleware(),
-        ] as const,
+        getDefaultMiddleware().prepend((() => {}) as any as Middleware<
+          (a: 'a') => 'A',
+          StateA
+        >),
     })
     const result1: 'A' = store.dispatch('a')
     const result2: Promise<'A'> = store.dispatch(thunkA())
@@ -438,10 +451,9 @@ const _anyMiddleware: any = () => () => () => {}
     const store = configureStore({
       reducer: reducerA,
       middleware: (getDefaultMiddleware) =>
-        [
-          (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>,
-          ...getDefaultMiddleware({ thunk: false }),
-        ] as const,
+        getDefaultMiddleware({ thunk: false }).prepend(
+          (() => {}) as any as Middleware<(a: 'a') => 'A', StateA>
+        ),
     })
     const result1: 'A' = store.dispatch('a')
     // @ts-expect-error
@@ -459,5 +471,58 @@ const _anyMiddleware: any = () => () => () => {}
     })
 
     expectNotAny(store.dispatch)
+  }
+
+  {
+    interface CounterState {
+      value: number
+    }
+
+    const counterSlice = createSlice({
+      name: 'counter',
+      initialState: { value: 0 } as CounterState,
+      reducers: {
+        increment(state) {
+          state.value += 1
+        },
+        decrement(state) {
+          state.value -= 1
+        },
+        // Use the PayloadAction type to declare the contents of `action.payload`
+        incrementByAmount: (state, action: PayloadAction<number>) => {
+          state.value += action.payload
+        },
+      },
+    })
+
+    type Unsubscribe = () => void
+
+    // A fake middleware that tells TS that an unsubscribe callback is being returned for a given action
+    // This is the same signature that the "listener" middleware uses
+    const dummyMiddleware: Middleware<
+      {
+        (action: Action<'actionListenerMiddleware/add'>): Unsubscribe
+      },
+      CounterState
+    > = (storeApi) => (next) => (action) => {}
+
+    const store = configureStore({
+      reducer: counterSlice.reducer,
+      middleware: (gDM) => gDM().prepend(dummyMiddleware),
+    })
+
+    // Order matters here! We need the listener type to come first, otherwise
+    // the thunk middleware type kicks in and TS thinks a plain action is being returned
+    expectType<
+      ((action: Action<'actionListenerMiddleware/add'>) => Unsubscribe) &
+        ThunkDispatch<CounterState, undefined, AnyAction> &
+        Dispatch<AnyAction>
+    >(store.dispatch)
+
+    const unsubscribe = store.dispatch({
+      type: 'actionListenerMiddleware/add',
+    } as const)
+
+    expectType<Unsubscribe>(unsubscribe)
   }
 }

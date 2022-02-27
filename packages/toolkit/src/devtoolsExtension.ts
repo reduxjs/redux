@@ -173,13 +173,17 @@ export interface EnhancerOptions {
   traceLimit?: number
 }
 
+type Compose = typeof compose
+
+interface ComposeWithDevTools {
+  (options: EnhancerOptions): Compose
+  <StoreExt>(...funcs: StoreEnhancer<StoreExt>[]): StoreEnhancer<StoreExt>
+}
+
 /**
  * @public
  */
-export const composeWithDevTools: {
-  (options: EnhancerOptions): typeof compose
-  <StoreExt>(...funcs: Array<StoreEnhancer<StoreExt>>): StoreEnhancer<StoreExt>
-} =
+export const composeWithDevTools: ComposeWithDevTools =
   typeof window !== 'undefined' &&
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
