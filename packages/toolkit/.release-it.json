@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "after:bump": "yarn"
+    "after:bump": "yarn && git add -u"
   }
 }
