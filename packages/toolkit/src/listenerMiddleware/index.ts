@@ -14,7 +14,7 @@ import type {
   FallbackAddListenerOptions,
   ListenerEntry,
   ListenerErrorHandler,
-  Unsubscribe,
+  UnsubscribeListener,
   TakePattern,
   ListenerErrorInfo,
   ForkedTaskExecutor,
@@ -22,6 +22,7 @@ import type {
   TypedRemoveListener,
   TaskResult,
   AbortSignalWithReason,
+  UnsubscribeListenerOptions,
 } from './types'
 import {
   abortControllerWithReason,
@@ -55,7 +56,8 @@ export type {
   TypedAddListener,
   TypedStopListening,
   TypedRemoveListener,
-  Unsubscribe,
+  UnsubscribeListener,
+  UnsubscribeListenerOptions,
   ForkedTaskExecutor,
   ForkedTask,
   ForkedTaskAPI,
@@ -113,7 +115,11 @@ const createFork = (parentAbortSignal: AbortSignalWithReason<unknown>) => {
 }
 
 const createTakePattern = <S>(
-  startListening: AddListenerOverloads<Unsubscribe, S, Dispatch<AnyAction>>,
+  startListening: AddListenerOverloads<
+    UnsubscribeListener,
+    S,
+    Dispatch<AnyAction>
+  >,
   signal: AbortSignal
 ): TakePattern<S> => {
   /**
@@ -130,7 +136,7 @@ const createTakePattern = <S>(
     validateActive(signal)
 
     // Placeholder unsubscribe function until the listener is added
-    let unsubscribe: Unsubscribe = () => {}
+    let unsubscribe: UnsubscribeListener = () => {}
 
     const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
       // Inside the Promise, we synchronously add the listener.
@@ -223,11 +229,7 @@ const createClearListenerMiddleware = (
   listenerMap: Map<string, ListenerEntry>
 ) => {
   return () => {
-    listenerMap.forEach((entry) => {
-      entry.pending.forEach((controller) => {
-        abortControllerWithReason(controller, listenerCancelled)
-      })
-    })
+    listenerMap.forEach(cancelActiveListeners)
 
     listenerMap.clear()
   }
@@ -257,19 +259,19 @@ const safelyNotifyError = (
 }
 
 /**
- * @alpha
+ * @public
  */
 export const addListener = createAction(
   `${alm}/add`
 ) as TypedAddListener<unknown>
 
 /**
- * @alpha
+ * @public
  */
 export const clearAllListeners = createAction(`${alm}/removeAll`)
 
 /**
- * @alpha
+ * @public
  */
 export const removeListener = createAction(
   `${alm}/remove`
@@ -279,8 +281,16 @@ const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
   console.error(`${alm}/error`, ...args)
 }
 
+const cancelActiveListeners = (
+  entry: ListenerEntry<unknown, Dispatch<AnyAction>>
+) => {
+  entry.pending.forEach((controller) => {
+    abortControllerWithReason(controller, listenerCancelled)
+  })
+}
+
 /**
- * @alpha
+ * @public
  */
 export function createListenerMiddleware<
   S = unknown,
@@ -296,7 +306,12 @@ export function createListenerMiddleware<
     entry.unsubscribe = () => listenerMap.delete(entry!.id)
 
     listenerMap.set(entry.id, entry)
-    return entry.unsubscribe
+    return (cancelOptions?: UnsubscribeListenerOptions) => {
+      entry.unsubscribe()
+      if (cancelOptions?.cancelActive) {
+        cancelActiveListeners(entry)
+      }
+    }
   }
 
   const findListenerEntry = (
@@ -323,7 +338,9 @@ export function createListenerMiddleware<
     return insertEntry(entry)
   }
 
-  const stopListening = (options: FallbackAddListenerOptions): boolean => {
+  const stopListening = (
+    options: FallbackAddListenerOptions & UnsubscribeListenerOptions
+  ): boolean => {
     const { type, effect, predicate } = getListenerEntryPropsFrom(options)
 
     const entry = findListenerEntry((entry) => {
@@ -335,7 +352,12 @@ export function createListenerMiddleware<
       return matchPredicateOrType && entry.effect === effect
     })
 
-    entry?.unsubscribe()
+    if (entry) {
+      entry.unsubscribe()
+      if (options.cancelActive) {
+        cancelActiveListeners(entry)
+      }
+    }
 
     return !!entry
   }
