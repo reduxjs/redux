@@ -14,7 +14,7 @@ import {
   addListener,
   removeListener,
   TaskAbortError,
-  removeAllListeners,
+  clearAllListeners,
 } from '../index'
 
 import type {
@@ -649,7 +649,7 @@ describe('createListenerMiddleware', () => {
       })
 
       startListening({
-        actionCreator: removeAllListeners,
+        actionCreator: clearAllListeners,
         effect() {
           listener2Calls++
         },
@@ -663,7 +663,7 @@ describe('createListenerMiddleware', () => {
       })
 
       store.dispatch(testAction1('a'))
-      store.dispatch(removeAllListeners())
+      store.dispatch(clearAllListeners())
       store.dispatch(testAction1('b'))
       expect(await listener1Test).toBe(1)
       expect(listener1Calls).toBe(1)

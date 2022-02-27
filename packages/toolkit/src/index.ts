@@ -178,6 +178,6 @@ export {
   createListenerMiddleware,
   addListener,
   removeListener,
-  removeAllListeners,
+  clearAllListeners,
   TaskAbortError,
 } from './listenerMiddleware/index'

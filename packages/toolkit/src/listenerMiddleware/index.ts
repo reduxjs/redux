@@ -266,7 +266,7 @@ export const addListener = createAction(
 /**
  * @alpha
  */
-export const removeAllListeners = createAction(`${alm}/removeAll`)
+export const clearAllListeners = createAction(`${alm}/removeAll`)
 
 /**
  * @alpha
@@ -405,7 +405,7 @@ export function createListenerMiddleware<
         return startListening(action.payload)
       }
 
-      if (removeAllListeners.match(action)) {
+      if (clearAllListeners.match(action)) {
         clearListenerMiddleware()
         return
       }
