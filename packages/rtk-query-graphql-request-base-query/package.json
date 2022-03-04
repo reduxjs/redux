@@ -9,7 +9,6 @@
   "license": "MIT",
   "type": "module",
   "source": "src/index.ts",
-  "exports": "./dist/index.modern.js",
   "main": "./dist/index.cjs",
   "module": "./dist/index.module.js",
   "unpkg": "./dist/index.umd.js",
