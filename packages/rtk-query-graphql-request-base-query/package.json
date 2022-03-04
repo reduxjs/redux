@@ -16,6 +16,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "microbundle",
+    "prepack": "rimraf dist/*; npm run build",
     "dev": "microbundle watch"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "@reduxjs/toolkit": "^1.6.0",
     "graphql": "^15.5.0",
     "microbundle": "^0.13.3",
+    "rimraf": "^3.0.2",
     "typescript": "^4.3.4"
   },
   "publishConfig": {
