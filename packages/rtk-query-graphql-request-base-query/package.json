@@ -15,7 +15,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "microbundle",
-    "prepack": "rimraf dist/*; npm run build",
+    "prepack": "rimraf dist/*; yarn build",
     "dev": "microbundle watch"
   },
   "dependencies": {
