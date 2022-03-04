@@ -4,13 +4,13 @@ import type { DocumentNode } from 'graphql'
 import { GraphQLClient, ClientError } from 'graphql-request'
 import type {
   GraphqlRequestBaseQueryArgs,
+  PrepareHeaders,
   RequestHeaders,
 } from './GraphqlBaseQueryTypes'
 
-export const graphqlRequestBaseQuery = ({
-  options,
-  prepareHeaders = (x) => x,
-}: GraphqlRequestBaseQueryArgs): BaseQueryFn<
+export const graphqlRequestBaseQuery = (
+  options: GraphqlRequestBaseQueryArgs
+): BaseQueryFn<
   { document: string | DocumentNode; variables?: any },
   unknown,
   Pick<ClientError, 'name' | 'message' | 'stack'>,
@@ -23,15 +23,30 @@ export const graphqlRequestBaseQuery = ({
 
   return async (
     { document, variables },
-    { getState, endpoint, forced, type }
+    { getState, endpoint, forced, type, signal, extra }
   ) => {
     try {
+      const prepareHeaders: PrepareHeaders =
+        options.prepareHeaders ?? ((x) => x)
       const headers = new Headers(stripUndefined(requestHeaders))
 
-      client.setHeaders(
-        await prepareHeaders(headers, { getState, endpoint, forced, type })
-      )
-      return { data: await client.request(document, variables), meta: {} }
+      const preparedHeaders = await prepareHeaders(headers, {
+        getState,
+        endpoint,
+        forced,
+        type,
+        extra,
+      })
+
+      return {
+        data: await client.request({
+          document,
+          variables,
+          signal,
+          requestHeaders: preparedHeaders,
+        }),
+        meta: {},
+      }
     } catch (error) {
       if (error instanceof ClientError) {
         const { name, message, stack, request, response } = error

@@ -1,6 +1,6 @@
 {
   "name": "@rtk-query/graphql-request-base-query",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "author": {
     "name": "Lenz Weber",
     "email": "mail@phryneas.de",
@@ -19,7 +19,7 @@
     "dev": "microbundle watch"
   },
   "dependencies": {
-    "graphql-request": "^3.4.0"
+    "graphql-request": "^4.0.0"
   },
   "peerDependencies": {
     "@reduxjs/toolkit": "^1.7.1",

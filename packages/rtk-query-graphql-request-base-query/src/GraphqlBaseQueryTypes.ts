@@ -1,22 +1,25 @@
 import type { BaseQueryApi } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
-import type { GraphQLClient } from 'graphql-request'
+import type {
+  GraphQLClient,
+  RequestOptions,
+  RequestDocument,
+} from 'graphql-request'
 
-type P = Parameters<GraphQLClient['request']>
-export type Document = P[0]
-export type Variables = P[1]
-export type RequestHeaders = P[2]
+export type Document = RequestDocument
+export type RequestHeaders = RequestOptions['requestHeaders']
+export type PrepareHeaders = (
+  headers: Headers,
+  api: Pick<BaseQueryApi, 'getState' | 'endpoint' | 'type' | 'forced' | 'extra'>
+) => MaybePromise<Headers>
 
-export type GraphqlRequestBaseQueryArgs = {
-  options:
-    | {
-        url: string
-        requestHeaders?: RequestHeaders
-      }
-    | { client: GraphQLClient }
-  prepareHeaders?: (
-    headers: Headers,
-    api: Pick<BaseQueryApi, 'getState' | 'endpoint' | 'type' | 'forced'>
-  ) => MaybePromise<Headers>
+export type GraphqlRequestBaseQueryArgs = (
+  | {
+      url: string
+    }
+  | { client: GraphQLClient }
+) & {
+  requestHeaders?: RequestHeaders
+  prepareHeaders?: PrepareHeaders
 }
 
 export type QueryReturnValue<T = unknown, E = unknown, M = unknown> =
