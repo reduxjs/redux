@@ -149,7 +149,7 @@ export interface ListenerEffectAPI<
    * ```ts
    * middleware.startListening({
    *  predicate: () => true,
-   *  async listener(_, { getOriginalState }) {
+   *  async effect(_, { getOriginalState }) {
    *    getOriginalState(); // sync: OK!
    *
    *    setTimeout(getOriginalState, 0); // async: throws Error
@@ -162,10 +162,67 @@ export interface ListenerEffectAPI<
    * ```
    */
   getOriginalState: () => State
+  /**
+   * Removes the listener entry from the middleware and prevent future instances of the listener from running.
+   *
+   * It does **not** cancel any active instances.
+   */
   unsubscribe(): void
+  /**
+   * It will subscribe a listener if it was previously removed, noop otherwise.
+   */
   subscribe(): void
+  /**
+   * Returns a promise that resolves when the input predicate returns `true` or
+   * rejects if the listener has been cancelled or is completed.
+   *
+   * The return value is `true` if the predicate succeeds or `false` if a timeout is provided and expires first.
+   * 
+   * ### Example
+   * 
+   * ```ts
+   * const updateBy = createAction<number>('counter/updateBy');
+   *
+   * middleware.startListening({
+   *  actionCreator: updateBy,
+   *  async effect(_, { condition }) {
+   *    // wait at most 3s for `updateBy` actions.
+   *    if(await condition(updateBy.match, 3_000)) {
+   *      // `updateBy` has been dispatched twice in less than 3s.
+   *    }
+   *  }
+   * })
+   * ```
+   */
   condition: ConditionFunction<State>
+  /**
+   * Returns a promise that resolves when the input predicate returns `true` or
+   * rejects if the listener has been cancelled or is completed.
+   *
+   * The return value is the `[action, currentState, previousState]` combination that the predicate saw as arguments.
+   *
+   * The promise resolves to null if a timeout is provided and expires first, 
+   *
+   * ### Example
+   *
+   * ```ts
+   * const updateBy = createAction<number>('counter/updateBy');
+   *
+   * middleware.startListening({
+   *  actionCreator: updateBy,
+   *  async effect(_, { take }) {
+   *    const [{ payload }] =  await take(updateBy.match);
+   *    console.log(payload); // logs 5;
+   *  }
+   * })
+   *
+   * store.dispatch(updateBy(5));
+   * ```
+   */
   take: TakePattern<State>
+  /**
+   * Cancels all other running instances of this same listener except for the one that made this call.
+   */
   cancelActiveListeners: () => void
   /**
    * An abort signal whose `aborted` property is set to `true`
@@ -189,7 +246,6 @@ export interface ListenerEffectAPI<
    * @param promise
    */
   pause<M>(promise: Promise<M>): Promise<M>
-  // TODO Figure out how to pass this through the other types correctly
   extra: ExtraArgument
 }
 
