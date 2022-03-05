@@ -36,7 +36,7 @@ Some of the changes in this section aren't strictly necessary - they're included
 
 ## Editing Posts
 
-We've already added a mutation endpoint to save new Post entries to the server, and used that in our `<AddNewPostForm>`. Next, we need to handle updating the `<EditPostForm>` to let us edit an existing post.
+We've already added a mutation endpoint to save new Post entries to the server, and used that in our `<AddPostForm>`. Next, we need to handle updating the `<EditPostForm>` to let us edit an existing post.
 
 ### Updating the Edit Post Form
 
