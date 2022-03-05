@@ -506,9 +506,9 @@ Like with query endpoints, the API slice automatically generates a React hook fo
 
 ### Using Mutation Hooks in Components
 
-Our `<AddNewPostForm>` is already dispatching an async thunk to add a post whenever we click the "Save Post" button. To do that, it has to import `useDispatch` and the `addNewPost` thunk. The mutation hooks replace both of those, and the usage pattern is very similar.
+Our `<AddPostForm>` is already dispatching an async thunk to add a post whenever we click the "Save Post" button. To do that, it has to import `useDispatch` and the `addNewPost` thunk. The mutation hooks replace both of those, and the usage pattern is very similar.
 
-```js title="features/posts/AddNewPostForm"
+```js title="features/posts/AddPostForm"
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
