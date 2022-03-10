@@ -178,7 +178,7 @@ However, there may be times when other parts of the codebase need to interact wi
 Some possible solutions are:
 
 - Write your store-dependent logic as a thunk, and then dispatch that thunk from a component
-- Pass along references to `dispatch` from components as arguments the relevant functions
+- Pass along references to `dispatch` from components as arguments to the relevant functions
 - Write the logic as middleware and add them to the store at setup time
 - Inject the store instance into the relevant files as the app is being created.
 
