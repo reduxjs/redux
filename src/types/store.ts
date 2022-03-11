@@ -40,6 +40,7 @@ declare const $CombinedState: unique symbol
 interface EmptyObject {
   readonly [$CombinedState]?: undefined
 }
+export type CleanState<T> = T extends CombinedState<infer S> ? { [K in keyof S]: CleanState<S[K]> } : T
 export type CombinedState<S> = EmptyObject & S
 
 /**
@@ -172,7 +173,7 @@ export interface Store<
    *
    * @returns The current state tree of your application.
    */
-  getState(): S
+  getState(): CleanState<S>
 
   /**
    * Adds a change listener. It will be called any time an action is
