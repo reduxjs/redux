@@ -15,23 +15,17 @@ const babelRuntimeVersion = pkg.dependencies['@babel/runtime'].replace(
   ''
 )
 
-const makeExternalPredicate = externalArr => {
-  if (externalArr.length === 0) {
-    return () => false
-  }
-  const pattern = new RegExp(`^(${externalArr.join('|')})($|/)`)
-  return id => pattern.test(id)
-}
+const external = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.peerDependencies || {})
+].map(name => RegExp(`^${name}($|/)`))
 
 export default defineConfig([
   // CommonJS
   {
     input: 'src/index.ts',
     output: { file: 'lib/redux.js', format: 'cjs', indent: false },
-    external: makeExternalPredicate([
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {})
-    ]),
+    external,
     plugins: [
       nodeResolve({
         extensions
@@ -52,10 +46,7 @@ export default defineConfig([
   {
     input: 'src/index.ts',
     output: { file: 'es/redux.js', format: 'es', indent: false },
-    external: makeExternalPredicate([
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {})
-    ]),
+    external,
     plugins: [
       nodeResolve({
         extensions
