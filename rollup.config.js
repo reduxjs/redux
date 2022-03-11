@@ -1,3 +1,4 @@
+import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import babel from '@rollup/plugin-babel'
 import replace from '@rollup/plugin-replace'
@@ -22,7 +23,7 @@ const makeExternalPredicate = externalArr => {
   return id => pattern.test(id)
 }
 
-export default [
+export default defineConfig([
   // CommonJS
   {
     input: 'src/index.ts',
@@ -165,4 +166,4 @@ export default [
       })
     ]
   }
-]
+])
