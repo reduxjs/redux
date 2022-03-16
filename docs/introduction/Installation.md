@@ -48,7 +48,7 @@ Most likely, you'll also need [the React bindings](https://github.com/reduxjs/re
 
 ```bash
 npm install react-redux
-npm install --save-dev redux-devtools
+npm install --save-dev @redux-devtools/core
 ```
 
 Note that unlike Redux itself, many packages in the Redux ecosystem don't provide UMD builds, so we recommend using CommonJS module bundlers like [Webpack](https://webpack.js.org/) and [Browserify](http://browserify.org/) for the most comfortable development experience.
