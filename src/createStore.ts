@@ -2,7 +2,6 @@ import $$observable from './utils/symbol-observable'
 
 import {
   Store,
-  PreloadedState,
   StoreEnhancer,
   Dispatch,
   Observer,
@@ -40,32 +39,35 @@ import { kindOf } from './utils/kindOf'
  * and subscribe to changes.
  */
 export default function createStore<
-  S,
+  S extends InputState,
   A extends Action,
   Ext = {},
-  StateExt = never
+  StateExt = never,
+  InputState = S | undefined
 >(
-  reducer: Reducer<S, A>,
+  reducer: Reducer<S, A, InputState>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 export default function createStore<
-  S,
+  S extends InputState,
   A extends Action,
   Ext = {},
-  StateExt = never
+  StateExt = never,
+  InputState = S | undefined
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>,
+  reducer: Reducer<S, A, InputState>,
+  preloadedState?: InputState,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 export default function createStore<
-  S,
+  S extends InputState,
   A extends Action,
   Ext = {},
-  StateExt = never
+  StateExt = never,
+  InputState = S | undefined
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
+  reducer: Reducer<S, A, InputState>,
+  preloadedState?: InputState | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
   if (
@@ -95,7 +97,7 @@ export default function createStore<
 
     return enhancer(createStore)(
       reducer,
-      preloadedState as PreloadedState<S>
+      preloadedState as InputState
     ) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   }
 

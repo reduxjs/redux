@@ -26,10 +26,11 @@ import { Action, AnyAction } from './actions'
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
  */
-export type Reducer<S = any, A extends Action = AnyAction> = (
-  state: S | undefined,
-  action: A
-) => S
+export type Reducer<
+  S extends InputState = any,
+  A extends Action = AnyAction,
+  InputState = S | undefined
+> = (state: InputState, action: A) => S
 
 /**
  * Object whose values correspond to different reducer functions.

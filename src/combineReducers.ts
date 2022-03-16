@@ -5,7 +5,6 @@ import {
   ReducersMapObject,
   StateFromReducersMapObject
 } from './types/reducers'
-import { CombinedState } from './types/store'
 
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
@@ -112,15 +111,16 @@ function assertReducerShape(reducers: ReducersMapObject) {
  */
 export default function combineReducers<S>(
   reducers: ReducersMapObject<S, any>
-): Reducer<CombinedState<S>>
+): Reducer<S, AnyAction, Partial<S> | undefined>
 export default function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
-): Reducer<CombinedState<S>, A>
+): Reducer<S, A, Partial<S> | undefined>
 export default function combineReducers<M extends ReducersMapObject>(
   reducers: M
 ): Reducer<
-  CombinedState<StateFromReducersMapObject<M>>,
-  ActionFromReducersMapObject<M>
+  StateFromReducersMapObject<M>,
+  ActionFromReducersMapObject<M>,
+  Partial<StateFromReducersMapObject<M>> | undefined
 >
 export default function combineReducers(reducers: ReducersMapObject) {
   const reducerKeys = Object.keys(reducers)

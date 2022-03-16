@@ -17,49 +17,6 @@ export type ExtendState<State, Extension> = [Extension] extends [never]
   : State & Extension
 
 /**
- * Internal "virtual" symbol used to make the `CombinedState` type unique.
- */
-declare const $CombinedState: unique symbol
-
-/**
- * State base type for reducers created with `combineReducers()`.
- *
- * This type allows the `createStore()` method to infer which levels of the
- * preloaded state can be partial.
- *
- * Because Typescript is really duck-typed, a type needs to have some
- * identifying property to differentiate it from other types with matching
- * prototypes for type checking purposes. That's why this type has the
- * `$CombinedState` symbol property. Without the property, this type would
- * match any object. The symbol doesn't really exist because it's an internal
- * (i.e. not exported), and internally we never check its value. Since it's a
- * symbol property, it's not expected to be unumerable, and the value is
- * typed as always undefined, so its never expected to have a meaningful
- * value anyway. It just makes this type distinquishable from plain `{}`.
- */
-interface EmptyObject {
-  readonly [$CombinedState]?: undefined
-}
-export type CombinedState<S> = EmptyObject & S
-
-/**
- * Recursively makes combined state objects partial. Only combined state _root
- * objects_ (i.e. the generated higher level object with keys mapping to
- * individual reducers) are partial.
- */
-export type PreloadedState<S> = Required<S> extends EmptyObject
-  ? S extends CombinedState<infer S1>
-    ? {
-        [K in keyof S1]?: S1[K] extends object ? PreloadedState<S1[K]> : S1[K]
-      }
-    : S
-  : {
-      [K in keyof S]: S[K] extends string | number | boolean | symbol
-        ? S[K]
-        : PreloadedState<S[K]>
-    }
-
-/**
  * A *dispatching function* (or simply *dispatch function*) is a function that
  * accepts an action or an async action; it then may or may not dispatch one
  * or more actions to the store.
@@ -234,13 +191,25 @@ export interface Store<
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext = {}, StateExt = never>(
-    reducer: Reducer<S, A>,
+  <
+    S extends InputState,
+    A extends Action,
+    Ext = {},
+    StateExt = never,
+    InputState = S | undefined
+  >(
+    reducer: Reducer<S, A, InputState>,
     enhancer?: StoreEnhancer<Ext, StateExt>
   ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
-  <S, A extends Action, Ext = {}, StateExt = never>(
+  <
+    S extends InputState,
+    A extends Action,
+    Ext = {},
+    StateExt = never,
+    InputState = S | undefined
+  >(
     reducer: Reducer<S, A>,
-    preloadedState?: PreloadedState<S>,
+    preloadedState?: InputState,
     enhancer?: StoreEnhancer<Ext>
   ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
 }
@@ -270,9 +239,10 @@ export type StoreEnhancer<Ext = {}, StateExt = never> = (
   next: StoreEnhancerStoreCreator<Ext, StateExt>
 ) => StoreEnhancerStoreCreator<Ext, StateExt>
 export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never> = <
-  S = any,
-  A extends Action = AnyAction
+  S extends InputState = any,
+  A extends Action = AnyAction,
+  InputState = S | undefined
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>
+  reducer: Reducer<S, A, InputState>,
+  preloadedState?: InputState
 ) => Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
