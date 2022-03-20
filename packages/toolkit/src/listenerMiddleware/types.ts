@@ -58,7 +58,7 @@ export interface ForkedTaskAPI {
    */
   pause<W>(waitFor: Promise<W>): Promise<W>
   /**
-   * Returns a promise resolves after `timeoutMs` or
+   * Returns a promise that resolves after `timeoutMs` or
    * rejects if the task or the parent listener has been cancelled or is completed.
    * @param timeoutMs
    */
@@ -231,7 +231,7 @@ export interface ListenerEffectAPI<
    */
   signal: AbortSignal
   /**
-   * Returns a promise resolves after `timeoutMs` or
+   * Returns a promise that resolves after `timeoutMs` or
    * rejects if the listener has been cancelled or is completed.
    */
   delay(timeoutMs: number): Promise<void>
@@ -373,7 +373,7 @@ export interface UnsubscribeListenerOptions {
 
 /** @public */
 export type UnsubscribeListener = (
-  unsuscribeOptions?: UnsubscribeListenerOptions
+  unsubscribeOptions?: UnsubscribeListenerOptions
 ) => void
 
 /**
