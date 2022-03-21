@@ -1098,7 +1098,7 @@ describe('createListenerMiddleware', () => {
       expect(takeResult).toBe(null)
     })
 
-    test("take resolves to [A, CurrentState, PreviousState] if the timeout is provided but doesn't expires", async () => {
+    test("take resolves to [A, CurrentState, PreviousState] if the timeout is provided but doesn't expire", async () => {
       const store = configureStore({
         reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
@@ -1120,6 +1120,43 @@ describe('createListenerMiddleware', () => {
 
       await delay(25)
       expect(takeResult).toEqual([increment(), stateCurrent, stateBefore])
+    })
+
+    test("take resolves to `[A, CurrentState, PreviousState] | null` if a possibly undefined timeout parameter is provided", async () => {
+      const store = configureStore({
+        reducer: counterSlice.reducer,
+        middleware: (gDM) => gDM().prepend(middleware),
+      })
+
+      type ExpectedTakeResultType = readonly [ReturnType<typeof increment>, CounterState, CounterState] | null
+
+      let timeout: number | undefined = undefined
+      let done = false
+
+      const startAppListening = startListening as TypedStartListening<CounterState>
+      startAppListening({
+        predicate: incrementByAmount.match,
+        effect: async (_, listenerApi) => {
+          const stateBefore = listenerApi.getState()
+          
+          let takeResult = await listenerApi.take(increment.match, timeout)
+          const stateCurrent = listenerApi.getState()
+          expect(takeResult).toEqual([increment(), stateCurrent, stateBefore])
+          
+          timeout = 1
+          takeResult = await listenerApi.take(increment.match, timeout)
+          expect(takeResult).toBeNull()
+          
+          expectType<ExpectedTakeResultType>(takeResult)
+
+          done = true
+        },
+      })
+      store.dispatch(incrementByAmount(1))
+      store.dispatch(increment())
+
+      await delay(25)
+      expect(done).toBe(true);
     })
 
     test('condition method resolves promise when the predicate succeeds', async () => {
