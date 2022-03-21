@@ -363,7 +363,7 @@ export interface TakePattern<State> {
   <Predicate extends AnyListenerPredicate<State>>(
     predicate: Predicate,
     timeout?: number | undefined
-  ): Promise<[AnyAction, State, State] | null>
+  ): TakePatternOutputWithTimeout<State, Predicate>
 }
 
 /** @public */
