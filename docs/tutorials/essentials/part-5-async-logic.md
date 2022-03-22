@@ -702,6 +702,13 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 ```
 
+You may noticed that our reducer is not using the `state` variable at all.
+Instead, we are returning the action payload directly.
+This has the effect that the existing state is completely replaced with whatever we are returning.
+In our case, we are replacing the initial state that was empty and therefore `state.push(...action.payload)` would have the same result.
+But, this could introduce subtle bug is we are not sure that the client state is empty and we want to synchronize the client with the server state.
+To learn more about how state updates with Immer work, see the ["Writing Reducers with Immer" section in the RTK docs](https://redux-toolkit.js.org/usage/immer-reducers#immer-usage-patterns).
+
 We only need to fetch the list of users once, and we want to do it right when the application starts. We can do that in our `index.js` file, and directly dispatch the `fetchUsers` thunk because we have the `store` right there:
 
 ```js title="index.js"
