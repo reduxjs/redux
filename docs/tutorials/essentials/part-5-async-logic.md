@@ -702,6 +702,16 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 ```
 
+You may have noticed that this time the case reducer isn't using the `state` variable at all. Instead, we're returning the `action.payload` directly. Immer lets us update state in two ways: either _mutating_ the existing state value, or _returning_ a new result. If we return a new value, that will replace the existing state completely with whatever we return. (Note that if you want to manually return a new value, it's up to you to write any immutable update logic that might be needed.)
+
+In this case, the initial state was an empty array, and we probably could have done `state.push(...action.payload)` to mutate it. But, in our case we really want to replace the list of users with whatever the server returned, and this avoids any chance of accidentally duplicating the list of users in state.
+
+:::info
+
+To learn more about how state updates with Immer work, see the ["Writing Reducers with Immer" guide in the RTK docs](https://redux-toolkit.js.org/usage/immer-reducers#immer-usage-patterns).
+
+:::
+
 We only need to fetch the list of users once, and we want to do it right when the application starts. We can do that in our `index.js` file, and directly dispatch the `fetchUsers` thunk because we have the `store` right there:
 
 ```js title="index.js"
