@@ -702,12 +702,15 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 ```
 
-You may noticed that our reducer is not using the `state` variable at all.
-Instead, we are returning the action payload directly.
-This has the effect that the existing state is completely replaced with whatever we are returning.
-In our case, we are replacing the initial state that was empty and therefore `state.push(...action.payload)` would have the same result.
-But, this could introduce subtle bug is we are not sure that the client state is empty and we want to synchronize the client with the server state.
-To learn more about how state updates with Immer work, see the ["Writing Reducers with Immer" section in the RTK docs](https://redux-toolkit.js.org/usage/immer-reducers#immer-usage-patterns).
+You may have noticed that this time the case reducer isn't using the `state` variable at all. Instead, we're returning the `action.payload` directly. Immer lets us update state in two ways: either _mutating_ the existing state value, or _returning_ a new result. If we return a new value, that will replace the existing state completely with whatever we return. (Note that if you want to manually return a new value, it's up to you to write any immutable update logic that might be needed.)
+
+In this case, the initial state was an empty array, and we probably could have done `state.push(...action.payload)` to mutate it. But, in our case we really want to replace the list of users with whatever the server returned, and this avoids any chance of accidentally duplicating the list of users in state.
+
+:::info
+
+To learn more about how state updates with Immer work, see the ["Writing Reducers with Immer" guide in the RTK docs](https://redux-toolkit.js.org/usage/immer-reducers#immer-usage-patterns).
+
+:::
 
 We only need to fetch the list of users once, and we want to do it right when the application starts. We can do that in our `index.js` file, and directly dispatch the `fetchUsers` thunk because we have the `store` right there:
 
