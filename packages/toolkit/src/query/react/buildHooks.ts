@@ -109,7 +109,7 @@ interface UseQuerySubscriptionOptions extends SubscriptionOptions {
    * - **If the query has cached data:**
    *   * The cached data **will not be used** on the initial load, and will ignore updates from any identical query until the `skip` condition is removed
    *   * The query will have a status of `uninitialized`
-   *   * If `skip: false` is set after skipping the initial load, the cached result will be used
+   *   * If `skip: false` is set after the initial load, the cached result will be used
    * - **If the query does not have cached data:**
    *   * The query will have a status of `uninitialized`
    *   * The query will not exist in the state when viewed with the dev tools
