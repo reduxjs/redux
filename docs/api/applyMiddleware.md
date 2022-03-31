@@ -126,7 +126,7 @@ store.dispatch(makeASandwichWithSecretSauce('Me'))
 
 // It even takes care to return the thunk's return value
 // from the dispatch, so I can chain Promises as long as I return them.
-store.dispatch(makeASandwichWithSecretSauce('My wife')).then(() => {
+store.dispatch(makeASandwichWithSecretSauce('My spouse')).then(() => {
   console.log('Done!')
 })
 
@@ -147,7 +147,7 @@ function makeSandwichesForEverybody() {
       .then(() =>
         Promise.all([
           dispatch(makeASandwichWithSecretSauce('Me')),
-          dispatch(makeASandwichWithSecretSauce('My wife'))
+          dispatch(makeASandwichWithSecretSauce('My spouse'))
         ])
       )
       .then(() => dispatch(makeASandwichWithSecretSauce('Our kids')))

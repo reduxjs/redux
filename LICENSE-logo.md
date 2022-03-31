@@ -28,9 +28,9 @@ efforts of others.
 
 For these and/or other purposes and motivations, and without any expectation
 of additional consideration or compensation, the person associating CC0 with a
-Work (the "Affirmer"), to the extent that he or she is an owner of Copyright
+Work (the "Affirmer"), to the extent that they or they is an owner of Copyright
 and Related Rights in the Work, voluntarily elects to apply CC0 to the Work
-and publicly distribute the Work under its terms, with knowledge of his or her
+and publicly distribute the Work under its terms, with knowledge of their or them
 Copyright and Related Rights in the Work and the meaning and intended legal
 effect of CC0 on those rights.
 
@@ -93,7 +93,7 @@ based on applicable law or treaty, and any national implementations thereof.
    License for any reason be judged legally invalid or ineffective under
    applicable law, such partial invalidity or ineffectiveness shall not
    invalidate the remainder of the License, and in such case Affirmer hereby
-   affirms that he or she will not (i) exercise any of his or her remaining
+   affirms that they or they will not (i) exercise any of their or them remaining
    Copyright and Related Rights in the Work or (ii) assert any associated claims
    and causes of action with respect to the Work, in either case contrary to
    Affirmer's express Statement of Purpose.
