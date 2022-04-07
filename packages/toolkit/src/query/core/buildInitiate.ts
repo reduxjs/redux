@@ -1,14 +1,15 @@
 import type {
   EndpointDefinitions,
+  QueryDefinition,
   MutationDefinition,
   QueryArgFrom,
-  QueryDefinition,
   ResultTypeFrom,
 } from '../endpointDefinitions'
 import { DefinitionType } from '../endpointDefinitions'
-import type { MutationThunk, QueryThunk } from './buildThunks'
-import type { AnyAction, SerializedError, ThunkAction } from '@reduxjs/toolkit'
-import type { RootState, SubscriptionOptions } from './apiState'
+import type { QueryThunk, MutationThunk } from './buildThunks'
+import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
+import type { SubscriptionOptions, RootState } from './apiState'
+import { QueryStatus } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
@@ -191,12 +192,10 @@ export function buildInitiate({
   api: Api<any, EndpointDefinitions, any, any>
   context: ApiContext<EndpointDefinitions>
 }) {
-  // keep track of running queries by id
   const runningQueries: Record<
     string,
-    Record<string, QueryActionCreatorResult<any>>
+    QueryActionCreatorResult<any> | undefined
   > = {}
-  // keep track of running mutations by id
   const runningMutations: Record<
     string,
     MutationActionCreatorResult<any> | undefined
@@ -225,10 +224,7 @@ export function buildInitiate({
         endpointDefinition,
         endpointName,
       })
-      // TODO(manuel) this is not really what we want, because we don't know which of those thunks will actually resolve to the correct result
-      return Promise.all(
-        Object.values(runningQueries[queryCacheKey] || {})
-      ).then((x) => x[0])
+      return runningQueries[queryCacheKey]
     } else {
       return runningMutations[argOrRequestId]
     }
@@ -236,9 +232,7 @@ export function buildInitiate({
 
   function getRunningOperationPromises() {
     return [
-      ...Object.values(runningQueries)
-        .map((x) => Object.values(x))
-        .reduce((x, y) => x.concat(y)),
+      ...Object.values(runningQueries),
       ...Object.values(runningMutations),
     ].filter(<T>(t: T | undefined): t is T => !!t)
   }
@@ -281,20 +275,27 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           originalArgs: arg,
           queryCacheKey,
         })
+        const selector = (
+          api.endpoints[endpointName] as ApiEndpointQuery<any, any>
+        ).select(arg)
+
         const thunkResult = dispatch(thunk)
+        const stateAfter = selector(getState())
+
         middlewareWarning(getState)
 
         const { requestId, abort } = thunkResult
 
-        const prevThunks = Object.values(runningQueries?.[queryCacheKey] || {})
+        const skippedSynchronously = stateAfter.requestId !== requestId
 
-        let promises: Promise<any>[] = [...prevThunks, thunkResult]
+        const runningQuery = runningQueries[queryCacheKey]
+
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
-          Promise.all(promises).then(() => {
-            return (
-              api.endpoints[endpointName] as ApiEndpointQuery<any, any>
-            ).select(arg)(getState())
-          }),
+          skippedSynchronously && !runningQuery
+            ? Promise.resolve(stateAfter)
+            : Promise.all([runningQuery, thunkResult]).then(() =>
+                selector(getState())
+              ),
           {
             arg,
             requestId,
@@ -338,14 +339,12 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           }
         )
 
-        if (!runningQueries.hasOwnProperty(queryCacheKey)) {
-          runningQueries[queryCacheKey] = {}
+        if (!runningQuery && !skippedSynchronously) {
+          runningQueries[queryCacheKey] = statePromise
+          statePromise.then(() => {
+            delete runningQueries[queryCacheKey]
+          })
         }
-
-        runningQueries[queryCacheKey][requestId] = statePromise
-        statePromise.then(() => {
-          delete runningQueries?.[queryCacheKey]?.[requestId]
-        })
 
         return statePromise
       }
