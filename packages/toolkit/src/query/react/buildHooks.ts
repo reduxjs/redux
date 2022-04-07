@@ -771,7 +771,13 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
           /**
            * A method to manually refetch data for the query
            */
-          refetch: () => void promiseRef.current?.refetch(),
+          refetch: () => {
+            if (!promiseRef.current)
+              throw new Error(
+                'Cannot refetch a query that has not been started yet.'
+              )
+            return promiseRef.current?.refetch()
+          },
         }),
         []
       )
