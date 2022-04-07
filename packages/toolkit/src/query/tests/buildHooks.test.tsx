@@ -199,7 +199,7 @@ describe('hooks tests', () => {
         expect(screen.getByTestId('isLoading').textContent).toBe('false')
       )
       // We call a refetch, should still be `false`
-      act(() => refetch())
+      act(() => void refetch())
       await waitFor(() =>
         expect(screen.getByTestId('isFetching').textContent).toBe('true')
       )
@@ -255,7 +255,7 @@ describe('hooks tests', () => {
       expect(getRenderCount()).toBe(5)
 
       // We call a refetch, should set `isFetching` to true, then false when complete/errored
-      act(() => refetchMe())
+      act(() => void refetchMe())
       await waitFor(() => {
         expect(screen.getByTestId('isLoading').textContent).toBe('false')
         expect(screen.getByTestId('isFetching').textContent).toBe('true')
