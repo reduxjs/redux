@@ -288,20 +288,23 @@ If we want to fetch the list of users outside of React, we can dispatch the `get
 // highlight-next-line
 import { apiSlice } from './features/api/apiSlice'
 
-// Start our mock API server
-worker.start({ onUnhandledRequest: 'bypass' })
+async function main() {
+  // Start our mock API server
+  await worker.start({ onUnhandledRequest: 'bypass' })
 
-// highlight-next-line
-store.dispatch(apiSlice.endpoints.getUsers.initiate())
+  // highlight-next-line
+  store.dispatch(apiSlice.endpoints.getUsers.initiate())
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+  ReactDOM.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
+}
+main()
 ```
 
 This dispatch happens automatically inside the query hooks, but we can start it manually if needed.
@@ -405,15 +408,35 @@ export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 
 At the moment, the only file that references the `getUsers` endpoint is our index file, which is dispatching the `initiate` thunk. We need to update that to import the extended API slice instead:
 
-```js title="index.js"
-// highlight-next-line
-import { extendedApiSlice } from './features/users/usersSlice'
+```diff title="index.js"
+  // omit other imports
+  // highlight-start
+- import { apiSlice } from './features/api/apiSlice'
++ import { extendedApiSlice } from './features/users/usersSlice'
+  // highlight-end
 
-// Start our mock API server
-worker.start({ onUnhandledRequest: 'bypass' })
 
-// highlight-next-line
-store.dispatch(extendedApiSlice.endpoints.getUsers.initiate())
+  async function main() {
+    // Start our mock API server
+    await worker.start({ onUnhandledRequest: 'bypass' })
+
+
+    // highlight-start
+-   store.dispatch(apiSlice.endpoints.getUsers.initiate())
++   store.dispatch(extendedApiSlice.endpoints.getUsers.initiate())
+    // highlight-end
+
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </React.StrictMode>,
+      document.getElementById('root')
+    )
+  }
+  main()
 ```
 
 Alternately, you could just export the specific endpoints themselves from the slice file.
