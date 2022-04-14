@@ -171,7 +171,7 @@ export function Counter() {
 }
 ```
 
-Now, any time you click the "Increment" and "Decrement buttons:
+Now, any time you click the "Increment" and "Decrement" buttons:
 
 - The corresponding Redux action will be dispatched to the store
 - The counter slice reducer will see the actions and update its state
