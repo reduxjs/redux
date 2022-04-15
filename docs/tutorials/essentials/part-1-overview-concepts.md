@@ -165,7 +165,7 @@ obj.b = 3
 const arr = ['a', 'b']
 // In the same way, we can change the contents of this array
 arr.push('c')
-arr[1] = 'd'
+arr[1] = 'b'
 ```
 
 This is called _mutating_ the object or array. It's the same object or array reference in memory, but now the contents inside the object have changed.
