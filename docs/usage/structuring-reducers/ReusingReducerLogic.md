@@ -83,7 +83,7 @@ console.log(store.getState())
 
 function incrementCounter(type = 'A') {
   return {
-    type: `INCREMENT_${type}`, 
+    type: `INCREMENT_${type}`
   }
 }
 store.dispatch(incrementCounter('C'))
