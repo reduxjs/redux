@@ -434,7 +434,7 @@ Thunk functions can be used for both asynchronous _and_ synchronous logic. Thunk
 
 ## What You've Learned
 
-We've now succesfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the AJAX calls to our fake server API.
+We've now successfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the AJAX calls to our fake server API.
 
 In the process, we saw how Redux middleware are used to let us make async calls and interact with the store by dispatching actions with after the async calls have completed.
 
