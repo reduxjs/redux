@@ -218,7 +218,7 @@ function complexSynchronousThunk(someValue) {
 
 ### Accessing State
 
-Unlike components, thunks also have access to `getState`. This can be called at any time to retrieve the current root Redux state value. This can be useful for running conditional logic basic on the current state. It's common to [use selector functions when reading state inside of thunks](./deriving-data-selectors.md) rather than accessing nested state fields directly, but either approach is fine.
+Unlike components, thunks also have access to `getState`. This can be called at any time to retrieve the current root Redux state value. This can be useful for running conditional logic based on the current state. It's common to [use selector functions when reading state inside of thunks](./deriving-data-selectors.md) rather than accessing nested state fields directly, but either approach is fine.
 
 ```js title="Example: Conditional dispatching based on state"
 const MAX_TODOS = 5
