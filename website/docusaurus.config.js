@@ -8,7 +8,7 @@ module.exports = {
   projectName: 'redux',
   themeConfig: {
     image: 'img/redux-logo-landscape.png',
-    metadatas: [{ name: 'twitter:card', content: 'summary' }],
+    metadata: [{ name: 'twitter:card', content: 'summary' }],
     prism: {
       theme: require('./src/js/monokaiTheme.js')
     },
@@ -122,12 +122,10 @@ module.exports = {
       copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
     },
     algolia: {
-      apiKey: '518c6e3c629811d8daa1d21dc8bcfa37',
+      appId: 'YUQHC5OCW0',
+      apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
       indexName: 'redux',
       algoliaOptions: {}
-    },
-    googleAnalytics: {
-      trackingID: 'UA-130598673-1'
     }
   },
   presets: [
@@ -143,6 +141,9 @@ module.exports = {
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')
+        },
+        googleAnalytics: {
+          trackingID: 'UA-130598673-1'
         }
       }
     ]
