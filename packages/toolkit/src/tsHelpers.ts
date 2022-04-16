@@ -1,4 +1,4 @@
-import type { Middleware, Dispatch } from 'redux'
+import type { Middleware } from 'redux'
 import type { MiddlewareArray } from './utils'
 
 /**
