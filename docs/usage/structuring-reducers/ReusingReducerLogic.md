@@ -80,6 +80,15 @@ const rootReducer = combineReducers({
 store.dispatch({ type: 'INCREMENT_B' })
 console.log(store.getState())
 // {counterA : 0, counterB : 1, counterC : 0}
+
+function incrementCounter(type = 'A') {
+  return {
+    type: `INCREMENT_${type}`
+  }
+}
+store.dispatch(incrementCounter('C'))
+console.log(store.getState())
+// {counterA : 0, counterB : 1, counterC : 1}
 ```
 
 We could also vary the approach somewhat, and create a more generic higher-order reducer that accepts both a given reducer function and a name or identifier:
