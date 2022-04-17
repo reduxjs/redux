@@ -8,7 +8,7 @@ module.exports = {
   projectName: 'redux',
   themeConfig: {
     image: 'img/redux-logo-landscape.png',
-    metadatas: [{ name: 'twitter:card', content: 'summary' }],
+    metadata: [{ name: 'twitter:card', content: 'summary' }],
     prism: {
       theme: require('./src/js/monokaiTheme.js')
     },
@@ -32,12 +32,23 @@ module.exports = {
           to: 'tutorials/essentials/part-1-overview-concepts',
           position: 'right'
         },
-        { label: 'Usage Guide', to: 'usage/index', position: 'right' },
-        { label: 'API', to: 'api/api-reference', position: 'right' },
+        {
+          label: 'Usage Guide',
+          type: 'doc',
+          docId: 'usage/index',
+          position: 'right'
+        },
+        {
+          label: 'API',
+          type: 'doc',
+          docId: 'api/api-reference',
+          position: 'right'
+        },
         { label: 'FAQ', to: 'faq', position: 'right' },
         {
           label: 'Best Practices',
-          to: '/style-guide/style-guide',
+          type: 'doc',
+          docId: 'style-guide/style-guide',
           position: 'right'
         },
         {
@@ -62,7 +73,7 @@ module.exports = {
               label: 'Getting Started',
               to: 'introduction/getting-started'
             },
-            { label: 'Usage Guide', to: 'usage/index' },
+            { label: 'Usage Guide', type: 'doc', to: 'usage/index' },
             {
               label: 'Tutorial',
               to: 'tutorials/essentials/part-1-overview-concepts'
@@ -73,6 +84,7 @@ module.exports = {
             },
             {
               label: 'API Reference',
+              type: 'doc',
               to: 'api/api-reference'
             }
           ]
@@ -122,12 +134,10 @@ module.exports = {
       copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
     },
     algolia: {
-      apiKey: '518c6e3c629811d8daa1d21dc8bcfa37',
+      appId: 'YUQHC5OCW0',
+      apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
       indexName: 'redux',
       algoliaOptions: {}
-    },
-    googleAnalytics: {
-      trackingID: 'UA-130598673-1'
     }
   },
   presets: [
@@ -143,6 +153,9 @@ module.exports = {
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')
+        },
+        googleAnalytics: {
+          trackingID: 'UA-130598673-1'
         }
       }
     ]

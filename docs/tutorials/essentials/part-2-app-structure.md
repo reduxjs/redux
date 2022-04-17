@@ -299,6 +299,8 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
+:::warning
+
 ```js
 // ❌ Illegal - by default, this will mutate the state!
 state.value = 123
