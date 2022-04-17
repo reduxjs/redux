@@ -6,7 +6,7 @@ description: 'Introduction > Why RTK is Redux Today: details on how RTK replaces
 
 ## What is Redux Toolkit?
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) (RTK) is our official recommended approach for writing Redux logic. It wraps around the Redux core, and contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
+[**Redux Toolkit**](https://redux-toolkit.js.org) (also known as **"RTK"** for short) is our official recommended approach for writing Redux logic. The `@reduxjs/toolkit` package wraps around the core `redux` package, and contains API methods and common dependencies that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
 
 **If you are writing _any_ Redux code today, you _should_ be using Redux Toolkit to write that code!**
 
@@ -107,7 +107,7 @@ While these _were_ the patterns originally shown in the Redux docs, they unfortu
 Redux Toolkit starts with two key APIs that simplify the most common things you do in every Redux app:
 
 - `configureStore` sets up a well-configured Redux store with a single function call, including combining reducers, adding the thunk middleware, and setting up the Redux DevTools integration. It also is easier to configure than `createStore`, because it takes named options parameters.
-- `createSlice` lets you write reducers that use [the Immer library](https://immerjs.github.io/immer/) to enable writing "mutating" update syntax that becomes safe and correct immutable updates, with no spreads needed. It also automatically generates action creator functions for each reducer, and generates action type strings internally based on your reducer's names. Finally, it works great with TypeScript.
+- `createSlice` lets you write reducers that use [the Immer library](https://immerjs.github.io/immer/) to enable writing immutable updates using "mutating" JS syntax like `state.value = 123`, with no spreads needed. It also automatically generates action creator functions for each reducer, and generates action type strings internally based on your reducer's names. Finally, it works great with TypeScript.
 
 That means that the code _you_ write can be drastically simpler. For example, that same todos reducer could just be:
 
@@ -136,7 +136,9 @@ export const { todoAdded, todoToggled } = todosSlice.actions
 export default todosSlice.reducer
 ```
 
-and store setup can be simplified down to:
+All of the action creators and action types are generated automatically, and the reducer code is shorter and easier to understand. It's also much more clear what's actually being updated in each case.
+
+With `configureStore`, the store setup can be simplified down to:
 
 ```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
@@ -149,14 +151,17 @@ export const store = configureStore({
     filters: filtersReducer
   }
 })
-
-// The store has been created with these options:
-// - The slice reducers were automatically passed to combineReducers()
-// - The redux-thunk middleware was automatically added
-// - Dev-mode middleware was added to catch accidental mutations
-// - The Redux DevTools Extension was automatically set up
-// - The middleware and Devtools enhancers were composed together
 ```
+
+Note that **this one `configureStore` call automatically does all the usual setup work you'd have done manually**:
+
+- The slice reducers were automatically passed to combineReducers()
+- The redux-thunk middleware was automatically added
+- Dev-mode middleware was added to catch accidental mutations
+- The Redux DevTools Extension was automatically set up
+- The middleware and Devtools enhancers were composed together
+
+At the same time, **`configureStore` provides the options to let users modify any of those default behaviors** (like turning off thunks and adding sagas, or disabling the DevTools in production),
 
 From there, Redux Toolkit includes other APIs for common Redux tasks:
 
@@ -165,7 +170,7 @@ From there, Redux Toolkit includes other APIs for common Redux tasks:
 - `createSelector`: a re-export of the standard Reselect API for memoized selectors
 - `createListenerMiddleware`: a side effects middleware for running logic in response to dispatched actions
 
-Finally, RTK also includes "RTK Query", a full data fetching and caching solution for Redux apps. It lets you define endpoints (REST, GraphQL, or any async function), and generates a reducer and middleware that fully manage fetching data, updating loading state, and caching results. It also automatically generates React hooks that can be used in components to fetch data, like `const { data, isFetching} = useGetPokemonQuery('pikachu')`
+Finally, the RTK package also includes "RTK Query", a full data fetching and caching solution for Redux apps, as a separate optional entry point. It lets you define endpoints (REST, GraphQL, or any async function), and generates a reducer and middleware that fully manage fetching data, updating loading state, and caching results. It also automatically generates React hooks that can be used in components to fetch data, like `const { data, isFetching} = useGetPokemonQuery('pikachu')`
 
 Each of these APIs is completely optional and designed for specific use cases, but are highly recommended.
 
@@ -196,6 +201,7 @@ Over the years, we've seen how people actually used Redux in practice. We've see
 - Redux Toolkit eliminates the need to write any action creators or action types by hand
 - Redux Toolkit eliminates the need to write manual and error-prone immutable update logic
 - Redux Toolkit eliminates the need to spread a Redux feature's code across multiple separate files
+- Redux Toolkit offers excellent TS support, with APIs that are designed to give you excellent type safety and minimize the number of types you have to define in your code
 - RTK Query eliminates the need to write _any_ thunks, reducers, action creators, or effect hooks to manage fetching data and tracking loading state
 
 Because of this:
@@ -206,7 +212,9 @@ Because of this:
 
 :::
 
-The `redux` core package still works, but today we consider it to be obsolete. All of its APIs are also re-exported from `@reduxjs/toolkit`, and `configureStore` does everything `createStore` does but with better default behavior and configurability.
+Even for existing applications, we recommend at least switching out `createStore` for `configureStore` as the dev-mode middleware will also help you catch accidental mutation and serializability errors in existing code bases. We also want to encourage you to switch the reducers you are using most (and any ones you write in the future) over to `createSlice` - the code will be shorter and easier to understand, and the safety improvements will save you time and effort going forward.
+
+**The `redux` core package still works, but today we consider it to be obsolete**. All of its APIs are also re-exported from `@reduxjs/toolkit`, and `configureStore` does everything `createStore` does but with better default behavior and configurability.
 
 If you are using the `redux` core package by itself, your code will continue to work. **But, we strongly encourage you to switch over to `@reduxjs/toolkit`, and update your code to use the Redux Toolkit APIs instead!**
 
@@ -217,4 +225,4 @@ See these docs pages and blog posts for more details
 - [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
 - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
 - [Redux Style Guide: Best Practices and Recommendations](../style-guide/style-guide.md)
-- [Mark Erikson: Redux Toolkit 1.0 Announcement](https://blog.isquaredsoftware.com/2019/10/redux-toolkit-1.0/)
+- [Mark Erikson: Redux Toolkit 1.0 Announcement and development history](https://blog.isquaredsoftware.com/2019/10/redux-toolkit-1.0/)
