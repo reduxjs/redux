@@ -24,7 +24,7 @@ make your Redux code better.
 
 The first thing to ask is, "what is Redux?"
 
-Redux is:
+Redux is really:
 
 - A single store containing "global" state
 - Dispatching plain object actions to the store when something happens in the app
