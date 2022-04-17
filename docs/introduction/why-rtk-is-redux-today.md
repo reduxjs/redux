@@ -67,7 +67,7 @@ export const addTodo = text => ({
 })
 
 export const todoToggled = id => ({
-  type: ADD_TODO,
+  type: TODO_TOGGLED,
   payload: id
 })
 
