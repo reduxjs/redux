@@ -1828,14 +1828,10 @@ describe('hooks with createApi defaults set', () => {
 
     const storeRef = setupApiStore(api)
 
-    // @pre41-ts-ignore
     expectExactType(api.useGetPostsQuery)(api.endpoints.getPosts.useQuery)
-    // @pre41-ts-ignore
     expectExactType(api.useUpdatePostMutation)(
-      // @pre41-ts-ignore
       api.endpoints.updatePost.useMutation
     )
-    // @pre41-ts-ignore
     expectExactType(api.useAddPostMutation)(api.endpoints.addPost.useMutation)
 
     test('useQueryState serves a deeply memoized value and does not rerender unnecessarily', async () => {

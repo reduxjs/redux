@@ -12,7 +12,7 @@ import { capitalize } from '../utils'
 import { safeAssign } from '../tsHelpers'
 import type { BaseQueryFn } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 
-import type { HooksWithUniqueNames } from './versionedTypes'
+import type { HooksWithUniqueNames } from './namedHooks'
 
 import {
   useDispatch as rrUseDispatch,

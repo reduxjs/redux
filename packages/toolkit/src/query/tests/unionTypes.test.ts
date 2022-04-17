@@ -141,7 +141,6 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-start
   test('useQuery TS4.1 union', () => {
     const result = api.useTestQuery()
 
@@ -207,7 +206,6 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-end
 
   test('useLazyQuery union', () => {
     const [_trigger, result] = api.endpoints.test.useLazyQuery()
@@ -275,7 +273,6 @@ describe.skip('TS only tests', () => {
     }
   })
 
-  // pre41-remove-start
   test('useLazyQuery TS4.1 union', () => {
     const [_trigger, result] = api.useLazyTestQuery()
 
@@ -341,7 +338,6 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-end
 
   test('queryHookResult (without selector) union', () => {
     const useQueryStateResult = api.endpoints.test.useQueryState()
@@ -501,7 +497,6 @@ describe.skip('TS only tests', () => {
     })(result)
   })
 
-  // pre41-remove-start
   test('useMutation TS4.1 union', () => {
     const [_trigger, result] = api.useMutationMutation()
 
@@ -552,5 +547,4 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-end
 })
