@@ -32,12 +32,23 @@ module.exports = {
           to: 'tutorials/essentials/part-1-overview-concepts',
           position: 'right'
         },
-        { label: 'Usage Guide', to: 'usage/index', position: 'right' },
-        { label: 'API', to: 'api/api-reference', position: 'right' },
+        {
+          label: 'Usage Guide',
+          type: 'doc',
+          docId: 'usage/index',
+          position: 'right'
+        },
+        {
+          label: 'API',
+          type: 'doc',
+          docId: 'api/api-reference',
+          position: 'right'
+        },
         { label: 'FAQ', to: 'faq', position: 'right' },
         {
           label: 'Best Practices',
-          to: '/style-guide/style-guide',
+          type: 'doc',
+          docId: 'style-guide/style-guide',
           position: 'right'
         },
         {
@@ -62,7 +73,7 @@ module.exports = {
               label: 'Getting Started',
               to: 'introduction/getting-started'
             },
-            { label: 'Usage Guide', to: 'usage/index' },
+            { label: 'Usage Guide', type: 'doc', to: 'usage/index' },
             {
               label: 'Tutorial',
               to: 'tutorials/essentials/part-1-overview-concepts'
@@ -73,6 +84,7 @@ module.exports = {
             },
             {
               label: 'API Reference',
+              type: 'doc',
               to: 'api/api-reference'
             }
           ]
