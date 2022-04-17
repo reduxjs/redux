@@ -8,7 +8,7 @@ description: 'Introduction > Why RTK is Redux Today: details on how RTK replaces
 
 [**Redux Toolkit**](https://redux-toolkit.js.org) (also known as **"RTK"** for short) is our official recommended approach for writing Redux logic. The `@reduxjs/toolkit` package wraps around the core `redux` package, and contains API methods and common dependencies that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
 
-**If you are writing _any_ Redux code today, you _should_ be using Redux Toolkit to write that code!**
+**If you are writing _any_ Redux logic today, you _should_ be using Redux Toolkit to write that code!**
 
 RTK includes utilities that help simplify many common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore),
 [creating reducers and writing immutable update logic](https://redux-toolkit.js.org/api/createreducer),
@@ -94,9 +94,9 @@ export const todosReducer = (state = [], action) => {
 }
 ```
 
-None of this code specifically depends on any API from the `redux` core library. But, this is a lot of code to write. Immutable updates required a lot of hand-written object spreads and array operations, and it was very easy to make mistakes and accidentally mutate state in the process. It was also common, though not strictly required, to spread that same code across multiple files: `actions/todos.js`, `constants/todos.js`, and `reducers/todos.js`.
+None of this code specifically depends on any API from the `redux` core library. But, this is a lot of code to write. Immutable updates required a lot of hand-written object spreads and array operations, and it was very easy to make mistakes and accidentally mutate state in the process (always the #1 cause of Redux bugs!). It was also common, though not strictly required, to spread the code for one feature across multiple files like `actions/todos.js`, `constants/todos.js`, and `reducers/todos.js`.
 
-Additionally, store setup usually required a few dozen lines of setting up commonly used middleware like thunks, hooking up the Redux DevTools Extension support
+Additionally, store setup usually required a series of steps to add commonly used middleware like thunks and enable Redux DevTools Extension support, even though these are standard tools used in almost every Redux app.
 
 ### What Does Redux Toolkit Do?
 
@@ -155,11 +155,11 @@ export const store = configureStore({
 
 Note that **this one `configureStore` call automatically does all the usual setup work you'd have done manually**:
 
-- The slice reducers were automatically passed to combineReducers()
-- The redux-thunk middleware was automatically added
+- The slice reducers were automatically passed to `combineReducers()`
+- The `redux-thunk` middleware was automatically added
 - Dev-mode middleware was added to catch accidental mutations
 - The Redux DevTools Extension was automatically set up
-- The middleware and Devtools enhancers were composed together
+- The middleware and DevTools enhancers were composed together and added to the store
 
 At the same time, **`configureStore` provides the options to let users modify any of those default behaviors** (like turning off thunks and adding sagas, or disabling the DevTools in production),
 
@@ -170,9 +170,9 @@ From there, Redux Toolkit includes other APIs for common Redux tasks:
 - `createSelector`: a re-export of the standard Reselect API for memoized selectors
 - `createListenerMiddleware`: a side effects middleware for running logic in response to dispatched actions
 
-Finally, the RTK package also includes "RTK Query", a full data fetching and caching solution for Redux apps, as a separate optional entry point. It lets you define endpoints (REST, GraphQL, or any async function), and generates a reducer and middleware that fully manage fetching data, updating loading state, and caching results. It also automatically generates React hooks that can be used in components to fetch data, like `const { data, isFetching} = useGetPokemonQuery('pikachu')`
+Finally, the RTK package also includes "RTK Query", a full data fetching and caching solution for Redux apps, as a separate optional `@reduxjs/toolkit/query` entry point. It lets you define endpoints (REST, GraphQL, or any async function), and generates a reducer and middleware that fully manage fetching data, updating loading state, and caching results. It also automatically generates React hooks that can be used in components to fetch data, like `const { data, isFetching} = useGetPokemonQuery('pikachu')`
 
-Each of these APIs is completely optional and designed for specific use cases, but are highly recommended.
+Each of these APIs is completely optional and designed for specific use cases, and **you can pick and choose which APIs you actually use in your app**. But, all of them are highly recommended to help with those tasks.
 
 Note that **Redux Toolkit is still "Redux"!** There's still a single store, with dispatched action objects for updates, and reducers that immutably update state, plus the ability to write thunks for async logic, manage normalized state, type your code with TypeScript, and use the DevTools. **There's just way less code _you_ have to write for the same results!**
 
@@ -193,16 +193,22 @@ The "boilerplate" and complexity of the early Redux patterns was never a _necess
 - JavaScript is a mutable language by default, and writing immutable updates required manual object spreads and array updates
 - Redux was originally built in just a few weeks and intentionally designed to be just a few API primitives
 
-Over the years, we've seen how people actually used Redux in practice. We've seen how the community wrote hundreds of add-on libraries for tasks like generating action types and creators, async logic and side effects, and data fetching. We've also seen the problems that have consistently caused pain for our users, like accidentally mutating state, writing dozens of lines of code just to make one simple state update, and having trouble tracing how a codebase fits together.
+Additionally, the Redux community has adopted some specific approaches that add additional boilerplate:
+
+- Emphasizing use of the `redux-saga` middleware as a common approach for writing side effects
+- Insisting on hand-writing TS types for Redux action objects and creating union types to limit what actions can be dispatched at the type level
+
+Over the years, we've seen how people actually used Redux in practice. We've seen how the community wrote hundreds of add-on libraries for tasks like generating action types and creators, async logic and side effects, and data fetching. We've also seen the problems that have consistently caused pain for our users, like accidentally mutating state, writing dozens of lines of code just to make one simple state update, and having trouble tracing how a codebase fits together. We've helped thousands of users who were trying to learn and use Redux and struggling to understand how all the pieces fit together, and were confused by the number of concepts and amount of extra code they had to write. We _know_ what problems our users are facing.
 
 **We specifically designed Redux Toolkit to solve those problems!**
 
 - Redux Toolkit simplifies store setup down to a single clear function call, while retaining the ability to fully configure the store's options if you need to
+- Redux Toolkit eliminates accidental mutations, which have always been the #1 cause of Redux bugs
 - Redux Toolkit eliminates the need to write any action creators or action types by hand
 - Redux Toolkit eliminates the need to write manual and error-prone immutable update logic
-- Redux Toolkit eliminates the need to spread a Redux feature's code across multiple separate files
+- Redux Toolkit makes it easy to write a Redux feature's code in one file, instead of spreading it across multiple separate files
 - Redux Toolkit offers excellent TS support, with APIs that are designed to give you excellent type safety and minimize the number of types you have to define in your code
-- RTK Query eliminates the need to write _any_ thunks, reducers, action creators, or effect hooks to manage fetching data and tracking loading state
+- RTK Query can eliminate the need to write _any_ thunks, reducers, action creators, or effect hooks to manage fetching data and tracking loading state
 
 Because of this:
 
@@ -215,6 +221,8 @@ Because of this:
 Even for existing applications, we recommend at least switching out `createStore` for `configureStore` as the dev-mode middleware will also help you catch accidental mutation and serializability errors in existing code bases. We also want to encourage you to switch the reducers you are using most (and any ones you write in the future) over to `createSlice` - the code will be shorter and easier to understand, and the safety improvements will save you time and effort going forward.
 
 **The `redux` core package still works, but today we consider it to be obsolete**. All of its APIs are also re-exported from `@reduxjs/toolkit`, and `configureStore` does everything `createStore` does but with better default behavior and configurability.
+
+It _is_ useful to understand the lower-level concepts, so that you have a better understanding of what Redux Toolkit is doing for you. That's why [the "Redux Fundamentals" tutorial shows how Redux works, with no abstractions](../tutorials/fundamentals/part-1-overview.md). _But_, it shows those examples solely as a learning tool, and finishes by showing you how Redux Toolkit simplifies the older hand-written Redux code.
 
 If you are using the `redux` core package by itself, your code will continue to work. **But, we strongly encourage you to switch over to `@reduxjs/toolkit`, and update your code to use the Redux Toolkit APIs instead!**
 
