@@ -52,6 +52,9 @@ export interface ConfigureStoreOptions<
   /**
    * An array of Redux middleware to install. If not supplied, defaults to
    * the set of middleware returned by `getDefaultMiddleware()`.
+   * 
+   * @example `middleware: (gDM) => gDM().concat(logger, apiMiddleware, yourCustomMiddleware)`
+   * @see https://redux-toolkit.js.org/api/getDefaultMiddleware#intended-usage
    */
   middleware?: ((getDefaultMiddleware: CurriedGetDefaultMiddleware<S>) => M) | M
 
