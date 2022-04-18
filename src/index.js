@@ -1,4 +1,4 @@
-import createStore from './createStore'
+import { createStore, legacy_createStore } from './createStore'
 import combineReducers from './combineReducers'
 import bindActionCreators from './bindActionCreators'
 import applyMiddleware from './applyMiddleware'
@@ -28,6 +28,7 @@ if (
 
 export {
   createStore,
+  legacy_createStore,
   combineReducers,
   bindActionCreators,
   applyMiddleware,
