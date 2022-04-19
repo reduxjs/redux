@@ -202,14 +202,17 @@ Store enhancer that can debounce subscription notifications
 
 ```js
 const debounceNotify = _.debounce(notify => notify())
-const store = configureStore({ reducer, enhancers: [ batchedSubscribe(debounceNotify) ] })
+const store = configureStore({
+  reducer,
+  enhancers: [batchedSubscribe(debounceNotify)]
+})
 ```
 
 **[manaflair/redux-batch](https://github.com/manaflair/redux-batch)** <br />
 Store enhancer that allows dispatching arrays of actions
 
 ```js
-const store = configureStore({ reducer, enhancers: [ reduxBatch ] })
+const store = configureStore({ reducer, enhancers: [reduxBatch] })
 store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
 ```
 
@@ -217,7 +220,7 @@ store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
 Store enhancer that accepts batched actions
 
 ```js
-const store = configureStore({ reducer, enhancers: [ batch().enhancer ] })
+const store = configureStore({ reducer, enhancers: [batch().enhancer] })
 store.dispatch(createAction({ type: 'INCREMENT' }, { type: 'INCREMENT' }))
 ```
 
@@ -239,12 +242,12 @@ const persistConfig = { key: 'root', version: 1, storage }
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+      }
+    })
 })
 export const persistor = persistStore(store)
 ```
@@ -256,9 +259,10 @@ Persistence layer for Redux with flexible backends
 const reducer = storage.reducer(combineReducers(reducers))
 const engine = createEngineLocalStorage('my-save-key')
 const storageMiddleware = storage.createMiddleware(engine)
-const store = configureStore({ 
-  reducer, 
-  middleware: getDefaultMiddleware => getDefaultMiddleware.concat(storageMiddleware)
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware.concat(storageMiddleware)
 })
 ```
 
@@ -266,7 +270,7 @@ const store = configureStore({
 Persistent store for Offline-First apps, with support for optimistic UIs
 
 ```js
-const store = configureStore({ reducer, enhancer: [ offline(offlineConfig) ] })
+const store = configureStore({ reducer, enhancer: [offline(offlineConfig)] })
 store.dispatch({
   type: 'FOLLOW_USER_REQUEST',
   meta: { offline: { effect: {}, commit: {}, rollback: {} } }
@@ -328,7 +332,7 @@ listenerMiddleware.startListening({
     const { specialData } = action.meta
 
     analyticsApi.trackUsage(action.type, user, specialData)
-  },
+  }
 })
 ```
 
@@ -501,9 +505,10 @@ const fetchUsers = () => ({
 An opinionated connector between socket.io and redux.
 
 ```js
-const store = configureStore({ 
-  reducer, 
-  middleware: getDefaultMiddleware => getDefaultMiddleware.concat(socketIoMiddleware)
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware.concat(socketIoMiddleware)
 })
 store.dispatch({ type: 'server/hello', data: 'Hello!' })
 ```
