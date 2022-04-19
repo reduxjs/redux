@@ -136,42 +136,6 @@ Reset the redux state on certain actions
 **[ForbesLindesay/redux-optimist](https://github.com/ForbesLindesay/redux-optimist)** <br />
 A reducer enhancer to enable type-agnostic optimistic updates
 
-## Actions
-
-**[reduxactions/redux-actions](https://github.com/reduxactions/redux-actions)** <br />
-Flux Standard Action utilities for Redux
-
-```js
-const increment = createAction('INCREMENT')
-const reducer = handleActions({ [increment]: (state, action) => state + 1 }, 0)
-const store = createStore(reducer)
-store.dispatch(increment())
-```
-
-**[BerkeleyTrue/redux-create-types](https://github.com/BerkeleyTrue/redux-create-types)** <br />
-Creates standard and async action types based on namespaces
-
-```js
-export const types = createTypes(
-  ['openModal', createAsyncTypes('fetch')],
-  'app'
-)
-// { openModal : "app.openModal", fetch : { start : "app.fetch.start", complete: 'app.fetch.complete' } }
-```
-
-**[maxhallinan/kreighter](https://github.com/maxhallinan/kreighter)** <br />
-Generates action creators based on types and expected fields
-
-```js
-const formatTitle = (id, title) => ({
-  id,
-  title: toTitleCase(title)
-})
-const updateBazTitle = fromType('UPDATE_BAZ_TITLE', formatTitle)
-updateBazTitle(1, 'foo bar baz')
-// -> { type: 'UPDATE_BAZ_TITLE', id: 1, title: 'Foo Bar Baz', }
-```
-
 ## Utilities
 
 **[reduxjs/reselect](https://github.com/reduxjs/reselect)** <br />
@@ -238,18 +202,14 @@ Store enhancer that can debounce subscription notifications
 
 ```js
 const debounceNotify = _.debounce(notify => notify())
-const store = createStore(
-  reducer,
-  initialState,
-  batchedSubscribe(debounceNotify)
-)
+const store = configureStore({ reducer, enhancers: [ batchedSubscribe(debounceNotify) ] })
 ```
 
 **[manaflair/redux-batch](https://github.com/manaflair/redux-batch)** <br />
 Store enhancer that allows dispatching arrays of actions
 
 ```js
-const store = createStore(reducer, reduxBatch)
+const store = configureStore({ reducer, enhancers: [ reduxBatch ] })
 store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
 ```
 
@@ -257,7 +217,7 @@ store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
 Store enhancer that accepts batched actions
 
 ```js
-const store = createStore(reducer, initialState, batch().enhancer)
+const store = configureStore({ reducer, enhancers: [ batch().enhancer ] })
 store.dispatch(createAction({ type: 'INCREMENT' }, { type: 'INCREMENT' }))
 ```
 
@@ -265,7 +225,7 @@ store.dispatch(createAction({ type: 'INCREMENT' }, { type: 'INCREMENT' }))
 Higher-order reducer that handles batched actions
 
 ```js
-const store = createStore(enableBatching(reducer), initialState)
+const store = configureStore({ reducer: enableBatching(rootReducer) })
 store.dispatch(batchActions([{ type: 'INCREMENT' }, { type: 'INCREMENT' }]))
 ```
 
@@ -275,8 +235,18 @@ store.dispatch(batchActions([{ type: 'INCREMENT' }, { type: 'INCREMENT' }]))
 Persist and rehydrate a Redux store, with many extensible options
 
 ```js
-const store = createStore(reducer, autoRehydrate())
-persistStore(store)
+const persistConfig = { key: 'root', version: 1, storage }
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+})
+export const persistor = persistStore(store)
 ```
 
 **[react-stack/redux-storage](https://github.com/react-stack/redux-storage)** <br />
@@ -286,14 +256,17 @@ Persistence layer for Redux with flexible backends
 const reducer = storage.reducer(combineReducers(reducers))
 const engine = createEngineLocalStorage('my-save-key')
 const storageMiddleware = storage.createMiddleware(engine)
-const store = createStore(reducer, applyMiddleware(storageMiddleware))
+const store = configureStore({ 
+  reducer, 
+  middleware: getDefaultMiddleware => getDefaultMiddleware.concat(storageMiddleware)
+})
 ```
 
 **[redux-offline/redux-offline](https://github.com/redux-offline/redux-offline)** <br />
 Persistent store for Offline-First apps, with support for optimistic UIs
 
 ```js
-const store = createStore(reducer, offline(offlineConfig))
+const store = configureStore({ reducer, enhancer: [ offline(offlineConfig) ] })
 store.dispatch({
   type: 'FOLLOW_USER_REQUEST',
   meta: { offline: { effect: {}, commit: {}, rollback: {} } }
@@ -341,6 +314,22 @@ function addTodosIfAllowed(todoText) {
         }
     }
 }
+```
+
+**[listenerMiddleware (Redux Toolkit)](https://redux-toolkit.js.org/api/createListenerMiddleware)** <br />
+listenerMiddleware is intended to be a lightweight alternative to more widely used Redux async middleware like sagas and observables. While similar to thunks in level of complexity and concept, it can be used to replicate some common saga usage patterns.
+
+```js
+listenerMiddleware.startListening({
+  matcher: isAnyOf(action1, action2, action3),
+  effect: (action, listenerApi) => {
+    const user = selectUserDetails(listenerApi.getState())
+
+    const { specialData } = action.meta
+
+    analyticsApi.trackUsage(action.type, user, specialData)
+  },
+})
 ```
 
 **[redux-saga/redux-saga](https://github.com/redux-saga/redux-saga)** <br />
@@ -512,7 +501,10 @@ const fetchUsers = () => ({
 An opinionated connector between socket.io and redux.
 
 ```js
-const store = createStore(reducer, applyMiddleware(socketIoMiddleware))
+const store = configureStore({ 
+  reducer, 
+  middleware: getDefaultMiddleware => getDefaultMiddleware.concat(socketIoMiddleware)
+})
 store.dispatch({ type: 'server/hello', data: 'Hello!' })
 ```
 
