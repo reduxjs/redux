@@ -278,9 +278,6 @@ export function buildThunks<
             api.util.patchQueryData(endpointName, args, ret.inversePatches)
           ),
       }
-      if (currentState.status === QueryStatus.uninitialized) {
-        return ret
-      }
       if ('data' in currentState) {
         if (isDraftable(currentState.data)) {
           const [, patches, inversePatches] = produceWithPatches(
@@ -305,9 +302,21 @@ export function buildThunks<
           path: [],
           value: undefined,
         })
-        dispatch(api.endpoints[endpointName].initiate(args, {subscribe: false, forceRefetch: true, }))
+        dispatch(
+          (
+            api.endpoints[endpointName] as ApiEndpointQuery<
+              QueryDefinition<any, any, any, any, any>,
+              Definitions
+            >
+          ).initiate(args, {
+            subscribe: false,
+            forceRefetch: true,
+            forceQueryFn: () => ({
+              data: upsertRecipe(undefined),
+            }),
+          })
+        )
       }
-
 
       return ret
     }
