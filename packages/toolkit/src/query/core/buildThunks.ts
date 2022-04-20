@@ -144,6 +144,7 @@ function defaultTransformResponse(baseQueryReturnValue: unknown) {
 
 export type MaybeDrafted<T> = T | Draft<T>
 export type Recipe<T> = (data: MaybeDrafted<T>) => void | MaybeDrafted<T>
+export type UpsertRecipe<T> = (data: MaybeDrafted<T> | undefined) => void | MaybeDrafted<T>
 
 export type PatchQueryDataThunk<
   Definitions extends EndpointDefinitions,
@@ -161,6 +162,15 @@ export type UpdateQueryDataThunk<
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
   updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>
+) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
+
+export type UpsertQueryDataThunk<
+  Definitions extends EndpointDefinitions,
+  PartialState
+> = <EndpointName extends QueryKeys<Definitions>>(
+  endpointName: EndpointName,
+  args: QueryArgFrom<Definitions[EndpointName]>,
+  upsertRecipe: UpsertRecipe<ResultTypeFrom<Definitions[EndpointName]>>
 ) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
 
 /**
@@ -255,6 +265,53 @@ export function buildThunks<
       return ret
     }
 
+  const upsertQueryData: UpsertQueryDataThunk<EndpointDefinitions, State> =
+    (endpointName, args, upsertRecipe) => (dispatch, getState) => {
+      const currentState = (
+        api.endpoints[endpointName] as ApiEndpointQuery<any, any>
+      ).select(args)(getState())
+      let ret: PatchCollection = {
+        patches: [],
+        inversePatches: [],
+        undo: () =>
+          dispatch(
+            api.util.patchQueryData(endpointName, args, ret.inversePatches)
+          ),
+      }
+      if (currentState.status === QueryStatus.uninitialized) {
+        return ret
+      }
+      if ('data' in currentState) {
+        if (isDraftable(currentState.data)) {
+          const [, patches, inversePatches] = produceWithPatches(
+            currentState.data,
+            upsertRecipe
+          )
+          ret.patches.push(...patches)
+          ret.inversePatches.push(...inversePatches)
+        } else {
+          const value = upsertRecipe(currentState.data)
+          ret.patches.push({ op: 'replace', path: [], value })
+          ret.inversePatches.push({
+            op: 'replace',
+            path: [],
+            value: currentState.data,
+          })
+        }
+        dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
+      } else {
+        ret.inversePatches.push({
+          op: 'replace',
+          path: [],
+          value: undefined,
+        })
+        dispatch(api.endpoints[endpointName].initiate(args, {subscribe: false, forceRefetch: true, }))
+      }
+
+
+      return ret
+    }
+
   const executeEndpoint: AsyncThunkPayloadCreator<
     ThunkResult,
     QueryThunkArg | MutationThunkArg,
@@ -291,7 +348,10 @@ export function buildThunks<
         forced:
           arg.type === 'query' ? isForcedQuery(arg, getState()) : undefined,
       }
-      if (endpointDefinition.query) {
+      if ('forceQueryFn' in arg && arg.forceQueryFn) {
+        result = arg.forceQueryFn()
+        
+      }else if (endpointDefinition.query) {
         result = await baseQuery(
           endpointDefinition.query(arg.originalArgs),
           baseQueryApi,
@@ -527,6 +587,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     mutationThunk,
     prefetch,
     updateQueryData,
+    upsertQueryData,
     patchQueryData,
     buildMatchThunkActions,
   }
