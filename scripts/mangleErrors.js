@@ -37,7 +37,7 @@ const evalToString = ast => {
  * If minify is enabled, we'll replace the error message with just an index that maps to an arrow object lookup.
  *
  * If minify is disabled, we'll add in a conditional statement to check the process.env.NODE_ENV which will output a
- * an error number index in production or the actual error message in development. This allows consumers using webpak
+ * an error number index in production or the actual error message in development. This allows consumers using webpack
  * or another build tool to have these messages in development but have just the error index in production.
  *
  * E.g.
