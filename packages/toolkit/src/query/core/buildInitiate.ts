@@ -34,11 +34,13 @@ declare module './module' {
   }
 }
 
-export interface StartQueryActionCreatorOptions  {
+export const forceQueryFnSymbol = Symbol('forceQueryFn')
+
+export interface StartQueryActionCreatorOptions {
   subscribe?: boolean
   forceRefetch?: boolean | number
   subscriptionOptions?: SubscriptionOptions
-  forceQueryFn?: () => QueryReturnValue
+  [forceQueryFnSymbol]?: () => QueryReturnValue
 }
 
 type StartQueryActionCreator<
@@ -180,7 +182,6 @@ export type MutationActionCreatorResult<
   unsubscribe(): void
 }
 
-
 export function buildInitiate({
   serializeQueryArgs,
   queryThunk,
@@ -261,7 +262,15 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     endpointDefinition: QueryDefinition<any, any, any, any>
   ) {
     const queryAction: StartQueryActionCreator<any> =
-      (arg, { subscribe = true, forceRefetch, subscriptionOptions, forceQueryFn } = {}) =>
+      (
+        arg,
+        {
+          subscribe = true,
+          forceRefetch,
+          subscriptionOptions,
+          [forceQueryFnSymbol]: forceQueryFn,
+        } = {}
+      ) =>
       (dispatch, getState) => {
         const queryCacheKey = serializeQueryArgs({
           queryArgs: arg,
@@ -272,11 +281,11 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           type: 'query',
           subscribe,
           forceRefetch,
-          forceQueryFn,
           subscriptionOptions,
           endpointName,
           originalArgs: arg,
           queryCacheKey,
+          [forceQueryFnSymbol]: forceQueryFn,
         })
         const selector = (
           api.endpoints[endpointName] as ApiEndpointQuery<any, any>

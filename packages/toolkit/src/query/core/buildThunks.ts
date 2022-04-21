@@ -7,7 +7,10 @@ import type {
 } from '../baseQueryTypes'
 import type { RootState, QueryKeys, QuerySubstateIdentifier } from './apiState'
 import { QueryStatus } from './apiState'
-import type { StartQueryActionCreatorOptions } from './buildInitiate'
+import {
+  forceQueryFnSymbol,
+  StartQueryActionCreatorOptions,
+} from './buildInitiate'
 import type {
   AssertTagTypes,
   EndpointDefinition,
@@ -144,7 +147,9 @@ function defaultTransformResponse(baseQueryReturnValue: unknown) {
 
 export type MaybeDrafted<T> = T | Draft<T>
 export type Recipe<T> = (data: MaybeDrafted<T>) => void | MaybeDrafted<T>
-export type UpsertRecipe<T> = (data: MaybeDrafted<T> | undefined) => void | MaybeDrafted<T>
+export type UpsertRecipe<T> = (
+  data: MaybeDrafted<T> | undefined
+) => void | MaybeDrafted<T>
 
 export type PatchQueryDataThunk<
   Definitions extends EndpointDefinitions,
@@ -311,7 +316,7 @@ export function buildThunks<
           ).initiate(args, {
             subscribe: false,
             forceRefetch: true,
-            forceQueryFn: () => ({
+            [forceQueryFnSymbol]: () => ({
               data: upsertRecipe(undefined),
             }),
           })
@@ -357,10 +362,12 @@ export function buildThunks<
         forced:
           arg.type === 'query' ? isForcedQuery(arg, getState()) : undefined,
       }
-      if ('forceQueryFn' in arg && arg.forceQueryFn) {
-        result = arg.forceQueryFn()
-        
-      }else if (endpointDefinition.query) {
+
+      const forceQueryFn =
+        arg.type === 'query' ? arg[forceQueryFnSymbol] : undefined
+      if (forceQueryFn) {
+        result = forceQueryFn()
+      } else if (endpointDefinition.query) {
         result = await baseQuery(
           endpointDefinition.query(arg.originalArgs),
           baseQueryApi,
