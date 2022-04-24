@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import type { Context } from 'react'
+import { Context, useEffect } from 'react'
 import React from 'react'
 import type { ReactReduxContextValue } from 'react-redux'
 import { Provider } from 'react-redux'
@@ -33,7 +33,7 @@ import type { Api } from '@reduxjs/toolkit/dist/query/apiTypes'
 export function ApiProvider<A extends Api<any, {}, any, any>>(props: {
   children: any
   api: A
-  setupListeners?: Parameters<typeof setupListeners>[1]
+  setupListeners?: Parameters<typeof setupListeners>[1] | false
   context?: Context<ReactReduxContextValue>
 }) {
   const [store] = React.useState(() =>
@@ -45,7 +45,13 @@ export function ApiProvider<A extends Api<any, {}, any, any>>(props: {
     })
   )
   // Adds the event listeners for online/offline/focus/etc
-  setupListeners(store.dispatch, props.setupListeners)
+  useEffect(
+    (): undefined | (() => void) =>
+      props.setupListeners === false
+        ? undefined
+        : setupListeners(store.dispatch, props.setupListeners),
+    [props.setupListeners]
+  )
 
   return (
     <Provider store={store} context={props.context}>
