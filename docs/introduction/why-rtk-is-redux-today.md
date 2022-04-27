@@ -81,7 +81,7 @@ export const todosReducer = (state = [], action) => {
       })
     case TODO_TOGGLED:
       return state.map(todo => {
-        if (todo.id !== action.payload) return
+        if (todo.id !== action.payload.id) return todo
 
         return {
           ...todo,
