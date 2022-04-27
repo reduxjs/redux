@@ -126,7 +126,7 @@ const todosSlice = createSlice({
       })
     },
     todoToggled(state, action) {
-      const todo = state.find(todo => todo.id === action.payload)
+      const todo = state.find(todo => todo.id === action.payload.id)
       todo.completed = !todo.completed
     }
   }
