@@ -753,7 +753,7 @@ export const ReactionButtons = ({ post }) => {
 }
 ```
 
-We don't yet have a `post.reactions` field in our data, so we'll need to update the `initialState` post objects and our `postAdded` prepare callback function to make sure that every post has that data inside, like `reactions: {thumbsUp: 0, hooray: 0}`.
+We don't yet have a `post.reactions` field in our data, so we'll need to update the `initialState` post objects and our `postAdded` prepare callback function to make sure that every post has that data inside, like `reactions: {thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0}`.
 
 Now, we can define a new reducer that will handle updating the reaction count for a post when a user clicks the reaction button.
 
