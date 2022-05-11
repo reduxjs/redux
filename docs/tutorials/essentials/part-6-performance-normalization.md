@@ -177,12 +177,12 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: [],
   reducers: {},
-  extraReducers: {
-    [fetchNotifications.fulfilled]: (state, action) => {
+  extraReducers(builder) {
+    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
       state.push(...action.payload)
       // Sort with newest first
       state.sort((a, b) => b.date.localeCompare(a.date))
-    }
+    })
   }
 })
 
