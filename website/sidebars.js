@@ -40,6 +40,11 @@ module.exports = {
           'tutorials/fundamentals/part-7-standard-patterns',
           'tutorials/fundamentals/part-8-modern-redux'
         ]
+      },
+      {
+        type: 'category',
+        label: 'Videos',
+        items: ['tutorials/videos/dave-grays-rtk-complete-tutorial']
       }
     ],
     'Using Redux': [
