@@ -44,7 +44,27 @@ module.exports = {
       {
         type: 'category',
         label: 'Videos',
-        items: ['tutorials/videos/dave-grays-rtk-complete-tutorial']
+        items: [
+          'tutorials/videos/dave-grays-rtk-complete-tutorial',
+          {
+            type: 'link',
+            label: 'Modern Redux with RTK and TS',
+            href:
+              'https://app.egghead.io/lessons/react-intro-to-modern-redux-with-rtk-and-typescript?pl=modern-redux-with-redux-toolkit-rtk-and-typescript-64f243c8' // The external URL
+          },
+          {
+            type: 'link',
+            label: 'Modernizing Legacy Redux Apps',
+            href:
+              'https://app.egghead.io/courses/modernizing-a-legacy-redux-application-with-react-hooks-c528' // The external URL
+          },
+          {
+            type: 'link',
+            label: 'Testing Redux Apps with Jest',
+            href:
+              'https://app.egghead.io/lessons/jest-intro-to-confidently-testing-redux-applications-with-jest-typescript?pl=confidently-testing-redux-applications-with-jest-typescript-16e17d9b' // The external URL
+          }
+        ]
       }
     ],
     'Using Redux': [
