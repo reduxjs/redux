@@ -42,7 +42,6 @@ module.exports = {
         ]
       },
       'tutorials/videos'
-      
     ],
     'Using Redux': [
       'usage/index',

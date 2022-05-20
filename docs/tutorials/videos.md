@@ -5,7 +5,6 @@ sidebar_label: 'Videos'
 hide_title: true
 ---
 
-import { DetailedExplanation } from '../components/DetailedExplanation'
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
