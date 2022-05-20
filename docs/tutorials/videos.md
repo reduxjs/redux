@@ -2,7 +2,6 @@
 id: videos
 title: 'Videos'
 sidebar_label: 'Videos'
-description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
 hide_title: true
 ---
 
