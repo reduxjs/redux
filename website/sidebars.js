@@ -40,7 +40,8 @@ module.exports = {
           'tutorials/fundamentals/part-7-standard-patterns',
           'tutorials/fundamentals/part-8-modern-redux'
         ]
-      }
+      },
+      'tutorials/videos'
     ],
     'Using Redux': [
       'usage/index',
