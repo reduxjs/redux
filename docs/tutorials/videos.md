@@ -10,29 +10,46 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
 # Recommended Videos
 
+While we don't currently have any "official" Redux tutorial videos from the Redux team, the Redux community has created some excellent tutorials that we can recommend.  These videos show the same "modern Redux" approaches that we teach in our docs.
+
+## Learn Modern Redux Livestream
+
+Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with Typescript, as well as the new RTK Query data fetching APIs:
+
+<LiteYouTubeEmbed
+    id="9zySeP5vH9c"
+    title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
+/>
+
+
 ## Redux Toolkit Complete Tutorial with Dave Gray
 
-This React Redux Full Course for Beginners is a complete tutorial full of 4 hours of React and Redux Toolkit code and instruction to help you learn state management with Redux. Think of this React Redux full course tutorial as a video textbook with 7 clearly defined chapters.
+This 4-hour tutorial video teaches how to use Redux Toolkit by showing how to build the same example app that's covered in [the "Redux Essentials" tutorial](./essentials/part-1-overview-concepts.md), and walks through how each piece of the app works.
+
 
 <LiteYouTubeEmbed
     id="NqzdVN2tyvQ"
-    title="React Redux Full Course for Beginners | Redux Toolkit Complete Tutorial"
+    title="Dave Gray - Redux Toolkit Complete Tutorial"
 />
 
-## Modern Redux with Redux Toolkit (RTK) and TypeScript with Jamund Ferguson
+## Egghead Courses with Jamund Ferguson
 
-[https://app.egghead.io/lessons/react-intro-to-modern-redux-with-rtk-and-typescript?pl=modern-redux-with-redux-toolkit-rtk-and-typescript-64f243c8](https://app.egghead.io/lessons/react-intro-to-modern-redux-with-rtk-and-typescript?pl=modern-redux-with-redux-toolkit-rtk-and-typescript-64f243c8)
+Jamund Ferguson has created several excellent "modern Redux" courses on Egghead.
 
-In this course we take a basic shopping cart application built with React and fully power it with Redux and RTK using TypeScript. For those of you familiar with Redux Hooks, we use those here, but the emphasis is more on how the Redux Toolkit simplifies the process of setting up your redux application including building slices, reducers, selectors and thunks. Everything we do in the course is typed with TypeScript to make your application development process as smooth and powerful as possible.
+### Modern Redux with Redux Toolkit (RTK) and TypeScript
 
-## Modernizing a Legacy Redux Application with React Hooks with Jamund Ferguson
+[Egghead course: Modern Redux with Redux Toolkit and TypeScript](https://app.egghead.io/lessons/react-intro-to-modern-redux-with-rtk-and-typescript?pl=modern-redux-with-redux-toolkit-rtk-and-typescript-64f243c8)
 
-[https://app.egghead.io/lessons/react-setup-the-currency-conversion-calculator?pl=modernizing-a-legacy-redux-application-with-react-hooks-c528](https://app.egghead.io/lessons/react-setup-the-currency-conversion-calculator?pl=modernizing-a-legacy-redux-application-with-react-hooks-c528)
+This course takes a basic shopping cart application built with React and fully power it with Redux and RTK using TypeScript.  It covers how Redux Toolkit simplifies the process of setting up your Redux application, including building slices, reducers, selectors and thunks, and all typed with TypeScript.
 
-Many engineers working with redux have felt burdened by large amounts of boilerplate code and confusing indirection. These apps often rely on legacy patterns that are no longer recommended, but are still commonly found in production code bases. If you are are an engineer working on such an application, this course is for you.
+### Modernizing a Legacy Redux Application with React Hooks
 
-## Confidently Testing Redux Applications with Jest & TypeScript with Jamund Ferguson
+[Egghead course: Modernizing a Legacy Redux Application with React Hooks](https://app.egghead.io/lessons/react-setup-the-currency-conversion-calculator?pl=modernizing-a-legacy-redux-application-with-react-hooks-c528)
 
-[https://app.egghead.io/lessons/jest-intro-to-confidently-testing-redux-applications-with-jest-typescript?pl=confidently-testing-redux-applications-with-jest-typescript-16e17d9b](https://app.egghead.io/lessons/jest-intro-to-confidently-testing-redux-applications-with-jest-typescript?pl=confidently-testing-redux-applications-with-jest-typescript-16e17d9b)
+A course that covers how to modernize existing React+Redux applications from older-style patterns like React class components and the React-Redux `connect` API, to modern patterns with React function components and the React-Redux `useSelector/useDispatch` hooks.
 
-Best practices for building & testing redux applications have changed dramatically over time. This course aims to be a comprehensive and up-to-date resource for those seeking to confidently test their redux apps. Whether you're just getting started or want to improve on your existing testing strategy, there will be something in this course for you.
+### Confidently Testing Redux Applications with Jest & TypeScript
+
+[Egghead course: Confidently Testing Redux Applications with Jest & TypeSCript](https://app.egghead.io/lessons/jest-intro-to-confidently-testing-redux-applications-with-jest-typescript?pl=confidently-testing-redux-applications-with-jest-typescript-16e17d9b)
+
+Best practices for building & testing Redux applications have changed dramatically over time. This course aims to be a comprehensive and up-to-date resource for those seeking to confidently test their Redux apps.
