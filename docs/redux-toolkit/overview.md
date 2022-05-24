@@ -35,7 +35,7 @@ This is good in some cases, because it gives you flexibility, but that flexibili
 - "I have to add a lot of packages to get Redux to do anything useful"
 - "Redux requires too much boilerplate code"
 
-We can't solve every use case, but in the spirit of [`create-react-app`](https://github.com/facebook/create-react-app) and [`apollo-boost`](https://dev-blog.apollodata.com/zero-config-graphql-state-management-27b1f1b3c2c3), we can provide an official recommended set of tools that handle the most common use cases and reduce the need to make extra decisions.
+We can't solve every use case, but in the spirit of [`create-react-app`](https://github.com/facebook/create-react-app) and [`apollo-boost`](https://www.apollographql.com/blog/announcement/frontend/zero-config-graphql-state-management/), we can provide an official recommended set of tools that handle the most common use cases and reduce the need to make extra decisions.
 
 ## Why You Should Use Redux Toolkit
 
