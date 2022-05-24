@@ -108,9 +108,9 @@ For non-connected components, you may want to check what props are being passed 
 
 **Articles**
 
-- [A Deep Dive into React Perf Debugging](https://benchling.engineering/deep-dive-react-perf-debugging/)
+- [A Deep Dive into React Perf Debugging](https://benchling.engineering/a-deep-dive-into-react-perf-debugging-fd2063f5a667)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
-- [Improving React and Redux Performance with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [Improving React and Redux Performance with Reselect](https://rangle.io/blog/react-and-redux-performance-with-reselect/)
 - [Encapsulating the Redux State Tree](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [React/Redux Links: React/Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md)
 
@@ -134,7 +134,7 @@ While React Redux does work to minimize the number of times that your `mapStateT
 
 **Articles**
 
-- [Improving React and Redux Performance with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [Improving React and Redux Performance with Reselect](https://rangle.io/blog/react-and-redux-performance-with-reselect/)
 
 **Discussions**
 
