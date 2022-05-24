@@ -475,6 +475,5 @@ In contrast, immutable libraries such as Immer can employ structural sharing, wh
 **Articles**
 
 - [A deep dive into Clojure’s data structures](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)
-- [JavaScript and Immutability](https://t4d.io/javascript-and-immutability/)
 - [Immutable Javascript using ES6 and beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
 - [Pros and Cons of using immutability with React.js - React Kung Fu](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
