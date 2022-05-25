@@ -317,7 +317,7 @@ export function createListenerMiddleware<
   const findListenerEntry = (
     comparator: (entry: ListenerEntry) => boolean
   ): ListenerEntry | undefined => {
-    for (const entry of listenerMap.values()) {
+    for (const entry of Array.from(listenerMap.values())) {
       if (comparator(entry)) {
         return entry
       }
