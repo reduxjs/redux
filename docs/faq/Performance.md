@@ -112,7 +112,6 @@ However, you _do_ need to create a copied and updated object for each level of n
 - [#758: Why can't state be mutated?](https://github.com/reduxjs/redux/issues/758)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reduxjs/redux/issues/994)
 - [Twitter: common misconception - deep cloning](https://twitter.com/dan_abramov/status/688087202312491008)
-- [Cloning Objects in JavaScript](https://www.zsoltnagy.eu/cloning-objects-in-javascript/)
 
 ### How can I reduce the number of store update events?
 
