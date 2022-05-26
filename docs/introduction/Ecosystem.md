@@ -122,6 +122,24 @@ const myCounter = counter({
 })
 ```
 
+**[@liveblocks/redux](https://github.com/liveblocks/liveblocks/tree/main/packages/liveblocks-redux)** <br />
+A store enhancer to turn selected parts of your Redux store into a real‑time shared state between clients
+
+```js
+function makeStore() {
+  return configureStore({
+    reducer: slice.reducer,
+    enhancers: [
+      enhancer({
+        client,
+        presenceMapping: { cursor: true },
+        storageMapping: { firstName: true, lastName: true, discoveries: true },
+      }),
+    ],
+  });
+}
+```
+
 #### Higher-Order Reducers
 
 **[omnidan/redux-undo](https://github.com/omnidan/redux-undo)** <br />
