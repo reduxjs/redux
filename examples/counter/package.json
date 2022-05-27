@@ -2,6 +2,7 @@
   "name": "counter",
   "version": "0.0.1",
   "private": true,
+  "main": "/src/index.js",
   "devDependencies": {
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
