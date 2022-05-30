@@ -188,7 +188,7 @@ export type UseLazyQueryLastPromiseInfo<
  * When the trigger function returned from a LazyQuery, it always initiates a new request to the server even if there is cached data. Set `preferCacheValue`(the second argument to the function) as `true` if you want it to immediately return a cached value if one exists.
  */
 export type UseLazyQuery<D extends QueryDefinition<any, any, any, any>> = <
-  R = UseQueryStateDefaultResult<D>
+  R extends Record<string, any> = UseQueryStateDefaultResult<D>
 >(
   options?: SubscriptionOptions & Omit<UseQueryStateOptions<D, R>, 'skip'>
 ) => [
@@ -257,7 +257,7 @@ export type QueryStateSelector<
  * - Re-renders as the request status changes and data becomes available
  */
 export type UseQueryState<D extends QueryDefinition<any, any, any, any>> = <
-  R = UseQueryStateDefaultResult<D>
+  R extends Record<string, any> = UseQueryStateDefaultResult<D>
 >(
   arg: QueryArgFrom<D> | SkipToken,
   options?: UseQueryStateOptions<D, R>

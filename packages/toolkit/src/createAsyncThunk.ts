@@ -530,7 +530,7 @@ export function createAsyncThunk<
     typeof AbortController !== 'undefined'
       ? AbortController
       : class implements AbortController {
-          signal: AbortSignal = {
+          signal = {
             aborted: false,
             addEventListener() {},
             dispatchEvent() {
@@ -538,6 +538,8 @@ export function createAsyncThunk<
             },
             onabort() {},
             removeEventListener() {},
+            reason: undefined,
+            throwIfAborted() {},
           }
           abort() {
             if (process.env.NODE_ENV !== 'production') {

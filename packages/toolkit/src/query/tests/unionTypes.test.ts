@@ -349,7 +349,7 @@ describe.skip('TS only tests', () => {
     const useQueryStateWithSelectFromResult = api.endpoints.test.useQueryState(
       undefined,
       {
-        selectFromResult: () => true,
+        selectFromResult: () => ({ x: true }),
       }
     )
 

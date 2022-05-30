@@ -61,7 +61,7 @@ const retryWithBackoff: BaseQueryEnhancer<
         throw new HandledError(result)
       }
       return result
-    } catch (e) {
+    } catch (e: any) {
       retry++
       if (e.throwImmediately || retry > options.maxRetries) {
         if (e instanceof HandledError) {

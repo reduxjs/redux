@@ -731,7 +731,7 @@ test('providesTags and invalidatesTags can use baseQueryMeta', async () => {
   type SuccessResponse = { value: 'success' }
 
   const api = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://example.com' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
     tagTypes: ['success'],
     endpoints: (build) => ({
       query: build.query<SuccessResponse, void>({
@@ -754,7 +754,6 @@ test('providesTags and invalidatesTags can use baseQueryMeta', async () => {
   const storeRef = setupApiStore(api)
 
   await storeRef.store.dispatch(api.endpoints.query.initiate())
-
   expect('request' in _meta! && 'response' in _meta!).toBe(true)
 
   _meta = undefined

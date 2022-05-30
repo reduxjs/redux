@@ -144,7 +144,7 @@ export function configureStore<
   if (typeof reducer === 'function') {
     rootReducer = reducer
   } else if (isPlainObject(reducer)) {
-    rootReducer = combineReducers(reducer)
+    rootReducer = combineReducers(reducer) as unknown as Reducer<S, A>
   } else {
     throw new Error(
       '"reducer" is a required argument, and must be a function or an object of functions that can be passed to combineReducers'

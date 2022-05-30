@@ -273,7 +273,7 @@ If you have multiple apis, you *have* to specify the reducerPath option when usi
 describe('`console.error` on unhandled errors during `initiate`', () => {
   test('error thrown in `baseQuery`', async () => {
     const api = createApi({
-      baseQuery() {
+      baseQuery(): { data: any } {
         throw new Error('this was kinda expected')
       },
       endpoints: (build) => ({
