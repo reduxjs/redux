@@ -2,6 +2,7 @@
   "name": "todos",
   "version": "0.0.1",
   "private": true,
+  "main": "/src/index.js",
   "devDependencies": {
     "react-scripts": "^4.0.3"
   },
