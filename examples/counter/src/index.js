@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import Counter from './components/Counter.js'
-import counter from './reducers/index.js'
+import counter from './reducers'
 
 const store = createStore(counter)
 const rootEl = document.getElementById('root')
