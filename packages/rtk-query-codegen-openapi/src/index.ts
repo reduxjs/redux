@@ -42,7 +42,7 @@ export function parseConfig(fullConfig: ConfigFile) {
 }
 
 /**
- * Enforces `oazapfts` to use the same TypeScript version as this module itself uses.
+ * Enforces `@rtk-query/oazapfts-patched` to use the same TypeScript version as this module itself uses.
  * That should prevent enums from running out of sync if both libraries use different TS versions.
  */
 function enforceOazapftsTsVersion<T>(cb: () => T): T {

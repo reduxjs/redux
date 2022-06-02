@@ -211,3 +211,14 @@ describe('yaml parsing', () => {
     expect(output).toContain('"foo:bar-foo.bar/foo": queryArg["foo:bar-foo.bar/foo"],');
   });
 });
+
+describe('tests from issues', () => {
+  it('issue #2002: should be able to generate proper intersection types', async () => {
+    const result = await generateEndpoints({
+      apiFile: './tmp/emptyApi.ts',
+      schemaFile: `./fixtures/issue-2002.json`,
+      hooks: true,
+    });
+    expect(result).toMatchSnapshot();
+  });
+});

@@ -445,6 +445,40 @@ export type PatchApiV1ListByItemIdApiArg = {
 
 `;
 
+exports[`tests from issues issue #2002: should be able to generate proper intersection types 1`] = `
+import { api } from './tmp/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    getApiV1Animals: build.query<GetApiV1AnimalsApiResponse, GetApiV1AnimalsApiArg>({
+      query: (queryArg) => ({
+        url: \`/api/v1/animals\`,
+        params: { type: queryArg['type'] },
+      }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type GetApiV1AnimalsApiResponse = /** status 200 Success */ (Dog | Cat)[];
+export type GetApiV1AnimalsApiArg = {
+  type?: AnimalType;
+};
+export type AnimalType = 'All' | 'Cats' | 'Dogs';
+export type Animal = {
+  type: AnimalType;
+  id?: number;
+  name?: string | null;
+};
+export type Dog = Animal & {
+  dogUniqueProp?: string | null;
+};
+export type Cat = Animal & {
+  catUniqueProp?: string | null;
+};
+export const { useGetApiV1AnimalsQuery } = injectedRtkApi;
+
+`;
+
 exports[`yaml parsing should be able to use read a yaml file 1`] = `
 import { api } from './tmp/emptyApi';
 const injectedRtkApi = api.injectEndpoints({
