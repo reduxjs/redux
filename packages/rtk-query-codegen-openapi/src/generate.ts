@@ -142,7 +142,14 @@ export async function generateApi(
         ...Object.values(interfaces),
         ...apiGen['aliases'],
         ...(hooks
-          ? [generateReactHooks({ exportName: generatedApiName, operationDefinitions, endpointOverrides })]
+          ? [
+              generateReactHooks({
+                exportName: generatedApiName,
+                operationDefinitions,
+                endpointOverrides,
+                config: hooks,
+              }),
+            ]
           : []),
       ],
       factory.createToken(ts.SyntaxKind.EndOfFileToken),

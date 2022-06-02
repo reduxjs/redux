@@ -73,7 +73,7 @@ test('endpoint overrides', async () => {
   expect(api).toMatchSnapshot('loginUser should be a mutation');
 });
 
-test('hooks generation', async () => {
+test('default hooks generation', async () => {
   const api = await generateEndpoints({
     unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
@@ -86,6 +86,74 @@ test('hooks generation', async () => {
   expect(api).toMatchSnapshot(
     'should generate an `useGetPetByIdQuery` query hook and an `useAddPetMutation` mutation hook'
   );
+});
+
+it('supports granular hooks generation that includes all query types', async () => {
+  const api = await generateEndpoints({
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+    filterEndpoints: ['getPetById', 'addPet'],
+    hooks: {
+      queries: true,
+      lazyQueries: true,
+      mutations: true,
+    },
+  });
+  expect(api).toContain('useGetPetByIdQuery');
+  expect(api).toContain('useLazyGetPetByIdQuery');
+  expect(api).toContain('useAddPetMutation');
+  expect(api).toMatchSnapshot();
+});
+
+it('supports granular hooks generation with only queries', async () => {
+  const api = await generateEndpoints({
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+    filterEndpoints: ['getPetById', 'addPet'],
+    hooks: {
+      queries: true,
+      lazyQueries: false,
+      mutations: false,
+    },
+  });
+  expect(api).toContain('useGetPetByIdQuery');
+  expect(api).not.toContain('useLazyGetPetByIdQuery');
+  expect(api).not.toContain('useAddPetMutation');
+  expect(api).toMatchSnapshot();
+});
+
+it('supports granular hooks generation with only lazy queries', async () => {
+  const api = await generateEndpoints({
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+    filterEndpoints: ['getPetById', 'addPet'],
+    hooks: {
+      queries: false,
+      lazyQueries: true,
+      mutations: false,
+    },
+  });
+  expect(api).not.toContain('useGetPetByIdQuery');
+  expect(api).toContain('useLazyGetPetByIdQuery');
+  expect(api).not.toContain('useAddPetMutation');
+  expect(api).toMatchSnapshot();
+});
+
+it('supports granular hooks generation with only mutations', async () => {
+  const api = await generateEndpoints({
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+    filterEndpoints: ['getPetById', 'addPet'],
+    hooks: {
+      queries: false,
+      lazyQueries: false,
+      mutations: true,
+    },
+  });
+  expect(api).not.toContain('useGetPetByIdQuery');
+  expect(api).not.toContain('useLazyGetPetByIdQuery');
+  expect(api).toContain('useAddPetMutation');
+  expect(api).toMatchSnapshot();
 });
 
 test('hooks generation uses overrides', async () => {

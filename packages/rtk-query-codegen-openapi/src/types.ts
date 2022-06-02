@@ -1,4 +1,3 @@
-import * as ts from 'typescript';
 import type { OpenAPIV3 } from 'openapi-types';
 
 export type OperationDefinition = {
@@ -48,9 +47,10 @@ export interface CommonOptions {
    */
   responseSuffix?: string;
   /**
-   * defaults to false
+   * defaults to `false`
+   * `true` will generate hooks for queries and mutations, but no lazyQueries
    */
-  hooks?: boolean;
+  hooks?: boolean | { queries: boolean; lazyQueries: boolean; mutations: boolean };
 
   /**
    * defaults to false

@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import type { CommonOptions, ConfigFile, GenerationOptions, OutputFileOptions } from './types';
 import { isValidUrl, prettify } from './utils';
-export { ConfigFile } from './types';
+export type { ConfigFile } from './types';
 
 export async function generateEndpoints(options: GenerationOptions): Promise<string | void> {
   const schemaLocation = options.schemaFile;

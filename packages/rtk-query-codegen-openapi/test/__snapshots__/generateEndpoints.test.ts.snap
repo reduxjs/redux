@@ -263,6 +263,54 @@ export type User = {
 
 `;
 
+exports[`default hooks generation: should generate an \`useGetPetByIdQuery\` query hook and an \`useAddPetMutation\` mutation hook 1`] = `
+import { api } from './fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    addPet: build.mutation<AddPetApiResponse, AddPetApiArg>({
+      query: (queryArg) => ({
+        url: \`/pet\`,
+        method: 'POST',
+        body: queryArg.pet,
+      }),
+    }),
+    getPetById: build.query<GetPetByIdApiResponse, GetPetByIdApiArg>({
+      query: (queryArg) => ({ url: \`/pet/\${queryArg.petId}\` }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
+export type AddPetApiArg = {
+  /** Create a new pet in the store */
+  pet: Pet;
+};
+export type GetPetByIdApiResponse = /** status 200 successful operation */ Pet;
+export type GetPetByIdApiArg = {
+  /** ID of pet to return */
+  petId: number;
+};
+export type Category = {
+  id?: number | undefined;
+  name?: string | undefined;
+};
+export type Tag = {
+  id?: number | undefined;
+  name?: string | undefined;
+};
+export type Pet = {
+  id?: number | undefined;
+  name: string;
+  category?: Category | undefined;
+  photoUrls: string[];
+  tags?: Tag[] | undefined;
+  status?: ('available' | 'pending' | 'sold') | undefined;
+};
+export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
+
+`;
+
 exports[`endpoint filtering: should only have endpoints loginUser, placeOrder, getOrderById, deleteOrder 1`] = `
 import { api } from './fixtures/emptyApi';
 const injectedRtkApi = api.injectEndpoints({
@@ -376,7 +424,28 @@ export const { useLoginUserMutation } = injectedRtkApi;
 
 `;
 
-exports[`hooks generation: should generate an \`useGetPetByIdQuery\` query hook and an \`useAddPetMutation\` mutation hook 1`] = `
+exports[`should use brackets in a querystring urls arg, when the arg contains full stops 1`] = `
+import { api } from './fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    patchApiV1ListByItemId: build.mutation<PatchApiV1ListByItemIdApiResponse, PatchApiV1ListByItemIdApiArg>({
+      query: (queryArg) => ({
+        url: \`/api/v1/list/\${queryArg['item.id']}\`,
+        method: 'PATCH',
+      }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type PatchApiV1ListByItemIdApiResponse = /** status 200 A successful response. */ string;
+export type PatchApiV1ListByItemIdApiArg = {
+  'item.id': string;
+};
+
+`;
+
+exports[`supports granular hooks generation that includes all query types 1`] = `
 import { api } from './fixtures/emptyApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -405,43 +474,166 @@ export type GetPetByIdApiArg = {
   petId: number;
 };
 export type Category = {
-  id?: number | undefined;
-  name?: string | undefined;
+  id?: number;
+  name?: string;
 };
 export type Tag = {
-  id?: number | undefined;
-  name?: string | undefined;
+  id?: number;
+  name?: string;
 };
 export type Pet = {
-  id?: number | undefined;
+  id?: number;
   name: string;
-  category?: Category | undefined;
+  category?: Category;
   photoUrls: string[];
-  tags?: Tag[] | undefined;
-  status?: ('available' | 'pending' | 'sold') | undefined;
+  tags?: Tag[];
+  status?: 'available' | 'pending' | 'sold';
 };
-export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
+export const { useAddPetMutation, useGetPetByIdQuery, useLazyGetPetByIdQuery } = injectedRtkApi;
 
 `;
 
-exports[`should use brackets in a querystring urls arg, when the arg contains full stops 1`] = `
+exports[`supports granular hooks generation with only lazy queries 1`] = `
 import { api } from './fixtures/emptyApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    patchApiV1ListByItemId: build.mutation<PatchApiV1ListByItemIdApiResponse, PatchApiV1ListByItemIdApiArg>({
+    addPet: build.mutation<AddPetApiResponse, AddPetApiArg>({
       query: (queryArg) => ({
-        url: \`/api/v1/list/\${queryArg['item.id']}\`,
-        method: 'PATCH',
+        url: \`/pet\`,
+        method: 'POST',
+        body: queryArg.pet,
       }),
+    }),
+    getPetById: build.query<GetPetByIdApiResponse, GetPetByIdApiArg>({
+      query: (queryArg) => ({ url: \`/pet/\${queryArg.petId}\` }),
     }),
   }),
   overrideExisting: false,
 });
 export { injectedRtkApi as enhancedApi };
-export type PatchApiV1ListByItemIdApiResponse = /** status 200 A successful response. */ string;
-export type PatchApiV1ListByItemIdApiArg = {
-  'item.id': string;
+export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
+export type AddPetApiArg = {
+  /** Create a new pet in the store */
+  pet: Pet;
 };
+export type GetPetByIdApiResponse = /** status 200 successful operation */ Pet;
+export type GetPetByIdApiArg = {
+  /** ID of pet to return */
+  petId: number;
+};
+export type Category = {
+  id?: number;
+  name?: string;
+};
+export type Tag = {
+  id?: number;
+  name?: string;
+};
+export type Pet = {
+  id?: number;
+  name: string;
+  category?: Category;
+  photoUrls: string[];
+  tags?: Tag[];
+  status?: 'available' | 'pending' | 'sold';
+};
+export const { useLazyGetPetByIdQuery } = injectedRtkApi;
+
+`;
+
+exports[`supports granular hooks generation with only mutations 1`] = `
+import { api } from './fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    addPet: build.mutation<AddPetApiResponse, AddPetApiArg>({
+      query: (queryArg) => ({
+        url: \`/pet\`,
+        method: 'POST',
+        body: queryArg.pet,
+      }),
+    }),
+    getPetById: build.query<GetPetByIdApiResponse, GetPetByIdApiArg>({
+      query: (queryArg) => ({ url: \`/pet/\${queryArg.petId}\` }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
+export type AddPetApiArg = {
+  /** Create a new pet in the store */
+  pet: Pet;
+};
+export type GetPetByIdApiResponse = /** status 200 successful operation */ Pet;
+export type GetPetByIdApiArg = {
+  /** ID of pet to return */
+  petId: number;
+};
+export type Category = {
+  id?: number;
+  name?: string;
+};
+export type Tag = {
+  id?: number;
+  name?: string;
+};
+export type Pet = {
+  id?: number;
+  name: string;
+  category?: Category;
+  photoUrls: string[];
+  tags?: Tag[];
+  status?: 'available' | 'pending' | 'sold';
+};
+export const { useAddPetMutation } = injectedRtkApi;
+
+`;
+
+exports[`supports granular hooks generation with only queries 1`] = `
+import { api } from './fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    addPet: build.mutation<AddPetApiResponse, AddPetApiArg>({
+      query: (queryArg) => ({
+        url: \`/pet\`,
+        method: 'POST',
+        body: queryArg.pet,
+      }),
+    }),
+    getPetById: build.query<GetPetByIdApiResponse, GetPetByIdApiArg>({
+      query: (queryArg) => ({ url: \`/pet/\${queryArg.petId}\` }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
+export type AddPetApiArg = {
+  /** Create a new pet in the store */
+  pet: Pet;
+};
+export type GetPetByIdApiResponse = /** status 200 successful operation */ Pet;
+export type GetPetByIdApiArg = {
+  /** ID of pet to return */
+  petId: number;
+};
+export type Category = {
+  id?: number;
+  name?: string;
+};
+export type Tag = {
+  id?: number;
+  name?: string;
+};
+export type Pet = {
+  id?: number;
+  name: string;
+  category?: Category;
+  photoUrls: string[];
+  tags?: Tag[];
+  status?: 'available' | 'pending' | 'sold';
+};
+export const { useGetPetByIdQuery } = injectedRtkApi;
 
 `;
 
