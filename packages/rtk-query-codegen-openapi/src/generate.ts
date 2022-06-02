@@ -17,6 +17,7 @@ import type { OpenAPIV3 } from 'openapi-types';
 import { generateReactHooks } from './generators/react-hooks';
 import type { EndpointMatcher, EndpointOverrides, GenerationOptions, OperationDefinition, TextMatcher } from './types';
 import { capitalize, getOperationDefinitions, getV3Doc, isQuery as testIsQuery, removeUndefined } from './utils';
+import { generateTagTypes } from './codegen';
 import type { ObjectPropertyDefinitions } from './codegen';
 import { generateCreateApiCall, generateEndpointDefinition, generateImportNode } from './codegen';
 import { factory } from './utils/factory';
@@ -30,6 +31,10 @@ function defaultIsDataResponse(code: string) {
 
 function getOperationName({ verb, path, operation }: Pick<OperationDefinition, 'verb' | 'path' | 'operation'>) {
   return _getOperationName(verb, path, operation.operationId);
+}
+
+function getTags({ verb, pathItem }: Pick<OperationDefinition, 'verb' | 'pathItem'>): string[] {
+  return verb ? pathItem[verb]?.tags || [] : [];
 }
 
 function patternMatches(pattern?: TextMatcher) {
@@ -67,6 +72,7 @@ export async function generateApi(
     argSuffix = 'ApiArg',
     responseSuffix = 'ApiResponse',
     hooks = false,
+    tag = false,
     outputFile,
     isDataResponse = defaultIsDataResponse,
     filterEndpoints,
@@ -116,7 +122,9 @@ export async function generateApi(
     factory.createSourceFile(
       [
         generateImportNode(apiFile, { [apiImport]: 'api' }),
+        ...(tag ? [generateTagTypes({ addTagTypes: extractAllTagTypes({ operationDefinitions }) })] : []),
         generateCreateApiCall({
+          tag,
           endpointDefinitions: factory.createObjectLiteralExpression(
             operationDefinitions.map((operationDefinition) =>
               generateEndpoint({
@@ -160,6 +168,18 @@ export async function generateApi(
 
   return sourceCode;
 
+  function extractAllTagTypes({ operationDefinitions }: { operationDefinitions: OperationDefinition[] }) {
+    let allTagTypes = new Set<string>();
+
+    for (const operationDefinition of operationDefinitions) {
+      const { verb, pathItem } = operationDefinition;
+      for (const tag of getTags({ verb, pathItem })) {
+        allTagTypes.add(tag);
+      }
+    }
+    return [...allTagTypes];
+  }
+
   function generateEndpoint({
     operationDefinition,
     overrides,
@@ -175,7 +195,7 @@ export async function generateApi(
       operation: { responses, requestBody },
     } = operationDefinition;
     const operationName = getOperationName({ verb, path, operation });
-
+    const tags = tag ? getTags({ verb, pathItem }) : [];
     const isQuery = testIsQuery(verb, overrides);
 
     const returnsJson = apiGen.getResponseType(responses) === 'json';
@@ -309,10 +329,11 @@ export async function generateApi(
       type: isQuery ? 'query' : 'mutation',
       Response: ResponseTypeName,
       QueryArg,
-      queryFn: generateQueryFn({ operationDefinition, queryArg, isQuery }),
+      queryFn: generateQueryFn({ operationDefinition, queryArg, isQuery, tags }),
       extraEndpointsProps: isQuery
         ? generateQueryEndpointProps({ operationDefinition })
         : generateMutationEndpointProps({ operationDefinition }),
+      tags,
     });
   }
 
@@ -320,10 +341,12 @@ export async function generateApi(
     operationDefinition,
     queryArg,
     isQuery,
+    tags,
   }: {
     operationDefinition: OperationDefinition;
     queryArg: QueryArgDefinitions;
     isQuery: boolean;
+    tags: string[];
   }) {
     const { path, verb } = operationDefinition;
 

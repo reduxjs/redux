@@ -51,11 +51,14 @@ export interface CommonOptions {
    * `true` will generate hooks for queries and mutations, but no lazyQueries
    */
   hooks?: boolean | { queries: boolean; lazyQueries: boolean; mutations: boolean };
-
   /**
    * defaults to false
    */
   unionUndefined?: boolean;
+  /**
+   * defaults to false
+   */
+  tag?: boolean;
 }
 
 export type TextMatcher = string | RegExp | (string | RegExp)[];

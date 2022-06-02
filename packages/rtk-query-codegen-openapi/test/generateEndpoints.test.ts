@@ -207,6 +207,7 @@ describe('import paths', () => {
       schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
       filterEndpoints: [],
       hooks: true,
+      tag: true,
     });
     expect(await fs.promises.readFile('./tmp/out.ts', 'utf8')).toContain("import { api } from '../fixtures/emptyApi'");
   });
@@ -223,6 +224,7 @@ describe('import paths', () => {
       schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
       filterEndpoints: [],
       hooks: true,
+      tag: true,
     });
     expect(await fs.promises.readFile('./tmp/out.ts', 'utf8')).toContain("import { api } from './emptyApi'");
   });
@@ -235,6 +237,7 @@ describe('yaml parsing', () => {
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `https://petstore3.swagger.io/api/v3/openapi.yaml`,
       hooks: true,
+      tag: true,
     });
     expect(result).toMatchSnapshot();
   });
@@ -245,6 +248,7 @@ describe('yaml parsing', () => {
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `./fixtures/petstore.yaml`,
       hooks: true,
+      tag: true,
     });
     expect(result).toMatchSnapshot();
   });
@@ -255,6 +259,7 @@ describe('yaml parsing', () => {
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `./fixtures/fhir.yaml`,
       hooks: true,
+      tag: true,
     });
 
     expect(output).toMatchSnapshot();
@@ -273,6 +278,7 @@ describe('yaml parsing', () => {
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `./fixtures/fhir.yaml`,
       hooks: true,
+      tag: true,
     });
 
     expect(output).toContain('"-bar-bar": queryArg["-bar-bar"],');
