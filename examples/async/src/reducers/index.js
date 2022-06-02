@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT,
-  INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS,
-  RECEIVE_POSTS
+  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
+  REQUEST_POSTS, RECEIVE_POSTS
 } from '../actions'
 
 const selectedSubreddit = (state = 'reactjs', action) => {
@@ -15,14 +13,11 @@ const selectedSubreddit = (state = 'reactjs', action) => {
   }
 }
 
-const posts = (
-  state = {
-    isFetching: false,
-    didInvalidate: false,
-    items: []
-  },
-  action
-) => {
+const posts = (state = {
+  isFetching: false,
+  didInvalidate: false,
+  items: []
+}, action) => {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return {
@@ -48,7 +43,7 @@ const posts = (
   }
 }
 
-const postsBySubreddit = (state = {}, action) => {
+const postsBySubreddit = (state = { }, action) => {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
