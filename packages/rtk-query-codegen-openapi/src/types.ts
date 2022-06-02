@@ -51,6 +51,11 @@ export interface CommonOptions {
    * defaults to false
    */
   hooks?: boolean;
+
+  /**
+   * defaults to false
+   */
+  unionUndefined?: boolean;
 }
 
 export type TextMatcher = string | RegExp | (string | RegExp)[];

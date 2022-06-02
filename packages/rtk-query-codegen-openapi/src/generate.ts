@@ -6,13 +6,13 @@ import ApiGenerator, {
   getReferenceName,
   isReference,
   supportDeepObjects,
-} from 'oazapfts/lib/codegen/generate';
+} from '@rtk-query/oazapfts-patched/lib/codegen/generate';
 import {
   createQuestionToken,
   keywordType,
   createPropertyAssignment,
   isValidIdentifier,
-} from 'oazapfts/lib/codegen/tscodegen';
+} from '@rtk-query/oazapfts-patched/lib/codegen/tscodegen';
 import type { OpenAPIV3 } from 'openapi-types';
 import { generateReactHooks } from './generators/react-hooks';
 import type { EndpointMatcher, EndpointOverrides, GenerationOptions, OperationDefinition, TextMatcher } from './types';
@@ -71,11 +71,14 @@ export async function generateApi(
     isDataResponse = defaultIsDataResponse,
     filterEndpoints,
     endpointOverrides,
+    unionUndefined,
   }: GenerationOptions
 ) {
   const v3Doc = await getV3Doc(spec);
 
-  const apiGen = new ApiGenerator(v3Doc, {});
+  const apiGen = new ApiGenerator(v3Doc, {
+    unionUndefined,
+  });
 
   const operationDefinitions = getOperationDefinitions(v3Doc).filter(operationMatches(filterEndpoints));
 
@@ -102,7 +105,7 @@ export async function generateApi(
     outputFile = path.resolve(process.cwd(), outputFile);
     if (apiFile.startsWith('.')) {
       apiFile = path.relative(path.dirname(outputFile), apiFile);
-      apiFile = apiFile.replace(/\\/g, '/')
+      apiFile = apiFile.replace(/\\/g, '/');
       if (!apiFile.startsWith('.')) apiFile = './' + apiFile;
     }
   }

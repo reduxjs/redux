@@ -222,43 +222,43 @@ export type DeleteUserApiArg = {
   username: string;
 };
 export type Category = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Tag = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Pet = {
-  id?: number;
+  id?: number | undefined;
   name: string;
-  category?: Category;
+  category?: Category | undefined;
   photoUrls: string[];
-  tags?: Tag[];
-  status?: 'available' | 'pending' | 'sold';
+  tags?: Tag[] | undefined;
+  status?: ('available' | 'pending' | 'sold') | undefined;
 };
 export type ApiResponse = {
-  code?: number;
-  type?: string;
-  message?: string;
+  code?: number | undefined;
+  type?: string | undefined;
+  message?: string | undefined;
 };
 export type Order = {
-  id?: number;
-  petId?: number;
-  quantity?: number;
-  shipDate?: string;
-  status?: 'placed' | 'approved' | 'delivered';
-  complete?: boolean;
+  id?: number | undefined;
+  petId?: number | undefined;
+  quantity?: number | undefined;
+  shipDate?: string | undefined;
+  status?: ('placed' | 'approved' | 'delivered') | undefined;
+  complete?: boolean | undefined;
 };
 export type User = {
-  id?: number;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  phone?: string;
-  userStatus?: number;
+  id?: number | undefined;
+  username?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+  phone?: string | undefined;
+  userStatus?: number | undefined;
 };
 
 `;
@@ -315,12 +315,12 @@ export type LoginUserApiArg = {
   password?: string;
 };
 export type Order = {
-  id?: number;
-  petId?: number;
-  quantity?: number;
-  shipDate?: string;
-  status?: 'placed' | 'approved' | 'delivered';
-  complete?: boolean;
+  id?: number | undefined;
+  petId?: number | undefined;
+  quantity?: number | undefined;
+  shipDate?: string | undefined;
+  status?: ('placed' | 'approved' | 'delivered') | undefined;
+  complete?: boolean | undefined;
 };
 
 `;
@@ -405,20 +405,20 @@ export type GetPetByIdApiArg = {
   petId: number;
 };
 export type Category = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Tag = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Pet = {
-  id?: number;
+  id?: number | undefined;
   name: string;
-  category?: Category;
+  category?: Category | undefined;
   photoUrls: string[];
-  tags?: Tag[];
-  status?: 'available' | 'pending' | 'sold';
+  tags?: Tag[] | undefined;
+  status?: ('available' | 'pending' | 'sold') | undefined;
 };
 export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
 
@@ -660,43 +660,43 @@ export type DeleteUserApiArg = {
   username: string;
 };
 export type Category = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Tag = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Pet = {
-  id?: number;
+  id?: number | undefined;
   name: string;
-  category?: Category;
+  category?: Category | undefined;
   photoUrls: string[];
-  tags?: Tag[];
-  status?: 'available' | 'pending' | 'sold';
+  tags?: Tag[] | undefined;
+  status?: ('available' | 'pending' | 'sold') | undefined;
 };
 export type ApiResponse = {
-  code?: number;
-  type?: string;
-  message?: string;
+  code?: number | undefined;
+  type?: string | undefined;
+  message?: string | undefined;
 };
 export type Order = {
-  id?: number;
-  petId?: number;
-  quantity?: number;
-  shipDate?: string;
-  status?: 'placed' | 'approved' | 'delivered';
-  complete?: boolean;
+  id?: number | undefined;
+  petId?: number | undefined;
+  quantity?: number | undefined;
+  shipDate?: string | undefined;
+  status?: ('placed' | 'approved' | 'delivered') | undefined;
+  complete?: boolean | undefined;
 };
 export type User = {
-  id?: number;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  phone?: string;
-  userStatus?: number;
+  id?: number | undefined;
+  username?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+  phone?: string | undefined;
+  userStatus?: number | undefined;
 };
 export const {
   useUpdatePetMutation,
@@ -983,43 +983,43 @@ export type DeleteUserApiArg = {
   username: string;
 };
 export type Category = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Tag = {
-  id?: number;
-  name?: string;
+  id?: number | undefined;
+  name?: string | undefined;
 };
 export type Pet = {
-  id?: number;
+  id?: number | undefined;
   name: string;
-  category?: Category;
+  category?: Category | undefined;
   photoUrls: string[];
-  tags?: Tag[];
-  status?: 'available' | 'pending' | 'sold';
+  tags?: Tag[] | undefined;
+  status?: ('available' | 'pending' | 'sold') | undefined;
 };
 export type ApiResponse = {
-  code?: number;
-  type?: string;
-  message?: string;
+  code?: number | undefined;
+  type?: string | undefined;
+  message?: string | undefined;
 };
 export type Order = {
-  id?: number;
-  petId?: number;
-  quantity?: number;
-  shipDate?: string;
-  status?: 'placed' | 'approved' | 'delivered';
-  complete?: boolean;
+  id?: number | undefined;
+  petId?: number | undefined;
+  quantity?: number | undefined;
+  shipDate?: string | undefined;
+  status?: ('placed' | 'approved' | 'delivered') | undefined;
+  complete?: boolean | undefined;
 };
 export type User = {
-  id?: number;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  phone?: string;
-  userStatus?: number;
+  id?: number | undefined;
+  username?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+  phone?: string | undefined;
+  userStatus?: number | undefined;
 };
 export const {
   useUpdatePetMutation,

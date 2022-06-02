@@ -16,6 +16,7 @@ afterEach(() => {
 
 test('calling without `outputFile` returns the generated api', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
   });
@@ -24,6 +25,7 @@ test('calling without `outputFile` returns the generated api', async () => {
 
 test('endpoint filtering', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
     filterEndpoints: ['loginUser', /Order/],
@@ -33,6 +35,7 @@ test('endpoint filtering', async () => {
 
 test('endpoint filtering by function', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
     filterEndpoints: (name, endpoint) => name.match(/order/i) !== null && endpoint.verb === 'get',
@@ -44,6 +47,7 @@ test('endpoint filtering by function', async () => {
 
 test('negated endpoint filtering', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
     filterEndpoints: (name) => !/user/i.test(name),
@@ -53,6 +57,7 @@ test('negated endpoint filtering', async () => {
 
 test('endpoint overrides', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
     filterEndpoints: 'loginUser',
@@ -70,6 +75,7 @@ test('endpoint overrides', async () => {
 
 test('hooks generation', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
     filterEndpoints: ['getPetById', 'addPet'],
@@ -84,6 +90,7 @@ test('hooks generation', async () => {
 
 test('hooks generation uses overrides', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
     filterEndpoints: 'loginUser',
@@ -102,6 +109,7 @@ test('hooks generation uses overrides', async () => {
 
 test('should use brackets in a querystring urls arg, when the arg contains full stops', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/params.json'),
   });
@@ -112,6 +120,7 @@ test('should use brackets in a querystring urls arg, when the arg contains full 
 
 test('apiImport builds correct `import` statement', async () => {
   const api = await generateEndpoints({
+    unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',
     schemaFile: resolve(__dirname, 'fixtures/params.json'),
     filterEndpoints: [],
@@ -124,6 +133,7 @@ describe('import paths', () => {
   test('should create paths relative to `outFile` when `apiFile` is relative (different folder)', async () => {
     process.chdir(__dirname);
     await generateEndpoints({
+      unionUndefined: true,
       apiFile: './fixtures/emptyApi.ts',
       outputFile: './tmp/out.ts',
       schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
@@ -139,6 +149,7 @@ describe('import paths', () => {
     await fs.promises.writeFile('./tmp/emptyApi.ts', await fs.promises.readFile('./fixtures/emptyApi.ts'));
 
     await generateEndpoints({
+      unionUndefined: true,
       apiFile: './tmp/emptyApi.ts',
       outputFile: './tmp/out.ts',
       schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
@@ -152,6 +163,7 @@ describe('import paths', () => {
 describe('yaml parsing', () => {
   it('should parse a yaml schema from a URL', async () => {
     const result = await generateEndpoints({
+      unionUndefined: true,
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `https://petstore3.swagger.io/api/v3/openapi.yaml`,
       hooks: true,
@@ -161,6 +173,7 @@ describe('yaml parsing', () => {
 
   it('should be able to use read a yaml file', async () => {
     const result = await generateEndpoints({
+      unionUndefined: true,
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `./fixtures/petstore.yaml`,
       hooks: true,
@@ -170,6 +183,7 @@ describe('yaml parsing', () => {
 
   it("should generate params with non quoted keys if they don't contain special characters", async () => {
     const output = await generateEndpoints({
+      unionUndefined: true,
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `./fixtures/fhir.yaml`,
       hooks: true,
@@ -187,6 +201,7 @@ describe('yaml parsing', () => {
 
   it('should generate params with quoted keys if they contain special characters', async () => {
     const output = await generateEndpoints({
+      unionUndefined: true,
       apiFile: './tmp/emptyApi.ts',
       schemaFile: `./fixtures/fhir.yaml`,
       hooks: true,
