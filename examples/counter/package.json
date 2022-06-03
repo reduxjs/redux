@@ -2,7 +2,6 @@
   "name": "counter",
   "version": "0.0.1",
   "private": true,
-//   "sandbox": true,
   "main": "src/index.js",
   "devDependencies": {
     "enzyme": "^3.11.0",
