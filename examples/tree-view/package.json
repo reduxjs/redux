@@ -2,7 +2,6 @@
   "name": "tree-view",
   "version": "0.0.1",
   "private": true,
-  "sandbox": true,
   "main": "src/index.js",
   "devDependencies": {
     "deep-freeze": "0.0.1",

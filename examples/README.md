@@ -14,8 +14,3 @@ Read the descriptions for every example on the [Examples](../docs/introduction/E
 
 [Run sandbox: Three view](./tree-view)
 
-## Inline Sandboxes
-
-[Run inline sandbox: Async](./async)
-
-[Run inline sandbox: Todos](./todos)

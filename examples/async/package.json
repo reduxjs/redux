@@ -2,7 +2,7 @@
   "name": "async",
   "version": "0.0.1",
   "private": true,
-  "sandbox": true,
+//   "sandbox": true,
   "main": "src/index.js",
   "devDependencies": {
     "react-scripts": "^4.0.3"
