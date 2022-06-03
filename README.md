@@ -32,9 +32,9 @@ For more details, see [the Installation docs page](https://redux.js.org/introduc
 
 ## Examples
 
-[Run inline sandbox: Async](./async)
+[Run inline sandbox: Async](/examples/async)
 
-[Run inline sandbox: Todos](./todos)
+[Run inline sandbox: Todos](/examples/todos)
 
 ## Documentation
 
