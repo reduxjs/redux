@@ -71,7 +71,7 @@ To learn how to describe asynchronous API calls, read the current state inside a
 #### Example
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 const store = createStore(todos, ['Use Redux'])
 
 function addTodo(text) {

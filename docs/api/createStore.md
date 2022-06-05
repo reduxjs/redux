@@ -27,7 +27,7 @@ There should only be a single store in your app.
 #### Example
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 
 function todos(state = [], action) {
   switch (action.type) {

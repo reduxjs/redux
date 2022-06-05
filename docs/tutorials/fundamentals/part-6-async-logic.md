@@ -190,7 +190,7 @@ npm install redux-thunk
 Once it's installed, we can update the Redux store in our todo app to use that middleware:
 
 ```js title="src/store.js"
-import { createStore, applyMiddleware } from 'redux'
+import { legacy_createStore as createStore, applyMiddleware } from 'redux'
 // highlight-next-line
 import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'

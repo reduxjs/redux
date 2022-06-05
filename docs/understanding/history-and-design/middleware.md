@@ -308,7 +308,11 @@ const crashReporter = store => next => action => {
 Here's how to apply it to a Redux store:
 
 ```js
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import {
+  legacy_createStore as createStore,
+  combineReducers,
+  applyMiddleware
+} from 'redux'
 
 const todoApp = combineReducers(reducers)
 const store = createStore(

@@ -72,7 +72,7 @@ The only way to change the state tree is to create an _action_, an object descri
 To specify how state gets updated in response to an action, you write pure _reducer_ functions that calculate a new state based on the old state and the action.
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 
 /**
  * This is a reducer - a function that takes a current state value and an
