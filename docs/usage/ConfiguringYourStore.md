@@ -18,7 +18,7 @@ First, let's look at the original `index.js` file in which we created our store:
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import rootReducer from './reducers'
 import App from './components/App'
 
@@ -72,21 +72,24 @@ export default logger
 ```js
 const round = number => Math.round(number * 100) / 100
 
-const monitorReducerEnhancer =
-  createStore => (reducer, initialState, enhancer) => {
-    const monitoredReducer = (state, action) => {
-      const start = performance.now()
-      const newState = reducer(state, action)
-      const end = performance.now()
-      const diff = round(end - start)
+const monitorReducerEnhancer = createStore => (
+  reducer,
+  initialState,
+  enhancer
+) => {
+  const monitoredReducer = (state, action) => {
+    const start = performance.now()
+    const newState = reducer(state, action)
+    const end = performance.now()
+    const diff = round(end - start)
 
-      console.log('reducer process time:', diff)
+    console.log('reducer process time:', diff)
 
-      return newState
-    }
-
-    return createStore(monitoredReducer, initialState, enhancer)
+    return newState
   }
+
+  return createStore(monitoredReducer, initialState, enhancer)
+}
 
 export default monitorReducerEnhancer
 ```
@@ -105,7 +108,11 @@ Let's add these to our existing `index.js`.
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { applyMiddleware, createStore, compose } from 'redux'
+import {
+  applyMiddleware,
+  legacy_createStore as createStore,
+  compose
+} from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import rootReducer from './reducers'
 import loggerMiddleware from './middleware/logger'
@@ -159,7 +166,11 @@ All the logic related to configuring the store - including importing reducers, m
 To achieve this, `configureStore` function looks like this:
 
 ```js
-import { applyMiddleware, compose, createStore } from 'redux'
+import {
+  applyMiddleware,
+  compose,
+  legacy_createStore as createStore
+} from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
@@ -216,7 +227,7 @@ Next, we remove the `compose` function which we imported from `redux`, and repla
 The final code looks like this:
 
 ```js
-import { applyMiddleware, createStore } from 'redux'
+import { applyMiddleware, legacy_createStore as createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 

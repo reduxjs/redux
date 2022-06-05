@@ -44,7 +44,7 @@ function counter(state = 0, action) {
 Now let's say you create a store with it.
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 const store = createStore(counter)
 console.log(store.getState()) // 0
 ```
@@ -54,7 +54,7 @@ The initial state is zero. Why? Because the second argument to `createStore` was
 Let's consider a different scenario:
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 const store = createStore(counter, 42)
 console.log(store.getState()) // 42
 ```
@@ -91,7 +91,7 @@ function combined(state = {}, action) {
 If we call `createStore` without the `preloadedState`, it's going to initialize the `state` to `{}`. Therefore, `state.a` and `state.b` will be `undefined` by the time it calls `a` and `b` reducers. **Both `a` and `b` reducers will receive `undefined` as _their_ `state` arguments, and if they specify default `state` values, those will be returned.** This is how the combined reducer returns a `{ a: 'lol', b: 'wat' }` state object on the first invocation.
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 const store = createStore(combined)
 console.log(store.getState()) // { a: 'lol', b: 'wat' }
 ```
@@ -99,7 +99,7 @@ console.log(store.getState()) // { a: 'lol', b: 'wat' }
 Let's consider a different scenario:
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 const store = createStore(combined, { a: 'horse' })
 console.log(store.getState()) // { a: 'horse', b: 'wat' }
 ```

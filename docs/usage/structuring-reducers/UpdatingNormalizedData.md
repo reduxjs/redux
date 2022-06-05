@@ -252,7 +252,7 @@ export const orm = new ORM()
 orm.register(Post, Comment)
 
 // main.js
-import { createStore, combineReducers } from 'redux'
+import { legacy_createStore as createStore, combineReducers } from 'redux'
 import { createReducer } from 'redux-orm'
 import { orm } from './models'
 

@@ -48,7 +48,7 @@ The Redux core library has [**a `createStore` API**](../../api/createStore.md) t
 called `store.js`, and import `createStore` and the root reducer. Then, call `createStore` and pass in the root reducer:
 
 ```js title="src/store.js"
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import rootReducer from './reducer'
 
 // highlight-next-line
@@ -64,7 +64,7 @@ initial data when the store is created, such as values that were included in an 
 `localStorage` and read back when the user visits the page again, like this:
 
 ```js title="storeStatePersistenceExample.js"
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import rootReducer from './reducer'
 
 // highlight-start
@@ -256,7 +256,7 @@ Our project has two small example store enhancers available, in the `src/example
 Let's start by using `sayHiOnDispatch`. First, we'll import it, and pass it to `createStore`:
 
 ```js title="src/store.js"
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import rootReducer from './reducer'
 import { sayHiOnDispatch } from './exampleAddons/enhancers'
 
@@ -293,7 +293,7 @@ Fortunately, **the Redux core includes [a `compose` function](../../api/compose.
 
 ```js title="src/store.js"
 // highlight-next-line
-import { createStore, compose } from 'redux'
+import { legacy_createStore as createStore, compose } from 'redux'
 import rootReducer from './reducer'
 import {
   sayHiOnDispatch,
@@ -360,7 +360,7 @@ We already saw that you can customize a Redux store using store enhancers. Redux
 Since we already know how to add enhancers to our store, we should be able to do that now. We'll start with `applyMiddleware` by itself, and we'll add three example middleware that have been included in this project.
 
 ```js title="src/store.js"
-import { createStore, applyMiddleware } from 'redux'
+import { legacy_createStore as createStore, applyMiddleware } from 'redux'
 import rootReducer from './reducer'
 import { print1, print2, print3 } from './exampleAddons/middleware'
 
@@ -555,7 +555,7 @@ The [Redux DevTools Extension docs](https://github.com/reduxjs/redux-devtools/tr
 Here's how that looks:
 
 ```js title="src/store.js"
-import { createStore, applyMiddleware } from 'redux'
+import { legacy_createStore as createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from './reducer'
 import { print1, print2, print3 } from './exampleAddons/middleware'

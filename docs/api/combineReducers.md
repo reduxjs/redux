@@ -109,7 +109,7 @@ export default combineReducers({
 #### `App.js`
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import reducer from './reducers/index'
 
 const store = createStore(reducer)

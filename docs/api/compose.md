@@ -27,7 +27,11 @@ You might want to use it to apply several [store enhancers](../understanding/thi
 This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a few developer tools from the [redux-devtools](https://github.com/reduxjs/redux-devtools) package.
 
 ```js
-import { createStore, applyMiddleware, compose } from 'redux'
+import {
+  legacy_createStore as createStore,
+  applyMiddleware,
+  compose
+} from 'redux'
 import thunk from 'redux-thunk'
 import DevTools from './containers/DevTools'
 import reducer from '../reducers'

@@ -33,7 +33,7 @@ to define a reusable `injectReducer()` function that keeps references to all of 
 that to the store instance.
 
 ```js
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 
 // Define the Reducers that will always be present in the application
 const staticReducers = {

@@ -47,7 +47,7 @@ Additionally, as we are using ES6 and JSX syntax, we will need to compile with [
 import path from 'path'
 import Express from 'express'
 import React from 'react'
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import { Provider } from 'react-redux'
 import counterApp from './reducers'
 import App from './containers/App'
@@ -148,7 +148,7 @@ Let's take a look at our new client file:
 ```js
 import React from 'react'
 import { hydrate } from 'react-dom'
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './containers/App'
 import counterApp from './reducers'

@@ -92,7 +92,7 @@ function todos(state = [], action) {
   }
 }
 
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, legacy_createStore as createStore } from 'redux'
 const reducer = combineReducers({ visibilityFilter, todos })
 const store = createStore(reducer)
 ```

@@ -28,7 +28,7 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 #### Example: Custom Logger Middleware
 
 ```js
-import { createStore, applyMiddleware } from 'redux'
+import { legacy_createStore as createStore, applyMiddleware } from 'redux'
 import todos from './reducers'
 
 function logger({ getState }) {
@@ -60,7 +60,11 @@ store.dispatch({
 #### Example: Using Thunk Middleware for Async Actions
 
 ```js
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import {
+  legacy_createStore as createStore,
+  combineReducers,
+  applyMiddleware
+} from 'redux'
 import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 
@@ -112,7 +116,7 @@ function makeASandwichWithSecretSauce(forPerson) {
   // Invert control!
   // Return a function that accepts `dispatch` so we can dispatch later.
   // Thunk middleware knows how to turn thunk async actions into actions.
-  return function (dispatch) {
+  return function(dispatch) {
     return fetchSecretSauce().then(
       sauce => dispatch(makeASandwich(forPerson, sauce)),
       error => dispatch(apologize('The Sandwich Shop', forPerson, error))
@@ -134,7 +138,7 @@ store.dispatch(makeASandwichWithSecretSauce('My wife')).then(() => {
 // actions and async actions from other action creators,
 // and I can build my control flow with Promises.
 function makeSandwichesForEverybody() {
-  return function (dispatch, getState) {
+  return function(dispatch, getState) {
     if (!getState().sandwiches.isShopOpen) {
       // You don't have to return Promises, but it's a handy convention
       // so the caller can always call .then() on async dispatch result.

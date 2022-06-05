@@ -271,7 +271,7 @@ A reducer enhancer that doesn't do anything looks like this:
 
 ```js
 function doNothingWith(reducer) {
-  return function (state, action) {
+  return function(state, action) {
     // Just call the passed reducer
     return reducer(state, action)
   }
@@ -282,7 +282,7 @@ A reducer enhancer that combines other reducers might look like this:
 
 ```js
 function combineReducers(reducers) {
-  return function (state = {}, action) {
+  return function(state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
       // Call every reducer with the part of the state it manages
       nextState[key] = reducers[key](state[key], action)
@@ -306,7 +306,7 @@ function undoable(reducer) {
   }
 
   // Return a reducer that handles undo and redo
-  return function (state = initialState, action) {
+  return function(state = initialState, action) {
     const { past, present, future } = state
 
     switch (action.type) {
@@ -353,7 +353,7 @@ function todos(state = [], action) {
 // This is also a reducer!
 const undoableTodos = undoable(todos)
 
-import { createStore } from 'redux'
+import { legacy_createStore as createStore } from 'redux'
 const store = createStore(undoableTodos)
 
 store.dispatch({
