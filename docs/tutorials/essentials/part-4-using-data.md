@@ -541,12 +541,10 @@ export const AddPostForm = () => {
   const onAuthorChanged = e => setUserId(e.target.value)
 
   const onSavePostClicked = () => {
-    if (title && content) {
-      // highlight-next-line
-      dispatch(postAdded(title, content, userId))
-      setTitle('')
-      setContent('')
-    }
+    // highlight-next-line
+    dispatch(postAdded(title, content, userId))
+    setTitle('')
+    setContent('')
   }
 
   // highlight-start
