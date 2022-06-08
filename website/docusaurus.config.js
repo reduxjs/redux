@@ -73,7 +73,7 @@ module.exports = {
               label: 'Getting Started',
               to: 'introduction/getting-started'
             },
-            { label: 'Usage Guide', type: 'doc', to: 'usage/index' },
+            { label: 'Usage Guide', type: 'doc', to: 'usage' },
             {
               label: 'Tutorial',
               to: 'tutorials/essentials/part-1-overview-concepts'
