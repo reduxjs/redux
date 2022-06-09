@@ -664,6 +664,8 @@ We only need to fetch the list of users once, and we want to do it right when th
 // omit other imports
 
 // highlight-next-line
+import store from './app/store'
+// highlight-next-line
 import { fetchUsers } from './features/users/usersSlice'
 
 import { worker } from './api/server'
