@@ -663,8 +663,10 @@ We only need to fetch the list of users once, and we want to do it right when th
 ```js title="index.js"
 // omit other imports
 
-// highlight-next-line
+// highlight-start
+import store from './app/store'
 import { fetchUsers } from './features/users/usersSlice'
+// highlight-end
 
 import { worker } from './api/server'
 
