@@ -3,17 +3,18 @@ import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import type { DocumentNode } from 'graphql'
 import { GraphQLClient, ClientError } from 'graphql-request'
 import type {
+  ErrorResponse,
   GraphqlRequestBaseQueryArgs,
   PrepareHeaders,
   RequestHeaders,
 } from './GraphqlBaseQueryTypes'
 
-export const graphqlRequestBaseQuery = (
-  options: GraphqlRequestBaseQueryArgs
+export const graphqlRequestBaseQuery = <E = ErrorResponse>(
+  options: GraphqlRequestBaseQueryArgs<E>
 ): BaseQueryFn<
   { document: string | DocumentNode; variables?: any },
   unknown,
-  Pick<ClientError, 'name' | 'message' | 'stack'>,
+  E,
   Partial<Pick<ClientError, 'request' | 'response'>>
 > => {
   const client =
@@ -50,7 +51,13 @@ export const graphqlRequestBaseQuery = (
     } catch (error) {
       if (error instanceof ClientError) {
         const { name, message, stack, request, response } = error
-        return { error: { name, message, stack }, meta: { request, response } }
+
+      const customErrors =
+        options.customErrors ?? (() => ({ name, message, stack }));
+
+      const customizedErrors = customErrors(error) as E;
+
+        return { error: customizedErrors, meta: { request, response } }
       }
       throw error
     }
