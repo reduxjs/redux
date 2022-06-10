@@ -218,7 +218,7 @@ export function fetchBaseQuery({
       config.headers.set('content-type', 'application/json')
     }
 
-    if (body && isJsonContentType(config.headers)) {
+    if (isJsonifiable(body) && isJsonContentType(config.headers)) {
       config.body = JSON.stringify(body)
     }
 
