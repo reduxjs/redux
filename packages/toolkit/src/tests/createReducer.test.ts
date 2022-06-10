@@ -106,6 +106,9 @@ describe('createReducer', () => {
         /Cannot assign to read only property/
       )
     })
+    test('does not throw error if initial state is not draftable', () => {
+      expect(() => createReducer(new URLSearchParams(), {})).not.toThrowError()
+    })
   })
 
   describe('given pure reducers with immutable updates', () => {

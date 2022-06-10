@@ -1,3 +1,4 @@
+import createNextState, { isDraftable } from 'immer'
 import type { Middleware } from 'redux'
 
 export function getTimeMeasureUtils(maxDelay: number, fnName: string) {
@@ -63,4 +64,8 @@ export class MiddlewareArray<
     }
     return new MiddlewareArray(...arr.concat(this))
   }
+}
+
+export function freezeDraftable<T>(val: T) {
+  return isDraftable(val) ? createNextState(val, () => {}) : val
 }

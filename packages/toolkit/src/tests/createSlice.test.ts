@@ -74,6 +74,16 @@ describe('createSlice', () => {
 
       expect(slice.getInitialState()).toBe(initialState)
     })
+
+    it('should allow non-draftable initial state', () => {
+      expect(() =>
+        createSlice({
+          name: 'params',
+          initialState: new URLSearchParams(),
+          reducers: {},
+        })
+      ).not.toThrowError()
+    })
   })
 
   describe('when initialState is a function', () => {
@@ -104,6 +114,16 @@ describe('createSlice', () => {
       })
 
       expect(slice.getInitialState()).toBe(42)
+    })
+
+    it('should allow non-draftable initial state', () => {
+      expect(() =>
+        createSlice({
+          name: 'params',
+          initialState: () => new URLSearchParams(),
+          reducers: {},
+        })
+      ).not.toThrowError()
     })
   })
 
