@@ -1,6 +1,6 @@
 {
   "name": "@rtk-query/graphql-request-base-query",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "author": {
     "name": "Lenz Weber",
     "email": "mail@phryneas.de",
