@@ -277,11 +277,12 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
           )) {
             if (typeof partialDefinition === 'function') {
               partialDefinition(context.endpointDefinitions[endpointName])
+            } else {
+              Object.assign(
+                context.endpointDefinitions[endpointName] || {},
+                partialDefinition
+              )
             }
-            Object.assign(
-              context.endpointDefinitions[endpointName] || {},
-              partialDefinition
-            )
           }
         }
         return api
