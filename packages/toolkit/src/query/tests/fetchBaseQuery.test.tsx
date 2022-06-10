@@ -399,6 +399,34 @@ describe('fetchBaseQuery', () => {
         `${baseUrl}/echo?someArray[]=a&someArray[]=b&someArray[]=c`
       )
     })
+
+    it('should supports a custom isJsonContentType function', async () => {
+      const testBody = {
+        i_should_be_stringified: true,
+      }
+      const baseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        isJsonContentType: (headers) =>
+          ['application/vnd.api+json', 'application/json', 'application/vnd.hal+json'].includes(
+            headers.get('content-type') ?? ''
+          ),
+      })
+
+      let request: any
+      ;({ data: request } = await baseQuery(
+        {
+          url: '/echo',
+          method: 'POST',
+          body: testBody,
+          headers: { 'content-type': 'application/vnd.hal+json' },
+        },
+        commonBaseQueryApi,
+        {}
+      ))
+
+      expect(request.body).toMatchObject(testBody)
+    })
   })
 
   describe('validateStatus', () => {

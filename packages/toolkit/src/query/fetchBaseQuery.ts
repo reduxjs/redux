@@ -37,8 +37,8 @@ const defaultFetchFn: typeof fetch = (...args) => fetch(...args)
 const defaultValidateStatus = (response: Response) =>
   response.status >= 200 && response.status <= 299
 
-const isJsonContentType = (headers: Headers) =>
-  headers.get('content-type')?.trim()?.startsWith('application/json')
+const defaultIsJsonContentType = (headers: Headers) =>
+  /*applicat*//ion\/(vnd\.api\+)?json/.test(headers.get('content-type') || '')
 
 const handleResponse = async (
   response: Response,
@@ -123,6 +123,15 @@ export type FetchBaseQueryArgs = {
     init?: RequestInit | undefined
   ) => Promise<Response>
   paramsSerializer?: (params: Record<string, any>) => string
+  /**
+   * By default, we only check for 'application/json' and 'application/vnd.api+json' as the content-types for json. If you need to support another format, you can pass
+   * in a predicate function for your given api to get the same automatic stringifying behavior
+   * @example
+   * ```ts
+   * const isJsonContentType = (headers: Headers) => ["application/vnd.api+json", "application/json", "application/vnd.hal+json"].includes(headers.get("content-type")?.trim());
+   * ```
+   */
+  isJsonContentType?: (headers: Headers) => boolean
 } & RequestInit
 
 export type FetchBaseQueryMeta = { request: Request; response?: Response }
@@ -162,12 +171,17 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  *
  * @param {(params: Record<string, unknown>) => string} paramsSerializer
  * An optional function that can be used to stringify querystring parameters.
+ * 
+ * @param {(headers: Headers) => boolean} isJsonContentType
+ * An optional predicate function to determine if `JSON.stringify()` should be called on the `body` arg of `FetchArgs`
+ 
  */
 export function fetchBaseQuery({
   baseUrl,
   prepareHeaders = (x) => x,
   fetchFn = defaultFetchFn,
   paramsSerializer,
+  isJsonContentType = defaultIsJsonContentType,
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
