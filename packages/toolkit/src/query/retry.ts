@@ -1,4 +1,4 @@
-import type { BaseQueryEnhancer } from './baseQueryTypes'
+import type { BaseQueryApi, BaseQueryArg, BaseQueryEnhancer, BaseQueryExtraOptions, BaseQueryFn } from './baseQueryTypes'
 import { FetchBaseQueryError } from './fetchBaseQuery'
 import { HandledError } from './HandledError'
 
@@ -36,7 +36,12 @@ export interface RetryOptions {
   /**
    * Function used to determine need retry error
    */
-  needRetryError?: (error: FetchBaseQueryError) => boolean
+  shouldRetry?: (error: FetchBaseQueryError, args: BaseQueryArg<BaseQueryFn>, extraArgs: {
+    attempt: number
+    maxRetries: number
+    baseQueryApi: BaseQueryApi
+    extraOptions: BaseQueryExtraOptions<BaseQueryFn> & RetryOptions
+  }) => boolean
 }
 
 function fail(e: any): never {
@@ -53,7 +58,7 @@ const retryWithBackoff: BaseQueryEnhancer<
   const options = {
     maxRetries: 5,
     backoff: defaultBackoff,
-    needRetryError: () => true,
+    shouldRetry: () => true,
     ...defaultOptions,
     ...extraOptions,
   }
@@ -63,7 +68,12 @@ const retryWithBackoff: BaseQueryEnhancer<
     try {
       const result = await baseQuery(args, api, extraOptions)
       // baseQueries _should_ return an error property, so we should check for that and throw it to continue retrying
-      if (result.error && options.needRetryError(result.error as FetchBaseQueryError)) {
+      if (result.error && options.shouldRetry(result.error as FetchBaseQueryError, args, {
+        attempt: retry,
+        maxRetries: options.maxRetries,
+        baseQueryApi: api,
+        extraOptions
+      })) {
         throw new HandledError(result)
       }
       return result
