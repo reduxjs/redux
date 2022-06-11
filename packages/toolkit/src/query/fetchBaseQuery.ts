@@ -132,6 +132,10 @@ export type FetchBaseQueryArgs = {
    * ```
    */
   isJsonContentType?: (headers: Headers) => boolean
+  /**
+   * Defaults to `application/json`;
+   */
+  jsonContentType?: string
 } & RequestInit
 
 export type FetchBaseQueryMeta = { request: Request; response?: Response }
@@ -171,10 +175,11 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  *
  * @param {(params: Record<string, unknown>) => string} paramsSerializer
  * An optional function that can be used to stringify querystring parameters.
- * 
+ *
  * @param {(headers: Headers) => boolean} isJsonContentType
  * An optional predicate function to determine if `JSON.stringify()` should be called on the `body` arg of `FetchArgs`
- 
+ *
+ * @param {string} jsonContentType Defaults to `application/json`. Used when automatically setting the content-type header for a request with a jsonifiable body that does not have an explicit content-type header.
  */
 export function fetchBaseQuery({
   baseUrl,
@@ -182,6 +187,7 @@ export function fetchBaseQuery({
   fetchFn = defaultFetchFn,
   paramsSerializer,
   isJsonContentType = defaultIsJsonContentType,
+  jsonContentType = 'application/json',
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
@@ -229,7 +235,7 @@ export function fetchBaseQuery({
         typeof body.toJSON === 'function')
 
     if (!config.headers.has('content-type') && isJsonifiable(body)) {
-      config.headers.set('content-type', 'application/json')
+      config.headers.set('content-type', jsonContentType)
     }
 
     if (body && isJsonContentType(config.headers)) {

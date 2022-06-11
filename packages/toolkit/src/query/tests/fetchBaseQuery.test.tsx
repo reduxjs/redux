@@ -292,6 +292,27 @@ describe('fetchBaseQuery', () => {
       expect(request.headers['content-type']).toBe('text/html')
       expect(request.body).toEqual(data.join(','))
     })
+
+    it('supports a custom jsonContentType', async () => {
+      const baseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        jsonContentType: 'application/vnd.api+json',
+      })
+
+      let request: any
+      ;({ data: request } = await baseQuery(
+        {
+          url: '/echo',
+          body: {},
+          method: 'POST',
+        },
+        commonBaseQueryApi,
+        {}
+      ))
+
+      expect(request.headers['content-type']).toBe('application/vnd.api+json')
+    })
   })
 
   describe('arg.params', () => {
@@ -408,9 +429,11 @@ describe('fetchBaseQuery', () => {
         baseUrl,
         fetchFn: fetchFn as any,
         isJsonContentType: (headers) =>
-          ['application/vnd.api+json', 'application/json', 'application/vnd.hal+json'].includes(
-            headers.get('content-type') ?? ''
-          ),
+          [
+            'application/vnd.api+json',
+            'application/json',
+            'application/vnd.hal+json',
+          ].includes(headers.get('content-type') ?? ''),
       })
 
       let request: any
