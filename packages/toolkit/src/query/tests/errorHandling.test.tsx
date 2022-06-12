@@ -519,8 +519,10 @@ describe('error handling in a component', () => {
     )
 
     // Make sure the hook and the unwrapped action return the same things in an error state
-    expect(screen.getByTestId('error').textContent).toEqual(
-      screen.getByTestId('manuallySetError').textContent
+    await waitFor(() =>
+      expect(screen.getByTestId('error').textContent).toEqual(
+        screen.getByTestId('manuallySetError').textContent
+      )
     )
 
     fireEvent.click(screen.getByText('Update User'))

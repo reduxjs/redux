@@ -1965,7 +1965,7 @@ describe('hooks with createApi defaults set', () => {
       await waitFor(() => expect(getRenderCount()).toBe(5))
       fireEvent.click(addBtn)
       fireEvent.click(addBtn)
-      await waitFor(() => expect(getRenderCount()).toBe(9))
+      await waitFor(() => expect(getRenderCount()).toBe(7))
     })
 
     test('useQuery with selectFromResult option serves a deeply memoized value and does not rerender unnecessarily', async () => {
