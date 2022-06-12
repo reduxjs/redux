@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createApi } from '@reduxjs/toolkit/query/react'
-
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, waitFor } from '@testing-library/react'
 import type { BaseQueryApi } from '../baseQueryTypes'
 import { withProvider } from './helpers'
 
@@ -91,7 +90,7 @@ describe('re-triggering behavior on arg change', () => {
   beforeEach(() => void spy.mockClear())
 
   test('re-trigger on literal value change', async () => {
-    const { result, rerender, waitForNextUpdate } = renderHook(
+    const { result, rerender } = renderHook(
       (props) => getUser.useQuery(props),
       {
         wrapper: withProvider(store),
@@ -99,32 +98,31 @@ describe('re-triggering behavior on arg change', () => {
       }
     )
 
-    while (result.current.status === 'pending') {
-      await waitForNextUpdate()
-    }
+    await waitFor(() => {
+      expect(result.current.status).not.toBe('pending')
+    })
+    
     expect(spy).toHaveBeenCalledTimes(1)
 
     for (let x = 1; x < 3; x++) {
       rerender(6)
-      // @ts-ignore
-      while (result.current.status === 'pending') {
-        await waitForNextUpdate()
-      }
+      await waitFor(() => {
+        expect(result.current.status).not.toBe('pending')
+      })
       expect(spy).toHaveBeenCalledTimes(2)
     }
 
     for (let x = 1; x < 3; x++) {
       rerender(7)
-      // @ts-ignore
-      while (result.current.status === 'pending') {
-        await waitForNextUpdate()
-      }
+      await waitFor(() => {
+        expect(result.current.status).not.toBe('pending')
+      })
       expect(spy).toHaveBeenCalledTimes(3)
     }
   })
 
   test('only re-trigger on shallow-equal arg change', async () => {
-    const { result, rerender, waitForNextUpdate } = renderHook(
+    const { result, rerender } = renderHook(
       (props) => getUser.useQuery(props),
       {
         wrapper: withProvider(store),
@@ -132,26 +130,24 @@ describe('re-triggering behavior on arg change', () => {
       }
     )
 
-    while (result.current.status === 'pending') {
-      await waitForNextUpdate()
-    }
+    await waitFor(() => {
+      expect(result.current.status).not.toBe('pending')
+    })
     expect(spy).toHaveBeenCalledTimes(1)
 
     for (let x = 1; x < 3; x++) {
       rerender({ name: 'Bob', likes: 'waffles' })
-      // @ts-ignore
-      while (result.current.status === 'pending') {
-        await waitForNextUpdate()
-      }
+      await waitFor(() => {
+        expect(result.current.status).not.toBe('pending')
+      })
       expect(spy).toHaveBeenCalledTimes(2)
     }
 
     for (let x = 1; x < 3; x++) {
       rerender({ name: 'Alice', likes: 'waffles' })
-      // @ts-ignore
-      while (result.current.status === 'pending') {
-        await waitForNextUpdate()
-      }
+      await waitFor(() => {
+        expect(result.current.status).not.toBe('pending')
+      })
       expect(spy).toHaveBeenCalledTimes(3)
     }
   })
@@ -159,7 +155,7 @@ describe('re-triggering behavior on arg change', () => {
   test('re-triggers every time on deeper value changes', async () => {
     const name = 'Tim'
 
-    const { result, rerender, waitForNextUpdate } = renderHook(
+    const { result, rerender } = renderHook(
       (props) => getUser.useQuery(props),
       {
         wrapper: withProvider(store),
@@ -167,23 +163,22 @@ describe('re-triggering behavior on arg change', () => {
       }
     )
 
-    while (result.current.status === 'pending') {
-      await waitForNextUpdate()
-    }
+    await waitFor(() => {
+      expect(result.current.status).not.toBe('pending')
+    })
     expect(spy).toHaveBeenCalledTimes(1)
 
     for (let x = 1; x < 3; x++) {
       rerender({ person: { name: name + x } })
-      // @ts-ignore
-      while (result.current.status === 'pending') {
-        await waitForNextUpdate()
-      }
+      await waitFor(() => {
+        expect(result.current.status).not.toBe('pending')
+      })
       expect(spy).toHaveBeenCalledTimes(x + 1)
     }
   })
 
   test('do not re-trigger if the order of keys change while maintaining the same values', async () => {
-    const { result, rerender, waitForNextUpdate } = renderHook(
+    const { result, rerender } = renderHook(
       (props) => getUser.useQuery(props),
       {
         wrapper: withProvider(store),
@@ -191,17 +186,16 @@ describe('re-triggering behavior on arg change', () => {
       }
     )
 
-    while (result.current.status === 'pending') {
-      await waitForNextUpdate()
-    }
+    await waitFor(() => {
+      expect(result.current.status).not.toBe('pending')
+    })
     expect(spy).toHaveBeenCalledTimes(1)
 
     for (let x = 1; x < 3; x++) {
       rerender({ likes: 'Bananas', name: 'Tim' })
-      // @ts-ignore
-      while (result.current.status === 'pending') {
-        await waitForNextUpdate()
-      }
+      await waitFor(() => {
+        expect(result.current.status).not.toBe('pending')
+      })
       expect(spy).toHaveBeenCalledTimes(1)
     }
   })

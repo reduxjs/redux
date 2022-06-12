@@ -30,7 +30,6 @@
     "@microsoft/api-extractor": "^7.13.2",
     "@size-limit/preset-small-lib": "^4.11.0",
     "@testing-library/react": "^13.3.0",
-    "@testing-library/react-hooks": "^8.0.0",
     "@testing-library/user-event": "^14.2.0",
     "@types/convert-source-map": "^1.5.1",
     "@types/jest": "^24.0.11",

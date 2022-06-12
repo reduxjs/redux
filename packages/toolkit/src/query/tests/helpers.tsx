@@ -6,8 +6,6 @@ import type {
 } from '@reduxjs/toolkit'
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-
-import { act } from '@testing-library/react-hooks'
 import type { Reducer } from 'react'
 import React, { useCallback } from 'react'
 import { Provider } from 'react-redux'
@@ -17,7 +15,7 @@ import {
   createConsole,
   getLog,
 } from 'console-testing-library/pure'
-import { cleanup } from '@testing-library/react'
+import { cleanup, act } from '@testing-library/react'
 
 export const ANY = 0 as any
 
