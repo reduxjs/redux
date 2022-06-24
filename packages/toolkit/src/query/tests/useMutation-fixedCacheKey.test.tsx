@@ -79,19 +79,22 @@ describe('fixedCacheKey', () => {
 
     getByTestId(c1, 'trigger').click()
 
-    await waitFor(() =>
+    await waitFor(() => {
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
-    )
-    expect(getByTestId(c1, 'data').textContent).toBe('C1')
-    expect(getByTestId(c2, 'status').textContent).toBe('fulfilled')
-    expect(getByTestId(c2, 'data').textContent).toBe('C1')
+      expect(getByTestId(c1, 'data').textContent).toBe('C1')
+      expect(getByTestId(c2, 'status').textContent).toBe('fulfilled')
+      expect(getByTestId(c2, 'data').textContent).toBe('C1')
+    })
 
     // test reset from the other component
     getByTestId(c2, 'reset').click()
-    expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
-    expect(getByTestId(c1, 'data').textContent).toBe('')
-    expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
-    expect(getByTestId(c2, 'data').textContent).toBe('')
+
+    await waitFor(() => {
+      expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
+      expect(getByTestId(c1, 'data').textContent).toBe('')
+      expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
+      expect(getByTestId(c2, 'data').textContent).toBe('')
+    })
   })
 
   test('resetting from the component that triggered the mutation resets for each shared result', async () => {
@@ -140,31 +143,35 @@ describe('fixedCacheKey', () => {
     )
 
     // the components with the first cache key should be unaffected
-    expect(getByTestId(c1, 'data').textContent).toBe('C1')
-    expect(getByTestId(c2, 'status').textContent).toBe('fulfilled')
-    expect(getByTestId(c2, 'data').textContent).toBe('C1')
-    expect(getByTestId(c2, 'status').textContent).toBe('fulfilled')
+    await waitFor(() => {
+      expect(getByTestId(c1, 'data').textContent).toBe('C1')
+      expect(getByTestId(c2, 'status').textContent).toBe('fulfilled')
+      expect(getByTestId(c2, 'data').textContent).toBe('C1')
+      expect(getByTestId(c2, 'status').textContent).toBe('fulfilled')
 
-    // the component with the second cache key should be affected
-    expect(getByTestId(c3, 'data').textContent).toBe('C3')
-    expect(getByTestId(c3, 'status').textContent).toBe('fulfilled')
-    expect(getByTestId(c4, 'data').textContent).toBe('C3')
-    expect(getByTestId(c4, 'status').textContent).toBe('fulfilled')
+      // the component with the second cache key should be affected
+      expect(getByTestId(c3, 'data').textContent).toBe('C3')
+      expect(getByTestId(c3, 'status').textContent).toBe('fulfilled')
+      expect(getByTestId(c4, 'data').textContent).toBe('C3')
+      expect(getByTestId(c4, 'status').textContent).toBe('fulfilled')
+    })
 
     // test reset from the component that triggered the mutation for the first cache key
     getByTestId(c1, 'reset').click()
 
-    // the components with the first cache key should be affected
-    expect(getByTestId(c1, 'data').textContent).toBe('')
-    expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
-    expect(getByTestId(c2, 'data').textContent).toBe('')
-    expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
+    await waitFor(() => {
+      // the components with the first cache key should be affected
+      expect(getByTestId(c1, 'data').textContent).toBe('')
+      expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
+      expect(getByTestId(c2, 'data').textContent).toBe('')
+      expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    // the components with the second cache key should be unaffected
-    expect(getByTestId(c3, 'data').textContent).toBe('C3')
-    expect(getByTestId(c3, 'status').textContent).toBe('fulfilled')
-    expect(getByTestId(c4, 'data').textContent).toBe('C3')
-    expect(getByTestId(c4, 'status').textContent).toBe('fulfilled')
+      // the components with the second cache key should be unaffected
+      expect(getByTestId(c3, 'data').textContent).toBe('C3')
+      expect(getByTestId(c3, 'status').textContent).toBe('fulfilled')
+      expect(getByTestId(c4, 'data').textContent).toBe('C3')
+      expect(getByTestId(c4, 'status').textContent).toBe('fulfilled')
+    })
   })
 
   test('two mutations with different `fixedCacheKey` do not influence each other', async () => {
@@ -236,7 +243,10 @@ describe('fixedCacheKey', () => {
   })
 
   test('a component without `fixedCacheKey` has `originalArgs`', async () => {
-    render(<Component name="C1" />, { wrapper: storeRef.wrapper })
+    render(<Component name="C1" />, {
+      wrapper: storeRef.wrapper,
+      legacyRoot: true,
+    })
     let c1 = screen.getByTestId('C1')
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('undefined')
@@ -272,7 +282,7 @@ describe('fixedCacheKey', () => {
         <Component name="C1" fixedCacheKey="test" value={p1} />
         <Component name="C2" fixedCacheKey="test" value={p2} />
       </>,
-      { wrapper: storeRef.wrapper }
+      { wrapper: storeRef.wrapper, legacyRoot: true }
     )
     const c1 = screen.getByTestId('C1')
     const c2 = screen.getByTestId('C2')

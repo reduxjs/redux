@@ -2,7 +2,6 @@ import {
   configureStore,
   createAction,
   createSlice,
-  Dispatch,
   isAnyOf,
 } from '@reduxjs/toolkit'
 
@@ -185,7 +184,7 @@ describe('createListenerMiddleware', () => {
         middleware: (gDM) => gDM().prepend(listenerMiddleware.middleware),
       })
 
-      let foundExtra = null
+      let foundExtra: number | null  = null
 
       const typedAddListener =
         listenerMiddleware.startListening as TypedStartListening<
@@ -1062,11 +1061,16 @@ describe('createListenerMiddleware', () => {
         middleware: (gDM) => gDM().prepend(middleware),
       })
 
-      let result = null
+      const typedAddListener =
+        startListening as TypedStartListening<
+          CounterState,
+          typeof store.dispatch
+        >
+      let result: [ReturnType<typeof increment>, CounterState, CounterState] | null = null
 
-      startListening({
+      typedAddListener({
         predicate: incrementByAmount.match,
-        effect: async (_, listenerApi) => {
+        async effect(_: AnyAction, listenerApi) {
           result = await listenerApi.take(increment.match)
         },
       })

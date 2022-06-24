@@ -54,7 +54,8 @@ export type BaseQueryEnhancer<
   BaseQueryArg<BaseQuery> & AdditionalArgs,
   BaseQueryResult<BaseQuery>,
   BaseQueryError<BaseQuery>,
-  BaseQueryExtraOptions<BaseQuery> & AdditionalDefinitionExtraOptions
+  BaseQueryExtraOptions<BaseQuery> & AdditionalDefinitionExtraOptions,
+  NonNullable<BaseQueryMeta<BaseQuery>>
 >
 
 export type BaseQueryResult<BaseQuery extends BaseQueryFn> = UnwrapPromise<

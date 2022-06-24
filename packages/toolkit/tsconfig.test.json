@@ -13,5 +13,6 @@
     "baseUrl": ".",
     "skipLibCheck": false,
     "noImplicitReturns": false
-  }
+  },
+  "include": ["./setup-type-tests.d.ts"]
 }

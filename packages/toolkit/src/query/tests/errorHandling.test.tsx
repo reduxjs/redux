@@ -1,14 +1,12 @@
 import * as React from 'react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { renderHook, act } from '@testing-library/react-hooks'
 import { rest } from 'msw'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
-
 import { expectExactType, hookWaitFor, setupApiStore } from './helpers'
 import { server } from './mocks/server'
-import { fireEvent, render, waitFor, screen } from '@testing-library/react'
+import { fireEvent, render, waitFor, screen, act, renderHook } from '@testing-library/react'
 import { useDispatch } from 'react-redux'
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import type { BaseQueryApi } from '../baseQueryTypes'
@@ -498,7 +496,7 @@ describe('error handling in a component', () => {
                   expectExactType(mockSuccessResponse)(result)
                   setManualError(undefined)
                 })
-                .catch((error) => setManualError(error))
+                .catch((error) => act(() => setManualError(error)))
             }}
           >
             Update User
@@ -519,8 +517,10 @@ describe('error handling in a component', () => {
     )
 
     // Make sure the hook and the unwrapped action return the same things in an error state
-    expect(screen.getByTestId('error').textContent).toEqual(
-      screen.getByTestId('manuallySetError').textContent
+    await waitFor(() =>
+      expect(screen.getByTestId('error').textContent).toEqual(
+        screen.getByTestId('manuallySetError').textContent
+      )
     )
 
     fireEvent.click(screen.getByText('Update User'))
