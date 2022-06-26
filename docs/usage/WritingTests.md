@@ -156,7 +156,9 @@ To test the component, we `render` it into the DOM, and assert that the app resp
 
 React Testing Library's `render` function accepts a tree of React elements and renders those components. Just like in a real app, any Redux-connected components will need [a React-Redux `<Provider>` component wrapped around them](https://react-redux.js.org/tutorials/quick-start#provide-the-redux-store-to-react), with a real Redux store set up and provided.
 
-Instead of copy-pasting the same store creation and `Provider` setup in every test, we can use the `wrapper` option in the `render` function and export our own customized `render` function as explained in [React Testing Library's setup docs](https://testing-library.com/docs/react-testing-library/setup#custom-render).
+Additionally, **the test code should create a separate Redux store instance for every test, rather than reusing the same store instance and resetting its state**. That ensures no values accidentally leak between tests.
+
+Instead of copy-pasting the same store creation and `Provider` setup in every test, we can use the `wrapper` option in the `render` function and **export our own customized `render` function that creates a new Redux store and renders a `<Provider>`**, as explained in [React Testing Library's setup docs](https://testing-library.com/docs/react-testing-library/setup#custom-render).
 
 The custom render function should let us:
 
