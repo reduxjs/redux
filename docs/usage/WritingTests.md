@@ -23,7 +23,7 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 Our general advice for testing an app using Redux is:
 
-- **Prefer writing integration tests with everything working together**. For a React app using Redux, render a `<Provider>` with a real store instance wrapping the component/s being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
+- **Prefer writing integration tests with everything working together**. For a React app using Redux, render a `<Provider>` with a real store instance wrapping the components being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
 - _If_ needed, use basic unit tests for pure functions such as particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
 - **Do _not_ try to mock selector functions or the React-Redux hooks!** Mocking imports from libraries is fragile, and doesn't give you confidence that your actual app code is working.
 
@@ -354,13 +354,7 @@ Because reducers are pure functions, so testing them should be straightforward. 
 ```js
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = [
-  {
-    text: 'Use Redux',
-    completed: false,
-    id: 0
-  }
-]
+const initialState = [{ text: 'Use Redux', completed: false, id: 0 }]
 
 const todosSlice = createSlice({
   name: 'todos',
@@ -388,51 +382,31 @@ import reducer, { todoAdded } from './todosSlice'
 
 test('should return the initial state', () => {
   expect(reducer(undefined, {})).toEqual([
-    {
-      text: 'Use Redux',
-      completed: false,
-      id: 0
-    }
+    { text: 'Use Redux', completed: false, id: 0 }
   ])
 })
 
 test('should handle a todo being added to an empty list', () => {
   const previousState = []
+
   expect(reducer(previousState, todoAdded('Run the tests'))).toEqual([
-    {
-      text: 'Run the tests',
-      completed: false,
-      id: 0
-    }
+    { text: 'Run the tests', completed: false, id: 0 }
   ])
 })
 
 test('should handle a todo being added to an existing list', () => {
-  const previousState = [
-    {
-      text: 'Run the tests',
-      completed: true,
-      id: 0
-    }
-  ]
+  const previousState = [{ text: 'Run the tests', completed: true, id: 0 }]
+
   expect(reducer(previousState, todoAdded('Use Redux'))).toEqual([
-    {
-      text: 'Run the tests',
-      completed: true,
-      id: 0
-    },
-    {
-      text: 'Use Redux',
-      completed: false,
-      id: 1
-    }
+    { text: 'Run the tests', completed: true, id: 0 },
+    { text: 'Use Redux', completed: false, id: 1 }
   ])
 })
 ```
 
 ### Selectors
 
-Selectors are also generally pure functions, and thus can be tested using the same basic `const actual = selectSomeValue(inputValue)` approach as reducers.
+Selectors are also generally pure functions, and thus can be tested using the same basic approach as reducers: set up an initial value, call the selector function with those inputs, and assert that the result matches the expected output.
 
 However, since [most selectors are memoized to remember their last inputs](./deriving-data-selectors.md), you may need to watch for cases where a selector is returning a cached value when you expected it to generate a new one depending on where it's being used in the test.
 
@@ -463,7 +437,7 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.ts).
 
 ```js
-const thunk =
+const thunkMiddleware =
   ({ dispatch, getState }) =>
   next =>
   action => {
@@ -487,7 +461,7 @@ const create = () => {
   }
   const next = jest.fn()
 
-  const invoke = action => thunk(store)(next)(action)
+  const invoke = action => thunkMiddleware(store)(next)(action)
 
   return { store, next, invoke }
 }
