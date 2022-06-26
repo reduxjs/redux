@@ -10,7 +10,7 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
 # Recommended Videos
 
-While we don't currently have any "official" Redux tutorial videos from the Redux team, the Redux community has created some excellent tutorials that we can recommend.  These videos show the same "modern Redux" approaches that we teach in our docs.
+While we don't currently have any "official" Redux tutorial videos from the Redux team, the Redux community has created some excellent tutorials that we can recommend. These videos show the same "modern Redux" approaches that we teach in our docs.
 
 ## Learn Modern Redux Livestream
 
@@ -21,11 +21,9 @@ Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain
     title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
 />
 
-
 ## Redux Toolkit Complete Tutorial with Dave Gray
 
 This 4-hour tutorial video teaches how to use Redux Toolkit by showing how to build the same example app that's covered in [the "Redux Essentials" tutorial](./essentials/part-1-overview-concepts.md), and walks through how each piece of the app works.
-
 
 <LiteYouTubeEmbed
     id="NqzdVN2tyvQ"
@@ -40,7 +38,7 @@ Jamund Ferguson has created several excellent "modern Redux" courses on Egghead.
 
 [Egghead course: Modern Redux with Redux Toolkit and TypeScript](https://app.egghead.io/lessons/react-intro-to-modern-redux-with-rtk-and-typescript?pl=modern-redux-with-redux-toolkit-rtk-and-typescript-64f243c8)
 
-This course takes a basic shopping cart application built with React and fully power it with Redux and RTK using TypeScript.  It covers how Redux Toolkit simplifies the process of setting up your Redux application, including building slices, reducers, selectors and thunks, and all typed with TypeScript.
+This course takes a basic shopping cart application built with React and fully power it with Redux and RTK using TypeScript. It covers how Redux Toolkit simplifies the process of setting up your Redux application, including building slices, reducers, selectors and thunks, and all typed with TypeScript.
 
 ### Modernizing a Legacy Redux Application with React Hooks
 

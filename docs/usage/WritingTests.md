@@ -19,12 +19,13 @@ The guiding principles for testing Redux logic closely follow that of React Test
 
 > [The more your tests resemble the way your software is used, the more confidence they can give you.](https://twitter.com/kentcdodds/status/977018512689455106) - Kent C. Dodds
 
-Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking. However, you should consider whether each piece of your Redux code needs its own dedicated tests. In the majority of scenarios, the end-user does not know, and does not care whether Redux is used within the application at all. As such, the Redux code can be treated as an implementation detail of the app, without requiring explicit tests for the Redux code in many circumstances.
+Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking. However, you should consider whether each piece of your Redux code needs its own dedicated tests. **In the majority of scenarios, the end-user does not know, and does not care whether Redux is used within the application at all**. As such, the Redux code can be treated as an implementation detail of the app, without requiring explicit tests for the Redux code in many circumstances.
 
-The general advice for testing an app using Redux is as follows:
+Our general advice for testing an app using Redux is:
 
-- Use integration tests for everything working together. I.e. for a React app using Redux, render a `<Provider>` with a real store instance wrapping the component/s being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
-- If needed, use basic unit tests for pure functions such as particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
+- **Prefer writing integration tests with everything working together**. For a React app using Redux, render a `<Provider>` with a real store instance wrapping the components being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
+- _If_ needed, use basic unit tests for pure functions such as particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
+- **Do _not_ try to mock selector functions or the React-Redux hooks!** Mocking imports from libraries is fragile, and doesn't give you confidence that your actual app code is working.
 
 :::info
 
@@ -35,82 +36,325 @@ For background on why we recommend integration-style tests, see:
 
 :::
 
-## Setting Up
+## Setting Up a Test Environment
 
-Redux can be tested with any test runner, however in the examples below we will be using [Jest](https://facebook.github.io/jest/), a popular testing framework.
-Note that it runs in a Node environment, so you won't have access to the real DOM.
-Jest can instead use [jsdom](https://github.com/jsdom/jsdom) to emulate portions of the browser in a test environment.
+### Test Runners
 
-```sh
-npm install --save-dev jest
+**Redux can be tested with any test runner**, since it's just plain JavaScript. One common option is [Jest](https://jestjs.io/), a widely used test runner that comes with Create-React-App, and is used by the Redux library repos. If you're using [Vite](https://vitejs.dev/) to build your project, you may be using [Vitest](https://vitest.dev/) as your test runner.
+
+Typically, your test runner needs to be configured to compile JavaScript/TypeScript syntax. If you're going to be testing UI components, you will likely need to configure the test runner to use [JSDOM](https://github.com/jsdom/jsdom) to provide a mock DOM environment.
+
+The examples in this page will assume you're using Jest, but the same patterns apply no matter what test runner you're using.
+
+See these resources for typical test runner configuration instructions:
+
+- **Jest**:
+  - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
+  - [Jest: Configuration - Test Environment](https://jestjs.io/docs/configuration#testenvironment-string)
+- **Vitest**
+  - [Vitest: Getting Started](https://vitest.dev/guide/)
+  - [Vitest: Configuration - Test Environment](https://vitest.dev/config/#environment)
+
+### UI and Network Testing Tools
+
+**The Redux team recommends using [React Testing Library (RTL)](https://testing-library.com/docs/react-testing-library/intro) to test React components that connect to Redux**. React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses ReactDOM's `render` function and `act` from react-dom/tests-utils. (The Testing Library family of tools also includes [adapters for many other popular frameworks as well](https://testing-library.com/docs/dom-testing-library/intro).)
+
+We also **recommend using [Mock Server Worker (MSW)](https://mswjs.io/) to mock network requests**, as this means your application logic does not need to be changed or mocked when writing tests.
+
+- **DOM/React Testing Library**
+  - [DOM Testing Library: Setup](https://testing-library.com/docs/dom-testing-library/setup)
+  - [React Testing Library: Setup](https://testing-library.com/docs/react-testing-library/setup)
+  - [Testing Library Jest-DOM Matchers](https://testing-library.com/docs/ecosystem-jest-dom)
+- **Mock Service Worker**
+  - [MSW: Installation](https://mswjs.io/docs/getting-started/install)
+  - [MSW: Setting up mock requests](https://mswjs.io/docs/getting-started/mocks/rest-api)
+  - [MSW: Mock server configuration for Node](https://mswjs.io/docs/getting-started/integrate/node)
+
+## Integration Testing Connected Components and Redux Logic
+
+**Our recommendation for testing Redux-connected React components is via integration tests that include everything working together**, with assertions aimed at verifying that the app behaves the way you expect when the user interacts with it in a given manner.
+
+### Example App Code
+
+Consider the following `userSlice` slice and `App` component:
+
+```ts title="features/users/usersSlice.ts"
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { userAPI } from './userAPI'
+import type { RootState } from '../../app/store'
+
+export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
+  const response = await userAPI.fetchUser()
+  return response.data
+})
+
+interface UserState {
+  name: string
+  status: 'idle' | 'loading' | 'complete'
+}
+
+const initialState: UserState = {
+  name: 'No user',
+  status: 'idle'
+}
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(fetchUser.pending, (state, action) => {
+      state.status = 'loading'
+    })
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.status = 'complete'
+      state.name = action.payload
+    })
+  }
+})
+
+export const selectUser = (state: RootState) => state.user.name
+export const selectUserFetchStatus = (state: RootState) => state.user.status
+
+export default userSlice.reducer
 ```
 
-To use it together with [Babel](https://babeljs.io), you will need to install `babel-jest`:
+```tsx title="features/users/UserDisplay.tsx"
+import React from 'react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { fetchUser, selectUser, selectUserFetchStatus } from './userSlice'
 
-```sh
-npm install --save-dev babel-jest
-```
+export default function UserDisplay() {
+  const dispatch = useAppDispatch()
+  const user = useAppSelector(selectUser)
+  const userFetchStatus = useSelector(selectUserFetchStatus)
 
-and configure it to use [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env) features in `.babelrc`:
-
-```js
-{
-  "presets": ["@babel/preset-env"]
+  return (
+    <div>
+      {/* Display the current user name */}
+      <div>{user}</div>
+      {/* On button click, dispatch a thunk action to fetch a user */}
+      <button onClick={() => dispatch(fetchUser())}>Fetch user</button>
+      {/* At any point if we're fetching a user, display that on the UI */}
+      {userFetchStatus === 'loading' && <div>Fetching user...</div>}
+    </div>
+  )
 }
 ```
 
-Then, add this to `scripts` in your `package.json`:
+This app involves thunks, reducers and selectors. All of these can be tested by writing an integration test with the following in mind:
 
-```js
-{
-  ...
-  "scripts": {
-    ...
-    "test": "jest",
-    "test:watch": "npm test -- --watch"
-  },
-  ...
+- Upon first loading the app, there should be no user yet - we should see 'No user' on the screen.
+- After clicking the button that says 'Fetch user', we expect it to start fetching the user. We should see 'Fetching user...' displayed on the screen.
+- After some time, the user should be received. We should no longer see 'Fetching user...', but instead should see the expected user's name based on the response from our API.
+
+Writing our tests to focus on the above as a whole, we can avoid mocking as much of the app as possible. We will also have confidence that the critical behavior of our app does what we expect it to when interacted with in the way we expect the user to use the app.
+
+To test the component, we `render` it into the DOM, and assert that the app responds to interactions in the way we expect the user to use the app.
+
+### Setting Up a Reusable Test Render Function
+
+React Testing Library's `render` function accepts a tree of React elements and renders those components. Just like in a real app, any Redux-connected components will need [a React-Redux `<Provider>` component wrapped around them](https://react-redux.js.org/tutorials/quick-start#provide-the-redux-store-to-react), with a real Redux store set up and provided.
+
+Instead of copy-pasting the same store creation and `Provider` setup in every test, we can use the `wrapper` option in the `render` function and export our own customized `render` function as explained in [React Testing Library's setup docs](https://testing-library.com/docs/react-testing-library/setup#custom-render).
+
+The custom render function should let us:
+
+- Create a new Redux store instance every time it's called, with an optional `preloadedState` value that can be used for an initial value
+- Alternately pass in an already-created Redux store instance
+- Pass through additional options to RTL's original `render` function
+- Automatically wrap the component being tested with a `<Provider store={store}>`
+- Return the store instance in case the test needs to dispatch more actions or check state
+
+A typical custom render function setup could look like this:
+
+```tsx title="utils/test-utils.tsx"
+import React, { PropsWithChildren } from 'react'
+import { render as rtlRender } from '@testing-library/react'
+import type { RenderOptions } from '@testing-library/react'
+import { configureStore } from '@reduxjs/toolkit'
+import type { PreloadedState } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
+
+import type { AppStore, RootState } from '../app/store'
+// As a basic setup, import your same slice reducers
+import { userReducer } from '../features/user/usersSlice'
+
+// This type interface extends the default options for render from RTL, as well
+// as allows the user to specify other things such as initialState, store.
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+  preloadedState?: PreloadedState<RootState>
+  store?: AppStore
+}
+
+function renderWithProvider(
+  ui: React.ReactElement,
+  {
+    preloadedState= {},
+    // Automatically create a store instance if no store was passed in
+    store = configureStore({ reducer: { user: userReducer }, preloadedState }),
+    ...renderOptions
+  }: ExtendedRenderOptions = {}
+) {
+  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+    return <Provider store={store}>{children}</Provider>
+  }
+
+  // Return an object with the store and all of RTL's query functions
+  return { store, ...rtlrender(ui, { wrapper: Wrapper, ...renderOptions }) }
+}
+
+// re-export everything from RTL
+export * from '@testing-library/react'
+// Override the `render` export name with our custom function
+export { render: renderWithProvider}
+```
+
+In this example, we're directly importing the same slice reducers that the real app uses to create the store. It may be helpful to create a reusable `setupStore` function that does the actual store creation with the right options and configuration, and use that in the custom render function instead.
+
+```ts title="app/store.ts"
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import type { PreloadedState } from '@reduxjs/toolkit'
+
+import userReducer from '../features/users/userSlice'
+
+// Create the root reducer separately so we can extract the RootState type
+const rootReducer = combineReducers({
+  user: userReducer
+})
+
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState
+  })
+}
+
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore['dispatch']
+```
+
+Then, use `setupStore` in the test utils file instead of calling `configureStore` again:
+
+```tsx
+function renderWithProviders(
+  ui: React.ReactElement,
+  {
+    preloadedState = {},
+    // Automatically create a store instance if no store was passed in
+    store = setupStore(preloadedState),
+    ...renderOptions
+  }: ExtendedRenderOptions = {}
+) {
+  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+    return <Provider store={store}>{children}</Provider>
+  }
+  return { store, ...rtlrender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 ```
 
-and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
+### Writing Integration Tests With Components
 
-## Action Creators & Thunks
+The actual test files should use the custom `render` function to actually render our Redux-connected components. If the code that we're testing involves making network requests, we should also configure MSW to mock the expected requests with appropriate test data.
 
-In Redux, action creators are functions which return plain objects. Our recommendation is not to write action creators manually, but instead have them generated automatically by [`createSlice`](https://redux-toolkit.js.org/api/createSlice#return-value), or created via [`createAction`](https://redux-toolkit.js.org/api/createAction) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). As such, you should not feel the need to test action creators by themselves (the Redux Toolkit maintainers have already done that for you!).
+```tsx title="features/users/tests/UserDisplay.test.tsx"
+import React from 'react'
+import { rest } from 'msw'
+import { setupServer } from 'msw/node'
+// We're using our own custom render function and not RTL's render.
+// Our custom utils also re-export everything from RTL
+// so we can import fireEvent and screen here as well
+import { render, fireEvent, screen } from '../../test-utils'
+import UserDisplay from '../UserDisplay'
 
-The return value of action creators is considered an implementation detail within your application, and when following an integration testing style, do not need explicit tests.
+// We use msw to intercept the network request during the test,
+// and return the response 'John Smith' after 150ms
+// when receiving a get request to the `/api/user` endpoint
+export const handlers = [
+  rest.get('/api/user', (req, res, ctx) => {
+    return res(ctx.json('John Smith'), ctx.delay(150))
+  })
+]
 
-Similarly for thunks using [Redux Thunk](https://github.com/reduxjs/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
+const server = setupServer(...handlers)
 
-We consider thunk behavior to be an implementation detail of the application, and recommend that it be covered by testing the group of components (or whole app) using it, rather than testing the thunk in isolation.
+// Enable API mocking before tests.
+beforeAll(() => server.listen())
 
-Our recommendation is to mock async requests at the `fetch/xhr` level using tools like [`msw`](https://mswjs.io/), [`miragejs`](https://miragejs.com/), [`jest-fetch-mock`](https://github.com/jefflau/jest-fetch-mock#readme), [`fetch-mock`](https://www.wheresrhys.co.uk/fetch-mock/), or similar. By mocking requests at this level, none of the thunk logic has to change in a test - the thunk still tries to make a "real" async request, it just gets intercepted. See the [components example](#example-1) for an example of testing a component which internally includes the behavior of a thunk.
+// Reset any runtime request handlers we may add during the tests.
+afterEach(() => server.resetHandlers())
 
-:::info
+// Disable API mocking after the tests are done.
+afterAll(() => server.close())
 
-If you prefer, or are otherwise required to write unit tests for your action creators or thunks, refer to the tests that Redux Toolkit uses for [`createAction`](https://github.com/reduxjs/redux-toolkit/blob/635d6d5e513e13dd59cd717f600d501b30ca2381/src/tests/createAction.test.ts) and [`createAsyncThunk`](https://github.com/reduxjs/redux-toolkit/blob/635d6d5e513e13dd59cd717f600d501b30ca2381/src/tests/createAsyncThunk.test.ts).
+test('fetches & receives a user after clicking the fetch user button', async () => {
+  render(<UserDisplay />)
 
-:::
+  // should show no user initially, and not be fetching a user
+  expect(screen.getByText(/no user/i)).toBeInTheDocument()
+  expect(screen.queryByText(/Fetching user\.\.\./i)).not.toBeInTheDocument()
 
-## Reducers
+  // after clicking the 'Fetch user' button, it should now show that it is fetching the user
+  fireEvent.click(screen.getByRole('button', { name: /Fetch user/i }))
+  expect(screen.getByText(/no user/i)).toBeInTheDocument()
+
+  // after some time, the user should be received
+  expect(await screen.findByText(/John Smith/i)).toBeInTheDocument()
+  expect(screen.queryByText(/no user/i)).not.toBeInTheDocument()
+  expect(screen.queryByText(/Fetching user\.\.\./i)).not.toBeInTheDocument()
+})
+```
+
+In this test, **we have completely avoided testing any Redux code directly, treating it as an implementation detail**. As a result, we are free to re-factor the _implementation_, while our tests will continue to pass and avoid false negatives (tests that fail despite the app still behaving how we want it to). We might change our state structure, convert our slice to use [RTK-Query](https://redux-toolkit.js.org/rtk-query/overview), or remove Redux entirely, and our tests will still pass. We have a strong degree of confidence that if we change some code and our tests report a failure, then our app really _is_ broken.
+
+### Preparing Initial Test State
+
+Many tests require that certain pieces of state already exist in the Redux store before the component is rendered. With the custom render function, there are a couple different ways you can do that.
+
+One option is to pass a `preloadedState` argument in to the custom render function:
+
+```tsx title="TodoList.test.tsx"
+test('Uses preloaded state to render', () => {
+  const initialTodos = [{ id: 5, text: 'Buy Milk', completed: false }]
+
+  const { getByText } = render(<TodoList />, {
+    preloadedState: {
+      todos: initialTodos
+    }
+  })
+})
+```
+
+Another option is to create a custom Redux store first and dispatch some actions to build up the desired state, then pass in that specific store instance:
+
+```tsx title="TodoList.test.tsx"
+test('Sets up initial state state with actions', () => {
+  const store = setupStore()
+  store.dispatch(todoAdded('Buy milk'))
+
+  const { getByText } = render(<TodoList />, { store })
+})
+```
+
+You can also extract `store` from the object returned by the custom render function, and dispatch more actions later as part of the test.
+
+## Unit Testing Individual Functions
+
+While we recommend using integration tests by default, since they exercise all the Redux logic working together, you may sometimes want to write unit tests for individual functions as well.
+
+### Reducers
 
 Reducers are pure functions that return the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested.
 
-Because reducers are pure functions, testing them should be straightforward. Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
+Because reducers are pure functions, so testing them should be straightforward. Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
 
 #### Example
 
 ```js
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = [
-  {
-    text: 'Use Redux',
-    completed: false,
-    id: 0
-  }
-]
+const initialState = [{ text: 'Use Redux', completed: false, id: 0 }]
 
 const todosSlice = createSlice({
   name: 'todos',
@@ -138,218 +382,53 @@ import reducer, { todoAdded } from './todosSlice'
 
 test('should return the initial state', () => {
   expect(reducer(undefined, {})).toEqual([
-    {
-      text: 'Use Redux',
-      completed: false,
-      id: 0
-    }
+    { text: 'Use Redux', completed: false, id: 0 }
   ])
 })
 
 test('should handle a todo being added to an empty list', () => {
   const previousState = []
+
   expect(reducer(previousState, todoAdded('Run the tests'))).toEqual([
-    {
-      text: 'Run the tests',
-      completed: false,
-      id: 0
-    }
+    { text: 'Run the tests', completed: false, id: 0 }
   ])
 })
 
 test('should handle a todo being added to an existing list', () => {
-  const previousState = [
-    {
-      text: 'Run the tests',
-      completed: true,
-      id: 0
-    }
-  ]
+  const previousState = [{ text: 'Run the tests', completed: true, id: 0 }]
+
   expect(reducer(previousState, todoAdded('Use Redux'))).toEqual([
-    {
-      text: 'Run the tests',
-      completed: true,
-      id: 0
-    },
-    {
-      text: 'Use Redux',
-      completed: false,
-      id: 1
-    }
+    { text: 'Run the tests', completed: true, id: 0 },
+    { text: 'Use Redux', completed: false, id: 1 }
   ])
 })
 ```
 
-## Components
+### Selectors
 
-Our recommendation for testing components that include Redux code is via integration tests that include everything working together, with assertions aimed at verifying that the app behaves the way you expect when the user interacts with it in a given manner.
+Selectors are also generally pure functions, and thus can be tested using the same basic approach as reducers: set up an initial value, call the selector function with those inputs, and assert that the result matches the expected output.
 
-First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
+However, since [most selectors are memoized to remember their last inputs](./deriving-data-selectors.md), you may need to watch for cases where a selector is returning a cached value when you expected it to generate a new one depending on where it's being used in the test.
 
-```sh
-npm install --save-dev @testing-library/react
-```
+### Action Creators & Thunks
 
-If you are using jest, we also recommend installing [jest-dom](https://github.com/testing-library/jest-dom) as it provides a set of custom jest matchers that you can use to extend jest. These will make your tests more declarative, clear to read and to maintain. jest-dom is being used in the examples below.
+In Redux, action creators are functions which return plain objects. Our recommendation is not to write action creators manually, but instead have them generated automatically by [`createSlice`](https://redux-toolkit.js.org/api/createSlice#return-value), or created via [`createAction`](https://redux-toolkit.js.org/api/createAction) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). As such, **you should not feel the need to test action creators by themselves** (the Redux Toolkit maintainers have already done that for you!).
 
-```sh
-npm install --save-dev @testing-library/jest-dom
-```
+The return value of action creators is considered an implementation detail within your application, and when following an integration testing style, do not need explicit tests.
 
-#### Example
+Similarly for thunks using [Redux Thunk](https://github.com/reduxjs/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
 
-Consider the following `userSlice` slice and `App` component:
+We consider thunk behavior to be an implementation detail of the application, and recommend that it be covered by testing the group of components (or whole app) using it, rather than testing the thunk in isolation.
 
-```js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { userAPI } from './userAPI'
+Our recommendation is to mock async requests at the `fetch/xhr` level using tools like [`msw`](https://mswjs.io/), [`miragejs`](https://miragejs.com/), [`jest-fetch-mock`](https://github.com/jefflau/jest-fetch-mock#readme), [`fetch-mock`](https://www.wheresrhys.co.uk/fetch-mock/), or similar. By mocking requests at this level, none of the thunk logic has to change in a test - the thunk still tries to make a "real" async request, it just gets intercepted. See the ["Integration Test" example](#writing-integration-tests-with-components) for an example of testing a component which internally includes the behavior of a thunk.
 
-export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
-  const response = await userAPI.fetchUser()
-  return response.data
-})
+:::info
 
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    name: 'No user',
-    status: 'idle'
-  },
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(fetchUser.pending, (state, action) => {
-      state.status = 'loading'
-    })
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
-      state.status = 'complete'
-      state.name = action.payload
-    })
-  }
-})
+If you prefer, or are otherwise required to write unit tests for your action creators or thunks, refer to the tests that Redux Toolkit uses for [`createAction`](https://github.com/reduxjs/redux-toolkit/blob/635d6d5e513e13dd59cd717f600d501b30ca2381/src/tests/createAction.test.ts) and [`createAsyncThunk`](https://github.com/reduxjs/redux-toolkit/blob/635d6d5e513e13dd59cd717f600d501b30ca2381/src/tests/createAsyncThunk.test.ts).
 
-export const selectUser = state => state.user.name
-export const selectUserFetchStatus = state => state.user.status
+:::
 
-export default userSlice.reducer
-```
-
-```jsx
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchUser, selectUser, selectUserFetchStatus } from './userSlice'
-
-export default function App() {
-  const dispatch = useDispatch()
-  const user = useSelector(selectUser)
-  const userFetchStatus = useSelector(selectUserFetchStatus)
-
-  return (
-    <div>
-      {/* Display the current user name */}
-      <div>{user}</div>
-      {/* On button click, dispatch a thunk action to fetch a user */}
-      <button onClick={() => dispatch(fetchUser())}>Fetch user</button>
-      {/* At any point if we're fetching a user, display that on the UI */}
-      {userFetchStatus === 'loading' && <div>Fetching user...</div>}
-    </div>
-  )
-}
-```
-
-This app involves thunks, reducers and selectors. All of these can be tested by writing an integration test with the following in mind:
-
-- Upon first loading the app, there should be no user yet - we should see 'No user' on the screen.
-- After clicking the button that says 'Fetch user', we expect it to start fetching the user. We should see 'Fetching user...' displayed on the screen.
-- After some time, the user should be received. We should no longer see 'Fetching user...', but instead should see the expected user's name based on the response from our API.
-
-Writing our tests to focus on the above as a whole, we can avoid mocking as much of the app as possible. We will also have confidence that the critical behavior of our app does what we expect it to when interacted with in the way we expect the user to use the app.
-
-To test the component, we `render` it into the DOM, and assert that the app responds to interactions in the way we expect the user to use the app. We can use the `wrapper` option in the `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
-
-Our `render` function can look like this:
-
-```jsx
-// test-utils.jsx
-import React from 'react'
-import { render as rtlRender } from '@testing-library/react'
-import { configureStore } from '@reduxjs/toolkit'
-import { Provider } from 'react-redux'
-// Import your own reducer
-import userReducer from '../userSlice'
-
-function render(
-  ui,
-  {
-    preloadedState,
-    store = configureStore({ reducer: { user: userReducer }, preloadedState }),
-    ...renderOptions
-  } = {}
-) {
-  function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>
-  }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
-}
-
-// re-export everything
-export * from '@testing-library/react'
-// override render method
-export { render }
-```
-
-And our test can use our exported `render` function to test the criteria of our integration test:
-
-```jsx
-import React from 'react'
-import { rest } from 'msw'
-import { setupServer } from 'msw/node'
-// We're using our own custom render function and not RTL's render.
-// Our custom utils also re-export everything from RTL
-// so we can import fireEvent and screen here as well
-import { render, fireEvent, screen } from '../../test-utils'
-import App from '../../containers/App'
-
-// We use msw to intercept the network request during the test,
-// and return the response 'John Smith' after 150ms
-// when receiving a get request to the `/api/user` endpoint
-export const handlers = [
-  rest.get('/api/user', (req, res, ctx) => {
-    return res(ctx.json('John Smith'), ctx.delay(150))
-  })
-]
-
-const server = setupServer(...handlers)
-
-// Enable API mocking before tests.
-beforeAll(() => server.listen())
-
-// Reset any runtime request handlers we may add during the tests.
-afterEach(() => server.resetHandlers())
-
-// Disable API mocking after the tests are done.
-afterAll(() => server.close())
-
-test('fetches & receives a user after clicking the fetch user button', async () => {
-  render(<App />)
-
-  // should show no user initially, and not be fetching a user
-  expect(screen.getByText(/no user/i)).toBeInTheDocument()
-  expect(screen.queryByText(/Fetching user\.\.\./i)).not.toBeInTheDocument()
-
-  // after clicking the 'Fetch user' button, it should now show that it is fetching the user
-  fireEvent.click(screen.getByRole('button', { name: /Fetch user/i }))
-  expect(screen.getByText(/no user/i)).toBeInTheDocument()
-
-  // after some time, the user should be received
-  expect(await screen.findByText(/John Smith/i)).toBeInTheDocument()
-  expect(screen.queryByText(/no user/i)).not.toBeInTheDocument()
-  expect(screen.queryByText(/Fetching user\.\.\./i)).not.toBeInTheDocument()
-})
-```
-
-In this test, we have completely avoided testing any Redux code directly, treating it as an implementation detail. As a result, we are free to re-factor the _implementation_, while our tests will continue to pass and avoid false negatives (tests that fail despite the app still behaving how we want it to). We might change our state structure, convert our slice to use [RTK-Query](https://redux-toolkit.js.org/rtk-query/overview), or remove Redux entirely, and our tests will still pass. We have a strong degree of confidence that if we change some code and our tests report a failure, then our app really _is_ broken.
-
-## Middleware
+### Middleware
 
 Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
 
@@ -358,7 +437,7 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.ts).
 
 ```js
-const thunk =
+const thunkMiddleware =
   ({ dispatch, getState }) =>
   next =>
   action => {
@@ -382,7 +461,7 @@ const create = () => {
   }
   const next = jest.fn()
 
-  const invoke = action => thunk(store)(next)(action)
+  const invoke = action => thunkMiddleware(store)(next)(action)
 
   return { store, next, invoke }
 }
@@ -421,9 +500,6 @@ In some cases, you will need to modify the `create` function to use different mo
 ## Further Information
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
-
 - [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.
-
 - [Blogged Answers: The Evolution of Redux Testing Approaches](https://blog.isquaredsoftware.com/2021/06/the-evolution-of-redux-testing-approaches/): Mark Erikson's thoughts on how Redux testing has evolved from 'isolation' to 'integration'.
-
 - [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details): Blog post by Kent C. Dodds on why he recommends to avoid testing implementation details.
