@@ -212,7 +212,14 @@ const store = configureStore({
 Store enhancer that allows dispatching arrays of actions
 
 ```js
-const store = configureStore({ reducer, enhancers: (existingEnhancersArray) => [reduxBatch, ...existingEnhancersArray, reduxBatch] })
+const store = configureStore({
+  reducer,
+  enhancers: existingEnhancersArray => [
+    reduxBatch,
+    ...existingEnhancersArray,
+    reduxBatch
+  ]
+})
 store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
 ```
 
