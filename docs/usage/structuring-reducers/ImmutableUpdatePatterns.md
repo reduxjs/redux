@@ -206,3 +206,9 @@ your reducers are using Redux Toolkit and Immer.
 
 In addition, Redux Toolkit's [`createSlice` utility](https://redux-toolkit.js.org/api/createSlice) will auto-generate action creators
 and action types based on the reducer functions you provide, with the same Immer-powered update capabilities inside.
+
+## Further Information
+
+- [Dave Ceddia: The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)
+- [React docs: Updating Objects in State](https://beta.reactjs.org/learn/updating-objects-in-state)
+- [React docs: Updating Arrays in State](https://beta.reactjs.org/learn/updating-arrays-in-state)
