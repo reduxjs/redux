@@ -175,13 +175,19 @@ export type UpsertQueryDataThunk<
 > = <EndpointName extends QueryKeys<Definitions>>(
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
-  upsertRecipe: UpsertRecipe<ResultTypeFrom<Definitions[EndpointName]>>
-) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
+  value: ResultTypeFrom<Definitions[EndpointName]>
+) => ThunkAction<void, PartialState, any, AnyAction>
 
 /**
  * An object returned from dispatching a `api.util.updateQueryData` call.
  */
 export type PatchCollection = {
+  /**
+   * A boolean stating if there was already data in the query cache
+   *
+   * If there was no data in the cache no update operation is performed
+   */
+  emptyCache: boolean
   /**
    * An `immer` Patch describing the cache update.
    */
@@ -236,6 +242,7 @@ export function buildThunks<
         api.endpoints[endpointName] as ApiEndpointQuery<any, any>
       ).select(args)(getState())
       let ret: PatchCollection = {
+        emptyCache: true,
         patches: [],
         inversePatches: [],
         undo: () =>
@@ -247,6 +254,7 @@ export function buildThunks<
         return ret
       }
       if ('data' in currentState) {
+        ret.emptyCache = false
         if (isDraftable(currentState.data)) {
           const [, patches, inversePatches] = produceWithPatches(
             currentState.data,
@@ -271,59 +279,21 @@ export function buildThunks<
     }
 
   const upsertQueryData: UpsertQueryDataThunk<EndpointDefinitions, State> =
-    (endpointName, args, upsertRecipe) => (dispatch, getState) => {
-      const currentState = (
-        api.endpoints[endpointName] as ApiEndpointQuery<any, any>
-      ).select(args)(getState())
-      let ret: PatchCollection = {
-        patches: [],
-        inversePatches: [],
-        undo: () =>
-          dispatch(
-            api.util.patchQueryData(endpointName, args, ret.inversePatches)
-          ),
-      }
-      if ('data' in currentState) {
-        if (isDraftable(currentState.data)) {
-          const [, patches, inversePatches] = produceWithPatches(
-            currentState.data,
-            upsertRecipe
-          )
-          ret.patches.push(...patches)
-          ret.inversePatches.push(...inversePatches)
-        } else {
-          const value = upsertRecipe(currentState.data)
-          ret.patches.push({ op: 'replace', path: [], value })
-          ret.inversePatches.push({
-            op: 'replace',
-            path: [],
-            value: currentState.data,
-          })
-        }
-        dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
-      } else {
-        ret.inversePatches.push({
-          op: 'replace',
-          path: [],
-          value: undefined,
+    (endpointName, args, value) => (dispatch) => {
+      dispatch(
+        (
+          api.endpoints[endpointName] as ApiEndpointQuery<
+            QueryDefinition<any, any, any, any, any>,
+            Definitions
+          >
+        ).initiate(args, {
+          subscribe: false,
+          forceRefetch: true,
+          [forceQueryFnSymbol]: () => ({
+            data: value,
+          }),
         })
-        dispatch(
-          (
-            api.endpoints[endpointName] as ApiEndpointQuery<
-              QueryDefinition<any, any, any, any, any>,
-              Definitions
-            >
-          ).initiate(args, {
-            subscribe: false,
-            forceRefetch: true,
-            [forceQueryFnSymbol]: () => ({
-              data: upsertRecipe(undefined),
-            }),
-          })
-        )
-      }
-
-      return ret
+      )
     }
 
   const executeEndpoint: AsyncThunkPayloadCreator<
