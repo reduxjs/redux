@@ -1,4 +1,3 @@
-import { selectIdValue } from '../utils'
 import { AClockworkOrange } from './fixtures/book'
 
 describe('Entity utils', () => {
@@ -12,18 +11,20 @@ describe('Entity utils', () => {
 
     afterEach(() => {
       process.env = OLD_ENV
+      jest.resetAllMocks()
     })
 
     it('should not warn when key does exist', () => {
-      const spy = spyOn(console, 'warn')
+      const { selectIdValue } = require('../utils')
+      const spy = jest.spyOn(console, 'warn')
 
-      selectIdValue(AClockworkOrange, (book) => book.id)
-
+      selectIdValue(AClockworkOrange, (book: any) => book.id)
       expect(spy).not.toHaveBeenCalled()
     })
 
     it('should warn when key does not exist in dev mode', () => {
-      const spy = spyOn(console, 'warn')
+      const { selectIdValue } = require('../utils')
+      const spy = jest.spyOn(console, 'warn')
 
       selectIdValue(AClockworkOrange, (book: any) => book.foo)
 
@@ -31,7 +32,8 @@ describe('Entity utils', () => {
     })
 
     it('should warn when key is undefined in dev mode', () => {
-      const spy = spyOn(console, 'warn')
+      const { selectIdValue } = require('../utils')
+      const spy = jest.spyOn(console, 'warn')
 
       const undefinedAClockworkOrange = { ...AClockworkOrange, id: undefined }
       selectIdValue(undefinedAClockworkOrange, (book: any) => book.id)
@@ -41,7 +43,8 @@ describe('Entity utils', () => {
 
     it('should not warn when key does not exist in prod mode', () => {
       process.env.NODE_ENV = 'production'
-      const spy = spyOn(console, 'warn')
+      const { selectIdValue } = require('../utils')
+      const spy = jest.spyOn(console, 'warn')
 
       selectIdValue(AClockworkOrange, (book: any) => book.foo)
 
@@ -50,7 +53,8 @@ describe('Entity utils', () => {
 
     it('should not warn when key is undefined in prod mode', () => {
       process.env.NODE_ENV = 'production'
-      const spy = spyOn(console, 'warn')
+      const { selectIdValue } = require('../utils')
+      const spy = jest.spyOn(console, 'warn')
 
       const undefinedAClockworkOrange = { ...AClockworkOrange, id: undefined }
       selectIdValue(undefinedAClockworkOrange, (book: any) => book.id)
