@@ -72,7 +72,7 @@ describe('refetchOnFocus tests', () => {
       expect(screen.getByTestId('amount').textContent).toBe('1')
     )
 
-    act(() => {
+    await act(async () => {
       fireEvent.focus(window)
     })
 
@@ -366,7 +366,9 @@ describe('refetchOnReconnect tests', () => {
 })
 
 describe('customListenersHandler', () => {
-  const storeRef = setupApiStore(defaultApi, undefined, true)
+  const storeRef = setupApiStore(defaultApi, undefined, {
+    withoutListeners: true,
+  })
 
   test('setupListeners accepts a custom callback and executes it', async () => {
     const consoleSpy = jest.spyOn(console, 'log')

@@ -4,7 +4,7 @@ import { waitMs } from './helpers'
 import type { Middleware, Reducer } from 'redux'
 
 beforeAll(() => {
-  jest.useFakeTimers()
+  jest.useFakeTimers('legacy')
 })
 
 const onCleanup = jest.fn()

@@ -3,7 +3,7 @@ import { createApi, retry } from '@reduxjs/toolkit/query'
 import { setupApiStore, waitMs } from './helpers'
 
 beforeEach(() => {
-  jest.useFakeTimers()
+  jest.useFakeTimers('legacy')
 })
 
 const loopTimers = async (max: number = 12) => {
@@ -33,7 +33,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
     await loopTimers(7)
@@ -58,7 +60,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
     await loopTimers(5)
@@ -87,7 +91,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
 
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
     await loopTimers(5)
@@ -123,7 +129,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
     await loopTimers(6)
@@ -148,7 +156,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
 
     storeRef.store.dispatch(api.endpoints.m1.initiate({}))
 
@@ -177,7 +187,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
 
     storeRef.store.dispatch(api.endpoints.m1.initiate({}))
 
@@ -202,7 +214,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
 
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
@@ -232,7 +246,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
 
     const result = await storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
@@ -277,7 +293,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
 
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
@@ -312,7 +330,9 @@ describe('configuration', () => {
       }),
     })
 
-    const storeRef = setupApiStore(api)
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
     storeRef.store.dispatch(api.endpoints.q1.initiate({}))
 
     await loopTimers()
