@@ -268,7 +268,7 @@ export function createSlice<
     process.env.NODE_ENV === 'development'
   ) {
     if(options.initialState === undefined) {
-      throw new Error('You must provide an `initialState` value that is not `undefined`.  You may have misspelled `initialState`')
+      console.error('initial state must be different of undefined')
     }
   }
 
