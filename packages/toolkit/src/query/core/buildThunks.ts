@@ -242,7 +242,7 @@ export function buildThunks<
         api.endpoints[endpointName] as ApiEndpointQuery<any, any>
       ).select(args)(getState())
       let ret: PatchCollection = {
-        cacheEntryFound: true,
+        cacheEntryFound: false,
         patches: [],
         inversePatches: [],
         undo: () =>
@@ -254,7 +254,7 @@ export function buildThunks<
         return ret
       }
       if ('data' in currentState) {
-        ret.cacheEntryFound = false
+        ret.cacheEntryFound = true
         if (isDraftable(currentState.data)) {
           const [, patches, inversePatches] = produceWithPatches(
             currentState.data,
