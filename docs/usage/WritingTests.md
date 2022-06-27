@@ -170,7 +170,7 @@ The custom render function should let us:
 
 A typical custom render function setup could look like this:
 
-```tsx title="utils/test-utils.tsx"
+```tsx title="src/test-utils.tsx"
 import React, { PropsWithChildren } from 'react'
 import { render as rtlRender } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
