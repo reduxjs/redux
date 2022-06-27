@@ -34,6 +34,18 @@ describe('createSlice', () => {
     })
   })
 
+  describe('when initial state is undefined', () => {
+    it('should throw an error', () => {
+      expect(() =>
+        createSlice({
+          name: 'test',
+          reducers: {},
+          initialState: undefined,
+        })
+      ).toThrowErrorMatchingInlineSnapshot(`"initial state must be different of undefined"`)
+    })
+  })
+
   describe('when passing slice', () => {
     const { actions, reducer, caseReducers } = createSlice({
       reducers: {
