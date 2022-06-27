@@ -72,7 +72,7 @@ describe('refetchOnFocus tests', () => {
       expect(screen.getByTestId('amount').textContent).toBe('1')
     )
 
-    act(() => {
+    await act(async () => {
       fireEvent.focus(window)
     })
 
