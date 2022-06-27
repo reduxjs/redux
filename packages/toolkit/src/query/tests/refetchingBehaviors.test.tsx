@@ -366,7 +366,9 @@ describe('refetchOnReconnect tests', () => {
 })
 
 describe('customListenersHandler', () => {
-  const storeRef = setupApiStore(defaultApi, undefined, true)
+  const storeRef = setupApiStore(defaultApi, undefined, {
+    withoutListeners: true,
+  })
 
   test('setupListeners accepts a custom callback and executes it', async () => {
     const consoleSpy = jest.spyOn(console, 'log')
