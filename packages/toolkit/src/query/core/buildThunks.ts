@@ -187,7 +187,7 @@ export type PatchCollection = {
    *
    * If there was no data in the cache no update operation is performed
    */
-  emptyCache: boolean
+  cacheEntryFound: boolean
   /**
    * An `immer` Patch describing the cache update.
    */
@@ -242,7 +242,7 @@ export function buildThunks<
         api.endpoints[endpointName] as ApiEndpointQuery<any, any>
       ).select(args)(getState())
       let ret: PatchCollection = {
-        emptyCache: true,
+        cacheEntryFound: true,
         patches: [],
         inversePatches: [],
         undo: () =>
@@ -254,7 +254,7 @@ export function buildThunks<
         return ret
       }
       if ('data' in currentState) {
-        ret.emptyCache = false
+        ret.cacheEntryFound = false
         if (isDraftable(currentState.data)) {
           const [, patches, inversePatches] = produceWithPatches(
             currentState.data,
