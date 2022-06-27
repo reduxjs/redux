@@ -1,7 +1,18 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice, createAction } from '@reduxjs/toolkit'
+import {
+  mockConsole,
+  createConsole,
+  getLog,
+} from 'console-testing-library/pure'
 
 describe('createSlice', () => {
+  let restore: () => void
+
+  beforeEach(() => {
+    restore = mockConsole(createConsole())
+  })
+  
   describe('when slice is undefined', () => {
     it('should throw an error', () => {
       expect(() =>
@@ -36,13 +47,13 @@ describe('createSlice', () => {
 
   describe('when initial state is undefined', () => {
     it('should throw an error', () => {
-      expect(() =>
-        createSlice({
-          name: 'test',
-          reducers: {},
-          initialState: undefined,
-        })
-      ).toThrowErrorMatchingInlineSnapshot(`"initial state must be different of undefined"`)
+      createSlice({
+        name: 'test',
+        reducers: {},
+        initialState: undefined,
+      })
+
+      expect(getLog().log).toBe('initial state must be different of undefined')
     })
   })
 
