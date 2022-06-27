@@ -53,7 +53,7 @@ describe('createSlice', () => {
         initialState: undefined,
       })
 
-      expect(getLog().log).toBe('initial state must be different of undefined')
+      expect(getLog().log).toBe('You must provide an `initialState` value that is not `undefined`.  You may have misspelled `initialState`')
     })
   })
 
