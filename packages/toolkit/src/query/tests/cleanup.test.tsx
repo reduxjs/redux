@@ -35,7 +35,7 @@ function UsingAB() {
 }
 
 beforeAll(() => {
-  jest.useFakeTimers()
+  jest.useFakeTimers('legacy')
 })
 
 test('data stays in store when component stays rendered', async () => {

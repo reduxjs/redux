@@ -3,7 +3,7 @@ import { createApi, retry } from '@reduxjs/toolkit/query'
 import { setupApiStore, waitMs } from './helpers'
 
 beforeEach(() => {
-  jest.useFakeTimers()
+  jest.useFakeTimers('legacy')
 })
 
 const loopTimers = async (max: number = 12) => {
