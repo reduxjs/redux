@@ -203,7 +203,7 @@ function renderWithProvider(
   }
 
   // Return an object with the store and all of RTL's query functions
-  return { store, ...rtlrender(ui, { wrapper: Wrapper, ...renderOptions }) }
+  return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 
 // re-export everything from RTL
@@ -252,7 +252,7 @@ function renderWithProviders(
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     return <Provider store={store}>{children}</Provider>
   }
-  return { store, ...rtlrender(ui, { wrapper: Wrapper, ...renderOptions }) }
+  return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 ```
 
