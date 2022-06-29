@@ -83,8 +83,6 @@ describe('joinUrls', () => {
 
     expect(joinUrls('', '/banana')).toBe('/banana')
     expect(joinUrls('', 'banana')).toBe('banana')
-
-    expect(joinUrls('/api', '?foo=bar')).toBe('/api?foo=bar')
   })
 
   test('correctly joins variations of absolute urls', () => {
@@ -100,10 +98,6 @@ describe('joinUrls', () => {
     )
     expect(joinUrls('https://example.com/api/', '/banana/')).toBe(
       'https://example.com/api/banana/'
-    )
-
-    expect(joinUrls('https://example.com/api/', '?foo=bar')).toBe(
-      'https://example.com/api?foo=bar'
     )
   })
 })
