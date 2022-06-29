@@ -20,6 +20,7 @@ export function joinUrls(
 
   base = withoutTrailingSlash(base)
   url = withoutLeadingSlash(url)
+  const delimiter = url.startsWith('?') ? '' : '/'
 
-  return `${base}/${url}`
+  return `${base}${delimiter}${url}`;
 }
