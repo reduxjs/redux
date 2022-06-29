@@ -680,12 +680,20 @@ describe('Sorted State Adapter', () => {
     test('updateMany', () => {
       const firstChange = { title: 'First Change' }
       const secondChange = { title: 'Second Change' }
-      const withMany = adapter.setAll(state, [TheGreatGatsby, AClockworkOrange])
+      const thirdChange = { title: 'Third Change' }
+      const fourthChange = { author: 'Fourth Change' }
+      const withMany = adapter.setAll(state, [
+        TheGreatGatsby,
+        AClockworkOrange,
+        TheHobbit,
+      ])
 
       const result = createNextState(withMany, (draft) => {
         adapter.updateMany(draft, [
-          { id: TheGreatGatsby.id, changes: firstChange },
-          { id: AClockworkOrange.id, changes: secondChange },
+          { id: TheHobbit.id, changes: firstChange },
+          { id: TheGreatGatsby.id, changes: secondChange },
+          { id: AClockworkOrange.id, changes: thirdChange },
+          { id: TheHobbit.id, changes: fourthChange },
         ])
       })
 
@@ -694,14 +702,20 @@ describe('Sorted State Adapter', () => {
           "entities": Object {
             "aco": Object {
               "id": "aco",
-              "title": "Second Change",
+              "title": "Third Change",
             },
             "tgg": Object {
               "id": "tgg",
+              "title": "Second Change",
+            },
+            "th": Object {
+              "author": "Fourth Change",
+              "id": "th",
               "title": "First Change",
             },
           },
           "ids": Array [
+            "th",
             "tgg",
             "aco",
           ],
