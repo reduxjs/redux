@@ -343,6 +343,34 @@ describe('Sorted State Adapter', () => {
     })
   })
 
+  it('should maintain a stable sorting order when updating items', () => {
+    interface OrderedEntity {
+      id: string
+      order: number
+      ts: number
+    }
+    const sortedItemsAdapter = createEntityAdapter<OrderedEntity>({
+      sortComparer: (a, b) => a.order - b.order,
+    })
+    const withInitialItems = sortedItemsAdapter.setAll(
+      sortedItemsAdapter.getInitialState(),
+      [
+        { id: 'A', order: 1, ts: 0 },
+        { id: 'B', order: 2, ts: 0 },
+        { id: 'C', order: 3, ts: 0 },
+        { id: 'D', order: 3, ts: 0 },
+        { id: 'E', order: 3, ts: 0 },
+      ]
+    )
+
+    const updated = sortedItemsAdapter.updateOne(withInitialItems, {
+      id: 'C',
+      changes: { ts: 5 },
+    })
+
+    expect(updated.ids).toEqual(['A', 'B', 'C', 'D', 'E'])
+  })
+
   it('should let you update many entities by id in the state', () => {
     const firstChange = { title: 'Zack' }
     const secondChange = { title: 'Aaron' }
@@ -652,12 +680,20 @@ describe('Sorted State Adapter', () => {
     test('updateMany', () => {
       const firstChange = { title: 'First Change' }
       const secondChange = { title: 'Second Change' }
-      const withMany = adapter.setAll(state, [TheGreatGatsby, AClockworkOrange])
+      const thirdChange = { title: 'Third Change' }
+      const fourthChange = { author: 'Fourth Change' }
+      const withMany = adapter.setAll(state, [
+        TheGreatGatsby,
+        AClockworkOrange,
+        TheHobbit,
+      ])
 
       const result = createNextState(withMany, (draft) => {
         adapter.updateMany(draft, [
-          { id: TheGreatGatsby.id, changes: firstChange },
-          { id: AClockworkOrange.id, changes: secondChange },
+          { id: TheHobbit.id, changes: firstChange },
+          { id: TheGreatGatsby.id, changes: secondChange },
+          { id: AClockworkOrange.id, changes: thirdChange },
+          { id: TheHobbit.id, changes: fourthChange },
         ])
       })
 
@@ -666,14 +702,20 @@ describe('Sorted State Adapter', () => {
           "entities": Object {
             "aco": Object {
               "id": "aco",
-              "title": "Second Change",
+              "title": "Third Change",
             },
             "tgg": Object {
               "id": "tgg",
+              "title": "Second Change",
+            },
+            "th": Object {
+              "author": "Fourth Change",
+              "id": "th",
               "title": "First Change",
             },
           },
           "ids": Array [
+            "th",
             "tgg",
             "aco",
           ],
