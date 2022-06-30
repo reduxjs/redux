@@ -189,7 +189,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   store?: AppStore
 }
 
-function renderWithProvider(
+function renderWithProviders(
   ui: React.ReactElement,
   {
     preloadedState= {},
@@ -209,7 +209,7 @@ function renderWithProvider(
 // re-export everything from RTL
 export * from '@testing-library/react'
 // Override the `render` export name with our custom function
-export { render: renderWithProvider}
+export { renderWithProviders as render }
 ```
 
 In this example, we're directly importing the same slice reducers that the real app uses to create the store. It may be helpful to create a reusable `setupStore` function that does the actual store creation with the right options and configuration, and use that in the custom render function instead.
