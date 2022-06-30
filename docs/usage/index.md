@@ -28,7 +28,7 @@ This section covers information on how to set up and organize Redux-based projec
 This section provides information on tools and techniques used to improve the quality of your Redux code.
 
 - [Usage with TypeScript](UsageWithTypescript.md)
-- [Writing Tests](WritingTests.md)
+- [Writing Tests](WritingTests.mdx)
 - [Troubleshooting](Troubleshooting.md)
 
 ## Redux Logic and Patterns
