@@ -56,10 +56,12 @@ const retryWithBackoff: BaseQueryEnhancer<
   RetryOptions,
   RetryOptions | void
 > = (baseQuery, defaultOptions) => async (args, api, extraOptions) => {
+  const defaultShouldRetry: Exclude<RetryOptions['shouldRetry'], undefined> = (_, __, {attempt, maxRetries}) => attempt <= maxRetries
+
   const options = {
     maxRetries: 5,
     backoff: defaultBackoff,
-    shouldRetry: () => true,
+    shouldRetry: defaultShouldRetry,
     ...defaultOptions,
     ...extraOptions,
   }
@@ -69,24 +71,29 @@ const retryWithBackoff: BaseQueryEnhancer<
     try {
       const result = await baseQuery(args, api, extraOptions)
       // baseQueries _should_ return an error property, so we should check for that and throw it to continue retrying
-      if (result.error && options.shouldRetry(result.error as FetchBaseQueryError, args, {
-        attempt: retry,
-        maxRetries: options.maxRetries,
-        baseQueryApi: api,
-        extraOptions
-      })) {
+      if (result.error) {
         throw new HandledError(result)
       }
       return result
     } catch (e: any) {
       retry++
-      if (e.throwImmediately || retry > options.maxRetries) {
+
+      if (e.throwImmediately) {
         if (e instanceof HandledError) {
           return e.value
         }
 
         // We don't know what this is, so we have to rethrow it
         throw e
+      }
+
+      if (e instanceof HandledError && !options.shouldRetry(e.value as FetchBaseQueryError, args, {
+        attempt: retry,
+        maxRetries: options.maxRetries,
+        baseQueryApi: api,
+        extraOptions
+      })) {
+        return e.value
       }
       await options.backoff(retry, options.maxRetries)
     }
