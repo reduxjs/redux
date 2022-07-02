@@ -142,7 +142,12 @@ declare module '../apiTypes' {
          * Useful for SSR scenarios to await everything triggered in any way,
          * including via hook calls, or manually dispatching `initiate` actions.
          */
-        getRunningOperationPromises: () => Array<Promise<unknown>>
+        getRunningOperationPromises: () => ThunkAction<
+          Array<Promise<unknown>>,
+          any,
+          any,
+          AnyAction
+        >
         /**
          * If a promise is running for a given endpoint name + argument combination,
          * returns that promise. Otherwise, returns `undefined`.
@@ -152,21 +157,29 @@ declare module '../apiTypes' {
         getRunningOperationPromise<EndpointName extends QueryKeys<Definitions>>(
           endpointName: EndpointName,
           args: QueryArgFrom<Definitions[EndpointName]>
-        ):
+        ): ThunkAction<
           | QueryActionCreatorResult<
               Definitions[EndpointName] & { type: 'query' }
             >
-          | undefined
+          | undefined,
+          any,
+          any,
+          AnyAction
+        >
         getRunningOperationPromise<
           EndpointName extends MutationKeys<Definitions>
         >(
           endpointName: EndpointName,
           fixedCacheKeyOrRequestId: string
-        ):
+        ): ThunkAction<
           | MutationActionCreatorResult<
               Definitions[EndpointName] & { type: 'mutation' }
             >
-          | undefined
+          | undefined,
+          any,
+          any,
+          AnyAction
+        >
 
         /**
          * A Redux thunk that can be used to manually trigger pre-fetching of data.
