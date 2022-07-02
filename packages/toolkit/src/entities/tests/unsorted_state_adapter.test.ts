@@ -1,4 +1,4 @@
-import type { EntityStateAdapter, EntityState } from '../models'
+import type { EntityAdapter, EntityState } from '../models'
 import { createEntityAdapter } from '../create_adapter'
 import type { BookModel } from './fixtures/book'
 import {
@@ -10,7 +10,7 @@ import {
 import { createNextState } from '../..'
 
 describe('Unsorted State Adapter', () => {
-  let adapter: EntityStateAdapter<BookModel>
+  let adapter: EntityAdapter<BookModel>
   let state: EntityState<BookModel>
 
   beforeAll(() => {
@@ -412,6 +412,21 @@ describe('Unsorted State Adapter', () => {
         [AClockworkOrange.id]: AClockworkOrange,
       },
     })
+  })
+  it("only returns one entry for that id in the id's array", () => {
+    const book1: BookModel = { id: 'a', title: 'First' }
+    const book2: BookModel = { id: 'b', title: 'Second' }
+    const initialState = adapter.getInitialState()
+    const withItems = adapter.addMany(initialState, [book1, book2])
+
+    expect(withItems.ids).toEqual(['a', 'b'])
+    const withUpdate = adapter.updateOne(withItems, {
+      id: 'a',
+      changes: { id: 'b' },
+    })
+
+    expect(withUpdate.ids).toEqual(['b'])
+    expect(withUpdate.entities['b']!.title).toBe(book1.title)
   })
 
   describe('can be used mutably when wrapped in createNextState', () => {
