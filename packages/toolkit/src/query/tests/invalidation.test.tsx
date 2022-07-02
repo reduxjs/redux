@@ -100,7 +100,9 @@ test.each(caseMatrix)(
             invalidatesTags,
           }),
         }),
-      })
+      }),
+      undefined,
+      { withoutTestLifecycles: true }
     )
 
     store.dispatch(providing.initiate())

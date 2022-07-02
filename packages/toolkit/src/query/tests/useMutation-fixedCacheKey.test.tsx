@@ -1,7 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { setupApiStore, waitMs } from './helpers'
 import React from 'react'
-import { render, screen, getByTestId, waitFor } from '@testing-library/react'
+import {
+  render,
+  screen,
+  getByTestId,
+  waitFor,
+  act,
+} from '@testing-library/react'
 
 describe('fixedCacheKey', () => {
   const api = createApi({
@@ -55,7 +61,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     await waitFor(() =>
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
@@ -77,7 +85,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     await waitFor(() => {
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
@@ -87,8 +97,9 @@ describe('fixedCacheKey', () => {
     })
 
     // test reset from the other component
-    getByTestId(c2, 'reset').click()
-
+    act(() => {
+      getByTestId(c2, 'reset').click()
+    })
     await waitFor(() => {
       expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
       expect(getByTestId(c1, 'data').textContent).toBe('')
@@ -117,7 +128,10 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c4, 'status').textContent).toBe('uninitialized')
 
     // trigger with a component using the first cache key
-    getByTestId(c1, 'trigger').click()
+
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     await waitFor(() =>
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
@@ -136,7 +150,10 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c4, 'status').textContent).toBe('uninitialized')
 
     // trigger with a component using the second cache key
-    getByTestId(c3, 'trigger').click()
+
+    act(() => {
+      getByTestId(c3, 'trigger').click()
+    })
 
     await waitFor(() =>
       expect(getByTestId(c3, 'status').textContent).toBe('fulfilled')
@@ -157,7 +174,10 @@ describe('fixedCacheKey', () => {
     })
 
     // test reset from the component that triggered the mutation for the first cache key
-    getByTestId(c1, 'reset').click()
+
+    act(() => {
+      getByTestId(c1, 'reset').click()
+    })
 
     await waitFor(() => {
       // the components with the first cache key should be affected
@@ -187,7 +207,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     await waitFor(() =>
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
@@ -203,7 +225,9 @@ describe('fixedCacheKey', () => {
     let c1 = screen.getByTestId('C1')
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     await waitFor(() =>
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
@@ -232,7 +256,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     await waitFor(() =>
       expect(getByTestId(c1, 'status').textContent).toBe('fulfilled')
@@ -251,7 +277,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('undefined')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('C1')
   })
@@ -264,7 +292,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('undefined')
 
-    getByTestId(c1, 'trigger').click()
+    await act(async () => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('undefined')
   })
@@ -289,24 +319,32 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    getByTestId(c1, 'trigger').click()
+    act(() => {
+      getByTestId(c1, 'trigger').click()
+    })
 
     expect(getByTestId(c1, 'status').textContent).toBe('pending')
     expect(getByTestId(c1, 'data').textContent).toBe('')
 
-    getByTestId(c2, 'trigger').click()
+    act(() => {
+      getByTestId(c2, 'trigger').click()
+    })
 
     expect(getByTestId(c1, 'status').textContent).toBe('pending')
     expect(getByTestId(c1, 'data').textContent).toBe('')
 
-    resolve1!('this should not show up any more')
+    act(() => {
+      resolve1!('this should not show up any more')
+    })
 
     await waitMs()
 
     expect(getByTestId(c1, 'status').textContent).toBe('pending')
     expect(getByTestId(c1, 'data').textContent).toBe('')
 
-    resolve2!('this should be visible')
+    act(() => {
+      resolve2!('this should be visible')
+    })
 
     await waitMs()
 

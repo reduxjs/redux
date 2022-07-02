@@ -262,6 +262,16 @@ export function createSlice<
   if (!name) {
     throw new Error('`name` is a required option for createSlice')
   }
+
+  if (
+    typeof process !== 'undefined' &&
+    process.env.NODE_ENV === 'development'
+  ) {
+    if(options.initialState === undefined) {
+      console.error('You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`')
+    }
+  }
+
   const initialState =
     typeof options.initialState == 'function'
       ? options.initialState

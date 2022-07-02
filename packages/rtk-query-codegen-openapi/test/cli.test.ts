@@ -33,8 +33,6 @@ afterEach(() => {
 
 describe('CLI options testing', () => {
   test('generation with `config.example.js`', async () => {
-    jest.setTimeout(10000);
-
     const out = await cli([`./config.example.js`], __dirname);
 
     expect(out).toEqual({
@@ -46,11 +44,9 @@ Done
     });
 
     expect(fs.readFileSync(path.resolve(tmpDir, 'example.ts'), 'utf-8')).toMatchSnapshot();
-  });
+  }, 25000);
 
   test('paths are relative to configfile, not to cwd', async () => {
-    jest.setTimeout(10000);
-
     const out = await cli([`../test/config.example.js`], path.resolve(__dirname, '../src'));
 
     expect(out).toEqual({
@@ -62,11 +58,9 @@ Done
     });
 
     expect(fs.readFileSync(path.resolve(tmpDir, 'example.ts'), 'utf-8')).toMatchSnapshot();
-  });
+  }, 25000);
 
   test('ts, js and json all work the same', async () => {
-    jest.setTimeout(25000);
-
     await cli([`./config.example.js`], __dirname);
     const fromJs = fs.readFileSync(path.resolve(tmpDir, 'example.ts'), 'utf-8');
     await cli([`./config.example.ts`], __dirname);
@@ -76,12 +70,10 @@ Done
 
     expect(fromTs).toEqual(fromJs);
     expect(fromJson).toEqual(fromJs);
-  });
+  }, 25000);
 
   test('missing parameters doesnt fail', async () => {
-    jest.setTimeout(25000);
-
     const out = await cli([`./config.invalid-example.json`], __dirname);
-    expect(out.stderr).toContain("Error: path parameter petId does not seem to be defined in '/pet/{petId}'!")
-  });
+    expect(out.stderr).toContain("Error: path parameter petId does not seem to be defined in '/pet/{petId}'!");
+  }, 25000);
 });

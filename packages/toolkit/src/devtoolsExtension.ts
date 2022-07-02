@@ -29,27 +29,26 @@ export interface EnhancerOptions {
    */
   maxAge?: number
   /**
-   * See detailed documentation at https://github.com/reduxjs/redux-devtools/blob/%40redux-devtools/extension%403.2.1/extension/docs/API/Arguments.md#serialize
+   * - `undefined` - will use regular `JSON.stringify` to send data (it's the fast mode).
+   * - `false` - will handle also circular references.
+   * - `true` - will handle also date, regex, undefined, error objects, symbols, maps, sets and functions.
+   * - object, which contains `date`, `regex`, `undefined`, `error`, `symbol`, `map`, `set` and `function` keys.
+   *   For each of them you can indicate if to include (by setting as `true`).
+   *   For `function` key you can also specify a custom function which handles serialization.
+   *   See [`jsan`](https://github.com/kolodny/jsan) for more details.
    */
   serialize?:
     | boolean
     | {
-        options?:
-          | boolean
-          | {
-              date?: boolean
-              regex?: boolean
-              undefined?: boolean
-              error?: boolean
-              symbol?: boolean
-              map?: boolean
-              set?: boolean
-              function?: boolean | Function
-            }
-        replacer?: (key: string, value: unknown) => unknown
-        reviver?: (key: string, value: unknown) => unknown
-        immutable?: unknown
-        refs?: unknown[]
+        date?: boolean
+        regex?: boolean
+        undefined?: boolean
+        error?: boolean
+        symbol?: boolean
+        map?: boolean
+        set?: boolean
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        function?: boolean | Function
       }
   /**
    * function which takes `action` object and id number as arguments, and should return `action` object back.
@@ -62,16 +61,28 @@ export interface EnhancerOptions {
   /**
    * *string or array of strings as regex* - actions types to be hidden / shown in the monitors (while passed to the reducers).
    * If `actionsWhitelist` specified, `actionsBlacklist` is ignored.
+   * @deprecated Use actionsDenylist instead.
    */
   actionsBlacklist?: string | string[]
   /**
    * *string or array of strings as regex* - actions types to be hidden / shown in the monitors (while passed to the reducers).
    * If `actionsWhitelist` specified, `actionsBlacklist` is ignored.
+   * @deprecated Use actionsAllowlist instead.
    */
   actionsWhitelist?: string | string[]
   /**
+   * *string or array of strings as regex* - actions types to be hidden / shown in the monitors (while passed to the reducers).
+   * If `actionsAllowlist` specified, `actionsDenylist` is ignored.
+   */
+  actionsDenylist?: string | string[]
+  /**
+   * *string or array of strings as regex* - actions types to be hidden / shown in the monitors (while passed to the reducers).
+   * If `actionsAllowlist` specified, `actionsDenylist` is ignored.
+   */
+  actionsAllowlist?: string | string[]
+  /**
    * called for every action before sending, takes `state` and `action` object, and returns `true` in case it allows sending the current data to the monitor.
-   * Use it as a more advanced version of `actionsBlacklist`/`actionsWhitelist` parameters.
+   * Use it as a more advanced version of `actionsDenylist`/`actionsAllowlist` parameters.
    */
   predicate?: <S, A extends Action>(state: S, action: A) => boolean
   /**

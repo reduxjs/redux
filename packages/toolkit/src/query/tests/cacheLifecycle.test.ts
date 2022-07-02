@@ -4,7 +4,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { expectType, fakeTimerWaitFor, setupApiStore, waitMs } from './helpers'
 
 beforeAll(() => {
-  jest.useFakeTimers()
+  jest.useFakeTimers('legacy')
 })
 
 const api = createApi({

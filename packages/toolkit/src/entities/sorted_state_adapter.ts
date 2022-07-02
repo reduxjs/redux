@@ -71,33 +71,30 @@ export function createSortedStateAdapter<T>(
     return updateManyMutably([update], state)
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-  function takeUpdatedModel(models: T[], update: Update<T>, state: R): boolean {
-    if (!(update.id in state.entities)) {
-      return false
-    }
-
-    const original = state.entities[update.id]
-    const updated = Object.assign({}, original, update.changes)
-    const newKey = selectIdValue(updated, selectId)
-
-    delete state.entities[update.id]
-
-    models.push(updated)
-
-    return newKey !== update.id
-  }
-
   function updateManyMutably(
     updates: ReadonlyArray<Update<T>>,
     state: R
   ): void {
-    const models: T[] = []
+    let appliedUpdates = false
 
-    updates.forEach((update) => takeUpdatedModel(models, update, state))
+    for (let update of updates) {
+      const entity = state.entities[update.id]
+      if (!entity) {
+        continue
+      }
 
-    if (models.length !== 0) {
-      merge(models, state)
+      appliedUpdates = true
+
+      Object.assign(entity, update.changes)
+      const newId = selectId(entity)
+      if (update.id !== newId) {
+        delete state.entities[update.id]
+        state.entities[newId] = entity
+      }
+    }
+
+    if (appliedUpdates) {
+      resortEntities(state)
     }
   }
 
@@ -139,6 +136,10 @@ export function createSortedStateAdapter<T>(
       state.entities[selectId(model)] = model
     })
 
+    resortEntities(state)
+  }
+
+  function resortEntities(state: R) {
     const allEntities = Object.values(state.entities) as T[]
     allEntities.sort(sort)
 
