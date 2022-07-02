@@ -58,39 +58,4 @@ describe('createStateOperator', () => {
     expect(state2.books.ids.length).toBe(2)
     expect(state2.books.entities['b']).toBe(book2)
   })
-
-  describe("when an id is updated to an existing id's value", () => {
-    it("only returns one entry for that id in the id's array", () => {
-      const booksSlice = createSlice({
-        name: 'books',
-        initialState: adapter.getInitialState(),
-        reducers: {
-          addOne: adapter.addOne,
-          updateOne: adapter.updateOne,
-        },
-      })
-
-      const { addOne, updateOne } = booksSlice.actions
-
-      const store = configureStore({
-        reducer: {
-          books: booksSlice.reducer,
-        },
-      })
-
-      const book1: BookModel = { id: 'a', title: 'First' }
-      const book2: BookModel = { id: 'b', title: 'Second' }
-      store.dispatch(addOne(book1))
-      store.dispatch(addOne(book2))
-
-      const state = store.getState()
-      expect(state.books.ids).toEqual(['a', 'b'])
-
-      store.dispatch(updateOne({ id: 'a', changes: { id: 'b' } }))
-
-      const updatedState = store.getState()
-      expect(updatedState.books.ids).toEqual(['b'])
-      expect(updatedState.books.entities['b'].title).toBe(book1.title)
-    })
-  })
 })
