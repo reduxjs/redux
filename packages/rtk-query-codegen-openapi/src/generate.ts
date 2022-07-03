@@ -350,17 +350,27 @@ export async function generateApi(
   }) {
     const { path, verb } = operationDefinition;
 
-    const pathParameters = Object.values(queryArg).filter((def) => def.origin === 'param' && def.param.in === 'path');
-    const queryParameters = Object.values(queryArg).filter((def) => def.origin === 'param' && def.param.in === 'query');
-    const headerParameters = Object.values(queryArg).filter(
-      (def) => def.origin === 'param' && def.param.in === 'header'
-    );
-    const cookieParameters = Object.values(queryArg).filter(
-      (def) => def.origin === 'param' && def.param.in === 'cookie'
-    );
     const bodyParameter = Object.values(queryArg).find((def) => def.origin === 'body');
 
     const rootObject = factory.createIdentifier('queryArg');
+
+    function pickParams(paramIn: string) {
+      return Object.values(queryArg).filter((def) => def.origin === 'param' && def.param.in === paramIn);
+    }
+
+    function createObjectLiteralProperty(parameters: QueryArgDefinition[], propertyName: string) {
+      return parameters.length === 0
+        ? undefined
+        : factory.createPropertyAssignment(
+            factory.createIdentifier(propertyName),
+            factory.createObjectLiteralExpression(
+              parameters.map(
+                (param) => createPropertyAssignment(param.originalName, accessProperty(rootObject, param.name)),
+                true
+              )
+            )
+          );
+    }
 
     return factory.createArrowFunction(
       undefined,
@@ -385,7 +395,7 @@ export async function generateApi(
           [
             factory.createPropertyAssignment(
               factory.createIdentifier('url'),
-              generatePathExpression(path, pathParameters, rootObject)
+              generatePathExpression(path, pickParams('path'), rootObject)
             ),
             isQuery && verb.toUpperCase() === 'GET'
               ? undefined
@@ -399,24 +409,9 @@ export async function generateApi(
                   factory.createIdentifier('body'),
                   factory.createPropertyAccessExpression(rootObject, factory.createIdentifier(bodyParameter.name))
                 ),
-            cookieParameters.length === 0
-              ? undefined
-              : factory.createPropertyAssignment(
-                  factory.createIdentifier('cookies'),
-                  generateQuerArgObjectLiteralExpression(cookieParameters, rootObject)
-                ),
-            headerParameters.length === 0
-              ? undefined
-              : factory.createPropertyAssignment(
-                  factory.createIdentifier('headers'),
-                  generateQuerArgObjectLiteralExpression(headerParameters, rootObject)
-                ),
-            queryParameters.length === 0
-              ? undefined
-              : factory.createPropertyAssignment(
-                  factory.createIdentifier('params'),
-                  generateQuerArgObjectLiteralExpression(queryParameters, rootObject)
-                ),
+            createObjectLiteralProperty(pickParams('cookie'), 'cookies'),
+            createObjectLiteralProperty(pickParams('header'), 'headers'),
+            createObjectLiteralProperty(pickParams('query'), 'params'),
           ].filter(removeUndefined),
           false
         )
@@ -466,12 +461,6 @@ function generatePathExpression(path: string, pathParameters: QueryArgDefinition
         )
       )
     : factory.createNoSubstitutionTemplateLiteral(head);
-}
-
-function generateQuerArgObjectLiteralExpression(queryArgs: QueryArgDefinition[], rootObject: ts.Identifier) {
-  return factory.createObjectLiteralExpression(
-    queryArgs.map((param) => createPropertyAssignment(param.originalName, accessProperty(rootObject, param.name)), true)
-  );
 }
 
 type QueryArgDefinition = {
