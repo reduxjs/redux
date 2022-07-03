@@ -73,7 +73,50 @@ test('endpoint overrides', async () => {
   expect(api).toMatchSnapshot('loginUser should be a mutation');
 });
 
-test('default hooks generation', async () => {
+describe('option flattenArg', () => {
+  const config = {
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/petstore.json'),
+    flattenArg: true,
+  };
+
+  it('should apply a queryArg directly in the path', async () => {
+    const api = await generateEndpoints({
+      ...config,
+      filterEndpoints: ['getOrderById'],
+    });
+    // eslint-disable-next-line no-template-curly-in-string
+    expect(api).toContain('`/store/order/${queryArg}`');
+    expect(api).toMatch(/export type GetOrderByIdApiArg =[\s/*]+ID of order that needs to be fetched[\s/*]+number;/);
+  });
+
+  it('should apply a queryArg directly in the params', async () => {
+    const api = await generateEndpoints({
+      ...config,
+      filterEndpoints: ['findPetsByStatus'],
+    });
+    expect(api).toContain('params: { status: queryArg }');
+    expect(api).not.toContain('export type FindPetsByStatusApiArg = {');
+  });
+
+  it('should use the queryArg as the entire body', async () => {
+    const api = await generateEndpoints({
+      ...config,
+      filterEndpoints: ['addPet'],
+    });
+    expect(api).toMatch(/body: queryArg[^.]/);
+  });
+
+  it('should not change anything if there are 2+ arguments.', async () => {
+    const api = await generateEndpoints({
+      ...config,
+      filterEndpoints: ['uploadFile'],
+    });
+    expect(api).toContain('queryArg.body');
+  });
+});
+
+test('hooks generation', async () => {
   const api = await generateEndpoints({
     unionUndefined: true,
     apiFile: './fixtures/emptyApi.ts',

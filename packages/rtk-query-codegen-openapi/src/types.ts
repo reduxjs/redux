@@ -53,12 +53,20 @@ export interface CommonOptions {
   hooks?: boolean | { queries: boolean; lazyQueries: boolean; mutations: boolean };
   /**
    * defaults to false
+   * `true` will generate a union type for `undefined` properties like: `{ id?: string | undefined }` instead of `{ id?: string }`
    */
   unionUndefined?: boolean;
   /**
    * defaults to false
+   * `true` will result in all generated endpoints having `providesTags`/`invalidatesTags` declarations for the `tags` of their respective operation definition
+   * @see https://redux-toolkit.js.org/rtk-query/usage/code-generation for more information
    */
   tag?: boolean;
+  /**
+   * defaults to false
+   * `true` will "flatten" the arg so that you can do things like `useGetEntityById(1)` instead of `useGetEntityById({ entityId: 1 })`
+   */
+  flattenArg?: boolean;
 }
 
 export type TextMatcher = string | RegExp | (string | RegExp)[];

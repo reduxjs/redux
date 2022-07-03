@@ -263,54 +263,6 @@ export type User = {
 
 `;
 
-exports[`default hooks generation: should generate an \`useGetPetByIdQuery\` query hook and an \`useAddPetMutation\` mutation hook 1`] = `
-import { api } from './fixtures/emptyApi';
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    addPet: build.mutation<AddPetApiResponse, AddPetApiArg>({
-      query: (queryArg) => ({
-        url: \`/pet\`,
-        method: 'POST',
-        body: queryArg.pet,
-      }),
-    }),
-    getPetById: build.query<GetPetByIdApiResponse, GetPetByIdApiArg>({
-      query: (queryArg) => ({ url: \`/pet/\${queryArg.petId}\` }),
-    }),
-  }),
-  overrideExisting: false,
-});
-export { injectedRtkApi as enhancedApi };
-export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
-export type AddPetApiArg = {
-  /** Create a new pet in the store */
-  pet: Pet;
-};
-export type GetPetByIdApiResponse = /** status 200 successful operation */ Pet;
-export type GetPetByIdApiArg = {
-  /** ID of pet to return */
-  petId: number;
-};
-export type Category = {
-  id?: number | undefined;
-  name?: string | undefined;
-};
-export type Tag = {
-  id?: number | undefined;
-  name?: string | undefined;
-};
-export type Pet = {
-  id?: number | undefined;
-  name: string;
-  category?: Category | undefined;
-  photoUrls: string[];
-  tags?: Tag[] | undefined;
-  status?: ('available' | 'pending' | 'sold') | undefined;
-};
-export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
-
-`;
-
 exports[`endpoint filtering: should only have endpoints loginUser, placeOrder, getOrderById, deleteOrder 1`] = `
 import { api } from './fixtures/emptyApi';
 const injectedRtkApi = api.injectEndpoints({
@@ -421,6 +373,54 @@ export type LoginUserApiArg = {
   password?: string;
 };
 export const { useLoginUserMutation } = injectedRtkApi;
+
+`;
+
+exports[`hooks generation: should generate an \`useGetPetByIdQuery\` query hook and an \`useAddPetMutation\` mutation hook 1`] = `
+import { api } from './fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    addPet: build.mutation<AddPetApiResponse, AddPetApiArg>({
+      query: (queryArg) => ({
+        url: \`/pet\`,
+        method: 'POST',
+        body: queryArg.pet,
+      }),
+    }),
+    getPetById: build.query<GetPetByIdApiResponse, GetPetByIdApiArg>({
+      query: (queryArg) => ({ url: \`/pet/\${queryArg.petId}\` }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type AddPetApiResponse = /** status 200 Successful operation */ Pet;
+export type AddPetApiArg = {
+  /** Create a new pet in the store */
+  pet: Pet;
+};
+export type GetPetByIdApiResponse = /** status 200 successful operation */ Pet;
+export type GetPetByIdApiArg = {
+  /** ID of pet to return */
+  petId: number;
+};
+export type Category = {
+  id?: number | undefined;
+  name?: string | undefined;
+};
+export type Tag = {
+  id?: number | undefined;
+  name?: string | undefined;
+};
+export type Pet = {
+  id?: number | undefined;
+  name: string;
+  category?: Category | undefined;
+  photoUrls: string[];
+  tags?: Tag[] | undefined;
+  status?: ('available' | 'pending' | 'sold') | undefined;
+};
+export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
 
 `;
 

@@ -56,6 +56,19 @@ function operationMatches(pattern?: EndpointMatcher) {
   };
 }
 
+function withQueryComment<T extends ts.Node>(node: T, def: QueryArgDefinition, hasTrailingNewLine: boolean): T {
+  const comment = def.origin === 'param' ? def.param.description : def.body.description;
+  if (comment) {
+    return ts.addSyntheticLeadingComment(
+      node,
+      ts.SyntaxKind.MultiLineCommentTrivia,
+      `* ${comment} `,
+      hasTrailingNewLine
+    );
+  }
+  return node;
+}
+
 export function getOverrides(
   operation: OperationDefinition,
   endpointOverrides?: EndpointOverrides[]
@@ -78,6 +91,7 @@ export async function generateApi(
     filterEndpoints,
     endpointOverrides,
     unionUndefined,
+    flattenArg = false,
   }: GenerationOptions
 ) {
   const v3Doc = await getV3Doc(spec);
@@ -290,6 +304,8 @@ export async function generateApi(
 
     const queryArgValues = Object.values(queryArg);
 
+    const isFlatArg = flattenArg && queryArgValues.length === 1;
+
     const QueryArg = factory.createTypeReferenceNode(
       registerInterface(
         factory.createTypeAliasDeclaration(
@@ -298,27 +314,22 @@ export async function generateApi(
           capitalize(operationName + argSuffix),
           undefined,
           queryArgValues.length > 0
-            ? factory.createTypeLiteralNode(
-                queryArgValues.map((def) => {
-                  const comment = def.origin === 'param' ? def.param.description : def.body.description;
-                  const node = factory.createPropertySignature(
-                    undefined,
-                    propertyName(def.name),
-                    createQuestionToken(!def.required),
-                    def.type
-                  );
-
-                  if (comment) {
-                    return ts.addSyntheticLeadingComment(
-                      node,
-                      ts.SyntaxKind.MultiLineCommentTrivia,
-                      `* ${comment} `,
+            ? isFlatArg
+              ? withQueryComment({ ...queryArgValues[0].type }, queryArgValues[0], false)
+              : factory.createTypeLiteralNode(
+                  queryArgValues.map((def) =>
+                    withQueryComment(
+                      factory.createPropertySignature(
+                        undefined,
+                        propertyName(def.name),
+                        createQuestionToken(!def.required),
+                        def.type
+                      ),
+                      def,
                       true
-                    );
-                  }
-                  return node;
-                })
-              )
+                    )
+                  )
+                )
             : factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
         )
       ).name
@@ -329,7 +340,7 @@ export async function generateApi(
       type: isQuery ? 'query' : 'mutation',
       Response: ResponseTypeName,
       QueryArg,
-      queryFn: generateQueryFn({ operationDefinition, queryArg, isQuery, tags }),
+      queryFn: generateQueryFn({ operationDefinition, queryArg, isQuery, isFlatArg }),
       extraEndpointsProps: isQuery
         ? generateQueryEndpointProps({ operationDefinition })
         : generateMutationEndpointProps({ operationDefinition }),
@@ -340,13 +351,13 @@ export async function generateApi(
   function generateQueryFn({
     operationDefinition,
     queryArg,
+    isFlatArg,
     isQuery,
-    tags,
   }: {
     operationDefinition: OperationDefinition;
     queryArg: QueryArgDefinitions;
+    isFlatArg: boolean;
     isQuery: boolean;
-    tags: string[];
   }) {
     const { path, verb } = operationDefinition;
 
@@ -365,7 +376,11 @@ export async function generateApi(
             factory.createIdentifier(propertyName),
             factory.createObjectLiteralExpression(
               parameters.map(
-                (param) => createPropertyAssignment(param.originalName, accessProperty(rootObject, param.name)),
+                (param) =>
+                  createPropertyAssignment(
+                    param.originalName,
+                    isFlatArg ? rootObject : accessProperty(rootObject, param.name)
+                  ),
                 true
               )
             )
@@ -395,7 +410,7 @@ export async function generateApi(
           [
             factory.createPropertyAssignment(
               factory.createIdentifier('url'),
-              generatePathExpression(path, pickParams('path'), rootObject)
+              generatePathExpression(path, pickParams('path'), rootObject, isFlatArg)
             ),
             isQuery && verb.toUpperCase() === 'GET'
               ? undefined
@@ -407,7 +422,9 @@ export async function generateApi(
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('body'),
-                  factory.createPropertyAccessExpression(rootObject, factory.createIdentifier(bodyParameter.name))
+                  isFlatArg
+                    ? rootObject
+                    : factory.createPropertyAccessExpression(rootObject, factory.createIdentifier(bodyParameter.name))
                 ),
             createObjectLiteralProperty(pickParams('cookie'), 'cookies'),
             createObjectLiteralProperty(pickParams('header'), 'headers'),
@@ -436,7 +453,12 @@ function accessProperty(rootObject: ts.Identifier, propertyName: string) {
     : factory.createElementAccessExpression(rootObject, factory.createStringLiteral(propertyName));
 }
 
-function generatePathExpression(path: string, pathParameters: QueryArgDefinition[], rootObject: ts.Identifier) {
+function generatePathExpression(
+  path: string,
+  pathParameters: QueryArgDefinition[],
+  rootObject: ts.Identifier,
+  isFlatArg: boolean
+) {
   const expressions: Array<[string, string]> = [];
 
   const head = path.replace(/\{(.*?)\}(.*?)(?=\{|$)/g, (_, expression, literal) => {
@@ -453,7 +475,7 @@ function generatePathExpression(path: string, pathParameters: QueryArgDefinition
         factory.createTemplateHead(head),
         expressions.map(([prop, literal], index) =>
           factory.createTemplateSpan(
-            accessProperty(rootObject, prop),
+            isFlatArg ? rootObject : accessProperty(rootObject, prop),
             index === expressions.length - 1
               ? factory.createTemplateTail(literal)
               : factory.createTemplateMiddle(literal)
