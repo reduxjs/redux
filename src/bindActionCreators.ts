@@ -1,5 +1,5 @@
-import { Dispatch } from './types/store'
-import {
+import type { Dispatch } from './types/store'
+import type {
   AnyAction,
   ActionCreator,
   ActionCreatorsMapObject

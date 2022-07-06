@@ -1,13 +1,13 @@
 import compose from './compose'
-import { Middleware, MiddlewareAPI } from './types/middleware'
-import { AnyAction } from './types/actions'
-import {
+import type { Middleware, MiddlewareAPI } from './types/middleware'
+import type { AnyAction } from './types/actions'
+import type {
   StoreEnhancer,
   Dispatch,
   PreloadedState,
   StoreEnhancerStoreCreator
 } from './types/store'
-import { Reducer } from './types/reducers'
+import type { Reducer } from './types/reducers'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method

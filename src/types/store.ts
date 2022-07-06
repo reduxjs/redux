@@ -1,5 +1,5 @@
-import { Action, AnyAction } from './actions'
-import { Reducer } from './reducers'
+import type { Action, AnyAction } from './actions'
+import type { Reducer } from './reducers'
 import '../utils/symbol-observable'
 
 /**

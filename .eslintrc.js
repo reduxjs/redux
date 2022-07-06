@@ -31,6 +31,10 @@ module.exports = {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_'
       }
-    ]
+    ],
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      { prefer: 'type-imports', disallowTypeAnnotations: false },
+    ],
   }
 }
