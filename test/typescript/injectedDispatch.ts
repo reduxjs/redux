@@ -1,4 +1,4 @@
-import { Dispatch, Action } from '../..'
+import type { Dispatch, Action } from '../..'
 
 interface Component<P> {
   props: P

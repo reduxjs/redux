@@ -1,4 +1,5 @@
-import { StoreEnhancer, Action, AnyAction, Reducer, createStore } from '../..'
+import type { StoreEnhancer, Action, AnyAction, Reducer} from '../..';
+import { createStore } from '../..'
 
 interface State {
   someField: 'string'

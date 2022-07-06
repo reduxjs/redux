@@ -1,9 +1,11 @@
-import {
+import type {
   ActionCreator,
   Action,
   Dispatch,
-  bindActionCreators,
   ActionCreatorsMapObject
+} from '../..';
+import {
+  bindActionCreators
 } from '../..'
 
 interface AddTodoAction extends Action {

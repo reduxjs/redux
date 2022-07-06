@@ -1,4 +1,4 @@
-import { Dispatch } from '../..'
+import type { Dispatch } from '../..'
 
 /**
  * Default Dispatch type accepts any object with `type` property.

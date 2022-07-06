@@ -6,7 +6,7 @@ import {
   UNSUBSCRIBE_IN_MIDDLE,
   THROW_ERROR
 } from './actionTypes'
-import { AnyAction } from '../..'
+import type { AnyAction } from '../..'
 
 function id(state: { id: number }[]) {
   return (

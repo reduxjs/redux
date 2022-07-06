@@ -1,4 +1,5 @@
-import { Reducer, Action, combineReducers, ReducersMapObject } from '../..'
+import type { Reducer, Action, ReducersMapObject } from '../..';
+import { combineReducers } from '../..'
 
 /**
  * Simple reducer definition with no action shape checks.

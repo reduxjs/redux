@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
+import type {
+  Reducer,
+  AnyAction,
+  CombinedState
+} from '..';
 import {
   createStore,
   combineReducers,
-  Reducer,
-  AnyAction,
-  __DO_NOT_USE__ActionTypes as ActionTypes,
-  CombinedState
+  __DO_NOT_USE__ActionTypes as ActionTypes
 } from '..'
 
 describe('Utils', () => {

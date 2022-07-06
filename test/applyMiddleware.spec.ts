@@ -1,6 +1,4 @@
-import {
-  createStore,
-  applyMiddleware,
+import type {
   Middleware,
   MiddlewareAPI,
   AnyAction,
@@ -8,6 +6,7 @@ import {
   Store,
   Dispatch
 } from '..'
+import { createStore, applyMiddleware } from '..'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'

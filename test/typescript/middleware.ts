@@ -1,12 +1,14 @@
-import {
+import type {
   Middleware,
   MiddlewareAPI,
-  applyMiddleware,
-  createStore,
   Dispatch,
   Reducer,
   Action,
   AnyAction
+} from '../..';
+import {
+  applyMiddleware,
+  createStore
 } from '../..'
 
 /**

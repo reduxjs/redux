@@ -1,12 +1,14 @@
-import {
+import type {
   Store,
-  createStore,
   Reducer,
   Action,
   StoreEnhancer,
   Unsubscribe,
   Observer,
   ExtendState
+} from '../..';
+import {
+  createStore
 } from '../..'
 import 'symbol-observable'
 
