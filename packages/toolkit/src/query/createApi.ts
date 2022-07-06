@@ -2,12 +2,12 @@ import type { Api, ApiContext, Module, ModuleName } from './apiTypes'
 import type { CombinedState } from './core/apiState'
 import type { BaseQueryArg, BaseQueryFn } from './baseQueryTypes'
 import type { SerializeQueryArgs } from './defaultSerializeQueryArgs'
-import { defaultSerializeQueryArgs } from './defaultSerializeQueryArgs'
+import { buildSerializeQueryArgs } from './buildSerializeQueryArgs'
 import type {
   EndpointBuilder,
   EndpointDefinitions,
 } from './endpointDefinitions'
-import { DefinitionType } from './endpointDefinitions'
+import { DefinitionType, isQueryDefinition } from './endpointDefinitions'
 import { nanoid } from '@reduxjs/toolkit'
 import type { AnyAction } from '@reduxjs/toolkit'
 import type { NoInfer } from './tsHelpers'
@@ -236,15 +236,18 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
       })
     )
 
+    const { serializeQueryArgs, registerArgsSerializerForEndpoint } =
+      buildSerializeQueryArgs(options.serializeQueryArgs)
+
     const optionsWithDefaults = {
       reducerPath: 'api',
-      serializeQueryArgs: defaultSerializeQueryArgs,
       keepUnusedDataFor: 60,
       refetchOnMountOrArgChange: false,
       refetchOnFocus: false,
       refetchOnReconnect: false,
       ...options,
       extractRehydrationInfo,
+      serializeQueryArgs,
       tagTypes: [...(options.tagTypes || [])],
     }
 
@@ -319,6 +322,14 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
 
           continue
         }
+
+        if (isQueryDefinition(definition) && definition.serializeQueryArgs) {
+          registerArgsSerializerForEndpoint(
+            endpointName,
+            definition.serializeQueryArgs
+          )
+        }
+
         context.endpointDefinitions[endpointName] = definition
         for (const m of initializedModules) {
           m.injectEndpoint(endpointName, definition)

@@ -17,6 +17,7 @@ import {
 } from './helpers'
 import { server } from './mocks/server'
 import { rest } from 'msw'
+import { SerializeQueryArgs } from '../defaultSerializeQueryArgs'
 
 const originalEnv = process.env.NODE_ENV
 beforeAll(() => void ((process.env as any).NODE_ENV = 'development'))
@@ -816,5 +817,70 @@ describe('structuralSharing flag behaviors', () => {
 
     expect(firstRef.requestId).not.toEqual(secondRef.requestId)
     expect(firstRef.data === secondRef.data).toBeFalsy()
+  })
+})
+
+describe('custom serializeQueryArgs per endpoint', () => {
+  const customArgsSerializer: SerializeQueryArgs<number> = ({
+    endpointName,
+    queryArgs,
+  }) => `${endpointName}-${queryArgs}`
+
+  type SuccessResponse = { value: 'success' }
+
+  const serializer1 = jest.fn(customArgsSerializer)
+
+  const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
+    endpoints: (build) => ({
+      queryWithCustomSerializer: build.query<SuccessResponse, number>({
+        query: () => ({ url: '/success' }),
+        serializeQueryArgs: serializer1,
+      }),
+    }),
+  })
+
+  const storeRef = setupApiStore(api)
+
+  it('Works via createApi', async () => {
+    expect(serializer1).toHaveBeenCalledTimes(0)
+
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithCustomSerializer.initiate(5)
+    )
+
+    const firstRef = api.endpoints.queryWithCustomSerializer.select(5)(
+      storeRef.store.getState()
+    )
+    expect(serializer1).toHaveBeenCalled()
+
+    expect(firstRef.data).toEqual({ value: 'success' })
+  })
+
+  const serializer2 = jest.fn(customArgsSerializer)
+
+  const injectedApi = api.injectEndpoints({
+    endpoints: (build) => ({
+      injectedQueryWithCustomSerializer: build.query<SuccessResponse, number>({
+        query: () => ({ url: '/success' }),
+        serializeQueryArgs: serializer2,
+      }),
+    }),
+  })
+
+  it('Works via injectEndpoints', async () => {
+    expect(serializer2).toHaveBeenCalledTimes(0)
+
+    await storeRef.store.dispatch(
+      injectedApi.endpoints.injectedQueryWithCustomSerializer.initiate(5)
+    )
+
+    const firstRef =
+      injectedApi.endpoints.injectedQueryWithCustomSerializer.select(5)(
+        storeRef.store.getState()
+      )
+    expect(serializer2).toHaveBeenCalled()
+
+    expect(firstRef.data).toEqual({ value: 'success' })
   })
 })
