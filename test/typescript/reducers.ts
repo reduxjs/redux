@@ -1,4 +1,4 @@
-import type { Reducer, Action, ReducersMapObject } from '../..';
+import type { Reducer, Action, ReducersMapObject } from '../..'
 import { combineReducers } from '../..'
 
 /**

@@ -1,4 +1,4 @@
-import type { StoreEnhancer, Action, Store } from '..';
+import type { StoreEnhancer, Action, Store } from '..'
 import { createStore, combineReducers } from '..'
 import {
   addTodo,
@@ -10,7 +10,7 @@ import {
   unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
-import type { ObservableInput } from 'rxjs';
+import type { ObservableInput } from 'rxjs'
 import { from } from 'rxjs'
 import { map } from 'rxjs/operators'
 import $$observable from '../src/utils/symbol-observable'

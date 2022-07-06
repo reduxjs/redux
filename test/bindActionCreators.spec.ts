@@ -1,4 +1,4 @@
-import type { ActionCreator, Store } from '..';
+import type { ActionCreator, Store } from '..'
 import { bindActionCreators, createStore } from '..'
 import { todos } from './helpers/reducers'
 import * as actionCreators from './helpers/actionCreators'

@@ -5,11 +5,8 @@ import type {
   Reducer,
   Action,
   AnyAction
-} from '../..';
-import {
-  applyMiddleware,
-  createStore
 } from '../..'
+import { applyMiddleware, createStore } from '../..'
 
 /**
  * Logger middleware doesn't add any extra types to dispatch, just logs actions

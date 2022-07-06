@@ -1,4 +1,4 @@
-import type { StoreEnhancer, Action, AnyAction, Reducer} from '../..';
+import type { StoreEnhancer, Action, AnyAction, Reducer } from '../..'
 import { createStore } from '../..'
 
 interface State {

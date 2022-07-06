@@ -6,10 +6,8 @@ import type {
   Unsubscribe,
   Observer,
   ExtendState
-} from '../..';
-import {
-  createStore
 } from '../..'
+import { createStore } from '../..'
 import 'symbol-observable'
 
 type BrandedString = string & { _brand: 'type' }

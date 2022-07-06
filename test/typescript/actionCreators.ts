@@ -3,10 +3,8 @@ import type {
   Action,
   Dispatch,
   ActionCreatorsMapObject
-} from '../..';
-import {
-  bindActionCreators
 } from '../..'
+import { bindActionCreators } from '../..'
 
 interface AddTodoAction extends Action {
   text: string

@@ -1,9 +1,5 @@
 /* eslint-disable no-console */
-import type {
-  Reducer,
-  AnyAction,
-  CombinedState
-} from '..';
+import type { Reducer, AnyAction, CombinedState } from '..'
 import {
   createStore,
   combineReducers,
