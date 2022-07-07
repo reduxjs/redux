@@ -436,7 +436,6 @@ describe('endpoint definition typings', () => {
 
       storeRef.store.dispatch(api.endpoints.query2.initiate('in2'))
       await waitMs(1)
-      debugger
       expect(spy).toHaveBeenCalledWith(
         "Tag type 'missing' was used, but not specified in `tagTypes`!"
       )
