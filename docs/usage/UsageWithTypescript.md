@@ -180,6 +180,26 @@ export function Counter() {
 }
 ```
 
+:::tip Warn about wrong imports
+
+ESLint can help your team import the right hooks easily. The [typescript-eslint/no-restricted-imports](https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-restricted-imports.md) rule can show a warning when the wrong import is used accidentally. 
+
+You could add this to your ESLint config as an example:
+
+```json
+"no-restricted-imports": "off",
+"@typescript-eslint/no-restricted-imports": [
+  "warn",
+  {
+    "name": "react-redux",
+    "importNames": ["useSelector", "useDispatch"],
+    "message": "Use typed hooks `useAppDispatch` and `useAppSelector` instead."
+  }
+],
+```
+
+:::
+
 ## Typing Additional Redux Logic
 
 ### Type Checking Reducers
