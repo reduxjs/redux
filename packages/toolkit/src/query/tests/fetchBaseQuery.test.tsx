@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
-import { setupApiStore } from './helpers'
+import { setupApiStore, waitMs } from './helpers'
 import { server } from './mocks/server'
 // @ts-ignore
 import nodeFetch from 'node-fetch'
@@ -76,8 +76,12 @@ type RootState = ReturnType<typeof storeRef.store.getState>
 
 let commonBaseQueryApi: BaseQueryApi = {} as any
 beforeEach(() => {
+  let abortController = new AbortController()
   commonBaseQueryApi = {
-    signal: new AbortController().signal,
+    signal: abortController.signal,
+    abort: (reason) =>
+      // @ts-ignore
+      abortController.abort(reason),
     dispatch: storeRef.store.dispatch,
     getState: storeRef.store.getState,
     extra: undefined,
@@ -564,11 +568,15 @@ describe('fetchBaseQuery', () => {
     test('prepareHeaders is able to select from a state', async () => {
       let request: any
 
-      const doRequest = async () =>
-        baseQuery(
+      const doRequest = async () => {
+        const abortController = new AbortController()
+        return baseQuery(
           { url: '/echo' },
           {
-            signal: new AbortController().signal,
+            signal: abortController.signal,
+            abort: (reason) =>
+              // @ts-ignore
+              abortController.abort(reason),
             dispatch: storeRef.store.dispatch,
             getState: storeRef.store.getState,
             extra: undefined,
@@ -577,6 +585,7 @@ describe('fetchBaseQuery', () => {
           },
           {}
         )
+      }
 
       ;({ data: request } = await doRequest())
 
@@ -614,11 +623,15 @@ describe('fetchBaseQuery', () => {
         getTokenSilently: async () => 'fakeToken',
       }
 
-      const doRequest = async () =>
-        baseQuery(
+      const doRequest = async () => {
+        const abortController = new AbortController()
+        return baseQuery(
           { url: '/echo' },
           {
-            signal: new AbortController().signal,
+            signal: abortController.signal,
+            abort: (reason) =>
+              // @ts-ignore
+              abortController.abort(reason),
             dispatch: storeRef.store.dispatch,
             getState: storeRef.store.getState,
             extra: fakeAuth0Client,
@@ -628,6 +641,7 @@ describe('fetchBaseQuery', () => {
           },
           {}
         )
+      }
 
       await doRequest()
 
@@ -759,5 +773,32 @@ describe('still throws on completely unexpected errors', () => {
     )
     expect(req).toBeInstanceOf(Promise)
     await expect(req).rejects.toBe(error)
+  })
+})
+
+describe('timeout', () => {
+  it('throws a timeout error when a request takes longer than specified timeout duration', async () => {
+    jest.useFakeTimers('legacy')
+    let result: any
+    server.use(
+      rest.get('https://example.com/empty', (req, res, ctx) =>
+        res.once(
+          ctx.delay(3000),
+          ctx.json({ ...req, headers: req.headers.all() })
+        )
+      )
+    )
+    Promise.resolve(
+      baseQuery({ url: '/empty', timeout: 2000 }, commonBaseQueryApi, {})
+    ).then((r) => {
+      result = r
+    })
+    await waitMs()
+    jest.runAllTimers()
+    await waitMs()
+    expect(result?.error).toEqual({
+      status: 'TIMEOUT_ERROR',
+      error: 'AbortError: The user aborted a request.',
+    })
   })
 })

@@ -34,8 +34,12 @@ const failQueryOnce = rest.get('/query', (_, req, ctx) =>
 describe('fetchBaseQuery', () => {
   let commonBaseQueryApiArgs: BaseQueryApi = {} as any
   beforeEach(() => {
+    const abortController = new AbortController()
     commonBaseQueryApiArgs = {
-      signal: new AbortController().signal,
+      signal: abortController.signal,
+      abort: (reason) =>
+        //@ts-ignore
+        abortController.abort(reason),
       dispatch: storeRef.store.dispatch,
       getState: storeRef.store.getState,
       extra: undefined,
