@@ -4,6 +4,7 @@ import type { BaseQueryApi, BaseQueryFn } from './baseQueryTypes'
 import type { MaybePromise, Override } from './tsHelpers'
 
 export type ResponseHandler =
+  | 'content-type'
   | 'json'
   | 'text'
   | ((response: Response) => Promise<any>)
@@ -40,24 +41,6 @@ const defaultValidateStatus = (response: Response) =>
 
 const defaultIsJsonContentType = (headers: Headers) =>
   /*applicat*/ /ion\/(vnd\.api\+)?json/.test(headers.get('content-type') || '')
-
-const handleResponse = async (
-  response: Response,
-  responseHandler: ResponseHandler
-) => {
-  if (typeof responseHandler === 'function') {
-    return responseHandler(response)
-  }
-
-  if (responseHandler === 'text') {
-    return response.text()
-  }
-
-  if (responseHandler === 'json') {
-    const text = await response.text()
-    return text.length ? JSON.parse(text) : null
-  }
-}
 
 export type FetchBaseQueryError =
   | {
@@ -341,5 +324,25 @@ export function fetchBaseQuery({
           },
           meta,
         }
+  }
+
+  async function handleResponse(
+    response: Response,
+    responseHandler: ResponseHandler
+  ) {
+    if (typeof responseHandler === 'function') {
+      return responseHandler(response)
+    }
+
+    if (responseHandler === 'content-type') {
+      responseHandler = isJsonContentType(response.headers) ? 'json' : 'text'
+    }
+
+    if (responseHandler === 'json') {
+      const text = await response.text()
+      return text.length ? JSON.parse(text) : null
+    }
+
+    return response.text()
   }
 }
