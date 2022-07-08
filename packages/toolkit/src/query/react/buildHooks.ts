@@ -53,6 +53,7 @@ import { useStableQueryArgs } from './useSerializedStableValue'
 import type { UninitializedValue } from './constants'
 import { UNINITIALIZED_VALUE } from './constants'
 import { useShallowStableValue } from './useShallowStableValue'
+import type { BaseQueryFn } from '../baseQueryTypes'
 
 // Copy-pasted from React-Redux
 export const useIsomorphicLayoutEffect =
@@ -98,7 +99,26 @@ export type UseQuery<D extends QueryDefinition<any, any, any, any>> = <
 >(
   arg: QueryArgFrom<D> | SkipToken,
   options?: UseQuerySubscriptionOptions & UseQueryStateOptions<D, R>
-) => UseQueryStateResult<D, R> & ReturnType<UseQuerySubscription<D>>
+) => UseQueryHookResult<D, R>
+
+export type UseQueryHookResult<
+  D extends QueryDefinition<any, any, any, any>,
+  R = UseQueryStateDefaultResult<D>
+> = UseQueryStateResult<D, R> & UseQuerySubscriptionResult<D>
+
+/**
+ * Helper type to manually type the result
+ * of the `useQuery` hook in userland code.
+ */
+export type TypedUseQueryHookResult<
+  ResultType,
+  QueryArg,
+  BaseQuery extends BaseQueryFn,
+  R = UseQueryStateDefaultResult<
+    QueryDefinition<QueryArg, BaseQuery, string, ResultType, string>
+  >
+> = TypedUseQueryStateResult<ResultType, QueryArg, BaseQuery, R> &
+  TypedUseQuerySubscriptionResult<ResultType, QueryArg, BaseQuery>
 
 interface UseQuerySubscriptionOptions extends SubscriptionOptions {
   /**
@@ -163,7 +183,23 @@ export type UseQuerySubscription<
 > = (
   arg: QueryArgFrom<D> | SkipToken,
   options?: UseQuerySubscriptionOptions
-) => Pick<QueryActionCreatorResult<D>, 'refetch'>
+) => UseQuerySubscriptionResult<D>
+
+export type UseQuerySubscriptionResult<
+  D extends QueryDefinition<any, any, any, any>
+> = Pick<QueryActionCreatorResult<D>, 'refetch'>
+
+/**
+ * Helper type to manually type the result
+ * of the `useQuerySubscription` hook in userland code.
+ */
+export type TypedUseQuerySubscriptionResult<
+  ResultType,
+  QueryArg,
+  BaseQuery extends BaseQueryFn
+> = UseQuerySubscriptionResult<
+  QueryDefinition<QueryArg, BaseQuery, string, ResultType, string>
+>
 
 export type UseLazyQueryLastPromiseInfo<
   D extends QueryDefinition<any, any, any, any>
@@ -339,6 +375,19 @@ export type UseQueryStateResult<
   R
 > = NoInfer<R>
 
+/**
+ * Helper type to manually type the result
+ * of the `useQueryState` hook in userland code.
+ */
+export type TypedUseQueryStateResult<
+  ResultType,
+  QueryArg,
+  BaseQuery extends BaseQueryFn,
+  R = UseQueryStateDefaultResult<
+    QueryDefinition<QueryArg, BaseQuery, string, ResultType, string>
+  >
+> = NoInfer<R>
+
 type UseQueryStateBaseResult<D extends QueryDefinition<any, any, any, any>> =
   QuerySubState<D> & {
     /**
@@ -435,6 +484,22 @@ export type UseMutationStateResult<
    */
   reset: () => void
 }
+
+/**
+ * Helper type to manually type the result
+ * of the `useMutation` hook in userland code.
+ */
+export type TypedUseMutationResult<
+  ResultType,
+  QueryArg,
+  BaseQuery extends BaseQueryFn,
+  R = MutationResultSelectorResult<
+    MutationDefinition<QueryArg, BaseQuery, string, ResultType, string>
+  >
+> = UseMutationStateResult<
+  MutationDefinition<QueryArg, BaseQuery, string, ResultType, string>,
+  R
+>
 
 /**
  * A React hook that lets you trigger an update request for a given endpoint, and subscribes the component to read the request status from the Redux store. The component will re-render as the loading status changes.

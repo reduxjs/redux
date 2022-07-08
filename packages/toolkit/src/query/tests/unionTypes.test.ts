@@ -1,10 +1,17 @@
 import type { SerializedError } from '@reduxjs/toolkit'
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
+import type {
+  FetchBaseQueryError,
+  TypedUseQueryHookResult,
+  TypedUseQueryStateResult,
+  TypedUseQuerySubscriptionResult,
+  TypedUseMutationResult,
+} from '@reduxjs/toolkit/query/react'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { expectExactType, expectType } from './helpers'
 
+const baseQuery = fetchBaseQuery()
 const api = createApi({
-  baseQuery: fetchBaseQuery(),
+  baseQuery,
   endpoints: (build) => ({
     test: build.query<string, void>({ query: () => '' }),
     mutation: build.mutation<string, void>({ query: () => '' }),
@@ -141,7 +148,6 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-start
   test('useQuery TS4.1 union', () => {
     const result = api.useTestQuery()
 
@@ -207,7 +213,6 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-end
 
   test('useLazyQuery union', () => {
     const [_trigger, result] = api.endpoints.test.useLazyQuery()
@@ -275,7 +280,6 @@ describe.skip('TS only tests', () => {
     }
   })
 
-  // pre41-remove-start
   test('useLazyQuery TS4.1 union', () => {
     const [_trigger, result] = api.useLazyTestQuery()
 
@@ -341,7 +345,6 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-end
 
   test('queryHookResult (without selector) union', () => {
     const useQueryStateResult = api.endpoints.test.useQueryState()
@@ -501,7 +504,6 @@ describe.skip('TS only tests', () => {
     })(result)
   })
 
-  // pre41-remove-start
   test('useMutation TS4.1 union', () => {
     const [_trigger, result] = api.useMutationMutation()
 
@@ -552,5 +554,52 @@ describe.skip('TS only tests', () => {
       expectType<never>(result)
     }
   })
-  // pre41-remove-end
+
+  test('"Typed" helper types', () => {
+    // useQuery
+    {
+      const result = api.endpoints.test.useQuery()
+      expectType<TypedUseQueryHookResult<string, void, typeof baseQuery>>(
+        result
+      )
+    }
+    // useQuery with selectFromResult
+    {
+      const result = api.endpoints.test.useQuery(undefined, {
+        selectFromResult: () => ({ x: true }),
+      })
+      expectType<
+        TypedUseQueryHookResult<string, void, typeof baseQuery, { x: boolean }>
+      >(result)
+    }
+    // useQueryState
+    {
+      const result = api.endpoints.test.useQueryState()
+      expectType<TypedUseQueryStateResult<string, void, typeof baseQuery>>(
+        result
+      )
+    }
+    // useQueryState with selectFromResult
+    {
+      const result = api.endpoints.test.useQueryState(undefined, {
+        selectFromResult: () => ({ x: true }),
+      })
+      expectType<
+        TypedUseQueryStateResult<string, void, typeof baseQuery, { x: boolean }>
+      >(result)
+    }
+    // useQuerySubscription
+    {
+      const result = api.endpoints.test.useQuerySubscription()
+      expectType<
+        TypedUseQuerySubscriptionResult<string, void, typeof baseQuery>
+      >(result)
+    }
+
+    // useMutation
+    {
+      const [trigger, result] = api.endpoints.mutation.useMutation()
+      expectType<TypedUseMutationResult<string, void, typeof baseQuery>>(result)
+    }
+  })
 })
