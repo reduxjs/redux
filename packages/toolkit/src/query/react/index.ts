@@ -21,4 +21,10 @@ const createApi = /* @__PURE__ */ buildCreateApi(
   reactHooksModule()
 )
 
+export type {
+  TypedUseQueryHookResult,
+  TypedUseQueryStateResult,
+  TypedUseQuerySubscriptionResult,
+  TypedUseMutationResult,
+} from './buildHooks'
 export { createApi, reactHooksModule }
