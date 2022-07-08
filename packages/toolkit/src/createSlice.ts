@@ -52,7 +52,7 @@ export interface Slice<
    * Action creators for the types of actions that are handled by the slice
    * reducer.
    */
-  actions: CaseReducerActions<CaseReducers>
+  actions: CaseReducerActions<CaseReducers, Name>
 
   /**
    * The individual case reducer functions that were passed in the `reducers` parameter.
@@ -165,15 +165,29 @@ export type SliceCaseReducers<State> = {
     | CaseReducerWithPrepare<State, PayloadAction<any, string, any, any>>
 }
 
+type SliceActionType<
+  SliceName extends string,
+  ActionName extends keyof any
+> = ActionName extends string | number ? `${SliceName}/${ActionName}` : string
+
 /**
  * Derives the slice's `actions` property from the `reducers` options
  *
  * @public
  */
-export type CaseReducerActions<CaseReducers extends SliceCaseReducers<any>> = {
+export type CaseReducerActions<
+  CaseReducers extends SliceCaseReducers<any>,
+  SliceName extends string
+> = {
   [Type in keyof CaseReducers]: CaseReducers[Type] extends { prepare: any }
-    ? ActionCreatorForCaseReducerWithPrepare<CaseReducers[Type]>
-    : ActionCreatorForCaseReducer<CaseReducers[Type]>
+    ? ActionCreatorForCaseReducerWithPrepare<
+        CaseReducers[Type],
+        SliceActionType<SliceName, Type>
+      >
+    : ActionCreatorForCaseReducer<
+        CaseReducers[Type],
+        SliceActionType<SliceName, Type>
+      >
 }
 
 /**
@@ -181,22 +195,24 @@ export type CaseReducerActions<CaseReducers extends SliceCaseReducers<any>> = {
  *
  * @internal
  */
-type ActionCreatorForCaseReducerWithPrepare<CR extends { prepare: any }> =
-  _ActionCreatorWithPreparedPayload<CR['prepare'], string>
+type ActionCreatorForCaseReducerWithPrepare<
+  CR extends { prepare: any },
+  Type extends string
+> = _ActionCreatorWithPreparedPayload<CR['prepare'], Type>
 
 /**
  * Get a `PayloadActionCreator` type for a passed `CaseReducer`
  *
  * @internal
  */
-type ActionCreatorForCaseReducer<CR> = CR extends (
+type ActionCreatorForCaseReducer<CR, Type extends string> = CR extends (
   state: any,
   action: infer Action
 ) => any
   ? Action extends { payload: infer P }
-    ? PayloadActionCreator<P>
-    : ActionCreatorWithoutPayload
-  : ActionCreatorWithoutPayload
+    ? PayloadActionCreator<P, Type>
+    : ActionCreatorWithoutPayload<Type>
+  : ActionCreatorWithoutPayload<Type>
 
 /**
  * Extracts the CaseReducers out of a `reducers` object, even if they are
