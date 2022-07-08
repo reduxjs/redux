@@ -109,7 +109,7 @@ interface UseQuerySubscriptionOptions extends SubscriptionOptions {
    * - **If the query has cached data:**
    *   * The cached data **will not be used** on the initial load, and will ignore updates from any identical query until the `skip` condition is removed
    *   * The query will have a status of `uninitialized`
-   *   * If `skip: false` is set after skipping the initial load, the cached result will be used
+   *   * If `skip: false` is set after the initial load, the cached result will be used
    * - **If the query does not have cached data:**
    *   * The query will have a status of `uninitialized`
    *   * The query will not exist in the state when viewed with the dev tools
@@ -185,7 +185,7 @@ export type UseLazyQueryLastPromiseInfo<
  *
  * #### Note
  *
- * When the trigger function returned from a LazyQuery, it always initiates a new request to the server even if there is cached data. Set `preferCacheValue`(the second argument to the function) as `true` if you want it to immediately return a cached value if one exists.
+ * When the trigger function returned from a LazyQuery is called, it always initiates a new request to the server even if there is cached data. Set `preferCacheValue`(the second argument to the function) as `true` if you want it to immediately return a cached value if one exists.
  */
 export type UseLazyQuery<D extends QueryDefinition<any, any, any, any>> = <
   R extends Record<string, any> = UseQueryStateDefaultResult<D>
