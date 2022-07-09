@@ -37,7 +37,7 @@ export interface RetryOptions {
    * Callback to determine if a retry should be attempted.
    * Return `true` for another retry and `false` to quit trying prematurely.
    */
-  shouldRetry?: (error: FetchBaseQueryError, args: BaseQueryArg<BaseQueryFn>, extraArgs: {
+  retryCondition?: (error: FetchBaseQueryError, args: BaseQueryArg<BaseQueryFn>, extraArgs: {
     attempt: number
     maxRetries: number
     baseQueryApi: BaseQueryApi
@@ -56,12 +56,12 @@ const retryWithBackoff: BaseQueryEnhancer<
   RetryOptions,
   RetryOptions | void
 > = (baseQuery, defaultOptions) => async (args, api, extraOptions) => {
-  const defaultShouldRetry: Exclude<RetryOptions['shouldRetry'], undefined> = (_, __, {attempt, maxRetries}) => attempt <= maxRetries
+  const defaultRetryCondition: Exclude<RetryOptions['retryCondition'], undefined> = (_, __, {attempt, maxRetries}) => attempt <= maxRetries
 
   const options = {
     maxRetries: 5,
     backoff: defaultBackoff,
-    shouldRetry: defaultShouldRetry,
+    retryCondition: defaultRetryCondition,
     ...defaultOptions,
     ...extraOptions,
   }
@@ -87,7 +87,7 @@ const retryWithBackoff: BaseQueryEnhancer<
         throw e
       }
 
-      if (e instanceof HandledError && !options.shouldRetry(e.value as FetchBaseQueryError, args, {
+      if (e instanceof HandledError && !options.retryCondition(e.value as FetchBaseQueryError, args, {
         attempt: retry,
         maxRetries: options.maxRetries,
         baseQueryApi: api,
