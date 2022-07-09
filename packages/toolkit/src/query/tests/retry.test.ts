@@ -371,4 +371,36 @@ describe('configuration', () => {
 
     expect(baseBaseQuery).toHaveBeenCalledTimes(overrideMaxRetries + 1)
   })
+
+  test('retryCondition with endpoint config that overrides baseQuery config', async () => {
+    const baseBaseQuery = jest.fn<
+      ReturnType<BaseQueryFn>,
+      Parameters<BaseQueryFn>
+    >()
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
+
+    const baseQuery = retry(baseBaseQuery, {
+      maxRetries: 10
+    })
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        q1: build.query({
+          query: () => {},
+          extraOptions: {
+            retryCondition: (_, __, {attempt, maxRetries}) => attempt <= maxRetries / 2,
+          }
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+    storeRef.store.dispatch(api.endpoints.q1.initiate({}))
+
+    await loopTimers()
+
+    expect(baseBaseQuery).toHaveBeenCalledTimes(6)
+  })
 })
