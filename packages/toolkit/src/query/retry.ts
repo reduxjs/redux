@@ -34,8 +34,8 @@ export interface RetryOptions {
    */
   backoff?: (attempt: number, maxRetries: number) => Promise<void>
   /**
-   Callback to determine if a retry should be attempted. 
-   Return `true` for another retry and `false` to quit trying prematurely.
+   * Callback to determine if a retry should be attempted.
+   * Return `true` for another retry and `false` to quit trying prematurely.
    */
   shouldRetry?: (error: FetchBaseQueryError, args: BaseQueryArg<BaseQueryFn>, extraArgs: {
     attempt: number
