@@ -403,4 +403,39 @@ describe('configuration', () => {
 
     expect(baseBaseQuery).toHaveBeenCalledTimes(6)
   })
+
+  test('retryCondition also works with mutations', async () => {
+    const baseBaseQuery = jest.fn<
+      ReturnType<BaseQueryFn>,
+      Parameters<BaseQueryFn>
+    >()
+
+    baseBaseQuery
+      .mockRejectedValueOnce(new Error('rejected'))
+      .mockRejectedValueOnce(new Error('hello retryCondition'))
+      .mockRejectedValueOnce(new Error('rejected'))
+      .mockResolvedValue({ error: 'hello retryCondition' })
+
+    const baseQuery = retry(baseBaseQuery, {})
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        m1: build.mutation({
+          query: () => ({ method: 'PUT' }),
+          extraOptions: {
+            retryCondition: (e) => e.data === 'hello retryCondition',
+          }
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+    storeRef.store.dispatch(api.endpoints.m1.initiate({}))
+
+    await loopTimers()
+
+    expect(baseBaseQuery).toHaveBeenCalledTimes(4)
+  })
 })
