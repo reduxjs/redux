@@ -287,7 +287,7 @@ describe('`console.error` on unhandled errors during `initiate`', () => {
     await store.dispatch(api.endpoints.baseQuery.initiate())
 
     expect(getLog().log)
-      .toBe(`An unhandled error occured processing a request for the endpoint "baseQuery".
+      .toBe(`An unhandled error occurred processing a request for the endpoint "baseQuery".
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 
@@ -311,7 +311,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
     await store.dispatch(api.endpoints.queryFn.initiate())
 
     expect(getLog().log)
-      .toBe(`An unhandled error occured processing a request for the endpoint "queryFn".
+      .toBe(`An unhandled error occurred processing a request for the endpoint "queryFn".
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 
@@ -336,7 +336,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
     await store.dispatch(api.endpoints.transformRspn.initiate())
 
     expect(getLog().log)
-      .toBe(`An unhandled error occured processing a request for the endpoint "transformRspn".
+      .toBe(`An unhandled error occurred processing a request for the endpoint "transformRspn".
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 
@@ -363,7 +363,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
     await store.dispatch(api.endpoints.prep.initiate())
 
     expect(getLog().log)
-      .toBe(`An unhandled error occured processing a request for the endpoint "prep".
+      .toBe(`An unhandled error occurred processing a request for the endpoint "prep".
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 
@@ -393,7 +393,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
     await store.dispatch(api.endpoints.val.initiate())
 
     expect(getLog().log)
-      .toBe(`An unhandled error occured processing a request for the endpoint "val".
+      .toBe(`An unhandled error occurred processing a request for the endpoint "val".
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 })
