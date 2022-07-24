@@ -215,8 +215,8 @@ Let's look at a small standalone example first.
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    entities: [],
-    status: null,
+  entities: [],
+  status: null
 }
 
 const todosSlice = createSlice({
