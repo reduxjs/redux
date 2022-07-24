@@ -1,4 +1,4 @@
-import expect from 'expect'
+import { expect } from 'expect'
 import isPlainObject from '../../src/utils/isPlainObject'
 import vm from 'vm'
 
