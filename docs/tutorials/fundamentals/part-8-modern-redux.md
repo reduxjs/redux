@@ -215,7 +215,7 @@ Let's look at a small standalone example first.
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    todoList: [],
+    entities: [],
     status: null,
 }
 
@@ -225,10 +225,10 @@ const todosSlice = createSlice({
   reducers: {
     todoAdded(state, action) {
       // ✅ This "mutating" code is okay inside of createSlice!
-      state.todoList.push(action.payload)
+      state.entities.push(action.payload)
     },
     todoToggled(state, action) {
-      const todo = state.todoList.find(todo => todo.id === action.payload)
+      const todo = state.entities.find(todo => todo.id === action.payload)
       todo.completed = !todo.completed
     },
     todosLoading(state, action) {
