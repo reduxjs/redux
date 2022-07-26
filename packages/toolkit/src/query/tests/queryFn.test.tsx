@@ -179,7 +179,7 @@ describe('queryFn base implementation tests', () => {
       result = await store.dispatch(thunk)
     }).toHaveConsoleOutput(
       endpointName.includes('Throw')
-        ? `An unhandled error occured processing a request for the endpoint "${endpointName}".
+        ? `An unhandled error occurred processing a request for the endpoint "${endpointName}".
         In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: resultFrom(${endpointName})]`
         : ''
     )
@@ -227,7 +227,7 @@ describe('queryFn base implementation tests', () => {
       result = await store.dispatch(thunk)
     }).toHaveConsoleOutput(
       endpointName.includes('Throw')
-        ? `An unhandled error occured processing a request for the endpoint "${endpointName}".
+        ? `An unhandled error occurred processing a request for the endpoint "${endpointName}".
         In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: resultFrom(${endpointName})]`
         : ''
     )
@@ -262,7 +262,7 @@ describe('queryFn base implementation tests', () => {
       await expect(async () => {
         result = await store.dispatch(thunk)
       }).toHaveConsoleOutput(
-        `An unhandled error occured processing a request for the endpoint "withNeither".
+        `An unhandled error occurred processing a request for the endpoint "withNeither".
         In the case of an unhandled error, no tags will be "provided" or "invalidated". [TypeError: endpointDefinition.queryFn is not a function]`
       )
       expect(result!.error).toEqual(
@@ -280,7 +280,7 @@ describe('queryFn base implementation tests', () => {
       await expect(async () => {
         result = await store.dispatch(thunk)
       }).toHaveConsoleOutput(
-        `An unhandled error occured processing a request for the endpoint "mutationWithNeither".
+        `An unhandled error occurred processing a request for the endpoint "mutationWithNeither".
         In the case of an unhandled error, no tags will be "provided" or "invalidated". [TypeError: endpointDefinition.queryFn is not a function]`
       )
       expect((result as any).error).toEqual(
@@ -379,7 +379,7 @@ describe('usage scenario tests', () => {
         api.endpoints.getMissingFirebaseUser.initiate(1)
       )
     })
-      .toHaveConsoleOutput(`An unhandled error occured processing a request for the endpoint "getMissingFirebaseUser".
+      .toHaveConsoleOutput(`An unhandled error occurred processing a request for the endpoint "getMissingFirebaseUser".
     In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: Missing user]`)
 
     expect(result!.data).toBeUndefined()
