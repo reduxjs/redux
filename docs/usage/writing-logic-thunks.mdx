@@ -47,7 +47,7 @@ In the same way that Redux code normally uses [action creators to generate actio
 // fetchTodoById is the "thunk action creator"
 export function fetchTodoById(todoId) {
   // fetchTodoByIdThunk is the "thunk function"
-  return async function fetchTodosThunk(dispatch, getState) {
+  return async function fetchTodoByIdThunk(dispatch, getState) {
     const response = await client.get(`/fakeApi/todo/${todoId}`)
     dispatch(todosLoaded(response.todos))
   }
