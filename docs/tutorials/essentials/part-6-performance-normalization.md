@@ -509,7 +509,7 @@ export const Navbar = () => {
 
 ## Improving Render Performance
 
-Our application is looking useful, but we've actually got a couple flaws in when and how our components re-render. Let's look at those problems, and talk about some ways to improve the performance.
+Our application is looking useful, but we've got a couple of flaws in when and how our components re-render. Let's look at those problems, and talk about some ways to improve the performance.
 
 ### Investigating Render Behavior
 
@@ -592,13 +592,17 @@ selectPostsByUser(state1, 'user1')
 // Output selector runs, because `userId` changed
 selectPostsByUser(state1, 'user2')
 
-dispatch(reactionAdded())
+dispatch(reactionAdded({ postId: post.id, reaction: "heart" }))
 const state2 = getState()
 // Output selector does not run, because `posts` and `userId` are the same
 selectPostsByUser(state2, 'user2')
 
 // Add some more posts
-dispatch(addNewPost())
+dispatch(addNewPost({
+  title: post.title,
+  content: post.content,
+  user: userId
+}))
 const state3 = getState()
 // Output selector runs, because `posts` has changed
 selectPostsByUser(state3, 'user2')
