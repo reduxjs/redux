@@ -1,6 +1,6 @@
 {
   "name": "@rtk-query/graphql-request-base-query",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "author": {
     "name": "Lenz Weber",
     "email": "mail@phryneas.de",
@@ -23,11 +23,11 @@
   },
   "peerDependencies": {
     "@reduxjs/toolkit": "^1.7.1",
-    "graphql": "^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0"
+    "graphql": "^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.6.0",
-    "graphql": "^15.5.0",
+    "graphql": "^16.5.0",
     "microbundle": "^0.13.3",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.4"

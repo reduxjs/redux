@@ -37,7 +37,7 @@ export type ActionMatcherDescriptionCollection<S> = Array<
 >
 
 /**
- * An *case reducer* is a reducer function for a specific action type. Case
+ * A *case reducer* is a reducer function for a specific action type. Case
  * reducers can be composed to full reducers using `createReducer()`.
  *
  * Unlike a normal Redux reducer, a case reducer is never called with an

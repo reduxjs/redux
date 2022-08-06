@@ -127,7 +127,7 @@ test('fakeBaseQuery throws when invoking query', async () => {
   await expect(async () => {
     result = await store.dispatch(thunk)
   }).toHaveConsoleOutput(
-    `An unhandled error occured processing a request for the endpoint "withQuery".
+    `An unhandled error occurred processing a request for the endpoint "withQuery".
     In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: When using \`fakeBaseQuery\`, all queries & mutations must use the \`queryFn\` definition syntax.]`
   )
 
