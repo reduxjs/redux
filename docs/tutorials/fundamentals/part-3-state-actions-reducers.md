@@ -221,7 +221,7 @@ Based on that list of things that can happen, we can create a list of actions th
 
 - `{type: 'todos/todoAdded', payload: todoText}`
 - `{type: 'todos/todoToggled', payload: todoId}`
-- `{type: 'todos/colorSelected, payload: {todoId, color}}`
+- `{type: 'todos/colorSelected', payload: {todoId, color}}`
 - `{type: 'todos/todoDeleted', payload: todoId}`
 - `{type: 'todos/allCompleted'}`
 - `{type: 'todos/completedCleared'}`
