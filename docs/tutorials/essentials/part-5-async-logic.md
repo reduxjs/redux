@@ -539,7 +539,7 @@ import { selectAllPosts, fetchPosts } from './postsSlice'
 // highlight-start
 const PostExcerpt = ({ post }) => {
   return (
-    <article className="post-excerpt" key={post.id}>
+    <article className="post-excerpt">
       <h3>{post.title}</h3>
       <div>
         <PostAuthor userId={post.user} />
