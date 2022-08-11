@@ -1,13 +1,15 @@
 import type { Api, ApiContext, Module, ModuleName } from './apiTypes'
 import type { CombinedState } from './core/apiState'
 import type { BaseQueryArg, BaseQueryFn } from './baseQueryTypes'
-import type { SerializeQueryArgs } from './defaultSerializeQueryArgs'
-import { defaultSerializeQueryArgs } from './defaultSerializeQueryArgs'
+import {
+  defaultSerializeQueryArgs,
+  SerializeQueryArgs,
+} from './defaultSerializeQueryArgs'
 import type {
   EndpointBuilder,
   EndpointDefinitions,
 } from './endpointDefinitions'
-import { DefinitionType } from './endpointDefinitions'
+import { DefinitionType, isQueryDefinition } from './endpointDefinitions'
 import { nanoid } from '@reduxjs/toolkit'
 import type { AnyAction } from '@reduxjs/toolkit'
 import type { NoInfer } from './tsHelpers'
@@ -236,15 +238,25 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
       })
     )
 
-    const optionsWithDefaults = {
+    const optionsWithDefaults: CreateApiOptions<any, any, any, any> = {
       reducerPath: 'api',
-      serializeQueryArgs: defaultSerializeQueryArgs,
       keepUnusedDataFor: 60,
       refetchOnMountOrArgChange: false,
       refetchOnFocus: false,
       refetchOnReconnect: false,
       ...options,
       extractRehydrationInfo,
+      serializeQueryArgs(queryArgsApi) {
+        let finalSerializeQueryArgs = defaultSerializeQueryArgs
+        if ('serializeQueryArgs' in queryArgsApi.endpointDefinition) {
+          finalSerializeQueryArgs =
+            queryArgsApi.endpointDefinition.serializeQueryArgs!
+        } else if (options.serializeQueryArgs) {
+          finalSerializeQueryArgs = options.serializeQueryArgs
+        }
+
+        return finalSerializeQueryArgs(queryArgsApi)
+      },
       tagTypes: [...(options.tagTypes || [])],
     }
 
@@ -266,8 +278,8 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
       enhanceEndpoints({ addTagTypes, endpoints }) {
         if (addTagTypes) {
           for (const eT of addTagTypes) {
-            if (!optionsWithDefaults.tagTypes.includes(eT as any)) {
-              optionsWithDefaults.tagTypes.push(eT as any)
+            if (!optionsWithDefaults.tagTypes!.includes(eT as any)) {
+              ;(optionsWithDefaults.tagTypes as any[]).push(eT)
             }
           }
         }
@@ -290,7 +302,7 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
     } as Api<BaseQueryFn, {}, string, string, Modules[number]['name']>
 
     const initializedModules = modules.map((m) =>
-      m.init(api as any, optionsWithDefaults, context)
+      m.init(api as any, optionsWithDefaults as any, context)
     )
 
     function injectEndpoints(
@@ -319,6 +331,7 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
 
           continue
         }
+
         context.endpointDefinitions[endpointName] = definition
         for (const m of initializedModules) {
           m.injectEndpoint(endpointName, definition)

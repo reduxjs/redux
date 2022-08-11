@@ -1,4 +1,5 @@
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
+import { SerializeQueryArgs } from './defaultSerializeQueryArgs'
 import type { RootState } from './core/apiState'
 import type {
   BaseQueryExtraOptions,
@@ -272,6 +273,8 @@ export interface QueryExtraOptions<
    * Not to be used. A query should not invalidate tags in the cache.
    */
   invalidatesTags?: never
+
+  serializeQueryArgs?: SerializeQueryArgs<any>
 }
 
 export type QueryDefinition<
