@@ -832,9 +832,14 @@ describe('custom serializeQueryArgs per endpoint', () => {
 
   const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
+    serializeQueryArgs: ({ endpointName, queryArgs }) =>
+      `base-${endpointName}-${queryArgs}`,
     endpoints: (build) => ({
+      queryWithNoSerializer: build.query<SuccessResponse, number>({
+        query: (arg) => `${arg}`,
+      }),
       queryWithCustomSerializer: build.query<SuccessResponse, number>({
-        query: () => ({ url: '/success' }),
+        query: (arg) => `${arg}`,
         serializeQueryArgs: serializer1,
       }),
     }),
@@ -843,18 +848,25 @@ describe('custom serializeQueryArgs per endpoint', () => {
   const storeRef = setupApiStore(api)
 
   it('Works via createApi', async () => {
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithNoSerializer.initiate(99)
+    )
+
     expect(serializer1).toHaveBeenCalledTimes(0)
 
     await storeRef.store.dispatch(
-      api.endpoints.queryWithCustomSerializer.initiate(5)
+      api.endpoints.queryWithCustomSerializer.initiate(42)
     )
 
-    const firstRef = api.endpoints.queryWithCustomSerializer.select(5)(
-      storeRef.store.getState()
-    )
     expect(serializer1).toHaveBeenCalled()
 
-    expect(firstRef.data).toEqual({ value: 'success' })
+    expect(
+      storeRef.store.getState().api.queries['base-queryWithNoSerializer-99']
+    ).toBeTruthy()
+
+    expect(
+      storeRef.store.getState().api.queries['queryWithCustomSerializer-42']
+    ).toBeTruthy()
   })
 
   const serializer2 = jest.fn(customArgsSerializer)
@@ -862,7 +874,7 @@ describe('custom serializeQueryArgs per endpoint', () => {
   const injectedApi = api.injectEndpoints({
     endpoints: (build) => ({
       injectedQueryWithCustomSerializer: build.query<SuccessResponse, number>({
-        query: () => ({ url: '/success' }),
+        query: (arg) => `${arg}`,
         serializeQueryArgs: serializer2,
       }),
     }),
@@ -875,12 +887,11 @@ describe('custom serializeQueryArgs per endpoint', () => {
       injectedApi.endpoints.injectedQueryWithCustomSerializer.initiate(5)
     )
 
-    const firstRef =
-      injectedApi.endpoints.injectedQueryWithCustomSerializer.select(5)(
-        storeRef.store.getState()
-      )
     expect(serializer2).toHaveBeenCalled()
-
-    expect(firstRef.data).toEqual({ value: 'success' })
+    expect(
+      storeRef.store.getState().api.queries[
+        'injectedQueryWithCustomSerializer-5'
+      ]
+    ).toBeTruthy()
   })
 })
