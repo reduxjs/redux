@@ -6,17 +6,18 @@ import ApiGenerator, {
   getReferenceName,
   isReference,
   supportDeepObjects,
-} from 'oazapfts/lib/codegen/generate';
+} from '@rtk-query/oazapfts-patched/lib/codegen/generate';
 import {
   createQuestionToken,
   keywordType,
   createPropertyAssignment,
   isValidIdentifier,
-} from 'oazapfts/lib/codegen/tscodegen';
+} from '@rtk-query/oazapfts-patched/lib/codegen/tscodegen';
 import type { OpenAPIV3 } from 'openapi-types';
 import { generateReactHooks } from './generators/react-hooks';
 import type { EndpointMatcher, EndpointOverrides, GenerationOptions, OperationDefinition, TextMatcher } from './types';
 import { capitalize, getOperationDefinitions, getV3Doc, isQuery as testIsQuery, removeUndefined } from './utils';
+import { generateTagTypes } from './codegen';
 import type { ObjectPropertyDefinitions } from './codegen';
 import { generateCreateApiCall, generateEndpointDefinition, generateImportNode } from './codegen';
 import { factory } from './utils/factory';
@@ -30,6 +31,10 @@ function defaultIsDataResponse(code: string) {
 
 function getOperationName({ verb, path, operation }: Pick<OperationDefinition, 'verb' | 'path' | 'operation'>) {
   return _getOperationName(verb, path, operation.operationId);
+}
+
+function getTags({ verb, pathItem }: Pick<OperationDefinition, 'verb' | 'pathItem'>): string[] {
+  return verb ? pathItem[verb]?.tags || [] : [];
 }
 
 function patternMatches(pattern?: TextMatcher) {
@@ -51,6 +56,19 @@ function operationMatches(pattern?: EndpointMatcher) {
   };
 }
 
+function withQueryComment<T extends ts.Node>(node: T, def: QueryArgDefinition, hasTrailingNewLine: boolean): T {
+  const comment = def.origin === 'param' ? def.param.description : def.body.description;
+  if (comment) {
+    return ts.addSyntheticLeadingComment(
+      node,
+      ts.SyntaxKind.MultiLineCommentTrivia,
+      `* ${comment} `,
+      hasTrailingNewLine
+    );
+  }
+  return node;
+}
+
 export function getOverrides(
   operation: OperationDefinition,
   endpointOverrides?: EndpointOverrides[]
@@ -67,15 +85,20 @@ export async function generateApi(
     argSuffix = 'ApiArg',
     responseSuffix = 'ApiResponse',
     hooks = false,
+    tag = false,
     outputFile,
     isDataResponse = defaultIsDataResponse,
     filterEndpoints,
     endpointOverrides,
+    unionUndefined,
+    flattenArg = false,
   }: GenerationOptions
 ) {
   const v3Doc = await getV3Doc(spec);
 
-  const apiGen = new ApiGenerator(v3Doc, {});
+  const apiGen = new ApiGenerator(v3Doc, {
+    unionUndefined,
+  });
 
   const operationDefinitions = getOperationDefinitions(v3Doc).filter(operationMatches(filterEndpoints));
 
@@ -102,7 +125,7 @@ export async function generateApi(
     outputFile = path.resolve(process.cwd(), outputFile);
     if (apiFile.startsWith('.')) {
       apiFile = path.relative(path.dirname(outputFile), apiFile);
-      apiFile = apiFile.replace(/\\/g, '/')
+      apiFile = apiFile.replace(/\\/g, '/');
       if (!apiFile.startsWith('.')) apiFile = './' + apiFile;
     }
   }
@@ -113,7 +136,9 @@ export async function generateApi(
     factory.createSourceFile(
       [
         generateImportNode(apiFile, { [apiImport]: 'api' }),
+        ...(tag ? [generateTagTypes({ addTagTypes: extractAllTagTypes({ operationDefinitions }) })] : []),
         generateCreateApiCall({
+          tag,
           endpointDefinitions: factory.createObjectLiteralExpression(
             operationDefinitions.map((operationDefinition) =>
               generateEndpoint({
@@ -139,7 +164,14 @@ export async function generateApi(
         ...Object.values(interfaces),
         ...apiGen['aliases'],
         ...(hooks
-          ? [generateReactHooks({ exportName: generatedApiName, operationDefinitions, endpointOverrides })]
+          ? [
+              generateReactHooks({
+                exportName: generatedApiName,
+                operationDefinitions,
+                endpointOverrides,
+                config: hooks,
+              }),
+            ]
           : []),
       ],
       factory.createToken(ts.SyntaxKind.EndOfFileToken),
@@ -149,6 +181,18 @@ export async function generateApi(
   );
 
   return sourceCode;
+
+  function extractAllTagTypes({ operationDefinitions }: { operationDefinitions: OperationDefinition[] }) {
+    let allTagTypes = new Set<string>();
+
+    for (const operationDefinition of operationDefinitions) {
+      const { verb, pathItem } = operationDefinition;
+      for (const tag of getTags({ verb, pathItem })) {
+        allTagTypes.add(tag);
+      }
+    }
+    return [...allTagTypes];
+  }
 
   function generateEndpoint({
     operationDefinition,
@@ -165,7 +209,7 @@ export async function generateApi(
       operation: { responses, requestBody },
     } = operationDefinition;
     const operationName = getOperationName({ verb, path, operation });
-
+    const tags = tag ? getTags({ verb, pathItem }) : [];
     const isQuery = testIsQuery(verb, overrides);
 
     const returnsJson = apiGen.getResponseType(responses) === 'json';
@@ -260,6 +304,8 @@ export async function generateApi(
 
     const queryArgValues = Object.values(queryArg);
 
+    const isFlatArg = flattenArg && queryArgValues.length === 1;
+
     const QueryArg = factory.createTypeReferenceNode(
       registerInterface(
         factory.createTypeAliasDeclaration(
@@ -268,27 +314,22 @@ export async function generateApi(
           capitalize(operationName + argSuffix),
           undefined,
           queryArgValues.length > 0
-            ? factory.createTypeLiteralNode(
-                queryArgValues.map((def) => {
-                  const comment = def.origin === 'param' ? def.param.description : def.body.description;
-                  const node = factory.createPropertySignature(
-                    undefined,
-                    propertyName(def.name),
-                    createQuestionToken(!def.required),
-                    def.type
-                  );
-
-                  if (comment) {
-                    return ts.addSyntheticLeadingComment(
-                      node,
-                      ts.SyntaxKind.MultiLineCommentTrivia,
-                      `* ${comment} `,
+            ? isFlatArg
+              ? withQueryComment({ ...queryArgValues[0].type }, queryArgValues[0], false)
+              : factory.createTypeLiteralNode(
+                  queryArgValues.map((def) =>
+                    withQueryComment(
+                      factory.createPropertySignature(
+                        undefined,
+                        propertyName(def.name),
+                        createQuestionToken(!def.required),
+                        def.type
+                      ),
+                      def,
                       true
-                    );
-                  }
-                  return node;
-                })
-              )
+                    )
+                  )
+                )
             : factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)
         )
       ).name
@@ -299,35 +340,52 @@ export async function generateApi(
       type: isQuery ? 'query' : 'mutation',
       Response: ResponseTypeName,
       QueryArg,
-      queryFn: generateQueryFn({ operationDefinition, queryArg, isQuery }),
+      queryFn: generateQueryFn({ operationDefinition, queryArg, isQuery, isFlatArg }),
       extraEndpointsProps: isQuery
         ? generateQueryEndpointProps({ operationDefinition })
         : generateMutationEndpointProps({ operationDefinition }),
+      tags,
     });
   }
 
   function generateQueryFn({
     operationDefinition,
     queryArg,
+    isFlatArg,
     isQuery,
   }: {
     operationDefinition: OperationDefinition;
     queryArg: QueryArgDefinitions;
+    isFlatArg: boolean;
     isQuery: boolean;
   }) {
     const { path, verb } = operationDefinition;
 
-    const pathParameters = Object.values(queryArg).filter((def) => def.origin === 'param' && def.param.in === 'path');
-    const queryParameters = Object.values(queryArg).filter((def) => def.origin === 'param' && def.param.in === 'query');
-    const headerParameters = Object.values(queryArg).filter(
-      (def) => def.origin === 'param' && def.param.in === 'header'
-    );
-    const cookieParameters = Object.values(queryArg).filter(
-      (def) => def.origin === 'param' && def.param.in === 'cookie'
-    );
     const bodyParameter = Object.values(queryArg).find((def) => def.origin === 'body');
 
     const rootObject = factory.createIdentifier('queryArg');
+
+    function pickParams(paramIn: string) {
+      return Object.values(queryArg).filter((def) => def.origin === 'param' && def.param.in === paramIn);
+    }
+
+    function createObjectLiteralProperty(parameters: QueryArgDefinition[], propertyName: string) {
+      return parameters.length === 0
+        ? undefined
+        : factory.createPropertyAssignment(
+            factory.createIdentifier(propertyName),
+            factory.createObjectLiteralExpression(
+              parameters.map(
+                (param) =>
+                  createPropertyAssignment(
+                    param.originalName,
+                    isFlatArg ? rootObject : accessProperty(rootObject, param.name)
+                  ),
+                true
+              )
+            )
+          );
+    }
 
     return factory.createArrowFunction(
       undefined,
@@ -352,7 +410,7 @@ export async function generateApi(
           [
             factory.createPropertyAssignment(
               factory.createIdentifier('url'),
-              generatePathExpression(path, pathParameters, rootObject)
+              generatePathExpression(path, pickParams('path'), rootObject, isFlatArg)
             ),
             isQuery && verb.toUpperCase() === 'GET'
               ? undefined
@@ -364,26 +422,13 @@ export async function generateApi(
               ? undefined
               : factory.createPropertyAssignment(
                   factory.createIdentifier('body'),
-                  factory.createPropertyAccessExpression(rootObject, factory.createIdentifier(bodyParameter.name))
+                  isFlatArg
+                    ? rootObject
+                    : factory.createPropertyAccessExpression(rootObject, factory.createIdentifier(bodyParameter.name))
                 ),
-            cookieParameters.length === 0
-              ? undefined
-              : factory.createPropertyAssignment(
-                  factory.createIdentifier('cookies'),
-                  generateQuerArgObjectLiteralExpression(cookieParameters, rootObject)
-                ),
-            headerParameters.length === 0
-              ? undefined
-              : factory.createPropertyAssignment(
-                  factory.createIdentifier('headers'),
-                  generateQuerArgObjectLiteralExpression(headerParameters, rootObject)
-                ),
-            queryParameters.length === 0
-              ? undefined
-              : factory.createPropertyAssignment(
-                  factory.createIdentifier('params'),
-                  generateQuerArgObjectLiteralExpression(queryParameters, rootObject)
-                ),
+            createObjectLiteralProperty(pickParams('cookie'), 'cookies'),
+            createObjectLiteralProperty(pickParams('header'), 'headers'),
+            createObjectLiteralProperty(pickParams('query'), 'params'),
           ].filter(removeUndefined),
           false
         )
@@ -408,7 +453,12 @@ function accessProperty(rootObject: ts.Identifier, propertyName: string) {
     : factory.createElementAccessExpression(rootObject, factory.createStringLiteral(propertyName));
 }
 
-function generatePathExpression(path: string, pathParameters: QueryArgDefinition[], rootObject: ts.Identifier) {
+function generatePathExpression(
+  path: string,
+  pathParameters: QueryArgDefinition[],
+  rootObject: ts.Identifier,
+  isFlatArg: boolean
+) {
   const expressions: Array<[string, string]> = [];
 
   const head = path.replace(/\{(.*?)\}(.*?)(?=\{|$)/g, (_, expression, literal) => {
@@ -425,7 +475,7 @@ function generatePathExpression(path: string, pathParameters: QueryArgDefinition
         factory.createTemplateHead(head),
         expressions.map(([prop, literal], index) =>
           factory.createTemplateSpan(
-            accessProperty(rootObject, prop),
+            isFlatArg ? rootObject : accessProperty(rootObject, prop),
             index === expressions.length - 1
               ? factory.createTemplateTail(literal)
               : factory.createTemplateMiddle(literal)
@@ -433,12 +483,6 @@ function generatePathExpression(path: string, pathParameters: QueryArgDefinition
         )
       )
     : factory.createNoSubstitutionTemplateLiteral(head);
-}
-
-function generateQuerArgObjectLiteralExpression(queryArgs: QueryArgDefinition[], rootObject: ts.Identifier) {
-  return factory.createObjectLiteralExpression(
-    queryArgs.map((param) => createPropertyAssignment(param.originalName, accessProperty(rootObject, param.name)), true)
-  );
 }
 
 type QueryArgDefinition = {
