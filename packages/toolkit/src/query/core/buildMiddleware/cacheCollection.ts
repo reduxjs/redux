@@ -28,6 +28,13 @@ declare module '../../endpointDefinitions' {
   }
 }
 
+// Per https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#maximum_delay_value , browsers store
+// `setTimeout()` timer values in a 32-bit int. If we pass a value in that's larger than that,
+// it wraps and ends up executing immediately.
+// Our `keepUnusedDataFor` values are in seconds, so adjust the numbers here accordingly.
+export const THIRTY_TWO_BIT_MAX_INT = 2_147_483_647
+export const THIRTY_TWO_BIT_MAX_TIMER_SECONDS = 2_147_483_647 / 1_000 - 1
+
 export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
   const { removeQueryResult, unsubscribeQueryResult } = api.internalActions
 
@@ -87,6 +94,14 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
       ] as QueryDefinition<any, any, any, any>
       const keepUnusedDataFor =
         endpointDefinition?.keepUnusedDataFor ?? config.keepUnusedDataFor
+      // Prevent `setTimeout` timers from overflowing a 32-bit internal int, by
+      // clamping the max value to be at most 1000ms less than the 32-bit max.
+      // Look, a 24.8-day keepalive ought to be enough for anybody, right? :)
+      // Also avoid negative values too.
+      const finalKeepUnusedDataFor = Math.max(
+        0,
+        Math.min(keepUnusedDataFor, THIRTY_TWO_BIT_MAX_TIMER_SECONDS)
+      )
 
       const currentTimeout = currentRemovalTimeouts[queryCacheKey]
       if (currentTimeout) {
@@ -99,7 +114,7 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
           api.dispatch(removeQueryResult({ queryCacheKey }))
         }
         delete currentRemovalTimeouts![queryCacheKey]
-      }, keepUnusedDataFor * 1000)
+      }, finalKeepUnusedDataFor * 1000)
     }
   }
 }
