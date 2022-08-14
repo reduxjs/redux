@@ -4,7 +4,7 @@ import { compose } from 'redux'
 /**
  * @public
  */
-export interface EnhancerOptions {
+export interface DevToolsEnhancerOptions {
   /**
    * the instance name to be showed on the monitor page. Default value is `document.title`.
    * If not specified and there's no document title, it will consist of `tabId` and `instanceId`.
@@ -29,26 +29,58 @@ export interface EnhancerOptions {
    */
   maxAge?: number
   /**
-   * - `undefined` - will use regular `JSON.stringify` to send data (it's the fast mode).
-   * - `false` - will handle also circular references.
-   * - `true` - will handle also date, regex, undefined, error objects, symbols, maps, sets and functions.
-   * - object, which contains `date`, `regex`, `undefined`, `error`, `symbol`, `map`, `set` and `function` keys.
-   *   For each of them you can indicate if to include (by setting as `true`).
-   *   For `function` key you can also specify a custom function which handles serialization.
-   *   See [`jsan`](https://github.com/kolodny/jsan) for more details.
+   * Customizes how actions and state are serialized and deserialized. Can be a boolean or object. If given a boolean, the behavior is the same as if you
+   * were to pass an object and specify `options` as a boolean. Giving an object allows fine-grained customization using the `replacer` and `reviver`
+   * functions.
    */
   serialize?:
     | boolean
     | {
-        date?: boolean
-        regex?: boolean
-        undefined?: boolean
-        error?: boolean
-        symbol?: boolean
-        map?: boolean
-        set?: boolean
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        function?: boolean | Function
+        /**
+         * - `undefined` - will use regular `JSON.stringify` to send data (it's the fast mode).
+         * - `false` - will handle also circular references.
+         * - `true` - will handle also date, regex, undefined, error objects, symbols, maps, sets and functions.
+         * - object, which contains `date`, `regex`, `undefined`, `error`, `symbol`, `map`, `set` and `function` keys.
+         *   For each of them you can indicate if to include (by setting as `true`).
+         *   For `function` key you can also specify a custom function which handles serialization.
+         *   See [`jsan`](https://github.com/kolodny/jsan) for more details.
+         */
+        options?:
+          | undefined
+          | boolean
+          | {
+              date?: true
+              regex?: true
+              undefined?: true
+              error?: true
+              symbol?: true
+              map?: true
+              set?: true
+              function?: true | ((fn: (...args: any[]) => any) => string)
+            }
+        /**
+         * [JSON replacer function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter) used for both actions and states stringify.
+         * In addition, you can specify a data type by adding a [`__serializedType__`](https://github.com/zalmoxisus/remotedev-serialize/blob/master/helpers/index.js#L4)
+         * key. So you can deserialize it back while importing or persisting data.
+         * Moreover, it will also [show a nice preview showing the provided custom type](https://cloud.githubusercontent.com/assets/7957859/21814330/a17d556a-d761-11e6-85ef-159dd12f36c5.png):
+         */
+        replacer?: (key: string, value: unknown) => any
+        /**
+         * [JSON `reviver` function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#Using_the_reviver_parameter)
+         * used for parsing the imported actions and states. See [`remotedev-serialize`](https://github.com/zalmoxisus/remotedev-serialize/blob/master/immutable/serialize.js#L8-L41)
+         * as an example on how to serialize special data types and get them back.
+         */
+        reviver?: (key: string, value: unknown) => any
+        /**
+         * Automatically serialize/deserialize immutablejs via [remotedev-serialize](https://github.com/zalmoxisus/remotedev-serialize).
+         * Just pass the Immutable library. It will support all ImmutableJS structures. You can even export them into a file and get them back.
+         * The only exception is `Record` class, for which you should pass this in addition the references to your classes in `refs`.
+         */
+        immutable?: any
+        /**
+         * ImmutableJS `Record` classes used to make possible restore its instances back when importing, persisting...
+         */
+        refs?: any
       }
   /**
    * function which takes `action` object and id number as arguments, and should return `action` object back.
@@ -187,7 +219,7 @@ export interface EnhancerOptions {
 type Compose = typeof compose
 
 interface ComposeWithDevTools {
-  (options: EnhancerOptions): Compose
+  (options: DevToolsEnhancerOptions): Compose
   <StoreExt>(...funcs: StoreEnhancer<StoreExt>[]): StoreEnhancer<StoreExt>
 }
 
@@ -208,7 +240,7 @@ export const composeWithDevTools: ComposeWithDevTools =
  * @public
  */
 export const devToolsEnhancer: {
-  (options: EnhancerOptions): StoreEnhancer<any>
+  (options: DevToolsEnhancerOptions): StoreEnhancer<any>
 } =
   typeof window !== 'undefined' && (window as any).__REDUX_DEVTOOLS_EXTENSION__
     ? (window as any).__REDUX_DEVTOOLS_EXTENSION__
