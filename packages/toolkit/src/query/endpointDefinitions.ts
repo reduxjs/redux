@@ -275,6 +275,25 @@ export interface QueryExtraOptions<
   invalidatesTags?: never
 
   serializeQueryArgs?: SerializeQueryArgs<any>
+
+  /**
+   * Can be provided to merge the current cache value into the new cache value.
+   * If supplied, no automatic structural sharing will be applied - it's up to
+   * you to update the cache appropriately.
+   *
+   * Since this is wrapped with Immer, you , you may either mutate the `currentCacheValue` directly,
+   * or return a new value, but _not_ both at once.   *
+   *
+   * Will only be called if the existing `currentCacheValue` is not `undefined`.
+   *
+   * Useful if you don't want a new request to completely override the current cache value,
+   * maybe because you have manually updated it from another source and don't want those
+   * updates to get lost.
+   */
+  merge?(
+    currentCacheData: ResultType,
+    responseData: ResultType
+  ): ResultType | void
 }
 
 export type QueryDefinition<

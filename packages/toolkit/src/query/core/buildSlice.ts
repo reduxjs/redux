@@ -6,6 +6,7 @@ import {
   isAnyOf,
   isFulfilled,
   isRejectedWithValue,
+  createNextState,
 } from '@reduxjs/toolkit'
 import type {
   CombinedState as CombinedQueryState,
@@ -27,6 +28,7 @@ import { calculateProvidedByThunk } from './buildThunks'
 import type {
   AssertTagTypes,
   EndpointDefinitions,
+  QueryDefinition,
 } from '../endpointDefinitions'
 import type { Patch } from 'immer'
 import { applyPatches } from 'immer'
@@ -156,11 +158,37 @@ export function buildSlice({
             meta.arg.queryCacheKey,
             (substate) => {
               if (substate.requestId !== meta.requestId) return
+              const { merge } = definitions[
+                meta.arg.endpointName
+              ] as QueryDefinition<any, any, any, any>
               substate.status = QueryStatus.fulfilled
-              substate.data =
-                definitions[meta.arg.endpointName].structuralSharing ?? true
-                  ? copyWithStructuralSharing(substate.data, payload)
-                  : payload
+
+              if (merge) {
+                if (substate.data !== undefined) {
+                  // There's existing cache data. Let the user merge it in themselves.
+                  // We're already inside an Immer-powered reducer, and the user could just mutate `substate.data`
+                  // themselves inside of `merge()`. But, they might also want to return a new value.
+                  // Try to let Immer figure that part out, save the result, and assign it to `substate.data`.
+                  let newData = createNextState(
+                    substate.data,
+                    (draftSubstateData) => {
+                      // As usual with Immer, you can mutate _or_ return inside here, but not both
+                      return merge(draftSubstateData, payload)
+                    }
+                  )
+                  substate.data = newData
+                } else {
+                  // Presumably a fresh request. Just cache the response data.
+                  substate.data = payload
+                }
+              } else {
+                // Assign or safely update the cache data.
+                substate.data =
+                  definitions[meta.arg.endpointName].structuralSharing ?? true
+                    ? copyWithStructuralSharing(substate.data, payload)
+                    : payload
+              }
+
               delete substate.error
               substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
             }

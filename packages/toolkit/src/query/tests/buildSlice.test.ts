@@ -29,6 +29,10 @@ const authSlice = createSlice({
 
 const storeRef = setupApiStore(api, { auth: authSlice.reducer })
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 it('only resets the api state when resetApiState is dispatched', async () => {
   storeRef.store.dispatch({ type: 'unrelated' }) // trigger "registered middleware" into place
   const initialState = storeRef.store.getState()
@@ -76,4 +80,101 @@ it('only resets the api state when resetApiState is dispatched', async () => {
   storeRef.store.dispatch(api.util.resetApiState())
 
   expect(storeRef.store.getState()).toEqual(initialState)
+})
+
+describe.only('`merge` callback', () => {
+  const baseQuery = (args?: any) => ({ data: args })
+
+  interface Todo {
+    id: string
+    text: string
+  }
+
+  it('Calls `merge` once there is existing data, and allows mutations of cache state', async () => {
+    let mergeCalled = false
+    let queryFnCalls = 0
+    const todoTexts = ['A', 'B', 'C', 'D']
+
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        getTodos: build.query<Todo[], void>({
+          async queryFn() {
+            const text = todoTexts[queryFnCalls]
+            return { data: [{ id: `${queryFnCalls++}`, text }] }
+          },
+          merge(currentCacheValue, responseData) {
+            mergeCalled = true
+            currentCacheValue.push(...responseData)
+          },
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+
+    const selectTodoEntry = api.endpoints.getTodos.select()
+
+    const res = storeRef.store.dispatch(api.endpoints.getTodos.initiate())
+    await res
+    expect(mergeCalled).toBe(false)
+    const todoEntry1 = selectTodoEntry(storeRef.store.getState())
+    expect(todoEntry1.data).toEqual([{ id: '0', text: 'A' }])
+
+    res.refetch()
+
+    await delay(10)
+
+    expect(mergeCalled).toBe(true)
+    const todoEntry2 = selectTodoEntry(storeRef.store.getState())
+
+    expect(todoEntry2.data).toEqual([
+      { id: '0', text: 'A' },
+      { id: '1', text: 'B' },
+    ])
+  })
+
+  it('Allows returning a different value from `merge`', async () => {
+    let firstQueryFnCall = true
+
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        getTodos: build.query<Todo[], void>({
+          async queryFn() {
+            const item = firstQueryFnCall
+              ? { id: '0', text: 'A' }
+              : { id: '1', text: 'B' }
+            firstQueryFnCall = false
+            return { data: [item] }
+          },
+          merge(currentCacheValue, responseData) {
+            return responseData
+          },
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+
+    const selectTodoEntry = api.endpoints.getTodos.select()
+
+    const res = storeRef.store.dispatch(api.endpoints.getTodos.initiate())
+    await res
+
+    const todoEntry1 = selectTodoEntry(storeRef.store.getState())
+    expect(todoEntry1.data).toEqual([{ id: '0', text: 'A' }])
+
+    res.refetch()
+
+    await delay(10)
+
+    const todoEntry2 = selectTodoEntry(storeRef.store.getState())
+
+    expect(todoEntry2.data).toEqual([{ id: '1', text: 'B' }])
+  })
 })
