@@ -6,13 +6,15 @@ import {
   getLog,
 } from 'console-testing-library/pure'
 
+type CreateSlice = typeof createSlice
+
 describe('createSlice', () => {
   let restore: () => void
 
   beforeEach(() => {
     restore = mockConsole(createConsole())
   })
-  
+
   describe('when slice is undefined', () => {
     it('should throw an error', () => {
       expect(() =>
@@ -53,7 +55,9 @@ describe('createSlice', () => {
         initialState: undefined,
       })
 
-      expect(getLog().log).toBe('You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`')
+      expect(getLog().log).toBe(
+        'You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`'
+      )
     })
   })
 
@@ -365,6 +369,66 @@ describe('createSlice', () => {
       expect(second.reducer(undefined, second.actions.other())).toBe(
         'secondOther'
       )
+    })
+  })
+
+  describe.only('Deprecation warnings', () => {
+    let originalNodeEnv = process.env.NODE_ENV
+
+    beforeEach(() => {
+      jest.resetModules()
+      restore = mockConsole(createConsole())
+    })
+
+    afterEach(() => {
+      process.env.NODE_ENV = originalNodeEnv
+    })
+
+    // NOTE: This needs to be in front of the later `createReducer` call to check the one-time warning
+    it('Warns about object notation deprecation, once', () => {
+      const { createSlice } = require('../createSlice')
+
+      let dummySlice = (createSlice as CreateSlice)({
+        name: 'dummy',
+        initialState: [],
+        reducers: {},
+        extraReducers: {
+          a: () => [],
+        },
+      })
+      // Have to trigger the lazy creation
+      let { reducer } = dummySlice
+      reducer(undefined, { type: 'dummy' })
+
+      expect(getLog().levels.warn).toMatch(
+        /The object notation for `createSlice.extraReducers` is deprecated/
+      )
+      restore = mockConsole(createConsole())
+
+      dummySlice = (createSlice as CreateSlice)({
+        name: 'dummy',
+        initialState: [],
+        reducers: {},
+        extraReducers: {
+          a: () => [],
+        },
+      })
+      reducer = dummySlice.reducer
+      reducer(undefined, { type: 'dummy' })
+      expect(getLog().levels.warn).toBe('')
+    })
+
+    it('Does not warn in production', () => {
+      process.env.NODE_ENV = 'production'
+      const { createSlice } = require('../createSlice')
+
+      let dummySlice = (createSlice as CreateSlice)({
+        name: 'dummy',
+        initialState: [],
+        reducers: {},
+        extraReducers: {},
+      })
+      expect(getLog().levels.warn).toBe('')
     })
   })
 })
