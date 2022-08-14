@@ -2,6 +2,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { configureStore } from '@reduxjs/toolkit'
 import { waitMs } from './helpers'
 import type { Middleware, Reducer } from 'redux'
+import {
+  THIRTY_TWO_BIT_MAX_INT,
+  THIRTY_TWO_BIT_MAX_TIMER_SECONDS,
+} from '../core/buildMiddleware/cacheCollection'
 
 beforeAll(() => {
   jest.useFakeTimers('legacy')
@@ -49,6 +53,35 @@ test(`query: await cleanup, keepUnusedDataFor set`, async () => {
   jest.advanceTimersByTime(28000), await waitMs()
   expect(onCleanup).not.toHaveBeenCalled()
   jest.advanceTimersByTime(2000), await waitMs()
+  expect(onCleanup).toHaveBeenCalled()
+})
+
+test(`query: handles large keepUnuseDataFor values over 32-bit ms`, async () => {
+  const { store, api } = storeForApi(
+    createApi({
+      baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
+      endpoints: (build) => ({
+        query: build.query<unknown, string>({
+          query: () => '/success',
+        }),
+      }),
+      keepUnusedDataFor: THIRTY_TWO_BIT_MAX_TIMER_SECONDS - 10,
+    })
+  )
+
+  store.dispatch(api.endpoints.query.initiate('arg')).unsubscribe()
+
+  // Shouldn't have been called right away
+  jest.advanceTimersByTime(1000), await waitMs()
+  expect(onCleanup).not.toHaveBeenCalled()
+
+  // Shouldn't have been called any time in the next few minutes
+  jest.advanceTimersByTime(1_000_000), await waitMs()
+  expect(onCleanup).not.toHaveBeenCalled()
+
+  // _Should_ be called _wayyyy_ in the future (like 24.8 days from now)
+  jest.advanceTimersByTime(THIRTY_TWO_BIT_MAX_TIMER_SECONDS * 1000),
+    await waitMs()
   expect(onCleanup).toHaveBeenCalled()
 })
 
