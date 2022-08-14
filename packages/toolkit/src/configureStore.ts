@@ -11,7 +11,7 @@ import type {
   CombinedState,
 } from 'redux'
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
-import type { EnhancerOptions as DevToolsOptions } from './devtoolsExtension'
+import type { DevToolsEnhancerOptions as DevToolsOptions } from './devtoolsExtension'
 import { composeWithDevTools } from './devtoolsExtension'
 
 import isPlainObject from './isPlainObject'
@@ -52,7 +52,7 @@ export interface ConfigureStoreOptions<
   /**
    * An array of Redux middleware to install. If not supplied, defaults to
    * the set of middleware returned by `getDefaultMiddleware()`.
-   * 
+   *
    * @example `middleware: (gDM) => gDM().concat(logger, apiMiddleware, yourCustomMiddleware)`
    * @see https://redux-toolkit.js.org/api/getDefaultMiddleware#intended-usage
    */
