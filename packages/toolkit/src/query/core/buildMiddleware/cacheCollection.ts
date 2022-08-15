@@ -113,6 +113,11 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
       ] as QueryDefinition<any, any, any, any>
       const keepUnusedDataFor =
         endpointDefinition?.keepUnusedDataFor ?? config.keepUnusedDataFor
+
+      if (keepUnusedDataFor === Infinity) {
+        // Hey, user said keep this forever!
+        return
+      }
       // Prevent `setTimeout` timers from overflowing a 32-bit internal int, by
       // clamping the max value to be at most 1000ms less than the 32-bit max.
       // Look, a 24.8-day keepalive ought to be enough for anybody, right? :)

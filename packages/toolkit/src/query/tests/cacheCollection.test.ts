@@ -101,6 +101,10 @@ describe(`query: await cleanup, keepUnusedDataFor set`, () => {
           query: () => '/success',
           keepUnusedDataFor: 0,
         }),
+        query4: build.query<unknown, string>({
+          query: () => '/success',
+          keepUnusedDataFor: Infinity,
+        }),
       }),
       keepUnusedDataFor: 29,
     })
@@ -126,8 +130,17 @@ describe(`query: await cleanup, keepUnusedDataFor set`, () => {
     expect(onCleanup).not.toHaveBeenCalled()
     store.dispatch(api.endpoints.query3.initiate('arg')).unsubscribe()
     expect(onCleanup).not.toHaveBeenCalled()
-    jest.advanceTimersByTime(1), await waitMs()
+    jest.advanceTimersByTime(1)
+    await waitMs()
     expect(onCleanup).toHaveBeenCalled()
+  })
+
+  test('endpoint keepUnusedDataFor: Infinity', async () => {
+    expect(onCleanup).not.toHaveBeenCalled()
+    store.dispatch(api.endpoints.query4.initiate('arg')).unsubscribe()
+    expect(onCleanup).not.toHaveBeenCalled()
+    jest.advanceTimersByTime(THIRTY_TWO_BIT_MAX_INT)
+    expect(onCleanup).not.toHaveBeenCalled()
   })
 })
 
