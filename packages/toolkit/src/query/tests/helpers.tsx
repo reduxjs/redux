@@ -176,14 +176,16 @@ export function setupApiStore<
 >(
   api: A,
   extraReducers?: R,
-  options: { withoutListeners?: boolean; withoutTestLifecycles?: boolean } = {}
+  options: { withoutListeners?: boolean; withoutTestLifecycles?: boolean, middleware?: Middleware[] } = {}
 ) {
+  const { middleware = [] } = options;
   const getStore = () =>
     configureStore({
       reducer: { api: api.reducer, ...extraReducers },
       middleware: (gdm) =>
         gdm({ serializableCheck: false, immutableCheck: false }).concat(
-          api.middleware
+          api.middleware,
+          ...middleware
         ),
     })
 

@@ -17,6 +17,7 @@ import { build as buildWindowEventHandling } from './windowEventHandling'
 import { build as buildCacheLifecycle } from './cacheLifecycle'
 import { build as buildQueryLifecycle } from './queryLifecycle'
 import { build as buildDevMiddleware } from './devMiddleware'
+import { build as buildBatchActions } from './batchActions'
 
 export function buildMiddleware<
   Definitions extends EndpointDefinitions,
@@ -38,6 +39,7 @@ export function buildMiddleware<
     buildWindowEventHandling,
     buildCacheLifecycle,
     buildQueryLifecycle,
+    buildBatchActions,
   ].map((build) =>
     build({
       ...(input as any as BuildMiddlewareInput<

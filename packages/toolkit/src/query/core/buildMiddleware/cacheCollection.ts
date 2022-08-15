@@ -11,6 +11,16 @@ import type {
 
 export type ReferenceCacheCollection = never
 
+function isObjectEmpty(obj: Record<any, any>) {
+  // Apparently a for..in loop is faster than `Object.keys()` here:
+  // https://stackoverflow.com/a/59787784/62937
+  for (let k in obj) {
+    // If there is at least one key, it's not empty
+    return false
+  }
+  return true
+}
+
 declare module '../../endpointDefinitions' {
   interface QueryExtraOptions<
     TagTypes extends string,
@@ -37,6 +47,15 @@ export const THIRTY_TWO_BIT_MAX_TIMER_SECONDS = 2_147_483_647 / 1_000 - 1
 
 export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
   const { removeQueryResult, unsubscribeQueryResult } = api.internalActions
+
+  function anySubscriptionsRemainingForKey(
+    queryCacheKey: string,
+    api: SubMiddlewareApi
+  ) {
+    const subscriptions =
+      api.getState()[reducerPath].subscriptions[queryCacheKey]
+    return !!subscriptions && !isObjectEmpty(subscriptions)
+  }
 
   return (mwApi) => {
     const currentRemovalTimeouts: QueryStateMeta<TimeoutId> = {}
@@ -94,6 +113,11 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
       ] as QueryDefinition<any, any, any, any>
       const keepUnusedDataFor =
         endpointDefinition?.keepUnusedDataFor ?? config.keepUnusedDataFor
+
+      if (keepUnusedDataFor === Infinity) {
+        // Hey, user said keep this forever!
+        return
+      }
       // Prevent `setTimeout` timers from overflowing a 32-bit internal int, by
       // clamping the max value to be at most 1000ms less than the 32-bit max.
       // Look, a 24.8-day keepalive ought to be enough for anybody, right? :)
@@ -103,18 +127,18 @@ export const build: SubMiddlewareBuilder = ({ reducerPath, api, context }) => {
         Math.min(keepUnusedDataFor, THIRTY_TWO_BIT_MAX_TIMER_SECONDS)
       )
 
-      const currentTimeout = currentRemovalTimeouts[queryCacheKey]
-      if (currentTimeout) {
-        clearTimeout(currentTimeout)
-      }
-      currentRemovalTimeouts[queryCacheKey] = setTimeout(() => {
-        const subscriptions =
-          api.getState()[reducerPath].subscriptions[queryCacheKey]
-        if (!subscriptions || Object.keys(subscriptions).length === 0) {
-          api.dispatch(removeQueryResult({ queryCacheKey }))
+      if (!anySubscriptionsRemainingForKey(queryCacheKey, api)) {
+        const currentTimeout = currentRemovalTimeouts[queryCacheKey]
+        if (currentTimeout) {
+          clearTimeout(currentTimeout)
         }
-        delete currentRemovalTimeouts![queryCacheKey]
-      }, finalKeepUnusedDataFor * 1000)
+        currentRemovalTimeouts[queryCacheKey] = setTimeout(() => {
+          if (!anySubscriptionsRemainingForKey(queryCacheKey, api)) {
+            api.dispatch(removeQueryResult({ queryCacheKey }))
+          }
+          delete currentRemovalTimeouts![queryCacheKey]
+        }, finalKeepUnusedDataFor * 1000)
+      }
     }
   }
 }

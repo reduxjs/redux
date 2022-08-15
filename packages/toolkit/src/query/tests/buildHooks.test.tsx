@@ -1162,9 +1162,12 @@ describe('hooks tests', () => {
     })
 
     test('useMutation return value contains originalArgs', async () => {
-      const { result } = renderHook(() => api.endpoints.updateUser.useMutation(), {
-        wrapper: storeRef.wrapper,
-      })
+      const { result } = renderHook(
+        () => api.endpoints.updateUser.useMutation(),
+        {
+          wrapper: storeRef.wrapper,
+        }
+      )
       const arg = { name: 'Foo' }
 
       const firstRenderResult = result.current
@@ -1955,13 +1958,13 @@ describe('hooks with createApi defaults set', () => {
 
       const addBtn = screen.getByTestId('addPost')
 
-      await waitFor(() => expect(getRenderCount()).toBe(3))
+      await waitFor(() => expect(getRenderCount()).toBe(4))
 
       fireEvent.click(addBtn)
-      await waitFor(() => expect(getRenderCount()).toBe(5))
+      await waitFor(() => expect(getRenderCount()).toBe(6))
       fireEvent.click(addBtn)
       fireEvent.click(addBtn)
-      await waitFor(() => expect(getRenderCount()).toBe(7))
+      await waitFor(() => expect(getRenderCount()).toBe(8))
     })
 
     test('useQuery with selectFromResult option serves a deeply memoized value and does not rerender unnecessarily', async () => {
