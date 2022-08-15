@@ -67,12 +67,7 @@ function getSerialize(
  * @public
  */
 export function isImmutableDefault(value: unknown): boolean {
-  return (
-    typeof value !== 'object' ||
-    value === null ||
-    typeof value === 'undefined' ||
-    Object.isFrozen(value)
-  )
+  return typeof value !== 'object' || value == null || Object.isFrozen(value)
 }
 
 export function trackForMutations(

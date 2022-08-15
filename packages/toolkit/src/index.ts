@@ -34,6 +34,7 @@ export type {
   ConfigureStoreOptions,
   EnhancedStore,
 } from './configureStore'
+export type { DevToolsEnhancerOptions } from './devtoolsExtension'
 export {
   // js
   createAction,
@@ -174,6 +175,7 @@ export type {
   TaskResolved,
   TaskResult,
 } from './listenerMiddleware/index'
+export type { AnyListenerPredicate } from './listenerMiddleware/types'
 
 export {
   createListenerMiddleware,

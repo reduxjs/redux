@@ -11,7 +11,7 @@ import type {
   CombinedState,
 } from 'redux'
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
-import type { EnhancerOptions as DevToolsOptions } from './devtoolsExtension'
+import type { DevToolsEnhancerOptions as DevToolsOptions } from './devtoolsExtension'
 import { composeWithDevTools } from './devtoolsExtension'
 
 import isPlainObject from './isPlainObject'
