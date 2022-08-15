@@ -21,6 +21,10 @@ const { getPosts } = api.endpoints
 
 const storeRef = setupApiStore(api)
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 const getSubscribersForQueryCacheKey = (queryCacheKey: string) =>
   storeRef.store.getState()[api.reducerPath].subscriptions[queryCacheKey] || {}
 const createSubscriptionGetter = (queryCacheKey: string) => () =>
@@ -78,6 +82,8 @@ describe('polling tests', () => {
         subscribe: true,
       })
     )
+
+    await delay(10)
 
     const getSubs = createSubscriptionGetter(subscriptionOne.queryCacheKey)
 

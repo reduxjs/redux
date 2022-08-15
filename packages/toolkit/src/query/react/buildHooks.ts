@@ -696,15 +696,24 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         pollingInterval,
       })
 
+      const lastRenderHadSubscription = useRef(false)
+
       const promiseRef = useRef<QueryActionCreatorResult<any>>()
 
       let { queryCacheKey, requestId } = promiseRef.current || {}
-      const subscriptionRemoved = useSelector(
+      const currentRenderHasSubscription = useSelector(
         (state: RootState<Definitions, string, string>) =>
           !!queryCacheKey &&
           !!requestId &&
           !state[api.reducerPath].subscriptions[queryCacheKey]?.[requestId]
       )
+
+      const subscriptionRemoved =
+        !currentRenderHasSubscription && lastRenderHadSubscription.current
+
+      usePossiblyImmediateEffect(() => {
+        lastRenderHadSubscription.current = currentRenderHasSubscription
+      })
 
       usePossiblyImmediateEffect((): void | undefined => {
         promiseRef.current = undefined
@@ -736,6 +745,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
               forceRefetch: refetchOnMountOrArgChange,
             })
           )
+
           promiseRef.current = promise
         } else if (stableSubscriptionOptions !== lastSubscriptionOptions) {
           lastPromise.updateSubscriptionOptions(stableSubscriptionOptions)
@@ -923,8 +933,9 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
           ...options,
         })
 
-        const { data, status, isLoading, isSuccess, isError, error } = queryStateResults;
-        useDebugValue({ data, status, isLoading, isSuccess, isError, error });
+        const { data, status, isLoading, isSuccess, isError, error } =
+          queryStateResults
+        useDebugValue({ data, status, isLoading, isSuccess, isError, error })
 
         return useMemo(
           () => ({ ...queryStateResults, ...querySubscriptionResults }),
@@ -993,8 +1004,24 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         })
       }, [dispatch, fixedCacheKey, promise, requestId])
 
-      const { endpointName, data, status, isLoading, isSuccess, isError, error } = currentState;
-      useDebugValue({ endpointName, data, status, isLoading, isSuccess, isError, error });
+      const {
+        endpointName,
+        data,
+        status,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+      } = currentState
+      useDebugValue({
+        endpointName,
+        data,
+        status,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+      })
 
       const finalState = useMemo(
         () => ({ ...currentState, originalArgs, reset }),

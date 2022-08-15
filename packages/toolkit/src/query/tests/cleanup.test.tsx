@@ -2,12 +2,13 @@
 
 import React from 'react'
 
+import { createListenerMiddleware } from '@reduxjs/toolkit'
 import { createApi, QueryStatus } from '@reduxjs/toolkit/query/react'
-import { render, waitFor } from '@testing-library/react'
+import { render, waitFor, act, screen } from '@testing-library/react'
 import { setupApiStore } from './helpers'
 
 const api = createApi({
-  baseQuery: () => ({ data: null }),
+  baseQuery: () => ({ data: 42 }),
   endpoints: (build) => ({
     a: build.query<unknown, void>({ query: () => '' }),
     b: build.query<unknown, void>({ query: () => '' }),
@@ -19,18 +20,21 @@ let getSubStateA = () => storeRef.store.getState().api.queries['a(undefined)']
 let getSubStateB = () => storeRef.store.getState().api.queries['b(undefined)']
 
 function UsingA() {
-  api.endpoints.a.useQuery()
-  return <></>
+  const { data } = api.endpoints.a.useQuery()
+
+  return <>Result: {data} </>
 }
 
 function UsingB() {
   api.endpoints.b.useQuery()
+
   return <></>
 }
 
 function UsingAB() {
   api.endpoints.a.useQuery()
   api.endpoints.b.useQuery()
+
   return <></>
 }
 
@@ -90,11 +94,15 @@ test('data stays in store when component stays rendered while data for another c
 
   const statusA = getSubStateA()
 
-  rerender(
-    <>
-      <UsingA />
-    </>
-  )
+  await act(async () => {
+    rerender(
+      <>
+        <UsingA />
+      </>
+    )
+
+    jest.advanceTimersByTime(10)
+  })
 
   jest.advanceTimersByTime(120000)
 
@@ -108,8 +116,8 @@ test('data stays in store when one component requiring the data stays in the sto
 
   const { rerender } = render(
     <>
-      <UsingA />
-      <UsingAB />
+      <UsingA key="a" />
+      <UsingAB key="ab" />
     </>,
     { wrapper: storeRef.wrapper }
   )
@@ -121,14 +129,81 @@ test('data stays in store when one component requiring the data stays in the sto
   const statusA = getSubStateA()
   const statusB = getSubStateB()
 
-  rerender(
-    <>
-      <UsingAB />
-    </>
-  )
+  await act(async () => {
+    rerender(
+      <>
+        <UsingAB key="ab" />
+      </>
+    )
+    jest.advanceTimersByTime(10)
+    jest.runAllTimers()
+  })
 
-  jest.advanceTimersByTime(120000)
+  await act(async () => {
+    jest.advanceTimersByTime(120000)
+    jest.runAllTimers()
+  })
 
   expect(getSubStateA()).toEqual(statusA)
   expect(getSubStateB()).toEqual(statusB)
 })
+
+test('Minimizes the number of subscription dispatches when multiple components ask for the same data', async () => {
+  const listenerMiddleware = createListenerMiddleware()
+  const storeRef = setupApiStore(api, undefined, {
+    middleware: [listenerMiddleware.middleware],
+    withoutTestLifecycles: true,
+  })
+
+  let getSubscriptionsA = () =>
+    storeRef.store.getState().api.subscriptions['a(undefined)']
+
+  let actionTypes: string[] = []
+
+  listenerMiddleware.startListening({
+    predicate: () => true,
+    effect: (action) => {
+      actionTypes.push(action.type)
+    },
+  })
+
+  const NUM_LIST_ITEMS = 1000
+
+  function ParentComponent() {
+    const listItems = Array.from({ length: NUM_LIST_ITEMS }).map((_, i) => (
+      <UsingA key={i} />
+    ))
+
+    return <>{listItems}</>
+  }
+
+  const start = Date.now()
+
+  render(<ParentComponent />, {
+    wrapper: storeRef.wrapper,
+  })
+
+  jest.advanceTimersByTime(10)
+
+  await waitFor(() => {
+    return screen.getAllByText(/42/).length > 0
+  })
+
+  const end = Date.now()
+
+  const timeElapsed = end - start
+
+  const subscriptions = getSubscriptionsA()
+
+  expect(Object.keys(subscriptions!).length).toBe(NUM_LIST_ITEMS)
+  // Expected: [
+  //   'api/config/middlewareRegistered',
+  //   'api/executeQuery/pending',
+  //   'api/subscriptions/subscriptionRequestsRejected',
+  //   'api/executeQuery/fulfilled'
+  // ]
+  expect(actionTypes.length).toBe(4)
+  // Could be flaky in CI, but we'll see.
+  // Currently seeing 1000ms in local dev, 6300 without the batching fixes
+  expect(timeElapsed).toBeLessThan(2500)
+}, 25000)
