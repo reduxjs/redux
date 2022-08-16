@@ -1,0 +1,29 @@
+{
+  "name": "@reduxjs/rtk-codemods",
+  "version": "0.0.1",
+  "author": {
+    "name": "Lenz Weber",
+    "email": "mail@phryneas.de",
+    "url": "https://phryneas.de/"
+  },
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test:codemods": "jest --config codemods/jest.config.js"
+  },
+  "dependencies": {
+    "jest": "^27",
+    "jscodeshift": "^0.13.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^27",
+    "@types/jscodeshift": "^0.11.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "dist"
+  ]
+}
