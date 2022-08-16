@@ -623,6 +623,29 @@ const anyAction = { type: 'foo' } as AnyAction
     return test1 + test2
   })
 
+  const thunk3 = typedCAT<
+    number,
+    string,
+    // @ts-expect-error TODO
+    // right now this still errors because
+    // it does not contain `state` and `dispatch`
+    {
+      rejectValue: string
+    }
+  >('foo', (arg, api) => {
+    // correct getState Type
+    const test1: number = api.getState().foo.value
+    // correct dispatch type
+    const test2: number = api.dispatch(
+      (dispatch, getState) => getState().foo.value
+    )
+    if (1 < 2) {
+      // TODO: @ts-expect-error
+      return api.rejectWithValue(5)
+    }
+    return api.rejectWithValue(5)
+  })
+
   const slice = createSlice({
     name: 'foo',
     initialState: { value: 0 },
@@ -633,6 +656,10 @@ const anyAction = { type: 'foo' } as AnyAction
           state.value += action.payload
         })
         .addCase(thunk2.fulfilled, (state, action) => {
+          state.value += action.payload
+        })
+        .addCase(thunk3.rejected, (state, action) => {
+          // @ts-expect-error TODO does not have the right type yet because the config was incomplete
           state.value += action.payload
         })
     },
