@@ -1,6 +1,12 @@
 /* eslint-disable no-lone-blocks */
 import type { AnyAction, SerializedError, AsyncThunk } from '@reduxjs/toolkit'
-import { createAsyncThunk, createReducer, unwrapResult } from '@reduxjs/toolkit'
+import {
+  createAsyncThunk,
+  createReducer,
+  unwrapResult,
+  createSlice,
+  configureStore,
+} from '@reduxjs/toolkit'
 import type { ThunkDispatch } from 'redux-thunk'
 
 import type { AxiosError } from 'axios'
@@ -589,4 +595,55 @@ const anyAction = { type: 'foo' } as AnyAction
     // @ts-expect-error wrong rejectValue type
     async (_, api) => api.rejectWithValue(5, '')
   )
+}
+
+{
+  const typedCAT = createAsyncThunk.forTypes<{
+    state: RootState
+    dispatch: AppDispatch
+  }>()
+
+  const thunk = typedCAT('foo', (arg: number, api) => {
+    // correct getState Type
+    const test1: number = api.getState().foo.value
+    // correct dispatch type
+    const test2: number = api.dispatch(
+      (dispatch, getState) => getState().foo.value
+    )
+    return test1 + test2
+  })
+
+  const thunk2 = typedCAT<number, string>('foo', (arg, api) => {
+    // correct getState Type
+    const test1: number = api.getState().foo.value
+    // correct dispatch type
+    const test2: number = api.dispatch(
+      (dispatch, getState) => getState().foo.value
+    )
+    return test1 + test2
+  })
+
+  const slice = createSlice({
+    name: 'foo',
+    initialState: { value: 0 },
+    reducers: {},
+    extraReducers(builder) {
+      builder
+        .addCase(thunk.fulfilled, (state, action) => {
+          state.value += action.payload
+        })
+        .addCase(thunk2.fulfilled, (state, action) => {
+          state.value += action.payload
+        })
+    },
+  })
+
+  const store = configureStore({
+    reducer: {
+      foo: slice.reducer,
+    },
+  })
+
+  type RootState = ReturnType<typeof store.getState>
+  type AppDispatch = typeof store.dispatch
 }
