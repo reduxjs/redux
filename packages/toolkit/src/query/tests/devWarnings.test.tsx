@@ -340,6 +340,34 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 
+  test('error thrown in `transformErrorResponse`', async () => {
+    const api = createApi({
+      baseQuery() {
+        return { error: {} }
+      },
+      endpoints: (build) => ({
+        // @ts-ignore TS doesn't like `() => never` for `tER`
+        transformErRspn: build.query<number, void>({
+          // @ts-ignore TS doesn't like `() => never` for `tER`
+          query: () => '/dummy',
+          // @ts-ignore TS doesn't like `() => never` for `tER`
+          transformErrorResponse() {
+            throw new Error('this was kinda expected')
+          },
+        }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.transformErRspn.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occurred processing a request for the endpoint "transformErRspn".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+
   test('`fetchBaseQuery`: error thrown in `prepareHeaders`', async () => {
     const api = createApi({
       baseQuery: fetchBaseQuery({

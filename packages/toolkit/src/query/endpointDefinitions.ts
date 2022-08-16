@@ -65,6 +65,14 @@ interface EndpointDefinitionWithQuery<
     arg: QueryArg
   ): ResultType | Promise<ResultType>
   /**
+   * A function to manipulate the data returned by a failed query or mutation.
+   */
+  transformErrorResponse?(
+    baseQueryReturnValue: BaseQueryError<BaseQuery>,
+    meta: BaseQueryMeta<BaseQuery>,
+    arg: QueryArg
+  ): unknown
+  /**
    * Defaults to `true`.
    *
    * Most apps should leave this setting on. The only time it can be a performance issue
@@ -130,6 +138,7 @@ interface EndpointDefinitionWithQueryFn<
   ): MaybePromise<QueryReturnValue<ResultType, BaseQueryError<BaseQuery>>>
   query?: never
   transformResponse?: never
+  transformErrorResponse?: never
   /**
    * Defaults to `true`.
    *
@@ -425,6 +434,8 @@ export type EndpointBuilder<
    *      query: (id) => ({ url: `post/${id}` }),
    *      // Pick out data and prevent nested properties in a hook or selector
    *      transformResponse: (response) => response.data,
+   *      // Pick out error and prevent nested properties in a hook or selector
+   *      transformErrorResponse: (response) => response.error,
    *      // `result` is the server response
    *      providesTags: (result, error, id) => [{ type: 'Post', id }],
    *      // trigger side effects or optimistic updates
@@ -455,6 +466,8 @@ export type EndpointBuilder<
    *       query: ({ id, ...patch }) => ({ url: `post/${id}`, method: 'PATCH', body: patch }),
    *       // Pick out data and prevent nested properties in a hook or selector
    *       transformResponse: (response) => response.data,
+   *       // Pick out error and prevent nested properties in a hook or selector
+   *       transformErrorResponse: (response) => response.error,
    *       // `result` is the server response
    *       invalidatesTags: (result, error, id) => [{ type: 'Post', id }],
    *      // trigger side effects or optimistic updates

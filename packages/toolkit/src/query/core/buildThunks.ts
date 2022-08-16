@@ -353,22 +353,46 @@ export function buildThunks<
         }
       )
     } catch (error) {
-      if (error instanceof HandledError) {
-        return rejectWithValue(error.value, { baseQueryMeta: error.meta })
+      let catchedError = error
+      if (catchedError instanceof HandledError) {
+        let transformErrorResponse: (
+          baseQueryReturnValue: any,
+          meta: any,
+          arg: any
+        ) => any = defaultTransformResponse
+
+        if (
+          endpointDefinition.query &&
+          endpointDefinition.transformErrorResponse
+        ) {
+          transformErrorResponse = endpointDefinition.transformErrorResponse
+        }
+        try {
+          return rejectWithValue(
+            await transformErrorResponse(
+              catchedError.value,
+              catchedError.meta,
+              arg.originalArgs
+            ),
+            { baseQueryMeta: catchedError.meta }
+          )
+        } catch (e) {
+          catchedError = e
+        }
       }
       if (
         typeof process !== 'undefined' &&
-        process.env.NODE_ENV === 'development'
+        process.env.NODE_ENV !== 'production'
       ) {
         console.error(
           `An unhandled error occurred processing a request for the endpoint "${arg.endpointName}".
 In the case of an unhandled error, no tags will be "provided" or "invalidated".`,
-          error
+          catchedError
         )
       } else {
-        console.error(error)
+        console.error(catchedError)
       }
-      throw error
+      throw catchedError
     }
   }
 

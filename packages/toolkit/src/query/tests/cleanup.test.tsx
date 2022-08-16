@@ -177,8 +177,6 @@ test('Minimizes the number of subscription dispatches when multiple components a
     return <>{listItems}</>
   }
 
-  const start = Date.now()
-
   render(<ParentComponent />, {
     wrapper: storeRef.wrapper,
   })
@@ -188,10 +186,6 @@ test('Minimizes the number of subscription dispatches when multiple components a
   await waitFor(() => {
     return screen.getAllByText(/42/).length > 0
   })
-
-  const end = Date.now()
-
-  const timeElapsed = end - start
 
   const subscriptions = getSubscriptionsA()
 
@@ -203,7 +197,4 @@ test('Minimizes the number of subscription dispatches when multiple components a
   //   'api/executeQuery/fulfilled'
   // ]
   expect(actionTypes.length).toBe(4)
-  // Could be flaky in CI, but we'll see.
-  // Currently seeing 1000ms in local dev, 6300 without the batching fixes
-  expect(timeElapsed).toBeLessThan(2500)
 }, 25000)

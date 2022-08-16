@@ -60,7 +60,7 @@ declare module '../../endpointDefinitions' {
         error: unknown
         meta?: undefined
         /**
-         * If this is `true`, that means that this error is the result of `baseQueryFn`, `queryFn` or `transformResponse` throwing an error instead of handling it properly.
+         * If this is `true`, that means that this error is the result of `baseQueryFn`, `queryFn`, `transformResponse` or `transformErrorResponse` throwing an error instead of handling it properly.
          * There can not be made any assumption about the shape of `error`.
          */
         isUnhandledError: true

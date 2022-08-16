@@ -9,9 +9,9 @@ import type { QuerySubState } from '@reduxjs/toolkit/dist/query/core/apiState'
 
 describe('queryFn base implementation tests', () => {
   const baseQuery: BaseQueryFn<string, { wrappedByBaseQuery: string }, string> =
-    jest.fn((arg: string) => ({
-      data: { wrappedByBaseQuery: arg },
-    }))
+    jest.fn((arg: string) => arg.includes('withErrorQuery')
+      ? ({ error: `cut${arg}` })
+      : ({ data: { wrappedByBaseQuery: arg } }))
 
   const api = createApi({
     baseQuery,
@@ -22,6 +22,14 @@ describe('queryFn base implementation tests', () => {
         },
         transformResponse(response) {
           return response.wrappedByBaseQuery
+        },
+      }),
+      withErrorQuery: build.query<string, string>({
+        query(arg: string) {
+          return `resultFrom(${arg})`
+        },
+        transformErrorResponse(response) {
+          return response.slice(3)
         },
       }),
       withQueryFn: build.query<string, string>({
@@ -141,6 +149,7 @@ describe('queryFn base implementation tests', () => {
 
   const {
     withQuery,
+    withErrorQuery,
     withQueryFn,
     withErrorQueryFn,
     withThrowingQueryFn,
@@ -166,6 +175,7 @@ describe('queryFn base implementation tests', () => {
 
   test.each([
     ['withQuery', withQuery, 'data'],
+    ['withErrorQuery', withErrorQuery, 'error'],
     ['withQueryFn', withQueryFn, 'data'],
     ['withErrorQueryFn', withErrorQueryFn, 'error'],
     ['withThrowingQueryFn', withThrowingQueryFn, 'throw'],

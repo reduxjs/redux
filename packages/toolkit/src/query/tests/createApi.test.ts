@@ -516,6 +516,7 @@ describe('endpoint definition typings', () => {
 describe('additional transformResponse behaviors', () => {
   type SuccessResponse = { value: 'success' }
   type EchoResponseData = { banana: 'bread' }
+  type ErrorResponse = { value: 'error' }
   const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
     endpoints: (build) => ({
@@ -530,6 +531,16 @@ describe('additional transformResponse behaviors', () => {
         }),
         transformResponse: (response: { body: { nested: EchoResponseData } }) =>
           response.body.nested,
+      }),
+      mutationWithError: build.mutation({
+        query: () => ({
+          url: '/error',
+          method: 'POST',
+        }),
+        transformErrorResponse: (response) => {
+          const data = response.data as ErrorResponse
+          return data.value
+        },
       }),
       mutationWithMeta: build.mutation({
         query: () => ({
@@ -594,6 +605,14 @@ describe('additional transformResponse behaviors', () => {
     )
 
     expect('data' in result && result.data).toEqual({ banana: 'bread' })
+  })
+
+  test('transformResponse transforms a response from a mutation with an error', async () => {
+    const result = await storeRef.store.dispatch(
+      api.endpoints.mutationWithError.initiate({})
+    )
+
+    expect('error' in result && result.error).toEqual('error')
   })
 
   test('transformResponse can inject baseQuery meta into the end result from a mutation', async () => {
