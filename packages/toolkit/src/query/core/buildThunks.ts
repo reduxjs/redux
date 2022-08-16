@@ -356,18 +356,25 @@ export function buildThunks<
       let catchedError = error
       if (catchedError instanceof HandledError) {
         let transformErrorResponse: (
-            baseQueryReturnValue: any,
-            meta: any,
-            arg: any
+          baseQueryReturnValue: any,
+          meta: any,
+          arg: any
         ) => any = defaultTransformResponse
 
-        if (endpointDefinition.query && endpointDefinition.transformErrorResponse) {
+        if (
+          endpointDefinition.query &&
+          endpointDefinition.transformErrorResponse
+        ) {
           transformErrorResponse = endpointDefinition.transformErrorResponse
         }
         try {
           return rejectWithValue(
-              await transformErrorResponse(catchedError.value, catchedError.meta, arg.originalArgs),
-              { baseQueryMeta: catchedError.meta }
+            await transformErrorResponse(
+              catchedError.value,
+              catchedError.meta,
+              arg.originalArgs
+            ),
+            { baseQueryMeta: catchedError.meta }
           )
         } catch (e) {
           catchedError = e
@@ -375,7 +382,7 @@ export function buildThunks<
       }
       if (
         typeof process !== 'undefined' &&
-        process.env.NODE_ENV === 'development'
+        process.env.NODE_ENV !== 'production'
       ) {
         console.error(
           `An unhandled error occurred processing a request for the endpoint "${arg.endpointName}".

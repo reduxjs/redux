@@ -346,8 +346,11 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
         return { error: {} }
       },
       endpoints: (build) => ({
-        transformErRspn: build.query<any, void>({
-          query() {},
+        // @ts-ignore TS doesn't like `() => never` for `tER`
+        transformErRspn: build.query<number, void>({
+          // @ts-ignore TS doesn't like `() => never` for `tER`
+          query: () => '/dummy',
+          // @ts-ignore TS doesn't like `() => never` for `tER`
           transformErrorResponse() {
             throw new Error('this was kinda expected')
           },
