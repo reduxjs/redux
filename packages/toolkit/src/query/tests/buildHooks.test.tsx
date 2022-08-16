@@ -1,4 +1,8 @@
 import * as React from 'react'
+import type {
+  UseMutation,
+  UseQuery,
+} from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import {
   createApi,
   fetchBaseQuery,
@@ -2363,3 +2367,20 @@ describe('skip behaviour', () => {
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
 })
+
+// type tests:
+{
+  const ANY = {} as any
+
+  // UseQuery type can be used to recreate the hook type
+  const fakeQuery = ANY as UseQuery<
+    typeof api.endpoints.getUser.Types.QueryDefinition
+  >
+  expectExactType(fakeQuery)(api.endpoints.getUser.useQuery)
+
+  // UseMutation type can be used to recreate the hook type
+  const fakeMutation = ANY as UseMutation<
+    typeof api.endpoints.updateUser.Types.MutationDefinition
+  >
+  expectExactType(fakeMutation)(api.endpoints.updateUser.useMutation)
+}
