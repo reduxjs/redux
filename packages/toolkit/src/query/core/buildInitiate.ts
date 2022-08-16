@@ -9,6 +9,7 @@ import { DefinitionType } from '../endpointDefinitions'
 import type { QueryThunk, MutationThunk } from './buildThunks'
 import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
 import type { SubscriptionOptions, RootState } from './apiState'
+import { QueryStatus } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
@@ -274,17 +275,27 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           originalArgs: arg,
           queryCacheKey,
         })
+        const selector = (
+          api.endpoints[endpointName] as ApiEndpointQuery<any, any>
+        ).select(arg)
+
         const thunkResult = dispatch(thunk)
+        const stateAfter = selector(getState())
+
         middlewareWarning(getState)
 
         const { requestId, abort } = thunkResult
 
+        const skippedSynchronously = stateAfter.requestId !== requestId
+
+        const runningQuery = runningQueries[queryCacheKey]
+
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
-          Promise.all([runningQueries[queryCacheKey], thunkResult]).then(() =>
-            (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
-              arg
-            )(getState())
-          ),
+          skippedSynchronously && !runningQuery
+            ? Promise.resolve(stateAfter)
+            : Promise.all([runningQuery, thunkResult]).then(() =>
+                selector(getState())
+              ),
           {
             arg,
             requestId,
@@ -328,7 +339,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           }
         )
 
-        if (!runningQueries[queryCacheKey]) {
+        if (!runningQuery && !skippedSynchronously) {
           runningQueries[queryCacheKey] = statePromise
           statePromise.then(() => {
             delete runningQueries[queryCacheKey]
