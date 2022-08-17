@@ -190,7 +190,7 @@ const todoAppState = {
 }
 ```
 
-It's important to note that **it's okay to have other state values outside of Redux!**. This example is small enough so far that we actually do have all our state in the Redux store, but as we'll see later, some data really doesn't need to be kept in Redux (like "is this dropdown open?" or "current value of a form input").
+It's important to note that **it's okay to have other state values outside of Redux!** This example is small enough so far that we actually do have all our state in the Redux store, but as we'll see later, some data really doesn't need to be kept in Redux (like "is this dropdown open?" or "current value of a form input").
 
 ### Designing Actions
 
