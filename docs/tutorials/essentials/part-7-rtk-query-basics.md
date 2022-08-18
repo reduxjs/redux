@@ -360,7 +360,7 @@ Instead, we're going to try adding another endpoint definition that will let us 
 
 ### Adding the Single Post Query Endpoint
 
-In `apiSlice.js`, we're going to add another query endpoint definition, called `getPost` (no 's' this time):
+In `apiSlice.js`, we're going to add another query endpoint definition, called `getPost` (no "s" this time):
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
