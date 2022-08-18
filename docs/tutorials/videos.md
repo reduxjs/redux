@@ -14,7 +14,7 @@ While we don't currently have any "official" Redux tutorial videos from the Redu
 
 ## Learn Modern Redux Livestream
 
-Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with Typescript, as well as the new RTK Query data fetching APIs:
+Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with TypeScript, as well as the new RTK Query data fetching APIs:
 
 <LiteYouTubeEmbed
     id="9zySeP5vH9c"
