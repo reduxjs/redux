@@ -74,31 +74,25 @@ describe('isDocumentVisible', () => {
 })
 
 describe('joinUrls', () => {
-  test('correctly joins variations of relative urls', () => {
-    expect(joinUrls('/api/', '/banana')).toBe('/api/banana')
-    expect(joinUrls('/api/', 'banana')).toBe('/api/banana')
-
-    expect(joinUrls('/api', 'banana')).toBe('/api/banana')
-    expect(joinUrls('/api', '/banana/')).toBe('/api/banana/')
-
-    expect(joinUrls('', '/banana')).toBe('/banana')
-    expect(joinUrls('', 'banana')).toBe('banana')
-  })
-
-  test('correctly joins variations of absolute urls', () => {
-    expect(joinUrls('https://example.com/api', 'banana')).toBe(
-      'https://example.com/api/banana'
-    )
-    expect(joinUrls('https://example.com/api', '/banana')).toBe(
-      'https://example.com/api/banana'
-    )
-
-    expect(joinUrls('https://example.com/api/', 'banana')).toBe(
-      'https://example.com/api/banana'
-    )
-    expect(joinUrls('https://example.com/api/', '/banana/')).toBe(
-      'https://example.com/api/banana/'
-    )
+  test.each([
+    ['/api/', '/banana', '/api/banana'],
+    ['/api/', 'banana', '/api/banana'],
+    ['/api', '/banana', '/api/banana'],
+    ['/api', 'banana', '/api/banana'],
+    ['', '/banana', '/banana'],
+    ['', 'banana', 'banana'],
+    ['api', '?a=1', 'api?a=1'],
+    ['api/', '?a=1', 'api/?a=1'],
+    ['api', 'banana?a=1', 'api/banana?a=1'],
+    ['api/', 'banana?a=1', 'api/banana?a=1'],
+    ['https://example.com/api', 'banana', 'https://example.com/api/banana'],
+    ['https://example.com/api', '/banana', 'https://example.com/api/banana'],
+    ['https://example.com/api/', 'banana', 'https://example.com/api/banana'],
+    ['https://example.com/api/', '/banana', 'https://example.com/api/banana'],
+    ['https://example.com/api/', 'https://example.org', 'https://example.org'],
+    ['https://example.com/api/', '//example.org', '//example.org'],
+  ])('%s and %s join to %s', (base, url, expected) => {
+    expect(joinUrls(base, url)).toBe(expected)
   })
 })
 
