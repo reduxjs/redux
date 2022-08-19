@@ -603,6 +603,7 @@ const anyAction = { type: 'foo' } as AnyAction
     state: RootState
     dispatch: AppDispatch
     rejectValue: string
+    extra: { s: string; n: number }
   }>()
 
   // inferred usage
@@ -617,6 +618,11 @@ const anyAction = { type: 'foo' } as AnyAction
       expectExactType<() => { foo: { value: number } }>(ANY)(getState)
       return getState().foo.value
     })
+
+    // correct extra type
+    const { s, n } = api.extra
+    expectExactType<string>(s)
+    expectExactType<number>(n)
 
     if (1 < 2)
       // @ts-expect-error
@@ -638,6 +644,11 @@ const anyAction = { type: 'foo' } as AnyAction
       expectExactType<() => { foo: { value: number } }>(ANY)(getState)
       return getState().foo.value
     })
+    // correct extra type
+    const { s, n } = api.extra
+    expectExactType<string>(s)
+    expectExactType<number>(n)
+
     if (1 < 2)
       // @ts-expect-error
       return api.rejectWithValue(5)
@@ -660,6 +671,10 @@ const anyAction = { type: 'foo' } as AnyAction
         expectExactType<() => { foo: { value: number } }>(ANY)(getState)
         return getState().foo.value
       })
+      // correct extra type
+      const { s, n } = api.extra
+      expectExactType<string>(s)
+      expectExactType<number>(n)
       if (1 < 2) return api.rejectWithValue(5)
       if (1 < 2)
         // @ts-expect-error
