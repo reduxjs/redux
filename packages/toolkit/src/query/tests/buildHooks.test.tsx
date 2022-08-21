@@ -65,7 +65,7 @@ const api = createApi({
         },
       }),
     }),
-    getIncrementedAmount: build.query<any, void>({
+    getIncrementedAmount: build.query<{ amount: number }, void>({
       query: () => ({
         url: '',
         body: {
@@ -606,6 +606,28 @@ describe('hooks tests', () => {
           status: 'uninitialized',
         })
       })
+    })
+
+    test('useQuery refetch method returns a promise that resolves with the result', async () => {
+      const { result } = renderHook(
+        () => api.endpoints.getIncrementedAmount.useQuery(),
+        {
+          wrapper: storeRef.wrapper,
+        }
+      )
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true))
+      const originalAmount = result.current.data!.amount
+
+      const { refetch } = result.current
+
+      let resPromise: ReturnType<typeof refetch> = null as any
+      await act(async () => {
+        resPromise = refetch()
+      })
+      expect(resPromise).toBeInstanceOf(Promise)
+      const res = await resPromise
+      expect(res.data!.amount).toBeGreaterThan(originalAmount)
     })
   })
 
