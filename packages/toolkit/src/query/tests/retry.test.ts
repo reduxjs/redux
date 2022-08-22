@@ -1,6 +1,7 @@
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { createApi, retry } from '@reduxjs/toolkit/query'
 import { setupApiStore, waitMs } from './helpers'
+import type { RetryOptions } from '../retry'
 
 beforeEach(() => {
   jest.useFakeTimers('legacy')
@@ -350,8 +351,7 @@ describe('configuration', () => {
     const overrideMaxRetries = 3
 
     const baseQuery = retry(baseBaseQuery, {
-      maxRetries: 0,
-      retryCondition: (_, __, {attempt}) => attempt <= overrideMaxRetries,
+      retryCondition: (_, __, { attempt }) => attempt <= overrideMaxRetries,
     })
     const api = createApi({
       baseQuery,
@@ -380,7 +380,7 @@ describe('configuration', () => {
     baseBaseQuery.mockResolvedValue({ error: 'rejected' })
 
     const baseQuery = retry(baseBaseQuery, {
-      maxRetries: 10
+      maxRetries: 10,
     })
     const api = createApi({
       baseQuery,
@@ -388,8 +388,8 @@ describe('configuration', () => {
         q1: build.query({
           query: () => {},
           extraOptions: {
-            retryCondition: (_, __, {attempt, maxRetries}) => attempt <= maxRetries / 2,
-          }
+            retryCondition: (_, __, { attempt }) => attempt <= 5,
+          },
         }),
       }),
     })
@@ -424,7 +424,7 @@ describe('configuration', () => {
           query: () => ({ method: 'PUT' }),
           extraOptions: {
             retryCondition: (e) => e.data === 'hello retryCondition',
-          }
+          },
         }),
       }),
     })
@@ -437,5 +437,13 @@ describe('configuration', () => {
     await loopTimers()
 
     expect(baseBaseQuery).toHaveBeenCalledTimes(4)
+  })
+
+  test.skip('RetryOptions only accepts one of maxRetries or retryCondition', () => {
+    // @ts-expect-error Should complain if both exist at once
+    const ro: RetryOptions = {
+      maxRetries: 5,
+      retryCondition: () => false,
+    }
   })
 })
