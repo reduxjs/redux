@@ -88,7 +88,7 @@ export type ExtractDispatchExtensions<M> = M extends MiddlewareArray<
   infer MiddlewareTuple
 >
   ? ExtractDispatchFromMiddlewareTuple<MiddlewareTuple, {}>
-  : M extends Middleware[]
+  : M extends ReadonlyArray<Middleware>
   ? ExtractDispatchFromMiddlewareTuple<[...M], {}>
   : never
 
