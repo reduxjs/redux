@@ -13,6 +13,7 @@ import {
   configureStore,
   getDefaultMiddleware,
   createSlice,
+  ConfigureStoreOptions,
 } from '@reduxjs/toolkit'
 import type { ThunkMiddleware, ThunkAction, ThunkDispatch } from 'redux-thunk'
 import thunk from 'redux-thunk'
@@ -305,6 +306,18 @@ const _anyMiddleware: any = () => () => () => {}
     const result2: string = store.dispatch(5)
   }
   /**
+   * Test: read-only middleware tuple
+   */
+  {
+    const store = configureStore({
+      reducer: reducerA,
+      middleware: [] as any as readonly [Middleware<(a: StateA) => boolean, StateA>],
+    })
+    const result: boolean = store.dispatch(5)
+    // @ts-expect-error
+    const result2: string = store.dispatch(5)
+  }
+  /**
    * Test: multiple custom middleware
    */
   {
@@ -471,6 +484,32 @@ const _anyMiddleware: any = () => () => () => {}
     })
 
     expectNotAny(store.dispatch)
+  }
+
+  /**
+   * Test: decorated `configureStore` won't make `dispatch` `never`
+   */
+  {
+    const someSlice = createSlice({
+      name: 'something',
+      initialState: null as any,
+      reducers: {
+        set(state) {
+          return state;
+        },
+      },
+    });
+
+    function configureMyStore<S>(options: Omit<ConfigureStoreOptions<S>, 'reducer'>) {
+      return configureStore({
+        ...options,
+        reducer: someSlice.reducer,
+      });
+    }
+
+    const store = configureMyStore({});
+
+    expectType<Function>(store.dispatch);
   }
 
   {
