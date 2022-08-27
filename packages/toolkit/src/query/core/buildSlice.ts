@@ -157,7 +157,14 @@ export function buildSlice({
             draft,
             meta.arg.queryCacheKey,
             (substate) => {
-              if (substate.requestId !== meta.requestId) return
+              if (substate.requestId !== meta.requestId) {
+                if (
+                  substate.fulfilledTimeStamp &&
+                  meta.fulfilledTimeStamp < substate.fulfilledTimeStamp
+                ) {
+                  return
+                }
+              }
               const { merge } = definitions[
                 meta.arg.endpointName
               ] as QueryDefinition<any, any, any, any>

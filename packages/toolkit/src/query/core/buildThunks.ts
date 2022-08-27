@@ -10,6 +10,7 @@ import { QueryStatus } from './apiState'
 import {
   forceQueryFnSymbol,
   StartQueryActionCreatorOptions,
+  QueryActionCreatorResult,
 } from './buildInitiate'
 import type {
   AssertTagTypes,
@@ -176,7 +177,12 @@ export type UpsertQueryDataThunk<
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
   value: ResultTypeFrom<Definitions[EndpointName]>
-) => ThunkAction<void, PartialState, any, AnyAction>
+) => ThunkAction<
+  QueryActionCreatorResult<Definitions[EndpointName]>,
+  PartialState,
+  any,
+  AnyAction
+>
 
 /**
  * An object returned from dispatching a `api.util.updateQueryData` call.
@@ -272,7 +278,7 @@ export function buildThunks<
 
   const upsertQueryData: UpsertQueryDataThunk<EndpointDefinitions, State> =
     (endpointName, args, value) => (dispatch) => {
-      dispatch(
+      return dispatch(
         (
           api.endpoints[endpointName] as ApiEndpointQuery<
             QueryDefinition<any, any, any, any, any>,
@@ -469,11 +475,16 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
       const fulfilledVal = requestState?.fulfilledTimeStamp
 
-      // Don't retry a request that's currently in-flight
-      if (requestState?.status === 'pending') return false
+      // Order of these checks matters.
+      // In order for `upsertQueryData` to successfully run while an existing request is
+      /// in flight, we have to check `isForcedQuery` before `status === 'pending'`,
+      // otherwise `queryThunk` will bail out and not run at all.
 
       // if this is forced, continue
       if (isForcedQuery(arg, state)) return true
+
+      // Don't retry a request that's currently in-flight
+      if (requestState?.status === 'pending') return false
 
       // Pull from the cache unless we explicitly force refetch or qualify based on time
       if (fulfilledVal)

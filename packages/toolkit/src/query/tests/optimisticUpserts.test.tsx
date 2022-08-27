@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { actionsReducer, hookWaitFor, setupApiStore, waitMs } from './helpers'
 import { skipToken } from '../core/buildSelectors'
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act, waitFor } from '@testing-library/react'
 
 interface Post {
   id: string
@@ -11,6 +11,10 @@ interface Post {
 
 const baseQuery = jest.fn()
 beforeEach(() => baseQuery.mockReset())
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 const api = createApi({
   baseQuery: (...args: any[]) => {
@@ -45,6 +49,18 @@ const api = createApi({
         }
       },
       invalidatesTags: (result) => (result ? ['Post'] : []),
+    }),
+    post2: build.query<Post, string>({
+      queryFn: async (id) => {
+        await delay(20)
+        return {
+          data: {
+            id,
+            title: 'All about cheese.',
+            contents: 'TODO',
+          },
+        }
+      },
     }),
   }),
 })
@@ -195,10 +211,9 @@ describe('upsertQueryData', () => {
     )
     await hookWaitFor(() => expect(result.current.isError).toBeTruthy())
 
-    let returnValue!: ReturnType<ReturnType<typeof api.util.upsertQueryData>>
     // upsert the data
     act(() => {
-      returnValue = storeRef.store.dispatch(
+      storeRef.store.dispatch(
         api.util.upsertQueryData('post', '4', {
           id: '4',
           title: 'All about cheese',
@@ -350,5 +365,45 @@ describe('full integration', () => {
         }),
       50
     )
+  })
+
+  test.only('Interop with in-flight requests', async () => {
+    await act(async () => {
+      const fetchRes = storeRef.store.dispatch(
+        api.endpoints.post2.initiate('3')
+      )
+
+      const upsertRes = storeRef.store.dispatch(
+        api.util.upsertQueryData('post2', '3', {
+          id: '3',
+          title: 'Upserted title',
+          contents: 'Upserted contents',
+        })
+      )
+
+      const selectEntry = api.endpoints.post2.select('3')
+      await waitFor(
+        () => {
+          const entry1 = selectEntry(storeRef.store.getState())
+          expect(entry1.data).toEqual({
+            id: '3',
+            title: 'Upserted title',
+            contents: 'Upserted contents',
+          })
+        },
+        { interval: 1, timeout: 15 }
+      )
+      await waitFor(
+        () => {
+          const entry2 = selectEntry(storeRef.store.getState())
+          expect(entry2.data).toEqual({
+            id: '3',
+            title: 'All about cheese.',
+            contents: 'TODO',
+          })
+        },
+        { interval: 1 }
+      )
+    })
   })
 })
