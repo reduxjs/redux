@@ -178,7 +178,11 @@ export type UpsertQueryDataThunk<
   args: QueryArgFrom<Definitions[EndpointName]>,
   value: ResultTypeFrom<Definitions[EndpointName]>
 ) => ThunkAction<
-  QueryActionCreatorResult<Definitions[EndpointName]>,
+  QueryActionCreatorResult<
+    Definitions[EndpointName] extends QueryDefinition<any, any, any, any>
+      ? Definitions[EndpointName]
+      : never
+  >,
   PartialState,
   any,
   AnyAction
@@ -276,7 +280,7 @@ export function buildThunks<
       return ret
     }
 
-  const upsertQueryData: UpsertQueryDataThunk<EndpointDefinitions, State> =
+  const upsertQueryData: UpsertQueryDataThunk<Definitions, State> =
     (endpointName, args, value) => (dispatch) => {
       return dispatch(
         (
