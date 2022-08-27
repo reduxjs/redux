@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { actionsReducer, hookWaitFor, setupApiStore, waitMs } from './helpers'
 import { skipToken } from '../core/buildSelectors'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 interface Post {
   id: string
@@ -33,13 +33,16 @@ const api = createApi({
         method: 'PATCH',
         body: patch,
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
-        const { undo } = dispatch(
-          api.util.upsertQueryData('post', id, (draft) => {
-            Object.assign(draft, patch)
-          })
-        )
-        queryFulfilled.catch(undo)
+      async onQueryStarted(arg, { dispatch, queryFulfilled, getState }) {
+        const currentItem = api.endpoints.post.select(arg.id)(getState())
+        if (currentItem?.data) {
+          dispatch(
+            api.util.upsertQueryData('post', arg.id, {
+              ...currentItem.data,
+              ...arg,
+            })
+          )
+        }
       },
       invalidatesTags: (result) => (result ? ['Post'] : []),
     }),
@@ -154,13 +157,12 @@ describe('upsertQueryData', () => {
       contents: 'TODO',
     })
 
-    let returnValue!: ReturnType<ReturnType<typeof api.util.upsertQueryData>>
-    act(() => {
-      returnValue = storeRef.store.dispatch(
-        api.util.upsertQueryData('post', '3', (draft) => {
-          if (draft) {
-            draft.contents = 'I love cheese!'
-          }
+    await act(async () => {
+      storeRef.store.dispatch(
+        api.util.upsertQueryData('post', '3', {
+          id: '3',
+          title: 'All about cheese.',
+          contents: 'I love cheese!',
         })
       )
     })
@@ -171,20 +173,6 @@ describe('upsertQueryData', () => {
       title: 'All about cheese.',
       contents: 'I love cheese!',
     })
-
-    expect(returnValue).toEqual({
-      inversePatches: [{ op: 'replace', path: ['contents'], value: 'TODO' }],
-      patches: [{ op: 'replace', path: ['contents'], value: 'I love cheese!' }],
-      undo: expect.any(Function),
-    })
-
-    act(() => {
-      storeRef.store.dispatch(
-        api.util.patchQueryData('post', '3', returnValue.inversePatches)
-      )
-    })
-
-    expect(result.current.data).toEqual(dataBefore)
   })
 
   test('does update non-existing values', async () => {
@@ -211,28 +199,12 @@ describe('upsertQueryData', () => {
     // upsert the data
     act(() => {
       returnValue = storeRef.store.dispatch(
-        api.util.upsertQueryData('post', '4', (draft) => {
-          if (draft) {
-            draft.contents = 'I love cheese!'
-          } else {
-            return {
-              id: '4',
-              title: 'All about cheese',
-              contents: 'I love cheese!',
-            }
-          }
+        api.util.upsertQueryData('post', '4', {
+          id: '4',
+          title: 'All about cheese',
+          contents: 'I love cheese!',
         })
       )
-    })
-
-    // the patch would remove the result again
-    // maybe this needs to be implemented differently in order
-    // for the whole thing to work correctly, I suppose that
-    // this would only revert the data but would not invalidate it
-    expect(returnValue).toEqual({
-      inversePatches: [{ op: 'replace', path: [], value: undefined }],
-      patches: [],
-      undo: expect.any(Function),
     })
 
     // rerender the hook
@@ -285,13 +257,16 @@ describe('full integration', () => {
       contents: 'TODO',
     })
 
-    act(() => {
-      result.current.mutation[0]({ id: '3', contents: 'Delicious cheese!' })
+    await act(async () => {
+      await result.current.mutation[0]({
+        id: '3',
+        contents: 'Delicious cheese!',
+      })
     })
 
     expect(result.current.query.data).toEqual({
       id: '3',
-      title: 'All about cheese.',
+      title: 'Meanwhile, this changed server-side.',
       contents: 'Delicious cheese!',
     })
 
@@ -336,8 +311,11 @@ describe('full integration', () => {
       contents: 'TODO',
     })
 
-    act(() => {
-      result.current.mutation[0]({ id: '3', contents: 'Delicious cheese!' })
+    await act(async () => {
+      await result.current.mutation[0]({
+        id: '3',
+        contents: 'Delicious cheese!',
+      })
     })
 
     // optimistic update
@@ -346,15 +324,6 @@ describe('full integration', () => {
       title: 'All about cheese.',
       contents: 'Delicious cheese!',
     })
-
-    // rollback
-    await hookWaitFor(() =>
-      expect(result.current.query.data).toEqual({
-        id: '3',
-        title: 'All about cheese.',
-        contents: 'TODO',
-      })
-    )
 
     // mutation failed - will not invalidate query and not refetch data from the server
     await expect(() =>

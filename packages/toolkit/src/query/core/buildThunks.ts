@@ -183,12 +183,6 @@ export type UpsertQueryDataThunk<
  */
 export type PatchCollection = {
   /**
-   * A boolean stating if there was already data in the query cache
-   *
-   * If there was no data in the cache no update operation is performed
-   */
-  cacheEntryFound: boolean
-  /**
    * An `immer` Patch describing the cache update.
    */
   patches: Patch[]
@@ -242,7 +236,6 @@ export function buildThunks<
         api.endpoints[endpointName] as ApiEndpointQuery<any, any>
       ).select(args)(getState())
       let ret: PatchCollection = {
-        cacheEntryFound: false,
         patches: [],
         inversePatches: [],
         undo: () =>
@@ -254,7 +247,6 @@ export function buildThunks<
         return ret
       }
       if ('data' in currentState) {
-        ret.cacheEntryFound = true
         if (isDraftable(currentState.data)) {
           const [, patches, inversePatches] = produceWithPatches(
             currentState.data,
