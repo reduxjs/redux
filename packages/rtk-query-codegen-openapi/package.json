@@ -47,7 +47,7 @@
     "esbuild-runner": "^2.2.1",
     "husky": "^4.3.6",
     "jest": "^27",
-    "msw": "^0.41.1",
+    "msw": "^0.40.2",
     "openapi-types": "^9.1.0",
     "pretty-quick": "^3.1.0",
     "ts-jest": "^27",
