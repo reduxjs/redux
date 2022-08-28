@@ -13,7 +13,7 @@ import { QueryStatus } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
-import type { BaseQueryError } from '../baseQueryTypes'
+import type { BaseQueryError, QueryReturnValue } from '../baseQueryTypes'
 import type { QueryResultSelectorResult } from './buildSelectors'
 
 declare module './module' {
@@ -34,10 +34,13 @@ declare module './module' {
   }
 }
 
+export const forceQueryFnSymbol = Symbol('forceQueryFn')
+
 export interface StartQueryActionCreatorOptions {
   subscribe?: boolean
   forceRefetch?: boolean | number
   subscriptionOptions?: SubscriptionOptions
+  [forceQueryFnSymbol]?: () => QueryReturnValue
 }
 
 type StartQueryActionCreator<
@@ -259,7 +262,15 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     endpointDefinition: QueryDefinition<any, any, any, any>
   ) {
     const queryAction: StartQueryActionCreator<any> =
-      (arg, { subscribe = true, forceRefetch, subscriptionOptions } = {}) =>
+      (
+        arg,
+        {
+          subscribe = true,
+          forceRefetch,
+          subscriptionOptions,
+          [forceQueryFnSymbol]: forceQueryFn,
+        } = {}
+      ) =>
       (dispatch, getState) => {
         const queryCacheKey = serializeQueryArgs({
           queryArgs: arg,
@@ -274,6 +285,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           endpointName,
           originalArgs: arg,
           queryCacheKey,
+          [forceQueryFnSymbol]: forceQueryFn,
         })
         const selector = (
           api.endpoints[endpointName] as ApiEndpointQuery<any, any>

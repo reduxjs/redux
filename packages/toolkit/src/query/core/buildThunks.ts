@@ -7,7 +7,11 @@ import type {
 } from '../baseQueryTypes'
 import type { RootState, QueryKeys, QuerySubstateIdentifier } from './apiState'
 import { QueryStatus } from './apiState'
-import type { StartQueryActionCreatorOptions } from './buildInitiate'
+import {
+  forceQueryFnSymbol,
+  StartQueryActionCreatorOptions,
+  QueryActionCreatorResult,
+} from './buildInitiate'
 import type {
   AssertTagTypes,
   EndpointDefinition,
@@ -144,6 +148,9 @@ function defaultTransformResponse(baseQueryReturnValue: unknown) {
 
 export type MaybeDrafted<T> = T | Draft<T>
 export type Recipe<T> = (data: MaybeDrafted<T>) => void | MaybeDrafted<T>
+export type UpsertRecipe<T> = (
+  data: MaybeDrafted<T> | undefined
+) => void | MaybeDrafted<T>
 
 export type PatchQueryDataThunk<
   Definitions extends EndpointDefinitions,
@@ -162,6 +169,24 @@ export type UpdateQueryDataThunk<
   args: QueryArgFrom<Definitions[EndpointName]>,
   updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>
 ) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
+
+export type UpsertQueryDataThunk<
+  Definitions extends EndpointDefinitions,
+  PartialState
+> = <EndpointName extends QueryKeys<Definitions>>(
+  endpointName: EndpointName,
+  args: QueryArgFrom<Definitions[EndpointName]>,
+  value: ResultTypeFrom<Definitions[EndpointName]>
+) => ThunkAction<
+  QueryActionCreatorResult<
+    Definitions[EndpointName] extends QueryDefinition<any, any, any, any>
+      ? Definitions[EndpointName]
+      : never
+  >,
+  PartialState,
+  any,
+  AnyAction
+>
 
 /**
  * An object returned from dispatching a `api.util.updateQueryData` call.
@@ -255,6 +280,24 @@ export function buildThunks<
       return ret
     }
 
+  const upsertQueryData: UpsertQueryDataThunk<Definitions, State> =
+    (endpointName, args, value) => (dispatch) => {
+      return dispatch(
+        (
+          api.endpoints[endpointName] as ApiEndpointQuery<
+            QueryDefinition<any, any, any, any, any>,
+            Definitions
+          >
+        ).initiate(args, {
+          subscribe: false,
+          forceRefetch: true,
+          [forceQueryFnSymbol]: () => ({
+            data: value,
+          }),
+        })
+      )
+    }
+
   const executeEndpoint: AsyncThunkPayloadCreator<
     ThunkResult,
     QueryThunkArg | MutationThunkArg,
@@ -291,7 +334,12 @@ export function buildThunks<
         forced:
           arg.type === 'query' ? isForcedQuery(arg, getState()) : undefined,
       }
-      if (endpointDefinition.query) {
+
+      const forceQueryFn =
+        arg.type === 'query' ? arg[forceQueryFnSymbol] : undefined
+      if (forceQueryFn) {
+        result = forceQueryFn()
+      } else if (endpointDefinition.query) {
         result = await baseQuery(
           endpointDefinition.query(arg.originalArgs),
           baseQueryApi,
@@ -431,11 +479,16 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
       const fulfilledVal = requestState?.fulfilledTimeStamp
 
-      // Don't retry a request that's currently in-flight
-      if (requestState?.status === 'pending') return false
+      // Order of these checks matters.
+      // In order for `upsertQueryData` to successfully run while an existing request is
+      /// in flight, we have to check `isForcedQuery` before `status === 'pending'`,
+      // otherwise `queryThunk` will bail out and not run at all.
 
       // if this is forced, continue
       if (isForcedQuery(arg, state)) return true
+
+      // Don't retry a request that's currently in-flight
+      if (requestState?.status === 'pending') return false
 
       // Pull from the cache unless we explicitly force refetch or qualify based on time
       if (fulfilledVal)
@@ -527,6 +580,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     mutationThunk,
     prefetch,
     updateQueryData,
+    upsertQueryData,
     patchQueryData,
     buildMatchThunkActions,
   }

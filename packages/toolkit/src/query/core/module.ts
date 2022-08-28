@@ -1,7 +1,11 @@
 /**
  * Note: this file should import all other files for type discovery and declaration merging
  */
-import type { PatchQueryDataThunk, UpdateQueryDataThunk } from './buildThunks'
+import type {
+  PatchQueryDataThunk,
+  UpdateQueryDataThunk,
+  UpsertQueryDataThunk,
+} from './buildThunks'
 import { buildThunks } from './buildThunks'
 import type {
   ActionCreatorWithPayload,
@@ -207,6 +211,10 @@ declare module '../apiTypes' {
         >
         /** @deprecated renamed to `updateQueryData` */
         updateQueryResult: UpdateQueryDataThunk<
+          Definitions,
+          RootState<Definitions, string, ReducerPath>
+        >
+        upsertQueryData: UpsertQueryDataThunk<
           Definitions,
           RootState<Definitions, string, ReducerPath>
         >
@@ -416,6 +424,7 @@ export const coreModule = (): Module<CoreModule> => ({
       mutationThunk,
       patchQueryData,
       updateQueryData,
+      upsertQueryData,
       prefetch,
       buildMatchThunkActions,
     } = buildThunks({
@@ -444,6 +453,7 @@ export const coreModule = (): Module<CoreModule> => ({
     safeAssign(api.util, {
       patchQueryData,
       updateQueryData,
+      upsertQueryData,
       prefetch,
       resetApiState: sliceActions.resetApiState,
     })
