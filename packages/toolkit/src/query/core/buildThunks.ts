@@ -480,15 +480,17 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       const fulfilledVal = requestState?.fulfilledTimeStamp
 
       // Order of these checks matters.
-      // In order for `upsertQueryData` to successfully run while an existing request is
-      /// in flight, we have to check `isForcedQuery` before `status === 'pending'`,
-      // otherwise `queryThunk` will bail out and not run at all.
-
-      // if this is forced, continue
-      if (isForcedQuery(arg, state)) return true
+      // In order for `upsertQueryData` to successfully run while an existing request is in flight,
+      /// we have to check for that first, otherwise `queryThunk` will bail out and not run at all.
+      const isUpsertQuery =
+        typeof arg[forceQueryFnSymbol] === 'function' && arg.forceRefetch
+      if (isUpsertQuery) return true
 
       // Don't retry a request that's currently in-flight
       if (requestState?.status === 'pending') return false
+
+      // if this is forced, continue
+      if (isForcedQuery(arg, state)) return true
 
       // Pull from the cache unless we explicitly force refetch or qualify based on time
       if (fulfilledVal)
