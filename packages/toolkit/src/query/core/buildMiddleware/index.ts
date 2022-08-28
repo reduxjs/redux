@@ -91,8 +91,12 @@ export function buildMiddleware<
           // This looks for actions that aren't specific to the API slice
           windowEventsHandler(action, mwApi, stateBefore)
 
-          if (isThisApiSliceAction(action)) {
-            // Only run these additional checks if the actions are part of the API slice
+          if (
+            isThisApiSliceAction(action) ||
+            context.hasRehydrationInfo(action)
+          ) {
+            // Only run these additional checks if the actions are part of the API slice,
+            // or the action has hydration-related data
             for (let handler of handlers) {
               handler(action, mwApi, stateBefore)
             }
