@@ -420,7 +420,7 @@ type OverrideThunkApiConfigs<OldConfig, NewConfig> = Id<
   NewConfig & Omit<OldConfig, keyof NewConfig>
 >
 
-type CreateAsyncThunk<CurriedThunkApiConfig> = {
+type CreateAsyncThunk<CurriedThunkApiConfig extends AsyncThunkConfig> = {
   /**
    *
    * @param typePrefix

@@ -58,8 +58,8 @@ import type { BaseQueryFn } from '../baseQueryTypes'
 // Copy-pasted from React-Redux
 export const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' &&
-  window.document &&
-  window.document.createElement
+  !!window.document &&
+  !!window.document.createElement
     ? useLayoutEffect
     : useEffect
 
