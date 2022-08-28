@@ -1,6 +1,5 @@
 import type {
   AnyAction,
-  AsyncThunk,
   AsyncThunkAction,
   Middleware,
   MiddlewareAPI,
@@ -60,6 +59,16 @@ export type SubMiddlewareBuilder = (
   RootState<EndpointDefinitions, string, string>,
   ThunkDispatch<any, any, AnyAction>
 >
+
+export type ApiMiddlewareInternalHandler<ReturnType = void> = (
+  action: AnyAction,
+  mwApi: SubMiddlewareApi,
+  prevState: RootState<EndpointDefinitions, string, string>
+) => ReturnType
+
+export type InternalHandlerBuilder<ReturnType = void> = (
+  input: BuildSubMiddlewareInput
+) => ApiMiddlewareInternalHandler<ReturnType>
 
 export interface PromiseConstructorWithKnownReason {
   /**

@@ -1,9 +1,13 @@
 import { QueryStatus } from '../apiState'
 import type { QueryCacheKey } from '../apiState'
 import { onFocus, onOnline } from '../setupListeners'
-import type { SubMiddlewareApi, SubMiddlewareBuilder } from './types'
+import type {
+  ApiMiddlewareInternalHandler,
+  InternalHandlerBuilder,
+  SubMiddlewareApi,
+} from './types'
 
-export const build: SubMiddlewareBuilder = ({
+export const buildWindowEventHandler: InternalHandlerBuilder = ({
   reducerPath,
   context,
   api,
@@ -11,20 +15,14 @@ export const build: SubMiddlewareBuilder = ({
 }) => {
   const { removeQueryResult } = api.internalActions
 
-  return (mwApi) =>
-    (next) =>
-    (action): any => {
-      const result = next(action)
-
-      if (onFocus.match(action)) {
-        refetchValidQueries(mwApi, 'refetchOnFocus')
-      }
-      if (onOnline.match(action)) {
-        refetchValidQueries(mwApi, 'refetchOnReconnect')
-      }
-
-      return result
+  const handler: ApiMiddlewareInternalHandler = (action, mwApi) => {
+    if (onFocus.match(action)) {
+      refetchValidQueries(mwApi, 'refetchOnFocus')
     }
+    if (onOnline.match(action)) {
+      refetchValidQueries(mwApi, 'refetchOnReconnect')
+    }
+  }
 
   function refetchValidQueries(
     api: SubMiddlewareApi,
@@ -64,4 +62,6 @@ export const build: SubMiddlewareBuilder = ({
       }
     })
   }
+
+  return handler
 }

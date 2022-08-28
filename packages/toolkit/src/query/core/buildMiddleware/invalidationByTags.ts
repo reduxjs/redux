@@ -5,9 +5,13 @@ import { calculateProvidedBy } from '../../endpointDefinitions'
 import type { QueryCacheKey } from '../apiState'
 import { QueryStatus } from '../apiState'
 import { calculateProvidedByThunk } from '../buildThunks'
-import type { SubMiddlewareApi, SubMiddlewareBuilder } from './types'
+import type {
+  SubMiddlewareApi,
+  InternalHandlerBuilder,
+  ApiMiddlewareInternalHandler,
+} from './types'
 
-export const build: SubMiddlewareBuilder = ({
+export const buildInvalidationByTagsHandler: InternalHandlerBuilder = ({
   reducerPath,
   context,
   context: { endpointDefinitions },
@@ -17,45 +21,38 @@ export const build: SubMiddlewareBuilder = ({
   refetchQuery,
 }) => {
   const { removeQueryResult } = api.internalActions
+  const isThunkActionWithTags = isAnyOf(
+    isFulfilled(mutationThunk),
+    isRejectedWithValue(mutationThunk)
+  )
 
-  return (mwApi) =>
-    (next) =>
-    (action): any => {
-      const result = next(action)
-
-      if (
-        isAnyOf(
-          isFulfilled(mutationThunk),
-          isRejectedWithValue(mutationThunk)
-        )(action)
-      ) {
-        invalidateTags(
-          calculateProvidedByThunk(
-            action,
-            'invalidatesTags',
-            endpointDefinitions,
-            assertTagType
-          ),
-          mwApi
-        )
-      }
-
-      if (api.util.invalidateTags.match(action)) {
-        invalidateTags(
-          calculateProvidedBy(
-            action.payload,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            assertTagType
-          ),
-          mwApi
-        )
-      }
-
-      return result
+  const handler: ApiMiddlewareInternalHandler = (action, mwApi) => {
+    if (isThunkActionWithTags(action)) {
+      invalidateTags(
+        calculateProvidedByThunk(
+          action,
+          'invalidatesTags',
+          endpointDefinitions,
+          assertTagType
+        ),
+        mwApi
+      )
     }
+
+    if (api.util.invalidateTags.match(action)) {
+      invalidateTags(
+        calculateProvidedBy(
+          action.payload,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          assertTagType
+        ),
+        mwApi
+      )
+    }
+  }
 
   function invalidateTags(
     tags: readonly FullTagDescription<string>[],
@@ -86,4 +83,6 @@ export const build: SubMiddlewareBuilder = ({
       }
     })
   }
+
+  return handler
 }
