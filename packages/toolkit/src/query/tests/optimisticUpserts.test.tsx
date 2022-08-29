@@ -234,6 +234,62 @@ describe('upsertQueryData', () => {
       contents: 'I love cheese!',
     })
   })
+
+  test('upsert while a normal query is running (success)', async () => {
+    const fetchedData = {
+      id: '3',
+      title: 'All about cheese.',
+      contents: 'Yummy',
+    }
+    baseQuery.mockImplementation(() => delay(20).then(() => fetchedData))
+    const upsertedData = {
+      id: '3',
+      title: 'Data from a SSR Render',
+      contents: 'This is just some random data',
+    }
+
+    const selector = api.endpoints.post.select('3')
+    const fetchRes = storeRef.store.dispatch(api.endpoints.post.initiate('3'))
+    const upsertRes = storeRef.store.dispatch(
+      api.util.upsertQueryData('post', '3', upsertedData)
+    )
+
+    await upsertRes
+    let state = selector(storeRef.store.getState())
+    expect(state.data).toEqual(upsertedData)
+
+    await fetchRes
+    state = selector(storeRef.store.getState())
+    expect(state.data).toEqual(fetchedData)
+  })
+  test('upsert while a normal query is running (rejected)', async () => {
+    baseQuery.mockImplementation(async () => {
+      await delay(20)
+      // eslint-disable-next-line no-throw-literal
+      throw 'Error!'
+    })
+    const upsertedData = {
+      id: '3',
+      title: 'Data from a SSR Render',
+      contents: 'This is just some random data',
+    }
+
+    const selector = api.endpoints.post.select('3')
+    const fetchRes = storeRef.store.dispatch(api.endpoints.post.initiate('3'))
+    const upsertRes = storeRef.store.dispatch(
+      api.util.upsertQueryData('post', '3', upsertedData)
+    )
+
+    await upsertRes
+    let state = selector(storeRef.store.getState())
+    expect(state.data).toEqual(upsertedData)
+    expect(state.isSuccess).toBeTruthy()
+
+    await fetchRes
+    state = selector(storeRef.store.getState())
+    expect(state.data).toEqual(upsertedData)
+    expect(state.isError).toBeTruthy()
+  })
 })
 
 describe('full integration', () => {
@@ -367,7 +423,7 @@ describe('full integration', () => {
     )
   })
 
-  test.only('Interop with in-flight requests', async () => {
+  test('Interop with in-flight requests', async () => {
     await act(async () => {
       const fetchRes = storeRef.store.dispatch(
         api.endpoints.post2.initiate('3')

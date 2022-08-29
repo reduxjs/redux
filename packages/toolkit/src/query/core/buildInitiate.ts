@@ -6,7 +6,7 @@ import type {
   ResultTypeFrom,
 } from '../endpointDefinitions'
 import { DefinitionType } from '../endpointDefinitions'
-import type { QueryThunk, MutationThunk } from './buildThunks'
+import type { QueryThunk, MutationThunk, QueryThunkArg } from './buildThunks'
 import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
 import type { SubscriptionOptions, RootState } from './apiState'
 import { QueryStatus } from './apiState'
@@ -35,6 +35,8 @@ declare module './module' {
 }
 
 export const forceQueryFnSymbol = Symbol('forceQueryFn')
+export const isUpsertQuery = (arg: QueryThunkArg) =>
+  typeof arg[forceQueryFnSymbol] === 'function'
 
 export interface StartQueryActionCreatorOptions {
   subscribe?: boolean
@@ -301,13 +303,20 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         const skippedSynchronously = stateAfter.requestId !== requestId
 
         const runningQuery = runningQueries[queryCacheKey]
+        const selectFromState = () => selector(getState())
 
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
-          skippedSynchronously && !runningQuery
-            ? Promise.resolve(stateAfter)
-            : Promise.all([runningQuery, thunkResult]).then(() =>
-                selector(getState())
-              ),
+          forceQueryFn
+            ? // a query has been forced (upsertQueryData)
+              // -> we want to resolve it once data has been written with the data that will be written
+              thunkResult.then(selectFromState)
+            : skippedSynchronously && !runningQuery
+            ? // a query has been skipped due to a condition and we do not have any currently running query
+              // -> we want to resolve it immediately with the current data
+              Promise.resolve(stateAfter)
+            : // query just started or one is already in flight
+              // -> wait for the running query, then resolve with data from after that
+              Promise.all([runningQuery, thunkResult]).then(selectFromState),
           {
             arg,
             requestId,
@@ -350,7 +359,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           }
         )
 
-        if (!runningQuery && !skippedSynchronously) {
+        if (!runningQuery && !skippedSynchronously && !forceQueryFn) {
           runningQueries[queryCacheKey] = statePromise
           statePromise.then(() => {
             delete runningQueries[queryCacheKey]

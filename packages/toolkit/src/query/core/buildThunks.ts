@@ -7,11 +7,11 @@ import type {
 } from '../baseQueryTypes'
 import type { RootState, QueryKeys, QuerySubstateIdentifier } from './apiState'
 import { QueryStatus } from './apiState'
-import {
-  forceQueryFnSymbol,
+import type {
   StartQueryActionCreatorOptions,
   QueryActionCreatorResult,
 } from './buildInitiate'
+import { forceQueryFnSymbol, isUpsertQuery } from './buildInitiate'
 import type {
   AssertTagTypes,
   EndpointDefinition,
@@ -482,9 +482,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       // Order of these checks matters.
       // In order for `upsertQueryData` to successfully run while an existing request is in flight,
       /// we have to check for that first, otherwise `queryThunk` will bail out and not run at all.
-      const isUpsertQuery =
-        typeof arg[forceQueryFnSymbol] === 'function' && arg.forceRefetch
-      if (isUpsertQuery) return true
+      if (isUpsertQuery(arg)) return true
 
       // Don't retry a request that's currently in-flight
       if (requestState?.status === 'pending') return false
