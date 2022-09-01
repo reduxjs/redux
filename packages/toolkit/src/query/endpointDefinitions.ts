@@ -1,6 +1,6 @@
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import { SerializeQueryArgs } from './defaultSerializeQueryArgs'
-import type { RootState } from './core/apiState'
+import type { QuerySubState, RootState } from './core/apiState'
 import type {
   BaseQueryExtraOptions,
   BaseQueryFn,
@@ -343,6 +343,10 @@ export interface QueryExtraOptions<
    * All of these are `undefined` at runtime, purely to be used in TypeScript declarations!
    */
   Types?: QueryTypes<QueryArg, BaseQuery, TagTypes, ResultType, ReducerPath>
+  sideEffectForced?: (params: {
+    getState(): RootState<any, any, string>
+    endpointState: QuerySubState<any>
+  }) => boolean
 }
 
 export type QueryDefinition<
