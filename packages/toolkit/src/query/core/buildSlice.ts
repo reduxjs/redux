@@ -136,7 +136,8 @@ export function buildSlice({
     extraReducers(builder) {
       builder
         .addCase(queryThunk.pending, (draft, { meta, meta: { arg } }) => {
-          if (arg.subscribe) {
+          const upserting = isUpsertQuery(arg)
+          if (arg.subscribe || upserting) {
             // only initialize substate if we want to subscribe to it
             draft[arg.queryCacheKey] ??= {
               status: QueryStatus.uninitialized,
@@ -148,7 +149,7 @@ export function buildSlice({
             substate.status = QueryStatus.pending
 
             substate.requestId =
-              isUpsertQuery(arg) && substate.requestId
+              upserting && substate.requestId
                 ? // for `upsertQuery` **updates**, keep the current `requestId`
                   substate.requestId
                 : // for normal queries or `upsertQuery` **inserts** always update the `requestId`
