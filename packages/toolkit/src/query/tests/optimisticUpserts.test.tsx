@@ -98,6 +98,41 @@ describe('basic lifecycle', () => {
     onSuccess.mockReset()
   })
 
+  test('Does basic inserts and upserts', async () => {
+    const newPost: Post = {
+      id: '3',
+      contents: 'Inserted content',
+      title: 'Inserted title',
+    }
+    const insertPromise = storeRef.store.dispatch(
+      api.util.upsertQueryData('post', newPost.id, newPost)
+    )
+
+    await insertPromise
+
+    const selectPost3 = api.endpoints.post.select(newPost.id)
+    const insertedPostEntry = selectPost3(storeRef.store.getState())
+    expect(insertedPostEntry.isSuccess).toBe(true)
+    expect(insertedPostEntry.data).toEqual(newPost)
+
+    const updatedPost: Post = {
+      id: '3',
+      contents: 'Updated content',
+      title: 'Updated title',
+    }
+
+    const updatePromise = storeRef.store.dispatch(
+      api.util.upsertQueryData('post', updatedPost.id, updatedPost)
+    )
+
+    await updatePromise
+
+    const updatedPostEntry = selectPost3(storeRef.store.getState())
+
+    expect(updatedPostEntry.isSuccess).toBe(true)
+    expect(updatedPostEntry.data).toEqual(updatedPost)
+  })
+
   test('success', async () => {
     const { result } = renderHook(
       () => extendedApi.endpoints.test.useMutation(),
