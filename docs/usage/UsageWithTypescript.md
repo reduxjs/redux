@@ -267,6 +267,21 @@ const rootReducer = combineReducers({ ... });
 type RootState = ReturnType<typeof rootReducer>;
 ```
 
+Switching the type definition of `RootState` with Redux Toolkit example:
+
+```ts
+//instead of defining the reducers in the reducer field of configureStore, combine them here:
+const rootReducer = combineReducers({ counter: counterReducer });
+
+//then set rootReducer as the reducer object of configureStore
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: [...],
+});
+
+type RootState = ReturnType<typeof rootReducer>;
+```
+
 ### Type Checking Redux Thunks
 
 [Redux Thunk](https://github.com/reduxjs/redux-thunk) is the standard middleware for writing sync and async logic that interacts with the Redux store. A thunk function receives `dispatch` and `getState` as its parameters. Redux Thunk has a built in `ThunkAction` type which we can use to define types for those arguments:
