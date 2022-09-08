@@ -276,7 +276,7 @@ const rootReducer = combineReducers({ counter: counterReducer });
 //then set rootReducer as the reducer object of configureStore
 const store = configureStore({
   reducer: rootReducer,
-  middleware: [...],
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(yourMiddleware),
 });
 
 type RootState = ReturnType<typeof rootReducer>;
