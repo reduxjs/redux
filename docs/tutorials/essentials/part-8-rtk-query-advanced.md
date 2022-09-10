@@ -90,7 +90,7 @@ We can use the same `useGetPostQuery` hook that we used in `<SinglePostPage>` to
 
 ```jsx title="features/posts/EditPostForm.js"
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Spinner } from '../../components/Spinner'
 // highlight-next-line
@@ -107,7 +107,7 @@ export const EditPostForm = ({ match }) => {
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const onTitleChanged = e => setTitle(e.target.value)
   const onContentChanged = e => setContent(e.target.value)
@@ -116,7 +116,7 @@ export const EditPostForm = ({ match }) => {
     if (title && content) {
       // highlight-next-line
       await updatePost({ id: postId, title, content })
-      history.push(`/posts/${postId}`)
+      navigate(`/posts/${postId}`);
     }
   }
 
