@@ -4,9 +4,12 @@ module.exports = {
   testEnvironment: 'node',
   testRegex: '(/test/.*\\.spec\\.ts)$',
   coverageProvider: 'v8',
-  globals: {
-    'ts-jest': {
-      tsconfig: './test/tsconfig.json'
-    }
+  transform: {
+    '\\.ts$': [
+      'ts-jest',
+      {
+        tsconfig: './test/tsconfig.json'
+      }
+    ]
   }
 }

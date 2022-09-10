@@ -4,8 +4,7 @@ import {
   combineReducers,
   Reducer,
   AnyAction,
-  __DO_NOT_USE__ActionTypes as ActionTypes,
-  CombinedState
+  __DO_NOT_USE__ActionTypes as ActionTypes
 } from '..'
 
 describe('Utils', () => {
@@ -223,8 +222,6 @@ describe('Utils', () => {
         foo: { bar: number }
         baz: { qux: number }
       }
-
-      type _ShapeMismatchState = CombinedState<ShapeState>
 
       const reducer = combineReducers<ShapeState>({
         foo(state = { bar: 1 }) {
