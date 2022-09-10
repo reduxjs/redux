@@ -271,15 +271,16 @@ Switching the type definition of `RootState` with Redux Toolkit example:
 
 ```ts
 //instead of defining the reducers in the reducer field of configureStore, combine them here:
-const rootReducer = combineReducers({ counter: counterReducer });
+const rootReducer = combineReducers({ counter: counterReducer })
 
 //then set rootReducer as the reducer object of configureStore
 const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(yourMiddleware),
-});
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(yourMiddleware)
+})
 
-type RootState = ReturnType<typeof rootReducer>;
+type RootState = ReturnType<typeof rootReducer>
 ```
 
 ### Type Checking Redux Thunks
