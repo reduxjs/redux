@@ -116,7 +116,7 @@ export const EditPostForm = ({ match }) => {
     if (title && content) {
       // highlight-next-line
       await updatePost({ id: postId, title, content })
-      navigate(`/posts/${postId}`);
+      navigate(`/posts/${postId}`)
     }
   }
 
