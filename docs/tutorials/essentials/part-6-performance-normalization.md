@@ -477,7 +477,7 @@ export const Navbar = () => {
   const dispatch = useDispatch()
   // highlight-start
   const notifications = useSelector(selectAllNotifications)
-  const numUnreadNotifications = notifications.filter(n => !n.read).length
+  const numUnreadNotifications = notifications.filter(n => n.isNew).length
   // highlight-end
   // omit component contents
   // highlight-start
