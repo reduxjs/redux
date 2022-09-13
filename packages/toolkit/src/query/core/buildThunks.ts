@@ -12,10 +12,11 @@ import type {
   QueryActionCreatorResult,
 } from './buildInitiate'
 import { forceQueryFnSymbol, isUpsertQuery } from './buildInitiate'
-import type {
+import {
   AssertTagTypes,
   EndpointDefinition,
   EndpointDefinitions,
+  isQueryDefinition,
   MutationDefinition,
   QueryArgFrom,
   QueryDefinition,
@@ -478,6 +479,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       const state = getState()
       const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
       const fulfilledVal = requestState?.fulfilledTimeStamp
+      const endpointDefinition = endpointDefinitions[arg.endpointName]
 
       // Order of these checks matters.
       // In order for `upsertQueryData` to successfully run while an existing request is in flight,
@@ -489,6 +491,15 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
 
       // if this is forced, continue
       if (isForcedQuery(arg, state)) return true
+
+      if (
+        isQueryDefinition(endpointDefinition) &&
+        endpointDefinition?.forceRefetch?.({
+          endpointState: requestState,
+          state,
+        })
+      )
+        return true
 
       // Pull from the cache unless we explicitly force refetch or qualify based on time
       if (fulfilledVal)

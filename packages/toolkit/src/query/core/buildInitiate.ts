@@ -279,20 +279,10 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           endpointName,
         })
 
-        const endpointContext = context.endpointDefinitions[endpointName]
-        const sideEffectForced =
-          isQueryDefinition(endpointContext) &&
-          endpointContext.sideEffectForced?.({
-            getState,
-            endpointState: (
-              api.endpoints[endpointName] as ApiEndpointQuery<any, any>
-            ).select(arg)(getState()),
-          })
-
         const thunk = queryThunk({
           type: 'query',
           subscribe,
-          forceRefetch: forceRefetch || sideEffectForced,
+          forceRefetch: forceRefetch,
           subscriptionOptions,
           endpointName,
           originalArgs: arg,

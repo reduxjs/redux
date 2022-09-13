@@ -339,14 +339,15 @@ export interface QueryExtraOptions<
     responseData: ResultType
   ): ResultType | void
 
+  forceRefetch?(params: {
+    state: RootState<any, any, string>
+    endpointState?: QuerySubState<any>
+  }): boolean
+
   /**
    * All of these are `undefined` at runtime, purely to be used in TypeScript declarations!
    */
   Types?: QueryTypes<QueryArg, BaseQuery, TagTypes, ResultType, ReducerPath>
-  sideEffectForced?: (params: {
-    getState(): RootState<any, any, string>
-    endpointState: QuerySubState<any>
-  }) => boolean
 }
 
 export type QueryDefinition<
