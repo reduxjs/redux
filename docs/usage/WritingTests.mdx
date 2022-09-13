@@ -125,7 +125,7 @@ const userSlice = createSlice({
   }
 })
 
-export const selectUser = (state: RootState) => state.user.name
+export const selectUserName = (state: RootState) => state.user.name
 export const selectUserFetchStatus = (state: RootState) => state.user.status
 
 export default userSlice.reducer
@@ -260,23 +260,23 @@ const userSlice = createSlice({
     })
   }
 })
-export const selectUser = (state: RootState) => state.user.name
+export const selectUserName = (state: RootState) => state.user.name
 export const selectUserFetchStatus = (state: RootState) => state.user.status
 export default userSlice.reducer
 // file: features/users/UserDisplay.tsx
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { fetchUser, selectUser, selectUserFetchStatus } from './userSlice'
+import { fetchUser, selectUserName, selectUserFetchStatus } from './userSlice'
 
 export default function UserDisplay() {
   const dispatch = useAppDispatch()
-  const user = useAppSelector(selectUser)
+  const userName = useAppSelector(selectUserName)
   const userFetchStatus = useAppSelector(selectUserFetchStatus)
 
   return (
     <div>
       {/* Display the current user name */}
-      <div>{user}</div>
+      <div>{userName}</div>
       {/* On button click, dispatch a thunk action to fetch a user */}
       <button onClick={() => dispatch(fetchUser())}>Fetch user</button>
       {/* At any point if we're fetching a user, display that on the UI */}
@@ -503,7 +503,7 @@ const userSlice = createSlice({
   },
   reducers: {}
 })
-export const selectUser = (state: RootState) => state.user.name
+export const selectUserName = (state: RootState) => state.user.name
 export const selectUserFetchStatus = (state: RootState) => state.user.status
 export default userSlice.reducer
 // file: app/store.ts noEmit
@@ -563,17 +563,17 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 // file: features/users/UserDisplay.tsx noEmit
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { fetchUser, selectUser, selectUserFetchStatus } from './userSlice'
+import { fetchUser, selectUserName, selectUserFetchStatus } from './userSlice'
 
 export default function UserDisplay() {
   const dispatch = useAppDispatch()
-  const user = useAppSelector(selectUser)
+  const userName = useAppSelector(selectUserName)
   const userFetchStatus = useAppSelector(selectUserFetchStatus)
 
   return (
     <div>
       {/* Display the current user name */}
-      <div>{user}</div>
+      <div>{userName}</div>
       {/* On button click, dispatch a thunk action to fetch a user */}
       <button onClick={() => dispatch(fetchUser())}>Fetch user</button>
       {/* At any point if we're fetching a user, display that on the UI */}
