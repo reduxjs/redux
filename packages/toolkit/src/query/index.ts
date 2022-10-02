@@ -1,6 +1,6 @@
 export { QueryStatus } from './core/apiState'
 export type { Api, Module, ApiModules } from './apiTypes'
-export type { BaseQueryEnhancer, BaseQueryFn } from './baseQueryTypes'
+export type { BaseQueryApi, BaseQueryEnhancer, BaseQueryFn } from './baseQueryTypes'
 export type {
   EndpointDefinitions,
   EndpointDefinition,
