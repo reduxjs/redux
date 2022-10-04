@@ -16,7 +16,7 @@ export type {
   ParametricSelector,
 } from 'reselect'
 export { createDraftSafeSelector } from './createDraftSafeSelector'
-export type { ThunkAction, ThunkDispatch } from 'redux-thunk'
+export type { ThunkAction, ThunkDispatch, ThunkMiddleware } from 'redux-thunk'
 
 // We deliberately enable Immer's ES5 support, on the grounds that
 // we assume RTK will be used with React Native and other Proxy-less
