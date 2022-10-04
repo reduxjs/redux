@@ -124,7 +124,7 @@ const retryWithBackoff: BaseQueryEnhancer<
 
       if (
         e instanceof HandledError &&
-        !options.retryCondition(e.value as FetchBaseQueryError, args, {
+        !options.retryCondition(e.value.error as FetchBaseQueryError, args, {
           attempt: retry,
           baseQueryApi: api,
           extraOptions,
