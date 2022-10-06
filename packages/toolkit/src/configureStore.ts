@@ -78,7 +78,7 @@ export interface ConfigureStoreOptions<
    * function (either directly or indirectly by passing an object as `reducer`),
    * this must be an object with the same shape as the reducer map keys.
    */
-  /* 
+  /*
   Not 100% correct but the best approximation we can get:
   - if S is a `CombinedState` applying a second `CombinedState` on it does not change anything.
   - if it is not, there could be two cases:
@@ -104,7 +104,7 @@ type Middlewares<S> = ReadonlyArray<Middleware<{}, S>>
 
 type Enhancers = ReadonlyArray<StoreEnhancer>
 
-interface ToolkitStore<
+export interface ToolkitStore<
   S = any,
   A extends Action = AnyAction,
   M extends Middlewares<S> = Middlewares<S>,
