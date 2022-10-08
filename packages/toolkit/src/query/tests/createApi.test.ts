@@ -866,6 +866,18 @@ describe('custom serializeQueryArgs per endpoint', () => {
         query: (arg) => `${arg}`,
         serializeQueryArgs: serializer1,
       }),
+      listItems: build.query<string[], number>({
+        query: (pageNumber) => `/listItems?page=${pageNumber}`,
+        serializeQueryArgs: ({ endpointName }) => {
+          return endpointName
+        },
+        merge: (currentCache, newItems) => {
+          currentCache.push(...newItems)
+        },
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg
+        },
+      }),
     }),
   })
 
@@ -917,5 +929,38 @@ describe('custom serializeQueryArgs per endpoint', () => {
         'injectedQueryWithCustomSerializer-5'
       ]
     ).toBeTruthy()
+  })
+
+  test('serializeQueryArgs + merge allows refetching as args change with same cache key', async () => {
+    const allItems = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'i']
+    const PAGE_SIZE = 3
+
+    function paginate<T>(array: T[], page_size: number, page_number: number) {
+      // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+      return array.slice((page_number - 1) * page_size, page_number * page_size)
+    }
+
+    server.use(
+      rest.get('https://example.com/listItems', (req, res, ctx) => {
+        const pageString = req.url.searchParams.get('page')
+        const pageNum = parseInt(pageString || '0')
+
+        const results = paginate(allItems, PAGE_SIZE, pageNum)
+        return res(ctx.json(results))
+      })
+    )
+
+    // Page number shouldn't matter here, because the cache key ignores that.
+    // We just need to select the only cache entry.
+    const selectListItems = api.endpoints.listItems.select(0)
+
+    await storeRef.store.dispatch(api.endpoints.listItems.initiate(1))
+
+    const initialEntry = selectListItems(storeRef.store.getState())
+    expect(initialEntry.data).toEqual(['a', 'b', 'c'])
+
+    await storeRef.store.dispatch(api.endpoints.listItems.initiate(2))
+    const updatedEntry = selectListItems(storeRef.store.getState())
+    expect(updatedEntry.data).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
   })
 })

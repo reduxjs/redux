@@ -5,11 +5,10 @@ import type {
   QueryArgFrom,
   ResultTypeFrom,
 } from '../endpointDefinitions'
-import { DefinitionType } from '../endpointDefinitions'
+import { DefinitionType, isQueryDefinition } from '../endpointDefinitions'
 import type { QueryThunk, MutationThunk, QueryThunkArg } from './buildThunks'
 import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
 import type { SubscriptionOptions, RootState } from './apiState'
-import { QueryStatus } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
@@ -279,10 +278,11 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           endpointDefinition,
           endpointName,
         })
+
         const thunk = queryThunk({
           type: 'query',
           subscribe,
-          forceRefetch,
+          forceRefetch: forceRefetch,
           subscriptionOptions,
           endpointName,
           originalArgs: arg,
