@@ -475,36 +475,51 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     getPendingMeta() {
       return { startedTimeStamp: Date.now() }
     },
-    condition(arg, { getState }) {
+    condition(queryThunkArgs, { getState }) {
       const state = getState()
-      const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
+
+      const requestState =
+        state[reducerPath]?.queries?.[queryThunkArgs.queryCacheKey]
       const fulfilledVal = requestState?.fulfilledTimeStamp
-      const endpointDefinition = endpointDefinitions[arg.endpointName]
+      const currentArg = queryThunkArgs.originalArgs
+      const previousArg = requestState?.originalArgs
+      const endpointDefinition =
+        endpointDefinitions[queryThunkArgs.endpointName]
 
       // Order of these checks matters.
       // In order for `upsertQueryData` to successfully run while an existing request is in flight,
       /// we have to check for that first, otherwise `queryThunk` will bail out and not run at all.
-      if (isUpsertQuery(arg)) return true
+      if (isUpsertQuery(queryThunkArgs)) {
+        return true
+      }
 
       // Don't retry a request that's currently in-flight
-      if (requestState?.status === 'pending') return false
+      if (requestState?.status === 'pending') {
+        return false
+      }
 
       // if this is forced, continue
-      if (isForcedQuery(arg, state)) return true
+      if (isForcedQuery(queryThunkArgs, state)) {
+        return true
+      }
 
       if (
         isQueryDefinition(endpointDefinition) &&
         endpointDefinition?.forceRefetch?.({
+          currentArg,
+          previousArg,
           endpointState: requestState,
           state,
         })
-      )
+      ) {
         return true
+      }
 
       // Pull from the cache unless we explicitly force refetch or qualify based on time
-      if (fulfilledVal)
+      if (fulfilledVal) {
         // Value is cached and we didn't specify to refresh, skip it.
         return false
+      }
 
       return true
     },

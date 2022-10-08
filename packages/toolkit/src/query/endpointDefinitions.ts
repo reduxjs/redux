@@ -339,7 +339,32 @@ export interface QueryExtraOptions<
     responseData: ResultType
   ): ResultType | void
 
+  /**
+   * Check to see if the endpoint should force a refetch in cases where it normally wouldn't.
+   * This is primarily useful for "infinite scroll" / pagination use cases where
+   * RTKQ is keeping a single cache entry that is added to over time, in combination
+   * with `serializeQueryArgs` returning a fixed cache key and a `merge` callback
+   * set to add incoming data to the cache entry each time.
+   *
+   * Example:
+   *
+   * ```ts
+   * forceRefetch({currentArg, previousArg}) {
+   *   // Assume these are page numbers
+   *   return currentArg !== previousArg
+   * },
+   * serializeQueryArgs({endpointName}) {
+   *   return endpointName
+   * },
+   * merge(currentCacheData, responseData) {
+   *   currentCacheData.push(...responseData)
+   * }
+   *
+   * ```
+   */
   forceRefetch?(params: {
+    currentArg: QueryArg | undefined
+    previousArg: QueryArg | undefined
     state: RootState<any, any, string>
     endpointState?: QuerySubState<any>
   }): boolean
