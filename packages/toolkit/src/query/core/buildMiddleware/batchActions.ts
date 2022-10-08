@@ -38,6 +38,7 @@ export const buildBatchedActionsHandler: InternalHandlerBuilder<boolean> = ({
               )
             )
             abortedQueryActionsQueue = []
+            dispatchQueued = false
           })
           dispatchQueued = true
         }
