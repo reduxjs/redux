@@ -4,6 +4,7 @@ import { onFocus, onOnline } from '../setupListeners'
 import type {
   ApiMiddlewareInternalHandler,
   InternalHandlerBuilder,
+  InternalMiddlewareState,
   SubMiddlewareApi,
 } from './types'
 
@@ -15,22 +16,27 @@ export const buildWindowEventHandler: InternalHandlerBuilder = ({
 }) => {
   const { removeQueryResult } = api.internalActions
 
-  const handler: ApiMiddlewareInternalHandler = (action, mwApi) => {
+  const handler: ApiMiddlewareInternalHandler = (
+    action,
+    mwApi,
+    internalState
+  ) => {
     if (onFocus.match(action)) {
-      refetchValidQueries(mwApi, 'refetchOnFocus')
+      refetchValidQueries(mwApi, 'refetchOnFocus', internalState)
     }
     if (onOnline.match(action)) {
-      refetchValidQueries(mwApi, 'refetchOnReconnect')
+      refetchValidQueries(mwApi, 'refetchOnReconnect', internalState)
     }
   }
 
   function refetchValidQueries(
     api: SubMiddlewareApi,
-    type: 'refetchOnFocus' | 'refetchOnReconnect'
+    type: 'refetchOnFocus' | 'refetchOnReconnect',
+    internalState: InternalMiddlewareState
   ) {
     const state = api.getState()[reducerPath]
     const queries = state.queries
-    const subscriptions = state.subscriptions
+    const subscriptions = internalState.currentSubscriptions
 
     context.batch(() => {
       for (const queryCacheKey of Object.keys(subscriptions)) {

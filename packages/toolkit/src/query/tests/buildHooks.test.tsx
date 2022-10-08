@@ -24,8 +24,9 @@ import {
 import { server } from './mocks/server'
 import type { AnyAction } from 'redux'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
-import type { SerializedError } from '@reduxjs/toolkit'
+import { createListenerMiddleware, SerializedError } from '@reduxjs/toolkit'
 import { renderHook } from '@testing-library/react'
+import { delay } from '../../utils'
 
 // Just setup a temporary in-memory counter for tests that `getIncrementedAmount`.
 // This can be used to test how many renders happen due to data changes or
@@ -82,14 +83,37 @@ const api = createApi({
   }),
 })
 
-const storeRef = setupApiStore(api, {
-  actions(state: AnyAction[] = [], action: AnyAction) {
-    return [...state, action]
+const listenerMiddleware = createListenerMiddleware()
+
+let actions: AnyAction[] = []
+
+const storeRef = setupApiStore(
+  api,
+  {
+    // actions(state: AnyAction[] = [], action: AnyAction) {
+    //   return [...state, action]
+    // },
   },
+  {
+    middleware: {
+      prepend: [listenerMiddleware.middleware],
+    },
+  }
+)
+
+beforeEach(() => {
+  actions = []
+  listenerMiddleware.startListening({
+    predicate: () => true,
+    effect: (action) => {
+      actions.push(action)
+    },
+  })
 })
 
 afterEach(() => {
   amount = 0
+  listenerMiddleware.clearListeners()
 })
 
 let getRenderCount: () => number = () => 0
@@ -765,9 +789,7 @@ describe('hooks tests', () => {
       expect(getRenderCount()).toBe(9)
 
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.updateSubscriptionOptions.match)
+        actions.filter(api.internalActions.updateSubscriptionOptions.match)
       ).toHaveLength(1)
     })
 
@@ -811,9 +833,7 @@ describe('hooks tests', () => {
 
       // Being that there is only the initial query, no unsubscribe should be dispatched
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(0)
 
       fireEvent.click(screen.getByTestId('fetchUser2'))
@@ -826,34 +846,26 @@ describe('hooks tests', () => {
       )
 
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(1)
 
       fireEvent.click(screen.getByTestId('fetchUser1'))
 
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(2)
 
       // we always unsubscribe the original promise and create a new one
       fireEvent.click(screen.getByTestId('fetchUser1'))
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(3)
 
       unmount()
 
       // We unsubscribe after the component unmounts
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(4)
     })
 
@@ -1618,6 +1630,7 @@ describe('hooks tests', () => {
       expect(storeRef.store.getState().actions).toMatchSequence(
         api.internalActions.middlewareRegistered.match,
         checkSession.matchPending,
+        api.internalActions.subscriptionsUpdated.match,
         checkSession.matchRejected,
         login.matchPending,
         login.matchFulfilled,
@@ -1984,13 +1997,13 @@ describe('hooks with createApi defaults set', () => {
 
       const addBtn = screen.getByTestId('addPost')
 
-      await waitFor(() => expect(getRenderCount()).toBe(4))
+      await waitFor(() => expect(getRenderCount()).toBe(3))
 
       fireEvent.click(addBtn)
-      await waitFor(() => expect(getRenderCount()).toBe(6))
+      await waitFor(() => expect(getRenderCount()).toBe(5))
       fireEvent.click(addBtn)
       fireEvent.click(addBtn)
-      await waitFor(() => expect(getRenderCount()).toBe(8))
+      await waitFor(() => expect(getRenderCount()).toBe(7))
     })
 
     test('useQuery with selectFromResult option serves a deeply memoized value and does not rerender unnecessarily', async () => {
@@ -2353,14 +2366,25 @@ describe('skip behaviour', () => {
     )
 
     expect(result.current).toEqual(uninitialized)
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
 
-    rerender([1])
-    expect(result.current).toMatchObject({ status: QueryStatus.pending })
+    await act(async () => {
+      rerender([1])
+    })
+    expect(result.current).toMatchObject({ status: QueryStatus.fulfilled })
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(1)
 
-    rerender([1, { skip: true }])
-    expect(result.current).toEqual(uninitialized)
+    await act(async () => {
+      rerender([1, { skip: true }])
+    })
+    expect(result.current).toEqual({
+      ...uninitialized,
+      currentData: undefined,
+      data: { name: 'Timmy' },
+    })
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
 
@@ -2375,17 +2399,28 @@ describe('skip behaviour', () => {
     )
 
     expect(result.current).toEqual(uninitialized)
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
     // also no subscription on `getUser(skipToken)` or similar:
     expect(storeRef.store.getState().api.subscriptions).toEqual({})
 
-    rerender([1])
-    expect(result.current).toMatchObject({ status: QueryStatus.pending })
+    await act(async () => {
+      rerender([1])
+    })
+    expect(result.current).toMatchObject({ status: QueryStatus.fulfilled })
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(1)
     expect(storeRef.store.getState().api.subscriptions).not.toEqual({})
 
-    rerender([skipToken])
-    expect(result.current).toEqual(uninitialized)
+    await act(async () => {
+      rerender([skipToken])
+    })
+    expect(result.current).toEqual({
+      ...uninitialized,
+      currentData: undefined,
+      data: { name: 'Timmy' },
+    })
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
 })

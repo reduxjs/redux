@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query'
 import { setupApiStore, waitMs } from './helpers'
+import { delay } from '../../utils'
 
 const mockBaseQuery = jest
   .fn()
@@ -20,10 +21,6 @@ const api = createApi({
 const { getPosts } = api.endpoints
 
 const storeRef = setupApiStore(api)
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 const getSubscribersForQueryCacheKey = (queryCacheKey: string) =>
   storeRef.store.getState()[api.reducerPath].subscriptions[queryCacheKey] || {}
@@ -59,11 +56,13 @@ describe('polling tests', () => {
 
     const getSubs = createSubscriptionGetter(queryCacheKey)
 
+    await delay(1)
     expect(Object.keys(getSubs())).toHaveLength(1)
     expect(getSubs()[requestId].pollingInterval).toBe(10)
 
     subscription.updateSubscriptionOptions({ pollingInterval: 20 })
 
+    await delay(1)
     expect(Object.keys(getSubs())).toHaveLength(1)
     expect(getSubs()[requestId].pollingInterval).toBe(20)
   })
@@ -91,6 +90,7 @@ describe('polling tests', () => {
 
     subscriptionOne.unsubscribe()
 
+    await delay(1)
     expect(Object.keys(getSubs())).toHaveLength(1)
   })
 

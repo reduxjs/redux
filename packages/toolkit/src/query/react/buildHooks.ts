@@ -701,12 +701,21 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       const promiseRef = useRef<QueryActionCreatorResult<any>>()
 
       let { queryCacheKey, requestId } = promiseRef.current || {}
-      const currentRenderHasSubscription = useSelector(
-        (state: RootState<Definitions, string, string>) =>
-          !!queryCacheKey &&
-          !!requestId &&
-          !state[api.reducerPath].subscriptions[queryCacheKey]?.[requestId]
-      )
+
+      // HACK Because the latest state is in the middleware, we actually
+      // dispatch an action that will be intercepted and returned.
+      let currentRenderHasSubscription = false
+      if (queryCacheKey && requestId) {
+        // This _should_ return a boolean, even if the types don't line up
+        const returnedValue = dispatch(
+          api.internalActions.internal_probeSubscription({
+            queryCacheKey,
+            requestId,
+          })
+        )
+        // console.log('Probe subscription check: ', returnedValue)
+        currentRenderHasSubscription = !!returnedValue
+      }
 
       const subscriptionRemoved =
         !currentRenderHasSubscription && lastRenderHadSubscription.current

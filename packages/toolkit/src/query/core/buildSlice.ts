@@ -380,15 +380,14 @@ export function buildSlice({
     },
   })
 
+  // Dummy slice to generate actions
   const subscriptionSlice = createSlice({
     name: `${reducerPath}/subscriptions`,
     initialState: initialState as SubscriptionState,
     reducers: {
       updateSubscriptionOptions(
-        draft,
-        {
-          payload: { queryCacheKey, requestId, options },
-        }: PayloadAction<
+        d,
+        a: PayloadAction<
           {
             endpointName: string
             requestId: string
@@ -396,59 +395,81 @@ export function buildSlice({
           } & QuerySubstateIdentifier
         >
       ) {
-        if (draft?.[queryCacheKey]?.[requestId]) {
-          draft[queryCacheKey]![requestId] = options
-        }
+        // Dummy
       },
       unsubscribeQueryResult(
-        draft,
-        {
-          payload: { queryCacheKey, requestId },
-        }: PayloadAction<{ requestId: string } & QuerySubstateIdentifier>
+        d,
+        a: PayloadAction<{ requestId: string } & QuerySubstateIdentifier>
       ) {
-        if (draft[queryCacheKey]) {
-          delete draft[queryCacheKey]![requestId]
-        }
+        // Dummy
       },
-      subscriptionRequestsRejected(
-        draft,
-        action: PayloadAction<RejectedAction<QueryThunk, any>[]>
+      internal_probeSubscription(
+        d,
+        a: PayloadAction<{ queryCacheKey: string; requestId: string }>
       ) {
-        // We need to process "rejected" actions caused by a component trying to start a subscription
-        // after there's already a cache entry. Since many components may mount at once and all want
-        // the same data, we use a middleware that intercepts those actions batches these together
-        // into a single larger action , and we'll process all of them at once.
-        for (let rejectedAction of action.payload) {
-          const {
-            meta: { condition, arg, requestId },
-          } = rejectedAction
-          // request was aborted due to condition (another query already running)
-          if (condition && arg.subscribe) {
-            const substate = (draft[arg.queryCacheKey] ??= {})
-            substate[requestId] =
-              arg.subscriptionOptions ?? substate[requestId] ?? {}
-          }
-        }
+        // dummy
       },
     },
-    extraReducers: (builder) => {
-      builder
-        .addCase(
-          querySlice.actions.removeQueryResult,
-          (draft, { payload: { queryCacheKey } }) => {
-            delete draft[queryCacheKey]
-          }
-        )
-        .addCase(queryThunk.pending, (draft, { meta: { arg, requestId } }) => {
-          if (arg.subscribe) {
-            const substate = (draft[arg.queryCacheKey] ??= {})
-            substate[requestId] =
-              arg.subscriptionOptions ?? substate[requestId] ?? {}
-          }
-        })
-        // update the state to be a new object to be picked up as a "state change"
-        // by redux-persist's `autoMergeLevel2`
-        .addMatcher(hasRehydrationInfo, (draft) => ({ ...draft }))
+  })
+
+  const { updateSubscriptionOptions, unsubscribeQueryResult } =
+    subscriptionSlice.actions
+
+  // Actually intentionally mutate the subscriptions state used in the middleware
+  // This is done to speed up perf when loading many components
+  const actuallyMutateSubscriptions = (
+    draft: SubscriptionState,
+    action: AnyAction
+  ) => {
+    if (updateSubscriptionOptions.match(action)) {
+      const { queryCacheKey, requestId, options } = action.payload
+
+      if (draft?.[queryCacheKey]?.[requestId]) {
+        draft[queryCacheKey]![requestId] = options
+      }
+      return true
+    } else if (unsubscribeQueryResult.match(action)) {
+      const { queryCacheKey, requestId } = action.payload
+      if (draft[queryCacheKey]) {
+        delete draft[queryCacheKey]![requestId]
+      }
+      return true
+    } else if (querySlice.actions.removeQueryResult.match(action)) {
+      delete draft[action.payload.queryCacheKey]
+    } else if (queryThunk.pending.match(action)) {
+      const {
+        meta: { arg, requestId },
+      } = action
+      if (arg.subscribe) {
+        const substate = (draft[arg.queryCacheKey] ??= {})
+        substate[requestId] =
+          arg.subscriptionOptions ?? substate[requestId] ?? {}
+
+        return true
+      }
+    } else if (queryThunk.rejected.match(action)) {
+      const {
+        meta: { condition, arg, requestId },
+      } = action
+      if (condition && arg.subscribe) {
+        const substate = (draft[arg.queryCacheKey] ??= {})
+        substate[requestId] =
+          arg.subscriptionOptions ?? substate[requestId] ?? {}
+
+        return true
+      }
+    }
+
+    return false
+  }
+
+  const internalSubscriptionsSlice = createSlice({
+    name: `${reducerPath}/internalSubscriptions`,
+    initialState: initialState as SubscriptionState,
+    reducers: {
+      subscriptionsUpdated(state, action: PayloadAction<Patch[]>) {
+        return applyPatches(state, action.payload)
+      },
     },
   })
 
@@ -494,7 +515,7 @@ export function buildSlice({
     queries: querySlice.reducer,
     mutations: mutationSlice.reducer,
     provided: invalidationSlice.reducer,
-    subscriptions: subscriptionSlice.reducer,
+    subscriptions: internalSubscriptionsSlice.reducer,
     config: configSlice.reducer,
   })
 
@@ -505,10 +526,12 @@ export function buildSlice({
     ...configSlice.actions,
     ...querySlice.actions,
     ...subscriptionSlice.actions,
+    ...internalSubscriptionsSlice.actions,
     ...mutationSlice.actions,
     /** @deprecated has been renamed to `removeMutationResult` */
     unsubscribeMutationResult: mutationSlice.actions.removeMutationResult,
     resetApiState,
+    actuallyMutateSubscriptions,
   }
 
   return { reducer, actions }

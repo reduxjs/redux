@@ -1,5 +1,7 @@
 import type { QueryThunk, RejectedAction } from '../buildThunks'
 import type { InternalHandlerBuilder } from './types'
+import type { SubscriptionState } from '../apiState'
+import { produceWithPatches } from 'immer'
 
 // Copied from https://github.com/feross/queue-microtask
 let promise: Promise<any>
@@ -14,39 +16,75 @@ const queueMicrotaskShim =
           }, 0)
         )
 
-export const buildBatchedActionsHandler: InternalHandlerBuilder<boolean> = ({
-  api,
-  queryThunk,
-}) => {
-  let abortedQueryActionsQueue: RejectedAction<QueryThunk, any>[] = []
+export const buildBatchedActionsHandler: InternalHandlerBuilder<
+  [actionShouldContinue: boolean, subscriptionExists: boolean]
+> = ({ api, queryThunk }) => {
+  const { actuallyMutateSubscriptions } = api.internalActions
+  const subscriptionsPrefix = `${api.reducerPath}/subscriptions`
+
+  let previousSubscriptions: SubscriptionState =
+    null as unknown as SubscriptionState
+
   let dispatchQueued = false
 
-  return (action, mwApi) => {
-    if (queryThunk.rejected.match(action)) {
-      const { condition, arg } = action.meta
-
-      if (condition && arg.subscribe) {
-        // request was aborted due to condition (another query already running)
-        // _Don't_ dispatch right away - queue it for a debounced grouped dispatch
-        abortedQueryActionsQueue.push(action)
-
-        if (!dispatchQueued) {
-          queueMicrotaskShim(() => {
-            mwApi.dispatch(
-              api.internalActions.subscriptionRequestsRejected(
-                abortedQueryActionsQueue
-              )
-            )
-            abortedQueryActionsQueue = []
-            dispatchQueued = false
-          })
-          dispatchQueued = true
-        }
-        // _Don't_ let the action reach the reducers now!
-        return false
-      }
+  return (action, mwApi, internalState) => {
+    if (!previousSubscriptions) {
+      // Initialize it the first time this handler runs
+      previousSubscriptions = JSON.parse(
+        JSON.stringify(internalState.currentSubscriptions)
+      )
     }
 
-    return true
+    // Intercept requests by hooks to see if they're subscribed
+    // Necessary because we delay updating store state to the end of the tick
+    if (api.internalActions.internal_probeSubscription.match(action)) {
+      const { queryCacheKey, requestId } = action.payload
+      const hasSubscription =
+        !!internalState.currentSubscriptions[queryCacheKey]?.[requestId]
+      return [false, hasSubscription]
+    }
+
+    // Update subscription data based on this action
+    const didMutate = actuallyMutateSubscriptions(
+      internalState.currentSubscriptions,
+      action
+    )
+
+    if (didMutate) {
+      if (!dispatchQueued) {
+        queueMicrotaskShim(() => {
+          // Deep clone the current subscription data
+          const newSubscriptions: SubscriptionState = JSON.parse(
+            JSON.stringify(internalState.currentSubscriptions)
+          )
+          // Figure out a smaller diff between original and current
+          const [, patches] = produceWithPatches(
+            previousSubscriptions,
+            () => newSubscriptions
+          )
+
+          // Sync the store state for visibility
+          mwApi.next(api.internalActions.subscriptionsUpdated(patches))
+          // Save the cloned state for later reference
+          previousSubscriptions = newSubscriptions
+          dispatchQueued = false
+        })
+        dispatchQueued = true
+      }
+
+      const isSubscriptionSliceAction =
+        !!action.type?.startsWith(subscriptionsPrefix)
+      const isAdditionalSubscriptionAction =
+        queryThunk.rejected.match(action) &&
+        action.meta.condition &&
+        !!action.meta.arg.subscribe
+
+      const actionShouldContinue =
+        !isSubscriptionSliceAction && !isAdditionalSubscriptionAction
+
+      return [actionShouldContinue, false]
+    }
+
+    return [true, false]
   }
 }

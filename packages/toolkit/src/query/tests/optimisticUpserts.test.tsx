@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { actionsReducer, hookWaitFor, setupApiStore, waitMs } from './helpers'
 import { skipToken } from '../core/buildSelectors'
 import { renderHook, act, waitFor } from '@testing-library/react'
+import { delay } from '../../utils'
 
 interface Post {
   id: string
@@ -11,10 +12,6 @@ interface Post {
 
 const baseQuery = jest.fn()
 beforeEach(() => baseQuery.mockReset())
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 const api = createApi({
   baseQuery: (...args: any[]) => {

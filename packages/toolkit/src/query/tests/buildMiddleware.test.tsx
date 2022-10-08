@@ -37,6 +37,7 @@ it('invalidates the specified tags', async () => {
   expect(storeRef.store.getState().actions).toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     getBanana.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     getBanana.matchFulfilled
   )
 
@@ -48,6 +49,7 @@ it('invalidates the specified tags', async () => {
   const firstSequence = [
     api.internalActions.middlewareRegistered.match,
     getBanana.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     getBanana.matchFulfilled,
     api.util.invalidateTags.match,
     getBanana.matchPending,
@@ -63,6 +65,7 @@ it('invalidates the specified tags', async () => {
   expect(storeRef.store.getState().actions).toMatchSequence(
     ...firstSequence,
     getBread.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     getBread.matchFulfilled,
     api.util.invalidateTags.match,
     getBread.matchPending,

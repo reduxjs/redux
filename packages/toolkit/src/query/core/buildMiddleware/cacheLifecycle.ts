@@ -197,6 +197,7 @@ export const buildCacheLifecycleHandler: InternalHandlerBuilder = ({
   const handler: ApiMiddlewareInternalHandler = (
     action,
     mwApi,
+    internalState,
     stateBefore
   ) => {
     const cacheKey = getCacheKey(action)
