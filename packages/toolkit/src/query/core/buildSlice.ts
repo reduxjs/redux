@@ -314,6 +314,17 @@ export function buildSlice({
             )
             const { queryCacheKey } = action.meta.arg
 
+            for (const tagTypeSubscriptions of Object.values(draft)) {
+              for (const idSubscriptions of Object.values(
+                tagTypeSubscriptions
+              )) {
+                const foundAt = idSubscriptions.indexOf(queryCacheKey)
+                if (foundAt !== -1) {
+                  idSubscriptions.splice(foundAt, 1)
+                }
+              }
+            }
+
             for (const { type, id } of providedTags) {
               const subscribedQueries = ((draft[type] ??= {})[
                 id || '__internal_without_id'
