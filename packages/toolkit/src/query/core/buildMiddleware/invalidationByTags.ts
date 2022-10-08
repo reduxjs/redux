@@ -70,8 +70,9 @@ export const build: SubMiddlewareBuilder = ({
       const valuesArray = Array.from(toInvalidate.values())
       for (const { queryCacheKey } of valuesArray) {
         const querySubState = state.queries[queryCacheKey]
-        const subscriptionSubState = state.subscriptions[queryCacheKey]
-        if (querySubState && subscriptionSubState) {
+        const subscriptionSubState = state.subscriptions[queryCacheKey] ?? {}
+
+        if (querySubState) {
           if (Object.keys(subscriptionSubState).length === 0) {
             mwApi.dispatch(
               removeQueryResult({
@@ -80,7 +81,6 @@ export const build: SubMiddlewareBuilder = ({
             )
           } else if (querySubState.status !== QueryStatus.uninitialized) {
             mwApi.dispatch(refetchQuery(querySubState, queryCacheKey))
-          } else {
           }
         }
       }
