@@ -10,7 +10,11 @@ import type { QueryThunkArg } from '../buildThunks'
 import { buildCacheCollectionHandler } from './cacheCollection'
 import { buildInvalidationByTagsHandler } from './invalidationByTags'
 import { buildPollingHandler } from './polling'
-import type { BuildMiddlewareInput, InternalHandlerBuilder } from './types'
+import type {
+  BuildMiddlewareInput,
+  InternalHandlerBuilder,
+  InternalMiddlewareState,
+} from './types'
 import { buildWindowEventHandler } from './windowEventHandling'
 import { buildCacheLifecycleHandler } from './cacheLifecycle'
 import { buildQueryLifecycleHandler } from './queryLifecycle'
@@ -69,6 +73,10 @@ export function buildMiddleware<
     const batchedActionsHandler = buildBatchedActionsHandler(builderArgs)
     const windowEventsHandler = buildWindowEventHandler(builderArgs)
 
+    let internalState: InternalMiddlewareState = {
+      currentSubscriptions: {},
+    }
+
     return (next) => {
       return (action) => {
         if (!initialized) {
@@ -77,19 +85,30 @@ export function buildMiddleware<
           mwApi.dispatch(api.internalActions.middlewareRegistered(apiUid))
         }
 
+        const mwApiWithNext = { ...mwApi, next }
+
         const stateBefore = mwApi.getState()
 
-        if (!batchedActionsHandler(action, mwApi, stateBefore)) {
-          return
-        }
+        const [actionShouldContinue, hasSubscription] = batchedActionsHandler(
+          action,
+          mwApiWithNext,
+          internalState,
+          stateBefore
+        )
 
-        const res = next(action)
+        let res: any
+
+        if (actionShouldContinue) {
+          res = next(action)
+        } else {
+          res = hasSubscription
+        }
 
         if (!!mwApi.getState()[reducerPath]) {
           // Only run these checks if the middleware is registered okay
 
           // This looks for actions that aren't specific to the API slice
-          windowEventsHandler(action, mwApi, stateBefore)
+          windowEventsHandler(action, mwApiWithNext, internalState, stateBefore)
 
           if (
             isThisApiSliceAction(action) ||
@@ -98,7 +117,7 @@ export function buildMiddleware<
             // Only run these additional checks if the actions are part of the API slice,
             // or the action has hydration-related data
             for (let handler of handlers) {
-              handler(action, mwApi, stateBefore)
+              handler(action, mwApiWithNext, internalState, stateBefore)
             }
           }
         }

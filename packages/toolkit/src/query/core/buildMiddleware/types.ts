@@ -1,6 +1,7 @@
 import type {
   AnyAction,
   AsyncThunkAction,
+  Dispatch,
   Middleware,
   MiddlewareAPI,
   ThunkDispatch,
@@ -11,7 +12,12 @@ import type {
   AssertTagTypes,
   EndpointDefinitions,
 } from '../../endpointDefinitions'
-import type { QueryStatus, QuerySubState, RootState } from '../apiState'
+import type {
+  QueryStatus,
+  QuerySubState,
+  RootState,
+  SubscriptionState,
+} from '../apiState'
 import type {
   MutationThunk,
   QueryThunk,
@@ -21,6 +27,10 @@ import type {
 
 export type QueryStateMeta<T> = Record<string, undefined | T>
 export type TimeoutId = ReturnType<typeof setTimeout>
+
+export interface InternalMiddlewareState {
+  currentSubscriptions: SubscriptionState
+}
 
 export interface BuildMiddlewareInput<
   Definitions extends EndpointDefinitions,
@@ -62,7 +72,8 @@ export type SubMiddlewareBuilder = (
 
 export type ApiMiddlewareInternalHandler<ReturnType = void> = (
   action: AnyAction,
-  mwApi: SubMiddlewareApi,
+  mwApi: SubMiddlewareApi & { next: Dispatch<AnyAction> },
+  internalState: InternalMiddlewareState,
   prevState: RootState<EndpointDefinitions, string, string>
 ) => ReturnType
 

@@ -23,6 +23,10 @@ It is disabled in production builds, so you don't need to worry about that.`)
   }
 }
 
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 /**
  * @public
  */

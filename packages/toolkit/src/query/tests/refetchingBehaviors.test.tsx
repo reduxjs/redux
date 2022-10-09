@@ -2,7 +2,7 @@ import * as React from 'react'
 import { createApi, setupListeners } from '@reduxjs/toolkit/query/react'
 import { act, fireEvent, render, waitFor, screen } from '@testing-library/react'
 import { setupApiStore, waitMs } from './helpers'
-import { AnyAction } from '@reduxjs/toolkit'
+import { delay } from '../../utils'
 
 // Just setup a temporary in-memory counter for tests that `getIncrementedAmount`.
 // This can be used to test how many renders happen due to data changes or
@@ -214,10 +214,11 @@ describe('refetchOnFocus tests', () => {
 
     expect(getIncrementedAmountState()).not.toBeUndefined()
 
-    act(() => {
+    await act(async () => {
       fireEvent.focus(window)
     })
 
+    await delay(1)
     expect(getIncrementedAmountState()).toBeUndefined()
   })
 })
@@ -372,7 +373,9 @@ describe('customListenersHandler', () => {
 
   test('setupListeners accepts a custom callback and executes it', async () => {
     const consoleSpy = jest.spyOn(console, 'log')
-    consoleSpy.mockImplementation(() => {})
+    consoleSpy.mockImplementation((...args) => {
+      // console.info(...args)
+    })
     const dispatchSpy = jest.spyOn(storeRef.store, 'dispatch')
 
     let unsubscribe = () => {}
@@ -427,9 +430,15 @@ describe('customListenersHandler', () => {
       window.dispatchEvent(new Event('online'))
     })
     expect(dispatchSpy).toHaveBeenCalled()
+
+    // Ignore RTKQ middleware `internal_probeSubscription` calls
+    const mockCallsWithoutInternals = dispatchSpy.mock.calls.filter(
+      (call) => !(call[0] as any)?.type?.includes('internal')
+    )
+
     expect(
       defaultApi.internalActions.onOnline.match(
-        dispatchSpy.mock.calls[1][0] as any
+        mockCallsWithoutInternals[1][0] as any
       )
     ).toBe(true)
 

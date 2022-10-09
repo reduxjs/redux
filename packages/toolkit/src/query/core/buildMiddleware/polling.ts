@@ -6,6 +6,7 @@ import type {
   TimeoutId,
   InternalHandlerBuilder,
   ApiMiddlewareInternalHandler,
+  InternalMiddlewareState,
 } from './types'
 
 export const buildPollingHandler: InternalHandlerBuilder = ({
@@ -20,26 +21,30 @@ export const buildPollingHandler: InternalHandlerBuilder = ({
     pollingInterval: number
   }> = {}
 
-  const handler: ApiMiddlewareInternalHandler = (action, mwApi) => {
+  const handler: ApiMiddlewareInternalHandler = (
+    action,
+    mwApi,
+    internalState
+  ) => {
     if (
       api.internalActions.updateSubscriptionOptions.match(action) ||
       api.internalActions.unsubscribeQueryResult.match(action)
     ) {
-      updatePollingInterval(action.payload, mwApi)
+      updatePollingInterval(action.payload, mwApi, internalState)
     }
 
     if (
       queryThunk.pending.match(action) ||
       (queryThunk.rejected.match(action) && action.meta.condition)
     ) {
-      updatePollingInterval(action.meta.arg, mwApi)
+      updatePollingInterval(action.meta.arg, mwApi, internalState)
     }
 
     if (
       queryThunk.fulfilled.match(action) ||
       (queryThunk.rejected.match(action) && !action.meta.condition)
     ) {
-      startNextPoll(action.meta.arg, mwApi)
+      startNextPoll(action.meta.arg, mwApi, internalState)
     }
 
     if (api.util.resetApiState.match(action)) {
@@ -49,11 +54,12 @@ export const buildPollingHandler: InternalHandlerBuilder = ({
 
   function startNextPoll(
     { queryCacheKey }: QuerySubstateIdentifier,
-    api: SubMiddlewareApi
+    api: SubMiddlewareApi,
+    internalState: InternalMiddlewareState
   ) {
     const state = api.getState()[reducerPath]
     const querySubState = state.queries[queryCacheKey]
-    const subscriptions = state.subscriptions[queryCacheKey]
+    const subscriptions = internalState.currentSubscriptions[queryCacheKey]
 
     if (!querySubState || querySubState.status === QueryStatus.uninitialized)
       return
@@ -84,11 +90,12 @@ export const buildPollingHandler: InternalHandlerBuilder = ({
 
   function updatePollingInterval(
     { queryCacheKey }: QuerySubstateIdentifier,
-    api: SubMiddlewareApi
+    api: SubMiddlewareApi,
+    internalState: InternalMiddlewareState
   ) {
     const state = api.getState()[reducerPath]
     const querySubState = state.queries[queryCacheKey]
-    const subscriptions = state.subscriptions[queryCacheKey]
+    const subscriptions = internalState.currentSubscriptions[queryCacheKey]
 
     if (!querySubState || querySubState.status === QueryStatus.uninitialized) {
       return
@@ -105,7 +112,7 @@ export const buildPollingHandler: InternalHandlerBuilder = ({
     const nextPollTimestamp = Date.now() + lowestPollingInterval
 
     if (!currentPoll || nextPollTimestamp < currentPoll.nextPollTimestamp) {
-      startNextPoll({ queryCacheKey }, api)
+      startNextPoll({ queryCacheKey }, api, internalState)
     }
   }
 
@@ -125,13 +132,15 @@ export const buildPollingHandler: InternalHandlerBuilder = ({
 
   function findLowestPollingInterval(subscribers: Subscribers = {}) {
     let lowestPollingInterval = Number.POSITIVE_INFINITY
-    for (const subscription of Object.values(subscribers)) {
-      if (!!subscription.pollingInterval)
+    for (let key in subscribers) {
+      if (!!subscribers[key].pollingInterval) {
         lowestPollingInterval = Math.min(
-          subscription.pollingInterval,
+          subscribers[key].pollingInterval!,
           lowestPollingInterval
         )
+      }
     }
+
     return lowestPollingInterval
   }
   return handler

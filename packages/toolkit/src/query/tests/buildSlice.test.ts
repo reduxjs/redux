@@ -1,12 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createApi } from '@reduxjs/toolkit/query'
 import { setupApiStore } from './helpers'
+import { delay } from '../../utils'
 
 let shouldApiResponseSuccess = true
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 const baseQuery = (args?: any) => ({ data: args })
 const api = createApi({
@@ -50,7 +47,7 @@ describe('buildSlice', () => {
       getUser.initiate(1, { subscriptionOptions: { pollingInterval: 10 } })
     )
 
-    expect(storeRef.store.getState()).toEqual({
+    const initialQueryState = {
       api: {
         config: {
           focused: true,
@@ -63,10 +60,11 @@ describe('buildSlice', () => {
           refetchOnReconnect: false,
         },
         mutations: {},
-        provided: {},
+        provided: expect.any(Object),
         queries: {
           'getUser(1)': {
             data: {
+              success: true,
               url: 'user/1',
             },
             endpointName: 'getUser',
@@ -77,12 +75,25 @@ describe('buildSlice', () => {
             status: 'fulfilled',
           },
         },
-        subscriptions: {
-          'getUser(1)': expect.any(Object),
-        },
+        // Filled in a tick later
+        subscriptions: expect.any(Object),
       },
       auth: {
         token: '1234',
+      },
+    }
+
+    expect(storeRef.store.getState()).toEqual(initialQueryState)
+
+    await delay(1)
+
+    expect(storeRef.store.getState()).toEqual({
+      ...initialQueryState,
+      api: {
+        ...initialQueryState.api,
+        subscriptions: {
+          'getUser(1)': expect.any(Object),
+        },
       },
     })
 
