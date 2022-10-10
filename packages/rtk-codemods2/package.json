@@ -1,0 +1,33 @@
+{
+  "name": "rtk-codemods2",
+  "version": "0.1.0",
+  "scripts": {
+    "lint": "eslint --cache .",
+    "test": "codemod-cli test",
+    "test:coverage": "codemod-cli test --coverage",
+    "update-docs": "codemod-cli update-docs",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+  },
+  "bin": "./bin/cli.js",
+  "keywords": [
+    "codemod-cli"
+  ],
+  "dependencies": {
+    "codemod-cli": "^3.2.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.1.0",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^26.6.3",
+    "prettier": "^2.7.1"
+  },
+  "engines": {
+    "node": "10.* || 12.* || >= 14"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
