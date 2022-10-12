@@ -16,6 +16,7 @@ createReducer(initialState, (builder) => {
   builder.addCase(todoAdded1e, (state, action) => {
     // stuff
   });
+
   builder.addCase(todoAdded1f, (state, action) => {
     //stuff
   });
@@ -30,6 +31,7 @@ createReducer(initialState, (builder) => {
   builder.addCase(todoAdded2b, (state, action) => {
     // stuff
   });
+
   builder.addCase(todoAdded2c, (state, action) => {
     // stuff
   });
