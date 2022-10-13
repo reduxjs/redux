@@ -1,16 +1,13 @@
 {
   "name": "@reduxjs/rtk-codemods",
-  "version": "0.0.0",
-  "private": false,
+  "version": "0.0.1",
   "scripts": {
     "lint": "eslint --cache .",
     "test": "codemod-cli test",
     "test:coverage": "codemod-cli test --coverage",
     "update-docs": "codemod-cli update-docs"
   },
-  "bin": {
-    "rtk-codemods": "./bin/cli.js"
-  },
+  "bin": "./bin/cli.js",
   "files": [
     "bin/cli.js",
     "transforms/**/index.ts",
