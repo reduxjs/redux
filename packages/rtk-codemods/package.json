@@ -1,29 +1,33 @@
 {
-  "name": "@reduxjs/rtk-codemods",
-  "version": "0.0.1",
-  "author": {
-    "name": "Lenz Weber",
-    "email": "mail@phryneas.de",
-    "url": "https://phryneas.de/"
-  },
-  "license": "MIT",
-  "type": "module",
+  "name": "rtk-codemods",
+  "version": "0.1.0",
   "scripts": {
-    "test:codemods": "jest --config codemods/jest.config.js"
+    "lint": "eslint --cache .",
+    "test": "codemod-cli test",
+    "test:coverage": "codemod-cli test --coverage",
+    "update-docs": "codemod-cli update-docs",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
+  "bin": "./bin/cli.js",
+  "keywords": [
+    "codemod-cli"
+  ],
   "dependencies": {
-    "jest": "^27",
-    "jscodeshift": "^0.13.1"
+    "codemod-cli": "^3.2.0"
   },
   "devDependencies": {
     "@types/jest": "^27",
-    "@types/jscodeshift": "^0.11.5"
+    "@types/jscodeshift": "^0.11.5",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27",
+    "prettier": "^2.2.1",
+    "ts-jest": "^27"
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "src",
-    "dist"
-  ]
+  "engines": {
+    "node": ">= 14"
+  }
 }
