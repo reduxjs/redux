@@ -110,7 +110,7 @@ export type FetchBaseQueryArgs = {
       BaseQueryApi,
       'getState' | 'extra' | 'endpoint' | 'type' | 'forced'
     >
-  ) => MaybePromise<Headers>
+  ) => MaybePromise<Headers | void>
   fetchFn?: (
     input: RequestInfo,
     init?: RequestInit | undefined
@@ -224,10 +224,15 @@ export function fetchBaseQuery({
       ...rest,
     }
 
-    config.headers = await prepareHeaders(
-      new Headers(stripUndefined(headers)),
-      { getState, extra, endpoint, forced, type }
-    )
+    headers = new Headers(stripUndefined(headers))
+    config.headers =
+      (await prepareHeaders(headers, {
+        getState,
+        extra,
+        endpoint,
+        forced,
+        type,
+      })) || headers
 
     // Only set the content-type to json if appropriate. Will not be true for FormData, ArrayBuffer, Blob, etc.
     const isJsonifiable = (body: any) =>

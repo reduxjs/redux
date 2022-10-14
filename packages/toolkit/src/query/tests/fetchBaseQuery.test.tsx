@@ -657,6 +657,26 @@ describe('fetchBaseQuery', () => {
       expect(request.headers['delete2']).toBeUndefined()
     })
 
+    test('prepareHeaders can return undefined', async () => {
+      let request: any
+
+      const token = 'accessToken'
+
+      const _baseQuery = fetchBaseQuery({
+        baseUrl,
+        prepareHeaders: (headers) => {
+          headers.set('authorization', `Bearer ${token}`)
+        },
+      })
+
+      const doRequest = async () =>
+        _baseQuery({ url: '/echo' }, commonBaseQueryApi, {})
+
+      ;({ data: request } = await doRequest())
+
+      expect(request.headers['authorization']).toBe(`Bearer ${token}`)
+    })
+
     test('prepareHeaders is able to be an async function', async () => {
       let request: any
 
@@ -668,6 +688,27 @@ describe('fetchBaseQuery', () => {
         prepareHeaders: async (headers) => {
           headers.set('authorization', `Bearer ${await getAccessTokenAsync()}`)
           return headers
+        },
+      })
+
+      const doRequest = async () =>
+        _baseQuery({ url: '/echo' }, commonBaseQueryApi, {})
+
+      ;({ data: request } = await doRequest())
+
+      expect(request.headers['authorization']).toBe(`Bearer ${token}`)
+    })
+
+    test('prepareHeaders is able to be an async function returning undefined', async () => {
+      let request: any
+
+      const token = 'accessToken'
+      const getAccessTokenAsync = async () => token
+
+      const _baseQuery = fetchBaseQuery({
+        baseUrl,
+        prepareHeaders: async (headers) => {
+          headers.set('authorization', `Bearer ${await getAccessTokenAsync()}`)
         },
       })
 
