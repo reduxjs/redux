@@ -204,8 +204,7 @@ export default function createStore<
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      const index = nextListeners.indexOf(listener)
-      nextListeners.splice(index, 1)
+      nextListeners = nextListeners.filter(x => x !== listener)
       currentListeners = null
     }
   }
