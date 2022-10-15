@@ -459,35 +459,6 @@ export const coreModule = (): Module<CoreModule> => ({
     })
     safeAssign(api.internalActions, sliceActions)
 
-    // remove in final release
-    Object.defineProperty(api.util, 'updateQueryResult', {
-      get() {
-        if (
-          typeof process !== 'undefined' &&
-          process.env.NODE_ENV === 'development'
-        ) {
-          console.warn(
-            '`api.util.updateQueryResult` has been renamed to `api.util.updateQueryData`, please change your code accordingly'
-          )
-        }
-        return api.util.updateQueryData
-      },
-    })
-    // remove in final release
-    Object.defineProperty(api.util, 'patchQueryResult', {
-      get() {
-        if (
-          typeof process !== 'undefined' &&
-          process.env.NODE_ENV === 'development'
-        ) {
-          console.warn(
-            '`api.util.patchQueryResult` has been renamed to `api.util.patchQueryData`, please change your code accordingly'
-          )
-        }
-        return api.util.patchQueryData
-      },
-    })
-
     const { middleware, actions: middlewareActions } = buildMiddleware({
       reducerPath,
       context,
