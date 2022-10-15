@@ -14,7 +14,7 @@ import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
 import type { BaseQueryError, QueryReturnValue } from '../baseQueryTypes'
 import type { QueryResultSelectorResult } from './buildSelectors'
-import { Dispatch } from 'redux'
+import type { Dispatch } from 'redux'
 
 declare module './module' {
   export interface ApiEndpointQuery<
@@ -214,40 +214,53 @@ export function buildInitiate({
   return {
     buildInitiateQuery,
     buildInitiateMutation,
-    getRunningOperationPromises,
-    getRunningOperationPromise,
+    getRunningQueryThunk,
+    getRunningMutationThunk,
+    getRunningQueriesThunk,
+    getRunningMutationsThunk,
   }
 
-  function getRunningOperationPromise(
-    endpointName: string,
-    argOrRequestId: any
-  ): ThunkAction<any, any, any, AnyAction> {
+  function getRunningQueryThunk(endpointName: string, queryArgs: any) {
     return (dispatch: Dispatch) => {
       const endpointDefinition = context.endpointDefinitions[endpointName]
-      if (endpointDefinition.type === DefinitionType.query) {
-        const queryCacheKey = serializeQueryArgs({
-          queryArgs: argOrRequestId,
-          endpointDefinition,
-          endpointName,
-        })
-        return runningQueries.get(dispatch)?.[queryCacheKey]
-      } else {
-        return runningMutations.get(dispatch)?.[argOrRequestId]
-      }
+      const queryCacheKey = serializeQueryArgs({
+        queryArgs,
+        endpointDefinition,
+        endpointName,
+      })
+      return runningQueries.get(dispatch)?.[queryCacheKey] as
+        | QueryActionCreatorResult<never>
+        | undefined
     }
   }
 
-  function getRunningOperationPromises(): ThunkAction<
-    Promise<unknown>[],
-    any,
-    any,
-    AnyAction
-  > {
+  function getRunningMutationThunk(
+    /**
+     * this is only here to allow TS to infer the result type by input value
+     * we could use it to validate the result, but it's probably not necessary
+     */
+    _endpointName: string,
+    fixedCacheKeyOrRequestId: string
+  ) {
+    return (dispatch: Dispatch) => {
+      return runningMutations.get(dispatch)?.[fixedCacheKeyOrRequestId] as
+        | MutationActionCreatorResult<never>
+        | undefined
+    }
+  }
+
+  function getRunningQueriesThunk() {
     return (dispatch: Dispatch) =>
-      [
-        ...Object.values(runningQueries.get(dispatch) || {}),
-        ...Object.values(runningMutations.get(dispatch) || {}),
-      ].filter(<T>(t: T | undefined): t is T => !!t)
+      Object.values(runningQueries.get(dispatch) || {}).filter(
+        <T>(t: T | undefined): t is T => !!t
+      )
+  }
+
+  function getRunningMutationsThunk() {
+    return (dispatch: Dispatch) =>
+      Object.values(runningMutations.get(dispatch) || {}).filter(
+        <T>(t: T | undefined): t is T => !!t
+      )
   }
 
   function middlewareWarning(getState: () => RootState<{}, string, string>) {
