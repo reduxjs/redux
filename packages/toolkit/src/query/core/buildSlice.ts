@@ -428,15 +428,19 @@ export function buildSlice({
         draft[queryCacheKey]![requestId] = options
       }
       return true
-    } else if (unsubscribeQueryResult.match(action)) {
+    }
+    if (unsubscribeQueryResult.match(action)) {
       const { queryCacheKey, requestId } = action.payload
       if (draft[queryCacheKey]) {
         delete draft[queryCacheKey]![requestId]
       }
       return true
-    } else if (querySlice.actions.removeQueryResult.match(action)) {
+    }
+    if (querySlice.actions.removeQueryResult.match(action)) {
       delete draft[action.payload.queryCacheKey]
-    } else if (queryThunk.pending.match(action)) {
+      return true
+    }
+    if (queryThunk.pending.match(action)) {
       const {
         meta: { arg, requestId },
       } = action
@@ -447,7 +451,8 @@ export function buildSlice({
 
         return true
       }
-    } else if (queryThunk.rejected.match(action)) {
+    }
+    if (queryThunk.rejected.match(action)) {
       const {
         meta: { condition, arg, requestId },
       } = action
