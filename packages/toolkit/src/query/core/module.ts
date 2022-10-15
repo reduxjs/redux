@@ -142,14 +142,22 @@ declare module '../apiTypes' {
       util: {
         /**
          * This method had to be removed due to a conceptual bug in RTK.
-         * Please see https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         *
+         * Despite TypeScript errors, it will continue working in the "buggy" way it did
+         * before in production builds and will be removed in the next major release.
+         *
+         * Nonetheless, you should immediately replace it with the new recommended approach.
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for new guidance on SSR.
+         *
+         * Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
          * @deprecated
          */
         getRunningOperationPromises: never // this is now types as `never` to immediately throw TS errors on use, but still allow for a comment
 
         /**
          * This method had to be removed due to a conceptual bug in RTK.
-         * Please see https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         * It has been replaced by `api.util.getRunningQueryThunk` and `api.util.getRunningMutationThunk`.
+         * Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
          * @deprecated
          */
         getRunningOperationPromise: never // this is now types as `never` to immediately throw TS errors on use, but still allow for a comment
@@ -541,6 +549,8 @@ export const coreModule = (): Module<CoreModule> => ({
       getRunningMutationsThunk,
       getRunningQueriesThunk,
       getRunningQueryThunk,
+      getRunningOperationPromises,
+      removalWarning,
     } = buildInitiate({
       queryThunk,
       mutationThunk,
@@ -549,16 +559,9 @@ export const coreModule = (): Module<CoreModule> => ({
       context,
     })
 
-    function removedSSRHelper(): never {
-      throw new Error(
-        `This method had to be removed due to a conceptual bug in RTK.
-         Please see https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.`
-      )
-    }
-
     safeAssign(api.util, {
-      getRunningOperationPromises: removedSSRHelper as any,
-      getRunningOperationPromise: removedSSRHelper as any,
+      getRunningOperationPromises: getRunningOperationPromises as any,
+      getRunningOperationPromise: removalWarning as any,
       getRunningMutationThunk,
       getRunningMutationsThunk,
       getRunningQueryThunk,
