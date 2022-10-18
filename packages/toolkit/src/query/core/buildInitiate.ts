@@ -14,6 +14,8 @@ import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
 import type { BaseQueryError, QueryReturnValue } from '../baseQueryTypes'
 import type { QueryResultSelectorResult } from './buildSelectors'
+import type { Dispatch } from 'redux'
+import { isNotNullish } from '../utils/isNotNullish'
 
 declare module './module' {
   export interface ApiEndpointQuery<
@@ -196,14 +198,14 @@ export function buildInitiate({
   api: Api<any, EndpointDefinitions, any, any>
   context: ApiContext<EndpointDefinitions>
 }) {
-  const runningQueries: Record<
-    string,
-    QueryActionCreatorResult<any> | undefined
-  > = {}
-  const runningMutations: Record<
-    string,
-    MutationActionCreatorResult<any> | undefined
-  > = {}
+  const runningQueries: Map<
+    Dispatch,
+    Record<string, QueryActionCreatorResult<any> | undefined>
+  > = new Map()
+  const runningMutations: Map<
+    Dispatch,
+    Record<string, MutationActionCreatorResult<any> | undefined>
+  > = new Map()
 
   const {
     unsubscribeQueryResult,
@@ -213,32 +215,80 @@ export function buildInitiate({
   return {
     buildInitiateQuery,
     buildInitiateMutation,
+    getRunningQueryThunk,
+    getRunningMutationThunk,
+    getRunningQueriesThunk,
+    getRunningMutationsThunk,
     getRunningOperationPromises,
-    getRunningOperationPromise,
+    removalWarning,
   }
 
-  function getRunningOperationPromise(
-    endpointName: string,
-    argOrRequestId: any
-  ): any {
-    const endpointDefinition = context.endpointDefinitions[endpointName]
-    if (endpointDefinition.type === DefinitionType.query) {
-      const queryCacheKey = serializeQueryArgs({
-        queryArgs: argOrRequestId,
-        endpointDefinition,
-        endpointName,
-      })
-      return runningQueries[queryCacheKey]
+  /** @deprecated to be removed in 2.0 */
+  function removalWarning(): never {
+    throw new Error(
+      `This method had to be removed due to a conceptual bug in RTK.
+       Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
+       See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for new guidance on SSR.`
+    )
+  }
+
+  /** @deprecated to be removed in 2.0 */
+  function getRunningOperationPromises() {
+    if (
+      typeof process !== 'undefined' &&
+      process.env.NODE_ENV === 'development'
+    ) {
+      removalWarning()
     } else {
-      return runningMutations[argOrRequestId]
+      const extract = <T>(
+        v: Map<Dispatch<AnyAction>, Record<string, T | undefined>>
+      ) =>
+        Array.from(v.values()).flatMap((queriesForStore) =>
+          queriesForStore ? Object.values(queriesForStore) : []
+        )
+      return [...extract(runningQueries), ...extract(runningMutations)].filter(
+        isNotNullish
+      )
     }
   }
 
-  function getRunningOperationPromises() {
-    return [
-      ...Object.values(runningQueries),
-      ...Object.values(runningMutations),
-    ].filter(<T>(t: T | undefined): t is T => !!t)
+  function getRunningQueryThunk(endpointName: string, queryArgs: any) {
+    return (dispatch: Dispatch) => {
+      const endpointDefinition = context.endpointDefinitions[endpointName]
+      const queryCacheKey = serializeQueryArgs({
+        queryArgs,
+        endpointDefinition,
+        endpointName,
+      })
+      return runningQueries.get(dispatch)?.[queryCacheKey] as
+        | QueryActionCreatorResult<never>
+        | undefined
+    }
+  }
+
+  function getRunningMutationThunk(
+    /**
+     * this is only here to allow TS to infer the result type by input value
+     * we could use it to validate the result, but it's probably not necessary
+     */
+    _endpointName: string,
+    fixedCacheKeyOrRequestId: string
+  ) {
+    return (dispatch: Dispatch) => {
+      return runningMutations.get(dispatch)?.[fixedCacheKeyOrRequestId] as
+        | MutationActionCreatorResult<never>
+        | undefined
+    }
+  }
+
+  function getRunningQueriesThunk() {
+    return (dispatch: Dispatch) =>
+      Object.values(runningQueries.get(dispatch) || {}).filter(isNotNullish)
+  }
+
+  function getRunningMutationsThunk() {
+    return (dispatch: Dispatch) =>
+      Object.values(runningMutations.get(dispatch) || {}).filter(isNotNullish)
   }
 
   function middlewareWarning(getState: () => RootState<{}, string, string>) {
@@ -302,7 +352,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
 
         const skippedSynchronously = stateAfter.requestId !== requestId
 
-        const runningQuery = runningQueries[queryCacheKey]
+        const runningQuery = runningQueries.get(dispatch)?.[queryCacheKey]
         const selectFromState = () => selector(getState())
 
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
@@ -360,9 +410,15 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         )
 
         if (!runningQuery && !skippedSynchronously && !forceQueryFn) {
-          runningQueries[queryCacheKey] = statePromise
+          const running = runningQueries.get(dispatch) || {}
+          running[queryCacheKey] = statePromise
+          runningQueries.set(dispatch, running)
+
           statePromise.then(() => {
-            delete runningQueries[queryCacheKey]
+            delete running[queryCacheKey]
+            if (!Object.keys(running).length) {
+              runningQueries.delete(dispatch)
+            }
           })
         }
 
@@ -404,15 +460,24 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           reset,
         })
 
-        runningMutations[requestId] = ret
+        const running = runningMutations.get(dispatch) || {}
+        runningMutations.set(dispatch, running)
+        running[requestId] = ret
         ret.then(() => {
-          delete runningMutations[requestId]
+          delete running[requestId]
+          if (!Object.keys(running).length) {
+            runningMutations.delete(dispatch)
+          }
         })
         if (fixedCacheKey) {
-          runningMutations[fixedCacheKey] = ret
+          running[fixedCacheKey] = ret
           ret.then(() => {
-            if (runningMutations[fixedCacheKey] === ret)
-              delete runningMutations[fixedCacheKey]
+            if (running[fixedCacheKey] === ret) {
+              delete running[fixedCacheKey]
+              if (!Object.keys(running).length) {
+                runningMutations.delete(dispatch)
+              }
+            }
           })
         }
 

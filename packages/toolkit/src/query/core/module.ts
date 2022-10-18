@@ -71,6 +71,9 @@ export type CoreModule =
   | ReferenceQueryLifecycle
   | ReferenceCacheCollection
 
+interface ThunkWithReturnValue<T>
+  extends ThunkAction<T | undefined, any, any, AnyAction> {}
+
 declare module '../apiTypes' {
   export interface ApiModules<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -138,35 +141,90 @@ declare module '../apiTypes' {
        */
       util: {
         /**
-         * Returns all promises for running queries and mutations.
-         * Useful for SSR scenarios to await everything triggered in any way,
-         * including via hook calls, or manually dispatching `initiate` actions.
+         * This method had to be removed due to a conceptual bug in RTK.
+         *
+         * Despite TypeScript errors, it will continue working in the "buggy" way it did
+         * before in production builds and will be removed in the next major release.
+         *
+         * Nonetheless, you should immediately replace it with the new recommended approach.
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for new guidance on SSR.
+         *
+         * Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
+         * @deprecated
          */
-        getRunningOperationPromises: () => Array<Promise<unknown>>
+        getRunningOperationPromises: never // this is now types as `never` to immediately throw TS errors on use, but still allow for a comment
+
         /**
-         * If a promise is running for a given endpoint name + argument combination,
-         * returns that promise. Otherwise, returns `undefined`.
-         * Can be used to await a specific query/mutation triggered in any way,
-         * including via hook calls, or manually dispatching `initiate` actions.
+         * This method had to be removed due to a conceptual bug in RTK.
+         * It has been replaced by `api.util.getRunningQueryThunk` and `api.util.getRunningMutationThunk`.
+         * Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
+         * @deprecated
          */
-        getRunningOperationPromise<EndpointName extends QueryKeys<Definitions>>(
+        getRunningOperationPromise: never // this is now types as `never` to immediately throw TS errors on use, but still allow for a comment
+
+        /**
+         * A thunk that (if dispatched) will return a specific running query, identified
+         * by `endpointName` and `args`.
+         * If that query is not running, dispatching the thunk will result in `undefined`.
+         *
+         * Can be used to await a specific query triggered in any way,
+         * including via hook calls or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningQueryThunk<EndpointName extends QueryKeys<Definitions>>(
           endpointName: EndpointName,
           args: QueryArgFrom<Definitions[EndpointName]>
-        ):
+        ): ThunkWithReturnValue<
           | QueryActionCreatorResult<
               Definitions[EndpointName] & { type: 'query' }
             >
           | undefined
-        getRunningOperationPromise<
-          EndpointName extends MutationKeys<Definitions>
-        >(
+        >
+
+        /**
+         * A thunk that (if dispatched) will return a specific running mutation, identified
+         * by `endpointName` and `fixedCacheKey` or `requestId`.
+         * If that mutation is not running, dispatching the thunk will result in `undefined`.
+         *
+         * Can be used to await a specific mutation triggered in any way,
+         * including via hook trigger functions or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningMutationThunk<EndpointName extends MutationKeys<Definitions>>(
           endpointName: EndpointName,
           fixedCacheKeyOrRequestId: string
-        ):
+        ): ThunkWithReturnValue<
           | MutationActionCreatorResult<
               Definitions[EndpointName] & { type: 'mutation' }
             >
           | undefined
+        >
+
+        /**
+         * A thunk that (if dispatched) will return all running queries.
+         *
+         * Useful for SSR scenarios to await all running queries triggered in any way,
+         * including via hook calls or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningQueriesThunk(): ThunkWithReturnValue<
+          Array<QueryActionCreatorResult<any>>
+        >
+
+        /**
+         * A thunk that (if dispatched) will return all running mutations.
+         *
+         * Useful for SSR scenarios to await all running mutations triggered in any way,
+         * including via hook calls or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningMutationsThunk(): ThunkWithReturnValue<
+          Array<MutationActionCreatorResult<any>>
+        >
 
         /**
          * A Redux thunk that can be used to manually trigger pre-fetching of data.
@@ -294,6 +352,11 @@ declare module '../apiTypes' {
           string
         >
 
+        /**
+         * A function to select all `{ endpointName, originalArgs, queryCacheKey }` combinations that would be invalidated by a specific set of tags.
+         *
+         * Can be used for mutations that want to do optimistic updates instead of invalidating a set of tags, but don't know exactly what they need to update.
+         */
         selectInvalidatedBy: (
           state: RootState<Definitions, string, ReducerPath>,
           tags: ReadonlyArray<TagDescription<TagTypes>>
@@ -482,8 +545,12 @@ export const coreModule = (): Module<CoreModule> => ({
     const {
       buildInitiateQuery,
       buildInitiateMutation,
+      getRunningMutationThunk,
+      getRunningMutationsThunk,
+      getRunningQueriesThunk,
+      getRunningQueryThunk,
       getRunningOperationPromises,
-      getRunningOperationPromise,
+      removalWarning,
     } = buildInitiate({
       queryThunk,
       mutationThunk,
@@ -493,8 +560,12 @@ export const coreModule = (): Module<CoreModule> => ({
     })
 
     safeAssign(api.util, {
-      getRunningOperationPromises,
-      getRunningOperationPromise,
+      getRunningOperationPromises: getRunningOperationPromises as any,
+      getRunningOperationPromise: removalWarning as any,
+      getRunningMutationThunk,
+      getRunningMutationsThunk,
+      getRunningQueryThunk,
+      getRunningQueriesThunk,
     })
 
     return {
