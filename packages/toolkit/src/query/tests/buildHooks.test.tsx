@@ -2379,11 +2379,7 @@ describe('skip behaviour', () => {
     await act(async () => {
       rerender([1, { skip: true }])
     })
-    expect(result.current).toEqual({
-      ...uninitialized,
-      currentData: undefined,
-      data: { name: 'Timmy' },
-    })
+    expect(result.current).toEqual(uninitialized)
     await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
@@ -2415,11 +2411,7 @@ describe('skip behaviour', () => {
     await act(async () => {
       rerender([skipToken])
     })
-    expect(result.current).toEqual({
-      ...uninitialized,
-      currentData: undefined,
-      data: { name: 'Timmy' },
-    })
+    expect(result.current).toEqual(uninitialized)
     await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
