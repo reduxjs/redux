@@ -486,8 +486,6 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
       const endpointDefinition =
         endpointDefinitions[queryThunkArgs.endpointName]
 
-      // console.trace('Query thunk: ', currentArg)
-
       // Order of these checks matters.
       // In order for `upsertQueryData` to successfully run while an existing request is in flight,
       /// we have to check for that first, otherwise `queryThunk` will bail out and not run at all.

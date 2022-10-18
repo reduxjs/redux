@@ -715,7 +715,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
             requestId,
           })
         )
-        // console.log('Probe subscription check: ', returnedValue)
+
         currentRenderHasSubscription = !!returnedValue
       }
 
