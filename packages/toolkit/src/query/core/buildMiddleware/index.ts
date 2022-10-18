@@ -59,12 +59,17 @@ export function buildMiddleware<
   > = (mwApi) => {
     let initialized = false
 
+    let internalState: InternalMiddlewareState = {
+      currentSubscriptions: {},
+    }
+
     const builderArgs = {
       ...(input as any as BuildMiddlewareInput<
         EndpointDefinitions,
         string,
         string
       >),
+      internalState,
       refetchQuery,
     }
 
@@ -72,10 +77,6 @@ export function buildMiddleware<
 
     const batchedActionsHandler = buildBatchedActionsHandler(builderArgs)
     const windowEventsHandler = buildWindowEventHandler(builderArgs)
-
-    let internalState: InternalMiddlewareState = {
-      currentSubscriptions: {},
-    }
 
     return (next) => {
       return (action) => {
@@ -92,7 +93,6 @@ export function buildMiddleware<
         const [actionShouldContinue, hasSubscription] = batchedActionsHandler(
           action,
           mwApiWithNext,
-          internalState,
           stateBefore
         )
 
@@ -108,7 +108,7 @@ export function buildMiddleware<
           // Only run these checks if the middleware is registered okay
 
           // This looks for actions that aren't specific to the API slice
-          windowEventsHandler(action, mwApiWithNext, internalState, stateBefore)
+          windowEventsHandler(action, mwApiWithNext, stateBefore)
 
           if (
             isThisApiSliceAction(action) ||
@@ -117,7 +117,7 @@ export function buildMiddleware<
             // Only run these additional checks if the actions are part of the API slice,
             // or the action has hydration-related data
             for (let handler of handlers) {
-              handler(action, mwApiWithNext, internalState, stateBefore)
+              handler(action, mwApiWithNext, stateBefore)
             }
           }
         }

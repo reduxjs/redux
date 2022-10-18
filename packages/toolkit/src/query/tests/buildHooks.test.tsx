@@ -89,11 +89,7 @@ let actions: AnyAction[] = []
 
 const storeRef = setupApiStore(
   api,
-  {
-    // actions(state: AnyAction[] = [], action: AnyAction) {
-    //   return [...state, action]
-    // },
-  },
+  {},
   {
     middleware: {
       prepend: [listenerMiddleware.middleware],
@@ -133,7 +129,9 @@ describe('hooks tests', () => {
       }
 
       render(<User />, { wrapper: storeRef.wrapper })
-      expect(getRenderCount()).toBe(2) // By the time this runs, the initial render will happen, and the query will start immediately running by the time we can expect this
+      // By the time this runs, the initial render will happen, and the query
+      //  will start immediately running by the time we can expect this
+      expect(getRenderCount()).toBe(2)
 
       await waitFor(() =>
         expect(screen.getByTestId('isFetching').textContent).toBe('false')

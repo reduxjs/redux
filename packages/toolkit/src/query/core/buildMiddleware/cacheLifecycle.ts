@@ -183,6 +183,7 @@ export const buildCacheLifecycleHandler: InternalHandlerBuilder = ({
   context,
   queryThunk,
   mutationThunk,
+  internalState,
 }) => {
   const isQueryThunk = isAsyncThunkAction(queryThunk)
   const isMutationThunk = isAsyncThunkAction(mutationThunk)
@@ -197,7 +198,6 @@ export const buildCacheLifecycleHandler: InternalHandlerBuilder = ({
   const handler: ApiMiddlewareInternalHandler = (
     action,
     mwApi,
-    internalState,
     stateBefore
   ) => {
     const cacheKey = getCacheKey(action)
