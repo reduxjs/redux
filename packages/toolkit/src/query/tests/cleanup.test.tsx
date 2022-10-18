@@ -162,21 +162,6 @@ test('Minimizes the number of subscription dispatches when multiple components a
     withoutTestLifecycles: true,
   })
 
-  const onProfile: ProfilerOnRenderCallback = (
-    id,
-    phase,
-    actualDuration,
-    baseDuration,
-    startTime,
-    commitTime
-  ) => {
-    console.table({
-      phase,
-      actualDuration,
-      baseDuration,
-    })
-  }
-
   let getSubscriptionsA = () =>
     storeRef.store.getState().api.subscriptions['a(undefined)']
 
@@ -199,50 +184,19 @@ test('Minimizes the number of subscription dispatches when multiple components a
     return <>{listItems}</>
   }
 
-  const start = Date.now()
-
-  render(
-    // <Profiler id="a" onRender={onProfile}>
-    <ParentComponent />,
-    // </Profiler>,
-    {
-      wrapper: storeRef.wrapper,
-    }
-  )
-
-  const afterRender = Date.now()
+  render(<ParentComponent />, {
+    wrapper: storeRef.wrapper,
+  })
 
   jest.advanceTimersByTime(10)
-
-  const afterTimers1 = Date.now()
 
   await waitFor(() => {
     return screen.getAllByText(/42/).length > 0
   })
 
-  const afterScreen = Date.now()
-
   await runAllTimers()
 
-  const end = Date.now()
-
-  const timeElapsed = end - start
-  // const renderTime = afterRender - start
-  // const timer1Time = afterTimers1 - afterRender
-  // const screenTime = afterScreen - afterTimers1
-  // const timer2Time = end - afterScreen
-
-  // console.table({
-  //   timeElapsed,
-  //   renderTime,
-  //   timer1Time,
-  //   screenTime,
-  //   timer2Time,
-  // })
-
-  // console.log('Getting final subscriptions')
   const subscriptions = getSubscriptionsA()
-  // console.log(actionTypes)
 
   expect(Object.keys(subscriptions!).length).toBe(NUM_LIST_ITEMS)
 
@@ -252,9 +206,4 @@ test('Minimizes the number of subscription dispatches when multiple components a
     'api/internalSubscriptions/subscriptionsUpdated',
     'api/executeQuery/fulfilled',
   ])
-
-  // Could be flaky in CI, but we'll see.
-  // Currently seeing 800ms in local dev, 6300 without the batching fixes
-  // console.log('Elapsed subscription time: ', timeElapsed)
-  expect(timeElapsed).toBeLessThan(1500)
 }, 25000)
