@@ -1,7 +1,12 @@
 import type { QueryThunk, RejectedAction } from '../buildThunks'
 import type { InternalHandlerBuilder } from './types'
-import type { SubscriptionState } from '../apiState'
+import type {
+  SubscriptionState,
+  QuerySubstateIdentifier,
+  Subscribers,
+} from '../apiState'
 import { produceWithPatches } from 'immer'
+import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit'
 
 // Copied from https://github.com/feross/queue-microtask
 let promise: Promise<any>
@@ -19,13 +24,68 @@ const queueMicrotaskShim =
 export const buildBatchedActionsHandler: InternalHandlerBuilder<
   [actionShouldContinue: boolean, subscriptionExists: boolean]
 > = ({ api, queryThunk, internalState }) => {
-  const { actuallyMutateSubscriptions } = api.internalActions
   const subscriptionsPrefix = `${api.reducerPath}/subscriptions`
 
   let previousSubscriptions: SubscriptionState =
     null as unknown as SubscriptionState
 
   let dispatchQueued = false
+
+  const { updateSubscriptionOptions, unsubscribeQueryResult } =
+    api.internalActions
+
+  // Actually intentionally mutate the subscriptions state used in the middleware
+  // This is done to speed up perf when loading many components
+  const actuallyMutateSubscriptions = (
+    mutableState: SubscriptionState,
+    action: AnyAction
+  ) => {
+    if (updateSubscriptionOptions.match(action)) {
+      const { queryCacheKey, requestId, options } = action.payload
+
+      if (mutableState?.[queryCacheKey]?.[requestId]) {
+        mutableState[queryCacheKey]![requestId] = options
+      }
+      return true
+    }
+    if (unsubscribeQueryResult.match(action)) {
+      const { queryCacheKey, requestId } = action.payload
+      if (mutableState[queryCacheKey]) {
+        delete mutableState[queryCacheKey]![requestId]
+      }
+      return true
+    }
+    if (api.internalActions.removeQueryResult.match(action)) {
+      delete mutableState[action.payload.queryCacheKey]
+      return true
+    }
+    if (queryThunk.pending.match(action)) {
+      const {
+        meta: { arg, requestId },
+      } = action
+      if (arg.subscribe) {
+        const substate = (mutableState[arg.queryCacheKey] ??= {})
+        substate[requestId] =
+          arg.subscriptionOptions ?? substate[requestId] ?? {}
+
+        return true
+      }
+    }
+    if (queryThunk.rejected.match(action)) {
+      const {
+        meta: { condition, arg, requestId },
+      } = action
+      if (condition && arg.subscribe) {
+        const substate = (mutableState[arg.queryCacheKey] ??= {})
+        substate[requestId] =
+          arg.subscriptionOptions ?? substate[requestId] ?? {}
+
+        return true
+      }
+    }
+
+    return false
+  }
 
   return (action, mwApi) => {
     if (!previousSubscriptions) {

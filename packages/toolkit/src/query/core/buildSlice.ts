@@ -412,62 +412,6 @@ export function buildSlice({
     },
   })
 
-  const { updateSubscriptionOptions, unsubscribeQueryResult } =
-    subscriptionSlice.actions
-
-  // Actually intentionally mutate the subscriptions state used in the middleware
-  // This is done to speed up perf when loading many components
-  const actuallyMutateSubscriptions = (
-    draft: SubscriptionState,
-    action: AnyAction
-  ) => {
-    if (updateSubscriptionOptions.match(action)) {
-      const { queryCacheKey, requestId, options } = action.payload
-
-      if (draft?.[queryCacheKey]?.[requestId]) {
-        draft[queryCacheKey]![requestId] = options
-      }
-      return true
-    }
-    if (unsubscribeQueryResult.match(action)) {
-      const { queryCacheKey, requestId } = action.payload
-      if (draft[queryCacheKey]) {
-        delete draft[queryCacheKey]![requestId]
-      }
-      return true
-    }
-    if (querySlice.actions.removeQueryResult.match(action)) {
-      delete draft[action.payload.queryCacheKey]
-      return true
-    }
-    if (queryThunk.pending.match(action)) {
-      const {
-        meta: { arg, requestId },
-      } = action
-      if (arg.subscribe) {
-        const substate = (draft[arg.queryCacheKey] ??= {})
-        substate[requestId] =
-          arg.subscriptionOptions ?? substate[requestId] ?? {}
-
-        return true
-      }
-    }
-    if (queryThunk.rejected.match(action)) {
-      const {
-        meta: { condition, arg, requestId },
-      } = action
-      if (condition && arg.subscribe) {
-        const substate = (draft[arg.queryCacheKey] ??= {})
-        substate[requestId] =
-          arg.subscriptionOptions ?? substate[requestId] ?? {}
-
-        return true
-      }
-    }
-
-    return false
-  }
-
   const internalSubscriptionsSlice = createSlice({
     name: `${reducerPath}/internalSubscriptions`,
     initialState: initialState as SubscriptionState,
@@ -536,7 +480,6 @@ export function buildSlice({
     /** @deprecated has been renamed to `removeMutationResult` */
     unsubscribeMutationResult: mutationSlice.actions.removeMutationResult,
     resetApiState,
-    actuallyMutateSubscriptions,
   }
 
   return { reducer, actions }
