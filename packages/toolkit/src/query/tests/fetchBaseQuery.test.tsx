@@ -808,6 +808,24 @@ describe('fetchBaseQuery', () => {
     })
   })
 
+  test('can pass `headers` into `fetchBaseQuery`', async () => {
+    let request: any
+
+    const token = 'accessToken'
+
+    const _baseQuery = fetchBaseQuery({
+      baseUrl,
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    const doRequest = async () =>
+      _baseQuery({ url: '/echo' }, commonBaseQueryApi, {})
+
+    ;({ data: request } = await doRequest())
+
+    expect(request.headers['authorization']).toBe(`Bearer ${token}`)
+  })
+
   test('lets a header be undefined', async () => {
     let request: any
     ;({ data: request } = await baseQuery(

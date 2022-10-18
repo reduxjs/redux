@@ -208,7 +208,7 @@ export function fetchBaseQuery({
     let {
       url,
       method = 'GET' as const,
-      headers = new Headers({}),
+      headers = new Headers(baseFetchOptions.headers),
       body = undefined,
       params = undefined,
       responseHandler = 'json' as const,
