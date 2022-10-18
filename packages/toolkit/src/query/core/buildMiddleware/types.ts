@@ -52,6 +52,7 @@ export type SubMiddlewareApi = MiddlewareAPI<
 
 export interface BuildSubMiddlewareInput
   extends BuildMiddlewareInput<EndpointDefinitions, string, string> {
+  internalState: InternalMiddlewareState
   refetchQuery(
     querySubState: Exclude<
       QuerySubState<any>,
@@ -73,7 +74,6 @@ export type SubMiddlewareBuilder = (
 export type ApiMiddlewareInternalHandler<ReturnType = void> = (
   action: AnyAction,
   mwApi: SubMiddlewareApi & { next: Dispatch<AnyAction> },
-  internalState: InternalMiddlewareState,
   prevState: RootState<EndpointDefinitions, string, string>
 ) => ReturnType
 

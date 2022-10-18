@@ -18,7 +18,7 @@ const queueMicrotaskShim =
 
 export const buildBatchedActionsHandler: InternalHandlerBuilder<
   [actionShouldContinue: boolean, subscriptionExists: boolean]
-> = ({ api, queryThunk }) => {
+> = ({ api, queryThunk, internalState }) => {
   const { actuallyMutateSubscriptions } = api.internalActions
   const subscriptionsPrefix = `${api.reducerPath}/subscriptions`
 
@@ -27,7 +27,7 @@ export const buildBatchedActionsHandler: InternalHandlerBuilder<
 
   let dispatchQueued = false
 
-  return (action, mwApi, internalState) => {
+  return (action, mwApi) => {
     if (!previousSubscriptions) {
       // Initialize it the first time this handler runs
       previousSubscriptions = JSON.parse(

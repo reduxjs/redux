@@ -50,13 +50,11 @@ export const buildCacheCollectionHandler: InternalHandlerBuilder = ({
   reducerPath,
   api,
   context,
+  internalState,
 }) => {
   const { removeQueryResult, unsubscribeQueryResult } = api.internalActions
 
-  function anySubscriptionsRemainingForKey(
-    queryCacheKey: string,
-    internalState: InternalMiddlewareState
-  ) {
+  function anySubscriptionsRemainingForKey(queryCacheKey: string) {
     const subscriptions = internalState.currentSubscriptions[queryCacheKey]
     return !!subscriptions && !isObjectEmpty(subscriptions)
   }
@@ -76,7 +74,6 @@ export const buildCacheCollectionHandler: InternalHandlerBuilder = ({
         queryCacheKey,
         state.queries[queryCacheKey]?.endpointName,
         mwApi,
-        internalState,
         state.config
       )
     }
@@ -99,7 +96,6 @@ export const buildCacheCollectionHandler: InternalHandlerBuilder = ({
           queryCacheKey as QueryCacheKey,
           queryState?.endpointName,
           mwApi,
-          internalState,
           state.config
         )
       }
@@ -110,7 +106,6 @@ export const buildCacheCollectionHandler: InternalHandlerBuilder = ({
     queryCacheKey: QueryCacheKey,
     endpointName: string | undefined,
     api: SubMiddlewareApi,
-    internalState: InternalMiddlewareState,
     config: ConfigState<string>
   ) {
     const endpointDefinition = context.endpointDefinitions[
@@ -132,13 +127,13 @@ export const buildCacheCollectionHandler: InternalHandlerBuilder = ({
       Math.min(keepUnusedDataFor, THIRTY_TWO_BIT_MAX_TIMER_SECONDS)
     )
 
-    if (!anySubscriptionsRemainingForKey(queryCacheKey, internalState)) {
+    if (!anySubscriptionsRemainingForKey(queryCacheKey)) {
       const currentTimeout = currentRemovalTimeouts[queryCacheKey]
       if (currentTimeout) {
         clearTimeout(currentTimeout)
       }
       currentRemovalTimeouts[queryCacheKey] = setTimeout(() => {
-        if (!anySubscriptionsRemainingForKey(queryCacheKey, internalState)) {
+        if (!anySubscriptionsRemainingForKey(queryCacheKey)) {
           api.dispatch(removeQueryResult({ queryCacheKey }))
         }
         delete currentRemovalTimeouts![queryCacheKey]
