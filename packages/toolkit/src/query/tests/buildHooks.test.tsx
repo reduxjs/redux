@@ -18,13 +18,18 @@ import {
   expectExactType,
   expectType,
   setupApiStore,
+  withProvider,
   useRenderCounter,
   waitMs,
 } from './helpers'
 import { server } from './mocks/server'
 import type { AnyAction } from 'redux'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
-import { createListenerMiddleware, SerializedError } from '@reduxjs/toolkit'
+import {
+  createListenerMiddleware,
+  SerializedError,
+  configureStore,
+} from '@reduxjs/toolkit'
 import { renderHook } from '@testing-library/react'
 import { delay } from '../../utils'
 
@@ -650,6 +655,39 @@ describe('hooks tests', () => {
       expect(resPromise).toBeInstanceOf(Promise)
       const res = await resPromise
       expect(res.data!.amount).toBeGreaterThan(originalAmount)
+    })
+
+    describe('Hook middleware requirements', () => {
+      let mock: jest.SpyInstance
+
+      beforeEach(() => {
+        mock = jest.spyOn(console, 'error').mockImplementation(() => {})
+      })
+
+      afterEach(() => {
+        mock.mockReset()
+      })
+
+      test('Throws error if middleware is not added to the store', async () => {
+        const store = configureStore({
+          reducer: {
+            [api.reducerPath]: api.reducer,
+          },
+        })
+
+        const doRender = () => {
+          const { result } = renderHook(
+            () => api.endpoints.getIncrementedAmount.useQuery(),
+            {
+              wrapper: withProvider(store),
+            }
+          )
+        }
+
+        expect(doRender).toThrowError(
+          /Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store/
+        )
+      })
     })
   })
 
