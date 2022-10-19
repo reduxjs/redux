@@ -300,9 +300,9 @@ export function buildInitiate({
         ;(middlewareWarning as any).triggered = true
       }
       if (registered === false) {
-        console.warn(
+        throw new Error(
           `Warning: Middleware for RTK-Query API at reducerPath "${api.reducerPath}" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`
+You must add the middleware for RTK-Query to function correctly!`
         )
       }
     }

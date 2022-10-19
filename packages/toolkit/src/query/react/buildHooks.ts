@@ -716,6 +716,15 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
           })
         )
 
+        if (process.env.NODE_ENV !== 'production') {
+          if (typeof returnedValue !== 'boolean') {
+            throw new Error(
+              `Warning: Middleware for RTK-Query API at reducerPath "${api.reducerPath}" has not been added to the store.
+    You must add the middleware for RTK-Query to function correctly!`
+            )
+          }
+        }
+
         currentRenderHasSubscription = !!returnedValue
       }
 

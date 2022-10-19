@@ -52,6 +52,9 @@ beforeEach(() => {
   ;[api1, api1_2, api2] = createApis()
 })
 
+const reMatchMissingMiddlewareError =
+  /Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store/
+
 describe('missing middleware', () => {
   test.each([
     ['development', true],
@@ -61,13 +64,14 @@ describe('missing middleware', () => {
     const store = configureStore({
       reducer: { [api1.reducerPath]: api1.reducer },
     })
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    expect(getLog().log).toBe(
-      shouldWarn
-        ? `Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`
-        : ''
-    )
+    const doDispatch = () => {
+      store.dispatch(api1.endpoints.q1.initiate(undefined))
+    }
+    if (shouldWarn) {
+      expect(doDispatch).toThrowError(reMatchMissingMiddlewareError)
+    } else {
+      expect(doDispatch).not.toThrowError()
+    }
   })
 
   test('does not warn if middleware is not missing', () => {
@@ -83,11 +87,12 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     const store = configureStore({
       reducer: { [api1.reducerPath]: api1.reducer },
     })
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    expect(getLog().log)
-      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`)
+    const doDispatch = () => {
+      store.dispatch(api1.endpoints.q1.initiate(undefined))
+    }
+
+    expect(doDispatch).toThrowError(reMatchMissingMiddlewareError)
+    expect(doDispatch).not.toThrowError()
   })
 
   test('warns multiple times for multiple apis', () => {
@@ -97,13 +102,16 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         [api2.reducerPath]: api2.reducer,
       },
     })
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    store.dispatch(api2.endpoints.q1.initiate(undefined))
-    expect(getLog().log)
-      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.
-Warning: Middleware for RTK-Query API at reducerPath "api2" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`)
+    const doDispatch1 = () => {
+      store.dispatch(api1.endpoints.q1.initiate(undefined))
+    }
+    const doDispatch2 = () => {
+      store.dispatch(api2.endpoints.q1.initiate(undefined))
+    }
+    expect(doDispatch1).toThrowError(reMatchMissingMiddlewareError)
+    expect(doDispatch2).toThrowError(
+      /Warning: Middleware for RTK-Query API at reducerPath "api2" has not been added to the store/
+    )
   })
 })
 
