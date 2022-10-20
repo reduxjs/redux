@@ -340,7 +340,6 @@ export interface QueryExtraOptions<
    *
    * createApi({
    *  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-   *  tagTypes: ['Posts'],
    *  endpoints: (build) => ({
    *    // Example: an endpoint with an API client passed in as an argument,
    *    // but only the item ID should be used as the cache key
@@ -370,18 +369,57 @@ export interface QueryExtraOptions<
   serializeQueryArgs?: SerializeQueryArgs<QueryArg>
 
   /**
-   * Can be provided to merge the current cache value into the new cache value.
+   * Can be provided to merge an incoming response value into the current cache data.
    * If supplied, no automatic structural sharing will be applied - it's up to
    * you to update the cache appropriately.
    *
-   * Since this is wrapped with Immer, you , you may either mutate the `currentCacheValue` directly,
-   * or return a new value, but _not_ both at once.   *
+   * Since RTKQ normally replaces cache entries with the new response, you will usually
+   * need to use this with the `serializeQueryArgs` or `forceRefetch` options to keep
+   * an existing cache entry so that it can be updated.
    *
-   * Will only be called if the existing `currentCacheValue` is not `undefined`.
+   * Since this is wrapped with Immer, you , you may either mutate the `currentCacheValue` directly,
+   * or return a new value, but _not_ both at once.
+   *
+   * Will only be called if the existing `currentCacheData` is _not_ `undefined` - on first response,
+   * the cache entry will just save the response data directly.
    *
    * Useful if you don't want a new request to completely override the current cache value,
    * maybe because you have manually updated it from another source and don't want those
    * updates to get lost.
+   *
+   *
+   * @example
+   *
+   * ```ts
+   * // codeblock-meta title="merge: pagination"
+   *
+   * import { createApi, fetchBaseQuery, defaultSerializeQueryArgs } from '@reduxjs/toolkit/query/react'
+   * interface Post {
+   *   id: number
+   *   name: string
+   * }
+   *
+   * createApi({
+   *  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+   *  endpoints: (build) => ({
+   *    listItems: build.query<string[], number>({
+   *      query: (pageNumber) => `/listItems?page=${pageNumber}`,
+   *     // Only have one cache entry because the arg always maps to one string
+   *     serializeQueryArgs: ({ endpointName }) => {
+   *       return endpointName
+   *      },
+   *      // Always merge incoming data to the cache entry
+   *      merge: (currentCache, newItems) => {
+   *        currentCache.push(...newItems)
+   *      },
+   *      // Refetch when the page arg changes
+   *      forceRefetch({ currentArg, previousArg }) {
+   *        return currentArg !== previousArg
+   *      },
+   *    }),
+   *  }),
+   *})
+   * ```
    */
   merge?(
     currentCacheData: ResultType,
