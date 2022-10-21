@@ -182,7 +182,7 @@ describe('basic lifecycle', () => {
 })
 
 describe('upsertQueryData', () => {
-  test('updates cache values, can apply inverse patch', async () => {
+  test('inserts cache entry', async () => {
     baseQuery
       .mockResolvedValueOnce({
         id: '3',
