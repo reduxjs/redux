@@ -44,12 +44,23 @@ interface EndpointDefinitionWithQuery<
    *
    * const api = createApi({
    *   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+   *   tagTypes: ['Post'],
    *   endpoints: (build) => ({
    *     getPosts: build.query<PostsResponse, void>({
    *       // highlight-start
    *       query: () => 'posts',
    *       // highlight-end
-   *     })
+   *     }),
+   *     addPost: build.mutation<Post, Partial<Post>>({
+   *      // highlight-start
+   *      query: (body) => ({
+   *        url: `posts`,
+   *        method: 'POST',
+   *        body,
+   *      }),
+   *      // highlight-end
+   *      invalidatesTags: [{ type: 'Post', id: 'LIST' }],
+   *    }),
    *   })
    * })
    * ```
@@ -433,20 +444,37 @@ export interface QueryExtraOptions<
    * with `serializeQueryArgs` returning a fixed cache key and a `merge` callback
    * set to add incoming data to the cache entry each time.
    *
-   * Example:
+   * @example
    *
    * ```ts
-   * forceRefetch({currentArg, previousArg}) {
-   *   // Assume these are page numbers
-   *   return currentArg !== previousArg
-   * },
-   * serializeQueryArgs({endpointName}) {
-   *   return endpointName
-   * },
-   * merge(currentCacheData, responseData) {
-   *   currentCacheData.push(...responseData)
+   * // codeblock-meta title="forceRefresh: pagination"
+   *
+   * import { createApi, fetchBaseQuery, defaultSerializeQueryArgs } from '@reduxjs/toolkit/query/react'
+   * interface Post {
+   *   id: number
+   *   name: string
    * }
    *
+   * createApi({
+   *  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+   *  endpoints: (build) => ({
+   *    listItems: build.query<string[], number>({
+   *      query: (pageNumber) => `/listItems?page=${pageNumber}`,
+   *     // Only have one cache entry because the arg always maps to one string
+   *     serializeQueryArgs: ({ endpointName }) => {
+   *       return endpointName
+   *      },
+   *      // Always merge incoming data to the cache entry
+   *      merge: (currentCache, newItems) => {
+   *        currentCache.push(...newItems)
+   *      },
+   *      // Refetch when the page arg changes
+   *      forceRefetch({ currentArg, previousArg }) {
+   *        return currentArg !== previousArg
+   *      },
+   *    }),
+   *  }),
+   *})
    * ```
    */
   forceRefetch?(params: {
