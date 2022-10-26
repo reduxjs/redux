@@ -176,7 +176,7 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  * @param {(headers: Headers) => boolean} isJsonContentType
  * An optional predicate function to determine if `JSON.stringify()` should be called on the `body` arg of `FetchArgs`
  *
- * @param {string} jsonContentType Defaults to `application/json`. Used when automatically setting the content-type header for a request with a jsonifiable body that does not have an explicit content-type header.
+ * @param {string} jsonContentType Used when automatically setting the content-type header for a request with a jsonifiable body that does not have an explicit content-type header. Defaults to `application/json`.
  *
  * @param {number} timeout
  * A number in milliseconds that represents the maximum time a request can take before timing out.
