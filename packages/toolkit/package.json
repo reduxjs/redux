@@ -85,7 +85,7 @@
     "format:check": "prettier --list-different \"(src|examples)/**/*.{ts,tsx}\" \"docs/*/**.md\"",
     "lint": "eslint src examples",
     "test": "jest --runInBand",
-    "type-tests": "yarn tsc -p src/tests && yarn tsc -p src/query/tests",
+    "type-tests": "yarn tsc -p src/tests/tsconfig.typetests.json && yarn tsc -p src/query/tests/tsconfig.typetests.json",
     "prepack": "npm run build-prepare"
   },
   "files": [
