@@ -284,7 +284,7 @@ We said earlier that reducers must **always** follow some special rules:
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
 - They must not do any asynchronous logic or other "side effects"
 
-But why are these rules important? There's a few different reasons:
+But why are these rules important? There are a few different reasons:
 
 - One of the goals of Redux is to make your code predictable. When a function's output is only calculated from the input arguments, it's easier to understand how that code works, and to test it.
 - On the other hand, if a function depends on variables outside itself, or behaves randomly, you never know what will happen when you run it.
