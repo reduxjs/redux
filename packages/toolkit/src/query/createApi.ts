@@ -249,8 +249,22 @@ export function buildCreateApi<Modules extends [Module<any>, ...Module<any>[]]>(
       serializeQueryArgs(queryArgsApi) {
         let finalSerializeQueryArgs = defaultSerializeQueryArgs
         if ('serializeQueryArgs' in queryArgsApi.endpointDefinition) {
-          finalSerializeQueryArgs =
+          const endpointSQA =
             queryArgsApi.endpointDefinition.serializeQueryArgs!
+          finalSerializeQueryArgs = (queryArgsApi) => {
+            const initialResult = endpointSQA(queryArgsApi)
+            if (typeof initialResult === 'string') {
+              // If the user function returned a string, use it as-is
+              return initialResult
+            } else {
+              // Assume they returned an object (such as a subset of the original
+              // query args) or a primitive, and serialize it ourselves
+              return defaultSerializeQueryArgs({
+                ...queryArgsApi,
+                queryArgs: initialResult,
+              })
+            }
+          }
         } else if (options.serializeQueryArgs) {
           finalSerializeQueryArgs = options.serializeQueryArgs
         }
