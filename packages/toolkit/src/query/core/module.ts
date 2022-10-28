@@ -229,7 +229,7 @@ declare module '../apiTypes' {
         /**
          * A Redux thunk that can be used to manually trigger pre-fetching of data.
          *
-         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a set of options used to determine if the data actually should be re-fetched based on cache staleness.
+         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and a set of options used to determine if the data actually should be re-fetched based on cache staleness.
          *
          * React Hooks users will most likely never need to use this directly, as the `usePrefetch` hook will dispatch this thunk internally as needed when you call the prefetching function supplied by the hook.
          *
@@ -247,11 +247,13 @@ declare module '../apiTypes' {
         /**
          * A Redux thunk action creator that, when dispatched, creates and applies a set of JSON diff/patch objects to the current state. This immediately updates the Redux state with those changes.
          *
-         * The thunk action creator accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a callback function. The callback receives an Immer-wrapped `draft` of the current state, and may modify the draft to match the expected results after the mutation completes successfully.
+         * The thunk action creator accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and an `updateRecipe` callback function. The callback receives an Immer-wrapped `draft` of the current state, and may modify the draft to match the expected results after the mutation completes successfully.
          *
-         * The thunk returns an object containing `{patches: Patch[], inversePatches: Patch[], undo: () => void}`. The `patches` and `inversePatches` are generated using Immer's [`produceWithPatches` method](https://immerjs.github.io/immer/patches).
+         * The thunk executes _synchronously_, and returns an object containing `{patches: Patch[], inversePatches: Patch[], undo: () => void}`. The `patches` and `inversePatches` are generated using Immer's [`produceWithPatches` method](https://immerjs.github.io/immer/patches).
          *
          * This is typically used as the first step in implementing optimistic updates. The generated `inversePatches` can be used to revert the updates by calling `dispatch(patchQueryData(endpointName, args, inversePatches))`. Alternatively, the `undo` method can be called directly to achieve the same effect.
+         *
+         * Note that the first two arguments (`endpointName` and `args`) are used to determine which existing cache entry to update. If no existing cache entry is found, the `updateRecipe` callback will not run.
          *
          * @example
          *
@@ -272,6 +274,25 @@ declare module '../apiTypes' {
           Definitions,
           RootState<Definitions, string, ReducerPath>
         >
+        /**
+         * A Redux thunk action creator that, when dispatched, acts as an artificial API request to upsert a value into the cache.
+         *
+         * The thunk action creator accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and the data to upsert.
+         *
+         * If no cache entry for that cache key exists, a cache entry will be created and the data added. If a cache entry already exists, this will _overwrite_ the existing cache entry data.
+         *
+         * The thunk executes _asynchronously_, and returns a promise that resolves when the store has been updated.
+         *
+         * If dispatched while an actual request is in progress, both the upsert and request will be handled as soon as they resolve, resulting in a "last result wins" update behavior.
+         *
+         * @example
+         *
+         * ```ts
+         * await dispatch(
+         *   api.util.upsertQueryData('getPost', {id: 1}, {id: 1, text: "Hello!"})
+         * )
+         * ```
+         */
         upsertQueryData: UpsertQueryDataThunk<
           Definitions,
           RootState<Definitions, string, ReducerPath>
@@ -279,7 +300,7 @@ declare module '../apiTypes' {
         /**
          * A Redux thunk that applies a JSON diff/patch array to the cached data for a given query result. This immediately updates the Redux state with those changes.
          *
-         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a JSON diff/patch array as produced by Immer's `produceWithPatches`.
+         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and a JSON diff/patch array as produced by Immer's `produceWithPatches`.
          *
          * This is typically used as the second step in implementing optimistic updates. If a request fails, the optimistically-applied changes can be reverted by dispatching `patchQueryData` with the `inversePatches` that were generated by `updateQueryData` earlier.
          *
