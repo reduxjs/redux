@@ -330,9 +330,12 @@ export interface QueryExtraOptions<
   invalidatesTags?: never
 
   /**
-   * Can be provided to return a custom cache key string based on the provided arguments.
+   * Can be provided to return a custom cache key value based on the query arguments.
    *
    * This is primarily intended for cases where a non-serializable value is passed as part of the query arg object and should be excluded from the cache key.  It may also be used for cases where an endpoint should only have a single cache entry, such as an infinite loading / pagination implementation.
+   *
+   * Unlike the `createApi` version which can _only_ return a string, this per-endpoint option can also return an an object, number, or boolean.  If it returns a string, that value will be used as the cache key directly.  If it returns an object / number / boolean, that value will be passed to the built-in `defaultSerializeQueryArgs`.  This simplifies the use case of stripping out args you don't want included in the cache key.
+   *
    *
    * @example
    *
@@ -362,13 +365,18 @@ export interface QueryExtraOptions<
    *      // highlight-start
    *      serializeQueryArgs: ({ queryArgs, endpointDefinition, endpointName }) => {
    *        const { id } = queryArgs
-   *        // You can use `defaultSerializeQueryArgs` to do the work:
-   *        return defaultSerializeQueryArgs({
-   *          endpointName,
-   *          queryArgs: { id },
-   *          endpointDefinition
-   *        })
-   *        // Or alternately, create a string yourself:
+   *        // This can return a string, an object, a number, or a boolean.
+   *        // If it returns an object, number or boolean, that value
+   *        // will be serialized automatically via `defaultSerializeQueryArgs`
+   *        return { id } // omit `client` from the cache key
+   *
+   *        // Alternately, you can use `defaultSerializeQueryArgs` yourself:
+   *        // return defaultSerializeQueryArgs({
+   *        //   endpointName,
+   *        //   queryArgs: { id },
+   *        //   endpointDefinition
+   *        // })
+   *        // Or  create and return a string yourself:
    *        // return `getPost(${id})`
    *      },
    *      // highlight-end
@@ -377,7 +385,10 @@ export interface QueryExtraOptions<
    *})
    * ```
    */
-  serializeQueryArgs?: SerializeQueryArgs<QueryArg>
+  serializeQueryArgs?: SerializeQueryArgs<
+    QueryArg,
+    string | number | boolean | Record<any, any>
+  >
 
   /**
    * Can be provided to merge an incoming response value into the current cache data.

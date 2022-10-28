@@ -19,11 +19,11 @@ export const defaultSerializeQueryArgs: SerializeQueryArgs<any> = ({
   )})`
 }
 
-export type SerializeQueryArgs<QueryArgs> = (_: {
+export type SerializeQueryArgs<QueryArgs, ReturnType = string> = (_: {
   queryArgs: QueryArgs
   endpointDefinition: EndpointDefinition<any, any, any, any>
   endpointName: string
-}) => string
+}) => ReturnType
 
 export type InternalSerializeQueryArgs = (_: {
   queryArgs: any

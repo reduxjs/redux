@@ -854,6 +854,16 @@ describe('custom serializeQueryArgs per endpoint', () => {
 
   const serializer1 = jest.fn(customArgsSerializer)
 
+  interface MyApiClient {
+    fetchPost: (id: string) => Promise<SuccessResponse>
+  }
+
+  const dummyClient: MyApiClient = {
+    async fetchPost(id) {
+      return { value: 'success' }
+    },
+  }
+
   const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
     serializeQueryArgs: ({ endpointName, queryArgs }) =>
@@ -865,6 +875,34 @@ describe('custom serializeQueryArgs per endpoint', () => {
       queryWithCustomSerializer: build.query<SuccessResponse, number>({
         query: (arg) => `${arg}`,
         serializeQueryArgs: serializer1,
+      }),
+      queryWithCustomObjectSerializer: build.query<
+        SuccessResponse,
+        { id: number; client: MyApiClient }
+      >({
+        query: (arg) => `${arg.id}`,
+        serializeQueryArgs: ({
+          endpointDefinition,
+          endpointName,
+          queryArgs,
+        }) => {
+          const { id } = queryArgs
+          return { id }
+        },
+      }),
+      queryWithCustomNumberSerializer: build.query<
+        SuccessResponse,
+        { id: number; client: MyApiClient }
+      >({
+        query: (arg) => `${arg.id}`,
+        serializeQueryArgs: ({
+          endpointDefinition,
+          endpointName,
+          queryArgs,
+        }) => {
+          const { id } = queryArgs
+          return id
+        },
       }),
       listItems: build.query<string[], number>({
         query: (pageNumber) => `/listItems?page=${pageNumber}`,
@@ -927,6 +965,36 @@ describe('custom serializeQueryArgs per endpoint', () => {
     expect(
       storeRef.store.getState().api.queries[
         'injectedQueryWithCustomSerializer-5'
+      ]
+    ).toBeTruthy()
+  })
+
+  test('Serializes a returned object for query args', async () => {
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithCustomObjectSerializer.initiate({
+        id: 42,
+        client: dummyClient,
+      })
+    )
+
+    expect(
+      storeRef.store.getState().api.queries[
+        'queryWithCustomObjectSerializer({"id":42})'
+      ]
+    ).toBeTruthy()
+  })
+
+  test('Serializes a returned primitive for query args', async () => {
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithCustomNumberSerializer.initiate({
+        id: 42,
+        client: dummyClient,
+      })
+    )
+
+    expect(
+      storeRef.store.getState().api.queries[
+        'queryWithCustomNumberSerializer(42)'
       ]
     ).toBeTruthy()
   })
