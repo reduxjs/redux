@@ -868,6 +868,89 @@ describe('fetchBaseQuery', () => {
     expect(request.headers['delete']).toBe(defaultHeaders['delete'])
     expect(request.headers['delete2']).toBe(defaultHeaders['delete2'])
   })
+
+  describe('Accepts global arguments', () => {
+    test('Global responseHandler', async () => {
+      server.use(
+        rest.get('https://example.com/success', (_, res, ctx) =>
+          res.once(ctx.text(`this is not json!`))
+        )
+      )
+
+      const globalizedBaseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        responseHandler: 'text',
+      })
+
+      const req = globalizedBaseQuery(
+        { url: '/success', responseHandler: 'text' },
+        commonBaseQueryApi,
+        {}
+      )
+      expect(req).toBeInstanceOf(Promise)
+      const res = await req
+      expect(res).toBeInstanceOf(Object)
+      expect(res.meta?.request).toBeInstanceOf(Request)
+      expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.data).toEqual(`this is not json!`)
+    })
+
+    test('Global validateStatus', async () => {
+      const globalizedBaseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        validateStatus: (response, body) =>
+          response.status === 200 && body.success === false ? false : true,
+      })
+
+      // This is a scenario where an API may always return a 200, but indicates there is an error when success = false
+      const res = await globalizedBaseQuery(
+        {
+          url: '/nonstandard-error',
+        },
+        commonBaseQueryApi,
+        {}
+      )
+
+      expect(res.error).toEqual({
+        status: 200,
+        data: {
+          success: false,
+          message: 'This returns a 200 but is really an error',
+        },
+      })
+    })
+
+    test('Global timeout', async () => {
+      let reject: () => void
+      const donePromise = new Promise((resolve, _reject) => {
+        reject = _reject
+      })
+      server.use(
+        rest.get('https://example.com/empty1', async (req, res, ctx) => {
+          await Promise.race([waitMs(3000), donePromise])
+          return res.once(ctx.json({ ...req, headers: req.headers.all() }))
+        })
+      )
+      const globalizedBaseQuery = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        timeout: 200,
+      })
+
+      const result = await globalizedBaseQuery(
+        { url: '/empty1' },
+        commonBaseQueryApi,
+        {}
+      )
+      expect(result?.error).toEqual({
+        status: 'TIMEOUT_ERROR',
+        error: 'AbortError: The user aborted a request.',
+      })
+      reject!()
+    })
+  })
 })
 
 describe('fetchFn', () => {
@@ -950,28 +1033,27 @@ describe('still throws on completely unexpected errors', () => {
 })
 
 describe('timeout', () => {
-  it('throws a timeout error when a request takes longer than specified timeout duration', async () => {
-    jest.useFakeTimers('legacy')
-    let result: any
-    server.use(
-      rest.get('https://example.com/empty', (req, res, ctx) =>
-        res.once(
-          ctx.delay(3000),
-          ctx.json({ ...req, headers: req.headers.all() })
-        )
-      )
-    )
-    Promise.resolve(
-      baseQuery({ url: '/empty', timeout: 2000 }, commonBaseQueryApi, {})
-    ).then((r) => {
-      result = r
+  test('throws a timeout error when a request takes longer than specified timeout duration', async () => {
+    let reject: () => void
+    const donePromise = new Promise((resolve, _reject) => {
+      reject = _reject
     })
-    await waitMs()
-    jest.runAllTimers()
-    await waitMs()
+
+    server.use(
+      rest.get('https://example.com/empty2', async (req, res, ctx) => {
+        await Promise.race([waitMs(3000), donePromise])
+        return res.once(ctx.json({ ...req, headers: req.headers.all() }))
+      })
+    )
+    const result = await baseQuery(
+      { url: '/empty2', timeout: 200 },
+      commonBaseQueryApi,
+      {}
+    )
     expect(result?.error).toEqual({
       status: 'TIMEOUT_ERROR',
       error: 'AbortError: The user aborted a request.',
     })
+    reject!()
   })
 })

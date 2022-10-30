@@ -26,6 +26,9 @@ export interface FetchArgs extends CustomRequestInit {
   body?: any
   responseHandler?: ResponseHandler
   validateStatus?: (response: Response, body: any) => boolean
+  /**
+   * A number in milliseconds that represents that maximum time a request can take before timing out.
+   */
   timeout?: number
 }
 
@@ -129,11 +132,8 @@ export type FetchBaseQueryArgs = {
    * Defaults to `application/json`;
    */
   jsonContentType?: string
-  /**
-   * A number in milliseconds that represents that maximum time a request can take before timing out.
-   */
-  timeout?: number
-} & RequestInit
+} & RequestInit &
+  Pick<FetchArgs, 'responseHandler' | 'validateStatus' | 'timeout'>
 
 export type FetchBaseQueryMeta = { request: Request; response?: Response }
 
@@ -189,6 +189,7 @@ export function fetchBaseQuery({
   isJsonContentType = defaultIsJsonContentType,
   jsonContentType = 'application/json',
   timeout: defaultTimeout,
+  validateStatus: globalValidateStatus,
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
@@ -212,7 +213,7 @@ export function fetchBaseQuery({
       body = undefined,
       params = undefined,
       responseHandler = 'json' as const,
-      validateStatus = defaultValidateStatus,
+      validateStatus = globalValidateStatus ?? defaultValidateStatus,
       timeout = defaultTimeout,
       ...rest
     } = typeof arg == 'string' ? { url: arg } : arg
