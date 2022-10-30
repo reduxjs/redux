@@ -291,15 +291,23 @@ export function buildInitiate({
       Object.values(runningMutations.get(dispatch) || {}).filter(isNotNullish)
   }
 
-  function middlewareWarning(getState: () => RootState<{}, string, string>) {
+  function middlewareWarning(dispatch: Dispatch) {
     if (process.env.NODE_ENV !== 'production') {
       if ((middlewareWarning as any).triggered) return
-      const registered =
-        getState()[api.reducerPath]?.config?.middlewareRegistered
-      if (registered !== undefined) {
-        ;(middlewareWarning as any).triggered = true
-      }
-      if (registered === false) {
+      const registered:
+        | ReturnType<typeof api.internalActions.internal_probeSubscription>
+        | boolean = dispatch(
+        api.internalActions.internal_probeSubscription({
+          queryCacheKey: 'DOES_NOT_EXIST',
+          requestId: 'DUMMY_REQUEST_ID',
+        })
+      )
+
+      ;(middlewareWarning as any).triggered = true
+
+      // The RTKQ middleware _should_ always return a boolean for `probeSubscription`
+      if (typeof registered !== 'boolean') {
+        // Otherwise, must not have been added
         throw new Error(
           `Warning: Middleware for RTK-Query API at reducerPath "${api.reducerPath}" has not been added to the store.
 You must add the middleware for RTK-Query to function correctly!`
@@ -346,7 +354,7 @@ You must add the middleware for RTK-Query to function correctly!`
         const thunkResult = dispatch(thunk)
         const stateAfter = selector(getState())
 
-        middlewareWarning(getState)
+        middlewareWarning(dispatch)
 
         const { requestId, abort } = thunkResult
 
@@ -440,7 +448,7 @@ You must add the middleware for RTK-Query to function correctly!`
           fixedCacheKey,
         })
         const thunkResult = dispatch(thunk)
-        middlewareWarning(getState)
+        middlewareWarning(dispatch)
         const { requestId, abort, unwrap } = thunkResult
         const returnValuePromise = thunkResult
           .unwrap()

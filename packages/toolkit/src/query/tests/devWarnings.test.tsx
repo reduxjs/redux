@@ -186,13 +186,16 @@ describe('missing reducer', () => {
   })
 })
 
-test('warns only for reducer if everything is missing', async () => {
+test('warns for reducer and also throws error if everything is missing', async () => {
   const store = configureStore({
     reducer: { x: () => 0 },
   })
   // @ts-expect-error
   api1.endpoints.q1.select(undefined)(store.getState())
-  await store.dispatch(api1.endpoints.q1.initiate(undefined))
+  const doDispatch = () => {
+    store.dispatch(api1.endpoints.q1.initiate(undefined))
+  }
+  expect(doDispatch).toThrowError(reMatchMissingMiddlewareError)
   expect(getLog().log).toBe(
     'Error: No data found at `state.api`. Did you forget to add the reducer to the store?'
   )
