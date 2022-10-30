@@ -189,6 +189,7 @@ export function fetchBaseQuery({
   isJsonContentType = defaultIsJsonContentType,
   jsonContentType = 'application/json',
   timeout: defaultTimeout,
+  validateStatus: globalValidateStatus,
   ...baseFetchOptions
 }: FetchBaseQueryArgs = {}): BaseQueryFn<
   string | FetchArgs,
@@ -212,7 +213,7 @@ export function fetchBaseQuery({
       body = undefined,
       params = undefined,
       responseHandler = 'json' as const,
-      validateStatus = defaultValidateStatus,
+      validateStatus = globalValidateStatus ?? defaultValidateStatus,
       timeout = defaultTimeout,
       ...rest
     } = typeof arg == 'string' ? { url: arg } : arg
