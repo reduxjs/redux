@@ -7,6 +7,7 @@ import {
   isFulfilled,
   isRejectedWithValue,
   createNextState,
+  prepareAutoBatched,
 } from '@reduxjs/toolkit'
 import type {
   CombinedState as CombinedQueryState,
@@ -114,11 +115,14 @@ export function buildSlice({
     name: `${reducerPath}/queries`,
     initialState: initialState as QueryState<any>,
     reducers: {
-      removeQueryResult(
-        draft,
-        { payload: { queryCacheKey } }: PayloadAction<QuerySubstateIdentifier>
-      ) {
-        delete draft[queryCacheKey]
+      removeQueryResult: {
+        reducer(
+          draft,
+          { payload: { queryCacheKey } }: PayloadAction<QuerySubstateIdentifier>
+        ) {
+          delete draft[queryCacheKey]
+        },
+        prepare: prepareAutoBatched<QuerySubstateIdentifier>(),
       },
       queryResultPatched(
         draft,
@@ -243,14 +247,14 @@ export function buildSlice({
     name: `${reducerPath}/mutations`,
     initialState: initialState as MutationState<any>,
     reducers: {
-      removeMutationResult(
-        draft,
-        { payload }: PayloadAction<MutationSubstateIdentifier>
-      ) {
-        const cacheKey = getMutationCacheKey(payload)
-        if (cacheKey in draft) {
-          delete draft[cacheKey]
-        }
+      removeMutationResult: {
+        reducer(draft, { payload }: PayloadAction<MutationSubstateIdentifier>) {
+          const cacheKey = getMutationCacheKey(payload)
+          if (cacheKey in draft) {
+            delete draft[cacheKey]
+          }
+        },
+        prepare: prepareAutoBatched<MutationSubstateIdentifier>(),
       },
     },
     extraReducers(builder) {
