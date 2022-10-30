@@ -37,6 +37,11 @@ import { delay } from '../../utils'
 // This can be used to test how many renders happen due to data changes or
 // the refetching behavior of components.
 let amount = 0
+let nextItemId = 0
+
+interface Item {
+  id: number
+}
 
 const api = createApi({
   baseQuery: async (arg: any) => {
@@ -52,6 +57,15 @@ const api = createApi({
           data: null,
         },
       }
+    }
+
+    if (arg?.body && 'listItems' in arg.body) {
+      const items: Item[] = []
+      for (let i = 0; i < 3; i++) {
+        const item = { id: nextItemId++ }
+        items.push(item)
+      }
+      return { data: items }
     }
 
     return {
@@ -84,6 +98,23 @@ const api = createApi({
     }),
     getError: build.query({
       query: (query) => '/error',
+    }),
+    listItems: build.query<Item[], { pageNumber: number }>({
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      query: ({ pageNumber }) => ({
+        url: `items?limit=1&offset=${pageNumber}`,
+        body: {
+          listItems: true,
+        },
+      }),
+      merge: (currentCache, newItems) => {
+        currentCache.push(...newItems)
+      },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return true
+      },
     }),
   }),
 })
@@ -587,6 +618,35 @@ describe('hooks tests', () => {
       await waitFor(() =>
         expect(screen.getByTestId('amount').textContent).toBe('2')
       )
+    })
+
+    test(`useQuery refetches when query args object changes even if serialized args don't change`, async () => {
+      function ItemList() {
+        const [pageNumber, setPageNumber] = React.useState(0)
+        const { data = [] } = api.useListItemsQuery({ pageNumber })
+
+        const renderedItems = data.map((item) => (
+          <li key={item.id}>ID: {item.id}</li>
+        ))
+        return (
+          <div>
+            <button onClick={() => setPageNumber(pageNumber + 1)}>
+              Next Page
+            </button>
+            <ul>{renderedItems}</ul>
+          </div>
+        )
+      }
+
+      render(<ItemList />, { wrapper: storeRef.wrapper })
+
+      await screen.findByText('ID: 0')
+
+      await act(async () => {
+        screen.getByText('Next Page').click()
+      })
+
+      await screen.findByText('ID: 3')
     })
 
     describe('api.util.resetApiState resets hook', () => {
