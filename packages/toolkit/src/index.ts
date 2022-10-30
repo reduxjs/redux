@@ -184,3 +184,9 @@ export {
   clearAllListeners,
   TaskAbortError,
 } from './listenerMiddleware/index'
+
+export {
+  SHOULD_AUTOBATCH,
+  prepareAutoBatched,
+  autoBatchEnhancer,
+} from './autoBatchEnhancer'
