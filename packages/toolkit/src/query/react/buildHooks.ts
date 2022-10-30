@@ -54,6 +54,7 @@ import type { UninitializedValue } from './constants'
 import { UNINITIALIZED_VALUE } from './constants'
 import { useShallowStableValue } from './useShallowStableValue'
 import type { BaseQueryFn } from '../baseQueryTypes'
+import { defaultSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 
 // Copy-pasted from React-Redux
 export const useIsomorphicLayoutEffect =
@@ -688,7 +689,12 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
       const stableArg = useStableQueryArgs(
         skip ? skipToken : arg,
-        serializeQueryArgs,
+        // Even if the user provided a per-endpoint `serializeQueryArgs` with
+        // a consistent return value, _here_ we want to use the default behavior
+        // so we can tell if _anything_ actually changed. Otherwise, we can end up
+        // with a case where the query args did change but the serialization doesn't,
+        // and then we never try to initiate a refetch.
+        defaultSerializeQueryArgs,
         context.endpointDefinitions[name],
         name
       )
