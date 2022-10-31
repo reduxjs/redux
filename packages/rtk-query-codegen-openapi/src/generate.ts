@@ -6,13 +6,13 @@ import ApiGenerator, {
   getReferenceName,
   isReference,
   supportDeepObjects,
-} from '@rtk-query/oazapfts-patched/lib/codegen/generate';
+} from 'oazapfts/lib/codegen/generate';
 import {
   createQuestionToken,
   keywordType,
   createPropertyAssignment,
   isValidIdentifier,
-} from '@rtk-query/oazapfts-patched/lib/codegen/tscodegen';
+} from 'oazapfts/lib/codegen/tscodegen';
 import type { OpenAPIV3 } from 'openapi-types';
 import { generateReactHooks } from './generators/react-hooks';
 import type { EndpointMatcher, EndpointOverrides, GenerationOptions, OperationDefinition, TextMatcher } from './types';
@@ -92,12 +92,14 @@ export async function generateApi(
     endpointOverrides,
     unionUndefined,
     flattenArg = false,
+    useEnumType = false,
   }: GenerationOptions
 ) {
   const v3Doc = await getV3Doc(spec);
 
   const apiGen = new ApiGenerator(v3Doc, {
     unionUndefined,
+    useEnumType,
   });
 
   const operationDefinitions = getOperationDefinitions(v3Doc).filter(operationMatches(filterEndpoints));
@@ -162,7 +164,8 @@ export async function generateApi(
           undefined
         ),
         ...Object.values(interfaces),
-        ...apiGen['aliases'],
+        ...apiGen.aliases,
+        ...apiGen.enumAliases,
         ...(hooks
           ? [
               generateReactHooks({

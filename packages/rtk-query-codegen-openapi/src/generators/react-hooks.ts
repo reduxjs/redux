@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import { getOperationName } from '@rtk-query/oazapfts-patched/lib/codegen/generate';
+import { getOperationName } from 'oazapfts/lib/codegen/generate';
 import { capitalize, isQuery } from '../utils';
 import type { OperationDefinition, EndpointOverrides, ConfigFile } from '../types';
 import { getOverrides } from '../generate';
