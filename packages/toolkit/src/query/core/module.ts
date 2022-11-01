@@ -71,8 +71,7 @@ export type CoreModule =
   | ReferenceQueryLifecycle
   | ReferenceCacheCollection
 
-interface ThunkWithReturnValue<T>
-  extends ThunkAction<T | undefined, any, any, AnyAction> {}
+interface ThunkWithReturnValue<T> extends ThunkAction<T, any, any, AnyAction> {}
 
 declare module '../apiTypes' {
   export interface ApiModules<
