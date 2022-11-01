@@ -885,7 +885,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
 
     const useQueryState: UseQueryState<any> = (
       arg: any,
-      { skip = false, selectFromResult = defaultQueryStateSelector } = {}
+      { skip = false, selectFromResult } = {}
     ) => {
       const { select } = api.endpoints[name] as ApiEndpointQuery<
         QueryDefinition<any, any, any, any, any>,
@@ -916,7 +916,10 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       )
 
       const querySelector: Selector<ApiRootState, any, [any]> = useMemo(
-        () => createSelector([selectDefaultResult], selectFromResult),
+        () =>
+          selectFromResult
+            ? createSelector([selectDefaultResult], selectFromResult)
+            : selectDefaultResult,
         [selectDefaultResult, selectFromResult]
       )
 

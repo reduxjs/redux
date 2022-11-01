@@ -129,6 +129,9 @@ export function buildSelectors<
 }) {
   type RootState = _RootState<Definitions, string, string>
 
+  const selectSkippedQuery = (state: RootState) => defaultQuerySubState
+  const selectSkippedMutation = (state: RootState) => defaultMutationSubState
+
   return { buildQuerySelector, buildMutationSelector, selectInvalidatedBy }
 
   function withRequestFlags<T extends { status: QueryStatus }>(
@@ -159,20 +162,18 @@ export function buildSelectors<
     endpointDefinition: QueryDefinition<any, any, any, any>
   ) {
     return ((queryArgs: any) => {
-      const selectQuerySubState = createSelector(
-        selectInternalState,
-        (internalState) =>
-          (queryArgs === skipToken
-            ? undefined
-            : internalState?.queries?.[
-                serializeQueryArgs({
-                  queryArgs,
-                  endpointDefinition,
-                  endpointName,
-                })
-              ]) ?? defaultQuerySubState
-      )
-      return createSelector(selectQuerySubState, withRequestFlags)
+      const serializedArgs = serializeQueryArgs({
+        queryArgs,
+        endpointDefinition,
+        endpointName,
+      })
+      const selectQuerySubstate = (state: RootState) =>
+        selectInternalState(state)?.queries?.[serializedArgs] ??
+        defaultQuerySubState
+      const finalSelectQuerySubState =
+        queryArgs === skipToken ? selectSkippedQuery : selectQuerySubstate
+
+      return createSelector(finalSelectQuerySubState, withRequestFlags)
     }) as QueryResultSelectorFactory<any, RootState>
   }
 
@@ -184,14 +185,15 @@ export function buildSelectors<
       } else {
         mutationId = id
       }
-      const selectMutationSubstate = createSelector(
-        selectInternalState,
-        (internalState) =>
-          (mutationId === skipToken
-            ? undefined
-            : internalState?.mutations?.[mutationId]) ?? defaultMutationSubState
-      )
-      return createSelector(selectMutationSubstate, withRequestFlags)
+      const selectMutationSubstate = (state: RootState) =>
+        selectInternalState(state)?.mutations?.[mutationId as string] ??
+        defaultMutationSubState
+      const finalSelectMutationSubstate =
+        mutationId === skipToken
+          ? selectSkippedMutation
+          : selectMutationSubstate
+
+      return createSelector(finalSelectMutationSubstate, withRequestFlags)
     }) as MutationResultSelectorFactory<any, RootState>
   }
 
