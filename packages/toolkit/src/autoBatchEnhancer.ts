@@ -23,9 +23,21 @@ const queueMicrotaskShim =
           }, 0)
         )
 
+export type AutoBatchOptions =
+  | { type: 'tick' }
+  | { type: 'timer'; timeout: number }
+  | { type: 'raf' }
+  | { type: 'callback'; queueNotification: (notify: () => void) => void }
+
+const createQueueWithTimer = (timeout: number) => {
+  return (notify: () => void) => {
+    setTimeout(notify, timeout)
+  }
+}
+
 /**
  * A Redux store enhancer that watches for "low-priority" actions, and delays
- * notifying subscribers until either the end of the event loop tick or the
+ * notifying subscribers until either the queued callback executes or the
  * next "standard-priority" action is dispatched.
  *
  * This allows dispatching multiple "low-priority" actions in a row with only
@@ -36,9 +48,17 @@ const queueMicrotaskShim =
  * This can be added to `action.meta` manually, or by using the
  * `prepareAutoBatched` helper.
  *
+ * By default, it will queue a notification for the end of the event loop tick.
+ * However, you can pass several other options to configure the behavior:
+ * - `{type: 'tick'}: queues using `queueMicrotask` (default)
+ * - `{type: 'timer, timeout: number}`: queues using `setTimeout`
+ * - `{type: 'raf'}`: queues using `requestAnimationFrame`
+ * - `{type: 'callback', queueNotification: (notify: () => void) => void}: lets you provide your own callback
+ *
+ *
  */
 export const autoBatchEnhancer =
-  (): StoreEnhancer =>
+  (options: AutoBatchOptions = { type: 'tick' }): StoreEnhancer =>
   (next) =>
   (...args) => {
     const store = next(...args)
@@ -48,6 +68,15 @@ export const autoBatchEnhancer =
     let notificationQueued = false
 
     const listeners = new Set<() => void>()
+
+    const queueCallback =
+      options.type === 'tick'
+        ? queueMicrotaskShim
+        : options.type === 'raf'
+        ? requestAnimationFrame
+        : options.type === 'callback'
+        ? options.queueNotification
+        : createQueueWithTimer(options.timeout)
 
     const notifyListeners = () => {
       // We're running at the end of the event loop tick.
@@ -91,7 +120,7 @@ export const autoBatchEnhancer =
             // Make sure we only enqueue this _once_ per tick.
             if (!notificationQueued) {
               notificationQueued = true
-              queueMicrotaskShim(notifyListeners)
+              queueCallback(notifyListeners)
             }
           }
           // Go ahead and process the action as usual, including reducers.
