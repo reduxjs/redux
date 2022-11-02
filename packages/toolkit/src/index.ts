@@ -189,4 +189,5 @@ export {
   SHOULD_AUTOBATCH,
   prepareAutoBatched,
   autoBatchEnhancer,
+  AutoBatchOptions,
 } from './autoBatchEnhancer'
