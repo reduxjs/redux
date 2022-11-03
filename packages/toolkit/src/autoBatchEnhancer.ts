@@ -58,7 +58,7 @@ const createQueueWithTimer = (timeout: number) => {
  *
  */
 export const autoBatchEnhancer =
-  (options: AutoBatchOptions = { type: 'tick' }): StoreEnhancer =>
+  (options: AutoBatchOptions = { type: 'raf' }): StoreEnhancer =>
   (next) =>
   (...args) => {
     const store = next(...args)
