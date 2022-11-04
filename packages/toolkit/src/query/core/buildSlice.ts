@@ -6,6 +6,8 @@ import {
   isAnyOf,
   isFulfilled,
   isRejectedWithValue,
+  createNextState,
+  prepareAutoBatched,
 } from '@reduxjs/toolkit'
 import type {
   CombinedState as CombinedQueryState,
@@ -22,11 +24,12 @@ import type {
   ConfigState,
 } from './apiState'
 import { QueryStatus } from './apiState'
-import type { MutationThunk, QueryThunk } from './buildThunks'
+import type { MutationThunk, QueryThunk, RejectedAction } from './buildThunks'
 import { calculateProvidedByThunk } from './buildThunks'
 import type {
   AssertTagTypes,
   EndpointDefinitions,
+  QueryDefinition,
 } from '../endpointDefinitions'
 import type { Patch } from 'immer'
 import { applyPatches } from 'immer'
@@ -37,6 +40,7 @@ import {
   copyWithStructuralSharing,
 } from '../utils'
 import type { ApiContext } from '../apiTypes'
+import { isUpsertQuery } from './buildInitiate'
 
 function updateQuerySubstateIfExists(
   state: QueryState<any>,
@@ -111,11 +115,14 @@ export function buildSlice({
     name: `${reducerPath}/queries`,
     initialState: initialState as QueryState<any>,
     reducers: {
-      removeQueryResult(
-        draft,
-        { payload: { queryCacheKey } }: PayloadAction<QuerySubstateIdentifier>
-      ) {
-        delete draft[queryCacheKey]
+      removeQueryResult: {
+        reducer(
+          draft,
+          { payload: { queryCacheKey } }: PayloadAction<QuerySubstateIdentifier>
+        ) {
+          delete draft[queryCacheKey]
+        },
+        prepare: prepareAutoBatched<QuerySubstateIdentifier>(),
       },
       queryResultPatched(
         draft,
@@ -133,7 +140,8 @@ export function buildSlice({
     extraReducers(builder) {
       builder
         .addCase(queryThunk.pending, (draft, { meta, meta: { arg } }) => {
-          if (arg.subscribe) {
+          const upserting = isUpsertQuery(arg)
+          if (arg.subscribe || upserting) {
             // only initialize substate if we want to subscribe to it
             draft[arg.queryCacheKey] ??= {
               status: QueryStatus.uninitialized,
@@ -143,7 +151,13 @@ export function buildSlice({
 
           updateQuerySubstateIfExists(draft, arg.queryCacheKey, (substate) => {
             substate.status = QueryStatus.pending
-            substate.requestId = meta.requestId
+
+            substate.requestId =
+              upserting && substate.requestId
+                ? // for `upsertQuery` **updates**, keep the current `requestId`
+                  substate.requestId
+                : // for normal queries or `upsertQuery` **inserts** always update the `requestId`
+                  meta.requestId
             if (arg.originalArgs !== undefined) {
               substate.originalArgs = arg.originalArgs
             }
@@ -155,12 +169,42 @@ export function buildSlice({
             draft,
             meta.arg.queryCacheKey,
             (substate) => {
-              if (substate.requestId !== meta.requestId) return
+              if (
+                substate.requestId !== meta.requestId &&
+                !isUpsertQuery(meta.arg)
+              )
+                return
+              const { merge } = definitions[
+                meta.arg.endpointName
+              ] as QueryDefinition<any, any, any, any>
               substate.status = QueryStatus.fulfilled
-              substate.data =
-                definitions[meta.arg.endpointName].structuralSharing ?? true
-                  ? copyWithStructuralSharing(substate.data, payload)
-                  : payload
+
+              if (merge) {
+                if (substate.data !== undefined) {
+                  // There's existing cache data. Let the user merge it in themselves.
+                  // We're already inside an Immer-powered reducer, and the user could just mutate `substate.data`
+                  // themselves inside of `merge()`. But, they might also want to return a new value.
+                  // Try to let Immer figure that part out, save the result, and assign it to `substate.data`.
+                  let newData = createNextState(
+                    substate.data,
+                    (draftSubstateData) => {
+                      // As usual with Immer, you can mutate _or_ return inside here, but not both
+                      return merge(draftSubstateData, payload)
+                    }
+                  )
+                  substate.data = newData
+                } else {
+                  // Presumably a fresh request. Just cache the response data.
+                  substate.data = payload
+                }
+              } else {
+                // Assign or safely update the cache data.
+                substate.data =
+                  definitions[meta.arg.endpointName].structuralSharing ?? true
+                    ? copyWithStructuralSharing(substate.data, payload)
+                    : payload
+              }
+
               delete substate.error
               substate.fulfilledTimeStamp = meta.fulfilledTimeStamp
             }
@@ -203,14 +247,14 @@ export function buildSlice({
     name: `${reducerPath}/mutations`,
     initialState: initialState as MutationState<any>,
     reducers: {
-      removeMutationResult(
-        draft,
-        { payload }: PayloadAction<MutationSubstateIdentifier>
-      ) {
-        const cacheKey = getMutationCacheKey(payload)
-        if (cacheKey in draft) {
-          delete draft[cacheKey]
-        }
+      removeMutationResult: {
+        reducer(draft, { payload }: PayloadAction<MutationSubstateIdentifier>) {
+          const cacheKey = getMutationCacheKey(payload)
+          if (cacheKey in draft) {
+            delete draft[cacheKey]
+          }
+        },
+        prepare: prepareAutoBatched<MutationSubstateIdentifier>(),
       },
     },
     extraReducers(builder) {
@@ -340,15 +384,14 @@ export function buildSlice({
     },
   })
 
+  // Dummy slice to generate actions
   const subscriptionSlice = createSlice({
     name: `${reducerPath}/subscriptions`,
     initialState: initialState as SubscriptionState,
     reducers: {
       updateSubscriptionOptions(
-        draft,
-        {
-          payload: { queryCacheKey, requestId, options },
-        }: PayloadAction<
+        d,
+        a: PayloadAction<
           {
             endpointName: string
             requestId: string
@@ -356,50 +399,30 @@ export function buildSlice({
           } & QuerySubstateIdentifier
         >
       ) {
-        if (draft?.[queryCacheKey]?.[requestId]) {
-          draft[queryCacheKey]![requestId] = options
-        }
+        // Dummy
       },
       unsubscribeQueryResult(
-        draft,
-        {
-          payload: { queryCacheKey, requestId },
-        }: PayloadAction<{ requestId: string } & QuerySubstateIdentifier>
+        d,
+        a: PayloadAction<{ requestId: string } & QuerySubstateIdentifier>
       ) {
-        if (draft[queryCacheKey]) {
-          delete draft[queryCacheKey]![requestId]
-        }
+        // Dummy
+      },
+      internal_probeSubscription(
+        d,
+        a: PayloadAction<{ queryCacheKey: string; requestId: string }>
+      ) {
+        // dummy
       },
     },
-    extraReducers: (builder) => {
-      builder
-        .addCase(
-          querySlice.actions.removeQueryResult,
-          (draft, { payload: { queryCacheKey } }) => {
-            delete draft[queryCacheKey]
-          }
-        )
-        .addCase(queryThunk.pending, (draft, { meta: { arg, requestId } }) => {
-          if (arg.subscribe) {
-            const substate = (draft[arg.queryCacheKey] ??= {})
-            substate[requestId] =
-              arg.subscriptionOptions ?? substate[requestId] ?? {}
-          }
-        })
-        .addCase(
-          queryThunk.rejected,
-          (draft, { meta: { condition, arg, requestId }, error, payload }) => {
-            // request was aborted due to condition (another query already running)
-            if (condition && arg.subscribe) {
-              const substate = (draft[arg.queryCacheKey] ??= {})
-              substate[requestId] =
-                arg.subscriptionOptions ?? substate[requestId] ?? {}
-            }
-          }
-        )
-        // update the state to be a new object to be picked up as a "state change"
-        // by redux-persist's `autoMergeLevel2`
-        .addMatcher(hasRehydrationInfo, (draft) => ({ ...draft }))
+  })
+
+  const internalSubscriptionsSlice = createSlice({
+    name: `${reducerPath}/internalSubscriptions`,
+    initialState: initialState as SubscriptionState,
+    reducers: {
+      subscriptionsUpdated(state, action: PayloadAction<Patch[]>) {
+        return applyPatches(state, action.payload)
+      },
     },
   })
 
@@ -445,7 +468,7 @@ export function buildSlice({
     queries: querySlice.reducer,
     mutations: mutationSlice.reducer,
     provided: invalidationSlice.reducer,
-    subscriptions: subscriptionSlice.reducer,
+    subscriptions: internalSubscriptionsSlice.reducer,
     config: configSlice.reducer,
   })
 
@@ -456,6 +479,7 @@ export function buildSlice({
     ...configSlice.actions,
     ...querySlice.actions,
     ...subscriptionSlice.actions,
+    ...internalSubscriptionsSlice.actions,
     ...mutationSlice.actions,
     /** @deprecated has been renamed to `removeMutationResult` */
     unsubscribeMutationResult: mutationSlice.actions.removeMutationResult,

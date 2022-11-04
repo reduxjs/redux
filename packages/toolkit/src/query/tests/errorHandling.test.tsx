@@ -34,8 +34,12 @@ const failQueryOnce = rest.get('/query', (_, req, ctx) =>
 describe('fetchBaseQuery', () => {
   let commonBaseQueryApiArgs: BaseQueryApi = {} as any
   beforeEach(() => {
+    const abortController = new AbortController()
     commonBaseQueryApiArgs = {
-      signal: new AbortController().signal,
+      signal: abortController.signal,
+      abort: (reason) =>
+        //@ts-ignore
+        abortController.abort(reason),
       dispatch: storeRef.store.dispatch,
       getState: storeRef.store.getState,
       extra: undefined,
@@ -143,7 +147,7 @@ describe('query error handling', () => {
       )
     )
 
-    act(result.current.refetch)
+    act(() => void result.current.refetch())
 
     await hookWaitFor(() => expect(result.current.isFetching).toBeFalsy())
     expect(result.current).toEqual(
@@ -189,7 +193,7 @@ describe('query error handling', () => {
       })
     )
 
-    act(result.current.refetch)
+    act(() => void result.current.refetch())
 
     await hookWaitFor(() => expect(result.current.isFetching).toBeFalsy())
     expect(result.current).toEqual(

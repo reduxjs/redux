@@ -1,7 +1,11 @@
 /**
  * Note: this file should import all other files for type discovery and declaration merging
  */
-import type { PatchQueryDataThunk, UpdateQueryDataThunk } from './buildThunks'
+import type {
+  PatchQueryDataThunk,
+  UpdateQueryDataThunk,
+  UpsertQueryDataThunk,
+} from './buildThunks'
 import { buildThunks } from './buildThunks'
 import type {
   ActionCreatorWithPayload,
@@ -66,6 +70,8 @@ export type CoreModule =
   | ReferenceCacheLifecycle
   | ReferenceQueryLifecycle
   | ReferenceCacheCollection
+
+interface ThunkWithReturnValue<T> extends ThunkAction<T, any, any, AnyAction> {}
 
 declare module '../apiTypes' {
   export interface ApiModules<
@@ -134,40 +140,95 @@ declare module '../apiTypes' {
        */
       util: {
         /**
-         * Returns all promises for running queries and mutations.
-         * Useful for SSR scenarios to await everything triggered in any way,
-         * including via hook calls, or manually dispatching `initiate` actions.
+         * This method had to be removed due to a conceptual bug in RTK.
+         *
+         * Despite TypeScript errors, it will continue working in the "buggy" way it did
+         * before in production builds and will be removed in the next major release.
+         *
+         * Nonetheless, you should immediately replace it with the new recommended approach.
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for new guidance on SSR.
+         *
+         * Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
+         * @deprecated
          */
-        getRunningOperationPromises: () => Array<Promise<unknown>>
+        getRunningOperationPromises: never // this is now types as `never` to immediately throw TS errors on use, but still allow for a comment
+
         /**
-         * If a promise is running for a given endpoint name + argument combination,
-         * returns that promise. Otherwise, returns `undefined`.
-         * Can be used to await a specific query/mutation triggered in any way,
-         * including via hook calls, or manually dispatching `initiate` actions.
+         * This method had to be removed due to a conceptual bug in RTK.
+         * It has been replaced by `api.util.getRunningQueryThunk` and `api.util.getRunningMutationThunk`.
+         * Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
+         * @deprecated
          */
-        getRunningOperationPromise<EndpointName extends QueryKeys<Definitions>>(
+        getRunningOperationPromise: never // this is now types as `never` to immediately throw TS errors on use, but still allow for a comment
+
+        /**
+         * A thunk that (if dispatched) will return a specific running query, identified
+         * by `endpointName` and `args`.
+         * If that query is not running, dispatching the thunk will result in `undefined`.
+         *
+         * Can be used to await a specific query triggered in any way,
+         * including via hook calls or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningQueryThunk<EndpointName extends QueryKeys<Definitions>>(
           endpointName: EndpointName,
           args: QueryArgFrom<Definitions[EndpointName]>
-        ):
+        ): ThunkWithReturnValue<
           | QueryActionCreatorResult<
               Definitions[EndpointName] & { type: 'query' }
             >
           | undefined
-        getRunningOperationPromise<
-          EndpointName extends MutationKeys<Definitions>
-        >(
+        >
+
+        /**
+         * A thunk that (if dispatched) will return a specific running mutation, identified
+         * by `endpointName` and `fixedCacheKey` or `requestId`.
+         * If that mutation is not running, dispatching the thunk will result in `undefined`.
+         *
+         * Can be used to await a specific mutation triggered in any way,
+         * including via hook trigger functions or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningMutationThunk<EndpointName extends MutationKeys<Definitions>>(
           endpointName: EndpointName,
           fixedCacheKeyOrRequestId: string
-        ):
+        ): ThunkWithReturnValue<
           | MutationActionCreatorResult<
               Definitions[EndpointName] & { type: 'mutation' }
             >
           | undefined
+        >
+
+        /**
+         * A thunk that (if dispatched) will return all running queries.
+         *
+         * Useful for SSR scenarios to await all running queries triggered in any way,
+         * including via hook calls or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningQueriesThunk(): ThunkWithReturnValue<
+          Array<QueryActionCreatorResult<any>>
+        >
+
+        /**
+         * A thunk that (if dispatched) will return all running mutations.
+         *
+         * Useful for SSR scenarios to await all running mutations triggered in any way,
+         * including via hook calls or manually dispatching `initiate` actions.
+         *
+         * See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for details.
+         */
+        getRunningMutationsThunk(): ThunkWithReturnValue<
+          Array<MutationActionCreatorResult<any>>
+        >
 
         /**
          * A Redux thunk that can be used to manually trigger pre-fetching of data.
          *
-         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a set of options used to determine if the data actually should be re-fetched based on cache staleness.
+         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and a set of options used to determine if the data actually should be re-fetched based on cache staleness.
          *
          * React Hooks users will most likely never need to use this directly, as the `usePrefetch` hook will dispatch this thunk internally as needed when you call the prefetching function supplied by the hook.
          *
@@ -185,11 +246,13 @@ declare module '../apiTypes' {
         /**
          * A Redux thunk action creator that, when dispatched, creates and applies a set of JSON diff/patch objects to the current state. This immediately updates the Redux state with those changes.
          *
-         * The thunk action creator accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a callback function. The callback receives an Immer-wrapped `draft` of the current state, and may modify the draft to match the expected results after the mutation completes successfully.
+         * The thunk action creator accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and an `updateRecipe` callback function. The callback receives an Immer-wrapped `draft` of the current state, and may modify the draft to match the expected results after the mutation completes successfully.
          *
-         * The thunk returns an object containing `{patches: Patch[], inversePatches: Patch[], undo: () => void}`. The `patches` and `inversePatches` are generated using Immer's [`produceWithPatches` method](https://immerjs.github.io/immer/patches).
+         * The thunk executes _synchronously_, and returns an object containing `{patches: Patch[], inversePatches: Patch[], undo: () => void}`. The `patches` and `inversePatches` are generated using Immer's [`produceWithPatches` method](https://immerjs.github.io/immer/patches).
          *
          * This is typically used as the first step in implementing optimistic updates. The generated `inversePatches` can be used to revert the updates by calling `dispatch(patchQueryData(endpointName, args, inversePatches))`. Alternatively, the `undo` method can be called directly to achieve the same effect.
+         *
+         * Note that the first two arguments (`endpointName` and `args`) are used to determine which existing cache entry to update. If no existing cache entry is found, the `updateRecipe` callback will not run.
          *
          * @example
          *
@@ -211,9 +274,32 @@ declare module '../apiTypes' {
           RootState<Definitions, string, ReducerPath>
         >
         /**
+         * A Redux thunk action creator that, when dispatched, acts as an artificial API request to upsert a value into the cache.
+         *
+         * The thunk action creator accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and the data to upsert.
+         *
+         * If no cache entry for that cache key exists, a cache entry will be created and the data added. If a cache entry already exists, this will _overwrite_ the existing cache entry data.
+         *
+         * The thunk executes _asynchronously_, and returns a promise that resolves when the store has been updated.
+         *
+         * If dispatched while an actual request is in progress, both the upsert and request will be handled as soon as they resolve, resulting in a "last result wins" update behavior.
+         *
+         * @example
+         *
+         * ```ts
+         * await dispatch(
+         *   api.util.upsertQueryData('getPost', {id: 1}, {id: 1, text: "Hello!"})
+         * )
+         * ```
+         */
+        upsertQueryData: UpsertQueryDataThunk<
+          Definitions,
+          RootState<Definitions, string, ReducerPath>
+        >
+        /**
          * A Redux thunk that applies a JSON diff/patch array to the cached data for a given query result. This immediately updates the Redux state with those changes.
          *
-         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), any relevant query arguments, and a JSON diff/patch array as produced by Immer's `produceWithPatches`.
+         * The thunk accepts three arguments: the name of the endpoint we are updating (such as `'getPost'`), the appropriate query arg values to construct the desired cache key, and a JSON diff/patch array as produced by Immer's `produceWithPatches`.
          *
          * This is typically used as the second step in implementing optimistic updates. If a request fails, the optimistically-applied changes can be reverted by dispatching `patchQueryData` with the `inversePatches` that were generated by `updateQueryData` earlier.
          *
@@ -286,6 +372,11 @@ declare module '../apiTypes' {
           string
         >
 
+        /**
+         * A function to select all `{ endpointName, originalArgs, queryCacheKey }` combinations that would be invalidated by a specific set of tags.
+         *
+         * Can be used for mutations that want to do optimistic updates instead of invalidating a set of tags, but don't know exactly what they need to update.
+         */
         selectInvalidatedBy: (
           state: RootState<Definitions, string, ReducerPath>,
           tags: ReadonlyArray<TagDescription<TagTypes>>
@@ -320,7 +411,12 @@ export interface ApiEndpointQuery<
   Definition extends QueryDefinition<any, any, any, any, any>,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Definitions extends EndpointDefinitions
-> {}
+> {
+  /**
+   * All of these are `undefined` at runtime, purely to be used in TypeScript declarations!
+   */
+  Types: NonNullable<Definition['Types']>
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface ApiEndpointMutation<
@@ -328,7 +424,12 @@ export interface ApiEndpointMutation<
   Definition extends MutationDefinition<any, any, any, any, any>,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Definitions extends EndpointDefinitions
-> {}
+> {
+  /**
+   * All of these are `undefined` at runtime, purely to be used in TypeScript declarations!
+   */
+  Types: NonNullable<Definition['Types']>
+}
 
 export type ListenerActions = {
   /**
@@ -406,6 +507,7 @@ export const coreModule = (): Module<CoreModule> => ({
       mutationThunk,
       patchQueryData,
       updateQueryData,
+      upsertQueryData,
       prefetch,
       buildMatchThunkActions,
     } = buildThunks({
@@ -434,39 +536,11 @@ export const coreModule = (): Module<CoreModule> => ({
     safeAssign(api.util, {
       patchQueryData,
       updateQueryData,
+      upsertQueryData,
       prefetch,
       resetApiState: sliceActions.resetApiState,
     })
     safeAssign(api.internalActions, sliceActions)
-
-    // remove in final release
-    Object.defineProperty(api.util, 'updateQueryResult', {
-      get() {
-        if (
-          typeof process !== 'undefined' &&
-          process.env.NODE_ENV === 'development'
-        ) {
-          console.warn(
-            '`api.util.updateQueryResult` has been renamed to `api.util.updateQueryData`, please change your code accordingly'
-          )
-        }
-        return api.util.updateQueryData
-      },
-    })
-    // remove in final release
-    Object.defineProperty(api.util, 'patchQueryResult', {
-      get() {
-        if (
-          typeof process !== 'undefined' &&
-          process.env.NODE_ENV === 'development'
-        ) {
-          console.warn(
-            '`api.util.patchQueryResult` has been renamed to `api.util.patchQueryData`, please change your code accordingly'
-          )
-        }
-        return api.util.patchQueryData
-      },
-    })
 
     const { middleware, actions: middlewareActions } = buildMiddleware({
       reducerPath,
@@ -491,8 +565,12 @@ export const coreModule = (): Module<CoreModule> => ({
     const {
       buildInitiateQuery,
       buildInitiateMutation,
+      getRunningMutationThunk,
+      getRunningMutationsThunk,
+      getRunningQueriesThunk,
+      getRunningQueryThunk,
       getRunningOperationPromises,
-      getRunningOperationPromise,
+      removalWarning,
     } = buildInitiate({
       queryThunk,
       mutationThunk,
@@ -502,8 +580,12 @@ export const coreModule = (): Module<CoreModule> => ({
     })
 
     safeAssign(api.util, {
-      getRunningOperationPromises,
-      getRunningOperationPromise,
+      getRunningOperationPromises: getRunningOperationPromises as any,
+      getRunningOperationPromise: removalWarning as any,
+      getRunningMutationThunk,
+      getRunningMutationsThunk,
+      getRunningQueryThunk,
+      getRunningQueriesThunk,
     })
 
     return {

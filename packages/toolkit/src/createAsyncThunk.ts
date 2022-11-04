@@ -5,7 +5,7 @@ import type {
 } from './createAction'
 import { createAction } from './createAction'
 import type { ThunkDispatch } from 'redux-thunk'
-import type { FallbackIfUnknown, IsAny, IsUnknown } from './tsHelpers'
+import type { FallbackIfUnknown, Id, IsAny, IsUnknown } from './tsHelpers'
 import { nanoid } from './nanoid'
 
 // @ts-ignore we need the import of these types due to a bundling issue.
@@ -24,6 +24,7 @@ export type BaseThunkAPI<
   extra: E
   requestId: string
   signal: AbortSignal
+  abort: (reason?: string) => void
   rejectWithValue: IsUnknown<
     RejectedMeta,
     (value: RejectedValue) => RejectWithValue<RejectedValue, RejectedMeta>,
@@ -415,268 +416,302 @@ export type AsyncThunk<
   typePrefix: string
 }
 
-/**
- *
- * @param typePrefix
- * @param payloadCreator
- * @param options
- *
- * @public
- */
-// separate signature without `AsyncThunkConfig` for better inference
-export function createAsyncThunk<Returned, ThunkArg = void>(
-  typePrefix: string,
-  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, {}>,
-  options?: AsyncThunkOptions<ThunkArg, {}>
-): AsyncThunk<Returned, ThunkArg, {}>
+type OverrideThunkApiConfigs<OldConfig, NewConfig> = Id<
+  NewConfig & Omit<OldConfig, keyof NewConfig>
+>
 
-/**
- *
- * @param typePrefix
- * @param payloadCreator
- * @param options
- *
- * @public
- */
-export function createAsyncThunk<
-  Returned,
-  ThunkArg,
-  ThunkApiConfig extends AsyncThunkConfig
->(
-  typePrefix: string,
-  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
-  options?: AsyncThunkOptions<ThunkArg, ThunkApiConfig>
-): AsyncThunk<Returned, ThunkArg, ThunkApiConfig>
+type CreateAsyncThunk<CurriedThunkApiConfig extends AsyncThunkConfig> = {
+  /**
+   *
+   * @param typePrefix
+   * @param payloadCreator
+   * @param options
+   *
+   * @public
+   */
+  // separate signature without `AsyncThunkConfig` for better inference
+  <Returned, ThunkArg = void>(
+    typePrefix: string,
+    payloadCreator: AsyncThunkPayloadCreator<
+      Returned,
+      ThunkArg,
+      CurriedThunkApiConfig
+    >,
+    options?: AsyncThunkOptions<ThunkArg, CurriedThunkApiConfig>
+  ): AsyncThunk<Returned, ThunkArg, CurriedThunkApiConfig>
 
-export function createAsyncThunk<
-  Returned,
-  ThunkArg,
-  ThunkApiConfig extends AsyncThunkConfig
->(
-  typePrefix: string,
-  payloadCreator: AsyncThunkPayloadCreator<Returned, ThunkArg, ThunkApiConfig>,
-  options?: AsyncThunkOptions<ThunkArg, ThunkApiConfig>
-): AsyncThunk<Returned, ThunkArg, ThunkApiConfig> {
-  type RejectedValue = GetRejectValue<ThunkApiConfig>
-  type PendingMeta = GetPendingMeta<ThunkApiConfig>
-  type FulfilledMeta = GetFulfilledMeta<ThunkApiConfig>
-  type RejectedMeta = GetRejectedMeta<ThunkApiConfig>
-
-  const fulfilled: AsyncThunkFulfilledActionCreator<
+  /**
+   *
+   * @param typePrefix
+   * @param payloadCreator
+   * @param options
+   *
+   * @public
+   */
+  <Returned, ThunkArg, ThunkApiConfig extends AsyncThunkConfig>(
+    typePrefix: string,
+    payloadCreator: AsyncThunkPayloadCreator<
+      Returned,
+      ThunkArg,
+      OverrideThunkApiConfigs<CurriedThunkApiConfig, ThunkApiConfig>
+    >,
+    options?: AsyncThunkOptions<
+      ThunkArg,
+      OverrideThunkApiConfigs<CurriedThunkApiConfig, ThunkApiConfig>
+    >
+  ): AsyncThunk<
     Returned,
     ThunkArg,
-    ThunkApiConfig
-  > = createAction(
-    typePrefix + '/fulfilled',
-    (
-      payload: Returned,
-      requestId: string,
-      arg: ThunkArg,
-      meta?: FulfilledMeta
-    ) => ({
-      payload,
-      meta: {
-        ...((meta as any) || {}),
-        arg,
-        requestId,
-        requestStatus: 'fulfilled' as const,
-      },
-    })
-  )
+    OverrideThunkApiConfigs<CurriedThunkApiConfig, ThunkApiConfig>
+  >
 
-  const pending: AsyncThunkPendingActionCreator<ThunkArg, ThunkApiConfig> =
-    createAction(
-      typePrefix + '/pending',
-      (requestId: string, arg: ThunkArg, meta?: PendingMeta) => ({
-        payload: undefined,
-        meta: {
-          ...((meta as any) || {}),
-          arg,
-          requestId,
-          requestStatus: 'pending' as const,
-        },
-      })
-    )
+  withTypes<ThunkApiConfig extends AsyncThunkConfig>(): CreateAsyncThunk<
+    OverrideThunkApiConfigs<CurriedThunkApiConfig, ThunkApiConfig>
+  >
+}
 
-  const rejected: AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig> =
-    createAction(
-      typePrefix + '/rejected',
-      (
-        error: Error | null,
-        requestId: string,
-        arg: ThunkArg,
-        payload?: RejectedValue,
-        meta?: RejectedMeta
-      ) => ({
-        payload,
-        error: ((options && options.serializeError) || miniSerializeError)(
-          error || 'Rejected'
-        ) as GetSerializedErrorType<ThunkApiConfig>,
-        meta: {
-          ...((meta as any) || {}),
-          arg,
-          requestId,
-          rejectedWithValue: !!payload,
-          requestStatus: 'rejected' as const,
-          aborted: error?.name === 'AbortError',
-          condition: error?.name === 'ConditionError',
-        },
-      })
-    )
-
-  let displayedWarning = false
-
-  const AC =
-    typeof AbortController !== 'undefined'
-      ? AbortController
-      : class implements AbortController {
-          signal = {
-            aborted: false,
-            addEventListener() {},
-            dispatchEvent() {
-              return false
-            },
-            onabort() {},
-            removeEventListener() {},
-            reason: undefined,
-            throwIfAborted() {},
-          }
-          abort() {
-            if (process.env.NODE_ENV !== 'production') {
-              if (!displayedWarning) {
-                displayedWarning = true
-                console.info(
-                  `This platform does not implement AbortController. 
-If you want to use the AbortController to react to \`abort\` events, please consider importing a polyfill like 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only'.`
-                )
-              }
-            }
-          }
-        }
-
-  function actionCreator(
-    arg: ThunkArg
-  ): AsyncThunkAction<Returned, ThunkArg, ThunkApiConfig> {
-    return (dispatch, getState, extra) => {
-      const requestId = options?.idGenerator
-        ? options.idGenerator(arg)
-        : nanoid()
-
-      const abortController = new AC()
-      let abortReason: string | undefined
-
-      const abortedPromise = new Promise<never>((_, reject) =>
-        abortController.signal.addEventListener('abort', () =>
-          reject({ name: 'AbortError', message: abortReason || 'Aborted' })
-        )
-      )
-
-      let started = false
-      function abort(reason?: string) {
-        if (started) {
-          abortReason = reason
-          abortController.abort()
-        }
-      }
-
-      const promise = (async function () {
-        let finalAction: ReturnType<typeof fulfilled | typeof rejected>
-        try {
-          let conditionResult = options?.condition?.(arg, { getState, extra })
-          if (isThenable(conditionResult)) {
-            conditionResult = await conditionResult
-          }
-          if (conditionResult === false) {
-            // eslint-disable-next-line no-throw-literal
-            throw {
-              name: 'ConditionError',
-              message: 'Aborted due to condition callback returning false.',
-            }
-          }
-          started = true
-          dispatch(
-            pending(
-              requestId,
-              arg,
-              options?.getPendingMeta?.({ requestId, arg }, { getState, extra })
-            )
-          )
-          finalAction = await Promise.race([
-            abortedPromise,
-            Promise.resolve(
-              payloadCreator(arg, {
-                dispatch,
-                getState,
-                extra,
-                requestId,
-                signal: abortController.signal,
-                rejectWithValue: ((
-                  value: RejectedValue,
-                  meta?: RejectedMeta
-                ) => {
-                  return new RejectWithValue(value, meta)
-                }) as any,
-                fulfillWithValue: ((value: unknown, meta?: FulfilledMeta) => {
-                  return new FulfillWithMeta(value, meta)
-                }) as any,
-              })
-            ).then((result) => {
-              if (result instanceof RejectWithValue) {
-                throw result
-              }
-              if (result instanceof FulfillWithMeta) {
-                return fulfilled(result.payload, requestId, arg, result.meta)
-              }
-              return fulfilled(result as any, requestId, arg)
-            }),
-          ])
-        } catch (err) {
-          finalAction =
-            err instanceof RejectWithValue
-              ? rejected(null, requestId, arg, err.payload, err.meta)
-              : rejected(err as any, requestId, arg)
-        }
-        // We dispatch the result action _after_ the catch, to avoid having any errors
-        // here get swallowed by the try/catch block,
-        // per https://twitter.com/dan_abramov/status/770914221638942720
-        // and https://github.com/reduxjs/redux-toolkit/blob/e85eb17b39a2118d859f7b7746e0f3fee523e089/docs/tutorials/advanced-tutorial.md#async-error-handling-logic-in-thunks
-
-        const skipDispatch =
-          options &&
-          !options.dispatchConditionRejection &&
-          rejected.match(finalAction) &&
-          (finalAction as any).meta.condition
-
-        if (!skipDispatch) {
-          dispatch(finalAction)
-        }
-        return finalAction
-      })()
-      return Object.assign(promise as Promise<any>, {
-        abort,
-        requestId,
-        arg,
-        unwrap() {
-          return promise.then<any>(unwrapResult)
-        },
-      })
-    }
-  }
-
-  return Object.assign(
-    actionCreator as AsyncThunkActionCreator<
+export const createAsyncThunk = (() => {
+  function createAsyncThunk<
+    Returned,
+    ThunkArg,
+    ThunkApiConfig extends AsyncThunkConfig
+  >(
+    typePrefix: string,
+    payloadCreator: AsyncThunkPayloadCreator<
       Returned,
       ThunkArg,
       ThunkApiConfig
     >,
-    {
-      pending,
-      rejected,
-      fulfilled,
-      typePrefix,
+    options?: AsyncThunkOptions<ThunkArg, ThunkApiConfig>
+  ): AsyncThunk<Returned, ThunkArg, ThunkApiConfig> {
+    type RejectedValue = GetRejectValue<ThunkApiConfig>
+    type PendingMeta = GetPendingMeta<ThunkApiConfig>
+    type FulfilledMeta = GetFulfilledMeta<ThunkApiConfig>
+    type RejectedMeta = GetRejectedMeta<ThunkApiConfig>
+
+    const fulfilled: AsyncThunkFulfilledActionCreator<
+      Returned,
+      ThunkArg,
+      ThunkApiConfig
+    > = createAction(
+      typePrefix + '/fulfilled',
+      (
+        payload: Returned,
+        requestId: string,
+        arg: ThunkArg,
+        meta?: FulfilledMeta
+      ) => ({
+        payload,
+        meta: {
+          ...((meta as any) || {}),
+          arg,
+          requestId,
+          requestStatus: 'fulfilled' as const,
+        },
+      })
+    )
+
+    const pending: AsyncThunkPendingActionCreator<ThunkArg, ThunkApiConfig> =
+      createAction(
+        typePrefix + '/pending',
+        (requestId: string, arg: ThunkArg, meta?: PendingMeta) => ({
+          payload: undefined,
+          meta: {
+            ...((meta as any) || {}),
+            arg,
+            requestId,
+            requestStatus: 'pending' as const,
+          },
+        })
+      )
+
+    const rejected: AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig> =
+      createAction(
+        typePrefix + '/rejected',
+        (
+          error: Error | null,
+          requestId: string,
+          arg: ThunkArg,
+          payload?: RejectedValue,
+          meta?: RejectedMeta
+        ) => ({
+          payload,
+          error: ((options && options.serializeError) || miniSerializeError)(
+            error || 'Rejected'
+          ) as GetSerializedErrorType<ThunkApiConfig>,
+          meta: {
+            ...((meta as any) || {}),
+            arg,
+            requestId,
+            rejectedWithValue: !!payload,
+            requestStatus: 'rejected' as const,
+            aborted: error?.name === 'AbortError',
+            condition: error?.name === 'ConditionError',
+          },
+        })
+      )
+
+    let displayedWarning = false
+
+    const AC =
+      typeof AbortController !== 'undefined'
+        ? AbortController
+        : class implements AbortController {
+            signal = {
+              aborted: false,
+              addEventListener() {},
+              dispatchEvent() {
+                return false
+              },
+              onabort() {},
+              removeEventListener() {},
+              reason: undefined,
+              throwIfAborted() {},
+            }
+            abort() {
+              if (process.env.NODE_ENV !== 'production') {
+                if (!displayedWarning) {
+                  displayedWarning = true
+                  console.info(
+                    `This platform does not implement AbortController. 
+If you want to use the AbortController to react to \`abort\` events, please consider importing a polyfill like 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only'.`
+                  )
+                }
+              }
+            }
+          }
+
+    function actionCreator(
+      arg: ThunkArg
+    ): AsyncThunkAction<Returned, ThunkArg, ThunkApiConfig> {
+      return (dispatch, getState, extra) => {
+        const requestId = options?.idGenerator
+          ? options.idGenerator(arg)
+          : nanoid()
+
+        const abortController = new AC()
+        let abortReason: string | undefined
+
+        const abortedPromise = new Promise<never>((_, reject) =>
+          abortController.signal.addEventListener('abort', () =>
+            reject({ name: 'AbortError', message: abortReason || 'Aborted' })
+          )
+        )
+
+        let started = false
+        function abort(reason?: string) {
+          if (started) {
+            abortReason = reason
+            abortController.abort()
+          }
+        }
+
+        const promise = (async function () {
+          let finalAction: ReturnType<typeof fulfilled | typeof rejected>
+          try {
+            let conditionResult = options?.condition?.(arg, { getState, extra })
+            if (isThenable(conditionResult)) {
+              conditionResult = await conditionResult
+            }
+            if (conditionResult === false) {
+              // eslint-disable-next-line no-throw-literal
+              throw {
+                name: 'ConditionError',
+                message: 'Aborted due to condition callback returning false.',
+              }
+            }
+            started = true
+            dispatch(
+              pending(
+                requestId,
+                arg,
+                options?.getPendingMeta?.(
+                  { requestId, arg },
+                  { getState, extra }
+                )
+              )
+            )
+            finalAction = await Promise.race([
+              abortedPromise,
+              Promise.resolve(
+                payloadCreator(arg, {
+                  dispatch,
+                  getState,
+                  extra,
+                  requestId,
+                  signal: abortController.signal,
+                  abort,
+                  rejectWithValue: ((
+                    value: RejectedValue,
+                    meta?: RejectedMeta
+                  ) => {
+                    return new RejectWithValue(value, meta)
+                  }) as any,
+                  fulfillWithValue: ((value: unknown, meta?: FulfilledMeta) => {
+                    return new FulfillWithMeta(value, meta)
+                  }) as any,
+                })
+              ).then((result) => {
+                if (result instanceof RejectWithValue) {
+                  throw result
+                }
+                if (result instanceof FulfillWithMeta) {
+                  return fulfilled(result.payload, requestId, arg, result.meta)
+                }
+                return fulfilled(result as any, requestId, arg)
+              }),
+            ])
+          } catch (err) {
+            finalAction =
+              err instanceof RejectWithValue
+                ? rejected(null, requestId, arg, err.payload, err.meta)
+                : rejected(err as any, requestId, arg)
+          }
+          // We dispatch the result action _after_ the catch, to avoid having any errors
+          // here get swallowed by the try/catch block,
+          // per https://twitter.com/dan_abramov/status/770914221638942720
+          // and https://github.com/reduxjs/redux-toolkit/blob/e85eb17b39a2118d859f7b7746e0f3fee523e089/docs/tutorials/advanced-tutorial.md#async-error-handling-logic-in-thunks
+
+          const skipDispatch =
+            options &&
+            !options.dispatchConditionRejection &&
+            rejected.match(finalAction) &&
+            (finalAction as any).meta.condition
+
+          if (!skipDispatch) {
+            dispatch(finalAction)
+          }
+          return finalAction
+        })()
+        return Object.assign(promise as Promise<any>, {
+          abort,
+          requestId,
+          arg,
+          unwrap() {
+            return promise.then<any>(unwrapResult)
+          },
+        })
+      }
     }
-  )
-}
+
+    return Object.assign(
+      actionCreator as AsyncThunkActionCreator<
+        Returned,
+        ThunkArg,
+        ThunkApiConfig
+      >,
+      {
+        pending,
+        rejected,
+        fulfilled,
+        typePrefix,
+      }
+    )
+  }
+  createAsyncThunk.withTypes = createAsyncThunk as unknown
+
+  return createAsyncThunk as CreateAsyncThunk<AsyncThunkConfig>
+})()
 
 interface UnwrappableAction {
   payload: any

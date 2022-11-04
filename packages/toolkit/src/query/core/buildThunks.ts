@@ -7,11 +7,16 @@ import type {
 } from '../baseQueryTypes'
 import type { RootState, QueryKeys, QuerySubstateIdentifier } from './apiState'
 import { QueryStatus } from './apiState'
-import type { StartQueryActionCreatorOptions } from './buildInitiate'
 import type {
+  StartQueryActionCreatorOptions,
+  QueryActionCreatorResult,
+} from './buildInitiate'
+import { forceQueryFnSymbol, isUpsertQuery } from './buildInitiate'
+import {
   AssertTagTypes,
   EndpointDefinition,
   EndpointDefinitions,
+  isQueryDefinition,
   MutationDefinition,
   QueryArgFrom,
   QueryDefinition,
@@ -34,7 +39,7 @@ import type {
   ThunkDispatch,
   AsyncThunk,
 } from '@reduxjs/toolkit'
-import { createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk, SHOULD_AUTOBATCH } from '@reduxjs/toolkit'
 
 import { HandledError } from '../HandledError'
 
@@ -118,13 +123,18 @@ export interface MutationThunkArg {
 export type ThunkResult = unknown
 
 export type ThunkApiMetaConfig = {
-  pendingMeta: { startedTimeStamp: number }
+  pendingMeta: {
+    startedTimeStamp: number
+    [SHOULD_AUTOBATCH]: true
+  }
   fulfilledMeta: {
     fulfilledTimeStamp: number
     baseQueryMeta: unknown
+    [SHOULD_AUTOBATCH]: true
   }
   rejectedMeta: {
     baseQueryMeta: unknown
+    [SHOULD_AUTOBATCH]: true
   }
 }
 export type QueryThunk = AsyncThunk<
@@ -144,6 +154,9 @@ function defaultTransformResponse(baseQueryReturnValue: unknown) {
 
 export type MaybeDrafted<T> = T | Draft<T>
 export type Recipe<T> = (data: MaybeDrafted<T>) => void | MaybeDrafted<T>
+export type UpsertRecipe<T> = (
+  data: MaybeDrafted<T> | undefined
+) => void | MaybeDrafted<T>
 
 export type PatchQueryDataThunk<
   Definitions extends EndpointDefinitions,
@@ -162,6 +175,24 @@ export type UpdateQueryDataThunk<
   args: QueryArgFrom<Definitions[EndpointName]>,
   updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>
 ) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
+
+export type UpsertQueryDataThunk<
+  Definitions extends EndpointDefinitions,
+  PartialState
+> = <EndpointName extends QueryKeys<Definitions>>(
+  endpointName: EndpointName,
+  args: QueryArgFrom<Definitions[EndpointName]>,
+  value: ResultTypeFrom<Definitions[EndpointName]>
+) => ThunkAction<
+  QueryActionCreatorResult<
+    Definitions[EndpointName] extends QueryDefinition<any, any, any, any>
+      ? Definitions[EndpointName]
+      : never
+  >,
+  PartialState,
+  any,
+  AnyAction
+>
 
 /**
  * An object returned from dispatching a `api.util.updateQueryData` call.
@@ -255,13 +286,39 @@ export function buildThunks<
       return ret
     }
 
+  const upsertQueryData: UpsertQueryDataThunk<Definitions, State> =
+    (endpointName, args, value) => (dispatch) => {
+      return dispatch(
+        (
+          api.endpoints[endpointName] as ApiEndpointQuery<
+            QueryDefinition<any, any, any, any, any>,
+            Definitions
+          >
+        ).initiate(args, {
+          subscribe: false,
+          forceRefetch: true,
+          [forceQueryFnSymbol]: () => ({
+            data: value,
+          }),
+        })
+      )
+    }
+
   const executeEndpoint: AsyncThunkPayloadCreator<
     ThunkResult,
     QueryThunkArg | MutationThunkArg,
     ThunkApiMetaConfig & { state: RootState<any, string, ReducerPath> }
   > = async (
     arg,
-    { signal, rejectWithValue, fulfillWithValue, dispatch, getState, extra }
+    {
+      signal,
+      abort,
+      rejectWithValue,
+      fulfillWithValue,
+      dispatch,
+      getState,
+      extra,
+    }
   ) => {
     const endpointDefinition = endpointDefinitions[arg.endpointName]
 
@@ -274,6 +331,7 @@ export function buildThunks<
       let result: QueryReturnValue
       const baseQueryApi = {
         signal,
+        abort,
         dispatch,
         getState,
         extra,
@@ -282,7 +340,12 @@ export function buildThunks<
         forced:
           arg.type === 'query' ? isForcedQuery(arg, getState()) : undefined,
       }
-      if (endpointDefinition.query) {
+
+      const forceQueryFn =
+        arg.type === 'query' ? arg[forceQueryFnSymbol] : undefined
+      if (forceQueryFn) {
+        result = forceQueryFn()
+      } else if (endpointDefinition.query) {
         result = await baseQuery(
           endpointDefinition.query(arg.originalArgs),
           baseQueryApi,
@@ -341,25 +404,50 @@ export function buildThunks<
         {
           fulfilledTimeStamp: Date.now(),
           baseQueryMeta: result.meta,
+          [SHOULD_AUTOBATCH]: true,
         }
       )
     } catch (error) {
-      if (error instanceof HandledError) {
-        return rejectWithValue(error.value, { baseQueryMeta: error.meta })
+      let catchedError = error
+      if (catchedError instanceof HandledError) {
+        let transformErrorResponse: (
+          baseQueryReturnValue: any,
+          meta: any,
+          arg: any
+        ) => any = defaultTransformResponse
+
+        if (
+          endpointDefinition.query &&
+          endpointDefinition.transformErrorResponse
+        ) {
+          transformErrorResponse = endpointDefinition.transformErrorResponse
+        }
+        try {
+          return rejectWithValue(
+            await transformErrorResponse(
+              catchedError.value,
+              catchedError.meta,
+              arg.originalArgs
+            ),
+            { baseQueryMeta: catchedError.meta, [SHOULD_AUTOBATCH]: true }
+          )
+        } catch (e) {
+          catchedError = e
+        }
       }
       if (
         typeof process !== 'undefined' &&
-        process.env.NODE_ENV === 'development'
+        process.env.NODE_ENV !== 'production'
       ) {
         console.error(
           `An unhandled error occurred processing a request for the endpoint "${arg.endpointName}".
 In the case of an unhandled error, no tags will be "provided" or "invalidated".`,
-          error
+          catchedError
         )
       } else {
-        console.error(error)
+        console.error(catchedError)
       }
-      throw error
+      throw catchedError
     }
   }
 
@@ -391,23 +479,53 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     ThunkApiMetaConfig & { state: RootState<any, string, ReducerPath> }
   >(`${reducerPath}/executeQuery`, executeEndpoint, {
     getPendingMeta() {
-      return { startedTimeStamp: Date.now() }
+      return { startedTimeStamp: Date.now(), [SHOULD_AUTOBATCH]: true }
     },
-    condition(arg, { getState }) {
+    condition(queryThunkArgs, { getState }) {
       const state = getState()
-      const requestState = state[reducerPath]?.queries?.[arg.queryCacheKey]
+
+      const requestState =
+        state[reducerPath]?.queries?.[queryThunkArgs.queryCacheKey]
       const fulfilledVal = requestState?.fulfilledTimeStamp
+      const currentArg = queryThunkArgs.originalArgs
+      const previousArg = requestState?.originalArgs
+      const endpointDefinition =
+        endpointDefinitions[queryThunkArgs.endpointName]
+
+      // Order of these checks matters.
+      // In order for `upsertQueryData` to successfully run while an existing request is in flight,
+      /// we have to check for that first, otherwise `queryThunk` will bail out and not run at all.
+      if (isUpsertQuery(queryThunkArgs)) {
+        return true
+      }
 
       // Don't retry a request that's currently in-flight
-      if (requestState?.status === 'pending') return false
+      if (requestState?.status === 'pending') {
+        return false
+      }
 
       // if this is forced, continue
-      if (isForcedQuery(arg, state)) return true
+      if (isForcedQuery(queryThunkArgs, state)) {
+        return true
+      }
+
+      if (
+        isQueryDefinition(endpointDefinition) &&
+        endpointDefinition?.forceRefetch?.({
+          currentArg,
+          previousArg,
+          endpointState: requestState,
+          state,
+        })
+      ) {
+        return true
+      }
 
       // Pull from the cache unless we explicitly force refetch or qualify based on time
-      if (fulfilledVal)
+      if (fulfilledVal) {
         // Value is cached and we didn't specify to refresh, skip it.
         return false
+      }
 
       return true
     },
@@ -420,7 +538,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     ThunkApiMetaConfig & { state: RootState<any, string, ReducerPath> }
   >(`${reducerPath}/executeMutation`, executeEndpoint, {
     getPendingMeta() {
-      return { startedTimeStamp: Date.now() }
+      return { startedTimeStamp: Date.now(), [SHOULD_AUTOBATCH]: true }
     },
   })
 
@@ -494,6 +612,7 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated".`
     mutationThunk,
     prefetch,
     updateQueryData,
+    upsertQueryData,
     patchQueryData,
     buildMatchThunkActions,
   }

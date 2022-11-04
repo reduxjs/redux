@@ -1,4 +1,11 @@
-import type { BaseQueryEnhancer } from './baseQueryTypes'
+import type {
+  BaseQueryApi,
+  BaseQueryArg,
+  BaseQueryEnhancer,
+  BaseQueryExtraOptions,
+  BaseQueryFn,
+} from './baseQueryTypes'
+import { FetchBaseQueryError } from './fetchBaseQuery'
 import { HandledError } from './HandledError'
 
 /**
@@ -23,16 +30,38 @@ async function defaultBackoff(attempt: number = 0, maxRetries: number = 5) {
   )
 }
 
-export interface RetryOptions {
-  /**
-   * How many times the query will be retried (default: 5)
-   */
-  maxRetries?: number
+type RetryConditionFunction = (
+  error: FetchBaseQueryError,
+  args: BaseQueryArg<BaseQueryFn>,
+  extraArgs: {
+    attempt: number
+    baseQueryApi: BaseQueryApi
+    extraOptions: BaseQueryExtraOptions<BaseQueryFn> & RetryOptions
+  }
+) => boolean
+
+export type RetryOptions = {
   /**
    * Function used to determine delay between retries
    */
   backoff?: (attempt: number, maxRetries: number) => Promise<void>
-}
+} & (
+  | {
+      /**
+       * How many times the query will be retried (default: 5)
+       */
+      maxRetries?: number
+      retryCondition?: undefined
+    }
+  | {
+      /**
+       * Callback to determine if a retry should be attempted.
+       * Return `true` for another retry and `false` to quit trying prematurely.
+       */
+      retryCondition?: RetryConditionFunction
+      maxRetries?: undefined
+    }
+)
 
 function fail(e: any): never {
   throw Object.assign(new HandledError({ error: e }), {
@@ -40,14 +69,34 @@ function fail(e: any): never {
   })
 }
 
+const EMPTY_OPTIONS = {}
+
 const retryWithBackoff: BaseQueryEnhancer<
   unknown,
   RetryOptions,
   RetryOptions | void
 > = (baseQuery, defaultOptions) => async (args, api, extraOptions) => {
-  const options = {
-    maxRetries: 5,
+  // We need to figure out `maxRetries` before we define `defaultRetryCondition.
+  // This is probably goofy, but ought to work.
+  // Put our defaults in one array, filter out undefineds, grab the last value.
+  const possibleMaxRetries: number[] = [
+    5,
+    ((defaultOptions as any) || EMPTY_OPTIONS).maxRetries,
+    ((extraOptions as any) || EMPTY_OPTIONS).maxRetries,
+  ].filter(Boolean)
+  const [maxRetries] = possibleMaxRetries.slice(-1)
+
+  const defaultRetryCondition: RetryConditionFunction = (_, __, { attempt }) =>
+    attempt <= maxRetries
+
+  const options: {
+    maxRetries: number
+    backoff: typeof defaultBackoff
+    retryCondition: typeof defaultRetryCondition
+  } = {
+    maxRetries,
     backoff: defaultBackoff,
+    retryCondition: defaultRetryCondition,
     ...defaultOptions,
     ...extraOptions,
   }
@@ -63,13 +112,25 @@ const retryWithBackoff: BaseQueryEnhancer<
       return result
     } catch (e: any) {
       retry++
-      if (e.throwImmediately || retry > options.maxRetries) {
+
+      if (e.throwImmediately) {
         if (e instanceof HandledError) {
           return e.value
         }
 
         // We don't know what this is, so we have to rethrow it
         throw e
+      }
+
+      if (
+        e instanceof HandledError &&
+        !options.retryCondition(e.value.error as FetchBaseQueryError, args, {
+          attempt: retry,
+          baseQueryApi: api,
+          extraOptions,
+        })
+      ) {
+        return e.value
       }
       await options.backoff(retry, options.maxRetries)
     }

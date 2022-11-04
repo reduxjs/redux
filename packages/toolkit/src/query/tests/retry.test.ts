@@ -1,6 +1,7 @@
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { createApi, retry } from '@reduxjs/toolkit/query'
 import { setupApiStore, waitMs } from './helpers'
+import type { RetryOptions } from '../retry'
 
 beforeEach(() => {
   jest.useFakeTimers('legacy')
@@ -338,5 +339,111 @@ describe('configuration', () => {
     await loopTimers()
 
     expect(baseBaseQuery).toHaveBeenCalledTimes(9)
+  })
+
+  test('accepts a custom retryCondition fn', async () => {
+    const baseBaseQuery = jest.fn<
+      ReturnType<BaseQueryFn>,
+      Parameters<BaseQueryFn>
+    >()
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
+
+    const overrideMaxRetries = 3
+
+    const baseQuery = retry(baseBaseQuery, {
+      retryCondition: (_, __, { attempt }) => attempt <= overrideMaxRetries,
+    })
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        q1: build.query({
+          query: () => {},
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+    storeRef.store.dispatch(api.endpoints.q1.initiate({}))
+
+    await loopTimers()
+
+    expect(baseBaseQuery).toHaveBeenCalledTimes(overrideMaxRetries + 1)
+  })
+
+  test('retryCondition with endpoint config that overrides baseQuery config', async () => {
+    const baseBaseQuery = jest.fn<
+      ReturnType<BaseQueryFn>,
+      Parameters<BaseQueryFn>
+    >()
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
+
+    const baseQuery = retry(baseBaseQuery, {
+      maxRetries: 10,
+    })
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        q1: build.query({
+          query: () => {},
+          extraOptions: {
+            retryCondition: (_, __, { attempt }) => attempt <= 5,
+          },
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+    storeRef.store.dispatch(api.endpoints.q1.initiate({}))
+
+    await loopTimers()
+
+    expect(baseBaseQuery).toHaveBeenCalledTimes(6)
+  })
+
+  test('retryCondition also works with mutations', async () => {
+    const baseBaseQuery = jest.fn<
+      ReturnType<BaseQueryFn>,
+      Parameters<BaseQueryFn>
+    >()
+
+    baseBaseQuery
+      .mockRejectedValueOnce(new Error('rejected'))
+      .mockRejectedValueOnce(new Error('hello retryCondition'))
+      .mockRejectedValueOnce(new Error('rejected'))
+      .mockResolvedValue({ error: 'hello retryCondition' })
+
+    const baseQuery = retry(baseBaseQuery, {})
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        m1: build.mutation({
+          query: () => ({ method: 'PUT' }),
+          extraOptions: {
+            retryCondition: (e) => e.data === 'hello retryCondition',
+          },
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+    storeRef.store.dispatch(api.endpoints.m1.initiate({}))
+
+    await loopTimers()
+
+    expect(baseBaseQuery).toHaveBeenCalledTimes(4)
+  })
+
+  test.skip('RetryOptions only accepts one of maxRetries or retryCondition', () => {
+    // @ts-expect-error Should complain if both exist at once
+    const ro: RetryOptions = {
+      maxRetries: 5,
+      retryCondition: () => false,
+    }
   })
 })

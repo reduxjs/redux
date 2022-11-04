@@ -1,5 +1,3 @@
-import { compose } from 'redux'
-
 import type { AnyAction, Middleware, ThunkDispatch } from '@reduxjs/toolkit'
 import { createAction } from '@reduxjs/toolkit'
 
@@ -9,58 +7,123 @@ import type {
 } from '../../endpointDefinitions'
 import type { QueryStatus, QuerySubState, RootState } from '../apiState'
 import type { QueryThunkArg } from '../buildThunks'
-import { build as buildCacheCollection } from './cacheCollection'
-import { build as buildInvalidationByTags } from './invalidationByTags'
-import { build as buildPolling } from './polling'
-import type { BuildMiddlewareInput } from './types'
-import { build as buildWindowEventHandling } from './windowEventHandling'
-import { build as buildCacheLifecycle } from './cacheLifecycle'
-import { build as buildQueryLifecycle } from './queryLifecycle'
-import { build as buildDevMiddleware } from './devMiddleware'
+import { buildCacheCollectionHandler } from './cacheCollection'
+import { buildInvalidationByTagsHandler } from './invalidationByTags'
+import { buildPollingHandler } from './polling'
+import type {
+  BuildMiddlewareInput,
+  InternalHandlerBuilder,
+  InternalMiddlewareState,
+} from './types'
+import { buildWindowEventHandler } from './windowEventHandling'
+import { buildCacheLifecycleHandler } from './cacheLifecycle'
+import { buildQueryLifecycleHandler } from './queryLifecycle'
+import { buildDevCheckHandler } from './devMiddleware'
+import { buildBatchedActionsHandler } from './batchActions'
 
 export function buildMiddleware<
   Definitions extends EndpointDefinitions,
   ReducerPath extends string,
   TagTypes extends string
 >(input: BuildMiddlewareInput<Definitions, ReducerPath, TagTypes>) {
-  const { reducerPath, queryThunk } = input
+  const { reducerPath, queryThunk, api, context } = input
+  const { apiUid } = context
+
   const actions = {
     invalidateTags: createAction<
       Array<TagTypes | FullTagDescription<TagTypes>>
     >(`${reducerPath}/invalidateTags`),
   }
 
-  const middlewares = [
-    buildDevMiddleware,
-    buildCacheCollection,
-    buildInvalidationByTags,
-    buildPolling,
-    buildWindowEventHandling,
-    buildCacheLifecycle,
-    buildQueryLifecycle,
-  ].map((build) =>
-    build({
+  const isThisApiSliceAction = (action: AnyAction) => {
+    return (
+      !!action &&
+      typeof action.type === 'string' &&
+      action.type.startsWith(`${reducerPath}/`)
+    )
+  }
+
+  const handlerBuilders: InternalHandlerBuilder[] = [
+    buildDevCheckHandler,
+    buildCacheCollectionHandler,
+    buildInvalidationByTagsHandler,
+    buildPollingHandler,
+    buildCacheLifecycleHandler,
+    buildQueryLifecycleHandler,
+  ]
+
+  const middleware: Middleware<
+    {},
+    RootState<Definitions, string, ReducerPath>,
+    ThunkDispatch<any, any, AnyAction>
+  > = (mwApi) => {
+    let initialized = false
+
+    let internalState: InternalMiddlewareState = {
+      currentSubscriptions: {},
+    }
+
+    const builderArgs = {
       ...(input as any as BuildMiddlewareInput<
         EndpointDefinitions,
         string,
         string
       >),
+      internalState,
       refetchQuery,
-    })
-  )
-  const middleware: Middleware<
-    {},
-    RootState<Definitions, string, ReducerPath>,
-    ThunkDispatch<any, any, AnyAction>
-  > = (mwApi) => (next) => {
-    const applied = compose<typeof next>(
-      ...middlewares.map((middleware) => middleware(mwApi))
-    )(next)
-    return (action) => {
-      if (mwApi.getState()[reducerPath]) {
-        return applied(action)
+    }
+
+    const handlers = handlerBuilders.map((build) => build(builderArgs))
+
+    const batchedActionsHandler = buildBatchedActionsHandler(builderArgs)
+    const windowEventsHandler = buildWindowEventHandler(builderArgs)
+
+    return (next) => {
+      return (action) => {
+        if (!initialized) {
+          initialized = true
+          // dispatch before any other action
+          mwApi.dispatch(api.internalActions.middlewareRegistered(apiUid))
+        }
+
+        const mwApiWithNext = { ...mwApi, next }
+
+        const stateBefore = mwApi.getState()
+
+        const [actionShouldContinue, hasSubscription] = batchedActionsHandler(
+          action,
+          mwApiWithNext,
+          stateBefore
+        )
+
+        let res: any
+
+        if (actionShouldContinue) {
+          res = next(action)
+        } else {
+          res = hasSubscription
+        }
+
+        if (!!mwApi.getState()[reducerPath]) {
+          // Only run these checks if the middleware is registered okay
+
+          // This looks for actions that aren't specific to the API slice
+          windowEventsHandler(action, mwApiWithNext, stateBefore)
+
+          if (
+            isThisApiSliceAction(action) ||
+            context.hasRehydrationInfo(action)
+          ) {
+            // Only run these additional checks if the actions are part of the API slice,
+            // or the action has hydration-related data
+            for (let handler of handlers) {
+              handler(action, mwApiWithNext, stateBefore)
+            }
+          }
+        }
+
+        return res
       }
-      return next(action)
     }
   }
 

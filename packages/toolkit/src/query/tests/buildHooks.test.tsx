@@ -1,4 +1,8 @@
 import * as React from 'react'
+import type {
+  UseMutation,
+  UseQuery,
+} from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import {
   createApi,
   fetchBaseQuery,
@@ -14,19 +18,30 @@ import {
   expectExactType,
   expectType,
   setupApiStore,
+  withProvider,
   useRenderCounter,
   waitMs,
 } from './helpers'
 import { server } from './mocks/server'
 import type { AnyAction } from 'redux'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
-import type { SerializedError } from '@reduxjs/toolkit'
+import {
+  createListenerMiddleware,
+  SerializedError,
+  configureStore,
+} from '@reduxjs/toolkit'
 import { renderHook } from '@testing-library/react'
+import { delay } from '../../utils'
 
 // Just setup a temporary in-memory counter for tests that `getIncrementedAmount`.
 // This can be used to test how many renders happen due to data changes or
 // the refetching behavior of components.
 let amount = 0
+let nextItemId = 0
+
+interface Item {
+  id: number
+}
 
 const api = createApi({
   baseQuery: async (arg: any) => {
@@ -42,6 +57,15 @@ const api = createApi({
           data: null,
         },
       }
+    }
+
+    if (arg?.body && 'listItems' in arg.body) {
+      const items: Item[] = []
+      for (let i = 0; i < 3; i++) {
+        const item = { id: nextItemId++ }
+        items.push(item)
+      }
+      return { data: items }
     }
 
     return {
@@ -61,7 +85,7 @@ const api = createApi({
         },
       }),
     }),
-    getIncrementedAmount: build.query<any, void>({
+    getIncrementedAmount: build.query<{ amount: number }, void>({
       query: () => ({
         url: '',
         body: {
@@ -75,17 +99,53 @@ const api = createApi({
     getError: build.query({
       query: (query) => '/error',
     }),
+    listItems: build.query<Item[], { pageNumber: number }>({
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      query: ({ pageNumber }) => ({
+        url: `items?limit=1&offset=${pageNumber}`,
+        body: {
+          listItems: true,
+        },
+      }),
+      merge: (currentCache, newItems) => {
+        currentCache.push(...newItems)
+      },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return true
+      },
+    }),
   }),
 })
 
-const storeRef = setupApiStore(api, {
-  actions(state: AnyAction[] = [], action: AnyAction) {
-    return [...state, action]
-  },
+const listenerMiddleware = createListenerMiddleware()
+
+let actions: AnyAction[] = []
+
+const storeRef = setupApiStore(
+  api,
+  {},
+  {
+    middleware: {
+      prepend: [listenerMiddleware.middleware],
+    },
+  }
+)
+
+beforeEach(() => {
+  actions = []
+  listenerMiddleware.startListening({
+    predicate: () => true,
+    effect: (action) => {
+      actions.push(action)
+    },
+  })
 })
 
 afterEach(() => {
   amount = 0
+  listenerMiddleware.clearListeners()
 })
 
 let getRenderCount: () => number = () => 0
@@ -105,7 +165,9 @@ describe('hooks tests', () => {
       }
 
       render(<User />, { wrapper: storeRef.wrapper })
-      expect(getRenderCount()).toBe(2) // By the time this runs, the initial render will happen, and the query will start immediately running by the time we can expect this
+      // By the time this runs, the initial render will happen, and the query
+      //  will start immediately running by the time we can expect this
+      expect(getRenderCount()).toBe(2)
 
       await waitFor(() =>
         expect(screen.getByTestId('isFetching').textContent).toBe('false')
@@ -195,7 +257,7 @@ describe('hooks tests', () => {
         expect(screen.getByTestId('isLoading').textContent).toBe('false')
       )
       // We call a refetch, should still be `false`
-      act(() => refetch())
+      act(() => void refetch())
       await waitFor(() =>
         expect(screen.getByTestId('isFetching').textContent).toBe('true')
       )
@@ -251,7 +313,7 @@ describe('hooks tests', () => {
       expect(getRenderCount()).toBe(5)
 
       // We call a refetch, should set `isFetching` to true, then false when complete/errored
-      act(() => refetchMe())
+      act(() => void refetchMe())
       await waitFor(() => {
         expect(screen.getByTestId('isLoading').textContent).toBe('false')
         expect(screen.getByTestId('isFetching').textContent).toBe('true')
@@ -558,6 +620,35 @@ describe('hooks tests', () => {
       )
     })
 
+    test(`useQuery refetches when query args object changes even if serialized args don't change`, async () => {
+      function ItemList() {
+        const [pageNumber, setPageNumber] = React.useState(0)
+        const { data = [] } = api.useListItemsQuery({ pageNumber })
+
+        const renderedItems = data.map((item) => (
+          <li key={item.id}>ID: {item.id}</li>
+        ))
+        return (
+          <div>
+            <button onClick={() => setPageNumber(pageNumber + 1)}>
+              Next Page
+            </button>
+            <ul>{renderedItems}</ul>
+          </div>
+        )
+      }
+
+      render(<ItemList />, { wrapper: storeRef.wrapper })
+
+      await screen.findByText('ID: 0')
+
+      await act(async () => {
+        screen.getByText('Next Page').click()
+      })
+
+      await screen.findByText('ID: 3')
+    })
+
     describe('api.util.resetApiState resets hook', () => {
       test('without `selectFromResult`', async () => {
         const { result } = renderHook(() => api.endpoints.getUser.useQuery(5), {
@@ -601,6 +692,61 @@ describe('hooks tests', () => {
           isUninitialized: true,
           status: 'uninitialized',
         })
+      })
+    })
+
+    test('useQuery refetch method returns a promise that resolves with the result', async () => {
+      const { result } = renderHook(
+        () => api.endpoints.getIncrementedAmount.useQuery(),
+        {
+          wrapper: storeRef.wrapper,
+        }
+      )
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true))
+      const originalAmount = result.current.data!.amount
+
+      const { refetch } = result.current
+
+      let resPromise: ReturnType<typeof refetch> = null as any
+      await act(async () => {
+        resPromise = refetch()
+      })
+      expect(resPromise).toBeInstanceOf(Promise)
+      const res = await resPromise
+      expect(res.data!.amount).toBeGreaterThan(originalAmount)
+    })
+
+    describe('Hook middleware requirements', () => {
+      let mock: jest.SpyInstance
+
+      beforeEach(() => {
+        mock = jest.spyOn(console, 'error').mockImplementation(() => {})
+      })
+
+      afterEach(() => {
+        mock.mockReset()
+      })
+
+      test('Throws error if middleware is not added to the store', async () => {
+        const store = configureStore({
+          reducer: {
+            [api.reducerPath]: api.reducer,
+          },
+        })
+
+        const doRender = () => {
+          const { result } = renderHook(
+            () => api.endpoints.getIncrementedAmount.useQuery(),
+            {
+              wrapper: withProvider(store),
+            }
+          )
+        }
+
+        expect(doRender).toThrowError(
+          /Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store/
+        )
       })
     })
   })
@@ -739,9 +885,7 @@ describe('hooks tests', () => {
       expect(getRenderCount()).toBe(9)
 
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.updateSubscriptionOptions.match)
+        actions.filter(api.internalActions.updateSubscriptionOptions.match)
       ).toHaveLength(1)
     })
 
@@ -785,9 +929,7 @@ describe('hooks tests', () => {
 
       // Being that there is only the initial query, no unsubscribe should be dispatched
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(0)
 
       fireEvent.click(screen.getByTestId('fetchUser2'))
@@ -800,34 +942,26 @@ describe('hooks tests', () => {
       )
 
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(1)
 
       fireEvent.click(screen.getByTestId('fetchUser1'))
 
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(2)
 
       // we always unsubscribe the original promise and create a new one
       fireEvent.click(screen.getByTestId('fetchUser1'))
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(3)
 
       unmount()
 
       // We unsubscribe after the component unmounts
       expect(
-        storeRef.store
-          .getState()
-          .actions.filter(api.internalActions.unsubscribeQueryResult.match)
+        actions.filter(api.internalActions.unsubscribeQueryResult.match)
       ).toHaveLength(4)
     })
 
@@ -1162,9 +1296,12 @@ describe('hooks tests', () => {
     })
 
     test('useMutation return value contains originalArgs', async () => {
-      const { result } = renderHook(() => api.endpoints.updateUser.useMutation(), {
-        wrapper: storeRef.wrapper,
-      })
+      const { result } = renderHook(
+        () => api.endpoints.updateUser.useMutation(),
+        {
+          wrapper: storeRef.wrapper,
+        }
+      )
       const arg = { name: 'Foo' }
 
       const firstRenderResult = result.current
@@ -1589,6 +1726,7 @@ describe('hooks tests', () => {
       expect(storeRef.store.getState().actions).toMatchSequence(
         api.internalActions.middlewareRegistered.match,
         checkSession.matchPending,
+        api.internalActions.subscriptionsUpdated.match,
         checkSession.matchRejected,
         login.matchPending,
         login.matchFulfilled,
@@ -1828,14 +1966,10 @@ describe('hooks with createApi defaults set', () => {
 
     const storeRef = setupApiStore(api)
 
-    // @pre41-ts-ignore
     expectExactType(api.useGetPostsQuery)(api.endpoints.getPosts.useQuery)
-    // @pre41-ts-ignore
     expectExactType(api.useUpdatePostMutation)(
-      // @pre41-ts-ignore
       api.endpoints.updatePost.useMutation
     )
-    // @pre41-ts-ignore
     expectExactType(api.useAddPostMutation)(api.endpoints.addPost.useMutation)
 
     test('useQueryState serves a deeply memoized value and does not rerender unnecessarily', async () => {
@@ -2328,14 +2462,21 @@ describe('skip behaviour', () => {
     )
 
     expect(result.current).toEqual(uninitialized)
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
 
-    rerender([1])
-    expect(result.current).toMatchObject({ status: QueryStatus.pending })
+    await act(async () => {
+      rerender([1])
+    })
+    expect(result.current).toMatchObject({ status: QueryStatus.fulfilled })
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(1)
 
-    rerender([1, { skip: true }])
+    await act(async () => {
+      rerender([1, { skip: true }])
+    })
     expect(result.current).toEqual(uninitialized)
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
 
@@ -2350,17 +2491,41 @@ describe('skip behaviour', () => {
     )
 
     expect(result.current).toEqual(uninitialized)
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
     // also no subscription on `getUser(skipToken)` or similar:
     expect(storeRef.store.getState().api.subscriptions).toEqual({})
 
-    rerender([1])
-    expect(result.current).toMatchObject({ status: QueryStatus.pending })
+    await act(async () => {
+      rerender([1])
+    })
+    expect(result.current).toMatchObject({ status: QueryStatus.fulfilled })
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(1)
     expect(storeRef.store.getState().api.subscriptions).not.toEqual({})
 
-    rerender([skipToken])
+    await act(async () => {
+      rerender([skipToken])
+    })
     expect(result.current).toEqual(uninitialized)
+    await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
 })
+
+// type tests:
+{
+  const ANY = {} as any
+
+  // UseQuery type can be used to recreate the hook type
+  const fakeQuery = ANY as UseQuery<
+    typeof api.endpoints.getUser.Types.QueryDefinition
+  >
+  expectExactType(fakeQuery)(api.endpoints.getUser.useQuery)
+
+  // UseMutation type can be used to recreate the hook type
+  const fakeMutation = ANY as UseMutation<
+    typeof api.endpoints.updateUser.Types.MutationDefinition
+  >
+  expectExactType(fakeMutation)(api.endpoints.updateUser.useMutation)
+}

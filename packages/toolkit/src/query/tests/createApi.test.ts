@@ -17,6 +17,7 @@ import {
 } from './helpers'
 import { server } from './mocks/server'
 import { rest } from 'msw'
+import { SerializeQueryArgs } from '../defaultSerializeQueryArgs'
 
 const originalEnv = process.env.NODE_ENV
 beforeAll(() => void ((process.env as any).NODE_ENV = 'development'))
@@ -310,6 +311,7 @@ describe('endpoint definition typings', () => {
     const commonBaseQueryApi = {
       dispatch: expect.any(Function),
       endpoint: expect.any(String),
+      abort: expect.any(Function),
       extra: undefined,
       forced: expect.any(Boolean),
       getState: expect.any(Function),
@@ -353,6 +355,7 @@ describe('endpoint definition typings', () => {
             endpoint: expect.any(String),
             getState: expect.any(Function),
             signal: expect.any(Object),
+            abort: expect.any(Function),
             forced: expect.any(Boolean),
             type: expect.any(String),
           },
@@ -365,6 +368,7 @@ describe('endpoint definition typings', () => {
             endpoint: expect.any(String),
             getState: expect.any(Function),
             signal: expect.any(Object),
+            abort: expect.any(Function),
             forced: expect.any(Boolean),
             type: expect.any(String),
           },
@@ -377,6 +381,7 @@ describe('endpoint definition typings', () => {
             endpoint: expect.any(String),
             getState: expect.any(Function),
             signal: expect.any(Object),
+            abort: expect.any(Function),
             // forced: undefined,
             type: expect.any(String),
           },
@@ -389,6 +394,7 @@ describe('endpoint definition typings', () => {
             endpoint: expect.any(String),
             getState: expect.any(Function),
             signal: expect.any(Object),
+            abort: expect.any(Function),
             // forced: undefined,
             type: expect.any(String),
           },
@@ -510,6 +516,7 @@ describe('endpoint definition typings', () => {
 describe('additional transformResponse behaviors', () => {
   type SuccessResponse = { value: 'success' }
   type EchoResponseData = { banana: 'bread' }
+  type ErrorResponse = { value: 'error' }
   const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
     endpoints: (build) => ({
@@ -524,6 +531,16 @@ describe('additional transformResponse behaviors', () => {
         }),
         transformResponse: (response: { body: { nested: EchoResponseData } }) =>
           response.body.nested,
+      }),
+      mutationWithError: build.mutation({
+        query: () => ({
+          url: '/error',
+          method: 'POST',
+        }),
+        transformErrorResponse: (response) => {
+          const data = response.data as ErrorResponse
+          return data.value
+        },
       }),
       mutationWithMeta: build.mutation({
         query: () => ({
@@ -588,6 +605,14 @@ describe('additional transformResponse behaviors', () => {
     )
 
     expect('data' in result && result.data).toEqual({ banana: 'bread' })
+  })
+
+  test('transformResponse transforms a response from a mutation with an error', async () => {
+    const result = await storeRef.store.dispatch(
+      api.endpoints.mutationWithError.initiate({})
+    )
+
+    expect('error' in result && result.error).toEqual('error')
   })
 
   test('transformResponse can inject baseQuery meta into the end result from a mutation', async () => {
@@ -816,5 +841,194 @@ describe('structuralSharing flag behaviors', () => {
 
     expect(firstRef.requestId).not.toEqual(secondRef.requestId)
     expect(firstRef.data === secondRef.data).toBeFalsy()
+  })
+})
+
+describe('custom serializeQueryArgs per endpoint', () => {
+  const customArgsSerializer: SerializeQueryArgs<number> = ({
+    endpointName,
+    queryArgs,
+  }) => `${endpointName}-${queryArgs}`
+
+  type SuccessResponse = { value: 'success' }
+
+  const serializer1 = jest.fn(customArgsSerializer)
+
+  interface MyApiClient {
+    fetchPost: (id: string) => Promise<SuccessResponse>
+  }
+
+  const dummyClient: MyApiClient = {
+    async fetchPost(id) {
+      return { value: 'success' }
+    },
+  }
+
+  const api = createApi({
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
+    serializeQueryArgs: ({ endpointName, queryArgs }) =>
+      `base-${endpointName}-${queryArgs}`,
+    endpoints: (build) => ({
+      queryWithNoSerializer: build.query<SuccessResponse, number>({
+        query: (arg) => `${arg}`,
+      }),
+      queryWithCustomSerializer: build.query<SuccessResponse, number>({
+        query: (arg) => `${arg}`,
+        serializeQueryArgs: serializer1,
+      }),
+      queryWithCustomObjectSerializer: build.query<
+        SuccessResponse,
+        { id: number; client: MyApiClient }
+      >({
+        query: (arg) => `${arg.id}`,
+        serializeQueryArgs: ({
+          endpointDefinition,
+          endpointName,
+          queryArgs,
+        }) => {
+          const { id } = queryArgs
+          return { id }
+        },
+      }),
+      queryWithCustomNumberSerializer: build.query<
+        SuccessResponse,
+        { id: number; client: MyApiClient }
+      >({
+        query: (arg) => `${arg.id}`,
+        serializeQueryArgs: ({
+          endpointDefinition,
+          endpointName,
+          queryArgs,
+        }) => {
+          const { id } = queryArgs
+          return id
+        },
+      }),
+      listItems: build.query<string[], number>({
+        query: (pageNumber) => `/listItems?page=${pageNumber}`,
+        serializeQueryArgs: ({ endpointName }) => {
+          return endpointName
+        },
+        merge: (currentCache, newItems) => {
+          currentCache.push(...newItems)
+        },
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg
+        },
+      }),
+    }),
+  })
+
+  const storeRef = setupApiStore(api)
+
+  it('Works via createApi', async () => {
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithNoSerializer.initiate(99)
+    )
+
+    expect(serializer1).toHaveBeenCalledTimes(0)
+
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithCustomSerializer.initiate(42)
+    )
+
+    expect(serializer1).toHaveBeenCalled()
+
+    expect(
+      storeRef.store.getState().api.queries['base-queryWithNoSerializer-99']
+    ).toBeTruthy()
+
+    expect(
+      storeRef.store.getState().api.queries['queryWithCustomSerializer-42']
+    ).toBeTruthy()
+  })
+
+  const serializer2 = jest.fn(customArgsSerializer)
+
+  const injectedApi = api.injectEndpoints({
+    endpoints: (build) => ({
+      injectedQueryWithCustomSerializer: build.query<SuccessResponse, number>({
+        query: (arg) => `${arg}`,
+        serializeQueryArgs: serializer2,
+      }),
+    }),
+  })
+
+  it('Works via injectEndpoints', async () => {
+    expect(serializer2).toHaveBeenCalledTimes(0)
+
+    await storeRef.store.dispatch(
+      injectedApi.endpoints.injectedQueryWithCustomSerializer.initiate(5)
+    )
+
+    expect(serializer2).toHaveBeenCalled()
+    expect(
+      storeRef.store.getState().api.queries[
+        'injectedQueryWithCustomSerializer-5'
+      ]
+    ).toBeTruthy()
+  })
+
+  test('Serializes a returned object for query args', async () => {
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithCustomObjectSerializer.initiate({
+        id: 42,
+        client: dummyClient,
+      })
+    )
+
+    expect(
+      storeRef.store.getState().api.queries[
+        'queryWithCustomObjectSerializer({"id":42})'
+      ]
+    ).toBeTruthy()
+  })
+
+  test('Serializes a returned primitive for query args', async () => {
+    await storeRef.store.dispatch(
+      api.endpoints.queryWithCustomNumberSerializer.initiate({
+        id: 42,
+        client: dummyClient,
+      })
+    )
+
+    expect(
+      storeRef.store.getState().api.queries[
+        'queryWithCustomNumberSerializer(42)'
+      ]
+    ).toBeTruthy()
+  })
+
+  test('serializeQueryArgs + merge allows refetching as args change with same cache key', async () => {
+    const allItems = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'i']
+    const PAGE_SIZE = 3
+
+    function paginate<T>(array: T[], page_size: number, page_number: number) {
+      // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+      return array.slice((page_number - 1) * page_size, page_number * page_size)
+    }
+
+    server.use(
+      rest.get('https://example.com/listItems', (req, res, ctx) => {
+        const pageString = req.url.searchParams.get('page')
+        const pageNum = parseInt(pageString || '0')
+
+        const results = paginate(allItems, PAGE_SIZE, pageNum)
+        return res(ctx.json(results))
+      })
+    )
+
+    // Page number shouldn't matter here, because the cache key ignores that.
+    // We just need to select the only cache entry.
+    const selectListItems = api.endpoints.listItems.select(0)
+
+    await storeRef.store.dispatch(api.endpoints.listItems.initiate(1))
+
+    const initialEntry = selectListItems(storeRef.store.getState())
+    expect(initialEntry.data).toEqual(['a', 'b', 'c'])
+
+    await storeRef.store.dispatch(api.endpoints.listItems.initiate(2))
+    const updatedEntry = selectListItems(storeRef.store.getState())
+    expect(updatedEntry.data).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
   })
 })

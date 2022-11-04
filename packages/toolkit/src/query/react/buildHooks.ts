@@ -54,12 +54,13 @@ import type { UninitializedValue } from './constants'
 import { UNINITIALIZED_VALUE } from './constants'
 import { useShallowStableValue } from './useShallowStableValue'
 import type { BaseQueryFn } from '../baseQueryTypes'
+import { defaultSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 
 // Copy-pasted from React-Redux
 export const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' &&
-  window.document &&
-  window.document.createElement
+  !!window.document &&
+  !!window.document.createElement
     ? useLayoutEffect
     : useEffect
 
@@ -625,7 +626,9 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       )
         lastResult = undefined
     }
-
+    if (queryArgs === skipToken) {
+      lastResult = undefined
+    }
     // data is the last known good request result we have tracked - or if none has been tracked yet the last good result for the current args
     let data = currentState.isSuccess ? currentState.data : lastResult?.data
     if (data === undefined) data = currentState.data
@@ -686,7 +689,12 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
       const stableArg = useStableQueryArgs(
         skip ? skipToken : arg,
-        serializeQueryArgs,
+        // Even if the user provided a per-endpoint `serializeQueryArgs` with
+        // a consistent return value, _here_ we want to use the default behavior
+        // so we can tell if _anything_ actually changed. Otherwise, we can end up
+        // with a case where the query args did change but the serialization doesn't,
+        // and then we never try to initiate a refetch.
+        defaultSerializeQueryArgs,
         context.endpointDefinitions[name],
         name
       )
@@ -696,15 +704,42 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         pollingInterval,
       })
 
+      const lastRenderHadSubscription = useRef(false)
+
       const promiseRef = useRef<QueryActionCreatorResult<any>>()
 
       let { queryCacheKey, requestId } = promiseRef.current || {}
-      const subscriptionRemoved = useSelector(
-        (state: RootState<Definitions, string, string>) =>
-          !!queryCacheKey &&
-          !!requestId &&
-          !state[api.reducerPath].subscriptions[queryCacheKey]?.[requestId]
-      )
+
+      // HACK Because the latest state is in the middleware, we actually
+      // dispatch an action that will be intercepted and returned.
+      let currentRenderHasSubscription = false
+      if (queryCacheKey && requestId) {
+        // This _should_ return a boolean, even if the types don't line up
+        const returnedValue = dispatch(
+          api.internalActions.internal_probeSubscription({
+            queryCacheKey,
+            requestId,
+          })
+        )
+
+        if (process.env.NODE_ENV !== 'production') {
+          if (typeof returnedValue !== 'boolean') {
+            throw new Error(
+              `Warning: Middleware for RTK-Query API at reducerPath "${api.reducerPath}" has not been added to the store.
+    You must add the middleware for RTK-Query to function correctly!`
+            )
+          }
+        }
+
+        currentRenderHasSubscription = !!returnedValue
+      }
+
+      const subscriptionRemoved =
+        !currentRenderHasSubscription && lastRenderHadSubscription.current
+
+      usePossiblyImmediateEffect(() => {
+        lastRenderHadSubscription.current = currentRenderHasSubscription
+      })
 
       usePossiblyImmediateEffect((): void | undefined => {
         promiseRef.current = undefined
@@ -736,6 +771,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
               forceRefetch: refetchOnMountOrArgChange,
             })
           )
+
           promiseRef.current = promise
         } else if (stableSubscriptionOptions !== lastSubscriptionOptions) {
           lastPromise.updateSubscriptionOptions(stableSubscriptionOptions)
@@ -761,7 +797,13 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
           /**
            * A method to manually refetch data for the query
            */
-          refetch: () => void promiseRef.current?.refetch(),
+          refetch: () => {
+            if (!promiseRef.current)
+              throw new Error(
+                'Cannot refetch a query that has not been started yet.'
+              )
+            return promiseRef.current?.refetch()
+          },
         }),
         []
       )
@@ -843,7 +885,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
 
     const useQueryState: UseQueryState<any> = (
       arg: any,
-      { skip = false, selectFromResult = defaultQueryStateSelector } = {}
+      { skip = false, selectFromResult } = {}
     ) => {
       const { select } = api.endpoints[name] as ApiEndpointQuery<
         QueryDefinition<any, any, any, any, any>,
@@ -874,7 +916,10 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       )
 
       const querySelector: Selector<ApiRootState, any, [any]> = useMemo(
-        () => createSelector([selectDefaultResult], selectFromResult),
+        () =>
+          selectFromResult
+            ? createSelector([selectDefaultResult], selectFromResult)
+            : selectDefaultResult,
         [selectDefaultResult, selectFromResult]
       )
 
@@ -923,8 +968,9 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
           ...options,
         })
 
-        const { data, status, isLoading, isSuccess, isError, error } = queryStateResults;
-        useDebugValue({ data, status, isLoading, isSuccess, isError, error });
+        const { data, status, isLoading, isSuccess, isError, error } =
+          queryStateResults
+        useDebugValue({ data, status, isLoading, isSuccess, isError, error })
 
         return useMemo(
           () => ({ ...queryStateResults, ...querySubscriptionResults }),
@@ -993,8 +1039,24 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
         })
       }, [dispatch, fixedCacheKey, promise, requestId])
 
-      const { endpointName, data, status, isLoading, isSuccess, isError, error } = currentState;
-      useDebugValue({ endpointName, data, status, isLoading, isSuccess, isError, error });
+      const {
+        endpointName,
+        data,
+        status,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+      } = currentState
+      useDebugValue({
+        endpointName,
+        data,
+        status,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+      })
 
       const finalState = useMemo(
         () => ({ ...currentState, originalArgs, reset }),
