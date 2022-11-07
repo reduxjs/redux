@@ -11,7 +11,7 @@ sidebar_label: Organizing State
 - [Redux FAQ: Organizing State](#redux-faq-organizing-state)
   - [Table of Contents](#table-of-contents)
   - [Organizing State](#organizing-state)
-    - [Do I have to put all my state into Redux? Should I ever use React's `setState()`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+    - [Do I have to put all my state into Redux? Should I ever use React's `useState` or `useReducer`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-usestate-or-usereducer)
       - [Further information](#further-information)
     - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
       - [Further information](#further-information-1)
@@ -22,7 +22,7 @@ sidebar_label: Organizing State
 
 ## Organizing State
 
-### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
+### Do I have to put all my state into Redux? Should I ever use React's `useState` or `useReducer`?
 
 There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state.
 
