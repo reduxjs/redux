@@ -12,7 +12,13 @@ import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit'
 let promise: Promise<any>
 const queueMicrotaskShim =
   typeof queueMicrotask === 'function'
-    ? queueMicrotask.bind(typeof window !== 'undefined' ? window : global)
+    ? queueMicrotask.bind(
+        typeof window !== 'undefined'
+          ? window
+          : typeof global !== 'undefined'
+          ? global
+          : globalThis
+      )
     : // reuse resolved promise, and allocate it lazily
       (cb: () => void) =>
         (promise || (promise = Promise.resolve())).then(cb).catch((err: any) =>
