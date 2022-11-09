@@ -708,7 +708,7 @@ If you want to use the AbortController to react to \`abort\` events, please cons
       }
     )
   }
-  createAsyncThunk.withTypes = createAsyncThunk as unknown
+  createAsyncThunk.withTypes = () => createAsyncThunk
 
   return createAsyncThunk as CreateAsyncThunk<AsyncThunkConfig>
 })()

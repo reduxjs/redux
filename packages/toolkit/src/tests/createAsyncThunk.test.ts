@@ -953,4 +953,18 @@ describe('meta', () => {
       ret.meta.extraProp
     }
   })
+
+  test('typed createAsyncThunk.withTypes', () => {
+    const typedCAT = createAsyncThunk.withTypes<{
+      state: { s: string }
+      rejectValue: string
+      extra: { s: string; n: number }
+    }>()
+    const thunk = typedCAT('a', () => 'b')
+    const expectFunction = expect.any(Function)
+    expect(thunk.fulfilled).toEqual(expectFunction)
+    expect(thunk.pending).toEqual(expectFunction)
+    expect(thunk.rejected).toEqual(expectFunction)
+    expect(thunk.fulfilled.type).toBe('a/fulfilled')
+  })
 })
