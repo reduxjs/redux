@@ -14,7 +14,13 @@ export const prepareAutoBatched =
 let promise: Promise<any>
 const queueMicrotaskShim =
   typeof queueMicrotask === 'function'
-    ? queueMicrotask.bind(typeof window !== 'undefined' ? window : global)
+    ? queueMicrotask.bind(
+        typeof window !== 'undefined'
+          ? window
+          : typeof global !== 'undefined'
+          ? global
+          : globalThis
+      )
     : // reuse resolved promise, and allocate it lazily
       (cb: () => void) =>
         (promise || (promise = Promise.resolve())).then(cb).catch((err: any) =>
@@ -23,17 +29,24 @@ const queueMicrotaskShim =
           }, 0)
         )
 
-export type AutoBatchOptions =
-  | { type: 'tick' }
-  | { type: 'timer'; timeout: number }
-  | { type: 'raf' }
-  | { type: 'callback'; queueNotification: (notify: () => void) => void }
-
 const createQueueWithTimer = (timeout: number) => {
   return (notify: () => void) => {
     setTimeout(notify, timeout)
   }
 }
+
+// requestAnimationFrame won't exist in SSR environments.
+// Fall back to a vague approximation just to keep from erroring.
+const rAF =
+  typeof window !== 'undefined' && window.requestAnimationFrame
+    ? window.requestAnimationFrame
+    : createQueueWithTimer(10)
+
+export type AutoBatchOptions =
+  | { type: 'tick' }
+  | { type: 'timer'; timeout: number }
+  | { type: 'raf' }
+  | { type: 'callback'; queueNotification: (notify: () => void) => void }
 
 /**
  * A Redux store enhancer that watches for "low-priority" actions, and delays
@@ -73,7 +86,7 @@ export const autoBatchEnhancer =
       options.type === 'tick'
         ? queueMicrotaskShim
         : options.type === 'raf'
-        ? requestAnimationFrame
+        ? rAF
         : options.type === 'callback'
         ? options.queueNotification
         : createQueueWithTimer(options.timeout)
