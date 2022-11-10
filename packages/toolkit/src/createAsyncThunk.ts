@@ -35,9 +35,7 @@ export type BaseThunkAPI<
   >
   fulfillWithValue: IsUnknown<
     FulfilledMeta,
-    <FulfilledValue>(
-      value: FulfilledValue
-    ) => FulfillWithMeta<FulfilledValue, FulfilledMeta>,
+    <FulfilledValue>(value: FulfilledValue) => FulfilledValue,
     <FulfilledValue>(
       value: FulfilledValue,
       meta: FulfilledMeta
@@ -405,18 +403,16 @@ export type AsyncThunk<
   Returned,
   ThunkArg,
   ThunkApiConfig extends AsyncThunkConfig
-> = [Returned] extends [FulfillWithMeta<infer P, infer M>]
-  ? AsyncThunk<P, ThunkArg, ThunkApiConfig & { fulfilledMeta: M }>
-  : AsyncThunkActionCreator<Returned, ThunkArg, ThunkApiConfig> & {
-      pending: AsyncThunkPendingActionCreator<ThunkArg, ThunkApiConfig>
-      rejected: AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig>
-      fulfilled: AsyncThunkFulfilledActionCreator<
-        Returned,
-        ThunkArg,
-        ThunkApiConfig
-      >
-      typePrefix: string
-    }
+> = AsyncThunkActionCreator<Returned, ThunkArg, ThunkApiConfig> & {
+  pending: AsyncThunkPendingActionCreator<ThunkArg, ThunkApiConfig>
+  rejected: AsyncThunkRejectedActionCreator<ThunkArg, ThunkApiConfig>
+  fulfilled: AsyncThunkFulfilledActionCreator<
+    Returned,
+    ThunkArg,
+    ThunkApiConfig
+  >
+  typePrefix: string
+}
 
 type OverrideThunkApiConfigs<OldConfig, NewConfig> = Id<
   NewConfig & Omit<OldConfig, keyof NewConfig>
@@ -696,12 +692,19 @@ If you want to use the AbortController to react to \`abort\` events, please cons
       }
     }
 
-    return Object.assign(actionCreator as any, {
-      pending,
-      rejected,
-      fulfilled,
-      typePrefix,
-    })
+    return Object.assign(
+      actionCreator as AsyncThunkActionCreator<
+        Returned,
+        ThunkArg,
+        ThunkApiConfig
+      >,
+      {
+        pending,
+        rejected,
+        fulfilled,
+        typePrefix,
+      }
+    )
   }
   createAsyncThunk.withTypes = () => createAsyncThunk
 
