@@ -43,7 +43,7 @@ To get started, you can open and fork this CodeSandbox:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -699,7 +699,7 @@ Here's the contents of our app so far:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"

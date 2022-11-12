@@ -141,7 +141,7 @@ Let's look at a minimal working example of a Redux app - a small counter applica
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/dank-architecture-lr7k1?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/dank-architecture-lr7k1?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-core-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

@@ -638,7 +638,7 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -964,7 +964,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
