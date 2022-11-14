@@ -59,11 +59,7 @@ If you are okay with things like persistence and time-travel debugging potential
 
 **Discussions**
 
-- [#1248: Is it ok and possible to store a react component in a reducer?](https://github.com/reduxjs/redux/issues/1248)
 - [#1279: Have any suggestions for where to put a Map Component in Flux?](https://github.com/reduxjs/redux/issues/1279)
-- [#1390: Component Loading](https://github.com/reduxjs/redux/issues/1390)
-- [#1407: Just sharing a great base class](https://github.com/reduxjs/redux/issues/1407)
-- [#1793: React Elements in Redux State](https://github.com/reduxjs/redux/issues/1793)
 
 ### How do I organize nested or duplicate data in my state?
 
