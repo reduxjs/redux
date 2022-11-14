@@ -37,7 +37,6 @@ Some common rules of thumb for determining what kind of data should be put into 
 - Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
 - Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
 
-
 #### Further information
 
 **Articles**
