@@ -132,6 +132,11 @@ export type FetchBaseQueryArgs = {
    * Defaults to `application/json`;
    */
   jsonContentType?: string
+
+  /**
+   * Custom replacer function used when calling `JSON.stringify()`;
+   */
+  jsonReplacer?: (this: any, key: string, value: any) => any
 } & RequestInit &
   Pick<FetchArgs, 'responseHandler' | 'validateStatus' | 'timeout'>
 
@@ -178,6 +183,8 @@ export type FetchBaseQueryMeta = { request: Request; response?: Response }
  *
  * @param {string} jsonContentType Used when automatically setting the content-type header for a request with a jsonifiable body that does not have an explicit content-type header. Defaults to `application/json`.
  *
+ * @param {(this: any, key: string, value: any) => any} jsonReplacer Custom replacer function used when calling `JSON.stringify()`.
+ * 
  * @param {number} timeout
  * A number in milliseconds that represents the maximum time a request can take before timing out.
  */
@@ -188,6 +195,7 @@ export function fetchBaseQuery({
   paramsSerializer,
   isJsonContentType = defaultIsJsonContentType,
   jsonContentType = 'application/json',
+  jsonReplacer,
   timeout: defaultTimeout,
   validateStatus: globalValidateStatus,
   ...baseFetchOptions
@@ -247,7 +255,7 @@ export function fetchBaseQuery({
     }
 
     if (isJsonifiable(body) && isJsonContentType(config.headers)) {
-      config.body = JSON.stringify(body)
+      config.body = JSON.stringify(body, jsonReplacer)
     }
 
     if (params) {
