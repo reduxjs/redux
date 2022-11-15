@@ -1,5 +1,5 @@
 export { createEntityAdapter } from './create_adapter'
-export {
+export type {
   Dictionary,
   EntityState,
   EntityAdapter,
