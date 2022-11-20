@@ -94,7 +94,6 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [#1824: Normalising state and garbage collection](https://github.com/reduxjs/redux/issues/1824#issuecomment-228585904)
 - [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
 - [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](https://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
-- [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
 
 ### Should I put form state or other UI state in my store?
 
