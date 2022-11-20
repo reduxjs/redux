@@ -72,16 +72,15 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Documentation**
 
+- [Redux Essentials: Normalizing Data](../tutorials/essentials/part-6-performance-normalization#normalizing-data)
 - [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
 - [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
 - [Examples: Real World example](../introduction/Examples.md#real-world)
 - [Using Redux: Structuring Reducers - Prerequisite Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
 - [Using Redux: Structuring Reducers - Normalizing State Shape](../usage/structuring-reducers/NormalizingStateShape.md)
-- [Examples: Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
 
 **Articles**
 
-- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
 **Discussions**
@@ -91,11 +90,9 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [#946: Best way to update related state fields with split reducers?](https://github.com/reduxjs/redux/issues/946)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reduxjs/redux/issues/994)
 - [#1255: Normalizr usage with nested objects in React/Redux](https://github.com/reduxjs/redux/issues/1255)
-- [#1269: Add tree view example](https://github.com/reduxjs/redux/pull/1269)
 - [#1824: Normalising state and garbage collection](https://github.com/reduxjs/redux/issues/1824#issuecomment-228585904)
 - [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
 - [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](https://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
-- [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
 
 ### Should I put form state or other UI state in my store?
 
