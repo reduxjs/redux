@@ -81,7 +81,6 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Articles**
 
-- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
 **Discussions**
