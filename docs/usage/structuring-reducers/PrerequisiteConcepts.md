@@ -72,7 +72,6 @@ Because of these rules, it's important that the following core concepts are full
 
 - [Pros and Cons of Using Immutability With React](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 - [Immutable Data using ES6 and Beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
-- [Immutable Data from Scratch](https://ryanfunduk.com/articles/immutable-data-from-scratch/)
 - [Redux Docs: Using the Object Spread Operator](../UsingObjectSpreadOperator.md)
 
 #### Normalizing Data
