@@ -83,7 +83,7 @@ const retryWithBackoff: BaseQueryEnhancer<
     5,
     ((defaultOptions as any) || EMPTY_OPTIONS).maxRetries,
     ((extraOptions as any) || EMPTY_OPTIONS).maxRetries,
-  ].filter(Boolean)
+  ].filter(x => x !== undefined)
   const [maxRetries] = possibleMaxRetries.slice(-1)
 
   const defaultRetryCondition: RetryConditionFunction = (_, __, { attempt }) =>
