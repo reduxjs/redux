@@ -439,6 +439,33 @@ describe('configuration', () => {
     expect(baseBaseQuery).toHaveBeenCalledTimes(4)
   })
 
+  test('Specifying maxRetries as 0 in RetryOptions prevents retries', async () => {
+    const baseBaseQuery = jest.fn<
+      ReturnType<BaseQueryFn>,
+      Parameters<BaseQueryFn>
+    >()
+    baseBaseQuery.mockResolvedValue({ error: 'rejected' })
+
+    const baseQuery = retry(baseBaseQuery, { maxRetries: 0 })
+    const api = createApi({
+      baseQuery,
+      endpoints: (build) => ({
+        q1: build.query({
+          query: () => {},
+        }),
+      }),
+    })
+
+    const storeRef = setupApiStore(api, undefined, {
+      withoutTestLifecycles: true,
+    })
+
+    storeRef.store.dispatch(api.endpoints.q1.initiate({}))
+    await loopTimers(2)
+
+    expect(baseBaseQuery).toHaveBeenCalledTimes(1)
+  });
+
   test.skip('RetryOptions only accepts one of maxRetries or retryCondition', () => {
     // @ts-expect-error Should complain if both exist at once
     const ro: RetryOptions = {
