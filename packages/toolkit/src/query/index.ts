@@ -10,6 +10,7 @@ export type {
   EndpointDefinition,
   QueryDefinition,
   MutationDefinition,
+  TagDescription,
 } from './endpointDefinitions'
 export { fetchBaseQuery } from './fetchBaseQuery'
 export type {
