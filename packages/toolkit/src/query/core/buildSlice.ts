@@ -181,6 +181,8 @@ export function buildSlice({
 
               if (merge) {
                 if (substate.data !== undefined) {
+                  const { fulfilledTimeStamp, arg, baseQueryMeta, requestId } =
+                    meta
                   // There's existing cache data. Let the user merge it in themselves.
                   // We're already inside an Immer-powered reducer, and the user could just mutate `substate.data`
                   // themselves inside of `merge()`. But, they might also want to return a new value.
@@ -189,7 +191,12 @@ export function buildSlice({
                     substate.data,
                     (draftSubstateData) => {
                       // As usual with Immer, you can mutate _or_ return inside here, but not both
-                      return merge(draftSubstateData, payload)
+                      return merge(draftSubstateData, payload, {
+                        arg: arg.originalArgs,
+                        baseQueryMeta,
+                        fulfilledTimeStamp,
+                        requestId,
+                      })
                     }
                   )
                   substate.data = newData
