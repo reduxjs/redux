@@ -144,7 +144,7 @@ export interface ActionCreatorWithoutPayload<T extends string = string>
    * Calling this {@link redux#ActionCreator} will
    * return a {@link PayloadAction} of type `T` with a payload of `undefined`
    */
-  (): PayloadAction<undefined, T>
+  (noArgument: void): PayloadAction<undefined, T>
 }
 
 /**

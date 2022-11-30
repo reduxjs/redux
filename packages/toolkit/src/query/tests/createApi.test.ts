@@ -18,6 +18,7 @@ import {
 import { server } from './mocks/server'
 import { rest } from 'msw'
 import { SerializeQueryArgs } from '../defaultSerializeQueryArgs'
+import { string } from 'yargs'
 
 const originalEnv = process.env.NODE_ENV
 beforeAll(() => void ((process.env as any).NODE_ENV = 'development'))
@@ -43,6 +44,9 @@ test('sensible defaults', () => {
           return { url: `user/${id}` }
         },
       }),
+      updateUser: build.mutation<unknown, void>({
+        query: () => '',
+      }),
     }),
   })
   configureStore({
@@ -60,6 +64,9 @@ test('sensible defaults', () => {
   expectType<TagTypes>(ANY as never)
   // @ts-expect-error
   expectType<TagTypes>(0)
+
+  expect(api.endpoints.getUser.name).toBe('getUser')
+  expect(api.endpoints.updateUser.name).toBe('updateUser')
 })
 
 describe('wrong tagTypes log errors', () => {
