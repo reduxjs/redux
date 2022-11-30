@@ -412,6 +412,7 @@ export interface ApiEndpointQuery<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Definitions extends EndpointDefinitions
 > {
+  name: string
   /**
    * All of these are `undefined` at runtime, purely to be used in TypeScript declarations!
    */
@@ -425,6 +426,7 @@ export interface ApiEndpointMutation<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Definitions extends EndpointDefinitions
 > {
+  name: string
   /**
    * All of these are `undefined` at runtime, purely to be used in TypeScript declarations!
    */
@@ -603,6 +605,7 @@ export const coreModule = (): Module<CoreModule> => ({
           safeAssign(
             anyApi.endpoints[endpointName],
             {
+              name: endpointName,
               select: buildQuerySelector(endpointName, definition),
               initiate: buildInitiateQuery(endpointName, definition),
             },
@@ -612,6 +615,7 @@ export const coreModule = (): Module<CoreModule> => ({
           safeAssign(
             anyApi.endpoints[endpointName],
             {
+              name: endpointName,
               select: buildMutationSelector(),
               initiate: buildInitiateMutation(endpointName),
             },
