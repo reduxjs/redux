@@ -445,7 +445,13 @@ export interface QueryExtraOptions<
    */
   merge?(
     currentCacheData: ResultType,
-    responseData: ResultType
+    responseData: ResultType,
+    otherArgs: {
+      arg: QueryArg
+      baseQueryMeta: BaseQueryMeta<BaseQuery>
+      requestId: string
+      fulfilledTimeStamp: number
+    }
   ): ResultType | void
 
   /**

@@ -590,18 +590,10 @@ If you want to use the AbortController to react to \`abort\` events, please cons
         const abortController = new AC()
         let abortReason: string | undefined
 
-        const abortedPromise = new Promise<never>((_, reject) =>
-          abortController.signal.addEventListener('abort', () =>
-            reject({ name: 'AbortError', message: abortReason || 'Aborted' })
-          )
-        )
-
         let started = false
         function abort(reason?: string) {
-          if (started) {
-            abortReason = reason
-            abortController.abort()
-          }
+          abortReason = reason
+          abortController.abort()
         }
 
         const promise = (async function () {
@@ -611,7 +603,8 @@ If you want to use the AbortController to react to \`abort\` events, please cons
             if (isThenable(conditionResult)) {
               conditionResult = await conditionResult
             }
-            if (conditionResult === false) {
+
+            if (conditionResult === false || abortController.signal.aborted) {
               // eslint-disable-next-line no-throw-literal
               throw {
                 name: 'ConditionError',
@@ -619,6 +612,15 @@ If you want to use the AbortController to react to \`abort\` events, please cons
               }
             }
             started = true
+
+            const abortedPromise = new Promise<never>((_, reject) =>
+              abortController.signal.addEventListener('abort', () =>
+                reject({
+                  name: 'AbortError',
+                  message: abortReason || 'Aborted',
+                })
+              )
+            )
             dispatch(
               pending(
                 requestId,

@@ -35,6 +35,11 @@ afterAll(() => {
   spy.mockRestore()
 })
 
+function paginate<T>(array: T[], page_size: number, page_number: number) {
+  // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+  return array.slice((page_number - 1) * page_size, page_number * page_size)
+}
+
 test('sensible defaults', () => {
   const api = createApi({
     baseQuery: fetchBaseQuery(),
@@ -923,6 +928,22 @@ describe('custom serializeQueryArgs per endpoint', () => {
           return currentArg !== previousArg
         },
       }),
+      listItems2: build.query<{ items: string[]; meta?: any }, number>({
+        query: (pageNumber) => `/listItems2?page=${pageNumber}`,
+        serializeQueryArgs: ({ endpointName }) => {
+          return endpointName
+        },
+        transformResponse(items: string[]) {
+          return { items }
+        },
+        merge: (currentCache, newData, meta) => {
+          currentCache.items.push(...newData.items)
+          currentCache.meta = meta
+        },
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg
+        },
+      }),
     }),
   })
 
@@ -1010,11 +1031,6 @@ describe('custom serializeQueryArgs per endpoint', () => {
     const allItems = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'i']
     const PAGE_SIZE = 3
 
-    function paginate<T>(array: T[], page_size: number, page_number: number) {
-      // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
-      return array.slice((page_number - 1) * page_size, page_number * page_size)
-    }
-
     server.use(
       rest.get('https://example.com/listItems', (req, res, ctx) => {
         const pageString = req.url.searchParams.get('page')
@@ -1037,5 +1053,34 @@ describe('custom serializeQueryArgs per endpoint', () => {
     await storeRef.store.dispatch(api.endpoints.listItems.initiate(2))
     const updatedEntry = selectListItems(storeRef.store.getState())
     expect(updatedEntry.data).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
+  })
+
+  test('merge receives a meta object as an argument', async () => {
+    const allItems = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'i']
+    const PAGE_SIZE = 3
+
+    server.use(
+      rest.get('https://example.com/listItems2', (req, res, ctx) => {
+        const pageString = req.url.searchParams.get('page')
+        const pageNum = parseInt(pageString || '0')
+
+        const results = paginate(allItems, PAGE_SIZE, pageNum)
+        return res(ctx.json(results))
+      })
+    )
+
+    const selectListItems = api.endpoints.listItems2.select(0)
+
+    await storeRef.store.dispatch(api.endpoints.listItems2.initiate(1))
+    await storeRef.store.dispatch(api.endpoints.listItems2.initiate(2))
+    const cacheEntry = selectListItems(storeRef.store.getState())
+
+    // Should have passed along the third arg from `merge` containing these fields
+    expect(cacheEntry.data?.meta).toEqual({
+      requestId: expect.any(String),
+      fulfilledTimeStamp: expect.any(Number),
+      arg: 2,
+      baseQueryMeta: expect.any(Object),
+    })
   })
 })
