@@ -1,9 +1,5 @@
-import { namedTypes } from 'ast-types';
-import { ExpressionKind, PatternKind } from 'ast-types/gen/kinds';
+import { ExpressionKind, SpreadElementKind } from 'ast-types/gen/kinds';
 import {
-  BlockStatement,
-  CallExpression,
-  Expression,
   ExpressionStatement,
   JSCodeshift,
   ObjectExpression,
@@ -16,48 +12,51 @@ type ObjectKey = ObjectMethod['key'] & ObjectProperty['key'];
 
 function wrapInAddCaseExpression(
   j: JSCodeshift,
-  key: ObjectKey,
-  params: PatternKind[],
-  body: BlockStatement | ExpressionKind
+  addCaseArgs: (ExpressionKind | SpreadElementKind)[]
 ) {
   const identifier = j.identifier('builder');
   return j.expressionStatement(
-    j.callExpression(j.memberExpression(identifier, j.identifier('addCase'), false), [
-      key,
-      j.arrowFunctionExpression(params, body),
-    ])
+    j.callExpression(j.memberExpression(identifier, j.identifier('addCase'), false), addCaseArgs)
   );
 }
 
 export function reducerPropsToBuilderExpression(j: JSCodeshift, defNode: ObjectExpression) {
   const caseExpressions: ExpressionStatement[] = [];
   for (let property of defNode.properties) {
-    let key: ObjectKey = null as any;
-    let params: PatternKind[] = [];
-    let body: BlockStatement | ExpressionKind = null as any;
+    let addCaseArgs: (ExpressionKind | SpreadElementKind)[] = [];
     switch (property.type) {
       case 'ObjectMethod': {
-        key = property.key;
-        params = property.params;
-        body = property.body;
+        const { key, params, body } = property;
+        if (body) {
+          addCaseArgs = [key, j.arrowFunctionExpression(params, body)];
+        }
         break;
       }
       case 'ObjectProperty': {
+        const { key } = property;
+
         switch (property.value.type) {
           case 'ArrowFunctionExpression':
           case 'FunctionExpression': {
-            key = property.key;
-            params = property.value.params;
-            body = property.value.body;
+            const { params, body } = property.value;
+            if (body) {
+              addCaseArgs = [key, j.arrowFunctionExpression(params, body)];
+            }
+            break;
+          }
+          case 'Identifier':
+          case 'MemberExpression': {
+            const { value } = property;
+            addCaseArgs = [key, value];
             break;
           }
         }
       }
     }
-    if (!body) {
+    if (!addCaseArgs.length) {
       continue;
     }
-    caseExpressions.push(wrapInAddCaseExpression(j, key, params, body));
+    caseExpressions.push(wrapInAddCaseExpression(j, addCaseArgs));
   }
 
   return j.arrowFunctionExpression([j.identifier('builder')], j.blockStatement(caseExpressions));
