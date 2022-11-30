@@ -525,6 +525,38 @@ const anyAction = { type: 'foo' } as AnyAction
   })
 }
 
+{
+  // https://github.com/reduxjs/redux-toolkit/issues/2886
+  // fulfillWithValue should infer return value
+
+  const initialState = {
+    loading: false,
+    obj: { magic: '' },
+  }
+
+  const getObj = createAsyncThunk(
+    'slice/getObj',
+    async (_: any, { fulfillWithValue, rejectWithValue }) => {
+      try {
+        return fulfillWithValue({ magic: 'object' })
+      } catch (rejected: any) {
+        return rejectWithValue(rejected?.response?.error || rejected)
+      }
+    }
+  )
+
+  createSlice({
+    name: 'slice',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder.addCase(getObj.fulfilled, (state, action) => {
+        expectExactType<{ magic: string }>(ANY)(action.payload)
+      })
+    },
+  })
+}
+
 // meta return values
 {
   // return values
@@ -621,8 +653,8 @@ const anyAction = { type: 'foo' } as AnyAction
 
     // correct extra type
     const { s, n } = api.extra
-    expectExactType<string>(s)
-    expectExactType<number>(n)
+    expectExactType<string>(ANY)(s)
+    expectExactType<number>(ANY)(n)
 
     if (1 < 2)
       // @ts-expect-error
@@ -646,8 +678,8 @@ const anyAction = { type: 'foo' } as AnyAction
     })
     // correct extra type
     const { s, n } = api.extra
-    expectExactType<string>(s)
-    expectExactType<number>(n)
+    expectExactType<string>(ANY)(s)
+    expectExactType<number>(ANY)(n)
 
     if (1 < 2)
       // @ts-expect-error
@@ -673,8 +705,8 @@ const anyAction = { type: 'foo' } as AnyAction
       })
       // correct extra type
       const { s, n } = api.extra
-      expectExactType<string>(s)
-      expectExactType<number>(n)
+      expectExactType<string>(ANY)(s)
+      expectExactType<number>(ANY)(n)
       if (1 < 2) return api.rejectWithValue(5)
       if (1 < 2)
         // @ts-expect-error

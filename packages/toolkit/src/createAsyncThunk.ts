@@ -35,9 +35,7 @@ export type BaseThunkAPI<
   >
   fulfillWithValue: IsUnknown<
     FulfilledMeta,
-    <FulfilledValue>(
-      value: FulfilledValue
-    ) => FulfillWithMeta<FulfilledValue, FulfilledMeta>,
+    <FulfilledValue>(value: FulfilledValue) => FulfilledValue,
     <FulfilledValue>(
       value: FulfilledValue,
       meta: FulfilledMeta
