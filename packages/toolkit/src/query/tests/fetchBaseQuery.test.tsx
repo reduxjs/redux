@@ -431,6 +431,47 @@ describe('fetchBaseQuery', () => {
 
       expect(request.headers['content-type']).toBe('application/vnd.api+json')
     })
+
+    it('supports a custom jsonReplacer', async () => {
+      const body = {
+        items: new Set(["A", "B", "C"])
+      }
+
+      let request: any
+      ;({ data: request } = await baseQuery(
+        {
+          url: '/echo',
+          body,
+          method: 'POST',
+        },
+        commonBaseQueryApi,
+        {}
+      ))
+
+      expect(request.headers['content-type']).toBe('application/json')
+      expect(request.body).toEqual({ items: {} }) // Set is not properly marshalled by default
+
+      // Use jsonReplacer
+      const baseQueryWithReplacer = fetchBaseQuery({
+        baseUrl,
+        fetchFn: fetchFn as any,
+        jsonReplacer: (key, value) => value instanceof Set ? [...value] : value
+      })
+
+      ;({ data: request } = await baseQueryWithReplacer(
+        {
+          url: '/echo',
+          body,
+          method: 'POST',
+        },
+        commonBaseQueryApi,
+        {}
+      ))
+
+      expect(request.headers['content-type']).toBe('application/json')
+      expect(request.body).toEqual({ items: ["A", "B", "C"] }) // Set is marshalled correctly by jsonReplacer
+      
+    })
   })
 
   describe('arg.params', () => {
