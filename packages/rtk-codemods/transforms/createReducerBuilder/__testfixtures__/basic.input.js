@@ -14,7 +14,9 @@ createReducer(initialState, {
   },
   todoAdded1f: (state, action) => {
     //stuff
-  }
+  },
+  [todoAdded1g]: someFunc,
+  todoAdded1h: adapter.someFunc
 });
 
 
