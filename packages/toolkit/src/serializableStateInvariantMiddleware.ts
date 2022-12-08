@@ -36,7 +36,7 @@ export function findNonSerializableValue(
   path: string = '',
   isSerializable: (value: unknown) => boolean = isPlain,
   getEntries?: (value: unknown) => [string, any][],
-  ignoredPaths: readonly string[] = []
+  ignoredPaths: readonly (string | RegExp)[] = []
 ): NonSerializableValue | false {
   let foundNestedSerializable: NonSerializableValue | false
 
@@ -58,8 +58,16 @@ export function findNonSerializableValue(
   for (const [key, nestedValue] of entries) {
     const nestedPath = path ? path + '.' + key : key
 
-    if (hasIgnoredPaths && ignoredPaths.indexOf(nestedPath) >= 0) {
-      continue
+    if (hasIgnoredPaths) {
+      const hasMatches = ignoredPaths.some(ignored => {
+        if (ignored instanceof RegExp) {
+          return ignored.test(nestedPath)
+        }
+        return nestedPath === ignored
+      })
+      if (hasMatches) {
+        continue
+      }
     }
 
     if (!isSerializable(nestedValue)) {
@@ -113,16 +121,17 @@ export interface SerializableStateInvariantMiddlewareOptions {
   ignoredActions?: string[]
 
   /**
-   * An array of dot-separated path strings to ignore when checking
-   * for serializability, Defaults to ['meta.arg', 'meta.baseQueryMeta']
+   * An array of dot-separated path strings or regular expressions to ignore
+   * when checking for serializability, Defaults to
+   * ['meta.arg', 'meta.baseQueryMeta']
    */
-  ignoredActionPaths?: string[]
+  ignoredActionPaths?: (string | RegExp)[]
 
   /**
-   * An array of dot-separated path strings to ignore when checking
-   * for serializability, Defaults to []
+   * An array of dot-separated path strings or regular expressions to ignore
+   * when checking for serializability, Defaults to []
    */
-  ignoredPaths?: string[]
+  ignoredPaths?: (string | RegExp)[]
   /**
    * Execution time warning threshold. If the middleware takes longer
    * than `warnAfter` ms, a warning will be displayed in the console.

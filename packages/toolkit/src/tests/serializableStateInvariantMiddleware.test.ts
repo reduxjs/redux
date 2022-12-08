@@ -389,6 +389,22 @@ describe('serializableStateInvariantMiddleware', () => {
 
       expect(getLog().log).toMatchInlineSnapshot(`""`)
     })
+
+    it('can specify regexp', () => {
+      configureStore({
+        reducer,
+        middleware: [
+          createSerializableStateInvariantMiddleware({
+            ignoredActionPaths: [/^payload\..*$/],
+          }),
+        ],
+      }).dispatch({
+        type: 'test',
+        payload: { arg: nonSerializableValue },
+      })
+
+      expect(getLog().log).toMatchInlineSnapshot(`""`)
+    })
   })
 
   it('allows ignoring actions entirely', () => {
@@ -439,6 +455,10 @@ describe('serializableStateInvariantMiddleware', () => {
               d: badValue,
             },
             e: { f: badValue },
+            g: {
+              h: badValue,
+              i: badValue,
+            },
           }
         }
         default:
@@ -455,6 +475,8 @@ describe('serializableStateInvariantMiddleware', () => {
           'testSlice.b.c',
           // Test for ignoring an object and its children
           'testSlice.e',
+          // Test for ignoring based on RegExp
+          /^testSlice\.g\..*$/,
         ],
       })
 
