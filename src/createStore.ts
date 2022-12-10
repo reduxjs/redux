@@ -205,7 +205,7 @@ export default function createStore<
 
       ensureCanMutateNextListeners()
       const index = nextListeners.indexOf(listener)
-      nextListeners.splice(index, 1)
+      if(index >= 0) nextListeners.splice(index, 1)
       currentListeners = null
     }
   }
