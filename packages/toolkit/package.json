@@ -77,13 +77,13 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build-ci": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
+    "build-ci": "yarn rimraf dist && yarn tsc && yarn lint && node scripts/cli.js --skipExtraction",
     "build-prepare": "npm run build-ci",
     "build": "yarn rimraf dist && yarn tsc && node scripts/cli.js --local --skipExtraction",
     "build-only": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
     "format": "prettier --write \"(src|examples)/**/*.{ts,tsx}\" \"**/*.md\"",
     "format:check": "prettier --list-different \"(src|examples)/**/*.{ts,tsx}\" \"docs/*/**.md\"",
-    "lint": "eslint src examples",
+    "lint": "eslint src",
     "test": "jest --runInBand",
     "type-tests": "yarn tsc -p src/tests/tsconfig.typetests.json && yarn tsc -p src/query/tests/tsconfig.typetests.json",
     "prepack": "npm run build-prepare"

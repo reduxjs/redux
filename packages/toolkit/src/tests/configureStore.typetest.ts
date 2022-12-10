@@ -9,12 +9,12 @@ import type {
   StoreEnhancer
 } from 'redux'
 import { applyMiddleware } from 'redux'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction ,
+  ConfigureStoreOptions} from '@reduxjs/toolkit'
 import {
   configureStore,
   getDefaultMiddleware,
-  createSlice,
-  ConfigureStoreOptions,
+  createSlice
 } from '@reduxjs/toolkit'
 import type { ThunkMiddleware, ThunkAction, ThunkDispatch } from 'redux-thunk'
 import thunk from 'redux-thunk'

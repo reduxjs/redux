@@ -12,15 +12,16 @@ import type {
   QueryActionCreatorResult,
 } from './buildInitiate'
 import { forceQueryFnSymbol, isUpsertQuery } from './buildInitiate'
-import {
+import type {
   AssertTagTypes,
   EndpointDefinition,
   EndpointDefinitions,
-  isQueryDefinition,
   MutationDefinition,
   QueryArgFrom,
   QueryDefinition,
-  ResultTypeFrom,
+  ResultTypeFrom} from '../endpointDefinitions';
+import {
+  isQueryDefinition
 } from '../endpointDefinitions'
 import { calculateProvidedBy } from '../endpointDefinitions'
 import type { AsyncThunkPayloadCreator, Draft } from '@reduxjs/toolkit'

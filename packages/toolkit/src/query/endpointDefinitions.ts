@@ -1,5 +1,5 @@
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
-import { SerializeQueryArgs } from './defaultSerializeQueryArgs'
+import type { SerializeQueryArgs } from './defaultSerializeQueryArgs'
 import type { QuerySubState, RootState } from './core/apiState'
 import type {
   BaseQueryExtraOptions,

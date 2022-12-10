@@ -225,6 +225,14 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   return entry
 }
 
+const cancelActiveListeners = (
+  entry: ListenerEntry<unknown, Dispatch<AnyAction>>
+) => {
+  entry.pending.forEach((controller) => {
+    abortControllerWithReason(controller, listenerCancelled)
+  })
+}
+
 const createClearListenerMiddleware = (
   listenerMap: Map<string, ListenerEntry>
 ) => {
@@ -279,14 +287,6 @@ export const removeListener = createAction(
 
 const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
   console.error(`${alm}/error`, ...args)
-}
-
-const cancelActiveListeners = (
-  entry: ListenerEntry<unknown, Dispatch<AnyAction>>
-) => {
-  entry.pending.forEach((controller) => {
-    abortControllerWithReason(controller, listenerCancelled)
-  })
 }
 
 /**
