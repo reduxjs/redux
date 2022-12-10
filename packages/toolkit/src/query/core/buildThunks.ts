@@ -19,10 +19,9 @@ import type {
   MutationDefinition,
   QueryArgFrom,
   QueryDefinition,
-  ResultTypeFrom} from '../endpointDefinitions';
-import {
-  isQueryDefinition
+  ResultTypeFrom,
 } from '../endpointDefinitions'
+import { isQueryDefinition } from '../endpointDefinitions'
 import { calculateProvidedBy } from '../endpointDefinitions'
 import type { AsyncThunkPayloadCreator, Draft } from '@reduxjs/toolkit'
 import {

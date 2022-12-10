@@ -1,11 +1,7 @@
 import { configureStore } from '../configureStore'
 import { createSlice } from '../createSlice'
-import type {
-  AutoBatchOptions} from '../autoBatchEnhancer';
-import {
-  autoBatchEnhancer,
-  prepareAutoBatched
-} from '../autoBatchEnhancer'
+import type { AutoBatchOptions } from '../autoBatchEnhancer'
+import { autoBatchEnhancer, prepareAutoBatched } from '../autoBatchEnhancer'
 import { delay } from '../utils'
 import { debounce } from 'lodash'
 
