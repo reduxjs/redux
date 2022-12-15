@@ -68,6 +68,14 @@ export default function createStore<
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
+  if (typeof reducer !== 'function') {
+    throw new Error(
+      `Expected the root reducer to be a function. Instead, received: '${kindOf(
+        reducer
+      )}'`
+    )
+  }
+
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
@@ -97,14 +105,6 @@ export default function createStore<
       reducer,
       preloadedState as PreloadedState<S>
     ) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
-  }
-
-  if (typeof reducer !== 'function') {
-    throw new Error(
-      `Expected the root reducer to be a function. Instead, received: '${kindOf(
-        reducer
-      )}'`
-    )
   }
 
   let currentReducer = reducer
