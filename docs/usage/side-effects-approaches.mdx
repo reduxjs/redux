@@ -1,0 +1,438 @@
+---
+id: side-effects-approaches
+title: Side Effects Approaches
+description: 'Usage > Redux Logic > Side Effects Approaches: tools and recommendations for managing side effects'
+---
+
+import { DetailedExplanation } from '../components/DetailedExplanation'
+
+:::tip What You'll Learn
+
+- What "side effects" are and how they fit into Redux
+- Common tools for managing side effects with Redux
+- Our recommendations for which tools to use for different use cases
+
+:::
+
+## Redux and Side Effects
+
+### Side Effects Overview
+
+By itself, a Redux store doesn't know anything about async logic. It only knows how to synchronously dispatch actions, update the state by calling the root reducer function, and notify the UI that something has changed. Any asynchronicity has to happen outside the store.
+
+Redux reducers must never contain "side effects". **A "side effect" is any change to state or behavior that can be seen outside of returning a value from a function**. Some common kinds of side effects are things like:
+
+- Logging a value to the console
+- Saving a file
+- Setting an async timer
+- Making an AJAX HTTP request
+- Modifying some state that exists outside of a function, or mutating arguments to a function
+- Generating random numbers or unique random IDs (such as `Math.random()` or `Date.now()`)
+
+However, any real app will need to do these kinds of things _somewhere_. So, if we can't put side effects in reducers, where _can_ we put them?
+
+### Middleware and Side Effects
+
+**Redux middleware were designed to enable writing logic that has side effects**.
+
+[A Redux middleware can do _anything_ when it sees a dispatched action](../tutorials/fundamentals/part-4-store.md#middleware-use-cases): log something, modify the action, delay the action, make an async call, and more. Also, since middleware form a pipeline around the real `store.dispatch` function, this also means that we could actually pass something that _isn't_ a plain action object to `dispatch`, as long as a middleware intercepts that value and doesn't let it reach the reducers.
+
+Middleware also have access to `dispatch` and `getState`. That means you could write some async logic in a middleware, and still have the ability to interact with the Redux store by dispatching actions.
+
+Because of this, **Redux side effects and async logic are normally implemented through middleware**.
+
+### Side Effects Use Cases
+
+In practice, **the single most common use case for side effects in a typical Redux app is fetching and caching data from the server**.
+
+Another use case more specific to Redux is writing logic that _responds_ to a dispatched action or state change by executing additional logic, such as dispatching more actions.
+
+## Recommendations
+
+We recommend using the tools that best fit each use case (see below for further details on each tool):
+
+:::tip
+
+#### Data Fetching
+
+- **Use RTK Query as the default approach for data fetching and caching**
+- If RTKQ doesn't fully fit for some reason, use `createAsyncThunk`
+- Only fall back to handwritten thunks if nothing else works
+- _Don't_ use sagas or observables for data fetching!
+
+#### Reacting to Actions / State Changes, Async Workflows
+
+- **Use RTK listeners as the default for responding to store updates and writing long-running async workflows**
+- Only use sagas / observables if listeners don't solve your use case well enough
+
+#### Logic with State Access
+
+- **Use thunks for complex sync and moderate async logic**, including access to `getState` and dispatching multiple actions
+
+:::
+
+## Common Side Effects Approaches
+
+The lowest-level technique for managing side effects with Redux is to write your own custom middleware that listens for specific actions and runs logic. However, that's rarely used. Instead, most apps have historically used one of the common pre-built Redux side effects middleware available in the ecosystem: thunks, sagas, or observables. Each of these has its own different use cases and tradeoffs.
+
+More recently, our official Redux Toolkit package has added two new APIs for managing side effects: the "listener" middleware for writing reactive logic, and RTK Query for fetching and caching server state.
+
+### Thunks
+
+The [Redux "thunk" middleware](./writing-logic-thunks.mdx) has traditionally been the most widely used middleware for writing async logic.
+
+Thunks work by passing a function into `dispatch`. The thunk middleware intercepts the function, calls it, and passes in `theThunkFunction(dispatch, getState)`. The thunk function can now do any sync/async logic and interact with the store.
+
+#### Thunk Use Cases
+
+Thunks are best used for complex sync logic that needs access to `dispatch` and `getState`, or moderate async logic such as one-shot "fetch some async data and dispatch an action with the result" requests.
+
+We have traditionally recommended thunks as the default Redux Toolkit specifically includes the [`createAsyncThunk` API](https://redux-toolkit.js.org/api/createAsyncThunk) for the "request and dispatch" use case. For other use cases, you can write your own thunk functions.
+
+#### Thunk Tradeoffs
+
+- 👍: Just write functions; may contain any logic
+- 👎: Can't respond to dispatched actions; imperative; can't be cancelled
+
+```js title="Thunk Examples"
+const thunkMiddleware =
+  ({ dispatch, getState }) =>
+  next =>
+  action => {
+    if (typeof action === 'function') {
+      return action(dispatch, getState)
+    }
+
+    return next(action)
+  }
+
+// Original "hand-written" thunk fetch request pattern
+const fetchUserById = userId => {
+  return async (dispatch, getState) => {
+    // Dispatch "pending" action to help track loading state
+    dispatch(fetchUserStarted())
+    // Need to pull this out to have correct error handling
+    let lastAction
+    try {
+      const user = await userApi.getUserById(userId)
+      // Dispatch "fulfilled" action on success
+      lastAction = fetchUserSucceeded(user)
+    } catch (err) {
+      // Dispatch "rejected" action on failure
+      lastAction = fetchUserFailed(err.message)
+    }
+    dispatch(lastAction)
+  }
+}
+
+// Similar request with `createAsyncThunk`
+const fetchUserById2 = createAsyncThunk('fetchUserById', async userId => {
+  const user = await userApi.getUserById(userId)
+  return user
+})
+```
+
+### Sagas
+
+The [Redux-Saga middleware](https://redux-saga.js.org/) has traditionally been the second most common tool for side effects, after thunks. It's inspired by the backend "saga" pattern, where long-running workflows can respond to events triggered throughout the system.
+
+Conceptually, you can think of sagas as "background threads" inside the Redux app, which have the ability to listen to dispatched actions and run additional logic.
+
+Sagas are written using generator functions. Saga functions return _descriptions_ of side effects and pause themselves, and the saga middleware is responsible for executing the side effect and resuming the saga function with the result. The `redux-saga` library includes a variety of effects definitions such as:
+
+- `call`: executes an async function and returns the result when the promise resolves:
+- `put`: dispatches a Redux action
+- `fork`: spawns a "child saga", like an additional thread that can do more work
+- `takeLatest`: listens for a given Redux action, triggers a saga function to execute, and cancels previous running copies of the saga if it's dispatched again
+
+#### Saga Use Cases
+
+Sagas are extremely powerful, and are best used for highly complex async workflows that require "background thread"-type behavior or debouncing/cancelling.
+
+Saga users have often pointed to the fact that saga functions only return _descriptions_ of the desired effects as a major positive that makes them more testable.
+
+#### Saga Tradeoffs
+
+- 👍: Sagas are testable because they only return descriptions of effects; powerful effects model; pause/cancel capabilities
+- 👎: generator functions are complex; unique saga effects API; saga tests often only test implementation results and need to be rewritten every time the saga is touched, making them a lot less valuable; do not work well with TypeScript; cannot
+
+```js title="Saga Examples"
+import { call, put, takeEvery } from 'redux-saga/effects'
+
+// "Worker" saga: will be fired on USER_FETCH_REQUESTED actions
+function* fetchUser(action) {
+  yield put(fetchUserStarted())
+  try {
+    const user = yield call(userApi.getUserById, action.payload.userId)
+    yield put(fetchUserSucceeded(user))
+  } catch (err) {
+    yield put(fetchUserFailed(err.message))
+  }
+}
+
+// "Watcher" saga: starts fetchUser on each `USER_FETCH_REQUESTED` action
+function* fetchUserWatcher() {
+  yield takeEvery('USER_FETCH_REQUESTED', fetchUser)
+}
+
+// Can use also use sagas for complex async workflows with "child tasks":
+function* fetchAll() {
+  const task1 = yield fork(fetchResource, 'users')
+  const task2 = yield fork(fetchResource, 'comments')
+  yield delay(1000)
+}
+
+function* fetchResource(resource) {
+  const { data } = yield call(api.fetch, resource)
+  yield put(receiveData(data))
+}
+```
+
+### Observables
+
+The [Redux-Observable middleware](https://redux-observable.js.org/) lets you use RxJS observables to create processing pipelines called "epics".
+
+Since RxJS is a framework-agnostic library, observable users point to the fact that you can reuse knowledge of how to use it across different as a major selling point. In addition, RxJS lets you construct declarative pipelines that handle timing cases like cancellation or debouncing.
+
+#### Observable Use Cases
+
+Similar to sagas, observables are powerful and best used for highly complex async workflows that require "background thread"-type behavior or debouncing/cancelling.
+
+#### Observable Tradeoffs
+
+- 👍: Observables are a highly powerful data flow model; RxJS knowledge can be used separate from Redux; declarative syntax
+- 👎: RxJS API is complex; mental model; can be hard to debug; bundle size
+
+```js title="Observable Examples"
+// Typical AJAX example:
+const fetchUserEpic = action$ =>
+  action$.pipe(
+    filter(fetchUser.match),
+    mergeMap(action =>
+      ajax
+        .getJSON(`https://api.github.com/users/${action.payload}`)
+        .pipe(map(response => fetchUserFulfilled(response)))
+    )
+  )
+
+// Can write highly complex async pipelines, including delays,
+// cancellation, debouncing, and error handling:
+const fetchReposEpic = action$ =>
+  action$.pipe(
+    filter(fetchReposInput.match),
+    debounceTime(300),
+    switchMap(action =>
+      of(fetchReposStart()).pipe(
+        concat(
+          searchRepos(action.payload).pipe(
+            map(payload => fetchReposSuccess(payload.items)),
+            catchError(error => of(fetchReposError(error)))
+          )
+        )
+      )
+    )
+  )
+```
+
+### Listeners
+
+Redux Toolkit includes [the `createListenerMiddleware` API](https://redux-toolkit.js.org/api/createListenerMiddleware) to handle "reactive" logic. It's specifically intended to be a lighter-weight alternative to sagas and observables that handles 90% of the same use cases, with a smaller bundle size, simpler API, and better TypeScript support.
+
+Conceptually, this is similar to React's `useEffect` hook, but for Redux store updates.
+
+The listener middleware lets you add entries that match against actions to determine when to run the `effect` callback. Similar to thunks, an `effect` callback can be sync or async, and have access to `dispatch` and `getState`. They also receive a `listenerApi` object with several primitives for building async workflows, such as:
+
+- `condition()`: pauses until a certain action is dispatched or state change occurs
+- `cancelActiveListeners()`: cancel existing in-progress instances of the effect
+- `fork()`: creates a "child task" that can do additional work
+
+These primitives allow listeners to replicate almost all of the effects behaviors from Redux-Saga.
+
+#### Listener Use Cases
+
+Listeners can be used for a wide variety of tasks, such as lightweight store persistence, triggering additional logic when an action is dispatched, watching for state changes, and complex long-running "background thread"-style async workflows.
+
+In addition, listener entries can be added and removed dynamically at runtime by dispatching special `add/removeListener` actions. This integrates nicely with React's `useEffect` hook, and can be used for adding additional behavior that corresponds to a component's lifetime.
+
+#### Listener Tradeoffs
+
+- 👍: Built into Redux Tolkit; `async/await` is more familiar syntax; similar to thunks; lightweight concepts and size; works great with TypeScript
+- 👎: Relatively new and not as "battle-tested" yet; not _quite_ as flexible as sagas/observables
+
+```js title="Listener Examples"
+// Create the middleware instance and methods
+const listenerMiddleware = createListenerMiddleware()
+
+// Add one or more listener entries that look for specific actions.
+// They may contain any sync or async logic, similar to thunks.
+listenerMiddleware.startListening({
+  actionCreator: todoAdded,
+  effect: async (action, listenerApi) => {
+    // Run whatever additional side-effect-y logic you want here
+    console.log('Todo added: ', action.payload.text)
+
+    // Can cancel other running instances
+    listenerApi.cancelActiveListeners()
+
+    // Run async logic
+    const data = await fetchData()
+
+    // Use the listener API methods to dispatch, get state,
+    // unsubscribe the listener, start child tasks, and more
+    listenerApi.dispatch(todoAdded('Buy pet food'))
+  }
+})
+
+listenerMiddleware.startListening({
+  // Can match against actions _or_ state changes/contents
+  predicate: (action, currentState, previousState) => {
+    return currentState.counter.value !== previousState.counter.value
+  },
+  // Listeners can have long-running async workflows
+  effect: async (action, listenerApi) => {
+    // Pause until action dispatched or state changed
+    if (await listenerApi.condition(matchSomeAction)) {
+      // Spawn "child tasks" that can do more work and return results
+      const task = listenerApi.fork(async forkApi => {
+        // Can pause execution
+        await forkApi.delay(5)
+        // Complete the child by returning a value
+        return 42
+      })
+
+      // Unwrap the child result in the listener
+      const result = await task.result
+      if (result.status === 'ok') {
+        console.log('Child succeeded: ', result.value)
+      }
+    }
+  }
+})
+```
+
+### RTK Query
+
+Redux Toolkit includes [RTK Query](https://redux-toolkit.js.org/rtk-query/overview), a purpose-built data fetching and caching solution for Redux apps. It's designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
+
+RTK Query relies on creating an API definition consisting of many "endpoints". An endpoint can be a "query" for fetching data, or a "mutation" for sending an update to the server. RTKQ manages fetching and caching data internally, including tracking usage of each cache entry and removing cached data that's no longer needed. It features a unique "tag" system for triggering automatic refetches of data as mutations update state on the server.
+
+Like the rest of Redux, RTKQ is UI-agnostic at its core, and can be used with any UI framework. However, it also comes with React integration built in, and can automatically generate React hooks for each endpoint. This provides a familiar and simple API for fetching and updating data from React components.
+
+RTKQ provides a `fetch`-based implementation out of the box, and works great with REST APIs. It's also flexible enough to be used with GraphQL APIs, and can even be configured to work with arbitrary async functions, allowing integration with external SDKs such as Firebase, Supabase, or your own async logic.
+
+RTKQ also has powerful capabilities such as endpoint "lifecycle methods", allowing you to run logic as cache entries are added and removed. This can be used for scenarios like fetching initial data for a chat room, then subscribing to a socket for additional messages that are used to update the cache.
+
+#### RTK Query Use Cases
+
+RTK Query is specifically built to solve the use case of data fetching and caching of server state.
+
+#### RTK Query Tradeoffs
+
+- 👍: Built into RTK; eliminates the need to write _any_ code (thunks, selectors, effects, reducers) for managing data fetching and loading state; works great with TS; integrates into the rest of the Redux store; built-in React hooks
+- 👎: Intentionally a "document"-style cache, rather than "normalized"; Adds a one-time additional bundle size cost
+
+```ts no-transpile title="RTK Query Examples"
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type { Pokemon } from './types'
+
+// Create an API definition using a base URL and expected endpoints
+export const api = createApi({
+  reducerPath: 'pokemonApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  endpoints: builder => ({
+    getPokemonByName: builder.query<Pokemon, string>({
+      query: name => `pokemon/${name}`
+    }),
+    getPosts: builder.query<Post[], void>({
+      query: () => '/posts'
+    }),
+    addNewPost: builder.mutation<void, Post>({
+      query: initialPost => ({
+        url: '/posts',
+        method: 'POST',
+        // Include the entire post object as the body of the request
+        body: initialPost
+      })
+    })
+  })
+})
+
+// Export hooks for usage in functional components, which are
+// auto-generated based on the defined endpoints
+export const { useGetPokemonByNameQuery } = api
+
+export default function App() {
+  // Using a query hook automatically fetches data and returns query values
+  const { data, error, isLoading } = useGetPokemonByNameQuery('bulbasaur')
+
+  // render UI based on data and loading state
+}
+```
+
+## Other Approaches
+
+### Custom Middleware
+
+Given that thunks, sagas, observables, and listeners are all forms of Redux middleware (and RTK Query includes its own custom middleware), it's always possible to write your own custom middleware if none of these tools sufficiently handles your use cases.
+
+Note that **we specifically recommend _against_ trying to use custom middleware as a technique for managing the bulk of your app's logic!** Some users have tried creating dozens of custom middleware, one per specific app feature. This adds significant overhead, as each middleware has to run as part of each call to `dispatch`. It's better to use a general-purpose middleware such as thunks or listeners instead, where there's a single middleware instance added that can handle many different chunks of logic.
+
+```js title="Custom Middleware Example"
+const delayedActionMiddleware = storeAPI => next => action => {
+  if (action.type === 'todos/todoAdded') {
+    setTimeout(() => {
+      // Delay this action by one second
+      next(action)
+    }, 1000)
+    return
+  }
+
+  return next(action)
+}
+```
+
+### Websockets
+
+Many apps use websockets or some other form of persistent connection, primarily to receive streaming updates from the server.
+
+We generally recommend that [most websocket usage in a Redux app should live inside a custom middleware](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58), for several reasons:
+
+- Middleware exist for the lifetime of the application
+- Like with the store itself, you probably only need a single instance of a given connection that the whole app can use
+- Middleware can see all dispatched actions and dispatch actions themselves. This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
+- A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](../style-guide/style-guide.md#do-not-put-non-serializable-values-in-state-or-actions)
+
+Depending on the needs of the application, you could create the socket as part of the middleware init process, create the socket on demand in the middleware by dispatching an initialization action, or create it in a separate module file so it can be accessed elsewhere.
+
+Websockets can also be used in an RTK Query lifecycle callback, where they could respond to messages by applying updates to the RTKQ cache.
+
+### XState
+
+State machines can be very useful for defining possible known states for a system and the possible transitions between each state, as well as triggering side effects when a transition occurs.
+
+Redux reducers _can_ be written as true Finite State Machines, but RTK doesn't include anything to help with this. In practice, they tend to be _partial_ state machines that really only care about the dispatched action to determine how to update the state. Listeners, sagas, and observables can be used for the "run side effects after dispatch" aspect, but can sometimes require more work to ensure a side effect only runs at a specific time.
+
+[XState](https://xstate.js.org/docs/) is a powerful library for defining true state machines and executing them, including managing state transitions based on events and triggering related side effects. It also has related tools for creating state machine definitions via a graphical editor, which can then be loaded into the XState logic for execution.
+
+While there currently is no official integration between XState and Redux, it _is_ possible to use an XState machine as a Redux reducer, and the XState developers have created a useful POC demonstrating using XState as a Redux side effects middleware:
+
+- https://github.com/mattpocock/redux-xstate-poc
+
+## Further Information
+
+- Presentation: [**The Evolution of Redux Async Logic**](https://blog.isquaredsoftware.com/2022/05/presentations-evolution-redux-async-logic/)
+- Reason for middleware and side effects:
+  - ["How to dispatch a Redux action with a timeout?"](https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559)
+  - ["Why do we need middleware for async flow?"](https://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux/34599594#34599594)
+- Docs and Tutorials:
+  - [Redux Fundamentals, Part 4: Store > Middleware](../tutorials/fundamentals/part-4-store.md#middleware)
+  - [Redux Fundamentals, Part 6: Async Logic and Data Fetching](../tutorials/fundamentals/part-6-async-logic.md)
+  - [Redux Essentials, Part 5: Async Logic and Data Fetching](../tutorials/essentials/part-5-async-logic.md)
+  - [Redux Essentials, Part 7: RTK Query Basics](../tutorials/essentials/part-7-rtk-query-basics.md)
+  - [Using Redux: Writing Logic with Thunks](./writing-logic-thunks.mdx)
+  - [Redux Toolkit: RTK Query Overview](https://redux-toolkit.js.org/rtk-query/overview)
+- Articles and comparisons
+  - [Designing the RTK Listener Middleware](https://blog.isquaredsoftware.com/2022/03/designing-rtk-listener-middleware/)
+  - [Thoughts on Async Redux: comparing thunks, sagas, and observables](https://nordfjord.io/2020/08/31/async-redux.html)
+  - [Redux Toolkit’s new listener middleware vs. Redux-Saga](https://blog.logrocket.com/redux-toolkits-new-listener-middleware-vs-redux-saga/)
+  - [Experimenting with the Redux Listener Middleware](https://www.rsarai.xyz/redux-listener-middleware/)

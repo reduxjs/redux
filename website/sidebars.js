@@ -93,6 +93,7 @@ module.exports = {
           'usage/reducing-boilerplate',
           'usage/deriving-data-selectors',
           'usage/writing-logic-thunks',
+          'usage/side-effects-approaches',
           'usage/implementing-undo-history'
         ]
       }
