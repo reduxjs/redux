@@ -1,7 +1,7 @@
 const { resolve } = require('path')
 const {
   linkDocblocks,
-  transpileCodeblocks,
+  transpileCodeblocks
 } = require('remark-typescript-tools')
 
 module.exports = {
@@ -155,6 +155,10 @@ module.exports = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
+          include: [
+            '{api,faq,introduction,redux-toolkit,style-guide,tutorials,understanding,usage}/**/*.{md,mdx}',
+            'FAQ.md'
+          ], // no other way to exclude node_modules
           editUrl: 'https://github.com/reduxjs/redux/edit/master/website',
           remarkPlugins: [
             [
@@ -163,11 +167,9 @@ module.exports = {
                 extractorSettings: {
                   tsconfig: resolve(__dirname, './tsconfig.json'),
                   basedir: resolve(__dirname, '../src'),
-                  rootFiles: [
-                    'index.ts',
-                  ],
-                },
-              },
+                  rootFiles: ['index.ts']
+                }
+              }
             ],
             [
               transpileCodeblocks,
@@ -175,11 +177,12 @@ module.exports = {
                 compilerSettings: {
                   tsconfig: resolve(__dirname, './tsconfig.json'),
                   externalResolutions: {},
-                  transformVirtualFilepath: (path) => path.replace('/docs/', '/website/')
-                },
-              },
-            ],
-          ],
+                  transformVirtualFilepath: path =>
+                    path.replace('/docs/', '/website/')
+                }
+              }
+            ]
+          ]
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')
