@@ -583,15 +583,23 @@ However, using action creators provides consistency, especially in cases where s
 
 **Prefer using action creators for dispatching any actions**. However, rather than writing action creators by hand, **we recommend using the `createSlice` function from Redux Toolkit, which will generate action creators and action types automatically**.
 
-### Use Thunks for Async Logic
+### Use RTK Query for Data Fetching
+
+In practice, **the single most common use case for side effects in a typical Redux app is fetching and caching data from the server**.
+
+Because of this, **we recommend using [RTK Query](../tutorials/essentials/part-7-rtk-query-basics.md) as the default approach for data fetching and caching in a Redux app**. RTK Query has been designed to correctly manage the logic for fetching data from the server as needed, caching it, deduplicating requests, updating components, and much more. We recommend _against_ writing data fetching logic by hand in almost all cases.
+
+### Use Thunks and Listeners for Other Async Logic
 
 Redux was designed to be extensible, and the middleware API was specifically created to allow different forms of async logic to be plugged into the Redux store. That way, users wouldn't be forced to learn a specific library like RxJS if it wasn't appropriate for their needs.
 
 This led to a wide variety of Redux async middleware addons being created, and that in turn has caused confusion and questions over which async middleware should be used.
 
-**We recommend [using the Redux Thunk middleware by default](https://github.com/reduxjs/redux-thunk)**, as it is sufficient for most typical use cases (such as basic AJAX data fetching). In addition, use of the `async/await` syntax in thunks makes them easier to read.
+**We recommend using [the Redux thunk middleware](../usage/writing-logic-thunks.mdx) for imperative logic**, such as complex sync logic that needs access to `dispatch` or `getState`, and moderately complex async logic. This includes use cases like moving logic out of components.
 
-If you have truly complex async workflows that involve things like cancellation, debouncing, running logic after a given action was dispatched, or "background-thread"-type behavior, then consider adding more powerful async middleware like Redux-Saga or Redux-Observable.
+**We recommend using [the RTK "listener" middleware"](https://redux-toolkit.js.org/api/createListenerMiddleware) for "reactive" logic that needs to respond to dispatched actions or state changes**, such as longer-running async workflows and "background thread"-type behavior.
+
+We recommend _against_ using the more complex Redux-Saga and Redux-Observable libraries in most cases, especially for async data fetching. Only use these libraries if no other tool is powerful enough to handle your use case.
 
 ### Move Complex Logic Outside Components
 
