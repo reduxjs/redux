@@ -87,7 +87,7 @@ Thunks work by passing a function into `dispatch`. The thunk middleware intercep
 
 Thunks are best used for complex sync logic that needs access to `dispatch` and `getState`, or moderate async logic such as one-shot "fetch some async data and dispatch an action with the result" requests.
 
-We have traditionally recommended thunks as the default Redux Toolkit specifically includes the [`createAsyncThunk` API](https://redux-toolkit.js.org/api/createAsyncThunk) for the "request and dispatch" use case. For other use cases, you can write your own thunk functions.
+We have traditionally recommended thunks as the default approach, and Redux Toolkit specifically includes the [`createAsyncThunk` API](https://redux-toolkit.js.org/api/createAsyncThunk) for the "request and dispatch" use case. For other use cases, you can write your own thunk functions.
 
 #### Thunk Tradeoffs
 
@@ -154,7 +154,7 @@ Saga users have often pointed to the fact that saga functions only return _descr
 #### Saga Tradeoffs
 
 - 👍: Sagas are testable because they only return descriptions of effects; powerful effects model; pause/cancel capabilities
-- 👎: generator functions are complex; unique saga effects API; saga tests often only test implementation results and need to be rewritten every time the saga is touched, making them a lot less valuable; do not work well with TypeScript; cannot
+- 👎: generator functions are complex; unique saga effects API; saga tests often only test implementation results and need to be rewritten every time the saga is touched, making them a lot less valuable; do not work well with TypeScript;
 
 ```js title="Saga Examples"
 import { call, put, takeEvery } from 'redux-saga/effects'
@@ -256,7 +256,7 @@ In addition, listener entries can be added and removed dynamically at runtime by
 
 #### Listener Tradeoffs
 
-- 👍: Built into Redux Tolkit; `async/await` is more familiar syntax; similar to thunks; lightweight concepts and size; works great with TypeScript
+- 👍: Built into Redux Toolkit; `async/await` is more familiar syntax; similar to thunks; lightweight concepts and size; works great with TypeScript
 - 👎: Relatively new and not as "battle-tested" yet; not _quite_ as flexible as sagas/observables
 
 ```js title="Listener Examples"
