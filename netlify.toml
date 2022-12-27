@@ -1,7 +1,7 @@
 [build]
   base    = "website"
   publish = "website/build"
-  command = "npm run build && cp _redirects ./build"
+  command = "cd ../docs && npm i && cd ../website && npm run build && cp _redirects ./build"
   ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
   environment = { NODE_VERSION = "16.14.0" }
 
