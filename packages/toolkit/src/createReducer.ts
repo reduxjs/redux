@@ -55,7 +55,7 @@ export type ActionMatcherDescriptionCollection<S> = Array<
 export type CaseReducer<S = any, A extends Action = AnyAction> = (
   state: Draft<S>,
   action: A
-) => S | void | Draft<S>
+) => NoInfer<S> | void | Draft<NoInfer<S>>
 
 /**
  * A mapping from action types to case reducers for `createReducer()`.

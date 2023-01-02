@@ -59,21 +59,22 @@ const value = actionCreators.anyKey
       increment: (state: number, action) => state + action.payload,
       decrement: (state: number, action) => state - action.payload,
     },
-    extraReducers: {
-      [firstAction.type]: (state: number, action) =>
-        state + action.payload.count,
+    extraReducers: (builder) => {
+      builder.addCase(
+        firstAction,
+        (state, action) => state + action.payload.count
+      )
     },
   })
 
   /* Reducer */
 
-  const reducer: Reducer<number, PayloadAction> = slice.reducer
+  expectType<Reducer<number, PayloadAction>>(slice.reducer)
 
   // @ts-expect-error
-  const stringReducer: Reducer<string, PayloadAction> = slice.reducer
+  expectType<Reducer<string, PayloadAction>>(slice.reducer)
   // @ts-expect-error
-  const anyActionReducer: Reducer<string, AnyAction> = slice.reducer
-
+  expectType<Reducer<string, AnyAction>>(slice.reducer)
   /* Actions */
 
   slice.actions.increment(1)
