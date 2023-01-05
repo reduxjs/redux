@@ -397,7 +397,7 @@ Unfortunately, this will recalculate the derived array if any other value inside
 The same selector with `proxy-memoize` might look like:
 
 ```js
-import memoize from 'proxy-memoize'
+import { memoize } from 'proxy-memoize'
 
 const selectTodoDescriptionsProxy = memoize(state =>
   state.todos.map(todo => todo.text)
