@@ -598,11 +598,6 @@ describe('serializableStateInvariantMiddleware', () => {
   })
 
   it('Should cache its results', () => {
-    const reducer: Reducer<[], AnyAction> = (state = [], action) => {
-      if (action.type === 'SET_STATE') return action.payload
-      return state
-    }
-
     let numPlainChecks = 0
     const countPlainChecks = (x: any) => {
       numPlainChecks++
@@ -615,8 +610,9 @@ describe('serializableStateInvariantMiddleware', () => {
       })
 
     const store = configureStore({
-      reducer: {
-        testSlice: reducer,
+      reducer: (state = [], action) => {
+        if (action.type === 'SET_STATE') return action.payload
+        return state
       },
       middleware: [serializableStateInvariantMiddleware],
     })
