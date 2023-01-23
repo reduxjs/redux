@@ -38,7 +38,8 @@ export function findNonSerializableValue(
   path: string = '',
   isSerializable: (value: unknown) => boolean = isPlain,
   getEntries?: (value: unknown) => [string, any][],
-  ignoredPaths: IgnorePaths = []
+  ignoredPaths: IgnorePaths = [],
+  cache?: WeakSet<object>
 ): NonSerializableValue | false {
   let foundNestedSerializable: NonSerializableValue | false
 
@@ -52,6 +53,8 @@ export function findNonSerializableValue(
   if (typeof value !== 'object' || value === null) {
     return false
   }
+
+  if (cache?.has(value)) return false
 
   const entries = getEntries != null ? getEntries(value) : Object.entries(value)
 
@@ -85,7 +88,8 @@ export function findNonSerializableValue(
         nestedPath,
         isSerializable,
         getEntries,
-        ignoredPaths
+        ignoredPaths,
+        cache
       )
 
       if (foundNestedSerializable) {
@@ -94,7 +98,21 @@ export function findNonSerializableValue(
     }
   }
 
+  if (cache && isNestedFrozen(value)) cache.add(value)
+
   return false
+}
+
+export function isNestedFrozen(value: object) {
+  if (!Object.isFrozen(value)) return false
+
+  for (const nestedValue of Object.values(value)) {
+    if (typeof nestedValue !== 'object' || nestedValue === null) continue
+
+    if (!isNestedFrozen(nestedValue)) return false
+  }
+
+  return true
 }
 
 /**
@@ -150,6 +168,12 @@ export interface SerializableStateInvariantMiddlewareOptions {
    * Opt out of checking actions. When set to `true`, other action-related params will be ignored.
    */
   ignoreActions?: boolean
+
+  /**
+   * Opt out of caching the results. The cache uses a WeakSet and speeds up repeated checking processes.
+   * The cache is automatically disabled if no browser support for WeakSet is present.
+   */
+  disableCache?: boolean
 }
 
 /**
@@ -176,7 +200,11 @@ export function createSerializableStateInvariantMiddleware(
     warnAfter = 32,
     ignoreState = false,
     ignoreActions = false,
+    disableCache = false,
   } = options
+
+  const cache: WeakSet<object> | undefined =
+    !disableCache && WeakSet ? new WeakSet() : undefined
 
   return (storeAPI) => (next) => (action) => {
     const result = next(action)
@@ -196,7 +224,8 @@ export function createSerializableStateInvariantMiddleware(
           '',
           isSerializable,
           getEntries,
-          ignoredActionPaths
+          ignoredActionPaths,
+          cache
         )
 
         if (foundActionNonSerializableValue) {
@@ -223,7 +252,8 @@ export function createSerializableStateInvariantMiddleware(
           '',
           isSerializable,
           getEntries,
-          ignoredPaths
+          ignoredPaths,
+          cache
         )
 
         if (foundStateNonSerializableValue) {
