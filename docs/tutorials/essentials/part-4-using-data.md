@@ -18,7 +18,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 :::info Prerequisites
 
 - Understanding the [Redux data flow and React-Redux APIs from Part 3](./part-3-data-flow.md)
-- Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reactrouter.com/docs/en/v6/getting-started/overview)
+- Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reactrouter.com/start/overview)
 
 :::
 
