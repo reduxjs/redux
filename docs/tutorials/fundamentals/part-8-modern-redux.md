@@ -249,7 +249,7 @@ There's several things to see in this example:
 
 - We write case reducer functions inside the `reducers` object, and give them readable names
 - **`createSlice` will automatically generate action creators** that correspond to each case reducer function we provide
-- createSlice automatically returns the existing state in the default case
+- `createSlice` automatically returns the existing state in the default case
 - **`createSlice` allows us to safely "mutate" our state!**
 - But, we can also make immutable copies like before if we want to
 
