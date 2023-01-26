@@ -312,3 +312,20 @@ function isRejectedWithValueTest(action: AnyAction) {
     expectExactType<SerializedError>(action.error)
   }
 }
+
+function matchersAcceptSpreadArguments() {
+  const thunk1 = createAsyncThunk('a', () => 'a')
+  const thunk2 = createAsyncThunk('b', () => 'b')
+  const interestingThunks = [thunk1, thunk2]
+  const interestingPendingThunks = interestingThunks.map(
+    (thunk) => thunk.pending
+  )
+  const interestingFulfilledThunks = interestingThunks.map(
+    (thunk) => thunk.fulfilled
+  )
+
+  const isLoading = isAnyOf(...interestingPendingThunks)
+  const isNotLoading = isAnyOf(...interestingFulfilledThunks)
+
+  const isAllLoading = isAllOf(...interestingPendingThunks)
+}

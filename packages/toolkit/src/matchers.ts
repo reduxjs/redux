@@ -12,14 +12,12 @@ import type {
 } from './createAsyncThunk'
 
 /** @public */
-export type ActionMatchingAnyOf<
-  Matchers extends [Matcher<any>, ...Matcher<any>[]]
-> = ActionFromMatcher<Matchers[number]>
+export type ActionMatchingAnyOf<Matchers extends [...Matcher<any>[]]> =
+  ActionFromMatcher<Matchers[number]>
 
 /** @public */
-export type ActionMatchingAllOf<
-  Matchers extends [Matcher<any>, ...Matcher<any>[]]
-> = UnionToIntersection<ActionMatchingAnyOf<Matchers>>
+export type ActionMatchingAllOf<Matchers extends [...Matcher<any>[]]> =
+  UnionToIntersection<ActionMatchingAnyOf<Matchers>>
 
 const matches = (matcher: Matcher<any>, action: any) => {
   if (hasMatchFunction(matcher)) {
@@ -38,7 +36,7 @@ const matches = (matcher: Matcher<any>, action: any) => {
  *
  * @public
  */
-export function isAnyOf<Matchers extends [Matcher<any>, ...Matcher<any>[]]>(
+export function isAnyOf<Matchers extends [...Matcher<any>[]]>(
   ...matchers: Matchers
 ) {
   return (action: any): action is ActionMatchingAnyOf<Matchers> => {
@@ -55,7 +53,7 @@ export function isAnyOf<Matchers extends [Matcher<any>, ...Matcher<any>[]]>(
  *
  * @public
  */
-export function isAllOf<Matchers extends [Matcher<any>, ...Matcher<any>[]]>(
+export function isAllOf<Matchers extends [...Matcher<any>[]]>(
   ...matchers: Matchers
 ) {
   return (action: any): action is ActionMatchingAllOf<Matchers> => {
