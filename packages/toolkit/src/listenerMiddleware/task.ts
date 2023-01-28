@@ -1,6 +1,6 @@
 import { TaskAbortError } from './exceptions'
 import type { AbortSignalWithReason, TaskResult } from './types'
-import { addAbortSignalListener, catchRejection } from './utils'
+import { addAbortSignalListener, catchRejection, noop } from './utils'
 
 /**
  * Synchronously raises {@link TaskAbortError} if the task tied to the input `signal` has been cancelled.
@@ -15,24 +15,29 @@ export const validateActive = (signal: AbortSignal): void => {
 }
 
 /**
- * Returns a promise that will reject {@link TaskAbortError} if the task is cancelled.
- * @param signal
- * @returns
+ * Generates a race between the promise(s) and the AbortSignal
+ * This avoids `Promise.race()`-related memory leaks:
+ * https://github.com/nodejs/node/issues/17469#issuecomment-349794909
  */
-export const promisifyAbortSignal = (
-  signal: AbortSignalWithReason<string>
-): Promise<never> => {
-  return catchRejection(
-    new Promise<never>((_, reject) => {
-      const notifyRejection = () => reject(new TaskAbortError(signal.reason))
+export function raceWithSignal<T>(
+  signal: AbortSignalWithReason<string>,
+  promise: Promise<T>
+): Promise<T> {
+  let cleanup = noop
+  return new Promise<T>((resolve, reject) => {
+    const notifyRejection = () => reject(new TaskAbortError(signal.reason))
 
-      if (signal.aborted) {
-        notifyRejection()
-      } else {
-        addAbortSignalListener(signal, notifyRejection)
-      }
-    })
-  )
+    if (signal.aborted) {
+      notifyRejection()
+      return
+    }
+
+    cleanup = addAbortSignalListener(signal, notifyRejection)
+    promise.finally(() => cleanup()).then(resolve, reject)
+  }).finally(() => {
+    // after this point, replace `cleanup` with a noop, so there is no reference to `signal` any more
+    cleanup = noop
+  })
 }
 
 /**
@@ -73,7 +78,7 @@ export const runTask = async <T>(
 export const createPause = <T>(signal: AbortSignal) => {
   return (promise: Promise<T>): Promise<T> => {
     return catchRejection(
-      Promise.race([promisifyAbortSignal(signal), promise]).then((output) => {
+      raceWithSignal(signal, promise).then((output) => {
         validateActive(signal)
         return output
       })

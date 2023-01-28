@@ -28,6 +28,7 @@ export const addAbortSignalListener = (
   callback: (evt: Event) => void
 ) => {
   abortSignal.addEventListener('abort', callback, { once: true })
+  return () => abortSignal.removeEventListener('abort', callback)
 }
 
 /**
