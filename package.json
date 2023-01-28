@@ -23,15 +23,16 @@
     "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
-  "main": "lib/redux.js",
-  "module": "es/redux.js",
+  "type": "module",
+  "module": "dist/es/index.js",
+  "main": "dist/cjs/index.cjs",
   "types": "types/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./es/redux.js",
-      "default": "./lib/redux.js"
+      "import": "./dist/es/index.js",
+      "default": "./dist/cjs/index.cjs"
     }
   },
   "files": [
