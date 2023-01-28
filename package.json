@@ -24,9 +24,16 @@
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
   "main": "lib/redux.js",
-  "unpkg": "dist/redux.js",
   "module": "es/redux.js",
   "types": "types/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./es/redux.js",
+      "default": "./lib/redux.js"
+    }
+  },
   "files": [
     "dist",
     "lib",
