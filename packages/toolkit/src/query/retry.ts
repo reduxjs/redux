@@ -5,7 +5,7 @@ import type {
   BaseQueryExtraOptions,
   BaseQueryFn,
 } from './baseQueryTypes'
-import { FetchBaseQueryError } from './fetchBaseQuery'
+import type { FetchBaseQueryError } from './fetchBaseQuery'
 import { HandledError } from './HandledError'
 
 /**

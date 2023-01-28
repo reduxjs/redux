@@ -1,10 +1,8 @@
 import type { Api, ApiContext, Module, ModuleName } from './apiTypes'
 import type { CombinedState } from './core/apiState'
 import type { BaseQueryArg, BaseQueryFn } from './baseQueryTypes'
-import {
-  defaultSerializeQueryArgs,
-  SerializeQueryArgs,
-} from './defaultSerializeQueryArgs'
+import type { SerializeQueryArgs } from './defaultSerializeQueryArgs'
+import { defaultSerializeQueryArgs } from './defaultSerializeQueryArgs'
 import type {
   EndpointBuilder,
   EndpointDefinitions,

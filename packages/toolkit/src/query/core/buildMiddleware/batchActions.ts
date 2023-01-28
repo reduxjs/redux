@@ -6,7 +6,8 @@ import type {
   Subscribers,
 } from '../apiState'
 import { produceWithPatches } from 'immer'
-import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit'
+import type { AnyAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Copied from https://github.com/feross/queue-microtask
 let promise: Promise<any>

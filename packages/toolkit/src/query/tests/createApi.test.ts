@@ -17,7 +17,7 @@ import {
 } from './helpers'
 import { server } from './mocks/server'
 import { rest } from 'msw'
-import { SerializeQueryArgs } from '../defaultSerializeQueryArgs'
+import type { SerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import { string } from 'yargs'
 
 const originalEnv = process.env.NODE_ENV

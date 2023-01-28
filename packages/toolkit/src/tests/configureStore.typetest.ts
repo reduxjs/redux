@@ -6,15 +6,14 @@ import type {
   Reducer,
   Store,
   Action,
-  StoreEnhancer
+  StoreEnhancer,
 } from 'redux'
 import { applyMiddleware } from 'redux'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import {
   configureStore,
   getDefaultMiddleware,
   createSlice,
-  ConfigureStoreOptions,
 } from '@reduxjs/toolkit'
 import type { ThunkMiddleware, ThunkAction, ThunkDispatch } from 'redux-thunk'
 import thunk from 'redux-thunk'
@@ -144,10 +143,12 @@ const _anyMiddleware: any = () => () => () => {}
   {
     const store = configureStore({
       reducer: () => 0,
-      enhancers: [applyMiddleware(() => next => next)]
+      enhancers: [applyMiddleware(() => (next) => next)],
     })
 
-    expectType<Dispatch & ThunkDispatch<number, undefined, AnyAction>>(store.dispatch)
+    expectType<Dispatch & ThunkDispatch<number, undefined, AnyAction>>(
+      store.dispatch
+    )
   }
 
   configureStore({
@@ -159,7 +160,7 @@ const _anyMiddleware: any = () => () => () => {}
   {
     type SomePropertyStoreEnhancer = StoreEnhancer<{ someProperty: string }>
 
-    const somePropertyStoreEnhancer: SomePropertyStoreEnhancer = next => {
+    const somePropertyStoreEnhancer: SomePropertyStoreEnhancer = (next) => {
       return (reducer, preloadedState) => {
         return {
           ...next(reducer, preloadedState),
@@ -168,9 +169,13 @@ const _anyMiddleware: any = () => () => () => {}
       }
     }
 
-    type AnotherPropertyStoreEnhancer = StoreEnhancer<{ anotherProperty: number }>
+    type AnotherPropertyStoreEnhancer = StoreEnhancer<{
+      anotherProperty: number
+    }>
 
-    const anotherPropertyStoreEnhancer: AnotherPropertyStoreEnhancer = next => {
+    const anotherPropertyStoreEnhancer: AnotherPropertyStoreEnhancer = (
+      next
+    ) => {
       return (reducer, preloadedState) => {
         return {
           ...next(reducer, preloadedState),
@@ -184,7 +189,9 @@ const _anyMiddleware: any = () => () => () => {}
       enhancers: [somePropertyStoreEnhancer, anotherPropertyStoreEnhancer],
     })
 
-    expectType<Dispatch & ThunkDispatch<number, undefined, AnyAction>>(store.dispatch)
+    expectType<Dispatch & ThunkDispatch<number, undefined, AnyAction>>(
+      store.dispatch
+    )
     expectType<string>(store.someProperty)
     expectType<number>(store.anotherProperty)
   }
@@ -348,7 +355,9 @@ const _anyMiddleware: any = () => () => () => {}
   {
     const store = configureStore({
       reducer: reducerA,
-      middleware: [] as any as readonly [Middleware<(a: StateA) => boolean, StateA>],
+      middleware: [] as any as readonly [
+        Middleware<(a: StateA) => boolean, StateA>
+      ],
     })
     const result: boolean = store.dispatch(5)
     // @ts-expect-error
@@ -532,21 +541,23 @@ const _anyMiddleware: any = () => () => () => {}
       initialState: null as any,
       reducers: {
         set(state) {
-          return state;
+          return state
         },
       },
-    });
+    })
 
-    function configureMyStore<S>(options: Omit<ConfigureStoreOptions<S>, 'reducer'>) {
+    function configureMyStore<S>(
+      options: Omit<ConfigureStoreOptions<S>, 'reducer'>
+    ) {
       return configureStore({
         ...options,
         reducer: someSlice.reducer,
-      });
+      })
     }
 
-    const store = configureMyStore({});
+    const store = configureMyStore({})
 
-    expectType<Function>(store.dispatch);
+    expectType<Function>(store.dispatch)
   }
 
   {

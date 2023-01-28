@@ -25,11 +25,8 @@ import {
 import { server } from './mocks/server'
 import type { AnyAction } from 'redux'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
-import {
-  createListenerMiddleware,
-  SerializedError,
-  configureStore,
-} from '@reduxjs/toolkit'
+import type { SerializedError } from '@reduxjs/toolkit'
+import { createListenerMiddleware, configureStore } from '@reduxjs/toolkit'
 import { renderHook } from '@testing-library/react'
 import { delay } from '../../utils'
 

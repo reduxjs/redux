@@ -31,7 +31,8 @@ export const rootReducer = combineSlices(sliceA, sliceB, {
 // fileC.ts
 // "naive" approach
 
-import { rootReducer, RootState } from './reducer'
+import type { RootState } from './reducer';
+import { rootReducer } from './reducer'
 import { createSlice } from '@reduxjs/toolkit'
 
 interface SliceCState {

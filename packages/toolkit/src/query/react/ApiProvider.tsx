@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { Context, useEffect } from 'react'
+import type { Context } from 'react'
+import { useEffect } from 'react'
 import React from 'react'
 import type { ReactReduxContextValue } from 'react-redux'
 import { Provider } from 'react-redux'
@@ -50,7 +51,7 @@ export function ApiProvider<A extends Api<any, {}, any, any>>(props: {
       props.setupListeners === false
         ? undefined
         : setupListeners(store.dispatch, props.setupListeners),
-    [props.setupListeners]
+    [props.setupListeners, store.dispatch]
   )
 
   return (
