@@ -72,7 +72,7 @@ export function isImmutableDefault(value: unknown): boolean {
 
 export function trackForMutations(
   isImmutable: IsImmutableFunc,
-  ignorePaths: string[] | undefined,
+  ignorePaths: IgnorePaths | undefined,
   obj: any
 ) {
   const trackedProperties = trackProperties(isImmutable, ignorePaths, obj)
@@ -116,11 +116,11 @@ function trackProperties(
   return tracked as TrackedProperty
 }
 
-type IgnorePaths = readonly string[]
+type IgnorePaths = readonly (string | RegExp)[]
 
 function detectMutations(
   isImmutable: IsImmutableFunc,
-  ignorePaths: IgnorePaths = [],
+  ignoredPaths: IgnorePaths = [],
   trackedProperty: TrackedProperty,
   obj: any,
   sameParentRef: boolean = false,
@@ -147,19 +147,30 @@ function detectMutations(
     keysToDetect[key] = true
   }
 
+  const hasIgnoredPaths = ignoredPaths.length > 0
+
   for (let key in keysToDetect) {
-    const childPath = path ? path + '.' + key : key
-    if (ignorePaths.length && ignorePaths.indexOf(childPath) !== -1) {
-      continue
+    const nestedPath = path ? path + '.' + key : key
+
+    if (hasIgnoredPaths) {
+      const hasMatches = ignoredPaths.some((ignored) => {
+        if (ignored instanceof RegExp) {
+          return ignored.test(nestedPath)
+        }
+        return nestedPath === ignored
+      })
+      if (hasMatches) {
+        continue
+      }
     }
 
     const result = detectMutations(
       isImmutable,
-      ignorePaths,
+      ignoredPaths,
       trackedProperty.children[key],
       obj[key],
       sameRef,
-      childPath
+      nestedPath
     )
 
     if (result.wasMutated) {
@@ -189,7 +200,7 @@ export interface ImmutableStateInvariantMiddlewareOptions {
     the root state to ignore when checking for immutability.
     Defaults to undefined
    */
-  ignoredPaths?: string[]
+  ignoredPaths?: IgnorePaths
   /** Print a warning if checks take longer than N ms. Default: 32ms */
   warnAfter?: number
   // @deprecated. Use ignoredPaths

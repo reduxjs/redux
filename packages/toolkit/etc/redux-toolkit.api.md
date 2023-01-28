@@ -511,7 +511,7 @@ export function findNonSerializableValue(
   path?: string,
   isSerializable?: (value: unknown) => boolean,
   getEntries?: (value: unknown) => [string, any][],
-  ignoredPaths?: readonly string[]
+  ignoredPaths?: readonly (string | RegExp)[]
 ): NonSerializableValue | false
 
 export { freeze }
@@ -762,9 +762,9 @@ export { Selector }
 // @public
 export interface SerializableStateInvariantMiddlewareOptions {
   getEntries?: (value: any) => [string, any][]
-  ignoredActionPaths?: string[]
+  ignoredActionPaths?: (string | RegExp)[]
   ignoredActions?: string[]
-  ignoredPaths?: string[]
+  ignoredPaths?: (string | RegExp)[]
   ignoreState?: boolean
   isSerializable?: (value: any) => boolean
   warnAfter?: number

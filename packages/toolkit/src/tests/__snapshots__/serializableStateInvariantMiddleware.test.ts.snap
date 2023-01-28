@@ -31,6 +31,8 @@ Take a look at the reducer(s) handling this action type: TEST_ACTION.
 
 exports[`serializableStateInvariantMiddleware ignored action paths can specify (multiple) different values 1`] = `""`;
 
+exports[`serializableStateInvariantMiddleware ignored action paths can specify regexp 1`] = `""`;
+
 exports[`serializableStateInvariantMiddleware ignored action paths default value can be overridden 1`] = `
 "A non-serializable value was detected in an action, in the path: \`meta.arg\`. Value: Map {} 
 Take a look at the logic that dispatched this action:  Object {
