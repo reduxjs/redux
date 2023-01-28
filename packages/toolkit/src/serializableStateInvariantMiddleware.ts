@@ -28,6 +28,8 @@ interface NonSerializableValue {
   value: unknown
 }
 
+type IgnorePaths = readonly (string | RegExp)[]
+
 /**
  * @public
  */
@@ -36,7 +38,7 @@ export function findNonSerializableValue(
   path: string = '',
   isSerializable: (value: unknown) => boolean = isPlain,
   getEntries?: (value: unknown) => [string, any][],
-  ignoredPaths: readonly (string | RegExp)[] = []
+  ignoredPaths: IgnorePaths = []
 ): NonSerializableValue | false {
   let foundNestedSerializable: NonSerializableValue | false
 
@@ -59,7 +61,7 @@ export function findNonSerializableValue(
     const nestedPath = path ? path + '.' + key : key
 
     if (hasIgnoredPaths) {
-      const hasMatches = ignoredPaths.some(ignored => {
+      const hasMatches = ignoredPaths.some((ignored) => {
         if (ignored instanceof RegExp) {
           return ignored.test(nestedPath)
         }
