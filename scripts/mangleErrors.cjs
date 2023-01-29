@@ -71,10 +71,10 @@ module.exports = babel => {
     },
     visitor: {
       ThrowStatement(path, file) {
-        const arguments = path.node.argument.arguments
+        const args = path.node.argument.arguments
         const minify = file.opts.minify
 
-        if (arguments && arguments[0]) {
+        if (args && args[0]) {
           // Skip running this logic when certain types come up:
           //  Identifier comes up when a variable is thrown (E.g. throw new error(message))
           //  NumericLiteral, CallExpression, and ConditionalExpression is code we have already processed
@@ -103,11 +103,12 @@ module.exports = babel => {
           }
 
           // Import the error message function
-          const formatProdErrorMessageIdentifier = helperModuleImports.addDefault(
-            path,
-            'src/utils/formatProdErrorMessage',
-            { nameHint: 'formatProdErrorMessage' }
-          )
+          const formatProdErrorMessageIdentifier =
+            helperModuleImports.addDefault(
+              path,
+              'src/utils/formatProdErrorMessage',
+              { nameHint: 'formatProdErrorMessage' }
+            )
 
           // Creates a function call to output the message to the error code page on the website
           const prodMessage = t.callExpression(

@@ -23,10 +23,18 @@
     "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
-  "main": "lib/redux.js",
-  "unpkg": "dist/redux.js",
-  "module": "es/redux.js",
+  "type": "module",
+  "module": "dist/es/index.js",
+  "main": "dist/cjs/index.cjs",
   "types": "types/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/es/index.js",
+      "default": "./dist/cjs/index.cjs"
+    }
+  },
   "files": [
     "dist",
     "lib",
@@ -50,9 +58,7 @@
     "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js"
   },
-  "dependencies": {
-    "@babel/runtime": "^7.19.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.19.0",
@@ -65,9 +71,9 @@
     "@babel/preset-flow": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@babel/register": "^7.18.9",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-node-resolve": "^14.0.1",
-    "@rollup/plugin-replace": "^4.0.0",
+    "@rollup/plugin-babel": "^6",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.0",
     "@types/jest": "^29.0.0",
     "@types/node": "^18.7.16",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
@@ -87,9 +93,9 @@
     "netlify-plugin-cache": "^1.0.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.79.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.33.0",
+    "rollup": "^3.12.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "rollup-plugin-typescript2": "^0.34.1",
     "rxjs": "^7.5.6",
     "ts-jest": "^29.0.0",
     "typescript": "^4.8.3"
