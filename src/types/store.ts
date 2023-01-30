@@ -91,6 +91,8 @@ export interface Unsubscribe {
   (): void
 }
 
+export type ListenerCallback = () => void
+
 declare global {
   interface SymbolConstructor {
     readonly observable: symbol
@@ -198,7 +200,7 @@ export interface Store<
    * @param listener A callback to be invoked on every dispatch.
    * @returns A function to remove this change listener.
    */
-  subscribe(listener: () => void): Unsubscribe
+  subscribe(listener: ListenerCallback): Unsubscribe
 
   /**
    * Replaces the reducer currently used by the store to calculate the state.

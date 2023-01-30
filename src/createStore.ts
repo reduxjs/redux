@@ -6,7 +6,8 @@ import {
   StoreEnhancer,
   Dispatch,
   Observer,
-  ExtendState
+  ExtendState,
+  ListenerCallback
 } from './types/store'
 import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
@@ -119,8 +120,9 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
 
   let currentReducer = reducer
   let currentState = preloadedState as S
-  let currentListeners: (() => void)[] | null = []
+  let currentListeners: Map<number, ListenerCallback> | null = new Map()
   let nextListeners = currentListeners
+  let listenerIdCounter = 0
   let isDispatching = false
 
   /**
@@ -132,7 +134,10 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
    */
   function ensureCanMutateNextListeners() {
     if (nextListeners === currentListeners) {
-      nextListeners = currentListeners.slice()
+      nextListeners = new Map()
+      currentListeners.forEach((listener, key) => {
+        nextListeners.set(key, listener)
+      })
     }
   }
 
@@ -197,7 +202,8 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     let isSubscribed = true
 
     ensureCanMutateNextListeners()
-    nextListeners.push(listener)
+    const listenerId = listenerIdCounter++
+    nextListeners.set(listenerId, listener)
 
     return function unsubscribe() {
       if (!isSubscribed) {
@@ -214,8 +220,7 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
       isSubscribed = false
 
       ensureCanMutateNextListeners()
-      const index = nextListeners.indexOf(listener)
-      nextListeners.splice(index, 1)
+      nextListeners.delete(listenerId)
       currentListeners = null
     }
   }
@@ -272,11 +277,9 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     }
 
     const listeners = (currentListeners = nextListeners)
-    for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i]
+    listeners.forEach(listener => {
       listener()
-    }
-
+    })
     return action
   }
 
