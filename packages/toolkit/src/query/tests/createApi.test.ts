@@ -1,11 +1,15 @@
 import { configureStore, createAction, createReducer } from '@reduxjs/toolkit'
+import type { SerializedError } from '@reduxjs/toolkit'
 import type {
   Api,
   MutationDefinition,
   QueryDefinition,
 } from '@reduxjs/toolkit/query'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
-import type { FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/query/fetchBaseQuery'
+import type {
+  FetchBaseQueryError,
+  FetchBaseQueryMeta,
+} from '@reduxjs/toolkit/dist/query/fetchBaseQuery'
 
 import {
   ANY,
@@ -19,6 +23,11 @@ import { server } from './mocks/server'
 import { rest } from 'msw'
 import type { SerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import { string } from 'yargs'
+import type {
+  DefinitionsFromApi,
+  OverrideResultType,
+  TagTypesFromApi,
+} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 
 const originalEnv = process.env.NODE_ENV
 beforeAll(() => void ((process.env as any).NODE_ENV = 'development'))
@@ -521,6 +530,71 @@ describe('endpoint definition typings', () => {
         ['modified1', { ...commonBaseQueryApi, forced: undefined }, undefined],
         ['modified2', { ...commonBaseQueryApi, forced: undefined }, undefined],
       ])
+    })
+
+    test('updated transform response types', async () => {
+      const baseApi = createApi({
+        baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }),
+        tagTypes: ['old'],
+        endpoints: (build) => ({
+          query1: build.query<'out1', void>({ query: () => 'success' }),
+          mutation1: build.mutation<'out1', void>({ query: () => 'success' }),
+        }),
+      })
+
+      type Transformed = { value: string }
+
+      type Definitions = DefinitionsFromApi<typeof api>
+      type TagTypes = TagTypesFromApi<typeof api>
+
+      type Q1Definition = OverrideResultType<Definitions['query1'], Transformed>
+      type M1Definition = OverrideResultType<
+        Definitions['mutation1'],
+        Transformed
+      >
+
+      type UpdatedDefitions = Omit<Definitions, 'query1' | 'mutation1'> & {
+        query1: Q1Definition
+        mutation1: M1Definition
+      }
+
+      const enhancedApi = baseApi.enhanceEndpoints<TagTypes, UpdatedDefitions>({
+        endpoints: {
+          query1: {
+            transformResponse: (a, b, c) => ({
+              value: 'transformed',
+            }),
+          },
+          mutation1: {
+            transformResponse: (a, b, c) => ({
+              value: 'transformed',
+            }),
+          },
+        },
+      })
+
+      const storeRef = setupApiStore(enhancedApi, undefined, {
+        withoutTestLifecycles: true,
+      })
+
+      const queryResponse = await storeRef.store.dispatch(
+        enhancedApi.endpoints.query1.initiate()
+      )
+      expect(queryResponse.data).toEqual({ value: 'transformed' })
+      expectType<Transformed | Promise<Transformed> | undefined>(
+        queryResponse.data
+      )
+
+      const mutationResponse = await storeRef.store.dispatch(
+        enhancedApi.endpoints.mutation1.initiate()
+      )
+      expectType<
+        | { data: Transformed | Promise<Transformed> }
+        | { error: FetchBaseQueryError | SerializedError }
+      >(mutationResponse)
+      expect('data' in mutationResponse && mutationResponse.data).toEqual({
+        value: 'transformed',
+      })
     })
   })
 })
