@@ -504,7 +504,7 @@ console.log(dispatchResult)
 // log: 'Hello!'
 ```
 
-Let's try one more example. Middleware often look for a specific action, and then do something when that action is dispatched. Middleware also have the ability to run async logic inside. We can write a middleware that prints something on a delay when it sees a certain action:
+Let's try one more example. Middleware often looks for a specific action, and then does something when that action is dispatched. Middleware also has the ability to run async logic inside. We can write a middleware that prints something on a delay when it sees a certain action:
 
 ```js
 const delayedMessageMiddleware = storeAPI => next => action => {
