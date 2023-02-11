@@ -7,7 +7,7 @@ import {
   Reducer,
   Action,
   AnyAction
-} from '../..'
+} from '../../src'
 
 /**
  * Logger middleware doesn't add any extra types to dispatch, just logs actions

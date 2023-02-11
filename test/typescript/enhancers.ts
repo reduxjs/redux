@@ -5,7 +5,7 @@ import {
   Reducer,
   createStore,
   Store
-} from '../..'
+} from '../../src'
 
 interface State {
   someField: 'string'

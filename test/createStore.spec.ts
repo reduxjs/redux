@@ -1,4 +1,10 @@
-import { createStore, combineReducers, StoreEnhancer, Action, Store } from '..'
+import {
+  createStore,
+  combineReducers,
+  StoreEnhancer,
+  Action,
+  Store
+} from '../src'
 import {
   addTodo,
   dispatchInMiddle,

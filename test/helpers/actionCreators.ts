@@ -7,7 +7,7 @@ import {
   THROW_ERROR,
   UNKNOWN_ACTION
 } from './actionTypes'
-import { Action, AnyAction, Dispatch } from '../..'
+import { Action, AnyAction, Dispatch } from '../../src'
 
 export function addTodo(text: string): AnyAction {
   return { type: ADD_TODO, text }

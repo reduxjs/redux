@@ -7,7 +7,7 @@ import {
   Action,
   Store,
   Dispatch
-} from '..'
+} from '../src'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'

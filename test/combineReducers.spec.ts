@@ -5,7 +5,7 @@ import {
   Reducer,
   AnyAction,
   __DO_NOT_USE__ActionTypes as ActionTypes
-} from '..'
+} from '../src'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
