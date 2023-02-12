@@ -64,11 +64,13 @@ function stateExtension() {
       reducer: Reducer<S, A>,
       preloadedState?: any
     ) => {
-      const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
-        const newState = reducer(state, action)
-        return {
-          ...newState,
-          extraField: 'extra'
+      function wrapReducer(reducer: Reducer<S, A>): Reducer<S & ExtraState, A> {
+        return (state, action) => {
+          const newState = reducer(state, action)
+          return {
+            ...newState,
+            extraField: 'extra'
+          }
         }
       }
       const wrappedPreloadedState = preloadedState
@@ -77,7 +79,13 @@ function stateExtension() {
             extraField: 'extra'
           }
         : undefined
-      return createStore(wrappedReducer, wrappedPreloadedState)
+      const store = createStore(wrapReducer(reducer), wrappedPreloadedState)
+      return {
+        ...store,
+        replaceReducer(nextReducer: Reducer<S, A>) {
+          store.replaceReducer(wrapReducer(nextReducer))
+        }
+      }
     }
 
   const store = createStore(reducer, enhancer)
@@ -96,8 +104,10 @@ function extraMethods() {
     createStore =>
     (...args) => {
       const store = createStore(...args)
-      store.method = () => 'foo'
-      return store
+      return {
+        ...store,
+        method: () => 'foo'
+      }
     }
 
   const store = createStore(reducer, enhancer)
@@ -122,11 +132,13 @@ function replaceReducerExtender() {
       reducer: Reducer<S, A>,
       preloadedState?: any
     ) => {
-      const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
-        const newState = reducer(state, action)
-        return {
-          ...newState,
-          extraField: 'extra'
+      function wrapReducer(reducer: Reducer<S, A>): Reducer<S & ExtraState, A> {
+        return (state, action) => {
+          const newState = reducer(state, action)
+          return {
+            ...newState,
+            extraField: 'extra'
+          }
         }
       }
       const wrappedPreloadedState = preloadedState
@@ -135,7 +147,14 @@ function replaceReducerExtender() {
             extraField: 'extra'
           }
         : undefined
-      return createStore(wrappedReducer, wrappedPreloadedState)
+      const store = createStore(wrapReducer(reducer), wrappedPreloadedState)
+      return {
+        ...store,
+        replaceReducer(nextReducer: Reducer<S, A>) {
+          store.replaceReducer(wrapReducer(nextReducer))
+        },
+        method: () => 'foo'
+      }
     }
 
   const store = createStore<
@@ -270,14 +289,14 @@ function finalHelmersonExample() {
       <S, A extends Action<unknown>>(
         reducer: Reducer<S, A>,
         preloadedState?: any
-      ): Store<S, A, ExtraState> & { persistor: Store<S, A, ExtraState> } => {
+      ) => {
         const persistedReducer = persistReducer<S, A>(persistConfig, reducer)
         const store = createStore(persistedReducer, preloadedState)
         const persistor = persistStore(store)
 
         return {
           ...store,
-          replaceReducer: nextReducer => {
+          replaceReducer: (nextReducer: Reducer<S, A>) => {
             store.replaceReducer(persistReducer(persistConfig, nextReducer))
           },
           persistor
@@ -307,4 +326,45 @@ function finalHelmersonExample() {
   store.getState().whatever
   // @ts-expect-error
   store.getState().wrongField
+}
+
+function composedEnhancers() {
+  interface State {
+    someState: string
+  }
+  const reducer: Reducer<State> = null as any
+
+  interface Ext1 {
+    enhancer1: string
+  }
+  interface Ext2 {
+    enhancer2: number
+  }
+
+  const enhancer1: StoreEnhancer<Ext1> =
+    createStore => (reducer, preloadedState) => {
+      const store = createStore(reducer, preloadedState)
+      return {
+        ...store,
+        enhancer1: 'foo'
+      }
+    }
+
+  const enhancer2: StoreEnhancer<Ext2> =
+    createStore => (reducer, preloadedState) => {
+      const store = createStore(reducer, preloadedState)
+      return {
+        ...store,
+        enhancer2: 5
+      }
+    }
+
+  const composedEnhancer: StoreEnhancer<Ext1 & Ext2> = createStore =>
+    enhancer2(enhancer1(createStore))
+
+  const enhancedStore = createStore(reducer, composedEnhancer)
+  enhancedStore.enhancer1
+  enhancedStore.enhancer2
+  // @ts-expect-error
+  enhancedStore.enhancer3
 }
