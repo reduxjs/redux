@@ -1,43 +1,86 @@
-name: Tests
-
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+name: CI
+on: [push, pull_request]
 
 jobs:
-  build:
-    name: Test Suite
+  changes:
+    name: Check for changes
     runs-on: ubuntu-latest
+    outputs:
+      toolkit: ${{ steps.filter.outputs.toolkit }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'src/**'
+
+  build:
+    needs: changes
+    #if: ${{ needs.changes.outputs.src == 'true' }}
+
+    name: Lint, Test, Build & Pack on Node ${{ matrix.node }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['16.x']
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      - name: Use node ${{ matrix.node }}
+        uses: actions/setup-node@v2
         with:
-          node-version: 16.x
-          cache: 'npm'
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install deps
+        run: yarn install
 
-      - name: Check types
-        run: npm run check-types
+      - name: Pack
+        run: yarn pack
 
-      - name: Check formatting
-        run: npm run format:check
+      - uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ./package.tgz
 
-      - name: Lint code
-        run: npm run lint
+  test-dist:
+    name: Test against dist
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['16.x']
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
-      - name: Run test suite
-        run: npm test
+      - name: Use node ${{ matrix.node }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
 
-      - name: Check build
-        run: npm run build
+      - name: Install deps
+        run: yarn install
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: package
+          path: .
+
+      - run: ls -lah
+
+      - name: Install build artifact
+        run: yarn  add ./package.tgz
+
+      - name: Run tests, against dist
+        run: yarn test
 
   test-types:
     name: Test Types with TypeScript ${{ matrix.ts }}
@@ -57,16 +100,24 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-          cache: 'npm'
+          cache: 'yarn'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install deps
+        run: yarn install
 
       - name: Install TypeScript ${{ matrix.ts }}
-        run: npm i --save-dev typescript@${{ matrix.ts }}
+        run: yarn add typescript@${{ matrix.ts }}
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: package
+          path: .
+
+      - name: Install build artifact
+        run: yarn add ./package.tgz
 
       - name: Test types
         run: |
-          npm run tsc -- --version
-          npm run check-types
-          npm run test:types
+          yarn tsc --version
+          yarn check-types
+          yarn test:types
