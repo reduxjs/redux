@@ -824,7 +824,7 @@ describe('createStore', () => {
     console.error = jest.fn()
 
     const store = createStore(
-      combineReducers({
+      combineReducers<{ x?: number; y: { z: number; w?: number } }>({
         x: (s = 0, _) => s,
         y: combineReducers({
           z: (s = 0, _) => s,

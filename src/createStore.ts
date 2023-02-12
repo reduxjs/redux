@@ -6,7 +6,6 @@ import {
   StoreEnhancer,
   Dispatch,
   Observer,
-  ExtendState,
   ListenerCallback
 } from './types/store'
 import { Action } from './types/actions'
@@ -43,7 +42,7 @@ import { kindOf } from './utils/kindOf'
 export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+): Store<S, A, StateExt> & Ext
 /**
  * @deprecated
  *
@@ -73,12 +72,12 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+): Store<S, A, StateExt> & Ext
 export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
+): Store<S, A, StateExt> & Ext {
   if (typeof reducer !== 'function') {
     throw new Error(
       `Expected the root reducer to be a function. Instead, received: '${kindOf(
@@ -115,7 +114,7 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     return enhancer(createStore)(
       reducer,
       preloadedState as PreloadedState<S>
-    ) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+    ) as Store<S, A, StateExt> & Ext
   }
 
   let currentReducer = reducer
@@ -291,11 +290,8 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
    * implement a hot reloading mechanism for Redux.
    *
    * @param nextReducer The reducer for the store to use instead.
-   * @returns The same store instance with a new reducer in place.
    */
-  function replaceReducer<NewState, NewActions extends A>(
-    nextReducer: Reducer<NewState, NewActions>
-  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext {
+  function replaceReducer(nextReducer: Reducer<S, A>): void {
     if (typeof nextReducer !== 'function') {
       throw new Error(
         `Expected the nextReducer to be a function. Instead, received: '${kindOf(
@@ -304,22 +300,13 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
       )
     }
 
-    // TODO: do this more elegantly
-    ;(currentReducer as unknown as Reducer<NewState, NewActions>) = nextReducer
+    currentReducer = nextReducer
 
     // This action has a similar effect to ActionTypes.INIT.
     // Any reducers that existed in both the new and old rootReducer
     // will receive the previous state. This effectively populates
     // the new state tree with any relevant data from the old one.
     dispatch({ type: ActionTypes.REPLACE } as A)
-    // change the type of the store by casting it to the new store
-    return store as unknown as Store<
-      ExtendState<NewState, StateExt>,
-      NewActions,
-      StateExt,
-      Ext
-    > &
-      Ext
   }
 
   /**
@@ -377,7 +364,7 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     getState,
     replaceReducer,
     [$$observable]: observable
-  } as unknown as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  } as unknown as Store<S, A, StateExt> & Ext
   return store
 }
 
@@ -419,7 +406,7 @@ export function legacy_createStore<
 >(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+): Store<S, A, StateExt> & Ext
 /**
  * Creates a Redux store that holds the state tree.
  *
@@ -459,7 +446,7 @@ export function legacy_createStore<
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+): Store<S, A, StateExt> & Ext
 export function legacy_createStore<
   S,
   A extends Action,
@@ -469,6 +456,6 @@ export function legacy_createStore<
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
+): Store<S, A, StateExt> & Ext {
   return createStore(reducer, preloadedState as any, enhancer)
 }

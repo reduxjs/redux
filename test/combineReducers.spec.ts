@@ -327,14 +327,16 @@ describe('Utils', () => {
       const ACTION = { type: 'ACTION' }
 
       it('should return an updated state when additional reducers are passed to combineReducers', function () {
-        const originalCompositeReducer = combineReducers({ foo })
+        type State = { foo: {}; bar?: {} }
+
+        const originalCompositeReducer = combineReducers<State>({ foo })
         const store = createStore(originalCompositeReducer)
 
         store.dispatch(ACTION)
 
         const initialState = store.getState()
 
-        store.replaceReducer(combineReducers({ foo, bar }))
+        store.replaceReducer(combineReducers<State>({ foo, bar }))
         store.dispatch(ACTION)
 
         const nextState = store.getState()
@@ -342,16 +344,18 @@ describe('Utils', () => {
       })
 
       it('should return an updated state when reducers passed to combineReducers are changed', function () {
+        type State = { foo?: {}; bar: {}; baz?: {} }
+
         const baz = (state = {}) => state
 
-        const originalCompositeReducer = combineReducers({ foo, bar })
+        const originalCompositeReducer = combineReducers<State>({ foo, bar })
         const store = createStore(originalCompositeReducer)
 
         store.dispatch(ACTION)
 
         const initialState = store.getState()
 
-        store.replaceReducer(combineReducers({ baz, bar }))
+        store.replaceReducer(combineReducers<State>({ baz, bar }))
         store.dispatch(ACTION)
 
         const nextState = store.getState()
@@ -374,7 +378,9 @@ describe('Utils', () => {
       })
 
       it('should return an updated state when one of more reducers passed to the combineReducers are removed', function () {
-        const originalCompositeReducer = combineReducers({ foo, bar })
+        const originalCompositeReducer = combineReducers<{ foo?: {}; bar: {} }>(
+          { foo, bar }
+        )
         const store = createStore(originalCompositeReducer)
 
         store.dispatch(ACTION)
