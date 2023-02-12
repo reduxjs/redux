@@ -1,4 +1,4 @@
-import { MiddlewareAPI, Dispatch, AnyAction } from '../..'
+import { MiddlewareAPI, Dispatch, AnyAction } from '../../src'
 
 type ThunkAction<T extends any = any> = T extends AnyAction
   ? AnyAction

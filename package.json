@@ -48,15 +48,15 @@
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "lint": "eslint --ext js,ts src test",
     "check-types": "tsc --noEmit",
-    "test": "jest && tsc -p test/typescript",
+    "test": "jest",
     "test:types": "tsc -p test/typescript",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "build": "rollup -c",
-    "pretest": "npm run build",
     "prepublishOnly": "npm run clean && npm run check-types && npm run format:check && npm run lint && npm test",
     "examples:lint": "eslint --ext js,ts examples",
-    "examples:test": "cross-env CI=true babel-node examples/testAll.js"
+    "examples:test": "cross-env CI=true babel-node examples/testAll.js",
+    "tsc": "tsc"
   },
   "dependencies": {},
   "devDependencies": {
