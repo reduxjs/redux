@@ -233,4 +233,5 @@ See these docs pages and blog posts for more details
 - [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
 - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
 - [Redux Style Guide: Best Practices and Recommendations](../style-guide/style-guide.md)
+- [Presentation: Modern Redux with Redux Toolkit](https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/)
 - [Mark Erikson: Redux Toolkit 1.0 Announcement and development history](https://blog.isquaredsoftware.com/2019/10/redux-toolkit-1.0/)

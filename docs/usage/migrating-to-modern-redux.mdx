@@ -1,0 +1,1162 @@
+---
+id: migrating-to-modern-redux
+title: Migrating to Modern Redux
+description: 'Usage > Setup > Migrating to Modern Redux: how to modernize legacy Redux code'
+---
+
+import { DetailedExplanation } from '../components/DetailedExplanation'
+
+:::tip What You'll Learn
+
+- How to modernize legacy "hand-written" Redux logic to use Redux Toolkit
+- How to modernize legacy React-Redux `connect` components to use the hooks API
+- How to modernize Redux logic and React-Redux components that use TypeScript
+
+:::
+
+## Overview
+
+Redux has been around since 2015, and our recommended patterns for writing Redux code have changed significantly over the years. In the same way that React has evolved from `createClass` to `React.Component` to function components with hooks, Redux has evolved from manual store setup + hand-written reducers with object spreads + React-Redux's `connect`, to Redux Toolkit's `configureStore` + `createSlice` + React-Redux's hooks API.
+
+Many users are working on older Redux codebases that have been around since before these "modern Redux" patterns existed. Migrating those codebases to today's recommended modern Redux patterns will result in codebases that are much smaller and easier to maintain.
+
+The good news is that **you can migrate your code to modern Redux incrementally, piece by piece, with old and new Redux code coexisting and working together!**.
+
+This page covers the general approaches and techniques you can use to modernize an existing legacy Redux codebase.
+
+:::info
+
+For more details on how "modern Redux" with Redux Toolkit + React-Redux hooks simplifies using Redux, see these additional resources:
+
+- [Why Redux Toolkit is How to use Redux Today](../introduction/why-rtk-is-redux-today.md)
+- [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
+- [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
+- [Presentation: Modern Redux with Redux Toolkit](https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/)
+
+:::
+
+## Modernizing Redux Logic with Redux Toolkit
+
+The general approach to migrating Redux logic is:
+
+- Replace the existing manual Redux store setup with Redux Toolkit's `configureStore`
+- Pick an existing slice reducer and its associated actions. Replace those with RTK's `createSlice`. Repeat for one reducer at a time.
+- As needed, replace existing data fetching logic with RTK Query or `createAsyncThunk`
+- Use RTK's other APIs like `createListenerMiddleware` or `createEntityAdapter` as needed
+
+**You should always start by replacing the legacy `createStore` call with `configureStore`**. This is a one-time step, and all of the existing reducers and middleware will continue to work as-is. `configureStore` includes development-mode checks for common mistakes like accidental mutations and non-serializable values, so having those in place will help identify any areas of the codebase where those mistakes are happening.
+
+:::info
+
+You can see this general approach in action in [**Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit**](../tutorials/fundamentals/part-8-modern-redux.md).
+
+:::
+
+### Store Setup with `configureStore`
+
+A typical legacy Redux store setup file does several different steps:
+
+- Combining the slice reducers into the root reducer
+- Creating the middleware enhancer, usually with the thunk middleware, and possibly other middleware in development mode such as `redux-logger`
+- Adding the Redux DevTools enhancer, and composing the enhancers together
+- Calling `createStore`
+
+Here's what those steps might look like in an existing application:
+
+```js title="src/app/store.js"
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
+import thunk from 'redux-thunk'
+
+import postsReducer from '../reducers/postsReducer'
+import usersReducer from '../reducers/usersReducer'
+
+const rootReducer = combineReducers({
+  posts: postsReducer,
+  users: usersReducer
+})
+
+const middlewareEnhancer = applyMiddleware(thunk)
+
+const composeWithDevTools =
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const composedEnhancers = composeWithDevTools(middlewareEnhancer)
+
+const store = createStore(rootReducer, composedEnhancers)
+```
+
+**_All_ of those steps can be replaced with a single call to Redux Toolkit's `configureStore` API**.
+
+RTK's `configureStore` wraps around the original `createStore` method, and handles most of the store setup for us automatically. In fact, we can cut it down to effectively one step:
+
+```js title="Basic Store Setup: src/app/store.js"
+import { configureStore } from '@reduxjs/toolkit'
+
+import postsReducer from '../reducers/postsReducer'
+import usersReducer from '../reducers/usersReducer'
+
+// highlight-start
+// Automatically adds the thunk middleware and the Redux DevTools extension
+const store = configureStore({
+  // Automatically calls `combineReducers`
+  reducer: {
+    posts: postsReducer,
+    users: usersReducer
+  }
+})
+// highlight-end
+```
+
+That one call to `configureStore` did all the work for us:
+
+- It called `combineReducers` to combine `postsReducer` and `usersReducer` into the root reducer function, which will handle a root state that looks like `{posts, users}`
+- It called `createStore` to create a Redux store using that root reducer
+- It automatically added the thunk middleware and called `applyMiddleware`
+- It automatically added more middleware to check for common mistakes like accidentally mutating the state
+- It automatically set up the Redux DevTools Extension connection
+
+If your store setup requires additional steps, such as adding additional middleware, passing in an `extra` argument to the thunk middleware, or creating a persisted root reducer, you can do that as well. Here's a larger example that shows customizing the built-in middleware and turning on Redux-Persist, which demonstrates some of the options for working with `configureStore`:
+
+<DetailedExplanation title="Detailed Example: Custom Store Setup with Persistence and Middleware">
+
+This example shows several possible common tasks when setting up a Redux store:
+
+- Combining the reducers separately (sometimes needed due to other architectural constraints)
+- Adding additional middleware, both conditionally and unconditionally
+- Passing an "extra argument" into the thunk middleware, such as an API service layer
+- Using the Redux-Persist library, which requires special handling for its non-serializable action types
+- Turning the devtools off in prod, and setting additional devtools options in development
+
+None of these are _required_, but they do show up frequently in real-world codebases.
+
+```js title="Custom Store Setup: src/app/store.js"
+import { configureStore, combineReducers} from '@reduxjs/toolkit'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import { PersistGate } from 'redux-persist/integration/react'
+import logger from 'redux-logger'
+
+import postsReducer from '../features/posts/postsSlice'
+import usersReducer from '../features/users/usersSlice'
+import { api } from '../features/api/apiSlice'
+import { serviceLayer } from '../features/api/serviceLayer'
+
+import sanitizeStateForDevtools from './devtools'
+import customMiddleware from './someCustomMiddleware'
+
+// Can call `combineReducers` yourself if needed
+const rootReducer = combineReducers({
+  posts: postsReducer,
+  users: usersReducer,
+  [api.reducerPath]: api.reducer
+})
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+
+const store = configureStore({
+  // Can create a root reducer separately and pass that in
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware => {
+    const middleware = getDefaultMiddleware({
+      // Pass in a custom `extra` argument to the thunk middleware
+      thunk: {
+        extraArgument: {serviceLayer}
+      },
+      // Customize the built-in serializability dev check
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(customMiddleware, api.middleware)
+
+    // Conditionally add another middleware in dev
+    if (process.env.NODE_ENV !== 'production') {
+      middleware.push(logger)
+    }
+
+    return middleware
+  },
+  // Turn off devtools in prod, or pass options in dev
+  devTools: process.env.NODE_ENV == 'production' ? false {
+    sanitizeState: sanitizeStateForDevtools
+  }
+})
+```
+
+</DetailedExplanation>
+
+### Reducers and Actions with `createSlice`
+
+A typical legacy Redux codebase has its reducer logic, action creators, and action types spread across separate files, and those files are often in separate folders by type. The reducer logic is written using `switch` statements and hand-written immutable update logic with object spreads and array mapping:
+
+```js title="src/constants/todos.js"
+export const ADD_TODO = 'ADD_TODO'
+export const TOGGLE_TODO = 'TOGGLE_TODO'
+```
+
+```js title="src/actions/todos.js"
+import { ADD_TODO, TOGGLE_TODO } from '../constants/todos'
+
+export const addTodo = (id, text) => ({
+  type: ADD_TODO,
+  text,
+  id
+})
+
+export const toggleTodo = id => ({
+  type: TOGGLE_TODO,
+  id
+})
+```
+
+```js title="src/reducers/todos.js"
+import { ADD_TODO, TOGGLE_TODO } from '../constants/todos'
+
+const initialState = []
+
+export default function todosReducer(state = initialState, action) {
+  switch (action.type) {
+    case ADD_TODO: {
+      return state.concat({
+        id: action.id,
+        text: action.text,
+        completed: false
+      })
+    }
+    case TOGGLE_TODO: {
+      return state.map(todo => {
+        if (todo.id !== action.id) {
+          return todo
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed
+        }
+      })
+    }
+    default:
+      return state
+  }
+}
+```
+
+**Redux Toolkit's `createSlice` API was designed to eliminate all the "boilerplate" with writing reducers, actions, and immutable updates!**.
+
+With Redux Toolkit, there's multiple changes to that legacy code:
+
+- `createSlice` will eliminate the hand-written action creators and action types entirely
+- All of the uniquely-named fields like `action.text` and `action.id` get replaced by `action.payload`, either as an individual value or an object containing those fields
+- The hand-written immutable updates are replaced by "mutating" logic in reducers thanks to Immer
+- There's no need for separate files for each type of code
+- We teach having _all_ logic for a given reducer in a single "slice" file
+- Instead of having separate folders by "type of code", we recommend organizing files by "features", with related code living in the same folder
+- Ideally, the naming of the reducers and actions should use the past tense and describe "a thing that happened", rather than an imperative "do this thing now", such as `todoAdded` instead of `ADD_TODO`
+
+Those separate files for constants, actions, and reducers, would all be replaced by a single "slice" file. The modernized slice file would look like this:
+
+```js title="src/features/todos/todosSlice.js"
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = []
+
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+    // highlight-start
+    // Give case reducers meaningful past-tense "event"-style names
+    todoAdded(state, action) {
+      const { id, text } = action.payload
+      // "Mutating" update syntax thanks to Immer, and no `return` needed
+      todos.push({
+        id,
+        text,
+        completed: false
+      })
+    },
+    // highlight-end
+    todoToggled(state, action) {
+      // Look for the specific nested object to update.
+      // In this case, `action.payload` is the default field in the action,
+      // and can hold the `id` value - no need for `action.id` separately
+      const matchingTodo = state.find(todo => todo.id === action.payload)
+
+      if (matchingTodo) {
+        // Can directly "mutate" the nested object
+        matchingTodo.completed = !matchingTodo.completed
+      }
+    }
+  }
+})
+
+// highlight-start
+// `createSlice` automatically generated action creators with these names.
+// export them as named exports from this "slice" file
+export const { todoAdded, todoToggled } = todosSlice.actions
+//highlight-end
+
+// Export the slice reducer as the default export
+export default todosSlice.reducer
+```
+
+When you call `dispatch(todoAdded('Buy milk'))`, whatever single value you pass to the `todoAdded` action creator will automatically get used as the `action.payload` field. If you need to pass in multiple values, do so as an object, like `dispatch(todoAdded({id, text}))`. Alternately, you can use [the "prepare" notation inside of a `createSlice` reducer](../tutorials/essentials/part-4-using-data.md#preparing-action-payloads) to accept multiple separate arguments and create the `payload` field. The `prepare` notation is also useful for cases where the action creators were doing additional work, such as generating unique IDs for each item.
+
+While Redux Toolkit does not specifically care about your folder and file structures or action naming, [these are the best practices we recommend](../style-guide/style-guide.md) because we've found they lead to more maintainable and understandable code.
+
+### Data Fetching with RTK Query
+
+Typical legacy data fetching in a React+Redux app requires many moving pieces and types of code:
+
+- Action creators and action types that represent "request starting", "request succeeded", and "request failed" actions
+- Thunks to dispatch the actions and make the async request
+- Reducers that track loading status and store the cached data
+- Selectors to read those values from the store
+- Dispatching the thunk in a component after mounting, either via `componentDidMount` in a class component or `useEffect` in a function component
+
+These typically would be split across many different files:
+
+```js title="src/constants/todos.js"
+export const FETCH_TODOS_STARTED = 'FETCH_TODOS_STARTED'
+export const FETCH_TODOS_SUCCEEDED = 'FETCH_TODOS_SUCCEEDED'
+export const FETCH_TODOS_FAILED = 'FETCH_TODOS_FAILED'
+```
+
+```js title="src/actions/todos.js"
+import axios from 'axios'
+import {
+  FETCH_TODOS_STARTED,
+  FETCH_TODOS_SUCCEEDED,
+  FETCH_TODOS_FAILED
+} from '../constants/todos'
+
+export const fetchTodosStarted = () => ({
+  type: FETCH_TODOS_STARTED
+})
+
+export const fetchTodosSucceeded = todos => ({
+  type: FETCH_TODOS_SUCCEEDED,
+  todos
+})
+
+export const fetchTodosFailed = error => ({
+  type: FETCH_TODOS_FAILED,
+  error
+})
+
+export const fetchTodos = () => {
+  return async dispatch => {
+    dispatch(fetchTodosStarted())
+
+    try {
+      // Axios is common, but also `fetch`, or your own "API service" layer
+      const res = await axios.get('/todos')
+      dispatch(fetchTodosSucceeded(res.data))
+    } catch (err) {
+      dispatch(fetchTodosFailed(err))
+    }
+  }
+}
+```
+
+```js title="src/reducers/todos.js"
+import {
+  FETCH_TODOS_STARTED,
+  FETCH_TODOS_SUCCEEDED,
+  FETCH_TODOS_FAILED
+} from '../constants/todos'
+
+const initialState = {
+  status: 'uninitialized',
+  todos: [],
+  error: null
+}
+
+export default function todosReducer(state = initialState, action) {
+  switch (action.type) {
+    case FETCH_TODOS_STARTED: {
+      return {
+        ...state,
+        status: 'loading'
+      }
+    }
+    case FETCH_TODOS_SUCCEEDED: {
+      return {
+        ...state,
+        status: 'succeeded',
+        todos: action.todos
+      }
+    }
+    case FETCH_TODOS_FAILED: {
+      return {
+        ...state,
+        status: 'failed',
+        todos: [],
+        error: action.error
+      }
+    }
+    default:
+      return state
+  }
+}
+```
+
+```js title="src/selectors/todos.js"
+export const selectTodosStatus = state => state.todos.status
+export const selectTodos = state => state.todos.todos
+```
+
+```js title="src/components/TodosList.js"
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchTodos } from '../actions/todos'
+import { selectTodosStatus, selectTodos } from '../selectors/todos'
+
+export function TodosList() {
+  const dispatch = useDispatch()
+  const status = useSelector(selectTodosStatus)
+  const todos = useSelector(selectTodos)
+
+  useEffect(() => {
+    dispatch(fetchTodos())
+  }, [dispatch])
+
+  // omit rendering logic here
+}
+```
+
+Many users may be using the `redux-saga` library to manage data fetching, in which case they might have _additional_ "signal" action types used to trigger the sagas, and this saga file instead of thunks:
+
+```js title="src/sagas/todos.js"
+import { put, takeEvery, call } from 'redux-saga/effects'
+import {
+  FETCH_TODOS_BEGIN,
+  fetchTodosStarted,
+  fetchTodosSucceeded,
+  fetchTodosFailed
+} from '../actions/todos
+
+// Saga to actually fetch data
+export function* fetchTodos() {
+  yield put(fetchTodosStarted())
+
+  try {
+    const res = yield call(axios.get, '/todos')
+    yield put(fetchTodosSucceeded(res.data))
+  } catch (err) {
+    yield put(fetchTodosFailed(err))
+  }
+}
+
+// "Watcher" saga that waits for a "signal" action, which is
+// dispatched only to kick off logic, not to update state
+export function* fetchTodosSaga() {
+  yield takeEvery(FETCH_TODOS_BEGIN, fetchTodos)
+}
+```
+
+**_All_ of that code can be replaced with [Redux Toolkit's "RTK Query" data fetching and caching layer](https://redux-toolkit.js.org/rtk-query/overview)!**
+
+RTK Query replaces the need to write _any_ actions, thunks, reducers, selectors, or effects to manage data fetching. (In fact, it actually _uses_ all those same tools internally.) Additionally, RTK Query takes care of tracking loading state, deduplicating requests, and managing cache data lifecycles (including removing expired data that is no longer needed).
+
+To migrate, [set up a single RTK Query "API slice" definition and add the generated reducer + middleware to your store](../tutorials/essentials/part-7-rtk-query-basics):
+
+```js title="src/features/api/apiSlice.js"
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+export const api = createApi({
+  baseQuery: fetchBaseQuery({
+    // Fill in your own server starting URL here
+    url: '/'
+  }),
+  endpoints: build => ({})
+})
+```
+
+```js title="src/app/store.js"
+import { configureStore } from '@reduxjs/toolkit'
+
+// Import the API object
+// highlight-next-line
+import { api } from '../features/api/apiSlice'
+// Import any other slice reducers as usual here
+import usersReducer from '../features/users/usersSlice'
+
+export const store = configureStore({
+  reducer: {
+    // Add the generated RTK Query "API slice" caching reducer
+    // highlight-next-line
+    [api.reducerPath]: api.reducer,
+    // Add any other reducers
+    users: usersReducer
+  },
+  // Add the RTK Query API middleware
+  // highlight-start
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(api.middleware)
+  // highlight-end
+})
+```
+
+Then, add "endpoints" that represents the specific data you want to fetch and cache, and export the auto-generated React hooks for each endpoint:
+
+```js title="src/features/api/apiSlice.js"
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+export const api = createApi({
+  baseQuery: fetchBaseQuery({
+    // Fill in your own server starting URL here
+    url: '/'
+  }),
+  endpoints: build => ({
+    // highlight-start
+    // A query endpoint with no arguments
+    getTodos: build.query({
+      query: () => '/todos'
+    }),
+    // A query endpoint with an argument
+    userById: build.query({
+      query: userId => `/users/${userId}`
+    }),
+    // highlight-end
+    // A mutation endpoint
+    updateTodo: build.mutation({
+      query: updatedTodo => ({
+        url: `/todos/${updatedTodo.id}`,
+        method: 'POST',
+        body: updatedTodo
+      })
+    })
+  })
+})
+
+// highlight-next-line
+export const { useGetTodosQuery, useUserByIdQuery, useUpdateTodoMutation } = api
+```
+
+Finally, use the hooks in your components:
+
+```js title="src/features/todos/TodoList.js"
+// highlight-next-line
+import { useGetTodosQuery } from '../api/apiSlice'
+
+export function TodoList() {
+  // highlight-next-line
+  const { data: todos, isFetching, isSuccess } = useGetTodosQuery()
+
+  // omit rendering logic here
+}
+```
+
+### Data Fetching with `createAsyncThunk`
+
+**We _specifically_ recommend using RTK Query for data fetching.** However, some users have told us they aren't ready to make that step yet. In that case, you can at least cut down on some of the boilerplate of hand-written thunks and reducers using RTK's `createAsyncThunk`. It automatically generates the action creators and action types for you, calls the async function you provide to make the request, and dispatches those actions based on the promise lifecycle. The same example with `createAsyncThunk` might look like this:
+
+```js title="src/features/todos/todosSlice"
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+const initialState = {
+  status: 'uninitialized',
+  todos: [],
+  error: null
+}
+
+const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
+  // Just make the async request here, and return the response.
+  // This will automatically dispatch a `pending` action first,
+  // and then `fulfilled` or `rejected` actions based on the promise.
+  // as needed based on the
+  const res = await axios.get('/todos')
+  return res.data
+})
+
+export const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+    // any additional "normal" case reducers here.
+    // these will generate new action creators
+  },
+  extraReducers: builder => {
+    // Use `extraReducers` to handle actions that were generated
+    // _outside_ of the slice, such as thunks or in other slices
+    builder
+      .addCase(fetchTodos.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      // Pass the generated action creators to `.addCase()`
+      .addCase(fetchTodos.fulfilled, (state, action) => {
+        // Same "mutating" update syntax thanks to Immer
+        state.status = 'succeeded'
+        state.todos = action.payload
+      })
+      .addCase(fetchTodos.rejected, (state, action) => {
+        state.status = 'failed'
+        state.todos = []
+        state.error = action.error
+      })
+  }
+})
+
+export default todosSlice.reducer
+```
+
+You'd also still need to write any selectors, and dispatch the `fetchTodos` thunk yourself in a `useEffect` hook.
+
+### Reactive Logic with `createListenerMiddleware`
+
+Many Redux apps have "reactive"-style logic that listens for specific actions or state changes, and runs additional logic in response. These behaviors are often implemented using the `redux-saga` or `redux-observable` libraries.
+
+These libraries are used for a wide variety of tasks. As a basic example, a saga and an epic that listen for an action, wait one second, and then dispatch an additional action might look like this:
+
+```js title="src/sagas/ping.js"
+import { delay, put, takeEvery } from 'redux-saga/effects'
+
+export function* ping() {
+  yield delay(1000)
+  yield put({ type: 'PONG' })
+}
+
+// "Watcher" saga that waits for a "signal" action, which is
+// dispatched only to kick off logic, not to update state
+export function* pingSaga() {
+  yield takeEvery('PING', ping)
+}
+```
+
+```js title="src/epics/ping.js"
+import { filter, mapTo } from 'rxjs/operators'
+import { ofType } from 'redux-observable'
+
+const pingEpic = action$ =>
+  action$.pipe(ofType('PING'), delay(1000), mapTo({ type: 'PONG' }))
+```
+
+```js title="src/app/store.js"
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import { combineEpics, createEpicMiddleware  } from 'redux-observable';
+
+// skip reducers
+
+import { pingEpic } from '../sagas/ping'
+import { pingSaga } from '../epics/ping
+
+function* rootSaga() {
+  yield pingSaga()
+}
+
+const rootEpic = combineEpics(
+  pingEpic
+);
+
+const sagaMiddleware = createSagaMiddleware()
+const epicMiddleware = createEpicMiddleware()
+
+const middlewareEnhancer = applyMiddleware(sagaMiddleware, epicMiddleware)
+
+const store = createStore(rootReducer, middlewareEnhancer)
+
+sagaMiddleware.run(rootSaga)
+epicMiddleware.run(rootEpic)
+```
+
+**The RTK "listener" middleware is designed to replace sagas and observables, with a simpler API, smaller bundle size, and better TS support.**
+
+The saga and epic examples could be replaced with the listener middleware, like this:
+
+```js title="src/app/listenerMiddleware.js"
+import { createListenerMiddleware } from '@reduxjs/toolkit'
+
+// Best to define this in a separate file, to avoid importing
+// from the store file into the rest of the codebase
+export const listenerMiddleware = createListenerMiddleware()
+
+export const { startListening, stopListening } = listenerMiddleware
+```
+
+```js title="src/features/ping/pingSlice.js"
+import { createSlice } from '@reduxjs/toolkit'
+import { startListening } from '../../app/listenerMiddleware'
+
+const pingSlice = createSlice({
+  name: 'ping',
+  initialState,
+  reducers: {
+    pong(state, action) {
+      // state update here
+    }
+  }
+})
+
+export const { ping } = pingSlice.actions
+export default pingSlice.reducer
+
+// highlight-start
+// The `startListening()` call could go in different files,
+// depending on your preferred app setup. Here, we just add
+// it directly in a slice file.
+startListening({
+  // Match this exact action type based on the action creator
+  actionCreator: ping,
+  // Run this effect callback whenever that action is dispatched
+  effect: async (action, listenerApi) => {
+    // Listener effect functions get a `listenerApi` object
+    // with many useful methods built in, including `delay`:
+    await listenerApi.delay(1000)
+    listenerApi.dispatch(pong())
+  }
+})
+// highlight-end
+```
+
+```js title="src/app/store.js"
+import { configureStore } from '@reduxjs/toolkit'
+
+import { listenerMiddleware } from './listenerMiddleware'
+
+// omit reducers
+
+export const store = configureStore({
+  reducer: rootReducer,
+  // Add the listener middleware _before_ the thunk or dev checks
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware.prepend(listenerMiddleware.middleware)
+})
+```
+
+### Migrating TypeScript for Redux Logic
+
+Legacy Redux code that uses TypeScript typically follows _very_ verbose patterns for defining types. In particular, many users in the community have decided to manually define TS types for each individual action, and then created "action type unions" that try to limit what specific actions can actually be passed to `dispatch`.
+
+**We specifically and strongly recommend _against_ these patterns!**
+
+```ts no-transpile title="src/actions/todos.ts"
+import { ADD_TODO, TOGGLE_TODO } from '../constants/todos'
+
+// ❌ Common pattern: manually defining types for each action object
+interface AddTodoAction {
+  type: typeof ADD_TODO
+  text: string
+  id: string
+}
+
+interface ToggleTodoAction {
+  type: typeof TOGGLE_TODO
+  id: string
+}
+
+// ❌ Common pattern: an "action type union" of all possible actions
+export type TodoActions = AddTodoAction | ToggleTodoAction
+
+export const addTodo = (id: string, text: string): AddTodoAction => ({
+  type: ADD_TODO,
+  text,
+  id
+})
+
+export const toggleTodo = (id: string): ToggleTodoAction => ({
+  type: TOGGLE_TODO,
+  id
+})
+```
+
+```ts no-transpile title="src/reducers/todos.ts"
+import { ADD_TODO, TOGGLE_TODO, TodoActions } from '../constants/todos'
+
+interface Todo {
+  id: string
+  text: string
+  completed: boolean
+}
+
+export type TodosState = Todo[]
+
+const initialState: TodosState = []
+
+export default function todosReducer(
+  state = initialState,
+  action: TodoActions
+) {
+  switch (action.type) {
+    // omit reducer logic
+    default:
+      return state
+  }
+}
+```
+
+```ts no-transpile title="src/app/store.ts"
+import { createStore, Dispatch } from 'redux'
+
+import { TodoActions } from '../actions/todos'
+import { CounterActions } from '../actions/counter'
+import { TodosState } from '../reducers/todos'
+import { CounterState } from '../reducers/counter'
+
+// omit reducer setup
+
+export const createStore(rootReducer)
+
+// ❌ Common pattern: an "action type union" of all possible actions
+export type RootAction = TodoActions | CounterActions
+// ❌ Common pattern: manually defining the root state type with each field
+export interface RootState {
+  todos: TodosState;
+  counter: CounterState
+}
+
+// ❌ Common pattern: limiting what can be dispatched at the types level
+export type AppDispatch = Dispatch<RootAction>
+```
+
+**Redux Toolkit is designed to drastically simplify TS usage, and our recommendations include _inferring_ types as much as possible!**
+
+Per [our standard TypeScript setup and usage guidelines](../tutorials/typescript.md), start with setting up the store file to infer `AppDispatch` and `RootState` types directly from the store itself. That will correctly include any modifications to `dispatch` that were added by middleware, such as the ability to dispatch thunks, and update the `RootState` type any time you modify a slice's state definition or add more slices.
+
+```ts no-transpile title="app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+// omit any other imports
+
+const store = configureStore({
+  reducer: {
+    todos: todosReducer,
+    counter: counterReducer
+  }
+})
+
+// highlight-start
+// Infer the `RootState` and `AppDispatch` types from the store itself
+
+// Inferred state type: {todos: TodosState, counter: CounterState}
+export type RootState = ReturnType<typeof store.getState>
+
+// Inferred dispatch type: Dispatch & ThunkDispatch<RootState, undefined, AnyAction>
+export type AppDispatch = typeof store.dispatch
+// highlight-end
+```
+
+Each slice file should declare and export a type for its own slice state. Then, use the `PayloadAction` type to declare the type of any `action` argument inside of `createSlice.reducers`. The generated action creators will then _also_ have the correct type for the argument they accept, and the type of `action.payload` that they return.
+
+```ts no-transpile title="src/features/todos/todosSlice.ts"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+interface Todo {
+  id: string
+  text: string
+  completed: boolean
+}
+
+// highlight-start
+// Declare and export a type for the slice's state
+export type TodosState = Todo[]
+
+const initialState: TodosState = []
+// highlight-end
+
+const todosSlice = createSlice({
+  name: 'todos',
+  // The `state` argument type will be inferred for all case reducers
+  // from the type of `initialState`
+  initialState,
+  reducers: {
+    // highlight-start
+    // Use `PayloadAction<YourPayloadTypeHere>` for each `action` argument
+    todoAdded(state, action: PayloadAction<{ id: string; text: string }>) {
+      // omit logic
+    },
+    todoToggled(state, action: PayloadAction<string>) {
+      // omit logic
+    }
+    // highlight-end
+  }
+})
+```
+
+## Modernizing React Components with React-Redux
+
+The general approach to migrating React-Redux usage in components is:
+
+- Migrate an existing React class component to be a function component
+- Replace the `connect` wrapper with uses of the `useSelector` and `useDispatch` hooks _inside_ the component
+
+You can do this on an individual per-component basis. Components with `connect` and with hooks can coexist at the same time.
+
+This page won't cover the process of migrating class components to function components, but will focus on the changes specific to React-Redux.
+
+### Migrating `connect` to Hooks
+
+A typical legacy component using React-Redux's `connect` API might look like this:
+
+```js title="src/features/todos/TodoListItem.js"
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import {
+  todoToggled,
+  todoDeleted,
+  selectTodoById,
+  selectActiveTodoId
+} from './todosSlice'
+
+// A `mapState` function, possibly using values from `ownProps`,
+// and returning an object with multiple separate fields inside
+const mapStateToProps = (state, ownProps) => {
+  return {
+    todo: selectTodoById(state, ownProps.todoId),
+    activeTodoId: selectActiveTodoId(state)
+  }
+}
+
+// Several possible variations on how you might see `mapDispatch` written:
+
+// 1) a separate function, manual wrapping of `dispatch`
+const mapDispatchToProps = dispatch => {
+  return {
+    todoDeleted: id => dispatch(todoDeleted(id)),
+    todoToggled: id => dispatch(todoToggled(id))
+  }
+}
+
+// 2) A separate function, wrapping with `bindActionCreators`
+const mapDispatchToProps2 = dispatch => {
+  return bindActionCreators(
+    {
+      todoDeleted,
+      todoToggled
+    },
+    dispatch
+  )
+}
+
+// 3) An object full of action creators
+const mapDispatchToProps3 = {
+  todoDeleted,
+  todoToggled
+}
+
+// The component, which gets all these fields as props
+function TodoListItem({ todo, activeTodoId, todoDeleted, todoToggled }) {
+  // rendering logic here
+}
+
+// Finished with the call to `connect`
+export default connect(mapStateToProps, mapDispatchToProps)(TodoListItem)
+```
+
+**With the React-Redux hooks API, the `connect` call and `mapState/mapDispatch` arguments are replaced by hooks!**
+
+- Each individual field returned in `mapState` becomes a separate `useSelector` call
+- Each function passed in via `mapDispatch` becomes a separate callback function defined inside the component
+
+```js title="src/features/todos/TodoListItem.js"
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  todoAdded,
+  todoToggled,
+  selectTodoById,
+  selectActiveTodoId
+} from './todosSlice'
+
+export function TodoListItem({ todoId }) {
+  // highlight-start
+  // Get the actual `dispatch` function with `useDispatch`
+  const dispatch = useDispatch()
+
+  // Select values from the state with `useSelector`
+  const activeTodoId = useSelector(selectActiveTodoId)
+  // Use prop in scope to select a specific value
+  const todo = useSelector(state => selectTodoById(state, todoId))
+  // highlight-end
+
+  // Create callback functions that dispatch as needed, with arguments
+  const handleToggleClick = () => {
+    dispatch(todoToggled(todoId))
+  }
+
+  const handleDeleteClick = () => {
+    dispatch(todoDeleted(todoId))
+  }
+
+  // omit rendering logic
+}
+```
+
+One thing that's different is that `connect` optimized rendering performance by preventing the wrapped component from rendering unless its incoming `stateProps+dispatchProps+ownProps` had changed. The hooks cannot do that, since they're _inside_ the component. If you need to prevent [React's normal recursive rendering behavior](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/#standard-render-behavior), wrap the component in `React.memo(MyComponent)` yourself.
+
+### Migrating TypeScript for Components
+
+One of the major downsides with `connect` is that it is _very_ hard to type correctly, and the type declarations end up being extremely verbose. This is due to it being a Higher-Order Component, and also the amount of flexibility in its API (four arguments, all optional, each with multiple possible overloads and variations).
+
+The community came up with multiple variations on how to handle this, with varying levels of complexity. On the low end, some usages required typing `state` in `mapState()`, and then calculating the types of all the props for the component:
+
+```ts no-transpile title="Simple connect TS example"
+import { connect } from 'react-redux'
+import { RootState } from '../../app/store'
+import {
+  todoToggled,
+  todoDeleted,
+  selectTodoById,
+  selectActiveTodoId
+} from './todosSlice'
+
+interface TodoListItemOwnProps {
+  todoId: string
+}
+
+const mapStateToProps = (state: RootState, ownProps) => {
+  return {
+    todo: selectTodoById(state, ownProps.todoId),
+    activeTodoId: selectActiveTodoId(state)
+  }
+}
+
+const mapDispatchToProps = {
+  todoDeleted,
+  todoToggled
+}
+
+type TodoListItemProps = TodoListItemOwnProps &
+  ReturnType<typeof mapStateToProps> &
+  typeof mapDispatchToProps
+
+function TodoListItem({
+  todo,
+  activeTodoId,
+  todoDeleted,
+  todoToggled
+}: TodoListItemProps) {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoListItem)
+```
+
+The use of `typeof mapDispatch` as an object in particular was dangerous, because it would fail if thunks were included.
+
+Other community-created patterns required significantly more overhead, including declaring `mapDispatch` as a function and calling `bindActionCreators` in order to pass through a `dispatch: Dispatch<RootActions>` type, or manually calculating the types of _all_ the props received by the wrapped component and passing those as generics to `connect`.
+
+One slightly-better alternative was the `ConnectedProps<T>` type that was added to `@types/react-redux` in v7.x, which enabled inferring the type of _all_ the props that would be passed to the component from `connect`. This did require splitting up the call to `connect` into two parts for the inference to work right:
+
+```ts no-transpile title="ConnectedProps<T> TS example"
+import { connect, ConnectedProps } from 'react-redux'
+import { RootState } from '../../app/store'
+import {
+  todoToggled,
+  todoDeleted,
+  selectTodoById,
+  selectActiveTodoId
+} from './todosSlice'
+
+interface TodoListItemOwnProps {
+  todoId: string
+}
+
+const mapStateToProps = (state: RootState, ownProps) => {
+  return {
+    todo: selectTodoById(state, ownProps.todoId),
+    activeTodoId: selectActiveTodoId(state)
+  }
+}
+
+const mapDispatchToProps = {
+  todoDeleted,
+  todoToggled
+}
+
+// Call the first part of `connect` to get the function that accepts the component.
+// This knows the types of the props returned by `mapState/mapDispatch`
+const connector = connect(mapStateToProps, mapDispatchToProps)
+// The `ConnectedProps<T> util type can extract "the type of all props from Redux"
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+// The final component props are "the props from Redux" + "props from the parent"
+type TodoListItemProps = PropsFromRedux & TodoListItemOwnProps
+
+// That type can then be used in the component
+function TodoListItem({
+  todo,
+  activeTodoId,
+  todoDeleted,
+  todoToggled
+}: TodoListItemProps) {}
+
+// And the final wrapped component is generated and exported
+export default connector(TodoListItem)
+```
+
+**The React-Redux hooks API is _much_ simpler to use with TypeScript!** Instead of dealing with layers of component wrapping, type inference, and generics, the hooks are simple functions that take arguments and return a result. All that you need to pass around are the types for `RootState` and `AppDispatch`.
+
+Per [our standard TypeScript setup and usage guidelines](../tutorials/typescript.md), we specifically teach setting up "pre-typed" aliases for the hooks, so that those have the correct types baked in, and only use those pre-typed hooks in the app.
+
+First, set up the hooks:
+
+```ts no-transpile title="src/app/hooks.ts"
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import type { RootState, AppDispatch } from './store'
+
+// highlight-start
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+// highlight-end
+```
+
+Then, use them in your components:
+
+```ts no-transpile title="src/features/todos/TodoListItem.tsx"
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import {
+  todoToggled,
+  todoDeleted,
+  selectTodoById,
+  selectActiveTodoId
+} from './todosSlice'
+
+interface TodoListItemProps {
+  todoId: string
+}
+
+function TodoListItem({ todoId }: TodoListItemProps) {
+  // highlight-start
+  // Use the pre-typed hooks in the component
+  const dispatch = useAppDispatch()
+  const activeTodoId = useAppSelector(selectActiveTodoId)
+  const todo = useAppSelector(state => selectTodoById(state, todoId))
+  // highlight-end
+
+  // omit event handlers and rendering logic
+}
+```
+
+## Further Information
+
+See these docs pages and blog posts for more details:
+
+- **Tutorials**
+  - [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
+  - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
+  - [Redux TypeScript Quick Start](../tutorials/typescript.md)
+- **Additional Documentation**
+  - [Why Redux Toolkit is How to use Redux Today](../introduction/why-rtk-is-redux-today.md)
+  - [Redux Style Guide: Best Practices and Recommendations](../style-guide/style-guide.md)
+  - [Redux core: Usage with TypeScript](./UsageWithTypescript.md)
+  - [Redux Toolkit: Usage with TypeScript](https://redux-toolkit.js.org/usage/usage-with-typescript)
+- **Articles**
+  - [Presentation: Modern Redux with Redux Toolkit](https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/)
+  - [Mark Erikson: Redux Toolkit 1.0 Announcement and development history](https://blog.isquaredsoftware.com/2019/10/redux-toolkit-1.0/)
+  - [Lenz Weber: Do Not Create Action Type Unions](https://phryneas.de/redux-typescript-no-discriminating-union)
