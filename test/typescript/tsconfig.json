@@ -6,7 +6,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "emitDeclarationOnly": false,
-    "strict": false,
+    "strict": true,
     "noEmit": true,
     "target": "esnext",
     "jsx": "react",

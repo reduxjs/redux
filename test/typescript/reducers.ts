@@ -150,9 +150,9 @@ function discriminated() {
 
   const cs = combined(undefined, { type: 'INCREMENT' })
   combined(cs, { type: 'MULTIPLY' })
-  // TODO // @ts-expect-error
+  // @ts-expect-error
   combined(cs, { type: 'init' })
-  // TODO // @ts-expect-error
+  // @ts-expect-error
   combined(cs, { type: 'SOME_OTHER_TYPE' })
 
   // Combined reducer can be made to only accept known actions.
