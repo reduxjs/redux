@@ -3,8 +3,7 @@ import {
   Action,
   AnyAction,
   Reducer,
-  createStore,
-  Store
+  createStore
 } from '../../src'
 
 interface State {
@@ -157,17 +156,23 @@ function replaceReducerExtender() {
       }
     }
 
+  interface PartialState {
+    someField?: 'string'
+    test?: boolean
+  }
+
+  const initialReducer: Reducer<PartialState, Action<unknown>> = () => ({
+    someField: 'string'
+  })
   const store = createStore<
-    { someField?: 'string'; test?: boolean },
+    PartialState,
     Action<unknown>,
     { method(): string },
     ExtraState
-  >(reducer, enhancer)
+  >(initialReducer, enhancer)
 
-  const newReducer = (
-    state: { test: boolean } = { test: true },
-    _: AnyAction
-  ) => state
+  const newReducer = (state: PartialState = { test: true }, _: AnyAction) =>
+    state
 
   store.replaceReducer(newReducer)
   store.getState().test
@@ -234,23 +239,27 @@ function mhelmersonExample() {
         }
       }
 
-    const store = createStore<
-      { someField?: 'string'; test?: boolean },
-      Action<unknown>,
-      {},
-      ExtraState
-    >(reducer, enhancer)
-    store.replaceReducer(reducer)
+    interface PartialState {
+      someField?: 'string'
+      test?: boolean
+    }
+
+    const initialReducer: Reducer<PartialState, Action<unknown>> = () => ({
+      someField: 'string'
+    })
+    const store = createStore<PartialState, Action<unknown>, {}, ExtraState>(
+      initialReducer,
+      enhancer
+    )
+    store.replaceReducer(initialReducer)
 
     store.getState().extraField
     // @ts-expect-error
     store.getState().wrongField
     store.getState().test
 
-    const newReducer = (
-      state: { test: boolean } = { test: true },
-      _: AnyAction
-    ) => state
+    const newReducer = (state: PartialState = { test: true }, _: AnyAction) =>
+      state
 
     store.replaceReducer(newReducer)
     store.getState().test
@@ -304,21 +313,25 @@ function finalHelmersonExample() {
       }
   }
 
-  const store = createStore<
-    { someField?: 'string'; test?: boolean },
-    Action<unknown>,
-    {},
-    ExtraState
-  >(reducer, createPersistEnhancer('hi'))
+  interface PartialState {
+    someField?: 'string'
+    test?: boolean
+  }
+
+  const initialReducer: Reducer<PartialState, Action<unknown>> = () => ({
+    someField: 'string'
+  })
+  const store = createStore<PartialState, Action<unknown>, {}, ExtraState>(
+    initialReducer,
+    createPersistEnhancer('hi')
+  )
 
   store.getState().foo
   // @ts-expect-error
   store.getState().wrongField
 
-  const newReducer = (
-    state: { test: boolean } = { test: true },
-    _: AnyAction
-  ) => state
+  const newReducer = (state: PartialState = { test: true }, _: AnyAction) =>
+    state
 
   store.replaceReducer(newReducer)
   store.getState().test
