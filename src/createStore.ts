@@ -39,7 +39,12 @@ import { kindOf } from './utils/kindOf'
  * `import { legacy_createStore as createStore} from 'redux'`
  *
  */
-export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
+export function createStore<
+  S,
+  A extends Action,
+  Ext extends {} = {},
+  StateExt extends {} = {}
+>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S, A, StateExt> & Ext
@@ -68,12 +73,22 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
  * `import { legacy_createStore as createStore} from 'redux'`
  *
  */
-export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
+export function createStore<
+  S,
+  A extends Action,
+  Ext extends {} = {},
+  StateExt extends {} = {}
+>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S, A, StateExt> & Ext
-export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
+export function createStore<
+  S,
+  A extends Action,
+  Ext extends {} = {},
+  StateExt extends {} = {}
+>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
@@ -401,8 +416,8 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
 export function legacy_createStore<
   S,
   A extends Action,
-  Ext = {},
-  StateExt = never
+  Ext extends {} = {},
+  StateExt extends {} = {}
 >(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
@@ -440,8 +455,8 @@ export function legacy_createStore<
 export function legacy_createStore<
   S,
   A extends Action,
-  Ext = {},
-  StateExt = never
+  Ext extends {} = {},
+  StateExt extends {} = {}
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
@@ -450,8 +465,8 @@ export function legacy_createStore<
 export function legacy_createStore<
   S,
   A extends Action,
-  Ext = {},
-  StateExt = never
+  Ext extends {} = {},
+  StateExt extends {} = {}
 >(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,

@@ -1,12 +1,7 @@
 import compose from './compose'
 import { Middleware, MiddlewareAPI } from './types/middleware'
 import { AnyAction } from './types/actions'
-import {
-  StoreEnhancer,
-  Dispatch,
-  PreloadedState,
-  StoreEnhancerStoreCreator
-} from './types/store'
+import { StoreEnhancer, Dispatch, PreloadedState } from './types/store'
 import { Reducer } from './types/reducers'
 
 /**
@@ -60,7 +55,7 @@ export default function applyMiddleware<Ext, S = any>(
 export default function applyMiddleware(
   ...middlewares: Middleware[]
 ): StoreEnhancer<any> {
-  return (createStore: StoreEnhancerStoreCreator) =>
+  return createStore =>
     <S, A extends AnyAction>(
       reducer: Reducer<S, A>,
       preloadedState?: PreloadedState<S>
