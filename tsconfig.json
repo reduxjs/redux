@@ -15,6 +15,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "baseUrl": "./",
+    "types": ["vitest/globals"],
     "paths": {
       "redux": ["src/index.ts"], // @remap-prod-remove-line
       "@internal/*": ["src/*"]

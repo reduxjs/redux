@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "noImplicitReturns": false,
     "noUnusedLocals": false,
+    "types": ["vitest/globals"],
     "paths": {
       "redux": ["../src/index.ts"], // @remap-prod-remove-line
       "@internal/*": ["../src/*"]

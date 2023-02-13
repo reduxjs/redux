@@ -8,6 +8,7 @@ import {
   Store,
   Dispatch
 } from 'redux'
+import { vi } from 'vitest'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
@@ -34,7 +35,7 @@ describe('applyMiddleware', () => {
       }
     }
 
-    const spy = jest.fn()
+    const spy = vi.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodo('Use Redux'))
@@ -59,7 +60,7 @@ describe('applyMiddleware', () => {
       }
     }
 
-    const spy = jest.fn()
+    const spy = vi.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     // the typing for redux-thunk is super complex, so we will use an as unknown hack
@@ -71,7 +72,7 @@ describe('applyMiddleware', () => {
     })
   })
 
-  it('works with thunk middleware', done => {
+  it('works with thunk middleware', async () => {
     const store = applyMiddleware(thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodoIfEmpty('Hello') as any)
@@ -106,27 +107,25 @@ describe('applyMiddleware', () => {
     const dispatchedValue = store.dispatch(
       addTodoAsync('Maybe') as any
     ) as unknown as Promise<void>
-    dispatchedValue.then(() => {
-      expect(store.getState()).toEqual([
-        {
-          id: 1,
-          text: 'Hello'
-        },
-        {
-          id: 2,
-          text: 'World'
-        },
-        {
-          id: 3,
-          text: 'Maybe'
-        }
-      ])
-      done()
-    })
+    await dispatchedValue
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      },
+      {
+        id: 2,
+        text: 'World'
+      },
+      {
+        id: 3,
+        text: 'Maybe'
+      }
+    ])
   })
 
   it('passes through all arguments of dispatch calls from within middleware', () => {
-    const spy = jest.fn()
+    const spy = vi.fn()
     const testCallArgs = ['test']
 
     interface MultiDispatch<A extends Action = AnyAction> {

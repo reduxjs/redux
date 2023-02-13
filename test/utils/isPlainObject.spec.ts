@@ -1,4 +1,3 @@
-import { expect } from 'expect'
 import isPlainObject from '@internal/utils/isPlainObject'
 import vm from 'vm'
 

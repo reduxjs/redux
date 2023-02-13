@@ -6,6 +6,7 @@ import {
   AnyAction,
   __DO_NOT_USE__ActionTypes as ActionTypes
 } from 'redux'
+import { vi } from 'vitest'
 
 describe('Utils', () => {
   describe('combineReducers', () => {
@@ -39,7 +40,7 @@ describe('Utils', () => {
 
     it('warns if a reducer prop is undefined', () => {
       const preSpy = console.error
-      const spy = jest.fn()
+      const spy = vi.fn()
       console.error = spy
 
       let isNotDefined: any
@@ -199,7 +200,7 @@ describe('Utils', () => {
 
     it('warns if no reducers are passed to combineReducers', () => {
       const preSpy = console.error
-      const spy = jest.fn()
+      const spy = vi.fn()
       console.error = spy
 
       const reducer = combineReducers({})
@@ -214,7 +215,7 @@ describe('Utils', () => {
 
     it('warns if input state does not match reducer shape', () => {
       const preSpy = console.error
-      const spy = jest.fn()
+      const spy = vi.fn()
       const nullAction = undefined as unknown as AnyAction
       console.error = spy
 
@@ -287,7 +288,7 @@ describe('Utils', () => {
 
     it('only warns for unexpected keys once', () => {
       const preSpy = console.error
-      const spy = jest.fn()
+      const spy = vi.fn()
       console.error = spy
       const nullAction = { type: '' }
 
