@@ -1,15 +1,21 @@
 [build]
   base    = "website"
   publish = "website/build"
-  command = "cd ../docs && npm i && cd ../website && npm run build && cp _redirects ./build"
+  command = "cd ../docs && yarn && cd ../website && yarn build && cp _redirects ./build"
   ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
-  environment = { NODE_VERSION = "16.14.0" }
+
+[build.environment]
+NODE_VERSION = "16.14.0"
+NODE_OPTIONS = "--max_old_space_size=4096"
+NETLIFY_USE_YARN = "true"
+YARN_VERSION = "1.22.10"
 
 [[plugins]]
   package = "netlify-plugin-cache"
   [plugins.inputs]
     paths = [
       "node_modules/.cache",
-      "website/node_modules/.cache"
+      "website/node_modules/.cache",
+      ".yarn/.cache"
     ]
 
