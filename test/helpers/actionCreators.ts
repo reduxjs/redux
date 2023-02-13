@@ -7,7 +7,7 @@ import {
   THROW_ERROR,
   UNKNOWN_ACTION
 } from './actionTypes'
-import { Action, AnyAction, Dispatch } from '../../src'
+import { Action, AnyAction, Dispatch } from 'redux'
 
 export function addTodo(text: string): AnyAction {
   return { type: ADD_TODO, text }

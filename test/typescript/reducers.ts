@@ -1,4 +1,4 @@
-import { Reducer, Action, combineReducers, ReducersMapObject } from '../../src'
+import { Reducer, Action, combineReducers, ReducersMapObject } from 'redux'
 
 /**
  * Simple reducer definition with no action shape checks.

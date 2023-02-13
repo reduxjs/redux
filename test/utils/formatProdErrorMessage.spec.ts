@@ -1,4 +1,4 @@
-import formatProdErrorMessage from '../../src/utils/formatProdErrorMessage'
+import formatProdErrorMessage from '@internal/utils/formatProdErrorMessage'
 
 describe('formatProdErrorMessage', () => {
   it('returns message with expected code references', () => {

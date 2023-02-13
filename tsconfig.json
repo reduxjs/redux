@@ -14,7 +14,12 @@
     "removeComments": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "types": ["vitest/globals"],
+    "paths": {
+      "redux": ["src/index.ts"], // @remap-prod-remove-line
+      "@internal/*": ["src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

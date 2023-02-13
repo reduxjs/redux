@@ -1,4 +1,4 @@
-import { Dispatch } from '../../src'
+import { Dispatch } from 'redux'
 
 /**
  * Default Dispatch type accepts any object with `type` property.

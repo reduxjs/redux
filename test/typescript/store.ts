@@ -6,7 +6,7 @@ import {
   StoreEnhancer,
   Unsubscribe,
   Observer
-} from '../../src'
+} from 'redux'
 import 'symbol-observable'
 
 type BrandedString = string & { _brand: 'type' }

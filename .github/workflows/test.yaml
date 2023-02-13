@@ -6,7 +6,7 @@ jobs:
     name: Check for changes
     runs-on: ubuntu-latest
     outputs:
-      toolkit: ${{ steps.filter.outputs.toolkit }}
+      src: ${{ steps.filter.outputs.src }}
     steps:
       - uses: actions/checkout@v2
       - uses: dorny/paths-filter@v2
@@ -15,10 +15,11 @@ jobs:
           filters: |
             src:
               - 'src/**'
+              - 'test/**'
 
   build:
     needs: changes
-    #if: ${{ needs.changes.outputs.src == 'true' }}
+    if: ${{ needs.changes.outputs.src == 'true' }}
 
     name: Lint, Test, Build & Pack on Node ${{ matrix.node }}
 
@@ -39,6 +40,9 @@ jobs:
 
       - name: Install deps
         run: yarn install
+
+      - name: Build
+        run: yarn build
 
       - name: Pack
         run: yarn pack
@@ -78,6 +82,8 @@ jobs:
 
       - name: Install build artifact
         run: yarn  add ./package.tgz
+
+      - run: sed -i -e /@remap-prod-remove-line/d ./tsconfig.json ./vitest.config.ts ./test/tsconfig.json ./test/typescript/tsconfig.json
 
       - name: Run tests, against dist
         run: yarn test
