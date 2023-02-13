@@ -1,0 +1,8 @@
+{
+  "hooks": {
+    "after:bump": "yarn && git add -u"
+  },
+  "git": {
+    "tagName": "v${version}"
+  }
+}
