@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "noImplicitReturns": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "paths": {
+      "redux": ["../../src/index.ts"], // @remap-prod-remove-line
+      "@internal/*": ["../../src/*"]
+    }
   },
   "include": ["."]
 }

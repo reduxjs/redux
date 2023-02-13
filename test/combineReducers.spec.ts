@@ -5,7 +5,7 @@ import {
   Reducer,
   AnyAction,
   __DO_NOT_USE__ActionTypes as ActionTypes
-} from '../src'
+} from 'redux'
 
 describe('Utils', () => {
   describe('combineReducers', () => {

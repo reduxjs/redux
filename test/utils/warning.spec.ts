@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import warning from '../../src/utils/warning'
+import warning from '@internal/utils/warning'
 
 describe('Utils', () => {
   describe('warning', () => {

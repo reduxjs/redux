@@ -1,5 +1,5 @@
 import { expect } from 'expect'
-import isPlainObject from '../../src/utils/isPlainObject'
+import isPlainObject from '@internal/utils/isPlainObject'
 import vm from 'vm'
 
 describe('isPlainObject', () => {

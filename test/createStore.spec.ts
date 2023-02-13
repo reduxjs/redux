@@ -4,7 +4,7 @@ import {
   StoreEnhancer,
   Action,
   Store
-} from '../src'
+} from 'redux'
 import {
   addTodo,
   dispatchInMiddle,

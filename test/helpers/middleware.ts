@@ -1,4 +1,4 @@
-import { MiddlewareAPI, Dispatch, AnyAction } from '../../src'
+import { MiddlewareAPI, Dispatch, AnyAction } from 'redux'
 
 type ThunkAction<T extends any = any> = T extends AnyAction
   ? AnyAction

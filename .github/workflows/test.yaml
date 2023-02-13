@@ -40,6 +40,9 @@ jobs:
       - name: Install deps
         run: yarn install
 
+      - name: Build
+        run: yarn build
+
       - name: Pack
         run: yarn pack
 
@@ -78,6 +81,14 @@ jobs:
 
       - name: Install build artifact
         run: yarn  add ./package.tgz
+
+      - run: sed -i -e /@remap-prod-remove-line/d ./tsconfig.json ./jest.config.cjs ./test/tsconfig.json ./test/typescript/tsconfig.json
+
+      - run: cat ./tsconfig.json
+      - run: cat ./test/tsconfig.json
+      - run: cat ./test/typescript/tsconfig.json
+
+      - run: ls -lah ./node_modules/redux
 
       - name: Run tests, against dist
         run: yarn test

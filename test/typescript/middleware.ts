@@ -7,7 +7,7 @@ import {
   Reducer,
   Action,
   AnyAction
-} from '../../src'
+} from 'redux'
 
 /**
  * Logger middleware doesn't add any extra types to dispatch, just logs actions
