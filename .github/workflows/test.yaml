@@ -14,6 +14,7 @@ jobs:
         with:
           filters: |
             src:
+              - '.github/**'
               - 'src/**'
               - 'test/**'
 
