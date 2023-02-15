@@ -52,6 +52,7 @@
     "test:types": "tsc -p test/typescript && echo \"Typetests passed\"",
     "test:watch": "vitest",
     "test:cov": "vitest --coverage",
+    "test:typecheck": "tsc -p test && echo \"Types passed\"",
     "build": "rollup -c",
     "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test && yarn build",
     "examples:lint": "eslint --ext js,ts examples",

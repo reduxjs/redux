@@ -126,4 +126,5 @@ jobs:
         run: |
           yarn tsc --version
           yarn check-types
+          yarn test:typecheck
           yarn test:types
