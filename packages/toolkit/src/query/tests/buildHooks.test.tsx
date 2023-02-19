@@ -1,3 +1,4 @@
+import util from 'util'
 import * as React from 'react'
 import type {
   UseMutation,
@@ -2472,7 +2473,11 @@ describe('skip behaviour', () => {
     await act(async () => {
       rerender([1, { skip: true }])
     })
-    expect(result.current).toEqual(uninitialized)
+    expect(result.current).toEqual({
+      ...uninitialized,
+      currentData: undefined,
+      data: { name: 'Timmy' },
+    })
     await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
@@ -2489,6 +2494,7 @@ describe('skip behaviour', () => {
 
     expect(result.current).toEqual(uninitialized)
     await delay(1)
+
     expect(subscriptionCount('getUser(1)')).toBe(0)
     // also no subscription on `getUser(skipToken)` or similar:
     expect(storeRef.store.getState().api.subscriptions).toEqual({})
@@ -2504,9 +2510,50 @@ describe('skip behaviour', () => {
     await act(async () => {
       rerender([skipToken])
     })
-    expect(result.current).toEqual(uninitialized)
+    expect(result.current).toEqual({
+      ...uninitialized,
+      currentData: undefined,
+      data: { name: 'Timmy' },
+    })
     await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
+  })
+
+  test('skipping a previously fetched query retains the existing value as `data`, but clears `currentData`', async () => {
+    const { result, rerender } = renderHook(
+      ([arg, options]: Parameters<typeof api.endpoints.getUser.useQuery>) =>
+        api.endpoints.getUser.useQuery(arg, options),
+      {
+        wrapper: storeRef.wrapper,
+        initialProps: [1],
+      }
+    )
+
+    await act(async () => {
+      await delay(1)
+    })
+
+    // Normal fulfilled result, with both `data` and `currentData`
+    expect(result.current).toMatchObject({
+      status: QueryStatus.fulfilled,
+      isSuccess: true,
+      data: { name: 'Timmy' },
+      currentData: { name: 'Timmy' },
+    })
+
+    await act(async () => {
+      rerender([1, { skip: true }])
+      await delay(1)
+    })
+
+    // After skipping, the query is "uninitialized", but still retains the last fetched `data`
+    // even though it's skipped. `currentData` is undefined, since that matches the current arg.
+    expect(result.current).toMatchObject({
+      status: QueryStatus.uninitialized,
+      isSuccess: false,
+      data: { name: 'Timmy' },
+      currentData: undefined,
+    })
   })
 })
 
