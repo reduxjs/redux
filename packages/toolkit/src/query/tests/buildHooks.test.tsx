@@ -9,7 +9,14 @@ import {
   QueryStatus,
   skipToken,
 } from '@reduxjs/toolkit/query/react'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  renderHook,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import {
@@ -27,7 +34,6 @@ import type { AnyAction } from 'redux'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
 import type { SerializedError } from '@reduxjs/toolkit'
 import { createListenerMiddleware, configureStore } from '@reduxjs/toolkit'
-import { renderHook } from '@testing-library/react'
 import { delay } from '../../utils'
 
 // Just setup a temporary in-memory counter for tests that `getIncrementedAmount`.
@@ -712,6 +718,94 @@ describe('hooks tests', () => {
       expect(resPromise).toBeInstanceOf(Promise)
       const res = await resPromise
       expect(res.data!.amount).toBeGreaterThan(originalAmount)
+    })
+
+    // See https://github.com/reduxjs/redux-toolkit/issues/3182
+    test('Hook subscriptions are properly cleaned up when changing skip back and forth', async () => {
+      const pokemonApi = createApi({
+        baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+        endpoints: (builder) => ({
+          getPokemonByName: builder.query({
+            queryFn: (name: string) => ({ data: null }),
+            keepUnusedDataFor: 1,
+          }),
+        }),
+      })
+
+      const storeRef = setupApiStore(pokemonApi, undefined, {
+        withoutTestLifecycles: true,
+      })
+
+      const getSubscriptions = () => storeRef.store.getState().api.subscriptions
+
+      const checkNumSubscriptions = (arg: string, count: number) => {
+        const subscriptions = getSubscriptions()
+        const cacheKeyEntry = subscriptions[arg]
+
+        if (cacheKeyEntry) {
+          expect(Object.values(cacheKeyEntry).length).toBe(count)
+        }
+      }
+
+      // 1) Initial state: an active subscription
+      const { result, rerender, unmount } = renderHook(
+        ([arg, options]: Parameters<
+          typeof pokemonApi.useGetPokemonByNameQuery
+        >) => pokemonApi.useGetPokemonByNameQuery(arg, options),
+        {
+          wrapper: storeRef.wrapper,
+          initialProps: ['a'],
+        }
+      )
+
+      await act(async () => {
+        await delay(1)
+      })
+
+      // 2) Set the current subscription to `{skip: true}
+      await act(async () => {
+        rerender(['a', { skip: true }])
+      })
+
+      // 3) Change _both_ the cache key _and_ `{skip: false}` at the same time.
+      // This causes the `subscriptionRemoved` check to be `true`.
+      await act(async () => {
+        rerender(['b'])
+      })
+
+      // There should only be one active subscription after changing the arg
+      checkNumSubscriptions('b', 1)
+
+      // 4) Re-render with the same arg.
+      // This causes the `subscriptionRemoved` check to be `false`.
+      // Correct behavior is this does _not_ clear the promise ref,
+      // so
+      await act(async () => {
+        rerender(['b'])
+      })
+
+      // There should only be one active subscription after changing the arg
+      checkNumSubscriptions('b', 1)
+
+      await act(async () => {
+        await delay(1)
+      })
+
+      unmount()
+
+      await act(async () => {
+        await delay(1)
+      })
+
+      // There should be no subscription entries left over after changing
+      // cache key args and swapping `skip` on and off
+      checkNumSubscriptions('b', 0)
+
+      const finalSubscriptions = getSubscriptions()
+
+      for (let cacheKeyEntry of Object.values(finalSubscriptions)) {
+        expect(Object.values(cacheKeyEntry!).length).toBe(0)
+      }
     })
 
     describe('Hook middleware requirements', () => {
@@ -2472,7 +2566,11 @@ describe('skip behaviour', () => {
     await act(async () => {
       rerender([1, { skip: true }])
     })
-    expect(result.current).toEqual(uninitialized)
+    expect(result.current).toEqual({
+      ...uninitialized,
+      currentData: undefined,
+      data: { name: 'Timmy' },
+    })
     await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
   })
@@ -2489,6 +2587,7 @@ describe('skip behaviour', () => {
 
     expect(result.current).toEqual(uninitialized)
     await delay(1)
+
     expect(subscriptionCount('getUser(1)')).toBe(0)
     // also no subscription on `getUser(skipToken)` or similar:
     expect(storeRef.store.getState().api.subscriptions).toEqual({})
@@ -2504,9 +2603,50 @@ describe('skip behaviour', () => {
     await act(async () => {
       rerender([skipToken])
     })
-    expect(result.current).toEqual(uninitialized)
+    expect(result.current).toEqual({
+      ...uninitialized,
+      currentData: undefined,
+      data: { name: 'Timmy' },
+    })
     await delay(1)
     expect(subscriptionCount('getUser(1)')).toBe(0)
+  })
+
+  test('skipping a previously fetched query retains the existing value as `data`, but clears `currentData`', async () => {
+    const { result, rerender } = renderHook(
+      ([arg, options]: Parameters<typeof api.endpoints.getUser.useQuery>) =>
+        api.endpoints.getUser.useQuery(arg, options),
+      {
+        wrapper: storeRef.wrapper,
+        initialProps: [1],
+      }
+    )
+
+    await act(async () => {
+      await delay(1)
+    })
+
+    // Normal fulfilled result, with both `data` and `currentData`
+    expect(result.current).toMatchObject({
+      status: QueryStatus.fulfilled,
+      isSuccess: true,
+      data: { name: 'Timmy' },
+      currentData: { name: 'Timmy' },
+    })
+
+    await act(async () => {
+      rerender([1, { skip: true }])
+      await delay(1)
+    })
+
+    // After skipping, the query is "uninitialized", but still retains the last fetched `data`
+    // even though it's skipped. `currentData` is undefined, since that matches the current arg.
+    expect(result.current).toMatchObject({
+      status: QueryStatus.uninitialized,
+      isSuccess: false,
+      data: { name: 'Timmy' },
+      currentData: undefined,
+    })
   })
 })
 

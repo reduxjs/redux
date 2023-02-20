@@ -626,9 +626,7 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       )
         lastResult = undefined
     }
-    if (queryArgs === skipToken) {
-      lastResult = undefined
-    }
+
     // data is the last known good request result we have tracked - or if none has been tracked yet the last good result for the current args
     let data = currentState.isSuccess ? currentState.data : lastResult?.data
     if (data === undefined) data = currentState.data
@@ -742,7 +740,9 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       })
 
       usePossiblyImmediateEffect((): void | undefined => {
-        promiseRef.current = undefined
+        if (subscriptionRemoved) {
+          promiseRef.current = undefined
+        }
       }, [subscriptionRemoved])
 
       usePossiblyImmediateEffect((): void | undefined => {
