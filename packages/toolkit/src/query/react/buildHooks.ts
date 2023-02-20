@@ -740,7 +740,9 @@ export function buildHooks<Definitions extends EndpointDefinitions>({
       })
 
       usePossiblyImmediateEffect((): void | undefined => {
-        promiseRef.current = undefined
+        if (subscriptionRemoved) {
+          promiseRef.current = undefined
+        }
       }, [subscriptionRemoved])
 
       usePossiblyImmediateEffect((): void | undefined => {
