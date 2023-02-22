@@ -53,7 +53,8 @@
     "test:watch": "vitest",
     "test:cov": "vitest --coverage",
     "build": "rollup -c",
-    "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test && yarn build",
+    "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test",
+    "prepack": "yarn build",
     "examples:lint": "eslint --ext js,ts examples",
     "examples:test": "cross-env CI=true babel-node examples/testAll.js",
     "tsc": "tsc"
