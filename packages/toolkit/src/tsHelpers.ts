@@ -119,7 +119,34 @@ export type ExtractStoreExtensions<E> = E extends EnhancerArray<
   ? UnionToIntersection<
       E[number] extends StoreEnhancer<infer Ext>
         ? Ext extends {}
-          ? Ext
+          ? IsAny<Ext, {}, Ext>
+          : {}
+        : {}
+    >
+  : never
+
+type ExtractStateExtensionsFromEnhancerTuple<
+  EnhancerTuple extends any[],
+  Acc extends {}
+> = EnhancerTuple extends [infer Head, ...infer Tail]
+  ? ExtractStateExtensionsFromEnhancerTuple<
+      Tail,
+      Acc &
+        (Head extends StoreEnhancer<any, infer StateExt>
+          ? IsAny<StateExt, {}, StateExt>
+          : {})
+    >
+  : Acc
+
+export type ExtractStateExtensions<E> = E extends EnhancerArray<
+  infer EnhancerTuple
+>
+  ? ExtractStateExtensionsFromEnhancerTuple<EnhancerTuple, {}>
+  : E extends ReadonlyArray<StoreEnhancer>
+  ? UnionToIntersection<
+      E[number] extends StoreEnhancer<any, infer StateExt>
+        ? StateExt extends {}
+          ? IsAny<StateExt, {}, StateExt>
           : {}
         : {}
     >

@@ -24,6 +24,7 @@ import type {
   NoInfer,
   ExtractDispatchExtensions,
   ExtractStoreExtensions,
+  ExtractStateExtensions,
 } from './tsHelpers'
 import { EnhancerArray } from './utils'
 
@@ -129,7 +130,8 @@ export type EnhancedStore<
   A extends Action = AnyAction,
   M extends Middlewares<S> = Middlewares<S>,
   E extends Enhancers = Enhancers
-> = ToolkitStore<S, A, M> & ExtractStoreExtensions<E>
+> = ToolkitStore<S & ExtractStateExtensions<E>, A, M> &
+  ExtractStoreExtensions<E>
 
 /**
  * A friendly abstraction over the standard Redux `createStore()` function.

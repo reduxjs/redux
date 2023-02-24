@@ -209,6 +209,72 @@ const _anyMiddleware: any = () => () => () => {}
     expectType<string>(storeWithCallback.someProperty)
     expectType<number>(storeWithCallback.anotherProperty)
   }
+
+  {
+    type StateExtendingEnhancer = StoreEnhancer<{}, { someProperty: string }>
+
+    const someStateExtendingEnhancer: StateExtendingEnhancer =
+      (next) =>
+      // @ts-expect-error how do you properly return an enhancer that extends state?
+      (...args) => {
+        const store = next(...args)
+        const getState = () => ({
+          ...store.getState(),
+          someProperty: 'some value',
+        })
+        return {
+          ...store,
+          getState,
+        }
+      }
+
+    type AnotherStateExtendingEnhancer = StoreEnhancer<
+      {},
+      { anotherProperty: number }
+    >
+
+    const anotherStateExtendingEnhancer: AnotherStateExtendingEnhancer =
+      (next) =>
+      // @ts-expect-error any input on this would be great
+      (...args) => {
+        const store = next(...args)
+        const getState = () => ({
+          ...store.getState(),
+          anotherProperty: 123,
+        })
+        return {
+          ...store,
+          getState,
+        }
+      }
+
+    const store = configureStore({
+      reducer: () => ({ aProperty: 0 }),
+      enhancers: [
+        someStateExtendingEnhancer,
+        anotherStateExtendingEnhancer,
+        // this doesn't work without the as const
+      ] as const,
+    })
+
+    const state = store.getState()
+
+    expectType<number>(state.aProperty)
+    expectType<string>(state.someProperty)
+    expectType<number>(state.anotherProperty)
+
+    const storeWithCallback = configureStore({
+      reducer: () => ({ aProperty: 0 }),
+      enhancers: (dE) =>
+        dE.concat(someStateExtendingEnhancer, anotherStateExtendingEnhancer),
+    })
+
+    const stateWithCallback = storeWithCallback.getState()
+
+    expectType<number>(stateWithCallback.aProperty)
+    expectType<string>(stateWithCallback.someProperty)
+    expectType<number>(stateWithCallback.anotherProperty)
+  }
 }
 
 /**
