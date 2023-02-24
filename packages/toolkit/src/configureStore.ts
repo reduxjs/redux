@@ -25,6 +25,7 @@ import type {
   ExtractDispatchExtensions,
   ExtractStoreExtensions,
 } from './tsHelpers'
+import { EnhancerArray } from './utils'
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
@@ -34,8 +35,8 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production'
  * @public
  */
 export type ConfigureEnhancersCallback<E extends Enhancers = Enhancers> = (
-    defaultEnhancers: readonly StoreEnhancer[]
-) => [...E]
+  defaultEnhancers: EnhancerArray<[StoreEnhancer<{}, {}>]>
+) => E
 
 /**
  * Options for `configureStore()`.
@@ -107,7 +108,7 @@ type Enhancers = ReadonlyArray<StoreEnhancer>
 export interface ToolkitStore<
   S = any,
   A extends Action = AnyAction,
-  M extends Middlewares<S> = Middlewares<S>,
+  M extends Middlewares<S> = Middlewares<S>
 > extends Store<S, A> {
   /**
    * The `dispatch` method of your store, enhanced by all its middlewares.
@@ -197,12 +198,13 @@ export function configureStore<
     })
   }
 
-  let storeEnhancers: Enhancers = [middlewareEnhancer]
+  const defaultEnhancers = new EnhancerArray(middlewareEnhancer)
+  let storeEnhancers: Enhancers = defaultEnhancers
 
   if (Array.isArray(enhancers)) {
     storeEnhancers = [middlewareEnhancer, ...enhancers]
   } else if (typeof enhancers === 'function') {
-    storeEnhancers = enhancers(storeEnhancers)
+    storeEnhancers = enhancers(defaultEnhancers)
   }
 
   const composedEnhancer = finalCompose(...storeEnhancers) as StoreEnhancer<any>

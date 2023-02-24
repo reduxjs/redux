@@ -194,6 +194,20 @@ const _anyMiddleware: any = () => () => () => {}
     )
     expectType<string>(store.someProperty)
     expectType<number>(store.anotherProperty)
+
+    const storeWithCallback = configureStore({
+      reducer: () => 0,
+      enhancers: (defaultEnhancers) =>
+        defaultEnhancers
+          .prepend(anotherPropertyStoreEnhancer)
+          .concat(somePropertyStoreEnhancer),
+    })
+
+    expectType<Dispatch & ThunkDispatch<number, undefined, AnyAction>>(
+      store.dispatch
+    )
+    expectType<string>(storeWithCallback.someProperty)
+    expectType<number>(storeWithCallback.anotherProperty)
   }
 }
 

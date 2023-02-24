@@ -1,5 +1,5 @@
 import createNextState, { isDraftable } from 'immer'
-import type { Middleware } from 'redux'
+import type { Middleware, StoreEnhancer } from 'redux'
 
 export function getTimeMeasureUtils(maxDelay: number, fnName: string) {
   let elapsed = 0
@@ -67,6 +67,49 @@ export class MiddlewareArray<
       return new MiddlewareArray(...arr[0].concat(this))
     }
     return new MiddlewareArray(...arr.concat(this))
+  }
+}
+
+/**
+ * @public
+ */
+export class EnhancerArray<
+  Enhancers extends StoreEnhancer<any, any>[]
+> extends Array<Enhancers[number]> {
+  constructor(...items: Enhancers)
+  constructor(...args: any[]) {
+    super(...args)
+    Object.setPrototypeOf(this, EnhancerArray.prototype)
+  }
+
+  static get [Symbol.species]() {
+    return EnhancerArray as any
+  }
+
+  concat<AdditionalEnhancers extends ReadonlyArray<StoreEnhancer<any, any>>>(
+    items: AdditionalEnhancers
+  ): EnhancerArray<[...Enhancers, ...AdditionalEnhancers]>
+
+  concat<AdditionalEnhancers extends ReadonlyArray<StoreEnhancer<any, any>>>(
+    ...items: AdditionalEnhancers
+  ): EnhancerArray<[...Enhancers, ...AdditionalEnhancers]>
+  concat(...arr: any[]) {
+    return super.concat.apply(this, arr)
+  }
+
+  prepend<AdditionalEnhancers extends ReadonlyArray<StoreEnhancer<any, any>>>(
+    items: AdditionalEnhancers
+  ): EnhancerArray<[...AdditionalEnhancers, ...Enhancers]>
+
+  prepend<AdditionalEnhancers extends ReadonlyArray<StoreEnhancer<any, any>>>(
+    ...items: AdditionalEnhancers
+  ): EnhancerArray<[...AdditionalEnhancers, ...Enhancers]>
+
+  prepend(...arr: any[]) {
+    if (arr.length === 1 && Array.isArray(arr[0])) {
+      return new EnhancerArray(...arr[0].concat(this))
+    }
+    return new EnhancerArray(...arr.concat(this))
   }
 }
 
