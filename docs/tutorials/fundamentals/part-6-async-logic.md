@@ -35,6 +35,14 @@ In this section, we'll update our todo app to fetch the todos from an API, and a
 
 <FundamentalsWarning />
 
+:::tip
+
+Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching, and RTK Query is built on the same patterns shown in this page.
+
+Learn how to use RTK Query for data fetching in [Redux Essentials, Part 7: RTK Query Basics](../essentials/part-7-rtk-query-basics.md).
+
+:::
+
 ### Example REST API and Client
 
 To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using [the Mirage.js mock API tool](https://miragejs.com/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/todos`. It's defined in `src/api/server.js`.
