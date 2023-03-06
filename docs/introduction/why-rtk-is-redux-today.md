@@ -240,7 +240,7 @@ If you are using the `redux` core package by itself, your code will continue to 
 
 See these docs pages and blog posts for more details
 
-- [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
+- [Redux Essentials: Redux Toolkit App Structure](../tutorials/essentials/part-2-app-structure.md)
 - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
 - [Redux Style Guide: Best Practices and Recommendations](../style-guide/style-guide.md)
 - [Presentation: Modern Redux with Redux Toolkit](https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/)
