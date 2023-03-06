@@ -7,6 +7,9 @@ description: 'The official Redux Fundamentals tutorial: learn how to create and 
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 4: Store
 
 :::tip What You'll Learn
@@ -26,6 +29,8 @@ to describe "what happened" and match the kinds of events that can happen as a u
 to create a "root reducer" based on the different "slice reducers" for each feature in our app.
 
 Now, it's time to pull those pieces together, with the central piece of a Redux app: the **store**.
+
+<FundamentalsWarning />
 
 ## Redux Store
 

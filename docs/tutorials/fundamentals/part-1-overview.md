@@ -26,9 +26,15 @@ Starting in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reduce
 
 ### How to Read This Tutorial
 
-**This tutorial will teach you "how Redux works"**, as well as _why_ these patterns exist. Fair warning though - learning the concepts is different from putting them into practice in actual apps.
+**This tutorial will teach you "how Redux works"**, as well as _why_ these patterns exist.
 
-**The initial code will be less concise than the way we suggest writing real app code**, but writing it out long-hand is the best way to learn. Once you understand how everything fits together, we'll look at using Redux Toolkit to simplify things. **Redux Toolkit is the recommended way to build production apps with Redux**, and is built on all of the concepts that we will look at throughout this tutorial. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
+:::tip
+
+Note that **this tutorial intentionally shows older-style patterns that require more code than the "modern Redux" patterns we teach as the right approach for building apps with Redux today**, in order to explain the principles and concepts behind Redux. **The initial code will be less concise than the way we suggest writing real app code**, but writing it out long-hand is the best way to learn.
+
+:::
+
+Once you understand how everything fits together, we'll look at using Redux Toolkit to simplify things. **Redux Toolkit is the recommended way to build production apps with Redux**, and is built on all of the concepts that we will look at throughout this tutorial. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
 
 :::info
 

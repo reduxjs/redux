@@ -5,6 +5,9 @@ sidebar_label: 'Async Logic and Data Fetching'
 description: 'The official Redux Fundamentals tutorial: learn how to use async logic with Redux'
 ---
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 6: Async Logic and Data Fetching
 
 :::tip What You'll Learn
@@ -29,6 +32,8 @@ In [Part 5: UI and React](./part-5-ui-and-react.md), we saw how to use the React
 So far, all the data we've worked with has been directly inside of our React+Redux client application. However, most real applications need to work with data from a server, by making HTTP API calls to fetch and save items.
 
 In this section, we'll update our todo app to fetch the todos from an API, and add new todos by saving them to the API.
+
+<FundamentalsWarning />
 
 ### Example REST API and Client
 

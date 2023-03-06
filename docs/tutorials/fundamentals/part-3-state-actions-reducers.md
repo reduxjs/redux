@@ -7,6 +7,9 @@ description: 'The official Redux Fundamentals tutorial: learn how reducers updat
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 3: State, Actions, and Reducers
 
 :::tip What You'll Learn
@@ -29,11 +32,7 @@ In [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md), we lo
 
 Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small example app to see how these pieces actually work together.
 
-:::caution
-
-**The example app is not meant as a complete production-ready project**. The goal is to help you learn core Redux APIs and usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. **Please read through the whole tutorial to see all the concepts in use**.
-
-:::
+<FundamentalsWarning />
 
 ### Project Setup
 

@@ -18,6 +18,16 @@ Whether you're a brand new Redux user setting up your first project, or an exper
 simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org/)** can help you
 make your Redux code better.
 
+:::tip
+
+See these pages to learn how to use "modern Redux" with Redux Toolkit:
+
+- [**The "Redux Essentials" tutorial**](../tutorials/essentials/part-1-overview-concepts.md), which teaches "how to use Redux, the right way" with Redux Toolkit for real-world apps,
+- [**Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit**](../tutorials/fundamentals/part-8-modern-redux.md), which shows how to convert the low-level examples from earlier sections of the tutorial into modern Redux Toolkit equivalents
+- [**Using Redux: Migrating to Modern Redux**](../usage/migrating-to-modern-redux.mdx), which covers how to migrate different kinds of legacy Redux logic into modern Redux equivalents
+
+:::
+
 ## How Redux Toolkit Is Different Than the Redux Core
 
 ### What Is "Redux"?
