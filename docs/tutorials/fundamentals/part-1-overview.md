@@ -7,6 +7,9 @@ description: 'The official Fundamentals tutorial for Redux: learn the fundamenta
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 1: Redux Overview
 
 :::tip What You'll Learn
@@ -28,22 +31,9 @@ Starting in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reduce
 
 **This tutorial will teach you "how Redux works"**, as well as _why_ these patterns exist.
 
-:::tip
-
-Note that **this tutorial intentionally shows older-style patterns that require more code than the "modern Redux" patterns we teach as the right approach for building apps with Redux today**, in order to explain the principles and concepts behind Redux. **The initial code will be less concise than the way we suggest writing real app code**, but writing it out long-hand is the best way to learn.
-
-:::
+<FundamentalsWarning />
 
 Once you understand how everything fits together, we'll look at using Redux Toolkit to simplify things. **Redux Toolkit is the recommended way to build production apps with Redux**, and is built on all of the concepts that we will look at throughout this tutorial. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
-
-:::info
-
-If you're looking to learn more about how Redux is used to write real-world applications, please see:
-
-- [**The "Modern Redux" page in this tutorial**](./part-8-modern-redux.md), which shows how to convert the low-level examples from earlier sections into the modern patterns we do recommend for real-world usage
-- [**The "Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md), which teaches "how to use Redux, the right way" for real-world apps, using our latest recommended patterns and practices.
-
-:::
 
 We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already so that we can focus on explaining Redux itself. **This tutorial assumes that you know**:
 
