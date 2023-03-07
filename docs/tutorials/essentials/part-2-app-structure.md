@@ -1,15 +1,15 @@
 ---
 id: part-2-app-structure
-title: 'Redux Essentials, Part 2: Redux App Structure'
-sidebar_label: 'Redux App Structure'
-description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux app'
+title: 'Redux Essentials, Part 2: Redux Toolkit App Structure'
+sidebar_label: 'Redux Toolkit App Structure'
+description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux Toolkit app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip What You'll Learn
 
-- The structure of a typical React + Redux app
+- The structure of a typical React + Redux Toolkit app
 - How to view state changes in the Redux DevTools Extension
 
 :::

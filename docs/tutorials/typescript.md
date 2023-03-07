@@ -22,15 +22,13 @@ sidebar_label: TypeScript Quick Start
 
 ## Introduction
 
-Welcome to the Redux Toolkit TypeScript Quick Start tutorial! **This tutorial will briefly show how to use TypeScript with Redux Toolkit**.
+Welcome to the Redux Toolkit TypeScript Quick Start tutorial! **This tutorial will briefly show how to use TypeScript with Redux Toolkit and React-Redux**.
 
 This page focuses on just how to set up the TypeScript aspects . For explanations of what Redux is, how it works, and full examples of how to use Redux Toolkit, [see the tutorials linked in the "Tutorials Index" page](./tutorials-index.md).
 
 Redux Toolkit is already written in TypeScript, so its TS type definitions are built in.
 
-[React Redux](https://react-redux.js.org) has its type definitions in a separate [`@types/react-redux` typedefs package](https://npm.im/@types/react-redux) on NPM. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
-
-As of React Redux v7.2.3, the `react-redux` package has a dependency on `@types/react-redux`, so the type definitions will be automatically installed with the library. Otherwise, you'll need to manually install them yourself (typically `npm install @types/react-redux` ).
+[React Redux](https://react-redux.js.org) is also written in TypeScript as of version 8, and also includes its own type definitions.
 
 The [Redux+TS template for Create-React-App](https://github.com/reduxjs/cra-template-redux-typescript) comes with a working example of these patterns already configured.
 
@@ -184,4 +182,8 @@ Here's the complete TS counter application as a running CodeSandbox:
 
 ## What's Next?
 
-See [the "Usage with TypeScript" page](../usage/UsageWithTypescript.md) for extended details on how to use Redux Toolkit's APIs with TypeScript.
+We recommend going through [**the full "Redux Essentials" tutorial**](./essentials/part-1-overview-concepts.md), which covers all of the key pieces included in Redux Toolkit, what problems they solve, and how to use them to build real-world applications.
+
+You may also want to read through [the "Redux Fundamentals" tutorial](./fundamentals/part-1-overview.md), which will give you a complete understanding of how Redux works, what Redux Toolkit does, and how to use it correctly.
+
+Finally, see [the "Usage with TypeScript" page](../usage/UsageWithTypescript.md) for extended details on how to use Redux Toolkit's APIs with TypeScript.
