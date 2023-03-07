@@ -24,11 +24,11 @@ In this section, we'll add a User Interface for our todo app. We'll see how Redu
 
 :::caution
 
-Note that **this page and all of the "Essentials" tutorial teach using [our modern React-Redux hooks API](https://react-redux.js.org/api/hooks)**. The old-style [`connect` API](https://react-redux.js.org/api/connect) still works, but today we want all Redux users using the hooks API.
+Note that **this page and all of the "Essentials" tutorial teach how to use [our modern React-Redux hooks API](https://react-redux.js.org/api/hooks)**. The old-style [`connect` API](https://react-redux.js.org/api/connect) still works, but today we want all Redux users using the hooks API.
 
 Also, the other pages in this tutorial intentionally show older-style Redux logic patterns that require more code than the "modern Redux" patterns with Redux Toolkit we teach as the right approach for building apps with Redux today, in order to explain the principles and concepts behind Redux.
 
-See [**the "Redux Essentials" tutorial**](../tutorials/essentials/part-1-overview-concepts.md) for full examples of "how to use Redux, the right way" with Redux Toolkit and React-Redux hooks for real-world apps.
+See [**the "Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md) for full examples of "how to use Redux, the right way" with Redux Toolkit and React-Redux hooks for real-world apps.
 
 :::
 
