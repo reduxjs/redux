@@ -97,7 +97,7 @@ More subtly, some middlewares expect that the middleware is called on the same t
 
 ### Returning the dispatch return value
 
-Unless the middleware needs to explicitly modify the return value of `dispatch`, just return what you get from `next`. It you do need to modify the return value, then your middleware anyway will need to sit in a very specific spot in the middleware chain to be able to do what it is supposed to, so you will need to check compatability with all other middlewares manually and decide how they could work together.
+Unless the middleware needs to explicitly modify the return value of `dispatch`, just return what you get from `next`. If you do need to modify the return value, then your middleware will need to sit in a very specific spot in the middleware chain to be able to do what it is supposed to - you will need to check compatibility with all other middlewares manually and decide how they could work together.
 
 This has a tricky consequence:
 
