@@ -116,7 +116,7 @@ const middleware: Middleware = api => next => async action => {
 }
 ```
 
-Even though it looks like we didn't modify the response, we actually did: Due to async-await, it is now a promise. This will break some middlewares like e.g. the one from RTK query.
+Even though it looks like we didn't modify the response, we actually did: Due to async-await, it is now a promise. This will break some middlewares like the one from RTK Query.
 
 So how to write this middleware?
 
