@@ -93,7 +93,7 @@ There are two contact points between our middleware and the other middlewares:
 
 When you call `next`, the middleware will expect some form of action. Unless you want to explicitly modify it, just pass through the action that you received.
 
-More subtly, some middlewares except that the middleware is called on the same tick as `dispatch` is called, so next should be called synchronously by your middleware.
+More subtly, some middlewares expect that the middleware is called on the same tick as `dispatch` is called, so `next` should be called synchronously by your middleware.
 
 ### Returning the dispatch return value
 
