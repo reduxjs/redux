@@ -65,7 +65,7 @@ Other than that, all the other Redux-related logic in your app has to be written
 
 The good news is that this means Redux _can_ be used in many different ways. The bad news is that there are no helpers to make any of your code easier to write.
 
-For example, a reducer function is _just_ a function. Prior to Redux Toolkit, you'd typically write it that reducer with a `switch` statement and manual updates. You'd also probably have hand-written action creators and action type constants along with it:
+For example, a reducer function is _just_ a function. Prior to Redux Toolkit, you'd typically write that reducer with a `switch` statement and manual updates. You'd also probably have hand-written action creators and action type constants along with it:
 
 ```js title="Legacy hand-written Redux usage"
 const ADD_TODO = 'ADD_TODO'
