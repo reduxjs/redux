@@ -143,4 +143,4 @@ Just move out the async logic into a separate function so that you can still use
 
 ## Next Steps
 
-If you haven't yet, take a look at [the Middleware section in Understanding Redux](../understanding/history-and-design/middleware.md) to understand how middleware works below the hood.
+If you haven't yet, take a look at [the Middleware section in Understanding Redux](../understanding/history-and-design/middleware.md) to understand how middleware works under the hood.
