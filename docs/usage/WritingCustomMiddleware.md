@@ -15,12 +15,15 @@ title: Writing Custom Middleware
 
 Middleware in Redux can be mainly used to either
 
-- create side effects for actions, or to
-- modify or cancel actions.
+- create side effects for actions,
+- modify or cancel actions, or to
+- modify the input accepted by dispatch.
 
 Most use cases fall into the first category: For example [Redux-Saga](https://github.com/redux-saga/redux-saga/), [redux-observable](https://github.com/redux-observable/redux-observable), and [RTK listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) all create side effects that react to actions. These examples also show that this is a very common need: To be able to react to an action other than with a state change.
 
-The most obvious example for modifying actions is [Redux Thunk](https://github.com/reduxjs/redux-thunk), which transforms a function returning an action into an action by calling it. But it can also be used to e.g. enhance an action with information from the state or from an external input.
+Modifying actions can be used to e.g. enhance an action with information from the state or from an external input, or to throttle, debounce or gate them.
+
+The most obvious example for modifying the input of dispatch is [Redux Thunk](https://github.com/reduxjs/redux-thunk), which transforms a function returning an action into an action by calling it.
 
 ## When to use custom middleware
 
