@@ -1,17 +1,24 @@
 /* eslint-disable no-lone-blocks */
 import type { AnyAction, SerializedError, AsyncThunk } from '@reduxjs/toolkit'
-import { createAsyncThunk, createReducer, unwrapResult } from '@reduxjs/toolkit'
+import {
+  createAsyncThunk,
+  createReducer,
+  unwrapResult,
+  createSlice,
+  configureStore,
+} from '@reduxjs/toolkit'
 import type { ThunkDispatch } from 'redux-thunk'
 
 import type { AxiosError } from 'axios'
 import apiRequest from 'axios'
 import type { IsAny, IsUnknown } from '@internal/tsHelpers'
-import { expectType } from './helpers'
+import { expectExactType, expectType } from './helpers'
 import type {
   AsyncThunkFulfilledActionCreator,
   AsyncThunkRejectedActionCreator,
 } from '@internal/createAsyncThunk'
 
+const ANY = {} as any
 const defaultDispatch = (() => {}) as ThunkDispatch<{}, any, AnyAction>
 const anyAction = { type: 'foo' } as AnyAction
 
@@ -518,6 +525,38 @@ const anyAction = { type: 'foo' } as AnyAction
   })
 }
 
+{
+  // https://github.com/reduxjs/redux-toolkit/issues/2886
+  // fulfillWithValue should infer return value
+
+  const initialState = {
+    loading: false,
+    obj: { magic: '' },
+  }
+
+  const getObj = createAsyncThunk(
+    'slice/getObj',
+    async (_: any, { fulfillWithValue, rejectWithValue }) => {
+      try {
+        return fulfillWithValue({ magic: 'object' })
+      } catch (rejected: any) {
+        return rejectWithValue(rejected?.response?.error || rejected)
+      }
+    }
+  )
+
+  createSlice({
+    name: 'slice',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder.addCase(getObj.fulfilled, (state, action) => {
+        expectExactType<{ magic: string }>(ANY)(action.payload)
+      })
+    },
+  })
+}
+
 // meta return values
 {
   // return values
@@ -589,4 +628,126 @@ const anyAction = { type: 'foo' } as AnyAction
     // @ts-expect-error wrong rejectValue type
     async (_, api) => api.rejectWithValue(5, '')
   )
+}
+
+{
+  const typedCAT = createAsyncThunk.withTypes<{
+    state: RootState
+    dispatch: AppDispatch
+    rejectValue: string
+    extra: { s: string; n: number }
+  }>()
+
+  // inferred usage
+  const thunk = typedCAT('foo', (arg: number, api) => {
+    // correct getState Type
+    const test1: number = api.getState().foo.value
+    // correct dispatch type
+    const test2: number = api.dispatch((dispatch, getState) => {
+      expectExactType<
+        ThunkDispatch<{ foo: { value: number } }, undefined, AnyAction>
+      >(ANY)(dispatch)
+      expectExactType<() => { foo: { value: number } }>(ANY)(getState)
+      return getState().foo.value
+    })
+
+    // correct extra type
+    const { s, n } = api.extra
+    expectExactType<string>(ANY)(s)
+    expectExactType<number>(ANY)(n)
+
+    if (1 < 2)
+      // @ts-expect-error
+      return api.rejectWithValue(5)
+    if (1 < 2) return api.rejectWithValue('test')
+    return test1 + test2
+  })
+
+  // usage with two generics
+  const thunk2 = typedCAT<number, string>('foo', (arg, api) => {
+    expectExactType('' as string)(arg)
+    // correct getState Type
+    const test1: number = api.getState().foo.value
+    // correct dispatch type
+    const test2: number = api.dispatch((dispatch, getState) => {
+      expectExactType<
+        ThunkDispatch<{ foo: { value: number } }, undefined, AnyAction>
+      >(ANY)(dispatch)
+      expectExactType<() => { foo: { value: number } }>(ANY)(getState)
+      return getState().foo.value
+    })
+    // correct extra type
+    const { s, n } = api.extra
+    expectExactType<string>(ANY)(s)
+    expectExactType<number>(ANY)(n)
+
+    if (1 < 2)
+      // @ts-expect-error
+      return api.rejectWithValue(5)
+    if (1 < 2) return api.rejectWithValue('test')
+    return test1 + test2
+  })
+
+  // usage with config override generic
+  const thunk3 = typedCAT<number, string, { rejectValue: number }>(
+    'foo',
+    (arg, api) => {
+      expectExactType('' as string)(arg)
+      // correct getState Type
+      const test1: number = api.getState().foo.value
+      // correct dispatch type
+      const test2: number = api.dispatch((dispatch, getState) => {
+        expectExactType<
+          ThunkDispatch<{ foo: { value: number } }, undefined, AnyAction>
+        >(ANY)(dispatch)
+        expectExactType<() => { foo: { value: number } }>(ANY)(getState)
+        return getState().foo.value
+      })
+      // correct extra type
+      const { s, n } = api.extra
+      expectExactType<string>(ANY)(s)
+      expectExactType<number>(ANY)(n)
+      if (1 < 2) return api.rejectWithValue(5)
+      if (1 < 2)
+        // @ts-expect-error
+        return api.rejectWithValue('test')
+      return 5
+    }
+  )
+
+  const slice = createSlice({
+    name: 'foo',
+    initialState: { value: 0 },
+    reducers: {},
+    extraReducers(builder) {
+      builder
+        .addCase(thunk.fulfilled, (state, action) => {
+          state.value += action.payload
+        })
+        .addCase(thunk.rejected, (state, action) => {
+          expectExactType('' as string | undefined)(action.payload)
+        })
+        .addCase(thunk2.fulfilled, (state, action) => {
+          state.value += action.payload
+        })
+        .addCase(thunk2.rejected, (state, action) => {
+          expectExactType('' as string | undefined)(action.payload)
+        })
+        .addCase(thunk3.fulfilled, (state, action) => {
+          state.value += action.payload
+        })
+        .addCase(thunk3.rejected, (state, action) => {
+          expectExactType(0 as number | undefined)(action.payload)
+        })
+    },
+  })
+
+  const store = configureStore({
+    reducer: {
+      foo: slice.reducer,
+    },
+  })
+
+  type RootState = ReturnType<typeof store.getState>
+  type AppDispatch = typeof store.dispatch
 }

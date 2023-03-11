@@ -11,9 +11,10 @@ import type {
 import { getMutationCacheKey } from '../buildSlice'
 import type { PatchCollection, Recipe } from '../buildThunks'
 import type {
+  ApiMiddlewareInternalHandler,
+  InternalHandlerBuilder,
   PromiseWithKnownReason,
   SubMiddlewareApi,
-  SubMiddlewareBuilder,
 } from './types'
 
 export type ReferenceCacheLifecycle = never
@@ -176,157 +177,155 @@ const neverResolvedError = new Error(
   message: 'Promise never resolved before cacheEntryRemoved.'
 }
 
-export const build: SubMiddlewareBuilder = ({
+export const buildCacheLifecycleHandler: InternalHandlerBuilder = ({
   api,
   reducerPath,
   context,
   queryThunk,
   mutationThunk,
+  internalState,
 }) => {
   const isQueryThunk = isAsyncThunkAction(queryThunk)
   const isMutationThunk = isAsyncThunkAction(mutationThunk)
-  const isFullfilledThunk = isFulfilled(queryThunk, mutationThunk)
+  const isFulfilledThunk = isFulfilled(queryThunk, mutationThunk)
 
-  return (mwApi) => {
-    type CacheLifecycle = {
-      valueResolved?(value: { data: unknown; meta: unknown }): unknown
-      cacheEntryRemoved(): void
-    }
-    const lifecycleMap: Record<string, CacheLifecycle> = {}
+  type CacheLifecycle = {
+    valueResolved?(value: { data: unknown; meta: unknown }): unknown
+    cacheEntryRemoved(): void
+  }
+  const lifecycleMap: Record<string, CacheLifecycle> = {}
 
-    return (next) =>
-      (action): any => {
-        const stateBefore = mwApi.getState()
+  const handler: ApiMiddlewareInternalHandler = (
+    action,
+    mwApi,
+    stateBefore
+  ) => {
+    const cacheKey = getCacheKey(action)
 
-        const result = next(action)
-
-        const cacheKey = getCacheKey(action)
-
-        if (queryThunk.pending.match(action)) {
-          const oldState = stateBefore[reducerPath].queries[cacheKey]
-          const state = mwApi.getState()[reducerPath].queries[cacheKey]
-          if (!oldState && state) {
-            handleNewKey(
-              action.meta.arg.endpointName,
-              action.meta.arg.originalArgs,
-              cacheKey,
-              mwApi,
-              action.meta.requestId
-            )
-          }
-        } else if (mutationThunk.pending.match(action)) {
-          const state = mwApi.getState()[reducerPath].mutations[cacheKey]
-          if (state) {
-            handleNewKey(
-              action.meta.arg.endpointName,
-              action.meta.arg.originalArgs,
-              cacheKey,
-              mwApi,
-              action.meta.requestId
-            )
-          }
-        } else if (isFullfilledThunk(action)) {
-          const lifecycle = lifecycleMap[cacheKey]
-          if (lifecycle?.valueResolved) {
-            lifecycle.valueResolved({
-              data: action.payload,
-              meta: action.meta.baseQueryMeta,
-            })
-            delete lifecycle.valueResolved
-          }
-        } else if (
-          api.internalActions.removeQueryResult.match(action) ||
-          api.internalActions.removeMutationResult.match(action)
-        ) {
-          const lifecycle = lifecycleMap[cacheKey]
-          if (lifecycle) {
-            delete lifecycleMap[cacheKey]
-            lifecycle.cacheEntryRemoved()
-          }
-        } else if (api.util.resetApiState.match(action)) {
-          for (const [cacheKey, lifecycle] of Object.entries(lifecycleMap)) {
-            delete lifecycleMap[cacheKey]
-            lifecycle.cacheEntryRemoved()
-          }
-        }
-
-        return result
+    if (queryThunk.pending.match(action)) {
+      const oldState = stateBefore[reducerPath].queries[cacheKey]
+      const state = mwApi.getState()[reducerPath].queries[cacheKey]
+      if (!oldState && state) {
+        handleNewKey(
+          action.meta.arg.endpointName,
+          action.meta.arg.originalArgs,
+          cacheKey,
+          mwApi,
+          action.meta.requestId
+        )
       }
-
-    function getCacheKey(action: any) {
-      if (isQueryThunk(action)) return action.meta.arg.queryCacheKey
-      if (isMutationThunk(action)) return action.meta.requestId
-      if (api.internalActions.removeQueryResult.match(action))
-        return action.payload.queryCacheKey
-      if (api.internalActions.removeMutationResult.match(action))
-        return getMutationCacheKey(action.payload)
-      return ''
-    }
-
-    function handleNewKey(
-      endpointName: string,
-      originalArgs: any,
-      queryCacheKey: string,
-      mwApi: SubMiddlewareApi,
-      requestId: string
+    } else if (mutationThunk.pending.match(action)) {
+      const state = mwApi.getState()[reducerPath].mutations[cacheKey]
+      if (state) {
+        handleNewKey(
+          action.meta.arg.endpointName,
+          action.meta.arg.originalArgs,
+          cacheKey,
+          mwApi,
+          action.meta.requestId
+        )
+      }
+    } else if (isFulfilledThunk(action)) {
+      const lifecycle = lifecycleMap[cacheKey]
+      if (lifecycle?.valueResolved) {
+        lifecycle.valueResolved({
+          data: action.payload,
+          meta: action.meta.baseQueryMeta,
+        })
+        delete lifecycle.valueResolved
+      }
+    } else if (
+      api.internalActions.removeQueryResult.match(action) ||
+      api.internalActions.removeMutationResult.match(action)
     ) {
-      const endpointDefinition = context.endpointDefinitions[endpointName]
-      const onCacheEntryAdded = endpointDefinition?.onCacheEntryAdded
-      if (!onCacheEntryAdded) return
-
-      let lifecycle = {} as CacheLifecycle
-
-      const cacheEntryRemoved = new Promise<void>((resolve) => {
-        lifecycle.cacheEntryRemoved = resolve
-      })
-      const cacheDataLoaded: PromiseWithKnownReason<
-        { data: unknown; meta: unknown },
-        typeof neverResolvedError
-      > = Promise.race([
-        new Promise<{ data: unknown; meta: unknown }>((resolve) => {
-          lifecycle.valueResolved = resolve
-        }),
-        cacheEntryRemoved.then(() => {
-          throw neverResolvedError
-        }),
-      ])
-      // prevent uncaught promise rejections from happening.
-      // if the original promise is used in any way, that will create a new promise that will throw again
-      cacheDataLoaded.catch(() => {})
-      lifecycleMap[queryCacheKey] = lifecycle
-      const selector = (api.endpoints[endpointName] as any).select(
-        endpointDefinition.type === DefinitionType.query
-          ? originalArgs
-          : queryCacheKey
-      )
-
-      const extra = mwApi.dispatch((_, __, extra) => extra)
-      const lifecycleApi = {
-        ...mwApi,
-        getCacheEntry: () => selector(mwApi.getState()),
-        requestId,
-        extra,
-        updateCachedData: (endpointDefinition.type === DefinitionType.query
-          ? (updateRecipe: Recipe<any>) =>
-              mwApi.dispatch(
-                api.util.updateQueryData(
-                  endpointName as never,
-                  originalArgs,
-                  updateRecipe
-                )
-              )
-          : undefined) as any,
-
-        cacheDataLoaded,
-        cacheEntryRemoved,
+      const lifecycle = lifecycleMap[cacheKey]
+      if (lifecycle) {
+        delete lifecycleMap[cacheKey]
+        lifecycle.cacheEntryRemoved()
       }
-
-      const runningHandler = onCacheEntryAdded(originalArgs, lifecycleApi)
-      // if a `neverResolvedError` was thrown, but not handled in the running handler, do not let it leak out further
-      Promise.resolve(runningHandler).catch((e) => {
-        if (e === neverResolvedError) return
-        throw e
-      })
+    } else if (api.util.resetApiState.match(action)) {
+      for (const [cacheKey, lifecycle] of Object.entries(lifecycleMap)) {
+        delete lifecycleMap[cacheKey]
+        lifecycle.cacheEntryRemoved()
+      }
     }
   }
+
+  function getCacheKey(action: any) {
+    if (isQueryThunk(action)) return action.meta.arg.queryCacheKey
+    if (isMutationThunk(action)) return action.meta.requestId
+    if (api.internalActions.removeQueryResult.match(action))
+      return action.payload.queryCacheKey
+    if (api.internalActions.removeMutationResult.match(action))
+      return getMutationCacheKey(action.payload)
+    return ''
+  }
+
+  function handleNewKey(
+    endpointName: string,
+    originalArgs: any,
+    queryCacheKey: string,
+    mwApi: SubMiddlewareApi,
+    requestId: string
+  ) {
+    const endpointDefinition = context.endpointDefinitions[endpointName]
+    const onCacheEntryAdded = endpointDefinition?.onCacheEntryAdded
+    if (!onCacheEntryAdded) return
+
+    let lifecycle = {} as CacheLifecycle
+
+    const cacheEntryRemoved = new Promise<void>((resolve) => {
+      lifecycle.cacheEntryRemoved = resolve
+    })
+    const cacheDataLoaded: PromiseWithKnownReason<
+      { data: unknown; meta: unknown },
+      typeof neverResolvedError
+    > = Promise.race([
+      new Promise<{ data: unknown; meta: unknown }>((resolve) => {
+        lifecycle.valueResolved = resolve
+      }),
+      cacheEntryRemoved.then(() => {
+        throw neverResolvedError
+      }),
+    ])
+    // prevent uncaught promise rejections from happening.
+    // if the original promise is used in any way, that will create a new promise that will throw again
+    cacheDataLoaded.catch(() => {})
+    lifecycleMap[queryCacheKey] = lifecycle
+    const selector = (api.endpoints[endpointName] as any).select(
+      endpointDefinition.type === DefinitionType.query
+        ? originalArgs
+        : queryCacheKey
+    )
+
+    const extra = mwApi.dispatch((_, __, extra) => extra)
+    const lifecycleApi = {
+      ...mwApi,
+      getCacheEntry: () => selector(mwApi.getState()),
+      requestId,
+      extra,
+      updateCachedData: (endpointDefinition.type === DefinitionType.query
+        ? (updateRecipe: Recipe<any>) =>
+            mwApi.dispatch(
+              api.util.updateQueryData(
+                endpointName as never,
+                originalArgs,
+                updateRecipe
+              )
+            )
+        : undefined) as any,
+
+      cacheDataLoaded,
+      cacheEntryRemoved,
+    }
+
+    const runningHandler = onCacheEntryAdded(originalArgs, lifecycleApi)
+    // if a `neverResolvedError` was thrown, but not handled in the running handler, do not let it leak out further
+    Promise.resolve(runningHandler).catch((e) => {
+      if (e === neverResolvedError) return
+      throw e
+    })
+  }
+
+  return handler
 }

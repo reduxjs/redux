@@ -28,6 +28,8 @@ interface NonSerializableValue {
   value: unknown
 }
 
+type IgnorePaths = readonly (string | RegExp)[]
+
 /**
  * @public
  */
@@ -36,7 +38,8 @@ export function findNonSerializableValue(
   path: string = '',
   isSerializable: (value: unknown) => boolean = isPlain,
   getEntries?: (value: unknown) => [string, any][],
-  ignoredPaths: readonly string[] = []
+  ignoredPaths: IgnorePaths = [],
+  cache?: WeakSet<object>
 ): NonSerializableValue | false {
   let foundNestedSerializable: NonSerializableValue | false
 
@@ -51,6 +54,8 @@ export function findNonSerializableValue(
     return false
   }
 
+  if (cache?.has(value)) return false
+
   const entries = getEntries != null ? getEntries(value) : Object.entries(value)
 
   const hasIgnoredPaths = ignoredPaths.length > 0
@@ -58,8 +63,16 @@ export function findNonSerializableValue(
   for (const [key, nestedValue] of entries) {
     const nestedPath = path ? path + '.' + key : key
 
-    if (hasIgnoredPaths && ignoredPaths.indexOf(nestedPath) >= 0) {
-      continue
+    if (hasIgnoredPaths) {
+      const hasMatches = ignoredPaths.some((ignored) => {
+        if (ignored instanceof RegExp) {
+          return ignored.test(nestedPath)
+        }
+        return nestedPath === ignored
+      })
+      if (hasMatches) {
+        continue
+      }
     }
 
     if (!isSerializable(nestedValue)) {
@@ -75,7 +88,8 @@ export function findNonSerializableValue(
         nestedPath,
         isSerializable,
         getEntries,
-        ignoredPaths
+        ignoredPaths,
+        cache
       )
 
       if (foundNestedSerializable) {
@@ -84,7 +98,21 @@ export function findNonSerializableValue(
     }
   }
 
+  if (cache && isNestedFrozen(value)) cache.add(value)
+
   return false
+}
+
+export function isNestedFrozen(value: object) {
+  if (!Object.isFrozen(value)) return false
+
+  for (const nestedValue of Object.values(value)) {
+    if (typeof nestedValue !== 'object' || nestedValue === null) continue
+
+    if (!isNestedFrozen(nestedValue)) return false
+  }
+
+  return true
 }
 
 /**
@@ -113,16 +141,17 @@ export interface SerializableStateInvariantMiddlewareOptions {
   ignoredActions?: string[]
 
   /**
-   * An array of dot-separated path strings to ignore when checking
-   * for serializability, Defaults to ['meta.arg', 'meta.baseQueryMeta']
+   * An array of dot-separated path strings or regular expressions to ignore
+   * when checking for serializability, Defaults to
+   * ['meta.arg', 'meta.baseQueryMeta']
    */
-  ignoredActionPaths?: string[]
+  ignoredActionPaths?: (string | RegExp)[]
 
   /**
-   * An array of dot-separated path strings to ignore when checking
-   * for serializability, Defaults to []
+   * An array of dot-separated path strings or regular expressions to ignore
+   * when checking for serializability, Defaults to []
    */
-  ignoredPaths?: string[]
+  ignoredPaths?: (string | RegExp)[]
   /**
    * Execution time warning threshold. If the middleware takes longer
    * than `warnAfter` ms, a warning will be displayed in the console.
@@ -139,6 +168,12 @@ export interface SerializableStateInvariantMiddlewareOptions {
    * Opt out of checking actions. When set to `true`, other action-related params will be ignored.
    */
   ignoreActions?: boolean
+
+  /**
+   * Opt out of caching the results. The cache uses a WeakSet and speeds up repeated checking processes.
+   * The cache is automatically disabled if no browser support for WeakSet is present.
+   */
+  disableCache?: boolean
 }
 
 /**
@@ -165,7 +200,11 @@ export function createSerializableStateInvariantMiddleware(
     warnAfter = 32,
     ignoreState = false,
     ignoreActions = false,
+    disableCache = false,
   } = options
+
+  const cache: WeakSet<object> | undefined =
+    !disableCache && WeakSet ? new WeakSet() : undefined
 
   return (storeAPI) => (next) => (action) => {
     const result = next(action)
@@ -185,7 +224,8 @@ export function createSerializableStateInvariantMiddleware(
           '',
           isSerializable,
           getEntries,
-          ignoredActionPaths
+          ignoredActionPaths,
+          cache
         )
 
         if (foundActionNonSerializableValue) {
@@ -212,7 +252,8 @@ export function createSerializableStateInvariantMiddleware(
           '',
           isSerializable,
           getEntries,
-          ignoredPaths
+          ignoredPaths,
+          cache
         )
 
         if (foundStateNonSerializableValue) {

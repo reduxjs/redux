@@ -176,15 +176,29 @@ export function setupApiStore<
 >(
   api: A,
   extraReducers?: R,
-  options: { withoutListeners?: boolean; withoutTestLifecycles?: boolean } = {}
+  options: {
+    withoutListeners?: boolean
+    withoutTestLifecycles?: boolean
+    middleware?: {
+      prepend?: Middleware[]
+      concat?: Middleware[]
+    }
+  } = {}
 ) {
+  const { middleware } = options
   const getStore = () =>
     configureStore({
       reducer: { api: api.reducer, ...extraReducers },
-      middleware: (gdm) =>
-        gdm({ serializableCheck: false, immutableCheck: false }).concat(
-          api.middleware
-        ),
+      middleware: (gdm) => {
+        const tempMiddleware = gdm({
+          serializableCheck: false,
+          immutableCheck: false,
+        }).concat(api.middleware)
+
+        return tempMiddleware
+          .concat(...(middleware?.concat ?? []))
+          .prepend(...(middleware?.prepend ?? [])) as typeof tempMiddleware
+      },
     })
 
   type StoreType = EnhancedStore<

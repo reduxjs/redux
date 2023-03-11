@@ -271,14 +271,14 @@ describe('fixedCacheKey', () => {
   test('a component without `fixedCacheKey` has `originalArgs`', async () => {
     render(<Component name="C1" />, {
       wrapper: storeRef.wrapper,
-      legacyRoot: true,
     })
     let c1 = screen.getByTestId('C1')
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('undefined')
 
-    act(() => {
+    await act(async () => {
       getByTestId(c1, 'trigger').click()
+      await Promise.resolve()
     })
 
     expect(getByTestId(c1, 'originalArgs').textContent).toBe('C1')
@@ -312,15 +312,16 @@ describe('fixedCacheKey', () => {
         <Component name="C1" fixedCacheKey="test" value={p1} />
         <Component name="C2" fixedCacheKey="test" value={p2} />
       </>,
-      { wrapper: storeRef.wrapper, legacyRoot: true }
+      { wrapper: storeRef.wrapper }
     )
     const c1 = screen.getByTestId('C1')
     const c2 = screen.getByTestId('C2')
     expect(getByTestId(c1, 'status').textContent).toBe('uninitialized')
     expect(getByTestId(c2, 'status').textContent).toBe('uninitialized')
 
-    act(() => {
+    await act(async () => {
       getByTestId(c1, 'trigger').click()
+      await Promise.resolve()
     })
 
     expect(getByTestId(c1, 'status').textContent).toBe('pending')
@@ -333,8 +334,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('pending')
     expect(getByTestId(c1, 'data').textContent).toBe('')
 
-    act(() => {
+    await act(async () => {
       resolve1!('this should not show up any more')
+      await Promise.resolve()
     })
 
     await waitMs()
@@ -342,8 +344,9 @@ describe('fixedCacheKey', () => {
     expect(getByTestId(c1, 'status').textContent).toBe('pending')
     expect(getByTestId(c1, 'data').textContent).toBe('')
 
-    act(() => {
+    await act(async () => {
       resolve2!('this should be visible')
+      await Promise.resolve()
     })
 
     await waitMs()

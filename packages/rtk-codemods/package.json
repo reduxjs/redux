@@ -1,0 +1,46 @@
+{
+  "name": "@reduxjs/rtk-codemods",
+  "version": "0.0.3",
+  "scripts": {
+    "lint": "eslint --cache .",
+    "test": "codemod-cli test",
+    "test:coverage": "codemod-cli test --coverage",
+    "update-docs": "codemod-cli update-docs"
+  },
+  "bin": "./bin/cli.js",
+  "files": [
+    "bin/*",
+    "transforms/**/index.ts",
+    "transforms/**/README.md",
+    "package.json",
+    "README.md"
+  ],
+  "keywords": [
+    "codemod-cli",
+    "redux",
+    "redux-toolkit",
+    "codemod"
+  ],
+  "dependencies": {
+    "@types/jest": "^27",
+    "@types/jscodeshift": "^0.11.5",
+    "codemod-cli": "^3.2.0",
+    "ts-node": "10.4.0",
+    "typescript": "^4.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27",
+    "prettier": "^2.2.1",
+    "ts-jest": "^27"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

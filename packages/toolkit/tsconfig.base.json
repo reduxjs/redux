@@ -26,6 +26,8 @@
     "skipLibCheck": true,
     // error out if import and file system have a casing mismatch. Recommended by TS
     "forceConsistentCasingInFileNames": true,
+    // ensure that each file can be safely transpiled by babel (etc.) without relying on other imports
+    "isolatedModules": true,
     "downlevelIteration": false,
     "allowSyntheticDefaultImports": true,
     "emitDeclarationOnly": true,

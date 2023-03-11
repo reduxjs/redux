@@ -59,21 +59,22 @@ const value = actionCreators.anyKey
       increment: (state: number, action) => state + action.payload,
       decrement: (state: number, action) => state - action.payload,
     },
-    extraReducers: {
-      [firstAction.type]: (state: number, action) =>
-        state + action.payload.count,
+    extraReducers: (builder) => {
+      builder.addCase(
+        firstAction,
+        (state, action) => state + action.payload.count
+      )
     },
   })
 
   /* Reducer */
 
-  const reducer: Reducer<number, PayloadAction> = slice.reducer
+  expectType<Reducer<number, PayloadAction>>(slice.reducer)
 
   // @ts-expect-error
-  const stringReducer: Reducer<string, PayloadAction> = slice.reducer
+  expectType<Reducer<string, PayloadAction>>(slice.reducer)
   // @ts-expect-error
-  const anyActionReducer: Reducer<string, AnyAction> = slice.reducer
-
+  expectType<Reducer<string, AnyAction>>(slice.reducer)
   /* Actions */
 
   slice.actions.increment(1)
@@ -154,12 +155,13 @@ const value = actionCreators.anyKey
     },
   })
 
-  const s: string = counter.actions.increment.type
-  const t: string = counter.actions.decrement.type
-  const u: string = counter.actions.multiply.type
+  const s: 'counter/increment' = counter.actions.increment.type
+  const sa: 'counter/increment' = counter.actions.increment().type
+  const t: 'counter/decrement' = counter.actions.decrement.type
+  const ta: 'counter/decrement' = counter.actions.decrement().type
+  const u: 'counter/multiply' = counter.actions.multiply.type
+  const ua: 'counter/multiply' = counter.actions.multiply(1).type
 
-  // @ts-expect-error
-  const x: 'counter/increment' = counter.actions.increment.type
   // @ts-expect-error
   const y: 'increment' = counter.actions.increment.type
 }
@@ -192,7 +194,9 @@ const value = actionCreators.anyKey
     },
   })
 
-  expectType<string>(counter.actions.incrementByStrLen('test').type)
+  expectType<'test/incrementByStrLen'>(
+    counter.actions.incrementByStrLen('test').type
+  )
   expectType<number>(counter.actions.incrementByStrLen('test').payload)
   expectType<string>(counter.actions.concatMetaStrLen('test').payload)
   expectType<number>(counter.actions.concatMetaStrLen('test').meta)
@@ -384,7 +388,7 @@ const value = actionCreators.anyKey
 
   const x: Action<unknown> = {} as any
   if (mySlice.actions.setName.match(x)) {
-    expectType<string>(x.type)
+    expectType<'name/setName'>(x.type)
     expectType<string>(x.payload)
   } else {
     // @ts-expect-error

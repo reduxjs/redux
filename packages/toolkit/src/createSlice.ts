@@ -19,6 +19,8 @@ import { executeReducerBuilderCallback } from './mapBuilders'
 import type { NoInfer } from './tsHelpers'
 import { freezeDraftable } from './utils'
 
+let hasWarnedAboutObjectNotation = false
+
 /**
  * An action creator attached to a slice.
  *
@@ -52,7 +54,7 @@ export interface Slice<
    * Action creators for the types of actions that are handled by the slice
    * reducer.
    */
-  actions: CaseReducerActions<CaseReducers>
+  actions: CaseReducerActions<CaseReducers, Name>
 
   /**
    * The individual case reducer functions that were passed in the `reducers` parameter.
@@ -165,15 +167,29 @@ export type SliceCaseReducers<State> = {
     | CaseReducerWithPrepare<State, PayloadAction<any, string, any, any>>
 }
 
+type SliceActionType<
+  SliceName extends string,
+  ActionName extends keyof any
+> = ActionName extends string | number ? `${SliceName}/${ActionName}` : string
+
 /**
  * Derives the slice's `actions` property from the `reducers` options
  *
  * @public
  */
-export type CaseReducerActions<CaseReducers extends SliceCaseReducers<any>> = {
+export type CaseReducerActions<
+  CaseReducers extends SliceCaseReducers<any>,
+  SliceName extends string
+> = {
   [Type in keyof CaseReducers]: CaseReducers[Type] extends { prepare: any }
-    ? ActionCreatorForCaseReducerWithPrepare<CaseReducers[Type]>
-    : ActionCreatorForCaseReducer<CaseReducers[Type]>
+    ? ActionCreatorForCaseReducerWithPrepare<
+        CaseReducers[Type],
+        SliceActionType<SliceName, Type>
+      >
+    : ActionCreatorForCaseReducer<
+        CaseReducers[Type],
+        SliceActionType<SliceName, Type>
+      >
 }
 
 /**
@@ -181,22 +197,24 @@ export type CaseReducerActions<CaseReducers extends SliceCaseReducers<any>> = {
  *
  * @internal
  */
-type ActionCreatorForCaseReducerWithPrepare<CR extends { prepare: any }> =
-  _ActionCreatorWithPreparedPayload<CR['prepare'], string>
+type ActionCreatorForCaseReducerWithPrepare<
+  CR extends { prepare: any },
+  Type extends string
+> = _ActionCreatorWithPreparedPayload<CR['prepare'], Type>
 
 /**
  * Get a `PayloadActionCreator` type for a passed `CaseReducer`
  *
  * @internal
  */
-type ActionCreatorForCaseReducer<CR> = CR extends (
+type ActionCreatorForCaseReducer<CR, Type extends string> = CR extends (
   state: any,
   action: infer Action
 ) => any
   ? Action extends { payload: infer P }
-    ? PayloadActionCreator<P>
-    : ActionCreatorWithoutPayload
-  : ActionCreatorWithoutPayload
+    ? PayloadActionCreator<P, Type>
+    : ActionCreatorWithoutPayload<Type>
+  : ActionCreatorWithoutPayload<Type>
 
 /**
  * Extracts the CaseReducers out of a `reducers` object, even if they are
@@ -227,15 +245,16 @@ type SliceDefinedCaseReducers<CaseReducers extends SliceCaseReducers<any>> = {
 export type ValidateSliceCaseReducers<
   S,
   ACR extends SliceCaseReducers<S>
-> = ACR & {
-  [T in keyof ACR]: ACR[T] extends {
-    reducer(s: S, action?: infer A): any
+> = ACR &
+  {
+    [T in keyof ACR]: ACR[T] extends {
+      reducer(s: S, action?: infer A): any
+    }
+      ? {
+          prepare(...a: never[]): Omit<A, 'type'>
+        }
+      : {}
   }
-    ? {
-        prepare(...a: never[]): Omit<A, 'type'>
-      }
-    : {}
-}
 
 function getType(slice: string, actionKey: string): string {
   return `${slice}/${actionKey}`
@@ -267,8 +286,10 @@ export function createSlice<
     typeof process !== 'undefined' &&
     process.env.NODE_ENV === 'development'
   ) {
-    if(options.initialState === undefined) {
-      console.error('You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`')
+    if (options.initialState === undefined) {
+      console.error(
+        'You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`'
+      )
     }
   }
 
@@ -307,6 +328,16 @@ export function createSlice<
   })
 
   function buildReducer() {
+    if (process.env.NODE_ENV !== 'production') {
+      if (typeof options.extraReducers === 'object') {
+        if (!hasWarnedAboutObjectNotation) {
+          hasWarnedAboutObjectNotation = true
+          console.warn(
+            "The object notation for `createSlice.extraReducers` is deprecated, and will be removed in RTK 2.0. Please use the 'builder callback' notation instead: https://redux-toolkit.js.org/api/createSlice"
+          )
+        }
+      }
+    }
     const [
       extraReducers = {},
       actionMatchers = [],
@@ -317,12 +348,18 @@ export function createSlice<
         : [options.extraReducers]
 
     const finalCaseReducers = { ...extraReducers, ...sliceCaseReducersByType }
-    return createReducer(
-      initialState,
-      finalCaseReducers as any,
-      actionMatchers,
-      defaultCaseReducer
-    )
+
+    return createReducer(initialState, (builder) => {
+      for (let key in finalCaseReducers) {
+        builder.addCase(key, finalCaseReducers[key] as CaseReducer<any>)
+      }
+      for (let m of actionMatchers) {
+        builder.addMatcher(m.matcher, m.reducer)
+      }
+      if (defaultCaseReducer) {
+        builder.addDefaultCase(defaultCaseReducer)
+      }
+    })
   }
 
   let _reducer: ReducerWithInitialState<State>

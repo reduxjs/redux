@@ -52,6 +52,9 @@ beforeEach(() => {
   ;[api1, api1_2, api2] = createApis()
 })
 
+const reMatchMissingMiddlewareError =
+  /Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store/
+
 describe('missing middleware', () => {
   test.each([
     ['development', true],
@@ -61,13 +64,14 @@ describe('missing middleware', () => {
     const store = configureStore({
       reducer: { [api1.reducerPath]: api1.reducer },
     })
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    expect(getLog().log).toBe(
-      shouldWarn
-        ? `Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`
-        : ''
-    )
+    const doDispatch = () => {
+      store.dispatch(api1.endpoints.q1.initiate(undefined))
+    }
+    if (shouldWarn) {
+      expect(doDispatch).toThrowError(reMatchMissingMiddlewareError)
+    } else {
+      expect(doDispatch).not.toThrowError()
+    }
   })
 
   test('does not warn if middleware is not missing', () => {
@@ -83,11 +87,12 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     const store = configureStore({
       reducer: { [api1.reducerPath]: api1.reducer },
     })
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    expect(getLog().log)
-      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`)
+    const doDispatch = () => {
+      store.dispatch(api1.endpoints.q1.initiate(undefined))
+    }
+
+    expect(doDispatch).toThrowError(reMatchMissingMiddlewareError)
+    expect(doDispatch).not.toThrowError()
   })
 
   test('warns multiple times for multiple apis', () => {
@@ -97,13 +102,16 @@ Features like automatic cache collection, automatic refetching etc. will not be 
         [api2.reducerPath]: api2.reducer,
       },
     })
-    store.dispatch(api1.endpoints.q1.initiate(undefined))
-    store.dispatch(api2.endpoints.q1.initiate(undefined))
-    expect(getLog().log)
-      .toBe(`Warning: Middleware for RTK-Query API at reducerPath "api" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.
-Warning: Middleware for RTK-Query API at reducerPath "api2" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`)
+    const doDispatch1 = () => {
+      store.dispatch(api1.endpoints.q1.initiate(undefined))
+    }
+    const doDispatch2 = () => {
+      store.dispatch(api2.endpoints.q1.initiate(undefined))
+    }
+    expect(doDispatch1).toThrowError(reMatchMissingMiddlewareError)
+    expect(doDispatch2).toThrowError(
+      /Warning: Middleware for RTK-Query API at reducerPath "api2" has not been added to the store/
+    )
   })
 })
 
@@ -178,13 +186,16 @@ describe('missing reducer', () => {
   })
 })
 
-test('warns only for reducer if everything is missing', async () => {
+test('warns for reducer and also throws error if everything is missing', async () => {
   const store = configureStore({
     reducer: { x: () => 0 },
   })
   // @ts-expect-error
   api1.endpoints.q1.select(undefined)(store.getState())
-  await store.dispatch(api1.endpoints.q1.initiate(undefined))
+  const doDispatch = () => {
+    store.dispatch(api1.endpoints.q1.initiate(undefined))
+  }
+  expect(doDispatch).toThrowError(reMatchMissingMiddlewareError)
   expect(getLog().log).toBe(
     'Error: No data found at `state.api`. Did you forget to add the reducer to the store?'
   )
@@ -337,6 +348,34 @@ In the case of an unhandled error, no tags will be "provided" or "invalidated". 
 
     expect(getLog().log)
       .toBe(`An unhandled error occurred processing a request for the endpoint "transformRspn".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
+  })
+
+  test('error thrown in `transformErrorResponse`', async () => {
+    const api = createApi({
+      baseQuery() {
+        return { error: {} }
+      },
+      endpoints: (build) => ({
+        // @ts-ignore TS doesn't like `() => never` for `tER`
+        transformErRspn: build.query<number, void>({
+          // @ts-ignore TS doesn't like `() => never` for `tER`
+          query: () => '/dummy',
+          // @ts-ignore TS doesn't like `() => never` for `tER`
+          transformErrorResponse() {
+            throw new Error('this was kinda expected')
+          },
+        }),
+      }),
+    })
+    const store = configureStore({
+      reducer: { [api.reducerPath]: api.reducer },
+      middleware: (gdm) => gdm().concat(api.middleware),
+    })
+    await store.dispatch(api.endpoints.transformErRspn.initiate())
+
+    expect(getLog().log)
+      .toBe(`An unhandled error occurred processing a request for the endpoint "transformErRspn".
 In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: this was kinda expected]`)
   })
 

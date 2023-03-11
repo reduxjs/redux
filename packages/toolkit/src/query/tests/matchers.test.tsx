@@ -65,21 +65,25 @@ test('matches query pending & fulfilled actions for the given endpoint', async (
   expect(storeRef.store.getState().actions).toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchFulfilled
   )
   expect(storeRef.store.getState().actions).not.toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     otherEndpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     otherEndpoint.matchFulfilled
   )
   expect(storeRef.store.getState().actions).not.toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchFulfilled,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchRejected
   )
   expect(storeRef.store.getState().actions).not.toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchRejected
   )
 })
@@ -92,6 +96,7 @@ test('matches query pending & rejected actions for the given endpoint', async ()
   expect(storeRef.store.getState().actions).toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchRejected
   )
   expect(storeRef.store.getState().actions).not.toMatchSequence(
@@ -117,17 +122,20 @@ test('matches lazy query pending & fulfilled actions for given endpoint', async 
   expect(storeRef.store.getState().actions).toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchFulfilled
   )
   expect(storeRef.store.getState().actions).not.toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchFulfilled,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchRejected
   )
 
   expect(storeRef.store.getState().actions).not.toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchRejected
   )
 })
@@ -143,6 +151,7 @@ test('matches lazy query pending & rejected actions for given endpoint', async (
   expect(storeRef.store.getState().actions).toMatchSequence(
     api.internalActions.middlewareRegistered.match,
     endpoint.matchPending,
+    api.internalActions.subscriptionsUpdated.match,
     endpoint.matchRejected
   )
   expect(storeRef.store.getState().actions).not.toMatchSequence(

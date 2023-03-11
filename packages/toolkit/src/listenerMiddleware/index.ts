@@ -39,10 +39,10 @@ import {
 } from './exceptions'
 import {
   runTask,
-  promisifyAbortSignal,
   validateActive,
   createPause,
   createDelay,
+  raceWithSignal,
 } from './task'
 export { TaskAbortError } from './exceptions'
 export type {
@@ -138,9 +138,9 @@ const createTakePattern = <S>(
     // Placeholder unsubscribe function until the listener is added
     let unsubscribe: UnsubscribeListener = () => {}
 
-    const tuplePromise = new Promise<[AnyAction, S, S]>((resolve) => {
+    const tuplePromise = new Promise<[AnyAction, S, S]>((resolve, reject) => {
       // Inside the Promise, we synchronously add the listener.
-      unsubscribe = startListening({
+      let stopListening = startListening({
         predicate: predicate as any,
         effect: (action, listenerApi): void => {
           // One-shot listener that cleans up as soon as the predicate passes
@@ -153,10 +153,13 @@ const createTakePattern = <S>(
           ])
         },
       })
+      unsubscribe = () => {
+        stopListening()
+        reject()
+      }
     })
 
     const promises: (Promise<null> | Promise<[AnyAction, S, S]>)[] = [
-      promisifyAbortSignal(signal),
       tuplePromise,
     ]
 
@@ -167,7 +170,7 @@ const createTakePattern = <S>(
     }
 
     try {
-      const output = await Promise.race(promises)
+      const output = await raceWithSignal(signal, Promise.race(promises))
 
       validateActive(signal)
       return output
@@ -225,6 +228,14 @@ export const createListenerEntry: TypedCreateListenerEntry<unknown> = (
   return entry
 }
 
+const cancelActiveListeners = (
+  entry: ListenerEntry<unknown, Dispatch<AnyAction>>
+) => {
+  entry.pending.forEach((controller) => {
+    abortControllerWithReason(controller, listenerCancelled)
+  })
+}
+
 const createClearListenerMiddleware = (
   listenerMap: Map<string, ListenerEntry>
 ) => {
@@ -279,14 +290,6 @@ export const removeListener = createAction(
 
 const defaultErrorHandler: ListenerErrorHandler = (...args: unknown[]) => {
   console.error(`${alm}/error`, ...args)
-}
-
-const cancelActiveListeners = (
-  entry: ListenerEntry<unknown, Dispatch<AnyAction>>
-) => {
-  entry.pending.forEach((controller) => {
-    abortControllerWithReason(controller, listenerCancelled)
-  })
 }
 
 /**

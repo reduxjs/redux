@@ -6,6 +6,11 @@ import type {
   AnyAction,
 } from '@reduxjs/toolkit'
 import { createReducer, createAction, createNextState } from '@reduxjs/toolkit'
+import {
+  mockConsole,
+  createConsole,
+  getLog,
+} from 'console-testing-library/pure'
 
 interface Todo {
   text: string
@@ -29,7 +34,14 @@ type ToggleTodoReducer = CaseReducer<
   PayloadAction<ToggleTodoPayload>
 >
 
+type CreateReducer = typeof createReducer
+
 describe('createReducer', () => {
+  let restore: () => void
+
+  beforeEach(() => {
+    restore = mockConsole(createConsole())
+  })
   describe('given impure reducers with immer', () => {
     const addTodo: AddTodoReducer = (state, action) => {
       const { newTodo } = action.payload
@@ -52,6 +64,39 @@ describe('createReducer', () => {
     })
 
     behavesLikeReducer(todosReducer)
+  })
+
+  describe('Deprecation warnings', () => {
+    let originalNodeEnv = process.env.NODE_ENV
+
+    beforeEach(() => {
+      jest.resetModules()
+    })
+
+    afterEach(() => {
+      process.env.NODE_ENV = originalNodeEnv
+    })
+
+    it('Warns about object notation deprecation, once', () => {
+      const { createReducer } = require('../createReducer')
+      let dummyReducer = (createReducer as CreateReducer)([] as TodoState, {})
+
+      expect(getLog().levels.warn).toMatch(
+        /The object notation for `createReducer` is deprecated/
+      )
+      restore = mockConsole(createConsole())
+
+      dummyReducer = (createReducer as CreateReducer)([] as TodoState, {})
+      expect(getLog().levels.warn).toBe('')
+    })
+
+    it('Does not warn in production', () => {
+      process.env.NODE_ENV = 'production'
+      const { createReducer } = require('../createReducer')
+      let dummyReducer = (createReducer as CreateReducer)([] as TodoState, {})
+
+      expect(getLog().levels.warn).toBe('')
+    })
   })
 
   describe('Immer in a production environment', () => {

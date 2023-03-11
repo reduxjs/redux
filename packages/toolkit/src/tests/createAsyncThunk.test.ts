@@ -13,6 +13,7 @@ import {
   getLog,
 } from 'console-testing-library/pure'
 import { expectType } from './helpers'
+import { delay } from '../utils'
 
 declare global {
   interface Window {
@@ -621,6 +622,21 @@ describe('conditional skipping of asyncThunks', () => {
     )
   })
 
+  test('async condition with AbortController signal first', async () => {
+    const condition = async () => {
+      await delay(25)
+      return true
+    }
+    const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
+
+    try {
+      const thunkPromise = asyncThunk(arg)(dispatch, getState, extra)
+      thunkPromise.abort()
+      await thunkPromise
+    } catch (err) {}
+    expect(dispatch).toHaveBeenCalledTimes(0)
+  })
+
   test('rejected action is not dispatched by default', async () => {
     const asyncThunk = createAsyncThunk('test', payloadCreator, { condition })
     await asyncThunk(arg)(dispatch, getState, extra)
@@ -630,7 +646,7 @@ describe('conditional skipping of asyncThunks', () => {
 
   test('does not fail when attempting to abort a canceled promise', async () => {
     const asyncPayloadCreator = jest.fn(async (x: typeof arg) => {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await delay(200)
       return 10
     })
 
@@ -952,5 +968,19 @@ describe('meta', () => {
       // @ts-expect-error
       ret.meta.extraProp
     }
+  })
+
+  test('typed createAsyncThunk.withTypes', () => {
+    const typedCAT = createAsyncThunk.withTypes<{
+      state: { s: string }
+      rejectValue: string
+      extra: { s: string; n: number }
+    }>()
+    const thunk = typedCAT('a', () => 'b')
+    const expectFunction = expect.any(Function)
+    expect(thunk.fulfilled).toEqual(expectFunction)
+    expect(thunk.pending).toEqual(expectFunction)
+    expect(thunk.rejected).toEqual(expectFunction)
+    expect(thunk.fulfilled.type).toBe('a/fulfilled')
   })
 })

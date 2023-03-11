@@ -5,15 +5,17 @@ import type {
   QueryArgFrom,
   ResultTypeFrom,
 } from '../endpointDefinitions'
-import { DefinitionType } from '../endpointDefinitions'
-import type { QueryThunk, MutationThunk } from './buildThunks'
+import { DefinitionType, isQueryDefinition } from '../endpointDefinitions'
+import type { QueryThunk, MutationThunk, QueryThunkArg } from './buildThunks'
 import type { AnyAction, ThunkAction, SerializedError } from '@reduxjs/toolkit'
 import type { SubscriptionOptions, RootState } from './apiState'
 import type { InternalSerializeQueryArgs } from '../defaultSerializeQueryArgs'
 import type { Api, ApiContext } from '../apiTypes'
 import type { ApiEndpointQuery } from './module'
-import type { BaseQueryError } from '../baseQueryTypes'
+import type { BaseQueryError, QueryReturnValue } from '../baseQueryTypes'
 import type { QueryResultSelectorResult } from './buildSelectors'
+import type { Dispatch } from 'redux'
+import { isNotNullish } from '../utils/isNotNullish'
 
 declare module './module' {
   export interface ApiEndpointQuery<
@@ -33,10 +35,15 @@ declare module './module' {
   }
 }
 
+export const forceQueryFnSymbol = Symbol('forceQueryFn')
+export const isUpsertQuery = (arg: QueryThunkArg) =>
+  typeof arg[forceQueryFnSymbol] === 'function'
+
 export interface StartQueryActionCreatorOptions {
   subscribe?: boolean
   forceRefetch?: boolean | number
   subscriptionOptions?: SubscriptionOptions
+  [forceQueryFnSymbol]?: () => QueryReturnValue
 }
 
 type StartQueryActionCreator<
@@ -55,7 +62,7 @@ export type QueryActionCreatorResult<
   abort(): void
   unwrap(): Promise<ResultTypeFrom<D>>
   unsubscribe(): void
-  refetch(): void
+  refetch(): QueryActionCreatorResult<D>
   updateSubscriptionOptions(options: SubscriptionOptions): void
   queryCacheKey: string
 }
@@ -191,14 +198,14 @@ export function buildInitiate({
   api: Api<any, EndpointDefinitions, any, any>
   context: ApiContext<EndpointDefinitions>
 }) {
-  const runningQueries: Record<
-    string,
-    QueryActionCreatorResult<any> | undefined
-  > = {}
-  const runningMutations: Record<
-    string,
-    MutationActionCreatorResult<any> | undefined
-  > = {}
+  const runningQueries: Map<
+    Dispatch,
+    Record<string, QueryActionCreatorResult<any> | undefined>
+  > = new Map()
+  const runningMutations: Map<
+    Dispatch,
+    Record<string, MutationActionCreatorResult<any> | undefined>
+  > = new Map()
 
   const {
     unsubscribeQueryResult,
@@ -208,46 +215,102 @@ export function buildInitiate({
   return {
     buildInitiateQuery,
     buildInitiateMutation,
+    getRunningQueryThunk,
+    getRunningMutationThunk,
+    getRunningQueriesThunk,
+    getRunningMutationsThunk,
     getRunningOperationPromises,
-    getRunningOperationPromise,
+    removalWarning,
   }
 
-  function getRunningOperationPromise(
-    endpointName: string,
-    argOrRequestId: any
-  ): any {
-    const endpointDefinition = context.endpointDefinitions[endpointName]
-    if (endpointDefinition.type === DefinitionType.query) {
-      const queryCacheKey = serializeQueryArgs({
-        queryArgs: argOrRequestId,
-        endpointDefinition,
-        endpointName,
-      })
-      return runningQueries[queryCacheKey]
+  /** @deprecated to be removed in 2.0 */
+  function removalWarning(): never {
+    throw new Error(
+      `This method had to be removed due to a conceptual bug in RTK.
+       Please see https://github.com/reduxjs/redux-toolkit/pull/2481 for details.
+       See https://redux-toolkit.js.org/rtk-query/usage/server-side-rendering for new guidance on SSR.`
+    )
+  }
+
+  /** @deprecated to be removed in 2.0 */
+  function getRunningOperationPromises() {
+    if (
+      typeof process !== 'undefined' &&
+      process.env.NODE_ENV === 'development'
+    ) {
+      removalWarning()
     } else {
-      return runningMutations[argOrRequestId]
+      const extract = <T>(
+        v: Map<Dispatch<AnyAction>, Record<string, T | undefined>>
+      ) =>
+        Array.from(v.values()).flatMap((queriesForStore) =>
+          queriesForStore ? Object.values(queriesForStore) : []
+        )
+      return [...extract(runningQueries), ...extract(runningMutations)].filter(
+        isNotNullish
+      )
     }
   }
 
-  function getRunningOperationPromises() {
-    return [
-      ...Object.values(runningQueries),
-      ...Object.values(runningMutations),
-    ].filter(<T>(t: T | undefined): t is T => !!t)
+  function getRunningQueryThunk(endpointName: string, queryArgs: any) {
+    return (dispatch: Dispatch) => {
+      const endpointDefinition = context.endpointDefinitions[endpointName]
+      const queryCacheKey = serializeQueryArgs({
+        queryArgs,
+        endpointDefinition,
+        endpointName,
+      })
+      return runningQueries.get(dispatch)?.[queryCacheKey] as
+        | QueryActionCreatorResult<never>
+        | undefined
+    }
   }
 
-  function middlewareWarning(getState: () => RootState<{}, string, string>) {
+  function getRunningMutationThunk(
+    /**
+     * this is only here to allow TS to infer the result type by input value
+     * we could use it to validate the result, but it's probably not necessary
+     */
+    _endpointName: string,
+    fixedCacheKeyOrRequestId: string
+  ) {
+    return (dispatch: Dispatch) => {
+      return runningMutations.get(dispatch)?.[fixedCacheKeyOrRequestId] as
+        | MutationActionCreatorResult<never>
+        | undefined
+    }
+  }
+
+  function getRunningQueriesThunk() {
+    return (dispatch: Dispatch) =>
+      Object.values(runningQueries.get(dispatch) || {}).filter(isNotNullish)
+  }
+
+  function getRunningMutationsThunk() {
+    return (dispatch: Dispatch) =>
+      Object.values(runningMutations.get(dispatch) || {}).filter(isNotNullish)
+  }
+
+  function middlewareWarning(dispatch: Dispatch) {
     if (process.env.NODE_ENV !== 'production') {
       if ((middlewareWarning as any).triggered) return
-      const registered =
-        getState()[api.reducerPath]?.config?.middlewareRegistered
-      if (registered !== undefined) {
-        ;(middlewareWarning as any).triggered = true
-      }
-      if (registered === false) {
-        console.warn(
+      const registered:
+        | ReturnType<typeof api.internalActions.internal_probeSubscription>
+        | boolean = dispatch(
+        api.internalActions.internal_probeSubscription({
+          queryCacheKey: 'DOES_NOT_EXIST',
+          requestId: 'DUMMY_REQUEST_ID',
+        })
+      )
+
+      ;(middlewareWarning as any).triggered = true
+
+      // The RTKQ middleware _should_ always return a boolean for `probeSubscription`
+      if (typeof registered !== 'boolean') {
+        // Otherwise, must not have been added
+        throw new Error(
           `Warning: Middleware for RTK-Query API at reducerPath "${api.reducerPath}" has not been added to the store.
-Features like automatic cache collection, automatic refetching etc. will not be available.`
+You must add the middleware for RTK-Query to function correctly!`
         )
       }
     }
@@ -258,33 +321,60 @@ Features like automatic cache collection, automatic refetching etc. will not be 
     endpointDefinition: QueryDefinition<any, any, any, any>
   ) {
     const queryAction: StartQueryActionCreator<any> =
-      (arg, { subscribe = true, forceRefetch, subscriptionOptions } = {}) =>
+      (
+        arg,
+        {
+          subscribe = true,
+          forceRefetch,
+          subscriptionOptions,
+          [forceQueryFnSymbol]: forceQueryFn,
+        } = {}
+      ) =>
       (dispatch, getState) => {
         const queryCacheKey = serializeQueryArgs({
           queryArgs: arg,
           endpointDefinition,
           endpointName,
         })
+
         const thunk = queryThunk({
           type: 'query',
           subscribe,
-          forceRefetch,
+          forceRefetch: forceRefetch,
           subscriptionOptions,
           endpointName,
           originalArgs: arg,
           queryCacheKey,
+          [forceQueryFnSymbol]: forceQueryFn,
         })
+        const selector = (
+          api.endpoints[endpointName] as ApiEndpointQuery<any, any>
+        ).select(arg)
+
         const thunkResult = dispatch(thunk)
-        middlewareWarning(getState)
+        const stateAfter = selector(getState())
+
+        middlewareWarning(dispatch)
 
         const { requestId, abort } = thunkResult
 
+        const skippedSynchronously = stateAfter.requestId !== requestId
+
+        const runningQuery = runningQueries.get(dispatch)?.[queryCacheKey]
+        const selectFromState = () => selector(getState())
+
         const statePromise: QueryActionCreatorResult<any> = Object.assign(
-          Promise.all([runningQueries[queryCacheKey], thunkResult]).then(() =>
-            (api.endpoints[endpointName] as ApiEndpointQuery<any, any>).select(
-              arg
-            )(getState())
-          ),
+          forceQueryFn
+            ? // a query has been forced (upsertQueryData)
+              // -> we want to resolve it once data has been written with the data that will be written
+              thunkResult.then(selectFromState)
+            : skippedSynchronously && !runningQuery
+            ? // a query has been skipped due to a condition and we do not have any currently running query
+              // -> we want to resolve it immediately with the current data
+              Promise.resolve(stateAfter)
+            : // query just started or one is already in flight
+              // -> wait for the running query, then resolve with data from after that
+              Promise.all([runningQuery, thunkResult]).then(selectFromState),
           {
             arg,
             requestId,
@@ -300,11 +390,10 @@ Features like automatic cache collection, automatic refetching etc. will not be 
 
               return result.data
             },
-            refetch() {
+            refetch: () =>
               dispatch(
                 queryAction(arg, { subscribe: false, forceRefetch: true })
-              )
-            },
+              ),
             unsubscribe() {
               if (subscribe)
                 dispatch(
@@ -328,10 +417,16 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           }
         )
 
-        if (!runningQueries[queryCacheKey]) {
-          runningQueries[queryCacheKey] = statePromise
+        if (!runningQuery && !skippedSynchronously && !forceQueryFn) {
+          const running = runningQueries.get(dispatch) || {}
+          running[queryCacheKey] = statePromise
+          runningQueries.set(dispatch, running)
+
           statePromise.then(() => {
-            delete runningQueries[queryCacheKey]
+            delete running[queryCacheKey]
+            if (!Object.keys(running).length) {
+              runningQueries.delete(dispatch)
+            }
           })
         }
 
@@ -353,7 +448,7 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           fixedCacheKey,
         })
         const thunkResult = dispatch(thunk)
-        middlewareWarning(getState)
+        middlewareWarning(dispatch)
         const { requestId, abort, unwrap } = thunkResult
         const returnValuePromise = thunkResult
           .unwrap()
@@ -373,15 +468,24 @@ Features like automatic cache collection, automatic refetching etc. will not be 
           reset,
         })
 
-        runningMutations[requestId] = ret
+        const running = runningMutations.get(dispatch) || {}
+        runningMutations.set(dispatch, running)
+        running[requestId] = ret
         ret.then(() => {
-          delete runningMutations[requestId]
+          delete running[requestId]
+          if (!Object.keys(running).length) {
+            runningMutations.delete(dispatch)
+          }
         })
         if (fixedCacheKey) {
-          runningMutations[fixedCacheKey] = ret
+          running[fixedCacheKey] = ret
           ret.then(() => {
-            if (runningMutations[fixedCacheKey] === ret)
-              delete runningMutations[fixedCacheKey]
+            if (running[fixedCacheKey] === ret) {
+              delete running[fixedCacheKey]
+              if (!Object.keys(running).length) {
+                runningMutations.delete(dispatch)
+              }
+            }
           })
         }
 

@@ -55,7 +55,7 @@ export type ActionMatcherDescriptionCollection<S> = Array<
 export type CaseReducer<S = any, A extends Action = AnyAction> = (
   state: Draft<S>,
   action: A
-) => S | void | Draft<S>
+) => NoInfer<S> | void | Draft<NoInfer<S>>
 
 /**
  * A mapping from action types to case reducers for `createReducer()`.
@@ -79,6 +79,8 @@ function isStateFunction<S>(x: unknown): x is () => S {
 export type ReducerWithInitialState<S extends NotFunction<any>> = Reducer<S> & {
   getInitialState: () => S
 }
+
+let hasWarnedAboutObjectNotation = false
 
 /**
  * A utility function that allows defining a reducer as a mapping from action
@@ -219,6 +221,17 @@ export function createReducer<S extends NotFunction<any>>(
   actionMatchers: ReadonlyActionMatcherDescriptionCollection<S> = [],
   defaultCaseReducer?: CaseReducer<S>
 ): ReducerWithInitialState<S> {
+  if (process.env.NODE_ENV !== 'production') {
+    if (typeof mapOrBuilderCallback === 'object') {
+      if (!hasWarnedAboutObjectNotation) {
+        hasWarnedAboutObjectNotation = true
+        console.warn(
+          "The object notation for `createReducer` is deprecated, and will be removed in RTK 2.0. Please use the 'builder callback' notation instead: https://redux-toolkit.js.org/api/createReducer"
+        )
+      }
+    }
+  }
+
   let [actionsMap, finalActionMatchers, finalDefaultCaseReducer] =
     typeof mapOrBuilderCallback === 'function'
       ? executeReducerBuilderCallback(mapOrBuilderCallback)

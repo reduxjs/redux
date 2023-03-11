@@ -3,13 +3,15 @@ import {
   createConsole,
   getLog,
 } from 'console-testing-library/pure'
-import type { Reducer } from '@reduxjs/toolkit'
+import type { AnyAction, Reducer } from '@reduxjs/toolkit'
 import {
+  createNextState,
   configureStore,
   createSerializableStateInvariantMiddleware,
   findNonSerializableValue,
   isPlain,
 } from '@reduxjs/toolkit'
+import { isNestedFrozen } from '@internal/serializableStateInvariantMiddleware'
 
 // Mocking console
 let restore = () => {}
@@ -389,6 +391,22 @@ describe('serializableStateInvariantMiddleware', () => {
 
       expect(getLog().log).toMatchInlineSnapshot(`""`)
     })
+
+    it('can specify regexp', () => {
+      configureStore({
+        reducer,
+        middleware: [
+          createSerializableStateInvariantMiddleware({
+            ignoredActionPaths: [/^payload\..*$/],
+          }),
+        ],
+      }).dispatch({
+        type: 'test',
+        payload: { arg: nonSerializableValue },
+      })
+
+      expect(getLog().log).toMatchInlineSnapshot(`""`)
+    })
   })
 
   it('allows ignoring actions entirely', () => {
@@ -439,6 +457,10 @@ describe('serializableStateInvariantMiddleware', () => {
               d: badValue,
             },
             e: { f: badValue },
+            g: {
+              h: badValue,
+              i: badValue,
+            },
           }
         }
         default:
@@ -455,6 +477,8 @@ describe('serializableStateInvariantMiddleware', () => {
           'testSlice.b.c',
           // Test for ignoring an object and its children
           'testSlice.e',
+          // Test for ignoring based on RegExp
+          /^testSlice\.g\..*$/,
         ],
       })
 
@@ -571,5 +595,41 @@ describe('serializableStateInvariantMiddleware', () => {
 
     store.dispatch({ type: 'SOME_ACTION' })
     expect(getLog().log).toMatch('')
+  })
+
+  it('Should cache its results', () => {
+    let numPlainChecks = 0
+    const countPlainChecks = (x: any) => {
+      numPlainChecks++
+      return isPlain(x)
+    }
+
+    const serializableStateInvariantMiddleware =
+      createSerializableStateInvariantMiddleware({
+        isSerializable: countPlainChecks,
+      })
+
+    const store = configureStore({
+      reducer: (state = [], action) => {
+        if (action.type === 'SET_STATE') return action.payload
+        return state
+      },
+      middleware: [serializableStateInvariantMiddleware],
+    })
+
+    const state = createNextState([], () =>
+      new Array(50).fill(0).map((x, i) => ({ i }))
+    )
+    expect(isNestedFrozen(state)).toBe(true)
+
+    store.dispatch({
+      type: 'SET_STATE',
+      payload: state,
+    })
+    expect(numPlainChecks).toBeGreaterThan(state.length)
+
+    numPlainChecks = 0
+    store.dispatch({ type: 'NOOP' })
+    expect(numPlainChecks).toBeLessThan(10)
   })
 })

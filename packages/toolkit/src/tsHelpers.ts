@@ -1,4 +1,4 @@
-import type { Middleware } from 'redux'
+import type { Middleware, StoreEnhancer } from 'redux'
 import type { MiddlewareArray } from './utils'
 
 /**
@@ -66,6 +66,15 @@ export type IsUnknownOrNonInferrable<T, True, False> = AtLeastTS35<
   IsEmptyObj<T, True, IsUnknown<T, True, False>>
 >
 
+/**
+ * Convert a Union type `(A|B)` to an intersection type `(A&B)`
+ */
+export type UnionToIntersection<U> = (
+  U extends any ? (k: U) => void : never
+) extends (k: infer I) => void
+  ? I
+  : never
+
 // Appears to have a convenient side effect of ignoring `never` even if that's not what you specified
 export type ExcludeFromTuple<T, E, Acc extends unknown[] = []> = T extends [
   infer Head,
@@ -80,7 +89,7 @@ type ExtractDispatchFromMiddlewareTuple<
 > = MiddlewareTuple extends [infer Head, ...infer Tail]
   ? ExtractDispatchFromMiddlewareTuple<
       Tail,
-      Acc & (Head extends Middleware<infer D, any> ? IsAny<D, {}, D> : {})
+      Acc & (Head extends Middleware<infer D> ? IsAny<D, {}, D> : {})
     >
   : Acc
 
@@ -92,14 +101,9 @@ export type ExtractDispatchExtensions<M> = M extends MiddlewareArray<
   ? ExtractDispatchFromMiddlewareTuple<[...M], {}>
   : never
 
-/**
- * Convert a Union type `(A|B)` to an intersection type `(A&B)`
- */
-export type UnionToIntersection<U> = (
-  U extends any ? (k: U) => void : never
-) extends (k: infer I) => void
-  ? I
-  : never
+export type ExtractStoreExtensions<E> = E extends any[]
+  ? UnionToIntersection<E[number] extends StoreEnhancer<infer Ext> ? Ext extends {} ? Ext : {} : {}>
+  : {}
 
 /**
  * Helper type. Passes T out again, but boxes it in a way that it cannot
@@ -135,3 +139,5 @@ export type ActionFromMatcher<M extends Matcher<any>> = M extends Matcher<
 >
   ? T
   : never
+
+export type Id<T> = { [K in keyof T]: T[K] } & {}

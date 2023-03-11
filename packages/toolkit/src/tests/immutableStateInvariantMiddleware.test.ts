@@ -121,10 +121,16 @@ describe('createImmutableStateInvariantMiddleware', () => {
       return action
     }
 
-    const dispatch = middleware({ ignoredPaths: ['foo.bar'] })(next)
+    const dispatch1 = middleware({ ignoredPaths: ['foo.bar'] })(next)
 
     expect(() => {
-      dispatch({ type: 'SOME_ACTION' })
+      dispatch1({ type: 'SOME_ACTION' })
+    }).not.toThrow()
+
+    const dispatch2 = middleware({ ignoredPaths: [/^foo/] })(next)
+
+    expect(() => {
+      dispatch2({ type: 'SOME_ACTION' })
     }).not.toThrow()
   })
 

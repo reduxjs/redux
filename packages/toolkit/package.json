@@ -1,6 +1,6 @@
 {
   "name": "@reduxjs/toolkit",
-  "version": "1.8.6",
+  "version": "1.9.3",
   "description": "The official, opinionated, batteries-included toolset for efficient Redux development",
   "author": "Mark Erikson <mark@isquaredsoftware.com>",
   "license": "MIT",
@@ -61,7 +61,7 @@
     "json-stringify-safe": "^5.0.1",
     "magic-string": "^0.25.7",
     "merge-source-map": "^1.1.0",
-    "msw": "^0.41.1",
+    "msw": "^0.40.2",
     "node-fetch": "^2.6.1",
     "prettier": "^2.2.1",
     "query-string": "^7.0.1",
@@ -77,15 +77,15 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build-ci": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
+    "build-ci": "yarn rimraf dist && yarn tsc && yarn lint && node scripts/cli.js --skipExtraction",
     "build-prepare": "npm run build-ci",
     "build": "yarn rimraf dist && yarn tsc && node scripts/cli.js --local --skipExtraction",
     "build-only": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
     "format": "prettier --write \"(src|examples)/**/*.{ts,tsx}\" \"**/*.md\"",
     "format:check": "prettier --list-different \"(src|examples)/**/*.{ts,tsx}\" \"docs/*/**.md\"",
-    "lint": "eslint src examples",
+    "lint": "eslint src",
     "test": "jest --runInBand",
-    "type-tests": "yarn tsc -p src/tests && yarn tsc -p src/query/tests",
+    "type-tests": "yarn tsc -p src/tests/tsconfig.typetests.json && yarn tsc -p src/query/tests/tsconfig.typetests.json",
     "prepack": "npm run build-prepare"
   },
   "files": [
@@ -97,10 +97,10 @@
     "query"
   ],
   "dependencies": {
-    "immer": "^9.0.7",
-    "redux": "^4.1.2",
-    "redux-thunk": "^2.4.1",
-    "reselect": "^4.1.5"
+    "immer": "^9.0.16",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.2",
+    "reselect": "^4.1.7"
   },
   "peerDependencies": {
     "react": "^16.9.0 || ^17.0.0 || ^18",
