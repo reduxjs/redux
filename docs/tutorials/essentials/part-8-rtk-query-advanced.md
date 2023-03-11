@@ -1117,7 +1117,7 @@ Let's take one last look at the whole application in action:
   - Cache tags can be either `'Post'` or `{type: 'Post', id}`
   - Endpoints can provide or invalidate cache tags based on results and arg cache keys
 - **RTK Query's APIs are UI-agnostic and can be used outside of React**
-  - Endpoint objects include functions for initating requests, generating result selectors, and matching request action objects
+  - Endpoint objects include functions for initiating requests, generating result selectors, and matching request action objects
 - **Responses can be transformed in different ways as needed**
   - Endpoints can define a `transformResponse` callback to modify the data before caching
   - Hooks can be given a `selectFromResult` option to extract/transform data
