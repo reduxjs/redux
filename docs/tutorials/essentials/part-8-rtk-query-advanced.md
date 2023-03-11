@@ -845,7 +845,7 @@ Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives t
 - Create a server-side data subscription like a Websocket
 - When an update is received, use `updateCachedData` to "mutate" the cached values based on the update
 - `await cacheEntryRemoved` at the end
-- Clean up subscriptions afterwwards
+- Clean up subscriptions afterwards
 
 Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we add a thunk we can dispatch that reads the latest timestamp from the cache state and tells the mock server to generate newer notifications.
 
