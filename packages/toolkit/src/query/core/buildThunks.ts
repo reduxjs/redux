@@ -20,6 +20,7 @@ import type {
   QueryArgFrom,
   QueryDefinition,
   ResultTypeFrom,
+  FullTagDescription,
 } from '../endpointDefinitions'
 import { isQueryDefinition } from '../endpointDefinitions'
 import { calculateProvidedBy } from '../endpointDefinitions'
@@ -210,6 +211,7 @@ export type PatchCollection = {
    * A function that will undo the cache update.
    */
   undo: () => void
+  provided: readonly FullTagDescription<string>[]
 }
 
 export function buildThunks<
@@ -222,12 +224,14 @@ export function buildThunks<
   context: { endpointDefinitions },
   serializeQueryArgs,
   api,
+  assertTagType,
 }: {
   baseQuery: BaseQuery
   reducerPath: ReducerPath
   context: ApiContext<Definitions>
   serializeQueryArgs: InternalSerializeQueryArgs
   api: Api<BaseQuery, Definitions, ReducerPath, any>
+  assertTagType: AssertTagTypes
 }) {
   type State = RootState<any, string, ReducerPath>
 
@@ -247,32 +251,43 @@ export function buildThunks<
     }
 
   const updateQueryData: UpdateQueryDataThunk<EndpointDefinitions, State> =
-    (endpointName, args, updateRecipe) => (dispatch, getState) => {
+    (endpointName, args, updateRecipe, updateProvided = true) =>
+    (dispatch, getState) => {
       const currentState = (
         api.endpoints[endpointName] as ApiEndpointQuery<any, any>
       ).select(args)(getState())
       let ret: PatchCollection = {
         patches: [],
         inversePatches: [],
-        undo: () =>
+        undo: () => {
           dispatch(
             api.util.patchQueryData(endpointName, args, ret.inversePatches)
-          ),
+          )
+          // this needs to `getState` the current value after patching the `inversePatch`
+          const oldValue = getState()
+          dispatch(
+            // `updateProvidedBy` needs to be implemented as a new reducer on `invalidationSlice`
+            updateProvidedBy(endpointName, args, calculateNewProvided(oldValue))
+          )
+        },
+        provided: [],
       }
       if (currentState.status === QueryStatus.uninitialized) {
         return ret
       }
+      let newValue
       if ('data' in currentState) {
         if (isDraftable(currentState.data)) {
-          const [, patches, inversePatches] = produceWithPatches(
+          const [value, patches, inversePatches] = produceWithPatches(
             currentState.data,
             updateRecipe
           )
           ret.patches.push(...patches)
           ret.inversePatches.push(...inversePatches)
+          newValue = value
         } else {
-          const value = updateRecipe(currentState.data)
-          ret.patches.push({ op: 'replace', path: [], value })
+          newValue = updateRecipe(currentState.data)
+          ret.patches.push({ op: 'replace', path: [], value: newValue })
           ret.inversePatches.push({
             op: 'replace',
             path: [],
@@ -281,9 +296,25 @@ export function buildThunks<
         }
       }
 
+      if (updateProvided) {
+        ret.provided = calculateNewProvided(newValue)
+      }
+
+      // `patchQueryData` needs to be added as `extraReducer` on `invalidationSlice`
       dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
 
       return ret
+
+      function calculateNewProvided(newValue: unknown) {
+        return calculateProvidedBy(
+          endpointDefinitions[endpointName].providesTags,
+          newValue,
+          undefined,
+          args,
+          {},
+          assertTagType
+        )
+      }
     }
 
   const upsertQueryData: UpsertQueryDataThunk<Definitions, State> =
