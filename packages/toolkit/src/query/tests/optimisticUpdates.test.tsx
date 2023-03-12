@@ -192,7 +192,7 @@ describe('updateQueryData', () => {
     expect(result.current.data).toEqual(dataBefore)
   })
 
-  test.only('updates cache values including provided tags, undos that', async () => {
+  test('updates (list) cache values including provided tags, undos that', async () => {
     baseQuery
       .mockResolvedValueOnce([
         {
@@ -251,6 +251,65 @@ describe('updateQueryData', () => {
     const provided4Next = provided['Post']['4']
 
     expect(provided4Next).toEqual([])
+  })
+
+  test('updates (list) cache values excluding provided tags, undos that', async () => {
+    baseQuery
+      .mockResolvedValueOnce([
+        {
+          id: '3',
+          title: 'All about cheese.',
+          contents: 'TODO',
+        },
+      ])
+      .mockResolvedValueOnce(42)
+    const { result } = renderHook(() => api.endpoints.listPosts.useQuery(), {
+      wrapper: storeRef.wrapper,
+    })
+    await hookWaitFor(() => expect(result.current.isSuccess).toBeTruthy())
+
+    let provided!: InvalidationState<'Post'>
+    act(() => {
+      provided = storeRef.store.getState().api.provided
+    })
+
+    let returnValue!: ReturnType<ReturnType<typeof api.util.updateQueryData>>
+    act(() => {
+      returnValue = storeRef.store.dispatch(
+        api.util.updateQueryData(
+          'listPosts',
+          undefined,
+          (draft) => {
+            draft.push({
+              id: '4',
+              title: 'Mostly about cheese.',
+              contents: 'TODO',
+            })
+          },
+          false
+        )
+      )
+    })
+
+    act(() => {
+      provided = storeRef.store.getState().api.provided
+    })
+
+    const provided4 = provided['Post']['4']
+
+    expect(provided4).toEqual(undefined)
+
+    act(() => {
+      returnValue.undo()
+    })
+
+    act(() => {
+      provided = storeRef.store.getState().api.provided
+    })
+
+    const provided4Next = provided['Post']['4']
+
+    expect(provided4Next).toEqual(undefined)
   })
 
   test('does not update non-existing values', async () => {

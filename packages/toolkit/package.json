@@ -94,10 +94,7 @@
     "dist/**/*.d.ts",
     "dist/**/package.json",
     "src/",
-    "query",
-    "tsconfig.test.json",
-    "tsconfig.json",
-    "tsconfig.base.json"
+    "query"
   ],
   "dependencies": {
     "immer": "^9.0.21",
