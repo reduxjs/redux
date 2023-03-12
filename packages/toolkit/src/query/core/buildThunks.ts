@@ -165,7 +165,8 @@ export type PatchQueryDataThunk<
 > = <EndpointName extends QueryKeys<Definitions>>(
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
-  patches: readonly Patch[]
+  patches: readonly Patch[],
+  updateProvided?: boolean
 ) => ThunkAction<void, PartialState, any, AnyAction>
 
 export type UpdateQueryDataThunk<
@@ -174,7 +175,8 @@ export type UpdateQueryDataThunk<
 > = <EndpointName extends QueryKeys<Definitions>>(
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
-  updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>
+  updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>,
+  updateProvided?: boolean
 ) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
 
 export type UpsertQueryDataThunk<
@@ -211,7 +213,6 @@ export type PatchCollection = {
    * A function that will undo the cache update.
    */
   undo: () => void
-  provided: readonly FullTagDescription<string>[]
 }
 
 export function buildThunks<
@@ -236,41 +237,58 @@ export function buildThunks<
   type State = RootState<any, string, ReducerPath>
 
   const patchQueryData: PatchQueryDataThunk<EndpointDefinitions, State> =
-    (endpointName, args, patches) => (dispatch) => {
+    (endpointName, args, patches, updateProvided) => (dispatch, getState) => {
       const endpointDefinition = endpointDefinitions[endpointName]
+
+      const queryCacheKey = serializeQueryArgs({
+        queryArgs: args,
+        endpointDefinition,
+        endpointName,
+      })
+
       dispatch(
-        api.internalActions.queryResultPatched({
-          queryCacheKey: serializeQueryArgs({
-            queryArgs: args,
-            endpointDefinition,
-            endpointName,
-          }),
-          patches,
-        })
+        api.internalActions.queryResultPatched({ queryCacheKey, patches })
+      )
+
+      if (!updateProvided) {
+        return
+      }
+
+      const newValue = api.endpoints[endpointName].select(args)(getState())
+
+      const providedTags = calculateProvidedBy(
+        endpointDefinition.providesTags,
+        newValue.data,
+        undefined,
+        args,
+        {},
+        assertTagType
+      )
+
+      dispatch(
+        api.internalActions.updateProvidedBy({ queryCacheKey, providedTags })
       )
     }
 
   const updateQueryData: UpdateQueryDataThunk<EndpointDefinitions, State> =
     (endpointName, args, updateRecipe, updateProvided = true) =>
     (dispatch, getState) => {
-      const currentState = (
-        api.endpoints[endpointName] as ApiEndpointQuery<any, any>
-      ).select(args)(getState())
+      const endpointDefinition = api.endpoints[endpointName]
+
+      const currentState = endpointDefinition.select(args)(getState())
+
       let ret: PatchCollection = {
         patches: [],
         inversePatches: [],
-        undo: () => {
+        undo: () =>
           dispatch(
-            api.util.patchQueryData(endpointName, args, ret.inversePatches)
-          )
-          // this needs to `getState` the current value after patching the `inversePatch`
-          const oldValue = getState()
-          dispatch(
-            // `updateProvidedBy` needs to be implemented as a new reducer on `invalidationSlice`
-            updateProvidedBy(endpointName, args, calculateNewProvided(oldValue))
-          )
-        },
-        provided: [],
+            api.util.patchQueryData(
+              endpointName,
+              args,
+              ret.inversePatches,
+              updateProvided
+            )
+          ),
       }
       if (currentState.status === QueryStatus.uninitialized) {
         return ret
@@ -296,25 +314,11 @@ export function buildThunks<
         }
       }
 
-      if (updateProvided) {
-        ret.provided = calculateNewProvided(newValue)
-      }
-
-      // `patchQueryData` needs to be added as `extraReducer` on `invalidationSlice`
-      dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
+      dispatch(
+        api.util.patchQueryData(endpointName, args, ret.patches, updateProvided)
+      )
 
       return ret
-
-      function calculateNewProvided(newValue: unknown) {
-        return calculateProvidedBy(
-          endpointDefinitions[endpointName].providesTags,
-          newValue,
-          undefined,
-          args,
-          {},
-          assertTagType
-        )
-      }
     }
 
   const upsertQueryData: UpsertQueryDataThunk<Definitions, State> =

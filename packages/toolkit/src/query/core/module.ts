@@ -518,6 +518,7 @@ export const coreModule = (): Module<CoreModule> => ({
       context,
       api,
       serializeQueryArgs,
+      assertTagType,
     })
 
     const { reducer, actions: sliceActions } = buildSlice({

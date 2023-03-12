@@ -29,6 +29,7 @@ import { calculateProvidedByThunk } from './buildThunks'
 import type {
   AssertTagTypes,
   EndpointDefinitions,
+  FullTagDescription,
   QueryDefinition,
 } from '../endpointDefinitions'
 import type { Patch } from 'immer'
@@ -325,7 +326,36 @@ export function buildSlice({
   const invalidationSlice = createSlice({
     name: `${reducerPath}/invalidation`,
     initialState: initialState as InvalidationState<string>,
-    reducers: {},
+    reducers: {
+      updateProvidedBy: (
+        draft,
+        action: PayloadAction<{
+          queryCacheKey: QueryCacheKey
+          providedTags: readonly FullTagDescription<string>[]
+        }>
+      ) => {
+        const { queryCacheKey, providedTags } = action.payload
+
+        for (const tagTypeSubscriptions of Object.values(draft)) {
+          for (const idSubscriptions of Object.values(tagTypeSubscriptions)) {
+            const foundAt = idSubscriptions.indexOf(queryCacheKey)
+            if (foundAt !== -1) {
+              idSubscriptions.splice(foundAt, 1)
+            }
+          }
+        }
+
+        for (const { type, id } of providedTags) {
+          const subscribedQueries = ((draft[type] ??= {})[
+            id || '__internal_without_id'
+          ] ??= [])
+          const alreadySubscribed = subscribedQueries.includes(queryCacheKey)
+          if (!alreadySubscribed) {
+            subscribedQueries.push(queryCacheKey)
+          }
+        }
+      },
+    },
     extraReducers(builder) {
       builder
         .addCase(
@@ -371,27 +401,13 @@ export function buildSlice({
             )
             const { queryCacheKey } = action.meta.arg
 
-            for (const tagTypeSubscriptions of Object.values(draft)) {
-              for (const idSubscriptions of Object.values(
-                tagTypeSubscriptions
-              )) {
-                const foundAt = idSubscriptions.indexOf(queryCacheKey)
-                if (foundAt !== -1) {
-                  idSubscriptions.splice(foundAt, 1)
-                }
-              }
-            }
-
-            for (const { type, id } of providedTags) {
-              const subscribedQueries = ((draft[type] ??= {})[
-                id || '__internal_without_id'
-              ] ??= [])
-              const alreadySubscribed =
-                subscribedQueries.includes(queryCacheKey)
-              if (!alreadySubscribed) {
-                subscribedQueries.push(queryCacheKey)
-              }
-            }
+            invalidationSlice.caseReducers.updateProvidedBy(
+              draft,
+              invalidationSlice.actions.updateProvidedBy({
+                queryCacheKey,
+                providedTags,
+              })
+            )
           }
         )
     },
@@ -497,6 +513,7 @@ export function buildSlice({
     ...subscriptionSlice.actions,
     ...internalSubscriptionsSlice.actions,
     ...mutationSlice.actions,
+    ...invalidationSlice.actions,
     /** @deprecated has been renamed to `removeMutationResult` */
     unsubscribeMutationResult: mutationSlice.actions.removeMutationResult,
     resetApiState,
