@@ -126,17 +126,22 @@ export function buildSlice({
         },
         prepare: prepareAutoBatched<QuerySubstateIdentifier>(),
       },
-      queryResultPatched(
-        draft,
-        {
-          payload: { queryCacheKey, patches },
-        }: PayloadAction<
+      queryResultPatched: {
+        reducer(
+          draft,
+          {
+            payload: { queryCacheKey, patches },
+          }: PayloadAction<
+            QuerySubstateIdentifier & { patches: readonly Patch[] }
+          >
+        ) {
+          updateQuerySubstateIfExists(draft, queryCacheKey, (substate) => {
+            substate.data = applyPatches(substate.data as any, patches.concat())
+          })
+        },
+        prepare: prepareAutoBatched<
           QuerySubstateIdentifier & { patches: readonly Patch[] }
-        >
-      ) {
-        updateQuerySubstateIfExists(draft, queryCacheKey, (substate) => {
-          substate.data = applyPatches(substate.data as any, patches.concat())
-        })
+        >(),
       },
     },
     extraReducers(builder) {
@@ -327,33 +332,39 @@ export function buildSlice({
     name: `${reducerPath}/invalidation`,
     initialState: initialState as InvalidationState<string>,
     reducers: {
-      updateProvidedBy: (
-        draft,
-        action: PayloadAction<{
-          queryCacheKey: QueryCacheKey
-          providedTags: readonly FullTagDescription<string>[]
-        }>
-      ) => {
-        const { queryCacheKey, providedTags } = action.payload
+      updateProvidedBy: {
+        reducer(
+          draft,
+          action: PayloadAction<{
+            queryCacheKey: QueryCacheKey
+            providedTags: readonly FullTagDescription<string>[]
+          }>
+        ) {
+          const { queryCacheKey, providedTags } = action.payload
 
-        for (const tagTypeSubscriptions of Object.values(draft)) {
-          for (const idSubscriptions of Object.values(tagTypeSubscriptions)) {
-            const foundAt = idSubscriptions.indexOf(queryCacheKey)
-            if (foundAt !== -1) {
-              idSubscriptions.splice(foundAt, 1)
+          for (const tagTypeSubscriptions of Object.values(draft)) {
+            for (const idSubscriptions of Object.values(tagTypeSubscriptions)) {
+              const foundAt = idSubscriptions.indexOf(queryCacheKey)
+              if (foundAt !== -1) {
+                idSubscriptions.splice(foundAt, 1)
+              }
             }
           }
-        }
 
-        for (const { type, id } of providedTags) {
-          const subscribedQueries = ((draft[type] ??= {})[
-            id || '__internal_without_id'
-          ] ??= [])
-          const alreadySubscribed = subscribedQueries.includes(queryCacheKey)
-          if (!alreadySubscribed) {
-            subscribedQueries.push(queryCacheKey)
+          for (const { type, id } of providedTags) {
+            const subscribedQueries = ((draft[type] ??= {})[
+              id || '__internal_without_id'
+            ] ??= [])
+            const alreadySubscribed = subscribedQueries.includes(queryCacheKey)
+            if (!alreadySubscribed) {
+              subscribedQueries.push(queryCacheKey)
+            }
           }
-        }
+        },
+        prepare: prepareAutoBatched<{
+          queryCacheKey: QueryCacheKey
+          providedTags: readonly FullTagDescription<string>[]
+        }>(),
       },
     },
     extraReducers(builder) {
