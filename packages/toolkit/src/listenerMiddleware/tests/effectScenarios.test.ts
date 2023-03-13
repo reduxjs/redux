@@ -194,7 +194,7 @@ describe('Saga-style Effects Scenarios', () => {
         listenerApi.unsubscribe()
 
         // Pretend we're doing expensive work
-        await listenerApi.delay(15)
+        await listenerApi.delay(25)
 
         workPerformed++
 
@@ -221,7 +221,7 @@ describe('Saga-style Effects Scenarios', () => {
     expect(listenerCalls).toBe(1)
     expect(workPerformed).toBe(0)
 
-    await delay(20)
+    await delay(50)
 
     // Work finished, should have resubscribed
     expect(workPerformed).toBe(1)
@@ -232,7 +232,7 @@ describe('Saga-style Effects Scenarios', () => {
     expect(listenerCalls).toBe(2)
     expect(workPerformed).toBe(1)
 
-    await delay(20)
+    await delay(50)
 
     expect(workPerformed).toBe(2)
   })
