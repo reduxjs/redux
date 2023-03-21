@@ -1,6 +1,6 @@
 # Redux Toolkit
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/reduxjs/redux-toolkit/CI?style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reduxjs/redux-toolkit/tests.yml?style=flat-square)
 [![npm version](https://img.shields.io/npm/v/@reduxjs/toolkit.svg?style=flat-square)](https://www.npmjs.com/package/@reduxjs/toolkit)
 [![npm downloads](https://img.shields.io/npm/dm/@reduxjs/toolkit.svg?style=flat-square&label=RTK+downloads)](https://www.npmjs.com/package/@reduxjs/toolkit)
 
