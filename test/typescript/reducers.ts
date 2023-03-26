@@ -156,7 +156,7 @@ function discriminated() {
   combined(cs, { type: 'SOME_OTHER_TYPE' })
 
   // Combined reducer can be made to only accept known actions.
-  const strictCombined = combineReducers<{ sub: State }, MyAction0>({
+  const strictCombined = combineReducers({
     sub: reducer0
   })
 

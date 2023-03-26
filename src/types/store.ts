@@ -3,49 +3,6 @@ import { Reducer } from './reducers'
 import '../utils/symbol-observable'
 
 /**
- * Internal "virtual" symbol used to make the `CombinedState` type unique.
- */
-declare const $CombinedState: unique symbol
-
-/**
- * State base type for reducers created with `combineReducers()`.
- *
- * This type allows the `createStore()` method to infer which levels of the
- * preloaded state can be partial.
- *
- * Because Typescript is really duck-typed, a type needs to have some
- * identifying property to differentiate it from other types with matching
- * prototypes for type checking purposes. That's why this type has the
- * `$CombinedState` symbol property. Without the property, this type would
- * match any object. The symbol doesn't really exist because it's an internal
- * (i.e. not exported), and internally we never check its value. Since it's a
- * symbol property, it's not expected to be unumerable, and the value is
- * typed as always undefined, so its never expected to have a meaningful
- * value anyway. It just makes this type distinguishable from plain `{}`.
- */
-interface EmptyObject {
-  readonly [$CombinedState]?: undefined
-}
-export type CombinedState<S> = EmptyObject & S
-
-/**
- * Recursively makes combined state objects partial. Only combined state _root
- * objects_ (i.e. the generated higher level object with keys mapping to
- * individual reducers) are partial.
- */
-export type PreloadedState<S> = Required<S> extends EmptyObject
-  ? S extends CombinedState<infer S1>
-    ? {
-        [K in keyof S1]?: S1[K] extends object ? PreloadedState<S1[K]> : S1[K]
-      }
-    : S
-  : {
-      [K in keyof S]: S[K] extends string | number | boolean | symbol
-        ? S[K]
-        : PreloadedState<S[K]>
-    }
-
-/**
  * A *dispatching function* (or simply *dispatch function*) is a function that
  * accepts an action or an async action; it then may or may not dispatch one
  * or more actions to the store.
@@ -214,6 +171,7 @@ export interface Store<
  *
  * @template S The type of state to be held by the store.
  * @template A The type of actions which may be dispatched.
+ * @template PreloadedState The initial state that is passed into the reducer.
  * @template Ext Store extension that is mixed in to the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
@@ -222,9 +180,15 @@ export interface StoreCreator {
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
   ): Store<S, A, StateExt> & Ext
-  <S, A extends Action, Ext extends {} = {}, StateExt extends {} = {}>(
-    reducer: Reducer<S, A>,
-    preloadedState?: PreloadedState<S>,
+  <
+    S,
+    A extends Action,
+    Ext extends {} = {},
+    StateExt extends {} = {},
+    PreloadedState = S
+  >(
+    reducer: Reducer<S, A, PreloadedState>,
+    preloadedState?: PreloadedState | undefined,
     enhancer?: StoreEnhancer<Ext>
   ): Store<S, A, StateExt> & Ext
 }
@@ -259,7 +223,7 @@ export type StoreEnhancer<Ext extends {} = {}, StateExt extends {} = {}> = <
 export type StoreEnhancerStoreCreator<
   Ext extends {} = {},
   StateExt extends {} = {}
-> = <S = any, A extends Action = AnyAction>(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>
+> = <S, A extends Action, PreloadedState>(
+  reducer: Reducer<S, A, PreloadedState>,
+  preloadedState?: PreloadedState | undefined
 ) => Store<S, A, StateExt> & Ext

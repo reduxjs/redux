@@ -1,11 +1,10 @@
 import { AnyAction, Action } from './types/actions'
 import {
   ActionFromReducersMapObject,
+  PreloadedStateShapeFromReducersMapObject,
   Reducer,
-  ReducersMapObject,
   StateFromReducersMapObject
 } from './types/reducers'
-import { CombinedState } from './types/store'
 
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
@@ -14,7 +13,7 @@ import { kindOf } from './utils/kindOf'
 
 function getUnexpectedStateShapeWarningMessage(
   inputState: object,
-  reducers: ReducersMapObject,
+  reducers: { [key: string]: Reducer<any, any, any> },
   action: Action,
   unexpectedKeyCache: { [key: string]: true }
 ) {
@@ -60,7 +59,9 @@ function getUnexpectedStateShapeWarningMessage(
   }
 }
 
-function assertReducerShape(reducers: ReducersMapObject) {
+function assertReducerShape(reducers: {
+  [key: string]: Reducer<any, any, any>
+}) {
   Object.keys(reducers).forEach(key => {
     const reducer = reducers[key]
     const initialState = reducer(undefined, { type: ActionTypes.INIT })
@@ -110,21 +111,20 @@ function assertReducerShape(reducers: ReducersMapObject) {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export default function combineReducers<S>(
-  reducers: ReducersMapObject<S, any>
-): Reducer<CombinedState<S>>
-export default function combineReducers<S, A extends Action = AnyAction>(
-  reducers: ReducersMapObject<S, A>
-): Reducer<CombinedState<S>, A>
-export default function combineReducers<M extends ReducersMapObject>(
+export default function combineReducers<M>(
   reducers: M
-): Reducer<
-  CombinedState<StateFromReducersMapObject<M>>,
-  ActionFromReducersMapObject<M>
->
-export default function combineReducers(reducers: ReducersMapObject) {
+): M[keyof M] extends Reducer<any, any, any> | undefined
+  ? Reducer<
+      StateFromReducersMapObject<M>,
+      ActionFromReducersMapObject<M>,
+      Partial<PreloadedStateShapeFromReducersMapObject<M>>
+    >
+  : never
+export default function combineReducers(reducers: {
+  [key: string]: Reducer<any, any, any>
+}) {
   const reducerKeys = Object.keys(reducers)
-  const finalReducers: ReducersMapObject = {}
+  const finalReducers: { [key: string]: Reducer<any, any, any> } = {}
   for (let i = 0; i < reducerKeys.length; i++) {
     const key = reducerKeys[i]
 

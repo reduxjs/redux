@@ -9,8 +9,6 @@ import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 // types
 // store
 export {
-  CombinedState,
-  PreloadedState,
   Dispatch,
   Unsubscribe,
   Observable,
@@ -23,11 +21,12 @@ export {
 // reducers
 export {
   Reducer,
-  ReducerFromReducersMapObject,
   ReducersMapObject,
   StateFromReducersMapObject,
+  ReducerFromReducersMapObject,
   ActionFromReducer,
-  ActionFromReducersMapObject
+  ActionFromReducersMapObject,
+  PreloadedStateShapeFromReducersMapObject
 } from './types/reducers'
 // action creators
 export { ActionCreator, ActionCreatorsMapObject } from './types/actions'

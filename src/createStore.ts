@@ -2,7 +2,6 @@ import $$observable from './utils/symbol-observable'
 
 import {
   Store,
-  PreloadedState,
   StoreEnhancer,
   Dispatch,
   Observer,
@@ -77,20 +76,22 @@ export function createStore<
   S,
   A extends Action,
   Ext extends {} = {},
-  StateExt extends {} = {}
+  StateExt extends {} = {},
+  PreloadedState = S
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>,
+  reducer: Reducer<S, A, PreloadedState>,
+  preloadedState?: PreloadedState | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S, A, StateExt> & Ext
 export function createStore<
   S,
   A extends Action,
   Ext extends {} = {},
-  StateExt extends {} = {}
+  StateExt extends {} = {},
+  PreloadedState = S
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
+  reducer: Reducer<S, A, PreloadedState>,
+  preloadedState?: PreloadedState | StoreEnhancer<Ext, StateExt> | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S, A, StateExt> & Ext {
   if (typeof reducer !== 'function') {
@@ -128,12 +129,14 @@ export function createStore<
 
     return enhancer(createStore)(
       reducer,
-      preloadedState as PreloadedState<S>
-    ) as Store<S, A, StateExt> & Ext
+      preloadedState as PreloadedState | undefined
+    )
   }
 
   let currentReducer = reducer
-  let currentState = preloadedState as S
+  let currentState: S | PreloadedState | undefined = preloadedState as
+    | PreloadedState
+    | undefined
   let currentListeners: Map<number, ListenerCallback> | null = new Map()
   let nextListeners = currentListeners
   let listenerIdCounter = 0
@@ -315,7 +318,7 @@ export function createStore<
       )
     }
 
-    currentReducer = nextReducer
+    currentReducer = nextReducer as unknown as Reducer<S, A, PreloadedState>
 
     // This action has a similar effect to ActionTypes.INIT.
     // Any reducers that existed in both the new and old rootReducer
@@ -456,20 +459,22 @@ export function legacy_createStore<
   S,
   A extends Action,
   Ext extends {} = {},
-  StateExt extends {} = {}
+  StateExt extends {} = {},
+  PreloadedState = S
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>,
+  reducer: Reducer<S, A, PreloadedState>,
+  preloadedState?: PreloadedState | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S, A, StateExt> & Ext
 export function legacy_createStore<
   S,
   A extends Action,
   Ext extends {} = {},
-  StateExt extends {} = {}
+  StateExt extends {} = {},
+  PreloadedState = S
 >(
   reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
+  preloadedState?: PreloadedState | StoreEnhancer<Ext, StateExt> | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S, A, StateExt> & Ext {
   return createStore(reducer, preloadedState as any, enhancer)
