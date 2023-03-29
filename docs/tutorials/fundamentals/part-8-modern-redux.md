@@ -49,7 +49,7 @@ If you'd like a reminder of what we've covered so far, take a look at this summa
   - Redux "thunk" functions are the standard way to write basic async logic
 - [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md):
   - Action creators encapsulate preparing action objects and thunks
-  - Memoized selectors optimize calculating transformed data
+  - Memorized selectors optimize calculating transformed data
   - Request status should be tracked with loading state enum values
   - Normalized state makes it easier to look up items by IDs
 
