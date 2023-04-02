@@ -36,55 +36,107 @@ You might still want to use custom middleware in one of two cases:
 
 ## Standard patterns for middleware
 
-Middleware roughly works like this:
+### Create side effects for actions
 
+This is the most common middleware. Here's what it looks like for [rtk listener middleware](https://github.com/reduxjs/redux-toolkit/blob/0678c2e195a70c34cd26bddbfd29043bc36d1362/packages/toolkit/src/listenerMiddleware/index.ts#L427):
 ```ts
-const middleware: Middleware = api => next => action => {
-  // Do something before the action hits the reducer and the next middlewares
-  const beforeState = api.getState()
-  beforeSideEffect(action, beforeState)
-  // Do something with the action before passing it along
-  const enhancedAction = enhance(action, beforeState, api)
-  let response: unknown
-  // Pass the action along, or cancel it by not passing it
-  if (!shouldCancelAction(enhancedAction, beforeState)) {
-    response = next(enhancedAction)
-  }
-  // Do something after the action hits the reducer
-  const afterState = api.getState()
-  afterSideEffect(action, afterState, api)
+const middleware: ListenerMiddleware<S, D, ExtraArgument> =
+    (api) => (next) => (action) => {
+      if (addListener.match(action)) {
+        return startListening(action.payload)
+      }
 
-  // Do something with the dispatch function return value
-  return enhanceDispatch(response, api)
-}
+      if (clearAllListeners.match(action)) {
+        clearListenerMiddleware()
+        return
+      }
+
+      if (removeListener.match(action)) {
+        return stopListening(action.payload)
+      }
+
+      // Need to get this state _before_ the reducer processes the action
+      let originalState: S | typeof INTERNAL_NIL_TOKEN = api.getState()
+
+      // `getOriginalState` can only be called synchronously.
+      // @see https://github.com/reduxjs/redux-toolkit/discussions/1648#discussioncomment-1932820
+      const getOriginalState = (): S => {
+        if (originalState === INTERNAL_NIL_TOKEN) {
+          throw new Error(
+            `${alm}: getOriginalState can only be called synchronously`
+          )
+        }
+
+        return originalState as S
+      }
+
+      let result: unknown
+
+      try {
+        // Actually forward the action to the reducer before we handle listeners
+        result = next(action)
+
+        if (listenerMap.size > 0) {
+          let currentState = api.getState()
+          // Work around ESBuild+TS transpilation issue
+          const listenerEntries = Array.from(listenerMap.values())
+          for (let entry of listenerEntries) {
+            let runListener = false
+
+            try {
+              runListener = entry.predicate(action, currentState, originalState)
+            } catch (predicateError) {
+              runListener = false
+
+              safelyNotifyError(onError, predicateError, {
+                raisedBy: 'predicate',
+              })
+            }
+
+            if (!runListener) {
+              continue
+            }
+
+            notifyListener(entry, action, api, getOriginalState)
+          }
+        }
+      } finally {
+        // Remove `originalState` store from this scope.
+        originalState = INTERNAL_NIL_TOKEN
+      }
+
+      return result
+    }
 ```
 
-The different points to hook in (as marked by the comments) combined with the main usage for side-effects leads to two main patterns that are used in many different libraries.
+In the first part, it listens to `addListener`, `clearAllListeners` and `removeListener` actions to change which listeners should be invoked later on.
 
-### Early side effect
+In the second part, the code mainly calculates the state after passing the action through the other middlewares and the reducer, and then passes both the original state as well as the new state coming from the reducer to the listeners.
 
-```ts
-const middleware: Middleware = api => next => action => {
-  // Do something before the action hits the reducer and the next middlewares
-  const beforeState = api.getState()
-  beforeSideEffect(action, beforeState, api)
-  return next(action)
-}
-```
+It is common to have side effects after dispatching th eaction, because this allows taking into account both the original and the new state, and because the interaction coming from the side effects shouldn't influence the current action execution anyways (otherwise, it wouldn't be a side effect).
 
-### Late side effect
+### Modify or cancel actions, or modify the input accepted by dispatch
+
+While these patterns are less common, most of them (except for cancelling actions) are used by [redux thunk middleware](https://github.com/reduxjs/redux-thunk/blob/587a85b1d908e8b7cf2297bec6e15807d3b7dc62/src/index.ts#L22):
 
 ```ts
-const middleware: Middleware = api => next => action => {
-  const response = next(action)
+  const middleware: ThunkMiddleware<State, BasicAction, ExtraThunkArg> =
+    ({ dispatch, getState }) =>
+    next =>
+    action => {
+      // The thunk middleware looks for any functions that were passed to `store.dispatch`.
+      // If this "action" is really a function, call it and return the result.
+      if (typeof action === 'function') {
+        // Inject the store's `dispatch` and `getState` methods, as well as any "extra arg"
+        return action(dispatch, getState, extraArgument)
+      }
 
-  // Do something after the action hits the reducer
-  const afterState = api.getState()
-  afterSideEffect(action, afterState, api)
-
-  return response
-}
+      // Otherwise, pass the action down the middleware chain as usual
+      return next(action)
+    }
 ```
+
+Usually, `dispatch` can only handle JSON actions. This middleware adds the ability to also handle actions in the form of functions. It also changes the return type of the dispatch function itself by passing the return value of the function-action to be the return value of the dispatch function.
 
 ## Rules to make compatible middleware
 
