@@ -127,3 +127,74 @@ jobs:
           yarn tsc --version
           yarn check-types
           yarn test:types
+
+  test-published-artifact:
+    name: Test Published Artifact ${{ matrix.example }}
+
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['16.x']
+        example:
+          [
+            'cra4',
+            'cra5',
+            'next',
+            'vite',
+            'node-standard',
+            'node-esm',
+            'are-the-types-wrong'
+          ]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use node ${{ matrix.node }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
+
+      - name: Clone RTK repo
+        run: git clone https://github.com/reduxjs/redux-toolkit.git ./redux-toolkit
+
+      - name: Check folder contents
+        run: ls -l .
+
+      - name: Install deps
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: yarn install
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: package
+          path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+
+      - name: Check folder contents
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: ls -l .
+
+      - name: Install build artifact
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: yarn add ./package.tgz
+
+      - name: Show installed package versions
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: yarn info redux && yarn why redux
+
+      - name: Build example
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: yarn build
+
+      - name: Run test step
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: yarn test
+        if: matrix.example != 'are-the-types-wrong'
+
+      - name: Run test step
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        # Ignore "FalseCJS" errors in the `attw` job
+        run: yarn test -n FalseCJS
+        if: matrix.example == 'are-the-types-wrong'
