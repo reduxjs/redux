@@ -24,7 +24,7 @@
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
   "main": "dist/cjs/redux.cjs",
-  "module": "dist/redux.mjs",
+  "module": "dist/redux.legacy-esm.js",
   "types": "dist/redux.d.ts",
   "exports": {
     "./package.json": "./package.json",

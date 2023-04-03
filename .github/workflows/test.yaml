@@ -16,6 +16,8 @@ jobs:
             src:
               - 'src/**'
               - 'test/**'
+              - '.github/**/*.yaml'
+              - 'tsup.config.ts'
 
   build:
     needs: changes
