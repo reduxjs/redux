@@ -3,6 +3,7 @@ import { defineConfig, Options } from 'tsup'
 import * as babel from '@babel/core'
 import { Plugin } from 'esbuild'
 import { getBuildExtensions } from 'esbuild-extra'
+import fs from 'fs'
 
 // Extract error strings, replace them with error codes, and write messages to a file
 const mangleErrorsTransform: Plugin = {
@@ -42,7 +43,11 @@ export default defineConfig(options => {
       format: ['esm'],
       outExtension: () => ({ js: '.mjs' }),
       dts: true,
-      clean: true
+      clean: true,
+      onSuccess() {
+        // Support Webpack 4 by pointing `"module"` to a file with a `.js` extension
+        fs.copyFileSync('dist/redux.mjs', 'dist/redux.legacy-esm.js')
+      }
     },
     // Browser-ready ESM, production + minified
     {
