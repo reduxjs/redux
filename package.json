@@ -23,27 +23,23 @@
     "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
   ],
-  "type": "module",
-  "module": "dist/es/index.js",
-  "main": "dist/cjs/index.cjs",
-  "types": "types/index.d.ts",
+  "main": "dist/cjs/redux.cjs",
+  "module": "dist/redux.mjs",
+  "types": "dist/redux.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./types/index.d.ts",
-      "import": "./dist/es/index.js",
-      "default": "./dist/cjs/index.cjs"
+      "types": "./dist/redux.d.ts",
+      "import": "./dist/redux.mjs",
+      "default": "./dist/cjs/redux.cjs"
     }
   },
   "files": [
     "dist",
-    "lib",
-    "es",
-    "src",
-    "types"
+    "src"
   ],
   "scripts": {
-    "clean": "rimraf lib dist es coverage types",
+    "clean": "rimraf dist",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "lint": "eslint --ext js,ts src test",
@@ -52,7 +48,7 @@
     "test:types": "tsc -p test/typescript && echo \"Typetests passed\"",
     "test:watch": "vitest",
     "test:cov": "vitest --coverage",
-    "build": "rollup -c",
+    "build": "tsup",
     "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test",
     "prepack": "yarn build",
     "examples:lint": "eslint --ext js,ts examples",
