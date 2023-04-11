@@ -25,6 +25,6 @@ export interface Middleware<
   D extends Dispatch = Dispatch
 > {
   (api: MiddlewareAPI<D, S>): (
-    next: D
-  ) => (action: unknown) => any
+    next: (action: unknown) => unknown
+  ) => (action: unknown) => unknown
 }
