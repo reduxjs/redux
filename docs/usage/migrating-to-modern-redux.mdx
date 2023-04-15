@@ -20,7 +20,7 @@ Redux has been around since 2015, and our recommended patterns for writing Redux
 
 Many users are working on older Redux codebases that have been around since before these "modern Redux" patterns existed. Migrating those codebases to today's recommended modern Redux patterns will result in codebases that are much smaller and easier to maintain.
 
-The good news is that **you can migrate your code to modern Redux incrementally, piece by piece, with old and new Redux code coexisting and working together!**.
+The good news is that **you can migrate your code to modern Redux incrementally, piece by piece, with old and new Redux code coexisting and working together!**
 
 This page covers the general approaches and techniques you can use to modernize an existing legacy Redux codebase.
 
@@ -29,7 +29,7 @@ This page covers the general approaches and techniques you can use to modernize 
 For more details on how "modern Redux" with Redux Toolkit + React-Redux hooks simplifies using Redux, see these additional resources:
 
 - [Why Redux Toolkit is How to use Redux Today](../introduction/why-rtk-is-redux-today.md)
-- [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
+- [Redux Essentials: Redux Toolkit App Structure](../tutorials/essentials/part-2-app-structure.md)
 - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
 - [Presentation: Modern Redux with Redux Toolkit](https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/)
 
@@ -150,7 +150,7 @@ import usersReducer from '../features/users/usersSlice'
 import { api } from '../features/api/apiSlice'
 import { serviceLayer } from '../features/api/serviceLayer'
 
-import sanitizeStateForDevtools from './devtools'
+import stateSanitizerForDevtools from './devtools'
 import customMiddleware from './someCustomMiddleware'
 
 // Can call `combineReducers` yourself if needed
@@ -167,7 +167,6 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 
 const store = configureStore({
   // Can create a root reducer separately and pass that in
@@ -192,8 +191,8 @@ const store = configureStore({
     return middleware
   },
   // Turn off devtools in prod, or pass options in dev
-  devTools: process.env.NODE_ENV == 'production' ? false {
-    sanitizeState: sanitizeStateForDevtools
+  devTools: process.env.NODE_ENV === 'production' ? false : {
+    stateSanitizer: stateSanitizerForDevtools
   }
 })
 ```
@@ -256,7 +255,7 @@ export default function todosReducer(state = initialState, action) {
 }
 ```
 
-**Redux Toolkit's `createSlice` API was designed to eliminate all the "boilerplate" with writing reducers, actions, and immutable updates!**.
+**Redux Toolkit's `createSlice` API was designed to eliminate all the "boilerplate" with writing reducers, actions, and immutable updates!**
 
 With Redux Toolkit, there's multiple changes to that legacy code:
 
@@ -284,7 +283,7 @@ const todosSlice = createSlice({
     todoAdded(state, action) {
       const { id, text } = action.payload
       // "Mutating" update syntax thanks to Immer, and no `return` needed
-      todos.push({
+      state.todos.push({
         id,
         text,
         completed: false
@@ -295,7 +294,7 @@ const todosSlice = createSlice({
       // Look for the specific nested object to update.
       // In this case, `action.payload` is the default field in the action,
       // and can hold the `id` value - no need for `action.id` separately
-      const matchingTodo = state.find(todo => todo.id === action.payload)
+      const matchingTodo = state.todos.find(todo => todo.id === action.payload)
 
       if (matchingTodo) {
         // Can directly "mutate" the nested object
@@ -449,7 +448,7 @@ import {
   fetchTodosStarted,
   fetchTodosSucceeded,
   fetchTodosFailed
-} from '../actions/todos
+} from '../actions/todos'
 
 // Saga to actually fetch data
 export function* fetchTodos() {
@@ -482,7 +481,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     // Fill in your own server starting URL here
-    url: '/'
+    baseUrl: '/'
   }),
   endpoints: build => ({})
 })
@@ -521,7 +520,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     // Fill in your own server starting URL here
-    url: '/'
+    baseUrl: '/'
   }),
   endpoints: build => ({
     // highlight-start
@@ -705,7 +704,7 @@ const pingSlice = createSlice({
   }
 })
 
-export const { ping } = pingSlice.actions
+export const { pong } = pingSlice.actions
 export default pingSlice.reducer
 
 // highlight-start
@@ -714,7 +713,7 @@ export default pingSlice.reducer
 // it directly in a slice file.
 startListening({
   // Match this exact action type based on the action creator
-  actionCreator: ping,
+  actionCreator: pong,
   // Run this effect callback whenever that action is dispatched
   effect: async (action, listenerApi) => {
     // Listener effect functions get a `listenerApi` object
@@ -812,7 +811,7 @@ import { CounterState } from '../reducers/counter'
 
 // omit reducer setup
 
-export const createStore(rootReducer)
+export const store = createStore(rootReducer)
 
 // ❌ Common pattern: an "action type union" of all possible actions
 export type RootAction = TodoActions | CounterActions
@@ -1148,7 +1147,7 @@ function TodoListItem({ todoId }: TodoListItemProps) {
 See these docs pages and blog posts for more details:
 
 - **Tutorials**
-  - [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
+  - [Redux Essentials: Redux Toolkit App Structure](../tutorials/essentials/part-2-app-structure.md)
   - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
   - [Redux TypeScript Quick Start](../tutorials/typescript.md)
 - **Additional Documentation**

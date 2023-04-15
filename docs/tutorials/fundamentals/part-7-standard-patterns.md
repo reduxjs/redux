@@ -7,6 +7,9 @@ description: 'The official Fundamentals tutorial for Redux: learn the standard p
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 7: Standard Redux Patterns
 
 :::tip What You'll Learn
@@ -33,6 +36,8 @@ So far, we've covered the basics of how Redux actually works. However, real worl
 It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists, and you'll see some or all of them in almost every Redux codebase.
 
 In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](https://redux-toolkit.js.org) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
+
+<FundamentalsWarning />
 
 ## Action Creators
 

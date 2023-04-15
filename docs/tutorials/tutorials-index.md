@@ -17,12 +17,12 @@ The [**Quick Start** page](./quick-start.md) briefly shows the basics of setting
 
 We have two different full-size tutorials:
 
-- The [**Redux Essentials tutorial**](./essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices.
+- The [**Redux Essentials tutorial**](./essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices (Redux Toolkit for the logic, React-Redux hooks for the UI, and "RTK Query" for fetching and caching data).
 - The [**Redux Fundamentals tutorial**](./fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.
 
 :::tip
 
-**We recommend starting with the [Redux Essentials tutorial](./essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using Redux to write actual applications.
+**We recommend starting with the [Redux Essentials tutorial](./essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using our modern Redux Toolkit package to write actual applications.
 
 :::
 

@@ -28,10 +28,10 @@ describe('applyMiddleware', () => {
   })
 
   it('wraps dispatch method with middleware once', () => {
-    function test(spyOnMethods: any) {
-      return (methods: any) => {
+    function test(spyOnMethods: any): Middleware {
+      return methods => {
         spyOnMethods(methods)
-        return (next: Dispatch) => (action: Action) => next(action)
+        return next => action => next(action)
       }
     }
 
@@ -53,8 +53,8 @@ describe('applyMiddleware', () => {
   })
 
   it('passes recursive dispatches through the middleware chain', () => {
-    function test(spyOnMethods: any) {
-      return () => (next: Dispatch) => (action: Action) => {
+    function test(spyOnMethods: any): Middleware {
+      return () => next => action => {
         spyOnMethods(action)
         return next(action)
       }
@@ -146,8 +146,7 @@ describe('applyMiddleware', () => {
     }
 
     function dummyMiddleware({ dispatch }: MiddlewareAPI) {
-      return (_next: Dispatch) => (action: Action) =>
-        dispatch(action, testCallArgs)
+      return (_next: unknown) => (action: any) => dispatch(action, testCallArgs)
     }
 
     const store = createStore(

@@ -459,4 +459,4 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
 
 ## What's Next?
 
-We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.
+We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux Toolkit App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.

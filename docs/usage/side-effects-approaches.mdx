@@ -49,7 +49,7 @@ Another use case more specific to Redux is writing logic that _responds_ to a di
 
 ## Recommendations
 
-We recommend using the tools that best fit each use case (see below for further details on each tool):
+We recommend using the tools that best fit each use case (see below for the reasons for our recommendations, as well as further details on each tool):
 
 :::tip
 
@@ -70,6 +70,23 @@ We recommend using the tools that best fit each use case (see below for further 
 - **Use thunks for complex sync and moderate async logic**, including access to `getState` and dispatching multiple actions
 
 :::
+
+### Why RTK Query for Data Fetching
+
+Per [the React docs section on "alternatives for data fetching in Effects"](https://beta.reactjs.org/learn/synchronizing-with-effects#what-are-good-alternatives-to-data-fetching-in-effects), you _should_ use either data fetching approaches that are built into a server-side framework, or a client-side cache. **You should _not_ write data fetching and cache management code yourself.**
+
+RTK Query was specifically designed to be a complete data fetching and caching layer for Redux-based applications. It manages all the fetching, caching, and loading status logic for you, and covers many edge cases that are typically forgotten or hard to handle if you write data fetching code yourself, as well as having cache lifecycle management built-in. It also makes it simple to fetch and use data via the auto-generated React hooks.
+
+We specifically recommend _against_ sagas for data fetching because the complexity of sagas is not helpful, and you would still have to write all of the caching + loading status management logic yourself.
+
+### Why Listeners for Reactive Logic
+
+We've intentionally designed the RTK listener middleware to be straightforward to use. It uses standard `async/await` syntax, covers most common reactive use cases (responding to actions or state changes, debouncing, delays), and even several advanced cases (launching child tasks). It has a small bundle size (~3K), is included with Redux Toolkit, and works great with TypeScript.
+
+We specifically recommend _against_ sagas or observables for most reactive logic for multiple reasons:
+
+- Sagas: require understanding ES6 generator function syntax as well as the saga effects behaviors; add multiple levels of indirection due to needing extra actions dispatched; have poor TypeScript support; and the power and complexity is simply not needed for most Redux use cases.
+- Observables: require understanding the RxJS API and mental model; can be difficult to debug; can add significant bundle size
 
 ## Common Side Effects Approaches
 
@@ -192,7 +209,7 @@ function* fetchResource(resource) {
 
 The [Redux-Observable middleware](https://redux-observable.js.org/) lets you use RxJS observables to create processing pipelines called "epics".
 
-Since RxJS is a framework-agnostic library, observable users point to the fact that you can reuse knowledge of how to use it across different as a major selling point. In addition, RxJS lets you construct declarative pipelines that handle timing cases like cancellation or debouncing.
+Since RxJS is a framework-agnostic library, observable users point to the fact that you can reuse knowledge of how to use it across different platforms as a major selling point. In addition, RxJS lets you construct declarative pipelines that handle timing cases like cancellation or debouncing.
 
 #### Observable Use Cases
 

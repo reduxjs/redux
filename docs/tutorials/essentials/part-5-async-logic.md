@@ -29,6 +29,14 @@ So far, all the data we've worked with has been directly inside of our React cli
 
 In this section, we'll convert our social media app to fetch the posts and users data from an API, and add new posts by saving them to the API.
 
+:::tip
+
+Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching, and RTK Query is built on the same patterns shown in this page.
+
+We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md).
+
+:::
+
 ### Example REST API and Client
 
 To keep the example project isolated but realistic, the initial project setup already includes a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.js`.
@@ -169,14 +177,6 @@ However, writing code using this approach is tedious. Each separate type of requ
 </DetailedExplanation>
 
 <br />
-
-:::tip
-
-Redux Toolkit has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We encourage you to try it out and see if it can help simplify the data fetching code in your own apps!
-
-We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md).
-
-:::
 
 ## Loading Posts
 
