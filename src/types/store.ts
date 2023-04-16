@@ -1,4 +1,4 @@
-import { Action, AnyAction } from './actions'
+import { Action, UnknownAction } from './actions'
 import { Reducer } from './reducers'
 import '../utils/symbol-observable'
 
@@ -23,7 +23,7 @@ import '../utils/symbol-observable'
  * @template A The type of things (actions or otherwise) which may be
  *   dispatched.
  */
-export interface Dispatch<A extends Action = AnyAction> {
+export interface Dispatch<A extends Action = UnknownAction> {
   <T extends A>(action: T, ...extraArgs: any[]): T
 }
 
@@ -79,7 +79,7 @@ export type Observer<T> = {
  */
 export interface Store<
   S = any,
-  A extends Action = AnyAction,
+  A extends Action = UnknownAction,
   StateExt extends {} = {}
 > {
   /**
