@@ -925,7 +925,7 @@ describe('fetchBaseQuery', () => {
       })
 
       const req = globalizedBaseQuery(
-        { url: '/success', responseHandler: 'text' },
+        { url: '/success' },
         commonBaseQueryApi,
         {}
       )
@@ -934,6 +934,7 @@ describe('fetchBaseQuery', () => {
       expect(res).toBeInstanceOf(Object)
       expect(res.meta?.request).toBeInstanceOf(Request)
       expect(res.meta?.response).toBeInstanceOf(Object)
+      expect(res.error).toBeUndefined()
       expect(res.data).toEqual(`this is not json!`)
     })
 
