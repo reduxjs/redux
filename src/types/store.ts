@@ -1,6 +1,7 @@
 import { Action, UnknownAction } from './actions'
 import { Reducer } from './reducers'
-import '../utils/symbol-observable'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import _$$observable from '../utils/symbol-observable'
 
 /**
  * A *dispatching function* (or simply *dispatch function*) is a function that

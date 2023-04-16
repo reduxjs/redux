@@ -202,8 +202,8 @@ axiosInstance.interceptors.request.use(config => {
 Then, in your entry point file, inject the store into the API setup file:
 
 ```js title="index.js"
-import store from "./app/store"
-import {injectStore} from "./common/api"
+import store from './app/store'
+import { injectStore } from './common/api'
 injectStore(store)
 ```
 
