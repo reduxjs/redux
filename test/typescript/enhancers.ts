@@ -15,9 +15,9 @@ function dispatchExtension() {
     dispatch: PromiseDispatch
   }> =
     createStore =>
-    <S, A extends Action = AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: any
+    <S, A extends Action, PreloadedState>(
+      reducer: Reducer<S, A, PreloadedState>,
+      preloadedState?: PreloadedState | undefined
     ) => {
       const store = createStore(reducer, preloadedState)
       return {
@@ -48,16 +48,18 @@ function dispatchExtension() {
  */
 function stateExtension() {
   interface ExtraState {
-    extraField: 'extra'
+    extraField: string
   }
 
   const enhancer: StoreEnhancer<{}, ExtraState> =
     createStore =>
-    <S, A extends Action = AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: any
+    <S, A extends Action, PreloadedState>(
+      reducer: Reducer<S, A, PreloadedState>,
+      preloadedState?: PreloadedState | undefined
     ) => {
-      function wrapReducer(reducer: Reducer<S, A>): Reducer<S & ExtraState, A> {
+      function wrapReducer<PreloadedStateToWrap>(
+        reducer: Reducer<S, A, PreloadedStateToWrap>
+      ): Reducer<S & ExtraState, A, PreloadedStateToWrap & ExtraState> {
         return (state, action) => {
           const newState = reducer(state, action)
           return {
@@ -116,16 +118,18 @@ function extraMethods() {
  */
 function replaceReducerExtender() {
   interface ExtraState {
-    extraField: 'extra'
+    extraField: string
   }
 
   const enhancer: StoreEnhancer<{ method(): string }, ExtraState> =
     createStore =>
-    <S, A extends Action = AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: any
+    <S, A extends Action, PreloadedState>(
+      reducer: Reducer<S, A, PreloadedState>,
+      preloadedState?: PreloadedState | undefined
     ) => {
-      function wrapReducer(reducer: Reducer<S, A>): Reducer<S & ExtraState, A> {
+      function wrapReducer<PreloadedStateToWrap>(
+        reducer: Reducer<S, A, PreloadedStateToWrap>
+      ): Reducer<S & ExtraState, A, PreloadedStateToWrap & ExtraState> {
         return (state, action) => {
           const newState = reducer(state, action)
           return {
@@ -192,16 +196,20 @@ function mhelmersonExample() {
 
   function stateExtensionExpectedToWork() {
     interface ExtraState {
-      extraField: 'extra'
+      extraField: string
     }
 
     const enhancer: StoreEnhancer<{}, ExtraState> =
       createStore =>
-      <S, A extends Action = AnyAction>(
-        reducer: Reducer<S, A>,
-        preloadedState?: any
+      <S, A extends Action, PreloadedState>(
+        reducer: Reducer<S, A, PreloadedState>,
+        preloadedState?: PreloadedState | undefined
       ) => {
-        const wrappedReducer: Reducer<S & ExtraState, A> = (state, action) => {
+        const wrappedReducer: Reducer<
+          S & ExtraState,
+          A,
+          PreloadedState & ExtraState
+        > = (state, action) => {
           const newState = reducer(state, action)
           return {
             ...newState,
@@ -268,11 +276,14 @@ function finalHelmersonExample() {
     foo: string
   }
 
-  function persistReducer<S, A extends Action<unknown>>(
+  function persistReducer<S, A extends Action<unknown>, PreloadedState>(
     config: any,
-    reducer: Reducer<S, A>
+    reducer: Reducer<S, A, PreloadedState>
   ) {
-    return (state: (S & ExtraState) | undefined, action: A) => {
+    return (
+      state: (S & ExtraState) | PreloadedState | undefined,
+      action: A
+    ) => {
       const newState = reducer(state, action)
       return {
         ...newState,
@@ -289,11 +300,11 @@ function finalHelmersonExample() {
     persistConfig: any
   ): StoreEnhancer<{}, ExtraState> {
     return createStore =>
-      <S, A extends Action<unknown>>(
-        reducer: Reducer<S, A>,
-        preloadedState?: any
+      <S, A extends Action<unknown>, PreloadedState>(
+        reducer: Reducer<S, A, PreloadedState>,
+        preloadedState?: PreloadedState | undefined
       ) => {
-        const persistedReducer = persistReducer<S, A>(persistConfig, reducer)
+        const persistedReducer = persistReducer(persistConfig, reducer)
         const store = createStore(persistedReducer, preloadedState)
         const persistor = persistStore(store)
 

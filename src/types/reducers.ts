@@ -25,28 +25,46 @@ import { Action, AnyAction } from './actions'
  *
  * @template S The type of state consumed and produced by this reducer.
  * @template A The type of actions the reducer can potentially respond to.
+ * @template PreloadedState The type of state consumed by this reducer the first time it's called.
  */
-export type Reducer<S = any, A extends Action = AnyAction> = (
-  state: S | undefined,
-  action: A
-) => S
+export type Reducer<
+  S = any,
+  A extends Action = AnyAction,
+  PreloadedState = S
+> = (state: S | PreloadedState | undefined, action: A) => S
 
 /**
  * Object whose values correspond to different reducer functions.
  *
+ * @template S The combined state of the reducers.
  * @template A The type of actions the reducers can potentially respond to.
+ * @template PreloadedState The combined preloaded state of the reducers.
  */
-export type ReducersMapObject<S = any, A extends Action = AnyAction> = {
-  [K in keyof S]: Reducer<S[K], A>
-}
+export type ReducersMapObject<
+  S = any,
+  A extends Action = AnyAction,
+  PreloadedState = S
+> = keyof PreloadedState extends keyof S
+  ? {
+      [K in keyof S]: Reducer<
+        S[K],
+        A,
+        K extends keyof PreloadedState ? PreloadedState[K] : never
+      >
+    }
+  : never
 
 /**
  * Infer a combined state shape from a `ReducersMapObject`.
  *
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
-export type StateFromReducersMapObject<M> = M extends ReducersMapObject
-  ? { [P in keyof M]: M[P] extends Reducer<infer S, any> ? S : never }
+export type StateFromReducersMapObject<M> = M[keyof M] extends
+  | Reducer<any, any, any>
+  | undefined
+  ? {
+      [P in keyof M]: M[P] extends Reducer<infer S> ? S : never
+    }
   : never
 
 /**
@@ -54,12 +72,10 @@ export type StateFromReducersMapObject<M> = M extends ReducersMapObject
  *
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
-export type ReducerFromReducersMapObject<M> = M extends {
-  [P in keyof M]: infer R
-}
-  ? R extends Reducer<any, any>
-    ? R
-    : never
+export type ReducerFromReducersMapObject<M> = M[keyof M] extends
+  | Reducer<any, any, any>
+  | undefined
+  ? M[keyof M]
   : never
 
 /**
@@ -67,13 +83,35 @@ export type ReducerFromReducersMapObject<M> = M extends {
  *
  * @template R Type of reducer.
  */
-export type ActionFromReducer<R> = R extends Reducer<any, infer A> ? A : never
+export type ActionFromReducer<R> = R extends
+  | Reducer<any, infer A, any>
+  | undefined
+  ? A
+  : never
 
 /**
  * Infer action union type from a `ReducersMapObject`.
  *
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
-export type ActionFromReducersMapObject<M> = M extends ReducersMapObject
-  ? ActionFromReducer<ReducerFromReducersMapObject<M>>
+export type ActionFromReducersMapObject<M> = ActionFromReducer<
+  ReducerFromReducersMapObject<M>
+>
+
+/**
+ * Infer a combined preloaded state shape from a `ReducersMapObject`.
+ *
+ * @template M Object map of reducers as provided to `combineReducers(map: M)`.
+ */
+export type PreloadedStateShapeFromReducersMapObject<M> = M[keyof M] extends
+  | Reducer<any, any, any>
+  | undefined
+  ? {
+      [P in keyof M]: M[P] extends (
+        inputState: infer InputState,
+        action: AnyAction
+      ) => any
+        ? InputState
+        : never
+    }
   : never

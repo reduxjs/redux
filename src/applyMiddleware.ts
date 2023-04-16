@@ -1,8 +1,6 @@
 import compose from './compose'
 import { Middleware, MiddlewareAPI } from './types/middleware'
-import { AnyAction } from './types/actions'
-import { StoreEnhancer, Dispatch, PreloadedState } from './types/store'
-import { Reducer } from './types/reducers'
+import { StoreEnhancer, Dispatch } from './types/store'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -55,29 +53,25 @@ export default function applyMiddleware<Ext, S = any>(
 export default function applyMiddleware(
   ...middlewares: Middleware[]
 ): StoreEnhancer<any> {
-  return createStore =>
-    <S, A extends AnyAction>(
-      reducer: Reducer<S, A>,
-      preloadedState?: PreloadedState<S>
-    ) => {
-      const store = createStore(reducer, preloadedState)
-      let dispatch: Dispatch = () => {
-        throw new Error(
-          'Dispatching while constructing your middleware is not allowed. ' +
-            'Other middleware would not be applied to this dispatch.'
-        )
-      }
-
-      const middlewareAPI: MiddlewareAPI = {
-        getState: store.getState,
-        dispatch: (action, ...args) => dispatch(action, ...args)
-      }
-      const chain = middlewares.map(middleware => middleware(middlewareAPI))
-      dispatch = compose<typeof dispatch>(...chain)(store.dispatch)
-
-      return {
-        ...store,
-        dispatch
-      }
+  return createStore => (reducer, preloadedState) => {
+    const store = createStore(reducer, preloadedState)
+    let dispatch: Dispatch = () => {
+      throw new Error(
+        'Dispatching while constructing your middleware is not allowed. ' +
+          'Other middleware would not be applied to this dispatch.'
+      )
     }
+
+    const middlewareAPI: MiddlewareAPI = {
+      getState: store.getState,
+      dispatch: (action, ...args) => dispatch(action, ...args)
+    }
+    const chain = middlewares.map(middleware => middleware(middlewareAPI))
+    dispatch = compose<typeof dispatch>(...chain)(store.dispatch)
+
+    return {
+      ...store,
+      dispatch
+    }
+  }
 }

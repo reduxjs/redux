@@ -3,6 +3,7 @@ import {
   createStore,
   combineReducers,
   Reducer,
+  Action,
   AnyAction,
   __DO_NOT_USE__ActionTypes as ActionTypes
 } from 'redux'
@@ -11,10 +12,13 @@ import { vi } from 'vitest'
 describe('Utils', () => {
   describe('combineReducers', () => {
     it('returns a composite reducer that maps the state keys to given reducers', () => {
+      type IncrementAction = { type: 'increment' }
+      type PushAction = { type: 'push'; value: unknown }
+
       const reducer = combineReducers({
-        counter: (state: number = 0, action) =>
+        counter: (state: number = 0, action: IncrementAction) =>
           action.type === 'increment' ? state + 1 : state,
-        stack: (state: any[] = [], action) =>
+        stack: (state: any[] = [], action: PushAction) =>
           action.type === 'push' ? [...state, action.value] : state
       })
 
@@ -50,7 +54,6 @@ describe('Utils', () => {
       )
 
       spy.mockClear()
-      // @ts-expect-error
       combineReducers({ thing: undefined })
       expect(spy.mock.calls[0][0]).toMatch(
         /No reducer provided for key "thing"/
@@ -62,7 +65,7 @@ describe('Utils', () => {
 
     it('throws an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
-        counter(state: number = 0, action) {
+        counter(state: number = 0, action: Action<unknown>) {
           switch (action && action.type) {
             case 'increment':
               return state + 1
@@ -92,7 +95,7 @@ describe('Utils', () => {
 
     it('throws an error on first call if a reducer returns undefined initializing', () => {
       const reducer = combineReducers({
-        counter(state: number, action) {
+        counter(state: number, action: Action<unknown>) {
           switch (action.type) {
             case 'increment':
               return state + 1
@@ -123,7 +126,7 @@ describe('Utils', () => {
       const increment = Symbol('INCREMENT')
 
       const reducer = combineReducers({
-        counter(state: number = 0, action) {
+        counter(state: number = 0, action: Action<unknown>) {
           switch (action.type) {
             case increment:
               return state + 1
@@ -158,7 +161,10 @@ describe('Utils', () => {
         child1(state = {}) {
           return state
         },
-        child2(state: { count: number } = { count: 0 }, action) {
+        child2(
+          state: { count: number } = { count: 0 },
+          action: Action<unknown>
+        ) {
           switch (action.type) {
             case 'increment':
               return { count: state.count + 1 }
@@ -179,7 +185,7 @@ describe('Utils', () => {
 
     it('throws an error on first call if a reducer attempts to handle a private action', () => {
       const reducer = combineReducers({
-        counter(state: number, action) {
+        counter(state: number, action: Action<unknown>) {
           switch (action.type) {
             case 'increment':
               return state + 1
@@ -204,6 +210,7 @@ describe('Utils', () => {
       console.error = spy
 
       const reducer = combineReducers({})
+      // @ts-ignore
       reducer(undefined, { type: '' })
       expect(spy.mock.calls[0][0]).toMatch(
         /Store does not have a valid reducer/
@@ -224,7 +231,7 @@ describe('Utils', () => {
         baz: { qux: number }
       }
 
-      const reducer = combineReducers<ShapeState>({
+      const reducer = combineReducers({
         foo(state = { bar: 1 }) {
           return state
         },
@@ -379,9 +386,10 @@ describe('Utils', () => {
       })
 
       it('should return an updated state when one of more reducers passed to the combineReducers are removed', function () {
-        const originalCompositeReducer = combineReducers<{ foo?: {}; bar: {} }>(
-          { foo, bar }
-        )
+        const originalCompositeReducer = combineReducers<{
+          foo?: typeof foo
+          bar: typeof bar
+        }>({ foo, bar })
         const store = createStore(originalCompositeReducer)
 
         store.dispatch(ACTION)

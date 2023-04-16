@@ -3,7 +3,8 @@ import {
   combineReducers,
   StoreEnhancer,
   Action,
-  Store
+  Store,
+  Reducer
 } from 'redux'
 import { vi } from 'vitest'
 import {
@@ -844,20 +845,27 @@ describe('createStore', () => {
     const originalConsoleError = console.error
     console.error = vi.fn()
 
+    const reducer: Reducer<number> = (s = 0) => s
+
+    const yReducer = combineReducers<{
+      z: typeof reducer
+      w?: typeof reducer
+    }>({
+      z: reducer,
+      w: reducer
+    })
+
     const store = createStore(
-      combineReducers<{ x?: number; y: { z: number; w?: number } }>({
-        x: (s = 0, _) => s,
-        y: combineReducers({
-          z: (s = 0, _) => s,
-          w: (s = 0, _) => s
-        })
+      combineReducers<{ x?: typeof reducer; y: typeof yReducer }>({
+        x: reducer,
+        y: yReducer
       })
     )
 
     store.replaceReducer(
       combineReducers({
         y: combineReducers({
-          z: (s = 0, _) => s
+          z: reducer
         })
       })
     )
