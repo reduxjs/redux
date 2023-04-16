@@ -2,7 +2,7 @@ import type {
   EndpointDefinitions,
   EndpointBuilder,
   EndpointDefinition,
-  ReplaceTagTypes,
+  UpdateDefinitions,
 } from './endpointDefinitions'
 import type {
   UnionToIntersection,
@@ -93,11 +93,15 @@ export type Api<
   /**
    *A function to enhance a generated API with additional information. Useful with code-generation.
    */
-  enhanceEndpoints<NewTagTypes extends string = never>(_: {
+  enhanceEndpoints<
+    NewTagTypes extends string = never,
+    NewDefinitions extends EndpointDefinitions = never
+  >(_: {
     addTagTypes?: readonly NewTagTypes[]
-    endpoints?: ReplaceTagTypes<
+    endpoints?: UpdateDefinitions<
       Definitions,
-      TagTypes | NoInfer<NewTagTypes>
+      TagTypes | NoInfer<NewTagTypes>,
+      NewDefinitions
     > extends infer NewDefinitions
       ? {
           [K in keyof NewDefinitions]?:
@@ -107,7 +111,7 @@ export type Api<
       : never
   }): Api<
     BaseQuery,
-    ReplaceTagTypes<Definitions, TagTypes | NewTagTypes>,
+    UpdateDefinitions<Definitions, TagTypes | NewTagTypes, NewDefinitions>,
     ReducerPath,
     TagTypes | NewTagTypes,
     Enhancers
