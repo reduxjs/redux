@@ -15,7 +15,7 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export interface Action<T = unknown> {
+export type Action<T = unknown> = {
   type: T
 }
 
