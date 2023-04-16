@@ -103,12 +103,12 @@ module.exports = babel => {
           }
 
           // Import the error message function
-          const formatProdErrorMessageIdentifier =
-            helperModuleImports.addDefault(
-              path,
-              'src/utils/formatProdErrorMessage',
-              { nameHint: 'formatProdErrorMessage' }
-            )
+          const formatProdErrorMessageIdentifier = helperModuleImports.addNamed(
+            path,
+            'formatProdErrorMessage',
+            'src/utils/formatProdErrorMessage',
+            { nameHint: 'formatProdErrorMessage' }
+          )
 
           // Creates a function call to output the message to the error code page on the website
           const prodMessage = t.callExpression(

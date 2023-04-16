@@ -845,7 +845,7 @@ Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives t
 - Create a server-side data subscription like a Websocket
 - When an update is received, use `updateCachedData` to "mutate" the cached values based on the update
 - `await cacheEntryRemoved` at the end
-- Clean up subscriptions afterwwards
+- Clean up subscriptions afterwards
 
 Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we add a thunk we can dispatch that reads the latest timestamp from the cache state and tells the mock server to generate newer notifications.
 
@@ -1117,7 +1117,7 @@ Let's take one last look at the whole application in action:
   - Cache tags can be either `'Post'` or `{type: 'Post', id}`
   - Endpoints can provide or invalidate cache tags based on results and arg cache keys
 - **RTK Query's APIs are UI-agnostic and can be used outside of React**
-  - Endpoint objects include functions for initating requests, generating result selectors, and matching request action objects
+  - Endpoint objects include functions for initiating requests, generating result selectors, and matching request action objects
 - **Responses can be transformed in different ways as needed**
   - Endpoints can define a `transformResponse` callback to modify the data before caching
   - Hooks can be given a `selectFromResult` option to extract/transform data

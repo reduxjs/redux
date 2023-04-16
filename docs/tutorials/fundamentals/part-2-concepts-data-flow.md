@@ -7,6 +7,9 @@ description: 'The official Redux Fundamentals tutorial: learn key Redux terms an
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 2: Concepts and Data Flow
 
 :::tip What You'll Learn
@@ -22,6 +25,8 @@ In [Part 1: Redux Overview](./part-1-overview.md), we talked about what Redux is
 
 In this section, we'll look at those terms and concepts in more detail, and talk more about how data flows
 through a Redux application.
+
+<FundamentalsWarning />
 
 ## Background Concepts
 

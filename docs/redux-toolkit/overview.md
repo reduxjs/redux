@@ -59,7 +59,7 @@ Redux Toolkit includes:
 - [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter): generates a set of reusable reducers and selectors to manage normalized data in the store
 - The [`createSelector` utility](https://redux-toolkit.js.org/api/createSelector) from the [Reselect](https://github.com/reduxjs/reselect) library, re-exported for ease of use.
 
-Redux Toolkit also has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a powerful data fetching and caching tool built specifically for Redux. It is designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
+Redux Toolkit also has the [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a powerful data fetching and caching tool built specifically for Redux. It is designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
 
 ## Documentation
 

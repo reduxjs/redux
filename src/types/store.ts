@@ -1,6 +1,7 @@
 import { Action, AnyAction } from './actions'
 import { Reducer } from './reducers'
-import '../utils/symbol-observable'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import _$$observable from '../utils/symbol-observable'
 
 /**
  * Internal "virtual" symbol used to make the `CombinedState` type unique.
