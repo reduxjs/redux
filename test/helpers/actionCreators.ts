@@ -7,9 +7,10 @@ import {
   THROW_ERROR,
   UNKNOWN_ACTION
 } from './actionTypes'
-import { Action, AnyAction, Dispatch } from 'redux'
+import { TodoAction } from './reducers'
+import { Dispatch } from 'redux'
 
-export function addTodo(text: string): AnyAction {
+export function addTodo(text: string): TodoAction {
   return { type: ADD_TODO, text }
 }
 
@@ -31,42 +32,42 @@ export function addTodoIfEmpty(text: string) {
   }
 }
 
-export function dispatchInMiddle(boundDispatchFn: () => void): AnyAction {
+export function dispatchInMiddle(boundDispatchFn: () => void) {
   return {
     type: DISPATCH_IN_MIDDLE,
     boundDispatchFn
-  }
+  } as const
 }
 
-export function getStateInMiddle(boundGetStateFn: () => void): AnyAction {
+export function getStateInMiddle(boundGetStateFn: () => void) {
   return {
     type: GET_STATE_IN_MIDDLE,
     boundGetStateFn
-  }
+  } as const
 }
 
-export function subscribeInMiddle(boundSubscribeFn: () => void): AnyAction {
+export function subscribeInMiddle(boundSubscribeFn: () => void) {
   return {
     type: SUBSCRIBE_IN_MIDDLE,
     boundSubscribeFn
-  }
+  } as const
 }
 
-export function unsubscribeInMiddle(boundUnsubscribeFn: () => void): AnyAction {
+export function unsubscribeInMiddle(boundUnsubscribeFn: () => void) {
   return {
     type: UNSUBSCRIBE_IN_MIDDLE,
     boundUnsubscribeFn
-  }
+  } as const
 }
 
-export function throwError(): Action {
+export function throwError() {
   return {
     type: THROW_ERROR
-  }
+  } as const
 }
 
-export function unknownAction(): Action {
+export function unknownAction() {
   return {
     type: UNKNOWN_ACTION
-  }
+  } as const
 }

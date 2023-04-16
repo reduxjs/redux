@@ -4,7 +4,6 @@ import {
   combineReducers,
   Reducer,
   Action,
-  AnyAction,
   __DO_NOT_USE__ActionTypes as ActionTypes
 } from 'redux'
 import { vi } from 'vitest'
@@ -88,7 +87,7 @@ describe('Utils', () => {
       expect(() => reducer({ counter: 0 }, null)).toThrow(
         /"counter".*an action/
       )
-      expect(() => reducer({ counter: 0 }, {} as unknown as AnyAction)).toThrow(
+      expect(() => reducer({ counter: 0 }, {} as unknown as Action)).toThrow(
         /"counter".*an action/
       )
     })
@@ -117,9 +116,9 @@ describe('Utils', () => {
           throw new Error('Error thrown in reducer')
         }
       })
-      expect(() =>
-        reducer(undefined, undefined as unknown as AnyAction)
-      ).toThrow(/Error thrown in reducer/)
+      expect(() => reducer(undefined, undefined as unknown as Action)).toThrow(
+        /Error thrown in reducer/
+      )
     })
 
     it('allows a symbol to be used as an action type', () => {
@@ -185,7 +184,7 @@ describe('Utils', () => {
 
     it('throws an error on first call if a reducer attempts to handle a private action', () => {
       const reducer = combineReducers({
-        counter(state: number, action: Action<unknown>) {
+        counter(state: number, action: Action) {
           switch (action.type) {
             case 'increment':
               return state + 1
@@ -199,9 +198,9 @@ describe('Utils', () => {
           }
         }
       })
-      expect(() =>
-        reducer(undefined, undefined as unknown as AnyAction)
-      ).toThrow(/"counter".*private/)
+      expect(() => reducer(undefined, undefined as unknown as Action)).toThrow(
+        /"counter".*private/
+      )
     })
 
     it('warns if no reducers are passed to combineReducers', () => {
@@ -223,7 +222,7 @@ describe('Utils', () => {
     it('warns if input state does not match reducer shape', () => {
       const preSpy = console.error
       const spy = vi.fn()
-      const nullAction = undefined as unknown as AnyAction
+      const nullAction = undefined as unknown as Action
       console.error = spy
 
       interface ShapeState {

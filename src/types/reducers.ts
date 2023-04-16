@@ -1,4 +1,4 @@
-import { Action, AnyAction } from './actions'
+import { Action, UnknownAction } from './actions'
 
 /* reducers */
 
@@ -29,7 +29,7 @@ import { Action, AnyAction } from './actions'
  */
 export type Reducer<
   S = any,
-  A extends Action = AnyAction,
+  A extends Action = UnknownAction,
   PreloadedState = S
 > = (state: S | PreloadedState | undefined, action: A) => S
 
@@ -42,7 +42,7 @@ export type Reducer<
  */
 export type ReducersMapObject<
   S = any,
-  A extends Action = AnyAction,
+  A extends Action = UnknownAction,
   PreloadedState = S
 > = keyof PreloadedState extends keyof S
   ? {
@@ -63,7 +63,7 @@ export type StateFromReducersMapObject<M> = M[keyof M] extends
   | Reducer<any, any, any>
   | undefined
   ? {
-      [P in keyof M]: M[P] extends Reducer<infer S> ? S : never
+      [P in keyof M]: M[P] extends Reducer<infer S, any, any> ? S : never
     }
   : never
 
@@ -109,7 +109,7 @@ export type PreloadedStateShapeFromReducersMapObject<M> = M[keyof M] extends
   ? {
       [P in keyof M]: M[P] extends (
         inputState: infer InputState,
-        action: AnyAction
+        action: UnknownAction
       ) => any
         ? InputState
         : never

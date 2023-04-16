@@ -15,7 +15,7 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export interface Action<T = any> {
+export interface Action<T = unknown> {
   type: T
 }
 
@@ -24,6 +24,18 @@ export interface Action<T = any> {
  * This is mainly for the use of the `Reducer` type.
  * This is not part of `Action` itself to prevent types that extend `Action` from
  * having an index signature.
+ */
+export interface UnknownAction extends Action {
+  // Allows any extra properties to be defined in an action.
+  [extraProps: string]: unknown
+}
+
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent types that extend `Action` from
+ * having an index signature.
+ * @deprecated use Action or UnknownAction instead
  */
 export interface AnyAction extends Action {
   // Allows any extra properties to be defined in an action.

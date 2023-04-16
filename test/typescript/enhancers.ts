@@ -1,4 +1,4 @@
-import { StoreEnhancer, Action, AnyAction, Reducer, createStore } from 'redux'
+import { StoreEnhancer, Action, Reducer, createStore } from 'redux'
 
 interface State {
   someField: 'string'
@@ -169,8 +169,7 @@ function replaceReducerExtender() {
     ExtraState
   >(initialReducer, enhancer)
 
-  const newReducer = (state: PartialState = { test: true }, _: AnyAction) =>
-    state
+  const newReducer = (state: PartialState = { test: true }, _: Action) => state
 
   store.replaceReducer(newReducer)
   store.getState().test
@@ -260,7 +259,7 @@ function mhelmersonExample() {
     store.getState().wrongField
     store.getState().test
 
-    const newReducer = (state: PartialState = { test: true }, _: AnyAction) =>
+    const newReducer = (state: PartialState = { test: true }, _: Action) =>
       state
 
     store.replaceReducer(newReducer)
@@ -335,8 +334,7 @@ function finalHelmersonExample() {
   // @ts-expect-error
   store.getState().wrongField
 
-  const newReducer = (state: PartialState = { test: true }, _: AnyAction) =>
-    state
+  const newReducer = (state: PartialState = { test: true }, _: Action) => state
 
   store.replaceReducer(newReducer)
   store.getState().test

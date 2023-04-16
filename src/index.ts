@@ -33,7 +33,7 @@ export { ActionCreator, ActionCreatorsMapObject } from './types/actions'
 // middleware
 export { MiddlewareAPI, Middleware } from './types/middleware'
 // actions
-export { Action, AnyAction } from './types/actions'
+export { Action, UnknownAction, AnyAction } from './types/actions'
 
 export {
   createStore,

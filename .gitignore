@@ -5,7 +5,6 @@ coverage
 dist
 lib
 es
-types
 
 # Yarn
 .cache
