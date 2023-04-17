@@ -39,6 +39,8 @@ export {
   // js
   createAction,
   getType,
+  isAction,
+  isFSA as isFluxStandardAction,
 } from './createAction'
 export type {
   // types

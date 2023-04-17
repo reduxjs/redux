@@ -367,7 +367,7 @@ describe('fork', () => {
         },
       })
 
-      store.dispatch(increment)
+      store.dispatch(increment())
 
       expect(await deferredResult).toBe(listenerCompleted)
     })
