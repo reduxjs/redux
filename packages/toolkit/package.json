@@ -97,10 +97,10 @@
     "query"
   ],
   "dependencies": {
-    "immer": "^9.0.16",
-    "redux": "^4.2.0",
+    "immer": "^9.0.21",
+    "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
-    "reselect": "^4.1.7"
+    "reselect": "^4.1.8"
   },
   "peerDependencies": {
     "react": "^16.9.0 || ^17.0.0 || ^18",
