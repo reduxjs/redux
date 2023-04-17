@@ -102,6 +102,11 @@ export const buildBatchedActionsHandler: InternalHandlerBuilder<
       )
     }
 
+    if (api.util.resetApiState.match(action)) {
+      previousSubscriptions = internalState.currentSubscriptions = {}
+      return [true, false]
+    }
+
     // Intercept requests by hooks to see if they're subscribed
     // Necessary because we delay updating store state to the end of the tick
     if (api.internalActions.internal_probeSubscription.match(action)) {
