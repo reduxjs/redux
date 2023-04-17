@@ -433,8 +433,11 @@ export function buildSlice({
     name: `${reducerPath}/internalSubscriptions`,
     initialState: initialState as SubscriptionState,
     reducers: {
-      subscriptionsUpdated(state, action: PayloadAction<Patch[]>) {
-        return applyPatches(state, action.payload)
+      subscriptionsUpdated: {
+        reducer(state, action: PayloadAction<Patch[]>) {
+          return applyPatches(state, action.payload)
+        },
+        prepare: prepareAutoBatched<Patch[]>(),
       },
     },
   })
