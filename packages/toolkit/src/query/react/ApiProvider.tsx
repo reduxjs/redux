@@ -12,7 +12,7 @@ import type { Api } from '@reduxjs/toolkit/dist/query/apiTypes'
  *
  * @example
  * ```tsx
- * // codeblock-meta title="Basic usage - wrap your App with ApiProvider"
+ * // codeblock-meta no-transpile title="Basic usage - wrap your App with ApiProvider"
  * import * as React from 'react';
  * import { ApiProvider } from '@reduxjs/toolkit/query/react';
  * import { Pokemon } from './features/Pokemon';

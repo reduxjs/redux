@@ -140,7 +140,7 @@ interface UseQuerySubscriptionOptions extends SubscriptionOptions {
    *
    * @example
    * ```tsx
-   * // codeblock-meta title="Skip example"
+   * // codeblock-meta no-transpile title="Skip example"
    * const Pokemon = ({ name, skip }: { name: string; skip: boolean }) => {
    *   const { data, error, status } = useGetPokemonByNameQuery(name, {
    *     skip,
