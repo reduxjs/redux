@@ -105,7 +105,7 @@ export type {
   // types
   ActionReducerMapBuilder,
 } from './mapBuilders'
-export { MiddlewareArray } from './utils'
+export { MiddlewareArray, EnhancerArray } from './utils'
 
 export { createEntityAdapter } from './entities/create_adapter'
 export type {

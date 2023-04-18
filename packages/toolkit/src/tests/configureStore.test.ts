@@ -231,9 +231,7 @@ describe('configureStore', () => {
 
       const store = configureStore({
         reducer,
-        enhancers: (defaultEnhancers) => {
-          return [...defaultEnhancers, dummyEnhancer]
-        },
+        enhancers: (defaultEnhancers) => defaultEnhancers.concat(dummyEnhancer),
       })
 
       expect(dummyEnhancerCalled).toBe(true)
