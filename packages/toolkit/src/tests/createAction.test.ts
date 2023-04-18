@@ -1,4 +1,4 @@
-import { createAction, getType } from '@reduxjs/toolkit'
+import { createAction, getType, isAction } from '@reduxjs/toolkit'
 
 describe('createAction', () => {
   it('should create an action', () => {
@@ -119,6 +119,27 @@ describe('createAction', () => {
       const actionCreator = createAction('test')
       expect(actionCreator.match({ type: 'test-abc' })).toBe(false)
     })
+  })
+})
+
+describe('isAction', () => {
+  it('should only return true for plain objects with a type property', () => {
+    const actionCreator = createAction('anAction')
+    class Action {
+      type = 'totally an action'
+    }
+    const testCases: [action: unknown, expected: boolean][] = [
+      [{ type: 'an action' }, true],
+      [{ type: 'more props', extra: true }, true],
+      [actionCreator(), true],
+      [actionCreator, false],
+      [Promise.resolve({ type: 'an action' }), false],
+      [new Action(), false],
+      ['a string', false],
+    ]
+    for (const [action, expected] of testCases) {
+      expect(isAction(action)).toBe(expected)
+    }
   })
 })
 
