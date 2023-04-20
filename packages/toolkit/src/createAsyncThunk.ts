@@ -15,7 +15,7 @@ export type BaseThunkAPI<
   S,
   E,
   D extends Dispatch = Dispatch,
-  RejectedValue = undefined,
+  RejectedValue = unknown,
   RejectedMeta = unknown,
   FulfilledMeta = unknown
 > = {
@@ -137,7 +137,7 @@ type GetDispatch<ThunkApiConfig> = ThunkApiConfig extends {
     >
   : ThunkDispatch<GetState<ThunkApiConfig>, GetExtra<ThunkApiConfig>, AnyAction>
 
-type GetThunkAPI<ThunkApiConfig> = BaseThunkAPI<
+export type GetThunkAPI<ThunkApiConfig> = BaseThunkAPI<
   GetState<ThunkApiConfig>,
   GetExtra<ThunkApiConfig>,
   GetDispatch<ThunkApiConfig>,
