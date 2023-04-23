@@ -95,6 +95,7 @@ module.exports = {
           'usage/deriving-data-selectors',
           'usage/writing-logic-thunks',
           'usage/side-effects-approaches',
+          'usage/writing-custom-middleware',
           'usage/implementing-undo-history'
         ]
       }
