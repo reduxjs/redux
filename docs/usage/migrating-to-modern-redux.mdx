@@ -736,7 +736,7 @@ export const store = configureStore({
   reducer: rootReducer,
   // Add the listener middleware _before_ the thunk or dev checks
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware.prepend(listenerMiddleware.middleware)
+    getDefaultMiddleware().prepend(listenerMiddleware.middleware)
 })
 ```
 
