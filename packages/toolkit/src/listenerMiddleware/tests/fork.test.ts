@@ -12,6 +12,7 @@ import {
   listenerCancelled,
   listenerCompleted,
   taskCancelled,
+  taskCompleted,
 } from '../exceptions'
 
 function delay(ms: number) {
@@ -349,28 +350,60 @@ describe('fork', () => {
       )
     })
 
-    test('forkApi.signal listener is invoked as soon as the parent listener is cancelled or completed', async () => {
-      let deferredResult = deferred()
+    it.each([
+      {
+        autoJoin: true,
+        expectedAbortReason: taskCompleted,
+        cancelListener: false,
+      },
+      {
+        autoJoin: false,
+        expectedAbortReason: listenerCompleted,
+        cancelListener: false,
+      },
+      {
+        autoJoin: true,
+        expectedAbortReason: listenerCancelled,
+        cancelListener: true,
+      },
+      {
+        autoJoin: false,
+        expectedAbortReason: listenerCancelled,
+        cancelListener: true,
+      },
+    ])(
+      'signal is $expectedAbortReason when autoJoin: $autoJoin, cancelListener: $cancelListener',
+      async ({ autoJoin, cancelListener, expectedAbortReason }) => {
+        let deferredResult = deferred()
 
-      startListening({
-        actionCreator: increment,
-        async effect(_, listenerApi) {
-          const wronglyDoNotAwaitResultOfTask = listenerApi.fork(
-            async (forkApi) => {
-              forkApi.signal.addEventListener('abort', () => {
-                deferredResult.resolve(
-                  (forkApi.signal as AbortSignalWithReason<unknown>).reason
-                )
-              })
-            }
-          )
-        },
-      })
+        const unsubscribe = startListening({
+          actionCreator: increment,
+          async effect(_, listenerApi) {
+            listenerApi.fork(
+              async (forkApi) => {
+                forkApi.signal.addEventListener('abort', () => {
+                  deferredResult.resolve(
+                    (forkApi.signal as AbortSignalWithReason<unknown>).reason
+                  )
+                })
 
-      store.dispatch(increment())
+                await forkApi.delay(10)
+              },
+              { autoJoin }
+            )
+          },
+        })
 
-      expect(await deferredResult).toBe(listenerCompleted)
-    })
+        store.dispatch(increment())
+
+        // let task start
+        await Promise.resolve()
+
+        if (cancelListener) unsubscribe({ cancelActive: true })
+
+        expect(await deferredResult).toBe(expectedAbortReason)
+      }
+    )
 
     test('fork.delay does not trigger unhandledRejections for completed or cancelled tasks', async () => {
       let deferredCompletedEvt = deferred()
