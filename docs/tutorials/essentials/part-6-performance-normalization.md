@@ -644,7 +644,7 @@ This isn't a serious problem for our small example app, but in a larger real-wor
 
 There's a few different ways we could optimize this behavior in `<PostsList>`.
 
-First, we could wrap the `<PostExcerpt>` component in [`React.memo()`](https://reactjs.org/docs/react-api.html#reactmemo), which will ensure that the component inside of it only re-renders if the props have actually changed. This will actually work quite well - try it out and see what happens:
+First, we could wrap the `<PostExcerpt>` component in [`React.memo()`](https://react.dev/reference/react/memo), which will ensure that the component inside of it only re-renders if the props have actually changed. This will actually work quite well - try it out and see what happens:
 
 ```jsx title="features/posts/PostsList.js
 // highlight-next-line
