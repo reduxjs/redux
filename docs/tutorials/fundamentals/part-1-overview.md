@@ -39,10 +39,10 @@ We've tried to keep these explanations beginner-friendly, but we do need to make
 
 :::important Prerequisites
 
-- Familiarity with [HTML & CSS](https://internetingishard.com/).
+- Familiarity with [HTML & CSS](https://internetingishard.netlify.app/html-and-css/index.html).
 - Familiarity with [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - Understanding of [the array and object spread operators](https://javascript.info/rest-parameters-spread#spread-syntax)
-- Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
+- Knowledge of React terminology: [JSX](https://react.dev/learn/writing-markup-with-jsx), [State](https://react.dev/learn/state-a-components-memory), [Function Components](https://react.dev/learn/your-first-component), [Props](https://react.dev/learn/passing-props-to-a-component), and [Hooks](https://react.dev/reference/react)
 - Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
 
 :::
