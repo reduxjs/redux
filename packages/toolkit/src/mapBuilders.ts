@@ -46,7 +46,7 @@ export interface ActionReducerMapBuilder<State> {
    * If multiple matcher reducers match, all of them will be executed in the order
    * they were defined in - even if a case reducer already matched.
    * All calls to `builder.addMatcher` must come after any calls to `builder.addCase` and before any calls to `builder.addDefaultCase`.
-   * @param matcher - A matcher function. In TypeScript, this should be a [type predicate](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates)
+   * @param matcher - A matcher function. In TypeScript, this should be a [type predicate](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
    *   function
    * @param reducer - The actual case reducer function.
    *
