@@ -17,7 +17,7 @@ You can use Redux together with [React](https://reactjs.org), or with any other 
 
 ### Redux Toolkit
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) is our official recommended approach for writing Redux logic. It wraps around the Redux core, and contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
+[**Redux Toolkit**](https://redux-toolkit.js.org) is our official standard approach for writing Redux logic. It wraps around the Redux core, and contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
 
 RTK includes utilities that help simplify many common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore),
 [creating reducers and writing immutable update logic](https://redux-toolkit.js.org/api/createreducer),
@@ -39,15 +39,23 @@ yarn add @reduxjs/toolkit
 
 ### Create a React Redux App
 
-The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) or [Redux+TS template](https://github.com/reduxjs/cra-template-redux-typescript) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of **[Redux Toolkit](https://redux-toolkit.js.org/)** and React Redux's integration with React components.
+The recommended way to start new apps with React and Redux is by using [our official Redux+TS template for Vite](https://github.com/reduxjs/redux-templates), or by creating a new Next.js project using [Next's `with-redux` template](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
+
+Both of these already have Redux Toolkit and React-Redux configured appropriately for that build tool, and come with a small example app that demonstrates how to use several of Redux Toolkit's features.
 
 ```bash
-# Redux + Plain JS template
-npx create-react-app my-app --template redux
+# Vite with our Redux+TS template
+# (using the `degit` tool to clone and extract the template)
+npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
 
-# Redux + TypeScript template
-npx create-react-app my-app --template redux-typescript
+# Next.js using the `with-redux` template
+npx create-next-app --example with-redux my-app
 ```
+
+We do not currently have official React Native templates, but recommend these templates for standard React Native and for Expo:
+
+- https://github.com/rahsheen/react-native-template-redux-typescript
+- https://github.com/rahsheen/expo-template-redux-typescript
 
 ### Redux Core
 
