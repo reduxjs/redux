@@ -139,7 +139,7 @@ Here's the initial React UI of this app before we start adding any Redux-related
 
 We know that we need to be able to show a list of todo items. Let's start by creating a `<TodoList>` component that can read the list of todos from the store, loop over them, and show one `<TodoListItem>` component for each todo entry.
 
-You should be familiar with [React hooks like `useState`](https://reactjs.org/docs/hooks-state.html), which can be called in React function components to give them access to React state values. React also lets us write [custom hooks](https://reactjs.org/docs/hooks-custom.html), which let us extract reusable hooks to add our own behavior on top of React's built-in hooks.
+You should be familiar with [React hooks like `useState`](https://react.dev/reference/react/useState), which can be called in React function components to give them access to React state values. React also lets us write [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks), which let us extract reusable hooks to add our own behavior on top of React's built-in hooks.
 
 Like many other libraries, React-Redux includes [its own custom hooks](https://react-redux.js.org/api/hooks), which you can use in your own components. The React-Redux hooks give your React component the ability to talk to the Redux store by reading state and dispatching actions.
 
@@ -238,7 +238,7 @@ So, we can call `const dispatch = useDispatch()` in any component that needs to 
 
 Let's try that in our `<Header>` component. We know that we need to let the user type in some text for a new todo item, and then dispatch a `{type: 'todos/todoAdded'}` action containing that text.
 
-We'll write a typical React form component that uses ["controlled inputs"](https://reactjs.org/docs/forms.html#controlled-components) to let the user type in the form text. Then, when the user presses the Enter key specifically, we'll dispatch that action.
+We'll write a typical React form component that uses ["controlled inputs"](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable) to let the user type in the form text. Then, when the user presses the Enter key specifically, we'll dispatch that action.
 
 ```jsx title="src/features/header/Header.js"
 import React, { useState } from 'react'
@@ -433,7 +433,7 @@ This works, but there's a potential performance problem.
 
 Re-rendering components isn't bad - that's how React knows if it needs to update the DOM. But, re-rendering lots of components when nothing has actually changed can potentially get too slow if the list is too big.
 
-There's a couple ways we could try to fix this. One option is to [wrap all the `<TodoListItem>` components in `React.memo()`](https://reactjs.org/docs/react-api.html#reactmemo), so that they only re-render when their props actually change. This is often a good choice for improving performance, but it does require that the child component always receives the same props until something really changes. Since each `<TodoListItem>` component is receiving a todo item as a prop, only one of them should actually get a changed prop and have to re-render.
+There's a couple ways we could try to fix this. One option is to [wrap all the `<TodoListItem>` components in `React.memo()`](https://react.dev/reference/react/memo), so that they only re-render when their props actually change. This is often a good choice for improving performance, but it does require that the child component always receives the same props until something really changes. Since each `<TodoListItem>` component is receiving a todo item as a prop, only one of them should actually get a changed prop and have to re-render.
 
 Another option is to have the `<TodoList>` component only read an array of todo IDs from the store, and pass those IDs as props to the child `<TodoListItem>` components. Then, each `<TodoListItem>` can use that ID to find the right todo object it needs.
 
