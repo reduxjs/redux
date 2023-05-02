@@ -44,6 +44,7 @@ export type CurriedGetDefaultMiddleware<S = any> = <
     thunk: true
     immutableCheck: true
     serializableCheck: true
+    actionCreatorCheck: true
   }
 >(
   options?: O
