@@ -36,27 +36,26 @@ describe('getDefaultMiddleware', () => {
     expect(middleware.length).toBeGreaterThan(1)
   })
 
+  const defaultMiddleware = getDefaultMiddleware()
+
   it('removes the thunk middleware if disabled', () => {
     const middleware = getDefaultMiddleware({ thunk: false })
     // @ts-ignore
     expect(middleware.includes(thunk)).toBe(false)
-    expect(middleware.length).toBe(2)
+    expect(middleware.length).toBe(defaultMiddleware.length - 1)
   })
 
   it('removes the immutable middleware if disabled', () => {
-    const defaultMiddleware = getDefaultMiddleware()
     const middleware = getDefaultMiddleware({ immutableCheck: false })
     expect(middleware.length).toBe(defaultMiddleware.length - 1)
   })
 
   it('removes the serializable middleware if disabled', () => {
-    const defaultMiddleware = getDefaultMiddleware()
     const middleware = getDefaultMiddleware({ serializableCheck: false })
     expect(middleware.length).toBe(defaultMiddleware.length - 1)
   })
 
   it('removes the action creator middleware if disabled', () => {
-    const defaultMiddleware = getDefaultMiddleware()
     const middleware = getDefaultMiddleware({ actionCreatorCheck: false })
     expect(middleware.length).toBe(defaultMiddleware.length - 1)
   })
