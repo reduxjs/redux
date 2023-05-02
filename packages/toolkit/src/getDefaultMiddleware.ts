@@ -133,7 +133,7 @@ export function getDefaultMiddleware<
         actionCreatorOptions = actionCreatorCheck
       }
 
-      middlewareArray.push(
+      middlewareArray.prepend(
         createActionCreatorInvariantMiddleware(actionCreatorOptions)
       )
     }
