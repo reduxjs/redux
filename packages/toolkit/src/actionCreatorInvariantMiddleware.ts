@@ -13,7 +13,7 @@ export function getMessage(type?: unknown) {
   return `Detected an action creator with type "${
     type || 'unknown'
   }" being dispatched. 
-Make sure you're calling the action before dispatching, i.e. \`dispatch(actionCreator())\` instead of \`dispatch(actionCreator)\`. This is necessary even if the action has no payload.`
+Make sure you're calling the action creator before dispatching, i.e. \`dispatch(actionCreator())\` instead of \`dispatch(actionCreator)\`. This is necessary even if the action has no payload.`
 }
 
 export function createActionCreatorInvariantMiddleware(
