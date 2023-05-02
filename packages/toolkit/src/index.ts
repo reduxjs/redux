@@ -40,6 +40,7 @@ export {
   createAction,
   getType,
   isAction,
+  isActionCreator,
   isFSA as isFluxStandardAction,
 } from './createAction'
 export type {
@@ -78,6 +79,8 @@ export type {
   CaseReducerWithPrepare,
   SliceActionCreator,
 } from './createSlice'
+export type { ActionCreatorInvariantMiddlewareOptions } from './actionCreatorInvariantMiddleware'
+export { createActionCreatorInvariantMiddleware } from './actionCreatorInvariantMiddleware'
 export {
   // js
   createImmutableStateInvariantMiddleware,

@@ -15,6 +15,7 @@ import thunk from 'redux-thunk'
 import type { ThunkMiddleware } from 'redux-thunk'
 
 import { expectType } from './helpers'
+import { BaseActionCreator } from '@internal/createAction'
 
 describe('getDefaultMiddleware', () => {
   const ORIGINAL_NODE_ENV = process.env.NODE_ENV
@@ -54,12 +55,19 @@ describe('getDefaultMiddleware', () => {
     expect(middleware.length).toBe(defaultMiddleware.length - 1)
   })
 
+  it('removes the action creator middleware if disabled', () => {
+    const defaultMiddleware = getDefaultMiddleware()
+    const middleware = getDefaultMiddleware({ actionCreatorCheck: false })
+    expect(middleware.length).toBe(defaultMiddleware.length - 1)
+  })
+
   it('allows passing options to thunk', () => {
     const extraArgument = 42 as const
     const middleware = getDefaultMiddleware({
       thunk: { extraArgument },
       immutableCheck: false,
       serializableCheck: false,
+      actionCreatorCheck: false,
     })
 
     const m2 = getDefaultMiddleware({
@@ -129,6 +137,7 @@ describe('getDefaultMiddleware', () => {
         },
       },
       serializableCheck: false,
+      actionCreatorCheck: false,
     })
 
     const reducer = () => ({})
@@ -153,6 +162,7 @@ describe('getDefaultMiddleware', () => {
           return true
         },
       },
+      actionCreatorCheck: false,
     })
 
     const reducer = () => ({})
@@ -166,6 +176,33 @@ describe('getDefaultMiddleware', () => {
 
     expect(serializableCheckWasCalled).toBe(true)
   })
+})
+
+it('allows passing options to actionCreatorCheck', () => {
+  let actionCreatorCheckWasCalled = false
+
+  const middleware = getDefaultMiddleware({
+    thunk: false,
+    immutableCheck: false,
+    serializableCheck: false,
+    actionCreatorCheck: {
+      isActionCreator: (action: unknown): action is Function => {
+        actionCreatorCheckWasCalled = true
+        return false
+      },
+    },
+  })
+
+  const reducer = () => ({})
+
+  const store = configureStore({
+    reducer,
+    middleware,
+  })
+
+  store.dispatch({ type: 'TEST_ACTION' })
+
+  expect(actionCreatorCheckWasCalled).toBe(true)
 })
 
 describe('MiddlewareArray functionality', () => {

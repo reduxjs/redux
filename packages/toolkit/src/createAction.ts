@@ -5,6 +5,7 @@ import type {
   IfVoid,
   IsAny,
 } from './tsHelpers'
+import { hasMatchFunction } from './tsHelpers'
 import isPlainObject from './isPlainObject'
 
 /**
@@ -291,6 +292,20 @@ export function createAction(type: string, prepareAction?: Function): any {
  */
 export function isAction(action: unknown): action is Action<unknown> {
   return isPlainObject(action) && 'type' in action
+}
+
+/**
+ * Returns true if value is an RTK-like action creator, with a static type property and match method.
+ */
+export function isActionCreator(
+  action: unknown
+): action is BaseActionCreator<unknown, string> & Function {
+  return (
+    typeof action === 'function' &&
+    'type' in action &&
+    // hasMatchFunction only wants Matchers but I don't see the point in rewriting it
+    hasMatchFunction(action as any)
+  )
 }
 
 /**

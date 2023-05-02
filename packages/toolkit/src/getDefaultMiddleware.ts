@@ -1,6 +1,8 @@
 import type { Middleware, AnyAction } from 'redux'
 import type { ThunkMiddleware } from 'redux-thunk'
 import thunkMiddleware from 'redux-thunk'
+import type { ActionCreatorInvariantMiddlewareOptions } from './actionCreatorInvariantMiddleware'
+import { createActionCreatorInvariantMiddleware } from './actionCreatorInvariantMiddleware'
 import type { ImmutableStateInvariantMiddlewareOptions } from './immutableStateInvariantMiddleware'
 /* PROD_START_REMOVE_UMD */
 import { createImmutableStateInvariantMiddleware } from './immutableStateInvariantMiddleware'
@@ -23,6 +25,7 @@ interface GetDefaultMiddlewareOptions {
   thunk?: boolean | ThunkOptions
   immutableCheck?: boolean | ImmutableStateInvariantMiddlewareOptions
   serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions
+  actionCreatorCheck?: boolean | ActionCreatorInvariantMiddlewareOptions
 }
 
 export type ThunkMiddlewareFor<
@@ -72,6 +75,7 @@ export function getDefaultMiddleware<
     thunk: true
     immutableCheck: true
     serializableCheck: true
+    actionCreatorCheck: true
   }
 >(
   options: O = {} as O
@@ -80,6 +84,7 @@ export function getDefaultMiddleware<
     thunk = true,
     immutableCheck = true,
     serializableCheck = true,
+    actionCreatorCheck = true,
   } = options
 
   let middlewareArray = new MiddlewareArray<Middleware[]>()
@@ -118,6 +123,17 @@ export function getDefaultMiddleware<
 
       middlewareArray.push(
         createSerializableStateInvariantMiddleware(serializableOptions)
+      )
+    }
+    if (actionCreatorCheck) {
+      let actionCreatorOptions: ActionCreatorInvariantMiddlewareOptions = {}
+
+      if (!isBoolean(actionCreatorCheck)) {
+        actionCreatorOptions = actionCreatorCheck
+      }
+
+      middlewareArray.push(
+        createActionCreatorInvariantMiddleware(actionCreatorOptions)
       )
     }
   }
