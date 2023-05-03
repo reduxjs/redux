@@ -14,7 +14,7 @@ describe('createActionCreatorInvariantMiddleware', () => {
     consoleSpy.mockRestore()
   })
 
-  const dummyAction = createAction('anAction')
+  const dummyAction = createAction('aSlice/anAction')
 
   it('sends the action through the middleware chain', () => {
     const next: Dispatch = (action) => ({

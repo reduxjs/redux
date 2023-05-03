@@ -10,10 +10,12 @@ export interface ActionCreatorInvariantMiddlewareOptions {
 }
 
 export function getMessage(type?: unknown) {
+  const splitType = type ? `${type}`.split('/') : []
+  const actionName = splitType[splitType.length - 1] || 'actionCreator'
   return `Detected an action creator with type "${
     type || 'unknown'
   }" being dispatched. 
-Make sure you're calling the action creator before dispatching, i.e. \`dispatch(actionCreator())\` instead of \`dispatch(actionCreator)\`. This is necessary even if the action has no payload.`
+Make sure you're calling the action creator before dispatching, i.e. \`dispatch(${actionName}())\` instead of \`dispatch(${actionName})\`. This is necessary even if the action has no payload.`
 }
 
 export function createActionCreatorInvariantMiddleware(
