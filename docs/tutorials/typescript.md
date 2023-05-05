@@ -96,7 +96,7 @@ import type { RootState } from '../../app/store'
 
 // highlight-start
 // Define a type for the slice state
-interface CounterState {
+export interface CounterState {
   value: number
 }
 

@@ -55,7 +55,7 @@ If you'd like to see the final version of what we're going to build, you can che
 
 #### Creating a New Redux + React Project
 
-Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux templates for Create-React-App](https://github.com/reduxjs/cra-template-redux) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
+Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux template for Vite](../../introduction/Installation.md#create-a-react-redux-app) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
 
 If you want to know specific details on how to add Redux to a project, see this explanation:
 
@@ -183,7 +183,7 @@ export const PostsList = () => {
 }
 ```
 
-We then need to update the routing in `App.js` so that we show the `PostsList` component instead of the "welcome" message. Import the `PostsList` component into `App.js`, and replace the welcome text with `<PostsList />`. We'll also wrap it in a [React Fragment](https://reactjs.org/docs/fragments.html), because we're going to add something else to the main page soon:
+We then need to update the routing in `App.js` so that we show the `PostsList` component instead of the "welcome" message. Import the `PostsList` component into `App.js`, and replace the welcome text with `<PostsList />`. We'll also wrap it in a [React Fragment](https://react.dev/reference/react/Fragment), because we're going to add something else to the main page soon:
 
 ```jsx title="App.js"
 import React from 'react'

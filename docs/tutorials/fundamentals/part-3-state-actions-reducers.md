@@ -158,7 +158,7 @@ think about these different kinds of categories to help understand how the diffe
 ### Designing the State Structure
 
 With Redux, **our application state is always kept in plain JavaScript objects and arrays**. That means you may not put
-other things into the Redux state - no class instances, built-in JS types like `Map` / `Set` `Promise` / `Date`, functions, or anything else that is not plain JS data.
+other things into the Redux state - no class instances, built-in JS types like `Map` / `Set` / `Promise` / `Date`, functions, or anything else that is not plain JS data.
 
 **The root Redux state value is almost always a plain JS object**, with other data nested inside of it.
 
