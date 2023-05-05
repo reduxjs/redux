@@ -892,7 +892,6 @@ describe('createStore', () => {
     )
 
     store.replaceReducer(
-      // @ts-expect-error
       combineReducers({
         y: combineReducers({
           z: reducer
