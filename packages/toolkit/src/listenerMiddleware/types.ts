@@ -132,6 +132,15 @@ export interface ForkedTask<T> {
 }
 
 /** @public */
+export interface ForkOptions {
+  /**
+   * If true, causes the parent task to not be marked as complete until
+   * all autoJoined forks have completed or failed.
+   */
+  autoJoin: boolean;
+}
+
+/** @public */
 export interface ListenerEffectAPI<
   State,
   Dispatch extends ReduxDispatch<AnyAction>,
@@ -238,8 +247,9 @@ export interface ListenerEffectAPI<
   /**
    * Queues in the next microtask the execution of a task.
    * @param executor
+   * @param options
    */
-  fork<T>(executor: ForkedTaskExecutor<T>): ForkedTask<T>
+  fork<T>(executor: ForkedTaskExecutor<T>, options?: ForkOptions): ForkedTask<T>
   /**
    * Returns a promise that resolves when `waitFor` resolves or
    * rejects if the listener has been cancelled or is completed.
