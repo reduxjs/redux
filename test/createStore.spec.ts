@@ -575,16 +575,15 @@ describe('createStore', () => {
 
   it('throws if action type is not string', () => {
     const store = createStore(reducers.todos)
-    const expectedErr = /Action "type" property must be a string/
     expect(() =>
       store.dispatch({ type: false } as unknown as AnyAction)
-    ).toThrow(expectedErr)
+    ).toThrow(/the actual type was: 'boolean'.*Value was: 'false'/)
     expect(() => store.dispatch({ type: 0 } as unknown as AnyAction)).toThrow(
-      expectedErr
+      /the actual type was: 'number'.*Value was: '0'/
     )
     expect(() =>
       store.dispatch({ type: null } as unknown as AnyAction)
-    ).toThrow(expectedErr)
+    ).toThrow(/the actual type was: 'null'.*Value was: 'null'/)
 
     expect(() =>
       store.dispatch({ type: '' } as unknown as AnyAction)

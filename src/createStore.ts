@@ -284,9 +284,9 @@ export function createStore<
 
     if (typeof action.type !== 'string') {
       throw new Error(
-        `Action "type" property must be a string. Instead, the actual type was: ${kindOf(
+        `Action "type" property must be a string. Instead, the actual type was: '${kindOf(
           action.type
-        )}.`
+        )}'. Value was: '${action.type}' (stringified)`
       )
     }
 
