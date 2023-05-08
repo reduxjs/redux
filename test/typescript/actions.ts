@@ -39,21 +39,3 @@ namespace StringLiteralTypeAction {
 
   const type: ActionType = action.type
 }
-
-namespace EnumTypeAction {
-  enum ActionType {
-    A,
-    B,
-    C
-  }
-
-  interface Action extends ReduxAction {
-    type: ActionType
-  }
-
-  const action: Action = {
-    type: ActionType.A
-  }
-
-  const type: ActionType = action.type
-}

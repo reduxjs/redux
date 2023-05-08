@@ -4,7 +4,8 @@ import {
   StoreEnhancer,
   Action,
   Store,
-  Reducer
+  Reducer,
+  AnyAction
 } from 'redux'
 import { vi } from 'vitest'
 import {
@@ -567,17 +568,27 @@ describe('createStore', () => {
 
   it('throws if action type is undefined', () => {
     const store = createStore(reducers.todos)
-    expect(() => store.dispatch({ type: undefined })).toThrow(
-      /Actions may not have an undefined "type" property/
-    )
+    expect(() =>
+      store.dispatch({ type: undefined } as unknown as AnyAction)
+    ).toThrow(/Actions may not have an undefined "type" property/)
   })
 
-  it('does not throw if action type is falsy', () => {
+  it('throws if action type is not string', () => {
     const store = createStore(reducers.todos)
-    expect(() => store.dispatch({ type: false })).not.toThrow()
-    expect(() => store.dispatch({ type: 0 })).not.toThrow()
-    expect(() => store.dispatch({ type: null })).not.toThrow()
-    expect(() => store.dispatch({ type: '' })).not.toThrow()
+    const expectedErr = /Action "type" property must be a string/
+    expect(() =>
+      store.dispatch({ type: false } as unknown as AnyAction)
+    ).toThrow(expectedErr)
+    expect(() => store.dispatch({ type: 0 } as unknown as AnyAction)).toThrow(
+      expectedErr
+    )
+    expect(() =>
+      store.dispatch({ type: null } as unknown as AnyAction)
+    ).toThrow(expectedErr)
+
+    expect(() =>
+      store.dispatch({ type: '' } as unknown as AnyAction)
+    ).not.toThrow()
   })
 
   it('accepts enhancer as the third argument', () => {

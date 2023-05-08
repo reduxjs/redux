@@ -282,6 +282,14 @@ export function createStore<
       )
     }
 
+    if (typeof action.type !== 'string') {
+      throw new Error(
+        `Action "type" property must be a string. Instead, the actual type was: ${kindOf(
+          action.type
+        )}.`
+      )
+    }
+
     if (isDispatching) {
       throw new Error('Reducers may not dispatch actions.')
     }
