@@ -651,7 +651,7 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 ## Flux Standard Actions
 
-The Redux store itself does not actually care what fields you put into your action object. It only cares that `action.type` exists and has a value, and normal Redux actions always use a string for `action.type`. That means that you _could_ put any other fields into the action that you want. Maybe we could have `action.todo` for a "todo added" action, or `action.color`, and so on.
+The Redux store itself does not actually care what fields you put into your action object. It only cares that `action.type` exists and is a string. That means that you _could_ put any other fields into the action that you want. Maybe we could have `action.todo` for a "todo added" action, or `action.color`, and so on.
 
 However, if every action uses different field names for its data fields, it can be hard to know ahead of time what fields you need to handle in each reducer.
 

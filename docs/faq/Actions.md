@@ -23,11 +23,11 @@ sidebar_label: Actions
 
 ## Actions
 
-### Why should `type` be a string, or at least serializable? Why should my action types be constants?
+### Why should `type` be a string? Why should my action types be constants?
 
 As with state, serializable actions enable several of Redux's defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it _is_ okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.
 
-We can't reliably enforce serializable actions for performance reasons, so Redux only checks that every action is a plain object, and that the `type` is defined. The rest is up to you, but you might find that keeping everything serializable helps debug and reproduce issues.
+We can't reliably enforce serializable actions for performance reasons, so Redux only checks that every action is a plain object, and that the `type` is a string. The rest is up to you, but you might find that keeping everything serializable helps debug and reproduce issues.
 
 Encapsulating and centralizing commonly used pieces of code is a key concept in programming. While it is certainly possible to manually create action objects everywhere, and write each `type` value by hand, defining reusable constants makes maintaining code easier. If you put constants in a separate file, you can [check your `import` statements against typos](https://www.npmjs.com/package/eslint-plugin-import) so you can't accidentally use the wrong string.
 
