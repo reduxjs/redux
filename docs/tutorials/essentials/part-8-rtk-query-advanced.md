@@ -729,10 +729,19 @@ export const apiSlice = createApi({
             }
           })
         )
+        
+        // Also patch the separately cached single post
+        const patchSingleResult = dispatch(
+          apiSlice.util.updateQueryData('getPost', postId, draft => {
+            draft.reactions[reaction]++
+          })
+        )
+        
         try {
           await queryFulfilled
         } catch {
           patchResult.undo()
+          patchSingleResult.undo()
         }
       }
       // highlight-end
