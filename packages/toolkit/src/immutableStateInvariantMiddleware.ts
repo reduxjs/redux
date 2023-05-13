@@ -92,11 +92,13 @@ function trackProperties(
   isImmutable: IsImmutableFunc,
   ignorePaths: IgnorePaths = [],
   obj: Record<string, any>,
-  path: string = ''
+  path: string = '',
+  checkedObjects: Set<Record<string, any>> = new Set()
 ) {
   const tracked: Partial<TrackedProperty> = { value: obj }
 
-  if (!isImmutable(obj)) {
+  if (!isImmutable(obj) && !checkedObjects.has(obj)) {
+    checkedObjects.add(obj);
     tracked.children = {}
 
     for (const key in obj) {
