@@ -83,9 +83,7 @@ export type ReducerFromReducersMapObject<M> = M[keyof M] extends
  *
  * @template R Type of reducer.
  */
-export type ActionFromReducer<R> = R extends
-  | Reducer<any, infer A, any>
-  | undefined
+export type ActionFromReducer<R> = R extends Reducer<any, infer A, any>
   ? A
   : never
 

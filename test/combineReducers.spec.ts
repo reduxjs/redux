@@ -64,7 +64,7 @@ describe('Utils', () => {
 
     it('throws an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
-        counter(state: number = 0, action: Action<unknown>) {
+        counter(state: number = 0, action: Action) {
           switch (action && action.type) {
             case 'increment':
               return state + 1
@@ -94,7 +94,7 @@ describe('Utils', () => {
 
     it('throws an error on first call if a reducer returns undefined initializing', () => {
       const reducer = combineReducers({
-        counter(state: number, action: Action<unknown>) {
+        counter(state: number, action: Action) {
           switch (action.type) {
             case 'increment':
               return state + 1
@@ -121,23 +121,6 @@ describe('Utils', () => {
       )
     })
 
-    it('allows a symbol to be used as an action type', () => {
-      const increment = Symbol('INCREMENT')
-
-      const reducer = combineReducers({
-        counter(state: number = 0, action: Action<unknown>) {
-          switch (action.type) {
-            case increment:
-              return state + 1
-            default:
-              return state
-          }
-        }
-      })
-
-      expect(reducer({ counter: 0 }, { type: increment }).counter).toEqual(1)
-    })
-
     it('maintains referential equality if the reducers it is combining do', () => {
       const reducer = combineReducers({
         child1(state = {}) {
@@ -160,10 +143,7 @@ describe('Utils', () => {
         child1(state = {}) {
           return state
         },
-        child2(
-          state: { count: number } = { count: 0 },
-          action: Action<unknown>
-        ) {
+        child2(state: { count: number } = { count: 0 }, action: Action) {
           switch (action.type) {
             case 'increment':
               return { count: state.count + 1 }

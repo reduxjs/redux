@@ -159,12 +159,12 @@ function replaceReducerExtender() {
     test?: boolean
   }
 
-  const initialReducer: Reducer<PartialState, Action<unknown>> = () => ({
+  const initialReducer: Reducer<PartialState, Action> = () => ({
     someField: 'string'
   })
   const store = createStore<
     PartialState,
-    Action<unknown>,
+    Action,
     { method(): string },
     ExtraState
   >(initialReducer, enhancer)
@@ -245,10 +245,10 @@ function mhelmersonExample() {
       test?: boolean
     }
 
-    const initialReducer: Reducer<PartialState, Action<unknown>> = () => ({
+    const initialReducer: Reducer<PartialState, Action> = () => ({
       someField: 'string'
     })
-    const store = createStore<PartialState, Action<unknown>, {}, ExtraState>(
+    const store = createStore<PartialState, Action, {}, ExtraState>(
       initialReducer,
       enhancer
     )
@@ -275,7 +275,7 @@ function finalHelmersonExample() {
     foo: string
   }
 
-  function persistReducer<S, A extends Action<unknown>, PreloadedState>(
+  function persistReducer<S, A extends Action, PreloadedState>(
     config: any,
     reducer: Reducer<S, A, PreloadedState>
   ) {
@@ -299,7 +299,7 @@ function finalHelmersonExample() {
     persistConfig: any
   ): StoreEnhancer<{}, ExtraState> {
     return createStore =>
-      <S, A extends Action<unknown>, PreloadedState>(
+      <S, A extends Action, PreloadedState>(
         reducer: Reducer<S, A, PreloadedState>,
         preloadedState?: PreloadedState | undefined
       ) => {
@@ -322,10 +322,10 @@ function finalHelmersonExample() {
     test?: boolean
   }
 
-  const initialReducer: Reducer<PartialState, Action<unknown>> = () => ({
+  const initialReducer: Reducer<PartialState, Action> = () => ({
     someField: 'string'
   })
-  const store = createStore<PartialState, Action<unknown>, {}, ExtraState>(
+  const store = createStore<PartialState, Action, {}, ExtraState>(
     initialReducer,
     createPersistEnhancer('hi')
   )

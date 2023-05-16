@@ -595,14 +595,20 @@ describe('createStore', () => {
     )
   })
 
-  it('does not throw if action type is falsy', () => {
+  it('throws if action type is not string', () => {
     const store = createStore(reducers.todos)
     // @ts-expect-error
-    expect(() => store.dispatch({ type: false })).not.toThrow()
+    expect(() => store.dispatch({ type: false })).toThrow(
+      /the actual type was: 'boolean'.*Value was: 'false'/
+    )
     // @ts-expect-error
-    expect(() => store.dispatch({ type: 0 })).not.toThrow()
+    expect(() => store.dispatch({ type: 0 })).toThrow(
+      /the actual type was: 'number'.*Value was: '0'/
+    )
     // @ts-expect-error
-    expect(() => store.dispatch({ type: null })).not.toThrow()
+    expect(() => store.dispatch({ type: null })).toThrow(
+      /the actual type was: 'null'.*Value was: 'null'/
+    )
     // @ts-expect-error
     expect(() => store.dispatch({ type: '' })).not.toThrow()
   })

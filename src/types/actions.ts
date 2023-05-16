@@ -6,8 +6,7 @@
  *
  * Actions must have a `type` field that indicates the type of action being
  * performed. Types can be defined as constants and imported from another
- * module. It's better to use strings for `type` than Symbols because strings
- * are serializable.
+ * module. These must be strings, as strings are serializable.
  *
  * Other than `type`, the structure of an action object is really up to you.
  * If you're interested, check out Flux Standard Action for recommendations on
@@ -15,7 +14,7 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export type Action<T = unknown> = {
+export interface Action<T extends string = string> {
   type: T
 }
 
