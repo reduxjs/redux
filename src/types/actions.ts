@@ -14,6 +14,8 @@
  *
  * @template T the type of the action's `type` tag.
  */
+// things break if this is an interface #justtypescriptthings
+// https://tsplay.dev/wj8X6m
 export type Action<T extends string = string> = {
   type: T
 }
