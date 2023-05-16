@@ -4,7 +4,7 @@ import { kindOf } from './utils/kindOf'
 
 function bindActionCreator<A extends Action>(
   actionCreator: ActionCreator<A>,
-  dispatch: Dispatch
+  dispatch: Dispatch<A>
 ) {
   return function (this: any, ...args: any[]) {
     return dispatch(actionCreator.apply(this, args))
