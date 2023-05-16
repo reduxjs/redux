@@ -14,7 +14,7 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export interface Action<T extends string = string> {
+export type Action<T extends string = string> = {
   type: T
 }
 
