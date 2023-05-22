@@ -36,7 +36,7 @@ Note that unlike Redux itself, many packages in the Redux ecosystem don't provid
 
 ### Redux DevTools Extension
 
-Redux Toolkit's `configureStore` automatically sets up integration with the pRedux DevTools](https://github.com/reduxjs/redux-devtools/tree/main/extension). You'll want to install the browser extensions to view the store state and actions:
+Redux Toolkit's `configureStore` automatically sets up integration with the [Redux DevTools](https://github.com/reduxjs/redux-devtools/tree/main/extension). You'll want to install the browser extensions to view the store state and actions:
 
 - Redux DevTools Extension:
   - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
