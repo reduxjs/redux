@@ -14,7 +14,9 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export interface Action<T extends string = string> {
+// this needs to be a type, not an interface
+// https://github.com/microsoft/TypeScript/issues/15300
+export type Action<T extends string = string> = {
   type: T
 }
 
@@ -23,6 +25,18 @@ export interface Action<T extends string = string> {
  * This is mainly for the use of the `Reducer` type.
  * This is not part of `Action` itself to prevent types that extend `Action` from
  * having an index signature.
+ */
+export interface UnknownAction extends Action {
+  // Allows any extra properties to be defined in an action.
+  [extraProps: string]: unknown
+}
+
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent types that extend `Action` from
+ * having an index signature.
+ * @deprecated use Action or UnknownAction instead
  */
 export interface AnyAction extends Action {
   // Allows any extra properties to be defined in an action.

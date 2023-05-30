@@ -5,8 +5,7 @@ import {
   createStore,
   Dispatch,
   Reducer,
-  Action,
-  AnyAction
+  Action
 } from 'redux'
 
 /**

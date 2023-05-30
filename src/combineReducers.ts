@@ -1,4 +1,4 @@
-import { AnyAction, Action } from './types/actions'
+import { Action } from './types/actions'
 import {
   ActionFromReducersMapObject,
   PreloadedStateShapeFromReducersMapObject,
@@ -156,7 +156,7 @@ export default function combineReducers(reducers: {
 
   return function combination(
     state: StateFromReducersMapObject<typeof reducers> = {},
-    action: AnyAction
+    action: Action
   ) {
     if (shapeAssertionError) {
       throw shapeAssertionError

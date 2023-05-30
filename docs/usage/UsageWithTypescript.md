@@ -207,10 +207,10 @@ You could add this to your ESLint config as an example:
 
 [Reducers](../tutorials/fundamentals/part-3-state-actions-reducers.md) are pure functions that receive the current `state` and incoming `action` as arguments, and return a new state.
 
-If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `AnyAction`:
+If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `UnknownAction`:
 
 ```ts
-import { AnyAction } from 'redux'
+import { UnknownAction } from 'redux'
 
 interface CounterState {
   value: number
@@ -222,7 +222,7 @@ const initialState: CounterState = {
 
 export default function counterReducer(
   state = initialState,
-  action: AnyAction
+  action: UnknownAction
 ) {
   // logic here
 }
@@ -297,16 +297,16 @@ export type ThunkAction<
 > = (dispatch: ThunkDispatch<S, E, A>, getState: () => S, extraArgument: E) => R
 ```
 
-You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `AnyAction` for `A`:
+You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `UnknownAction` for `A`:
 
 ```ts
-import { AnyAction } from 'redux'
+import { UnknownAction } from 'redux'
 import { sendMessage } from './store/chat/actions'
 import { RootState } from './store'
 import { ThunkAction } from 'redux-thunk'
 
 export const thunkSendMessage =
-  (message: string): ThunkAction<void, RootState, unknown, AnyAction> =>
+  (message: string): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     const asyncResp = await exampleAPI()
     dispatch(
@@ -330,7 +330,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  AnyAction
+  UnknownAction
 >
 ```
 

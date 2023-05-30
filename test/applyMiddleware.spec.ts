@@ -3,7 +3,6 @@ import {
   applyMiddleware,
   Middleware,
   MiddlewareAPI,
-  AnyAction,
   Action,
   Store,
   Dispatch
@@ -128,7 +127,7 @@ describe('applyMiddleware', () => {
     const spy = vi.fn()
     const testCallArgs = ['test']
 
-    interface MultiDispatch<A extends Action = AnyAction> {
+    interface MultiDispatch<A extends Action = Action> {
       <T extends A>(action: T, extraArg?: string[]): T
     }
 

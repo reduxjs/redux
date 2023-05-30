@@ -1,14 +1,10 @@
 import { Dispatch } from './types/store'
-import {
-  AnyAction,
-  ActionCreator,
-  ActionCreatorsMapObject
-} from './types/actions'
+import { ActionCreator, ActionCreatorsMapObject, Action } from './types/actions'
 import { kindOf } from './utils/kindOf'
 
-function bindActionCreator<A extends AnyAction = AnyAction>(
+function bindActionCreator<A extends Action>(
   actionCreator: ActionCreator<A>,
-  dispatch: Dispatch
+  dispatch: Dispatch<A>
 ) {
   return function (this: any, ...args: any[]) {
     return dispatch(actionCreator.apply(this, args))
