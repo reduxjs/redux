@@ -581,16 +581,13 @@ describe('endpoint definition typings', () => {
         enhancedApi.endpoints.query1.initiate()
       )
       expect(queryResponse.data).toEqual({ value: 'transformed' })
-      expectType<Transformed | Promise<Transformed> | undefined>(
-        queryResponse.data
-      )
+      expectType<Transformed | undefined>(queryResponse.data)
 
       const mutationResponse = await storeRef.store.dispatch(
         enhancedApi.endpoints.mutation1.initiate()
       )
       expectType<
-        | { data: Transformed | Promise<Transformed> }
-        | { error: FetchBaseQueryError | SerializedError }
+        { data: Transformed } | { error: FetchBaseQueryError | SerializedError }
       >(mutationResponse)
       expect('data' in mutationResponse && mutationResponse.data).toEqual({
         value: 'transformed',

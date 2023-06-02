@@ -17,6 +17,7 @@ import type {
   OmitFromUnion,
   CastAny,
   NonUndefined,
+  UnwrapPromise,
 } from './tsHelpers'
 import type { NEVER } from './fakeBaseQuery'
 import type { Api } from '@reduxjs/toolkit/query'
@@ -797,7 +798,9 @@ export type TransformedResponse<
 > = K extends keyof NewDefinitions
   ? NewDefinitions[K]['transformResponse'] extends undefined
     ? ResultType
-    : ReturnType<NonUndefined<NewDefinitions[K]['transformResponse']>>
+    : UnwrapPromise<
+        ReturnType<NonUndefined<NewDefinitions[K]['transformResponse']>>
+      >
   : ResultType
 
 export type OverrideResultType<Definition, NewResultType> =
