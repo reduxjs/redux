@@ -78,7 +78,7 @@ export const addTodo = text => ({
 
 export const todoToggled = id => ({
   type: TODO_TOGGLED,
-  payload: id
+  payload: { id }
 })
 
 export const todosReducer = (state = [], action) => {
