@@ -138,6 +138,8 @@ const todosSlice = createSlice({
     todoToggled(state, action) {
       const todo = state.find(todo => todo.id === action.payload)
       todo.completed = !todo.completed
+      
+      state = todo
     }
   }
 })
