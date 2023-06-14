@@ -34,7 +34,7 @@ for (const dir of exampleDirs) {
     }
     if (result.status !== 0) {
       console.log(result)
-      throw new Error('Building examples exited with non-zero')
+      throw new Error(`Building examples exited with non-zero ${opts.cwd} cmd: ${JSON.stringify(cmdArg)}`)
     }
   }
 }
