@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",
+    "node-gyp": "^9.4.0",
     "parcel-bundler": "^1.6.1"
   }
 }

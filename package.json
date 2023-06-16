@@ -19,6 +19,9 @@
     "flux",
     "elm"
   ],
+  "workspaces": [
+    "examples/*"
+  ],
   "authors": [
     "Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)",
     "Andrew Clark <acdlite@me.com> (https://github.com/acdlite)"
@@ -53,7 +56,7 @@
     "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test",
     "prepack": "yarn build",
     "examples:lint": "eslint --ext js,ts examples",
-    "examples:test": "cross-env CI=true babel-node examples/testAll.js",
+    "examples:test": "cross-env CI=true SKIP_PREFLIGHT_CHECK=true yarn workspaces foreach -v run test",
     "tsc": "tsc"
   },
   "devDependencies": {
@@ -78,5 +81,6 @@
     "typescript": "^4.8.3",
     "vitest": "^0.27.2"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "packageManager": "yarn@3.6.0"
 }
