@@ -1,4 +1,5 @@
 {
   "sandboxes": ["vanilla", "vanilla-ts"],
-  "node": "16"
+  "node": "16",
+  "packages": ["."]
 }
