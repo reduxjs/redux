@@ -199,7 +199,7 @@ module.exports = {
       /** @type {import('@dipakparmar/docusaurus-plugin-umami').Options} */
       ({
         websiteID: '4bb3bf09-7460-453f-857d-874d8a361cb6',
-        analyticsDomain: 'redux-docs-umami.vercel.app',
+        analyticsDomain: 'redux-docs-umami.up.railway.app',
         scriptName: 'script.js',
         dataAutoTrack: true,
         dataDoNotTrack: true,
