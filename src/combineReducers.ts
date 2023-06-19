@@ -125,9 +125,7 @@ export default function combineReducers(reducers: {
 }) {
   const reducerKeys = Object.keys(reducers)
   const finalReducers: { [key: string]: Reducer<any, any, any> } = {}
-  for (let i = 0; i < reducerKeys.length; i++) {
-    const key = reducerKeys[i]
-
+  for (const key of reducerKeys) {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
@@ -176,13 +174,12 @@ export default function combineReducers(reducers: {
 
     let hasChanged = false
     const nextState: StateFromReducersMapObject<typeof reducers> = {}
-    for (let i = 0; i < finalReducerKeys.length; i++) {
-      const key = finalReducerKeys[i]
+    for (const key of finalReducerKeys) {
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]
       const nextStateForKey = reducer(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
-        const actionType = action && action.type
+        const actionType = action?.type
         throw new Error(
           `When called with an action of type ${
             actionType ? `"${String(actionType)}"` : '(unknown type)'

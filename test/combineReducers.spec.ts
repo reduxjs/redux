@@ -15,7 +15,7 @@ describe('Utils', () => {
       type PushAction = { type: 'push'; value: unknown }
 
       const reducer = combineReducers({
-        counter: (state: number = 0, action: IncrementAction) =>
+        counter: (state = 0, action: IncrementAction) =>
           action.type === 'increment' ? state + 1 : state,
         stack: (state: any[] = [], action: PushAction) =>
           action.type === 'push' ? [...state, action.value] : state
@@ -64,8 +64,8 @@ describe('Utils', () => {
 
     it('throws an error if a reducer returns undefined handling an action', () => {
       const reducer = combineReducers({
-        counter(state: number = 0, action: Action) {
-          switch (action && action.type) {
+        counter(state = 0, action: Action) {
+          switch (action?.type) {
             case 'increment':
               return state + 1
             case 'decrement':

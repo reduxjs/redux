@@ -101,10 +101,10 @@ const storeWithCombineReducerAndBadPreloadedState = createStore(
 )
 
 const nestedCombinedReducer = combineReducers({
-  a: (state: string = 'a') => state,
+  a: (state = 'a') => state,
   b: combineReducers({
-    c: (state: string = 'c') => state,
-    d: (state: string = 'd') => state
+    c: (state = 'c') => state,
+    d: (state = 'd') => state
   }),
   e: (state: BrandedString = brandedString) => state
 })
@@ -116,8 +116,8 @@ const storeWithNestedCombineReducer = createStore(nestedCombinedReducer, {
 })
 
 const simpleCombinedReducer = combineReducers({
-  c: (state: string = 'c') => state,
-  d: (state: string = 'd') => state
+  c: (state = 'c') => state,
+  d: (state = 'd') => state
 })
 
 // @ts-expect-error

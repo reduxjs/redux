@@ -23,7 +23,7 @@ namespace FreeShapeAction {
     text: 'test'
   }
 
-  const text: string = action['text']
+  const text: string = action.text
 }
 
 namespace StringLiteralTypeAction {

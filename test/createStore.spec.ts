@@ -431,7 +431,7 @@ describe('createStore', () => {
     const store = createStore(reducers.todos)
 
     let resolve: (value: unknown) => void = () => {}
-    let promise = new Promise(_resolve => {
+    const promise = new Promise(_resolve => {
       resolve = _resolve
     })
     store.subscribe(() => {
@@ -451,7 +451,7 @@ describe('createStore', () => {
   it('does not leak private listeners array', async () => {
     const store = createStore(reducers.todos)
     let resolve: (value: unknown) => void = () => {}
-    let promise = new Promise(_resolve => {
+    const promise = new Promise(_resolve => {
       resolve = _resolve
     })
 

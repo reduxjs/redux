@@ -59,8 +59,8 @@
   "devDependencies": {
     "@babel/core": "^7.19.0",
     "@types/node": "^18.7.16",
-    "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/parser": "^5.36.2",
+    "@typescript-eslint/eslint-plugin": "6.0.0-alpha.158",
+    "@typescript-eslint/parser": "6.0.0-alpha.158",
     "cross-env": "^7.0.3",
     "esbuild-extra": "^0.1.3",
     "eslint": "^8.23.0",
@@ -77,6 +77,10 @@
     "tsup": "^6.7.0",
     "typescript": "^4.8.3",
     "vitest": "^0.27.2"
+  },
+  "resolutions": {
+    "@typescript-eslint/eslint-plugin": "6.0.0-alpha.158",
+    "@typescript-eslint/parser": "6.0.0-alpha.158"
   },
   "sideEffects": false
 }
