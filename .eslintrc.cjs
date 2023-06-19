@@ -29,7 +29,6 @@ module.exports = {
 
   rules: {
     'jsx-a11y/href-no-hash': 'off',
-    'no-unused-vars': 'off',
 
     // These off/not-configured-the-way-we-want lint rules we like & opt into
     '@typescript-eslint/no-unused-vars': [
