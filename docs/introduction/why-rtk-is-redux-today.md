@@ -1,6 +1,7 @@
 ---
 id: why-rtk-is-redux-today
 title: Why Redux Toolkit is How To Use Redux Today
+# Yes, we are serious with the title. It's okay as it is. Please don't open more Pull Requests to change it.
 description: 'Introduction > Why RTK is Redux Today: details on how RTK replaces the Redux core'
 ---
 
