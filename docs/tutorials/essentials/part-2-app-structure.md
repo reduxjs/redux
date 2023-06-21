@@ -24,7 +24,7 @@ Now, let's look at a real working example to see how these pieces fit together.
 
 The sample project we'll look at is a small counter application that lets us add or subtract from a number as we click buttons. It may not be very exciting, but it shows all the important pieces of a React+Redux application in action.
 
-The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/cra-template-redux). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
+The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/redux-templates). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
 
 Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
 
