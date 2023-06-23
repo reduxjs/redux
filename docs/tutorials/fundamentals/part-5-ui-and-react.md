@@ -300,7 +300,7 @@ import store from './store'
 ReactDOM.render(
   // highlight-start
   // Render a `<Provider>` around the entire `<App>`,
-  // and pass the Redux store to as a prop
+  // and pass the Redux store too as a prop
   <React.StrictMode>
     <Provider store={store}>
       <App />
