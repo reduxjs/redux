@@ -473,6 +473,24 @@ describe('createReducer', () => {
         `"addCase cannot be called with two reducers for the same action type"`
       )
     })
+
+    test('will throw if an empty type is used', () => {
+      const customActionCreator = (payload: number) => ({
+        type: 'custom_action',
+        payload,
+      })
+      customActionCreator.type = ""
+      expect(() =>
+        createReducer(0, (builder) =>
+          builder.addCase(
+            customActionCreator,
+            (state, action) => state + action.payload
+          )
+        )
+      ).toThrowErrorMatchingInlineSnapshot(
+        '"`builder.addCase` cannot be called with an empty action type"'
+      )
+    })
   })
 
   describe('builder "addMatcher" method', () => {

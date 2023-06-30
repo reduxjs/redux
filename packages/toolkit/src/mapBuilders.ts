@@ -140,7 +140,7 @@ export function executeReducerBuilderCallback<S>(
     ) {
       if (process.env.NODE_ENV !== 'production') {
         /*
-         to keep the definition by the user in line with actual behavior, 
+         to keep the definition by the user in line with actual behavior,
          we enforce `addCase` to always be called before calling `addMatcher`
          as matching cases take precedence over matchers
          */
@@ -159,6 +159,11 @@ export function executeReducerBuilderCallback<S>(
         typeof typeOrActionCreator === 'string'
           ? typeOrActionCreator
           : typeOrActionCreator.type
+      if (!type) {
+        throw new Error(
+          '`builder.addCase` cannot be called with an empty action type'
+        )
+      }
       if (type in actionsMap) {
         throw new Error(
           'addCase cannot be called with two reducers for the same action type'
