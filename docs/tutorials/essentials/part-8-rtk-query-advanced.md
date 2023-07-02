@@ -115,7 +115,7 @@ export const EditPostForm = ({ match }) => {
   const onSavePostClicked = async () => {
     if (title && content) {
       // highlight-next-line
-      await updatePost({ id: postId, title, content })
+      await updatePost({ id: postId, title, content }).unwrap()
       history.push(`/posts/${postId}`)
     }
   }
