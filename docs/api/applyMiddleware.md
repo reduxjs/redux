@@ -7,7 +7,7 @@ description: 'API > applyMiddleware: extending the Redux store'
 
 &nbsp;
 
-# `applyMiddleware(...middleware)`
+# `applyMiddleware(...middlewares)`
 
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store's [`dispatch`](Store.md#dispatchaction) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
 
@@ -19,7 +19,7 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 
 #### Arguments
 
-- `...middleware` (_arguments_): Functions that conform to the Redux _middleware API_. Each middleware receives [`Store`](Store.md)'s [`dispatch`](Store.md#dispatchaction) and [`getState`](Store.md#getState) functions as named arguments, and returns a function. That function will be given the `next` middleware's dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real store's [`dispatch`](Store.md#dispatchaction) method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
+- `...middlewares` (_arguments_): Functions that conform to the Redux _middleware API_. Each middleware receives [`Store`](Store.md)'s [`dispatch`](Store.md#dispatchaction) and [`getState`](Store.md#getState) functions as named arguments, and returns a function. That function will be given the `next` middleware's dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real store's [`dispatch`](Store.md#dispatchaction) method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
 
 #### Returns
 
@@ -200,17 +200,17 @@ export default connect(state => ({
 - If you want to conditionally apply a middleware, make sure to only import it when it's needed:
 
   ```js
-  let middleware = [a, b]
+  let middlewares = [a, b]
   if (process.env.NODE_ENV !== 'production') {
     const c = require('some-debug-middleware')
     const d = require('another-debug-middleware')
-    middleware = [...middleware, c, d]
+    middlewares = [...middlewares, c, d]
   }
 
   const store = createStore(
     reducer,
     preloadedState,
-    applyMiddleware(...middleware)
+    applyMiddleware(...middlewares)
   )
   ```
 
