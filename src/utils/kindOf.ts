@@ -3,15 +3,8 @@ export function miniKindOf(val: any): string {
   if (val === void 0) return 'undefined'
   if (val === null) return 'null'
 
-  const type = typeof val
-  switch (type) {
-    case 'boolean':
-    case 'string':
-    case 'number':
-    case 'symbol':
-    case 'function': {
-      return type
-    }
+  if (['boolean', 'string', 'number', 'symbol', 'function'].includes(typeof val)) {
+    return typeof val;
   }
 
   if (Array.isArray(val)) return 'array'
