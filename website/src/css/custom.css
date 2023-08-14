@@ -119,6 +119,7 @@ div[class*='codeBlockTitle'] {
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
+  color: var(--ifm-color-content);
 }
 
 a code,
