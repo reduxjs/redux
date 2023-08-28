@@ -15,11 +15,16 @@
       </p>
     </div>
     <script>
-      function counter(state, action) {
-        if (typeof state === 'undefined') {
-          return 0
-        }
-
+      const valueEl = document.getElementById('value')
+      const incrementButtonEl = document.getElementById('increment')
+      const decrementButtonEl = document.getElementById('decrement')
+      const incrementIfOddButtonEl = document.getElementById('incrementIfOdd')
+      const incrementAsyncButtonEl = document.getElementById('incrementAsync')
+      
+      const store = Redux.createStore(counterReducer)
+      store.subscribe(render)
+      
+      function counterReducer(state = 0, action) {
         switch (action.type) {
           case 'INCREMENT':
             return state + 1
@@ -30,39 +35,26 @@
         }
       }
 
-      var store = Redux.createStore(counter)
-      var valueEl = document.getElementById('value')
-
       function render() {
         valueEl.innerHTML = store.getState().toString()
       }
 
-      render()
-      store.subscribe(render)
-
-      document.getElementById('increment')
-        .addEventListener('click', function () {
+      incrementButtonEl.addEventListener('click', () => {
+        store.dispatch({ type: 'INCREMENT' })
+      })
+      decrementButtonEl.addEventListener('click', () => {
+        store.dispatch({ type: 'DECREMENT' })
+      })
+      incrementIfOddButtonEl.addEventListener('click', () => {
+        if (store.getState() % 2 !== 0) {
           store.dispatch({ type: 'INCREMENT' })
-        })
-
-      document.getElementById('decrement')
-        .addEventListener('click', function () {
-          store.dispatch({ type: 'DECREMENT' })
-        })
-
-      document.getElementById('incrementIfOdd')
-        .addEventListener('click', function () {
-          if (store.getState() % 2 !== 0) {
-            store.dispatch({ type: 'INCREMENT' })
-          }
-        })
-
-      document.getElementById('incrementAsync')
-        .addEventListener('click', function () {
-          setTimeout(function () {
-            store.dispatch({ type: 'INCREMENT' })
-          }, 1000)
-        })
+        }
+      })
+      incrementAsyncButtonEl.addEventListener('click', () => {
+        setTimeout(() => {
+          store.dispatch({ type: 'INCREMENT' })
+        }, 1000)
+      })
     </script>
   </body>
 </html>
