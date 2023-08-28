@@ -38,19 +38,19 @@
         .addEventListener('click', () => {
           store.dispatch({ type: 'INCREMENT' })
         })
-      
+
       document.getElementById('decrement')
         .addEventListener('click', () => {
           store.dispatch({ type: 'DECREMENT' })
         })
-      
+
       document.getElementById('incrementIfOdd')
         .addEventListener('click', () => {
           if (store.getState() % 2 !== 0) {
             store.dispatch({ type: 'INCREMENT' })
           }
         })
-      
+
       document.getElementById('incrementAsync')
         .addEventListener('click', () => {
           setTimeout(() => {
