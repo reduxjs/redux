@@ -16,11 +16,6 @@
     </div>
     <script>
       const valueEl = document.getElementById('value')
-      const incrementButtonEl = document.getElementById('increment')
-      const decrementButtonEl = document.getElementById('decrement')
-      const incrementIfOddButtonEl = document.getElementById('incrementIfOdd')
-      const incrementAsyncButtonEl = document.getElementById('incrementAsync')
-      
       const store = Redux.createStore(counterReducer)
       store.subscribe(render)
       
@@ -39,22 +34,29 @@
         valueEl.innerHTML = store.getState().toString()
       }
 
-      incrementButtonEl.addEventListener('click', () => {
-        store.dispatch({ type: 'INCREMENT' })
-      })
-      decrementButtonEl.addEventListener('click', () => {
-        store.dispatch({ type: 'DECREMENT' })
-      })
-      incrementIfOddButtonEl.addEventListener('click', () => {
-        if (store.getState() % 2 !== 0) {
+      document.getElementById('increment')
+        .addEventListener('click', () => {
           store.dispatch({ type: 'INCREMENT' })
-        }
-      })
-      incrementAsyncButtonEl.addEventListener('click', () => {
-        setTimeout(() => {
-          store.dispatch({ type: 'INCREMENT' })
-        }, 1000)
-      })
+        })
+      
+      document.getElementById('decrement')
+        .addEventListener('click', () => {
+          store.dispatch({ type: 'DECREMENT' })
+        })
+      
+      document.getElementById('incrementIfOdd')
+        .addEventListener('click', () => {
+          if (store.getState() % 2 !== 0) {
+            store.dispatch({ type: 'INCREMENT' })
+          }
+        })
+      
+      document.getElementById('incrementAsync')
+        .addEventListener('click', () => {
+          setTimeout(() => {
+            store.dispatch({ type: 'INCREMENT' })
+          }, 1000)
+        })
     </script>
   </body>
 </html>
