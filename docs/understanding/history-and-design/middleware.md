@@ -247,7 +247,7 @@ const crashReporter = store => next => action => {
 
 Now middleware takes the `next()` dispatch function, and returns a dispatch function, which in turn serves as `next()` to the middleware to the left, and so on. It's still useful to have access to some store methods like `getState()`, so `store` stays available as the top-level argument.
 
-### Attempt #6: Naïvely Applying the Middleware
+### Attempt #6: Naively Applying the Middleware
 
 Instead of `applyMiddlewareByMonkeypatching()`, we could write `applyMiddleware()` that first obtains the final, fully wrapped `dispatch()` function, and returns a copy of the store using it:
 
