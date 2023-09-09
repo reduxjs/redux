@@ -385,6 +385,7 @@ export default notificationsSlice.reducer
 We want to mark these notifications as read whenever our `<NotificationsList>` component renders, either because we clicked on the tab to view the notifications, or because we already have it open and we just received some additional notifications. We can do this by dispatching `allNotificationsRead` any time this component re-renders. In order to avoid flashing of old data as this updates, we'll dispatch the action in a `useLayoutEffect` hook. We also want to add an additional classname to any notification list entries in the page, to highlight them:
 
 ```jsx title="features/notifications/NotificationsList.js"
+// highlight-next-line
 import React, { useLayoutEffect } from 'react'
 // highlight-next-line
 import { useSelector, useDispatch } from 'react-redux'
