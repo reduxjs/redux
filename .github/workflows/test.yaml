@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Use node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           cache: 'yarn'
 
@@ -60,7 +60,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Use node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           cache: 'yarn'
 
@@ -96,7 +96,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Use node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           cache: 'yarn'
 
@@ -144,7 +144,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Use node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           cache: 'yarn'
 
