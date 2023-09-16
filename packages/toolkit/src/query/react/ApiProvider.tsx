@@ -5,7 +5,7 @@ import React from 'react'
 import type { ReactReduxContextValue } from 'react-redux'
 import { Provider } from 'react-redux'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import type { Api } from '@reduxjs/toolkit/dist/query/apiTypes'
+import type { Api } from '@reduxjs/toolkit/query'
 
 /**
  * Can be used as a `Provider` if you **do not already have a Redux store**.

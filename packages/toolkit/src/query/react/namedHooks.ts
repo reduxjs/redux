@@ -4,7 +4,7 @@ import type {
   EndpointDefinitions,
   MutationDefinition,
   QueryDefinition,
-} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+} from '@reduxjs/toolkit/query'
 
 export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
   keyof Definitions extends infer Keys

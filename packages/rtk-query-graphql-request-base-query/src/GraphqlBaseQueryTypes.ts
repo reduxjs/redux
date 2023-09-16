@@ -1,4 +1,4 @@
-import type { BaseQueryApi } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import type { BaseQueryApi } from '@reduxjs/toolkit/query'
 import type {
   GraphQLClient,
   RequestOptions,

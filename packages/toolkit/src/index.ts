@@ -196,3 +196,5 @@ export {
   autoBatchEnhancer,
 } from './autoBatchEnhancer'
 export type { AutoBatchOptions } from './autoBatchEnhancer'
+
+export type { ExtractDispatchExtensions as TSHelpersExtractDispatchExtensions } from './tsHelpers'

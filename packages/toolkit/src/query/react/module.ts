@@ -6,11 +6,11 @@ import type {
   QueryDefinition,
   MutationDefinition,
   QueryArgFrom,
-} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+} from '@reduxjs/toolkit/query'
 import type { Api, Module } from '../apiTypes'
 import { capitalize } from '../utils'
 import { safeAssign } from '../tsHelpers'
-import type { BaseQueryFn } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 
 import type { HooksWithUniqueNames } from './namedHooks'
 
@@ -26,7 +26,7 @@ import type { PrefetchOptions } from '../core/module'
 export const reactHooksModuleName = /* @__PURE__ */ Symbol()
 export type ReactHooksModule = typeof reactHooksModuleName
 
-declare module '@reduxjs/toolkit/dist/query/apiTypes' {
+declare module '@reduxjs/toolkit/query' {
   export interface ApiModules<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     BaseQuery extends BaseQueryFn,
