@@ -31,9 +31,9 @@ We've tried to keep these explanations beginner-friendly, but we do need to make
 
 :::important Prerequisites
 
-- Familiarity with [HTML & CSS](https://internetingishard.com/).
+- Familiarity with [HTML & CSS](https://internetingishard.netlify.app/html-and-css/index.html).
 - Familiarity with [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
-- Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
+- Knowledge of React terminology: [JSX](https://react.dev/learn/writing-markup-with-jsx), [State](https://react.dev/learn/state-a-components-memory), [Function Components](https://react.dev/learn/your-first-component), [Props](https://react.dev/learn/passing-props-to-a-component), and [Hooks](https://react.dev/reference/react)
 - Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
 
 :::
@@ -143,7 +143,7 @@ This is a small example of **"one-way data flow"**:
 
 ![One-way data flow](/img/tutorials/essentials/one-way-data-flow.png)
 
-However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but that doesn't always help.
+However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://react.dev/learn/sharing-state-between-components) to parent components, but that doesn't always help.
 
 One way to solve this is to extract the shared state from the components, and put it into a centralized location outside the component tree. With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
 
@@ -459,4 +459,4 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
 
 ## What's Next?
 
-We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.
+We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux Toolkit App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.

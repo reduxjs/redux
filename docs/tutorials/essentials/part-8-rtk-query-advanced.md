@@ -580,7 +580,7 @@ export const UserPage = ({ match }) => {
 
 There's a key difference with the memoized selector function we've created here. Normally, [selectors expect the entire Redux `state` as their first argument](../../usage/deriving-data-selectors.md), and extract or derive a value from `state`. However, in this case we're only dealing with the "result" value that is kept in the cache. The result object has a `data` field inside with the actual values we need, as well as some of the request metadata fields.
 
-Our `selectFromResult` callback receives the `result` object containing the original request metadata and the `data` from the server, and should return some extracted or derived values. Because query hooks add an additional `refetch` method to whatever is returned here, it's preferably to always return an object from `selectFromResult` with the fields inside that you need.
+Our `selectFromResult` callback receives the `result` object containing the original request metadata and the `data` from the server, and should return some extracted or derived values. Because query hooks add an additional `refetch` method to whatever is returned here, it's preferable to always return an object from `selectFromResult` with the fields inside that you need.
 
 Since `result` is being kept in the Redux store, we can't mutate it - we need to return a new object. The query hook will do a "shallow" comparison on this returned object, and only re-render the component if one of the fields has changed. We can optimize re-renders by only returning the specific fields needed by this component - if we don't need the rest of the metadata flags, we could omit them entirely. If you do need them, you can spread the original `result` value to include them in the output.
 
@@ -845,7 +845,7 @@ Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives t
 - Create a server-side data subscription like a Websocket
 - When an update is received, use `updateCachedData` to "mutate" the cached values based on the update
 - `await cacheEntryRemoved` at the end
-- Clean up subscriptions afterwwards
+- Clean up subscriptions afterwards
 
 Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we add a thunk we can dispatch that reads the latest timestamp from the cache state and tells the mock server to generate newer notifications.
 
@@ -1105,7 +1105,7 @@ Let's take one last look at the whole application in action:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-6-rtkqConversion/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-6-rtkqConversion/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -1117,7 +1117,7 @@ Let's take one last look at the whole application in action:
   - Cache tags can be either `'Post'` or `{type: 'Post', id}`
   - Endpoints can provide or invalidate cache tags based on results and arg cache keys
 - **RTK Query's APIs are UI-agnostic and can be used outside of React**
-  - Endpoint objects include functions for initating requests, generating result selectors, and matching request action objects
+  - Endpoint objects include functions for initiating requests, generating result selectors, and matching request action objects
 - **Responses can be transformed in different ways as needed**
   - Endpoints can define a `transformResponse` callback to modify the data before caching
   - Hooks can be given a `selectFromResult` option to extract/transform data

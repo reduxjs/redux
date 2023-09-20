@@ -7,6 +7,9 @@ description: 'The official Redux Fundamentals tutorial: learn how to create and 
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 4: Store
 
 :::tip What You'll Learn
@@ -26,6 +29,8 @@ to describe "what happened" and match the kinds of events that can happen as a u
 to create a "root reducer" based on the different "slice reducers" for each feature in our app.
 
 Now, it's time to pull those pieces together, with the central piece of a Redux app: the **store**.
+
+<FundamentalsWarning />
 
 ## Redux Store
 
@@ -490,8 +495,8 @@ Whenever an action is dispatched:
 Any middleware can return any value, and the return value from the first middleware in the pipeline is actually returned when you call `store.dispatch()`. For example:
 
 ```js
-const alwaysReturnHelloMiddleware = storeAPI => next => action {
-  const originalResult = next(action);
+const alwaysReturnHelloMiddleware = storeAPI => next => action => {
+  const originalResult = next(action)
   // Ignore the original result, return something else
   return 'Hello!'
 }
@@ -499,7 +504,7 @@ const alwaysReturnHelloMiddleware = storeAPI => next => action {
 const middlewareEnhancer = applyMiddleware(alwaysReturnHelloMiddleware)
 const store = createStore(rootReducer, middlewareEnhancer)
 
-const dispatchResult = store.dispatch({type: 'some/action'})
+const dispatchResult = store.dispatch({ type: 'some/action' })
 console.log(dispatchResult)
 // log: 'Hello!'
 ```
@@ -597,7 +602,7 @@ Let's see how our example app looks now:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-2-storeSetup/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Fstore.js&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-2-storeSetup/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Fstore.js&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

@@ -6,7 +6,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "emitDeclarationOnly": false,
-    "strict": false,
+    "strict": true,
     "noEmit": true,
     "target": "esnext",
     "jsx": "react",
@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "noImplicitReturns": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["vitest/globals"],
+    "paths": {
+      "redux": ["../../src/index.ts"], // @remap-prod-remove-line
+      "@internal/*": ["../../src/*"]
+    }
   },
   "include": ["."]
 }

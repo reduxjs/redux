@@ -5,7 +5,7 @@ title: Glossary
 
 # Glossary
 
-This is a glossary of the core terms in Redux, along with their type signatures. The types are documented using [Flow notation](https://flowtype.org/docs/quick-reference.html).
+This is a glossary of the core terms in Redux, along with their type signatures. The types are documented using [Flow notation](https://flow.org/en/docs/types).
 
 ## State
 
@@ -93,7 +93,7 @@ A middleware is a higher-order function that composes a [dispatch function](#dis
 
 Middleware is composable using function composition. It is useful for logging actions, performing side effects like routing, or turning an asynchronous API call into a series of synchronous actions.
 
-See [`applyMiddleware(...middlewares)`](./api/applyMiddleware.md) for a detailed look at middleware.
+See [`applyMiddleware(...middlewares)`](../../api/applyMiddleware.md) for a detailed look at middleware.
 
 ## Store
 

@@ -18,7 +18,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 :::info Prerequisites
 
 - Understanding the [Redux data flow and React-Redux APIs from Part 3](./part-3-data-flow.md)
-- Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reactrouter.com/docs/en/v6/getting-started/overview)
+- Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reactrouter.com/start/overview)
 
 :::
 
@@ -842,7 +842,7 @@ Here's what our app looks like after all these changes:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-2-reactionButtons/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-2-reactionButtons/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

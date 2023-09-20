@@ -214,7 +214,10 @@ Let's look at a small standalone example first.
 ```js title="createSlice  example"
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = []
+const initialState = {
+  entities: [],
+  status: null
+}
 
 const todosSlice = createSlice({
   name: 'todos',
@@ -222,10 +225,10 @@ const todosSlice = createSlice({
   reducers: {
     todoAdded(state, action) {
       // ✅ This "mutating" code is okay inside of createSlice!
-      state.push(action.payload)
+      state.entities.push(action.payload)
     },
     todoToggled(state, action) {
-      const todo = state.find(todo => todo.id === action.payload)
+      const todo = state.entities.find(todo => todo.id === action.payload)
       todo.completed = !todo.completed
     },
     todosLoading(state, action) {
@@ -246,7 +249,7 @@ There's several things to see in this example:
 
 - We write case reducer functions inside the `reducers` object, and give them readable names
 - **`createSlice` will automatically generate action creators** that correspond to each case reducer function we provide
-- createSlice automatically returns the existing state in the default case
+- `createSlice` automatically returns the existing state in the default case
 - **`createSlice` allows us to safely "mutate" our state!**
 - But, we can also make immutable copies like before if we want to
 
@@ -440,7 +443,7 @@ Here's how our code looks with all the slices converted:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-9-createSlice/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-9-createSlice/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -829,7 +832,7 @@ Let's take one final look at the completed todo application, including all the c
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

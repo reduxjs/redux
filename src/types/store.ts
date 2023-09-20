@@ -1,63 +1,7 @@
-import type { Action, AnyAction } from './actions'
+import type { Action, UnknownAction } from './actions'
 import type { Reducer } from './reducers'
-import '../utils/symbol-observable'
-
-/**
- * Extend the state
- *
- * This is used by store enhancers and store creators to extend state.
- * If there is no state extension, it just returns the state, as is, otherwise
- * it returns the state joined with its extension.
- *
- * Reference for future devs:
- * https://github.com/microsoft/TypeScript/issues/31751#issuecomment-498526919
- */
-export type ExtendState<State, Extension> = [Extension] extends [never]
-  ? State
-  : State & Extension
-
-/**
- * Internal "virtual" symbol used to make the `CombinedState` type unique.
- */
-declare const $CombinedState: unique symbol
-
-/**
- * State base type for reducers created with `combineReducers()`.
- *
- * This type allows the `createStore()` method to infer which levels of the
- * preloaded state can be partial.
- *
- * Because Typescript is really duck-typed, a type needs to have some
- * identifying property to differentiate it from other types with matching
- * prototypes for type checking purposes. That's why this type has the
- * `$CombinedState` symbol property. Without the property, this type would
- * match any object. The symbol doesn't really exist because it's an internal
- * (i.e. not exported), and internally we never check its value. Since it's a
- * symbol property, it's not expected to be unumerable, and the value is
- * typed as always undefined, so its never expected to have a meaningful
- * value anyway. It just makes this type distinguishable from plain `{}`.
- */
-interface EmptyObject {
-  readonly [$CombinedState]?: undefined
-}
-export type CombinedState<S> = EmptyObject & S
-
-/**
- * Recursively makes combined state objects partial. Only combined state _root
- * objects_ (i.e. the generated higher level object with keys mapping to
- * individual reducers) are partial.
- */
-export type PreloadedState<S> = Required<S> extends EmptyObject
-  ? S extends CombinedState<infer S1>
-    ? {
-        [K in keyof S1]?: S1[K] extends object ? PreloadedState<S1[K]> : S1[K]
-      }
-    : S
-  : {
-      [K in keyof S]: S[K] extends string | number | boolean | symbol
-        ? S[K]
-        : PreloadedState<S[K]>
-    }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import _$$observable from '../utils/symbol-observable'
 
 /**
  * A *dispatching function* (or simply *dispatch function*) is a function that
@@ -80,7 +24,7 @@ export type PreloadedState<S> = Required<S> extends EmptyObject
  * @template A The type of things (actions or otherwise) which may be
  *   dispatched.
  */
-export interface Dispatch<A extends Action = AnyAction> {
+export interface Dispatch<A extends Action = UnknownAction> {
   <T extends A>(action: T, ...extraArgs: any[]): T
 }
 
@@ -90,6 +34,8 @@ export interface Dispatch<A extends Action = AnyAction> {
 export interface Unsubscribe {
   (): void
 }
+
+export type ListenerCallback = () => void
 
 declare global {
   interface SymbolConstructor {
@@ -131,13 +77,11 @@ export type Observer<T> = {
  * @template S The type of state held by this store.
  * @template A the type of actions which may be dispatched by this store.
  * @template StateExt any extension to state from store enhancers
- * @template Ext any extensions to the store from store enhancers
  */
 export interface Store<
   S = any,
-  A extends Action = AnyAction,
-  StateExt = never,
-  Ext = {}
+  A extends Action = UnknownAction,
+  StateExt extends {} = {}
 > {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
@@ -172,7 +116,7 @@ export interface Store<
    *
    * @returns The current state tree of your application.
    */
-  getState(): S
+  getState(): S & StateExt
 
   /**
    * Adds a change listener. It will be called any time an action is
@@ -198,7 +142,7 @@ export interface Store<
    * @param listener A callback to be invoked on every dispatch.
    * @returns A function to remove this change listener.
    */
-  subscribe(listener: () => void): Unsubscribe
+  subscribe(listener: ListenerCallback): Unsubscribe
 
   /**
    * Replaces the reducer currently used by the store to calculate the state.
@@ -209,9 +153,7 @@ export interface Store<
    *
    * @param nextReducer The reducer for the store to use instead.
    */
-  replaceReducer<NewState, NewActions extends Action>(
-    nextReducer: Reducer<NewState, NewActions>
-  ): Store<ExtendState<NewState, StateExt>, NewActions, StateExt, Ext> & Ext
+  replaceReducer(nextReducer: Reducer<S, A>): void
 
   /**
    * Interoperability point for observable/reactive libraries.
@@ -219,7 +161,7 @@ export interface Store<
    * For more information, see the observable proposal:
    * https://github.com/tc39/proposal-observable
    */
-  [Symbol.observable](): Observable<S>
+  [Symbol.observable](): Observable<S & StateExt>
 }
 
 /**
@@ -230,19 +172,26 @@ export interface Store<
  *
  * @template S The type of state to be held by the store.
  * @template A The type of actions which may be dispatched.
+ * @template PreloadedState The initial state that is passed into the reducer.
  * @template Ext Store extension that is mixed in to the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
 export interface StoreCreator {
-  <S, A extends Action, Ext = {}, StateExt = never>(
+  <S, A extends Action, Ext extends {} = {}, StateExt extends {} = {}>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
-  ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
-  <S, A extends Action, Ext = {}, StateExt = never>(
-    reducer: Reducer<S, A>,
-    preloadedState?: PreloadedState<S>,
+  ): Store<S, A, StateExt> & Ext
+  <
+    S,
+    A extends Action,
+    Ext extends {} = {},
+    StateExt extends {} = {},
+    PreloadedState = S
+  >(
+    reducer: Reducer<S, A, PreloadedState>,
+    preloadedState?: PreloadedState | undefined,
     enhancer?: StoreEnhancer<Ext>
-  ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  ): Store<S, A, StateExt> & Ext
 }
 
 /**
@@ -266,13 +215,16 @@ export interface StoreCreator {
  * @template Ext Store extension that is mixed into the Store type.
  * @template StateExt State extension that is mixed into the state type.
  */
-export type StoreEnhancer<Ext = {}, StateExt = never> = (
-  next: StoreEnhancerStoreCreator<Ext, StateExt>
-) => StoreEnhancerStoreCreator<Ext, StateExt>
-export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never> = <
-  S = any,
-  A extends Action = AnyAction
+export type StoreEnhancer<Ext extends {} = {}, StateExt extends {} = {}> = <
+  NextExt extends {},
+  NextStateExt extends {}
 >(
-  reducer: Reducer<S, A>,
-  preloadedState?: PreloadedState<S>
-) => Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
+  next: StoreEnhancerStoreCreator<NextExt, NextStateExt>
+) => StoreEnhancerStoreCreator<NextExt & Ext, NextStateExt & StateExt>
+export type StoreEnhancerStoreCreator<
+  Ext extends {} = {},
+  StateExt extends {} = {}
+> = <S, A extends Action, PreloadedState>(
+  reducer: Reducer<S, A, PreloadedState>,
+  preloadedState?: PreloadedState | undefined
+) => Store<S, A, StateExt> & Ext

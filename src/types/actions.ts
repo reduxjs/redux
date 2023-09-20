@@ -6,8 +6,7 @@
  *
  * Actions must have a `type` field that indicates the type of action being
  * performed. Types can be defined as constants and imported from another
- * module. It's better to use strings for `type` than Symbols because strings
- * are serializable.
+ * module. These must be strings, as strings are serializable.
  *
  * Other than `type`, the structure of an action object is really up to you.
  * If you're interested, check out Flux Standard Action for recommendations on
@@ -15,7 +14,9 @@
  *
  * @template T the type of the action's `type` tag.
  */
-export interface Action<T = any> {
+// this needs to be a type, not an interface
+// https://github.com/microsoft/TypeScript/issues/15300
+export type Action<T extends string = string> = {
   type: T
 }
 
@@ -24,6 +25,18 @@ export interface Action<T = any> {
  * This is mainly for the use of the `Reducer` type.
  * This is not part of `Action` itself to prevent types that extend `Action` from
  * having an index signature.
+ */
+export interface UnknownAction extends Action {
+  // Allows any extra properties to be defined in an action.
+  [extraProps: string]: unknown
+}
+
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent types that extend `Action` from
+ * having an index signature.
+ * @deprecated use Action or UnknownAction instead
  */
 export interface AnyAction extends Action {
   // Allows any extra properties to be defined in an action.

@@ -22,6 +22,16 @@ In [Part 4: Store](./part-4-store.md), we saw how to create a Redux store, dispa
 
 In this section, we'll add a User Interface for our todo app. We'll see how Redux works with a UI layer overall, and we'll specifically cover how Redux works together with React.
 
+:::caution
+
+Note that **this page and all of the "Essentials" tutorial teach how to use [our modern React-Redux hooks API](https://react-redux.js.org/api/hooks)**. The old-style [`connect` API](https://react-redux.js.org/api/connect) still works, but today we want all Redux users using the hooks API.
+
+Also, the other pages in this tutorial intentionally show older-style Redux logic patterns that require more code than the "modern Redux" patterns with Redux Toolkit we teach as the right approach for building apps with Redux today, in order to explain the principles and concepts behind Redux.
+
+See [**the "Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md) for full examples of "how to use Redux, the right way" with Redux Toolkit and React-Redux hooks for real-world apps.
+
+:::
+
 ## Integrating Redux with a UI
 
 Redux is a standalone JS library. As we've already seen, you can create and use a Redux store even if you don't have a user interface set up. This also means that **you can use Redux with any UI framework** (or even without _any_ UI framework), and use it on both client and server. You can write Redux apps with React, Vue, Angular, Ember, jQuery, or vanilla JavaScript.
@@ -83,7 +93,7 @@ Since Redux is a separate library, there are different "binding" libraries to he
 
 ## Using Redux with React
 
-The official [**React-Redux UI bindings library**](https://react-redux.js.org) is a separate package from the Redux core. You'll need to install that in addition as well:
+The official [**React-Redux UI bindings library**](https://react-redux.js.org) is a separate package from the Redux core. You'll need to install that in addition:
 
 ```sh
 npm install react-redux
@@ -115,11 +125,11 @@ Beyond this basic component structure, we could potentially divide the component
 
 For now, we'll start with this small list of components to keep things easier to follow. On that note, since we assume that [you already know React](https://reactjs.org), **we're going to skip past the details of how to write the layout code for these components and focus on how to actually use the React-Redux library in your React components**.
 
-Here's the initial React UI of this app looks like before we start adding any Redux-related logic:
+Here's the initial React UI of this app before we start adding any Redux-related logic:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-3-initialUI/?fontsize=14&hidenavigation=1&theme=dark&view=preview&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-3-initialUI/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&view=preview&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -129,7 +139,7 @@ Here's the initial React UI of this app looks like before we start adding any Re
 
 We know that we need to be able to show a list of todo items. Let's start by creating a `<TodoList>` component that can read the list of todos from the store, loop over them, and show one `<TodoListItem>` component for each todo entry.
 
-You should be familiar with [React hooks like `useState`](https://reactjs.org/docs/hooks-state.html), which can be called in React function components to give them access to React state values. React also lets us write [custom hooks](https://reactjs.org/docs/hooks-custom.html), which let us extract reusable hooks to add our own behavior on top of React's built-in hooks.
+You should be familiar with [React hooks like `useState`](https://react.dev/reference/react/useState), which can be called in React function components to give them access to React state values. React also lets us write [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks), which let us extract reusable hooks to add our own behavior on top of React's built-in hooks.
 
 Like many other libraries, React-Redux includes [its own custom hooks](https://react-redux.js.org/api/hooks), which you can use in your own components. The React-Redux hooks give your React component the ability to talk to the Redux store by reading state and dispatching actions.
 
@@ -228,7 +238,7 @@ So, we can call `const dispatch = useDispatch()` in any component that needs to 
 
 Let's try that in our `<Header>` component. We know that we need to let the user type in some text for a new todo item, and then dispatch a `{type: 'todos/todoAdded'}` action containing that text.
 
-We'll write a typical React form component that uses ["controlled inputs"](https://reactjs.org/docs/forms.html#controlled-components) to let the user type in the form text. Then, when the user presses the Enter key specifically, we'll dispatch that action.
+We'll write a typical React form component that uses ["controlled inputs"](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable) to let the user type in the form text. Then, when the user presses the Enter key specifically, we'll dispatch that action.
 
 ```jsx title="src/features/header/Header.js"
 import React, { useState } from 'react'
@@ -274,7 +284,7 @@ export default Header
 
 Our components can now read state from the store, and dispatch actions to the store. However, we're still missing something. Where and how are the React-Redux hooks finding the right Redux store? A hook is a JS function, so it can't automatically import a store from `store.js` by itself.
 
-Instead, we have to specifically tell React-Redux what store we want to use in our components. We do this by **rendering a `<Provider>` component around our entire `<App>`, and passing the Redux store as a prop to `<Provider>`**. After we do this once, every component in the application will be able to access the Redux store if needs to.
+Instead, we have to specifically tell React-Redux what store we want to use in our components. We do this by **rendering a `<Provider>` component around our entire `<App>`, and passing the Redux store as a prop to `<Provider>`**. After we do this once, every component in the application will be able to access the Redux store if it needs to.
 
 Let's add that to our main `index.js` file:
 
@@ -290,7 +300,7 @@ import store from './store'
 ReactDOM.render(
   // highlight-start
   // Render a `<Provider>` around the entire `<App>`,
-  // and pass the Redux store to as a prop
+  // and pass the Redux store to it as a prop
   <React.StrictMode>
     <Provider store={store}>
       <App />
@@ -311,7 +321,7 @@ We should now be able to actually interact with the app! Here's the working UI s
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-4-initialHooks/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-4-initialHooks/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -423,7 +433,7 @@ This works, but there's a potential performance problem.
 
 Re-rendering components isn't bad - that's how React knows if it needs to update the DOM. But, re-rendering lots of components when nothing has actually changed can potentially get too slow if the list is too big.
 
-There's a couple ways we could try to fix this. One option is to [wrap all the `<TodoListItem>` components in `React.memo()`](https://reactjs.org/docs/react-api.html#reactmemo), so that they only re-render when their props actually change. This is often a good choice for improving performance, but it does require that the child component always receives the same props until something really changes. Since each `<TodoListItem>` component is receiving a todo item as a prop, only one of them should actually get a changed prop and have to re-render.
+There's a couple ways we could try to fix this. One option is to [wrap all the `<TodoListItem>` components in `React.memo()`](https://react.dev/reference/react/memo), so that they only re-render when their props actually change. This is often a good choice for improving performance, but it does require that the child component always receives the same props until something really changes. Since each `<TodoListItem>` component is receiving a todo item as a prop, only one of them should actually get a changed prop and have to re-render.
 
 Another option is to have the `<TodoList>` component only read an array of todo IDs from the store, and pass those IDs as props to the child `<TodoListItem>` components. Then, each `<TodoListItem>` can use that ID to find the right todo object it needs.
 
@@ -546,7 +556,7 @@ Let's see how the app looks now, including the components and sections we skippe
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

@@ -7,6 +7,9 @@ description: 'The official Fundamentals tutorial for Redux: learn the standard p
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 7: Standard Redux Patterns
 
 :::tip What You'll Learn
@@ -33,6 +36,8 @@ So far, we've covered the basics of how Redux actually works. However, real worl
 It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists, and you'll see some or all of them in almost every Redux codebase.
 
 In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](https://redux-toolkit.js.org) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
+
+<FundamentalsWarning />
 
 ## Action Creators
 
@@ -638,7 +643,7 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -646,7 +651,7 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 ## Flux Standard Actions
 
-The Redux store itself does not actually care what fields you put into your action object. It only cares that `action.type` exists and has a value, and normal Redux actions always use a string for `action.type`. That means that you _could_ put any other fields into the action that you want. Maybe we could have `action.todo` for a "todo added" action, or `action.color`, and so on.
+The Redux store itself does not actually care what fields you put into your action object. It only cares that `action.type` exists and is a string. That means that you _could_ put any other fields into the action that you want. Maybe we could have `action.todo` for a "todo added" action, or `action.color`, and so on.
 
 However, if every action uses different field names for its data fields, it can be hard to know ahead of time what fields you need to handle in each reducer.
 
@@ -964,7 +969,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

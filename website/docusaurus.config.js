@@ -1,3 +1,9 @@
+const { resolve } = require('path')
+const {
+  linkDocblocks,
+  transpileCodeblocks
+} = require('remark-typescript-tools')
+
 module.exports = {
   title: 'Redux',
   tagline: 'A Predictable State Container for JS Apps',
@@ -149,15 +155,53 @@ module.exports = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
-          editUrl: 'https://github.com/reduxjs/redux/edit/master/website'
+          include: [
+            '{api,faq,introduction,redux-toolkit,style-guide,tutorials,understanding,usage}/**/*.{md,mdx}',
+            'FAQ.md'
+          ], // no other way to exclude node_modules
+          editUrl: 'https://github.com/reduxjs/redux/edit/master/website',
+          remarkPlugins: [
+            [
+              linkDocblocks,
+              {
+                extractorSettings: {
+                  tsconfig: resolve(__dirname, './tsconfig.json'),
+                  basedir: resolve(__dirname, '../src'),
+                  rootFiles: ['index.ts']
+                }
+              }
+            ],
+            [
+              transpileCodeblocks,
+              {
+                compilerSettings: {
+                  tsconfig: resolve(__dirname, './tsconfig.json'),
+                  externalResolutions: {},
+                  transformVirtualFilepath: path =>
+                    path.replace('/docs/', '/website/')
+                }
+              }
+            ]
+          ]
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')
-        },
-        googleAnalytics: {
-          trackingID: 'UA-130598673-1'
         }
       }
+    ]
+  ],
+  plugins: [
+    [
+      '@dipakparmar/docusaurus-plugin-umami',
+      /** @type {import('@dipakparmar/docusaurus-plugin-umami').Options} */
+      ({
+        websiteID: '4bb3bf09-7460-453f-857d-874d8a361cb6',
+        analyticsDomain: 'redux-docs-umami.up.railway.app',
+        scriptName: 'script.js',
+        dataAutoTrack: true,
+        dataDoNotTrack: true,
+        dataCache: true
+      })
     ]
   ]
 }

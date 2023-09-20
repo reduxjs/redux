@@ -1,4 +1,4 @@
-import type { Action as ReduxAction } from '../..'
+import type { Action as ReduxAction } from 'redux'
 
 namespace FSA {
   interface Action<P> extends ReduxAction {
@@ -35,24 +35,6 @@ namespace StringLiteralTypeAction {
 
   const action: Action = {
     type: 'A'
-  }
-
-  const type: ActionType = action.type
-}
-
-namespace EnumTypeAction {
-  enum ActionType {
-    A,
-    B,
-    C
-  }
-
-  interface Action extends ReduxAction {
-    type: ActionType
-  }
-
-  const action: Action = {
-    type: ActionType.A
   }
 
   const type: ActionType = action.type

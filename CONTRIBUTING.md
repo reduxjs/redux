@@ -40,12 +40,14 @@ git clone https://github.com/your-username/redux.git
 
 ### Building
 
+This repo uses Yarn 3 for all package management. Please ensure that Yarn 1.x is installed globally on your system, so that Yarn 3 will run properly inside this repo.
+
 #### Building Redux
 
 Running the `build` task will create a CommonJS module-per-module build, a ES Modules build and a UMD build.
 
 ```sh
-npm run build
+yarn build
 ```
 
 ### Testing and Linting
@@ -53,19 +55,19 @@ npm run build
 To only run linting:
 
 ```sh
-npm run lint
+yarn lint
 ```
 
 To only run tests:
 
 ```sh
-npm run test
+yarn test
 ```
 
 To continuously watch and run tests, run the following:
 
 ```sh
-npm run test:watch
+yarn test:watch
 ```
 
 ### Docs
@@ -83,7 +85,7 @@ When adding a new example, please adhere to the style and format of the existing
 To test the official Redux examples, run the following:
 
 ```sh
-npm run examples:test
+yarn examples:test
 ```
 
 Not all examples have tests. If you see an example project without tests, you are very welcome to add them in a way consistent with the examples that have tests.

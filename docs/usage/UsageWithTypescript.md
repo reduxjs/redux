@@ -87,7 +87,8 @@ import type { RootState, AppDispatch } from './store'
 
 // highlight-start
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch
+type DispatchFunc = () => AppDispatch
+export const useAppDispatch: DispatchFunc = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 // highlight-end
 ```
@@ -180,16 +181,36 @@ export function Counter() {
 }
 ```
 
+:::tip Warn about wrong imports
+
+ESLint can help your team import the right hooks easily. The [typescript-eslint/no-restricted-imports](https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-restricted-imports.md) rule can show a warning when the wrong import is used accidentally.
+
+You could add this to your ESLint config as an example:
+
+```json
+"no-restricted-imports": "off",
+"@typescript-eslint/no-restricted-imports": [
+  "warn",
+  {
+    "name": "react-redux",
+    "importNames": ["useSelector", "useDispatch"],
+    "message": "Use typed hooks `useAppDispatch` and `useAppSelector` instead."
+  }
+],
+```
+
+:::
+
 ## Typing Additional Redux Logic
 
 ### Type Checking Reducers
 
 [Reducers](../tutorials/fundamentals/part-3-state-actions-reducers.md) are pure functions that receive the current `state` and incoming `action` as arguments, and return a new state.
 
-If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `AnyAction`:
+If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `UnknownAction`:
 
 ```ts
-import { AnyAction } from 'redux'
+import { UnknownAction } from 'redux'
 
 interface CounterState {
   value: number
@@ -201,7 +222,7 @@ const initialState: CounterState = {
 
 export default function counterReducer(
   state = initialState,
-  action: AnyAction
+  action: UnknownAction
 ) {
   // logic here
 }
@@ -247,6 +268,22 @@ const rootReducer = combineReducers({ ... });
 type RootState = ReturnType<typeof rootReducer>;
 ```
 
+Switching the type definition of `RootState` with Redux Toolkit example:
+
+```ts
+//instead of defining the reducers in the reducer field of configureStore, combine them here:
+const rootReducer = combineReducers({ counter: counterReducer })
+
+//then set rootReducer as the reducer object of configureStore
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(yourMiddleware)
+})
+
+type RootState = ReturnType<typeof rootReducer>
+```
+
 ### Type Checking Redux Thunks
 
 [Redux Thunk](https://github.com/reduxjs/redux-thunk) is the standard middleware for writing sync and async logic that interacts with the Redux store. A thunk function receives `dispatch` and `getState` as its parameters. Redux Thunk has a built in `ThunkAction` type which we can use to define types for those arguments:
@@ -260,16 +297,16 @@ export type ThunkAction<
 > = (dispatch: ThunkDispatch<S, E, A>, getState: () => S, extraArgument: E) => R
 ```
 
-You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `AnyAction` for `A`:
+You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `UnknownAction` for `A`:
 
 ```ts
-import { AnyAction } from 'redux'
+import { UnknownAction } from 'redux'
 import { sendMessage } from './store/chat/actions'
 import { RootState } from './store'
 import { ThunkAction } from 'redux-thunk'
 
 export const thunkSendMessage =
-  (message: string): ThunkAction<void, RootState, unknown, AnyAction> =>
+  (message: string): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     const asyncResp = await exampleAPI()
     dispatch(
@@ -293,7 +330,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  AnyAction
+  UnknownAction
 >
 ```
 

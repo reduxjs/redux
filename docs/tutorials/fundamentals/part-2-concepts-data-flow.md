@@ -7,6 +7,9 @@ description: 'The official Redux Fundamentals tutorial: learn key Redux terms an
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 2: Concepts and Data Flow
 
 :::tip What You'll Learn
@@ -22,6 +25,8 @@ In [Part 1: Redux Overview](./part-1-overview.md), we talked about what Redux is
 
 In this section, we'll look at those terms and concepts in more detail, and talk more about how data flows
 through a Redux application.
+
+<FundamentalsWarning />
 
 ## Background Concepts
 
@@ -65,7 +70,7 @@ This is a small example of **"one-way data flow"**:
 
 ![One-way data flow](/img/tutorials/essentials/one-way-data-flow.png)
 
-However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but that doesn't always help.
+However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://react.dev/learn/sharing-state-between-components) to parent components, but that doesn't always help.
 
 One way to solve this is to extract the shared state from the components, and put it into a centralized location outside the component tree. With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
 

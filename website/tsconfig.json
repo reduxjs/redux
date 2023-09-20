@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowUnusedLabels": true,
+    "skipLibCheck": true,
+    "noEmitOnError": false,
+    "jsx": "preserve",
+    "strict": true,
+    "removeComments": false,
+    "module": "ESNext",
+    "target": "ESNext",
+    "allowJs": true,
+    "checkJs": false,
+    "alwaysStrict": false,
+    "baseUrl": "..",
+    "paths": {}
+  }
+}

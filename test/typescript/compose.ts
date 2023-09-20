@@ -1,4 +1,4 @@
-import { compose } from '../..'
+import { compose } from 'redux'
 
 // adapted from DefinitelyTyped/compose-function
 

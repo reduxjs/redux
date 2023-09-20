@@ -1,4 +1,4 @@
-import { compose } from '..'
+import { compose } from '../src'
 
 describe('Utils', () => {
   describe('compose', () => {

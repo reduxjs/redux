@@ -7,6 +7,9 @@ description: 'The official Redux Fundamentals tutorial: learn how reducers updat
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 3: State, Actions, and Reducers
 
 :::tip What You'll Learn
@@ -29,11 +32,7 @@ In [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md), we lo
 
 Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small example app to see how these pieces actually work together.
 
-:::caution
-
-**The example app is not meant as a complete production-ready project**. The goal is to help you learn core Redux APIs and usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. **Please read through the whole tutorial to see all the concepts in use**.
-
-:::
+<FundamentalsWarning />
 
 ### Project Setup
 
@@ -43,7 +42,7 @@ To get started, you can open and fork this CodeSandbox:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -159,7 +158,7 @@ think about these different kinds of categories to help understand how the diffe
 ### Designing the State Structure
 
 With Redux, **our application state is always kept in plain JavaScript objects and arrays**. That means you may not put
-other things into the Redux state - no class instances, built-in JS types like `Map` / `Set` `Promise` / `Date`, functions, or anything else that is not plain JS data.
+other things into the Redux state - no class instances, built-in JS types like `Map` / `Set` / `Promise` / `Date`, functions, or anything else that is not plain JS data.
 
 **The root Redux state value is almost always a plain JS object**, with other data nested inside of it.
 
@@ -190,7 +189,7 @@ const todoAppState = {
 }
 ```
 
-It's important to note that **it's okay to have other state values outside of Redux!**. This example is small enough so far that we actually do have all our state in the Redux store, but as we'll see later, some data really doesn't need to be kept in Redux (like "is this dropdown open?" or "current value of a form input").
+It's important to note that **it's okay to have other state values outside of Redux!** This example is small enough so far that we actually do have all our state in the Redux store, but as we'll see later, some data really doesn't need to be kept in Redux (like "is this dropdown open?" or "current value of a form input").
 
 ### Designing Actions
 
@@ -221,7 +220,7 @@ Based on that list of things that can happen, we can create a list of actions th
 
 - `{type: 'todos/todoAdded', payload: todoText}`
 - `{type: 'todos/todoToggled', payload: todoId}`
-- `{type: 'todos/colorSelected, payload: {todoId, color}}`
+- `{type: 'todos/colorSelected', payload: {todoId, color}}`
 - `{type: 'todos/todoDeleted', payload: todoId}`
 - `{type: 'todos/allCompleted'}`
 - `{type: 'todos/completedCleared'}`
@@ -699,7 +698,7 @@ Here's the contents of our app so far:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"

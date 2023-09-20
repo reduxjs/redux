@@ -1,12 +1,11 @@
 import type {
   Middleware,
   MiddlewareAPI,
-  AnyAction,
   Action,
   Store,
   Dispatch
-} from '..'
-import { createStore, applyMiddleware } from '..'
+} from 'redux'
+import { vi } from 'vitest'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
@@ -26,14 +25,14 @@ describe('applyMiddleware', () => {
   })
 
   it('wraps dispatch method with middleware once', () => {
-    function test(spyOnMethods: any) {
-      return (methods: any) => {
+    function test(spyOnMethods: any): Middleware {
+      return methods => {
         spyOnMethods(methods)
-        return (next: Dispatch) => (action: Action) => next(action)
+        return next => action => next(action)
       }
     }
 
-    const spy = jest.fn()
+    const spy = vi.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodo('Use Redux'))
@@ -51,14 +50,14 @@ describe('applyMiddleware', () => {
   })
 
   it('passes recursive dispatches through the middleware chain', () => {
-    function test(spyOnMethods: any) {
-      return () => (next: Dispatch) => (action: Action) => {
+    function test(spyOnMethods: any): Middleware {
+      return () => next => action => {
         spyOnMethods(action)
         return next(action)
       }
     }
 
-    const spy = jest.fn()
+    const spy = vi.fn()
     const store = applyMiddleware(test(spy), thunk)(createStore)(reducers.todos)
 
     // the typing for redux-thunk is super complex, so we will use an as unknown hack
@@ -70,7 +69,7 @@ describe('applyMiddleware', () => {
     })
   })
 
-  it('works with thunk middleware', done => {
+  it('works with thunk middleware', async () => {
     const store = applyMiddleware(thunk)(createStore)(reducers.todos)
 
     store.dispatch(addTodoIfEmpty('Hello') as any)
@@ -105,30 +104,28 @@ describe('applyMiddleware', () => {
     const dispatchedValue = store.dispatch(
       addTodoAsync('Maybe') as any
     ) as unknown as Promise<void>
-    dispatchedValue.then(() => {
-      expect(store.getState()).toEqual([
-        {
-          id: 1,
-          text: 'Hello'
-        },
-        {
-          id: 2,
-          text: 'World'
-        },
-        {
-          id: 3,
-          text: 'Maybe'
-        }
-      ])
-      done()
-    })
+    await dispatchedValue
+    expect(store.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      },
+      {
+        id: 2,
+        text: 'World'
+      },
+      {
+        id: 3,
+        text: 'Maybe'
+      }
+    ])
   })
 
   it('passes through all arguments of dispatch calls from within middleware', () => {
-    const spy = jest.fn()
+    const spy = vi.fn()
     const testCallArgs = ['test']
 
-    interface MultiDispatch<A extends Action = AnyAction> {
+    interface MultiDispatch<A extends Action = Action> {
       <T extends A>(action: T, extraArg?: string[]): T
     }
 
@@ -146,8 +143,7 @@ describe('applyMiddleware', () => {
     }
 
     function dummyMiddleware({ dispatch }: MiddlewareAPI) {
-      return (_next: Dispatch) => (action: Action) =>
-        dispatch(action, testCallArgs)
+      return (_next: unknown) => (action: any) => dispatch(action, testCallArgs)
     }
 
     const store = createStore(

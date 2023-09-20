@@ -11,7 +11,7 @@ sidebar_label: Organizing State
 - [Redux FAQ: Organizing State](#redux-faq-organizing-state)
   - [Table of Contents](#table-of-contents)
   - [Organizing State](#organizing-state)
-    - [Do I have to put all my state into Redux? Should I ever use React's `setState()`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+    - [Do I have to put all my state into Redux? Should I ever use React's `useState` or `useReducer`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-usestate-or-usereducer)
       - [Further information](#further-information)
     - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
       - [Further information](#further-information-1)
@@ -22,7 +22,7 @@ sidebar_label: Organizing State
 
 ## Organizing State
 
-### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
+### Do I have to put all my state into Redux? Should I ever use React's `useState` or `useReducer`?
 
 There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state.
 
@@ -37,36 +37,16 @@ Some common rules of thumb for determining what kind of data should be put into 
 - Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
 - Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
 
-There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more. It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
-
 #### Further information
 
 **Articles**
 
 - [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
-- [Finding `state`'s place with React and Redux](https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172)
-- [A Case for setState](https://medium.com/@zackargyle/a-case-for-setstate-1f1c47cd3f73)
-- [How to handle state in React: the missing FAQ](https://medium.com/react-ecosystem/how-to-handle-state-in-react-6f2d3cd73a0c)
-- [Where to Hold React Component Data: state, store, static, and this](https://medium.freecodecamp.com/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00)
-- [The 5 Types of React Application State](http://jamesknelson.com/5-types-react-application-state/)
-- [Shape Your Redux Store Like Your Database](https://hackernoon.com/shape-your-redux-store-like-your-database-98faa4754fd5)
 
 **Discussions**
 
-- [#159: Investigate using Redux for pseudo-local component state](https://github.com/reduxjs/redux/issues/159)
-- [#1098: Using Redux in reusable React component](https://github.com/reduxjs/redux/issues/1098)
-- [#1287: How to choose between Redux's store and React's state?](https://github.com/reduxjs/redux/issues/1287)
-- [#1385: What are the disadvantages of storing all your state in a single immutable atom?](https://github.com/reduxjs/redux/issues/1385)
-- [Twitter: Should I keep something in React component state?](https://twitter.com/dan_abramov/status/749710501916139520)
-- [Twitter: Using a reducer to update a component](https://twitter.com/dan_abramov/status/736310245945933824)
-- [React Forums: Redux and global state vs local state](https://discuss.reactjs.org/t/redux-and-global-state-vs-local-state/4187)
 - [Reddit: "When should I put something into my Redux store?"](https://www.reddit.com/r/reactjs/comments/4w04to/when_using_redux_should_all_asynchronous_actions/d63u4o8)
-- [Stack Overflow: Why is state all in one place, even state that isn't global?](https://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
 - [Stack Overflow: Should all component state be kept in Redux store?](https://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
-
-**Libraries**
-
-- [Redux Addons Catalog: Component State](https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md)
 
 ### Can I put functions, promises, or other non-serializable items in my store state?
 
@@ -92,16 +72,15 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 
 **Documentation**
 
+- [Redux Essentials: Normalizing Data](../tutorials/essentials/part-6-performance-normalization#normalizing-data)
 - [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
 - [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
 - [Examples: Real World example](../introduction/Examples.md#real-world)
 - [Using Redux: Structuring Reducers - Prerequisite Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
 - [Using Redux: Structuring Reducers - Normalizing State Shape](../usage/structuring-reducers/NormalizingStateShape.md)
-- [Examples: Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
 
 **Articles**
 
-- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
 **Discussions**
@@ -111,15 +90,13 @@ Data with IDs, nesting, or relationships should generally be stored in a “norm
 - [#946: Best way to update related state fields with split reducers?](https://github.com/reduxjs/redux/issues/946)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reduxjs/redux/issues/994)
 - [#1255: Normalizr usage with nested objects in React/Redux](https://github.com/reduxjs/redux/issues/1255)
-- [#1269: Add tree view example](https://github.com/reduxjs/redux/pull/1269)
 - [#1824: Normalising state and garbage collection](https://github.com/reduxjs/redux/issues/1824#issuecomment-228585904)
 - [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
 - [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](https://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
-- [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
 
 ### Should I put form state or other UI state in my store?
 
-The [same rules of thumb for deciding what should go in the Redux store](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate) apply for this question as well.
+The [same rules of thumb for deciding what should go in the Redux store](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-usestate-or-usereducer) apply for this question as well.
 
 **Based on those rules of thumb, most form state doesn't need to go into Redux**, as it's probably not being shared between components. However, that decision is always going to be specific to you and your application. You might choose to keep some form state in Redux because you are editing data that came from the store originally, or because you do need to see the work-in-progress values reflected in other components elsewhere in the application. On the other hand, it may be a lot simpler to keep the form state local to the component, and only dispatch an action to put the data in the store once the user is done with the form.
 

@@ -94,7 +94,7 @@ The functionality included in RTK Query quickly pays for the added bundle size, 
 
 Redux has always had an emphasis on predictability and explicit behavior. There's no "magic" involved in Redux - you should be able to understand what's happening in the application because **all Redux logic follows the same basic patterns of dispatching actions and updating state via reducers**. This does mean that sometimes you have to write more code to make things happen, but the tradeoff is that should be very clear what the data flow and behavior is.
 
-**The Redux Toolkit core APIs do not change any of the basic data flow in a Redux app** You're still dispatching actions and writing reducers, just with less code than writing all of that logic by hand. **RTK Query is the same way**. It's an additional level of abstraction, but **internally it's still doing the exact same steps we've already seen for managing async requests and their results**.
+**The Redux Toolkit core APIs do not change any of the basic data flow in a Redux app** You're still dispatching actions and writing reducers, just with less code than writing all of that logic by hand. **RTK Query is the same way**. It's an additional level of abstraction, but **internally it's still doing the exact same steps we've already seen for managing async requests and their responses**.
 
 However, when you use RTK Query, there _is_ a mindset shift that happens. We're no longer thinking about "managing state" per se. Instead, **we now think about "managing _cached data_"**. Rather than trying to write reducers ourselves, we're now going to focus on defining **"where is this data coming from?", "how should this update be sent?", "when should this cached data be re-fetched?", and "how should the cached data be updated?"**. How that data gets fetched, stored, and retrieved becomes implementation details we no longer have to worry about.
 
@@ -285,7 +285,13 @@ export const PostsList = () => {
 }
 ```
 
-Conceptually, `<PostsList>` is still doing all the same work it was before, but we were able to replace the multiple `useSelector` calls and the `useEffect` dispatch with a single call to `useGetPostsQuery()`.
+Conceptually, `<PostsList>` is still doing all the same work it was before, but **we were able to replace the multiple `useSelector` calls and the `useEffect` dispatch with a single call to `useGetPostsQuery()`**.
+
+:::tip
+
+You should normally use the query hooks to access cached data in components - you _shouldn't_ write your own `useSelector` calls to access fetched data or `useEffect` calls to trigger fetching!
+
+:::
 
 Each generated query hook returns a "result" object containing several fields, including:
 
@@ -445,13 +451,19 @@ We can see that we have a top-level `state.api` slice, as expected from the stor
 
 RTK Query creates a "cache key" for each unique endpoint + argument combination, and stores the results for each cache key separately. That means that **you can use the same query hook multiple times, pass it different query parameters, and each result will be cached separately in the Redux store**.
 
+:::tip
+
+If you need the same data in multiple components, just call the same query hook with the same arguments in each component! For example, you can call `useGetPostQuery('123')` in three different components, and RTK Query will make sure the data is only fetched once, and each component will re-render as needed.
+
+:::
+
 It's also important to note that **the query parameter must be a _single_ value!** If you need to pass through multiple parameters, you must pass an object containing multiple fields (exactly the same as with `createAsyncThunk`). RTK Query will do a "shallow stable" comparison of the fields, and re-fetch the data if any of them have changed.
 
 Notice that the names of the actions in the left-hand list are much more generic and less descriptive: `api/executeQuery/fulfilled`, instead of `posts/fetchPosts/fulfilled`. This is a tradeoff of using an additional abstraction layer. The individual actions do contain the specific endpoint name under `action.meta.arg.endpointName`, but it's not as easily viewable in the action history list.
 
 :::tip
 
-The Redux team is working on a new RTK Query view for the Redux DevTools that will specifically show RTK Query data in a more usable format. This includes info on each endpoint and cache result, stats on query timing, and much more. This will be added to the DevTools Extension in the near future. For a preview, see:
+The Redux DevTools have an "RTK Query" tab that specifically shows RTK Query data in a more usable format. This includes info on each endpoint and cache result, stats on query timing, and much more:
 
 - [Redux DevTools #750: Add RTK Query-Inspector monitor](https://github.com/reduxjs/redux-devtools/pull/750)
 - [RTK Query Monitor preview demo](https://rtk-query-monitor-demo.netlify.app/)
@@ -686,7 +698,7 @@ With RTK Query, the actual details of how to manage data fetching, caching, and 
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-5-createApi/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-5-createApi/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

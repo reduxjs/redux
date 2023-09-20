@@ -1,15 +1,15 @@
 ---
 id: part-2-app-structure
-title: 'Redux Essentials, Part 2: Redux App Structure'
-sidebar_label: 'Redux App Structure'
-description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux app'
+title: 'Redux Essentials, Part 2: Redux Toolkit App Structure'
+sidebar_label: 'Redux Toolkit App Structure'
+description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux Toolkit app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip What You'll Learn
 
-- The structure of a typical React + Redux app
+- The structure of a typical React + Redux Toolkit app
 - How to view state changes in the Redux DevTools Extension
 
 :::
@@ -24,13 +24,13 @@ Now, let's look at a real working example to see how these pieces fit together.
 
 The sample project we'll look at is a small counter application that lets us add or subtract from a number as we click buttons. It may not be very exciting, but it shows all the important pieces of a React+Redux application in action.
 
-The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/cra-template-redux). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
+The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/redux-templates). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
 
 Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.js&theme=dark&runonclick=1"
   title="redux-essentials-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -284,7 +284,7 @@ We said earlier that reducers must **always** follow some special rules:
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
 - They must not do any asynchronous logic or other "side effects"
 
-But why are these rules important? There's a few different reasons:
+But why are these rules important? There are a few different reasons:
 
 - One of the goals of Redux is to make your code predictable. When a function's output is only calculated from the input arguments, it's easier to understand how that code works, and to test it.
 - On the other hand, if a function depends on variables outside itself, or behaves randomly, you never know what will happen when you run it.
@@ -514,7 +514,7 @@ There's one more function in this file, but we'll talk about that in a minute wh
 
 :::info Want to Know More?
 
-See [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
+See [the Redux Thunk docs](../../usage/writing-logic-thunks.mdx), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
 
 :::
 

@@ -1,6 +1,7 @@
 ---
 id: why-rtk-is-redux-today
 title: Why Redux Toolkit is How To Use Redux Today
+# Yes, we are serious with the title. It's okay as it is. Please don't open more Pull Requests to change it.
 description: 'Introduction > Why RTK is Redux Today: details on how RTK replaces the Redux core'
 ---
 
@@ -17,6 +18,16 @@ and even [creating entire "slices" of state at once](https://redux-toolkit.js.or
 Whether you're a brand new Redux user setting up your first project, or an experienced user who wants to
 simplify an existing application, **[Redux Toolkit](https://redux-toolkit.js.org/)** can help you
 make your Redux code better.
+
+:::tip
+
+See these pages to learn how to use "modern Redux" with Redux Toolkit:
+
+- [**The "Redux Essentials" tutorial**](../tutorials/essentials/part-1-overview-concepts.md), which teaches "how to use Redux, the right way" with Redux Toolkit for real-world apps,
+- [**Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit**](../tutorials/fundamentals/part-8-modern-redux.md), which shows how to convert the low-level examples from earlier sections of the tutorial into modern Redux Toolkit equivalents
+- [**Using Redux: Migrating to Modern Redux**](../usage/migrating-to-modern-redux.mdx), which covers how to migrate different kinds of legacy Redux logic into modern Redux equivalents
+
+:::
 
 ## How Redux Toolkit Is Different Than the Redux Core
 
@@ -55,7 +66,7 @@ Other than that, all the other Redux-related logic in your app has to be written
 
 The good news is that this means Redux _can_ be used in many different ways. The bad news is that there are no helpers to make any of your code easier to write.
 
-For example, a reducer function is _just_ a function. Prior to Redux Toolkit, you'd typically write it that reducer with a `switch` statement and manual updates. You'd also probably have hand-written action creators and action type constants along with it:
+For example, a reducer function is _just_ a function. Prior to Redux Toolkit, you'd typically write that reducer with a `switch` statement and manual updates. You'd also probably have hand-written action creators and action type constants along with it:
 
 ```js title="Legacy hand-written Redux usage"
 const ADD_TODO = 'ADD_TODO'
@@ -68,7 +79,7 @@ export const addTodo = text => ({
 
 export const todoToggled = id => ({
   type: TODO_TOGGLED,
-  payload: id
+  payload: { id }
 })
 
 export const todosReducer = (state = [], action) => {
@@ -230,7 +241,8 @@ If you are using the `redux` core package by itself, your code will continue to 
 
 See these docs pages and blog posts for more details
 
-- [Redux Essentials: Redux App Structure](../tutorials/essentials/part-2-app-structure.md)
+- [Redux Essentials: Redux Toolkit App Structure](../tutorials/essentials/part-2-app-structure.md)
 - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
 - [Redux Style Guide: Best Practices and Recommendations](../style-guide/style-guide.md)
+- [Presentation: Modern Redux with Redux Toolkit](https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/)
 - [Mark Erikson: Redux Toolkit 1.0 Announcement and development history](https://blog.isquaredsoftware.com/2019/10/redux-toolkit-1.0/)

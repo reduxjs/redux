@@ -51,6 +51,7 @@ module.exports = {
         collapsed: false,
         items: [
           'usage/configuring-your-store',
+          'usage/migrating-to-modern-redux',
           'usage/code-splitting',
           'usage/server-rendering',
           'usage/isolating-redux-sub-apps'
@@ -93,6 +94,8 @@ module.exports = {
           'usage/reducing-boilerplate',
           'usage/deriving-data-selectors',
           'usage/writing-logic-thunks',
+          'usage/side-effects-approaches',
+          'usage/writing-custom-middleware',
           'usage/implementing-undo-history'
         ]
       }

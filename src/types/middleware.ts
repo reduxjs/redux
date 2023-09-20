@@ -20,11 +20,11 @@ export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
  *   installed.
  */
 export interface Middleware<
-  _DispatchExt = {}, // TODO: remove unused component (breaking change)
+  _DispatchExt = {}, // TODO: see if this can be used in type definition somehow (can't be removed, as is used to get final dispatch type)
   S = any,
   D extends Dispatch = Dispatch
 > {
   (api: MiddlewareAPI<D, S>): (
-    next: D
-  ) => (action: D extends Dispatch<infer A> ? A : never) => any
+    next: (action: unknown) => unknown
+  ) => (action: unknown) => unknown
 }

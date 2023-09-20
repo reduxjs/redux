@@ -5,6 +5,9 @@ sidebar_label: 'Async Logic and Data Fetching'
 description: 'The official Redux Fundamentals tutorial: learn how to use async logic with Redux'
 ---
 
+<!-- prettier-ignore -->
+import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
+
 # Redux Fundamentals, Part 6: Async Logic and Data Fetching
 
 :::tip What You'll Learn
@@ -29,6 +32,16 @@ In [Part 5: UI and React](./part-5-ui-and-react.md), we saw how to use the React
 So far, all the data we've worked with has been directly inside of our React+Redux client application. However, most real applications need to work with data from a server, by making HTTP API calls to fetch and save items.
 
 In this section, we'll update our todo app to fetch the todos from an API, and add new todos by saving them to the API.
+
+<FundamentalsWarning />
+
+:::tip
+
+Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching, and RTK Query is built on the same patterns shown in this page.
+
+Learn how to use RTK Query for data fetching in [Redux Essentials, Part 7: RTK Query Basics](../essentials/part-7-rtk-query-basics.md).
+
+:::
 
 ### Example REST API and Client
 
@@ -442,7 +455,7 @@ Here's what the current app looks like:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-6-asyncThunks/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-6-asyncThunks/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

@@ -1,13 +1,12 @@
+import { combineReducers } from 'redux'
 import type {
   Store,
   Reducer,
   Action,
   StoreEnhancer,
   Unsubscribe,
-  Observer,
-  ExtendState
-} from '../..'
-import { createStore } from '../..'
+  Observer
+} from 'redux'
 import 'symbol-observable'
 
 type BrandedString = string & { _brand: 'type' }
@@ -20,46 +19,6 @@ type State = {
     d: 'd'
   }
   e: BrandedString
-}
-
-/* extended state */
-const noExtend: ExtendState<State, never> = {
-  a: 'a',
-  b: {
-    c: 'c',
-    d: 'd'
-  },
-  e: brandedString
-}
-
-const noExtendError: ExtendState<State, never> = {
-  a: 'a',
-  b: {
-    c: 'c',
-    d: 'd'
-  },
-  e: brandedString,
-  // @ts-expect-error
-  f: 'oops'
-}
-
-const yesExtend: ExtendState<State, { yes: 'we can' }> = {
-  a: 'a',
-  b: {
-    c: 'c',
-    d: 'd'
-  },
-  e: brandedString,
-  yes: 'we can'
-}
-// @ts-expect-error
-const yesExtendError: ExtendState<State, { yes: 'we can' }> = {
-  a: 'a',
-  b: {
-    c: 'c',
-    d: 'd'
-  },
-  e: brandedString
 }
 
 interface DerivedAction extends Action {
@@ -114,6 +73,70 @@ const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
   b: { c: 'c' },
   e: brandedString
 })
+
+const reducerA: Reducer<string> = (state = 'a') => state
+const reducerB: Reducer<{ c: string; d: string }> = (
+  state = { c: 'c', d: 'd' }
+) => state
+const reducerE: Reducer<BrandedString> = (state = brandedString) => state
+
+const combinedReducer = combineReducers({
+  a: reducerA,
+  b: reducerB,
+  e: reducerE
+})
+
+const storeWithCombineReducer = createStore(combinedReducer, {
+  b: { c: 'c', d: 'd' },
+  e: brandedString
+})
+// @ts-expect-error
+const storeWithCombineReducerAndBadPreloadedState = createStore(
+  combinedReducer,
+  {
+    b: { c: 'c' },
+    e: brandedString
+  }
+)
+
+const nestedCombinedReducer = combineReducers({
+  a: (state: string = 'a') => state,
+  b: combineReducers({
+    c: (state: string = 'c') => state,
+    d: (state: string = 'd') => state
+  }),
+  e: (state: BrandedString = brandedString) => state
+})
+
+// @ts-expect-error
+const storeWithNestedCombineReducer = createStore(nestedCombinedReducer, {
+  b: { c: 5 },
+  e: brandedString
+})
+
+const simpleCombinedReducer = combineReducers({
+  c: (state: string = 'c') => state,
+  d: (state: string = 'd') => state
+})
+
+// @ts-expect-error
+const storeWithSimpleCombinedReducer = createStore(simpleCombinedReducer, {
+  c: 5
+})
+
+// Note: It's not necessary that the errors occur on the lines specified, just as long as something errors somewhere
+// since the preloaded state doesn't match the reducer type.
+
+const simpleCombinedReducerWithImplicitState = combineReducers({
+  c: (state = 'c') => state,
+  d: (state = 'd') => state
+})
+
+// @ts-expect-error
+const storeWithSimpleCombinedReducerWithImplicitState = createStore(
+  simpleCombinedReducerWithImplicitState,
+  { c: 5 }
+)
 
 const storeWithActionReducer = createStore(reducerWithAction)
 const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {

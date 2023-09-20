@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
-import warning from '../../src/utils/warning'
+import { vi } from 'vitest'
+import warning from '@internal/utils/warning'
 
 describe('Utils', () => {
   describe('warning', () => {
     it('calls console.error when available', () => {
       const preSpy = console.error
-      const spy = jest.fn()
+      const spy = vi.fn()
       console.error = spy
       try {
         warning('Test')

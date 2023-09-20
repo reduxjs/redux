@@ -3,10 +3,8 @@ import type {
   MiddlewareAPI,
   Dispatch,
   Reducer,
-  Action,
-  AnyAction
-} from '../..'
-import { applyMiddleware, createStore } from '../..'
+  Action
+} from 'redux'
 
 /**
  * Logger middleware doesn't add any extra types to dispatch, just logs actions
@@ -14,8 +12,8 @@ import { applyMiddleware, createStore } from '../..'
  */
 function logger() {
   const loggerMiddleware: Middleware =
-    ({ getState }: MiddlewareAPI) =>
-    (next: Dispatch) =>
+    ({ getState }) =>
+    next =>
     action => {
       console.log('will dispatch', action)
 
@@ -40,9 +38,9 @@ type PromiseDispatch = <T extends Action>(promise: Promise<T>) => Promise<T>
 
 function promise() {
   const promiseMiddleware: Middleware<PromiseDispatch> =
-    ({ dispatch }: MiddlewareAPI) =>
+    ({ dispatch }) =>
     next =>
-    <T extends Action>(action: AnyAction | Promise<T>) => {
+    action => {
       if (action instanceof Promise) {
         action.then(dispatch)
         return action
@@ -71,13 +69,10 @@ function thunk<S, DispatchExt>() {
     ThunkDispatch<S, DispatchExt>,
     S,
     Dispatch & ThunkDispatch<S>
-  > =
-    api =>
-    (next: Dispatch) =>
-    <R>(action: AnyAction | Thunk<R, any>) =>
-      typeof action === 'function'
-        ? action(api.dispatch, api.getState)
-        : next(action)
+  > = api => next => action =>
+    typeof action === 'function'
+      ? action(api.dispatch, api.getState)
+      : next(action)
 
   return thunkMiddleware
 }
@@ -88,14 +83,13 @@ function thunk<S, DispatchExt>() {
 function customState() {
   type State = { field: 'string' }
 
-  const customMiddleware: Middleware<{}, State> =
-    api => (next: Dispatch) => action => {
-      api.getState().field
-      // @ts-expect-error
-      api.getState().wrongField
+  const customMiddleware: Middleware<{}, State> = api => next => action => {
+    api.getState().field
+    // @ts-expect-error
+    api.getState().wrongField
 
-      return next(action)
-    }
+    return next(action)
+  }
 
   return customMiddleware
 }

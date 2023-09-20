@@ -14,7 +14,7 @@ This page includes our recommendations for some of the best external resources a
 
 _Tutorials that teach the basic concepts of Redux and how to use it_
 
-- **Intro to React, Redux, and Typescript** <br />
+- **Intro to React, Redux, and TypeScript** <br />
   https://blog.isquaredsoftware.com/2020/12/presentations-react-redux-ts-intro/ <br />
   Redux maintainer Mark Erikson's slideset that covers the basics of React, Redux, and TypeScript. Redux topics include stores, reducers, middleware, React-Redux, and Redux Toolkit.
 
@@ -30,7 +30,7 @@ _Tutorials that teach the basic concepts of Redux and how to use it_
   https://www.freecodecamp.org/news/redux-for-beginners-the-brain-friendly-guide-to-redux/ <br />
   An easy-to-follow tutorial that builds a small todo app with Redux Toolkit and React-Redux, including data fetching.
 
-- **Redux made easy with Redux Toolkit and Typescript** <br />
+- **Redux made easy with Redux Toolkit and TypeScript** <br />
   https://www.mattbutton.com/redux-made-easy-with-redux-toolkit-and-typescript/ <br />
   A helpful tutorial that shows how to use Redux Toolkit and TypeScript together to write Redux applications, and how RTK simplifies typical Redux usage.
 

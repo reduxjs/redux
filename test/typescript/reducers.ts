@@ -1,5 +1,5 @@
-import type { Reducer, Action, ReducersMapObject } from '../..'
-import { combineReducers } from '../..'
+import type { Reducer, Action, ReducersMapObject, AnyAction } from 'redux'
+import { combineReducers } from 'redux'
 
 /**
  * Simple reducer definition with no action shape checks.
@@ -14,14 +14,16 @@ function simple() {
   const reducer: Reducer<State> = (state = 0, action) => {
     if (action.type === 'INCREMENT') {
       const { count = 1 } = action
-
-      return state + count
+      if (typeof count === 'number') {
+        return state + count
+      }
     }
 
     if (action.type === 'DECREMENT') {
       const { count = 1 } = action
-
-      return state - count
+      if (typeof count === 'number') {
+        return state + count
+      }
     }
 
     return state
@@ -151,13 +153,13 @@ function discriminated() {
 
   const cs = combined(undefined, { type: 'INCREMENT' })
   combined(cs, { type: 'MULTIPLY' })
-  // TODO // @ts-expect-error
+  // @ts-expect-error
   combined(cs, { type: 'init' })
-  // TODO // @ts-expect-error
+  // @ts-expect-error
   combined(cs, { type: 'SOME_OTHER_TYPE' })
 
   // Combined reducer can be made to only accept known actions.
-  const strictCombined = combineReducers<{ sub: State }, MyAction0>({
+  const strictCombined = combineReducers({
     sub: reducer0
   })
 
@@ -187,8 +189,9 @@ function typeGuards() {
     count?: number
   }
 
-  const reducer: Reducer<State> = (state = 0, action) => {
+  const reducer: Reducer<State, AnyAction> = (state = 0, action) => {
     if (isAction<IncrementAction>(action, 'INCREMENT')) {
+      // TODO: this doesn't seem to work correctly with UnknownAction - `action` becomes `UnknownAction & IncrementAction`
       // Action shape is determined by the type guard returned from `isAction`
       // @ts-expect-error
       action.wrongField
