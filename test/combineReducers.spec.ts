@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import type { Reducer, AnyAction, CombinedState } from '..'
 import type { Reducer, Action } from 'redux'
 import {
   createStore,
