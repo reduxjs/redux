@@ -4,5 +4,8 @@
   },
   "git": {
     "tagName": "v${version}"
+  },
+  "npm": {
+    "versionArgs": ["--workspaces-update=false"]
   }
 }
