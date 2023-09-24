@@ -20,6 +20,7 @@ import type {
   QueryArgFrom,
   QueryDefinition,
   ResultTypeFrom,
+  FullTagDescription,
 } from '../endpointDefinitions'
 import { isQueryDefinition } from '../endpointDefinitions'
 import { calculateProvidedBy } from '../endpointDefinitions'
@@ -164,7 +165,8 @@ export type PatchQueryDataThunk<
 > = <EndpointName extends QueryKeys<Definitions>>(
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
-  patches: readonly Patch[]
+  patches: readonly Patch[],
+  updateProvided?: boolean
 ) => ThunkAction<void, PartialState, any, AnyAction>
 
 export type UpdateQueryDataThunk<
@@ -173,7 +175,8 @@ export type UpdateQueryDataThunk<
 > = <EndpointName extends QueryKeys<Definitions>>(
   endpointName: EndpointName,
   args: QueryArgFrom<Definitions[EndpointName]>,
-  updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>
+  updateRecipe: Recipe<ResultTypeFrom<Definitions[EndpointName]>>,
+  updateProvided?: boolean
 ) => ThunkAction<PatchCollection, PartialState, any, AnyAction>
 
 export type UpsertQueryDataThunk<
@@ -222,57 +225,87 @@ export function buildThunks<
   context: { endpointDefinitions },
   serializeQueryArgs,
   api,
+  assertTagType,
 }: {
   baseQuery: BaseQuery
   reducerPath: ReducerPath
   context: ApiContext<Definitions>
   serializeQueryArgs: InternalSerializeQueryArgs
   api: Api<BaseQuery, Definitions, ReducerPath, any>
+  assertTagType: AssertTagTypes
 }) {
   type State = RootState<any, string, ReducerPath>
 
   const patchQueryData: PatchQueryDataThunk<EndpointDefinitions, State> =
-    (endpointName, args, patches) => (dispatch) => {
+    (endpointName, args, patches, updateProvided) => (dispatch, getState) => {
       const endpointDefinition = endpointDefinitions[endpointName]
+
+      const queryCacheKey = serializeQueryArgs({
+        queryArgs: args,
+        endpointDefinition,
+        endpointName,
+      })
+
       dispatch(
-        api.internalActions.queryResultPatched({
-          queryCacheKey: serializeQueryArgs({
-            queryArgs: args,
-            endpointDefinition,
-            endpointName,
-          }),
-          patches,
-        })
+        api.internalActions.queryResultPatched({ queryCacheKey, patches })
+      )
+
+      if (!updateProvided) {
+        return
+      }
+
+      const newValue = api.endpoints[endpointName].select(args)(getState())
+
+      const providedTags = calculateProvidedBy(
+        endpointDefinition.providesTags,
+        newValue.data,
+        undefined,
+        args,
+        {},
+        assertTagType
+      )
+
+      dispatch(
+        api.internalActions.updateProvidedBy({ queryCacheKey, providedTags })
       )
     }
 
   const updateQueryData: UpdateQueryDataThunk<EndpointDefinitions, State> =
-    (endpointName, args, updateRecipe) => (dispatch, getState) => {
-      const currentState = (
-        api.endpoints[endpointName] as ApiEndpointQuery<any, any>
-      ).select(args)(getState())
+    (endpointName, args, updateRecipe, updateProvided = true) =>
+    (dispatch, getState) => {
+      const endpointDefinition = api.endpoints[endpointName]
+
+      const currentState = endpointDefinition.select(args)(getState())
+
       let ret: PatchCollection = {
         patches: [],
         inversePatches: [],
         undo: () =>
           dispatch(
-            api.util.patchQueryData(endpointName, args, ret.inversePatches)
+            api.util.patchQueryData(
+              endpointName,
+              args,
+              ret.inversePatches,
+              updateProvided
+            )
           ),
       }
       if (currentState.status === QueryStatus.uninitialized) {
         return ret
       }
+      let newValue
       if ('data' in currentState) {
         if (isDraftable(currentState.data)) {
-          const [, patches, inversePatches] = produceWithPatches(
+          const [value, patches, inversePatches] = produceWithPatches(
             currentState.data,
             updateRecipe
           )
           ret.patches.push(...patches)
           ret.inversePatches.push(...inversePatches)
+          newValue = value
         } else {
-          const value = updateRecipe(currentState.data)
-          ret.patches.push({ op: 'replace', path: [], value })
+          newValue = updateRecipe(currentState.data)
+          ret.patches.push({ op: 'replace', path: [], value: newValue })
           ret.inversePatches.push({
             op: 'replace',
             path: [],
@@ -281,7 +314,9 @@ export function buildThunks<
         }
       }
 
-      dispatch(api.util.patchQueryData(endpointName, args, ret.patches))
+      dispatch(
+        api.util.patchQueryData(endpointName, args, ret.patches, updateProvided)
+      )
 
       return ret
     }
