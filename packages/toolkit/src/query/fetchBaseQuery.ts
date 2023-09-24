@@ -266,7 +266,7 @@ export function fetchBaseQuery({
     url = joinUrls(baseUrl, url)
 
     const request = new Request(url, config)
-    const requestClone = request.clone()
+    const requestClone = new Request(url, config)
     meta = { request: requestClone }
 
     let response,
