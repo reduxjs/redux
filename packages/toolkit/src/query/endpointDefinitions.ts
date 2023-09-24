@@ -402,7 +402,7 @@ export interface QueryExtraOptions<
    * need to use this with the `serializeQueryArgs` or `forceRefetch` options to keep
    * an existing cache entry so that it can be updated.
    *
-   * Since this is wrapped with Immer, you , you may either mutate the `currentCacheValue` directly,
+   * Since this is wrapped with Immer, you may either mutate the `currentCacheValue` directly,
    * or return a new value, but _not_ both at once.
    *
    * Will only be called if the existing `currentCacheData` is _not_ `undefined` - on first response,
