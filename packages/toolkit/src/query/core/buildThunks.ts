@@ -254,7 +254,10 @@ export function buildThunks<
         return
       }
 
-      const newValue = api.endpoints[endpointName].select(args)(getState())
+      const newValue = api.endpoints[endpointName].select(args)(
+        // Work around TS 4.1 mismatch
+        getState() as RootState<any, any, any>
+      )
 
       const providedTags = calculateProvidedBy(
         endpointDefinition.providesTags,
@@ -275,7 +278,10 @@ export function buildThunks<
     (dispatch, getState) => {
       const endpointDefinition = api.endpoints[endpointName]
 
-      const currentState = endpointDefinition.select(args)(getState())
+      const currentState = endpointDefinition.select(args)(
+        // Work around TS 4.1 mismatch
+        getState() as RootState<any, any, any>
+      )
 
       let ret: PatchCollection = {
         patches: [],
