@@ -17,6 +17,7 @@ import type {
   AsyncThunkFulfilledActionCreator,
   AsyncThunkRejectedActionCreator,
 } from '@internal/createAsyncThunk'
+import type { TSVersion } from '@phryneas/ts-version'
 
 const ANY = {} as any
 const defaultDispatch = (() => {}) as ThunkDispatch<{}, any, AnyAction>
@@ -287,8 +288,22 @@ const anyAction = { type: 'foo' } as AnyAction
   // in that case, we have to forbid this behaviour or it will make arguments optional everywhere
   {
     const asyncThunk = createAsyncThunk('test', (arg?: number) => 0)
-    expectType<(arg?: number) => any>(asyncThunk)
-    asyncThunk()
+
+    // Per https://github.com/reduxjs/redux-toolkit/issues/3758#issuecomment-1742152774 , this is a bug in
+    // TS 5.1 and 5.2, that is fixed in 5.3. Conditionally run the TS assertion here.
+    type IsTS51Or52 = TSVersion.Major extends 5
+      ? TSVersion.Minor extends 1 | 2
+        ? true
+        : false
+      : false
+
+    type expectedType = IsTS51Or52 extends true
+      ? (arg: number) => any
+      : (arg?: number) => any
+    expectType<expectedType>(asyncThunk)
+    // We _should_ be able to call this with no arguments, but we run into that error in 5.1 and 5.2.
+    // Disabling this for now.
+    // asyncThunk()
     asyncThunk(5)
     // @ts-expect-error
     asyncThunk('string')
