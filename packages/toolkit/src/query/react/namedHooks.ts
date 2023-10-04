@@ -6,26 +6,37 @@ import type {
   QueryDefinition,
 } from '@reduxjs/toolkit/query'
 
+type QueryHookNames<Definitions extends EndpointDefinitions> = {
+  [K in keyof Definitions as Definitions[K] extends {
+    type: DefinitionType.query
+  }
+    ? `use${Capitalize<K & string>}Query`
+    : never]: UseQuery<
+    Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+  >
+}
+
+type LazyQueryHookNames<Definitions extends EndpointDefinitions> = {
+  [K in keyof Definitions as Definitions[K] extends {
+    type: DefinitionType.query
+  }
+    ? `useLazy${Capitalize<K & string>}Query`
+    : never]: UseLazyQuery<
+    Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+  >
+}
+
+type MutationHookNames<Definitions extends EndpointDefinitions> = {
+  [K in keyof Definitions as Definitions[K] extends {
+    type: DefinitionType.mutation
+  }
+    ? `use${Capitalize<K & string>}Mutation`
+    : never]: UseMutation<
+    Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+  >
+}
+
 export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
-  keyof Definitions extends infer Keys
-    ? Keys extends string
-      ? Definitions[Keys] extends { type: DefinitionType.query }
-        ? {
-            [K in Keys as `use${Capitalize<K>}Query`]: UseQuery<
-              Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-            >
-          } &
-            {
-              [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
-                Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-              >
-            }
-        : Definitions[Keys] extends { type: DefinitionType.mutation }
-        ? {
-            [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
-              Extract<Definitions[K], MutationDefinition<any, any, any, any>>
-            >
-          }
-        : never
-      : never
-    : never
+  QueryHookNames<Definitions> &
+    LazyQueryHookNames<Definitions> &
+    MutationHookNames<Definitions>
