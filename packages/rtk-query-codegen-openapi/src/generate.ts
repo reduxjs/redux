@@ -1,26 +1,27 @@
-import ts from 'typescript';
 import * as path from 'path';
-import { camelCase } from 'lodash';
+
 import ApiGenerator, {
   getOperationName as _getOperationName,
   getReferenceName,
   isReference,
   supportDeepObjects,
-} from '@rtk-query/oazapfts-patched/lib/codegen/generate';
-import {
-  createQuestionToken,
-  keywordType,
-  createPropertyAssignment,
-  isValidIdentifier,
-} from '@rtk-query/oazapfts-patched/lib/codegen/tscodegen';
-import type { OpenAPIV3 } from 'openapi-types';
-import { generateReactHooks } from './generators/react-hooks';
+} from 'oazapfts/lib/codegen/generate';
 import type { EndpointMatcher, EndpointOverrides, GenerationOptions, OperationDefinition, TextMatcher } from './types';
-import { capitalize, getOperationDefinitions, getV3Doc, isQuery as testIsQuery, removeUndefined } from './utils';
-import { generateTagTypes } from './codegen';
+import { capitalize, getOperationDefinitions, getV3Doc, removeUndefined, isQuery as testIsQuery } from './utils';
+import {
+  createPropertyAssignment,
+  createQuestionToken,
+  isValidIdentifier,
+  keywordType,
+} from 'oazapfts/lib/codegen/tscodegen';
+import { generateCreateApiCall, generateEndpointDefinition, generateImportNode, generateTagTypes } from './codegen';
+
 import type { ObjectPropertyDefinitions } from './codegen';
-import { generateCreateApiCall, generateEndpointDefinition, generateImportNode } from './codegen';
+import type { OpenAPIV3 } from 'openapi-types';
+import { camelCase } from 'lodash';
 import { factory } from './utils/factory';
+import { generateReactHooks } from './generators/react-hooks';
+import ts from 'typescript';
 
 const generatedApiName = 'injectedRtkApi';
 
@@ -92,12 +93,14 @@ export async function generateApi(
     endpointOverrides,
     unionUndefined,
     flattenArg = false,
+    useEnumType = false,
   }: GenerationOptions
 ) {
   const v3Doc = await getV3Doc(spec);
 
   const apiGen = new ApiGenerator(v3Doc, {
     unionUndefined,
+    useEnumType,
   });
 
   const operationDefinitions = getOperationDefinitions(v3Doc).filter(operationMatches(filterEndpoints));
@@ -131,7 +134,7 @@ export async function generateApi(
   }
   apiFile = apiFile.replace(/\.[jt]sx?$/, '');
 
-  const sourceCode = printer.printNode(
+  return printer.printNode(
     ts.EmitHint.Unspecified,
     factory.createSourceFile(
       [
@@ -151,7 +154,6 @@ export async function generateApi(
         }),
         factory.createExportDeclaration(
           undefined,
-          undefined,
           false,
           factory.createNamedExports([
             factory.createExportSpecifier(
@@ -162,7 +164,8 @@ export async function generateApi(
           undefined
         ),
         ...Object.values(interfaces),
-        ...apiGen['aliases'],
+        ...apiGen.aliases,
+        ...apiGen.enumAliases,
         ...(hooks
           ? [
               generateReactHooks({
@@ -179,8 +182,6 @@ export async function generateApi(
     ),
     resultFile
   );
-
-  return sourceCode;
 
   function extractAllTagTypes({ operationDefinitions }: { operationDefinitions: OperationDefinition[] }) {
     let allTagTypes = new Set<string>();
@@ -242,7 +243,6 @@ export async function generateApi(
     const ResponseTypeName = factory.createTypeReferenceNode(
       registerInterface(
         factory.createTypeAliasDeclaration(
-          undefined,
           [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
           capitalize(operationName + responseSuffix),
           undefined,
@@ -259,7 +259,7 @@ export async function generateApi(
     const allNames = parameters.map((p) => p.name);
     const queryArg: QueryArgDefinitions = {};
     for (const param of parameters) {
-      const isPureSnakeCase = /^[a-zA-Z][a-zA-Z0-9_]*$/.test(param.name);
+      const isPureSnakeCase = /^[a-zA-Z][\\w]*$/.test(param.name);
       const camelCaseName = camelCase(param.name);
 
       const name = isPureSnakeCase && !allNames.includes(camelCaseName) ? camelCaseName : param.name;
@@ -309,7 +309,6 @@ export async function generateApi(
     const QueryArg = factory.createTypeReferenceNode(
       registerInterface(
         factory.createTypeAliasDeclaration(
-          undefined,
           [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
           capitalize(operationName + argSuffix),
           undefined,
@@ -391,17 +390,7 @@ export async function generateApi(
       undefined,
       undefined,
       Object.keys(queryArg).length
-        ? [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              rootObject,
-              undefined,
-              undefined,
-              undefined
-            ),
-          ]
+        ? [factory.createParameterDeclaration(undefined, undefined, rootObject, undefined, undefined, undefined)]
         : [],
       undefined,
       factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
@@ -461,7 +450,7 @@ function generatePathExpression(
 ) {
   const expressions: Array<[string, string]> = [];
 
-  const head = path.replace(/\{(.*?)\}(.*?)(?=\{|$)/g, (_, expression, literal) => {
+  const head = path.replace(/\{(.*?)}(.*?)(?=\{|$)/g, (_, expression, literal) => {
     const param = pathParameters.find((p) => p.originalName === expression);
     if (!param) {
       throw new Error(`path parameter ${expression} does not seem to be defined in '${path}'!`);

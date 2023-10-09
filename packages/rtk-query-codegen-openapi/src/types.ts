@@ -79,6 +79,11 @@ export interface OutputFileOptions extends Partial<CommonOptions> {
   outputFile: string;
   filterEndpoints?: EndpointMatcher;
   endpointOverrides?: EndpointOverrides[];
+  /**
+   * defaults to false
+   * If passed as true it will generate TS enums instead of union of strings
+   */
+  useEnumType?: boolean;
 }
 
 export interface EndpointOverrides {

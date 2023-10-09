@@ -21,6 +21,7 @@
     "prepare": "npm run build && chmod +x ./lib/bin/cli.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "test:update": "lib/bin/cli.js test/fixtures/petstore.json --file test/fixtures/generated.ts -h",
+    "test:update:enum": "lib/bin/cli.js test/config.example.enum.ts",
     "test": "jest --runInBand",
     "cli": "esr src/bin/cli.ts"
   },
@@ -56,12 +57,12 @@
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^10.0.2",
-    "@rtk-query/oazapfts-patched": "^3.6.0-2",
     "commander": "^6.2.0",
+    "oazapfts": "^4.2.0",
     "prettier": "^2.2.1",
     "semver": "^7.3.5",
     "swagger2openapi": "^7.0.4",
-    "typescript": ">=4.1 <=4.5"
+    "typescript": "^4.9.3"
   },
   "husky": {
     "hooks": {
