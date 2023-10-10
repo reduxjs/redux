@@ -17,10 +17,10 @@
     "rtk-query-codegen-openapi": "lib/bin/cli.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x lib/bin/cli.js",
     "prepare": "npm run build && chmod +x ./lib/bin/cli.js",
     "format": "prettier --write \"src/**/*.ts\"",
-    "test:update": "lib/bin/cli.js test/fixtures/petstore.json --file test/fixtures/generated.ts -h",
+    "test:update": "jest --runInBand --updateSnapshot",
     "test:update:enum": "lib/bin/cli.js test/config.example.enum.ts",
     "test": "jest --runInBand",
     "cli": "esr src/bin/cli.ts"

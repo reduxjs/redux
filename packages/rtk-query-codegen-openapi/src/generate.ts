@@ -258,12 +258,27 @@ export async function generateApi(
 
     const allNames = parameters.map((p) => p.name);
     const queryArg: QueryArgDefinitions = {};
+    function generateName(name: string, potentialPrefix: string) {
+      const isPureSnakeCase = /^[a-zA-Z][a-zA-Z0-9_]*$/.test(name);
+      // prefix with `query`, `path` or `body` if there are multiple paramters with the same name
+      const hasNamingConflict = allNames.filter((n) => n === name).length > 1;
+      if (hasNamingConflict) {
+        name = `${potentialPrefix}_${name}`;
+      }
+      // convert to camelCase if the name is pure snake_case and there are no naming conflicts
+      const camelCaseName = camelCase(name);
+      if (isPureSnakeCase && !allNames.includes(camelCaseName)) {
+        name = camelCaseName;
+      }
+      // if there are still any naming conflicts, prepend with underscore
+      while (name in queryArg) {
+        name = '_' + name;
+      }
+      return name;
+    }
+
     for (const param of parameters) {
-      const isPureSnakeCase = /^[a-zA-Z][\w]*$/.test(param.name);
-      const camelCaseName = camelCase(param.name);
-
-      const name = isPureSnakeCase && !allNames.includes(camelCaseName) ? camelCaseName : param.name;
-
+      const name = generateName(param.name, param.in);
       queryArg[name] = {
         origin: 'param',
         name,
@@ -279,11 +294,7 @@ export async function generateApi(
       const schema = apiGen.getSchemaFromContent(body.content);
       const type = apiGen.getTypeFromSchema(schema);
       const schemaName = camelCase((type as any).name || getReferenceName(schema) || 'body');
-      let name = schemaName in queryArg ? 'body' : schemaName;
-
-      while (name in queryArg) {
-        name = '_' + name;
-      }
+      const name = generateName(schemaName in queryArg ? 'body' : schemaName, 'body');
 
       queryArg[name] = {
         origin: 'body',
@@ -479,6 +490,7 @@ type QueryArgDefinition = {
   originalName: string;
   type: ts.TypeNode;
   required?: boolean;
+  param?: OpenAPIV3.ParameterObject;
 } & (
   | {
       origin: 'param';

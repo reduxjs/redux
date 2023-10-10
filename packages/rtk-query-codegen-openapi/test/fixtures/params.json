@@ -27,6 +27,32 @@
           }
         ]
       }
+    },
+    "/api/v2/{some_name}": {
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "some_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "some_name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
     }
   }
 }

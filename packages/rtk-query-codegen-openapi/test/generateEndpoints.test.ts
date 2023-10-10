@@ -229,6 +229,18 @@ test('should use brackets in a querystring urls arg, when the arg contains full 
   expect(api).toMatchSnapshot();
 });
 
+test('duplicate parameter names must be prefixed with a path or query prefix', async () => {
+  const api = await generateEndpoints({
+    unionUndefined: true,
+    apiFile: './fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/params.json'),
+  });
+  // eslint-disable-next-line no-template-curly-in-string
+  expect(api).toContain('pathSomeName: string');
+  expect(api).toContain('querySomeName: string');
+  expect(api).toMatchSnapshot();
+});
+
 test('apiImport builds correct `import` statement', async () => {
   const api = await generateEndpoints({
     unionUndefined: true,
