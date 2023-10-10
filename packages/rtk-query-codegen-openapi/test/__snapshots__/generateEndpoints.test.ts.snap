@@ -1005,7 +1005,7 @@ const injectedRtkApi = api
     overrideExisting: false,
   });
 export { injectedRtkApi as enhancedApi };
-export type GetStructureDefinitionApiResponse = unknown;
+export type GetStructureDefinitionApiResponse = /** status 200 Success */ FhirJsonResource;
 export type GetStructureDefinitionApiArg = {
   /** Some description */
   foo?: any;
@@ -1024,6 +1024,7 @@ export type GetStructureDefinitionApiArg = {
   /** Some description */
   naming_conflict?: any;
 };
+export type FhirJsonResource = object;
 export const { useGetStructureDefinitionQuery } = injectedRtkApi;
 
 `;

@@ -259,7 +259,7 @@ export async function generateApi(
     const allNames = parameters.map((p) => p.name);
     const queryArg: QueryArgDefinitions = {};
     for (const param of parameters) {
-      const isPureSnakeCase = /^[a-zA-Z][\\w]*$/.test(param.name);
+      const isPureSnakeCase = /^[a-zA-Z][\w]*$/.test(param.name);
       const camelCaseName = camelCase(param.name);
 
       const name = isPureSnakeCase && !allNames.includes(camelCaseName) ? camelCaseName : param.name;
