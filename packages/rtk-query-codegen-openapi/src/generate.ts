@@ -222,7 +222,8 @@ export async function generateApi(
             [
               code,
               apiGen.resolve(response),
-              apiGen.getTypeFromResponse(response) || factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
+              apiGen.getTypeFromResponse(response, 'readOnly') ||
+                factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
             ] as const
         )
         .filter(([status, response]) => isDataResponse(status, apiGen.resolve(response), responses || {}))
@@ -283,7 +284,7 @@ export async function generateApi(
         origin: 'param',
         name,
         originalName: param.name,
-        type: apiGen.getTypeFromSchema(isReference(param) ? param : param.schema),
+        type: apiGen.getTypeFromSchema(isReference(param) ? param : param.schema, undefined, 'writeOnly'),
         required: param.required,
         param,
       };
@@ -300,7 +301,7 @@ export async function generateApi(
         origin: 'body',
         name,
         originalName: schemaName,
-        type: apiGen.getTypeFromSchema(schema),
+        type: apiGen.getTypeFromSchema(schema, undefined, 'writeOnly'),
         required: true,
         body,
       };

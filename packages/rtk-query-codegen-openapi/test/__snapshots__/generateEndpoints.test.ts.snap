@@ -457,6 +457,44 @@ export const { useAddPetMutation, useGetPetByIdQuery } = injectedRtkApi;
 
 `;
 
+exports[`openapi spec readOnly / writeOnly are respected 1`] = `
+import { api } from './fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    getExample: build.query<GetExampleApiResponse, GetExampleApiArg>({
+      query: () => ({ url: \`/example\` }),
+    }),
+    setExample: build.mutation<SetExampleApiResponse, SetExampleApiArg>({
+      query: (queryArg) => ({
+        url: \`/example\`,
+        method: 'POST',
+        body: queryArg.exampleSchema,
+      }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type GetExampleApiResponse = /** status 200 OK */ ExampleSchemaRead;
+export type GetExampleApiArg = void;
+export type SetExampleApiResponse = /** status 200 OK */ ExampleSchemaRead;
+export type SetExampleApiArg = {
+  exampleSchema: ExampleSchemaWrite;
+};
+export type ExampleSchema = {
+  always_present: string;
+};
+export type ExampleSchemaRead = {
+  always_present: string;
+  read_only_prop: string;
+};
+export type ExampleSchemaWrite = {
+  always_present: string;
+  write_only_prop: string;
+};
+
+`;
+
 exports[`should use brackets in a querystring urls arg, when the arg contains full stops 1`] = `
 import { api } from './fixtures/emptyApi';
 const injectedRtkApi = api.injectEndpoints({

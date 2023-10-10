@@ -1,8 +1,7 @@
-import { resolve } from 'path';
-import { generateEndpoints } from '../src';
-import fs from 'fs';
-import path from 'path';
 import del from 'del';
+import fs from 'fs';
+import path, { resolve } from 'path';
+import { generateEndpoints } from '../src';
 
 const tmpDir = path.resolve(__dirname, 'tmp');
 
@@ -349,5 +348,16 @@ describe('tests from issues', () => {
       hooks: true,
     });
     expect(result).toMatchSnapshot();
+  });
+});
+
+describe('openapi spec', () => {
+  it('readOnly / writeOnly are respected', async () => {
+    const api = await generateEndpoints({
+      unionUndefined: true,
+      schemaFile: './fixtures/readOnlyWriteOnly.yaml',
+      apiFile: './fixtures/emptyApi.ts',
+    });
+    expect(api).toMatchSnapshot();
   });
 });
