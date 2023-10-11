@@ -383,6 +383,40 @@ export type LoginUserApiArg = {
 
 `;
 
+exports[`falls back to the \`title\` parameter for the body parameter name when no other name is available 1`] = `
+import { api } from 'fixtures/emptyApi';
+const injectedRtkApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    postV1Export: build.mutation<PostV1ExportApiResponse, PostV1ExportApiArg>({
+      query: (queryArg) => ({
+        url: \`/v1/export\`,
+        method: 'POST',
+        body: queryArg.exportedEntityIds,
+      }),
+    }),
+    postV1Import: build.mutation<PostV1ImportApiResponse, PostV1ImportApiArg>({
+      query: (queryArg) => ({
+        url: \`/v1/import\`,
+        method: 'POST',
+        body: queryArg.rawData,
+      }),
+    }),
+  }),
+  overrideExisting: false,
+});
+export { injectedRtkApi as enhancedApi };
+export type PostV1ExportApiResponse = unknown;
+export type PostV1ExportApiArg = {
+  exportedEntityIds: IdList;
+};
+export type PostV1ImportApiResponse = unknown;
+export type PostV1ImportApiArg = {
+  rawData: string;
+};
+export type IdList = number[];
+
+`;
+
 exports[`hooks generation uses overrides: should generate an \`useLoginMutation\` mutation hook 1`] = `
 import { api } from './fixtures/emptyApi';
 const injectedRtkApi = api.injectEndpoints({

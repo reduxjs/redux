@@ -198,6 +198,17 @@ it('supports granular hooks generation with only mutations', async () => {
   expect(api).toMatchSnapshot();
 });
 
+it('falls back to the `title` parameter for the body parameter name when no other name is available', async () => {
+  const api = await generateEndpoints({
+    apiFile: 'fixtures/emptyApi.ts',
+    schemaFile: resolve(__dirname, 'fixtures/title-as-param-name.json'),
+  });
+  expect(api).not.toContain('queryArg.body');
+  expect(api).toContain('queryArg.exportedEntityIds');
+  expect(api).toContain('queryArg.rawData');
+  expect(api).toMatchSnapshot();
+});
+
 test('hooks generation uses overrides', async () => {
   const api = await generateEndpoints({
     unionUndefined: true,

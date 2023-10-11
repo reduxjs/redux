@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Title as param name",
+    "version": "0.1"
+  },
+  "paths": {
+    "/v1/export": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "exportedEntityIds",
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/IdList"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/import": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "rawData",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IdList": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
