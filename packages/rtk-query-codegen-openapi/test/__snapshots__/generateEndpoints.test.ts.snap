@@ -773,17 +773,21 @@ export type GetApiV1AnimalsApiArg = {
   type?: AnimalType;
 };
 export type AnimalType = 'All' | 'Cats' | 'Dogs';
-export type Animal = {
+export type AnimalBase = {
   type: AnimalType;
   id?: number;
   name?: string | null;
 };
-export type Dog = Animal & {
-  dogUniqueProp?: string | null;
-};
-export type Cat = Animal & {
-  catUniqueProp?: string | null;
-};
+export type Dog = {
+  type: 'Dog';
+} & AnimalBase & {
+    dogUniqueProp?: string | null;
+  };
+export type Cat = {
+  type: 'Cat';
+} & AnimalBase & {
+    catUniqueProp?: string | null;
+  };
 export const { useGetApiV1AnimalsQuery } = injectedRtkApi;
 
 `;
