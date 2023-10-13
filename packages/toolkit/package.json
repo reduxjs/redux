@@ -1,0 +1,123 @@
+{
+  "name": "@reduxjs/toolkit",
+  "version": "1.9.7",
+  "description": "The official, opinionated, batteries-included toolset for efficient Redux development",
+  "author": "Mark Erikson <mark@isquaredsoftware.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reduxjs/redux-toolkit.git"
+  },
+  "keywords": [
+    "redux",
+    "react",
+    "starter",
+    "toolkit",
+    "reducer",
+    "slice",
+    "immer",
+    "immutable",
+    "redux-toolkit"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/redux-toolkit.esm.js",
+  "unpkg": "dist/redux-toolkit.umd.min.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.13.2",
+    "@phryneas/ts-version": "^1.0.2",
+    "@size-limit/preset-small-lib": "^4.11.0",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.1.5",
+    "@types/convert-source-map": "^1.5.1",
+    "@types/jest": "^27",
+    "@types/json-stringify-safe": "^5.0.0",
+    "@types/nanoid": "^2.1.0",
+    "@types/node": "^10.14.4",
+    "@types/query-string": "^6.3.0",
+    "@types/react": "^18.0.12",
+    "@types/react-dom": "^18.0.5",
+    "@types/yargs": "^16.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "axios": "^0.19.2",
+    "console-testing-library": "^0.3.1",
+    "convert-source-map": "^1.7.0",
+    "esbuild": "^0.11.13",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-flowtype": "^5.7.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "fs-extra": "^9.1.0",
+    "invariant": "^2.2.4",
+    "jest": "^27",
+    "json-stringify-safe": "^5.0.1",
+    "magic-string": "^0.25.7",
+    "merge-source-map": "^1.1.0",
+    "msw": "^0.40.2",
+    "node-fetch": "^2.6.1",
+    "prettier": "^2.2.1",
+    "query-string": "^7.0.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.47.0",
+    "rollup-plugin-strip-code": "^0.2.6",
+    "size-limit": "^4.11.0",
+    "source-map": "^0.7.3",
+    "terser": "^5.6.1",
+    "ts-jest": "^27",
+    "tslib": "^1.10.0",
+    "typescript": "~4.2.4",
+    "yargs": "^15.3.1"
+  },
+  "scripts": {
+    "build-ci": "yarn rimraf dist && yarn tsc && yarn lint && node scripts/cli.js --skipExtraction",
+    "build-prepare": "npm run build-ci",
+    "build": "yarn rimraf dist && yarn tsc && node scripts/cli.js --local --skipExtraction",
+    "build-only": "yarn rimraf dist && yarn tsc && node scripts/cli.js --skipExtraction",
+    "format": "prettier --write \"(src|examples)/**/*.{ts,tsx}\" \"**/*.md\"",
+    "format:check": "prettier --list-different \"(src|examples)/**/*.{ts,tsx}\" \"docs/*/**.md\"",
+    "lint": "eslint src",
+    "test": "jest --runInBand",
+    "type-tests": "yarn tsc -p src/tests/tsconfig.typetests.json && yarn tsc -p src/query/tests/tsconfig.typetests.json",
+    "prepack": "npm run build-prepare"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "dist/**/*.d.ts",
+    "dist/**/package.json",
+    "src/",
+    "query"
+  ],
+  "dependencies": {
+    "immer": "^9.0.21",
+    "redux": "^4.2.1",
+    "redux-thunk": "^2.4.2",
+    "reselect": "^4.1.8"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0 || ^17.0.0 || ^18",
+    "react-redux": "^7.2.1 || ^8.0.2"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-redux": {
+      "optional": true
+    }
+  },
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/reduxjs/redux-toolkit/issues"
+  },
+  "homepage": "https://redux-toolkit.js.org"
+}

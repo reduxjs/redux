@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "after:bump": "yarn && git add -u"
+  },
+  "git": {
+    "tagName": "v${version}"
+  },
+  "npm": {
+    "versionArgs": ["--workspaces-update=false"]
+  }
+}

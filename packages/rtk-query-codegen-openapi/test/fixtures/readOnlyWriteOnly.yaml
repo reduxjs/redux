@@ -1,0 +1,51 @@
+openapi: 3.0.2
+info:
+  title: readOnlyWriteOnlyAPI
+  version: 1.0.0
+paths:
+  /example:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExampleSchema'
+          description: OK
+      operationId: getExample
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleSchema'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExampleSchema'
+          description: OK
+      operationId: setExample
+components:
+  schemas:
+    ExampleSchema:
+      description: ''
+      required:
+        - always_present
+        - read_only_prop
+        - write_only_prop
+      type: object
+      properties:
+        always_present:
+          description: ''
+          type: string
+        read_only_prop:
+          description: ''
+          type: string
+          readOnly: true
+        write_only_prop:
+          writeOnly: true
+          description: ''
+          type: string

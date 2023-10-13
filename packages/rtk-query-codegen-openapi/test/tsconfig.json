@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./test/fixtures/*"],
+      "@rtk-query/codegen-openapi": ["./src"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmit": true,
+    "target": "es2018",
+    "jsx": "react",
+    "baseUrl": "..",
+    "resolveJsonModule": true,
+    "types": ["node", "jest"],
+    "allowJs": true,
+    "checkJs": true
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "schemaFile": "./fixtures/invalid-petstore.json",
+  "apiFile": "./fixtures/emptyApi.ts",
+  "outputFile": "./tmp/example.ts"
+}
