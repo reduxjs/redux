@@ -166,7 +166,7 @@ export function executeReducerBuilderCallback<S>(
       }
       if (type in actionsMap) {
         throw new Error(
-          '`builder.addCase` cannot be called with two reducers for the same action type ' + type
+          `\`builder.addCase\` cannot be called with two reducers for the same action type '${type}'`
         )
       }
       actionsMap[type] = reducer
