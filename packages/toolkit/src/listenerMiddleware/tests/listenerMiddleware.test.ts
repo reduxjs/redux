@@ -45,6 +45,7 @@ const middlewareApi = {
   unsubscribe: expect.any(Function),
   subscribe: expect.any(Function),
   cancelActiveListeners: expect.any(Function),
+  cancel: expect.any(Function),
 }
 
 const noop = () => {}
@@ -184,7 +185,7 @@ describe('createListenerMiddleware', () => {
         middleware: (gDM) => gDM().prepend(listenerMiddleware.middleware),
       })
 
-      let foundExtra: number | null  = null
+      let foundExtra: number | null = null
 
       const typedAddListener =
         listenerMiddleware.startListening as TypedStartListening<
@@ -645,7 +646,32 @@ describe('createListenerMiddleware', () => {
       expect(await deferredCompletedSignalReason).toBe(listenerCompleted)
     })
 
-    test('"can unsubscribe via middleware api', () => {
+    test('can self-cancel via middleware api', async () => {
+      const notifyDeferred = createAction<Deferred<string>>('notify-deferred')
+
+      startListening({
+        actionCreator: notifyDeferred,
+        effect: async ({ payload }, { signal, cancel, delay }) => {
+          signal.addEventListener(
+            'abort',
+            () => {
+              payload.resolve((signal as AbortSignalWithReason<string>).reason)
+            },
+            { once: true }
+          )
+
+          cancel()
+        },
+      })
+
+      const deferredCancelledSignalReason = store.dispatch(
+        notifyDeferred(deferred<string>())
+      ).payload
+
+      expect(await deferredCancelledSignalReason).toBe(listenerCancelled)
+    })
+
+    test('can unsubscribe via middleware api', () => {
       const effect = jest.fn(
         (action: TestAction1, api: ListenerEffectAPI<any, any>) => {
           if (action.payload === 'b') {
@@ -1126,7 +1152,7 @@ describe('createListenerMiddleware', () => {
       expect(takeResult).toEqual([increment(), stateCurrent, stateBefore])
     })
 
-    test("take resolves to `[A, CurrentState, PreviousState] | null` if a possibly undefined timeout parameter is provided", async () => {
+    test('take resolves to `[A, CurrentState, PreviousState] | null` if a possibly undefined timeout parameter is provided', async () => {
       const store = configureStore({
         reducer: counterSlice.reducer,
         middleware: (gDM) => gDM().prepend(middleware),
@@ -1160,7 +1186,7 @@ describe('createListenerMiddleware', () => {
       store.dispatch(increment())
 
       await delay(25)
-      expect(done).toBe(true);
+      expect(done).toBe(true)
     })
 
     test('condition method resolves promise when the predicate succeeds', async () => {

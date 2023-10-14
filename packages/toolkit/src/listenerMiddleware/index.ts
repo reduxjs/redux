@@ -419,6 +419,13 @@ export function createListenerMiddleware<
                 }
               })
             },
+            cancel: () => {
+              abortControllerWithReason(
+                internalTaskController,
+                listenerCancelled
+              )
+              entry.pending.delete(internalTaskController)
+            },
           })
         )
       )

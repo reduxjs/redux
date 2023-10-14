@@ -137,7 +137,7 @@ export interface ForkOptions {
    * If true, causes the parent task to not be marked as complete until
    * all autoJoined forks have completed or failed.
    */
-  autoJoin: boolean;
+  autoJoin: boolean
 }
 
 /** @public */
@@ -186,9 +186,9 @@ export interface ListenerEffectAPI<
    * rejects if the listener has been cancelled or is completed.
    *
    * The return value is `true` if the predicate succeeds or `false` if a timeout is provided and expires first.
-   * 
+   *
    * ### Example
-   * 
+   *
    * ```ts
    * const updateBy = createAction<number>('counter/updateBy');
    *
@@ -210,7 +210,7 @@ export interface ListenerEffectAPI<
    *
    * The return value is the `[action, currentState, previousState]` combination that the predicate saw as arguments.
    *
-   * The promise resolves to null if a timeout is provided and expires first, 
+   * The promise resolves to null if a timeout is provided and expires first,
    *
    * ### Example
    *
@@ -233,6 +233,10 @@ export interface ListenerEffectAPI<
    * Cancels all other running instances of this same listener except for the one that made this call.
    */
   cancelActiveListeners: () => void
+  /**
+   * Cancels the instance of this listener that made this call.
+   */
+  cancel: () => void
   /**
    * An abort signal whose `aborted` property is set to `true`
    * if the listener execution is either aborted or completed.
