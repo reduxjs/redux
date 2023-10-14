@@ -46,6 +46,7 @@ const middlewareApi = {
   subscribe: expect.any(Function),
   cancelActiveListeners: expect.any(Function),
   cancel: expect.any(Function),
+  throwIfCancelled: expect.any(Function),
 }
 
 const noop = () => {}
@@ -671,6 +672,52 @@ describe('createListenerMiddleware', () => {
       expect(await deferredCancelledSignalReason).toBe(listenerCancelled)
     })
 
+    test('Can easily check if the listener has been cancelled', async () => {
+      const pauseDeferred = deferred<void>()
+
+      let listenerCancelled = false
+      let listenerStarted = false
+      let listenerCompleted = false
+      let cancelListener: () => void = () => {}
+      let error: TaskAbortError | undefined = undefined
+
+      startListening({
+        actionCreator: testAction1,
+        effect: async ({ payload }, { throwIfCancelled, cancel }) => {
+          cancelListener = cancel
+          try {
+            listenerStarted = true
+            throwIfCancelled()
+            await pauseDeferred
+
+            throwIfCancelled()
+            listenerCompleted = true
+          } catch (err) {
+            if (err instanceof TaskAbortError) {
+              listenerCancelled = true
+              error = err
+            }
+          }
+        },
+      })
+
+      store.dispatch(testAction1('a'))
+      expect(listenerStarted).toBe(true)
+      expect(listenerCompleted).toBe(false)
+      expect(listenerCancelled).toBe(false)
+
+      // Cancel it while the listener is paused at a non-cancel-aware promise
+      cancelListener()
+      pauseDeferred.resolve()
+
+      await delay(10)
+      expect(listenerCompleted).toBe(false)
+      expect(listenerCancelled).toBe(true)
+      expect((error as any)?.message).toBe(
+        'task cancelled (reason: listener-cancelled)'
+      )
+    })
+
     test('can unsubscribe via middleware api', () => {
       const effect = jest.fn(
         (action: TestAction1, api: ListenerEffectAPI<any, any>) => {
@@ -1087,12 +1134,13 @@ describe('createListenerMiddleware', () => {
         middleware: (gDM) => gDM().prepend(middleware),
       })
 
-      const typedAddListener =
-        startListening as TypedStartListening<
-          CounterState,
-          typeof store.dispatch
-        >
-      let result: [ReturnType<typeof increment>, CounterState, CounterState] | null = null
+      const typedAddListener = startListening as TypedStartListening<
+        CounterState,
+        typeof store.dispatch
+      >
+      let result:
+        | [ReturnType<typeof increment>, CounterState, CounterState]
+        | null = null
 
       typedAddListener({
         predicate: incrementByAmount.match,
@@ -1158,25 +1206,28 @@ describe('createListenerMiddleware', () => {
         middleware: (gDM) => gDM().prepend(middleware),
       })
 
-      type ExpectedTakeResultType = readonly [ReturnType<typeof increment>, CounterState, CounterState] | null
+      type ExpectedTakeResultType =
+        | readonly [ReturnType<typeof increment>, CounterState, CounterState]
+        | null
 
       let timeout: number | undefined = undefined
       let done = false
 
-      const startAppListening = startListening as TypedStartListening<CounterState>
+      const startAppListening =
+        startListening as TypedStartListening<CounterState>
       startAppListening({
         predicate: incrementByAmount.match,
         effect: async (_, listenerApi) => {
           const stateBefore = listenerApi.getState()
-          
+
           let takeResult = await listenerApi.take(increment.match, timeout)
           const stateCurrent = listenerApi.getState()
           expect(takeResult).toEqual([increment(), stateCurrent, stateBefore])
-          
+
           timeout = 1
           takeResult = await listenerApi.take(increment.match, timeout)
           expect(takeResult).toBeNull()
-          
+
           expectType<ExpectedTakeResultType>(takeResult)
 
           done = true

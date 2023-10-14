@@ -238,6 +238,10 @@ export interface ListenerEffectAPI<
    */
   cancel: () => void
   /**
+   * Throws a `TaskAbortError` if this listener has been cancelled
+   */
+  throwIfCancelled: () => void
+  /**
    * An abort signal whose `aborted` property is set to `true`
    * if the listener execution is either aborted or completed.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal

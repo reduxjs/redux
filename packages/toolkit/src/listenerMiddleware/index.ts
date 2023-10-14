@@ -426,6 +426,9 @@ export function createListenerMiddleware<
               )
               entry.pending.delete(internalTaskController)
             },
+            throwIfCancelled: () => {
+              validateActive(internalTaskController.signal)
+            },
           })
         )
       )
