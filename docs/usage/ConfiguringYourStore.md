@@ -356,7 +356,7 @@ import rootReducer from './reducers'
 export default function configureAppStore(preloadedState) {
   const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => [loggerMiddleware, ...getDefaultMiddleware()],
+    middleware: (getDefaultMiddleware) => [loggerMiddleware, ...getDefaultMiddleware().prepend()],
     preloadedState,
     enhancers: [monitorReducersEnhancer]
   })
