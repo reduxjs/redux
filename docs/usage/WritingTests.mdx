@@ -581,7 +581,7 @@ export default function UserDisplay() {
 }
 // file: features/users/tests/UserDisplay.test.tsx
 import React from 'react'
-import { rest } from 'msw'
+import { http, HttpResponse, delay } from 'msw'
 import { setupServer } from 'msw/node'
 import { fireEvent, screen } from '@testing-library/react'
 // We're using our own custom render function and not RTL's render.
@@ -592,8 +592,9 @@ import UserDisplay from '../UserDisplay'
 // and return the response 'John Smith' after 150ms
 // when receiving a get request to the `/api/user` endpoint
 export const handlers = [
-  rest.get('/api/user', (req, res, ctx) => {
-    return res(ctx.json('John Smith'), ctx.delay(150))
+  http.get('/api/user', async () => {
+      await delay(150)
+      return HttpResponse.json('John Smith')
   })
 ]
 
