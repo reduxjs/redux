@@ -37,6 +37,7 @@ If you prefer a video course, you can [watch this RTK Query video course by Lenz
 </div>
 
 :::
+
 ## Introduction
 
 in [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md) and [Part 6: Performance and Normalization](./part-6-performance-normalization.md), we saw the standard patterns used for data fetching and caching with Redux. Those patterns include using async thunks to fetch data, dispatching actions with the results, managing request loading state in the store, and normalizing the cached data to enable easier lookups and updates of individual items by ID.
