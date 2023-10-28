@@ -21,6 +21,22 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
+
+::: tip Prefer a video course?
+
+If you prefer a video course, you can [watch this RTK Query video course by Lenz Weber-Tronic, the creator of RTK Query, for free at Egghead](https://egghead.io/courses/rtk-query-basics-query-endpoints-data-flow-and-typescript-57ea3c43?af=7pnhj6) or take a look at the first lesson right here:
+
+<div style={{position:"relative",paddingTop:"56.25%"}}>
+  <iframe 
+    src="https://app.egghead.io/lessons/redux-course-introduction-and-application-walk-through-for-rtk-query-basics/embed?af=7pnhj6" 
+    title="RTK Query Video course at Egghead: Course Introduction and Application Walk through for RTK Query Basics"
+    frameborder="0" 
+    allowfullscreen
+    style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}}
+  ></iframe>
+</div>
+
+:::
 ## Introduction
 
 in [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md) and [Part 6: Performance and Normalization](./part-6-performance-normalization.md), we saw the standard patterns used for data fetching and caching with Redux. Those patterns include using async thunks to fetch data, dispatching actions with the results, managing request loading state in the store, and normalizing the cached data to enable easier lookups and updates of individual items by ID.
