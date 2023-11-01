@@ -1,0 +1,434 @@
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, createAction } from '@reduxjs/toolkit'
+import {
+  mockConsole,
+  createConsole,
+  getLog,
+} from 'console-testing-library/pure'
+
+type CreateSlice = typeof createSlice
+
+describe('createSlice', () => {
+  let restore: () => void
+
+  beforeEach(() => {
+    restore = mockConsole(createConsole())
+  })
+
+  describe('when slice is undefined', () => {
+    it('should throw an error', () => {
+      expect(() =>
+        // @ts-ignore
+        createSlice({
+          reducers: {
+            increment: (state) => state + 1,
+            multiply: (state, action: PayloadAction<number>) =>
+              state * action.payload,
+          },
+          initialState: 0,
+        })
+      ).toThrowError()
+    })
+  })
+
+  describe('when slice is an empty string', () => {
+    it('should throw an error', () => {
+      expect(() =>
+        createSlice({
+          name: '',
+          reducers: {
+            increment: (state) => state + 1,
+            multiply: (state, action: PayloadAction<number>) =>
+              state * action.payload,
+          },
+          initialState: 0,
+        })
+      ).toThrowError()
+    })
+  })
+
+  describe('when initial state is undefined', () => {
+    it('should throw an error', () => {
+      createSlice({
+        name: 'test',
+        reducers: {},
+        initialState: undefined,
+      })
+
+      expect(getLog().log).toBe(
+        'You must provide an `initialState` value that is not `undefined`. You may have misspelled `initialState`'
+      )
+    })
+  })
+
+  describe('when passing slice', () => {
+    const { actions, reducer, caseReducers } = createSlice({
+      reducers: {
+        increment: (state) => state + 1,
+      },
+      initialState: 0,
+      name: 'cool',
+    })
+
+    it('should create increment action', () => {
+      expect(actions.hasOwnProperty('increment')).toBe(true)
+    })
+
+    it('should have the correct action for increment', () => {
+      expect(actions.increment()).toEqual({
+        type: 'cool/increment',
+        payload: undefined,
+      })
+    })
+
+    it('should return the correct value from reducer', () => {
+      expect(reducer(undefined, actions.increment())).toEqual(1)
+    })
+
+    it('should include the generated case reducers', () => {
+      expect(caseReducers).toBeTruthy()
+      expect(caseReducers.increment).toBeTruthy()
+      expect(typeof caseReducers.increment).toBe('function')
+    })
+
+    it('getInitialState should return the state', () => {
+      const initialState = 42
+      const slice = createSlice({
+        name: 'counter',
+        initialState,
+        reducers: {},
+      })
+
+      expect(slice.getInitialState()).toBe(initialState)
+    })
+
+    it('should allow non-draftable initial state', () => {
+      expect(() =>
+        createSlice({
+          name: 'params',
+          initialState: new URLSearchParams(),
+          reducers: {},
+        })
+      ).not.toThrowError()
+    })
+  })
+
+  describe('when initialState is a function', () => {
+    const initialState = () => ({ user: '' })
+
+    const { actions, reducer } = createSlice({
+      reducers: {
+        setUserName: (state, action) => {
+          state.user = action.payload
+        },
+      },
+      initialState,
+      name: 'user',
+    })
+
+    it('should set the username', () => {
+      expect(reducer(undefined, actions.setUserName('eric'))).toEqual({
+        user: 'eric',
+      })
+    })
+
+    it('getInitialState should return the state', () => {
+      const initialState = () => 42
+      const slice = createSlice({
+        name: 'counter',
+        initialState,
+        reducers: {},
+      })
+
+      expect(slice.getInitialState()).toBe(42)
+    })
+
+    it('should allow non-draftable initial state', () => {
+      expect(() =>
+        createSlice({
+          name: 'params',
+          initialState: () => new URLSearchParams(),
+          reducers: {},
+        })
+      ).not.toThrowError()
+    })
+  })
+
+  describe('when mutating state object', () => {
+    const initialState = { user: '' }
+
+    const { actions, reducer } = createSlice({
+      reducers: {
+        setUserName: (state, action) => {
+          state.user = action.payload
+        },
+      },
+      initialState,
+      name: 'user',
+    })
+
+    it('should set the username', () => {
+      expect(reducer(initialState, actions.setUserName('eric'))).toEqual({
+        user: 'eric',
+      })
+    })
+  })
+
+  describe('when passing extra reducers', () => {
+    const addMore = createAction<{ amount: number }>('ADD_MORE')
+
+    const { reducer } = createSlice({
+      name: 'test',
+      reducers: {
+        increment: (state) => state + 1,
+        multiply: (state, action) => state * action.payload,
+      },
+      extraReducers: {
+        [addMore.type]: (state, action) => state + action.payload.amount,
+      },
+      initialState: 0,
+    })
+
+    it('should call extra reducers when their actions are dispatched', () => {
+      const result = reducer(10, addMore({ amount: 5 }))
+
+      expect(result).toBe(15)
+    })
+
+    describe('alternative builder callback for extraReducers', () => {
+      const increment = createAction<number, 'increment'>('increment')
+
+      test('can be used with actionCreators', () => {
+        const slice = createSlice({
+          name: 'counter',
+          initialState: 0,
+          reducers: {},
+          extraReducers: (builder) =>
+            builder.addCase(
+              increment,
+              (state, action) => state + action.payload
+            ),
+        })
+        expect(slice.reducer(0, increment(5))).toBe(5)
+      })
+
+      test('can be used with string action types', () => {
+        const slice = createSlice({
+          name: 'counter',
+          initialState: 0,
+          reducers: {},
+          extraReducers: (builder) =>
+            builder.addCase(
+              'increment',
+              (state, action: { type: 'increment'; payload: number }) =>
+                state + action.payload
+            ),
+        })
+        expect(slice.reducer(0, increment(5))).toBe(5)
+      })
+
+      test('prevents the same action type from being specified twice', () => {
+        expect(() => {
+          const slice = createSlice({
+            name: 'counter',
+            initialState: 0,
+            reducers: {},
+            extraReducers: (builder) =>
+              builder
+                .addCase('increment', (state) => state + 1)
+                .addCase('increment', (state) => state + 1),
+          })
+          slice.reducer(undefined, { type: 'unrelated' })
+        }).toThrowErrorMatchingInlineSnapshot(
+          `"addCase cannot be called with two reducers for the same action type"`
+        )
+      })
+
+      test('can be used with addMatcher and type guard functions', () => {
+        const slice = createSlice({
+          name: 'counter',
+          initialState: 0,
+          reducers: {},
+          extraReducers: (builder) =>
+            builder.addMatcher(
+              increment.match,
+              (state, action: { type: 'increment'; payload: number }) =>
+                state + action.payload
+            ),
+        })
+        expect(slice.reducer(0, increment(5))).toBe(5)
+      })
+
+      test('can be used with addDefaultCase', () => {
+        const slice = createSlice({
+          name: 'counter',
+          initialState: 0,
+          reducers: {},
+          extraReducers: (builder) =>
+            builder.addDefaultCase((state, action) => state + action.payload),
+        })
+        expect(slice.reducer(0, increment(5))).toBe(5)
+      })
+
+      // for further tests, see the test of createReducer that goes way more into depth on this
+    })
+  })
+
+  describe('behaviour with enhanced case reducers', () => {
+    it('should pass all arguments to the prepare function', () => {
+      const prepare = jest.fn((payload, somethingElse) => ({ payload }))
+
+      const testSlice = createSlice({
+        name: 'test',
+        initialState: 0,
+        reducers: {
+          testReducer: {
+            reducer: (s) => s,
+            prepare,
+          },
+        },
+      })
+
+      expect(testSlice.actions.testReducer('a', 1)).toEqual({
+        type: 'test/testReducer',
+        payload: 'a',
+      })
+      expect(prepare).toHaveBeenCalledWith('a', 1)
+    })
+
+    it('should call the reducer function', () => {
+      const reducer = jest.fn(() => 5)
+
+      const testSlice = createSlice({
+        name: 'test',
+        initialState: 0,
+        reducers: {
+          testReducer: {
+            reducer,
+            prepare: (payload: any) => ({ payload }),
+          },
+        },
+      })
+
+      testSlice.reducer(0, testSlice.actions.testReducer('testPayload'))
+      expect(reducer).toHaveBeenCalledWith(
+        0,
+        expect.objectContaining({ payload: 'testPayload' })
+      )
+    })
+  })
+
+  describe('circularity', () => {
+    test('extraReducers can reference each other circularly', () => {
+      const first = createSlice({
+        name: 'first',
+        initialState: 'firstInitial',
+        reducers: {
+          something() {
+            return 'firstSomething'
+          },
+        },
+        extraReducers(builder) {
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          builder.addCase(second.actions.other, () => {
+            return 'firstOther'
+          })
+        },
+      })
+      const second = createSlice({
+        name: 'second',
+        initialState: 'secondInitial',
+        reducers: {
+          other() {
+            return 'secondOther'
+          },
+        },
+        extraReducers(builder) {
+          builder.addCase(first.actions.something, () => {
+            return 'secondSomething'
+          })
+        },
+      })
+
+      expect(first.reducer(undefined, { type: 'unrelated' })).toBe(
+        'firstInitial'
+      )
+      expect(first.reducer(undefined, first.actions.something())).toBe(
+        'firstSomething'
+      )
+      expect(first.reducer(undefined, second.actions.other())).toBe(
+        'firstOther'
+      )
+
+      expect(second.reducer(undefined, { type: 'unrelated' })).toBe(
+        'secondInitial'
+      )
+      expect(second.reducer(undefined, first.actions.something())).toBe(
+        'secondSomething'
+      )
+      expect(second.reducer(undefined, second.actions.other())).toBe(
+        'secondOther'
+      )
+    })
+  })
+
+  describe.only('Deprecation warnings', () => {
+    let originalNodeEnv = process.env.NODE_ENV
+
+    beforeEach(() => {
+      jest.resetModules()
+      restore = mockConsole(createConsole())
+    })
+
+    afterEach(() => {
+      process.env.NODE_ENV = originalNodeEnv
+    })
+
+    // NOTE: This needs to be in front of the later `createReducer` call to check the one-time warning
+    it('Warns about object notation deprecation, once', () => {
+      const { createSlice } = require('../createSlice')
+
+      let dummySlice = (createSlice as CreateSlice)({
+        name: 'dummy',
+        initialState: [],
+        reducers: {},
+        extraReducers: {
+          a: () => [],
+        },
+      })
+      // Have to trigger the lazy creation
+      let { reducer } = dummySlice
+      reducer(undefined, { type: 'dummy' })
+
+      expect(getLog().levels.warn).toMatch(
+        /The object notation for `createSlice.extraReducers` is deprecated/
+      )
+      restore = mockConsole(createConsole())
+
+      dummySlice = (createSlice as CreateSlice)({
+        name: 'dummy',
+        initialState: [],
+        reducers: {},
+        extraReducers: {
+          a: () => [],
+        },
+      })
+      reducer = dummySlice.reducer
+      reducer(undefined, { type: 'dummy' })
+      expect(getLog().levels.warn).toBe('')
+    })
+
+    it('Does not warn in production', () => {
+      process.env.NODE_ENV = 'production'
+      const { createSlice } = require('../createSlice')
+
+      let dummySlice = (createSlice as CreateSlice)({
+        name: 'dummy',
+        initialState: [],
+        reducers: {},
+        extraReducers: {},
+      })
+      expect(getLog().levels.warn).toBe('')
+    })
+  })
+})

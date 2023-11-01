@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serializableStateInvariantMiddleware Should log an error when a non-serializable action is dispatched 1`] = `
+"A non-serializable value was detected in an action, in the path: \`type\`. Value: Symbol(SOME_CONSTANT) 
+Take a look at the logic that dispatched this action:  Object {
+  \\"type\\": Symbol(SOME_CONSTANT),
+} 
+(See https://redux.js.org/faq/actions#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants) 
+(To allow non-serializable values see: https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data)"
+`;
+
+exports[`serializableStateInvariantMiddleware Should log an error when a non-serializable value is in state 1`] = `
+"A non-serializable value was detected in the state, in the path: \`testSlice.a\`. Value: Map {} 
+Take a look at the reducer(s) handling this action type: TEST_ACTION.
+(See https://redux.js.org/faq/organizing-state#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)"
+`;
+
+exports[`serializableStateInvariantMiddleware allows ignoring state entirely 1`] = `""`;
+
+exports[`serializableStateInvariantMiddleware consumer tolerated structures Should log an error when a non-serializable value is nested in state 1`] = `
+"A non-serializable value was detected in the state, in the path: \`testSlice.a.entries\`. Value: [Function entries] 
+Take a look at the reducer(s) handling this action type: TEST_ACTION.
+(See https://redux.js.org/faq/organizing-state#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)"
+`;
+
+exports[`serializableStateInvariantMiddleware consumer tolerated structures Should use consumer supplied isSerializable and getEntries options to tolerate certain structures 1`] = `
+"A non-serializable value was detected in the state, in the path: \`testSlice.a.third.bad-map-instance\`. Value: Map {} 
+Take a look at the reducer(s) handling this action type: TEST_ACTION.
+(See https://redux.js.org/faq/organizing-state#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)"
+`;
+
+exports[`serializableStateInvariantMiddleware ignored action paths can specify (multiple) different values 1`] = `""`;
+
+exports[`serializableStateInvariantMiddleware ignored action paths can specify regexp 1`] = `""`;
+
+exports[`serializableStateInvariantMiddleware ignored action paths default value can be overridden 1`] = `
+"A non-serializable value was detected in an action, in the path: \`meta.arg\`. Value: Map {} 
+Take a look at the logic that dispatched this action:  Object {
+  \\"meta\\": Object {
+    \\"arg\\": Map {},
+  },
+  \\"type\\": \\"test\\",
+} 
+(See https://redux.js.org/faq/actions#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants) 
+(To allow non-serializable values see: https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data)"
+`;
+
+exports[`serializableStateInvariantMiddleware ignored action paths default value: meta.arg 1`] = `""`;
+
+exports[`serializableStateInvariantMiddleware should not check serializability for ignored slice names 1`] = `
+"A non-serializable value was detected in the state, in the path: \`testSlice.b.d\`. Value: Map {} 
+Take a look at the reducer(s) handling this action type: TEST_ACTION.
+(See https://redux.js.org/faq/organizing-state#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)"
+`;

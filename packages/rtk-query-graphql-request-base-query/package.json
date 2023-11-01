@@ -1,0 +1,42 @@
+{
+  "name": "@rtk-query/graphql-request-base-query",
+  "version": "2.2.0",
+  "author": {
+    "name": "Lenz Weber",
+    "email": "mail@phryneas.de",
+    "url": "https://phryneas.de/"
+  },
+  "license": "MIT",
+  "type": "module",
+  "source": "src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "unpkg": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "microbundle",
+    "prepack": "rimraf dist/*; yarn build",
+    "dev": "microbundle watch"
+  },
+  "dependencies": {
+    "graphql-request": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@reduxjs/toolkit": "^1.7.1",
+    "graphql": "^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0"
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
+    "graphql": "^16.5.0",
+    "microbundle": "^0.13.3",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "dist"
+  ]
+}
