@@ -282,7 +282,7 @@ const initialState = { value: 0 }
 function counterReducer(state = initialState, action) {
   // Check to see if the reducer cares about this action
   if (action.type === 'counter/increment') {
-    // If so, make a copy of `state` by returning a new object (notice the brackets)
+    // If so, make a copy of `state` by returning a new object, notice the return brackets
     return {
       // spread in case there was properties like payload
       ...state,
