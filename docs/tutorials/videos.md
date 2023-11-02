@@ -64,6 +64,6 @@ A course that covers how to modernize existing React+Redux applications from old
 
 ### Confidently Testing Redux Applications with Jest & TypeScript
 
-[Egghead course: Confidently Testing Redux Applications with Jest & TypeSCript](https://app.egghead.io/lessons/jest-intro-to-confidently-testing-redux-applications-with-jest-typescript?pl=confidently-testing-redux-applications-with-jest-typescript-16e17d9b&af=7pnhj6)
+[Egghead course: Confidently Testing Redux Applications with Jest & TypeScript](https://app.egghead.io/lessons/jest-intro-to-confidently-testing-redux-applications-with-jest-typescript?pl=confidently-testing-redux-applications-with-jest-typescript-16e17d9b&af=7pnhj6)
 
 Best practices for building & testing Redux applications have changed dramatically over time. This course aims to be a comprehensive and up-to-date resource for those seeking to confidently test their Redux apps.
