@@ -347,7 +347,7 @@ By default, `configureStore` from Redux Toolkit will:
 Here's what the hot reloading example might look like using Redux Toolkit:
 
 ```js
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'
@@ -356,7 +356,7 @@ import rootReducer from './reducers'
 export default function configureAppStore(preloadedState) {
   const store = configureStore({
     reducer: rootReducer,
-    middleware: [loggerMiddleware, ...getDefaultMiddleware()],
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(loggerMiddleware),
     preloadedState,
     enhancers: [monitorReducersEnhancer]
   })
