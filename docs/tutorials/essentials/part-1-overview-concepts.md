@@ -24,9 +24,6 @@ In Part 1 of this tutorial, we'll cover the key concepts and terms you need to k
 Starting in [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
 ### How to Read This Tutorial
-
-This page will focus on showing you _how_ to use Redux the right way, and explain just enough of the concepts so that you can understand how to build Redux apps correctly.
-
 We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already:
 
 :::important Prerequisites
