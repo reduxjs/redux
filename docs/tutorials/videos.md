@@ -21,7 +21,7 @@ Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain
     title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
 />
 
-## RTK Query Basics: Query Endpoints, Data Flow and TypeScript 
+## RTK Query Basics: Query Endpoints, Data Flow and TypeScript
 
 A video course on RTK Query basics by Lenz Weber-Tronic, the creator of RTK Query.
 
