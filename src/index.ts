@@ -4,6 +4,7 @@ import combineReducers from './combineReducers'
 import bindActionCreators from './bindActionCreators'
 import applyMiddleware from './applyMiddleware'
 import compose from './compose'
+import isAction from './utils/isAction'
 import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 // types
@@ -42,5 +43,6 @@ export {
   bindActionCreators,
   applyMiddleware,
   compose,
+  isAction,
   __DO_NOT_USE__ActionTypes
 }
