@@ -5,6 +5,7 @@ import bindActionCreators from './bindActionCreators'
 import applyMiddleware from './applyMiddleware'
 import compose from './compose'
 import isAction from './utils/isAction'
+import isPlainObject from './utils/isPlainObject'
 import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 // types
@@ -44,5 +45,6 @@ export {
   applyMiddleware,
   compose,
   isAction,
+  isPlainObject,
   __DO_NOT_USE__ActionTypes
 }
