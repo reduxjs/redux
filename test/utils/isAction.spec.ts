@@ -1,4 +1,4 @@
-import { isAction } from 'redux'
+import isAction from '@internal/utils/isAction'
 
 describe('isAction', () => {
   it('should only return true for plain objects with a string type property', () => {
