@@ -44,6 +44,9 @@ jobs:
       - name: Install deps
         run: yarn install
 
+      - name: Lint
+        run: yarn lint
+
       - name: Build
         run: yarn build
 
