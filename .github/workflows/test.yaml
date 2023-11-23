@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['16.x']
+        node: ['18.x']
 
     steps:
       - name: Checkout repo
@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['16.x']
+        node: ['18.x']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -99,8 +99,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['16.x']
-        ts: ['4.7', '4.8', '4.9', '5.0']
+        node: ['18.x']
+        ts: ['4.7', '4.8', '4.9', '5.0', '5.1', '5.2', '5.3']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -140,7 +140,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['16.x']
+        node: ['18.x']
         example:
           [
             'cra4',
