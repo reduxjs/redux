@@ -69,11 +69,11 @@ const storeWithPreloadedState: Store<State> = createStore(reducer, {
   b: { c: 'c', d: 'd' },
   e: brandedString
 })
-// @ts-expect-error
-const storeWithBadPreloadedState: Store<State> = createStore(reducer, {
-  b: { c: 'c' },
-  e: brandedString
-})
+
+const storeWithBadPreloadedState: Store<State> =
+  // @ts-expect-error
+  // prettier-ignore
+  createStore(reducer, { b: { c: 'c' }, e: brandedString })
 
 const reducerA: Reducer<string> = (state = 'a') => state
 const reducerB: Reducer<{ c: string; d: string }> = (
@@ -91,14 +91,11 @@ const storeWithCombineReducer = createStore(combinedReducer, {
   b: { c: 'c', d: 'd' },
   e: brandedString
 })
-// @ts-expect-error
-const storeWithCombineReducerAndBadPreloadedState = createStore(
-  combinedReducer,
-  {
-    b: { c: 'c' },
-    e: brandedString
-  }
-)
+
+const storeWithCombineReducerAndBadPreloadedState =
+  // @ts-expect-error
+  // prettier-ignore
+  createStore( combinedReducer, { b: { c: 'c' }, e: brandedString  }  )
 
 const nestedCombinedReducer = combineReducers({
   a: (state: string = 'a') => state,
@@ -120,10 +117,10 @@ const simpleCombinedReducer = combineReducers({
   d: (state: string = 'd') => state
 })
 
-// @ts-expect-error
-const storeWithSimpleCombinedReducer = createStore(simpleCombinedReducer, {
-  c: 5
-})
+const storeWithSimpleCombinedReducer =
+  // @ts-expect-error
+  // prettier-ignore
+  createStore(simpleCombinedReducer, { c: 5 })
 
 // Note: It's not necessary that the errors occur on the lines specified, just as long as something errors somewhere
 // since the preloaded state doesn't match the reducer type.
@@ -133,11 +130,10 @@ const simpleCombinedReducerWithImplicitState = combineReducers({
   d: (state = 'd') => state
 })
 
-// @ts-expect-error
-const storeWithSimpleCombinedReducerWithImplicitState = createStore(
-  simpleCombinedReducerWithImplicitState,
-  { c: 5 }
-)
+const storeWithSimpleCombinedReducerWithImplicitState =
+  // @ts-expect-error
+  // prettier-ignore
+  createStore( simpleCombinedReducerWithImplicitState,  { c: 5 } )
 
 const storeWithActionReducer = createStore(reducerWithAction)
 const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
@@ -148,14 +144,10 @@ const storeWithActionReducerAndPreloadedState = createStore(reducerWithAction, {
 funcWithStore(storeWithActionReducer)
 funcWithStore(storeWithActionReducerAndPreloadedState)
 
-// @ts-expect-error
-const storeWithActionReducerAndBadPreloadedState = createStore(
-  reducerWithAction,
-  {
-    b: { c: 'c' },
-    e: brandedString
-  }
-)
+const storeWithActionReducerAndBadPreloadedState =
+  // @ts-expect-error
+  // prettier-ignore
+  createStore( reducerWithAction,  {   b: { c: 'c' },  e: brandedString  } )
 
 const enhancer: StoreEnhancer = next => next
 
