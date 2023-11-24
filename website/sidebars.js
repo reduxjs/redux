@@ -51,6 +51,7 @@ module.exports = {
         collapsed: false,
         items: [
           'usage/configuring-your-store',
+          'usage/nextjs',
           'usage/code-splitting',
           'usage/server-rendering',
           'usage/isolating-redux-sub-apps'
