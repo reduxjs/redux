@@ -5,8 +5,8 @@ Redux is a predictable state container for JavaScript apps.
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
-You can use Redux together with [React](https://reactjs.org), or with any other view library.
-It is tiny (2kB, including dependencies), and has a rich ecosystem of addons.
+You can use Redux together with [React](https://react.dev), or with any other view library.
+The Redux core tiny (2kB, including dependencies), and has a rich ecosystem of addons.
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reduxjs/redux/test.yaml?branch=master&event=push&style=flat-square)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
