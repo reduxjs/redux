@@ -9,11 +9,31 @@ description: 'API > combineReducers: merging slice reducers to create combined s
 
 # `combineReducers(reducers)`
 
-As your app grows more complex, you'll want to split your [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../understanding/thinking-in-redux/Glossary.md#state).
+## Overview
 
-The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
+The `combineReducers` helper function turns an object whose values are different "slice reducer" functions into a single combined reducer function you can pass to Redux Toolkit's [`configureStore`](https://redux-toolkit.js.org/api/configureStore) (or the legacy [`createStore`](createStore.md) method)
 
-The resulting reducer calls every child reducer, and gathers their results into a single state object.
+The resulting combined reducer calls every slice reducer any time an action is dispatched, and gathers their results into a single state object. This enables splitting up reducer logic into separate functions, each managing their own slice of the state independently.
+
+:::tip
+
+This should be rarely needed - Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore) will automatically call `combineReducers` for you if you pass in an object of slice reducers:
+
+```ts
+const store = configureStore({
+  reducer: {
+    posts: postsReducer,
+    comments: commentsReducer
+  }
+})
+```
+
+You can still call `combineReducers()` yourself if you need to construct the root reducer manually first.
+
+:::
+
+### State Slices
+
 **The state produced by `combineReducers()` namespaces the states of each reducer under their keys as passed to `combineReducers()`**
 
 Example:
@@ -33,23 +53,24 @@ rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 
 You can control state key names by using different keys for the reducers in the passed object. For example, you may call `combineReducers({ todos: myTodosReducer, counter: myCounterReducer })` for the state shape to be `{ todos, counter }`.
 
-A popular convention is to name reducers after the state slices they manage, so you can use ES6 property shorthand notation: `combineReducers({ counter, todos })`. This is equivalent to writing `combineReducers({ counter: counter, todos: todos })`.
+## Arguments
 
-> ##### A Note for Flux Users
->
-> This function helps you organize your reducers to manage their own slices of state, similar to how you would have different Flux Stores to manage different state. With Redux, there is just one store, but `combineReducers` helps you keep the same logical division between reducers.
+1. `reducers` (_Object_): An object whose values correspond to different reducing functions that need to be combined into one.
 
-#### Arguments
+```ts
+combineReducers({
+  posts: postsReducer,
+  comments: commentsReducer
+})
+```
 
-1. `reducers` (_Object_): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
+See the notes below for some rules every passed reducer must follow.
 
-> Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend exporting a single reducer obtained using `combineReducers()` from `reducers/index.js` instead. An example is included below.
-
-#### Returns
+### Returns
 
 (_Function_): A reducer that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
 
-#### Notes
+## Notes
 
 This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don't have to follow if you write the root reducer manually.
 
@@ -63,7 +84,7 @@ Any reducer passed to `combineReducers` must satisfy these rules:
 
 While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them. `combineReducers` will check your reducers by passing `undefined` to them; this is done even if you specify initial state to `Redux.createStore(combineReducers(...), initialState)`. Therefore, you **must** ensure your reducers work properly when receiving `undefined` as state, even if you never intend for them to actually receive `undefined` in your own code.
 
-#### Example
+## Example
 
 #### `reducers/todos.js`
 
@@ -130,8 +151,8 @@ console.log(store.getState())
 // }
 ```
 
-#### Tips
+## Tips
 
-- This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
+- This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/redux-utilities/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
 
 - You may call `combineReducers` at any level of the reducer hierarchy. It doesn't have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.

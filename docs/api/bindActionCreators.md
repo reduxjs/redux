@@ -9,6 +9,8 @@ description: 'API > bindActionCreators: wrapping action creators for dispatching
 
 # `bindActionCreators(actionCreators, dispatch)`
 
+## Overview
+
 Turns an object whose values are [action creators](../understanding/thinking-in-redux/Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatchaction) call so they may be invoked directly.
 
 Normally you should just call [`dispatch`](Store.md#dispatchaction) directly on your [`Store`](Store.md) instance. If you use Redux with React, [react-redux](https://github.com/gaearon/react-redux) will provide you with the [`dispatch`](Store.md#dispatchaction) function so you can call it directly, too.
@@ -17,17 +19,23 @@ The only use case for `bindActionCreators` is when you want to pass some action 
 
 For convenience, you can also pass an action creator as the first argument, and get a dispatch wrapped function in return.
 
-#### Parameters
+:::warning Warning
+
+This was originally intended for use with the legacy React-Redux `connect` method. It still works, but is rarely needed.
+
+:::
+
+## Parameters
 
 1. `actionCreators` (_Function_ or _Object_): An [action creator](../understanding/thinking-in-redux/Glossary.md#action-creator), or an object whose values are action creators.
 
 2. `dispatch` (_Function_): A [`dispatch`](Store.md#dispatchaction) function available on the [`Store`](Store.md) instance.
 
-#### Returns
+### Returns
 
 (_Function_ or _Object_): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
 
-#### Example
+## Example
 
 #### `TodoActionCreators.js`
 
@@ -103,9 +111,3 @@ function TodoListContainer(props) {
 
 export default connect(state => ({ todos: state.todos }))(TodoListContainer)
 ```
-
-#### Tips
-
-- You might ask: why don't we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won't work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you're stuck with a single store instance for all requests.
-
-- If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` properties are functions. The module system doesn't matter.

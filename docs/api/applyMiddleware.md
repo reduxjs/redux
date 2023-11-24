@@ -9,21 +9,31 @@ description: 'API > applyMiddleware: extending the Redux store'
 
 # `applyMiddleware(...middleware)`
 
+## Overview
+
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store's [`dispatch`](Store.md#dispatchaction) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
+
+:::warning Warning
+
+You shouldn't have to call `applyMiddleware` directly. Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore) automatically adds a default set of middleware to the store, or can accept a list of middleware to add.
+
+:::
 
 The most common use case for middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [async actions](../understanding/thinking-in-redux/Glossary.md#async-action) in addition to normal actions.
 
 For example, [redux-thunk](https://github.com/reduxjs/redux-thunk) lets the action creators invert control by dispatching functions. They would receive [`dispatch`](Store.md#dispatchaction) as an argument and may call it asynchronously. Such functions are called _thunks_. Another example of middleware is [redux-promise](https://github.com/acdlite/redux-promise). It lets you dispatch a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) async action, and dispatches a normal action when the Promise resolves.
 
-Middleware is not baked into [`createStore`](createStore.md) and is not a fundamental part of the Redux architecture, but we consider it useful enough to be supported right in the core. This way, there is a single standard way to extend [`dispatch`](Store.md#dispatchaction) in the ecosystem, and different middleware may compete in expressiveness and utility.
+The original Redux [`createStore`](createStore.md) method does not understand what middleware are out of the box - it has to be configured with `applyMiddleware` to add that behavior. However, Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore) automatically adds middleware support by default.
 
-#### Arguments
+## Arguments
 
 - `...middleware` (_arguments_): Functions that conform to the Redux _middleware API_. Each middleware receives [`Store`](Store.md)'s [`dispatch`](Store.md#dispatchaction) and [`getState`](Store.md#getState) functions as named arguments, and returns a function. That function will be given the `next` middleware's dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real store's [`dispatch`](Store.md#dispatchaction) method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
 
-#### Returns
+### Returns
 
 (_Function_) A store enhancer that applies the given middleware. The store enhancer signature is `createStore => createStore` but the easiest way to apply it is to pass it to [`createStore()`](./createStore.md) as the last `enhancer` argument.
+
+## Examples
 
 #### Example: Custom Logger Middleware
 
@@ -191,7 +201,7 @@ export default connect(state => ({
 }))(SandwichShop)
 ```
 
-#### Tips
+## Tips
 
 - Middleware only wraps the store's [`dispatch`](Store.md#dispatchaction) function. Technically, anything a middleware can do, you can do manually by wrapping every `dispatch` call, but it's easier to manage this in a single place and define action transformations on the scale of the whole project.
 
