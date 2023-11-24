@@ -4,7 +4,6 @@ import { useLocation } from '@docusaurus/router'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import styles from './styles.module.css'
 import errorCodes from '../../../errors.json'
-import 'url-search-params-polyfill'
 
 function Errors() {
   const location = useLocation()
