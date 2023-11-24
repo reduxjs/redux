@@ -7,12 +7,26 @@ description: 'API > createStore: creating a core Redux store'
 
 &nbsp;
 
-# `createStore(reducer, [preloadedState], [enhancer])`
+# `createStore(reducer, preloadedState?, enhancer?)`
 
 Creates a Redux [store](Store.md) that holds the complete state tree of your app.
 There should only be a single store in your app.
 
-#### Arguments
+:::danger
+
+**The original Redux core `createStore` method is deprecated!**
+
+`createStore` will continue to work indefinitely, but we discourage direct use of `createStore` or the original `redux` package.
+
+Instead, you should use [the `configureStore` method](https://redux-toolkit.js.org/api/configureStore) from our official [Redux Toolkit](https://redux-toolkit.js.org) package, which wraps `createStore` to provide a better default setup and configuration approach. You should also use Redux Toolkit's [`createSlice` method](https://redux-toolkit.js.org/api/createSlice) for writing reducer logic.
+
+Redux Toolkit also re-exports all of the other APIs included in the `redux` package as well.
+
+See the [**Migrating to Modern Redux** page](../usage/migrating-to-modern-redux.mdx) for details on how to update your existing legacy Redux codebase to use Redux Toolkit.
+
+:::
+
+## Arguments
 
 1. `reducer` _(Function)_: A [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) that returns the next [state tree](../understanding/thinking-in-redux/Glossary.md#state), given the current state tree and an [action](../understanding/thinking-in-redux/Glossary.md#action) to handle.
 
@@ -49,7 +63,21 @@ console.log(store.getState())
 // [ 'Use Redux', 'Read the docs' ]
 ```
 
-#### Tips
+## Deprecation and Alternate `legacy_createStore` Export
+
+In [Redux 4.2.0, we marked the original `createStore` method as `@deprecated`](https://github.com/reduxjs/redux/releases/tag/v4.2.0). Strictly speaking, **this is _not_ a breaking change**, nor is it new in 5.0, but we're documenting it here for completeness.
+
+**This deprecation is solely a _visual_ indicator that is meant to encourage users to [migrate their apps from legacy Redux patterns to use the modern Redux Toolkit APIs](https://redux.js.org/usage/migrating-to-modern-redux)**. The deprecation results in a visual strikethrough when imported and used, like ~~`createStore`~~, but with _no_ runtime errors or warnings.
+
+**`createStore` will continue to work indefinitely, and will _not_ ever be removed**. But, today we want _all_ Redux users to be using Redux Toolkit for all of their Redux logic.
+
+To fix this, there are three options:
+
+- **[Follow our strong suggestion to switch over to Redux Toolkit and `configureStore`](../usage/migrating-to-modern-redux.mdx)**
+- Do nothing. It's just a visual strikethrough, and it doesn't affect how your code behaves. Ignore it.
+- Switch to using the `legacy_createStore` API that is now exported, which is the exact same function but with no `@deprecated` tag. The simplest option is to do an aliased import rename, like `import { legacy_createStore as createStore } from 'redux'`
+
+## Tips
 
 - Don't create more than one store in an application! Instead, use [`combineReducers`](combineReducers.md) to create a single root reducer out of many.
 
