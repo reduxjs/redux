@@ -51,10 +51,18 @@ module.exports = {
         collapsed: false,
         items: [
           'usage/configuring-your-store',
-          'usage/migrating-to-modern-redux',
           'usage/code-splitting',
           'usage/server-rendering',
           'usage/isolating-redux-sub-apps'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Migrations',
+        collapsed: false,
+        items: [
+          'usage/migrating-to-modern-redux',
+          'usage/migrations/migrating-rtk-2'
         ]
       },
       {
