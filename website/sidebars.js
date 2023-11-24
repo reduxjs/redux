@@ -141,7 +141,8 @@ module.exports = {
       'api/combinereducers',
       'api/applymiddleware',
       'api/bindactioncreators',
-      'api/compose'
+      'api/compose',
+      { type: 'link', label: 'Error Messages', href: '/errors' }
     ],
     'Redux Toolkit': ['redux-toolkit/overview']
   }
