@@ -8,6 +8,17 @@ description: 'Introduction > Prior Art: Influences on the design of Redux'
 
 Redux has a mixed heritage. It is similar to some patterns and technologies, but is also different from them in important ways. We'll explore some of the similarities and the differences below.
 
+## Developer Experience
+
+Dan Abramov (author of Redux) wrote Redux while working on his React Europe talk called [“Hot Reloading with Time Travel”](https://www.youtube.com/watch?v=xsSnOQynTHs). His goal was to create a state management library with a minimal API but completely predictable behavior. Redux makes it possible to implement logging, hot reloading, time travel, universal apps, record and replay, without any buy-in from the developer.
+
+Dan talked about some of his intent and approach in [Changelog episode 187](https://changelog.com/187).
+
+## Influences
+
+Redux evolves the ideas of [Flux](https://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
+Even if you haven't used Flux or Elm, Redux only takes a few minutes to get started with.
+
 ### Flux
 
 Redux was inspired by several important qualities of [Flux](https://facebook.github.io/flux/). Like Flux, Redux prescribes that you concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called an “action”.
@@ -67,3 +78,39 @@ Similarly, you can compose different asynchronous streams to turn them into acti
 The question is: do you really need Redux if you already use Rx? Maybe not. It's not hard to [re-implement Redux in Rx](https://github.com/jas-chen/rx-redux). Some say it's a two-liner using Rx `.scan()` method. It may very well be!
 
 If you're in doubt, check out the Redux source code (there isn't much going on there), as well as its ecosystem (for example, [the developer tools](https://github.com/reduxjs/redux-devtools)). If you don't care too much about it and want to go with the reactive data flow all the way, you might want to explore something like [Cycle](https://cycle.js.org) instead, or even combine it with Redux. Let us know how it goes!
+
+## Testimonials
+
+> [“Love what you're doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
+> Jing Chen, creator of Flux
+
+> [“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
+> Bill Fisher, author of Flux documentation
+
+> [“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
+> André Staltz, creator of Cycle
+
+## Thanks
+
+- [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) for a great intro to modeling state updates with reducers;
+- [Turning the database inside-out](https://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) for blowing my mind;
+- [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) for convincing me that re-evaluation should “just work”;
+- [Webpack](https://webpack.js.org/concepts/hot-module-replacement/) for Hot Module Replacement;
+- [Flummox](https://github.com/acdlite/flummox) for teaching me to approach Flux without boilerplate or singletons;
+- [disto](https://github.com/threepointone/disto) for a proof of concept of hot reloadable Stores;
+- [NuclearJS](https://github.com/optimizely/nuclear-js) for proving this architecture can be performant;
+- [Om](https://github.com/omcljs/om) for popularizing the idea of a single state atom;
+- [Cycle](https://github.com/cyclejs/cycle-core) for showing how often a function is the best tool;
+- [React](https://github.com/facebook/react) for the pragmatic innovation.
+
+Special thanks to [Jamie Paton](https://jdpaton.github.io) for handing over the `redux` NPM package name.
+
+## Patrons
+
+The original work on Redux was [funded by the community](https://www.patreon.com/reactdx).
+Meet some of the outstanding companies that made it possible:
+
+- [Webflow](https://github.com/webflow)
+- [Ximedes](https://www.ximedes.com/)
+
+[See the full list of Redux patrons](<[PATRONS.md](https://github.com/reduxjs/redux/blob/master/PATRONS.md)>), as well as the always-growing list of [people and companies that use Redux](https://github.com/reduxjs/redux/issues/310).
