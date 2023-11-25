@@ -452,7 +452,7 @@ JavaScript was never designed to provide guaranteed immutable operations. Accord
 
 With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new _reference_ to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
 
-To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](../usage/structuring-reducers/ImmutableUpdatePatterns.md).
+To avoid these issues, ensure you follow the recommended [immutable update patterns for ES2015](../usage/structuring-reducers/ImmutableUpdatePatterns.md).
 
 ### Verbose Code
 
@@ -470,7 +470,7 @@ In contrast, immutable libraries such as Immer can employ structural sharing, wh
 
 **Documentation**
 
-- [Immutable Update Patterns for ES6](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
+- [Immutable Update Patterns for ES2015](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
 
 **Articles**
 

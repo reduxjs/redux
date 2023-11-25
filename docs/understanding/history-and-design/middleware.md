@@ -217,7 +217,7 @@ function logger(store) {
 }
 ```
 
-It's a [“we need to go deeper”](https://knowyourmeme.com/memes/we-need-to-go-deeper) kind of moment, so it might take a while for this to make sense. The function cascade feels intimidating. ES6 arrow functions make this [currying](https://en.wikipedia.org/wiki/Currying) easier on eyes:
+It's a [“we need to go deeper”](https://knowyourmeme.com/memes/we-need-to-go-deeper) kind of moment, so it might take a while for this to make sense. The function cascade feels intimidating. Arrow functions make this [currying](https://en.wikipedia.org/wiki/Currying) easier on eyes:
 
 ```js
 const logger = store => next => action => {

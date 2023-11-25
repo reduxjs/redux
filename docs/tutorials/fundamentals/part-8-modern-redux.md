@@ -801,7 +801,7 @@ export const selectFilteredTodoIds = createSelector(
 )
 ```
 
-We call `todosAdapter.getSelectors`, and pass in a `state => state.todos` selector that returns this slice of state. From there, the adapter generates a `selectAll` selector that takes the _entire_ Redux state tree, as usual, and loops over `state.todos.entities` and `state.todos.ids` to give us the complete array of todo objects. Since `selectAll` doesn't tell us _what_ we're selecting, we can use ES6 destructuring syntax to rename the function to `selectTodos`. Similarly, we can rename `selectById` to `selectTodoById`.
+We call `todosAdapter.getSelectors`, and pass in a `state => state.todos` selector that returns this slice of state. From there, the adapter generates a `selectAll` selector that takes the _entire_ Redux state tree, as usual, and loops over `state.todos.entities` and `state.todos.ids` to give us the complete array of todo objects. Since `selectAll` doesn't tell us _what_ we're selecting, we can use ES2015 destructuring syntax to rename the function to `selectTodos`. Similarly, we can rename `selectById` to `selectTodoById`.
 
 Notice that our other selectors still use `selectTodos` as an input. That's because it's still returning an array of todo objects this whole time, no matter whether we were keeping the array as the entire `state.todos`, keeping it as a nested array, or storing it as a normalized object and converting to an array. Even as we've made all these changes to how we stored our data, the use of selectors allowed us to keep the rest of our code the same, and the use of memoized selectors has helped the UI perform better by avoiding unnecessary rerenders.
 

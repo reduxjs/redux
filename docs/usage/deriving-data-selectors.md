@@ -379,7 +379,7 @@ While Reselect is the most widely used selector library with Redux, there are ma
 
 ### `proxy-memoize`
 
-`proxy-memoize` is a relatively new memoized selector library that uses a unique implementation approach. It relies on ES6 `Proxy` objects to track attempted reads of nested values, then compares only the nested values on later calls to see if they've changed. This can provide better results than Reselect in some cases.
+`proxy-memoize` is a relatively new memoized selector library that uses a unique implementation approach. It relies on ES2015 `Proxy` objects to track attempted reads of nested values, then compares only the nested values on later calls to see if they've changed. This can provide better results than Reselect in some cases.
 
 A good example of this is a selector that derives an array of todo descriptions:
 
@@ -411,7 +411,7 @@ It also has a built-in `size` option, which lets you set the desired cache size 
 It has some tradeoffs and differences from Reselect:
 
 - All values are passed in as a single object argument
-- It requires that the environment supports ES6 `Proxy` objects (no IE11)
+- It requires that the environment supports ES2015 `Proxy` objects (no IE11)
 - It's more magical, whereas Reselect is more explicit
 - There are some edge cases regarding the `Proxy`-based tracking behavior
 - It's newer and less widely used
