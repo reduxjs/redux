@@ -44,7 +44,7 @@ This repo uses Yarn 3 for all package management. Please ensure that Yarn 1.x is
 
 #### Building Redux
 
-Running the `build` task will create a CommonJS module-per-module build, a ES Modules build and a UMD build.
+Running the `build` task will build the artifacts into the `./dist` folder
 
 ```sh
 yarn build

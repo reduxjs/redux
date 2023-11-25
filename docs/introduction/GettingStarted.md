@@ -69,7 +69,7 @@ npm install redux
 yarn add redux
 ```
 
-It is also available as a precompiled UMD package that defines a `window.Redux` global variable. The UMD package can be used as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) directly.
+The package includes a precompiled ESM build that can be used as a [`<script type="module">` tag](https://unpkg.com/redux/dist/redux.browser.mjs) directly in the browser.
 
 For more details, see the [Installation](Installation.md) page.
 
