@@ -57,7 +57,7 @@ It's important to remember that whenever you update a nested value, you must als
 Note that “updating data immutably” does _not_ mean that you must use [Immer](https://github.com/immerjs/immer), although that is certainly an option. You can do immutable updates to plain JS objects and arrays using several different approaches:
 
 - Copying objects using functions like `Object.assign()` or `_.extend()`, and array functions such as `slice()` and `concat()`
-- The array spread operator in ES6, and the similar object spread operator that is proposed for a future version of JavaScript
+- The array spread operator in ES2015, and the similar object spread operator from ES2018
 - Utility libraries that wrap immutable update logic into simpler functions
 
 #### Further information

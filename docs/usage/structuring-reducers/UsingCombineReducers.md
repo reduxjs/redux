@@ -26,9 +26,9 @@ There are several important ideas to be aware of when using `combineReducers`:
 
 There are two ways to define the initial shape and contents of your store's state. First, the `createStore` function can take `preloadedState` as its second argument. This is primarily intended for initializing the store with state that was previously persisted elsewhere, such as the browser's localStorage. The other way is for the root reducer to return the initial state value when the state argument is `undefined`. These two approaches are described in more detail in [Initializing State](./InitializingState.md), but there are some additional concerns to be aware of when using `combineReducers`.
 
-`combineReducers` takes an object full of slice reducer functions, and creates a function that outputs a corresponding state object with the same keys. This means that if no preloaded state is provided to `createStore`, the naming of the keys in the input slice reducer object will define the naming of the keys in the output state object. The correlation between these names is not always apparent, especially when using ES6 features such as default module exports and object literal shorthands.
+`combineReducers` takes an object full of slice reducer functions, and creates a function that outputs a corresponding state object with the same keys. This means that if no preloaded state is provided to `createStore`, the naming of the keys in the input slice reducer object will define the naming of the keys in the output state object. The correlation between these names is not always apparent, especially when using features such as default module exports and object literal shorthands.
 
-Here's an example of how use of ES6 object literal shorthand with `combineReducers` can define the state shape:
+Here's an example of how use of object literal shorthand with `combineReducers` can define the state shape:
 
 ```js
 // reducers.js
@@ -46,7 +46,7 @@ import theDefaultReducer, {
   secondNamedReducer
 } from './reducers'
 
-// Use ES6 object literal shorthand syntax to define the object shape
+// Use object literal shorthand syntax to define the object shape
 const rootReducer = combineReducers({
   theDefaultReducer,
   firstNamedReducer,
@@ -58,7 +58,7 @@ console.log(store.getState())
 // {theDefaultReducer : 0, firstNamedReducer : 1, secondNamedReducer : 2}
 ```
 
-Notice that because we used the ES6 shorthand for defining an object literal, the key names in the resulting state are the same as the variable names from the imports. This may not always be the desired behavior, and is often a cause of confusion for those who aren't as familiar with ES6 syntax.
+Notice that because we used the shorthand for defining an object literal, the key names in the resulting state are the same as the variable names from the imports. This may not always be the desired behavior, and is often a cause of confusion for those who aren't as familiar with modern JS syntax.
 
 Also, the resulting names are a bit odd. It's generally not a good practice to actually include words like "reducer" in your state key names - the keys should simply reflect the domain or type of data they hold. This means we should either explicitly specify the names of the keys in the slice reducer object to define the keys in the output state object, or carefully rename the variables for the imported slice reducers to set up the keys when using the shorthand object literal syntax.
 

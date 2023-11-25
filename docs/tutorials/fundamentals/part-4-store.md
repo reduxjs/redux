@@ -449,7 +449,7 @@ You can give these middleware functions any names you want, but it can help to u
 
 :::
 
-Because these are normal functions, we can also write them using ES6 arrow functions. This lets us write them shorter because arrow functions don't have to have a `return` statement, but it can also be a bit harder to read if you're not yet familiar with arrow functions and implicit returns.
+Because these are normal functions, we can also write them using ES2015 arrow functions. This lets us write them shorter because arrow functions don't have to have a `return` statement, but it can also be a bit harder to read if you're not yet familiar with arrow functions and implicit returns.
 
 Here's the same example as above, using arrow functions:
 

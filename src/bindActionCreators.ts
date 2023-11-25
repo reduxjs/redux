@@ -21,7 +21,7 @@ function bindActionCreator<A extends Action>(
  * and get a dispatch wrapped function in return.
  *
  * @param actionCreators An object whose values are action
- * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * creator functions. One handy way to obtain it is to use `import * as`
  * syntax. You may also pass a single function.
  *
  * @param dispatch The `dispatch` function available on your Redux

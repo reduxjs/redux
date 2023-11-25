@@ -51,10 +51,19 @@ module.exports = {
         collapsed: false,
         items: [
           'usage/configuring-your-store',
-          'usage/migrating-to-modern-redux',
+          'usage/nextjs',
           'usage/code-splitting',
           'usage/server-rendering',
           'usage/isolating-redux-sub-apps'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Migrations',
+        collapsed: false,
+        items: [
+          'usage/migrating-to-modern-redux',
+          'usage/migrations/migrating-rtk-2'
         ]
       },
       {
@@ -141,7 +150,9 @@ module.exports = {
       'api/combinereducers',
       'api/applymiddleware',
       'api/bindactioncreators',
-      'api/compose'
+      'api/compose',
+      'api/utils',
+      { type: 'link', label: 'Error Messages', href: '/errors' }
     ],
     'Redux Toolkit': ['redux-toolkit/overview']
   }

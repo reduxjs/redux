@@ -7,21 +7,11 @@ description: 'API > Store: the core Redux store methods'
 # Store
 
 A store holds the whole [state tree](../understanding/thinking-in-redux/Glossary.md#state) of your application.
-The only way to change the state inside it is to dispatch an [action](../understanding/thinking-in-redux/Glossary.md#action) on it.
+The only way to change the state inside it is to dispatch an [action](../understanding/thinking-in-redux/Glossary.md#action) on it, which triggers the [root reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to calculate the new state.
 
 A store is not a class. It's just an object with a few methods on it.
-To create it, pass your root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) to [`createStore`](createStore.md).
 
-> ##### A Note for Flux Users
->
-> If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
-
-### Store Methods
-
-- [`getState()`](#getstate)
-- [`dispatch(action)`](#dispatchaction)
-- [`subscribe(listener)`](#subscribelistener)
-- [`replaceReducer(nextReducer)`](#replacereducernextreducer)
+To create a store, **pass your root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore)**, which will set up a Redux store with a good default configuration. (Alternately, if you're not yet using Redux Toolkit, you can use the original [`createStore`](createStore.md) method, but we encourage you to [migrate your code to use Redux Toolkit](../usage/migrating-to-modern-redux.mdx) as soon as possible)
 
 ## Store Methods
 
@@ -42,13 +32,15 @@ _(any)_: The current state tree of your application.
 
 Dispatches an action. This is the only way to trigger a state change.
 
-The store's reducing function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
+The store's reducer function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
 
-> ##### A Note for Flux Users
->
-> If you attempt to call `dispatch` from inside the [reducer](../understanding/thinking-in-redux/Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
->
-> In Redux, subscriptions are called after the root reducer has returned the new state, so you _may_ dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../understanding/thinking-in-redux/Glossary.md#action-creator).
+:::caution
+
+If you attempt to call `dispatch` from inside the [reducer](../understanding/thinking-in-redux/Glossary.md#reducer), it will throw with an error saying "Reducers may not dispatch actions." Reducers are pure functions - they can _only_ return a new state value and must not have side effects (and dispatching is a side effect).
+
+In Redux, subscriptions are called after the root reducer has returned the new state, so you _may_ dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../understanding/thinking-in-redux/Glossary.md#action-creator).
+
+:::
 
 #### Arguments
 

@@ -272,7 +272,7 @@ export default function appReducer(state = initialState, action) {
 }
 ```
 
-A reducer may be called with `undefined` as the state value when the application is being initialized. If that happens, we need to provide an initial state value so the rest of the reducer code has something to work with. **Reducers normally use ES6 default argument syntax to provide initial state: `(state = initialState, action)`**.
+A reducer may be called with `undefined` as the state value when the application is being initialized. If that happens, we need to provide an initial state value so the rest of the reducer code has something to work with. **Reducers normally use default argument syntax to provide initial state: `(state = initialState, action)`**.
 
 Next, let's add the logic to handle the `'todos/todoAdded'` action.
 

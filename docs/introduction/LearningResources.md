@@ -341,7 +341,7 @@ _Patterns and practices for structuring larger Redux applications_
 
 - **Modern React with Redux, by Stephen Grider (paid)** <br/>
   https://www.udemy.com/react-redux/ <br/>
-  Master the fundamentals of React and Redux with this tutorial as you develop apps with React Router, Webpack, and ES6. This course will get you up and running quickly, and teach you the core knowledge you need to deeply understand and build React components and structure applications with Redux.
+  Master the fundamentals of React and Redux with this tutorial as you develop apps with React Router, Webpack, and ES2015. This course will get you up and running quickly, and teach you the core knowledge you need to deeply understand and build React components and structure applications with Redux.
 
 - **Redux, by Tyler McGinnis (paid)** <br/>
   https://tylermcginnis.com/courses/redux/ <br/>
@@ -353,7 +353,7 @@ _Patterns and practices for structuring larger Redux applications_
 
 ## More Resources
 
-- [React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES6, and more.
+- [React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES2015, and more.
 - [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) is a categorized collection of Redux-related libraries, addons, and utilities.
 - [Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
 - [DEV Community](https://dev.to/t/redux) is a place to share Redux projects, articles and tutorials as well as start discussions and ask for feedback on Redux-related topics. Developers of all skill-levels are welcome to take part.

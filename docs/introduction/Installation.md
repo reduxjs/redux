@@ -20,7 +20,7 @@ npm install @reduxjs/toolkit
 yarn add @reduxjs/toolkit
 ```
 
-It's also available as a UMD build, which can be loaded from [the `dist` folder on unpkg](https://unpkg.com/@reduxjs/toolkit/dist/). The UMD builds make Redux Toolkit available as a `window.RTK` global variable.
+The package includes a precompiled ESM build that can be used as a [`<script type="module">` tag](https://unpkg.com/redux/dist/redux.browser.mjs) directly in the browser.
 
 ## Complementary Packages
 

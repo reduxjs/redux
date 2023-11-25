@@ -237,7 +237,7 @@ As mentioned in [Reducers Should Own the State Shape](#reducers-should-own-the-s
 The key names in the object passed to `combineReducers` will define the names of the keys in the resulting state object. Be sure to name these keys after the data that is kept inside, and avoid use of the word "reducer" in the key names. Your object should look like `{users: {}, posts: {}}`, rather than `{usersReducer: {}, postsReducer: {}}`.
 
 <DetailedExplanation>
-ES6 object literal shorthand makes it easy to define a key name and a value in an object at the same time:
+Object literal shorthand makes it easy to define a key name and a value in an object at the same time:
 
 ```js
 const data = 42

@@ -11726,7 +11726,6 @@ __metadata:
     react-redux: ^8.0.2
     remark-typescript-tools: ^1.0.11
     typescript: ~4.7
-    url-search-params-polyfill: ^8.1.0
   languageName: unknown
   linkType: soft
 
@@ -13122,13 +13121,6 @@ __metadata:
   dependencies:
     prepend-http: ^2.0.0
   checksum: 1040e357750451173132228036aff1fd04abbd43eac1fb3e4fca7495a078bcb8d33cb765fe71ad7e473d9c94d98fd67adca63bd2716c815a2da066198dd37217
-  languageName: node
-  linkType: hard
-
-"url-search-params-polyfill@npm:^8.1.0":
-  version: 8.2.5
-  resolution: "url-search-params-polyfill@npm:8.2.5"
-  checksum: 6791c3e2d62d415a6ca7d12c0c679c8621e918726ea82407a3cb9fd149060bdf2c17193a7623ac983551eeba34f987e465822f69364d1fd442e7983aea4d568e
   languageName: node
   linkType: hard
 

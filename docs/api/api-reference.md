@@ -5,44 +5,41 @@ title: API Reference
 
 # API Reference
 
-The Redux API surface is tiny. Redux defines a set of contracts for you to implement (such as [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
+This section documents the original Redux core API. The Redux core is small - it defines a set of contracts for you to implement (such as [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
 
-This section documents the complete Redux API. Keep in mind that Redux is only concerned with managing the state. In a real app, you'll also want to use UI bindings like [react-redux](https://github.com/gaearon/react-redux).
+**In practice, you won't use the Redux core directly**. [**Redux Toolkit**](https://redux-toolkit.js.org) is our official recommended approach for writing Redux logic. It wraps around the Redux core, and contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications. Additionally, [**React-Redux**](https://react-redux.js.org) lets your React components talk to the Redux store.
 
-### Top-Level Exports
+See their API docs here:
 
-- [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
+- https://redux-toolkit.js.org/
+- https://react-redux.js.org/
+
+:::danger
+
+**The original Redux core `createStore` method is deprecated!**
+
+`createStore` will continue to work indefinitely, but we discourage direct use of `createStore` or the original `redux` package.
+
+Instead, you should use [the `configureStore` method](https://redux-toolkit.js.org/api/configureStore) from our official [Redux Toolkit](https://redux-toolkit.js.org) package, which wraps `createStore` to provide a better default setup and configuration approach. You should also use Redux Toolkit's [`createSlice` method](https://redux-toolkit.js.org/api/createSlice) for writing reducer logic.
+
+Redux Toolkit also re-exports all of the other APIs included in the `redux` package as well.
+
+See the [**Migrating to Modern Redux** page](../usage/migrating-to-modern-redux.mdx) for details on how to update your existing legacy Redux codebase to use Redux Toolkit.
+
+:::
+
+## Top-Level Exports
+
+- [createStore(reducer, preloadedState?, enhancer?)](createStore.md)
 - [combineReducers(reducers)](combineReducers.md)
 - [applyMiddleware(...middlewares)](applyMiddleware.md)
 - [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
 - [compose(...functions)](compose.md)
 
-### Store API
+## Store API
 
 - [Store](Store.md)
   - [getState()](Store.md#getState)
   - [dispatch(action)](Store.md#dispatchaction)
   - [subscribe(listener)](Store.md#subscribelistener)
   - [replaceReducer(nextReducer)](Store.md#replacereducernextreducer)
-
-### Importing
-
-Every function described above is a top-level export. You can import any of them like this:
-
-#### ES6
-
-```js
-import { createStore } from 'redux'
-```
-
-#### ES5 (CommonJS)
-
-```js
-var createStore = require('redux').createStore
-```
-
-#### ES5 (UMD build)
-
-```js
-var createStore = Redux.createStore
-```

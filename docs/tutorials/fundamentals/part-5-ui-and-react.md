@@ -99,8 +99,6 @@ The official [**React-Redux UI bindings library**](https://react-redux.js.org) i
 npm install react-redux
 ```
 
-(If you don't use npm, you may grab the latest UMD build from unpkg (either a [development](https://unpkg.com/react-redux@latest/dist/react-redux.js) or a [production](https://unpkg.com/react-redux@latest/dist/react-redux.min.js) build). The UMD build exports a global called `window.ReactRedux` if you add it to your page via a `<script>` tag.)
-
 For this tutorial, we'll cover the most important patterns and examples you need to use React and Redux together, and see how they work in practice as part of our todo app.
 
 :::info

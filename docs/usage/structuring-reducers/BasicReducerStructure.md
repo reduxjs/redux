@@ -36,7 +36,7 @@ function counter(state, action) {
 
 Notice that this simple function fulfills all the basic requirements. It returns a default value if none exists, initializing the store; it determines what sort of update needs to be done based on the type of the action, and returns new values; and it returns the previous state if no work needs to be done.
 
-There are some simple tweaks that can be made to this reducer. First, repeated `if`/`else` statements quickly grow tiresome, so it's very common to use `switch` statements instead. Second, we can use ES6's default parameter values to handle the initial "no existing data" case. With those changes, the reducer would look like:
+There are some simple tweaks that can be made to this reducer. First, repeated `if`/`else` statements quickly grow tiresome, so it's very common to use `switch` statements instead. Second, we can use default parameter values to handle the initial "no existing data" case. With those changes, the reducer would look like:
 
 ```js
 function counter(state = 0, action) {

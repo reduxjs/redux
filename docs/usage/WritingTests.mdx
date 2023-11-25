@@ -164,6 +164,7 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 ```
+
 ```ts title="app/hooks.ts"
 // file: features/users/userSlice.ts noEmit
 import { createSlice } from '@reduxjs/toolkit'
@@ -366,7 +367,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
 export function renderWithProviders(
   ui: React.ReactElement,
   {
-    preloadedState= {},
+    preloadedState = {},
     // Automatically create a store instance if no store was passed in
     store = configureStore({ reducer: { user: userReducer }, preloadedState }),
     ...renderOptions
@@ -593,8 +594,8 @@ import UserDisplay from '../UserDisplay'
 // when receiving a get request to the `/api/user` endpoint
 export const handlers = [
   http.get('/api/user', async () => {
-      await delay(150)
-      return HttpResponse.json('John Smith')
+    await delay(150)
+    return HttpResponse.json('John Smith')
   })
 ]
 
@@ -754,7 +755,9 @@ test('should handle a todo being added to an empty list', () => {
 })
 
 test('should handle a todo being added to an existing list', () => {
-  const previousState: Todo[] = [{ text: 'Run the tests', completed: true, id: 0 }]
+  const previousState: Todo[] = [
+    { text: 'Run the tests', completed: true, id: 0 }
+  ]
 
   expect(reducer(previousState, todoAdded('Use Redux'))).toEqual([
     { text: 'Run the tests', completed: true, id: 0 },
@@ -859,6 +862,5 @@ In some cases, you will need to modify the `create` function to use different mo
 ## Further Information
 
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
-- [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.
 - [Blogged Answers: The Evolution of Redux Testing Approaches](https://blog.isquaredsoftware.com/2021/06/the-evolution-of-redux-testing-approaches/): Mark Erikson's thoughts on how Redux testing has evolved from 'isolation' to 'integration'.
 - [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details): Blog post by Kent C. Dodds on why he recommends to avoid testing implementation details.
