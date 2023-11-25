@@ -114,7 +114,7 @@ There are [many async/side effect middlewares available](https://github.com/mark
 As a general rule of thumb:
 
 - Thunks are best for complex synchronous logic (especially code that needs access to the entire Redux store state), and simple async logic (like basic AJAX calls). With the use of `async/await`, it can be reasonable to use thunks for some more complex promise-based logic as well.
-- Sagas are best for complex async logic and decoupled "background thread"-type behavior, especially if you need to listen to dispatched actions (which is something that can't be done with thunks). They require familiarity with ES2015 generator functions and `redux-saga`'s "effects" operators.
+- Sagas are best for complex async logic and decoupled "background thread"-type behavior, especially if you need to listen to dispatched actions (which is something that can't be done with thunks). They require familiarity with generator functions and `redux-saga`'s "effects" operators.
 - Observables solve the same problems as sagas, but rely on RxJS to implement async behavior. They require familiarity with the RxJS API.
 
 We recommend that most Redux users should start with thunks, and then add an additional side effect library like sagas or observables later if their app really requires handling for more complex async logic.

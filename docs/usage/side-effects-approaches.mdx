@@ -85,7 +85,7 @@ We've intentionally designed the RTK listener middleware to be straightforward t
 
 We specifically recommend _against_ sagas or observables for most reactive logic for multiple reasons:
 
-- Sagas: require understanding ES2015 generator function syntax as well as the saga effects behaviors; add multiple levels of indirection due to needing extra actions dispatched; have poor TypeScript support; and the power and complexity is simply not needed for most Redux use cases.
+- Sagas: require understanding generator function syntax as well as the saga effects behaviors; add multiple levels of indirection due to needing extra actions dispatched; have poor TypeScript support; and the power and complexity is simply not needed for most Redux use cases.
 - Observables: require understanding the RxJS API and mental model; can be difficult to debug; can add significant bundle size
 
 ## Common Side Effects Approaches
