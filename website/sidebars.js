@@ -151,6 +151,7 @@ module.exports = {
       'api/applymiddleware',
       'api/bindactioncreators',
       'api/compose',
+      'api/utils',
       { type: 'link', label: 'Error Messages', href: '/errors' }
     ],
     'Redux Toolkit': ['redux-toolkit/overview']
