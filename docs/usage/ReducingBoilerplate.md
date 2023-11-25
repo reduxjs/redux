@@ -484,7 +484,7 @@ AppDispatcher.register(function (action) {
 export default TodoStore
 ```
 
-With Redux, the same update logic can be described as a reducing function:
+With Redux, the same update logic can be described as a reducer function:
 
 ```js
 export function todos(state = [], action) {

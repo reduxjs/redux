@@ -28,7 +28,7 @@ See the [**Migrating to Modern Redux** page](../usage/migrating-to-modern-redux.
 
 ## Arguments
 
-1. `reducer` _(Function)_: A [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) that returns the next [state tree](../understanding/thinking-in-redux/Glossary.md#state), given the current state tree and an [action](../understanding/thinking-in-redux/Glossary.md#action) to handle.
+1. `reducer` _(Function)_: A root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) that returns the next [state tree](../understanding/thinking-in-redux/Glossary.md#state), given the current state tree and an [action](../understanding/thinking-in-redux/Glossary.md#action) to handle.
 
 2. [`preloadedState`] _(any)_: The initial state. You may optionally specify it to hydrate the state from the server in universal apps, or to restore a previously serialized user session. If you produced `reducer` with [`combineReducers`](combineReducers.md), this must be a plain object with the same shape as the keys passed to it. Otherwise, you are free to pass anything that your `reducer` can understand.
 

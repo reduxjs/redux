@@ -55,7 +55,7 @@ You can control state key names by using different keys for the reducers in the 
 
 ## Arguments
 
-1. `reducers` (_Object_): An object whose values correspond to different reducing functions that need to be combined into one.
+1. `reducers` (_Object_): An object whose values correspond to different reducer functions that need to be combined into one.
 
 ```ts
 combineReducers({
@@ -153,6 +153,6 @@ console.log(store.getState())
 
 ## Tips
 
-- This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/redux-utilities/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
+- This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/redux-utilities/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducer function explicitly, like you would write any other function.
 
 - You may call `combineReducers` at any level of the reducer hierarchy. It doesn't have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.

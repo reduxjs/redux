@@ -11,7 +11,7 @@ The only way to change the state inside it is to dispatch an [action](../underst
 
 A store is not a class. It's just an object with a few methods on it.
 
-To create a store, pass your root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) to Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore), which will set up a Redux store with a good default configuration. (Alternately, if you're not yet using Redux Toolkit, you can use the original [`createStore`](createStore.md) method, but we encourage you to [migrate your code to use Redux Toolkit](../usage/migrating-to-modern-redux.mdx) as soon as possible)
+To create a store, **pass your root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore)**, which will set up a Redux store with a good default configuration. (Alternately, if you're not yet using Redux Toolkit, you can use the original [`createStore`](createStore.md) method, but we encourage you to [migrate your code to use Redux Toolkit](../usage/migrating-to-modern-redux.mdx) as soon as possible)
 
 ## Store Methods
 
@@ -32,7 +32,7 @@ _(any)_: The current state tree of your application.
 
 Dispatches an action. This is the only way to trigger a state change.
 
-The store's reducing function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
+The store's reducer function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
 
 :::caution
 
