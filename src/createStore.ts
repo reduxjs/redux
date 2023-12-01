@@ -294,6 +294,7 @@ export function createStore<
       throw new Error('Reducers may not dispatch actions.')
     }
 
+    const previousState = currentState
     try {
       isDispatching = true
       currentState = currentReducer(currentState, action)
@@ -302,9 +303,12 @@ export function createStore<
     }
 
     const listeners = (currentListeners = nextListeners)
-    listeners.forEach(listener => {
-      listener()
-    })
+    if (previousState !== currentState) {
+      listeners.forEach(listener => {
+        listener()
+      })
+    }
+
     return action
   }
 

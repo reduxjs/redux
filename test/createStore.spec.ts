@@ -207,19 +207,28 @@ describe('createStore', () => {
     ])
   })
 
+  it(`doesn't notify listeners when state didn't change after action`, () => {
+    const store = createStore(reducers.todos)
+    const listener = vi.fn()
+
+    store.subscribe(listener)
+    // @ts-expect-error
+    store.dispatch(unknownAction())
+
+    expect(listener.mock.calls.length).toBe(0)
+  })
+
   it('supports multiple subscriptions', () => {
     const store = createStore(reducers.todos)
     const listenerA = vi.fn()
     const listenerB = vi.fn()
 
     let unsubscribeA = store.subscribe(listenerA)
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(1)
     expect(listenerB.mock.calls.length).toBe(0)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(2)
     expect(listenerB.mock.calls.length).toBe(0)
 
@@ -227,8 +236,7 @@ describe('createStore', () => {
     expect(listenerA.mock.calls.length).toBe(2)
     expect(listenerB.mock.calls.length).toBe(0)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(1)
 
@@ -236,8 +244,7 @@ describe('createStore', () => {
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(1)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(2)
 
@@ -245,8 +252,7 @@ describe('createStore', () => {
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(2)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(2)
 
@@ -254,8 +260,7 @@ describe('createStore', () => {
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(2)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(4)
     expect(listenerB.mock.calls.length).toBe(2)
   })
@@ -271,8 +276,7 @@ describe('createStore', () => {
     unsubscribeA()
     unsubscribeA()
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listenerA.mock.calls.length).toBe(0)
     expect(listenerB.mock.calls.length).toBe(1)
   })
@@ -287,8 +291,7 @@ describe('createStore', () => {
     unsubscribeSecond()
     unsubscribeSecond()
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener.mock.calls.length).toBe(1)
   })
 
@@ -305,10 +308,8 @@ describe('createStore', () => {
     })
     store.subscribe(listenerC)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
+    store.dispatch(addTodo(''))
 
     expect(listenerA.mock.calls.length).toBe(2)
     expect(listenerB.mock.calls.length).toBe(1)
@@ -335,14 +336,12 @@ describe('createStore', () => {
     )
     unsubscribeHandles.push(store.subscribe(() => listener3()))
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener1.mock.calls.length).toBe(1)
     expect(listener2.mock.calls.length).toBe(1)
     expect(listener3.mock.calls.length).toBe(1)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener1.mock.calls.length).toBe(1)
     expect(listener2.mock.calls.length).toBe(1)
     expect(listener3.mock.calls.length).toBe(1)
@@ -369,14 +368,12 @@ describe('createStore', () => {
       maybeAddThirdListener()
     })
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener1.mock.calls.length).toBe(1)
     expect(listener2.mock.calls.length).toBe(1)
     expect(listener3.mock.calls.length).toBe(0)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener1.mock.calls.length).toBe(2)
     expect(listener2.mock.calls.length).toBe(2)
     expect(listener3.mock.calls.length).toBe(1)
@@ -400,8 +397,7 @@ describe('createStore', () => {
 
       unsubscribe1()
       unsubscribe4 = store.subscribe(listener4)
-      // @ts-expect-error
-      store.dispatch(unknownAction())
+      store.dispatch(addTodo(''))
 
       expect(listener1.mock.calls.length).toBe(1)
       expect(listener2.mock.calls.length).toBe(1)
@@ -411,16 +407,14 @@ describe('createStore', () => {
     store.subscribe(listener2)
     store.subscribe(listener3)
 
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener1.mock.calls.length).toBe(1)
     expect(listener2.mock.calls.length).toBe(2)
     expect(listener3.mock.calls.length).toBe(2)
     expect(listener4.mock.calls.length).toBe(1)
 
     unsubscribe4()
-    // @ts-expect-error
-    store.dispatch(unknownAction())
+    store.dispatch(addTodo(''))
     expect(listener1.mock.calls.length).toBe(1)
     expect(listener2.mock.calls.length).toBe(3)
     expect(listener3.mock.calls.length).toBe(3)
