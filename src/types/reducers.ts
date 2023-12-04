@@ -3,7 +3,7 @@ import { Action, UnknownAction } from './actions'
 /* reducers */
 
 /**
- * A *reducer* (also called a *reducing function*) is a function that accepts
+ * A *reducer* is a function that accepts
  * an accumulation and a value and returns a new accumulation. They are used
  * to reduce a collection of values down to a single value
  *
