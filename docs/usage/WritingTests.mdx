@@ -144,17 +144,13 @@ const userSlice = createSlice({
 })
 export default userSlice.reducer
 // file: app/store.ts
-import {
-  combineReducers,
-  configureStore,
-  PreloadedState
-} from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from '../features/users/userSlice'
 // Create the root reducer independently to obtain the RootState type
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -178,16 +174,12 @@ const userSlice = createSlice({
 })
 export default userSlice.reducer
 // file: app/store.ts noEmit
-import {
-  combineReducers,
-  configureStore,
-  PreloadedState
-} from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from '../features/users/userSlice'
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -212,16 +204,12 @@ export const userAPI = {
   })
 }
 // file: app/store.ts noEmit
-import {
-  combineReducers,
-  configureStore,
-  PreloadedState
-} from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from '../features/users/userSlice'
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -328,16 +316,12 @@ const userSlice = createSlice({
 })
 export default userSlice.reducer
 // file: app/store.ts noEmit
-import {
-  combineReducers,
-  configureStore,
-  PreloadedState
-} from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from '../features/users/userSlice'
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: PreloadedState<RootState>) {
+export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -350,7 +334,6 @@ import React, { PropsWithChildren } from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import { configureStore } from '@reduxjs/toolkit'
-import type { PreloadedState } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import type { AppStore, RootState } from '../app/store'
@@ -360,7 +343,7 @@ import userReducer from '../features/users/userSlice'
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: PreloadedState<RootState>
+  preloadedState?: Partial<RootState>
   store?: AppStore
 }
 
@@ -398,7 +381,6 @@ const userSlice = createSlice({
 export default userSlice.reducer
 // file: app/store.ts
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import type { PreloadedState } from '@reduxjs/toolkit'
 
 import userReducer from '../features/users/userSlice'
 
@@ -407,7 +389,7 @@ const rootReducer = combineReducers({
   user: userReducer
 })
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+export const setupStore = (preloadedState?: Partial<RootState>) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -435,7 +417,6 @@ const userSlice = createSlice({
 export default userSlice.reducer
 // file: app/store.ts noEmit
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import type { PreloadedState } from '@reduxjs/toolkit'
 
 import userReducer from '../features/users/userSlice'
 
@@ -443,7 +424,7 @@ const rootReducer = combineReducers({
   user: userReducer
 })
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+export const setupStore = (preloadedState?: Partial<RootState>) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -457,7 +438,6 @@ export type AppDispatch = AppStore['dispatch']
 import React, { PropsWithChildren } from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
-import type { PreloadedState } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import { setupStore } from '../app/store'
@@ -466,7 +446,7 @@ import type { AppStore, RootState } from '../app/store'
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: PreloadedState<RootState>
+  preloadedState?: Partial<RootState>
   store?: AppStore
 }
 
@@ -508,7 +488,6 @@ export const selectUserFetchStatus = (state: RootState) => state.user.status
 export default userSlice.reducer
 // file: app/store.ts noEmit
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import type { PreloadedState } from '@reduxjs/toolkit'
 
 import userReducer from '../features/users/userSlice'
 
@@ -516,7 +495,7 @@ const rootReducer = combineReducers({
   user: userReducer
 })
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+export const setupStore = (preloadedState?: Partial<RootState>) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState
@@ -530,14 +509,13 @@ export type AppDispatch = AppStore['dispatch']
 import React, { PropsWithChildren } from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
-import type { PreloadedState } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import { setupStore } from '../app/store'
 import type { AppStore, RootState } from '../app/store'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: PreloadedState<RootState>
+  preloadedState?: Partial<RootState>
   store?: AppStore
 }
 
