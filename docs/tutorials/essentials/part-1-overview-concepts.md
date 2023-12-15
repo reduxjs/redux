@@ -11,6 +11,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 - What Redux is and why you might want to use it
 - Key Redux terms and concepts
+- Hi this is mano from iamneo
 - How data flows through a Redux app
 
 :::
