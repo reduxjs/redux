@@ -81,7 +81,7 @@ export type Observer<T> = {
 export interface Store<
   S = any,
   A extends Action = UnknownAction,
-  StateExt extends {} = {}
+  StateExt extends unknown = unknown
 > {
   /**
    * Dispatches an action. It is the only way to trigger a state change.
