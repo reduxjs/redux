@@ -225,7 +225,7 @@ export type StoreEnhancer<Ext extends {} = {}, StateExt extends {} = {}> = <
 ) => StoreEnhancerStoreCreator<NextExt & Ext, NextStateExt & StateExt>
 export type StoreEnhancerStoreCreator<
   Ext extends {} = {},
-  StateExt extends unknown = unknown
+  StateExt extends {} = {}
 > = <S, A extends Action, PreloadedState>(
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | undefined
