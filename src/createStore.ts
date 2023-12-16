@@ -5,7 +5,8 @@ import {
   StoreEnhancer,
   Dispatch,
   Observer,
-  ListenerCallback
+  ListenerCallback,
+  UnknownIfNonSpecific
 } from './types/store'
 import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
@@ -46,7 +47,7 @@ export function createStore<
 >(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, StateExt> & Ext
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
 /**
  * @deprecated
  *
@@ -82,7 +83,7 @@ export function createStore<
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, StateExt> & Ext
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
 export function createStore<
   S,
   A extends Action,
@@ -93,7 +94,7 @@ export function createStore<
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | StoreEnhancer<Ext, StateExt> | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, StateExt> & Ext {
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext {
   if (typeof reducer !== 'function') {
     throw new Error(
       `Expected the root reducer to be a function. Instead, received: '${kindOf(
@@ -432,7 +433,7 @@ export function legacy_createStore<
 >(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, StateExt> & Ext
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
 /**
  * Creates a Redux store that holds the state tree.
  *
@@ -473,7 +474,7 @@ export function legacy_createStore<
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, StateExt> & Ext
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
 export function legacy_createStore<
   S,
   A extends Action,
@@ -484,6 +485,6 @@ export function legacy_createStore<
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState | StoreEnhancer<Ext, StateExt> | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, StateExt> & Ext {
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext {
   return createStore(reducer, preloadedState as any, enhancer)
 }

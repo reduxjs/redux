@@ -164,6 +164,8 @@ export interface Store<
   [Symbol.observable](): Observable<S & StateExt>
 }
 
+export type UnknownIfNonSpecific<T> = {} extends T ? unknown : T
+
 /**
  * A store creator is a function that creates a Redux store. Like with
  * dispatching function, we must distinguish the base store creator,
@@ -180,7 +182,7 @@ export interface StoreCreator {
   <S, A extends Action, Ext extends {} = {}, StateExt extends {} = {}>(
     reducer: Reducer<S, A>,
     enhancer?: StoreEnhancer<Ext, StateExt>
-  ): Store<S, A, StateExt> & Ext
+  ): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
   <
     S,
     A extends Action,
@@ -191,7 +193,7 @@ export interface StoreCreator {
     reducer: Reducer<S, A, PreloadedState>,
     preloadedState?: PreloadedState | undefined,
     enhancer?: StoreEnhancer<Ext>
-  ): Store<S, A, StateExt> & Ext
+  ): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
 }
 
 /**
@@ -223,7 +225,7 @@ export type StoreEnhancer<Ext extends {} = {}, StateExt extends {} = {}> = <
 ) => StoreEnhancerStoreCreator<NextExt & Ext, NextStateExt & StateExt>
 export type StoreEnhancerStoreCreator<
   Ext extends {} = {},
-  StateExt extends {} = {}
+  StateExt extends unknown = unknown
 > = <S, A extends Action, PreloadedState>(
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | undefined
