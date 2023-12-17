@@ -134,7 +134,7 @@ We've changed `next` to be `(action: unknown) => unknown` (which is accurate, we
 
 In order to safely interact with values or access fields inside of the `action` argument, you must first do a type guard check to narrow the type, such as `isAction(action)` or `someActionCreator.match(action)`.
 
-This new type is incompatible with the v4 `Middleware` type, so if a package's middleware is saying it's incompatible, check which version of Redux it's getting its types from!
+This new type is incompatible with the v4 `Middleware` type, so if a package's middleware is saying it's incompatible, check which version of Redux it's getting its types from! (See [overriding dependencies](#overriding-dependencies) later in this page.)
 
 #### `PreloadedState` type removed in favour of `Reducer` generic
 
@@ -722,6 +722,56 @@ We've updated RTK to depend on the final Immer 10.0 release.
 We now have a docs page that covers [how to set up Redux properly with Next.js](https://redux.js.org/usage/nextjs). We've seen a lot of questions around using Redux, Next, and the App Router together, and this guide should help provide advice.
 
 (At this time, the Next.js `with-redux` example is still showing outdated patterns - we're going to file a PR shortly to update that to match our docs guide.)
+
+## Overriding dependencies
+
+It will take a while for packages to update their peer dependencies to allow for Redux core 5.0, and in the meantime changes like the [Middleware type](#middleware-type-changed---middleware-action-and-next-are-typed-as-unknown) will result in perceived incompatibilities.
+
+It's likely that most libraries will not actually have any practices that are incompatible with 5.0, but due to the peer dependency on 4.0 they end up pulling in old type declarations.
+
+This can be solved by manually overriding the dependency resolution, which is supported by both `npm` and `yarn`.
+
+### `npm` - `overrides`
+
+NPM supports this through an [`overrides`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides) field in your `package.json`. You can override the dependency for a specific package, or make sure that every package that pulls in Redux receives the same version.
+
+```json title="Individual override - redux-persist"
+{
+  "overrides": {
+    "redux-persist": {
+      "redux": "^5.0.0"
+    }
+  }
+}
+```
+
+```json title="Blanket override"
+{
+  "overrides": {
+    "redux": "^5.0.0"
+  }
+}
+```
+
+### `yarn` - `resolutions`
+
+Yarn supports this through a [`resolutions`](https://classic.yarnpkg.com/lang/en/docs/selective-version-resolutions/) field in your `package.json`. Just like with NPM, you can override the dependency for a specific package, or make sure that every package that pulls in Redux receives the same version.
+
+```json title="Individual override - redux-persist"
+{
+  "resolutions": {
+    "redux-persist/redux": "^5.0.0"
+  }
+}
+```
+
+```json title="Blanket override"
+{
+  "resolutions": {
+    "redux": "^5.0.0"
+  }
+}
+```
 
 ## Recommendations
 
