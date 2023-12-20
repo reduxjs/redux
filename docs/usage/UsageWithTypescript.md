@@ -615,7 +615,7 @@ interface Book {
 }
 
 // highlight-next-line
-const booksAdapter = createEntityAdapter<Book>({
+const booksAdapter = createEntityAdapter<Book, number>({
   selectId: book => book.bookId,
   sortComparer: (a, b) => a.title.localeCompare(b.title)
 })
