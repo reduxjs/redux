@@ -181,7 +181,7 @@ From there, Redux Toolkit includes other APIs for common Redux tasks:
 - `createSelector`: a re-export of the standard Reselect API for memoized selectors
 - `createListenerMiddleware`: a side effects middleware for running logic in response to dispatched actions
 
-Finally, the RTK package also includes "RTK Query", a full data fetching and caching solution for Redux apps, as a separate optional `@reduxjs/toolkit/query` entry point. It lets you define endpoints (REST, GraphQL, or any async function), and generates a reducer and middleware that fully manage fetching data, updating loading state, and caching results. It also automatically generates React hooks that can be used in components to fetch data, like `const { data, isFetching} = useGetPokemonQuery('pikachu')`
+Finally, the RTK package also includes "RTK Query", a full data fetching and caching solution for Redux apps, as a separate optional `@reduxjs/toolkit/query` entry point. It lets you define endpoints (REST, GraphQL, or any async function), and generates a reducer and middleware that fully manage fetching data, updating loading state, and caching results. It also automatically generates React hooks that can be used in components to fetch data, like `const { data, isFetching } = useGetPokemonQuery('pikachu')`
 
 Each of these APIs is completely optional and designed for specific use cases, and **you can pick and choose which APIs you actually use in your app**. But, all of them are highly recommended to help with those tasks.
 
