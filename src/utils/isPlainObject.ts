@@ -10,5 +10,7 @@ export default function isPlainObject(obj: any): obj is object {
     proto = Object.getPrototypeOf(proto)
   }
 
-  return Object.getPrototypeOf(obj) === proto || Object.getPrototypeOf(obj) === null
+  return (
+    Object.getPrototypeOf(obj) === proto || Object.getPrototypeOf(obj) === null
+  )
 }
