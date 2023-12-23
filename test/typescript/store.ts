@@ -61,6 +61,11 @@ const funcWithStore = (store: Store<State, DerivedAction>) => {}
 
 const store: Store<State> = createStore(reducer)
 
+// test that nullable state is preserved
+const nullableStore = createStore((): string | null => null)
+
+expectTypeOf(nullableStore.getState()).toEqualTypeOf<string | null>()
+
 // ensure that an array-based state works
 const arrayReducer = (state: any[] = []) => state || []
 const storeWithArrayState: Store<any[]> = createStore(arrayReducer)
