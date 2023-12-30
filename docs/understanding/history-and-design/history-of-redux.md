@@ -22,7 +22,7 @@ Facebook announced this "Flux Architecture" concept around 2014, but didn't prov
 
 ## 2015: The Birth of Redux
 
-In mid-2015, Dan Abramov began building yet another Flux-inspired library, called Redux. The idea was to demonstrate "time-travel debugging" for a conference talk. The library was designed to use the Flux pattern, but with some functional programming principles applied. Rather than Store _instances_, you could use predictable reducer functions that did immutable updates. This would allow jumping back and forth in time to see how the state looked at various points. It would also make the code more straightforward, testable, and understandable.
+In mid-2015, Dan Abramov began building yet another Flux-inspired library, called Redux. The idea was to demonstrate "time-travel debugging" for a [conference talk](https://youtu.be/xsSnOQynTHs?t=601). The library was designed to use the Flux pattern, but with some functional programming principles applied. Rather than Store _instances_, you could use predictable reducer functions that did immutable updates. This would allow jumping back and forth in time to see how the state looked at various points. It would also make the code more straightforward, testable, and understandable.
 
 Redux came out in 2015, and quickly killed off all the other Flux-inspired libraries. It got early adoption from advanced developers in the React ecosystem, and by 2016, many people began to say that "if you're using React, you _must_ be using Redux too". (Frankly, this led to a lot of people using Redux in places they didn't _need_ to be using it!)
 
