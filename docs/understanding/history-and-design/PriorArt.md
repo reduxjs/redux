@@ -1,7 +1,7 @@
 ---
 id: prior-art
 title: Prior Art
-description: 'Introduction > Prior Art: Influences on the design of Redux'
+description: 'Understanding > Prior Art: Influences on the design of Redux'
 ---
 
 # Prior Art
