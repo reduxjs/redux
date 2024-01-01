@@ -575,7 +575,7 @@ const fetchUserById = createAsyncThunk(
 const lastReturnedAction = await store.dispatch(fetchUserById(3))
 ```
 
-If you need to modify the types of the `thunkApi` parameter, such as supplying the type of the `state` returned by `getState()`, you must supply the first two generic arguments for return type and payload argument, plus whicher "thunkApi argument fields" are relevant in an object:
+If you need to modify the types of the `thunkApi` parameter, such as supplying the type of the `state` returned by `getState()`, you must supply the first two generic arguments for return type and payload argument, plus whichever "thunkApi argument fields" are relevant in an object:
 
 ```ts
 const fetchUserById = createAsyncThunk<
