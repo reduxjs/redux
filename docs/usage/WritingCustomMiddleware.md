@@ -114,7 +114,7 @@ In the first part, it listens to `addListener`, `clearAllListeners` and `removeL
 
 In the second part, the code mainly calculates the state after passing the action through the other middlewares and the reducer, and then passes both the original state as well as the new state coming from the reducer to the listeners.
 
-It is common to have side effects after dispatching th eaction, because this allows taking into account both the original and the new state, and because the interaction coming from the side effects shouldn't influence the current action execution anyways (otherwise, it wouldn't be a side effect).
+It is common to have side effects after dispatching the action, because this allows taking into account both the original and the new state, and because the interaction coming from the side effects shouldn't influence the current action execution anyways (otherwise, it wouldn't be a side effect).
 
 ### Modify or cancel actions, or modify the input accepted by dispatch
 
