@@ -158,7 +158,7 @@ _Explanations and examples of how middleware work and how to write them_
   Understanding middlewares through a series of small experiments
 
 - **Redux Middleware Tutorial** <br/>
-  https://www.pshrmn.com/tutorials/react/redux-middleware/ <br/>
+  https://github.com/pshrmn/notes/blob/master/redux/redux-middleware.md <br/>
   An overview of what middleware is, how `applyMiddleware` works, and how to write middleware.
 
 - **ReactCasts #6: Redux Middleware** <br/>
