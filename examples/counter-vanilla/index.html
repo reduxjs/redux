@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Redux basic example</title>
-    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
   </head>
   <body>
     <div>
@@ -14,7 +13,9 @@
         <button id="incrementAsync">Increment async</button>
       </p>
     </div>
-    <script>
+    <script type="module">
+      import * as Redux from 'https://unpkg.com/redux@latest/dist/redux.browser.mjs'
+
       function counter(state, action) {
         if (typeof state === 'undefined') {
           return 0
