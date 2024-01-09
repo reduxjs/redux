@@ -63,7 +63,7 @@ These recommendations are specific to applications written with the Next.js App 
 
 ### Folder Structure
 
-Next apps can be created to have the `/app` folder either at the root, or nested under `/src/app`. Your Redux logic should go in a separate folder, alongside the `/app` folder. It's common to put the Redux logic in a folder named `/lib`, but not required.
+Next apps can be created to have the `/app` folder either at the root, or nested under `/app`. Your Redux logic should go in a separate folder, alongside the `/app` folder. It's common to put the Redux logic in a folder named `/lib`, but not required.
 
 The file and folder structure inside of that `/lib` folder is up to you, but we generally recommend [a "feature folder"-based structure](https://redux.js.org/style-guide/#structure-files-as-feature-folders-with-single-file-logic) for the Redux logic.
 
@@ -207,7 +207,7 @@ The next step is to **include the `StoreProvider` anywhere in the tree above whe
 
 If you need to initialize the store with data from the parent component, then define that data as a prop on the client `StoreProvider` component and use a Redux action on the slice to set the data in the store as shown below.
 
-```ts title="src/app/StoreProvider.tsx"
+```ts title="app/StoreProvider.tsx"
 // file: lib/features/counter/counterSlice.ts noEmit
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
