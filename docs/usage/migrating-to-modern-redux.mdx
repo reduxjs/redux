@@ -169,8 +169,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
-  // Can create a root reducer separately and pass that in
-  reducer: rootReducer,
+  // Pass previously created persisted reducer
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware => {
     const middleware = getDefaultMiddleware({
       // Pass in a custom `extra` argument to the thunk middleware
