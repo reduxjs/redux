@@ -207,7 +207,7 @@ The next step is to **include the `StoreProvider` anywhere in the tree above whe
 
 If you need to initialize the store with data from the parent component, then define that data as a prop on the client `StoreProvider` component and use a Redux action on the slice to set the data in the store as shown below.
 
-```ts title="src/app/StoreProvider.tsx"
+```ts title="app/StoreProvider.tsx"
 // file: lib/features/counter/counterSlice.ts noEmit
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
