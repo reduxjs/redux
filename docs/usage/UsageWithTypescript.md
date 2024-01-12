@@ -81,15 +81,36 @@ While it's possible to import the `RootState` and `AppDispatch` types into each 
 
 Since these are actual variables, not types, it's important to define them in a separate file such as `app/hooks.ts`, not the store setup file. This allows you to import them into any component file that needs to use the hooks, and avoids potential circular import dependency issues.
 
+#### `.withTypes()`
+
+Previously, the approach for "pre-typing" hooks with your app setting was a little varied. The result would look something like the snippet below:
+
 ```ts title="app/hooks.ts"
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import type { RootState, AppDispatch } from './store'
+import type { TypedUseSelectorHook } from 'react-redux'
+import { useDispatch, useSelector, useStore } from 'react-redux'
+import type { AppDispatch, AppStore, RootState } from './store'
 
 // highlight-start
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
-type DispatchFunc = () => AppDispatch
-export const useAppDispatch: DispatchFunc = useDispatch
+export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppStore: () => AppStore = useStore
+// highlight-end
+```
+
+React Redux v9.1.0 adds a new `.withTypes` method to each of these hooks, analogous to the [`.withTypes`](https://redux-toolkit.js.org/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method found on Redux Toolkit's `createAsyncThunk`.
+
+The setup now becomes:
+
+```ts title="app/hooks.ts"
+import { useDispatch, useSelector, useStore } from 'react-redux'
+import type { AppDispatch, AppStore, RootState } from './store'
+
+// highlight-start
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
+export const useAppStore = useStore.withTypes<AppStore>()
 // highlight-end
 ```
 
