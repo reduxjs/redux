@@ -189,11 +189,12 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 // file: app/hooks.ts
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import type { RootState, AppDispatch } from './store'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from './store'
+
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
 ```
 
 ```tsx title="features/users/UserDisplay.tsx"
@@ -219,11 +220,11 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 // file: app/hooks.ts noEmit
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import type { RootState, AppDispatch } from './store'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from './store'
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = () => useDispatch<AppDispatch>()
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
 // file: features/users/userSlice.ts noEmit
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { userAPI } from './userAPI'
@@ -337,6 +338,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import type { AppStore, RootState } from '../app/store'
+import { setupStore } from '../app/store'
 // As a basic setup, import your same slice reducers
 import userReducer from '../features/users/userSlice'
 
@@ -349,19 +351,24 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
 
 export function renderWithProviders(
   ui: React.ReactElement,
-  {
+  extendedRenderOptions: ExtendedRenderOptions = {},
+) {
+  const {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = configureStore({ reducer: { user: userReducer }, preloadedState }),
+    store = setupStore(preloadedState),
     ...renderOptions
-  }: ExtendedRenderOptions = {}
-) {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
-    return <Provider store={store}>{children}</Provider>
-  }
+  } = extendedRenderOptions
+
+  const Wrapper = ({ children }: PropsWithChildren) => (
+    <Provider store={store}>{children}</Provider>
+  )
 
   // Return an object with the store and all of RTL's query functions
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
+  return {
+    store,
+    ...render(ui, { wrapper: Wrapper, ...renderOptions }),
+  }
 }
 ```
 
@@ -533,10 +540,11 @@ export function renderWithProviders(
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 // file: app/hooks.tsx noEmit
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import type { RootState, AppDispatch } from './store'
-export const useAppDispatch: () => AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from './store'
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
 // file: features/users/UserDisplay.tsx noEmit
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
@@ -719,7 +727,7 @@ export default todosSlice.reducer
 import reducer, { todoAdded, Todo } from './todosSlice'
 
 test('should return the initial state', () => {
-  expect(reducer(undefined, { type: undefined })).toEqual([
+  expect(reducer(undefined, { type: 'unknown' })).toEqual([
     { text: 'Use Redux', completed: false, id: 0 }
   ])
 })
