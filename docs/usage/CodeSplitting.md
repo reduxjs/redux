@@ -26,6 +26,8 @@ store.replaceReducer(newRootReducer)
 
 ## Reducer Injection Approaches
 
+This section will cover some handwritten recipes used to inject reducers.
+
 ### Defining an `injectReducer` function
 
 We will likely want to call `store.replaceReducer()` from anywhere in the application. Because of that, it's helpful
@@ -381,11 +383,153 @@ function App() {
 
 ### `createDynamicMiddleware`
 
+The `createDynamicMiddleware` utility creates a "meta-middleware" which allows for injection of middleware after store initialisation.
+
+```ts
+import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import reducer from './reducer'
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(dynamicMiddleware.middleware)
+})
+
+dynamicMiddleware.addMiddleware(logger)
+```
+
 #### `addMiddleware`
+
+`addMiddleware` appends the middleware instance to the chain of middlewares handled by the dynamic middleware instance. Middleware is applied in injection order, and stored by function reference (so the same middleware is only applied once regardless of how many times it's injected).
+
+:::note
+
+It's important to remember that all middlewares injected will be contained _within_ the original dynamic middleware instance.
+
+```ts
+import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import reducer from './reducer'
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(dynamicMiddleware.middleware)
+})
+
+dynamicMiddleware.addMiddleware(logger)
+
+// middleware chain is now [thunk, logger]
+```
+
+If it's desired to have more control over the order, multiple instances can be used.
+
+```ts
+import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import reducer from './reducer'
+
+const beforeMiddleware = createDynamicMiddleware()
+const afterMiddleware = createDynamicMiddleware()
+
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware()
+      .prepend(beforeMiddleware.middleware)
+      .concat(afterMiddleware.middleware)
+})
+
+beforeMiddleware.addMiddleware(logger)
+afterMiddleware.addMiddleware(logger)
+
+// middleware chain is now [logger, thunk, logger]
+```
+
+:::
 
 #### `withMiddleware`
 
+`withMiddleware` is an action creator which, when dispatched, causes the middleware to add any middlewares included and returns a pre-typed version of `dispatch` with any added extensions.
+
+```ts
+const listenerDispatch = store.dispatch(
+  withMiddleware(listenerMiddleware.middleware)
+)
+
+const unsubscribe = listenerDispatch(addListener({ actionCreator, effect }))
+//    ^? () => void
+```
+
+This is mainly useful in a non-React context. With React it's more useful to use the [react integration](#react-integration).
+
 #### React integration
+
+When imported from the `@reduxjs/toolkit/react` entry point, the instance of dynamic middleware will have a couple of additional methods attached.
+
+##### `createDispatchWithMiddlewareHook`
+
+This method calls `addMiddleware` and returns a version of `useDispatch` typed to know about the injected middleware.
+
+```ts
+import { createDynamicMiddleware } from '@reduxjs/toolkit/react'
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const useListenerDispatch = dynamicMiddleware.createDispatchWithMiddlewareHook(
+  listenerMiddleware.middleware
+)
+
+function Component() {
+  const dispatch = useListenerDispatch()
+
+  useEffect(() => {
+    const unsubscribe = dispatch(addListener({ actionCreator, effect }))
+    return unsubscribe
+  }, [dispatch])
+}
+```
+
+:::caution
+
+Middleware is injected when `createDispatchWithMiddlewareHook` is called, _not_ when the `useDispatch` hook is called.
+
+:::
+
+##### `createDispatchWithMiddlewareHookFactory`
+
+This method take a React context instance and creates an instance of `createDispatchWithMiddlewareHook` which uses that context. (see [Providing custom context](https://react-redux.js.org/using-react-redux/accessing-store#providing-custom-context))
+
+```ts
+import { createContext } from 'react'
+import { createDynamicMiddleware } from '@reduxjs/toolkit/react'
+import type { ReactReduxContextValue } from 'react-redux'
+
+const context = createContext<ReactReduxContextValue | null>(null)
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const createDispatchWithMiddlewareHook =
+  dynamicMiddleware.createDispatchWithMiddlewareHookFactory(context)
+
+const useListenerDispatch = createDispatchWithMiddlewareHook(
+  listenerMiddleware.middleware
+)
+
+function Component() {
+  const dispatch = useListenerDispatch()
+
+  useEffect(() => {
+    const unsubscribe = dispatch(addListener({ actionCreator, effect }))
+    return unsubscribe
+  }, [dispatch])
+}
+```
 
 ## Libraries and Frameworks
 
