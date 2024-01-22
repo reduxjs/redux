@@ -1,4 +1,4 @@
-# <a href='https://redux.js.org'><img src='https://avatars.githubusercontent.com/u/13142323?s=200&v=4' height='60' alt='Redux Logo' aria-label='redux.js.org' /></a>
+# <a href='https://redux.js.org'><img src='https://avatars.githubusercontent.com/u/13142323?s=200&v=4' height='60' alt='Redux Logo' aria-label='redux.js.org' />Redux</a> 
 
 Redux is a predictable state container for JavaScript apps.
 
