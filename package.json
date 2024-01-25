@@ -46,7 +46,7 @@
     "check-types": "tsc --noEmit && echo \"Types compiled\"",
     "test": "vitest --run",
     "test:types": "tsc -p test/typescript && echo \"Typetests passed\"",
-    "test:watch": "vitest",
+    "test:watch": "vitest --watch",
     "test:cov": "vitest --coverage",
     "test:typecheck": "tsc -p test && echo \"Types passed\"",
     "build": "tsup",
