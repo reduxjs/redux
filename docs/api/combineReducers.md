@@ -117,7 +117,7 @@ export default function counter(state = 0, action) {
 #### `reducers/index.js`
 
 ```js
-import { combineReducers } from 'redux'
+import { combineReducers } from '@reduxjs/toolkit'
 import todos from './todos'
 import counter from './counter'
 
@@ -130,10 +130,13 @@ export default combineReducers({
 #### `App.js`
 
 ```js
-import { createStore } from 'redux'
+import { configureStore } from '@reduxjs/toolkit' 
 import reducer from './reducers/index'
 
-const store = createStore(reducer)
+const store = configureStore({
+  reducer
+  // ...ConfigureStoreOptions ref: https://redux-toolkit.js.org/api/configureStore
+})
 console.log(store.getState())
 // {
 //   counter: 0,
