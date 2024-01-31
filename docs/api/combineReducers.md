@@ -135,7 +135,6 @@ import reducer from './reducers/index'
 
 const store = configureStore({
   reducer
-  // ...ConfigureStoreOptions ref: https://redux-toolkit.js.org/api/configureStore
 })
 console.log(store.getState())
 // {
