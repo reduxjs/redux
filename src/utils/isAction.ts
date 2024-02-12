@@ -1,4 +1,4 @@
-import { Action } from '../types/actions'
+import type { Action } from '../types/actions'
 import isPlainObject from './isPlainObject'
 
 export default function isAction(action: unknown): action is Action<string> {
