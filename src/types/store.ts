@@ -1,5 +1,5 @@
-import { Action, UnknownAction } from './actions'
-import { Reducer } from './reducers'
+import type { Action, UnknownAction } from './actions'
+import type { Reducer } from './reducers'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import _$$observable from '../utils/symbol-observable'
 

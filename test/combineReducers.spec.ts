@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
+import type { Reducer, Action } from 'redux'
 import {
   createStore,
   combineReducers,
-  Reducer,
-  Action,
   __DO_NOT_USE__ActionTypes as ActionTypes
 } from 'redux'
 import { vi } from 'vitest'

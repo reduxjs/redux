@@ -1,12 +1,11 @@
-import {
+import { combineReducers, createStore } from 'redux'
+import type {
   Store,
-  createStore,
   Reducer,
   Action,
   StoreEnhancer,
   Unsubscribe,
-  Observer,
-  combineReducers
+  Observer
 } from 'redux'
 import 'symbol-observable'
 

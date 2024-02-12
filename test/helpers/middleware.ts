@@ -1,4 +1,4 @@
-import { Dispatch, Middleware } from 'redux'
+import type { Dispatch, Middleware } from 'redux'
 
 export const thunk: Middleware<{
   <R>(thunk: (dispatch: Dispatch, getState: () => any) => R): R

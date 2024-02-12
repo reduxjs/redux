@@ -1,11 +1,5 @@
-import {
-  createStore,
-  combineReducers,
-  StoreEnhancer,
-  Action,
-  Store,
-  Reducer
-} from 'redux'
+import type { StoreEnhancer, Action, Store, Reducer } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import { vi } from 'vitest'
 import {
   addTodo,
@@ -17,7 +11,8 @@ import {
   unknownAction
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
-import { from, ObservableInput } from 'rxjs'
+import type { ObservableInput } from 'rxjs'
+import { from } from 'rxjs'
 import { map } from 'rxjs/operators'
 import $$observable from '../src/utils/symbol-observable'
 

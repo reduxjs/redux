@@ -1,5 +1,5 @@
-import { Action } from './types/actions'
-import {
+import type { Action } from './types/actions'
+import type {
   ActionFromReducersMapObject,
   PreloadedStateShapeFromReducersMapObject,
   Reducer,

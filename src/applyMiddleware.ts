@@ -1,6 +1,6 @@
 import compose from './compose'
-import { Middleware, MiddlewareAPI } from './types/middleware'
-import { StoreEnhancer, Dispatch } from './types/store'
+import type { Middleware, MiddlewareAPI } from './types/middleware'
+import type { StoreEnhancer, Dispatch } from './types/store'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method

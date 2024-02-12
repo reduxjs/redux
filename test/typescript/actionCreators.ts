@@ -1,10 +1,10 @@
-import {
+import type {
   ActionCreator,
   Action,
   Dispatch,
-  bindActionCreators,
   ActionCreatorsMapObject
 } from 'redux'
+import { bindActionCreators } from 'redux'
 
 interface AddTodoAction extends Action {
   text: string

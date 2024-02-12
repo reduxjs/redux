@@ -1,10 +1,5 @@
-import {
-  Reducer,
-  Action,
-  combineReducers,
-  ReducersMapObject,
-  AnyAction
-} from 'redux'
+import type { Reducer, Action, ReducersMapObject, AnyAction } from 'redux'
+import { combineReducers } from 'redux'
 
 /**
  * Simple reducer definition with no action shape checks.

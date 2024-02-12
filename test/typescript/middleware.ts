@@ -1,12 +1,11 @@
-import {
+import type {
   Middleware,
   MiddlewareAPI,
-  applyMiddleware,
-  createStore,
   Dispatch,
   Reducer,
   Action
 } from 'redux'
+import { applyMiddleware, createStore } from 'redux'
 
 /**
  * Logger middleware doesn't add any extra types to dispatch, just logs actions

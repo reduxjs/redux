@@ -1,4 +1,4 @@
-import { Dispatch } from 'redux'
+import type { Dispatch } from 'redux'
 
 /**
  * Default Dispatch type accepts any object with `type` property.

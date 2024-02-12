@@ -1,6 +1,6 @@
 import $$observable from './utils/symbol-observable'
 
-import {
+import type {
   Store,
   StoreEnhancer,
   Dispatch,
@@ -8,8 +8,8 @@ import {
   ListenerCallback,
   UnknownIfNonSpecific
 } from './types/store'
-import { Action } from './types/actions'
-import { Reducer } from './types/reducers'
+import type { Action } from './types/actions'
+import type { Reducer } from './types/reducers'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'

@@ -1,4 +1,4 @@
-import { Dispatch, Action } from 'redux'
+import type { Dispatch, Action } from 'redux'
 
 interface Component<P> {
   props: P

@@ -1,4 +1,4 @@
-import { Action, UnknownAction } from './actions'
+import type { Action, UnknownAction } from './actions'
 
 /* reducers */
 

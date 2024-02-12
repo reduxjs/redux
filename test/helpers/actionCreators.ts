@@ -7,8 +7,8 @@ import {
   THROW_ERROR,
   UNKNOWN_ACTION
 } from './actionTypes'
-import { TodoAction } from './reducers'
-import { Dispatch } from 'redux'
+import type { TodoAction } from './reducers'
+import type { Dispatch } from 'redux'
 
 export function addTodo(text: string): TodoAction {
   return { type: ADD_TODO, text }

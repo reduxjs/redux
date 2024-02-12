@@ -1,12 +1,5 @@
-import {
-  createStore,
-  applyMiddleware,
-  Middleware,
-  MiddlewareAPI,
-  Action,
-  Store,
-  Dispatch
-} from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import type { Middleware, MiddlewareAPI, Action, Store, Dispatch } from 'redux'
 import { vi } from 'vitest'
 import * as reducers from './helpers/reducers'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
