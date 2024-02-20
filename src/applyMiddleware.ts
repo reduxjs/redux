@@ -1,12 +1,12 @@
 import compose from './compose'
 import type { Middleware, MiddlewareAPI } from './types/middleware'
-import type { StoreEnhancer, Dispatch } from './types/store'
+import type { StoreEnhancer, Dispatch } from './types/store'     
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
  * of the Redux store. This is handy for a variety of tasks, such as expressing
  * asynchronous actions in a concise manner, or logging every action payload.
- *
+ * 
  * See `redux-thunk` package as an example of the Redux middleware.
  *
  * Because middleware is potentially asynchronous, this should be the first
@@ -42,10 +42,7 @@ export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(
 ): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 }>
 export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(
   middleware1: Middleware<Ext1, S, any>,
-  middleware2: Middleware<Ext2, S, any>,
-  middleware3: Middleware<Ext3, S, any>,
-  middleware4: Middleware<Ext4, S, any>,
-  middleware5: Middleware<Ext5, S, any>
+
 ): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5 }>
 export default function applyMiddleware<Ext, S = any>(
   ...middlewares: Middleware<any, S, any>[]
