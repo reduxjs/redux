@@ -83,5 +83,6 @@
     "@typescript-eslint/eslint-plugin": "6.12.0",
     "@typescript-eslint/parser": "6.12.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "packageManager": "yarn@4.1.0"
 }
