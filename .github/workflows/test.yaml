@@ -8,7 +8,7 @@ jobs:
     outputs:
       src: ${{ steps.filter.outputs.src }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@v2
@@ -68,7 +68,7 @@ jobs:
         node: ['20.x']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@v2
@@ -106,7 +106,7 @@ jobs:
         ts: ['4.7', '4.8', '4.9', '5.0', '5.1', '5.2', '5.3']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@v2
@@ -146,7 +146,7 @@ jobs:
         node: ['20.x']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: actions/download-artifact@v3
         with:
@@ -169,7 +169,7 @@ jobs:
         example: ['cra4', 'cra5', 'next', 'vite', 'node-standard', 'node-esm']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@v2
