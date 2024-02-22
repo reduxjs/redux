@@ -166,7 +166,17 @@ jobs:
       fail-fast: false
       matrix:
         node: ['18.x']
-        example: ['cra4', 'cra5', 'next', 'vite', 'node-standard', 'node-esm']
+        example:
+          [
+            'cra4',
+            'cra5',
+            'next',
+            'vite',
+            'node-standard',
+            'node-esm',
+            'react-native',
+            'expo',
+          ]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
