@@ -208,7 +208,9 @@ jobs:
 
       - name: Build example
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        run: NODE_OPTIONS=--openssl-legacy-provider yarn build
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+        run: yarn build
 
       - name: Run test step
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
