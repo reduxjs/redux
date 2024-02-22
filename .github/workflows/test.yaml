@@ -216,6 +216,13 @@ jobs:
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: yarn info redux && yarn why redux
 
+      - name: Set up JDK 17 for React Native build
+        if: matrix.example == 'react-native'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17.x'
+          distribution: 'temurin'
+
       - name: Build example
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
         env:
