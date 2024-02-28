@@ -281,7 +281,7 @@ When making async requests, it's standard to dispatch actions before and after a
 Error handling here can be trickier than most people think. If you chain `resPromise.then(dispatchFulfilled).catch(dispatchRejected)` together, you may end up dispatching a "rejected" action if some non-network error occurs during the process of handling the "fulfilled" action. It's better to use the second argument of `.then()` to ensure you only handle errors related to the request itself:
 
 ```js title="Example: async request with promise chaining"
-function fetchData(someValue) {
+function postData(someValue) {
   return (dispatch, getState) => {
     dispatch(requestStarted())
 
@@ -296,7 +296,7 @@ function fetchData(someValue) {
 With `async/await`, this can be even trickier, because of how `try/catch` logic is usually organized. In order to ensure that the `catch` block _only_ handles errors from the network level, it may be necessary to reorganize the logic so that the thunk returns early if there's an error, and "fulfilled" action only happens at the end:
 
 ```js title="Example: error handling with async/await"
-function fetchData(someValue) {
+function postData(someValue) {
   return async (dispatch, getState) => {
     dispatch(requestStarted())
 
