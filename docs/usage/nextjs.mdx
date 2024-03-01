@@ -95,10 +95,11 @@ The first change is to move from defining `store` as a global or module-singleto
 
 ```ts title="lib/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from "./features/counter/counterSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {}
+    reducer: { counterReducer }
   })
 }
 
@@ -118,10 +119,11 @@ You'll also want to create and export [pre-typed versions of the React-Redux hoo
 ```ts title="lib/hooks.ts"
 // file: lib/store.ts noEmit
 import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from "./features/counter/counterSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {}
+    reducer: { counterReducer }
   })
 }
 
@@ -152,10 +154,11 @@ To use this new `makeStore` function we need to create a new "client" component 
 ```ts title="app/StoreProvider.tsx"
 // file: lib/store.ts noEmit
 import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from "./features/counter/counterSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {}
+    reducer: { counterReducer }
   })
 }
 
