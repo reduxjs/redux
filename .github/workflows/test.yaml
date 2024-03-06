@@ -103,7 +103,7 @@ jobs:
       fail-fast: false
       matrix:
         node: ['18.x']
-        ts: ['4.7', '4.8', '4.9', '5.0', '5.1', '5.2', '5.3']
+        ts: ['4.7', '4.8', '4.9', '5.0', '5.1', '5.2', '5.3', '5.4']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
