@@ -75,7 +75,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.6",
     "tsup": "7.0.0",
-    "typescript": "5.2",
+    "typescript": "^5.4.2",
     "vitest": "^1.2.1"
   },
   "resolutions": {
