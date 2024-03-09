@@ -1,46 +1,46 @@
 import type { Dispatch } from 'redux'
 
-/**
- * Default Dispatch type accepts any object with `type` property.
- */
-function simple() {
-  const dispatch: Dispatch = null as any
+describe('type tests', () => {
+  test('default Dispatch type accepts any object with `type` property.', () => {
+    const dispatch: Dispatch = null as any
 
-  const a = dispatch({ type: 'INCREMENT', count: 10 })
+    const a = dispatch({ type: 'INCREMENT', count: 10 })
 
-  a.count
-  // @ts-expect-error
-  a.wrongProp
+    expectTypeOf(a).toHaveProperty('count')
 
-  // @ts-expect-error
-  dispatch('not-an-action')
-}
+    expectTypeOf(a).not.toHaveProperty('wrongProp')
 
-/**
- * Dispatch accepts type argument that restricts allowed action types.
- */
-function discriminated() {
-  interface IncrementAction {
-    type: 'INCREMENT'
-    count?: number
-  }
+    expectTypeOf(dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
+  })
 
-  interface DecrementAction {
-    type: 'DECREMENT'
-    count?: number
-  }
+  test('Dispatch accepts type argument that restricts allowed action types.', () => {
+    interface IncrementAction {
+      type: 'INCREMENT'
+      count?: number
+    }
 
-  // Union of all actions in the app.
-  type MyAction = IncrementAction | DecrementAction
+    interface DecrementAction {
+      type: 'DECREMENT'
+      count?: number
+    }
 
-  const dispatch: Dispatch<MyAction> = null as any
+    // Union of all actions in the app.
+    type MyAction = IncrementAction | DecrementAction
 
-  dispatch({ type: 'INCREMENT' })
-  dispatch({ type: 'DECREMENT', count: 10 })
-  // Known actions are strictly checked.
-  // @ts-expect-error
-  dispatch({ type: 'DECREMENT', count: '' })
-  // Unknown actions are rejected.
-  // @ts-expect-error
-  dispatch({ type: 'SOME_OTHER_TYPE' })
-}
+    const dispatch: Dispatch<MyAction> = null as any
+
+    expectTypeOf(dispatch).parameter(0).toMatchTypeOf({ type: 'INCREMENT' })
+
+    expectTypeOf(dispatch).toBeCallableWith({ type: 'DECREMENT', count: 10 })
+
+    // Known actions are strictly checked.
+    expectTypeOf(dispatch)
+      .parameter(0)
+      .not.toMatchTypeOf({ type: 'DECREMENT', count: '' })
+
+    // Unknown actions are rejected.
+    expectTypeOf(dispatch)
+      .parameter(0)
+      .not.toEqualTypeOf({ type: 'SOME_OTHER_TYPE' })
+  })
+})
