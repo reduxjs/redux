@@ -1,0 +1,10 @@
+{
+  // For building the library.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"]
+}
