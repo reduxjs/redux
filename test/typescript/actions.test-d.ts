@@ -1,41 +1,43 @@
 import type { Action as ReduxAction } from 'redux'
 
-namespace FSA {
-  interface Action<P> extends ReduxAction {
-    payload: P
-  }
+describe('type tests', () => {
+  test('FSA', () => {
+    interface Action<P> extends ReduxAction {
+      payload: P
+    }
 
-  const action: Action<string> = {
-    type: 'ACTION_TYPE',
-    payload: 'test'
-  }
+    const action: Action<string> = {
+      type: 'ACTION_TYPE',
+      payload: 'test'
+    }
 
-  const payload: string = action.payload
-}
+    expectTypeOf(action.payload).toBeString()
+  })
 
-namespace FreeShapeAction {
-  interface Action extends ReduxAction {
-    [key: string]: any
-  }
+  test('FreeShapeAction', () => {
+    interface Action extends ReduxAction {
+      [key: string]: any
+    }
 
-  const action: Action = {
-    type: 'ACTION_TYPE',
-    text: 'test'
-  }
+    const action: Action = {
+      type: 'ACTION_TYPE',
+      text: 'test'
+    }
 
-  const text: string = action['text']
-}
+    expectTypeOf(action.text).toBeAny()
+  })
 
-namespace StringLiteralTypeAction {
-  type ActionType = 'A' | 'B' | 'C'
+  test('StringLiteralTypeAction', () => {
+    type ActionType = 'A' | 'B' | 'C'
 
-  interface Action extends ReduxAction {
-    type: ActionType
-  }
+    interface Action extends ReduxAction {
+      type: ActionType
+    }
 
-  const action: Action = {
-    type: 'A'
-  }
+    const action: Action = {
+      type: 'A'
+    }
 
-  const type: ActionType = action.type
-}
+    expectTypeOf(action.type).toEqualTypeOf<ActionType>()
+  })
+})
