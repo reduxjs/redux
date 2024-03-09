@@ -1,64 +1,68 @@
 import type {
-  ActionCreator,
   Action,
-  Dispatch,
-  ActionCreatorsMapObject
+  ActionCreator,
+  ActionCreatorsMapObject,
+  Dispatch
 } from 'redux'
 import { bindActionCreators } from 'redux'
+import { addTodo } from '../helpers/actionCreators'
 
 interface AddTodoAction extends Action {
   text: string
 }
 
-const addTodo: ActionCreator<AddTodoAction, [string]> = text => ({
-  type: 'ADD_TODO',
-  text
-})
-
-const addTodoAction: AddTodoAction = addTodo('test')
-
-type AddTodoThunk = (dispatch: Dispatch) => AddTodoAction
-
-const addTodoViaThunk: ActionCreator<AddTodoThunk> = text => (_: Dispatch) => ({
-  type: 'ADD_TODO',
-  text
-})
-
 declare const dispatch: Dispatch
 
-function bound() {
-  const boundAddTodo = bindActionCreators(addTodo, dispatch)
+describe('type tests', () => {
+  test('ActionCreator', () => {
+    const addTodo: ActionCreator<AddTodoAction, [string]> = text => ({
+      type: 'ADD_TODO',
+      text
+    })
 
-  const dispatchedAddTodoAction: AddTodoAction = boundAddTodo('test')
+    expectTypeOf(addTodo('test')).toEqualTypeOf<AddTodoAction>()
+  })
 
-  const boundAddTodoViaThunk = bindActionCreators<
-    ActionCreator<AddTodoThunk, [string]>,
-    ActionCreator<AddTodoAction, [string]>
-  >(addTodoViaThunk, dispatch)
+  test('bound', () => {
+    type AddTodoThunk = (dispatch: Dispatch) => AddTodoAction
+    const addTodoViaThunk: ActionCreator<AddTodoThunk> =
+      text => (_: Dispatch) => ({
+        type: 'ADD_TODO',
+        text
+      })
 
-  const dispatchedAddTodoViaThunkAction: AddTodoAction =
-    boundAddTodoViaThunk('test')
+    const boundAddTodo = bindActionCreators(addTodo, dispatch)
 
-  const boundActionCreators = bindActionCreators({ addTodo }, dispatch)
+    expectTypeOf(boundAddTodo('test')).toMatchTypeOf<AddTodoAction>()
 
-  const otherDispatchedAddTodoAction: AddTodoAction =
-    boundActionCreators.addTodo('test')
+    const boundAddTodoViaThunk = bindActionCreators<
+      ActionCreator<AddTodoThunk, [string]>,
+      ActionCreator<AddTodoAction, [string]>
+    >(addTodoViaThunk, dispatch)
 
-  interface M extends ActionCreatorsMapObject {
-    addTodoViaThunk: ActionCreator<AddTodoThunk, [string]>
-  }
+    expectTypeOf(boundAddTodoViaThunk('test')).toEqualTypeOf<AddTodoAction>()
 
-  interface N extends ActionCreatorsMapObject {
-    addTodoViaThunk: ActionCreator<AddTodoAction, [string]>
-  }
+    const boundActionCreators = bindActionCreators({ addTodo }, dispatch)
 
-  const boundActionCreators2 = bindActionCreators<M, N>(
-    {
-      addTodoViaThunk
-    },
-    dispatch
-  )
+    expectTypeOf(
+      boundActionCreators.addTodo('test')
+    ).toMatchTypeOf<AddTodoAction>()
 
-  const otherDispatchedAddTodoAction2: AddTodoAction =
-    boundActionCreators2.addTodoViaThunk('test')
-}
+    interface M extends ActionCreatorsMapObject {
+      addTodoViaThunk: ActionCreator<AddTodoThunk, [string]>
+    }
+
+    interface N extends ActionCreatorsMapObject {
+      addTodoViaThunk: ActionCreator<AddTodoAction, [string]>
+    }
+
+    const boundActionCreators2 = bindActionCreators<M, N>(
+      { addTodoViaThunk },
+      dispatch
+    )
+
+    expectTypeOf(
+      boundActionCreators2.addTodoViaThunk('test')
+    ).toEqualTypeOf<AddTodoAction>()
+  })
+})
