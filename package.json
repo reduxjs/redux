@@ -43,7 +43,7 @@
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "lint": "eslint --ext js,ts src test",
-    "check-types": "tsc --noEmit && echo \"Types compiled\"",
+    "check-types": "tsc -p tsconfig.json --noEmit && echo \"Types compiled\"",
     "test": "vitest --run",
     "test:types": "tsc -p test/typescript && echo \"Typetests passed\"",
     "test:watch": "vitest --watch",
