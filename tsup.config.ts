@@ -1,9 +1,11 @@
-import { defineConfig, Options } from 'tsup'
-
-import * as babel from '@babel/core'
-import { Plugin } from 'esbuild'
+import babel from '@babel/core'
+import type { Plugin } from 'esbuild'
 import { getBuildExtensions } from 'esbuild-extra'
-import fs from 'fs'
+import fs from 'node:fs'
+import type { Options } from 'tsup'
+import { defineConfig } from 'tsup'
+
+const tsconfig = 'tsconfig.build.json' satisfies Options['tsconfig']
 
 // Extract error strings, replace them with error codes, and write messages to a file
 const mangleErrorsTransform: Plugin = {
@@ -27,12 +29,13 @@ const mangleErrorsTransform: Plugin = {
 }
 
 export default defineConfig(options => {
-  const commonOptions: Partial<Options> = {
+  const commonOptions: Options = {
     entry: {
       redux: 'src/index.ts'
     },
     esbuildPlugins: [mangleErrorsTransform],
     sourcemap: true,
+    tsconfig,
     ...options
   }
 
@@ -68,5 +71,5 @@ export default defineConfig(options => {
       outDir: './dist/cjs/',
       outExtension: () => ({ js: '.cjs' })
     }
-  ]
+  ] as Options[]
 })
