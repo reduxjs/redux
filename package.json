@@ -58,6 +58,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__helper-module-imports": "^7.18.3",
     "@types/node": "^18.7.16",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
