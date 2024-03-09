@@ -1,24 +1,10 @@
 {
-  "extends": "../tsconfig.json",
+  // For runtime and type tests during CI.
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "emitDeclarationOnly": false,
-    "strict": true,
+    "jsx": "react-jsx",
     "noEmit": true,
-    "target": "esnext",
-    "jsx": "react",
-    "baseUrl": ".",
-    "skipLibCheck": true,
-    "noImplicitReturns": false,
-    "noUnusedLocals": false,
-    "types": ["vitest/globals"],
-    "paths": {
-      "redux": ["../src/index.ts"], // @remap-prod-remove-line
-      "@internal/*": ["../src/*"]
-    }
+    "noImplicitReturns": false
   },
-  "include": ["**/*.spec.ts"]
+  "include": ["test/typescript"]
 }
