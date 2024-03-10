@@ -17,6 +17,7 @@
     "checkJs": false,
     "alwaysStrict": false,
     "baseUrl": "..",
+    "types": ["@testing-library/jest-dom"],
     "paths": {}
   }
 }
