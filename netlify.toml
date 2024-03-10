@@ -5,7 +5,7 @@
   ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
 
 [build.environment]
-NODE_VERSION = "18.15.0"
+NODE_VERSION = "20"
 NODE_OPTIONS = "--max_old_space_size=4096"
 NETLIFY_USE_YARN = "true"
 YARN_VERSION = "1.22.10"
