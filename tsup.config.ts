@@ -1,7 +1,7 @@
 import babel from '@babel/core'
 import type { Plugin } from 'esbuild'
 import { getBuildExtensions } from 'esbuild-extra'
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import type { Options } from 'tsup'
 import { defineConfig } from 'tsup'
 
@@ -14,15 +14,25 @@ const mangleErrorsTransform: Plugin = {
     const { onTransform } = getBuildExtensions(build, 'mangle-errors-plugin')
 
     onTransform({ loaders: ['ts', 'tsx'] }, async args => {
-      const res = babel.transformSync(args.code, {
-        parserOpts: {
-          plugins: ['typescript']
-        },
-        plugins: [['./scripts/mangleErrors.cjs', { minify: false }]]
-      })!
-      return {
-        code: res.code!,
-        map: res.map!
+      try {
+        const res = await babel.transformAsync(args.code, {
+          parserOpts: {
+            plugins: ['typescript']
+          },
+          plugins: [['./scripts/mangleErrors.cjs', { minify: false }]]
+        })
+
+        if (res == null) {
+          throw new Error('Babel transformAsync returned null')
+        }
+
+        return {
+          code: res.code!,
+          map: res.map!
+        }
+      } catch (err) {
+        console.error('Babel mangleErrors error: ', err)
+        return null
       }
     })
   }
@@ -47,9 +57,9 @@ export default defineConfig(options => {
       outExtension: () => ({ js: '.mjs' }),
       dts: true,
       clean: true,
-      onSuccess() {
+      async onSuccess() {
         // Support Webpack 4 by pointing `"module"` to a file with a `.js` extension
-        fs.copyFileSync('dist/redux.mjs', 'dist/redux.legacy-esm.js')
+        await fs.copyFile('dist/redux.mjs', 'dist/redux.legacy-esm.js')
       }
     },
     // Browser-ready ESM, production + minified
@@ -71,5 +81,5 @@ export default defineConfig(options => {
       outDir: './dist/cjs/',
       outExtension: () => ({ js: '.cjs' })
     }
-  ] as Options[]
+  ]
 })
