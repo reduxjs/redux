@@ -166,7 +166,17 @@ jobs:
       fail-fast: false
       matrix:
         node: ['20.x']
-        example: ['cra4', 'cra5', 'next', 'vite', 'node-standard', 'node-esm']
+        example:
+          [
+            'cra4',
+            'cra5',
+            'next',
+            'vite',
+            'node-standard',
+            'node-esm',
+            'react-native',
+            'expo'
+          ]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -179,6 +189,12 @@ jobs:
 
       - name: Clone RTK repo
         run: git clone https://github.com/reduxjs/redux-toolkit.git ./redux-toolkit
+
+      - name: Cache example deps
+        uses: actions/cache@v4
+        with:
+          path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}/node_modules
+          key: test-published-artifact-${{ matrix.example }}-node_modules
 
       - name: Check folder contents
         run: ls -l .
