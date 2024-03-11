@@ -8,8 +8,8 @@ jobs:
     outputs:
       src: ${{ steps.filter.outputs.src }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: dorny/paths-filter@v2
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
         id: filter
         with:
           filters: |
@@ -29,14 +29,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['18.x']
+        node: ['20.x']
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
@@ -53,7 +53,7 @@ jobs:
       - name: Pack
         run: yarn pack
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: package
           path: ./package.tgz
@@ -65,13 +65,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['18.x']
+        node: ['20.x']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
@@ -79,7 +79,7 @@ jobs:
       - name: Install deps
         run: yarn install
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: package
           path: .
@@ -102,14 +102,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['18.x']
+        node: ['20.x']
         ts: ['4.7', '4.8', '4.9', '5.0', '5.1', '5.2', '5.3', '5.4']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
@@ -120,7 +120,7 @@ jobs:
       - name: Install TypeScript ${{ matrix.ts }}
         run: yarn add typescript@${{ matrix.ts }}
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: package
           path: .
@@ -143,12 +143,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['18.x']
+        node: ['20.x']
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: package
           path: .
@@ -165,14 +165,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['18.x']
-        example: ['cra4', 'cra5', 'next', 'vite', 'node-standard', 'node-esm']
+        node: ['20.x']
+        example:
+          [
+            'cra4',
+            'cra5',
+            'next',
+            'vite',
+            'node-standard',
+            'node-esm',
+            'react-native',
+            'expo'
+          ]
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use node ${{ matrix.node }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
@@ -180,14 +190,22 @@ jobs:
       - name: Clone RTK repo
         run: git clone https://github.com/reduxjs/redux-toolkit.git ./redux-toolkit
 
+      - name: Cache example deps
+        uses: actions/cache@v4
+        with:
+          path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}/node_modules
+          key: test-published-artifact-${{ matrix.example }}-node_modules
+
       - name: Check folder contents
         run: ls -l .
 
       - name: Install deps
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
         run: yarn install
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: package
           path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
@@ -206,7 +224,9 @@ jobs:
 
       - name: Build example
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        run: NODE_OPTIONS=--openssl-legacy-provider yarn build
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+        run: yarn build
 
       - name: Run test step
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
