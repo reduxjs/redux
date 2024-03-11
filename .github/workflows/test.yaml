@@ -89,7 +89,7 @@ jobs:
       - name: Install build artifact
         run: yarn  add ./package.tgz
 
-      - run: sed -i -e /@remap-prod-remove-line/d ./tsconfig.json ./vitest.config.mts ./test/tsconfig.json ./test/typescript/tsconfig.json
+      - run: sed -i -e /@remap-prod-remove-line/d ./tsconfig.base.json ./vitest.config.mts
 
       - name: Run tests, against dist
         run: yarn test
