@@ -131,9 +131,7 @@ jobs:
       - name: Test types
         run: |
           yarn tsc --version
-          yarn check-types
-          yarn test:typecheck
-          yarn test:types
+          yarn type-tests
 
   are-the-types-wrong:
     name: Check package config with are-the-types-wrong
