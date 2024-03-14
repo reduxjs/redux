@@ -3,7 +3,6 @@ import $$observable from './utils/symbol-observable'
 import type {
   Store,
   StoreEnhancer,
-  Dispatch,
   Observer,
   ListenerCallback,
   UnknownIfNonSpecific
@@ -399,7 +398,7 @@ export function createStore<
   initialState = currentState
 
   const store = {
-    dispatch: dispatch as Dispatch<A>,
+    dispatch,
     subscribe,
     getState,
     getInitialState,
