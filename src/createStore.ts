@@ -138,6 +138,7 @@ export function createStore<
   let currentState: S | PreloadedState | undefined = preloadedState as
     | PreloadedState
     | undefined
+  let initialState: S | PreloadedState | undefined = currentState
   let currentListeners: Map<number, ListenerCallback> | null = new Map()
   let nextListeners = currentListeners
   let listenerIdCounter = 0
@@ -174,6 +175,15 @@ export function createStore<
     }
 
     return currentState as S
+  }
+
+  /**
+   * Reads the initial state tree managed by the store.
+   *
+   * @returns The initial state tree of your application.
+   */
+  function getInitialState(): S {
+    return initialState as S
   }
 
   /**
@@ -385,10 +395,14 @@ export function createStore<
   // the initial state tree.
   dispatch({ type: ActionTypes.INIT } as A)
 
+  // initial state should be the state *after* the "INIT" action is dispatched
+  initialState = currentState
+
   const store = {
     dispatch: dispatch as Dispatch<A>,
     subscribe,
     getState,
+    getInitialState,
     replaceReducer,
     [$$observable]: observable
   } as unknown as Store<S, A, StateExt> & Ext

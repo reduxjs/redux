@@ -24,10 +24,11 @@ describe('createStore', () => {
     // So we filter it out
     const methods = Object.keys(store).filter(key => key !== $$observable)
 
-    expect(methods.length).toBe(4)
+    expect(methods.length).toBe(5)
     expect(methods).toContain('subscribe')
     expect(methods).toContain('dispatch')
     expect(methods).toContain('getState')
+    expect(methods).toContain('getInitialState')
     expect(methods).toContain('replaceReducer')
   })
 
@@ -925,5 +926,56 @@ describe('createStore', () => {
         dummyEnhancer
       )
     ).toThrow()
+  })
+
+  it("exposes getInitialState which returns the store's initial state", () => {
+    const unPreloadedStore = createStore(reducers.todos)
+
+    expect(unPreloadedStore.getInitialState()).toEqual([])
+
+    unPreloadedStore.dispatch(addTodo('Hello'))
+
+    expect(unPreloadedStore.getInitialState()).toEqual([])
+
+    expect(unPreloadedStore.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+
+    const preloadedStore = createStore(reducers.todos, [
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+
+    expect(preloadedStore.getInitialState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+
+    preloadedStore.dispatch(addTodo('World'))
+
+    expect(preloadedStore.getInitialState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      }
+    ])
+
+    expect(preloadedStore.getState()).toEqual([
+      {
+        id: 1,
+        text: 'Hello'
+      },
+      {
+        id: 2,
+        text: 'World'
+      }
+    ])
   })
 })
