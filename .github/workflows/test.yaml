@@ -153,9 +153,9 @@ jobs:
           name: package
           path: .
 
-      # Note: We currently expect "FalseCJS" failures for Node16 + `moduleResolution: "node16"
+      # Note: We currently expect "FalseESM" failures for Node16 + `moduleResolution: "node16"
       - name: Run are-the-types-wrong
-        run: npx @arethetypeswrong/cli ./package.tgz --format table --ignore-rules false-cjs
+        run: npx @arethetypeswrong/cli ./package.tgz --format table --ignore-rules false-esm
 
   test-published-artifact:
     name: Test Published Artifact ${{ matrix.example }}
