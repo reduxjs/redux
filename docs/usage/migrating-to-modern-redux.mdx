@@ -130,7 +130,7 @@ This example shows several possible common tasks when setting up a Redux store:
 None of these are _required_, but they do show up frequently in real-world codebases.
 
 ```js title="Custom Store Setup: src/app/store.js"
-import { configureStore, combineReducers} from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import {
   persistStore,
   persistReducer,
@@ -139,7 +139,7 @@ import {
   PAUSE,
   PERSIST,
   PURGE,
-  REGISTER,
+  REGISTER
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -163,7 +163,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   version: 1,
-  storage,
+  storage
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -175,12 +175,12 @@ const store = configureStore({
     const middleware = getDefaultMiddleware({
       // Pass in a custom `extra` argument to the thunk middleware
       thunk: {
-        extraArgument: {serviceLayer}
+        extraArgument: { serviceLayer }
       },
       // Customize the built-in serializability dev check
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+      }
     }).concat(customMiddleware, api.middleware)
 
     // Conditionally add another middleware in dev
@@ -191,9 +191,12 @@ const store = configureStore({
     return middleware
   },
   // Turn off devtools in prod, or pass options in dev
-  devTools: process.env.NODE_ENV === 'production' ? false : {
-    stateSanitizer: stateSanitizerForDevtools
-  }
+  devTools:
+    process.env.NODE_ENV === 'production'
+      ? false
+      : {
+          stateSanitizer: stateSanitizerForDevtools
+        }
 })
 ```
 
@@ -817,7 +820,7 @@ export const store = createStore(rootReducer)
 export type RootAction = TodoActions | CounterActions
 // ❌ Common pattern: manually defining the root state type with each field
 export interface RootState {
-  todos: TodosState;
+  todos: TodosState
   counter: CounterState
 }
 

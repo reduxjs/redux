@@ -238,8 +238,6 @@ Here are some suggestions on when it makes sense to use Redux:
 >
 > - **[Redux FAQ: When should I use Redux?](../faq/General.md#when-should-i-use-redux)**
 > - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
->
 > - **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
->
 > - **[The Tao of Redux, Part 2 - Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
 > - **[Redux FAQ](../FAQ.md)**
