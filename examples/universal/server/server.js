@@ -21,7 +21,12 @@ const port = 3000
 
 // Use this middleware to set up hot module reloading via webpack.
 const compiler = webpack(webpackConfig)
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }))
+app.use(
+  webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+  })
+)
 app.use(webpackHotMiddleware(compiler))
 
 const handleRender = (req, res) => {
@@ -73,10 +78,12 @@ const renderFullPage = (html, preloadedState) => {
     `
 }
 
-app.listen(port, (error) => {
+app.listen(port, error => {
   if (error) {
     console.error(error)
   } else {
-    console.info(`==> 🌎  Listening on port ${port}. Open up http://localhost:${port}/ in your browser.`)
+    console.info(
+      `==> 🌎  Listening on port ${port}. Open up http://localhost:${port}/ in your browser.`
+    )
   }
 })

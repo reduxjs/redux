@@ -1,5 +1,5 @@
 import React from 'react'
-import { createRenderer } from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow'
 import TodoList from './TodoList'
 import TodoItem from './TodoItem'
 
@@ -10,7 +10,8 @@ const setup = () => {
         text: 'Use Redux',
         completed: false,
         id: 0
-      }, {
+      },
+      {
         text: 'Run the tests',
         completed: true,
         id: 1
@@ -25,7 +26,7 @@ const setup = () => {
     }
   }
 
-  const renderer = createRenderer();
+  const renderer = createRenderer()
   renderer.render(<TodoList {...props} />)
   const output = renderer.getRenderOutput()
 

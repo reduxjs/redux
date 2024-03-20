@@ -8,9 +8,7 @@ const setup = product => {
     onAddToCartClicked: jest.fn()
   }
 
-  const component = shallow(
-    <ProductItem product={product} {...actions} />
-  )
+  const component = shallow(<ProductItem product={product} {...actions} />)
 
   return {
     component: component,
@@ -33,7 +31,11 @@ describe('ProductItem component', () => {
 
   it('should render product', () => {
     const { product } = setup(productProps)
-    expect(product.props()).toEqual({ title: 'Product 1', price: 9.99, quantity: 6 })
+    expect(product.props()).toEqual({
+      title: 'Product 1',
+      price: 9.99,
+      quantity: 6
+    })
   })
 
   it('should render Add To Cart message', () => {

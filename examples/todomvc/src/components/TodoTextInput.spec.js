@@ -1,21 +1,22 @@
 import React from 'react'
-import { createRenderer } from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow'
 import TodoTextInput from './TodoTextInput'
 
 const setup = propOverrides => {
-  const props = Object.assign({
-    onSave: jest.fn(),
-    text: 'Use Redux',
-    placeholder: 'What needs to be done?',
-    editing: false,
-    newTodo: false
-  }, propOverrides)
+  const props = Object.assign(
+    {
+      onSave: jest.fn(),
+      text: 'Use Redux',
+      placeholder: 'What needs to be done?',
+      editing: false,
+      newTodo: false
+    },
+    propOverrides
+  )
 
   const renderer = createRenderer()
 
-  renderer.render(
-    <TodoTextInput {...props} />
-  )
+  renderer.render(<TodoTextInput {...props} />)
 
   const output = renderer.getRenderOutput()
 

@@ -1,9 +1,15 @@
-import { INCREMENT, ADD_CHILD, REMOVE_CHILD, CREATE_NODE, DELETE_NODE } from '../actions'
+import {
+  INCREMENT,
+  ADD_CHILD,
+  REMOVE_CHILD,
+  CREATE_NODE,
+  DELETE_NODE
+} from '../actions'
 
 const childIds = (state, action) => {
   switch (action.type) {
     case ADD_CHILD:
-      return [ ...state, action.childId ]
+      return [...state, action.childId]
     case REMOVE_CHILD:
       return state.filter(id => id !== action.childId)
     default:
@@ -35,11 +41,11 @@ const node = (state, action) => {
   }
 }
 
-const getAllDescendantIds = (state, nodeId) => (
-  state[nodeId].childIds.reduce((acc, childId) => (
-    [ ...acc, childId, ...getAllDescendantIds(state, childId) ]
-  ), [])
-)
+const getAllDescendantIds = (state, nodeId) =>
+  state[nodeId].childIds.reduce(
+    (acc, childId) => [...acc, childId, ...getAllDescendantIds(state, childId)],
+    []
+  )
 
 const deleteMany = (state, ids) => {
   state = { ...state }
@@ -55,7 +61,7 @@ export default (state = {}, action) => {
 
   if (action.type === DELETE_NODE) {
     const descendantIds = getAllDescendantIds(state, nodeId)
-    return deleteMany(state, [ nodeId, ...descendantIds ])
+    return deleteMany(state, [nodeId, ...descendantIds])
   }
 
   return {

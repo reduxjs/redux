@@ -1,9 +1,9 @@
 import React from 'react'
-import { createRenderer } from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow'
 import TodoItem from './TodoItem'
 import TodoTextInput from './TodoTextInput'
 
-const setup = ( editing = false ) => {
+const setup = (editing = false) => {
   const props = {
     todo: {
       id: 0,
@@ -17,9 +17,7 @@ const setup = ( editing = false ) => {
 
   const renderer = createRenderer()
 
-  renderer.render(
-    <TodoItem {...props} />
-  )
+  renderer.render(<TodoItem {...props} />)
 
   let output = renderer.getRenderOutput()
 
@@ -49,7 +47,7 @@ describe('components', () => {
       expect(div.type).toBe('div')
       expect(div.props.className).toBe('view')
 
-      const [ input, label, button ] = div.props.children
+      const [input, label, button] = div.props.children
 
       expect(input.type).toBe('input')
       expect(input.props.checked).toBe(false)

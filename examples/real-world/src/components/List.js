@@ -22,9 +22,11 @@ export default class List extends Component {
   renderLoadMore() {
     const { isFetching, onLoadMoreClick } = this.props
     return (
-      <button style={{ fontSize: '150%' }}
-              onClick={onLoadMoreClick}
-              disabled={isFetching}>
+      <button
+        style={{ fontSize: '150%' }}
+        onClick={onLoadMoreClick}
+        disabled={isFetching}
+      >
         {isFetching ? 'Loading...' : 'Load More'}
       </button>
     )
@@ -32,18 +34,30 @@ export default class List extends Component {
 
   render() {
     const {
-      isFetching, nextPageUrl, pageCount,
-      items, renderItem, loadingLabel
+      isFetching,
+      nextPageUrl,
+      pageCount,
+      items,
+      renderItem,
+      loadingLabel
     } = this.props
 
     const isEmpty = items.length === 0
     if (isEmpty && isFetching) {
-      return <h2><i>{loadingLabel}</i></h2>
+      return (
+        <h2>
+          <i>{loadingLabel}</i>
+        </h2>
+      )
     }
 
     const isLastPage = !nextPageUrl
     if (isEmpty && isLastPage) {
-      return <h1><i>Nothing here!</i></h1>
+      return (
+        <h1>
+          <i>Nothing here!</i>
+        </h1>
+      )
     }
 
     return (

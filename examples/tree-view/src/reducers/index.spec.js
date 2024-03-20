@@ -1,6 +1,12 @@
 import deepFreeze from 'deep-freeze'
 import reducer from './index'
-import { increment, createNode, deleteNode, addChild, removeChild } from '../actions'
+import {
+  increment,
+  createNode,
+  deleteNode,
+  addChild,
+  removeChild
+} from '../actions'
 
 describe('reducer', () => {
   it('should provide the initial state', () => {
@@ -9,7 +15,7 @@ describe('reducer', () => {
 
   it('should handle INCREMENT action', () => {
     const stateBefore = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
         childIds: []
@@ -17,7 +23,7 @@ describe('reducer', () => {
     }
     const action = increment('node_0')
     const stateAfter = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 1,
         childIds: []
@@ -49,27 +55,27 @@ describe('reducer', () => {
 
   it('should handle DELETE_NODE action', () => {
     const stateBefore = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
-        childIds: [ 'node_1' ]
+        childIds: ['node_1']
       },
-      'node_1': {
+      node_1: {
         id: 'node_1',
         counter: 0,
         childIds: []
       },
-      'node_2': {
+      node_2: {
         id: 'node_2',
         counter: 0,
-        childIds: [ 'node_3', 'node_4' ]
+        childIds: ['node_3', 'node_4']
       },
-      'node_3': {
+      node_3: {
         id: 'node_3',
         counter: 0,
         childIds: []
       },
-      'node_4': {
+      node_4: {
         id: 'node_4',
         counter: 0,
         childIds: []
@@ -77,12 +83,12 @@ describe('reducer', () => {
     }
     const action = deleteNode('node_2')
     const stateAfter = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
-        childIds: [ 'node_1' ]
+        childIds: ['node_1']
       },
-      'node_1': {
+      node_1: {
         id: 'node_1',
         counter: 0,
         childIds: []
@@ -97,12 +103,12 @@ describe('reducer', () => {
 
   it('should handle ADD_CHILD action', () => {
     const stateBefore = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
         childIds: []
       },
-      'node_1': {
+      node_1: {
         id: 'node_1',
         counter: 0,
         childIds: []
@@ -110,12 +116,12 @@ describe('reducer', () => {
     }
     const action = addChild('node_0', 'node_1')
     const stateAfter = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
-        childIds: [ 'node_1' ]
+        childIds: ['node_1']
       },
-      'node_1': {
+      node_1: {
         id: 'node_1',
         counter: 0,
         childIds: []
@@ -130,12 +136,12 @@ describe('reducer', () => {
 
   it('should handle REMOVE_CHILD action', () => {
     const stateBefore = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
-        childIds: [ 'node_1' ]
+        childIds: ['node_1']
       },
-      'node_1': {
+      node_1: {
         id: 'node_1',
         counter: 0,
         childIds: []
@@ -143,12 +149,12 @@ describe('reducer', () => {
     }
     const action = removeChild('node_0', 'node_1')
     const stateAfter = {
-      'node_0': {
+      node_0: {
         id: 'node_0',
         counter: 0,
         childIds: []
       },
-      'node_1': {
+      node_1: {
         id: 'node_1',
         counter: 0,
         childIds: []
