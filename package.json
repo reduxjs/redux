@@ -25,11 +25,11 @@
   ],
   "main": "dist/cjs/redux.cjs",
   "module": "dist/redux.legacy-esm.js",
-  "types": "dist/redux.d.ts",
+  "types": "dist/redux.d.mts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/redux.d.ts",
+      "types": "./dist/redux.d.mts",
       "import": "./dist/redux.mjs",
       "default": "./dist/cjs/redux.cjs"
     }
@@ -55,33 +55,32 @@
     "tsc": "tsc"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.0",
+    "@babel/core": "^7.24.3",
     "@types/babel__core": "^7.20.5",
     "@types/babel__helper-module-imports": "^7.18.3",
-    "@types/node": "^18.7.16",
-    "@typescript-eslint/eslint-plugin": "^6",
-    "@typescript-eslint/parser": "^6",
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "cross-env": "^7.0.3",
-    "esbuild-extra": "^0.1.3",
-    "eslint": "^8.23.0",
+    "esbuild-extra": "^0.3.1",
+    "eslint": "^8.57.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-import-resolver-typescript": "^3.5.1",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-react": "^7.31.8",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "glob": "^8.0.3",
+    "glob": "^10.3.10",
     "netlify-plugin-cache": "^1.0.3",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "rxjs": "^7.5.6",
-    "tsup": "7.0.0",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "rxjs": "^7.8.1",
+    "tsup": "8.0.2",
     "typescript": "^5.4.2",
     "vitest": "^1.4.0"
   },
   "resolutions": {
-    "esbuild": "0.19.7",
-    "@typescript-eslint/eslint-plugin": "6.12.0",
-    "@typescript-eslint/parser": "6.12.0"
+    "@typescript-eslint/eslint-plugin": "7.3.1",
+    "@typescript-eslint/parser": "7.3.1"
   },
   "sideEffects": false,
   "packageManager": "yarn@4.1.0"

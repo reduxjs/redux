@@ -1,21 +1,24 @@
 import React from 'react'
-import { createRenderer } from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow'
 import MainSection from './MainSection'
 import Footer from './Footer'
 import VisibleTodoList from '../containers/VisibleTodoList'
 
 const setup = propOverrides => {
-  const props = Object.assign({
-    todosCount: 2,
-    completedCount: 1,
-    actions: {
-      editTodo: jest.fn(),
-      deleteTodo: jest.fn(),
-      completeTodo: jest.fn(),
-      completeAllTodos: jest.fn(),
-      clearCompleted: jest.fn()
-    }
-  }, propOverrides)
+  const props = Object.assign(
+    {
+      todosCount: 2,
+      completedCount: 1,
+      actions: {
+        editTodo: jest.fn(),
+        deleteTodo: jest.fn(),
+        completeTodo: jest.fn(),
+        completeAllTodos: jest.fn(),
+        clearCompleted: jest.fn()
+      }
+    },
+    propOverrides
+  )
 
   const renderer = createRenderer()
   renderer.render(<MainSection {...props} />)
@@ -39,7 +42,7 @@ describe('components', () => {
     describe('toggle all input', () => {
       it('should render', () => {
         const { output } = setup()
-        const [ toggle ] = output.props.children[0].props.children
+        const [toggle] = output.props.children[0].props.children
         expect(toggle.type).toBe('input')
         expect(toggle.props.className).toBe('toggle-all')
         expect(toggle.props.type).toBe('checkbox')
@@ -50,13 +53,13 @@ describe('components', () => {
         const { output } = setup({
           completedCount: 2
         })
-        const [ toggle ] = output.props.children[0].props.children
+        const [toggle] = output.props.children[0].props.children
         expect(toggle.props.checked).toBe(true)
       })
 
       it('should call completeAllTodos on change', () => {
         const { output, props } = setup()
-        const [ , label ] = output.props.children[0].props.children
+        const [, label] = output.props.children[0].props.children
         label.props.onClick({})
         expect(props.actions.completeAllTodos).toBeCalled()
       })
@@ -65,7 +68,7 @@ describe('components', () => {
     describe('footer', () => {
       it('should render', () => {
         const { output } = setup()
-        const [ , , footer ] = output.props.children
+        const [, , footer] = output.props.children
         expect(footer.type).toBe(Footer)
         expect(footer.props.completedCount).toBe(1)
         expect(footer.props.activeCount).toBe(1)
@@ -73,7 +76,7 @@ describe('components', () => {
 
       it('onClearCompleted should call clearCompleted', () => {
         const { output, props } = setup()
-        const [ , , footer ] = output.props.children
+        const [, , footer] = output.props.children
         footer.props.onClearCompleted()
         expect(props.actions.clearCompleted).toBeCalled()
       })
@@ -82,7 +85,7 @@ describe('components', () => {
     describe('visible todo list', () => {
       it('should render', () => {
         const { output } = setup()
-        const [ , visibleTodoList ] = output.props.children
+        const [, visibleTodoList] = output.props.children
         expect(visibleTodoList.type).toBe(VisibleTodoList)
       })
     })
@@ -93,8 +96,9 @@ describe('components', () => {
           todosCount: 0,
           completedCount: 0
         })
-        const renderedChildren = output.props.children
-        .filter((item) => item !== false)
+        const renderedChildren = output.props.children.filter(
+          item => item !== false
+        )
         expect(renderedChildren.length).toBe(1)
         expect(renderedChildren[0].type).toBe(VisibleTodoList)
       })

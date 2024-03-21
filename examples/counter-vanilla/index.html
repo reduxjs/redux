@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Redux basic example</title>
@@ -41,24 +41,28 @@
       render()
       store.subscribe(render)
 
-      document.getElementById('increment')
+      document
+        .getElementById('increment')
         .addEventListener('click', function () {
           store.dispatch({ type: 'INCREMENT' })
         })
 
-      document.getElementById('decrement')
+      document
+        .getElementById('decrement')
         .addEventListener('click', function () {
           store.dispatch({ type: 'DECREMENT' })
         })
 
-      document.getElementById('incrementIfOdd')
+      document
+        .getElementById('incrementIfOdd')
         .addEventListener('click', function () {
           if (store.getState() % 2 !== 0) {
             store.dispatch({ type: 'INCREMENT' })
           }
         })
 
-      document.getElementById('incrementAsync')
+      document
+        .getElementById('incrementAsync')
         .addEventListener('click', function () {
           setTimeout(function () {
             store.dispatch({ type: 'INCREMENT' })

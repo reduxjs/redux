@@ -130,7 +130,7 @@ export default combineReducers({
 #### `App.js`
 
 ```js
-import { configureStore } from '@reduxjs/toolkit' 
+import { configureStore } from '@reduxjs/toolkit'
 import reducer from './reducers/index'
 
 const store = configureStore({

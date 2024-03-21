@@ -11,7 +11,7 @@ import List from '../components/List'
 
 const loadData = props => {
   const { fullName } = props
-  props.loadRepo(fullName, [ 'description' ])
+  props.loadRepo(fullName, ['description'])
   props.loadStargazers(fullName)
 }
 
@@ -48,20 +48,25 @@ class RepoPage extends Component {
   render() {
     const { repo, owner, name } = this.props
     if (!repo || !owner) {
-      return <h1><i>Loading {name} details...</i></h1>
+      return (
+        <h1>
+          <i>Loading {name} details...</i>
+        </h1>
+      )
     }
 
     const { stargazers, stargazersPagination } = this.props
     return (
       <div>
-        <Repo repo={repo}
-              owner={owner} />
+        <Repo repo={repo} owner={owner} />
         <hr />
-        <List renderItem={this.renderUser}
-              items={stargazers}
-              onLoadMoreClick={this.handleLoadMoreClick}
-              loadingLabel={`Loading stargazers of ${name}...`}
-              {...stargazersPagination} />
+        <List
+          renderItem={this.renderUser}
+          items={stargazers}
+          onLoadMoreClick={this.handleLoadMoreClick}
+          loadingLabel={`Loading stargazers of ${name}...`}
+          {...stargazersPagination}
+        />
       </div>
     )
   }
@@ -92,7 +97,9 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, {
-  loadRepo,
-  loadStargazers
-})(RepoPage))
+export default withRouter(
+  connect(mapStateToProps, {
+    loadRepo,
+    loadStargazers
+  })(RepoPage)
+)

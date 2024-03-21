@@ -1,5 +1,5 @@
 import React from 'react'
-import { createRenderer } from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow'
 import Header from './Header'
 import TodoTextInput from '../components/TodoTextInput'
 
@@ -8,7 +8,7 @@ const setup = () => {
     addTodo: jest.fn()
   }
 
-  const renderer = createRenderer();
+  const renderer = createRenderer()
   renderer.render(<Header {...props} />)
   const output = renderer.getRenderOutput()
 
@@ -26,7 +26,7 @@ describe('components', () => {
       expect(output.type).toBe('header')
       expect(output.props.className).toBe('header')
 
-      const [ h1, input ] = output.props.children
+      const [h1, input] = output.props.children
       expect(h1.type).toBe('h1')
       expect(h1.props.children).toBe('todos')
       expect(input.type).toBe(TodoTextInput)

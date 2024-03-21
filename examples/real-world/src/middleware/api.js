@@ -21,24 +21,23 @@ const API_ROOT = 'https://api.github.com/'
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 const callApi = (endpoint, schema) => {
-  const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
+  const fullUrl =
+    endpoint.indexOf(API_ROOT) === -1 ? API_ROOT + endpoint : endpoint
 
-  return fetch(fullUrl)
-    .then(response =>
-      response.json().then(json => {
-        if (!response.ok) {
-          return Promise.reject(json)
-        }
+  return fetch(fullUrl).then(response =>
+    response.json().then(json => {
+      if (!response.ok) {
+        return Promise.reject(json)
+      }
 
-        const camelizedJson = camelizeKeys(json)
-        const nextPageUrl = getNextPageUrl(response)
+      const camelizedJson = camelizeKeys(json)
+      const nextPageUrl = getNextPageUrl(response)
 
-        return Object.assign({},
-          normalize(camelizedJson, schema),
-          { nextPageUrl }
-        )
+      return Object.assign({}, normalize(camelizedJson, schema), {
+        nextPageUrl
       })
-    )
+    })
+  )
 }
 
 // We use this Normalizr schemas to transform API responses from a nested form
@@ -54,15 +53,23 @@ const callApi = (endpoint, schema) => {
 // leading to a frozen UI as it wouldn't find "someuser" in the entities.
 // That's why we're forcing lower cases down there.
 
-const userSchema = new schema.Entity('users', {}, {
-  idAttribute: user => user.login.toLowerCase()
-})
+const userSchema = new schema.Entity(
+  'users',
+  {},
+  {
+    idAttribute: user => user.login.toLowerCase()
+  }
+)
 
-const repoSchema = new schema.Entity('repos', {
-  owner: userSchema
-}, {
-  idAttribute: repo => repo.fullName.toLowerCase()
-})
+const repoSchema = new schema.Entity(
+  'repos',
+  {
+    owner: userSchema
+  },
+  {
+    idAttribute: repo => repo.fullName.toLowerCase()
+  }
+)
 
 // Schemas for Github API responses.
 export const Schemas = {
@@ -109,17 +116,23 @@ export default store => next => action => {
     return finalAction
   }
 
-  const [ requestType, successType, failureType ] = types
+  const [requestType, successType, failureType] = types
   next(actionWith({ type: requestType }))
 
   return callApi(endpoint, schema).then(
-    response => next(actionWith({
-      response,
-      type: successType
-    })),
-    error => next(actionWith({
-      type: failureType,
-      error: error.message || 'Something bad happened'
-    }))
+    response =>
+      next(
+        actionWith({
+          response,
+          type: successType
+        })
+      ),
+    error =>
+      next(
+        actionWith({
+          type: failureType,
+          error: error.message || 'Something bad happened'
+        })
+      )
   )
 }

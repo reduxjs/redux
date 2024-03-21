@@ -48,7 +48,7 @@ const pagination = combineReducers({
 const rootReducer = combineReducers({
   entities,
   pagination,
-  errorMessage,
+  errorMessage
 })
 
 export default rootReducer

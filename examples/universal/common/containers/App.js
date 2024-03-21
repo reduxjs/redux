@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import Counter from '../components/Counter'
 import * as CounterActions from '../actions'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   counter: state.counter
 })
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return bindActionCreators(CounterActions, dispatch)
 }
 

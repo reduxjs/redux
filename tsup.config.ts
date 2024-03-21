@@ -54,7 +54,7 @@ export default defineConfig(options => {
     {
       ...commonOptions,
       format: ['esm'],
-      outExtension: () => ({ js: '.mjs' }),
+      outExtension: () => ({ js: '.mjs' }), // Add dts: '.d.ts' when egoist/tsup#1053 lands
       dts: true,
       clean: true,
       async onSuccess() {

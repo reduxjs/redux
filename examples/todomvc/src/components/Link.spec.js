@@ -1,21 +1,24 @@
 import React from 'react'
-import { createRenderer } from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow'
 import Link from './Link'
 
-const setup = (propOverrides) => {
-  const props = Object.assign({
-    active: false,
-    children: 'All',
-    setFilter: jest.fn()
-  }, propOverrides)
+const setup = propOverrides => {
+  const props = Object.assign(
+    {
+      active: false,
+      children: 'All',
+      setFilter: jest.fn()
+    },
+    propOverrides
+  )
 
-  const renderer = createRenderer();
+  const renderer = createRenderer()
   renderer.render(<Link {...props} />)
   const output = renderer.getRenderOutput()
 
   return {
     props: props,
-    output: output,
+    output: output
   }
 }
 
