@@ -16,13 +16,21 @@ function setup(id, counter, childIds, parentId) {
   }
 
   const component = shallow(
-    <Node id={id} counter={counter} parentId={parentId} childIds={childIds} {...actions} />
+    <Node
+      id={id}
+      counter={counter}
+      parentId={parentId}
+      childIds={childIds}
+      {...actions}
+    />
   )
 
   return {
     component: component,
     removeLink: component.findWhere(n => n.type() === 'a' && n.contains('×')),
-    addLink: component.findWhere(n => n.type() === 'a' && n.contains('Add child')),
+    addLink: component.findWhere(
+      n => n.type() === 'a' && n.contains('Add child')
+    ),
     button: component.find('button'),
     childNodes: component.find(ConnectedNode),
     actions: actions,
@@ -67,7 +75,7 @@ describe('Node component', () => {
 
   describe('when given childIds', () => {
     it('should render child nodes', () => {
-      const { childNodes } = setup(1, 23, [ 2, 3 ])
+      const { childNodes } = setup(1, 23, [2, 3])
       expect(childNodes.length).toEqual(2)
     })
   })

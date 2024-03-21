@@ -21,7 +21,10 @@ describe('ProductsList component', () => {
   })
 
   it('should render children', () => {
-    const { children } = setup({ title: 'Test Products', children: 'Test Children' })
+    const { children } = setup({
+      title: 'Test Products',
+      children: 'Test Children'
+    })
     expect(children.text()).toMatch(/^Test Children$/)
   })
 })

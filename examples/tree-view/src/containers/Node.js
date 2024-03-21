@@ -38,22 +38,22 @@ export class Node extends Component {
     const { counter, parentId, childIds } = this.props
     return (
       <div>
-        Counter: {counter}
-        {' '}
-        <button onClick={this.handleIncrementClick}>
-          +
-        </button>
-        {' '}
-        {typeof parentId !== 'undefined' &&
-          <a href="#" onClick={this.handleRemoveClick} // eslint-disable jsx-a11y/anchor-is-valid
-             style={{ color: 'lightgray', textDecoration: 'none' }}>
+        Counter: {counter}{' '}
+        <button onClick={this.handleIncrementClick}>+</button>{' '}
+        {typeof parentId !== 'undefined' && (
+          <a
+            href="#"
+            onClick={this.handleRemoveClick} // eslint-disable jsx-a11y/anchor-is-valid
+            style={{ color: 'lightgray', textDecoration: 'none' }}
+          >
             ×
           </a>
-        }
+        )}
         <ul>
           {childIds.map(this.renderChild)}
           <li key="add">
-            <a href="#" // eslint-disable jsx-a11y/anchor-is-valid
+            <a
+              href="#" // eslint-disable jsx-a11y/anchor-is-valid
               onClick={this.handleAddChildClick}
             >
               Add child

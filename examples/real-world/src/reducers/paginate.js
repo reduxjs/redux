@@ -13,14 +13,17 @@ const paginate = ({ types, mapActionToKey }) => {
     throw new Error('Expected mapActionToKey to be a function.')
   }
 
-  const [ requestType, successType, failureType ] = types
+  const [requestType, successType, failureType] = types
 
-  const updatePagination = (state = {
-    isFetching: false,
-    nextPageUrl: undefined,
-    pageCount: 0,
-    ids: []
-  }, action) => {
+  const updatePagination = (
+    state = {
+      isFetching: false,
+      nextPageUrl: undefined,
+      pageCount: 0,
+      ids: []
+    },
+    action
+  ) => {
     switch (action.type) {
       case requestType:
         return {

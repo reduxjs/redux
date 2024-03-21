@@ -1,7 +1,8 @@
-import { defineConfig, Options } from 'tsup'
+import type { Options } from 'tsup'
+import { defineConfig } from 'tsup'
 
 import * as babel from '@babel/core'
-import { Plugin } from 'esbuild'
+import type { Plugin } from 'esbuild'
 import { getBuildExtensions } from 'esbuild-extra'
 import fs from 'fs'
 
@@ -41,10 +42,10 @@ export default defineConfig(options => {
     {
       ...commonOptions,
       format: ['esm'],
-      outExtension: () => ({ js: '.mjs' }),
+      outExtension: () => ({ js: '.mjs' }), // Add dts: '.d.ts' when egoist/tsup#1053 lands
       dts: true,
       clean: true,
-      onSuccess() {
+      async onSuccess() {
         // Support Webpack 4 by pointing `"module"` to a file with a `.js` extension
         fs.copyFileSync('dist/redux.mjs', 'dist/redux.legacy-esm.js')
       }

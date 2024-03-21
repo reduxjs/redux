@@ -5,7 +5,7 @@ describe('selectors', () => {
     it('should return price total', () => {
       const state = {
         cart: {
-          addedIds: [ 1, 2, 3 ],
+          addedIds: [1, 2, 3],
           quantityById: {
             1: 4,
             2: 2,
@@ -37,7 +37,7 @@ describe('selectors', () => {
     it('should return products with quantity', () => {
       const state = {
         cart: {
-          addedIds: [ 1, 2, 3 ],
+          addedIds: [1, 2, 3],
           quantityById: {
             1: 4,
             2: 2,

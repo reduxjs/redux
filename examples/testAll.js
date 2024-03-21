@@ -12,7 +12,10 @@ const exampleDirs = fs.readdirSync(__dirname).filter(file => {
 })
 
 // Ordering is important here. `npm install` must come first.
-const cmdArgs = [{ cmd: 'npm', args: ['ci'] }, { cmd: 'npm', args: ['test'] }]
+const cmdArgs = [
+  { cmd: 'npm', args: ['ci'] },
+  { cmd: 'npm', args: ['test'] }
+]
 
 for (const dir of exampleDirs) {
   if (dir === 'counter-vanilla' || dir === 'universal') continue
@@ -34,7 +37,9 @@ for (const dir of exampleDirs) {
     }
     if (result.status !== 0) {
       console.log(result)
-      throw new Error(`Building examples exited with non-zero ${opts.cwd} cmd: ${JSON.stringify(cmdArg)}`)
+      throw new Error(
+        `Building examples exited with non-zero ${opts.cwd} cmd: ${JSON.stringify(cmdArg)}`
+      )
     }
   }
 }

@@ -37,8 +37,8 @@ export default class TodoTextInput extends Component {
 
   render() {
     return (
-      <input className={
-        classnames({
+      <input
+        className={classnames({
           edit: this.props.editing,
           'new-todo': this.props.newTodo
         })}
@@ -48,7 +48,8 @@ export default class TodoTextInput extends Component {
         value={this.state.text}
         onBlur={this.handleBlur}
         onChange={this.handleChange}
-        onKeyDown={this.handleSubmit} />
+        onKeyDown={this.handleSubmit}
+      />
     )
   }
 }

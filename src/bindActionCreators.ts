@@ -1,5 +1,9 @@
 import type { Dispatch } from './types/store'
-import type { ActionCreator, ActionCreatorsMapObject, Action } from './types/actions'
+import type {
+  ActionCreator,
+  ActionCreatorsMapObject,
+  Action
+} from './types/actions'
 import { kindOf } from './utils/kindOf'
 
 function bindActionCreator<A extends Action>(
