@@ -353,6 +353,12 @@ const selectItemsByCategory = createSelector(
 )
 ```
 
+You can then use the selector like this:
+
+```js
+const electronicItems = selectItemsByCategory( state, "electronics" );
+```
+
 For consistency, you may want to consider passing additional parameters to a selector as a single object, such as `selectThings(state, otherArgs)`, and then extracting values from the `otherArgs` object.
 
 #### Selector Factories
