@@ -54,7 +54,8 @@ module.exports = {
           'usage/nextjs',
           'usage/code-splitting',
           'usage/server-rendering',
-          'usage/isolating-redux-sub-apps'
+          'usage/isolating-redux-sub-apps',
+          'usage/application-setup'
         ]
       },
       {
