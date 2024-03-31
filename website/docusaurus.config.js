@@ -6,7 +6,8 @@ const {
 
 module.exports = {
   title: 'Redux',
-  tagline: 'A Predictable State Container for JS Apps',
+  tagline:
+    'A JS library for predictable and maintainable global state management',
   url: 'https://redux.js.org',
   baseUrl: '/',
   favicon: 'img/favicon/favicon.ico',
