@@ -1,6 +1,6 @@
 # <a href='https://redux.js.org'><img src='https://avatars.githubusercontent.com/u/13142323?s=200&v=4' height='60' alt='Redux Logo' aria-label='redux.js.org' style="display: flex;align-items: center;"/>Redux</a>
 
-Redux is a predictable state container for JavaScript apps.
+Redux is a JS library for predictable and maintainable global state management.
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 

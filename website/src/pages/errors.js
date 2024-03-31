@@ -14,8 +14,8 @@ function Errors() {
 
   return (
     <Layout
-      title={`${siteConfig.title} - A predictable state container for JavaScript apps.`}
-      description="A predictable state container for JavaScript apps."
+      title={`${siteConfig.title} - A JS library for predictable and maintainable global state management`}
+      description="A JS library for predictable and maintainable global state management"
     >
       <main className={styles.mainFull}>
         <h1>Production Error Codes</h1>
