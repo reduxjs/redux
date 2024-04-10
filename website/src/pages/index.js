@@ -137,8 +137,8 @@ function Home() {
   const { siteConfig = {} } = context
   return (
     <Layout
-      title={`${siteConfig.title} - A predictable state container for JavaScript apps.`}
-      description="A predictable state container for JavaScript apps."
+      title={`${siteConfig.title} - A JS library for predictable and maintainable global state management`}
+      description="A JS library for predictable and maintainable global state management"
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">

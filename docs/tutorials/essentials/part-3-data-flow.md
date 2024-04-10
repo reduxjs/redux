@@ -42,7 +42,7 @@ To get started, you can open and fork this CodeSandbox:
 <iframe
   class="codesandbox"
   src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-quick-start-example-app"
+  title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
@@ -61,7 +61,7 @@ If you want to know specific details on how to add Redux to a project, see this 
 
 <DetailedExplanation title="Detailed Explanation: Adding Redux to a React Project">
 
-The Redux template for CRA comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
+The Redux template for Vite comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
 
 - Add the `@reduxjs/toolkit` and `react-redux` packages
 - Create a Redux store using RTK's `configureStore` API, and pass in at least one reducer function

@@ -7,7 +7,7 @@ description: 'Introduction > Getting Started: Resources to get started learning 
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 
-Redux is a predictable state container for JavaScript apps.
+Redux is a JS library for predictable and maintainable global state management.
 
 It helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, such as [live code editing combined with a time traveling debugger](https://github.com/reduxjs/redux-devtools).
 
