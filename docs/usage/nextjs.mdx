@@ -408,7 +408,7 @@ There are three key areas that you should check to ensure that you have set up R
 
 ## Overall Recommendations
 
-The App Router presents a dramatically different archtecture for React applications from either the Pages Router or a SPA application. We recommend rethinking your approach to state management in the light of this new architecture. In SPA applications it's not unusual to have a large store that contains all the data, both mutable and immutable, required to drive the application. For App Router applications we recommend that you should:
+The App Router presents a dramatically different architecture for React applications from either the Pages Router or a SPA application. We recommend rethinking your approach to state management in the light of this new architecture. In SPA applications it's not unusual to have a large store that contains all the data, both mutable and immutable, required to drive the application. For App Router applications we recommend that you should:
 
 - **only use Redux for globally shared, mutable data**
 - use a combination of Next.js state (search params, route parameters, form state, etc.), React context and React hooks for all other state management.
