@@ -531,8 +531,8 @@ function Component() {
 }
 ```
 
-## Libraries and Frameworks
+## Third-party Libraries and Frameworks
 
-There are a few good libraries out there that can help you add the above functionality automatically:
+There are a few good external libraries out there that can help you add the above functionality automatically:
 
 - [Redux Ecosystem Links: Reducers - Dynamic Reducer Injection](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md#dynamic-reducer-injection)
