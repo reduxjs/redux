@@ -16,12 +16,12 @@ Dan talked about some of his intent and approach in [Changelog episode 187](http
 
 ## Influences
 
-Redux evolves the ideas of [Flux](https://facebook.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
+Redux evolves the ideas of [Flux](https://facebookarchive.github.io/flux/), but avoids its complexity by taking cues from [Elm](https://github.com/evancz/elm-architecture-tutorial/).
 Even if you haven't used Flux or Elm, Redux only takes a few minutes to get started with.
 
 ### Flux
 
-Redux was inspired by several important qualities of [Flux](https://facebook.github.io/flux/). Like Flux, Redux prescribes that you concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called an “action”.
+Redux was inspired by several important qualities of [Flux](https://facebookarchive.github.io/flux/). Like Flux, Redux prescribes that you concentrate your model update logic in a certain layer of your application (“stores” in Flux, “reducers” in Redux). Instead of letting the application code directly mutate the data, both tell you to describe every mutation as a plain object called an “action”.
 
 Unlike Flux, **Redux does not have the concept of a Dispatcher**. This is because it relies on pure functions instead of event emitters, and pure functions are easy to compose and don't need an additional entity managing them. Depending on how you view Flux, you may see this as either a deviation or an implementation detail. Flux has often been [described as `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot-1). In this sense, Redux is true to the Flux architecture, but makes it simpler thanks to pure functions.
 
