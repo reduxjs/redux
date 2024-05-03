@@ -51,7 +51,7 @@ You can also create a new Next+Redux project with `npx create-next-app --example
 
 The primary new feature of the Next.js App Router is the addition of support for React Server Components (RSCs). RSCs are a special type of React component that only renders on the server, as opposed to "client" components that render on **both** the client and the server. RSCs can be defined as `async` functions and return promises during rendering as they make async requests for data to render.
 
-RSCs ability to block for data requests means that with the App Router you no longer have `getServerSideProps` to fetch data for rendering. Any component in the tree can make asychronous requests for data. While this is very convenient it also means thats if you define global variables (like the Redux store) they will be shared across requests. This is a problem because the Redux store could be contaminated with data from other requests.
+RSCs ability to block for data requests means that with the App Router you no longer have `getServerSideProps` to fetch data for rendering. Any component in the tree can make asynchronous requests for data. While this is very convenient it also means thats if you define global variables (like the Redux store) they will be shared across requests. This is a problem because the Redux store could be contaminated with data from other requests.
 
 Based on the architecture of the App Router we have these general recommendations for appropriate use of Redux:
 
@@ -372,13 +372,13 @@ export default function ProductName({ product }: { product: Product }) {
 }
 ```
 
-Here we are using the same intialization pattern as before, of dispatching actions to the store, to set the route-specific data. The `initialized` ref is used to ensure that the store is only initialized once per route change.
+Here we are using the same initialization pattern as before, of dispatching actions to the store, to set the route-specific data. The `initialized` ref is used to ensure that the store is only initialized once per route change.
 
 It is worth noting that initializing the store with a `useEffect` would not work because `useEffect` only runs on the client. This would result in hydration errors or flicker because the result from a server side render would not match the result from the client side render.
 
 ### Caching
 
-The App Router has four seperate caches including `fetch` request and route caches. The most likely cache to cause issues is the route cache. If you have an application that accepts login you may have routes (e.g. the home route, `/`) that render different data based on the user you will need to disable the route cache by using the [`dynamic` export from the route handler](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic):
+The App Router has four separate caches including `fetch` request and route caches. The most likely cache to cause issues is the route cache. If you have an application that accepts login you may have routes (e.g. the home route, `/`) that render different data based on the user you will need to disable the route cache by using the [`dynamic` export from the route handler](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic):
 
 ```ts
 export const dynamic = 'force-dynamic'
