@@ -9,6 +9,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip What You'll Learn
 
+- How to set up a Redux store in a React application
 - How to add "slices" of reducer logic to the Redux store with `createSlice`
 - Reading Redux data in components with the `useSelector` hook
 - Dispatching actions in components with the `useDispatch` hook
@@ -18,6 +19,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 :::info Prerequisites
 
 - Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See [**Part 1: Redux Overview and Concepts**](./part-1-overview-concepts.md) for explanations of these terms.)
+- Basic understanding of [TypeScript syntax and usage](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 :::
 
@@ -29,7 +31,7 @@ Now that you have some idea of what these pieces are, it's time to put that know
 
 :::caution
 
-The example app is not meant as a complete production-ready project. The goal is to help you learn the Redux APIs and typical usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. Please read through the whole tutorial to see all the concepts in use.
+The example app is not meant as a complete production-ready project. The goal is to help you learn the Redux APIs and typical usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. **Please read through the whole tutorial to see all the concepts in use**.
 
 :::
 
@@ -63,17 +65,106 @@ If you want to know specific details on how to add Redux to a project, see this 
 
 The Redux template for Vite comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
 
-- Add the `@reduxjs/toolkit` and `react-redux` packages
-- Create a Redux store using RTK's `configureStore` API, and pass in at least one reducer function
-- Import the Redux store into your application's entry point file (such as `src/index.js`)
-- Wrap your root React component with the `<Provider>` component from React-Redux, like:
+1. Add the `@reduxjs/toolkit` and `react-redux` packages:
 
-```jsx
-ReactDOM.render(
+```bash
+# Use NPM, or alternatively Yarn or PNPM as preferred
+npm i @reduxjs/toolkit react-redux
+```
+
+2. Create a Redux store using RTK's `configureStore` API, and export the store types needed for the rest of the application:
+
+```ts title="src/app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+
+// highlight-start
+export const store = configureStore({
+  reducer: {
+    // Empty to start with, will be filled in next
+  }
+})
+// highlight-end
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+export type AppStore = typeof store
+```
+
+3. Define pre-typed versions of the React-Redux hooks, so that the `RootState` and `AppDispatch` types are built in automatically:
+
+```ts title="src/app/hooks.ts"
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from './store'
+
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
+```
+
+4. Create a Redux slice file, define a reducer with `createSlice`, and add that reducer to the store:
+
+```ts title="src/features/counter/counterSlice.ts"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+// Define a type for the slice state
+export interface CounterState {
+  value: number
+}
+
+// Define the initial state using that type
+const initialState: CounterState = {
+  value: 0
+}
+
+export const counterSlice = createSlice({
+  name: 'counter',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {
+    // Use the PayloadAction type to declare the contents of `action.payload`
+    amountAdded: (state, action: PayloadAction<number>) => {
+      state.value += action.payload
+    }
+  }
+})
+
+export const { amountAdded } = counterSlice.actions
+
+export default counterSlice.reducer
+```
+
+```ts title="src/app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+// highlight-next-line
+import counterReducer from "@/features/counter/counterSlice
+
+// highlight-start
+export const store = configureStore({
+  reducer: {
+    // highlight-start
+    // Add the slice reducer to the store
+    counter: counterReducer
+    // highlight-end
+  }
+})
+// highlight-end
+```
+
+5. Wrap your root React component with the `<Provider>` component from React-Redux, like:
+
+```tsx title="@/main.tsx"
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import { store } from './app/store'
+import { App } from './App'
+
+const root = ReactDOM.createRoot(document.getElementById('root')!)
+
+root.render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 )
 ```
 
