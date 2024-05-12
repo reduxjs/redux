@@ -145,7 +145,7 @@ When we pass in an object like `{counter: counterReducer}`, that says that we wa
 
 Redux allows store setup to be customized with different kinds of plugins ("middleware" and "enhancers"). `configureStore` automatically adds several middleware to the store setup by default to provide a good developer experience, and also sets up the store so that the Redux DevTools Extension can inspect its contents.
 
-#### Redux Slices
+### Redux Slices
 
 **A "slice" is a collection of Redux reducer logic and actions for a single feature in your app**, typically defined together in a single file. The name comes from splitting up the root Redux state object into multiple "slices" of state.
 

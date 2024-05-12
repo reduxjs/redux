@@ -235,15 +235,21 @@ export const useAppSelector = useSelector.withTypes<RootState>()
 // highlight-end
 ```
 
+That completes the setup process. Let's start building the app!
+
 ## Main Posts Feed
 
 The main feature for our social media feed app will be a list of posts. We'll add several more pieces to this feature as we go along, but to start off, our first goal is to only show the list of post entries on screen.
 
 ### Creating the Posts Slice
 
-The first step is to create a new Redux "slice" that will contain the data for our posts. Once we have that data in the Redux store, we can create the React components to show that data on the page.
+The first step is to create a new Redux "slice" that will contain the data for our posts.
 
-Inside of `src`, create a new `features` folder, put a `posts` folder inside of `features`, and add a new file named `postsSlice.js`.
+**A "slice" is a collection of Redux reducer logic and actions for a single feature in your app**, typically defined together in a single file. The name comes from splitting up the root Redux state object into multiple "slices" of state.
+
+Once we have the posts data in the Redux store, we can create the React components to show that data on the page.
+
+Inside of `src`, create a new `features` folder, put a `posts` folder inside of `features`, and add a new file named `postsSlice.ts`.
 
 We're going to use the Redux Toolkit `createSlice` function to make a reducer function that knows how to handle our posts data. Reducer functions need to have some initial data included so that the Redux store has those values loaded when the app starts up.
 
@@ -251,32 +257,44 @@ For now, we'll create an array with some fake post objects inside so that we can
 
 We'll import `createSlice`, define our initial posts array, pass that to `createSlice`, and export the posts reducer function that `createSlice` generated for us:
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = [
+// Define a TS type for the data we'll be using
+export interface Post {
+  id: string
+  title: string
+  content: string
+}
+
+// Create an initial state value for the reducer, with that type
+const initialState: Post[] = [
   { id: '1', title: 'First Post!', content: 'Hello!' },
   { id: '2', title: 'Second Post', content: 'More text' }
 ]
 
+// Create the slice and pass in the initial state
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {}
 })
 
+// Export the generated reducer function
 export default postsSlice.reducer
 ```
 
-Every time we create a new slice, we need to add its reducer function to our Redux store. We already have a Redux store being created, but right now it doesn't have any data inside. Open up `app/store.js`, import the `postsReducer` function, and update the call to `configureStore` so that the `postsReducer` is being passed as a reducer field named `posts`:
+Every time we create a new slice, we need to add its reducer function to our Redux store. We already have a Redux store being created, but right now it doesn't have any data inside. Open up `app/store.ts`, import the `postsReducer` function, and update the call to `configureStore` so that the `postsReducer` is being passed as a reducer field named `posts`:
 
-```js title="app/store.js"
+```ts title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
 
-import postsReducer from '../features/posts/postsSlice'
+// highlight-next-line
+import postsReducer from '@/features/posts/postsSlice'
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
+    // highlight-next-line
     posts: postsReducer
   }
 })
@@ -290,18 +308,23 @@ We can confirm that this works by opening the Redux DevTools Extension and looki
 
 ### Showing the Posts List
 
-Now that we have some posts data in our store, we can create a React component that shows the list of posts. All of the code related to our feed posts feature should go in the `posts` folder, so go ahead and create a new file named `PostsList.js` in there.
+Now that we have some posts data in our store, we can create a React component that shows the list of posts. All of the code related to our feed posts feature should go in the `posts` folder, so go ahead and create a new file named `PostsList.tsx` in there.
 
 If we're going to render a list of posts, we need to get the data from somewhere. React components can read data from the Redux store using the `useSelector` hook from the React-Redux library. The "selector functions" that you write will be called with the entire Redux `state` object as a parameter, and should return the specific data that this component needs from the store.
 
+Since we're using TypeScript, all of our components should always use the pre-typed `useAppSelector` hook that we added in `src/app/hooks.ts`, since that has the right `RootState` type already included.
+
 Our initial `PostsList` component will read the `state.posts` value from the Redux store, then loop over the array of posts and show each of them on screen:
 
-```jsx title="features/posts/PostsList.js"
-import React from 'react'
-import { useSelector } from 'react-redux'
+```tsx title="features/posts/PostsList.tsx"
+// highlight-next-line
+import { useAppSelector } from '@/app/hooks'
 
 export const PostsList = () => {
-  const posts = useSelector(state => state.posts)
+  // highlight-start
+  // Select the `state.posts` value from the store into the component
+  const posts = useAppSelector(state => state.posts)
+  // highlight-end
 
   const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
@@ -319,19 +342,12 @@ export const PostsList = () => {
 }
 ```
 
-We then need to update the routing in `App.js` so that we show the `PostsList` component instead of the "welcome" message. Import the `PostsList` component into `App.js`, and replace the welcome text with `<PostsList />`. We'll also wrap it in a [React Fragment](https://react.dev/reference/react/Fragment), because we're going to add something else to the main page soon:
+We then need to update the routing in `App.tsx` so that we show the `PostsList` component instead of the "welcome" message. Import the `PostsList` component into `App.tsx`, and replace the welcome text with `<PostsList />`. We'll also wrap it in a [React Fragment](https://react.dev/reference/react/Fragment), because we're going to add something else to the main page soon:
 
-```jsx title="App.js"
-import React from 'react'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom'
+```tsx title="App.tsx"
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import { Navbar } from './app/Navbar'
-
+import { Navbar } from './components/Navbar'
 // highlight-next-line
 import { PostsList } from './features/posts/PostsList'
 
@@ -340,20 +356,18 @@ function App() {
     <Router>
       <Navbar />
       <div className="App">
-        <Switch>
+        <Routes>
           <Route
-            exact
             path="/"
-            render={() => (
+            element={
               // highlight-start
-              <React.Fragment>
+              <>
                 <PostsList />
-              </React.Fragment>
+              </>
               // highlight-end
-            )}
-          />
-          <Redirect to="/" />
-        </Switch>
+            }
+          ></Route>
+        </Routes>
       </div>
     </Router>
   )
@@ -376,58 +390,67 @@ We'll create the empty form first and add it to the page. Then, we'll connect th
 
 #### Adding the New Post Form
 
-Create `AddPostForm.js` in our `posts` folder. We'll add a text input for the post title, and a text area for the body of the post:
+Create `AddPostForm.tsx` in our `posts` folder. We'll add a text input for the post title, and a text area for the body of the post:
 
-```jsx title="features/posts/AddPostForm.js"
-import React, { useState } from 'react'
+```tsx title="features/posts/AddPostForm.tsx"
+import React from 'react'
+
+// TS types for the input fields
+// See: https://epicreact.dev/how-to-type-a-react-form-on-submit-handler/
+interface AddPostFormFields extends HTMLFormControlsCollection {
+  postTitle: HTMLInputElement
+  postContent: HTMLTextAreaElement
+}
+interface AddPostFormElements extends HTMLFormElement {
+  readonly elements: AddPostFormFields
+}
 
 export const AddPostForm = () => {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+    // Prevent server submission
+    e.preventDefault()
 
-  const onTitleChanged = e => setTitle(e.target.value)
-  const onContentChanged = e => setContent(e.target.value)
+    const { elements } = e.currentTarget
+    const title = elements.postTitle.value
+    const content = elements.postContent.value
+
+    console.log('Values: ', { title, content })
+
+    e.currentTarget.reset()
+  }
 
   return (
     <section>
       <h2>Add a New Post</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="postTitle">Post Title:</label>
-        <input
-          type="text"
-          id="postTitle"
-          name="postTitle"
-          value={title}
-          onChange={onTitleChanged}
-        />
+        <input type="text" id="postTitle" defaultValue="" />
         <label htmlFor="postContent">Content:</label>
-        <textarea
-          id="postContent"
-          name="postContent"
-          value={content}
-          onChange={onContentChanged}
-        />
-        <button type="button">Save Post</button>
+        <textarea id="postContent" name="postContent" defaultValue="" />
+        <button>Save Post</button>
       </form>
     </section>
   )
 }
 ```
 
-Import that component into `App.js`, and add it right above the `<PostsList />` component:
+Note that this doesn't have any Redux-specific logic yet - we'll add that next.
 
-```jsx title="App.js"
+In this example we're using ["uncontrolled" inputs](https://react.dev/reference/react-dom/components/input#reading-the-input-values-when-submitting-a-form), but it's up to you how you read values from a form.
+
+Import that component into `App.tsx`, and add it right above the `<PostsList />` component:
+
+```tsx title="App.tsx"
 <Route
-  exact
   path="/"
-  render={() => (
-    <React.Fragment>
+  element={
+    <>
       // highlight-next-line
       <AddPostForm />
       <PostsList />
-    </React.Fragment>
-  )}
-/>
+    </>
+  }
+></Route>
 ```
 
 You should see the form show up in the page right below the header.
@@ -440,38 +463,53 @@ Our posts slice is responsible for handling all updates to the posts data. Insid
 
 Inside of `reducers`, add a function named `postAdded`, which will receive two arguments: the current `state` value, and the `action` object that was dispatched. Since the posts slice _only_ knows about the data it's responsible for, the `state` argument will be the array of posts by itself, and not the entire Redux state object.
 
-The `action` object will have our new post entry as the `action.payload` field, and we'll put that new post object into the `state` array.
+The `action` object will have our new post entry as the `action.payload` field. In order to have this typed correctly, we need to declare the type of the `action` argument as `action: PayloadAction<Post>`.
 
-When we write the `postAdded` reducer function, `createSlice` will automatically generate an "action creator" function with the same name. We can export that action creator and use it in our UI components to dispatch the action when the user clicks "Save Post".
+The actual state update is adding the new post object into the `state` array, which we can do via `state.push()` in the reducer.
 
-```js title="features/posts/postsSlice.js"
+:::warning
+
+Remember: **Redux reducer functions must _always_ create new state values immutably, by making copies!** It's safe to call mutating functions like `Array.push()` or modify object fields like `state.someField = someValue` inside of `createSlice()`, because [it converts those mutations into safe immutable updates internally using the Immer library](./part-2-app-structure.md#reducers-and-immutable-updates), but **don't try to mutate any data outside of `createSlice`!**
+
+:::
+
+When we write the `postAdded` reducer function, `createSlice` will automatically generate an ["action creator" function](../fundamentals/part-7-standard-patterns.md#action-creators) with the same name. We can export that action creator and use it in our UI components to dispatch the action when the user clicks "Save Post".
+
+```ts title="features/posts/postsSlice.ts"
+// highlight-start
+// Import the `PayloadAction` TS type
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+// highlight-end
+
+// omit initial state
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
     // highlight-start
-    postAdded(state, action) {
+    // Declare a "case reducer" named `postAdded`.
+    // The type of `action.payload` will be a `Post` object.
+    postAdded(state, action: PayloadAction<Post>) {
+      // "Mutate" the existing state array, which is
+      // safe to do here because `createSlice` uses Immer inside.
       state.push(action.payload)
     }
     // highlight-end
   }
 })
 
-// highlight-next-line
+// highlight-start
+// Export the auto-generated action creator with the same name
 export const { postAdded } = postsSlice.actions
+// highlight-end
 
 export default postsSlice.reducer
 ```
 
-:::warning
-
-Remember: **reducer functions must _always_ create new state values immutably, by making copies!** It's safe to call mutating functions like `Array.push()` or modify object fields like `state.someField = someValue` inside of `createSlice()`, because it converts those mutations into safe immutable updates internally using the Immer library, but **don't try to mutate any data outside of `createSlice`!**
-
-:::
-
 #### Dispatching the "Post Added" Action
 
-Our `AddPostForm` has text inputs and a "Save Post" button, but the button doesn't do anything yet. We need to add a click handler that will dispatch the `postAdded` action creator and pass in a new post object containing the title and content the user wrote.
+Our `AddPostForm` has text inputs and a "Save Post" button that triggers a submit handler, but the button doesn't do anything yet. We need to update the submit handler to dispatch the `postAdded` action creator and pass in a new post object containing the title and content the user wrote.
 
 Our post objects also need to have an `id` field. Right now, our initial test posts are using some fake numbers for their IDs. We could write some code that would figure out what the next incrementing ID number should be, but it would be better if we generated a random unique ID instead. Redux Toolkit has a `nanoid` function we can use for that.
 
@@ -481,55 +519,59 @@ We'll talk more about generating IDs and dispatching actions in [Part 4: Using R
 
 :::
 
-In order to dispatch actions from a component, we need access to the store's `dispatch` function. We get this by calling the `useDispatch` hook from React-Redux. We also need to import the `postAdded` action creator into this file.
+In order to dispatch actions from a component, **we need access to the store's `dispatch` function**. We get this by calling the `useDispatch` hook from React-Redux. Since we're using TypeScript, that means that we should actually **import the `useAppDispatch` hook with the right types**. We also need to import the `postAdded` action creator into this file.
 
-Once we have the `dispatch` function available in our component, we can call `dispatch(postAdded())` in a click handler. We can take the title and content values from our React component `useState` hooks, generate a new ID, and put them together into a new post object that we pass to `postAdded()`.
+Once we have the `dispatch` function available in our component, we can call `dispatch(postAdded())` in a click handler. We can take the title and content values from our form, generate a new ID, and put them together into a new post object that we pass to `postAdded()`.
 
 ```jsx title="features/posts/AddPostForm"
-import React, { useState } from 'react'
+import React from 'react'
 // highlight-start
-import { useDispatch } from 'react-redux'
 import { nanoid } from '@reduxjs/toolkit'
 
-import { postAdded } from './postsSlice'
+import { useAppDispatch } from '@/app/hooks'
+
+import { type Post, postAdded } from './postsSlice'
 // highlight-end
 
+// omit form types
+
 export const AddPostForm = () => {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-
-  // highlight-next-line
-  const dispatch = useDispatch()
-
-  const onTitleChanged = e => setTitle(e.target.value)
-  const onContentChanged = e => setContent(e.target.value)
-
   // highlight-start
-  const onSavePostClicked = () => {
-    if (title && content) {
-      dispatch(
-        postAdded({
-          id: nanoid(),
-          title,
-          content
-        })
-      )
+  // Get the `dispatch` method from the store
+  const dispatch = useAppDispatch()
 
-      setTitle('')
-      setContent('')
-    }
-  }
   // highlight-end
+
+  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+    // Prevent server submission
+    e.preventDefault()
+
+    const { elements } = e.currentTarget
+    const title = elements.postTitle.value
+    const content = elements.postContent.value
+
+    // highlight-start
+    // Create the post object and dispatch the `postAdded` action
+    const newPost: Post = {
+      id: nanoid(),
+      title,
+      content,
+    }
+    dispatch(postAdded(newPost))
+    // highlight-end
+
+    e.currentTarget.reset()
+  }
 
   return (
     <section>
       <h2>Add a New Post</h2>
-      <form>
-        {/* omit form inputs */}
-        // highlight-next-line
-        <button type="button" onClick={onSavePostClicked}>
-          Save Post
-        </button>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="postTitle">Post Title:</label>
+        <input type="text" id="postTitle" defaultValue="" />
+        <label htmlFor="postContent">Content:</label>
+        <textarea id="postContent" name="postContent" defaultValue="" />
+        <button>Save Post</button>
       </form>
     </section>
   )
@@ -556,7 +598,7 @@ We can check the Redux DevTools Extension to see the action we dispatched, and l
 
 The "Diff" tab should also show us that `state.posts` had one new item added, which is at index 2.
 
-Notice that our `AddPostForm` component has some React `useState` hooks inside, to keep track of the title and content values the user is typing in. Remember, **the Redux store should only contain data that's considered "global" for the application!** In this case, only the `AddPostForm` will need to know about the latest values for the input fields, so we want to keep that data in React component state instead of trying to keep the temporary data in the Redux store. When the user is done with the form, we dispatch a Redux action to update the store with the final values based on the user input.
+Remember, **the Redux store should only contain data that's considered "global" for the application!** In this case, only the `AddPostForm` will need to know about the latest values for the input fields. Even if we built the form with ["controlled" inputs](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable), we'd want to keep the data in React component state instead of trying to keep the temporary data in the Redux store. When the user is done with the form, we dispatch a Redux action to update the store with the final values based on the user input.
 
 ## What You've Learned
 
@@ -564,6 +606,7 @@ Let's recap what you've learned in this section:
 
 :::tip Summary
 
+- **A Redux app has a single `store` that is passed to React components via a `<Provider>` component**
 - **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
   - The Redux Toolkit `createSlice` function generates "slice reducer" functions for you, and lets you write "mutating" code that is turned into safe immutable updates
@@ -575,7 +618,7 @@ Let's recap what you've learned in this section:
   - `createSlice` will generate action creator functions for each reducer we add to a slice
   - Call `dispatch(someActionCreator())` in a component to dispatch an action
   - Reducers will run, check to see if this action is relevant, and return new state if appropriate
-  - Temporary data like form input values should be kept as React component state. Dispatch a Redux action to update the store when the user is done with the form.
+  - Temporary data like form input values should be kept as React component state or plain HTML input fields. Dispatch a Redux action to update the store when the user is done with the form.
 
 :::
 
